@@ -53,20 +53,22 @@
                     var r = JSON.parse(repResponse.body);
                     reportId = r.id;
                 });
-
+            }).then(function() {
                 //create user
-                e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
+                    return e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
                         //POST custdefaulthomepage for a table
-                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
+                        return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
                             //Modify the field rights of all numeric fields on a form (readAccess and modify access set to false)
-                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 7, false, false).then(function() {
-                                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 8, false, false).then(function() {
-                                    e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 9, false, false).then(function() {
-                                        e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 10, false, false).then(function() {
-                                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 14, false, false);
-                                            done();
+                            return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 7, false, false).then(function() {
+                                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 8, false, false).then(function() {
+                                    return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 9, false, false).then(function() {
+                                        return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 10, false, false).then(function() {
+                                            return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 14, false, false).then(function() {
+                                            }).then(function() {
+                                                done();
+                                            });
                                         });
                                     });
                                 });
@@ -93,24 +95,25 @@
             formsPage.getUserAuthentication(userId).then(function() {
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
-
-                //Open a record
-                reportServicePage.openRecord(2);
-
-                //Verify cannot see any text fields on the form in view mode as readaccess set to false
-                formsPage.verifyFieldsNotPresentOnForm(formsPage.formViewModeTable, expectedNumericFieldsWhichHasNoFieldRights);
-
-                //go to edit mode
-                reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
-                    reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
-                        reportServicePage.waitForElement(element(by.className('editForm')));
-                        //wait for trowser to animate
-                        e2eBase.sleep(browser.params.smallSleep);
-                        //Verify cannot see any text fields on the form in edit mode as modify access set to false
-                        formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, expectedNumericFieldsWhichHasNoFieldRights);
-                        done();
+                reportContentPO.waitForReportContent().then(function() {
+                    //Open a record
+                    reportServicePage.openRecord(2);
+                }).then(function() {
+                    //Verify cannot see any text fields on the form in view mode as readaccess set to false
+                    formsPage.verifyFieldsNotPresentOnForm(formsPage.formViewModeTable, expectedNumericFieldsWhichHasNoFieldRights);
+                }).then(function() {
+                    //go to edit mode
+                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
+                        reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
+                            reportServicePage.waitForElement(element(by.className('editForm')));
+                            //wait for trowser to animate
+                            e2eBase.sleep(browser.params.smallSleep);
+                            //Verify cannot see any text fields on the form in edit mode as modify access set to false
+                            formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, expectedNumericFieldsWhichHasNoFieldRights);
+                        });
                     });
+                }).then(function() {
+                    done();
                 });
             });
         });
@@ -124,28 +127,30 @@
 
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
-
-                //click on add record button
-                reportServicePage.clickAddRecordOnStage();
-
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-
-                //Save the form
-                formsPage.clickFormSaveBtn();
-
-                //reload the report
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent().then(function() {
 
-                    //Verify record added
-                    reportServicePage.agGridRecordElList.then(function(records) {
-                        for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                            formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
-                        }
+                    //click on add record button
+                    reportServicePage.clickAddRecordOnStage();
+                }).then(function() {
+                    //get the fields from the table and generate a record
+                    for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                        formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    }
+                }).then(function() {
+                    //Save the form
+                    formsPage.clickFormSaveBtn();
+                    reportContentPO.waitForReportContent();
+                }).then(function() {
+                    //reload the report
+                    e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
+                    reportContentPO.waitForReportContent().then(function() {
+
+                        //Verify record added
+                        reportServicePage.agGridRecordElList.then(function(records) {
+                            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                                formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
+                            }
+                        });
                     });
                 }).then(function() {
                     done();
@@ -161,27 +166,29 @@
 
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
-
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(2);
-
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-
-                //Save the form
-                formsPage.clickFormSaveBtn();
-
-                //reload the report
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent().then(function() {
+                    //click edit record from the grid recordActions
+                    reportServicePage.clickRecordEditPencil(2);
+                }).then(function() {
 
-                    //Verify edited record
-                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                    //get the fields from the table and generate a record
+                    for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                        formsPage.enterFormValues(fieldTypeClassNames[i]);
                     }
+                }).then(function() {
+                    //Save the form
+                    formsPage.clickFormSaveBtn();
+                    reportContentPO.waitForReportContent();
+                }).then(function() {
+                    //reload the report
+                    e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
+                    reportContentPO.waitForReportContent().then(function() {
+
+                        //Verify edited record
+                        for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                            formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                        }
+                    });
                 }).then(function() {
                     done();
                 });

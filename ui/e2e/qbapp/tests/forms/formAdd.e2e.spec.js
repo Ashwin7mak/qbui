@@ -25,12 +25,13 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
                 });
             });
@@ -51,30 +52,32 @@
             });
 
             // Click on add record button
-            reportServicePage.clickAddRecordOnStage();
+            reportServicePage.clickAddRecordOnStage().then(function() {
 
-            // Get the fields from the from and create a new record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                formsPage.enterFormValues(fieldTypeClassNames[i]);
-            }
-
-            // Save the form
-            formsPage.clickFormSaveBtn();
-
-            // Reload the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent().then(function() {
-                // Check the record count
-                reportContentPage.agGridRecordElList.then(function(records) {
-                    expect(records.length).toBe(origRecordCount + 1);
-                });
-            }).then(function() {
-                // Verify new record is now the last row in a table
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(7, fieldTypeClassNames[j]);
+                // Get the fields from the from and create a new record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
-                done();
+                // Save the form
+                formsPage.clickFormSaveBtn();
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                // Reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent().then(function() {
+                    // Check the record count
+                    reportContentPage.agGridRecordElList.then(function(records) {
+                        expect(records.length).toBe(origRecordCount + 1);
+                    });
+                }).then(function() {
+                    // Verify new record is now the last row in a table
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(7, fieldTypeClassNames[j]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
         });
     });

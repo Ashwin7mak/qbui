@@ -53,19 +53,21 @@
                     var r = JSON.parse(repResponse.body);
                     reportId = r.id;
                 });
-
+            }).then(function() {
                 //create user
-                e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
+                return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
-                    e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
+                    return e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
                         //POST custdefaulthomepage for a table
-                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
+                        return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
                             //Modify the field rights of all text records (readAccess and modify access set to false)
-                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 6, false, false).then(function() {
-                                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 16, false, false).then(function() {
-                                    e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 17, false, false).then(function() {
-                                        e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 18, false, false);
-                                        done();
+                            return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 6, false, false).then(function() {
+                                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 16, false, false).then(function() {
+                                    return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 17, false, false).then(function() {
+                                        return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 18, false, false).then(function() {
+                                        }).then(function() {
+                                            done();
+                                        });
                                     });
                                 });
                             });
@@ -90,24 +92,25 @@
             formsPage.getUserAuthentication(userId).then(function() {
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
-
-                //Open a record
-                reportServicePage.openRecord(2);
-
-                //Verify cannot see any text fields on the form in view mode as readaccess set to false
-                formsPage.verifyFieldsNotPresentOnForm(formsPage.formViewModeTable, ['Text Field', 'Phone Number Field', 'Email Address Field', 'URL Field']);
-
-                //go to edit mode
-                reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
-                    reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
-                        reportServicePage.waitForElement(element(by.className('editForm')));
-                        //wait for trowser to animate
-                        e2eBase.sleep(browser.params.smallSleep);
-                        //Verify cannot see any text fields on the form in edit mode as modify access set to false
-                        formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, ['Text Field', 'Phone Number Field', 'Email Address Field', 'URL Field']);
-                        done();
+                reportContentPO.waitForReportContent().then(function() {
+                    //Open a record
+                    reportServicePage.openRecord(2);
+                }).then(function() {
+                    //Verify cannot see any text fields on the form in view mode as readaccess set to false
+                    formsPage.verifyFieldsNotPresentOnForm(formsPage.formViewModeTable, ['Text Field', 'Phone Number Field', 'Email Address Field', 'URL Field']);
+                }).then(function() {
+                    //go to edit mode
+                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
+                        reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
+                            reportServicePage.waitForElement(element(by.className('editForm')));
+                            //wait for trowser to animate
+                            e2eBase.sleep(browser.params.smallSleep);
+                            //Verify cannot see any text fields on the form in edit mode as modify access set to false
+                            formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, ['Text Field', 'Phone Number Field', 'Email Address Field', 'URL Field']);
+                        });
                     });
+                }).then(function() {
+                    done();
                 });
             });
         });
@@ -118,25 +121,27 @@
             formsPage.getUserAuthentication(userId).then(function() {
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
+                reportContentPO.waitForReportContent().then(function() {
+                    //click on add record button
+                    reportServicePage.clickAddRecordOnStage();
+                }).then(function() {
 
-                //click on add record button
-                reportServicePage.clickAddRecordOnStage();
-
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save');
-                reportContentPO.waitForReportContent();
-
-                //Verify record has no permission message shows up.
-                reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
-
-                formsPage.closeSaveChangesDialogue();
-                done();
+                    //get the fields from the table and generate a record
+                    for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                        formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    }
+                }).then(function() {
+                    //Save the form
+                    formsPage.clickSaveBtnWithName('Save');
+                    reportContentPO.waitForReportContent();
+                }).then(function() {
+                    //Verify record has no permission message shows up.
+                    reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
+                }).then(function() {
+                    formsPage.closeSaveChangesDialogue();
+                }).then(function() {
+                    done();
+                });
             });
         });
 
@@ -148,27 +153,29 @@
 
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
+                reportContentPO.waitForReportContent().then(function() {
+                    //click edit record from the grid recordActions
+                    reportServicePage.clickRecordEditPencil(2);
+                }).then(function() {
 
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(2);
-
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save');
-                reportContentPO.waitForReportContent();
-
-                //Verify record has no permission message shows up.
-                reportContentPO.assertNotificationMessage("Record not saved");
-                //TODO enable when MB-1488 is fixed enable below and remove above message
-                //reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
-
-                formsPage.closeSaveChangesDialogue();
-                done();
+                    //get the fields from the table and generate a record
+                    for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                        formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    }
+                }).then(function() {
+                    //Save the form
+                    formsPage.clickSaveBtnWithName('Save');
+                    reportContentPO.waitForReportContent();
+                }).then(function() {
+                    //Verify record has no permission message shows up.
+                    reportContentPO.assertNotificationMessage("Record not saved");
+                    //TODO enable when MB-1488 is fixed enable below and remove above message
+                    //reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
+                }).then(function() {
+                    formsPage.closeSaveChangesDialogue();
+                }).then(function() {
+                    done();
+                });
             });
         });
 

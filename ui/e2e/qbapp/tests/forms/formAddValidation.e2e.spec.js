@@ -32,9 +32,10 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
@@ -49,21 +50,17 @@
         beforeEach(function(done) {
             //go to report page directly.
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            // Wait until report loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+            done();
         });
 
         it('Validate all required fields by not entering anything into them on form', function(done) {
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
-                reportServicePage.clickAddRecordOnStage();
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-
-                //Save the form without entering any field values
-                formsPage.clickSaveBtnWithName('Save').then(function() {
+                reportServicePage.clickAddRecordOnStage().then(function() {
+                    //Save the form without entering any field values
+                    formsPage.clickSaveBtnWithName('Save');
+                }).then(function() {
                     //verify validation
                     formsPage.verifyErrorMessages(expectedErrorMessages);
                 }).then(function() {
@@ -99,19 +96,19 @@
             it('Save Button - Validate ' + testcase.message, function(done) {
                 formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                     //click on add record button
-                    reportServicePage.clickAddRecordOnStage();
-
-                    //enter invalid field values
-                    formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
-
-                    //Save the form
-                    formsPage.clickSaveBtnWithName('Save').then(function() {
-                        //verify field validations
-                        formsPage.verifyErrorMessages(expectedErrorMessages);
+                    reportServicePage.clickAddRecordOnStage().then(function() {
+                        //enter invalid field values
+                        formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
                     }).then(function() {
-                        //close dirty form
-                        formsPage.closeSaveChangesDialogue();
-                        done();
+                        //Save the form
+                        formsPage.clickSaveBtnWithName('Save').then(function() {
+                            //verify field validations
+                            formsPage.verifyErrorMessages(expectedErrorMessages);
+                        }).then(function() {
+                            //close dirty form
+                            formsPage.closeSaveChangesDialogue();
+                            done();
+                        });
                     });
                 });
             });
@@ -121,13 +118,13 @@
             var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
 
             //click on add record button
-            reportServicePage.clickAddRecordOnStage();
-
-            //enter invalid values into fields
-            formsPage.enterInvalidFormValues('numericField');
-
-            //Save the form
-            formsPage.clickSaveBtnWithName('Save & Add Another').then(function() {
+            reportServicePage.clickAddRecordOnStage().then(function() {
+                //enter invalid values into fields
+                formsPage.enterInvalidFormValues('numericField');
+            }).then(function() {
+                //Save the form
+                formsPage.clickSaveBtnWithName('Save & Add Another');
+            }).then(function() {
                 //verify validation
                 formsPage.verifyErrorMessages(expectedErrorMessages);
                 // Needed to get around stale element error

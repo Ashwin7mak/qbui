@@ -30,9 +30,10 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
@@ -54,15 +55,15 @@
         it('Save Button - Validate errors ', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //click edit record from the grid recordActions
-            reportServicePage.clickRecordEditPencil(2);
-
-            //enter invalid values into fields on form
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickSaveBtnWithName('Save').then(function() {
+            reportServicePage.clickRecordEditPencil(2).then(function() {
+                //enter invalid values into fields on form
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickSaveBtnWithName('Save');
+            }).then(function() {
                 //verify validation
                 formsPage.verifyErrorMessages(expectedErrorMessages);
             }).then(function() {
@@ -75,16 +76,16 @@
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //click edit record from the grid recordActions
-            reportServicePage.clickRecordEditPencil(3);
+            reportServicePage.clickRecordEditPencil(3).then(function() {
 
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickSaveBtnWithName('Save & Next').then(function() {
-
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickSaveBtnWithName('Save & Next');
+            }).then(function() {
                 //verify validation
                 formsPage.verifyErrorMessages(expectedErrorMessages);
                 // Needed to get around stale element error

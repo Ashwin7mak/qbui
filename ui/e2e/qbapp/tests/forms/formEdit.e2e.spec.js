@@ -27,12 +27,13 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
                 });
             });
@@ -43,28 +44,29 @@
 
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent();
-
-            //click edit record from the grid recordActions
-            reportServicePage.clickRecordEditPencil(2);
-
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                formsPage.enterFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveBtn();
-
-            //reload the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent().then(function() {
-                //Verify record is added on top row in a table
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                //click edit record from the grid recordActions
+                reportServicePage.clickRecordEditPencil(2);
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
-                done();
+                //Save the form
+                formsPage.clickFormSaveBtn();
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent().then(function() {
+                    //Verify record is added on top row in a table
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
         });
 
@@ -74,31 +76,31 @@
 
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
-            reportContentPage.waitForReportContent();
-
-            //click edit record from the grid recordActions
-            reportServicePage.clickEditPencilOnStage(3);
-
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                formsPage.enterFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveBtn().then(function() {
-                //verify it landed in record viewMode since record edited in record open mode. If edited at table level should land in table.
-                reportServicePage.waitForElement(formsPage.formViewContainerEl);
-            });
-
-            //reload the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
             reportContentPage.waitForReportContent().then(function() {
-                //Verify record is added on top row in a table
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
+                //click edit record from the grid recordActions
+                reportServicePage.clickEditPencilOnStage(3);
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
-                done();
+                //Save the form
+                formsPage.clickFormSaveBtn().then(function() {
+                    //verify it landed in record viewMode since record edited in record open mode. If edited at table level should land in table.
+                    reportServicePage.waitForElement(formsPage.formViewContainerEl);
+                });
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
+                reportContentPage.waitForReportContent().then(function() {
+                    //Verify record is added on top row in a table
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
         });
 
@@ -107,28 +109,29 @@
 
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
-            reportContentPage.waitForReportContent();
-
-            //click on add record button
-            reportServicePage.clickEditPencilOnReportActions(1);
-
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                formsPage.enterFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveBtn();
-
-            //reload the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
             reportContentPage.waitForReportContent().then(function() {
-                //Verify record is added on top row in a table
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
+                //click on add record button
+                reportServicePage.clickEditPencilOnReportActions(1);
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
-                done();
+                //Save the form
+                formsPage.clickFormSaveBtn();
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
+                reportContentPage.waitForReportContent().then(function() {
+                    //Verify record is added on top row in a table
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
         });
     });
