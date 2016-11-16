@@ -239,7 +239,10 @@
             //TODO: Doesn't work for Safari and Firefox, need to find workaround
             var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
             return rowElement.click().then(function() {
-                return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu);
+                return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu).then(function() {
+                    // Let the trowser animate
+                    return e2eBase.sleep(browser.params.smallSleep);
+                });
             });
         };
 
@@ -251,7 +254,10 @@
             //TODO: Doesn't work for Safari and Firefox, need to find workaround
             var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
             return rowElement.click().then(function() {
-                return e2ePageBase.waitForElement(element(by.className('viewForm')));
+                return e2ePageBase.waitForElement(element(by.className('viewForm'))).then(function() {
+                    // Let the trowser animate
+                    return e2eBase.sleep(browser.params.smallSleep);
+                });
             });
         };
 
@@ -261,7 +267,10 @@
          */
         this.clickRecordEditPencil = function(recordRowIndex) {
             return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit')).click().then(function() {
-                return e2ePageBase.waitForElement(element(by.className('editForm')));
+                return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                    // Let the trowser animate
+                    return e2eBase.sleep(browser.params.smallSleep);
+                });
             });
         };
 
@@ -271,13 +280,13 @@
          */
         this.clickEditPencilOnStage = function(recordRowIndex) {
             var self = this;
-
             return element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).click().then(function() {
-                // Let the trowser animate
-                e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
                     return self.reportEditRecordBtnOnStage.click().then(function() {
-                        return e2ePageBase.waitForElement(element(by.className('editForm')));
+                        return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                            // Let the trowser animate
+                            return e2eBase.sleep(browser.params.smallSleep);
+                        });
                     });
                 });
             });
@@ -289,13 +298,13 @@
          */
         this.clickEditPencilOnReportActions = function(recordRowIndex) {
             var self = this;
-
             return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('ag-selection-checkbox')).click().then(function() {
-                // Let the trowser animate
-                e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnReportActions).then(function() {
                     return self.reportEditRecordBtnOnReportActions.click().then(function() {
-                        return e2ePageBase.waitForElement(element(by.className('editForm')));
+                        return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                            // Let the trowser animate
+                            return e2eBase.sleep(browser.params.smallSleep);
+                        });
                     });
                 });
             });
@@ -310,7 +319,10 @@
             var self = this;
             return e2ePageBase.waitForElementToBeClickable(self.reportAddRecordBtn).then(function() {
                 return self.reportAddRecordBtn.click().then(function() {
-                    return e2ePageBase.waitForElement(element(by.className('editForm')));
+                    return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                        // Let the trowser animate
+                        return e2eBase.sleep(browser.params.smallSleep);
+                    });
                 });
             });
         };

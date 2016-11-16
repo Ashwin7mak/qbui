@@ -127,7 +127,10 @@
             var self = this;
             return e2ePageBase.waitForElementToBeClickable(self.addNewRecordBtn).then(function() {
                 return self.addNewRecordBtn.click().then(function() {
-                    return e2ePageBase.waitForElement(element(by.className('editForm')));
+                    return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                        // Let the trowser animate
+                        return e2eBase.sleep(browser.params.smallSleep);
+                    });
                 });
             });
         };
@@ -156,7 +159,10 @@
             var self = this;
             return e2ePageBase.waitForElementToBeClickable(self.recordEditBtn).then(function() {
                 return self.recordEditBtn.click().then(function() {
-                    return e2ePageBase.waitForElement(element(by.className('editForm')));
+                    return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                        // Let the trowser animate
+                        return e2eBase.sleep(browser.params.smallSleep);
+                    });
                 });
             });
         };
