@@ -41,6 +41,7 @@
 
         it('Edit a record via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
+
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent();
@@ -55,6 +56,9 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
+
+            //reload the report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent().then(function() {
                 //Verify record is added on top row in a table
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
@@ -66,13 +70,13 @@
         });
 
         it('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
-            //TODO MB-1339 - Test won't work in Firefox and Safari as edit opens 2 forms in view and edit mode one behind the other.
-            //TODO After hitting save instead of showing report grid it has the view mode open.
+
             var fieldTypeClassNames = ['dateField'];
+
             //Open the report
-            //reload the report to verify the row edited
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
             reportContentPage.waitForReportContent();
+
             //click edit record from the grid recordActions
             reportServicePage.clickEditPencilOnStage(3);
 
@@ -87,7 +91,7 @@
                 reportServicePage.waitForElement(formsPage.formViewContainerEl);
             });
 
-            //go to report page
+            //reload the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
             reportContentPage.waitForReportContent().then(function() {
                 //Verify record is added on top row in a table
@@ -101,6 +105,7 @@
 
         it('Edit a record from the tableActions Container using report with facets', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
+
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
             reportContentPage.waitForReportContent();
@@ -115,6 +120,9 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
+
+            //reload the report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
             reportContentPage.waitForReportContent().then(function() {
                 //Verify record is added on top row in a table
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
