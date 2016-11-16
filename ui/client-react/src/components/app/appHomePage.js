@@ -5,7 +5,6 @@ import {NotificationManager} from 'react-notifications';
 import {SUPPORT_LINK} from '../../constants/urlConstants';
 
 import './appHomePage.scss';
-import './m5AppHomePage.scss';
 
 function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
@@ -31,7 +30,7 @@ wistiaScriptPart2.async = true;
 /**
  * Temporary homepage for M5 Beta
  */
-const M5AppHomePage = React.createClass({
+const AppHomePage = React.createClass({
     launchGuideMe() {
         try {
             WalkMeAPI.startWalkthruById(228348);
@@ -113,4 +112,4 @@ const M5AppHomePage = React.createClass({
     }
 });
 
-export default M5AppHomePage;
+export default AppHomePage;

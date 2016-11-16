@@ -1,3 +1,5 @@
+@import '../../assets/css/qbVariables';
+
 .appHomePageContainer {
     display: flex;
     flex-direction: column;
@@ -17,5 +19,340 @@
     }
     .secondaryBar {
         flex: 0 0 auto;
+    }
+}
+
+/*
+ * This background color for appHomePageContainer is defined here because it is particular to the temporary app homepage
+ * background color. It overrides the white background for the purpose of this temp page. When/If this is deleted,
+ * the homepage will revert to the normal color.
+*/
+.appHomePageContainer {
+    background-color: $color-blue-200;
+}
+
+.m5AppHomePage {
+    background-color: $color-blue-200;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    padding: 20px;
+
+    .appHomePageWidthConstraint {
+        max-width: 1200px;
+        min-width: 670px;
+        margin: auto;
+
+        @include medium-breakpoint {
+            min-width: initial;
+        }
+
+        @include small-breakpoint {
+            min-width: initial;
+        }
+    }
+
+    @include medium-breakpoint {
+        padding: 20px;
+    }
+
+    @include small-breakpoint {
+        padding: 20px;
+    }
+
+    h2, h3 {
+        margin-top: 0;
+    }
+
+    .homePanel {
+        background-color: $color-black-100;
+        border: 1px solid $color-blue-300;
+        padding: 10px 30px;
+        margin-bottom: 20px;
+
+        @include small-breakpoint {
+            padding: 10px 15px;
+        }
+    }
+
+    .bottomSubPanel {
+        padding: 10px;
+    }
+
+    .topPanel {
+        display: flex;
+
+        @include medium-breakpoint {
+            flex-direction: column;
+        }
+
+        @include small-breakpoint {
+            flex-direction: column;
+        }
+
+        h2 {
+            margin-top: 8px;
+        }
+
+        .topPanelContent {
+            flex-basis: 65%;
+            margin-right: 40px;
+
+            @include medium-breakpoint {
+                flex-basis: auto;
+                margin-right: 0;
+            }
+
+            @include small-breakpoint {
+                flex-basis: auto;
+                margin-right: 0;
+            }
+        }
+
+        .topPanelLinks {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+
+            .linkWithImage {
+                display: flex;
+                align-items: center;
+                justify-content: left;
+                margin-bottom: 10px;
+
+                img, .launchTourImage:after, .guideMeImage:after {
+                    height: 40px;
+                    margin-right: 10px;
+                }
+            }
+
+            .qbIcon {
+                font-size: 40px;
+                margin-right: 5px;
+            }
+        }
+
+        /* For Chrome/Safari */
+        .launchTourImage {
+            content: url("Launch-tour.png");
+        }
+
+        /** For Firefox */
+        .launchTourImage:after {
+            display: inline-block;
+            content: '';
+            background-image: url("Launch-tour.png");
+            background-repeat: no-repeat;
+            background-size: auto 40px;
+            width: 40px;
+        }
+
+        .guideMeImage {
+            content: url("Guide-me.png");
+        }
+        /** For Firefox */
+        .guideMeImage:after {
+            display: inline-block;
+            content: '';
+            background-image: url("Guide-me.png");
+            background-repeat: no-repeat;
+            background-size: auto 40px;
+            width: 40px;
+        }
+    }
+
+    .mainPanel {
+        display: flex;
+        text-align: center;
+
+        @include medium-breakpoint {
+            flex-direction: column;
+        }
+
+        @include small-breakpoint {
+            flex-direction: column;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h4 {
+            align-self: center;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .leftContent p, .rightContent p {
+            margin-top: 20px;
+        }
+
+        .leftContent {
+            flex-basis: 50%;
+            margin-right: 20px;
+
+            @include medium-breakpoint {
+                flex-basis: auto;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+
+            @include small-breakpoint {
+                flex-basis: auto;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+
+            .welcomeGuideImage {
+                content: url("Welcome-guide.png");
+            }
+            .welcomeGuideImage:after {
+                content: url("Welcome-guide.png");
+            }
+        }
+
+        .rightContent {
+            align-items: center;
+            flex-basis: 50%;
+
+            @include medium-breakpoint {
+                flex-basis: auto;
+            }
+
+            @include small-breakpoint {
+                flex-basis: auto;
+            }
+
+            .giveFeedbackImage {
+                content: url("GiveFeedback.png");
+            }
+            .giveFeedbackImage:after {
+                content: url("GiveFeedback.png");
+            }
+        }
+
+        .btn {
+            align-self: center;
+            background-color: $color-indigo-700;
+            border-radius: 0;
+            margin-bottom: 20px;
+            margin-top: 10px;
+
+            &.btn-feedback {
+                padding-left: 40px;
+                padding-right: 40px;
+            }
+
+            small {
+                font-size: 70%;
+            }
+
+            @include small-breakpoint {
+                white-space: normal;
+                word-wrap: break-word;
+            }
+        }
+    }
+
+    .bottomPanel {
+        display: flex;
+
+        @include medium-breakpoint {
+            flex-direction: column;
+        }
+
+        @include small-breakpoint {
+            flex-direction: column;
+        }
+
+        .leftBottomPanel, .rightBottomPanel {
+            flex-basis: 50%;
+
+            @include medium-breakpoint {
+                flex-basis: auto;
+            }
+
+            @include small-breakpoint {
+                flex-basis: auto;
+            }
+        }
+
+        .leftBottomPanel, .rightBottomPanel {
+            display: flex;
+        }
+
+        .leftBottomPanel {
+            margin-right: 20px;
+
+            @include medium-breakpoint {
+                margin-right: 0;
+            }
+
+            @include small-breakpoint {
+                margin-right: 0;
+            }
+        }
+
+        .rightBottomPanel {
+            padding-bottom: 0;
+        }
+
+        .leftBottomPanelContent, .rightBottomPanelContent {
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        .rightBottomPanelContent {
+            @include medium-breakpoint {
+                padding-bottom: 10px;
+            }
+
+            @include small-breakpoint {
+                padding-bottom: 10px;
+            }
+        }
+
+        .homePageTipImage {
+            content: url("Tip.png");
+        }
+        .homePageTipImage:after {
+            content: url("Tip.png");
+        }
+
+        .homePageHelpImage {
+            content: url("Need-help.png");
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .homePageHelpImage:after {
+            content: url("Need-help.png");
+        }
+
+        .supportEmail {
+            display: flex;
+            align-items: center;
+
+            .supportEmailText {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    // On really small devices the layout breaks, this fixes it
+    @media (max-width: 355px) {
+        & {
+            padding: 5px;
+        }
+
+        .rightBottomPanel {
+            flex-direction: column;
+        }
+
+        .homePageHelpImage {
+            object-fit: contain;
+        }
     }
 }
