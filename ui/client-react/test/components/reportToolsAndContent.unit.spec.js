@@ -84,7 +84,7 @@ describe('ReportToolsAndContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
     });
 
-    it('test to check if page fetches records on successful delete', () => {
+    fit('test to check if page fetches records on successful delete', () => {
         let MockParent = React.createClass({
             getInitialState() {
                 return {
@@ -102,9 +102,11 @@ describe('ReportToolsAndContent functions', () => {
         });
 
         component = TestUtils.renderIntoDocument(<MockParent />);
-        spyOn(component.refs.reportTools, 'getPageUsingOffsetMultiplicant');
+        // spyOn(component.refs.reportTools.getFlux(), 'loadDynamicReport');
+        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
+        spyOn(flux.actions, 'loadDynamicReport');
         component.isRecordDeleted();
-        expect(component.refs.reportTools.getPageUsingOffsetMultiplicant).toHaveBeenCalled();
+        expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
     });
 
     it('test to check if page does not fetch records on failed delete', () => {
