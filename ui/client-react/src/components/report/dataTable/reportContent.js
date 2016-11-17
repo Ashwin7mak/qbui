@@ -351,7 +351,7 @@ export let ReportContent = React.createClass({
     handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
         let colList = [];
-        if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.reportData.data.fields)) {
+        if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
