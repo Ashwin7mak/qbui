@@ -60,7 +60,6 @@ let AppHomePageRoute = React.createClass({
     getSelectedAppName() {
         if (this.props.apps && this.props.selectedAppId) {
             let app = _.find(this.props.apps, {id: this.props.selectedAppId});
-
             return (app ? app.name : null);
         }
 

@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import PageTitle from '../pageTitle/pageTitle';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -18,16 +18,10 @@ let AppsRoute = React.createClass({
         flux.actions.setTopTitle();
     },
 
-    getAppName() {
-        if (this.props.app) {
-            return this.props.app.name;
-        }
-    },
-
     render: function() {
         return (
             <div>
-                {/*Reset the page title on the apps page to the realm*/}
+                {/* Reset the page title on the apps page to the realm */}
                 <PageTitle />
                 <AppHomePage />
             </div>
