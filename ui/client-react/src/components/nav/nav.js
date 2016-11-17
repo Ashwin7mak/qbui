@@ -3,6 +3,7 @@ import React from "react";
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
+import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import * as SchemaConsts from "../../constants/schema";
@@ -71,7 +72,10 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         if (Breakpoints.isSmallBreakpoint()) {
-            flux.actions.toggleLeftNav(false);
+            setTimeout(() => {
+                // left nav css transition seems to interfere with event handling without this
+                flux.actions.toggleLeftNav(false);
+            }, 0);
         }
         flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
@@ -210,6 +214,7 @@ export let Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
+                        <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
