@@ -17,6 +17,7 @@
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
         var formService = require('./services/formService.js');
+        var roleService = require('./services/roleService.js');
 
         var e2eBase = {
             // Instantiate recordBase module to use for your tests
@@ -44,6 +45,7 @@
             tableService: tableService(recordBase),
             reportService: reportService(recordBase),
             formService: formService(recordBase),
+            roleService: roleService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables

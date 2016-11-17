@@ -128,7 +128,7 @@
 }
 
 $tableActionsContainerMinHeight: 52px;
-$reportActionsMinHeight: 61px;
+$reportActionsMinHeight: $tableActionsContainerMinHeight;
 @include not-small-breakpoint {
     .tableActionsContainer {
         min-height: $tableActionsContainerMinHeight;
