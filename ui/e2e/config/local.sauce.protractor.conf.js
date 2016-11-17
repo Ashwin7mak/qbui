@@ -35,7 +35,7 @@
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 2
+            maxInstances: 4
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
@@ -46,8 +46,8 @@
         specs: [
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
-            //baseE2EPath + 'qbapp/tests/forms/formAdd.e2e.spec.js',
-            //baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/forms/formAdd.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [

@@ -126,7 +126,7 @@ const ReportToolsAndContent = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.addRecord', icon:'add', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star', disabled: true},
             {msg: 'pageActions.print', icon:'print', disabled: true},
         ];
@@ -183,6 +183,18 @@ const ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport('', noSelections, true);
     },
 
+    /**
+     * This function should be called only once when AGGrid is initialized. Find the full width of
+     * the table so the ReportToolbar can adjust its width to match the table.
+     */
+    onGridSizeSet() {
+        let agGridBody = document.getElementsByClassName('ag-body-container');
+        let leftColumn = document.getElementsByClassName('ag-pinned-left-cols-container');
+        if (_.get(agGridBody, '[0].clientWidth') && _.get(leftColumn, '[0].clientWidth')) {
+            this.setState({gridWidth: agGridBody[0].clientWidth + leftColumn[0].clientWidth});
+        }
+    },
+
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
@@ -204,7 +216,9 @@ const ReportToolsAndContent = React.createClass({
                               getPreviousReportPage={this.getPreviousReportPage}
                               pageStart={this.pageStart}
                               pageEnd={this.pageEnd}
-                              recordsCount={this.recordsCount}/>;
+                              recordsCount={this.recordsCount}
+                              width={this.state.gridWidth}
+               />;
     },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId} nameForRecords={this.props.nameForRecords}/>);
@@ -295,13 +309,13 @@ const ReportToolsAndContent = React.createClass({
     },
 
     render() {
-        let classes = "reportToolsAndContentContainer";
+        let classes = ['reportToolsAndContentContainer'];
         if (this.props.selectedRows) {
             if (this.props.selectedRows.length > 0) {
-                classes += " activeSelection";
+                classes.push('activeSelection');
             }
             if (this.props.selectedRows.length === 1) {
-                classes += " singleSelection";
+                classes.push('singleSelection');
             }
         }
 
@@ -342,7 +356,9 @@ const ReportToolsAndContent = React.createClass({
                                          getPreviousReportPage={this.getPreviousReportPage}
                                          pageStart={this.pageStart}
                                          pageEnd={this.pageEnd}
-                                         recordsCount={this.recordsCount}/>;
+                                         recordsCount={this.recordsCount}
+                                         width={this.state.gridWidth}
+                          />;
 
             let reportFooter = <ReportFooter
                                 reportData={this.props.reportData}
@@ -361,7 +377,7 @@ const ReportToolsAndContent = React.createClass({
                                 recordsCount={this.recordsCount}/>;
 
             return (
-                <div className={classes}>
+                <div className={classes.join(' ')}>
                     <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
                         <input type="checkbox"
                                defaultChecked={this.state.reactabular}
@@ -383,6 +399,8 @@ const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
+
+                                   onGridReady={this.onGridSizeSet}
                                    {...this.props} />
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}

@@ -1,3 +1,6 @@
+/**
+ * E2E tests for error and invalid field validation when adding a new record via a Form.
+ */
 (function() {
     'use strict';
 
@@ -11,7 +14,6 @@
     var reportServicePage = new ReportServicePage();
     var reportContentPage = new ReportContentPage();
     var formsPage = new FormsPage();
-    var tableGenerator = require('../../../../test_generators/table.generator');
 
     describe('Add Form Validation Tests: ', function() {
 
@@ -19,6 +21,7 @@
         var realmId;
         var app;
         var recordList;
+        var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -29,9 +32,11 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
@@ -45,26 +50,33 @@
         beforeEach(function(done) {
             //go to report page directly.
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            // Wait until report loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+            done();
         });
 
         it('Validate all required fields by not entering anything into them on form', function(done) {
-            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
-                reportServicePage.clickAddRecordOnStage();
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-
-                //Save the form without entering any field values
-                formsPage.clickSaveBtnWithName('Save');
-
-                //verify validation
-                formsPage.verifyErrorMessages(expectedErrorMessages);
-                done();
+                reportServicePage.clickAddRecordOnStage().then(function() {
+                    //Save the form without entering any field values
+                    formsPage.clickSaveBtnWithName('Save');
+                }).then(function() {
+                    //verify validation
+                    formsPage.verifyErrorMessages(expectedErrorMessages);
+                }).then(function() {
+                    //verify clicking on alert button brings up the error message popup
+                    formsPage.clickFormAlertBtn();
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+                }).then(function() {
+                    //verify clicking on alert again hides the error message popup
+                    formsPage.clickFormAlertBtn();
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+                }).then(function() {
+                    //close forms
+                    formsPage.clickFormCloseBtn();
+                }).then(function() {
+                    done();
+                });
             });
         });
 
@@ -75,9 +87,8 @@
             return [
                 {
                     message: 'all numeric fields',
-                    fieldTypeClassNames: 'numericField',
-                    expectedErrorMessages : ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field']
-                },
+                    fieldTypeClassNames: 'numericField'
+                }
             ];
         }
 
@@ -85,67 +96,60 @@
             it('Save Button - Validate ' + testcase.message, function(done) {
                 formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                     //click on add record button
-                    reportServicePage.clickAddRecordOnStage();
-
-                    //enter invalid field values
-                    formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
-
-                    //Save the form
-                    formsPage.clickSaveBtnWithName('Save');
-
-                    //verify field validations
-                    formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
-
-                    //verify clicking on alert button brings up the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-
-                    //verify clicking on alert again hides the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-                    done();
+                    reportServicePage.clickAddRecordOnStage().then(function() {
+                        //enter invalid field values
+                        formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
+                    }).then(function() {
+                        //Save the form
+                        formsPage.clickSaveBtnWithName('Save').then(function() {
+                            //verify field validations
+                            formsPage.verifyErrorMessages(expectedErrorMessages);
+                        }).then(function() {
+                            //close dirty form
+                            formsPage.closeSaveChangesDialogue();
+                            done();
+                        });
+                    });
                 });
             });
         });
 
         it('Save and add another Button - Validate errors and correct the errors by adding new record', function(done) {
             var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
-            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
             //click on add record button
-            reportServicePage.clickAddRecordOnStage();
-
-            //enter invalid values into fields
-            formsPage.enterInvalidFormValues('numericField');
-
-            //Save the form
-            formsPage.clickSaveBtnWithName('Save & Add Another');
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
-            // Needed to get around stale element error
-            e2eBase.sleep(browser.params.smallSleep);
-
-            //correct the errors and add the record
-            for (var i = 0; i < validFieldClassNames.length; i++) {
-                formsPage.enterFormValues(validFieldClassNames[i]);
-            }
-
-            //Save the form by clicking on 'Save and add another' btn
-            formsPage.clickFormSaveAndAddAnotherBtn();
-
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            reportServicePage.clickAddRecordOnStage().then(function() {
+                //enter invalid values into fields
+                formsPage.enterInvalidFormValues('numericField');
+            }).then(function() {
+                //Save the form
+                formsPage.clickSaveBtnWithName('Save & Add Another');
+            }).then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+                // Needed to get around stale element error
                 e2eBase.sleep(browser.params.smallSleep);
-                reportServicePage.agGridRecordElList.then(function(records) {
-                    for (var j = 0; j < validFieldClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
-                    }
+            }).then(function() {
+                //correct the errors and add the record
+                for (var i = 0; i < validFieldClassNames.length; i++) {
+                    formsPage.enterFormValues(validFieldClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form by clicking on 'Save and add another' btn
+                formsPage.clickFormSaveAndAddAnotherBtn();
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent().then(function() {
+                    reportServicePage.agGridRecordElList.then(function(records) {
+                        for (var j = 0; j < validFieldClassNames.length; j++) {
+                            formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
+                        }
+                    });
+                }).then(function() {
                     done();
                 });
             });
         });
-
     });
 }());
