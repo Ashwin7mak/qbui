@@ -27,10 +27,16 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let recordActions = {
 
     /**
-     * save a new record
+     * Action to save a new record. On successful save get a copy of the newly created record from server.
+     * @param appId
+     * @param tblId
+     * @param recordChanges
+     * @param fields
+     * @param colList - optional list of fids to query for getRecord call.
+     * @param showNotificationOnSuccess - true to show success notification.
      */
-    saveNewRecord(appId, tblId, recordChanges, fields, addNewRecordAfterSave = false) {
-        function getRecord(_recordChanges, _fields) {
+    saveNewRecord(appId, tblId, recordChanges, fields, colList = [], showNotificationOnSuccess = false) {
+        function formatRecordChanges(_recordChanges) {
             //save changes in record
             let payload = [];
             // columns id and new values array
@@ -59,7 +65,7 @@ let recordActions = {
         }
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            let record = getRecord(recordChanges, fields);
+            let record = formatRecordChanges(recordChanges);
 
             if (appId && tblId && record) {
 
@@ -73,12 +79,34 @@ let recordActions = {
                         logger.debug('RecordService createRecord success:' + JSON.stringify(response));
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
-                            this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                            if (resJson.id) {
+                                //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
+                                let clist = colList ? colList : [];
+                                if (!clist.length && fields) {
+                                    fields.forEach((field) => {
+                                        clist.push(field.id);
+                                    });
+                                }
+                                clist = clist.join('.');
+                                this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
+                                recordService.getRecord(appId, tblId, resJson.id, clist).then(
+                                    getResponse => {
+                                        logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                        this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
 
-                            if (!addNewRecordAfterSave) {
-                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                        if (!showNotificationOnSuccess) {
+                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                        }
+                                        resolve(resJson.id);
+                                    },
+                                    getError => {
+                                        logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                        // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
+                                        this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+                                        reject();
+                                    }
+                                );
                             }
-                            resolve(resJson.id);
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
@@ -206,11 +234,17 @@ let recordActions = {
         });
     },
 
-    /* the start of editing a record */
     /**
-     * save a record
+     * Save changes to an existing record. On successful save get a copy of updated record from server.
+     * @param appId
+     * @param tblId
+     * @param recId
+     * @param pendEdits
+     * @param fields
+     * @param colList - optional list of fids to query for getRecord call.
+     * @param showNotificationOnSuccess - true to show success notification.
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecordAfterSave = false) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -288,16 +322,30 @@ let recordActions = {
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
-                        this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
-
-                        // When adding a new record immediately after saving, the success message should appear
-                        // after the new record row is added so that it appears correctly and for the correct duration
-                        // See method addNewRowAfterRecordSaveSuccess in reportContent for when the mesage is displayed.
-                        if (!addNewRecordAfterSave) {
-                            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        let clist = colList ? colList : [];
+                        if (!clist.length && fields) {
+                            fields.forEach((field) => {
+                                clist.push(field.id);
+                            });
                         }
-
-                        resolve(recId);
+                        clist = clist.join('.');
+                        this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
+                        recordService.getRecord(appId, tblId, recId, clist).then(
+                            getResponse => {
+                                logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
+                                if (!showNotificationOnSuccess) {
+                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                }
+                                resolve(recId);
+                            },
+                            getError => {
+                                logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
+                                this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+                                reject();
+                            }
+                        );
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
