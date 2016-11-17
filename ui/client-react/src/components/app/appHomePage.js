@@ -48,7 +48,7 @@ const AppHomePage = React.createClass({
     },
     render() {
         return (
-            <div className="m5AppHomePage">
+            <div className="appHomePage">
                 <div className="appHomePageWidthConstraint">
                     <div className="homePanel topPanel">
                         <div className="topPanelContent">
