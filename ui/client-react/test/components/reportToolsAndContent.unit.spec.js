@@ -11,7 +11,7 @@ describe('ReportToolsAndContent functions', () => {
     'use strict';
 
     let component;
-
+    // function getFlux() {return {actions: {loadDynamicReport() {return;}}};}
     let flux = {
         actions:{
             selectTableId() {return;},
@@ -23,10 +23,13 @@ describe('ReportToolsAndContent functions', () => {
             filterSelectionsPending() {return;},
             getNextReportPage() {return;},
             getPreviousReportPage() {return;},
+            getPageUsingOffsetMultiplicant() {return;},
+            loadDynamicReport() {return;},
+            // successfulDelete() {return;}
         }
     };
 
-    let reportParams = {appId:1, tblId:2, rptId:3, format:true, offset:1, numRows: 10};
+    let reportParams = {appId:1, tblId:2, rptId:3, format:true, offset:0, numRows: 20};
     let reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
     let ReportContentMock = React.createClass({
@@ -59,6 +62,9 @@ describe('ReportToolsAndContent functions', () => {
         flux.actions.filterSelectionsPending.calls.reset();
         flux.actions.getNextReportPage.calls.reset();
         flux.actions.getPreviousReportPage.calls.reset();
+        // flux.actions.getPageUsingOffsetMultiplicant.calls.reset();
+        // flux.actions.loadDynamicReport.calls.reset();
+        // flux.actions.successfulDelete.calls.reset();
     });
 
     it('test render of report widget', () => {
@@ -76,5 +82,68 @@ describe('ReportToolsAndContent functions', () => {
 
         //  test that the reportContentMock is rendered
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
+    });
+
+    it('test to check if page fetches records on successful delete', () => {
+        let filter = {
+            selections: reportDataParams.reportData.selections,
+            search:undefined,
+            facet:undefined
+        };
+        let queryParams = {
+            sortList: '',
+            offset: reportParams.offset,
+            numRows: reportParams.numRows
+        };
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    isRecordDeleted: false
+                };
+            },
+            isRecordDeleted() {
+                this.setState({isRecordDeleted: true});
+            },
+            render() {
+                const modifiedReport = Object.assign({}, reportDataParams);
+                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
+                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
+        spyOn(flux.actions, 'loadDynamicReport');
+        component.isRecordDeleted();
+        expect(flux.actions.loadDynamicReport).toHaveBeenCalledWith(reportParams.appId,
+                                                                    reportParams.tblId,
+                                                                    reportParams.rptId,
+                                                                    reportParams.format,
+                                                                    filter,
+                                                                    queryParams);
+    });
+
+    it('test to check if page does not fetch records on failed delete', () => {
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    isRecordDeleted: true
+                };
+            },
+            isRecordDeleted() {
+                this.setState({isRecordDeleted: false});
+            },
+            render() {
+                const modifiedReport = Object.assign({}, reportDataParams);
+                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
+                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
+        spyOn(flux.actions, 'loadDynamicReport');
+        component.isRecordDeleted();
+        expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
     });
 });
