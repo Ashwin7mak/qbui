@@ -289,14 +289,6 @@
         };
 
         /**
-         * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
-         */
-        this.createRoleReportMapJSON = function(roleId, report_Id) {
-            var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
-            return JSON.parse(jsonStr);
-        };
-
-        /**
          * Function that gets user authentication
          */
         this.getUserAuthentication = function(userId) {
@@ -314,7 +306,7 @@
             }).map(function(elm) {
                 return elm.getText();
             }).then(function(fieldsPresentOnForm) {
-                expectedFieldsNotPresentOnForm.filter(function(field) {
+                return expectedFieldsNotPresentOnForm.filter(function(field) {
                     //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
                     expect(fieldsPresentOnForm.indexOf(field)).toBe(-1);
                 });

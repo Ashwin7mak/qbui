@@ -26,6 +26,14 @@
                 return recordBase.apiBase.executeRequest(rolesEndpoint, 'POST', fieldRightsJSON);
             },
 
+            /**
+             * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
+             */
+            createRoleReportMapJSON: function(roleId, report_Id) {
+                var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
+                return JSON.parse(jsonStr);
+            },
+
         };
         return roleService;
     };

@@ -49,7 +49,7 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
                 //Create a report
-                e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportJSON).then(function(repResponse) {
+                return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportJSON).then(function(repResponse) {
                     var r = JSON.parse(repResponse.body);
                     reportId = r.id;
                 });
@@ -57,23 +57,26 @@
                 //create user
                 return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
-                    return e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
-                        //POST custdefaulthomepage for a table
-                        return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
-                            //Modify the field rights of all text records (readAccess and modify access set to false)
-                            return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 6, false, false).then(function() {
-                                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 16, false, false).then(function() {
-                                    return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 17, false, false).then(function() {
-                                        return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 18, false, false).then(function() {
-                                        }).then(function() {
-                                            done();
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
                 });
+            }).then(function() {
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]);
+            }).then(function() {
+                //POST custdefaulthomepage for a table
+                return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, e2eBase.roleService.createRoleReportMapJSON(roleId, reportId));
+            }).then(function() {
+                //Modify the field rights for Text field (readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 6, false, false);
+            }).then(function() {
+                //Modify the field rights for Phone Number Field(readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 16, false, false);
+            }).then(function() {
+                //Modify the field rights for Email Address Field(readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 17, false, false);
+            }).then(function() {
+                //Modify the field rights for URL Field(readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 18, false, false);
+            }).then(function() {
+                done();
             });
         });
 

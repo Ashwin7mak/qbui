@@ -49,7 +49,7 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
                 //Create a report
-                e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportJSON).then(function(repResponse) {
+                return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportJSON).then(function(repResponse) {
                     var r = JSON.parse(repResponse.body);
                     reportId = r.id;
                 });
@@ -57,25 +57,29 @@
                 //create user
                 return e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
-                    return e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
-                        //POST custdefaulthomepage for a table
-                        return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
-                            //Modify the field rights of all numeric fields on a form (readAccess and modify access set to false)
-                            return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 7, false, false).then(function() {
-                                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 8, false, false).then(function() {
-                                    return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 9, false, false).then(function() {
-                                        return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 10, false, false).then(function() {
-                                            return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 14, false, false).then(function() {
-                                            }).then(function() {
-                                                done();
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
                 });
+            }).then(function() {
+                return e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]);
+            }).then(function() {
+                //POST custdefaulthomepage for a table
+                return e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, e2eBase.roleService.createRoleReportMapJSON(roleId, reportId));
+            }).then(function() {
+                //Modify the field rights for numeric field (readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 7, false, false);
+            }).then(function() {
+                //Modify the field rights for Numeric Currency Field (readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 8, false, false);
+            }).then(function() {
+                //Modify the field rights for Numeric Percent Field (readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 9, false, false);
+            }).then(function() {
+                //Modify the field rights for Numeric Rating Field (readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 10, false, false);
+            }).then(function() {
+                //Modify the field rights for Duration Field (readAccess and modify access set to false)
+                return e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 14, false, false);
+            }).then(function() {
+                done();
             });
         });
 
