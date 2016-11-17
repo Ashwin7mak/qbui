@@ -24,8 +24,8 @@
         specs: [
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
-            //baseE2EPath + 'qbapp/tests/forms/formAdd.e2e.spec.js',
-            //baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/forms/formAdd.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [
@@ -47,7 +47,7 @@
             // If true, print colors to the terminal.
             showColors: true,
             // Default time to wait in ms before a test fails.
-            defaultTimeoutInterval: 150000
+            defaultTimeoutInterval: 600000
         },
         // Globally accessible variables (params is a property of the Protractor instance)
         // Used for running tests slower / faster if running in Sauce Labs
