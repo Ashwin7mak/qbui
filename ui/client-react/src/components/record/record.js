@@ -9,21 +9,12 @@ let Record = React.createClass({
     mixins: [FluxMixin],
     displayName: 'Record',
 
-    componentDidMount() {
-        // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
-        //if ((_.has(this.props, 'pendEdits.recordEditOpen') && !this.props.pendEdits.recordEditOpen) && _.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
-        //    this.handleEditRecordStart(this.props.recId);
-        //}
-    },
     componentWillReceiveProps(nextProps) {
         let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && !this.props.pendEdits.recordEditOpen;
         let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
         if (wasRecordEditOpen !== shouldRecordEditOpen && _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges)) {
             this.handleEditRecordStart(this.props.recId);
         }
-        //if ((_.has(this.props, 'pendEdits.recordEditOpen') && !this.props.pendEdits.recordEditOpen) && _.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
-        //    this.handleEditRecordStart(this.props.recId);
-        //}
     },
     /**
      * Get the record as {fids, names}
@@ -113,13 +104,6 @@ let Record = React.createClass({
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
     },
-
-    //componentDidUpdate(prevProps,  prevState) {
-    //    // the first time with no changes on a new record,  since its new consider all fields changed so they get saved
-    //    if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges) &&  !this.props.recId && !this.props.formData.record) {
-    //        this.handleEditRecordStart(this.props.recId);
-    //    }
-    //},
 
     render() {
 
