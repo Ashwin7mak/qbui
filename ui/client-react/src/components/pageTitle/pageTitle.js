@@ -9,9 +9,11 @@ import {DEFAULT_PAGE_TITLE, NEW_RECORD_VALUE} from '../../constants/urlConstants
  * # Page Title
  *
  * A component that can alter the page/document title (i.e., the title in the tab at the top of the browser)
+ *
  * Logic for contextually identifying the title is included or you can pass in a title that will be used.
+ *
  * The title takes the form:
- * {report name} - {title name} - {app name} - QuickBase
+ * {edit/add record} - {report name} - {title name} - {app name} - QuickBase
  *
  * or if no context provided:
  * {realm name} - Quickbase
