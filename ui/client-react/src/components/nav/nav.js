@@ -18,7 +18,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
-import PageTitle from '../pageTitle/pageTitle';
+import NavPageTitle from '../pageTitle/navPageTitle';
 import AppQbModal from '../qbModal/appQbModal';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -183,7 +183,7 @@ export let Nav = React.createClass({
         }
 
         return (<div className={classes}>
-            <PageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} recordId={editRecordIdForPageTitle} />
+            <NavPageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} recordId={editRecordIdForPageTitle} />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
