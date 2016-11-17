@@ -50,7 +50,7 @@ describe('ReportActions functions', () => {
         let selection = [1, 2, 3];
         component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
         let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
-        let node = ReactDOM.findDOMNode(actionIcons[2]);
+        let node = ReactDOM.findDOMNode(actionIcons[3]);
         TestUtils.Simulate.click(node);
 
         // no longer delete before confirmation

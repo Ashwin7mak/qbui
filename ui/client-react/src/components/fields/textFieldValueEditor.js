@@ -80,27 +80,13 @@ const TextFieldValueEditor = React.createClass({
         }
     },
 
-    getValue() {
-        /*
-         Value is set to display by default because in most cases
-         the user edits the display value and not the raw value.
-         For example, the user edits '$5.50', not '550'.
-         If you need the user to edit the raw value instead of
-         the display value, then remove display from the props before passing
-         to textFieldValueEditor.
-         */
-        let value = this.props.display ? this.props.display : this.props.value;
-        // If it still is null, show as a blank string to avoid React input errors
-        value = (value === null ? '' : value);
-        return value;
-    },
-
     renderInputBox(classes) {
         let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
+        // use the raw value as the input value, not the formatted display value that may include escaped content
         return <input ref="textInput"
                       className={classes}
-                      value={this.getValue()}
+                      value={this.props.value || ''}
                       maxLength={maxLength}
                       type={this.props.inputType}
                       key={'inp' + this.props.idKey}
@@ -127,11 +113,13 @@ const TextFieldValueEditor = React.createClass({
         let theVals = {
             value: ev.target.value
         };
+
         let attrs = null;
         if (this.props.fieldDef && this.props.fieldDef.datatypeAttributes) {
             attrs = this.props.fieldDef.datatypeAttributes;
         }
         theVals.display = textFormatter.format(theVals, attrs);
+
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }

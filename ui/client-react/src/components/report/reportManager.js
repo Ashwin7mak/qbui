@@ -41,6 +41,7 @@ let ReportManager = React.createClass({
      * render a searchable set of report categories (hardcoded until we get the real ones...)
      */
     render() {
+        const groupTitle = Locale.getMessage("reports.allReports");
         return (
             <div className={"reportsList"}>
                 <div className={"reportsContainer"}>
@@ -56,7 +57,7 @@ let ReportManager = React.createClass({
 
                     </div>
                     <div className="reportGroups">
-                        <ReportGroup reports ={this.reportList()} title={"My Reports"} onSelectReport={this.props.onSelectReport}/>
+                        <ReportGroup reports ={this.reportList()} title={groupTitle} onSelectReport={this.props.onSelectReport}/>
                     </div>
                 </div>
             </div>

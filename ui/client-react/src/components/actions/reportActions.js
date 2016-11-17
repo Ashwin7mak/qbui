@@ -108,6 +108,13 @@ let ReportActions = React.createClass({
                 bodyMessage={msg}
                 type="alert"/>);
     },
+    getEmailAction() {
+        //TODO Email action is disabled for now until its implemented.
+        //return <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
+        //                        subject={this.getEmailSubject()}
+        //                        body={this.getEmailBody()}/>;
+        return <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.email")} disabled={true}/>;
+    },
     /**
      * render the actions, omitting 'edit' if we have multiple selections
      */
@@ -122,11 +129,7 @@ let ReportActions = React.createClass({
                             <ActionIcon icon="edit" onClick={this.onEditClicked} tip={this.getSelectionTip("selection.edit")}/>
                         }
                         <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
-
-                        <EmailReportLink tip={this.getSelectionTip("selection.email")}
-                                         subject={this.getEmailSubject()}
-                                         body={this.getEmailBody()}/>
-
+                        {this.getEmailAction()}
                         <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
                         <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleDelete}/>
 
