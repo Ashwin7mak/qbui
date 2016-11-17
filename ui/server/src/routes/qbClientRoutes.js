@@ -90,13 +90,12 @@ var lodash = require('lodash');
         });
 
         app.route('/qbase/components/:componentName').get(function(req, res) {
-            renderIndex(req, res, {bundleFileName: compBundleFileName});
+            renderIndex(req, res, {title: 'QuickBase Component Library', bundleFileName: compBundleFileName});
         });
 
         //  default application dashboard
         app.route('/qbase/').get(function(req, res) {
             renderIndex(req, res);
         });
-
     };
 }());
