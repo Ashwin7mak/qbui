@@ -168,7 +168,9 @@
                     for (var i = 0; i < cells.length; i++) {
                         fetchCellValuesPromises.push(self.getRecordCellValue(cells[i]));
                     }
-                    return Promise.all(fetchCellValuesPromises).then(function(results) {
+                    return Promise.each(fetchCellValuesPromises, function(results) {
+                        return results;
+                    }).then(function(results) {
                         // Do post processing
                         for (var j = 0; j < results.length; j++) {
                             results[j] = self.formatRecordValue(results[j]);
@@ -289,7 +291,7 @@
          * Function returns the date input cells for the record being edited in agGrid
          * @returns An array of element locators
          */
-        //TODO: Extend for editing multiple records at a time
+            //TODO: Extend for editing multiple records at a time
         this.getNumericFieldInputCells = function() {
             return this.agGridRecordElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -306,7 +308,7 @@
          * Function returns the date input cells for the record being edited in agGrid
          * @returns An array of element locators
          */
-        //TODO: Extend for editing multiple records at a time
+            //TODO: Extend for editing multiple records at a time
         this.getDateFieldInputCells = function() {
             return this.agGridRecordElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -499,6 +501,7 @@
 
         this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconTableUISturdy-delete'));
         this.successWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
+        this.notificationWindow = element(by.className('notification')).element(by.className('notification-message')).element(by.className('message'));
 
 
         //Click on the Delete Icon and Checking for the success Message
@@ -512,6 +515,18 @@
             var self = this;
             this.waitForElement(self.successWindow).then(function() {
                 expect(self.successWindow.getText()).toMatch(successMessage.toString());
+            });
+        };
+
+        // Notification window assertion
+        this.assertNotificationMessage = function(notificationMessage) {
+            var self = this;
+            return self.waitForReportContent().then(function() {
+                return self.waitForElementToBePresent(self.notificationWindow).then(function() {
+                    expect(self.notificationWindow.getAttribute('textContent')).toMatch(notificationMessage.toString());
+                    //wait for growl to slide away
+                    return e2eBase.sleep(browser.params.mediumSleep);
+                });
             });
         };
 

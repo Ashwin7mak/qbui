@@ -64,7 +64,7 @@
         display: flex;
         flex-direction: row;
         flex: 1 0 auto;
-        align-items: center;
+        align-items: flex-start;
         color: $icon-color;
 
 
@@ -78,18 +78,15 @@
         }
 
         .leftReportToolbar {
-            width:50%;
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .rightReportToolbar {
-            width:50%;
             display: flex;
             flex-direction: row;
-            flex: 1 1 auto;
             justify-content: flex-end;
             color: $pagination-iconfont-normal-color;
 
@@ -98,7 +95,6 @@
                 display:flex;
                 justify-content: flex-end;
                 align-items: center;
-                width: 50%;
 
                 .loadedContent {
                     display:block;
@@ -124,14 +120,8 @@
             }
 
             .reportNavigation {
-                flex-grow: 1;
                 display:flex;
                 align-items: center;
-                width: 50%;
-            }
-            .spacer {
-                min-width:1px;
-                flex-grow: 1;
             }
             .loadedContent {
                 flex-grow: 1;
@@ -165,6 +155,9 @@
             font-size: 16px;
             cursor: pointer;
         }
+    }
+    .spacer {
+        width: 15px;
     }
 
     .reportFooter {
@@ -285,7 +278,7 @@
 
     .navigationButton {
         text-decoration: none;
-        padding-top:10px;
+        padding-top:5px;
         .disabled {
             pointer-events: none;
         }
