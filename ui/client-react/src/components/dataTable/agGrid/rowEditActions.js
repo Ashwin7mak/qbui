@@ -64,8 +64,9 @@ const RowEditActions = React.createClass({
         if (this.props.flux && this.props.flux.store) {
             let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
             if (recordPendingEdits && (recordPendingEdits.isPendingEdit || id === null)) {
-                //to show saving in spinner
-                this.forceUpdate();
+                //state change to trigger rerending this component to show saving in spinner & not update all of aggrid
+                //as we should avoid calling forceupdate we instead update key value
+                this.setState({key : "rowEditKey-" + new Date().getTime()});
             }
         }
 

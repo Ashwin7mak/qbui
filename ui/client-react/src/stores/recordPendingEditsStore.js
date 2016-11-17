@@ -25,9 +25,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
+            actions.DELETE_RECORD, this.onStartEdit,
+            actions.DELETE_RECORD_BULK, this.onStartEdit,
+            actions.DELETE_RECORD_SUCCESS, this.onEndEdit,
+            actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
+            actions.DELETE_RECORD_BULK_SUCCESS, this.onEndEdit,
+            actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
-            actions.DELETE_RECORD_FAILED, this.deleteRecordFailed,
-            actions.DELETE_RECORD_BULK_FAILED, this.deleteRecordBulkFailed,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
@@ -335,13 +339,22 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.saving = false;
         this.emit('change');
     },
-
-    deleteRecordFailed(payload) {
-        this.handleErrors(payload);
+    onStartEdit() {
+        this.saving = true;
         this.emit('change');
     },
-    deleteRecordBulkFailed(payload) {
+    onEndEdit() {
+        this.saving = false;
+        this.emit('change');
+    },
+    onDeleteRecordFailed(payload) {
         this.handleErrors(payload);
+        this.saving = false;
+        this.emit('change');
+    },
+    onDeleteRecordBulkFailed(payload) {
+        this.handleErrors(payload);
+        this.saving = false;
         this.emit('change');
     },
     /**
