@@ -42,6 +42,8 @@
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
         var ROLES_ENDPOINT = '/roles/';
+        var TABLES_RIGHTS = '/tableRights/';
+        var FIELD_RIGHTS = '/fieldRights/';
         var ADMIN_REALM = 'localhost';
         var ADMIN_REALM_ID = 117000;
         var ADMIN_TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
@@ -205,8 +207,20 @@
                 }
                 return endpoint;
             },
+            resolveCreateAppRolesEndpoint        : function(appId, roleId) {
+                var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT;
+                return endpoint;
+            },
             resolveAppRolesEndpoint        : function(appId, roleId) {
                 var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + USERS_ENDPOINT;
+                return endpoint;
+            },
+            resolveAppRoleTableRightsEndpoint        : function(appId, roleId, tableId) {
+                var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + TABLES_ENDPOINT + tableId + TABLES_RIGHTS;
+                return endpoint;
+            },
+            resolveAppRoleFieldRightsEndpoint        : function(appId, roleId, tableId, fieldId) {
+                var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + TABLES_ENDPOINT + tableId + '/field/' + fieldId + FIELD_RIGHTS;
                 return endpoint;
             },
             defaultHeaders              : DEFAULT_HEADERS,

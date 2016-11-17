@@ -3,7 +3,7 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-import M5AppHomePage from '../app/m5AppHomePage';
+import AppHomePage from '../app/appHomePage';
 
 /**
  * placeholder for my apps route
@@ -19,7 +19,7 @@ let AppsRoute = React.createClass({
     },
 
     render: function() {
-        return <M5AppHomePage />;
+        return <AppHomePage />;
     }
 });
 

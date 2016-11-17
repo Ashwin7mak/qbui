@@ -42,7 +42,8 @@ export default {
             dtsErrorTID: "Identifiant de transaction:",
             dtsErrorPrimaryButtonText: "Ouvrez mon application en Classique"
         },
-        reports : {
+        reports: {
+            allReports: "Tous les Rapports",
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
             emailBody: "Voici le rapport de la '{reportName}' '{tableName}' de table dans '{appName}'"
@@ -381,7 +382,9 @@ export default {
             favorites: "L'accès aux Favoris n'est pas encore disponible",
             makeFavorite: "Marquer comme favori n'est pas encore disponible",
             print: "L'impression n'est pas encore disponible",
-            copy: "La copie n'est pas encore disponible"
+            copy: "La copie n'est pas encore disponible",
+            email: "L'envoi par courriel n'est pas encore disponible",
+            delete: "La suppression n'est pas encore disponible"
         },
         quickBaseClassic: "QuickBase Classique"
     }
