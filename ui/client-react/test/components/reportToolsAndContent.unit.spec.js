@@ -19,12 +19,14 @@ describe('ReportToolsAndContent functions', () => {
             filterSelectionsPending() {return;},
             getNextReportPage() {return;},
             getPreviousReportPage() {return;},
+            getPageUsingOffsetMultiplicant() {return;},
+            loadDynamicReport() {return;},
         }
     };
 
     const rptId = '3';
-    const reportParams = {appId: '1', tblId: '2', rptId: rptId, format: true, offset: 1, numRows: 10};
-    const reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: 0, numRows: 20};
+    let reportDataParams = {reportData: {loading: true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
     const primaryKeyName = 'Employee Number';
     const reportFields = {
@@ -109,5 +111,68 @@ describe('ReportToolsAndContent functions', () => {
         expect(reportContent).not.toBeNull();
         expect(reportContent).not.toBeUndefined();
         expect(reportContent.props.primaryKeyName).toEqual(primaryKeyName);
+    });
+
+    it('test to check if page fetches records on successful delete', () => {
+        let filter = {
+            selections: reportDataParams.reportData.selections,
+            search:undefined,
+            facet:undefined
+        };
+        let queryParams = {
+            sortList: '',
+            offset: reportParams.offset,
+            numRows: reportParams.numRows
+        };
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    isRecordDeleted: false
+                };
+            },
+            isRecordDeleted() {
+                this.setState({isRecordDeleted: true});
+            },
+            render() {
+                const modifiedReport = Object.assign({}, reportDataParams);
+                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
+                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
+        spyOn(flux.actions, 'loadDynamicReport');
+        component.isRecordDeleted();
+        expect(flux.actions.loadDynamicReport).toHaveBeenCalledWith(reportParams.appId,
+                                                                    reportParams.tblId,
+                                                                    reportParams.rptId,
+                                                                    reportParams.format,
+                                                                    filter,
+                                                                    queryParams);
+    });
+
+    it('test to check if page does not fetch records on failed delete', () => {
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    isRecordDeleted: true
+                };
+            },
+            isRecordDeleted() {
+                this.setState({isRecordDeleted: false});
+            },
+            render() {
+                const modifiedReport = Object.assign({}, reportDataParams);
+                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
+                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        spyOn(component.refs.reportTools, 'getFlux').and.returnValue(flux);
+        spyOn(flux.actions, 'loadDynamicReport');
+        component.isRecordDeleted();
+        expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
     });
 });

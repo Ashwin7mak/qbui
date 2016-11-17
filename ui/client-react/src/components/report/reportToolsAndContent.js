@@ -318,6 +318,10 @@ const ReportToolsAndContent = React.createClass({
             }
         }
 
+        if (this.props.reportData && this.props.reportData.isRecordDeleted) {
+            this.getPageUsingOffsetMultiplicant(0);
+        }
+
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
         let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
 
