@@ -10,7 +10,7 @@ const supportEmail = 'betaprogram@quickbase.com';
 const supportEmailSubject = 'subject=Error%20Loading%20Report';
 
 /**
- * This is a temporary component that is a stopgap error message for Mercury Beta M5 when
+ * This is a temporary component that is a stopgap error message for Mercury Beta when
  * a report cannot be loaded.
  */
 const ReportContentError = React.createClass({
