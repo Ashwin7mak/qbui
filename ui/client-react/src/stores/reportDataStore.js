@@ -528,6 +528,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.nextOrPreviousEdit = "";
 
         this.navigateAfterSave = false;
+        this.isRecordDeleted = false;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -623,6 +624,7 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecords(payload) {
+        this.isRecordDeleted = false;
         this.loading = true;
         this.editingIndex = undefined;
         this.editingId = undefined;
@@ -654,6 +656,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
+
 
         this.reportModel.updateFilteredRecords(response.recordData);
         this.reportModel.setMetaData(response.metaData);
@@ -898,6 +901,7 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordSuccess(recId) {
         this.reportModel.deleteRecordsFromLists(recId);
+        this.isRecordDeleted = true;
         this.emit('change');
     },
 
@@ -927,6 +931,7 @@ let ReportDataStore = Fluxxor.createStore({
             this.reportModel.deleteRecordsFromLists(recIds[i]);
         }
         this.selectedRows = [];
+        this.isRecordDeleted = true;
         this.emit('change');
     },
 
@@ -1149,7 +1154,8 @@ let ReportDataStore = Fluxxor.createStore({
             nextEditRecordId: this.nextEditRecordId,
             previousEditRecordId: this.previousEditRecordId,
             nextOrPreviousEdit: this.nextOrPreviousEdit,
-            navigateAfterSave: this.navigateAfterSave
+            navigateAfterSave: this.navigateAfterSave,
+            isRecordDeleted: this.isRecordDeleted
         };
     }
 });

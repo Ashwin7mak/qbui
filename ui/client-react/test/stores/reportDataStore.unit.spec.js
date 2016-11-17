@@ -318,6 +318,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).selections).toEqual({});
         expect(flux.store(STORE_NAME).facetExpression).toEqual('');
         expect(flux.store(STORE_NAME).searchStringForFiltering).toEqual('abc');
+        expect(flux.store(STORE_NAME).isRecordDeleted).toBe(false);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -1173,6 +1174,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
+        expect(flux.store(STORE_NAME).isRecordDeleted).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });

@@ -131,10 +131,10 @@ describe('TextFieldValueEditor', () => {
 
     let inputValueTestCases = [
         {
-            name: 'uses the display value by default',
+            name: 'uses the raw value by default',
             displayValue: 'display',
             rawValue: 'raw',
-            expectation: 'display'
+            expectation: 'raw'
         },
         {
             name: 'uses the raw value if the display value is not set',
