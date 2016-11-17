@@ -45,7 +45,8 @@ export default {
             dtsErrorTID: "Transaction ID:",
             dtsErrorPrimaryButtonText: "Open my app in Classic"
         },
-        reports : {
+        reports: {
+            allReports: "All Reports",
             emailReportTooltip: "Share these records with someone else",
             emailSubject: "'{reportName}' report from the QuickBase app '{appName}'",
             emailBody: "Here's the '{reportName}' report from the table '{tableName}' in '{appName}'"
