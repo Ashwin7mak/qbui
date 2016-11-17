@@ -383,7 +383,11 @@ export default {
             print: "L'impression n'est pas encore disponible",
             copy: "La copie n'est pas encore disponible"
         },
-        pageTitleSeparator: ", ",
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Modifier l'enregistrement n ° {recordId}",
+            newRecord: "Ajouter un enregistrement"
+        },
         quickBaseClassic: "QuickBase Classique"
     }
 };

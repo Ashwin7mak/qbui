@@ -173,13 +173,14 @@ export let Nav = React.createClass({
             classes += " leftNavOpen";
         }
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
+        let editRecordIdForPageTitle = editRecordId;
 
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
 
         return (<div className={classes}>
-            <PageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} />
+            <PageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} recordId={editRecordIdForPageTitle} />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>

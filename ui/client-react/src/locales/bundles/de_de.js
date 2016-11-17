@@ -384,7 +384,11 @@ export default {
             print: "Der Druck ist noch nicht verfügbar",
             copy: "Kopieren ist noch nicht verfügbar"
         },
-        pageTitleSeparator: " - ",
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Datensatz #{recordId} bearbeiten",
+            newRecord: "Datensatz hinzufügen"
+        },
         quickBaseClassic: "QuickBase Klassik"
     }
 };

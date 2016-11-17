@@ -388,7 +388,11 @@ export default {
             print: "Printing is not available yet",
             copy: "Copying is not available yet"
         },
-        pageTitleSeparator: " - ",
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Edit Record #{recordId}",
+            newRecord: "Add Record"
+        },
         quickBaseClassic: "QuickBase Classic"
     }
 };
