@@ -6,7 +6,7 @@ import _ from 'lodash';
 //TODO  need a way to share scss vars in js
 let colorBlue500 = '#7090ab';
 let colorBlack100 = '#ffffff';
-let spinnerZindex = 2e9
+let spinnerZindex = 2e9;
 
 const BASE_SPINNER = {
     //http://spin.js.org/#?lines=7&length=0&width=16&radius=17&scale=1.00&corners=1.0&opacity=0&rotate=0&direction=1&speed=1.0&trail=60&top=50&left=50
