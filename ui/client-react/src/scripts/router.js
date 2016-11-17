@@ -35,7 +35,7 @@ import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
-import FastClick from "fastclick";
+import "react-fastclick";
 
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
@@ -103,8 +103,6 @@ let NavWrapper = React.createClass({
     },
 
     componentDidMount() {
-        FastClick.attach(document.body);
-
         // listen for resizes (nicely) in case we need to re-render for a new breakpoint
         window.addEventListener('resize', this.handleResize);
 

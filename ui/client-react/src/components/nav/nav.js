@@ -74,7 +74,10 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         if (Breakpoints.isSmallBreakpoint()) {
-            flux.actions.toggleLeftNav(false);
+            setTimeout(() => {
+                // left nav css transition seems to interfere with event handling without this
+                flux.actions.toggleLeftNav(false);
+            }, 0);
         }
         flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);

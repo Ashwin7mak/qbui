@@ -3,10 +3,7 @@ import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import M5AppHomePage from './m5AppHomePage';
-import {I18nMessage} from '../../utils/i18nMessage';
-import AlertBanner from '../alertBanner/alertBanner';
-import AppUtils from '../../utils/appUtils';
+import AppHomePage from './appHomePage';
 
 import './appHomePage.scss';
 
@@ -105,7 +102,7 @@ let AppHomePageRoute = React.createClass({
     render() {
         return (
             <div className="appHomePageContainer">
-                <M5AppHomePage />
+                <AppHomePage />
             </div>
         );
     }

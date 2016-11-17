@@ -97,6 +97,7 @@ let TableHomePageRoute = React.createClass({
             <ReportToolsAndContent
                 params={this.props.params}
                 reportData={this.props.reportData}
+                appUsers={this.props.appUsers}
                 routeParams={this.props.routeParams}
                 selectedAppId={this.props.selectedAppId}
                 fields={this.props.fields}
@@ -104,6 +105,7 @@ let TableHomePageRoute = React.createClass({
                 selectedRows={this.props.reportData.selectedRows}
                 scrollingReport={this.props.scrollingReport}
                 rptId={this.props.reportData ? this.props.reportData.rptId : null}
+                nameForRecords={this.nameForRecords}
                 pendEdits={this.props.pendEdits} />
         </div>);
     }

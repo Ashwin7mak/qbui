@@ -45,7 +45,8 @@ export default {
             dtsErrorTID: "Transaction ID:",
             dtsErrorPrimaryButtonText: "Open my app in Classic"
         },
-        reports : {
+        reports: {
+            allReports: "All Reports",
             emailReportTooltip: "Share these records with someone else",
             emailSubject: "'{reportName}' report from the QuickBase app '{appName}'",
             emailBody: "Here's the '{reportName}' report from the table '{tableName}' in '{appName}'"
@@ -386,7 +387,9 @@ export default {
             favorites: "Accessing favorites is not available yet",
             makeFavorite: "Marking as a favorite is not available yet",
             print: "Printing is not available yet",
-            copy: "Copying is not available yet"
+            copy: "Copying is not available yet",
+            email: "Emailing is not available yet",
+            delete: "Deleting is not available yet"
         },
         quickBaseClassic: "QuickBase Classic"
     }

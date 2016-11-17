@@ -4,7 +4,8 @@
     opacity: 0;
   }
 
-  .invisibleBackdropModal-backdrop {
+  .invisibleBackdropModal-backdrop,
+  .invisibleBackdropModal-dialog {
     position: fixed;
     top: 0;
     right: 0;

@@ -20,11 +20,30 @@ const InvisibleBackdrop = React.createClass({
         };
     },
 
+    discardInput(evt) {
+        //Cancel the event
+        //stop the event from continuing
+        evt.cancelBubble = true;
+        evt.cancel = true;
+        evt.returnValue = false;
+        if (evt.stopPropagation) {
+            evt.stopPropagation();
+        }
+        if (evt.preventDefault) {
+            evt.preventDefault();
+        }
+        if (evt.stopImmediatePropagation) {
+            evt.stopImmediatePropagation();
+        }
+        return false;
+    },
+
     render() {
         return (
                 <Modal
                     aria-labelledby="modal-label"
                     bsClass="invisibleBackdropModal"
+                    shouldCloseOnOverlayClick={false}
                     show={this.props.show}
                     onHide={this.close}
                     backdrop="static"
@@ -32,7 +51,7 @@ const InvisibleBackdrop = React.createClass({
                     keyboard={false}
                     animation={false}
                 >
-                  <div></div>
+                  <div onClick={this.discardInput}></div>
                 </Modal>
         );
     },

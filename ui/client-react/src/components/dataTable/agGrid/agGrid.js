@@ -123,6 +123,9 @@ let AGGrid = React.createClass({
         this.onMenuClose();
         this.installHeaderMenus();
         this.api.setHeaderHeight(this.rowHeight);
+        if (this.props.onGridReady) {
+            this.props.onGridReady();
+        }
     },
 
     /**
@@ -703,7 +706,7 @@ let AGGrid = React.createClass({
      * We want to make sure if all-checkbox is clicked then the event doesn't propagate to all rows in turn.
      * Use selectAllClicked state variable to keep track of this.
      */
-    allCheckBoxSelected() {
+    allCheckBoxSelected(event) {
         if (!this.props.records) {
             return;
         }
