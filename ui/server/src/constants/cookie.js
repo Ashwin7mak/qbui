@@ -1,7 +1,8 @@
 (function() {
     'use strict';
     module.exports = Object.freeze({
-        TICKET: 'TICKET'
+        TICKET: 'TICKET',
+        NSTICKET: 'NSTICKET'
     });
 
 }());

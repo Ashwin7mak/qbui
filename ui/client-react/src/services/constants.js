@@ -3,7 +3,8 @@ import Configuration from '../config/app.config';
 export default {
     //  COOKIES
     COOKIE: {
-        TICKET: 'TICKET'
+        TICKET: 'TICKET',
+        NSTICKET: 'NSTICKET'
     },
 
     // REQUEST HEADERS
