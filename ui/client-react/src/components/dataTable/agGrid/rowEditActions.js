@@ -61,15 +61,6 @@ const RowEditActions = React.createClass({
         const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
 
         this.props.params.context.onRecordNewBlank(id);
-        if (this.props.flux && this.props.flux.store) {
-            let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
-            if (recordPendingEdits && (recordPendingEdits.isPendingEdit || id === null)) {
-                //state change to trigger rerending this component to show saving in spinner & not update all of aggrid
-                //as we should avoid calling forceupdate we instead update key value
-                this.setState({key : "rowEditKey-" + new Date().getTime()});
-            }
-        }
-
         this.props.api.deselectAll();
     },
 
@@ -113,14 +104,9 @@ const RowEditActions = React.createClass({
         }
 
 
-        // Get the saving state from the flux store here so that the entire AG Grid does not need to reload
-        let saving = false;
-        if (this.props.flux && this.props.flux.store) {
-            let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
-            if (recordPendingEdits) {
-                saving = recordPendingEdits.saving;
-            }
-        }
+        // Get the saving state from the context
+        let saving = _.has(this.props, 'params.context.saving') ?
+            this.props.params.context.saving : false;
 
         let addRecordClass = 'addRecord';
         if (!validRow || saving) {

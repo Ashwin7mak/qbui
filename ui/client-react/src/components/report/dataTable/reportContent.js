@@ -833,7 +833,6 @@ export let ReportContent = React.createClass({
                                 validateRecord={this.validateRecord}
                                 validateFieldValue={this.handleValidateFieldValue}
                                 getOrigRec={this.getOrigRec}
-                                getPendingChanges={this.getPendingChanges}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}

@@ -468,7 +468,6 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordNewBlank = this.handleRecordNewBlank; // does local method, then calls prop method
         this.gridOptions.context.onFieldChange = this.handleFieldChange;// does local method, then calls prop method
         this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method, then calls prop method
-        this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
         this.gridOptions.context.validateRecord = this.handleValidateRecord;
         this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
@@ -479,6 +478,7 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onAttach = this.onAttach;
         this.gridOptions.context.onDetach = this.onDetach;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
+        this.gridOptions.context.saving = _.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
@@ -543,6 +543,16 @@ let AGGrid = React.createClass({
             this.setState({rowEditErrors: nextProps.editErrors}, () => {
                 this.updateCellErrors(nextProps);
             });
+            return false;
+        }
+        if (_.has(this.props, 'pendEdits.saving') &&
+            (!_.isEqual(nextProps.pendEdits.saving, this.props.pendEdits.saving) ||
+             !_.isEqual(nextProps.pendEdits.saving, this.gridOptions.context.saving))) {
+            //rerender the editRow action col only
+            if (this.state.editingRowNode !== null) {
+                this.gridOptions.context.saving = nextProps.pendEdits.saving;
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+            }
             return false;
         }
         return false;
@@ -780,14 +790,7 @@ let AGGrid = React.createClass({
         if (!this.props.onRecordSaveClicked) {
             return;
         }
-        let validation = this.props.onRecordSaveClicked(id);
-        if (validation && !validation.ok) {
-            //keep in edit and show error
-            this.setState({rowEditErrors: validation}, () => {
-                this.gridOptions.context.rowEditErrors = validation;
-                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
-            });
-        }
+        return this.props.onRecordSaveClicked(id);
     },
 
 

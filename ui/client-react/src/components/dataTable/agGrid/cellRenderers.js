@@ -450,6 +450,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
                             data={this.props.params.data}
+                            saving={_.has(this.props, 'params.context.saving') ? this.props.params.context.saving : false}
                             rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />

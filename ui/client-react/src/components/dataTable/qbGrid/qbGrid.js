@@ -292,8 +292,7 @@ const QBGrid = React.createClass({
                 this.props.onRecordChange(id);
             },
             onFieldChange: this.props.onFieldChange,
-            onEditRecordStart: this.props.onEditRecordStart,
-            getPendingChanges: this.props.getPendingChanges
+            onEditRecordStart: this.props.onEditRecordStart
         };
     },
     /**
