@@ -21,6 +21,7 @@ import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
+import FieldUtils from '../../../utils/fieldUtils';
 
 let logger = new Logger();
 
@@ -286,7 +287,7 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
-        this.setState({selectedRecordId: record[SchemaConsts.DEFAULT_RECORD_KEY].value});
+        this.setState({selectedRecordId: record[this.props.primaryKeyName].value});
         this.setState({confirmDeletesDialogOpen: true});
     },
 
