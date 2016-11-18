@@ -106,9 +106,11 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _hasChanges(payload) {
         if (_.has(payload, 'changes.values') && _.has(this.originalRecord, 'fids')) {
-            // Some components modify display values and some modify the underlying value so we check for both
             return (
-                 this._isDifferentThanOriginalFieldValue(payload) && this._isDifferentThanPreviousValue(payload)
+                // If the new and previous values are the same, but different from the original, then the change
+                // has already been registered by pendEdits. Therefore, we check to make sure the change is different
+                // from both the previous value AND the original value.
+                this._isDifferentThanOriginalFieldValue(payload) && this._isDifferentThanPreviousValue(payload)
             );
         }
 
@@ -125,6 +127,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _isDifferentThanPreviousValue(payload) {
         let {newVal, oldVal} = payload.changes.values;
+        // Some components modify display values and some modify the underlying value so we check for both
         return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
     },
 
