@@ -30,6 +30,7 @@ describe('NavPageTitle', () => {
     let mockTable = {name: 'Never gonna run around'};
     let mockReport = {name: 'And desert you'};
     let mockRecordId = '1987';
+    let mockViewingRecordId = 'Rick';
 
     let testCases = [
         {
@@ -38,6 +39,7 @@ describe('NavPageTitle', () => {
             table: null,
             report: null,
             recordId: null,
+            viewRecordId: null,
             expectedTitles: mockApp.name
         },
         {
@@ -46,6 +48,7 @@ describe('NavPageTitle', () => {
             table: mockTable,
             report: null,
             recordId: null,
+            viewRecordId: null,
             expectedTitles: mockTable.name
         },
         {
@@ -54,6 +57,7 @@ describe('NavPageTitle', () => {
             table: null,
             report: mockReport,
             recordId: null,
+            viewRecordId: null,
             expectedTitles: mockReport.name
         },
         {
@@ -62,6 +66,7 @@ describe('NavPageTitle', () => {
             table: null,
             report: null,
             recordId: mockRecordId,
+            viewRecordId: null,
             expectedTitles: Locale.getMessage('pageTitles.editingRecord', {recordId: mockRecordId})
         },
         {
@@ -70,16 +75,36 @@ describe('NavPageTitle', () => {
             table: null,
             report: null,
             recordId: NEW_RECORD_VALUE,
+            viewRecordId: null,
             expectedTitles: Locale.getMessage('pageTitles.newRecord')
+        },
+        {
+            description: 'shows the record currently being viewed',
+            app: null,
+            table: null,
+            report: null,
+            recordId: null,
+            viewRecordId: mockViewingRecordId,
+            expectedTitles: Locale.getMessage('pageTitles.viewRecord', {recordId: mockViewingRecordId})
+        },
+        {
+            description: 'only shows the currently editing record (not both editing and viewing record)',
+            app: null,
+            table: null,
+            report: null,
+            recordId: mockRecordId,
+            viewRecordId: mockViewingRecordId,
+            expectedTitles: Locale.getMessage('pageTitles.editingRecord', {recordId: mockRecordId})
         },
         {
             description: 'creates title that goes from most to least specific (record - report - table - app)',
             app: mockApp,
             table: mockTable,
             report: mockReport,
-            recordId: mockRecordId,
+            recordId: null,
+            viewRecordId: mockViewingRecordId,
             expectedTitles: [
-                Locale.getMessage('pageTitles.editingRecord', {recordId: mockRecordId}),
+                Locale.getMessage('pageTitles.viewRecord', {recordId: mockViewingRecordId}),
                 mockReport.name,
                 mockTable.name,
                 mockApp.name
@@ -94,7 +119,8 @@ describe('NavPageTitle', () => {
                     app={testCase.app}
                     table={testCase.table}
                     report={testCase.report}
-                    recordId={testCase.recordId}
+                    editingRecordId={testCase.recordId}
+                    selectedRecordId={testCase.viewRecordId}
                 />
             );
 

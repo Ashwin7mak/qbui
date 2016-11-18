@@ -182,13 +182,18 @@ export let Nav = React.createClass({
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
 
+        let viewingRecordId = null;
+        if (this.props.params) {
+            viewingRecordId = this.props.params.recordId;
+        }
+
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
                 table={this.getSelectedTable()}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
-                selectedRecordId={this.props.params.recordId}
+                selectedRecordId={viewingRecordId}
             />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
