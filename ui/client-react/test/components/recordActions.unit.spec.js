@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import RecordActions  from '../../src/components/actions/recordActions';
 
-describe('RecordActions functions', () => {
+fdescribe('RecordActions functions', () => {
     'use strict';
 
     let component;
@@ -10,14 +10,6 @@ describe('RecordActions functions', () => {
         actions:{
             deleteRecord: function() {return;}
         }
-    };
-
-    let props = {
-        data: [
-            {
-                "Record ID#: 1
-            }
-        ]
     };
 
     beforeEach(() => {
@@ -29,14 +21,15 @@ describe('RecordActions functions', () => {
     });
 
     beforeEach(() => {
-        component = TestUtils.renderIntoDocument(<RecordActions flux={flux} props={props}/>);
+        component = TestUtils.renderIntoDocument(<RecordActions flux={flux}/>);
     });
+
     it('test render of component', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test extra actions', () => {
-        component = TestUtils.renderIntoDocument(<RecordActions flux={flux} props={props}/>);
+        component = TestUtils.renderIntoDocument(<RecordActions flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let actions = TestUtils.scryRenderedDOMComponentsWithTag(component, "a");
