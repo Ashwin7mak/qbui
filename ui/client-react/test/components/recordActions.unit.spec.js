@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import RecordActions  from '../../src/components/actions/recordActions';
 
-fdescribe('RecordActions functions', () => {
+describe('RecordActions functions', () => {
     'use strict';
 
     let component;
