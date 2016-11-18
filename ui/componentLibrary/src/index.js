@@ -46,6 +46,7 @@ import QBIconDoc from './docs/qbicon';
 import QBModalDoc from './docs/qbModal.js';
 
 import AlertBannerDoc from './docs/alertBanner.js';
+import PageTitleDoc from './docs/pageTitle.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -79,6 +80,7 @@ render((
             <Route path="qbicon" component={QBIconDoc} />
             <Route path="qBModal" component={QBModalDoc} />
             <Route path="alertBanner" component={AlertBannerDoc} />
+            <Route path="pageTitle" component={PageTitleDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
