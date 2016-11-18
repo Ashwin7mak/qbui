@@ -25,7 +25,8 @@ class FieldUtils {
     */
     static getPrimaryKeyFieldNameFromFields(fields) {
         if (requiredFieldsArePresent(fields)) {
-            let primaryKeyField = _.find(fields.fields.data, {keyField: true});
+            let primaryKeyField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+
             if (primaryKeyField) {
                 return primaryKeyField.name;
             } else {

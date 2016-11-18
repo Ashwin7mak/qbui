@@ -33,7 +33,7 @@ describe('FieldUtils', () => {
                         data: [
                             {id: 1, name: 'Last Name'},
                             {id: 2, name: 'First Name'},
-                            {id: 3, keyField: true, name: SchemaConsts.DEFAULT_RECORD_KEY}
+                            {id: 3, name: SchemaConsts.DEFAULT_RECORD_KEY}
                         ]
                     }
                 },
@@ -46,7 +46,7 @@ describe('FieldUtils', () => {
                         data: [
                             {id: 1, name: 'Last Name'},
                             {id: 2, name: 'First Name'},
-                            {id: 3, keyField: true, name: recordIdCustomName}
+                            {id: 3, name: recordIdCustomName}
                         ]
                     }
                 },
