@@ -25,9 +25,9 @@ class FieldUtils {
     */
     static getPrimaryKeyFieldNameFromFields(fields) {
         if (requiredFieldsArePresent(fields)) {
-            let uniqueIdentifierField = _.find(fields.fields.data, {keyField: true});
-            if (uniqueIdentifierField) {
-                return uniqueIdentifierField.name;
+            let primaryKeyField = _.find(fields.fields.data, {keyField: true});
+            if (primaryKeyField) {
+                return primaryKeyField.name;
             } else {
                 return SchemaConsts.DEFAULT_RECORD_KEY;
             }
@@ -50,9 +50,9 @@ class FieldUtils {
      * @returns {string}
      */
     static getPrimaryKeyFieldNameFromData(rowData) {
-        let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-        if (recordIdField) {
-            return recordIdField;
+        let primaryKeyFieldName = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+        if (primaryKeyFieldName) {
+            return primaryKeyFieldName;
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
