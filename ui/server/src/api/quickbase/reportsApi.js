@@ -295,11 +295,11 @@
              *
              * @param req
              * @param opts
-             * @param useDefaultReportMetaData
+             * @param loadReportWithDefaultMetaData
              *
              * @returns {bluebird|exports|module.exports}
              */
-            fetchReportResult(req, reportId, useDefaultReportMetaData) {
+            fetchReportResult(req, reportId, loadReportWithDefaultMetaData) {
 
                 var responseObj = {
                     metaData: null,
@@ -321,8 +321,8 @@
                     }
                 }
 
-                if (useDefaultReportMetaData === true) {
-                    //  Call the the report results endpoint to fetch the report
+                if (loadReportWithDefaultMetaData === true) {
+                    //  Call the the report results endpoint, which will generate a report using the saved report meta data.
                     return new Promise((resolve1, reject1) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
@@ -368,9 +368,8 @@
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                //  Call the report invoke endpoint as a POST request to generate a report that
-                                //  is customized based on the below changes to the report's metadatasortList,
-                                //  columnList and query values are supported.
+                                //  The report invoke endpoint is a POST request as it allows for override of
+                                //  the report's default meta data in the body of the request.
                                 let req2 = lodash.clone(req);
                                 req2.method = 'POST';
 
@@ -459,13 +458,13 @@
              * @param req
              * @param reportId
              * @param includeFacets
-             * @param useDefaultReportMetaData
+             * @param loadReportWithDefaultMetaData
              *
              * @returns Promise
              */
-            fetchReport: function(req, reportId, includeFacets, useDefaultReportMetaData) {
+            fetchReport: function(req, reportId, includeFacets, loadReportWithDefaultMetaData) {
                 return new Promise(function(resolve, reject) {
-                    let fetchRequests = [this.fetchReportResult(req, reportId, useDefaultReportMetaData), this.fetchFields(req), this.fetchReportCount(req, reportId)];
+                    let fetchRequests = [this.fetchReportResult(req, reportId, loadReportWithDefaultMetaData), this.fetchFields(req), this.fetchReportCount(req, reportId)];
 
                     if (includeFacets === true) {
                         fetchRequests.push(this.fetchReportFacets(req, reportId));
