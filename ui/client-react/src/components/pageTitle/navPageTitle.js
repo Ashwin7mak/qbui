@@ -36,7 +36,12 @@ const NavPageTitle = React.createClass({
         /**
          * The id of the record currently being edited
          */
-        recordId: PropTypes.string
+        editingRecordId: PropTypes.string,
+
+        /**
+         * The id of the currently selected record (if viewing a single record)
+         */
+        selectedRecordId: PropTypes.string
     },
 
     /**
@@ -70,14 +75,22 @@ const NavPageTitle = React.createClass({
      * If a record is being editing or added, add that info the page title
      */
     addCurrentlyEditingRecordId() {
-        let recordId = this.props.recordId;
+        let recordId = this.props.editingRecordId;
 
         if (recordId && recordId === NEW_RECORD_VALUE) {
             return this.pageTitles.unshift(Locale.getMessage('pageTitles.newRecord'));
         }
 
         if (recordId) {
-            this.pageTitles.unshift(Locale.getMessage('pageTitles.editingRecord', {recordId: this.props.recordId}));
+            this.pageTitles.unshift(Locale.getMessage('pageTitles.editingRecord', {recordId}));
+        }
+    },
+
+    addCurrentlyViewingRecordId() {
+        let {editingRecordId, selectedRecordId} = this.props;
+
+        if (selectedRecordId && !editingRecordId) {
+            this.pageTitles.unshift(Locale.getMessage('pageTitles.viewRecord', {recordId: selectedRecordId}));
         }
     },
 
@@ -89,6 +102,7 @@ const NavPageTitle = React.createClass({
         this.addTableNameToTitleIfSelected();
         this.addReportNameToTheTitleIfSelected();
         this.addCurrentlyEditingRecordId();
+        this.addCurrentlyViewingRecordId();
 
         return <PageTitle title={this.pageTitles.join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />;
     }

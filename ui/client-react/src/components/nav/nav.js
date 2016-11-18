@@ -183,7 +183,13 @@ export let Nav = React.createClass({
         }
 
         return (<div className={classes}>
-            <NavPageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} recordId={editRecordIdForPageTitle} />
+            <NavPageTitle
+                app={this.getSelectedApp()}
+                table={this.getSelectedTable()}
+                report={this.getSelectedReport()}
+                editingRecordId={editRecordIdForPageTitle}
+                selectedRecordId={this.props.params.recordId}
+            />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
