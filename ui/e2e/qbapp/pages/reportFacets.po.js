@@ -193,8 +193,9 @@
                 return e2eRetry.run(function() {
                     return element.all(by.className('selectedToken')).then(function(items) {
                         items.forEach(function(item) {
-                            item.element(by.className('clearFacet')).click();
-                            return self.waitForReportReady().then(function() {
+                            return item.element(by.className('clearFacet')).click().then(function() {
+                                return self.waitForReportReady();
+                            }).then(function() {
                                 return self.waitForFacetsPopupReady().then(function() {
                                     return self.waitForReportReady();
                                 });

@@ -39,7 +39,7 @@
             });
         });
 
-        it('Edit a record via recordActions edit pencil using basic report', function(done) {
+        it('@smoke Edit a record via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
 
             //Open the report
@@ -54,8 +54,9 @@
                 }
             }).then(function() {
                 //Save the form
-                formsPage.clickFormSaveBtn();
-                reportContentPage.waitForReportContent();
+                formsPage.clickFormSaveBtn().then(function() {
+                    reportContentPage.waitForReportContent();
+                });
             }).then(function() {
                 //reload the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);

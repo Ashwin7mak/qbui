@@ -95,7 +95,9 @@
         this.clickFormSaveBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                return self.clickSaveBtnWithName('Save');
+                return self.clickSaveBtnWithName('Save').then(function() {
+                    return reportContentPage.waitForReportContent();
+                });
             });
         };
 
@@ -186,7 +188,7 @@
                     }).map(function(elm) {
                         return fetchEnterCellValuesPromises.push(elm.element(by.className('label')).click());
                     });
-                } else if (fieldLabel === 'timeCell' && browserName !== 'safari') {
+                } else if (fieldLabel === 'timeCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //enter time of day fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
@@ -273,12 +275,12 @@
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 5)).toBe(sNumeric.toString());
                     //numeric duration field
                     // expect(reportServicePage.getRecordValues(records[7], 9)).toBe('2.0337302E-7 weeks');
-                } if (fieldType === 'dateCell' && browserName !== 'safari') {
+                } if (fieldType === 'dateCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //date field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 6)).toBe(sDate);
                     //date Time field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate + ' ' + sTime);
-                }if (fieldType === 'timeCell' && browserName !== 'safari') {
+                }if (fieldType === 'timeCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //time of day field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 8)).toBe(sTime);
                 }if (fieldType === 'checkbox') {

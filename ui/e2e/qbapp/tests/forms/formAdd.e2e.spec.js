@@ -38,7 +38,7 @@
         });
 
 
-        it('Add a record from the form', function(done) {
+        it('@smoke Add a record from the form', function(done) {
             var origRecordCount;
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
 
@@ -60,8 +60,9 @@
                 }
             }).then(function() {
                 // Save the form
-                formsPage.clickFormSaveBtn();
-                reportContentPage.waitForReportContent();
+                formsPage.clickFormSaveBtn().then(function() {
+                    reportContentPage.waitForReportContent();
+                });
             }).then(function() {
                 // Reload the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
