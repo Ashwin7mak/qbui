@@ -17,7 +17,7 @@ var mockRes = {
     clearCookie: function(name, options) {},
     cookie: function(name, value, options) {}
 };
-var stubLog, stubMockJson, spyRender;
+var stubLog, stubMockJson, spyRender, spyCookie, spyClearCookie;
 
 describe('Validate https response authentication functions', function() {
 
@@ -25,11 +25,15 @@ describe('Validate https response authentication functions', function() {
         stubLog = sinon.stub(log, 'info').returns(true);
         stubMockJson = sinon.stub(mockRes, 'json').returns(true);
         spyRender = sinon.spy(mockRes, 'render');
+        spyCookie = sinon.spy(mockRes, 'cookie');
+        spyClearCookie = sinon.spy(mockRes, 'clearCookie');
     });
     afterEach(function() {
         stubLog.restore();
         stubMockJson.restore();
         spyRender.restore();
+        spyCookie.restore();
+        spyClearCookie.restore();
     });
 
     it('validate http response 200 json request for signout', function() {
@@ -45,6 +49,8 @@ describe('Validate https response authentication functions', function() {
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
         assert(stubMockJson.calledOnce);
+        assert(spyCookie.callCount === 2, true);
+        assert(spyClearCookie.callCount === 2, true);
         assert(spyRender.callCount === 0, true);
     });
 
@@ -61,6 +67,8 @@ describe('Validate https response authentication functions', function() {
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
         assert(stubMockJson.callCount === 0, true);
+        assert(spyCookie.callCount === 2, true);
+        assert(spyClearCookie.callCount === 2, true);
         assert(spyRender.calledOnce);
     });
 
