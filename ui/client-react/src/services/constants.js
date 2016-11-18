@@ -43,6 +43,7 @@ export default {
     HOMEPAGE            : 'homePage',
     RECORDSCOUNT        : 'recordsCount',
     RESULTS             : 'results',
+    INVOKE              : 'invoke',
     PARSE               : 'parse',
     BULK                : 'bulk'
 };

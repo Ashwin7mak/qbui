@@ -134,6 +134,29 @@ describe("Validate fieldsApi", function() {
             });
         });
 
+        it('success return select field with parameter but option to not include', function(done) {
+            req.url = '/apps/123/tables/456/fields/789?show=tell';
+            req.params.fieldId = '789';
+
+            var targetObject = "[{fields: []}]";
+
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = fieldsApi.fetchFields(req, false);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
         it('fail return results ', function(done) {
             req.url = '/apps/1/tables/1/fields';
             var error_message = "fail fieldsApi unit test case execution";

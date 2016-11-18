@@ -95,7 +95,7 @@
             },
 
             fetchFields: function(req) {
-                return fieldsApi.fetchFields(req);
+                return fieldsApi.fetchFields(req, false);
             },
 
             /**
@@ -215,7 +215,7 @@
                 let search = url.parse(req.url).search;
                 let query = url.parse(opts.url, true).query;
 
-                if (req.params.recordId) {
+                if (req.params && req.params.recordId) {
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
                 } else {
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
