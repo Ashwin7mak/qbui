@@ -144,7 +144,7 @@
              * @returns {*|Promise}
              */
             fetchFields: function(req) {
-                return fieldsApi.fetchFields(req, false);
+                return fieldsApi.fetchFields(req, true);
             },
 
             /** Returns a promise that is always resolved with either facets data or

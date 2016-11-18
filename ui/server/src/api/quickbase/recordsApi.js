@@ -95,7 +95,7 @@
             },
 
             fetchFields: function(req) {
-                return fieldsApi.fetchFields(req, false);
+                return fieldsApi.fetchFields(req, true);
             },
 
             /**

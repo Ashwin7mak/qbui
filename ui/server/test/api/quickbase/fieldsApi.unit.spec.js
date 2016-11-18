@@ -141,7 +141,7 @@ describe("Validate fieldsApi", function() {
             var targetObject = "[{fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req, false);
+            var promise = fieldsApi.fetchFields(req, true);
 
             promise.then(
                 function(response) {
