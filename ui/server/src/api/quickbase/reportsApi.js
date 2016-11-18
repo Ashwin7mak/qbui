@@ -291,10 +291,15 @@
             },
 
             /**
-             * Fetch the report result for a given report id
+             * Fetch the report result for a given report id.
+             *
+             * If loadReportWithDefaultMetaData is set to true, then the report/results endpoint is called,
+             * which uses the report meta data to generate the report.  Otherwise, the report/invoke endpoint
+             * is called, which uses the default report meta data as a baseline, but allows for override's
+             * based on request query parameter input.
              *
              * @param req
-             * @param opts
+             * @param report id
              * @param loadReportWithDefaultMetaData
              *
              * @returns {bluebird|exports|module.exports}
@@ -363,6 +368,8 @@
                 } else {
                     //  A request to fetch the report using the default report meta data definition as a baseline
                     //  and then override the sortList, query and columnList(future) to generate a custom report.
+                    //  NOTE: if no overrides, then the baseline report is generated, no different than if
+                    //  loadReportWithDefaultMetaData == true.
                     return new Promise((resolve1, reject1) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
