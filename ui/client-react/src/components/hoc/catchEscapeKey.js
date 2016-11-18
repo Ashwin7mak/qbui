@@ -29,14 +29,14 @@ var catchEscapeKeyWrapper = (Component) =>{
         },
 
         componentWillMount() {
-            if (document && document.addEventListener) {
-                document.addEventListener("keydown", this.handleKey, this.props.capturePhase);
+            if (window && window.addEventListener) {
+                window.addEventListener("keydown", this.handleKey, this.props.capturePhase);
             }
         },
 
         componentWillUnmount() {
-            if (document && document.removeEventListener) {
-                document.removeEventListener("keydown", this.handleKey, this.props.capturePhase);
+            if (window && window.removeEventListener) {
+                window.removeEventListener("keydown", this.handleKey, this.props.capturePhase);
             }
         },
 

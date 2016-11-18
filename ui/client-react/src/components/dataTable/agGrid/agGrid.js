@@ -1087,9 +1087,6 @@ let AGGrid = React.createClass({
         return columns;
     },
     render() {
-        console.log('agGrid render isInlineEditOpen ' + this.props.isInlineEditOpen);
-        console.log('agGrid render currentEditRid ' + this.state.currentEditRid);
-
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
 
