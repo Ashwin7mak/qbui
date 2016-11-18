@@ -778,7 +778,6 @@ export let ReportContent = React.createClass({
             reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
             reportContent = (
-                <div className="loadedContent">
                     <div className={addPadding}>
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
@@ -866,9 +865,8 @@ export let ReportContent = React.createClass({
                                             getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
                                             getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
                         }
+                        {this.getConfirmationDialog()}
                     </div>
-                    {this.getConfirmationDialog()}
-                </div>
             );
         }
 
