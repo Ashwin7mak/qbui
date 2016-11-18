@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
+import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
 import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
@@ -154,8 +155,10 @@ const FieldValueEditor = React.createClass({
             classes: (this.props.classes && this.props.classes.includes('cellEditWrapper') ? 'cellEdit' : '')
         };
 
-        // Do not allow keyFields to be modified (only view as a renderer)
-        if (this.props.fieldDef && this.props.fieldDef.keyField) {
+        // Only allow the Record ID field to be a renderer, not an editor
+        // Record ID is found based on the ID of the fieldDef (it is a buiilt in field that is always field 3)
+        let fieldId = (typeof this.props.fieldDef === 'undefined' ? '' : this.props.fieldDef.id);
+        if (fieldId === DEFAULT_RECORD_KEY_ID) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
 
