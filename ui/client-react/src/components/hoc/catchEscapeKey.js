@@ -23,7 +23,7 @@ var catchEscapeKeyWrapper = (Component) =>{
 
         handleKey(e) {
             // close when Esc is pressed
-            if (e.keyCode === 27 && this.props.onClose) {
+            if ((e.keyCode === 27 || e.key === 'Escape') && this.props.onClose) {
                 this.props.onClose();
             }
         },

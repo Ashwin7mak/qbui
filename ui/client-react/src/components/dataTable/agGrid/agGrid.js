@@ -600,6 +600,8 @@ let AGGrid = React.createClass({
     startEditRow(id, node) {
         this.setState({currentEditRid: id}); // note which record is being edited used to index into cellComponentsMounted
         this.props.onEditRecordStart(id);
+        this.gridOptions.context.currentEditRid = id;
+        this.gridOptions.context.isInlineEditOpen = this.props.isInlineEditOpen;
         this.editRow(node);
     },
     /**
@@ -1085,6 +1087,9 @@ let AGGrid = React.createClass({
         return columns;
     },
     render() {
+        console.log('agGrid render isInlineEditOpen ' + this.props.isInlineEditOpen);
+        console.log('agGrid render currentEditRid ' + this.state.currentEditRid);
+
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
 

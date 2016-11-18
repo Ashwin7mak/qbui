@@ -47,14 +47,19 @@ const RowEditActions = React.createClass({
         //get the original unchanged values in data to rerender
         const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
 
-        if (this.props.params.node) {
-            //ag-grid
-            this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
-        }
+        const {context} = this.props.params;
+        // Escape keydoan handler can fire this onClickCancel, we should cancel only if this is the
+        // row currently being edited
+        if (context.isInlineEditOpen && context.currentEditRid === id.value) {
+            if (this.props.params.node) {
+                //ag-grid
+                this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
+            }
 
-        this.props.api.deselectAll();
-        this.props.flux.actions.selectedRows([]);
-        this.props.params.context.onEditRecordCancel(id);
+            this.props.api.deselectAll();
+            this.props.flux.actions.selectedRows([]);
+            this.props.params.context.onEditRecordCancel(id);
+        }
     },
 
     onClickAdd() {
@@ -131,7 +136,7 @@ const RowEditActions = React.createClass({
 
         return (
             <ClosableRowEditActions
-                className="editTools" onClose={this.onClickCancel} capturePhase={true}>
+                className="editTools" onClose={this.onClickCancel}>
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
                     <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
