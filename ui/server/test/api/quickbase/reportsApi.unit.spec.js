@@ -563,6 +563,25 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
+            var promise = reportsApi.fetchReport(req, 1, false, true);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with no facets"));
+                }
+            );
+        });
+
+        it('Test get report success - no facets or useDefault specified', function(done) {
+            req.method = 'get';
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
             var promise = reportsApi.fetchReport(req, 1);
             promise.then(
                 function(response) {
@@ -583,7 +602,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1, true);
+            var promise = reportsApi.fetchReport(req, 1, true, true);
             promise.then(
                 function(response) {
                     done();
@@ -603,7 +622,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, true);
             promise.then(
                 function(response) {
                     done();
@@ -622,7 +641,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, true);
             promise.then(
                 function(response) {
                     done();
@@ -641,7 +660,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, true);
             promise.then(
                 function(response) {
                     done(new Error("Unexpected success promise return with test error from fetchReports"));
@@ -661,7 +680,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(Promise.reject('metaError'));
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, true);
             promise.then(
                 function(response) {
                     done(new Error("Unexpected success promise return with test meta data failure from fetchReports(Get request)"));
@@ -681,7 +700,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, true);
             promise.then(
                 function(response) {
                     done(new Error("Unexpected success promise return with testing unexpected error from get fetchReports"));
@@ -692,8 +711,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report success WITHOUT meta data overrides', function(done) {
-            req.method = 'post';
+        it('Test dynamic report success WITHOUT meta data overrides', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
 
             reportResultsStub.returns(fetchReportResultsPromise);
@@ -701,7 +720,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
                     done();
@@ -711,8 +730,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report success with meta data failure', function(done) {
-            req.method = 'post';
+        it('Test dynamic report success with meta data failure', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
 
             reportResultsStub.returns(fetchReportResultsPromise);
@@ -720,7 +739,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(Promise.reject('meta error'));
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
                     done(new Error("Unexpected success promise return with test meta data failure from fetchReports(post request)"));
@@ -731,8 +750,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report success WITH meta data overrides', function(done) {
-            req.method = 'post';
+        it('Test dynamic report success WITH meta data overrides', function(done) {
+            req.method = 'get';
             req.url += '&sortList=1:EQUALS&query=1.EX.test&columns=1';
             reportsApi.setRequestHelper(requestHelper);
 
@@ -741,7 +760,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
                     done();
@@ -751,8 +770,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report success WITH meta data overrides and default query', function(done) {
-            req.method = 'post';
+        it('Test dynamic report success WITH meta data overrides and default query', function(done) {
+            req.method = 'get';
             req.url += '&sortList=1:EQUALS&query=1.EX.test&columns=1';
             reportsApi.setRequestHelper(requestHelper);
 
@@ -761,7 +780,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaDataWithQuery);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
                     done();
@@ -771,8 +790,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report success WITH NO meta data overrides but a default query', function(done) {
-            req.method = 'post';
+        it('Test dynamic report success WITH NO meta data overrides but a default query', function(done) {
+            req.method = 'get';
             req.url += '&sortList=1:EQUALS';
             reportsApi.setRequestHelper(requestHelper);
 
@@ -781,7 +800,7 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaDataWithQuery);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
                     done();
@@ -791,8 +810,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report with unexpected exception processing report results', function(done) {
-            req.method = 'post';
+        it('Test dynamic report with unexpected exception processing report results', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
 
             reportResultsStub.returns({body:'bad object structure'});
@@ -800,10 +819,10 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
-                    done(new Error("Unexpected success promise return with testing unexpected error from post fetchReports"));
+                    done(new Error("Unexpected success promise return with testing unexpected error from dynamic fetchReports"));
                 },
                 function(error) {
                     assert(executeReqLogSpy.called);
@@ -811,8 +830,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report with unexpected exception processing fields within report results', function(done) {
-            req.method = 'post';
+        it('Test dynamic report with unexpected exception processing fields within report results', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
 
             reportResultsStub.returns(fetchReportResultsPromise);
@@ -820,10 +839,10 @@ describe('Validate ReportsApi unit tests', function() {
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
-            var promise = reportsApi.fetchReport(req, 1);
+            var promise = reportsApi.fetchReport(req, 1, false, false);
             promise.then(
                 function(response) {
-                    done(new Error("Unexpected success promise return with testing unexpected error from post fetchReports"));
+                    done(new Error("Unexpected success promise return with testing unexpected error from dynamic fetchReports"));
                 },
                 function(error) {
                     assert(executeReqLogSpy.called);
