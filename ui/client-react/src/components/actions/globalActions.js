@@ -88,7 +88,7 @@ let GlobalActions = React.createClass({
                     }) : null}
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
-                    <MenuItem href="/signout" eventKey={eventKeyIdx++}><I18nMessage
+                    <MenuItem href="/qbase/signout" eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.sign_out'}/></MenuItem>
                 </Dropdown.Menu>
             </Dropdown>);
