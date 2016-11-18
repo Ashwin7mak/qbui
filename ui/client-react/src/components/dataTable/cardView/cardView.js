@@ -4,6 +4,7 @@ import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 import '../../QBForm/qbform.scss';
 import QBicon from '../../qbIcon/qbIcon';
+import _ from 'lodash';
 
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
@@ -71,7 +72,7 @@ let CardView = React.createClass({
             return (
                 <div key={c} className="field">
                     <span className="fieldLabel">{curKey}</span>
-                    <span className="fieldValue">{fieldValue}</span>
+                    <span className="fieldValue">{_.unescape(fieldValue)}</span>
                 </div>);
         }
     },

@@ -42,7 +42,8 @@ export default {
             dtsErrorTID: "Identifiant de transaction:",
             dtsErrorPrimaryButtonText: "Ouvrez mon application en Classique"
         },
-        reports : {
+        reports: {
+            allReports: "Tous les Rapports",
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
             emailBody: "Voici le rapport de la '{reportName}' '{tableName}' de table dans '{appName}'"
@@ -384,6 +385,11 @@ export default {
             copy: "La copie n'est pas encore disponible",
             email: "L'envoi par courriel n'est pas encore disponible",
             delete: "La suppression n'est pas encore disponible"
+        },
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Modifier l'enregistrement n ° {recordId}",
+            newRecord: "Ajouter un enregistrement"
         },
         quickBaseClassic: "QuickBase Classique"
     }
