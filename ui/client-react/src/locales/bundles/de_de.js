@@ -387,6 +387,11 @@ export default {
             email: "E-Mail ist noch nicht verfügbar",
             delete: "Das Löschen ist noch nicht verfügbar"
         },
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Datensatz #{recordId} bearbeiten",
+            newRecord: "Datensatz hinzufügen"
+        },
         quickBaseClassic: "QuickBase Klassik"
     }
 };
