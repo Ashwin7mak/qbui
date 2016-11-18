@@ -52,7 +52,7 @@ let RecordActions = React.createClass({
      * delete the selected records, after confirmation if multiple records selected
      */
     handleDelete(record) {
-        if(this.props.data) {
+        if (this.props.data) {
             this.setState({selectedRecordId: this.props.data[SchemaConsts.DEFAULT_RECORD_KEY].value});
             this.setState({confirmDeletesDialogOpen: true});
         }
