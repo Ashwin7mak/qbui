@@ -10,7 +10,7 @@ let Record = React.createClass({
     displayName: 'Record',
 
     componentWillReceiveProps(nextProps) {
-        let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && !this.props.pendEdits.recordEditOpen;
+        let wasRecordEditOpen = _.has(this.props, 'pendEdits.recordEditOpen') && this.props.pendEdits.recordEditOpen === false;
         let shouldRecordEditOpen = _.has(nextProps, 'pendEdits.recordEditOpen') && !nextProps.pendEdits.recordEditOpen;
         if (wasRecordEditOpen !== shouldRecordEditOpen && _.has(nextProps, 'pendEdits.recordChanges') && _.isEmpty(nextProps.pendEdits.recordChanges)) {
             this.handleEditRecordStart(this.props.recId);
