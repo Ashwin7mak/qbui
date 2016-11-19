@@ -5,7 +5,6 @@ import {NotificationManager} from 'react-notifications';
 import {SUPPORT_LINK} from '../../constants/urlConstants';
 
 import './appHomePage.scss';
-import './m5AppHomePage.scss';
 
 function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
@@ -17,7 +16,7 @@ const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
 /**
  * Scripts for Wistia video popover
- * These script tags are only relevant to this temporary homepage
+ * These script tags are only relevant to this homepage
  * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
  */
 const wistiaScriptPart1 = document.createElement("script");
@@ -29,9 +28,9 @@ wistiaScriptPart2.src = "//fast.wistia.com/assets/external/E-v1.js";
 wistiaScriptPart2.async = true;
 
 /**
- * Temporary homepage for M5 Beta
+ * App Home page (displays when no app or table is selected)
  */
-const M5AppHomePage = React.createClass({
+const AppHomePage = React.createClass({
     launchGuideMe() {
         try {
             WalkMeAPI.startWalkthruById(228348);
@@ -49,7 +48,7 @@ const M5AppHomePage = React.createClass({
     },
     render() {
         return (
-            <div className="m5AppHomePage">
+            <div className="appHomePage">
                 <div className="appHomePageWidthConstraint">
                     <div className="homePanel topPanel">
                         <div className="topPanelContent">
@@ -113,4 +112,4 @@ const M5AppHomePage = React.createClass({
     }
 });
 
-export default M5AppHomePage;
+export default AppHomePage;
