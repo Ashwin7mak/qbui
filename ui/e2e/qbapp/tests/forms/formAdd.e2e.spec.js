@@ -53,7 +53,6 @@
 
             // Click on add record button
             reportServicePage.clickAddRecordOnStage().then(function() {
-
                 // Get the fields from the from and create a new record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
@@ -61,7 +60,9 @@
             }).then(function() {
                 // Save the form
                 formsPage.clickFormSaveBtn().then(function() {
-                    reportContentPage.waitForReportContent();
+                    reportContentPage.waitForReportContent().then(function() {
+                        reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
+                    });
                 });
             }).then(function() {
                 // Reload the report

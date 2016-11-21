@@ -16,7 +16,7 @@
     var reportContentPage = new ReportContentPage();
 
     var sText = '9782341234';
-    var sNumeric = rawValueGenerator.generateInt(1, 100);
+    var sNumeric = parseFloat("4.333");
     var sTime = "12:00 am";
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
@@ -30,7 +30,7 @@
 
         this.formTrowserFooter = element(by.className('recordTrowser')).element(by.className('trowserFooter'));
         //save button
-        this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).first();
+        this.formSaveBtn = this.formTrowserFooter.element(by.className('saveButtons'));
         //alert button
         this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('iconTableUISturdy-alert'));
 
@@ -77,15 +77,17 @@
         //Save buttons function
         this.clickSaveBtnWithName = function(btnName) {
             var self = this;
-            return self.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveButtons')).all(by.tagName('button')).filter(function(elm) {
-                return elm.getAttribute('textContent').then(function(text) {
-                    return text  === btnName;
+            return reportServicePage.waitForElement(self.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveButtons'))).then(function() {
+                return self.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveButtons')).all(by.tagName('button')).filter(function(elm) {
+                    return elm.getAttribute('textContent').then(function(text) {
+                        return text === btnName;
+                    });
+                }).then(function(filteredSaveBtn) {
+                    return filteredSaveBtn[0].click();
+                }).then(function() {
+                    //Need this for growl to come and go off
+                    return e2eBase.sleep(browser.params.smallSleep);
                 });
-            }).then(function(filteredSaveBtn) {
-                return filteredSaveBtn[0].click();
-            }).then(function() {
-                //Need this for growl to come and go off
-                return e2eBase.sleep(browser.params.smallSleep);
             });
         };
 
@@ -94,10 +96,8 @@
 
         this.clickFormSaveBtn = function() {
             var self = this;
-            return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                return self.clickSaveBtnWithName('Save').then(function() {
-                    return reportContentPage.waitForReportContent();
-                });
+            return reportServicePage.waitForElement(self.formSaveBtn).then(function() {
+                return self.clickSaveBtnWithName('Save');
             });
         };
 
@@ -153,7 +153,7 @@
                 return e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
                 var fetchEnterCellValuesPromises = [];
-                if (fieldLabel === 'dateCell' && browserName !== 'safari') {
+                if (fieldLabel === 'dateCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //enter date fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
@@ -269,12 +269,11 @@
                     //numeric currency field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 3)).toBe('$' + sNumeric);
                     //numeric percent field
-                    //TODO sometimes this fails example '56.99999999999999%' to be '57%'
-                    //expect(reportServicePage.getRecordValues(records[recordRowNo], 4)).toBe(sNumeric + '%');
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 4)).toBe(sNumeric + '%');
                     //numeric rating field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 5)).toBe(sNumeric.toString());
                     //numeric duration field
-                    // expect(reportServicePage.getRecordValues(records[7], 9)).toBe('2.0337302E-7 weeks');
+                    //expect(reportServicePage.getRecordValues(records[recordRowNo], 9)).toBe('9.92063E-9 weeks');
                 } if (fieldType === 'dateCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //date field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 6)).toBe(sDate);

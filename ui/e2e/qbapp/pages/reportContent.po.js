@@ -485,7 +485,7 @@
         this.waitForReportContent = function() {
             var self = this;
             // First wait for the containers
-            return e2ePageBase.waitForElements(self.reportContainerEl, self.reportContentEl).then(function() {
+            return e2ePageBase.waitForElements(self.reportContainerEl, self.reportContentEl, reportServicePage.loadedContentEl).then(function() {
                 // Then wait for records to be shown in the grid
                 return e2ePageBase.waitForElement(self.agGridBodyViewportEl);
             }).catch(function(e) {

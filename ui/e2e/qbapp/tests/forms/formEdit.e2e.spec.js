@@ -55,7 +55,9 @@
             }).then(function() {
                 //Save the form
                 formsPage.clickFormSaveBtn().then(function() {
-                    reportContentPage.waitForReportContent();
+                    reportContentPage.waitForReportContent().then(function() {
+                        reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
+                    });
                 });
             }).then(function() {
                 //reload the report
