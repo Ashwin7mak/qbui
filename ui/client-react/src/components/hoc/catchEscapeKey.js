@@ -31,6 +31,7 @@ var catchEscapeKeyWrapper = (Component) =>{
         componentWillMount() {
             // Need to listen to window so this listener will fire after react's onKeydown handlers
             // as well as components/select/reactSelectWrapper
+            // Set `capturePhase` to true to intercept keydown events before react's onKeydown handlers.
             if (window && window.addEventListener) {
                 window.addEventListener("keydown", this.handleKey, this.props.capturePhase);
             }
@@ -39,6 +40,7 @@ var catchEscapeKeyWrapper = (Component) =>{
         componentWillUnmount() {
             // Need to listen to window so this listener will fire after react's onKeydown handlers
             // as well as components/select/reactSelectWrapper
+            // Set `capturePhase` to true to intercept keydown events before react's onKeydown handlers.
             if (window && window.removeEventListener) {
                 window.removeEventListener("keydown", this.handleKey, this.props.capturePhase);
             }
