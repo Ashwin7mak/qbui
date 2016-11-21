@@ -407,7 +407,7 @@
             return url;
         },
 
-        getDynamicReportsResultsRoute: function(url) {
+        getInvokeReportRoute: function(url) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;
