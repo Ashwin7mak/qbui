@@ -118,7 +118,7 @@ describe("Validate fieldsApi", function() {
             var targetObject = "[{fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req);
+            var promise = fieldsApi.fetchFields(req, true);
 
             promise.then(
                 function(response) {
@@ -134,14 +134,14 @@ describe("Validate fieldsApi", function() {
             });
         });
 
-        it('success return select field with parameter but option to not include', function(done) {
+        it('success return select field with parameter but do not include', function(done) {
             req.url = '/apps/123/tables/456/fields/789?show=tell';
             req.params.fieldId = '789';
 
             var targetObject = "[{fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req, true);
+            var promise = fieldsApi.fetchFields(req);
 
             promise.then(
                 function(response) {

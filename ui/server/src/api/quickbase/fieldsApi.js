@@ -80,10 +80,10 @@
              * Fetch the requested field meta data for a table.
              *
              * @param req
-             * @param noQueryParameters
+             * @param includeQueryParameters
              * @returns Promise
              */
-            fetchFields: function(req, noQueryParameters) {
+            fetchFields: function(req, includeQueryParameters) {
                 let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
@@ -93,8 +93,8 @@
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                 }
 
-                //  unless explicitly requested not to do so, include query parameters
-                if (noQueryParameters !== true) {
+                //  Include query parameters only when instructed to do so
+                if (includeQueryParameters === true) {
                     //  any request parameters to append?
                     let search = url.parse(req.url).search;
                     if (search) {
