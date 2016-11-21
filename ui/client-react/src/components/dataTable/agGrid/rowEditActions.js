@@ -12,6 +12,33 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 
 import _ from 'lodash';
 
+// wrap this component with catchEscapeKey HOC to allow cancelling inline edit by hitting Escape
+const RowEditWrapper = React.createClass({
+    propTypes: {
+        onClose: React.PropTypes.func,
+        onClickAdd: React.PropTypes.func,
+        addRecordClass: React.PropTypes.string,
+    },
+
+    render() {
+        return (
+            <div
+                className="editTools">
+                <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
+                    <Button onClick={this.props.onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
+                </QBToolTip>
+
+                {this.props.children}
+
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
+                    <Button onClick={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClass}/></Button>
+                </QBToolTip>
+            </div>
+        );
+    }
+});
+const ClosableRowEditActions = closeOnEscape(RowEditWrapper);
+
 /**
  * editing tools for the currently edited row
  */
@@ -118,34 +145,18 @@ const RowEditActions = React.createClass({
             }
         }
 
-        let addRecordClass = 'addRecord';
+        let addRecordClass = ['addRecord'];
         if (!validRow || saving) {
-            addRecordClass += ' disabled';
+            addRecordClass.push('disabled');
         }
-
-        // wrap this component, also gets wrapped by the catchEscapeKey HOC to allow cancelling
-        // inline edit by hitting Escape
-        const RowEditWrapper = React.createClass({
-            render() {
-                return <div
-                    {...this.props}>
-                </div>;
-            }
-        });
-        const ClosableRowEditActions = closeOnEscape(RowEditWrapper);
 
         return (
             <ClosableRowEditActions
-                className="editTools" onClose={this.onClickCancel}>
-                <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
-                </QBToolTip>
-
+                onClose={this.onClickCancel}
+                onClickAdd={validRow ? this.onClickAdd : null}
+                addRecordClass={addRecordClass.join(' ')}
+                {...this.props} >
                 {this.renderSaveRecordButton(validRow, saving)}
-
-                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
-                </QBToolTip>
             </ClosableRowEditActions>
         );
     }

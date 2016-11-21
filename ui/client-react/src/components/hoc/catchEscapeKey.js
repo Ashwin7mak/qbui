@@ -1,4 +1,6 @@
 import React from 'react';
+import Keycode from '../../constants/keycodeConstants';
+
 /*
 
  This higher-order component (HoC) captures key in the window and if its escape it calls the
@@ -16,14 +18,11 @@ var catchEscapeKeyWrapper = (Component) =>{
 
         propTypes: {
             onClose  : React.PropTypes.func,
-            // Used as the 3rd argument accepted by addEventListener, single boolean for whether to
-            // use the capture phase which happens before the bubble phase.
-            capturePhase  : React.PropTypes.bool,
         },
 
         handleKey(e) {
             // close when Esc is pressed
-            if ((e.keyCode === 27 || e.key === 'Escape') && this.props.onClose) {
+            if ((e.keyCode === Keycode.ESCAPE || e.key === 'Escape') && this.props.onClose) {
                 this.props.onClose();
             }
         },
@@ -31,18 +30,16 @@ var catchEscapeKeyWrapper = (Component) =>{
         componentWillMount() {
             // Need to listen to window so this listener will fire after react's onKeydown handlers
             // as well as components/select/reactSelectWrapper
-            // Set `capturePhase` to true to intercept keydown events before react's onKeydown handlers.
             if (window && window.addEventListener) {
-                window.addEventListener("keydown", this.handleKey, this.props.capturePhase);
+                window.addEventListener("keydown", this.handleKey);
             }
         },
 
         componentWillUnmount() {
             // Need to listen to window so this listener will fire after react's onKeydown handlers
             // as well as components/select/reactSelectWrapper
-            // Set `capturePhase` to true to intercept keydown events before react's onKeydown handlers.
             if (window && window.removeEventListener) {
-                window.removeEventListener("keydown", this.handleKey, this.props.capturePhase);
+                window.removeEventListener("keydown", this.handleKey);
             }
         },
 

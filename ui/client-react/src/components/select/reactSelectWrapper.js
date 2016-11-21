@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import Keycode from '../../constants/keycodeConstants';
 
 /**
  * This component wraps the react-select component and call stopPropagation() on the keydown event
@@ -38,7 +39,7 @@ const stopPropogationWrapper = React.createClass({
 
     handleKey(e) {
         // If the react-select dropdown is open, stop propagation for Escape keydown.
-        if (this.state.isOpen && (e.keyCode === 27 || e.key === 'Escape')) {
+        if (this.state.isOpen && (e.keyCode === Keycode.ESCAPE || e.key === 'Escape')) {
             e.stopPropagation();
         }
     },
@@ -57,7 +58,9 @@ const stopPropogationWrapper = React.createClass({
                 onOpen={this.onOpen}
                 onClose={this.onClose}
                 {...this.props}
-            />
+            >
+                {this.props.children}
+            </Select>
         );
     }
 });
