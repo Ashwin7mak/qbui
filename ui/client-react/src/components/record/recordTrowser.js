@@ -302,8 +302,8 @@ let RecordTrowser = React.createClass({
         if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
-            WindowLocationUtils.pushWithoutQuery();
-            flux.actions.hideTrowser();
+            // Clean up before exiting the trowser
+            this.clearEditsAndClose();
         }
     },
     toggleErrorDialog() {

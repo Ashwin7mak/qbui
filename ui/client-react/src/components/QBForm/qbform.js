@@ -122,7 +122,9 @@ let QBForm = React.createClass({
                 }
             });
 
-            if (fieldRecord && fieldRecord.value) {
+            // If the fieldRecord.value exists or is a boolean (for checkbox fields), then return the field record
+            // otherwise set the default values if available
+            if (fieldRecord && (fieldRecord.value || typeof fieldRecord.value === "boolean")) {
                 return fieldRecord;
             } else if (field.defaultValue && field.defaultValue.coercedValue) {
                 fieldRecord = {};
