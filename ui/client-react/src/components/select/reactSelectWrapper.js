@@ -27,9 +27,10 @@ const stopPropogationWrapper = React.createClass({
      * Escape key when a dropdown is open events/functions are fired in the following order:
      * 1 react-select's keydown handler receivs the keydown event and closes the dropdown
      * 2 this `onClose` function is called
-     * 3 the same keydown event fires the `handleKey` function
+     * 3 the same keydown event fires `this.handleKey` function
      * 4 setTimeout fires to set `this.state.isOpen` to false
      * We need to set the state in a timeout so that `this.state.isOpen` is set to false after (3).
+     * Otherwise this.state.isOpen will be false at step (3).
      */
     onClose() {
         setTimeout(() => this.setState({isOpen: false}), 0);
