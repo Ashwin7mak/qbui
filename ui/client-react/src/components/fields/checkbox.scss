@@ -210,9 +210,13 @@ $checkbox-font-size-mobile: 16px;
 
         .text {
             font-size: $font-size;
+            padding-bottom: 4px;
+            padding-right: 7px;
 
             @include small-breakpoint {
                 font-size: $checkbox-font-size-mobile;
+                padding-bottom: 0px;
+                padding-right: 10px;
             }
         }
 

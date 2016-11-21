@@ -490,6 +490,9 @@ $cell-edit-background-edit: #f3f8fe;
     }
 }
 
+.cellEditWrapper .checkbox .label {
+    padding-left: 9px;
+}
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
     display:none;
