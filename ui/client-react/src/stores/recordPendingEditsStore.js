@@ -45,7 +45,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     _initData() {
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
-        this.recordEditOpen = false;
+        this.recordEditOpen = undefined;
         this.currentEditingRecordId = null;
         this.currentEditingAppId = null;
         this.currentEditingTableId = null;

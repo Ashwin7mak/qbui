@@ -53,7 +53,27 @@ describe('Record functions', () => {
     it('test field change callback', () => {
         component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux} pendEdits={{recordChanges: {}, recordEditOpen: false}} formData={{}}></Record>);
         component.handleFieldChange({});
-        expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
+    });
+    it('test pendingEditStart is called on edit open', () => {
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {recordEditOpen: false};
+            },
+            setRecordEdit() {
+                this.setState({recordEditOpen: true});
+            },
+            render() {
+                return <div>
+                    <Record ref="record" recId={1} flux={flux} pendEdits={{recordChanges: {}, recordEditOpen: this.state.recordEditOpen}} formData={{}}></Record>
+                    <button onClick={this.setRecordEdit} />
+                </div>;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = TestUtils.scryRenderedComponentsWithType(parent.refs.record, Record);
+        let button = TestUtils.scryRenderedDOMComponentsWithTag(parent, 'button');
+        TestUtils.Simulate.click(button[0]);
+        expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
     });
 });

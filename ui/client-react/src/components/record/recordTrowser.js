@@ -173,7 +173,7 @@ let RecordTrowser = React.createClass({
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props, 'reportData.data.fields')) {
+        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
@@ -191,7 +191,7 @@ let RecordTrowser = React.createClass({
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props, 'reportData.data.fields')) {
+        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
