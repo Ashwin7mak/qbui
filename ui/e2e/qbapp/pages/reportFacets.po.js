@@ -162,19 +162,19 @@
         this.selectGroupAndFacetItems = function(facetGroupName, facetIndexes) {
             var self = this;
             // Expand the Facet group
-            this.clickFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
+            return this.clickFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
                 // Select the facet Items
-                self.selectFacets(facetGroupElement, facetIndexes);
+                return self.selectFacets(facetGroupElement, facetIndexes);
+            }).then(function() {
+                // Get all Selected items from popup and push into an array for verification
+                return self.reportFacetPopUpMenu.all(by.className('selected')).map(
+                    function(selectedGroupItem, index) {
+                        return e2ePageBase.waitForElement(selectedGroupItem).then(function() {
+                            return selectedGroupItem.getText();
+                        });
+                    }
+                );
             });
-
-            // Get all Selected items from popup and push into an array for verification
-            return this.reportFacetPopUpMenu.all(by.className('selected')).map(
-                function(selectedGroupItem, index) {
-                    return e2ePageBase.waitForElement(selectedGroupItem).then(function() {
-                        return selectedGroupItem.getText();
-                    });
-                }
-            );
         };
 
         /*
