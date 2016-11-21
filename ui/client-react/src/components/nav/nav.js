@@ -18,7 +18,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
-
+import PageTitle from '../pageTitle/pageTitle';
 import AppQbModal from '../qbModal/appQbModal';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -83,13 +83,13 @@ export let Nav = React.createClass({
 
     getSelectedApp() {
         if (this.state.apps.selectedAppId) {
-
             return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
+
     /**
-     * get table object for currently selecte table (or null if no table selected);
+     * get table object for currently selected table (or null if no table selected)
      *
      */
     getSelectedTable() {
@@ -102,6 +102,22 @@ export let Nav = React.createClass({
     },
 
 
+    aReportIsSelected() {
+        let app = this.getSelectedApp();
+        let reportData = this.state.reportData;
+
+        return (app && reportData && reportData.rptId && reportData.data && reportData.data.name);
+    },
+
+    /**
+     * get the report for the currently selected report (or null if no report selected)
+     */
+    getSelectedReport() {
+        if (this.aReportIsSelected()) {
+            return this.state.reportData.data;
+        }
+        return null;
+    },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */
     toggleAppsList(open) {
@@ -160,12 +176,14 @@ export let Nav = React.createClass({
             classes += " leftNavOpen";
         }
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
+        let editRecordIdForPageTitle = editRecordId;
 
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
 
         return (<div className={classes}>
+            <PageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} recordId={editRecordIdForPageTitle} />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
