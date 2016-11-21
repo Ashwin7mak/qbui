@@ -77,7 +77,8 @@ export let Nav = React.createClass({
                 flux.actions.toggleLeftNav(false);
             }, 0);
         }
-        flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
+        this.props.onShowTrowser(TrowserConsts.TROWSER_REPORTS);
+        //flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
 
@@ -148,11 +149,11 @@ export let Nav = React.createClass({
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
-                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                    this.props.onShowTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
-                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                    this.props.onShowTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             }
         }
@@ -189,7 +190,7 @@ export let Nav = React.createClass({
             <AppQbModal/>
 
             {this.props.params && this.props.params.appId &&
-                <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                <RecordTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
                                form={this.state.form}
                                appId={this.props.params.appId}
@@ -200,14 +201,16 @@ export let Nav = React.createClass({
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable()}
                                reportData={this.state.reportData}
-                               errorPopupHidden={this.state.nav.errorPopupHidden}/>
+                               errorPopupHidden={this.state.nav.errorPopupHidden}
+                               onHideTrowser={this.props.onHideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
-                <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                <ReportManagerTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable()}
                                       filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={this.state.reportsData}/>
+                                      reportsData={this.state.reportsData}
+                                      onHideTrowser={this.props.onHideTrowser}/>
             }
 
             <LeftNav

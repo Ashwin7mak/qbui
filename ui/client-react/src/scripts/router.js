@@ -4,6 +4,12 @@ import ReactDOM, {render} from "react-dom";
 import {Router, Route, IndexRoute} from "react-router";
 import AppHistory from '../globals/appHistory';
 import Nav from "../components/nav/nav";
+import {Provider,connect} from "react-redux";
+import {showTrowser,hideTrowser} from '../actions';
+
+import {createStore} from 'redux';
+import qbui from '../reducers';
+
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";
 import reportActions from "../actions/reportActions";
@@ -159,6 +165,25 @@ let NavWrapper = React.createClass({
     }
 });
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+        qbui: state
+    }
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        onShowTrowser: (content) => {
+            dispatch(showTrowser(content));
+        },
+        onHideTrowser: () => {
+            dispatch(hideTrowser())
+        }
+    }
+} ;
+
+const NavContainer = connect(mapStateToProps, mapDispatchToProps)(NavWrapper);
+
 let Apps = React.createClass({
     render() {
         return <AppsHome flux={flux} />;
@@ -170,23 +195,27 @@ let Apps = React.createClass({
 
 let history = AppHistory.setup(flux).history;
 
+const store = createStore(qbui);
+
 render((
-    <Router history={history}>
-        <Route path="/qbase/" component={Apps} />
+    <Provider store={store}>
+        <Router history={history}>
+            <Route path="/qbase/" component={Apps} />
 
-        <Route path="/qbase/apps" component={NavWrapper} >
-            <IndexRoute component={AppsRoute} />
-        </Route>
+            <Route path="/qbase/apps" component={NavContainer} >
+                <IndexRoute component={AppsRoute} />
+            </Route>
 
-        <Route path="/qbase/app/:appId" component={NavWrapper} >
-            <IndexRoute component={AppHomePageRoute} />
-            <Route path="table/:tblId" component={TableHomePageRoute} />
-            <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
-            <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
-            <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
-        </Route>
+            <Route path="/qbase/app/:appId" component={NavContainer} >
+                <IndexRoute component={AppHomePageRoute} />
+                <Route path="table/:tblId" component={TableHomePageRoute} />
+                <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
+                <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
+                <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+            </Route>
 
-    </Router>
+        </Router>
+    </Provider>
 ), document.getElementById('content'));
 
 

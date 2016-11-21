@@ -68,7 +68,7 @@ let ReportManagerTrowser = React.createClass({
     hideTrowser() {
         let flux = this.getFlux();
         flux.actions.filterReportsByName("");
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
     /**
      * trowser to wrap report manager
