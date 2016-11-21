@@ -46,7 +46,8 @@
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
 
         DEFAULT_TABLE_REPORT: {
-            ID: '0'
+            ID: '0',
+            ROUTE: 'default'
         },
 
         NUMERIC_SEPARATOR: {

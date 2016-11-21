@@ -21,6 +21,7 @@
 
     var simpleStringify = require('./../../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
+    var commonConstants = require('./../../../common/src/constants.js');
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -479,7 +480,8 @@
 
         processRequest(req, res, function(req, res) {
             //  include facet information if a get request to fetch the report results
-            reportsApi.fetchReport(req, req.params.reportId, requestHelper.isGet(req)).then(
+            let reportId = req.params.reportId === commonConstants.DEFAULT_TABLE_REPORT.ROUTE ? commonConstants.DEFAULT_TABLE_REPORT.ID : req.params.reportId;
+            reportsApi.fetchReport(req, reportId, requestHelper.isGet(req)).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');
