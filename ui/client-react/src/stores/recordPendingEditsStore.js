@@ -199,8 +199,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let changes = payload.changes;
         logger.debug('saving changes: ' + JSON.stringify(payload));
-        this.saving = true;
-        this.emit('change');
+        this.onStartEdit();
     },
 
     /**
@@ -222,8 +221,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.saving = false;
-        this.emit('change');
+        this.onEndEdit();
 
     },
     handleErrors(payload) {
@@ -267,8 +265,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.handleErrors(payload);
         this.recordEditOpen = true;
-        this.saving = false;
-        this.emit('change');
+        this.onEndEdit();
     },
 
     /**
@@ -281,9 +278,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
         this.recordChanges = payload.changes;
-        this.saving = true;
         logger.debug('saving added record: ' + JSON.stringify(payload));
-        this.emit('change');
+        this.onStartEdit();
     },
 
     /**
@@ -315,8 +311,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.saving = false;
-        this.emit('change');
+        this.onEndEdit();
     },
 
     /**
@@ -336,26 +331,27 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
 
         this.handleErrors(payload);
-        this.saving = false;
-        this.emit('change');
-    },
-    onStartEdit() {
-        this.saving = true;
-        this.emit('change');
-    },
-    onEndEdit() {
-        this.saving = false;
-        this.emit('change');
+        this.onEndEdit();
     },
     onDeleteRecordFailed(payload) {
         this.handleErrors(payload);
-        this.saving = false;
-        this.emit('change');
+        this.onEndEdit();
     },
     onDeleteRecordBulkFailed(payload) {
         this.handleErrors(payload);
+        this.onEndEdit();
+    },
+    onStartEdit(emit = true) {
+        this.saving = true;
+        if (emit) {
+            this.emit('change');
+        }
+    },
+    onEndEdit(emit = true) {
         this.saving = false;
-        this.emit('change');
+        if (emit) {
+            this.emit('change');
+        }
     },
     /**
      * create a key for pending edit commitChanges map from the current context

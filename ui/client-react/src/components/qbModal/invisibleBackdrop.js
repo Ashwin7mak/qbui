@@ -51,7 +51,9 @@ const InvisibleBackdrop = React.createClass({
                     keyboard={false}
                     animation={false}
                 >
-                  <div onClick={this.discardInput}></div>
+                  {/* all clicks on screen get trapped and discarded */}
+                  <a className="invisibleLink" onClick={this.discardInput}>
+                  </a>
                 </Modal>
         );
     },
