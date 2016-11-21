@@ -111,8 +111,31 @@ describe("Validate fieldsApi", function() {
 
         });
 
-        it('success return select field with parameter ', function(done) {
+        it('success return select field with parameter and includeQueryParameter=true', function(done) {
             req.url = '/apps/123/tables/456/fields/789?show=tell';
+            req.params.fieldId = '789';
+
+            var targetObject = "[{fields: []}]";
+
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = fieldsApi.fetchFields(req, true);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return select field with no parameter and includeQueryParameter=true', function(done) {
+            req.url = '/apps/123/tables/456/fields/789';
             req.params.fieldId = '789';
 
             var targetObject = "[{fields: []}]";
