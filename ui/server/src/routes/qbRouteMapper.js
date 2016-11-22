@@ -488,17 +488,21 @@
      * @param useReportMetaData - use the report meta data..if true, any query parameter
      * override included on the request (query expression, clist, slist, etc) is ignored.
      */
-    function fetchReportResults(req, res, fetchFacets = true, useReportMetaData = true) {
+    function fetchReportResults(req, res, fetchFacets, useReportMetaData) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
+            //  node doesn't support default parameters until v6 (as of this writing, we're
+            //  on 4.x)..so until then, unless explicitly set to false, it is considered true..
+            fetchFacets = fetchFacets !== false ? true : false;
+            useReportMetaData = useReportMetaData !== false ? true : false;
 
             //  get the reportId
             let reportId = req.params ? req.params.reportId : '';
 
             //  If the route request is for the default table report (/apps/:appId/tables/:tableId/reports/default/results),
-            //  set the report id to an internal id ('0'). This is an internal value that is used to identify that this
+            //  set the report id to ('0'). This is an internal id value that is used to identify that this
             //  is a request to generate the synthetic default table report.
             if (reportId === commonConstants.SYNTHETIC_TABLE_REPORT.ROUTE) {
                 reportId = commonConstants.SYNTHETIC_TABLE_REPORT.ID;
