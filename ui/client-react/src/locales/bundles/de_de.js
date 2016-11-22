@@ -392,6 +392,12 @@ export default {
             editingRecord: "Datensatz #{recordId} bearbeiten",
             newRecord: "Datensatz hinzufügen"
         },
-        quickBaseClassic: "QuickBase Klassik"
+        quickBaseClassic: "QuickBase Klassik",
+        quickBaseMercury: "QuickBase Mercury",
+        v2v3: {
+            manageAccessTitle: "Benutzerzugriff auf Mercury verwalten",
+            versionSelectTitle: "Meine Nutzer öffnen diese App in:",
+            manageAccessTip: "*Nur Sie und andere App-Admins sehen dieses Umschaltmenü"
+        }
     }
 };

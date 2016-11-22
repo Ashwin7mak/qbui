@@ -14,6 +14,10 @@ const AppUtils = {
         let app = _.find(apps, {id: appId});
 
         return (app && app.tables) ? app.tables : [];
+    },
+
+    hasAdminAccess(accessRights) {
+        return Array.isArray(accessRights) && accessRights.indexOf("EDIT_SCHEMA") !== -1;
     }
 };
 

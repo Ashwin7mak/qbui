@@ -391,6 +391,13 @@ export default {
             editingRecord: "Modifier l'enregistrement n ° {recordId}",
             newRecord: "Ajouter un enregistrement"
         },
-        quickBaseClassic: "QuickBase Classique"
+        quickBaseClassic: "QuickBase Classique",
+        quickBaseMercury: "QuickBase Mercury",
+        v2v3: {
+            manageAccessTitle: "Gérer l'accès des utilisateurs au mercure",
+            versionSelectTitle: "Mes utilisateurs ouvriront cette application dans:",
+            manageAccessTip: "*Seuls vous et les autres administrateurs d'applications voyez ce menu déroulant"
+
+        }
     }
 };

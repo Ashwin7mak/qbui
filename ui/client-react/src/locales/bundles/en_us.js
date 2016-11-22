@@ -396,6 +396,13 @@ export default {
             editingRecord: "Edit Record #{recordId}",
             newRecord: "Add Record"
         },
-        quickBaseClassic: "QuickBase Classic"
+        quickBaseClassic: "QuickBase Classic",
+        quickBaseMercury: "QuickBase Mercury",
+        v2v3: {
+            manageAccessTitle: "Manage User Access to Mercury",
+            versionSelectTitle: "My users will open this app in:",
+            manageAccessTip: "*Only you and other app admins see this toggle menu"
+
+        }
     }
 };

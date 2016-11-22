@@ -7,9 +7,10 @@ import TableIconUtils from '../utils/tableIconUtils';
 
 let AppsStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.apps = [];
         this.appUsers = [];
+        this.appRights = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.error = false;
@@ -20,16 +21,17 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
-            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess
+            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
+            actions.LOAD_APP_RIGHTS_SUCCESS, this.onLoadAppRightsSuccess
         );
 
         this.logger = new Logger();
     },
-    onLoadApps: function() {
+    onLoadApps() {
         this.loading = true;
         this.emit("change");
     },
-    onLoadAppsFailed: function() {
+    onLoadAppsFailed() {
         this.loading = false;
         this.error = true;
         this.emit("change");
@@ -43,7 +45,7 @@ let AppsStore = Fluxxor.createStore({
             }
         });
     },
-    onLoadAppsSuccess: function(apps) {
+    onLoadAppsSuccess(apps) {
 
         this.loading = false;
         this.error = false;
@@ -53,25 +55,30 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onLoadAppUsersSuccess: function(users) {
+    onLoadAppUsersSuccess(users) {
         this.appUsers = users;
         this.emit('change');
     },
-    onSelectApp: function(appId) {
+    onLoadAppRightsSuccess(rights) {
+        this.appRights = rights;
+        this.emit('change');
+    },
+    onSelectApp(appId) {
         this.selectedAppId = appId;
 
         this.emit('change');
     },
-    onSelectTable: function(tblId) {
+    onSelectTable(tblId) {
         this.selectedTableId = tblId;
 
         this.emit('change');
     },
-    getState: function() {
+    getState() {
         return {
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
+            appRights: this.appRights,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             error: this.error

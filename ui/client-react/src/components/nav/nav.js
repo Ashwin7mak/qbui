@@ -3,6 +3,7 @@ import React from "react";
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
+import V2V3Footer from '../footer/v2v3Footer';
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
@@ -14,6 +15,7 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
+import AppUtils from '../../utils/appUtils';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
@@ -253,7 +255,22 @@ export let Nav = React.createClass({
                         )}
                     </div>}
             </div>
+            {this.getV2V3Footer()}
         </div>);
+    },
+
+    getV2V3Footer() {
+        const hasAdmin = AppUtils.hasAdminAccess(this.state.apps.appRights);
+
+        if (this.getSelectedApp() && hasAdmin) {
+            return <V2V3Footer version={this.state.uiVersion} onSelectUIVersion={this.onSelectV2V3}/>;
+        } else {
+            return null;
+        }
+    },
+    onSelectV2V3(uiVersion) {
+        this.setState({uiVersion});
+
     },
     onSelectItem() {
 
@@ -263,7 +280,7 @@ export let Nav = React.createClass({
             flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
         }
     },
-    toggleNav: function() {
+    toggleNav() {
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     }
