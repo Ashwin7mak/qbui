@@ -11,6 +11,7 @@ import TextFieldValueRenderer from './textFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
 import UrlFieldValueRenderer from './urlFieldValueRenderer';
+import PhoneFieldValueRenderer from './phoneFieldValueRenderer';
 
 /**
  * # FieldValueRenderer
@@ -133,6 +134,8 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.EMAIL_ADDRESS:
             return <EmailFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
 
+        case FieldFormats.PHONE_FORMAT:
+            return <PhoneFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties}/>;
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
         case FieldFormats.DURATION_FORMAT:
