@@ -55,7 +55,6 @@ const UrlFieldValueRenderer = React.createClass({
     },
     renderLink() {
         let target = (this.props.openInNewWindow ? '_blank' : '_self');
-
         // Don't render an empty button
         if (!this.props.display) {
             return <span className="link"></span>;
@@ -68,6 +67,7 @@ const UrlFieldValueRenderer = React.createClass({
                 </span>
             );
         } else {
+            debugger;
             return (
                 <a href={this.renderLinkHref()} target={target} className={this.setLinkClasses()} tabIndex="-1">
                     <span className="link" tabIndex="1">

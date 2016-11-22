@@ -66,6 +66,7 @@
             if (this.protocolIsMissingFrom(url)) {
                 url = protocol + url;
             }
+            // debugger;
             return url;
         }
     };

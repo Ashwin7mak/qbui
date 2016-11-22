@@ -11,6 +11,7 @@ const UrlUtils = {
         case 'tel':
         case 'callto':
         case 'skype':
+            debugger;
             return 'phone-outline';
         case 'mailto':
             return 'mail';
@@ -23,7 +24,7 @@ const UrlUtils = {
     },
     renderIconForUrl(url) {
         let protocol = UrlFileAttachmentReportLinkFormatter.getProtocolFromUrl(url);
-
+        console.log('QBIcon', UrlUtils.getIconForProtocol(protocol));
         if (protocol) {
             return (
                 <QBicon icon={UrlUtils.getIconForProtocol(protocol)} />
