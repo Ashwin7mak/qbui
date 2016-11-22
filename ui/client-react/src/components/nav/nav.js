@@ -18,7 +18,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
-import PageTitle from '../pageTitle/pageTitle';
+import NavPageTitle from '../pageTitle/navPageTitle';
 import Locale from '../../locales/locales';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
@@ -189,8 +189,19 @@ export let Nav = React.createClass({
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
 
+        let viewingRecordId = null;
+        if (this.props.params) {
+            viewingRecordId = this.props.params.recordId;
+        }
+
         return (<div className={classes}>
-            <PageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} recordId={editRecordIdForPageTitle} />
+            <NavPageTitle
+                app={this.getSelectedApp()}
+                table={this.getSelectedTable()}
+                report={this.getSelectedReport()}
+                editingRecordId={editRecordIdForPageTitle}
+                selectedRecordId={viewingRecordId}
+            />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>

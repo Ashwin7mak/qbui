@@ -53,7 +53,7 @@ export let RecordRoute = React.createClass({
 
         if (this.props.params.appId !== prev.params.appId ||
             this.props.params.tblId !== prev.params.tblId ||
-            this.props.params.recId !== prev.params.recId ||
+            this.props.params.recordId !== prev.params.recordId ||
             (this.props.form && this.props.form.syncLoadedForm)) {
 
             this.loadRecordFromParams(this.props.params);
