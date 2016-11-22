@@ -69,7 +69,7 @@
                 }
                 builderInstance.withFieldId(fields[i][fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
-                builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
+                builderInstance.withPositionSameRow(false); //set to false displays fields one after the other.
                 builderInstance.withDisplayText(rawValue.generateString());
                 builderInstance.withDisplayOptions(formElementDisplayOptionsAddAndEdit);
                 builderInstance.withLabelPosition('LEFT');
