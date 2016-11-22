@@ -8,6 +8,7 @@ import FieldUtils from '../../../utils/fieldUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import * as CompConsts from "../../../constants/componentConstants";
 
 import _ from 'lodash';
 
@@ -39,7 +40,7 @@ const RowEditActions = React.createClass({
 
         this.props.flux.actions.deleteRecord(id);
         setTimeout(()=> {
-            NotificationManager.info('Record deleted', 'Deleted', 1500);
+            NotificationManager.info('Record deleted', 'Deleted', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }, 1000);
     },
     onClickCancel() {

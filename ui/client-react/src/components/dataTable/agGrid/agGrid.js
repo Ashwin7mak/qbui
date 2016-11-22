@@ -548,9 +548,9 @@ let AGGrid = React.createClass({
         if (_.has(this.props, 'pendEdits.saving') &&
             (!_.isEqual(nextProps.pendEdits.saving, this.props.pendEdits.saving) ||
              !_.isEqual(nextProps.pendEdits.saving, this.gridOptions.context.saving))) {
+            this.gridOptions.context.saving = nextProps.pendEdits.saving;
             //rerender the editRow action col only
             if (this.state.editingRowNode !== null) {
-                this.gridOptions.context.saving = nextProps.pendEdits.saving;
                 this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
             }
             return false;
@@ -690,6 +690,7 @@ let AGGrid = React.createClass({
         // the refresh needs the new state so refresh in the setState callback
         this.setState({editingRowNode: node, rowEditErrors: null}, () => {
             this.gridOptions.context.rowEditErrors = null;
+            this.gridOptions.context.saving = _.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false;
             this.api.refreshRows(rowsToRefresh);
         });
     },

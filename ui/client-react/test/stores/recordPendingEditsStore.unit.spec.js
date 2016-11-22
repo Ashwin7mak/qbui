@@ -57,9 +57,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_FAILED).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_SUCCESS).toBeDefined();
@@ -199,6 +197,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -300,6 +299,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(null);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -378,8 +378,7 @@ describe('Test recordPendingEdits Store ', () => {
             payload : {}
         };
         flux.dispatcher.dispatch(onDeleteRecordSuccessAction);
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-        expect(flux.store(STORE_NAME).saving).toBe(false);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
 
     });
 
@@ -391,7 +390,6 @@ describe('Test recordPendingEdits Store ', () => {
         };
         flux.dispatcher.dispatch(onDeleteRecordFailedAction);
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-        expect(flux.store(STORE_NAME).saving).toBe(false);
 
     });
     it('test onDeleteRecordBulkSuccess recordPendingEdits action', () => {
@@ -400,8 +398,7 @@ describe('Test recordPendingEdits Store ', () => {
             payload : {}
         };
         flux.dispatcher.dispatch(onDeleteRecordBulkSuccessAction);
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-        expect(flux.store(STORE_NAME).saving).toBe(false);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
 
     });
 
@@ -412,6 +409,16 @@ describe('Test recordPendingEdits Store ', () => {
             payload : {}
         };
         flux.dispatcher.dispatch(onDeleteRecordBulkFailedAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+
+    });
+
+    it('test onAfterEdit recordPendingEdits action', () => {
+        let onAfterEditAction = {
+            type: actions.AFTER_RECORD_EDIT,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onAfterEditAction);
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
         expect(flux.store(STORE_NAME).saving).toBe(false);
 

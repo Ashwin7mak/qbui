@@ -27,13 +27,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             actions.DELETE_RECORD, this.onStartEdit,
             actions.DELETE_RECORD_BULK, this.onStartEdit,
-            actions.DELETE_RECORD_SUCCESS, this.onEndEdit,
             actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
-            actions.DELETE_RECORD_BULK_SUCCESS, this.onEndEdit,
             actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
+            actions.AFTER_RECORD_EDIT, this.onAfterEdit,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
         this._initData();
@@ -221,7 +220,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.onEndEdit();
+        this.emit('change');
 
     },
     handleErrors(payload) {
@@ -265,7 +264,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.handleErrors(payload);
         this.recordEditOpen = true;
-        this.onEndEdit();
+        this.emit('change');
     },
 
     /**
@@ -311,7 +310,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.onEndEdit();
+        this.emit('change');
     },
 
     /**
@@ -331,15 +330,15 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
 
         this.handleErrors(payload);
-        this.onEndEdit();
+        this.emit('change');
     },
     onDeleteRecordFailed(payload) {
         this.handleErrors(payload);
-        this.onEndEdit();
+        this.emit('change');
     },
     onDeleteRecordBulkFailed(payload) {
         this.handleErrors(payload);
-        this.onEndEdit();
+        this.emit('change');
     },
     onStartEdit(emit = true) {
         this.saving = true;
@@ -347,11 +346,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.emit('change');
         }
     },
-    onEndEdit(emit = true) {
+    onAfterEdit() {
         this.saving = false;
-        if (emit) {
-            this.emit('change');
-        }
+        this.emit('change');
     },
     /**
      * create a key for pending edit commitChanges map from the current context

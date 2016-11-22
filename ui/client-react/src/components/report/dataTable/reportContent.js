@@ -21,6 +21,7 @@ import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
+import * as CompConsts from '../../../constants/componentConstants';
 
 let logger = new Logger();
 
@@ -252,7 +253,8 @@ export let ReportContent = React.createClass({
         newBlankReportPromise.then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
             // due to the speed of re-rendering
-            NotificationManager.success(Locales.getMessage('recordNotifications.recordSaved'), Locales.getMessage('success'), 1500);
+            NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         });
     },
 

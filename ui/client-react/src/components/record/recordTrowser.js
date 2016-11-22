@@ -13,6 +13,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
+import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 
 import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
 
@@ -49,7 +50,8 @@ let RecordTrowser = React.createClass({
         }
 
         return (this.props.visible &&
-            <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
+            <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)}
+                    options={SpinnerConfigurations.TROWSER_CONTENT}>
                 <Record appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
