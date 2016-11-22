@@ -16,7 +16,7 @@
     var reportContentPage = new ReportContentPage();
 
     var sText = '9782341234';
-    var sNumeric = rawValueGenerator.generateInt(0, 99);
+    var sNumeric = '33.33';
     var sTime = "12:00 am";
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
@@ -159,7 +159,11 @@
                         return elm;
                     }).map(function(elm) {
                         return elm.element(by.className('date')).click().then(function() {
-                            return fetchEnterCellValuesPromises.push(elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate.replace(/-/g, "/")));
+                            if (browserName === 'safari') {
+                                return fetchEnterCellValuesPromises.push(elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate.replace(/-/g, "/")));
+                            } else {
+                                return fetchEnterCellValuesPromises.push(elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate));
+                            }
                         });
 
                         ////Select the date from the date picker.
@@ -179,7 +183,7 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return fetchEnterCellValuesPromises.push(elm.clear().elm.sendKeys(sNumeric));
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
                     });
                 } else if (fieldLabel === 'checkbox') {
                     //select checkbox field
