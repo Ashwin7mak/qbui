@@ -62,14 +62,14 @@
             }).then(function() {
                 //reload the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                reportContentPage.waitForReportContent().then(function() {
-                    //Verify record is added on top row in a table
-                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
-                    }
-                }).then(function() {
-                    done();
-                });
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                //Verify record is added on top row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
             });
         });
 
