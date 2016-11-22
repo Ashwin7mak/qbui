@@ -466,15 +466,15 @@
     }
 
     /**
-     * This is the function for fetching report results from the reportsAPI endpoint
-     * when paging and when overriding the default report meta data.
+     * This is a wrapper function for fetching report results
+     * when paging and/or overriding the default report meta data.
      *
      * @param req
      * @param res
      * @returns {*}
      */
     function fetchReportInvokeResults(req, res) {
-        return fetchReportResults(req, res, true);
+        return fetchReportResults(req, res, false, false);
     }
 
     /**
@@ -484,10 +484,11 @@
      *
      * @param req
      * @param res
-     * @param overrideReportMetaData
+     * @param fetchFacets - should the report facets get fetched
+     * @param useReportMetaData - use the report meta data..if true, any query parameter
+     * override included on the request (query expression, clist, slist, etc) is ignored.
      */
-    /*eslint no-shadow:0 */
-    function fetchReportResults(req, res, overrideReportMetaData) {
+    function fetchReportResults(req, res, fetchFacets = true, useReportMetaData = true) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
@@ -496,20 +497,14 @@
             //  get the reportId
             let reportId = req.params ? req.params.reportId : '';
 
-            //  If this is a request for the default table report route ('default'), set
-            //  the report id to an internal id ('0') that is used to identify that this
-            //  is a request for the default report.
+            //  If the route request is for the default table report (/apps/:appId/tables/:tableId/reports/default/results),
+            //  set the report id to an internal id ('0'). This is an internal value that is used to identify that this
+            //  is a request to generate the synthetic default table report.
             if (reportId === commonConstants.SYNTHETIC_TABLE_REPORT.ROUTE) {
                 reportId = commonConstants.SYNTHETIC_TABLE_REPORT.ID;
             }
 
-            //  anything but a true value means we will fetch the report using the default report meta data
-            let useDefaultReportMetaData = overrideReportMetaData !== true;
-
-            //  include facets in the response if we are using the default report meta data
-            let fetchFacets = useDefaultReportMetaData;
-
-            reportsApi.fetchReport(req, reportId, fetchFacets, useDefaultReportMetaData).then(
+            reportsApi.fetchReport(req, reportId, fetchFacets, useReportMetaData).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');
