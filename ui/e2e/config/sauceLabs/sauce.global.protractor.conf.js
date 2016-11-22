@@ -57,7 +57,7 @@
             mediumSleep : 10000,
             largeSleep :30000,
             // Constant for protractors ExpectedConditions functions (see e2ePageBase)
-            ecTimeout: 7500
+            ecTimeout: 15000
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {
