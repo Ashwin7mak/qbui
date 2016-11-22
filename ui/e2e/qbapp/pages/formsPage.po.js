@@ -16,7 +16,7 @@
     var reportContentPage = new ReportContentPage();
 
     var sText = '9782341234';
-    var sNumeric = parseFloat("4.333");
+    var sNumeric = rawValueGenerator.generateInt(0, 99);
     var sTime = "12:00 am";
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
@@ -179,7 +179,7 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
+                        return fetchEnterCellValuesPromises.push(elm.sendKeys(sNumeric));
                     });
                 } else if (fieldLabel === 'checkbox') {
                     //select checkbox field
