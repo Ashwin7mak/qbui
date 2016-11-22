@@ -606,19 +606,26 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadReportSuccess(response) {
+    onLoadReportSuccess(model) {
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
 
+        //  if there is no reportId set, then initialize with model value
+        //  This scenario happens when viewing the default report for the table..the
+        //  id is not known when the onLoadReport event is fired.
+        if (!this.rptId) {
+            this.rptId = model.rptId;
+        }
+
         this.error = false;
 
         this.reportModel = reportModel;
-        reportModel.setOriginalMetaData(response.metaData);
-        reportModel.setMetaData(response.metaData);
-        reportModel.setRecordData(response.recordData);
-        reportModel.setFacetData(response.recordData);
-        reportModel.updateRecordsCount(response.recordCount);
+        reportModel.setOriginalMetaData(model.metaData);
+        reportModel.setMetaData(model.metaData);
+        reportModel.setRecordData(model.recordData);
+        reportModel.setFacetData(model.recordData);
+        reportModel.updateRecordsCount(model.recordCount);
 
         this.emit('change');
     },

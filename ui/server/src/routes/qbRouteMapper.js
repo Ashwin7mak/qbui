@@ -493,8 +493,15 @@
 
         processRequest(req, res, function(req, res) {
 
-            //  include facet information if a get request to fetch the report results
-            //let reportId = req.params.reportId === commonConstants.DEFAULT_TABLE_REPORT.ROUTE ? commonConstants.DEFAULT_TABLE_REPORT.ID : req.params.reportId;
+            //  get the reportId
+            let reportId = req.params ? req.params.reportId : '';
+
+            //  If this is a request for the default table report route ('default'), set
+            //  the report id to an internal id ('0') that is used to identify that this
+            //  is a request for the default report.
+            if (reportId === commonConstants.DEFAULT_TABLE_REPORT.ROUTE) {
+                reportId = commonConstants.DEFAULT_TABLE_REPORT.ID;
+            }
 
             //  anything but a true value means we will fetch the report using the default report meta data
             let useDefaultReportMetaData = overrideReportMetaData !== true;
@@ -502,7 +509,7 @@
             //  include facets in the response if we are using the default report meta data
             let fetchFacets = useDefaultReportMetaData;
 
-            reportsApi.fetchReport(req, req.params.reportId, fetchFacets, useDefaultReportMetaData).then(
+            reportsApi.fetchReport(req, reportId, fetchFacets, useDefaultReportMetaData).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');
