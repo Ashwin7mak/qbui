@@ -591,7 +591,7 @@
                             }
 
                             //  fetch the report
-                            this.fetchReport(req, homepageReportId, true).then(
+                            this.fetchReport(req, homepageReportId, true, true).then(
                                 (reportResponse) => {
                                     resolve(reportResponse);
                                 },
