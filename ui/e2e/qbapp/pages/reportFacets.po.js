@@ -153,12 +153,7 @@
                         return filteredElements[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
                             if (!present) {
                                 return filteredElements[0].element(by.className('list-group-item-inner-wrapper')).click().then(function() {
-                                    return reportServicePage.waitForElementToBeStale(self.reportFacetPopUpMenu).then(function() {
-                                        // Wait for the new agGrid element
-                                        return reportServicePage.waitForElement(self.reportFacetPopUpMenu).then(function() {
-                                            return e2eBase.sleep(browser.params.smallSleep);
-                                        });
-                                    });
+                                    return e2eBase.sleep(browser.params.mediumSleep);
                                 });
                             }
                         });
