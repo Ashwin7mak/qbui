@@ -282,9 +282,8 @@
                 // Open the calendar widget
                 return e2ePageBase.scrollElementIntoView(dateFieldCell).then(function() {
                     //TODO: Safari is having an issue opening this widget (it works manually of course)
-                    return self.getDateFieldCalendarIconEl(dateFieldCell).click().then(function() {
-                        return dateFieldCell;
-                    });
+                    self.getDateFieldCalendarIconEl(dateFieldCell).click();
+                    return dateFieldCell;
                 });
             });
         };
@@ -474,6 +473,9 @@
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
                 return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(buttonIndex).click().then(function() {
+                    //Need this for growl to come and go off
+                    return e2eBase.sleep(browser.params.smallSleep);
+                }).then(function() {
                     // Wait for the report to be ready
                     return self.waitForReportContent();
                 });

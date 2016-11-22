@@ -73,6 +73,7 @@
             //TODO: Protractor having an issue opening the cal widget in safari (works manually)
             if (browserName !== 'safari') {
                 reportContentPO.openDateFieldCalWidget(0).then(function(dateFieldCell) {
+                    e2eBase.sleep(browser.params.smallSleep);
                     reportContentPO.advanceCurrentlySelectedDate(dateFieldCell);
                 });
             }
