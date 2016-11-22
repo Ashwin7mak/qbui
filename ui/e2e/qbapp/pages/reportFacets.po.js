@@ -124,30 +124,45 @@
          */
         this.selectFacets = function(facetGroupElement, facetIndexes) {
             var self = this;
-            //select the items
+            // Select the facet items
             facetIndexes.forEach(function(facetIndex) {
-                return self.waitForReportReady().then(function() {
-                    var items = self.unselectedFacetGroupsElList.all(by.className('list-group-item'));
-                    return items.filter(function(elm, index) {
-                        return index === facetIndex;
-                    }).then(function(filteredElement) {
-                        if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
-                            // Click on more fields link
-                            expect(filteredElement[0].getText()).toEqual('more...');
-                            return filteredElement[0].click().then(function() {
-                                return e2eBase.sleep(browser.params.smallSleep);
+                var items = self.unselectedFacetGroupsElList.all(by.className('list-group-item'));
+                return items.filter(function(elm, index) {
+                    return index === facetIndex;
+                }).then(function(filteredElements) {
+                    if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
+                        // Click on more fields link since the facet we want is currently hidden
+                        expect(filteredElements[0].getText()).toEqual('more...');
+                        return filteredElements[0].click().then(function() {
+                            return self.waitForFacetsPopupReady().then(function() {
+                                // Regather the facet selections since all are all shown now
+                                var allItems = self.unselectedFacetGroupsElList.all(by.className('list-group-item'));
+                                return allItems.filter(function(elm, index) {
+                                    return index === facetIndex;
+                                });
                             });
-                        }
-                        e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
-                            filteredElement[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
-                                if (!present) {
-                                    return filteredElement[0].click().then(function() {
-                                        return e2eBase.sleep(browser.params.smallSleep).then(function() {
-                                            expect(present).toBeFalsy();
-                                        });
+                        });
+                    } else {
+                        // Otherwise just pass on the original facet item
+                        return filteredElements;
+                    }
+                }).then(function(filteredElements) {
+                    // Select the facet item
+                    return e2ePageBase.waitForElementToBeClickable(filteredElements[0]).then(function() {
+                        // Check to see if the element has already been selected or not
+                        return filteredElements[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
+                            if (!present) {
+                                return filteredElements[0].element(by.className('list-group-item-inner-wrapper')).click().then(function() {
+                                    // Wait for the report content to become stale (we refresh the page with every facet selection)
+                                    return reportServicePage.waitForElementToBeStale(reportServicePage.agGridContainerEl).then(function() {
+                                        // Wait for the new agGrid element
+                                        return reportServicePage.waitForElement(reportServicePage.agGridContainerEl);
+                                    }).then(function() {
+                                        // Wait for the report content to redraw
+                                        return reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
                                     });
-                                }
-                            });
+                                });
+                            }
                         });
                     });
                 });

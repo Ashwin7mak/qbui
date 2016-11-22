@@ -86,39 +86,31 @@
             });
 
             /**
+             * Determine if an array contains one or more items from another array.
+             * @param {array} haystack the array to search.
+             * @param {array} arr the array providing items to check for in the haystack.
+             * @return {boolean} true|false if haystack contains at least one item from arr.
+             */
+            var findOne = function(haystack, arr) {
+                return arr.some(function(v) {
+                    return haystack.indexOf(v) >= 0;
+                });
+            };
+
+            /**
              * Function that will verify the filtered rows are contained in actual record list.
              * @param facets Group
              */
-            var verifyFacetTableResults = function(facetGroup) {
-                var expectedTableResuts = [];
-                reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            return {
-                                'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
-                                'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
-                            };
-                        }).then(function(results) {
-                            for (var i = 0; i < results.length; i++) {
-                                expectedTableResuts.push(results[i]);
-                            }
-                            var found = false;
-                            for (var j = 0; j < expectedTableResuts.length; j++) {
-                                for (var k = 0; k < actualTableResuts.length; k++) {
-                                    try {
-                                        if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
-                                            expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
-                                            found = true;
-                                            break;
-                                        }
-                                    } catch (e) {
-                                        found = false;
-                                        throw new Error(e);
-                                    }
-                                }
-                            }
+            var verifyFacetRecordResults = function(facetSelections) {
+                // Get the number of records being displayed
+                return reportServicePage.agGridRecordElList.then(function(records) {
+                    // Loop through each record and check their field values for one of the facet selections
+                    for (var i = 0; i < records.length; i++) {
+                        reportContentPage.getRecordValues(i).then(function(values) {
+                            var result = findOne(values, facetSelections);
+                            expect(result).toBe(true);
                         });
-                    });
+                    }
                 });
             };
 
@@ -218,6 +210,7 @@
                     //    message: 'Create CheckBox facet',
                     //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}]
                     //},
+                    //TODO: Need to handle multiple facet groups in test case below
                     //{
                     //    message: 'Create Checkbox and Text facet',
                     //    facets: [{"group": "Checkbox Field", "ItemIndex": [0]}, {
@@ -239,47 +232,29 @@
             //var facetTestcase = facetTestCases()[Math.floor(Math.random() * facetTestCases().length)];
             facetTestCases().forEach(function(facetTestcase) {
                 it('Test case: ' + facetTestcase.message, function(done) {
-                    // Click on facet carat
-                    reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
-                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
-                                // Verify the popup menu is displayed
-                                reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
-                                    expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                                });
-                            });
-                        });
+                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                        // Click on facet carat
+                        return reportFacetsPage.reportFacetFilterBtnCaret.click();
                     }).then(function() {
-                        for (var i = 0; i < facetTestcase.facets.length; i++) {
-                            // Select facet group and items
-                            reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
-                                // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
-                                reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                    return tokenName.getText();
-                                }).then(function(selections) {
-                                    // Sort each array before comparing
-                                    expect(selections.sort()).toEqual(facetSelections.sort());
-                                });
-                            }).then(function() {
-                                reportFacetsPage.waitForReportReady();
-                            });
-                        }
+                        // Verify the popup menu is displayed
+                        return reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu);
                     }).then(function() {
-                        //sleep for loading of table to finish
-                        e2eBase.sleep(browser.params.smallSleep);
-                        reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
-                            if (txt === 'There is no data to display.') {
-                                //Verify the toolbar still displays with filter button in it
-                                expect(reportServicePage.reportRecordsCount.getText()).toContain('0 of 6');
-                                expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
-                                done();
-                            } else if (txt !== 'There is no data to display.') {
-                                for (var i = 0; i < facetTestcase.facets.length; i++) {
-                                    verifyFacetTableResults(facetTestcase.facets[i].group);
-                                    done();
-                                }
-                            }
+                        // Select facet group and items
+                        return reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[0].group, facetTestcase.facets[0].ItemIndex);
+                    }).then(function(facetSelections) {
+                        // Get facet tokens from the reports toolbar
+                        return reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                            return tokenName.getText();
+                        }).then(function(facetTokens) {
+                            // Sort each array before then check facet tokens match the facet selections from the popup
+                            expect(facetTokens.sort()).toEqual(facetSelections.sort());
+                            return facetSelections;
                         });
+                    }).then(function(facetSelections) {
+                        // Check that the records displayed have fields containing values of one of the selected facet items
+                        return verifyFacetRecordResults(facetSelections);
+                    }).then(function() {
+                        done();
                     });
                 });
             });
@@ -376,6 +351,14 @@
                 reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetMenuContainer);
                 done();
             });
+
+            //TODO: Write a negative test that no records are shown if none match selected facets
+            //reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
+            //  if (txt === 'There is no data to display.') {
+            //Verify the toolbar still displays with filter button in it
+            //  expect(reportServicePage.reportRecordsCount.getText()).toContain('0 of 6');
+            //  expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+            //});
 
             //TODO: This is not working check with Claire
             xit('Negative test to verify > 200k Text fields shows error message in facet drop down', function(done) {
