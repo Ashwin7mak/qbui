@@ -8,36 +8,32 @@
 
     //Load the page Objects
     var ReportServicePage = requirePO('reportService');
-    var RequestAppsPage = requirePO('requestApps');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportFacetsPage = requirePO('reportFacets');
-    var ReportContentPage = requirePO('reportContent');
     var reportServicePage = new ReportServicePage();
+    var RequestAppsPage = requirePO('requestApps');
+    var ReportFacetsPage = requirePO('reportFacets');
     var reportFacetsPage = new ReportFacetsPage();
+    var ReportContentPage = requirePO('reportContent');
     var reportContentPage = new ReportContentPage();
+    var NewStackAuthPO = requirePO('newStackAuth');
+    var newStackAuthPO = new NewStackAuthPO();
 
     describe('Report Faceting Test Setup', function() {
         var realmName;
         var realmId;
-        var app;
-        var recordList;
-        var actualTableResuts = [];
+        var testApp;
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
-                app = appAndRecords[0];
-                recordList = appAndRecords[1];
-                // Get a session ticket for that subdomain and realmId (stores it in the browser)
-                // Gather the necessary values to make the requests via the browser
+                // Set your global objects to use in the test functions
+                testApp = appAndRecords[0];
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                // Auth into the new stack
+                newStackAuthPO.realmLogin(realmName, realmId);
             }).then(function() {
-                // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-            }).then(function() {
-                // Wait for the leftNav to load
-                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                // Go to report directly
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 4);
+                reportContentPage.waitForReportContent().then(function() {
                     done();
                 });
             });
@@ -47,40 +43,13 @@
          * Facet Test Cases
          */
         describe('Report Faceting Tests', function() {
-
-            beforeAll(function(done) {
-                e2eRetry.run(function() {
-                    //go to report page directly
-                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
-                    reportContentPage.waitForReportContent().then(function() {
-                        reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                            reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                                // Get all records from table before filter applied
-                                reportServicePage.agGridRecordElList.map(function(row) {
-                                    return {
-                                        'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
-                                        'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
-                                    };
-                                }).then(function(results) {
-                                    for (var i = 0; i < results.length; i++) {
-                                        actualTableResuts.push(results[i]);
-                                    }
-                                    done();
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-
             /**
              * Before each test starts just make sure the table list div has loaded
              */
             beforeEach(function(done) {
-                // Make sure the table report has loaded
-                reportServicePage.waitForElement(reportServicePage.reportsToolBar).then(function() {
-                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
-                    reportContentPage.waitForReportContent();
+                //go to report page directly
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 4);
+                reportContentPage.waitForReportContent().then(function() {
                     done();
                 });
             });
@@ -115,17 +84,15 @@
             };
 
             it('Verify reports toolbar', function(done) {
-                reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
-                    // Verify the records count
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
-                    // Verify display of filter search box
-                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
-                    // Verify display of facets filter button
-                    expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
-                    // Verify display of facets filter carat/dropdown button
-                    expect(reportFacetsPage.reportFacetFilterBtnCaret.isDisplayed()).toBeTruthy();
-                    done();
-                });
+                // Verify the records count
+                expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
+                // Verify display of filter search box
+                expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
+                // Verify display of facets filter button
+                expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                // Verify display of facets filter carat/dropdown button
+                expect(reportFacetsPage.reportFacetFilterBtnCaret.isDisplayed()).toBeTruthy();
+                done();
             });
 
             it('Verify facet overlay menu contents are collapsed to start with and match table column headers', function(done) {
@@ -185,10 +152,11 @@
                     //        "ItemIndex": [0]
                     //    }]
                     //},
-                    {
-                        message: 'Verify more filters - Create text facet',
-                        facets: [{"group": "Text Field", "ItemIndex": [1, 5]}]
-                    },
+                    //TODO: PO Functions aren't handling this properly
+                    //{
+                    //    message: 'Verify more filters - Create text facet',
+                    //    facets: [{"group": "Text Field", "ItemIndex": [1, 5]}]
+                    //},
                     {
                         message: '@smoke Create text facet',
                         facets: [{"group": "Text Field", "ItemIndex": [1, 3, 4]}]
@@ -228,8 +196,6 @@
                 ];
             }
 
-            // Grab a random test case from the data provider
-            //var facetTestcase = facetTestCases()[Math.floor(Math.random() * facetTestCases().length)];
             facetTestCases().forEach(function(facetTestcase) {
                 it('Test case: ' + facetTestcase.message, function(done) {
                     reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
@@ -346,7 +312,7 @@
 
             it('Negative test to verify a facet dropdown not displayed with report without facetsFIDS', function(done) {
                 //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, "1"));
                 // Verify the facet container is not present in DOM without facets for a report.
                 reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetMenuContainer);
                 done();
@@ -367,7 +333,7 @@
                     //Generate 201 duplicate records into table 2.
                     var duplicateRecords = [];
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE2]);
+                    var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(testApp.tables[e2eConsts.TABLE2]);
                     // Generate the record JSON objects
                     var generatedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, 1);
                     //Create 201 duplicate records
@@ -385,13 +351,13 @@
                         }
                     });
                     //Add 201 duplicate records via bulk records API.
-                    return e2eBase.recordService.addBulkRecords(app, app.tables[e2eConsts.TABLE2], duplicateRecords);
+                    return e2eBase.recordService.addBulkRecords(testApp, testApp.tables[e2eConsts.TABLE2], duplicateRecords);
                 }).then(function() {
                     //Create a new report to do negative testing of >200 text records
-                    return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE2].id, [6]);
+                    return e2eBase.reportService.createReportWithFacets(testApp.id, testApp.tables[e2eConsts.TABLE2].id, [6]);
                 }).then(function() {
                     //load the report
-                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE2].id, 2);
+                    e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE2].id, 2);
                     reportContentPage.waitForReportContent();
                 }).then(function() {
                     // expand the popup ad select group

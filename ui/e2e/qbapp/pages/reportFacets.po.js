@@ -153,13 +153,11 @@
                         return filteredElements[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
                             if (!present) {
                                 return filteredElements[0].element(by.className('list-group-item-inner-wrapper')).click().then(function() {
-                                    // Wait for the report content to become stale (we refresh the page with every facet selection)
-                                    return reportServicePage.waitForElementToBeStale(reportServicePage.agGridContainerEl).then(function() {
+                                    return reportServicePage.waitForElementToBeStale(self.reportFacetPopUpMenu).then(function() {
                                         // Wait for the new agGrid element
-                                        return reportServicePage.waitForElement(reportServicePage.agGridContainerEl);
-                                    }).then(function() {
-                                        // Wait for the report content to redraw
-                                        return reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
+                                        return reportServicePage.waitForElement(self.reportFacetPopUpMenu).then(function() {
+                                            return e2eBase.sleep(browser.params.smallSleep);
+                                        });
                                     });
                                 });
                             }
