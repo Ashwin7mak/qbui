@@ -53,7 +53,8 @@ export let Nav = React.createClass({
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
-                               startTabIndex={4}/>);
+                               startTabIndex={4}
+                               app={this.getSelectedApp()}/>);
     },
 
     getLeftGlobalActions() {

@@ -4,7 +4,8 @@ export default {
     //  COOKIES
     COOKIE: {
         TICKET: 'TICKET',
-        NSTICKET: 'NSTICKET'
+        NSTICKET: 'NSTICKET',
+        V2TOV3: 'V2TOV3'
     },
 
     // REQUEST HEADERS

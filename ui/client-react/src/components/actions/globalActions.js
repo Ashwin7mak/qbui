@@ -5,6 +5,10 @@ import QBicon from '../qbIcon/qbIcon';
 import {MenuItem, Dropdown, Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
+import UrlUtils from '../../utils/urlUtils';
+import cookie from 'react-cookie';
+import Constants from '../../services/constants';
+import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 const actionPropType = React.PropTypes.shape({
@@ -46,7 +50,8 @@ let GlobalActions = React.createClass({
         actions: React.PropTypes.arrayOf(actionPropType),
         dropdownIcon: React.PropTypes.string,
         dropdownMsg: React.PropTypes.string,
-        startTabIndex: React.PropTypes.number.isRequired
+        startTabIndex: React.PropTypes.number.isRequired,
+        app: React.PropTypes.object
     },
 
     getDefaultProps() {
@@ -59,6 +64,11 @@ let GlobalActions = React.createClass({
     changeLocale: function(locale) {
         let flux = this.getFlux();
         flux.actions.changeLocale(locale);
+    },
+
+    switchToQBClassic(eventKey) {
+        //we need to create a new cookie
+        cookie.save(Constants.COOKIE.V2TOV3, 'abort!', {path: '/'});
     },
 
     getUserDropdown() {
@@ -87,6 +97,12 @@ let GlobalActions = React.createClass({
                             message={'header.menu.locale.' + locale}/></MenuItem>;
                     }) : null}
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
+
+                    {this.props.app ? <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem> : null}
+                    {this.props.app ? <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
+                                                onSelect={this.switchToQBClassic}
+                                                 eventKey={eventKeyIdx++}>Switch to QuickBase Classic</MenuItem> : null}
+                    {this.props.app ? <MenuItem divider/> : null}
 
                     <MenuItem href="/qbase/signout" eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.sign_out'}/></MenuItem>
