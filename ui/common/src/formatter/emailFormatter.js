@@ -41,11 +41,28 @@
 
             return emails.join(';');
         },
-        //Given a email string as input, formats as a email with display preferences applied.
+
+        /**
+         * Check if a fieldValue was not passed in or does not have the required value property
+         * @param fieldValue
+         * @returns {boolean}
+         * @private
+         */
+        _fieldValueDoesNotExist: function(fieldValue) {
+            return (!fieldValue || !fieldValue.value);
+        },
+
+        /**
+         * Given a email string as input, formats as a email with display preferences applied.
+         * @param fieldValue
+         * @param fieldInfo
+         * @returns {String}
+         */
         format: function(fieldValue, fieldInfo) {
-            if (!fieldValue || !fieldValue.value) {
+            if  (this._fieldValueDoesNotExist(fieldValue)) {
                 return '';
             }
+
             //Default behavior is to return the raw value as display
             var baseValue = fieldValue.value;
 
@@ -72,6 +89,22 @@
             }
             return baseValue;
         },
+
+
+        /**
+         * Formats a single email or a field with a value that contains a list of emails from the fieldValue object
+         * @param fieldValue
+         * @param fieldInfo
+         * @returns {String}
+         */
+        formatListOfEmailsFromFieldValueObject: function(fieldValue, fieldInfo) {
+            if (this._fieldValueDoesNotExist(fieldValue)) {
+                return '';
+            }
+
+            return this.formatListOfEmails(fieldValue.value, fieldInfo);
+        },
+
         /**
          * Formats a list of emails in a string.
          * Emails can be separated by a semicolon (;), comma (,), or passed in as an array
