@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Select from 'react-select';
 import SelectWrapper from '../../src/components/select/reactSelectWrapper';
-import Keycode from '../../src/constants/keycodeConstants';
 
 describe('ReactSelectWrapper', () => {
     'use strict';
@@ -27,24 +26,11 @@ describe('ReactSelectWrapper', () => {
         expect(component.state.isOpen).toBeFalsy();
     });
 
-    it('calls stopPropagation when Escape key is pressed and dropdown is open', () => {
-        component = TestUtils.renderIntoDocument(<SelectWrapper />);
-        component.setState({isOpen: true});
-
-        const event = {keyCode: Keycode.ESCAPE, key: 'Escape', stopPropagation: () => {}};
-        spyOn(event, 'stopPropagation');
-
-        const node = ReactDOM.findDOMNode(component).querySelector('input');
-        TestUtils.Simulate.keyDown(node, event);
-
-        expect(event.stopPropagation).toHaveBeenCalled();
-    });
-
     it('handleKey calls stopPropagation when Escape key is pressed and dropdown is open', () => {
         component = TestUtils.renderIntoDocument(<SelectWrapper />);
         component.setState({isOpen: true});
 
-        const event = {keyCode: Keycode.ESCAPE, key: 'Escape', stopPropagation: () => {}};
+        const event = {key: 'Escape', stopPropagation: () => {}};
         spyOn(event, 'stopPropagation');
 
         component.handleKey(event);
@@ -56,7 +42,7 @@ describe('ReactSelectWrapper', () => {
         component = TestUtils.renderIntoDocument(<SelectWrapper />);
         expect(component.state.isOpen).toBeFalsy();
 
-        const event = {keyCode: Keycode.ESCAPE, key: 'Escape', stopPropagation: () => {}};
+        const event = {key: 'Escape', stopPropagation: () => {}};
         spyOn(event, 'stopPropagation');
 
         component.handleKey(event);
@@ -68,7 +54,7 @@ describe('ReactSelectWrapper', () => {
         component = TestUtils.renderIntoDocument(<SelectWrapper />);
         expect(component.state.isOpen).toBeFalsy();
 
-        const event = {keyCode: Keycode.END, key: 'End', stopPropagation: () => {}};
+        const event = {key: 'End', stopPropagation: () => {}};
         spyOn(event, 'stopPropagation');
 
         component.handleKey(event);

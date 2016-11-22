@@ -17,7 +17,7 @@ const RowEditWrapper = React.createClass({
     propTypes: {
         onClose: React.PropTypes.func,
         onClickAdd: React.PropTypes.func,
-        addRecordClass: React.PropTypes.string,
+        addRecordClasses: React.PropTypes.string,
     },
 
     render() {
@@ -31,7 +31,7 @@ const RowEditWrapper = React.createClass({
                 {this.props.children}
 
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button onClick={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClass}/></Button>
+                    <Button onClick={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClasses}/></Button>
                 </QBToolTip>
             </div>
         );
@@ -145,16 +145,16 @@ const RowEditActions = React.createClass({
             }
         }
 
-        let addRecordClass = ['addRecord'];
+        let addRecordClasses = ['addRecord'];
         if (!validRow || saving) {
-            addRecordClass.push('disabled');
+            addRecordClasses.push('disabled');
         }
 
         return (
             <ClosableRowEditActions
                 onClose={this.onClickCancel}
                 onClickAdd={validRow ? this.onClickAdd : null}
-                addRecordClass={addRecordClass.join(' ')}
+                addRecordClasses={addRecordClasses.join(' ')}
                 {...this.props} >
                 {this.renderSaveRecordButton(validRow, saving)}
             </ClosableRowEditActions>

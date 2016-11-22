@@ -1,5 +1,4 @@
 import React from 'react';
-import Keycode from '../../constants/keycodeConstants';
 
 /*
 
@@ -22,7 +21,7 @@ var catchEscapeKeyWrapper = (Component) =>{
 
         handleKey(e) {
             // close when Esc is pressed
-            if ((e.keyCode === Keycode.ESCAPE || e.key === 'Escape') && this.props.onClose) {
+            if (e.key === 'Escape' && this.props.onClose) {
                 this.props.onClose();
             }
         },
