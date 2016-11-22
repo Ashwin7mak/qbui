@@ -25,6 +25,7 @@ import {
     EmailCellRenderer,
     NumericCellRenderer,
     PercentCellRenderer,
+    PhoneCellRenderer,
     RatingCellRenderer,
     SelectionColumnCheckBoxCellRenderer,
     TextCellRenderer,
@@ -1004,6 +1005,8 @@ let AGGrid = React.createClass({
                     datatypeAttributes = obj.fieldDef.datatypeAttributes;
                 }
                 if (datatypeAttributes) {
+                    console.log('datatypeAttributes: ', datatypeAttributes);
+                    console.log()
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
 
@@ -1048,6 +1051,10 @@ let AGGrid = React.createClass({
 
                             case serverTypeConsts.URL :
                                 obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
+                                break;
+
+                            case serverTypeConsts.PHONE_NUMBER :
+                                obj.cellRenderer = reactCellRendererFactory(PhoneCellRenderer);
                                 break;
 
                             case serverTypeConsts.EMAIL_ADDRESS :
