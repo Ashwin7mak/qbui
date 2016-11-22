@@ -184,9 +184,9 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test valid url', url: '/apps/123/tables/456/reports/789', id: null, expectation: '/apps/123/tables/456/reports/789/count'},
             {name: 'test valid url 2', url: '/apps/123/tables/456/reports/789/results', expectation: '/apps/123/tables/456/reports/789/count'},
             {name: 'test valid url with id', url: '/apps/123/tables/234/reports/5', id: 5, expectation: '/apps/123/tables/234/reports/5/count'},
-            {name: 'test valid default url', url: '/apps/123/tables/234/reports/' + constants.DEFAULT_TABLE_REPORT.ID, id: null, expectation: '/apps/123/tables/234/reports/default/count'},
-            {name: 'test invalid default url with default id', url: '/apps/123', id: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123'},
-            {name: 'test valid default url with default id', url: '/apps/123/tables/234/reports/' + constants.DEFAULT_TABLE_REPORT.ID, id: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123/tables/234/reports/default/count'},
+            {name: 'test valid default url', url: '/apps/123/tables/234/reports/' + constants.SYNTHETIC_TABLE_REPORT.ID, id: null, expectation: '/apps/123/tables/234/reports/default/count'},
+            {name: 'test invalid default url with default id', url: '/apps/123', id: constants.SYNTHETIC_TABLE_REPORT.ID, expectation: '/apps/123'},
+            {name: 'test valid default url with default id', url: '/apps/123/tables/234/reports/' + constants.SYNTHETIC_TABLE_REPORT.ID, id: constants.SYNTHETIC_TABLE_REPORT.ID, expectation: '/apps/123/tables/234/reports/default/count'},
         ];
 
         testCases.forEach(function(testCase) {
@@ -213,8 +213,8 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test invalid url with reportId - no table2', url: '/apps/123/', reportId: '1', expectation: '/apps/123/'},
             {name: 'test invalid url with reportId', url: '/apps/123/tables/345/reports/789', reportId: '1', expectation: '/apps/123/tables/345/reports/1/facets/results'},
             {name: 'test valid url with reportId', url: '/apps/123/tables/456/homepage', reportId: '1', expectation: '/apps/123/tables/456/reports/1/facets/results'},
-            {name: 'test valid default report url with reportId', url: '/apps/123/tables/456', reportId: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default/facets/results'},
-            {name: 'test valid default report url', url: '/apps/123/tables/456/reports/' + constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default/facets/results'}
+            {name: 'test valid default report url with reportId', url: '/apps/123/tables/456', reportId: constants.SYNTHETIC_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default/facets/results'},
+            {name: 'test valid default report url', url: '/apps/123/tables/456/reports/' + constants.SYNTHETIC_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default/facets/results'}
         ];
 
         testCases.forEach(function(testCase) {
@@ -235,7 +235,7 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test valid url', url: '/apps/123/tables/456', id: null, expectation: '/apps/123/tables/456/reports'},
             {name: 'test valid url - id=1', url: '/apps/123/tables/456', id: '1', expectation: '/apps/123/tables/456/reports/1'},
             {name: 'test valid url - id=2', url: '/apps/123/tables/456/fields/789', id: '2', expectation: '/apps/123/tables/456/reports/2'},
-            {name: 'test valid default report url', url: '/apps/123/tables/456', id: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default'}
+            {name: 'test valid default report url', url: '/apps/123/tables/456', id: constants.SYNTHETIC_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default'}
         ];
 
         testCases.forEach(function(testCase) {
@@ -257,8 +257,8 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test valid url', url: '/apps/123/tables/456/reports/789', id: null, expectation: '/apps/123/tables/456/reports/789/results'},
             {name: 'test valid url - id=1', url: '/apps/123/tables/456', id: '1', expectation: '/apps/123/tables/456/reports/1/results'},
             {name: 'test valid url - id=2', url: '/apps/123/tables/456/fields/789', id: '2', expectation: '/apps/123/tables/456/reports/2/results'},
-            {name: 'test valid default report url', url: '/apps/123/tables/456/reports/' + constants.DEFAULT_TABLE_REPORT.ID, id: null, expectation: '/apps/123/tables/456/reports/default/results'},
-            {name: 'test valid url', url: '/apps/123/tables/456/reports/' + constants.DEFAULT_TABLE_REPORT.ID, id: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default/results'}
+            {name: 'test valid default report url', url: '/apps/123/tables/456/reports/' + constants.SYNTHETIC_TABLE_REPORT.ID, id: null, expectation: '/apps/123/tables/456/reports/default/results'},
+            {name: 'test valid url', url: '/apps/123/tables/456/reports/' + constants.SYNTHETIC_TABLE_REPORT.ID, id: constants.SYNTHETIC_TABLE_REPORT.ID, expectation: '/apps/123/tables/456/reports/default/results'}
         ];
 
         testCases.forEach(function(testCase) {

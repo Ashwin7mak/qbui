@@ -611,10 +611,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingIndex = undefined;
         this.editingId = undefined;
 
-        //  In the event the id of the report is not known when the onLoadReport
-        //  event is fired, this means we are loading the default table report
-        //  homepage and the report is is not known until after the report is
-        //  generated and returned to the client.
+        //  If the report id is not set, we'll set it now.
+        //
+        //  NOTE: this.rptId will be set in the onLoadReport callback, unless the table
+        //  home page report is getting loaded.  In this scenario, we do not know the
+        //  report id at the time of the request (see tableActions.loadTableHomePage),
+        //  so we'll set the id once the report response is returned.
         if (!this.rptId) {
             this.rptId = model.rptId;
         }

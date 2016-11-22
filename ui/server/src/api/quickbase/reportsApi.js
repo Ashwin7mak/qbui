@@ -581,11 +581,12 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            //  fetch the specified report or use the default if one is not defined
-                            let homepageReportId = constants.DEFAULT_TABLE_REPORT.ID;
+                            //  As a default, will generate a synthetic report using the table defaults if one is not defined
+                            let homepageReportId = constants.SYNTHETIC_TABLE_REPORT.ID;
                             if (response.body) {
                                 let responseBodyParsed = JSON.parse(response.body);
                                 if (responseBodyParsed) {
+                                    //  fetch the specified report home page report
                                     homepageReportId = responseBodyParsed;
                                 }
                             }

@@ -18,8 +18,8 @@ let reportModel = {
             if (reportMeta.id) {
                 obj.rptId = reportMeta.id.toString();
             } else {
-                //  if there's no id, we loading the table default report
-                obj.rptId = Constants.DEFAULT_TABLE_REPORT.ID;
+                //  if there's no id, we're generating the synthetic default table report
+                obj.rptId = Constants.SYNTHETIC_TABLE_REPORT.ID;
             }
 
             //  for convenience, convert from the meta data the sort/group info(if any) into a list delimited string.

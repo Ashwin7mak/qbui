@@ -499,8 +499,8 @@
             //  If this is a request for the default table report route ('default'), set
             //  the report id to an internal id ('0') that is used to identify that this
             //  is a request for the default report.
-            if (reportId === commonConstants.DEFAULT_TABLE_REPORT.ROUTE) {
-                reportId = commonConstants.DEFAULT_TABLE_REPORT.ID;
+            if (reportId === commonConstants.SYNTHETIC_TABLE_REPORT.ROUTE) {
+                reportId = commonConstants.SYNTHETIC_TABLE_REPORT.ID;
             }
 
             //  anything but a true value means we will fetch the report using the default report meta data
