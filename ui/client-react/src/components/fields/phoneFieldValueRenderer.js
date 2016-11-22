@@ -1,5 +1,7 @@
 import React from 'react';
 import './fields.scss';
+import UrlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
+import UrlFieldValueRenderer from './urlFieldValueRenderer';
 /**
  * # TextFieldValueRenderer
  *
@@ -24,11 +26,16 @@ const PhoneFieldValueRenderer = React.createClass({
 
     },
     render() {
-        let classes = 'textField';
-        if (this.props.classes) {
-            classes += ' ' + this.props.classes;
-        }
-        return <div className={classes}>{this.props.value}</div>;
+        // Remove value from props to be replaced by the formatted email
+        let {value, ...otherProps} = this.props;
+
+        // Format as an email link
+        value = (value || this.props.display);
+        let phoneNumber = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'callto:');
+
+        return (
+            <UrlFieldValueRenderer value={phoneNumber} openInNewWindow={false} {...otherProps} inputType="number" />
+        );
     }
 });
 
