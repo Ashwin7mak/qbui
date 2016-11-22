@@ -179,7 +179,7 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return fetchEnterCellValuesPromises.push(elm.sendKeys(sNumeric));
+                        return fetchEnterCellValuesPromises.push(elm.clear().elm.sendKeys(sNumeric));
                     });
                 } else if (fieldLabel === 'checkbox') {
                     //select checkbox field
