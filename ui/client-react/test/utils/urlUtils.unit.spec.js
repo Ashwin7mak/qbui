@@ -1,13 +1,21 @@
 import React from 'react';
 import UrlUtils from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
-import WindowUtils from '../../src/utils/windowLocationUtils';
+import {SUPPORT_LINK_PATH} from '../../src/constants/urlConstants';
 
 describe('UrlUtils', () => {
-    let phoneIcon = 'phone-outline';
-    let mailIcon = 'mail';
-    let messageIcon = 'speechbubble-outline';
-    let fileIcon = ''; // No file icon currently available
+    const phoneIcon = 'phone-outline';
+    const mailIcon = 'mail';
+    const messageIcon = 'speechbubble-outline';
+    const fileIcon = ''; // No file icon currently available
+
+    const testRealmId = 'realmId';
+    const testAppId = 'testAppId';
+    const testDomainId = 'quickbase.com';
+    const mockBaseService =  {
+        getSubdomain() {return testRealmId;},
+        getDomain() {return testDomainId;}
+    };
 
     describe('getIconForProtocol', () => {
         let testCases = [
@@ -76,10 +84,6 @@ describe('UrlUtils', () => {
     });
 
     describe('getQuickBaseClassicLink', () => {
-        let testRealmId = 'realmId';
-        let testAppId = 'testAppId';
-        let testDomainId = 'quickbase.com';
-
         let testCases = [
             {
                 description: 'returns the main quickbase classic link if selectedAppId is provided',
@@ -95,17 +99,22 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                let baseService =  {
-                    getSubdomain() {return testRealmId;},
-                    getDomain() {return testDomainId;}
-                };
-
-                UrlUtils.__Rewire__('baseService', baseService);
+                UrlUtils.__Rewire__('baseService', mockBaseService);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
                 UrlUtils.__ResetDependency__('baseService');
             });
+        });
+    });
+
+    describe('getSupportLink', () => {
+        it('returns a link to the support app that includes the current realm', () => {
+            UrlUtils.__Rewire__('baseService', mockBaseService);
+
+            expect(UrlUtils.getSupportLink()).toEqual(`https://${testRealmId}.${testDomainId}${SUPPORT_LINK_PATH}`);
+
+            UrlUtils.__ResetDependency__('baseService');
         });
     });
 });

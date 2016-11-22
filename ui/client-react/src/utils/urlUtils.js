@@ -2,6 +2,7 @@ import React from 'react';
 import QBicon from '../components/qbIcon/qbIcon.js';
 import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import BaseService from '../services/baseService';
+import {SUPPORT_LINK_PATH} from '../constants/urlConstants';
 
 let baseService = new BaseService();
 
@@ -44,6 +45,9 @@ const UrlUtils = {
         }
 
         return link;
+    },
+    getSupportLink() {
+        return `https://${baseService.getSubdomain()}.${baseService.getDomain()}${SUPPORT_LINK_PATH}`;
     },
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {NotificationManager} from 'react-notifications';
-import {SUPPORT_LINK} from '../../constants/urlConstants';
+import UrlUtils from '../../utils/urlUtils';
 
 import './appHomePage.scss';
 
@@ -98,7 +98,7 @@ const AppHomePage = React.createClass({
                                 <div className="supportEmail">
                                     <p className="supportEmailText">
                                         <I18nMessage message={i18nKey('helpLinkPreText')} />
-                                        <a href={SUPPORT_LINK} target="_blank">
+                                        <a href={UrlUtils.getSupportLink()} target="_blank">
                                             <I18nMessage message={i18nKey('helpLinkText')} />
                                         </a>.
                                     </p>
