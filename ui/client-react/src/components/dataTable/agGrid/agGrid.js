@@ -1005,8 +1005,6 @@ let AGGrid = React.createClass({
                     datatypeAttributes = obj.fieldDef.datatypeAttributes;
                 }
                 if (datatypeAttributes) {
-                    console.log('datatypeAttributes: ', datatypeAttributes);
-                    console.log()
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
 
