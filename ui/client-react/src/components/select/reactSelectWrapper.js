@@ -7,7 +7,7 @@ import Keycode from '../../constants/keycodeConstants';
  * when Escape key is pressed. This prevents the event from hitting other event listeners listening
  * for the Escape key on the document/window (see rowEditActions and trowser).
  */
-const stopPropogationWrapper = React.createClass({
+const reactSelectWrapper = React.createClass({
     displayName: 'ReactSelectWrapper',
 
     getInitialState() {
@@ -65,4 +65,4 @@ const stopPropogationWrapper = React.createClass({
     }
 });
 
-export default stopPropogationWrapper;
+export default reactSelectWrapper;
