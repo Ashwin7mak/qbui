@@ -159,7 +159,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 }
 
 .userDisplayValue {
-    overflow: hidden;
+    overflow: hidden; /* stylelint-disable-line */
     text-overflow: ellipsis;
     display: inline;
 }

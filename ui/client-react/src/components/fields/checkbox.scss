@@ -1,7 +1,7 @@
 @import '../../assets/css/_qbColorVariables';
 @import '../../assets/css/_qbVariables';
 @import './fields';
-$checkbox-disabled-opacity: .4;
+$checkbox-disabled-opacity: 0.4;
 $checkbox-size: 16px;
 $checkbox-size-mobile: 24px;
 $checkbox-font-size-mobile: 16px;
@@ -10,7 +10,7 @@ $checkbox-font-size-mobile: 16px;
     background-color: $checkbox-background-unchecked-color;
     border: 2px solid $checkbox-border-color;
     border-radius: 3px;
-    top: 0px;
+    top: 0;
     z-index: 0;
 }
 

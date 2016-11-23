@@ -66,7 +66,7 @@ $color-green-200: #e1eed3; //confirmation notification background, field validat
 
 
 //== Orange — for warnings, alerts, insights
-$color-orange-800: #ece5500;
+$color-orange-800: #ec5500;
 $color-orange-700: #e77700;
 $color-orange-600: #e59200; //Base of 1 of 6 highlight themes
 $color-orange-500: #f2b835;
@@ -266,7 +266,7 @@ $urlButton-background-normal-colorstop2-color: $color-black-100;
 }
 
 @mixin urlButtonDisabled() {
-    opacity: .4;
+    opacity: 0.4;
 }
 $urlButton-background-focus-colorstop1-color: $color-black-800;
 $urlButton-background-focus-colorstop2-color: $color-black-100;

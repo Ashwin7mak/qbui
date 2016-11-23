@@ -116,7 +116,6 @@ $grid-font-size: $font-size-p;
 
 .qbGrid > tbody > tr.editing {
     > td:first-child {
-        border-left: 1px solid #ddd;
         padding-left: 4px;
         border-left: 1px solid $row-border-color;
         position: relative;
