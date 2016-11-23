@@ -21,7 +21,7 @@ let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
-        uniqueIdentifier: React.PropTypes.string,
+        primaryKeyName: React.PropTypes.string,
         reportHeader: React.PropTypes.element,
         selectionActions: React.PropTypes.element,
         onScroll: React.PropTypes.func,
@@ -73,7 +73,7 @@ let CardViewListHolder = React.createClass({
 
         const flux = this.getFlux();
 
-        const id = row[this.props.uniqueIdentifier].value;
+        const id = row[this.props.primaryKeyName].value;
 
         let selectedRows = this.props.selectedRows;
 
@@ -278,7 +278,7 @@ let CardViewListHolder = React.createClass({
                         <CardViewList ref="cardViewList"
                                       node={recordNodes}
                                       columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
-                                      uniqueIdentifier={this.props.uniqueIdentifier}
+                                      primaryKeyName={this.props.primaryKeyName}
                                       groupId=""
                                       groupLevel={-1}
                                       allowCardSelection={this.allowCardSelection}

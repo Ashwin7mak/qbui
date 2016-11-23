@@ -53,7 +53,7 @@ describe('Report Mobile View functions', () => {
 
             render() {
                 return <CardView ref="refCardView" data={fakeReportData_empty.data.results}
-                                 uniqueIdentifier="col_num"
+                                 primaryKeyName="col_num"
                                  allowCardSelection={() => {return false;} }
                                  isRowSelected={() => {return false;} }/>;
             }
@@ -74,7 +74,7 @@ describe('Report Mobile View functions', () => {
             render() {
                 return <CardView ref="refCardView"
                                  data={fakeReportData_valid.data.results}
-                                 uniqueIdentifier="col_num"
+                                 primaryKeyName="col_num"
                                  allowCardSelection={() => {return false;} }
                                  isRowSelected={() => {return false;} }/>;
             }
@@ -96,7 +96,7 @@ describe('Report Mobile View functions', () => {
             render() {
                 return <CardView ref="refCardView"
                                  data={fakeReportData_valid.data.results}
-                                 uniqueIdentifier="col_num"
+                                 primaryKeyName="col_num"
                                  allowCardSelection={() => {return false;} }
                                  isRowSelected={() => {return false;} }/>;
             }
@@ -115,7 +115,7 @@ describe('Report Mobile View functions', () => {
             render() {
                 return <CardView ref="refCardView"
                                  data={fakeReportData_valid.data.results}
-                                 uniqueIdentifier="col_num"
+                                 primaryKeyName="col_num"
                                  allowCardSelection={() => {return false;} }
                                  isRowSelected={() => {return false;} }/>;
             }
@@ -151,7 +151,7 @@ describe('Report Mobile View functions', () => {
             render() {
                 return <CardView ref="refCardView"
                                  data={fakeReportData_valid.data.results}
-                                 uniqueIdentifier="col_num"
+                                 primaryKeyName="col_num"
                                  allowCardSelection={this.allowCardSelection }
                                  onToggleCardSelection={this.onToggleCardSelection}
                                  isRowSelected={this.isRowSelected}
