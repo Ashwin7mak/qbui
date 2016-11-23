@@ -1,8 +1,6 @@
 import React from 'react';
 import QBicon from '../../components/qbIcon/qbIcon.js';
-import Breakpoints from "../../utils/breakpoints";
-import './fields.scss';
-import './phoneField.scss';
+import './urlField.scss';
 
 const PhoneFieldValueRenderer = React.createClass({
     displayName: 'PhoneFieldValueRenderer',
@@ -17,20 +15,19 @@ const PhoneFieldValueRenderer = React.createClass({
 
     },
     renderLink() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
         let telPhoneNumberLink = 'tel:' + this.props.value;
         let smsPhoneNumberLink = 'sms:' + this.props.value;
         telPhoneNumberLink = encodeURI(telPhoneNumberLink);
         smsPhoneNumberLink = encodeURI(smsPhoneNumberLink);
-        if (isSmall) {
+        if (!this.props.showAsButton && !this.props.disabled) {
             return (
-                <div className = "qbIconWrapper">
+                <div className = "phoneQBIconWrapper">
                     <a href={telPhoneNumberLink} tabIndex="-1">
                         <span>
                             {this.props.display}
                         </span>
                     </a>
-                    <div className="phoneIcon">
+                    <div className="urlIcon phoneIcon">
                         <a href={smsPhoneNumberLink} tabIndex="-1">
                             <QBicon className="smsIcon" icon="edit" />
                         </a>
@@ -51,8 +48,10 @@ const PhoneFieldValueRenderer = React.createClass({
         }
     },
     render() {
+        let classes = 'urlField';
+        classes += (this.props.disabled ? ' disabled' : '');
         return (
-            <div className = "phoneWrapper">
+            <div className = {classes}>
                 {this.renderLink()}
             </div>
         );

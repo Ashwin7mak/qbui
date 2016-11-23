@@ -145,6 +145,17 @@ $urlIcon-margin-left: 10px;
             top: 2px;
         }
     }
+    .phoneQBIconWrapper {
+        display: flex;
+    }
+    .smsIcon {
+        padding-right: 10px;
+    }
+
+    .phoneIcon {
+        display: flex;
+    }
+
 }
 
 // Always show the URL icon on Forms
