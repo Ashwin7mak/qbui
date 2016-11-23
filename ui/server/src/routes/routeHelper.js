@@ -15,6 +15,9 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
 
+    let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
+    let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
+
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
     //      \/ - escaped forward slash
@@ -25,6 +28,13 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+
+    /**
+     *
+     */
+    function getLegacyRoot() {
+        return '/db';
+    }
 
     /**
      * Private function to extract the root url for the given type.
@@ -365,6 +375,27 @@
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;
             }
             return url;
+        },
+
+        /**
+         * TODO
+         *
+         * @param appId
+         * @param isGet
+         * @param useMercury
+         * @returns {*}
+         */
+        getApplicationStackRoute: function(appId, isGet, value) {
+            let root = getLegacyRoot();
+            if (appId) {
+                root += '/' + appId + '?a=';
+                if (isGet) {
+                    root += GET_APPLICATION_STACK_JBI;
+                } else {
+                    root += SET_APPLICATION_STACK_JBI + '&value=' + value;
+                }
+            }
+            return root;
         },
 
         /**

@@ -4,23 +4,22 @@
  */
 (function() {
     'use strict';
-    var log = require('../logger').getLogger();
-    var perfLogger = require('../perfLogger');
-    var routeConsts = require('./routeConstants');
-    var request = require('request');
+    let log = require('../logger').getLogger();
+    let perfLogger = require('../perfLogger');
+    let routeConsts = require('./routeConstants');
+    let request = require('request');
+    let routeGroupMapper = require('./qbRouteGroupMapper');
+    let simpleStringify = require('./../../../common/src/simpleStringify.js');
+    let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
-    var requestHelper;
-
-    var formsApi;
-    var recordsApi;
-    var reportsApi;
-    var appsApi;
-
-    var routeGroupMapper = require('./qbRouteGroupMapper');
-    var routeGroup;
-
-    var simpleStringify = require('./../../../common/src/simpleStringify.js');
-    var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
+    //  these all are initialized using the config parameter
+    let requestHelper;
+    let formsApi;
+    let recordsApi;
+    let reportsApi;
+    let appsApi;
+    let legacyApi;
+    let routeGroup;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -30,6 +29,7 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
+        legacyApi = require('../api/quickbase/legacyApi')(config);
 
         /* internal data */
         /*
@@ -61,11 +61,17 @@
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
+        //  legacy quickbase endpoints
+        routeToGetFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
+
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
+
+        //  legacy quickbase endpoints
+        routeToPostFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -607,6 +613,29 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function applicationStackPreference(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            legacyApi.stackPreference(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Application Stack Preference');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Application Stack Preference');
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
