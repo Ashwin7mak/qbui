@@ -37,5 +37,4 @@ To delete stack (each new line is a new command to type):
 export SLID=<The SLID you picked above>
 export STACKNAME=${SLID}-dev-nodejs
 aws cloudformation delete-stack --stack-name ${STACKNAME}
-aws cloudformation wait stack-delete-complete --stack-name ${STACKNAME}
 ```
