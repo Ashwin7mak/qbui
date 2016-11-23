@@ -59,7 +59,7 @@
         //    maxInstances: 2
         //},
         {
-            platform: 'OS X 10.11',
+            platform: 'Windows 10',
             browserName: 'MicrosoftEdge',
             version: '14.14393',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
