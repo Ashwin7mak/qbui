@@ -312,7 +312,9 @@
                         // Via the API create the bulk records
                         e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
                     }
-
+                    // Create a List all report for the first table
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
+                }).then(function() {
                     if (createdApp.tables[1]) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                         var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
@@ -324,17 +326,8 @@
                         });
                     }
                 }).then(function() {
-                    //Create a form
+                    //Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
-                }).then(function() {
-                    //create default report in table 1
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
-                }).then(function(reportId) {
-                    return e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId);
-                }).then(function(reportRecords) {
-                    // Return back the created app and records
-                    // Pass it back in an array as promise.resolve can only send back one object
-                    return  [createdApp, reportRecords];
                 }).then(function() {
                     // Set default table homepage for Table 1
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
@@ -342,6 +335,7 @@
                     // Set default table homepage for Table 2
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[1].id, 1);
                 }).then(function() {
+                    // Return the createdApp object
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
