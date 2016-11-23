@@ -545,10 +545,14 @@
                                     } else {
                                         //  Parse the facet response and format into an object that the client can consume and process
                                         //  IE: Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
-                                        if (Array.isArray(facets.body) && facets.body.length > 0) {
-                                            //  jsonBigNum.parse throws exception if the input is empty array..hence the test for content
-                                            let facetRecords = jsonBigNum.parse(facets.body);
-                                            responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                                        if (facets.body && facets.body.length > 0) {
+                                            try {
+                                                let facetRecords = jsonBigNum.parse(facets.body);
+                                                responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                                            } catch (e) {
+                                                //  log as a warning..no faceting returned
+                                                log.warn('Unexpected error parsing facet result.  Facet object is not in expected format. Error stack:\n' + e.stack);
+                                            }
                                         }
                                     }
                                 }
@@ -581,12 +585,14 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            //  As a default, will generate a synthetic report using the table defaults if one is not defined
+                            //  As a default, will generate a synthetic report using the table defaults if
+                            //  a saved report is not defined as the homepage.
                             let homepageReportId = constants.SYNTHETIC_TABLE_REPORT.ID;
                             if (response.body) {
                                 let responseBodyParsed = JSON.parse(response.body);
                                 if (responseBodyParsed) {
-                                    //  fetch the specified report home page report
+                                    //  fetch the specified report home page report id..who don't necessarily
+                                    //  know if the id value is valid, so fetch it and find out..
                                     homepageReportId = responseBodyParsed;
                                 }
                             }
