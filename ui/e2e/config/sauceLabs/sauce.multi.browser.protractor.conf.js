@@ -18,36 +18,49 @@
     // If you do not specify 'platform' it will run Linux by default
     // Not specifying 'version' will run the latest non beta / dev version of the browser
     globalSauceConfig.multiCapabilities = [
-        {
-            platform : 'OS X 10.11',
-            browserName     : 'chrome',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name            : 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
-            screenResolution : '1600x1200',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'large',
-            shardTestFiles: true,
-            maxInstances: 2
-        },
+        //{
+        //    platform : 'OS X 10.11',
+        //    browserName     : 'chrome',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    name            : 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
+        //    screenResolution : '1600x1200',
+        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'large',
+        //    shardTestFiles: true,
+        //    maxInstances: 2
+        //},
+        //{
+        //    platform: 'OS X 10.11',
+        //    browserName: 'safari',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    name: 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+        //    screenResolution : '1600x1200',
+        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'xlarge',
+        //    shardTestFiles: true,
+        //    maxInstances: 2
+        //},
+        //{
+        //    platform: 'OS X 10.11',
+        //    browserName: 'firefox',
+        //    version: '45.0',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    name: 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
+        //    screenResolution : '1600x1200',
+        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'medium',
+        //    shardTestFiles: true,
+        //    maxInstances: 2
+        //},
         {
             platform: 'OS X 10.11',
-            browserName: 'safari',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Safari',
-            screenResolution : '1600x1200',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            shardTestFiles: true,
-            maxInstances: 2
-        },
-        {
-            platform: 'OS X 10.11',
-            browserName: 'firefox',
-            version: '45.0',
+            browserName: 'MicrosoftEdge',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name: 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
             screenResolution : '1600x1200',
