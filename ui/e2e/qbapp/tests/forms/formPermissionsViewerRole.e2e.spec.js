@@ -90,7 +90,7 @@
             done();
         });
 
-        it('Verify not able to see any text fields on the View and Edit forms', function(done) {
+        it('@smoke Verify not able to see any text fields on the View and Edit forms', function(done) {
             //get user authentication
             formsPage.getUserAuthentication(userId).then(function() {
                 //Open the report
