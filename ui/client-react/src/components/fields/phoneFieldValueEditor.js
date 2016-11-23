@@ -41,7 +41,7 @@ const PhoneFieldValueEditor = React.createClass({
                                           onKeyDown={this.onKeyDown}
                                           value={value}
                                           {...otherProps} />
-                    <p className="x">x</p>
+                    <span className="x">x</span>
                     <TextFieldValueEditor type="tel"
                                           classes={classes.xNumber}
                                           onKeyDown={this.onKeyDown}
