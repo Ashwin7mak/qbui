@@ -642,8 +642,10 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            //edit if not already editing a row
-            if (!this.state.editingRowNode) {
+            //edit a row if not already editing a row or
+            //if you are editing a row but there are no pending changes start new edit
+            if (!this.state.editingRowNode || !_.has(this.props, '.pendEdits.isPendingEdit') ||
+                   !this.props.pendEdits.isPendingEdit) {
                 this.startEditRow(params.data[this.props.primaryKeyName].value, params.node);
             }
             return;
