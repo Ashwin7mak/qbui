@@ -24,7 +24,6 @@ const UrlUtils = {
     },
     renderIconForUrl(url) {
         let protocol = UrlFileAttachmentReportLinkFormatter.getProtocolFromUrl(url);
-        console.log('QBIcon', UrlUtils.getIconForProtocol(protocol));
         if (protocol) {
             return (
                 <QBicon icon={UrlUtils.getIconForProtocol(protocol)} />
