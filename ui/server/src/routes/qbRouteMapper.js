@@ -474,29 +474,37 @@
      * @returns {*}
      */
     function fetchReportInvokeResults(req, res) {
-        return fetchReportResults(req, res, false, false);
+        fetchReport(req, res, false, false);
     }
 
     /**
-     * This is the function for fetching the report results from the reportsApi endpoint.
-     * This endpoint is intended to be used when a client is initially loading a report
-     * as the report meta data is used.
+     * This is a wrapper function for fetching report results
+     * when loading a report using the default report meta data.
      *
      * @param req
      * @param res
-     * @param fetchFacets - should the report facets get fetched
-     * @param useReportMetaData - use the report meta data..if true, any query parameter
-     * override included on the request (query expression, clist, slist, etc) is ignored.
+     * @returns {*}
      */
-    function fetchReportResults(req, res, fetchFacets, useReportMetaData) {
+    function fetchReportResults(req, res) {
+        fetchReport(req, res, true, true);
+    }
+
+    /**
+     * This function fetches the report results from the reportsApi endpoint.  It should
+     * only get called from either the fetchReportInvokeResults or fetchReportResults
+     * wrapper functions.
+     *
+     * @param req
+     * @param res
+     * @param includeFacets - should the report facet information be included in the response
+     * @param useReportMetaData - if false, allows for override of report meta data defaults with
+     * a query parameter value included on the request (query expression, clist, slist, etc).
+     */
+    function fetchReport(req, res, includeFacets, useReportMetaData) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            //  node doesn't support default parameters until v6 (as of this writing, we're
-            //  on 4.x)..so until then, unless explicitly set to false, it is considered true..
-            fetchFacets = fetchFacets !== false ? true : false;
-            useReportMetaData = useReportMetaData !== false ? true : false;
 
             //  get the reportId
             let reportId = req.params ? req.params.reportId : '';
@@ -508,7 +516,7 @@
                 reportId = commonConstants.SYNTHETIC_TABLE_REPORT.ID;
             }
 
-            reportsApi.fetchReport(req, reportId, fetchFacets, useReportMetaData).then(
+            reportsApi.fetchReport(req, reportId, includeFacets, useReportMetaData).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');
