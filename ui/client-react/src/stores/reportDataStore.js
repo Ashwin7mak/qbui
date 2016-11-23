@@ -462,11 +462,12 @@ let reportModel = {
      */
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
-        recordValueToMatch[SchemaConsts.DEFAULT_RECORD_KEY] = {value: recId};
+        recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
         const newFilteredRecords = this.model.filteredRecords ? this.model.filteredRecords.slice(0) : null;
         const newRecords = this.model.records ? this.model.records.slice(0) : null;
         let recordDeleted = false;
         let filteredRecordDeleted = false;
+
         if (this.model.hasGrouping) {
             filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, this.model.keyField.name);
             recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, this.model.keyField.name);
