@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {AsYouTypeFormatter, PhoneNumberUtil, PhoneNumberFormat as PNF} from 'google-libphonenumber';
 import TextFieldValueEditor from './textFieldValueEditor';
+import './phoneFieldValueEditor.scss';
 
 
 const PhoneFieldValueEditor = React.createClass({
@@ -19,20 +20,33 @@ const PhoneFieldValueEditor = React.createClass({
         this.setState({value: newNumber});
     },
     homeOrOfficePhoneField() {
-        let {value, ...otherProps} = this.props;
+        let {value, classes, ...otherProps} = this.props;
         value = this.state.value;
-        if (!this.props.isHome) {
+        classes = {
+            officeNumber: "officeNumber",
+            xNumber: "xNumber"
+        }
+        if (this.props.isHome) {
             return (
-                <TextFieldValueEditor onKeyDown={this.onKeyDown}
+                <TextFieldValueEditor type="tel"
+                                      onKeyDown={this.onKeyDown}
                                       value={value}
                                       {...otherProps} />
             );
         } else {
             return (
-                <div>
-                    <input type="tel" value={this.state.value} onKeyDown={this.onKeyDown} />
-                    <p>X</p>
-                    <input />
+                <div className="officePhone">
+                    <TextFieldValueEditor type="tel"
+                                          classes={classes.officeNumber}
+                                          onKeyDown={this.onKeyDown}
+                                          value={value}
+                                          {...otherProps} />
+                    <p className="x">x</p>
+                    <TextFieldValueEditor type="tel"
+                                          classes={classes.xNumber}
+                                          onKeyDown={this.onKeyDown}
+                                          value={value}
+                                          {...otherProps} />
                 </div>
             );
         }

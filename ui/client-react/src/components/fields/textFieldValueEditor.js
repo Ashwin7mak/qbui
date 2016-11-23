@@ -132,11 +132,10 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.invalid) {
             classes += ' error';
         }
-
+        console.log('this.proprs.classes: ', this.props.classes);
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
-
         let inputBox = this.renderInputBox(classes);
 
         if (this.props.showClearButton) {

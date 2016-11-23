@@ -36,7 +36,7 @@ $data-font-size: $font-size-p;
     box-shadow: none;
 }
 
-
+[type="tel"],
 [type="text"],
 [type="url"],
 [type="email"] {
@@ -50,6 +50,12 @@ $data-font-size: $font-size-p;
         padding: 0 0 0 2px;
         width: inherit;
         height:  30px;
+        &.officeNumber {
+            width: 60%;
+        }
+        &.xNumber {
+            width: 40%;
+        }
     }
 
     &:focus.input {
@@ -225,7 +231,4 @@ textarea:focus,
         }
 
     }
-
-
-
 }
