@@ -22,7 +22,9 @@
         var request = defaultRequest;
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
-        //TODO: move getApps logic into this api
+        //
+        //TODO: move getApps logic into this api  (confirm that their is no special handling for getApps..the
+        //TODO  request is just proxied through to core..
         var appsApi = {
 
             /**
@@ -76,6 +78,34 @@
                             reject(error);
                         });
                 });
+            },
+
+            /**
+             * TODO
+             *
+             * @param req
+             * @returns Promise
+             */
+            //  TODO should the get and post be broken out into 2 separate methods????
+            stackPreference: function(req) {
+                let opts = requestHelper.setOptions(req, true);
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+
+                //  reset url to call the legacy stack
+                let isPost = requestHelper.isPost(req);
+                let openInMercury = false;
+                if (isPost === true) {
+                    let resp = JSON.parse(opts.body);
+                    //TODO openInMercury should be a common constant
+                    //TODO confirm the default behavior if invalid value..
+                    if (resp) {
+                        openInMercury = resp.openInMercury;
+                    }
+                }
+                opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackRoute(req.params.appId, isPost, openInMercury);
+
+                //return requestHelper.executeRequest(req, opts);
+                return Promise.resolve('ok');
             }
 
         };

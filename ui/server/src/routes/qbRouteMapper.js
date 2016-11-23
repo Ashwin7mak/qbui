@@ -18,7 +18,6 @@
     let recordsApi;
     let reportsApi;
     let appsApi;
-    let legacyApi;
     let routeGroup;
 
     module.exports = function(config) {
@@ -29,7 +28,6 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
-        legacyApi = require('../api/quickbase/legacyApi')(config);
 
         /* internal data */
         /*
@@ -629,7 +627,7 @@
         perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            legacyApi.stackPreference(req).then(
+            appsApi.stackPreference(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Application Stack Preference');
