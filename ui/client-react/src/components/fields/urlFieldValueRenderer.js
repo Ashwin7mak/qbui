@@ -67,7 +67,6 @@ const UrlFieldValueRenderer = React.createClass({
                 </span>
             );
         } else {
-            debugger;
             return (
                 <a href={this.renderLinkHref()} target={target} className={this.setLinkClasses()} tabIndex="-1">
                     <span className="link" tabIndex="1">
