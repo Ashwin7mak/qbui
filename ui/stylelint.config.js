@@ -7,7 +7,7 @@ module.exports = {
     "rules": {
         // See rules here
         // https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md
-        "scss/selector-no-redundant-nesting-selector": [true],
+        "scss/selector-no-redundant-nesting-selector": [true, {"severity": "warning"}],
         "scss/dollar-variable-pattern": ["^[a-z-0-9]+$", {"severity": "warning"}],
         "sh-waqar/declaration-use-variable": [
             [
@@ -45,7 +45,7 @@ module.exports = {
         "comment-whitespace-inside": ["always"],
         "declaration-bang-space-after": ["never"],
         "declaration-bang-space-before": ["always"],
-        "declaration-block-no-duplicate-properties": [true],
+        "declaration-block-no-duplicate-properties": [true, {ignore: ["consecutive-duplicates-with-different-values"]}],
         "declaration-block-no-ignored-properties": [true],
         "declaration-block-no-shorthand-property-overrides": [true],
         "declaration-block-semicolon-newline-after": ["always-multi-line"],
@@ -57,7 +57,7 @@ module.exports = {
         "declaration-colon-space-after": ["always-single-line"],
         "declaration-colon-space-before": ["never"],
         "font-family-name-quotes": ["always-where-recommended", {"severity": "warning"}],
-        "font-weight-notation": ["named-where-possible"],
+        "font-weight-notation": ["named-where-possible", {"severity": "warning"}],
         "function-calc-no-unspaced-operator": true,
         "function-comma-newline-after": "always-multi-line",
         "function-comma-space-after": ["always-single-line"],
@@ -96,9 +96,9 @@ module.exports = {
                     "last 3 Firefox versions",
                     "last 3 Edge versions"
                 ],
-                "ignore": []
+                "ignore": [],
+                "severity": "warning"
             },
-            {"severity": "warning"}
         ],
         "number-leading-zero": ["always"],
         "number-no-trailing-zeros": [true],
@@ -127,7 +127,7 @@ module.exports = {
         "selector-pseudo-class-no-unknown": true,
         "selector-pseudo-class-parentheses-space-inside": "never",
         "selector-pseudo-element-case": "lower",
-        "selector-pseudo-element-colon-notation": ["single"],
+        "selector-pseudo-element-colon-notation": ["single", {"severity": "warning"}],
         "selector-pseudo-element-no-unknown": true,
         "selector-type-case": "lower",
         "selector-type-no-unknown": true,
@@ -149,6 +149,8 @@ module.exports = {
         "value-list-comma-space-before": "never"
     },
     "ignoreFiles": [
-        "client-react/src/assets/css/vendor/**/*.{scss,css}"
+        "client-react/src/assets/css/vendor/**/*.{scss,css}",
+        "client-react/src/**/*.min.css",
+        "client-react/src/components/node/datetimePicker/css/bootstrap-datetimepicker.css"
     ]
 };
