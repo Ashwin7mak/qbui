@@ -97,7 +97,7 @@
                 opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackRoute(req.params.appId, isPost, openInMercury);
 
                 //return requestHelper.executeRequest(req, opts);
-                return Promise.resolve('ok');
+                return Promise.resolve(opts.url);
             }
 
         };
