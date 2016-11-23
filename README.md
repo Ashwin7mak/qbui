@@ -24,7 +24,7 @@ To bring up stack (each new line is a new command to type):
 export SLID=<Your Initials followed by a number>
 export STACKNAME=${SLID}-dev-nodejs
 # This will pick the latest AMI; alternatively specify your own
-export AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=centos-7.2-coreui.v* (Encrypted)" --query "sort_by(Images[], &CreationDate) | [-1].ImageId" --output text)
+export AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=centos-7.2-coreui.v*" --query "sort_by(Images[], &CreationDate) | [-1].ImageId" --output text)
 aws cloudformation create-stack --stack-name ${STACKNAME} --template-body file://deploy/coreui.json --parameters \
   ParameterKey=paramSwimlane,ParameterValue=${SLID} \
   ParameterKey=paramEC2ImageAMI,ParameterValue=${AMI} \

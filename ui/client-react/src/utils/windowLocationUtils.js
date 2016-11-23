@@ -1,4 +1,4 @@
-import {browserHistory} from 'react-router';
+import AppHistory from '../globals/appHistory';
 
 /**
  * Static class of window url param access functions
@@ -37,12 +37,20 @@ class WindowLocationUtils {
         window.location.href = url;
     }
 
+    /**
+     * Function to return the current href
+     * this exists for testability
+     */
     static getHref() {
         return window.location.href;
     }
 
-    static getSubdomain() {
-        return window.location.hostname.split(".")[0];
+    /**
+     * Function to return the current hostname
+     * this exists for testability
+     */
+    static getHostname() {
+        return window.location.hostname;
     }
 
     /**
@@ -67,7 +75,7 @@ class WindowLocationUtils {
                 params = urlQueryString + '&' + newParam;
             }
         }
-        browserHistory.push(location.pathname + params);
+        AppHistory.history.push(location.pathname + params);
     }
 
     /**
@@ -75,7 +83,7 @@ class WindowLocationUtils {
      */
     static pushWithoutQuery() {
 
-        browserHistory.push(location.pathname);
+        AppHistory.history.push(location.pathname);
     }
 }
 

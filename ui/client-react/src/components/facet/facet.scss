@@ -3,16 +3,34 @@
 
 .facetsMenuContainer {
   margin-left: 10px;
+  display: flex;
+  align-items: flex-start;
+
+  .selectedFacets {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    order: 20;
+  }
 
   //under the generated wrapper on facetMenuPopup
   > div:not(.facetsMenuButton) > div.facetsRelativePos {
     position: relative;
+  }
+
+  // this is the div that contains the react-bootstrap Overlay
+  > div:not(.facetsMenuButton):not(.selectedFacets) {
+    position: relative;
+    top: 30px;
+    order: 1;
   }
 }
 
 .facetsMenuButton {
   display: inline-block;
   cursor: pointer;
+  margin-top: 6px;
+  order: 10;
   &.withoutSelections {
     margin-bottom: 4px;
   }
@@ -68,6 +86,16 @@
 
       @include height-xlarge-breakpoint {
         max-height: 980px;
+      }
+
+      @include small-breakpoint {
+        @include height-small-breakpoint {
+          max-height: 420px;
+        }
+
+        @include height-medium-breakpoint {
+          max-height: 550px;
+        }
       }
     }
 
@@ -144,11 +172,6 @@
     .list-group-item {
       font-family: $font-family;
       padding-top: 4px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: flex-start
     }
 
     .list-group-item:hover {
@@ -158,6 +181,11 @@
     .list-group-item:focus {
       outline: none;
       background-color: $facetMenu-backgroundColor;
+    }
+
+    .list-group-item-inner-wrapper {
+      display: flex;
+      align-items: center;
     }
 
     .listMore {
@@ -194,12 +222,8 @@
     }
 }
 
-.selectedFacets {
-  display: inline;
-}
 .facetToken {
-    display : inline-block;
-    padding: 3px;
+    padding: 0 3px 3px 3px;
 
   .facetNameToken {
     margin-right: .5em;
@@ -215,7 +239,8 @@
     font-weight:500;
     background-color: $facetMenu-facetTokenBackgroundColor;
     color: $facetMenu-facetTokenTextColor;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
 
     .selectedTokenName {
       white-space: normal;
@@ -241,10 +266,8 @@
   }
 }
 
-
-
 @include small-breakpoint {
-    .selectedFacets {
+    .facetsMenuContainer .selectedFacets {
         display:none;
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
@@ -253,9 +276,7 @@
         input {
             color: $search-input-fg;
         }
-        .popover-content {
-            max-height: 454px;
-        }
+
         .facetMenuPopup {
             display: block;
             min-width: 150px;
@@ -276,6 +297,5 @@
         .popover.bottom > .arrow {
             display: none;
         }
-
     }
 }

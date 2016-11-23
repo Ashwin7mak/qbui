@@ -51,9 +51,9 @@ export const RECORD_COUNT = {
 
 // Used in card view previous and next buttons
 export const CARD_VIEW_NAVIGATION = {
-    lines: 7,
+    lines: 9,
     length: 0,
-    width: 5,
+    width: 11,
     radius: 5,
     scale: 1,
     corners: 1,
@@ -71,4 +71,26 @@ export const CARD_VIEW_NAVIGATION = {
     shadow: false,
     hwaccel: false,
     position: 'absolute'
+};
+
+// Used in the left navbar when apps or tables are loading
+export const LEFT_NAV_BAR = {
+    lines: 9,
+    length: 0,
+    width: 11,
+    radius: 18,
+    scale: 1,
+    corners: 1,
+    opacity: 0,
+    rotate: 0,
+    direction: 1,
+    speed: 1,
+    trail: 60,
+    fps: 20,
+    zIndex: 2e9,
+    color: '#fff',
+    className: 'spinner',
+    shadow: false,
+    hwaccel: false,
+    position: 'relative'
 };

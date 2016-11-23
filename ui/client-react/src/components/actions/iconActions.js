@@ -25,7 +25,6 @@ import './iconActions.scss';
  */
 
 let IconActions = React.createClass({
-
     // actions don't have any functionality yet...
     propTypes: {
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -33,8 +32,10 @@ let IconActions = React.createClass({
             msg: React.PropTypes.string,
             rawMsg: React.PropTypes.bool, // msg doesn't need to be localized
             onClick: React.PropTypes.function,
-            className: React.PropTypes.string
+            className: React.PropTypes.string,
+            disabled: React.PropTypes.bool
         })).isRequired,
+        flux: React.PropTypes.object,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
         className: React.PropTypes.string,
         pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
@@ -67,16 +68,19 @@ let IconActions = React.createClass({
             tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
         }
         let className = "iconActionButton ";
+        if (action.disabled) {
+            className += "disabled ";
+        }
         if (action.className) {
             className += action.className;
         }
+
 
         return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
                     <Button key={action.msg}
                        tabIndex="0"
                        className={className}
-                       onClick={action.onClick}
-                       disabled={action.disabled ? true : false} >
+                       onClick={action.onClick}>
                             <QBicon icon={action.icon}/>
                     </Button>
                 </OverlayTrigger>);
@@ -84,7 +88,12 @@ let IconActions = React.createClass({
 
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
+        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
+            //It will remove the white space if the menu is close. The class is added in reportContent.js
         this.setState({dropdownOpen: open});
+        if (this.props.flux) {
+            this.props.flux.actions.onToggleRowPopUpMenu(open);
+        }
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
@@ -98,10 +107,10 @@ let IconActions = React.createClass({
             const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
 
             dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
-                <Button tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+                <button ref="dropDownMenu" tabIndex="0"  className={"btn dropdownToggle iconActionButton"}><QBicon icon="fries"/> </button>
             </OverlayTrigger>;
         } else {
-            dropdownTrigger = <Button bsRole="toggle" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>;
+            dropdownTrigger = <button bsRole="toggle" tabIndex="0"  className={"btn dropdownToggle iconActionButton"}><QBicon icon="fries"/> </button>;
         }
 
         return (
@@ -111,10 +120,13 @@ let IconActions = React.createClass({
                 <Dropdown.Menu >
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {
-                            return <MenuItem key={action.msg} href="#" onSelect={action.onClick} >
-                                      {this.props.menuIcons && <QBicon className={action.className} icon={action.icon}/>}
+                            return (
+                                <MenuItem key={action.msg} href="#" onSelect={action.onClick} disabled={action.disabled} >
+                                    {this.props.menuIcons &&
+                                        <QBicon className={action.disabled ? "disabled " + action.className : action.className}
+                                                icon={action.icon}/>}
                                         {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
-                                   </MenuItem>;
+                                </MenuItem>);
                         }
                     })}
                 </Dropdown.Menu>

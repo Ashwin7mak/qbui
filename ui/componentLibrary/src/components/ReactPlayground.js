@@ -31,6 +31,9 @@ const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
 
 const Trowser = require('../../../client-react/src/components/trowser/trowser.js');
+const QBModal = require('../../../client-react/src/components/qbModal/qbModal.js');
+const AlertBanner = require('../../../client-react/src/components/alertBanner/alertBanner.js');
+const PageTitle = require('../../../client-react/src/components/pageTitle/pageTitle.js');
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

@@ -143,25 +143,13 @@ const SortAndGroup = React.createClass({
 
     updateRecords(sortGroupString) {
         let flux = this.getFlux();
-        let overrideParams = {};
-        //if report was grouped in the last render and is grouped in this render
-        // or was ungrouped in last and this render no need to re-load report.
-        let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
-        let changedGroupingStyle = true;
-        if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.groupEls) {
-            if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
-                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
-                changedGroupingStyle = false;
-            }
-        }
-        let pageOffset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : constants.PAGE.DEFAULT_OFFSET;
-        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : constants.PAGE.DEFAULT_NUM_ROWS;
-        if (changedGroupingStyle) {
-            flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, pageOffset, numRows, sortGroupString);
-        } else {
-            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: pageOffset, numRows: numRows}, this.props.filter, overrideParams);
-        }
+        let queryParams = {};
+
+        queryParams[query.SORT_LIST_PARAM] = sortGroupString;
+        queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
+
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
 
     applyChanges() {
@@ -192,7 +180,7 @@ const SortAndGroup = React.createClass({
     reset() {
         //reload data using report with original sort/group overrides & keep filter settings
         if (_.has(this.props, 'reportData.data.originalMetaData.sortList')) {
-            let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
+            let sortGroupString = ReportUtils.getSortListFromObject(this.props.reportData.data.originalMetaData.sortList);
             this.updateRecords(sortGroupString);
         }
     },

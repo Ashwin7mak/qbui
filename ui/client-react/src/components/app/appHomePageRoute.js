@@ -1,15 +1,16 @@
 import React from 'react';
-import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import Breakpoints from '../../utils/breakpoints';
+import AppHomePage from './appHomePage';
+import PageTitle from '../pageTitle/pageTitle';
 
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
+
 /**
  * placeholder for app dashboard route
  */
@@ -19,10 +20,18 @@ let AppHomePageRoute = React.createClass({
     contextTypes: {
         touch: React.PropTypes.bool
     },
+
+    /**
+     * Select an app by ID
+     */
     selectAppId(appId) {
         let flux = this.getFlux();
         flux.actions.selectAppId(appId);
     },
+
+    /**
+     * Select an app from the route params
+     */
     selectAppFromParams(params, checkParams) {
         if (params) {
             let appId = params.appId;
@@ -42,6 +51,19 @@ let AppHomePageRoute = React.createClass({
                 this.selectAppId(appId);
             }
         }
+    },
+
+    /**
+     * Gets the name of the currently selected app or returns null
+     * @returns {null|string}
+     */
+    getSelectedAppName() {
+        if (this.props.apps && this.props.selectedAppId) {
+            let app = _.find(this.props.apps, {id: this.props.selectedAppId});
+            return (app ? app.name : null);
+        }
+
+        return null;
     },
 
     getTopTitle() {
@@ -73,32 +95,32 @@ let AppHomePageRoute = React.createClass({
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     },
+
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
-
                 <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
             </div>
         );
     },
+
     getSecondaryBar() {
         return (
             <div className="secondaryAppHomePageActions">
                 {/* todo */}
             </div>);
     },
-    render: function() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
+
+    /**
+     * Render a temporary homepage. If the currenlty selected app does not exist, display a warning.
+     * @returns {XML}
+     */
+    render() {
         return (
-            isSmall ?
-                <div className="appHomePageContainer">
-                    <div className="appHomePageActionsContainer secondaryBar">
-                        {this.getSecondaryBar()}
-                        {this.getPageActions(2)}
-                    </div>
-                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                </div> :
-                <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
+            <div className="appHomePageContainer">
+                <PageTitle title={this.getSelectedAppName()} />
+                <AppHomePage />
+            </div>
         );
     }
 });

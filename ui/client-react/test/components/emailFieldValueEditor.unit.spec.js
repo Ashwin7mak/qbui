@@ -102,35 +102,6 @@ describe('EmailFieldValueEditor', () => {
         expect(emailInput).toBeNull();
     });
 
-    it('validates an email if validateFieldValue is enabled', () => {
-        let email = 'test@email.com';
-        let mockParent = {
-            onValidated(result) {
-                return result;
-            }
-        };
-        let fieldDef = {
-            headerName: 'email'
-        };
-
-        spyOn(mockParent, 'onValidated');
-
-        component = TestUtils.renderIntoDocument(<EmailFieldValueEditor value={email}
-                                                                        fieldDef={fieldDef}
-                                                                        onValidated={mockParent.onValidated}
-                                                                        validateFieldValue={true} />);
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
-
-        Simulate.blur(emailInput, {
-            value: email
-        });
-
-        expect(mockParent.onValidated).toHaveBeenCalledWith({
-            isInvalid: false,
-            invalidMessage: 'Format the email like name@domain.com'
-        });
-    });
-
     it('uses the value (not the display) for editing', () => {
         // The TextFieldValueEditor defaults to display if both display and value are provided
         // Due to the formatting that occurs on display, it is better for the user to edit the underlying value

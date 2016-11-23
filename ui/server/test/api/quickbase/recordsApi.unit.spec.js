@@ -73,7 +73,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return results for record 1', function(done) {
-            req.url = '/apps/123/tables/456/records/1?param=true';
+            req.url = '/apps/123/tables/456/records/1?param=true&offset=0&numRows=' + constants.PAGE.MAX_NUM_ROWS + 1;
             req.params.recordId = 1;
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
@@ -94,8 +94,8 @@ describe("Validate recordsApi", function() {
             });
         });
 
-        it('success return results for reportComponents', function(done) {
-            req.url = '/apps/123/tables/456/reports/2/reportComponents';
+        it('success return results for report results', function(done) {
+            req.url = '/apps/123/tables/456/reports/2/results';
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
@@ -115,8 +115,8 @@ describe("Validate recordsApi", function() {
             });
         });
 
-        it('success return results for reportComponents with sortList', function(done) {
-            req.url = '/apps/123/tables/456/reports/2/reportComponents?sortList=1';
+        it('success return results for report results with sortList', function(done) {
+            req.url = '/apps/123/tables/456/reports/2/results?sortList=1';
             req.params.sortList = '1';
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
@@ -138,7 +138,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('fail return results ', function(done) {
-            req.url = '/reports/2/reportComponents';
+            req.url = '/reports/2/results';
             var error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
@@ -198,7 +198,6 @@ describe("Validate recordsApi", function() {
 
         it('success return records array with display parameter type and no grouping', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             //fetch fields is already stubbed
@@ -209,7 +208,6 @@ describe("Validate recordsApi", function() {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.records[0][0].display, '1234525');
                     assert.equal(response.filteredCount, '10');
-                    assert.notEqual(response.groups.hasGrouping, true);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -235,25 +233,6 @@ describe("Validate recordsApi", function() {
                 done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
             });
         });
-
-        it('success return records array with display parameter type with grouping', function(done) {
-            req.url = '/apps/1/tables/2/records/3?format=display';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=2:' + groupTypes.COMMON.equals;
-            executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
-            var promise = recordsApi.fetchRecordsAndFields(req);
-            promise.then(
-                function(response) {
-                    assert.equal(response.fields[0].display, '12-3454');
-                    assert.equal(response.groups.fields[0].field.display, '12-3454');
-                    assert.equal(response.groups.hasGrouping, true);
-                    assert.equal(response.groups.totalRows, 2);
-                    assert.equal(response.records.length, 0);
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
-            });
-        });
     });
 
     describe("when fetchCountForRecords is called", function() {
@@ -273,9 +252,15 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return count when query is set', function(done) {
+            req.params[constants.REQUEST_PARAMETER.SORT_LIST] = '1:' + groupTypes.COMMON.equals;
+            req.params[constants.REQUEST_PARAMETER.QUERY] = '{1.EX.2}';
+
             req.url = '/apps/1/tables/2/records/countQuery';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
+            req.url += '?' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + req.params[constants.REQUEST_PARAMETER.SORT_LIST];
+            req.url += '&' + constants.REQUEST_PARAMETER.QUERY + '=' + req.params[constants.REQUEST_PARAMETER.QUERY];
+
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
+
             var promise = recordsApi.fetchCountForRecords(req);
             promise.then(
                 function(response) {
@@ -424,6 +409,25 @@ describe("Validate recordsApi", function() {
                 done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
             });
 
+        });
+
+        it('fail return results required field', function(done) {
+            let testField =  {datatypeAttributes :{type: "TEXT"}, required : true};
+            req.url = '/records/2';
+            req.body = [{value: "", fieldDef: testField}];
+            var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
+            var promise = recordsApi.createSingleRecord(req);
+
+            promise.then(
+                function(error) {
+                },
+                function(error) {
+                    assert.equal(error.response.errors[0].error.code, errType);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all tests: ' + JSON.stringify(errorMsg)));
+            });
         });
     });
 

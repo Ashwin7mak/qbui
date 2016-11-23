@@ -9,12 +9,11 @@
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
 
-
     describe('Report Sorting Tests - ', function() {
         var realmName;
         var realmId;
         var app;
-        var records;
+        var recordList;
         var report_Id;
         var keyValue = [];
         var sortedTableResults = [];
@@ -26,30 +25,12 @@
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
 
-        /**
-         * Setup method. Generates JSON for an app, a table with different fields, and 10 records with different field types.
-         */
         beforeAll(function(done) {
-            //Create a app, table and report
-            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
-                // Set your global objects to use in the test functions
+            e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
                 app = appAndRecords[0];
-                records = appAndRecords[1];
-            }).then(function() {
-                // Generate 1 empty record
-                // Get the appropriate fields out of the table 1
-                var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE1]);
-                var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
-                var clonedArray = JSON.parse(JSON.stringify(generatedEmptyRecords));
-                var emptyRecord = clonedArray[0];
-                emptyRecord.forEach(function(field) {
-                    if (field.id === 15) {
-                        field.value = 'false';
-                    }
-                });
-                return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], generatedEmptyRecords);
-            }).then(function() {
+                recordList = appAndRecords[1];
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
+                // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
                 return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
@@ -58,13 +39,9 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
                 });
-            }).catch(function(error) {
-                // Global catch that will grab any errors from chain above
-                // Will appropriately fail the beforeAll method so other tests won't run
-                done.fail('Error during test setup beforeAll: ' + error.message);
             });
         });
 
@@ -101,8 +78,8 @@
          */
         var getExpectedSortedResultsUsingLoDashSort = function(Fids, sortFids, sortOrder) {
             var sortedRecords;
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id);
-            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint + 1 + '/reportComponents', consts.GET).then(function(reportResult) {
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
                 var results = JSON.parse(reportResult.body);
                 // Sort the actual records using lodash _.orderby
                 sortedRecords = reportSortingPage.sortRecords(results.records, sortFids, sortOrder);
@@ -151,7 +128,7 @@
                 },
                 {
                     //the below are for UI calls
-                    message: 'Sort by Text field in asc order then by Numeric in desc',
+                    message: '@smoke Sort by Text field in asc order then by Numeric in desc',
                     ColumnName: ['Text Field', 'Numeric Field'],
                     SortOrderItem: ['Sort A to Z', 'Sort highest to lowest'],
                     //the below are for backend calls
@@ -283,17 +260,11 @@
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
                     //finally verify item got selected
-                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
-                    done();
+                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest").then(function() {
+                        done();
+                    });
                 });
             });
-        });
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
     });
 }());

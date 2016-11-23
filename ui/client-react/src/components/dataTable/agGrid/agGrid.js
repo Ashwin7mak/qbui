@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
 import {Button, Dropdown, MenuItem} from 'react-bootstrap';
 import QBicon from '../../qbIcon/qbIcon';
-import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Locale from '../../../locales/locales';
@@ -12,11 +11,9 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
-import * as SchemaConsts from '../../../constants/schema';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
-    CellRenderer,
     CheckBoxCellRenderer,
     CurrencyCellRenderer,
     DateCellRenderer,
@@ -73,7 +70,7 @@ let AGGrid = React.createClass({
     rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 
     propTypes: {
-        uniqueIdentifier: React.PropTypes.string,
+        primaryKeyName: React.PropTypes.string.isRequired,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
         reportFooter: React.PropTypes.element,
@@ -123,6 +120,9 @@ let AGGrid = React.createClass({
         this.onMenuClose();
         this.installHeaderMenus();
         this.api.setHeaderHeight(this.rowHeight);
+        if (this.props.onGridReady) {
+            this.props.onGridReady();
+        }
     },
 
     /**
@@ -132,7 +132,6 @@ let AGGrid = React.createClass({
      * @returns JSX column header dropdown
      */
     createHeaderMenu(columnIndex, pullRight) {
-
         const colDef = this.props.columns[columnIndex];
 
         let isSortedAsc = true;
@@ -165,14 +164,9 @@ let AGGrid = React.createClass({
                 <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
                 <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
                 <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
-                <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
-                <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
             </Dropdown.Menu>
         </Dropdown>);
     },
@@ -184,8 +178,10 @@ let AGGrid = React.createClass({
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
         // convert nodelist to array then iterate to render each menu
         _.map(headers, (header, index) => {
-            const pullRight = index === headers.length - 1;
-            ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+            if (header.childElementCount === 0) {
+                const pullRight = index === headers.length - 1;
+                ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+            }
         });
     },
     /**
@@ -245,10 +241,10 @@ let AGGrid = React.createClass({
 
         let sortList = ReportUtils.getSortListString(this.props.groupEls);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-        flux.actions.getFilteredRecords(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, {format:true}, this.props.filter, queryParams);
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
     /**
      * On selection of group option from menu fire off the action to group the data
@@ -261,25 +257,21 @@ let AGGrid = React.createClass({
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         let sortFid = column.id.toString();
         let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
+
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        /** AG-grid has a bug where on re-render it doesn't call groupRenderer
-         And hence doesn't render group headers.
-         To get around that, on grouping rebuild the whole report
-         If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
-         So optimize for that case..
-        */
-        if (this.props.groupEls.length) {
-            let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = sortListParam;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
-        } else {
-            flux.actions.loadReport(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, true, null, null, sortListParam);
-        }
+        let offset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+
+        let queryParams = {};
+        queryParams[query.OFFSET_PARAM] = offset;
+        queryParams[query.NUMROWS_PARAM] = numRows;
+        queryParams[query.SORT_LIST_PARAM] = sortListParam;
+
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
+
     /**
      * AG-grid doesn't fire any events or add any classes to the column for which menu has been opened
      * This makes the menu look like its detached from the header. The following is a hack to handle this.
@@ -295,7 +287,6 @@ let AGGrid = React.createClass({
         }
     },
     onMenuClose() {
-
         document.addEventListener("DOMNodeRemoved", (ev) => {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {
@@ -388,7 +379,7 @@ let AGGrid = React.createClass({
      */
     openRecordForEdit(data) {
 
-        const recordId = data[this.props.uniqueIdentifier].value;
+        const recordId = data[this.props.primaryKeyName].value;
 
         const flux = this.getFlux();
 
@@ -479,9 +470,8 @@ let AGGrid = React.createClass({
         this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
-        this.gridOptions.context.keyField = this.props.keyField;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
+        this.gridOptions.context.primaryKeyName = this.props.primaryKeyName;
         this.gridOptions.context.onAttach = this.onAttach;
         this.gridOptions.context.onDetach = this.onDetach;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
@@ -504,6 +494,7 @@ let AGGrid = React.createClass({
         }
     },
     componentDidUpdate(prevProps,  prevState) {
+        this.installHeaderMenus();
         if (!this.props.loading) {
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
@@ -513,16 +504,14 @@ let AGGrid = React.createClass({
             this.editRow();
             logger.debug('edit completed');
         }
-        // we have a new inserted row put it in edit mode
-        if (typeof (this.props.editingIndex) !== 'undefined' && this.props.editingIndex !== null) {
-            //get the node at editingIndex
-            let atIndex = 0;
+        // we have a new inserted row put ite.data && node.data[props.primaryKeyName]  in edit mode
+        if (typeof (this.props.editingIndex) !== 'undefined') {
+            let found = false;
             this.api.forEachNode((node) => {
-                if (atIndex === this.props.editingIndex + 1)  {
-                    //edit the record at specified index
+                if (!found && node.data && node.data[this.props.primaryKeyName] && this.props.editingId === node.data[this.props.primaryKeyName].value) {
                     this.startEditRow(this.props.editingId, node);
+                    found = true;
                 }
-                atIndex++;
             });
         }
     },
@@ -616,7 +605,6 @@ let AGGrid = React.createClass({
     onRowClicked(params) {
 
         const target = params.event.target;
-
         if (this.isEditChild(target.parentNode)) {
             return;
         }
@@ -627,10 +615,13 @@ let AGGrid = React.createClass({
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
+
         //For click on record action icons or input fields or links or link child elements do nothing
         if (target &&
             target.className.indexOf("qbIcon") !== -1 ||
             target.className.indexOf("iconLink") !== -1 ||
+            target.className.indexOf("dropdown") !== -1 ||
+            target.className.indexOf("iconActionButton") !== -1 ||
             target.tagName === "INPUT" ||
             target.tagName === "A" ||
             target.parentNode.tagName === "A") {
@@ -641,7 +632,7 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
+            this.startEditRow(params.data[this.props.primaryKeyName].value, params.node);
             return;
         }
         if (this.clickTimeout) {
@@ -708,7 +699,7 @@ let AGGrid = React.createClass({
      * We want to make sure if all-checkbox is clicked then the event doesn't propagate to all rows in turn.
      * Use selectAllClicked state variable to keep track of this.
      */
-    allCheckBoxSelected() {
+    allCheckBoxSelected(event) {
         if (!this.props.records) {
             return;
         }
@@ -730,8 +721,8 @@ let AGGrid = React.createClass({
         let rows = [];
         if (this.api) {
             this.api.getSelectedRows().forEach(row => {
-                if (row[SchemaConsts.DEFAULT_RECORD_KEY]) {
-                    rows.push(row[SchemaConsts.DEFAULT_RECORD_KEY].value);
+                if (row[this.props.primaryKeyName]) {
+                    rows.push(row[this.props.primaryKeyName].value);
                 }
             });
         }

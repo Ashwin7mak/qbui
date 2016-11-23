@@ -1,4 +1,5 @@
 import * as SchemaConsts from '../constants/schema';
+import consts from '../../../common/src/constants';
 
 class FieldUtils {
     /**
@@ -8,11 +9,11 @@ class FieldUtils {
     * @returns {string}
     *
     */
-    static getUniqueIdentifierFieldName(data) {
+    static getPrimaryKeyFieldName(data) {
         if (_.has(data, 'fields')) {
-            return FieldUtils.getUniqueIdentifierFieldNameFromFields(data);
+            return FieldUtils.getPrimaryKeyFieldNameFromFields(data);
         } else {
-            return FieldUtils.getUniqueIdentifierFieldNameFromData(data);
+            return FieldUtils.getPrimaryKeyFieldNameFromData(data);
         }
     }
 
@@ -22,14 +23,37 @@ class FieldUtils {
     * @param {object} fields
     * @returns {string}
     */
-    static getUniqueIdentifierFieldNameFromFields(fields) {
+    static getPrimaryKeyFieldNameFromFields(fields) {
         if (requiredFieldsArePresent(fields)) {
-            let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-            if (uniqueIdentifierField) {
-                return uniqueIdentifierField.name;
+            let primaryKeyField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+
+            if (primaryKeyField) {
+                return primaryKeyField.name;
             } else {
                 return SchemaConsts.DEFAULT_RECORD_KEY;
             }
+        } else {
+            return SchemaConsts.DEFAULT_RECORD_KEY;
+        }
+    }
+
+    /**
+     * Gets the name for the unique identifier row from grid data
+     * even if the Record ID # field has been renamed
+     * @param {object} rowData
+     *    {
+     *        fieldName: {
+     *            id: 3 // this is the field id
+     *            value: 2
+     *            display: "2"
+     *        }
+     *    }
+     * @returns {string}
+     */
+    static getPrimaryKeyFieldNameFromData(rowData) {
+        let primaryKeyFieldName = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+        if (primaryKeyFieldName) {
+            return primaryKeyFieldName;
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
@@ -50,25 +74,50 @@ class FieldUtils {
     }
 
     /**
-    * Gets the name for the unique identifier row from grid data
-    * even if the Record ID # field has been renamed
-    * @param {object} rowData
-    *    {
-    *        fieldName: {
-    *            id: 3 // this is the field id
-    *            value: 2
-    *            display: "2"
-    *        }
-    *    }
-    * @returns {string}
-    */
-    static getUniqueIdentifierFieldNameFromData(rowData) {
-        let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-        if (recordIdField) {
-            return recordIdField;
+     * Returns the label to be displayed for a fieldLabelElement.
+     * @param {object} element
+     *     {
+     *         useAlternateLabel: <boolean>,
+     *         displayText: <string>,
+     *     }
+     * @param {object} relatedField
+     *     {
+     *         name: <string>,
+     *     }
+     */
+    static getFieldLabel(element, relatedField) {
+        if (element && element.useAlternateLabel) {
+            return element.displayText || '';
+        } else if (relatedField) {
+            return relatedField.name || '';
         } else {
-            return SchemaConsts.DEFAULT_RECORD_KEY;
+            return '';
         }
+    }
+
+    /**
+     * Returns whether a field should be considered editable or now based on fieldDef.
+     * Rules: Built-in fields, non-Scalar fields and fields marked with userEditableValue=false are non-editable
+     * @param fieldDef
+     * @returns {boolean}
+     */
+    static isFieldEditable(fieldDef) {
+        if (fieldDef) {
+            // built in fields are not editable
+            if (typeof fieldDef.builtIn !== 'undefined' && fieldDef.builtIn) {
+                return false;
+            }
+            // field must be scalar (a non-generated field value)
+            if (typeof fieldDef.type !== 'undefined' && fieldDef.type !== consts.SCALAR) {
+                return false;
+            }
+            // field must be editable i.e. user editable not a restricted value
+            if (typeof fieldDef.userEditableValue !== 'undefined' && !fieldDef.userEditableValue) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
 

@@ -61,10 +61,6 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         /**
          * Function that will verify the filtered rows are contained in actual record list.
          * @param facets Group

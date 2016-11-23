@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
@@ -67,7 +66,7 @@ let TablesList = React.createClass({
      * get link to table homepage
      */
     getTableLink(table) {
-        return `/app/${this.props.selectedAppId}/table/${table.id}`;
+        return `/qbase/app/${this.props.selectedAppId}/table/${table.id}`;
     },
 
     /**
@@ -82,12 +81,14 @@ let TablesList = React.createClass({
         </div>);
     },
 
+
+
     /**
      * get list of table links for left nav
      * @returns {*}
      */
     tablesList() {
-        return this.props.getAppTables(this.props.selectedAppId).map((table) => {
+        return this.props.getAppTables(this.props.selectedAppId, this.props.apps).map((table) => {
             table.link = this.getTableLink(table);
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
@@ -117,8 +118,7 @@ let TablesList = React.createClass({
         return (
         <li className="horizontal">
             <ul className="topLinks">
-                {this.getNavItem('nav.home', `/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
-                {this.getNavItem('nav.users', '/users', 'user')}
+                {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
             </ul>
         </li>);
     },
@@ -131,7 +131,6 @@ let TablesList = React.createClass({
 
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
-                             secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
                         <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
@@ -140,11 +139,11 @@ let TablesList = React.createClass({
                                    onClearSearch={this.onClearSearch}
                                    placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
                 </ul>
+
                 <ul className="tablesList">
                     {this.tablesList()}
                 </ul>
             </div>
-
         );
     }
 });

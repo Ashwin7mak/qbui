@@ -159,7 +159,8 @@ describe('AGGrid functions', () => {
             rowClicked: ()=>{},
             openRecordForEdit: ()=> {},
             mark: ()=>{},
-            measure: ()=>{}
+            measure: ()=>{},
+            onToggleRowPopUpMenu: ()=>{}
         }
     };
 
@@ -169,6 +170,7 @@ describe('AGGrid functions', () => {
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
         spyOn(flux.actions, 'openRecordForEdit');
+        spyOn(flux.actions, 'onToggleRowPopUpMenu');
     });
 
     afterEach(() => {
@@ -277,6 +279,22 @@ describe('AGGrid functions', () => {
         let selectAllCheckbox = gridElement[0].getElementsByClassName("selectAllCheckbox");
         expect(selectAllCheckbox.length).toEqual(1);
     });
+
+    it('test props.onGridReady is called when AGGrid is ready', () => {
+        const onGridReady = jasmine.createSpy();
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns}
+                                                         flux={flux}
+                                                         showGrouping={true}
+                                                         loading={false}
+                                                         onGridReady={onGridReady}
+                                                         />);
+        expect(onGridReady).toHaveBeenCalled();
+        expect(onGridReady.calls.count()).toEqual(1);
+    });
+
     it('test selects all rows', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
@@ -436,7 +454,7 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                     <AGGrid ref="grid"
                             flux={flux}
-                            uniqueIdentifier="col_num"
+                            primaryKeyName="col_num"
                             actions={TableActionsMock}
                             records={fakeReportData_before.data.records}
                             columns={fakeReportData_before.data.columns}
@@ -484,8 +502,7 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                         <AGGrid ref="grid"
                                 flux={flux}
-                                keyField="col_num"
-                                uniqueIdentifier="col_num"
+                                primaryKeyName="col_num"
                                 onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={fakeReportData_before.data.records}
@@ -556,8 +573,7 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                         <AGGrid ref="grid"
                                 flux={flux}
-                                keyField="col_record_id"
-                                uniqueIdentifier="col_record_id"
+                                primaryKeyName="col_record_id"
                                 onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={dataWithUneditableField.data.records}
@@ -593,8 +609,7 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                         <AGGrid ref="grid"
                                 flux={flux}
-                                keyField="col_record_id"
-                                uniqueIdentifier="col_record_id"
+                                primaryKeyName="col_record_id"
                                 onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={dataWithRecordIdField.data.records}
@@ -644,8 +659,7 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                         <AGGrid ref="grid"
                                 flux={flux}
-                                keyField="col_num"
-                                uniqueIdentifier="col_num"
+                                primaryKeyName="col_num"
                                 onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={testData.data.records}

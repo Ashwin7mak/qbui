@@ -11,8 +11,10 @@ import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
-import {browserHistory} from 'react-router';
 import _ from 'lodash';
+import AppHistory from '../../globals/appHistory';
+
+import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
 
 import './recordTrowser.scss';
 
@@ -74,7 +76,7 @@ let RecordTrowser = React.createClass({
 
         if (this.props.reportData && this.props.reportData.navigateAfterSave) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`/app/${appId}/table/${tblId}/record/${recId}`);
+            this.props.router.push(`/qbase/app/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
@@ -168,7 +170,15 @@ let RecordTrowser = React.createClass({
     handleRecordChange() {
         const flux = this.getFlux();
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields);
+        let colList = [];
+        // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
+        // with the right column list from the server
+        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+            this.props.reportData.data.fields.forEach((field) => {
+                colList.push(field.id);
+            });
+        }
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields, colList);
     },
 
     /**
@@ -178,7 +188,15 @@ let RecordTrowser = React.createClass({
      */
     handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields);
+        let colList = [];
+        // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
+        // with the right column list from the server
+        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+            this.props.reportData.data.fields.forEach((field) => {
+                colList.push(field.id);
+            });
+        }
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields, colList);
     },
 
     /**
@@ -189,7 +207,6 @@ let RecordTrowser = React.createClass({
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
         flux.actions.editPreviousRecord(previousEditRecordId);
 
         flux.actions.openRecordForEdit(previousEditRecordId);
@@ -203,7 +220,6 @@ let RecordTrowser = React.createClass({
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
         flux.actions.editNextRecord(nextEditRecordId);
 
         flux.actions.openRecordForEdit(nextEditRecordId);
@@ -216,9 +232,14 @@ let RecordTrowser = React.createClass({
 
         const showBack = !!(this.props.reportData && this.props.reportData.previousEditRecordId !== null);
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
+            <span>{recordName} #{this.props.recId}</span>;
+
 
         return (
-            <h4>
+            <div className="breadcrumbsContent">
                 {(showBack || showNext) &&
                 <div className="iconActions">
                     <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev"><I18nMessage message="nav.previousRecord"/></Tooltip>}>
@@ -228,8 +249,8 @@ let RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""}
-            </h4>);
+                <TableIcon classes="primaryIcon" icon={table ? table.icon : ""}/>{title}
+            </div>);
 
     },
     getTrowserRightIcons() {
@@ -247,10 +268,10 @@ let RecordTrowser = React.createClass({
                 {showNext &&
                     <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
                 {this.props.recId === null &&
-                    <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
                 }
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 
@@ -261,12 +282,29 @@ let RecordTrowser = React.createClass({
         flux.actions.hideTrowser();
     },
 
-    cancelEditing() {
+    saveAndClose() {
+        HideAppModal();
+        this.saveClicked();
+    },
+
+    clearEditsAndClose() {
         const flux = this.getFlux();
+
+        HideAppModal();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
-
         flux.actions.hideTrowser();
+    },
+
+    cancelEditing() {
+        const flux = this.getFlux();
+
+        if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
+            AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
+        } else {
+            // Clean up before exiting the trowser
+            this.clearEditsAndClose();
+        }
     },
     toggleErrorDialog() {
         if (this.props.errorPopupHidden) {
@@ -287,8 +325,9 @@ let RecordTrowser = React.createClass({
      * trowser to wrap report manager
      */
     render() {
+        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
         return (
-            <Trowser className="recordTrowser"
+            <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      centerActions={this.getTrowserActions()}

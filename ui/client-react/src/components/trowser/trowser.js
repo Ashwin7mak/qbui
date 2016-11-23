@@ -76,11 +76,10 @@ let Trowser = React.createClass({
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>
                 <div className={"trowserContent"}>
                     <div className={"trowserHeader"}>
-                        <div className={"breadcrumbs"}>
+                        <div className={"breadcrumbs h4"}>
                             {this.props.breadcrumbs}
                         </div>
                         <div className={"rightIcons"}>
-                            <Button><QBicon icon={"help"}/></Button>
                             <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
                         </div>
                     </div>

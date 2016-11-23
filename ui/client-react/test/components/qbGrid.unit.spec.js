@@ -77,7 +77,7 @@ describe('QbGrid functions', () => {
 
     let flux = {
         actions: {
-            getFilteredRecords: ()=>{},
+            loadDynamicReport: ()=>{},
             selectedRows: ()=>{},
             rowClicked: ()=>{},
             mark: ()=>{},
@@ -87,14 +87,14 @@ describe('QbGrid functions', () => {
 
     beforeEach(() => {
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
-        spyOn(flux.actions, 'getFilteredRecords');
+        spyOn(flux.actions, 'loadDynamicReport');
         spyOn(flux.actions, 'rowClicked');
 
     });
 
     afterEach(() => {
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
-        flux.actions.getFilteredRecords.calls.reset();
+        flux.actions.loadDynamicReport.calls.reset();
         flux.actions.rowClicked.calls.reset();
     });
 
@@ -127,8 +127,7 @@ describe('QbGrid functions', () => {
                                 records={this.state.records}
                                 columns={this.state.columns}
                                 onRowClick={()=>{didRowClick = true;}}
-                                uniqueIdentifier="Record ID#"
-                                keyField="Record ID#"
+                                primaryKeyName="Record ID#"
                                 sortFids={[1]}
                                 flux={flux}/>;
                     </div>);
@@ -182,8 +181,7 @@ describe('QbGrid functions', () => {
                                 actions={TableActionsMock}
                                 records={this.state.records}
                                 columns={this.state.columns}
-                                uniqueIdentifier="Record ID#"
-                                keyField="Record ID#"
+                                primaryKeyName="Record ID#"
                                 onEditRecordStart={()=>{}}
                                 flux={flux} />;
                     </div>);

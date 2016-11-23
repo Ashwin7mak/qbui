@@ -109,11 +109,20 @@ describe('Apps Actions getApps -- ', () => {
     class mockAppService {
         constructor() { }
         getApps() {
-            return Promise.resolve(null);
+            return Promise.reject(null);
         }
         getApp(id) {
-            return Promise.resolve(null);
+            return Promise.reject(null);
         }
+    }
+
+    class mockLogger {
+        constructor() {}
+        logException() {}
+        debug() {}
+        warn() {}
+        error() {}
+        parseAndLogError() {}
     }
 
     let stores = {};
@@ -124,11 +133,14 @@ describe('Apps Actions getApps -- ', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
+        spyOn(mockLogger.prototype, 'logException').and.callThrough();
         appsActions.__Rewire__('AppService', mockAppService);
+        appsActions.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
         appsActions.__ResetDependency__('AppService');
+        appsActions.__ResetDependency__('Logger');
     });
 
     it('test exception handling', (done) => {
@@ -140,9 +152,9 @@ describe('Apps Actions getApps -- ', () => {
             () => {
                 expect(mockAppService.prototype.getApps).toHaveBeenCalled();
                 expect(mockAppService.prototype.getApp).not.toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED, exStatus]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );
@@ -158,8 +170,17 @@ describe('Apps Actions getApp -- ', () => {
             return Promise.resolve({data: responseData});
         }
         getApp(id) {
-            return Promise.resolve(null);
+            return Promise.reject(null);
         }
+    }
+
+    class mockLogger {
+        constructor() {}
+        logException() {}
+        debug() {}
+        warn() {}
+        error() {}
+        parseAndLogError() {}
     }
 
     let stores = {};
@@ -170,11 +191,14 @@ describe('Apps Actions getApp -- ', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
+        spyOn(mockLogger.prototype, 'logException').and.callThrough();
         appsActions.__Rewire__('AppService', mockAppService);
+        appsActions.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
         appsActions.__ResetDependency__('AppService');
+        appsActions.__ResetDependency__('Logger');
     });
 
     it('test exception handling', (done) => {
@@ -186,9 +210,9 @@ describe('Apps Actions getApp -- ', () => {
             () => {
                 expect(mockAppService.prototype.getApps).toHaveBeenCalled();
                 expect(mockAppService.prototype.getApp).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED, exStatus]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );

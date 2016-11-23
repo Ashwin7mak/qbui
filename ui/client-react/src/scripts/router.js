@@ -1,7 +1,8 @@
 //these two imports are needed for safari and iOS to work with internationalization
 import React from "react";
 import ReactDOM, {render} from "react-dom";
-import {Router, Route, IndexRoute, browserHistory} from "react-router";
+import {Router, Route, IndexRoute} from "react-router";
+import AppHistory from '../globals/appHistory';
 import Nav from "../components/nav/nav";
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";
@@ -34,7 +35,7 @@ import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
-import FastClick from "fastclick";
+import "react-fastclick";
 
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
@@ -102,8 +103,6 @@ let NavWrapper = React.createClass({
     },
 
     componentDidMount() {
-        FastClick.attach(document.body);
-
         // listen for resizes (nicely) in case we need to re-render for a new breakpoint
         window.addEventListener('resize', this.handleResize);
 
@@ -169,21 +168,22 @@ let Apps = React.createClass({
     }
 });
 
-render((
-    <Router history={browserHistory}>
-        <Route path="/" component={Apps} />
+let history = AppHistory.setup(flux).history;
 
-        <Route path="apps" component={NavWrapper} >
+render((
+    <Router history={history}>
+        <Route path="/qbase/" component={Apps} />
+
+        <Route path="/qbase/apps" component={NavWrapper} >
             <IndexRoute component={AppsRoute} />
         </Route>
 
-        <Route path="app/:appId" component={NavWrapper} >
+        <Route path="/qbase/app/:appId" component={NavWrapper} >
             <IndexRoute component={AppHomePageRoute} />
             <Route path="table/:tblId" component={TableHomePageRoute} />
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
             <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
             <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
-
         </Route>
 
     </Router>

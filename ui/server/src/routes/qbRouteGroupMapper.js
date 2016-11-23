@@ -14,16 +14,27 @@
      * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination
      */
     var routeGroupDisabled = {};
+    //  debug
     routeGroupDisabled[routeGroups.DEBUG] = [
         {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}];
+
+    //  mercury v1
     routeGroupDisabled[routeGroups.LH_V1] = [
         {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        // form endpoints
         {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.REPORT_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.FORM_AND_RECORD_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        // report endpoints
         {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.REPORT_INVOKE_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.REPORT_META, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.REPORT_RECORDS_COUNT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.TABLE_HOMEPAGE_REPORT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        // record endpoints
         {route: routeConsts.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
         {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
         {route: routeConsts.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
+        // swagger endpoints
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},

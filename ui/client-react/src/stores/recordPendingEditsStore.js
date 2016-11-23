@@ -3,14 +3,15 @@ import Fluxxor from "fluxxor";
 import _ from 'lodash';
 import Logger from '../utils/logger';
 import ValidationUtils from '../../../common/src/validationUtils';
-import ValidationMessage from "../utils/validationMessage";
-
+import ValidationMessage from '../utils/validationMessage';
+import Constants from '../../../common/src/constants';
 var logger = new Logger();
+
+const [DTS_ERR0R_CODE, DTS_ERROR_MESSAGES_CODE] = [Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, Constants.ERROR_CODE.DTS_ERROR_CODE];
 
 /**
    RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
  **/
-
 
 let RecordPendingEditsStore = Fluxxor.createStore({
 
@@ -25,8 +26,11 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
+            actions.DELETE_RECORD_FAILED, this.deleteRecordFailed,
+            actions.DELETE_RECORD_BULK_FAILED, this.deleteRecordBulkFailed,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_RECORD_FAILED, this.onAddRecordFailed
+            actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
+            actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
         this._initData();
         this.commitChanges = [];
@@ -41,15 +45,19 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     _initData() {
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordEditOpen = undefined;
         this.currentEditingRecordId = null;
         this.currentEditingAppId = null;
         this.currentEditingTableId = null;
         this.originalRecord = null;
         this.recordChanges = {};
+        this.showDTSErrorModal = false;
+        this.dtsErrorModalTID = "No Transaction ID Available";
         this.editErrors = {
             ok: true,
             errors:[]
         };
+        this.saving = false;
     },
 
     /**
@@ -73,7 +81,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.currentEditingRecordId = undefined;
             this.currentEditingAppId = undefined;
             this.currentEditingTableId = undefined;
-            this.recordChanges = {};
+            this.recordChanges = payload.changes ? _.cloneDeep(payload.changes) : {};
             this.originalRecord = undefined;
         }
         //TODO when a record gets into edit state it might already have errors so this should be populated with those
@@ -81,8 +89,83 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.isInlineEditOpen = true;
+        this.recordEditOpen = true;
+
+        if (payload.isInlineEdit) {
+            this.isInlineEditOpen = true;
+        }
+
         this.emit('change');
+    },
+
+    /**
+     * Checks if a field actually has changes (i.e., prevents change detection if a user picks the same item from a
+     * dropdown as they had originally selected)
+     * @param payload
+     * @returns {boolean}
+     */
+    _hasChanges(payload) {
+        if (_.has(payload, 'changes.values') && _.has(this.originalRecord, 'fids')) {
+            return (
+                // If the new and previous values are the same, but different from the original, then the change
+                // has already been registered by pendEdits. Therefore, we check to make sure the change is different
+                // from both the previous value AND the original value.
+                this._isDifferentThanOriginalFieldValue(payload) && this._isDifferentThanPreviousValue(payload)
+            );
+        }
+
+        // Assume there was a change if not all required properties are present.
+        // This is primarily for testing purposes.
+        return true;
+    },
+
+    /**
+     * Checks if the newest value is different than the previous one
+     * @param payload
+     * @returns {boolean}
+     * @private
+     */
+    _isDifferentThanPreviousValue(payload) {
+        let {newVal, oldVal} = payload.changes.values;
+        // Some components modify display values and some modify the underlying value so we check for both
+        return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
+    },
+
+    /**
+     * Checks if the newest value is different than the original record
+     * @param payload
+     * @returns {boolean}
+     * @private
+     */
+    _isDifferentThanOriginalFieldValue(payload) {
+        let {newVal} = payload.changes.values;
+        let originalRecord = this.originalRecord.fids[payload.changes.fid];
+        let originalRecordValue = null;
+        let originalRecordDisplay = null;
+        if (originalRecord) {
+            originalRecordValue = originalRecord.value;
+            originalRecordDisplay = originalRecord.display;
+        }
+        return (newVal.value !== originalRecordValue || newVal.display !== originalRecordDisplay);
+    },
+
+    /**
+     * If there were previously changes, but user put the values back to the original
+     * then we need to remove those from pendingEdits.
+     * @param payload
+     * @private
+     */
+    _removePriorChangesIfTheyExist(payload) {
+        if (this.recordChanges && this.recordChanges[payload.changes.fid] && !this._isDifferentThanOriginalFieldValue(payload)) {
+            delete this.recordChanges[payload.changes.fid];
+
+            // If there are no remaining changes, then the record is not pending edits anymore
+            if (Object.keys(this.recordChanges).length === 0) {
+                this.isPendingEdit = false;
+            }
+
+            this.emit('change');
+        }
     },
 
     /**
@@ -98,16 +181,21 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
             this.recordChanges[payload.changes.fid] = {};
         }
-        this.recordChanges =  _.cloneDeep(this.recordChanges);
-        this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
-        this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
-        this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
-        this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
-        this.currentEditingAppId = payload.appId;
-        this.currentEditingTableId = payload.tblId;
-        this.currentEditingRecordId = payload.recId;
-        this.isPendingEdit = true;
-        this.emit('change');
+
+        if (this._hasChanges(payload)) {
+            this.recordChanges =  _.cloneDeep(this.recordChanges);
+            this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
+            this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
+            this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
+            this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
+            this.currentEditingAppId = payload.appId;
+            this.currentEditingTableId = payload.tblId;
+            this.currentEditingRecordId = payload.recId;
+            this.isPendingEdit = true;
+            this.emit('change');
+        } else {
+            this._removePriorChangesIfTheyExist(payload);
+        }
     },
 
     /**
@@ -137,7 +225,11 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     onRecordEditCancel() {
         // record wasn't saved nothing pending
-        this.isInlineEditOpen = false;
+
+        if (this.isInlineEditOpen) {
+            this.isInlineEditOpen = false;
+        }
+        this.recordEditOpen = false;
         this._initData();
         this.emit('change');
     },
@@ -178,6 +270,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let changes = payload.changes;
         logger.debug('saving changes: ' + JSON.stringify(payload));
+        this.saving = true;
+        this.emit('change');
     },
 
     /**
@@ -193,18 +287,29 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordEditOpen = false;
         this.recordChanges = {};
-        this.emit('change');
-
-    },
-
-    getServerErrs(payload) {
-        // init no errors
         this.editErrors = {
             ok: true,
             errors:[]
         };
+        this.saving = false;
+        this.emit('change');
 
+    },
+    handleErrors(payload) {
+        this.getServerErrs(payload);
+        if (payload.error) {
+            if (payload.error.statusCode === DTS_ERR0R_CODE && payload.error.errorMessages[0].code === DTS_ERROR_MESSAGES_CODE) {
+                this.onDTSErrorModal(payload);
+            }
+        }
+    },
+    getServerErrs(payload) {
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
         // get errors from payload if not ok
         if (_.has(payload, 'error.data.response.errors') && payload.error.data.response.errors.length !== 0) {
             this.editErrors.errors = payload.error.data.response.errors;
@@ -214,6 +319,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
                 fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
             });
         }
+    },
+    onDTSErrorModal(payload) {
+        this.dtsErrorModalTID = payload.error ? payload.error.tid : this.dtsErrorModalTID;
+        this.showDTSErrorModal = true;
     },
 
     /**
@@ -227,8 +336,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
         }
-        this.getServerErrs(payload);
-        this.isInlineEditOpen = true;
+        this.handleErrors(payload);
+        this.recordEditOpen = true;
+        this.saving = false;
         this.emit('change');
     },
 
@@ -241,14 +351,16 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingAppId = payload.appId;
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
-        this.recordChanges = payload.record;
+        this.recordChanges = payload.changes;
+        this.saving = true;
         logger.debug('saving added record: ' + JSON.stringify(payload));
+        this.emit('change');
     },
 
     /**
      * On successful save of pending changes for a new record
      * notes the committed success and sets pendingEdits to false
-     * @param payload - the recid
+     * @param payload - the recId
      */
     onAddRecordSuccess(payload) {
         this.currentEditingRecordId = payload.recId;
@@ -264,10 +376,18 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry].status = actions.ADD_RECORD_SUCCESS;
         }
         this.isPendingEdit = false;
-        this.isInlineEditOpen = false;
-        this.recordChanges = {};
-        this.emit('change');
 
+        if (this.isInlineEditOpen) {
+            this.isInlineEditOpen = false;
+        }
+        this.recordEditOpen = false;
+        this.recordChanges = {};
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
+        this.saving = false;
+        this.emit('change');
     },
 
     /**
@@ -285,11 +405,20 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
         }
-        this.getServerErrs(payload);
 
+        this.handleErrors(payload);
+        this.saving = false;
         this.emit('change');
     },
 
+    deleteRecordFailed(payload) {
+        this.handleErrors(payload);
+        this.emit('change');
+    },
+    deleteRecordBulkFailed(payload) {
+        this.handleErrors(payload);
+        this.emit('change');
+    },
     /**
      * create a key for pending edit commitChanges map from the current context
      * of app/table/record
@@ -309,13 +438,17 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         return {
             isPendingEdit : this.isPendingEdit,
             isInlineEditOpen : this.isInlineEditOpen,
+            recordEditOpen : this.recordEditOpen,
             currentEditingAppId : this.currentEditingAppId,
             currentEditingTableId : this.currentEditingTableId,
             currentEditingRecordId : this.currentEditingRecordId,
             originalRecord : this.originalRecord,
             recordChanges : this.recordChanges,
             commitChanges : this.commitChanges,
-            editErrors: this.editErrors
+            editErrors: this.editErrors,
+            showDTSErrorModal: this.showDTSErrorModal,
+            dtsErrorModalTID: this.dtsErrorModalTID,
+            saving: this.saving
         };
     },
 });

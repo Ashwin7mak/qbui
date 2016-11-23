@@ -7,6 +7,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import Locale from '../locales/locales';
+import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
@@ -26,10 +27,16 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let recordActions = {
 
     /**
-     * save a new record
+     * Action to save a new record. On successful save get a copy of the newly created record from server.
+     * @param appId
+     * @param tblId
+     * @param recordChanges
+     * @param fields
+     * @param colList - optional list of fids to query for getRecord call.
+     * @param showNotificationOnSuccess - true to show success notification.
      */
-    saveNewRecord(appId, tblId, recordChanges, fields) {
-        function getRecord(_recordChanges, _fields) {
+    saveNewRecord(appId, tblId, recordChanges, fields, colList = [], showNotificationOnSuccess = false) {
+        function formatRecordChanges(_recordChanges) {
             //save changes in record
             let payload = [];
             // columns id and new values array
@@ -56,16 +63,13 @@ let recordActions = {
             }
             return payload;
         }
-            // promise is returned in support of unit testing only
+        // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            let record = getRecord(recordChanges, fields);
+            let record = formatRecordChanges(recordChanges);
 
-            // map the record array to an object with fids as keys since that's the recordChanges object format
-            let changes = record.reduce((obj, val) => {obj[val.id] = val; return obj;}, {});
+            if (appId && tblId && record) {
 
-            if (appId && tblId && record.length) {
-
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
 
                 let recordService = new RecordService();
 
@@ -75,27 +79,70 @@ let recordActions = {
                         logger.debug('RecordService createRecord success:' + JSON.stringify(response));
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
-                            this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
-                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
-                            resolve(resJson.id);
+                            if (resJson.id) {
+                                //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
+                                let clist = colList ? colList : [];
+                                if (!clist.length && fields) {
+                                    fields.forEach((field) => {
+                                        clist.push(field.id);
+                                    });
+                                }
+                                clist = clist.join('.');
+                                this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
+                                recordService.getRecord(appId, tblId, resJson.id, clist).then(
+                                    getResponse => {
+                                        logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                        this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
+
+                                        if (!showNotificationOnSuccess) {
+                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                        }
+                                        resolve(resJson.id);
+                                    },
+                                    getError => {
+                                        logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                        // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
+                                        this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+                                        reject();
+                                    }
+                                );
+                            }
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                            if (error.response.status === 403) {
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                            }
+                            if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                                const {status} = error.response.data.response;
+                                if (status !== 422) {
+                                    // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                                }
+                            }
                             reject();
                         }
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
-                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                        }
+                        if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                            const {status} = error.response.data.response;
+                            if (status !== 422) {
+                                // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                            }
+                        }
                         reject();
                     }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
-                        appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
+                    appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
                 logger.error(errMessage);
                 this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
                 reject();
@@ -123,14 +170,14 @@ let recordActions = {
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error.response});
+                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
                         NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
                     ex => {
+                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: ex});
                         reject();
                     }
                 );
@@ -165,15 +212,15 @@ let recordActions = {
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
-                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error.response});
+                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
                         NotificationManager.error(message, Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
                     ex => {
+                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: ex});
                         reject();
                     }
                 );
@@ -187,11 +234,17 @@ let recordActions = {
         });
     },
 
-    /* the start of editing a record */
     /**
-     * save a record
+     * Save changes to an existing record. On successful save get a copy of updated record from server.
+     * @param appId
+     * @param tblId
+     * @param recId
+     * @param pendEdits
+     * @param fields
+     * @param colList - optional list of fids to query for getRecord call.
+     * @param showNotificationOnSuccess - true to show success notification.
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -269,21 +322,36 @@ let recordActions = {
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
-                        this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
-                        resolve();
+                        let clist = colList ? colList : [];
+                        if (!clist.length && fields) {
+                            fields.forEach((field) => {
+                                clist.push(field.id);
+                            });
+                        }
+                        clist = clist.join('.');
+                        this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
+                        recordService.getRecord(appId, tblId, recId, clist).then(
+                            getResponse => {
+                                logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
+                                if (!showNotificationOnSuccess) {
+                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                                }
+                                resolve(recId);
+                            },
+                            getError => {
+                                logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
+                                this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+                                reject();
+                            }
+                        );
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
-                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error.response});
+                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
-                        reject();
-                    }
-                ).catch(
-                    ex => {
-                        logger.logException(ex);
-                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
                         reject();
                     }
                 );
@@ -299,3 +367,4 @@ let recordActions = {
 };
 
 export default recordActions;
+

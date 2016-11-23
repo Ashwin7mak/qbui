@@ -9,7 +9,44 @@ export default {
         apps: {
             header: "Apps"
         },
-        reports : {
+        app: {
+            homepage: {
+                welcomeTitle: "Welcome to Mercury Beta",
+                welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
+                "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
+                "data is here. Work you do here displays immediately in Classic view, too.",
+                launchVideoLink: "Launch video tour (2:58)",
+                guideMeLink: "Guide me through Mercury",
+                guideTitle: "Welcome guide",
+                guideText: "Learn all about the Mercury Beta program. See what features are currently available and how your team can get work done faster, across devices, using Mercury.",
+                guideButton: "Download the Welcome guide",
+                feedbackTitle: "We want your feedback",
+                feedbackText: "Our team is waiting to hear from you! We’re so eager to hear what you think about Mercury that we’ve included a Feedback button on each page of your app.",
+                feedbackButton: "Give feedback",
+                tipTitle: "Nothing happened when I clicked...",
+                tipText: "This is work in progress, so if you click a button and it doesn’t do anything, no worries. We’re still working on that feature.",
+                helpTitle: "Need help?",
+                helpText: "We want you to be successful; that’s why we’re always here to help.",
+                helpLinkPreText: "Please ",
+                helpLinkText: "contact our Care team",
+                missingWalkMe: "Tutorial is not available."
+            }
+        },
+        pendingEditModal: {
+            modalBodyMessage: "Save changes before leaving?",
+            modalStayButton: "Stay and keep working",
+            modalDoNotSaveButton: "Don't Save",
+            modalSaveButton: "Save"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Sorry to interrupt your work",
+            dtsErrorBodyMessage: "Mercury can’t continue running your app today, but will resume tomorrow.",
+            dtsErrorSecondErrorBodyMessage: "Your app is still available in QuickBase Classic.",
+            dtsErrorTID: "Transaction ID:",
+            dtsErrorPrimaryButtonText: "Open my app in Classic"
+        },
+        reports: {
+            allReports: "All Reports",
             emailReportTooltip: "Share these records with someone else",
             emailSubject: "'{reportName}' report from the QuickBase app '{appName}'",
             emailBody: "Here's the '{reportName}' report from the table '{tableName}' in '{appName}'"
@@ -24,6 +61,8 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            dontDelete: "Don't delete",
+            deleteThisRecord: "Delete this record?",
             more: "More...",
             placeholder: "Select...",
             notFound: "Not Found"
@@ -47,7 +86,8 @@ export default {
             previousRecord: "Previous Record",
             save: "Save",
             saveAndNext: "Save & Next",
-            saveAndAddAnother: "Save & add another"
+            saveAndAddAnother: "Save & Add Another",
+            new: "New"
         },
         field: {
             search: "Search",
@@ -89,7 +129,11 @@ export default {
             recordNotSaved :"Record not saved",
             deleted : "deleted",
             notDeleted : "not deleted",
-            cannotLoad : "Cannot load record"
+            cannotLoad : "Cannot load record",
+            error: {
+                403: "You are not authorized to create or access this record",
+                500: "Unexpected error rendering this record"
+            }
         },
         header: {
             menu: {
@@ -117,6 +161,11 @@ export default {
                 403: "You are not authorized to access this form",
                 500: "Unexpected error rendering this form"
             },
+            footer: {
+                lastUpdatedBy: "Last updated by ",
+                createdOn: "Created on ",
+                ownedBy: "Owned by "
+            }
         },
         report : {
             blank : "blank",
@@ -197,7 +246,7 @@ export default {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Please fix this field",
                 multipleErrorLabelPrefix: "Please fix these",
-                multipleErrorLabelSuffix: "fileds",
+                multipleErrorLabelSuffix: "fields",
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Show error list",
@@ -295,6 +344,34 @@ export default {
             url: 'www.example.com'
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
+        errors: {
+            appNotFound: {
+                notFound: "The app is not available in Mercury right now. ",
+                inQuickBaseClassic: " in QuickBase Classic. ",
+                clickHere: "Open the app "
+            },
+            noApps: {
+                noApps: "There are no apps in Mercury. ",
+                addApps: " to add apps."
+            },
+            errorLoadingReport: {
+                message: "That report is not available",
+                helpText: "For now, you can try selecting a different report.",
+                contactSupport: "Let our team know so we can fix it",
+                supportTeamInfo: "Some information for the support team:",
+                playGraphic: "Show me how",
+                stopGraphic: "Stop playing",
+                showAdditionalInfo: "View details",
+                hideAdditionalInfo: "Hide details"
+            },
+            noTables: {
+                noTables: "There are no tables in the app. ",
+                createTablesInQuickBaseClassic: "Create tables in "
+            },
+            supportLink: {
+                text: "Contact our Care team"
+            }
+        },
         invalidMsg : {
             unknown: 'Invalid unknown type. Results: ',
             required: 'Fill in the {fieldName}',
@@ -302,6 +379,24 @@ export default {
             maxChars: 'Use up to {maxNum} characters',
             choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },
-        noneOption: "\<None\>"
+        createInQuickBaseClassicMessage: {
+        },
+        noneOption: "\<None\>",
+        unimplemented: {
+            search: "Searching is not available yet",
+            favorites: "Accessing favorites is not available yet",
+            makeFavorite: "Marking as a favorite is not available yet",
+            print: "Printing is not available yet",
+            copy: "Copying is not available yet",
+            email: "Emailing is not available yet",
+            delete: "Deleting is not available yet"
+        },
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Edit Record #{recordId}",
+            newRecord: "Add Record",
+            viewRecord: "View Record #{recordId}"
+        },
+        quickBaseClassic: "QuickBase Classic"
     }
 };

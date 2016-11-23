@@ -38,13 +38,6 @@ html body {
 
 }
 
-body.touch {
-
-    .tooltip {
-        display: none !important;
-    }
-}
-
 #content {
     height: 100%;
 }
@@ -115,12 +108,13 @@ body.touch {
                     padding:0;
                     height: $top-nav-height;
                     text-align:center;
-                    &.dropdownToggle {
-                        width:20px;
-                    }
                 }
-                button:hover .hi {
+                button:not(.disabled):hover .hi {
                     color: #fff;
+                }
+
+                button.disabled {
+                    opacity: .65;
                 }
             }
 
@@ -136,6 +130,7 @@ body.touch {
 
         .mainContent {
             display: flex;
+            flex-direction: column;
             order: 2;
             flex: 1 1 auto;
             min-width: 0;
@@ -145,6 +140,7 @@ body.touch {
             transform: translate3d(0,0,0);
             //min-height is required in order for the scrollbar to work in firefox
             min-height: 0;
+            overflow: auto;
         }
 
         .footer {

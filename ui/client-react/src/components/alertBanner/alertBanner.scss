@@ -1,0 +1,49 @@
+@import '../../assets/css/_qbVariables.scss';
+
+$error-background-color: $color-black-100;
+
+.alertBanner {
+    border: 1px solid $error-color;
+    background-color: $error-background-color;
+    border-radius: 2px;
+    color: $error-color;
+    margin: 5px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+
+    .mainText, .qbIcon {
+        font-size: $font-size-h4;
+    }
+
+    .mainText {
+        display: inline-block;
+        margin-bottom: 0;
+        margin-left: 20px;
+    }
+
+    // Animations for showing message
+    &-enter {
+        opacity: 0;
+        max-height: 0;
+    }
+
+    &-enter.alertBanner-enter-active {
+        opacity: 1;
+        max-height: 800px;
+
+        transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
+    }
+
+    &-leave {
+        opacity: 1;
+        max-height: 800px;
+    }
+
+    &-leave.alertBanner-leave-active {
+        opacity: 0;
+        max-height: 0;
+
+        transition: opacity 0.5s ease-in 0.7s, max-height 0.5s linear;
+    }
+}

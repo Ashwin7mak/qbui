@@ -42,9 +42,9 @@
         RECORDS                     : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         RECORDS_BULK                : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',
 
-        REPORT                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId',
-        REPORT_COMPONENTS           : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
+        REPORT_META                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId',
         REPORT_RESULTS              : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        REPORT_INVOKE_RESULTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
 

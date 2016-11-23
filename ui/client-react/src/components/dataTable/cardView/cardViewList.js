@@ -16,7 +16,8 @@ let CardViewList = React.createClass({
         onRowSelected: React.PropTypes.func,
         onRowClicked: React.PropTypes.func,
         isRowSelected: React.PropTypes.func,
-        onSwipe: React.PropTypes.func
+        onSwipe: React.PropTypes.func,
+        columns: React.PropTypes.array
     },
 
     getInitialState() {
@@ -31,7 +32,7 @@ let CardViewList = React.createClass({
      */
     onEditRecord(data) {
 
-        this.props.onEditRecord(data[this.props.uniqueIdentifier].value);
+        this.props.onEditRecord(data[this.props.primaryKeyName].value);
     },
 
     getRows() {
@@ -47,7 +48,8 @@ let CardViewList = React.createClass({
                                      groupId={groupId}
                                      groupLevel={groupLevel}
                                      node={node}
-                                     uniqueIdentifier={this.props.uniqueIdentifier}
+                                     columns={this.props.columns}
+                                     primaryKeyName={this.props.primaryKeyName}
                                      allowCardSelection={this.props.allowCardSelection}
                                      onToggleCardSelection={this.props.onToggleCardSelection}
                                      onRowSelected={this.props.onRowSelected}
@@ -60,6 +62,7 @@ let CardViewList = React.createClass({
 
         let className = "cardViewList group-level-" + this.props.groupLevel;
         let groupIcon = this.state.open ? "caret-filled-down" : "caret-filled-right";
+
         return (
             <div>
                 {this.props.node.group || this.props.node.children && this.props.node.children.length ?
@@ -75,10 +78,11 @@ let CardViewList = React.createClass({
                             </div>
                         </Collapse>
                     </div> :
-                    <CardView key={this.props.node[this.props.uniqueIdentifier]}
-                              rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
+                    <CardView key={this.props.node[this.props.primaryKeyName]}
+                              rowId={this.props.node[this.props.primaryKeyName] ? this.props.node[this.props.primaryKeyName].value : null}
                               data={this.props.node}
-                              uniqueIdentifier={this.props.uniqueIdentifier}
+                              columns={this.props.columns}
+                              primaryKeyName={this.props.primaryKeyName}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}
                               onRowSelected={this.props.onRowSelected}

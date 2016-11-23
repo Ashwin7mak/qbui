@@ -6,6 +6,10 @@ import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import FieldUtils from '../../../utils/fieldUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
+import Loader  from 'react-loader';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+
+import _ from 'lodash';
 
 /**
  * editing tools for the currently edited row
@@ -21,26 +25,14 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         //get the current record id
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
         this.props.params.context.onRecordSaveClicked(id);
         this.props.api.deselectAll();
     },
 
-    /**
-     * delete icon is not included but may come back shortly
-     */
-    onClickDelete() {
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
-        this.props.api.deselectAll();
-
-        this.props.flux.actions.deleteRecord(id);
-        setTimeout(()=> {
-            NotificationManager.info('Record deleted', 'Deleted', 1500);
-        }, 1000);
-    },
     onClickCancel() {
         //get the original unchanged values in data to rerender
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
 
         if (this.props.params.node) {
             //ag-grid
@@ -54,13 +46,41 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         //get the current record id
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
         this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },
 
-    render() {
+    renderSaveRecordButton(validRow, saving) {
         let errorMessage = "editErrors";
+
+        let saveButton;
+        if (validRow) {
+            saveButton = (
+                <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
+                    <Button className="rowEditActionsSave" onClick={this.onClickSave}>
+                        <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
+                            <QBIcon icon="check" className="saveRecord"/>
+                        </Loader>
+                    </Button>
+                </QBToolTip>
+            );
+        } else {
+            saveButton = (
+                <QBToolTip location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
+                    <Button>
+                        <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
+                            <QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/>
+                        </Loader>
+                    </Button>
+                </QBToolTip>
+            );
+        }
+
+        return saveButton;
+    },
+
+    render() {
         let validRow = true;
         if (this.props &&
             _.has(this.props, 'params') &&
@@ -69,31 +89,35 @@ const RowEditActions = React.createClass({
             !_.isUndefined(this.props.params.context.rowEditErrors.ok)) {
             validRow = this.props.params.context.rowEditErrors.ok;
         }
+
+
+        // Get the saving state from the flux store here so that the entire AG Grid does not need to reload
+        let saving = false;
+        if (this.props.flux && this.props.flux.store) {
+            let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
+            if (recordPendingEdits) {
+                saving = recordPendingEdits.saving;
+            }
+        }
+
         let addRecordClass = 'addRecord';
-        if (!validRow) {
+        if (!validRow || saving) {
             addRecordClass += ' disabled';
         }
 
         return (
-            <span className="editTools">
+            <div className="editTools">
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
+                    <Button className="rowEditActionsCancel" onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
 
-                {validRow ?
-                    <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
-                        <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                    </QBToolTip> :
+                {this.renderSaveRecordButton(validRow, saving)}
 
-                    <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
-                        <Button><QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/></Button>
-                    </QBToolTip>
-                }
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                  <Button onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
+                    <Button className="rowEditActionsSaveAndAdd" onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
                 </QBToolTip>
-
-            </span>);
+            </div>
+        );
     }
 });
 

@@ -6,7 +6,44 @@ export default {
         apps: {
             header: "Vos Apps"
         },
-        reports : {
+        app: {
+            homepage: {
+                welcomeTitle: "Bienvenue sur Mercury Beta",
+                welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
+                "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
+                "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
+                launchVideoLink: "Lancez une tournée vidéo (2:58)",
+                guideMeLink: "Guide-moi par Mercury",
+                guideTitle: "Guide d'accueil",
+                guideText: "Apprenez tout sur le programme Mercury Beta. Voyez quelles fonctionnalités sont actuellement disponibles et comment votre équipe peut obtenir le travail plus rapidement, à travers les périphériques, en utilisant Mercury.",
+                guideButton: "Télécharger le guide d'accueil",
+                feedbackTitle: "Nous souhaitons recevoir vos commentaires",
+                feedbackText: "Notre équipe attend vos nouvelles! Nous sommes tellement désireux d'entendre ce que vous pensez de Mercury que nous avons inclus un bouton de commentaires sur chaque page de votre application.",
+                feedbackButton: "Donnez votre avis",
+                tipTitle: "Rien ne s'est passé quand j'ai cliqué...",
+                tipText: "Il s'agit de travaux en cours, donc si vous cliquez sur un bouton et il ne fait rien, pas de soucis. Nous travaillons encore sur cette fonctionnalité.",
+                helpTitle: "Besoin d'aide?",
+                helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
+                helpLinkPreText: "Veuillez ",
+                helpLinkText: "contacter notre équipe de soins",
+                missingWalkMe: "Le didacticiel n'est pas disponible"
+            }
+        },
+        pendingEditModal: {
+            modalBodyMessage: "Enregistrer les modifications avant de quitte?",
+            modalStayButton: "Restez et continuer à travailler",
+            modalDoNotSaveButton: "Ne pas enregistrer",
+            modalSaveButton: "Sauvegarder"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Désolé d'interrompre votre travail",
+            dtsErrorBodyMessage: "Mercury ne peut pas continuer à exécuter votre application aujourd'hui, mais reprendra demain. ",
+            dtsErrorSecondErrorBodyMessage: "Votre application est toujours disponible dans QuickBase Classic.",
+            dtsErrorTID: "Identifiant de transaction:",
+            dtsErrorPrimaryButtonText: "Ouvrez mon application en Classique"
+        },
+        reports: {
+            allReports: "Tous les Rapports",
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
             emailBody: "Voici le rapport de la '{reportName}' '{tableName}' de table dans '{appName}'"
@@ -21,6 +58,8 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            dontDelete: "Ne pas supprimer",
+            deleteThisRecord: "Supprimer cet enregistrement?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
@@ -44,7 +83,8 @@ export default {
             previousRecord: "Previous enregistrement",
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
-            saveAndAddAnother: "Sauver et ajouter un autre"
+            saveAndAddAnother: "Sauver et ajouter un autre",
+            new: "Nouveau"
         },
         field: {
             search: "Chercher",
@@ -86,7 +126,11 @@ export default {
             recordNotSaved :"Enregistrement non enregistré",
             deleted : "supprimé",
             notDeleted : "non supprimés",
-            cannotLoad : "Impossible de charger la fiche"
+            cannotLoad : "Impossible de charger la fiche",
+            error: {
+                403: "Vous n'êtes pas autorisé à créer ou à accéder à cette fiche",
+                500: "Erreur inattendue rendant cette fiche"
+            }
         },
         header: {
             menu: {
@@ -113,6 +157,11 @@ export default {
             error: {
                 403: "Vous n'êtes pas autorisé à accéder à ce formulaire",
                 500: "Erreur inattendue rendant ce formulaire"
+            },
+            footer: {
+                lastUpdatedBy: "Dernière mise à jour par ",
+                createdOn: "Créé sur ",
+                ownedBy: "Propriétaire "
             }
         },
         report : {
@@ -292,6 +341,34 @@ export default {
             url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
+        errors: {
+            appNotFound: {
+                notFound: "L'application est pas disponible dans Mercury en ce moment. ",
+                inQuickBaseClassic: " dans QuickBase Classic. ",
+                clickHere: "Ouvrez l'application"
+            },
+            noApps: {
+                noApps: "Il n'y a pas d'applications dans Mercury. ",
+                addApps: " d'ajouter des applications."
+            },
+            errorLoadingReport: {
+                message: "Ce rapport n'est pas disponible",
+                helpText: "Pour l'instant, vous pouvez essayer Sélection d'un rapport différent.",
+                contactSupport: "Laissez notre équipe sait que nous puissions fixer",
+                supportTeamInfo: "Quelques informations pour l'équipe de soutien:",
+                playGraphic: "Me montrer comment",
+                stopGraphic: "Arrête de jouer",
+                showAdditionalInfo: "Voir les détails",
+                hideAdditionalInfo: "Cacher les détails"
+            },
+            noTables: {
+                noTables: "Il n'y a pas tables. ",
+                createTablesInQuickBaseClassic: "Créer des tables dans ",
+            },
+            supportLink: {
+                text: "Contactez notre équipe de soins"
+            }
+        },
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
@@ -299,6 +376,22 @@ export default {
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },
-        noneOption: "\<Aucun\>"
+        noneOption: "\<Aucun\>",
+        unimplemented: {
+            search: "La recherche n'est pas encore disponible",
+            favorites: "L'accès aux Favoris n'est pas encore disponible",
+            makeFavorite: "Marquer comme favori n'est pas encore disponible",
+            print: "L'impression n'est pas encore disponible",
+            copy: "La copie n'est pas encore disponible",
+            email: "L'envoi par courriel n'est pas encore disponible",
+            delete: "La suppression n'est pas encore disponible"
+        },
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Modifier l'enregistrement n ° {recordId}",
+            newRecord: "Ajouter un enregistrement",
+            viewRecord: "Afficher le document n ° {recordId}"
+        },
+        quickBaseClassic: "QuickBase Classique"
     }
 };

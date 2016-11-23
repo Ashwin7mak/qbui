@@ -3,13 +3,13 @@
 $icon-action-icon-color:#fff;
 $page-actions-background-color: #486c8f;
 
+
 @include not-small-breakpoint {
     .secondaryBar .iconActions {
         display: none;
     }
 
     .iconActions {
-
         .iconActionButton {
             border: 0;
             margin-right: 2px;
@@ -17,14 +17,15 @@ $page-actions-background-color: #486c8f;
             display: inline-block;
             vertical-align: middle;
             text-align: center;
-            width: 40px;
-            height: 40px;
+            width: 24px;
+            height: 24px;
             font-size: 20px;
             color: $topnav-icon-color;
             padding: 0;
             line-height: 1px;
             &.dropdownToggle {
                 width: 20px;
+                margin-right: 10px;
             }
 
             .iconActionButton:not([disabled]):hover {
@@ -33,12 +34,22 @@ $page-actions-background-color: #486c8f;
                 cursor: pointer;
             }
         }
-        &.pageActions .addRecord {
-            border-radius:20px;
-            -webkit-border-radius:20px;
-            background-color: $color-green-600;
-            color: $color2;
-            margin-right: 30px;
+        &.pageActions {
+            .iconActionButton {
+                width: 40px;
+                height: 40px;
+            }
+            .addRecord {
+                border-radius: 20px;
+                -webkit-border-radius: 20px;
+                background-color: $color-green-600;
+                color: $color2;
+                margin-right: 30px;
+
+                .qbIcon {
+                    color: $color2;
+                }
+            }
         }
     }
 }

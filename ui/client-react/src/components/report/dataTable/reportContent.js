@@ -1,11 +1,13 @@
 import React from "react";
 import ReactIntl from "react-intl";
+import {NotificationManager} from 'react-notifications';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
+import ReportUtils from '../../../utils/reportUtils';
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
@@ -15,6 +17,11 @@ import ValidationUtils from "../../../../../common/src/validationUtils";
 import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
+import ReportContentError from './reportContentError';
+import DTSErrorModal from '../../dts/dtsErrorModal';
+import UrlUtils from '../../../utils/urlUtils';
+import QBModal from '../../qbModal/qbModal';
+import FieldUtils from '../../../utils/fieldUtils';
 
 let logger = new Logger();
 
@@ -24,18 +31,24 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 export let ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
 
+    getInitialState() {
+        return {
+            confirmDeletesDialogOpen: false
+        };
+    },
+
     // row was clicked once, navigate to record
     openRow(data) {
         const {appId, tblId, rptId} = this.props;
 
-        var recId = data[this.props.uniqueIdentifier].value;
+        var recId = data[this.props.primaryKeyName].value;
 
         // let flux know we've drilled-down into a record so we can navigate back and forth
         let flux = this.getFlux();
         flux.actions.openingReportRow(recId);
 
         //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         if (this.props.router) {
             this.props.router.push(link);
         }
@@ -49,14 +62,14 @@ export let ReportContent = React.createClass({
     getOrigRec(recid) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let uniqueIdentifier =  this.props.uniqueIdentifier;
+        let primaryKeyName =  this.props.primaryKeyName;
         _.find(recs, rec => {
             var keys = Object.keys(rec);
             keys.find((col) => {
-                if (col === uniqueIdentifier && rec[col].value === recid) {
+                if (col === primaryKeyName && rec[col].value === recid) {
                     orig.names = rec;
-                    var fids = {};
-                    var recKeys = Object.keys(rec);
+                    let fids = {};
+                    let recKeys = Object.keys(rec);
                     // have fid lookup hash
                     recKeys.forEach(function(item) {
                         fids[rec[item].id] = rec[item];
@@ -66,6 +79,30 @@ export let ReportContent = React.createClass({
                 }
             });
         });
+        return _.cloneDeep(orig);
+
+    },
+
+    /**
+     * Given a record id get the original values from the grouped report.
+     * @param recid
+     * @returns {*}
+     */
+    getOrigGroupedRec(recId) {
+        let orig = {names:{}, fids:{}};
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+
+        let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
+
+        orig.names = rec;
+        let fids = {};
+
+        let recKeys = Object.keys(rec);
+        // have fid lookup hash
+        recKeys.forEach((item) => {
+            fids[rec[item].id] = rec[item];
+        });
+        orig.fids = fids;
         return _.cloneDeep(orig);
     },
 
@@ -111,42 +148,52 @@ export let ReportContent = React.createClass({
     /**
      * When entering inline edit on a record, if it's an existing (already stored) record keep note
      * its originalRecord values (for later undo/audit?)
-     * if it's a new (unsaved) record note all it's non null values as changes to the new record
+     * if it's a new (unsaved) record note all it's values as changes to the new record
      * to be saved.
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
      * @param recId
      */
     handleEditRecordStart(recId) {
-        const flux = this.getFlux();
-        let origRec = null;
-        let changes = {};
-        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-            origRec = this.getOrigRec(recId);
-        } else {
-            //add each non null value as to the new record as a change
-            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                return rec[this.props.uniqueIdentifier].value === recId;
-            });
-            if (newRec) {
-                changes = {};
-                // loop thru the values in the new rec add any non nulls to change set
-                // so it will be treated as dirty/not saved
-                Object.keys(newRec).forEach((key) => {
-                    let field = newRec[key];
-                    if (field.value !== null) {
-                        let change = {
-                            //the + before field.id is needed turn the field id from string into a number
-                            oldVal: {value: null, id: +field.id},
-                            newVal: {value: field.value},
-                            fieldName: key
-                        };
-                        changes[field.id] = change;
-                    }
-                });
+        if (_.has(this.props, 'reportData.data')) {
+            const flux = this.getFlux();
+            let origRec = null;
+            let changes = {};
+
+            if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+                origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
+            } else {
+                //add each non null value as to the new record as a change
+                let newRec = null;
+                if (this.props.reportData.data.hasGrouping) {
+                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.primaryKeyName);
+                } else {
+                    newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                        return rec[this.props.primaryKeyName].value === recId;
+                    });
+                }
+                if (newRec) {
+                    changes = {};
+                    // loop thru the values in the new rec add any non nulls to change set
+                    // so it will be treated as dirty/not saved
+                    Object.keys(newRec).forEach((key) => {
+                        let field = newRec[key];
+                        let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
+                        if (fieldDef && !fieldDef.builtIn) {
+                            let change = {
+                                //the + before field.id is needed turn the field id from string into a number
+                                oldVal: {value: undefined, id: +field.id},
+                                newVal: {value: field.value},
+                                fieldName: key,
+                                fieldDef: fieldDef
+                            };
+                            changes[field.id] = change;
+                        }
+                    });
+                }
             }
+            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
     },
 
     /**
@@ -172,37 +219,65 @@ export let ReportContent = React.createClass({
     },
 
     /**
-     *  When inline edit mode and user wants to add a new record
+     *  When inline edit mode and user wants to add a new record and they are not currently trying to save or add a new record
      *  if there are pending edits or this record is not yet saved
-     *  try save instead of adding new one
-     *  otherwise if there are no unsaved changes add a blank new unsaved record after the
-     *  record specified
+     *  try save first before adding a new record
+     *  if there are no unsaved changes or changes save successfully
+     *  add a blank new unsaved record after the record specified
      * @param afterRecId
      */
     handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
+
+        // Don't allow a user to add multiple records in rapid success (i.e., clicking "Save and add new" multiple times rapidly)
+        if (this.props.pendEdits.saving) {
+            return;
+        }
+
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.handleRecordSaveClicked(afterRecId);
+            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId, true);
+
+            // After saving the record successfully, then add the new row
+            // Don't do anything if the record wasn't saved successfully or a promise was not returned
+            if (saveRecordPromise) {
+                saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
+            }
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
         return null;
     },
 
+    addNewRowAfterRecordSaveSuccess(afterRecId) {
+        const flux = this.getFlux();
+        let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+
+        // The promise is saved to a variable and called separately for testing purposes
+        // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
+        newBlankReportPromise.then(() => {
+            // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
+            // due to the speed of re-rendering
+            NotificationManager.success(Locales.getMessage('recordNotifications.recordSaved'), Locales.getMessage('success'), 1500);
+        });
+    },
 
     /**
      * User wants to save changes to a record.
      * @param id
      */
-    handleRecordSaveClicked(id) {
+    handleRecordSaveClicked(id, addNewRecord = false) {
         //signal record save action, server will validate and if ok update an existing records with changed values
         // or add a new record
         if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            let recordChanges = {};
+            if (this.props.pendEdits.recordChanges) {
+                recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
+            }
+            return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
-            this.handleRecordChange(id);
+            return this.handleRecordChange(id, addNewRecord);
         }
     },
 
@@ -212,36 +287,77 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
+        this.setState({selectedRecordId: record[this.props.primaryKeyName].value});
+        this.setState({confirmDeletesDialogOpen: true});
+    },
+
+    /**
+     * Delete a record, after getting confirmation
+     * @returns {{confirmDeletesDialogOpen: boolean}}
+     */
+    deleteRecord() {
         const flux = this.getFlux();
-        var recId = record[SchemaConsts.DEFAULT_RECORD_KEY].value;
-        //this.props.nameForRecords
-        flux.actions.deleteRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
+        flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+
+    cancelRecordDelete() {
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+
+    /**
+     * render a QBModal
+     * @returns {XML}
+     */
+    getConfirmationDialog() {
+
+        let msg = Locales.getMessage('selection.deleteThisRecord');
+
+        return (
+            <QBModal
+                show={this.state.confirmDeletesDialogOpen}
+                primaryButtonName={Locales.getMessage('selection.delete')}
+                primaryButtonOnClick={this.deleteRecord}
+                leftButtonName={Locales.getMessage('selection.dontDelete')}
+                leftButtonOnClick={this.cancelRecordDelete}
+                bodyMessage={msg}
+                type="alert"/>);
     },
 
     /**
      * Save a new record
      * @param recordChanges
+     * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges) {
+    handleRecordAdd(recordChanges, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
 
         let fields = {};
-        if (_.has(this.props, 'fields.fields.data')) {
+        let colList = [];
+        if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             fields = this.props.fields.fields.data;
+            fields.forEach((field) => {
+                colList.push(field.id);
+            });
         }
-        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
 
     /**
      * Save changes to an existing record
      * @param recId
+     * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(recId) {
+    handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
-        if (_.has(this.props, 'fields.fields.data')) {
+        let colList = [];
+        if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
+            this.props.fields.fields.data.forEach((field) => {
+                colList.push(field.id);
+            });
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
         }
     },
 
@@ -294,7 +410,7 @@ export let ReportContent = React.createClass({
 
     isDateDataType(dataType) {
         return dataType === SchemaConsts.DATE_TIME ||
-               dataType === SchemaConsts.DATE;
+            dataType === SchemaConsts.DATE;
     },
 
     parseTimeOfDay(timeOfDay) {
@@ -348,7 +464,7 @@ export let ReportContent = React.createClass({
 
                 //  Recursive call get to the last grouping field, and then update the grouping
                 //  labels as we work our way back to the top of the stack.
-                if (lvl < groupFields.length - 1) {
+                if (lvl < groupFields.length - 1 && groupDataRecords[group].children) {
                     this.localizeGroupingHeaders(groupFields, groupDataRecords[group].children, lvl + 1);
                 }
 
@@ -362,6 +478,9 @@ export let ReportContent = React.createClass({
                     //  that have already been localized.
                     groupData.localized = true;
 
+                    if (groupData.group === undefined) {
+                        continue;
+                    }
                     //  If no grouping header, use the empty label
                     if (groupData.group === null || groupData.group === '') {
                         groupData.group = Locales.getMessage('groupHeader.empty');
@@ -581,8 +700,8 @@ export let ReportContent = React.createClass({
      */
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
-                !this.props.reportData.loading &&
-                nextProps.reportData.loading) {
+            !this.props.reportData.loading &&
+            nextProps.reportData.loading) {
             let flux = this.getFlux();
             flux.actions.mark('component-ReportContent start');
         }
@@ -596,8 +715,8 @@ export let ReportContent = React.createClass({
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();
         if (_.has(this.props, 'reportData.loading') &&
-                !this.props.reportData.loading &&
-                prevProps.reportData.loading) {
+            !this.props.reportData.loading &&
+            prevProps.reportData.loading) {
             flux.actions.measure('component-ReportContent', 'component-ReportContent start');
 
             // note the size of the report with the measure
@@ -621,15 +740,8 @@ export let ReportContent = React.createClass({
 
 
     render() {
-
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
-        let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
-        if (this.props.keyField) {
-            keyField = this.props.keyField;
-        } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {
-            keyField = this.props.fields.keyField.name;
-        }
 
         if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
@@ -642,19 +754,32 @@ export let ReportContent = React.createClass({
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
+        let addPadding;
+        const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        if (isInlineEditOpen) {
+            addPadding = "reportContent inlineEditing";
+        } else if (isRowPopUpMenuOpen) {
+            addPadding =  "reportContent rowPopUpMenuOpen";
+        } else {
+            addPadding = "reportContent";
+        }
+        let showDTSErrorModal = this.props.pendEdits ? this.props.pendEdits.showDTSErrorModal : false;
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
-        return (
-                <div className="loadedContent">
-                {this.props.reportData.error ?
-                    <div>Error loading report!</div> :
-                    <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
 
+        let reportContent;
+
+        if (this.props.reportData.error) {
+            reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
+        } else {
+            reportContent = (
+                <div className="loadedContent">
+                    <div className={addPadding}>
+                        <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={this.props.keyField}
+                                primaryKeyName={this.props.primaryKeyName}
                                 selectedRows={this.props.selectedRows}
                                 onRowClick={this.openRow}
                                 onEditRecordStart={this.handleEditRecordStart}
@@ -674,8 +799,8 @@ export let ReportContent = React.createClass({
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                 filter={{selections: this.props.reportData.selections,
-                                        facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}
+                                    facet: this.props.reportData.facetExpression,
+                                    search: this.props.reportData.searchStringForFiltering}}
                         />}
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
@@ -683,8 +808,7 @@ export let ReportContent = React.createClass({
                                 editingId={this.props.reportData.editingId}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={keyField}
+                                primaryKeyName={this.props.primaryKeyName}
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
                                 isInlineEditOpen={isInlineEditOpen}
@@ -694,6 +818,7 @@ export let ReportContent = React.createClass({
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
+                                onGridReady={this.props.onGridReady}
                                 onRecordChange={this.handleRecordChange}
                                 onRecordAdd={this.handleRecordAdd}
                                 onRecordNewBlank={this.handleRecordNewBlank}
@@ -716,23 +841,13 @@ export let ReportContent = React.createClass({
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                 filter={{selections: this.props.reportData.selections,
-                                        facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}/>
-                        }
-                        {showFooter &&
-                        <ReportFooter
-                            reportData={this.props.reportData}
-                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
-                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
-                            pageStart={this.props.reportFooter.props.pageStart}
-                            pageEnd={this.props.reportFooter.props.pageEnd}
-                            recordsCount={this.props.reportFooter.props.recordsCount}/>
+                                    facet: this.props.reportData.facetExpression,
+                                    search: this.props.reportData.searchStringForFiltering}}/>
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
                                             appUsers={this.props.appUsers}
-                                            uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                            keyField={keyField}
+                                            primaryKeyName={this.props.primaryKeyName}
                                             reportHeader={this.props.reportHeader}
                                             selectionActions={<ReportActions selection={this.props.selectedRows}/>}
                                             onScroll={this.onScrollRecords}
@@ -744,7 +859,14 @@ export let ReportContent = React.createClass({
                                             getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
                         }
                     </div>
-                }
+                    {this.getConfirmationDialog()}
+                </div>
+            );
+        }
+
+        return (
+            <div className="loadedContent">
+                {reportContent}
             </div>
         );
     }
@@ -756,7 +878,9 @@ ReportContent.contextTypes = {
 };
 
 ReportContent.propTypes = {
-    pendEdits: React.PropTypes.object.isRequired
+    pendEdits: React.PropTypes.object.isRequired,
+    primaryKeyName: React.PropTypes.string.isRequired,
+    onGridReady: React.PropTypes.func
 };
 
 export let ReportContentWithRouter = withRouter(ReportContent);

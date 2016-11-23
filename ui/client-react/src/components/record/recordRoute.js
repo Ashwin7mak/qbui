@@ -14,6 +14,8 @@ import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import RecordHeader from './recordHeader';
+import Breakpoints from '../../utils/breakpoints';
 import _ from 'lodash';
 import './record.scss';
 
@@ -40,7 +42,7 @@ export let RecordRoute = React.createClass({
     },
     componentDidMount() {
         let flux = this.getFlux();
-        flux.actions.showTopNav();
+        flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
         this.loadRecordFromParams(this.props.params);
@@ -50,7 +52,7 @@ export let RecordRoute = React.createClass({
 
         if (this.props.params.appId !== prev.params.appId ||
             this.props.params.tblId !== prev.params.tblId ||
-            this.props.params.recId !== prev.params.recId ||
+            this.props.params.recordId !== prev.params.recordId ||
             (this.props.form && this.props.form.syncLoadedForm)) {
 
             this.loadRecordFromParams(this.props.params);
@@ -85,7 +87,7 @@ export let RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.params;
 
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
 
@@ -94,7 +96,7 @@ export let RecordRoute = React.createClass({
      * @param recId
      */
     navigateToRecord(appId, tblId, rptId, recId) {
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.router.push(link);
     },
 
@@ -124,38 +126,49 @@ export let RecordRoute = React.createClass({
         this.navigateToRecord(appId, tblId, rptId, nextRecordId);
     },
 
+    getTitle() {
+        const {recordId} = this.props.params;
+        const isSmall = Breakpoints.isSmallBreakpoint();
+        const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
+        return <div className="title">
+            {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
+            <span> {tableName} # {recordId}</span></div>;
+    },
+
     getStageHeadline() {
         if (this.props.params) {
-            const {appId, tblId, rptId, recordId} = this.props.params;
+            const {appId, tblId, rptId} = this.props.params;
 
-            const tableLink = `/app/${appId}/table/${tblId}`;
+            const tableLink = `/qbase/app/${appId}/table/${tblId}`;
 
+            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
-
-            const formName = this.props.form && this.props.form.formData && this.props.form.formData.formMeta && this.props.form.formData.formMeta.name;
-            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
 
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span>&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && <Link className="tableHomepageIconLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/></Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}>{this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
-
                 <div className="stageHeadline iconActions">
 
                     {(showBack || showNext) && <div className="iconActions">
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
-                        </OverlayTrigger>
+                        {showBack ?
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
+                                <Button className="iconActionButton prevRecord" onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
+                            </OverlayTrigger> :
+                            <Button className="iconActionButton prevRecord" disabled={true} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>}
+                        {showNext ?
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
+                                <Button className="iconActionButton nextRecord" onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
+                            </OverlayTrigger> :
+                            <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    <h3 className="formName">{formName} #{recordId}</h3>
+                    {this.getTitle()}
 
                 </div>
             </div>);
@@ -190,12 +203,11 @@ export let RecordRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
-            {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.delete', icon:'delete'},
-            {msg: 'pageActions.customizeForm', icon:'settings-hollow'}];
+            {msg: 'unimplemented.email', icon:'mail', disabled:true},
+            {msg: 'unimplemented.print', icon:'print', disabled:true},
+            {msg: 'unimplemented.delete', icon:'delete', disabled:true}];
 
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
     /**
@@ -204,7 +216,8 @@ export let RecordRoute = React.createClass({
         return this.props.form.syncLoadedForm ||
             !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
             !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
-            !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
+            !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
+            !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
 
     /**
@@ -222,6 +235,9 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
+            const formLoadingeErrorStatus = (_.isUndefined(this.props.form) || _.isUndefined(this.props.form.errorStatus)) ? false : this.props.form.errorStatus;
+            const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
+            const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
 
             return (
                 <div className="recordContainer">
@@ -232,22 +248,25 @@ export let RecordRoute = React.createClass({
                         </div>
                     </Stage>
 
+                    <RecordHeader title={this.getTitle()}/>
                     <div className="recordActionsContainer secondaryBar">
                         {this.getSecondaryBar()}
                         {this.getPageActions()}
                     </div>
 
-                    <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
-                            loaded={!this.props.form || !this.props.form.formLoading} >
-
+                    {!formLoadingeErrorStatus ?
+                        <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                                            loaded={(!this.props.form || !this.props.form.formLoading)}>
                         <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
+                                errorStatus={formLoadingeErrorStatus ? this.props.form.errorStatus : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers} />
-                    </Loader>
+                        </Loader> : null }
+                    {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
+                    {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
                 </div>);
         }
     }

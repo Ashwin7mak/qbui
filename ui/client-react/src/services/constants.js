@@ -3,7 +3,8 @@ import Configuration from '../config/app.config';
 export default {
     //  COOKIES
     COOKIE: {
-        TICKET: 'ticket'
+        TICKET: 'TICKET',
+        NSTICKET: 'NSTICKET'
     },
 
     // REQUEST HEADERS
@@ -41,9 +42,9 @@ export default {
     // API Entity actions
     FORMCOMPONENTS      : 'formComponents',
     HOMEPAGE            : 'homePage',
-    REPORTCOMPONENTS    : 'reportComponents',
     RECORDSCOUNT        : 'recordsCount',
     RESULTS             : 'results',
+    INVOKE              : 'invoke',
     PARSE               : 'parse',
     BULK                : 'bulk'
 };

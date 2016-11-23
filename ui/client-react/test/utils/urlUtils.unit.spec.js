@@ -1,6 +1,7 @@
 import React from 'react';
 import UrlUtils from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
+import WindowUtils from '../../src/utils/windowLocationUtils';
 
 describe('UrlUtils', () => {
     let phoneIcon = 'phone-outline';
@@ -71,6 +72,40 @@ describe('UrlUtils', () => {
 
         it('returns an empty span if the provided url does not have a protocl', () => {
             expect(UrlUtils.renderIconForUrl('www.quickbase.com')).toEqual(<span />);
+        });
+    });
+
+    describe('getQuickBaseClassicLink', () => {
+        let testRealmId = 'realmId';
+        let testAppId = 'testAppId';
+        let testDomainId = 'quickbase.com';
+
+        let testCases = [
+            {
+                description: 'returns the main quickbase classic link if selectedAppId is provided',
+                selectedAppId: null,
+                expectation: `https://${testRealmId}.${testDomainId}/db/main`
+            },
+            {
+                description: 'returns the quickbase classic link for the app',
+                selectedAppId: testAppId,
+                expectation: `https://${testRealmId}.${testDomainId}/db/${testAppId}`
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let baseService =  {
+                    getSubdomain() {return testRealmId;},
+                    getDomain() {return testDomainId;}
+                };
+
+                UrlUtils.__Rewire__('baseService', baseService);
+
+                expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
+
+                UrlUtils.__ResetDependency__('baseService');
+            });
         });
     });
 });

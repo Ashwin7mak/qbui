@@ -48,13 +48,13 @@ let AppsList = React.createClass({
                 () => {setTimeout(() => ReactDOM.findDOMNode(this.refs.appsSearchBox).querySelector("input.searchInput").focus(), 200);});
         }
     },
+
     render() {
         return (
             <ul className={"appsList"} >
 
                 <NavItem item={{msg: 'nav.appsHeading'}}
                          isHeading={true}
-                         secondaryIcon={"search"}
                          onClick={this.onClickApps}
                          open={true} />
 

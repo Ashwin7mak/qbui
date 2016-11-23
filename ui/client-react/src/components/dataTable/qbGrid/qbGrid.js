@@ -29,7 +29,7 @@ const QBGrid = React.createClass({
         records: React.PropTypes.array,
         scrollParentClass: React.PropTypes.string, // class of parent who may be scrolling this grid
         selectedRows: React.PropTypes.array,
-        uniqueIdentifier: React.PropTypes.string
+        primaryKeyName: React.PropTypes.string
     },
 
     getDefaultProps() {
@@ -53,7 +53,7 @@ const QBGrid = React.createClass({
 
         let data = this.props.records ? this.props.records : [];
         data.forEach((record, index) => {
-            record.id = record[this.props.uniqueIdentifier].value;
+            record.id = record[this.props.primaryKeyName].value;
         });
 
         return (this.props.columns &&
@@ -77,7 +77,7 @@ const QBGrid = React.createClass({
         // add the selection/actions column
 
         rtCols.push({
-            property: this.props.uniqueIdentifier,
+            property: this.props.primaryKeyName,
             headerClass: "gridHeaderCell",
             header: this.getCheckboxHeader(),
             cell: this.getActionsCell()
@@ -125,7 +125,7 @@ const QBGrid = React.createClass({
     selectAllRows() {
         let selected = []; // array of record ids to select
         this.props.records.forEach(rec => {
-            selected.push(rec[this.props.keyField].value);
+            selected.push(rec[this.props.primaryKeyName].value);
         });
         this.getFlux().actions.selectedRows(selected);
     },
@@ -232,10 +232,10 @@ const QBGrid = React.createClass({
 
         let sortList = ReportUtils.getSortListString(this.props.groupEls);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-        flux.actions.getFilteredRecords(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, {format:true}, this.props.filter, queryParams);
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
     /**
      * Build the menu items for sort/group
@@ -281,7 +281,7 @@ const QBGrid = React.createClass({
      */
     getContext() {
         return {
-            keyField: this.props.keyField,
+            primaryKeyName: this.props.primaryKeyName,
             flux: this.getFlux(),
             onEditRecordCancel: () => {
                 this.setState({editRow: -1});
@@ -414,7 +414,7 @@ const QBGrid = React.createClass({
         if (event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.props.onEditRecordStart(data[this.props.keyField].value);
+            this.props.onEditRecordStart(data[this.props.primaryKeyName].value);
             this.setState({editRow: rowIndex});
             return;
         }

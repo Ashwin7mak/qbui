@@ -89,11 +89,11 @@
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
         //Report page actions on stage
-        this.reportActions = this.reportStageContentEl.element(by.className('pageActions'));
+        this.reportActions = this.reportStageContentEl.all(by.className('pageActions')).first();
         //Add record btn
         this.reportAddRecordBtn = this.reportActions.element(by.className('iconTableUISturdy-add'));
         //Edit button
-        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).element(by.className('pageActions')).element(by.className('iconTableUISturdy-edit'));
+        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).all(by.className('pageActions')).first().element(by.className('iconTableUISturdy-edit'));
 
 
         //stage heading
@@ -197,7 +197,9 @@
                     for (var i = 0; i < cells.length; i++) {
                         fetchCellValuesPromises.push(self.getRecordCellValue(cells[i]));
                     }
-                    return Promise.all(fetchCellValuesPromises).then(function(results) {
+                    return Promise.each(fetchCellValuesPromises, function(results) {
+                        return results;
+                    }).then(function(results) {
                         // Do post processing
                         for (var j = 0; j < results.length; j++) {
                             results[j] = self.formatRecordValue(results[j]);
@@ -236,8 +238,27 @@
         this.openRecordEditMenu = function(recordRowIndex) {
             //TODO: Doesn't work for Safari and Firefox, need to find workaround
             var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
-            browser.actions().doubleClick(rowElement).perform();
-            return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu);
+            return rowElement.click().then(function() {
+                return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu).then(function() {
+                    // Let the trowser animate
+                    return e2eBase.sleep(browser.params.smallSleep);
+                });
+            });
+        };
+
+        /**
+         * Given a record element in agGrid, click on the row to open in view mode
+         * @param recordRowElement
+         */
+        this.openRecord = function(recordRowIndex) {
+            //TODO: Doesn't work for Safari and Firefox, need to find workaround
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
+            return rowElement.click().then(function() {
+                return e2ePageBase.waitForElement(element(by.className('viewForm'))).then(function() {
+                    // Let the trowser animate
+                    return e2eBase.sleep(browser.params.smallSleep);
+                });
+            });
         };
 
         /**
@@ -245,8 +266,12 @@
          * @param recordRowIndex
          */
         this.clickRecordEditPencil = function(recordRowIndex) {
-            var rowElement = element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit'));
-            return rowElement.click();
+            return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit')).click().then(function() {
+                return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                    // Let the trowser animate
+                    return e2eBase.sleep(browser.params.smallSleep);
+                });
+            });
         };
 
         /**
@@ -255,12 +280,14 @@
          */
         this.clickEditPencilOnStage = function(recordRowIndex) {
             var self = this;
-
             return element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).click().then(function() {
-                // Let the trowser animate
-                e2eBase.sleep(browser.params.smallSleep);
-                e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
-                    return self.reportEditRecordBtnOnStage.click();
+                return e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
+                    return self.reportEditRecordBtnOnStage.click().then(function() {
+                        return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                            // Let the trowser animate
+                            return e2eBase.sleep(browser.params.smallSleep);
+                        });
+                    });
                 });
             });
         };
@@ -271,12 +298,14 @@
          */
         this.clickEditPencilOnReportActions = function(recordRowIndex) {
             var self = this;
-
             return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('ag-selection-checkbox')).click().then(function() {
-                // Let the trowser animate
-                e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnReportActions).then(function() {
-                    return self.reportEditRecordBtnOnReportActions.click();
+                    return self.reportEditRecordBtnOnReportActions.click().then(function() {
+                        return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                            // Let the trowser animate
+                            return e2eBase.sleep(browser.params.smallSleep);
+                        });
+                    });
                 });
             });
 
@@ -290,7 +319,10 @@
             var self = this;
             return e2ePageBase.waitForElementToBeClickable(self.reportAddRecordBtn).then(function() {
                 return self.reportAddRecordBtn.click().then(function() {
-                    e2ePageBase.waitForElement(element(by.className('editForm')));
+                    return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                        // Let the trowser animate
+                        return e2eBase.sleep(browser.params.smallSleep);
+                    });
                 });
             });
         };
@@ -391,8 +423,8 @@
         };
 
         /**
-        * Helper function that will get all of the field column headers from the report. Returns an array of strings.
-        */
+         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
+         */
         this.getReportColumnHeaders = function() {
             var deferred = Promise.pending();
             this.agGridColHeaderElList.then(function(elements) {

@@ -17,22 +17,27 @@
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
         var formService = require('./services/formService.js');
+        var roleService = require('./services/roleService.js');
 
         var e2eBase = {
-            // Delegate to recordBase to initialize
+            // Instantiate recordBase module to use for your tests
             recordBase: recordBase,
-            // Create a realm
-            setUp: function() {
-                let defaultBase = config ? config.DOMAIN : 'http://localhost:9001';
-                this.setBaseUrl(typeof browser !== 'undefined' ? browser.baseUrl : defaultBase);
-                this.initialize();
+            /**
+             * Set the baseUrl we want to use to reach out for testing
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Run this BEFORE initialize function below
+             * @param baseUrl - The url where your nodejs server is running. example: http://localhost:9001 for e2e tests
+             */
+            setBaseUrl: function(baseUrl) {
+                recordBase.setBaseUrl(baseUrl);
             },
+            /**
+             * Initialize recordApi.base.js and api.base.js in the Mocha layer (qbui/server package)
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Make sure to run this AFTER setBaseUrl to avoid authentication errors due to ticket for wrong realm
+             */
             initialize: function() {
                 recordBase.initialize();
-            },
-            // Set the baseUrl we want to use to reach out for testing
-            setBaseUrl: function(baseUrlConfig) {
-                recordBase.setBaseUrl(baseUrlConfig);
             },
             // Initialize the service modules to use the same base class
             appService: appService(recordBase),
@@ -40,12 +45,13 @@
             tableService: tableService(recordBase),
             reportService: reportService(recordBase),
             formService: formService(recordBase),
+            roleService: roleService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
             ticketEndpoint: recordBase.apiBase.resolveTicketEndpoint(),
             // Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
-            cleanup: function(done) {
+            cleanup: function() {
                 //Checks for any JS errors in the browser console
                 //browser.manage().logs().get('browser').then(function(browserLog) {
                 //    // TODO: Errors in the console need to fix
@@ -55,23 +61,21 @@
                 //    }
                 //});
                 //Cleanup the realm and app
-                e2eBase.recordBase.apiBase.cleanup().then(function() {
-                    done();
-                });
+                return e2eBase.recordBase.apiBase.cleanup();
             },
             // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
             getRequestAppsPageEndpoint: function(realmName) {
-                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/apps/');
+                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/apps/');
                 return requestAppsPageEndPoint;
             },
             // Helper method to get the proper URL for loading the table home page containing a list of tables for a realm for an app
             getRequestTableEndpoint: function(realmName, appId, tableId) {
-                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId);
+                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId);
                 return requestTableEndPoint;
             },
             // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
             getRequestReportsPageEndpoint: function(realmName, appId, tableId, reportId) {
-                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
+                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
                 return requestReportsPageEndPoint;
             },
             // Get the proper URL for loading the session ticket page in the browser
@@ -108,7 +112,7 @@
             basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
                 var MIN_RECORDSCOUNT = 11;
-                e2eBase.setUp();
+
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
@@ -118,7 +122,7 @@
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     // Generate the record JSON objects
                     var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                    //Add 1 duplicate record
+                    // Add 1 duplicate record
                     var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
                     var dupRecord = clonedArray[0];
                     // Edit the numeric field so we can check the second level sort (ex: 6.7)
@@ -278,62 +282,52 @@
                     numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
                 }
 
-                e2eBase.setUp();
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
                 return e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
-                    // Count how many tables in map and loop over them to create records and reports
-                    var numberOfTables = createdApp.tables.length;
-                    var createAppPromises = [];
-
-                    for (var i = 0; i < numberOfTables; i++) {
-                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                        var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[i]);
-                        // Generate the record JSON objects
-                        var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
-
-                        // Create 1 duplicate record
-                        var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
-                        var dupRecord = clonedArray[0];
-                        // Edit the numeric and date fields so we can check the second level sort (ex: 6.7)
-                        dupRecord.forEach(function(field) {
-                            if (field.id === 7) {
-                                field.value = 1.90;
-                            }
-                            if (field.id === 11) {
-                                field.value = '1977-12-12';
-                            }
-                        });
-                        // Add the duplicate record back in to create via API
-                        generatedRecords.push(dupRecord);
-
-                        // Generate 1 empty record
-                        var generatedEmptyRecord = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
-                        // Add the empty record back in to create via API
-                        generatedRecords.push(generatedEmptyRecord);
-
-                        // Build create record promises
-                        if (numberOfRecords < MIN_RECORDSCOUNT) {
-                            // Via the API create the records
-                            createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
-                        } else {
-                            // Via the API create the bulk records
-                            createAppPromises.push(e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[i], generatedRecords));
+                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
+                    // Generate the record JSON objects
+                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
+                    // Add 1 duplicate record
+                    var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
+                    var dupRecord = clonedArray[0];
+                    // Edit the numeric field so we can check the second level sort (ex: 6.7)
+                    dupRecord.forEach(function(field) {
+                        if (field.id === 7) {
+                            field.value = 1.90;
                         }
-
-                        // Create a list all report for the table
-                        createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
-
-                        //TODO: Users Roles and Permissions
-                        //TODO: Custom table homepage based on role
+                        if (field.id === 11) {
+                            field.value = '1977-12-12';
+                        }
+                    });
+                    // Add the new record back in to create
+                    table1GeneratedRecords.push(dupRecord);
+                    if (numberOfRecords < MIN_RECORDSCOUNT) {
+                        // Via the API create the records, a new report, then run the report.
+                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                    } else {
+                        // Via the API create the bulk records
+                        e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
                     }
-                    // Create a default form for each table (uses the app JSON)
-                    createAppPromises.push(e2eBase.formService.createDefaultForms(createdApp));
-
-                    // Send all requests via Promise.all
-                    return Promise.all(createAppPromises);
+                    // Create a List all report for the first table
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
+                }).then(function() {
+                    if (createdApp.tables[1]) {
+                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                        var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
+                        // Generate the record JSON objects
+                        var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
+                        // Via the API create the records, a new report, then run the report.
+                        return e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords).then(function() {
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null);
+                        });
+                    }
+                }).then(function() {
+                    //Create forms for both tables
+                    return e2eBase.formService.createDefaultForms(createdApp);
                 }).then(function() {
                     // Set default table homepage for Table 1
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
@@ -341,6 +335,7 @@
                     // Set default table homepage for Table 2
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[1].id, 1);
                 }).then(function() {
+                    // Return the createdApp object
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
@@ -456,7 +451,6 @@
                     return Promise.reject(new Error("no map of tables to build defined"));
                 } else {
                     // Create the app schema via the API
-                    e2eBase.setUp();
                     return e2eBase.appService.createAppSchema(tableToFieldToFieldTypeMap);
                 }
             },
@@ -467,7 +461,7 @@
                     recordService : this.recordService,
                     tableService : this.tableService,
                     reportService : this.reportService,
-                    formService : this.formService,
+                    formService : this.formService
                 };
                 return e2eBase.appService.createRecords(app, recordsConfig, services);
             },

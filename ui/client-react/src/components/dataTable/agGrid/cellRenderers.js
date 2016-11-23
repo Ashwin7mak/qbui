@@ -34,7 +34,7 @@ class CellRendererFactory  {
             _.has(props.params, 'data') &&
             _.has(props.params, 'rowIndex')) {
 
-            recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
+            recId = props.params.data[FieldUtils.getPrimaryKeyFieldName(props.params.data)].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
         return key;
@@ -101,7 +101,7 @@ const CellRenderer = React.createClass({
     },
 
     /**
-     * get row uniqueIdentifier value that this cells is rendered in (usually record id)
+     * get row primaryKeyName value that this cells is rendered in (usually record id)
      * @returns value primitive
      */
     getRecId() {
@@ -110,11 +110,11 @@ const CellRenderer = React.createClass({
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
             _.has(this.props.params, 'context') &&
-            _.has(this.props.params, 'context.uniqueIdentifier') &&
+            _.has(this.props.params, 'context.primaryKeyName') &&
             !_.isUndefined(this.props.params.data) &&
-            !_.isUndefined(this.props.params.context.uniqueIdentifier) &&
-            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier])) {
-            recIdAnswer = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+            !_.isUndefined(this.props.params.context.primaryKeyName) &&
+            !_.isUndefined(this.props.params.data[this.props.params.context.primaryKeyName])) {
+            recIdAnswer = this.props.params.data[this.props.params.context.primaryKeyName].value;
         }
         return recIdAnswer;
     },
@@ -185,23 +185,7 @@ const CellRenderer = React.createClass({
     },
 
     render() {
-        let isEditable = true;
-
-        // built in fields are not editable
-        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
-            typeof this.props.colDef.fieldDef.builtIn !== 'undefined' &&  this.props.colDef.fieldDef.builtIn) {
-            isEditable = false;
-        }
-        // field must be scalar (a non-generated field value)
-        if (typeof this.props.colDef.fieldType !== 'undefined' &&  this.props.colDef.fieldType !== consts.SCALAR) {
-            isEditable = false;
-        }
-        // field must be editable i.e. user editable not a restricted value
-        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
-            typeof this.props.colDef.fieldDef.userEditableValue !== 'undefined' && !this.props.colDef.fieldDef.userEditableValue) {
-            isEditable = false;
-        }
-
+        let isEditable = FieldUtils.isFieldEditable(this.props.colDef.fieldDef);
 
         let attributes = null;
         if (typeof this.props.colDef.fieldDef !== 'undefined' &&
@@ -275,14 +259,14 @@ const CellRenderer = React.createClass({
             _.has(this.props.params, 'column.colId') &&
             _.has(this.props.params, 'colDef.id')) {
 
-            let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
+            let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.params.data);
 
             let change = {
                 values: {
                     oldVal: this.props.params.data[this.props.params.column.colId],
                     newVal: this.state.valueAndDisplay
                 },
-                recId: this.props.params.data[uniqueIdentifier].value,
+                recId: this.props.params.data[primaryKeyName].value,
                 fid: +this.props.params.colDef.id,
                 fieldName: this.props.params.column.colId,
                 fieldDef: this.props.params.colDef.fieldDef
@@ -455,10 +439,10 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
     render() {
         const record = Locale.getMessage('records.singular');
         const actions = [
-            {msg: Locale.getMessage('selection.edit') + " " + record, rawMsg: true, className:'edit', icon:'edit', onClick: this.onClickEdit},
-            {msg: Locale.getMessage('selection.print') + " " + record, rawMsg: true, className:'print', icon:'print'},
-            {msg: Locale.getMessage('selection.email') + " " + record, rawMsg: true, className:'email', icon:'mail'},
-            {msg: Locale.getMessage('selection.copy') + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate'},
+            {msg: Locale.getMessage('selection.edit')   + " " + record, rawMsg: true, className:'edit', icon:'edit', onClick: this.onClickEdit},
+            {msg: Locale.getMessage('selection.print')  + " " + record, rawMsg: true, className:'print', icon:'print', tooltipMsg: 'unimplemented.print', disabled:true},
+            {msg: Locale.getMessage('selection.email')  + " " + record, rawMsg: true, className:'email', icon:'mail', tooltipMsg: 'unimplemented.email', disabled:true},
+            {msg: Locale.getMessage('selection.copy')   + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate', tooltipMsg: 'unimplemented.copy', disabled:true},
             {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete', onClick: this.onClickDelete}
         ];
 
@@ -469,7 +453,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
                             rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />
-            <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
+            <IconActions flux={this.props.params.context.flux} dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);
     }
 });

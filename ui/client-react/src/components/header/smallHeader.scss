@@ -1,0 +1,106 @@
+@import '../../assets/css/qbVariables';
+
+.smallHeader {
+    display:flex;
+    flex-direction:row;
+    line-height:40px;
+    order:0;
+    font-size:13px;
+    flex: 0 0 auto;
+    flex-basis: $top-nav-height;
+    justify-content: space-between;
+
+    background-color: $small-header-bg !important;
+
+    .left {
+        flex: 0 0 auto;
+        margin-left:5px;
+        .toggleNavButton {
+            font-size: 22px;
+            width: auto;
+            padding: 0 4px;
+            color: #7090ab;
+            vertical-align: middle;
+        }
+    }
+    .center {
+        font-size:18px;
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        flex: 1 1 auto;
+        &.searchElements {
+            font-size: 14px;
+            width:100%;
+
+        }
+        &.title {
+            overflow: hidden;
+            min-width: 40px;
+            justify-content: center;
+            div.title {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+            .qbIcon {
+                flex: 0 0 auto;
+                color: $top-nav-title-icon-color;
+                font-size: 19px;
+            }
+            .title > * {
+                vertical-align: middle;
+            }
+        }
+        .cancelButton {
+            padding: 0 4px;
+            border-left: 1px solid #ccc;
+        }
+    }
+    .right {
+        display:flex;
+        align-items:center;
+        flex: 0 0 auto;
+        .iconLink {
+            font-size:22px;
+        }
+        .iconLink[disabled] .qbIcon {
+            opacity: .65;
+        }
+        .qbIcon {
+            width:auto;
+            padding: 0 4px;
+            color: $icon-color;
+        }
+    }
+    .searchElements {
+        display:none;
+    }
+    &.searching {
+        .left, .right {
+            display:none;
+        }
+        .center.title {
+            display:none;
+        }
+        .center.searchElements {
+            display:flex;
+            flex-direction:row;
+            .searchInputBox {
+                flex:1 1 auto;
+                .searchInput {
+                    border: none;
+                    border-radius: 0;
+                    padding: 0;
+                    height: inherit;
+                    padding-right: 30px;
+                    padding-left: 5px;
+                }
+            }
+            a.iconLink {
+                flex:0 0 auto;
+            }
+
+        }
+    }
+}

@@ -4,12 +4,14 @@ import RecordActions from '../../actions/recordActions';
 import './cardView.scss';
 import '../../QBForm/qbform.scss';
 import QBicon from '../../qbIcon/qbIcon';
+import _ from 'lodash';
 
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
     propTypes: {
         data: React.PropTypes.object,
+        columns: React.PropTypes.array,
         rowId: React.PropTypes.number,
         onSwipe: React.PropTypes.func
     },
@@ -36,17 +38,43 @@ let CardView = React.createClass({
         }
     },
 
+    /**
+     * is raw HTML allowed for a field
+     * @param fieldObject
+     * @returns {*}
+     */
+    allowHTML(fieldObject) {
+
+        if (!this.props.columns) {
+            return false;
+        }
+
+        const col = _.find(this.props.columns, {id: fieldObject.id});
+
+        return _.has(col, "fieldDef.datatypeAttributes") && col.fieldDef.datatypeAttributes.htmlAllowed;
+    },
+
     createField(c, curKey) {
         let fieldObject = this.props.data[curKey];
+
         let fieldValue = "";
         if (fieldObject) {
             fieldValue = fieldObject.display;
         }
 
-        return (<div key={c} className="field">
-            <span className="fieldLabel">{curKey}</span>
-            <span className="fieldValue">{fieldValue}</span>
-        </div>);
+        if (this.allowHTML(fieldObject)) {
+            return (
+                <div key={c} className="field">
+                    <span className="fieldLabel">{curKey}</span>
+                    <span className="fieldValue" dangerouslySetInnerHTML={{__html: fieldValue}}/>
+                </div>);
+        } else {
+            return (
+                <div key={c} className="field">
+                    <span className="fieldLabel">{curKey}</span>
+                    <span className="fieldValue">{_.unescape(fieldValue)}</span>
+                </div>);
+        }
     },
     createTopField(firstFieldValue) {
         return (
@@ -206,7 +234,7 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
-            const isSelected = _.has(this.props.data, this.props.uniqueIdentifier) && this.props.isRowSelected(this.props.data[this.props.uniqueIdentifier].value);
+            const isSelected = _.has(this.props.data, this.props.primaryKeyName) && this.props.isRowSelected(this.props.data[this.props.primaryKeyName].value);
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }

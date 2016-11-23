@@ -15,10 +15,42 @@
         flex-direction:column;
         justify-content:center;
 
+        .title {
+            font-size: $font-size-h3;
+        }
         .tableHomepageLink {
             display:flex;
             align-items:center;
         }
+
+        .iconActions {
+
+            .iconActionButton {
+                width: auto;
+                .qbIcon {
+                    width: 18px;
+                }
+            }
+            .iconActionButton:first-of-type {
+                margin-left: -7px;
+            }
+            .iconActionButton:last-of-type {
+                margin-right:10px;
+            }
+        }
+        .iconActionButton[disabled] {
+            color: $icon-disabled-color;
+        }
+        .iconActionButton {
+            color: $pagination-iconfont-normal-color;
+            font-size:24px;
+        }
+        .iconActionButton:not([disabled]):hover {
+            background-color: inherit;
+            color: $pagination-iconfont-hover-color;
+
+        }
+
     }
     .recordActionsContainer {
         display: flex;
@@ -37,17 +69,42 @@
         overflow:auto;
 
     }
+    .loadedContent {
+        overflow: auto;
+    }
     .formContainer {
         overflow: auto;
-        position:absolute;
         width:100%;
+    }
+    .divider.color-black-700 {
+        color: $color-black-700;
     }
 }
 
+@include not-small-breakpoint {
+    .smallHeader.recordHeader {
+        display: none;
+    }
+}
 
 @include small-breakpoint {
+    .secondaryBar .iconActions.pageActions {
+        padding-left: 6px;
+        .iconActionButton {
+            margin-right: 3px;
+        }
+        .dropdownToggle {
+            margin-left: -4px;
+        }
+    }
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
         display:none; /* hide on small, use a floating add button */
+    }
+
+    .recordStageHeadline {
+        .formName {
+            font-size: $font-size-h4;
+        }
     }
 }
 
@@ -88,3 +145,5 @@
     left: 100%;
     transition: all 200ms linear;
 }
+
+

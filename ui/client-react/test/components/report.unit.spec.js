@@ -5,6 +5,7 @@ import Report from '../../src/components/report/reportRoute';
 import ReportToolbar from '../../src/components/report/reportToolbar';
 import Stage from '../../src/components/stage/stage';
 import ReportDataSearchStore from '../../src/stores/reportDataSearchStore';
+import Constants from '../../../common/src/constants';
 import Fluxxor from 'fluxxor';
 
 import Locale from '../../src/locales/locales';
@@ -12,11 +13,11 @@ var i18n = Locale.getI18nBundle();
 
 describe('Report functions', () => {
     'use strict';
-
+    const pendEdits = {showDTSErrorModal: false};
     let component;
     let reportDataParams = {reportData: {data: {columns: [{field: "col_num", headerName: "col_num", fieldDef: {}}]}}};
 
-    let reportParams = {appId:1, tblId:2, rptId:3, format: true, offSet: null, numRows: null};
+    let reportParams = {appId:1, tblId:2, rptId:3, format: true, offSet: Constants.PAGE.DEFAULT_OFFSET, numRows: Constants.PAGE.DEFAULT_NUM_ROWS};
     let secondaryParams = {appId:4, tblId:5, rptId:6};
 
     let reportDataSearchStore = Fluxxor.createStore({
@@ -36,7 +37,8 @@ describe('Report functions', () => {
         selectTableId() {return;},
         getFilteredRecords() {return;},
         hideTopNav() {return;},
-        loadFields() {return;}
+        loadFields() {return;},
+        resetRowMenu() {return;}
     };
 
     let ReportStageMock = React.createClass({
@@ -76,17 +78,17 @@ describe('Report functions', () => {
 
     it('test flux action loadReport is called with app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits} />, div);
         expect(flux.actions.loadReport).toHaveBeenCalledWith(reportParams.appId, reportParams.tblId, reportParams.rptId, reportParams.format, reportParams.offSet, reportParams.numRows);
     });
 
     it('test flux action loadReport is not called on 2nd called with same app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).toHaveBeenCalled();
 
         //  on subsequent call with same parameter data, the loadReport function is not called
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}/>, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalledWith();
     });
 
@@ -94,7 +96,7 @@ describe('Report functions', () => {
         var div = document.createElement('div');
 
         reportParams.appId = null;
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}/>, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
@@ -103,7 +105,7 @@ describe('Report functions', () => {
         var div = document.createElement('div');
 
         reportDataParams.reportData.loading = true;
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 

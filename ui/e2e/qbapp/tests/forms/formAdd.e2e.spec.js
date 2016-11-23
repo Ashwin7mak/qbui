@@ -6,10 +6,12 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
+    var ReportContentPage = requirePO('reportContent');
+    var reportContentPage = new ReportContentPage();
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
-    describe('Edit Form Tests', function() {
+    describe('Add a record Via Form Tests : ', function() {
         var realmName;
         var realmId;
         var app;
@@ -23,63 +25,59 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
                 });
             });
         });
 
-        /**
-         * Before each test starts just make sure the report has loaded
-         */
-        beforeEach(function(done) {
-            //go to report page directly.
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            // Wait until report loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                done();
-            });
-        });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
+        it('@smoke Add a record from the form', function(done) {
+            var origRecordCount;
+            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
 
-        it('Add a record from the form', function(done) {
-            //TODO textField.Right now even phone no field says textField. Sp coudnt enter values and save record
-            var fieldTypeClassNames = ['numericField', 'dateCell', 'timeCell', 'checkbox'];
-            formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
-                //click on add record button
-                reportServicePage.clickAddRecordOnStage();
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
+            // Load the List All report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent().then(function() {
+                // Count the number of records before adding
+                reportContentPage.agGridRecordElList.then(function(records) {
+                    origRecordCount = records.length;
+                });
             }).then(function() {
-                //get the fields from the table and generate a record
+                // Click on add record button
+                reportServicePage.clickAddRecordOnStage();
+            }).then(function() {
+                // Get the fields from the from and create a new record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
-                //Save the form
+                // Save the form
                 formsPage.clickFormSaveBtn();
+                reportContentPage.waitForReportContent();
             }).then(function() {
-                //reload the report to verify the row edited
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-                return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    //Verify there are 7 records after editing 1
-                    e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('8 records');
-                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(7, fieldTypeClassNames[j]);
-                    }
-                    done();
+                // Reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                // Check the record count
+                reportContentPage.agGridRecordElList.then(function(records) {
+                    expect(records.length).toBe(origRecordCount + 1);
                 });
+            }).then(function() {
+                // Verify new record is now the last row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(origRecordCount, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
             });
         });
-
     });
 }());

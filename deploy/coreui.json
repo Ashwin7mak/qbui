@@ -350,10 +350,10 @@
                   "splunk": {
                     "forwarder": {
                       "index": "quickbase-ppdidx",
+                      "default": {
+                        "_meta": [ { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] } ]
+                      },
                       "logs_to_index": {
-                        "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
-                        },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
                           "index": "quickbase-ppdidx",
@@ -380,10 +380,10 @@
                   "splunk": {
                     "forwarder": {
                       "index": "quickbase-ppdidx",
+                      "default": {
+                        "_meta": [ { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] } ]
+                      },
                       "logs_to_index": {
-                        "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
-                        },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
                           "index": "quickbase-ppdidx",
@@ -410,10 +410,10 @@
                   "splunk": {
                     "forwarder": {
                       "index": "quickbase-ppdidx",
+                      "default": {
+                        "_meta": [ { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] } ]
+                      },
                       "logs_to_index": {
-                        "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
-                        },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
                           "index": "quickbase-ppdidx",
@@ -440,10 +440,10 @@
                   "splunk": {
                     "forwarder": {
                       "index": "quickbase-ppdidx",
+                      "default": {
+                        "_meta": [ { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] } ]
+                      },
                       "logs_to_index": {
-                        "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
-                        },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
                           "index": "quickbase-ppdidx",
@@ -470,10 +470,10 @@
                   "splunk": {
                     "forwarder": {
                       "index": "quickbase-prdidx",
+                      "default": {
+                        "_meta": [ { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] } ]
+                      },
                       "logs_to_index": {
-                        "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
-                        },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
                           "index": "quickbase-prdidx",
@@ -502,7 +502,7 @@
                 "command": "/opt/splunkforwarder/bin/splunk set default-hostname $(hostname) -auth admin:changeme"
               },
               "02_run_chef": {
-                "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
+                "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig,splunkclouduf::configure_ec2 -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
                 "cwd": "/var/packer/coreui/chef"
               },
               "03_enable_and_start_splunk": {

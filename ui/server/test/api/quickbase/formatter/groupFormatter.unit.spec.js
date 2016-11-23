@@ -154,7 +154,7 @@ describe('Validate GroupFormatter unit tests', function() {
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.message, function(done) {
                 var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
-                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                var groupData = groupFormatter.group(setup.fields, setup.records, testCase.gList);
                 assert.equal(groupData.hasGrouping, false);
                 assert.equal(groupData.gridData.length, 0);
                 assert.equal(groupData.totalRows, 0);
@@ -173,7 +173,7 @@ describe('Validate GroupFormatter unit tests', function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.message, function(done) {
-                var groupData = groupFormatter.group(testCase.req, testCase.fields, testCase.records);
+                var groupData = groupFormatter.group(testCase.fields, testCase.records, '');
                 assert.equal(groupData.hasGrouping, false);
                 assert.equal(groupData.gridData.length, 0);
                 assert.equal(groupData.totalRows, 0);
@@ -198,7 +198,7 @@ describe('Validate GroupFormatter unit tests', function() {
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.message, function(done) {
                 var setup = setupRecords(5, 5, constants.TEXT, testCase.sortList);
-                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                var groupData = groupFormatter.group(setup.fields, setup.records, testCase.sortList);
 
                 assert.equal(groupData.hasGrouping, testCase.expectation > 0);
                 assert.equal(groupData.fields.length, testCase.expectation);
@@ -226,7 +226,7 @@ describe('Validate GroupFormatter unit tests', function() {
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.message, function(done) {
                 var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
-                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                var groupData = groupFormatter.group(setup.fields, setup.records, testCase.gList);
                 assert.equal(groupData.hasGrouping, false);
                 assert.equal(groupData.totalRows, 0);
                 done();
@@ -352,7 +352,11 @@ describe('Validate GroupFormatter unit tests', function() {
             //  NUMERIC sub_type
             {message: 'NUMERIC: equals grouping currency', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.CURRENCY},
             {message: 'NUMERIC: equals grouping percent', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.PERCENT},
-            {message: 'NUMERIC: equals grouping rating', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.RATING}
+            {message: 'NUMERIC: equals grouping rating', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.RATING},
+            //  CHECKBOX
+            {message: 'CHECKBOX: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.CHECKBOX},
+            {message: 'PHONE: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.PHONE_NUMBER},
+            {message: 'URL: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.URL}
         ];
 
         testCases.forEach(function(testCase) {
@@ -363,8 +367,8 @@ describe('Validate GroupFormatter unit tests', function() {
                 var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
                 var groupSetup = setupGroupedRecords(testCase.numFields, testCase.numRecords, numberOfGroups, testCase.dataType, testCase.gList);
 
-                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
-                var coreGroupData = groupFormatter.groupData(groupSetup.req, groupSetup.fields, groupSetup.records, format);
+                var groupData = groupFormatter.group(setup.fields, setup.records, testCase.gList);
+                var coreGroupData = groupFormatter.groupData(groupSetup.fields, groupSetup.records, testCase.gList, format);
 
                 assert.equal(groupData.hasGrouping, true);
                 assert.equal(coreGroupData.hasGrouping, true);
