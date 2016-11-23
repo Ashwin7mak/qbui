@@ -6,7 +6,7 @@ describe('FieldUtils', () => {
     let testData;
     let recordIdCustomName = 'Employee ID';
 
-    describe('getUniqueIdentifierFieldNameFromFields', () => {
+    describe('getPrimaryKeyFieldNameFromFields', () => {
 
         let testCases = [
             {
@@ -56,18 +56,18 @@ describe('FieldUtils', () => {
 
         testCases.forEach(function(testCase) {
             it(testCase.name, () => {
-                let field = FieldUtils.getUniqueIdentifierFieldNameFromFields(testCase.data);
+                let field = FieldUtils.getPrimaryKeyFieldNameFromFields(testCase.data);
                 expect(field).toBe(testCase.expectation);
             });
         });
 
     });
 
-    describe('getUniqueIdentifierFieldNameFromData', () => {
+    describe('getPrimaryKeyFieldNameFromData', () => {
         it('returns the default Record ID column name if the provided data is misisng that info', () => {
             testData = {};
 
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromData(testData);
+            let field = FieldUtils.getPrimaryKeyFieldNameFromData(testData);
             expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
         });
 
@@ -84,7 +84,7 @@ describe('FieldUtils', () => {
                 display: 'Bob'
             };
 
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromData(testData);
+            let field = FieldUtils.getPrimaryKeyFieldNameFromData(testData);
             expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
         });
 
@@ -102,12 +102,12 @@ describe('FieldUtils', () => {
                 display: '8'
             };
 
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromData(testData);
+            let field = FieldUtils.getPrimaryKeyFieldNameFromData(testData);
             expect(field).toBe(recordIdCustomName);
         });
     });
 
-    describe('getUniqueIdentifierFieldName', () => {
+    describe('getPrimaryKeyFieldName', () => {
         it('gets the Record ID column name from row data', () => {
             testData = {};
             testData[recordIdCustomName] = {
@@ -121,7 +121,7 @@ describe('FieldUtils', () => {
                 display: 'Bob'
             };
 
-            let field = FieldUtils.getUniqueIdentifierFieldName(testData);
+            let field = FieldUtils.getPrimaryKeyFieldName(testData);
             expect(field).toBe(recordIdCustomName);
         });
 
@@ -130,20 +130,20 @@ describe('FieldUtils', () => {
                 fields: {
                     data: [
                         {id: 1, name: 'Last Name'},
-                        {id: 3, name: recordIdCustomName},
+                        {id: 3, keyField: true, name: recordIdCustomName},
                         {id: 2, name: 'First Name'}
                     ]
                 }
             };
 
-            let field = FieldUtils.getUniqueIdentifierFieldName(testData);
+            let field = FieldUtils.getPrimaryKeyFieldName(testData);
             expect(field).toBe(recordIdCustomName);
         });
 
         it('provides the default Record ID column name if it cannot identify the data', () => {
             testData = {};
 
-            let field = FieldUtils.getUniqueIdentifierFieldName(testData);
+            let field = FieldUtils.getPrimaryKeyFieldName(testData);
             expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
         });
     });

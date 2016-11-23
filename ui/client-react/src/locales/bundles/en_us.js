@@ -391,6 +391,12 @@ export default {
             email: "Emailing is not available yet",
             delete: "Deleting is not available yet"
         },
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Edit Record #{recordId}",
+            newRecord: "Add Record",
+            viewRecord: "View Record #{recordId}"
+        },
         quickBaseClassic: "QuickBase Classic"
     }
 };

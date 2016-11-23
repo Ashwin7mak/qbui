@@ -386,6 +386,12 @@ export default {
             email: "L'envoi par courriel n'est pas encore disponible",
             delete: "La suppression n'est pas encore disponible"
         },
+        pageTitles: {
+            pageTitleSeparator: " - ",
+            editingRecord: "Modifier l'enregistrement n ° {recordId}",
+            newRecord: "Ajouter un enregistrement",
+            viewRecord: "Afficher le document n ° {recordId}"
+        },
         quickBaseClassic: "QuickBase Classique"
     }
 };

@@ -1,6 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import AppHomePageRoute  from '../../src/components/app/appHomePageRoute';
+import HtmlUtils from '../../src/utils/htmlUtils';
+import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
 
 //TODO this is a placeholder file to add tests as app home page gets built out
 
@@ -8,7 +10,7 @@ describe('AppHomePageRoute functions', () => {
     'use strict';
 
     let component;
-    let flux = {
+    const flux = {
         actions:{
             selectAppId: function() {return;},
             showTopNav: function() {return;},
@@ -18,8 +20,17 @@ describe('AppHomePageRoute functions', () => {
         }
     };
 
+    const selectedAppId = 2;
+    const selectedAppName = 'Adams';
+    const apps = [
+        {id: 1, name: 'Washington'},
+        {id: selectedAppId, name: selectedAppName},
+        {id: 3, name: 'Jefferson'}
+    ];
+
     beforeEach(() => {
         spyOn(flux.actions, 'selectAppId');
+        spyOn(HtmlUtils, 'updatePageTitle');
     });
 
     afterEach(() => {
@@ -72,4 +83,58 @@ describe('AppHomePageRoute functions', () => {
         expect(TestUtils.isCompositeComponent(parent.refs.ahp)).toBeTruthy();
     });
 
+    it('sets the page title to the currently selected app', () => {
+        component = TestUtils.renderIntoDocument(
+            <AppHomePageRoute flux={flux} apps={apps} selectedAppId={selectedAppId} />
+        );
+
+        expect(HtmlUtils.updatePageTitle).toHaveBeenCalledWith(`${selectedAppName} - ${DEFAULT_PAGE_TITLE}`);
+    });
+
+    describe('getSelectedAppName', () => {
+        let nonExistingAppId = 4;
+
+        let testCases = [
+            {
+                description: 'returns the name of the currently selected app',
+                apps: apps,
+                selectedAppId: selectedAppId,
+                expectedName: selectedAppName
+            },
+            {
+                description: 'returns null if the app does not exist',
+                apps: apps,
+                selectedAppId: nonExistingAppId,
+                expectedName: null
+            },
+            {
+                description: 'returns null if there are no apps',
+                apps: [],
+                selectedAppId: selectedAppId,
+                expectedName: null
+            },
+            {
+                description: 'returns null if apps is null',
+                apps: null,
+                selectedAppId: selectedAppId,
+                expectedName: null
+            },
+            {
+                description: 'returns null if there is not a currently selected app',
+                apps: apps,
+                selectedAppId: null,
+                expectedName: null
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                component = TestUtils.renderIntoDocument(
+                    <AppHomePageRoute selectedAppId={testCase.selectedAppId} apps={testCase.apps} flux={flux} />
+                );
+
+                expect(component.getSelectedAppName()).toEqual(testCase.expectedName);
+            });
+        });
+    });
 });

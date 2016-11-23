@@ -21,6 +21,7 @@ import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
+import FieldUtils from '../../../utils/fieldUtils';
 
 let logger = new Logger();
 
@@ -30,11 +31,17 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 export let ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
 
+    getInitialState() {
+        return {
+            confirmDeletesDialogOpen: false
+        };
+    },
+
     // row was clicked once, navigate to record
     openRow(data) {
         const {appId, tblId, rptId} = this.props;
 
-        var recId = data[this.props.uniqueIdentifier].value;
+        var recId = data[this.props.primaryKeyName].value;
 
         // let flux know we've drilled-down into a record so we can navigate back and forth
         let flux = this.getFlux();
@@ -55,11 +62,11 @@ export let ReportContent = React.createClass({
     getOrigRec(recid) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let uniqueIdentifier =  this.props.uniqueIdentifier;
+        let primaryKeyName =  this.props.primaryKeyName;
         _.find(recs, rec => {
             var keys = Object.keys(rec);
             keys.find((col) => {
-                if (col === uniqueIdentifier && rec[col].value === recid) {
+                if (col === primaryKeyName && rec[col].value === recid) {
                     orig.names = rec;
                     let fids = {};
                     let recKeys = Object.keys(rec);
@@ -85,7 +92,7 @@ export let ReportContent = React.createClass({
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 
-        let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.uniqueIdentifier);
+        let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
         orig.names = rec;
         let fids = {};
@@ -159,10 +166,10 @@ export let ReportContent = React.createClass({
                 //add each non null value as to the new record as a change
                 let newRec = null;
                 if (this.props.reportData.data.hasGrouping) {
-                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.uniqueIdentifier);
+                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.primaryKeyName);
                 } else {
                     newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                        return rec[this.props.uniqueIdentifier].value === recId;
+                        return rec[this.props.primaryKeyName].value === recId;
                     });
                 }
                 if (newRec) {
@@ -280,7 +287,7 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
-        this.setState({selectedRecordId: record[SchemaConsts.DEFAULT_RECORD_KEY].value});
+        this.setState({selectedRecordId: record[this.props.primaryKeyName].value});
         this.setState({confirmDeletesDialogOpen: true});
     },
 
@@ -292,12 +299,6 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
         flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
-    },
-
-    getInitialState() {
-        return {
-            confirmDeletesDialogOpen: false
-        };
     },
 
     cancelRecordDelete() {
@@ -334,7 +335,7 @@ export let ReportContent = React.createClass({
 
         let fields = {};
         let colList = [];
-        if (_.has(this.props, 'fields.fields.data')) {
+        if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             fields = this.props.fields.fields.data;
             fields.forEach((field) => {
                 colList.push(field.id);
@@ -351,7 +352,7 @@ export let ReportContent = React.createClass({
     handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
         let colList = [];
-        if (_.has(this.props, 'fields.fields.data')) {
+        if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
@@ -741,12 +742,6 @@ export let ReportContent = React.createClass({
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
-        let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
-        if (this.props.keyField) {
-            keyField = this.props.keyField;
-        } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {
-            keyField = this.props.fields.keyField.name;
-        }
 
         if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
@@ -784,8 +779,7 @@ export let ReportContent = React.createClass({
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={this.props.keyField}
+                                primaryKeyName={this.props.primaryKeyName}
                                 selectedRows={this.props.selectedRows}
                                 onRowClick={this.openRow}
                                 onEditRecordStart={this.handleEditRecordStart}
@@ -814,8 +808,7 @@ export let ReportContent = React.createClass({
                                 editingId={this.props.reportData.editingId}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={keyField}
+                                primaryKeyName={this.props.primaryKeyName}
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
                                 isInlineEditOpen={isInlineEditOpen}
@@ -854,8 +847,7 @@ export let ReportContent = React.createClass({
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
                                             appUsers={this.props.appUsers}
-                                            uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                            keyField={keyField}
+                                            primaryKeyName={this.props.primaryKeyName}
                                             reportHeader={this.props.reportHeader}
                                             selectionActions={<ReportActions selection={this.props.selectedRows}/>}
                                             onScroll={this.onScrollRecords}
@@ -887,7 +879,8 @@ ReportContent.contextTypes = {
 
 ReportContent.propTypes = {
     pendEdits: React.PropTypes.object.isRequired,
-    onGridReady: React.PropTypes.func,
+    primaryKeyName: React.PropTypes.string.isRequired,
+    onGridReady: React.PropTypes.func
 };
 
 export let ReportContentWithRouter = withRouter(ReportContent);

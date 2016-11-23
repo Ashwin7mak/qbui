@@ -270,7 +270,7 @@ describe('Validate RouteHelper unit tests', function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getDynamicReportsResultsRoute(testCase.url, testCase.id), testCase.expectation);
+                assert.equal(routeHelper.getInvokeReportRoute(testCase.url, testCase.id), testCase.expectation);
                 done();
             });
         });
