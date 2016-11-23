@@ -3,6 +3,7 @@
 .record-content {
     padding: 0 10px;
 }
+
 .recordContainer {
     width: 100%;
     background-image: linear-gradient(to top, $color13 0%, $color14 100%);
@@ -11,47 +12,52 @@
     flex-direction: column;
 
     .recordStageHeadline {
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
         .title {
             font-size: $font-size-h3;
         }
+
         .tableHomepageLink {
-            display:flex;
-            align-items:center;
+            display: flex;
+            align-items: center;
         }
 
         .iconActions {
-
             .iconActionButton {
                 width: auto;
+
                 .qbIcon {
                     width: 18px;
                 }
             }
+
             .iconActionButton:first-of-type {
                 margin-left: -7px;
             }
+
             .iconActionButton:last-of-type {
-                margin-right:10px;
+                margin-right: 10px;
             }
         }
+
         .iconActionButton[disabled] {
             color: $icon-disabled-color;
         }
+
         .iconActionButton {
             color: $pagination-iconfont-normal-color;
-            font-size:24px;
+            font-size: 24px;
         }
+
         .iconActionButton:not([disabled]):hover {
             background-color: inherit;
             color: $pagination-iconfont-hover-color;
-
         }
-
     }
+
     .recordActionsContainer {
         display: flex;
         justify-content: space-between;
@@ -59,23 +65,27 @@
         .secondaryFormActions {
             flex: 1 1 auto;
         }
+
         .pageActions {
             flex: 0 0 auto;
         }
     }
-    .qbFormContainer {
-        flex:1 1 auto;
-        position:relative;
-        overflow:auto;
 
+    .qbFormContainer {
+        flex: 1 1 auto;
+        position: relative;
+        overflow: auto;
     }
+
     .loadedContent {
         overflow: auto;
     }
+
     .formContainer {
         overflow: auto;
-        width:100%;
+        width: 100%;
     }
+
     .divider.color-black-700 {
         color: $color-black-700;
     }
@@ -90,15 +100,18 @@
 @include small-breakpoint {
     .secondaryBar .iconActions.pageActions {
         padding-left: 6px;
+
         .iconActionButton {
             margin-right: 3px;
         }
+
         .dropdownToggle {
             margin-left: -4px;
         }
     }
+
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
-        display:none; /* hide on small, use a floating add button */
+        display: none; /* hide on small, use a floating add button */
     }
 
     .recordStageHeadline {
@@ -109,7 +122,7 @@
 }
 
 .next-enter {
-    left:100%;
+    left: 100%;
 }
 
 .next-enter.next-enter-active {
@@ -119,17 +132,17 @@
 
 .next-leave {
     left: 0;
-    opacity:1;
+    opacity: 1;
 }
 
 .next-leave.next-leave-active {
     left: -100%;
-    opacity:.1;
+    opacity: 0.1;
     transition: all 200ms linear;
 }
 
 .previous-enter {
-    left:-100%;
+    left: -100%;
 }
 
 .previous-enter.previous-enter-active {

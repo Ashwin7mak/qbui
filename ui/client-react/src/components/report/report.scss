@@ -12,38 +12,40 @@
     }
 
     .layout-stage {
-        flex:0 0 auto;
+        flex: 0 0 auto;
     }
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
-
     background-color: $report-backgroundColor;
 
     .reportLinks {
         margin: 0 10px;
+
         a {
             text-decoration: none;
+
             .hi {
                 padding-right: 4px;
             }
         }
+
         a:hover {
             text-decoration: none;
         }
     }
 
     .tableHomepageLink {
-        display:flex;
-        align-items:center;
+        display: flex;
+        align-items: center;
     }
 }
 
 .reportToolsAndContentContainer {
-    display:flex;
+    display: flex;
     flex: 1 1 auto;
-    flex-direction:column;
-    position:relative;
+    flex-direction: column;
+    position: relative;
     //min-height is required in order for the scrollbar to work in firefox
     min-height: 0;
 
@@ -52,11 +54,10 @@
         padding-left: 10px;
 
         @include small-breakpoint {
-            padding-top: 0px; // no stage so to need add space after
+            padding-top: 0; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
                 background-color: $secondary-bar-bg;
             }
-
         }
     }
 
@@ -67,14 +68,13 @@
         align-items: flex-start;
         color: $icon-color;
 
-
         &.noFacets {
             justify-content: flex-start;
         }
 
-        >.pageActions {
-            line-height:40px;
-            align-self:stretch;
+        > .pageActions {
+            line-height: 40px;
+            align-self: stretch;
         }
 
         .leftReportToolbar {
@@ -92,18 +92,18 @@
 
             .recordsCountLoaderContainer {
                 flex-grow: 1;
-                display:flex;
+                display: flex;
                 justify-content: flex-end;
                 align-items: center;
 
                 .loadedContent {
-                    display:block;
-                    width:100%;
+                    display: block;
+                    width: 100%;
                 }
 
                 .loader {
                     position: relative;
-                    width:8%;
+                    width: 8%;
                 }
 
                 .recordsCount {
@@ -121,9 +121,10 @@
             }
 
             .reportNavigation {
-                display:flex;
+                display: flex;
                 align-items: center;
             }
+
             .loadedContent {
                 flex-grow: 1;
                 flex-shrink: 0;
@@ -132,31 +133,34 @@
 
         .filterSearchBoxContainer {
             flex-shrink: 0;
+
             .filterSearchBox {
                 min-width: 60px;
                 max-width: 190px;
             }
         }
-        >.facetsMenuContainer {
+
+        > .facetsMenuContainer {
             flex-shrink: 1;
 
             .facetsMenuButton {
                 .withoutSelections {
-                    margin-top: 0px;
-                    margin-bottom: 0px;
+                    margin-top: 0;
+                    margin-bottom: 0;
                 }
             }
         }
 
         .clearAllFacets {
             display: inline-block;
-            margin-right: .5rem;
-            margin-left: .5rem;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
             vertical-align: top;
             font-size: 16px;
             cursor: pointer;
         }
     }
+
     .spacer {
         width: 15px;
     }
@@ -164,15 +168,15 @@
     .reportFooter {
         display: flex;
         flex-direction: row;
-        justify-content:flex-end;
+        justify-content: flex-end;
         align-items: center;
         flex: 0 1 auto;
-
-        color:$pagination-iconfont-normal-color;
+        color: $pagination-iconfont-normal-color;
 
         .leftReportFooter {
             width: 50%;
         }
+
         .rightReportFooter {
             position: relative;
             width: 50%;
@@ -180,15 +184,15 @@
         }
 
         .hidden {
-            display:none;
+            display: none;
         }
     }
 
     .loadedContent {
-        display:flex;
+        display: flex;
         flex: 1 1 auto;
-        width:100%;
-        position:relative;
+        width: 100%;
+        position: relative;
         //min-height is required in order for the scrollbar to work in firefox
         min-height: 0;
     }
@@ -198,12 +202,13 @@
     .layout-stage {
         .right {
             display: none;
-
         }
+
         .report-content .left {
             width: 100%;
         }
     }
+
     .filterSearchBox {
         .searchInput {
             border: none;
@@ -215,8 +220,8 @@
     .layout-stage {
         .right {
             display: none;
-
         }
+
         .report-content .left {
             width: 100%;
         }
@@ -224,41 +229,42 @@
 }
 
 .reportContent {
-    width:100%;
-    flex:1 1 auto;
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    overflow:auto;
+    width: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: auto;
 }
-
 
 .reportToolbarContainer {
     width: 100%;
-
 }
+
 .noData {
     padding-left: 1.5rem;
-
 }
+
 .addNewRecord {
-    display:none;
+    display: none;
 }
 
 .sortAndGroupPopoverContainer {
     margin-left: 10px;
 }
 
-.sortButtonSpan  {
+.sortButtonSpan {
     display: inline-block;
     cursor: pointer;
     color: $icon-color;
-        @include small-breakpoint {
-            color:$secondary-bar-fg;
-        }
+
+    @include small-breakpoint {
+        color: $secondary-bar-fg;
+    }
 
     .sortButton {
         font-size: 20px;
+
         &.qbIcon {
             display: inline;
         }
@@ -270,8 +276,8 @@
     color: $pagination-iconfont-normal-color;
     font-family: "Lato", sans-serif;
     font-size: 14px;
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
 
     .tipChildWrapper {
         width: auto;
@@ -279,7 +285,8 @@
 
     .navigationButton {
         text-decoration: none;
-        padding-top:5px;
+        padding-top: 5px;
+
         .disabled {
             pointer-events: none;
         }
@@ -290,20 +297,22 @@
             display: inline;
             font-size: 24px;
             color: $pagination-iconfont-normal-color;
+
             &.disabled {
                 color: $pagination-iconfont-disabled-color;
             }
         }
+
         &:hover {
             color: $pagination-iconfont-hover-color;
         }
     }
 
     .pageNumbers {
-        display:inline;
-        padding-left:3px;
-        padding-right:3px;
-        white-space:nowrap;
+        display: inline;
+        padding-left: 3px;
+        padding-right: 3px;
+        white-space: nowrap;
     }
 
     .nextButton {
@@ -311,66 +320,71 @@
             display: inline;
             font-size: 24px;
             color: $pagination-iconfont-normal-color;
+
             &.disabled {
                 color: $pagination-iconfont-disabled-color;
             }
         }
+
         &:hover {
             color: $pagination-iconfont-hover-color;
         }
     }
 }
+
 .navigationButton {
     background-color: Transparent;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
     overflow: hidden;
-    outline:none;
+    outline: none;
 }
-
-
 $add-record-fg: #fff;
 $add-record-bg: #a52363;
 $add-record-radius: 20px;
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        color:$secondary-bar-fg;
-        justify-content:space-between;
+        color: $secondary-bar-fg;
+        justify-content: space-between;
 
         .popover-content {
-            color:$icon-color;
+            color: $icon-color;
         }
     }
-    .reportContainer .reportToolsAndContentContainer .loadedContent {
-        margin:0;
-        width:100%;
-    }
-    .addNewRecord {
-        display:inline-block;
-        position:fixed;
-        right:24px;
-        bottom:24px;
-        font-size:24px;
 
+    .reportContainer .reportToolsAndContentContainer .loadedContent {
+        margin: 0;
+        width: 100%;
+    }
+
+    .addNewRecord {
+        display: inline-block;
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        font-size: 24px;
         color: $add-record-fg;
         background-color: $add-record-bg;
         vertical-align: middle;
-        text-align:center;
+        text-align: center;
         width: $add-record-radius * 2;
         height: $add-record-radius * 2;
         -moz-border-radius: $add-record-radius;
         -webkit-border-radius: $add-record-radius;
         border-radius: $add-record-radius;
+
         .qbIcon {
             line-height: $add-record-radius * 2;
         }
+
         &:hover {
             color: $add-record-fg;
         }
+
         &:focus {
-            color:$add-record-fg;
+            color: $add-record-fg;
         }
     }
 }

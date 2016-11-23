@@ -4,9 +4,11 @@
     .trowserFooter {
         z-index: $zindex-trowserFooter;
     }
+
     .trowserFooter .saveButtons {
         display: flex;
     }
+
     .trowserHeader {
         .breadcrumbs {
             .iconActions {
@@ -16,15 +18,17 @@
 
                 .btn {
                     &:hover {
-                        background-color:$nav-icon-hover-bg;
+                        background-color: $nav-icon-hover-bg;
                         color: $color2;
                     }
-                    background-color:inherit;
+                    background-color: inherit;
                     color: $color2;
-                    padding:0;
+                    padding: 0;
+
                     .qbIcon {
                         font-size: 24px;
                     }
+
                     &.prevRecord, &.nextRecord {
                         .qbIcon {
                             font-size: 30px;

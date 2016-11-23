@@ -94,73 +94,69 @@ $icon-color: $color-blue-500;
 $icon-disabled-color: $color-black-400;
 $menu-item-disabled-color: $color-black-400;
 $data-color: $color-black-700;
-$input-bg-color:$color-black-100;
-$input-text-focus-border-color:   $color-indigo-800;
-$input-border-focus-color:        $color-indigo-700;
-$input-text-normal-border-color:  $color-black-400;
-$input-text-error-border-color:   $error-color;
-$tootip-error-color:              $error-color;
-$input-email-normal-text-color:   $color-cyan-500;
-$field-label-normal-color:        $color-blue-600;
-$selected-color:                  $color-cyan-500;
-$hover-color:                     $color-blue-200;
+$input-bg-color: $color-black-100;
+$input-text-focus-border-color: $color-indigo-800;
+$input-border-focus-color: $color-indigo-700;
+$input-text-normal-border-color: $color-black-400;
+$input-text-error-border-color: $error-color;
+$tootip-error-color: $error-color;
+$input-email-normal-text-color: $color-cyan-500;
+$field-label-normal-color: $color-blue-600;
+$selected-color: $color-cyan-500;
+$hover-color: $color-blue-200;
 
 //-- TBD: update usages to reference colors above
-$color1:    #f3f8fe; // wispy-water
-$color2:    #ffffff; // white
-$color3:    #486c8f;
-$color4:    #dcdcdc; // rabbit
-$color5:    #c0d0e4; // periwinkle
-$color6:    #d2dce7;
-$color7:    #e3eaf3; // clear-day
-$color8:    #486c8f;
-$color9:    #969696; // walrus
-$color10:   #243F7F;
-$color11:   #404040; // charcoal
-$color12:   #f5f5f5; // kitten
-$color13:   #f6f8fb;
-$color14:   #f9fafb;
-$color15:   #f0f3f9;
-$color16:   #2ca01c; // lazy-lizard
-$color17:   #f3f5f8;
-$color18:   #cccccc;
-$color19:   #c7c7c7; // porpoise
-$color20:   #486c8f; // dull-sapphire
-$color21:   #b8b8b8; //ghost
-$color22:   #56b349; //fiddlehead
-$color23:   #7090ab; // dragon-foot
-$color24:   #002b48;
-$color25:   #555555;
-$color26:   #254a6d;
-$color27:   #00b0c2;
-$color28:   #264a6d;
-$color29:   #bfcfe3;
-$color30:   #193048;
-$color31:   #13dbf1;
-$color32:   #131f2b;
-$color33:   #365ebf; //big-leaf
-$color34:   #00b0c2; //waterpebble
+$color1: #f3f8fe; // wispy-water
+$color2: #ffffff; // white
+$color3: #486c8f;
+$color4: #dcdcdc; // rabbit
+$color5: #c0d0e4; // periwinkle
+$color6: #d2dce7;
+$color7: #e3eaf3; // clear-day
+$color8: #486c8f;
+$color9: #969696; // walrus
+$color10: #243f7f;
+$color11: #404040; // charcoal
+$color12: #f5f5f5; // kitten
+$color13: #f6f8fb;
+$color14: #f9fafb;
+$color15: #f0f3f9;
+$color16: #2ca01c; // lazy-lizard
+$color17: #f3f5f8;
+$color18: #cccccc;
+$color19: #c7c7c7; // porpoise
+$color20: #486c8f; // dull-sapphire
+$color21: #b8b8b8; //ghost
+$color22: #56b349; //fiddlehead
+$color23: #7090ab; // dragon-foot
+$color24: #002b48;
+$color25: #555555;
+$color26: #254a6d;
+$color27: #00b0c2;
+$color28: #264a6d;
+$color29: #bfcfe3;
+$color30: #193048;
+$color31: #13dbf1;
+$color32: #131f2b;
+$color33: #365ebf; //big-leaf
+$color34: #00b0c2; //waterpebble
 
 
 
 //================
-
 $left-nav-bg: $color30; // deep-sea
 $icon-color-hover: #0098cd; // caribbean
 $topnav-icon-color: $icon-color;
 $page-actions-icon-color: $color-cyan-700;
-
 $header-bg: $color7;
-$nav-hover-bg: #0097CD;
+$nav-hover-bg: #0097cd;
 $nav-hover-fg: $color2;
 $nav-link-fg: $color2;
 $nav-border: $color18;
 $small-header-bg: $color2;
-
 $report-container-bg: $color2;
 //tabs underline color
 $tabsUnderLine: $color33;
-
 $icon-badge-color: #2d6c92;
 $icon-edit-color: $color27;
 $icon-print-color: #2ca01c;
@@ -168,22 +164,19 @@ $icon-mail-color: #f7a21a;
 $icon-duplicate-color: #c75ac2;
 $icon-delete-color: #d93b42;
 $icon-pickles-color: #404040;
-
 $selection-badge-color: $color20;
-
 $link-normal-color: $color-indigo-700;
 $link-hover-color: $color-cyan-600;
 $link-press-color: $color-cyan-600;
-
-$selected-check-color:  $color16;
+$selected-check-color: $color16;
 
 //== Stage
-$stage-backgroundColor:           $color2;
+$stage-backgroundColor: $color2;
 $stage-headline-icon-color: $color-cyan-500;
 $stage-headline-color: $color-black-700;
 
 //== Report
-$report-backgroundColor:          $color13;
+$report-backgroundColor: $color13;
 $pagination-iconfont-normal-color: $color-cyan-700;
 $pagination-iconfont-disabled-color: $color-black-400;
 $pagination-iconfont-hover-color: $color-cyan-300;
@@ -195,9 +188,9 @@ $grid-group-row-header-border-top: $color7;
 $grid-group-row-header-divider: $color21;
 
 //== Report Toolbar
-$toolBar-borderColor:              $color7;
-$toolBar-backgroundColor:          $color15;
-$toolBar-input-borderColor:        $color4;
+$toolBar-borderColor: $color7;
+$toolBar-backgroundColor: $color15;
+$toolBar-input-borderColor: $color4;
 
 //==CardView
 $pagination-mobile-panel-background-color: $color-black-200;
@@ -206,19 +199,19 @@ $pagination-mobile-panel-text-color: $color-blue-500;
 $pagination-mobile-topbar-text-color: $color-black-100;
 
 //==Facet list
-$facetMenu-backgroundColor:             $color2;
-$facetSelected-color:                   $selected-check-color;
-$facetMenu-BorderColor:                 $color19;
-$facetMenu-NoOptionsColor:              $color19;
-$facetMenu-clearButtonColor:            $color9;
-$facetMenu-showMoreColor:               $color8;
-$facetMenu-facetTokenTextColor:         $color20;
-$facetMenu-facetTokenBackgroundColor:   $color7;
-$facetMenu-itemHoverColor:              rgba($color4, 0.5);
+$facetMenu-backgroundColor: $color2;
+$facetSelected-color: $selected-check-color;
+$facetMenu-BorderColor: $color19;
+$facetMenu-NoOptionsColor: $color19;
+$facetMenu-clearButtonColor: $color9;
+$facetMenu-showMoreColor: $color8;
+$facetMenu-facetTokenTextColor: $color20;
+$facetMenu-facetTokenBackgroundColor: $color7;
+$facetMenu-itemHoverColor: rgba($color4, 0.5);
 
 //===Sort & Group Popover
-$popover-text : $color11;
-$popover-title :$popover-text;
+$popover-text: $color11;
+$popover-title: $popover-text;
 $popover-background: $color2;
 
 //==report icon colors
@@ -229,37 +222,32 @@ $report-icon-calendar-color: $color22;
 $report-icon-grid-edit-color: #c72f79;
 $report-icon-timeline-color: #e77700;
 $report-icon-map-color: #00c4d8;
-
 $search-input-fg: $color25;
 $popup-fg: #404040;
-
-$top-nav-title-icon-color: #009AAE;
+$top-nav-title-icon-color: #009aae;
 $secondary-bar-fg: #fff;
-$secondary-bar-bg: #009AAE;
-$secondary-bar-page-actions-bg: #476B90;
+$secondary-bar-bg: #009aae;
+$secondary-bar-page-actions-bg: #476b90;
 
 //==recordtrowser
 $nav-icon-hover-bg: $color-cyan-800;
 
-@mixin focus-shadow($color:$input-border-focus-color) {
-  box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
-  outline: none;
+@mixin focus-shadow($color: $input-border-focus-color) {
+    box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
+    outline: none;
 }
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
-
 $required-asterisk-color: $color-blue-500;
 
 //== Fields
 $clearmini-normal-color: $color-black-500;
 $clearmini-hover-color: $color-cyan-600;
-
 $checkbox-background-checked-color: $color-cyan-500;
 $checkbox-background-unchecked-color: $color-black-100;
 $checkbox-border-color: $color-black-500;
 $checkbox-checkmark-editable-color: $color-black-100;
 $checkbox-checkmark-readonly-color: $color-cyan-500;
-
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
 $datepicker-date-hover-bg: $color-blue-300;
@@ -272,14 +260,17 @@ $datepicker-bg-today: $color-orange-500;
 // UrlField
 $urlButton-background-normal-colorstop1-color: $color-black-200;
 $urlButton-background-normal-colorstop2-color: $color-black-100;
+
 @mixin urlButtonBackgroundGradient() {
     background: linear-gradient(to top, $urlButton-background-normal-colorstop1-color, $urlButton-background-normal-colorstop2-color);
 }
+
 @mixin urlButtonDisabled() {
     opacity: .4;
 }
 $urlButton-background-focus-colorstop1-color: $color-black-800;
 $urlButton-background-focus-colorstop2-color: $color-black-100;
+
 @mixin urlButtonBackgroundFocusGradient() {
     background: linear-gradient(to top, rgba($urlButton-background-focus-colorstop1-color, 0.05), rgba($urlButton-background-focus-colorstop2-color, 0.05));
 }
@@ -288,7 +279,6 @@ $urlButton-border-color: $color-black-300;
 $urlButton-background-hover-color: $color-black-100;
 $urlButton-background-focus-colorstop1-color: $color-black-800;
 $urlButton-background-focus-colorstop2-color: $color-black-100;
-
 $user-picker-deactivated-label-fg: $color-black-600;
 $user-picker-user-label-fg: $color-black-700;
 $user-picker-email-label-fg: $color-black-600;
