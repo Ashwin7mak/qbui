@@ -73,9 +73,9 @@ const CellEditor = React.createClass({
                               showScrollForMultiLine={true}
                               ref={(c) => {
                                   //get reference to the component for this field
-                                  let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
-                                  if (this.props.params.data && uniqueIdentifier) {
-                                      let rid = this.props.params.data[uniqueIdentifier].value;
+                                  let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.params.data);
+                                  if (this.props.params.data && primaryKeyName) {
+                                      let rid = this.props.params.data[primaryKeyName].value;
 
                                       if (!this.props.params.context.cells) {
                                           this.props.params.context.cells = {};
