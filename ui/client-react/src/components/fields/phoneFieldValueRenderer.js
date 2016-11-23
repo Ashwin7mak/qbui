@@ -1,7 +1,8 @@
 import React from 'react';
+import QBicon from '../../components/qbIcon/qbIcon.js';
+import Breakpoints from "../../utils/breakpoints";
 import './fields.scss';
-import UrlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
-import UrlFieldValueRenderer from './urlFieldValueRenderer';
+import './phoneField.scss';
 /**
  * # TextFieldValueRenderer
  *
@@ -25,16 +26,39 @@ const PhoneFieldValueRenderer = React.createClass({
         attributes: React.PropTypes.object
 
     },
+    renderQBIcon() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        console.log('issmall: ', isSmall);
+        if (isSmall) {
+            return (
+                <div className = "phoneIcon">
+                    <QBicon className ="smsIcon" icon="mail" />
+                    <QBicon icon="mail" />
+                </div>
+            );
+        } else {
+            return <span />;
+        }
+    },
+    renderLinkHref() {
+        let phoneNumberLink = 'callto:' + this.props.value;
+        return encodeURI(phoneNumberLink);
+    },
     render() {
         // Remove value from props to be replaced by the formatted email
         let {value, ...otherProps} = this.props;
 
         // Format as an email link
         value = (value || this.props.display);
-        let phoneNumber = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'callto:');
-
+        // let phoneNumber = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'callto:');
+        // <UrlFieldValueRenderer value={phoneNumber} openInNewWindow={false} {...otherProps} inputType="number" />
         return (
-            <UrlFieldValueRenderer value={phoneNumber} openInNewWindow={false} {...otherProps} inputType="number" />
+            <a href={this.renderLinkHref()} tabIndex="-1">
+                <span>
+                    {this.props.display}
+                </span>
+                {this.renderQBIcon()}
+            </a>
         );
     }
 });
