@@ -26,39 +26,48 @@ const PhoneFieldValueRenderer = React.createClass({
         attributes: React.PropTypes.object
 
     },
-    renderQBIcon() {
+    renderLink() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        console.log('issmall: ', isSmall);
+        let telPhoneNumberLink = 'tel:' + this.props.value;
+        let smsPhoneNumberLink = 'sms:' + this.props.value;
+        telPhoneNumberLink = encodeURI(telPhoneNumberLink);
+        smsPhoneNumberLink = encodeURI(smsPhoneNumberLink);
         if (isSmall) {
             return (
-                <div className = "phoneIcon">
-                    <QBicon className ="smsIcon" icon="mail" />
-                    <QBicon icon="mail" />
+                <div className = "qbIconWrapper">
+                    <a href={telPhoneNumberLink} tabIndex="-1">
+                        <span>
+                            {this.props.display}
+                        </span>
+                    </a>
+                    <div className="phoneIcon">
+                        <a href={smsPhoneNumberLink} tabIndex="-1">
+                            <QBicon className="smsIcon" icon="edit" />
+                        </a>
+                        <a href={telPhoneNumberLink} tabIndex="-1">
+                            <QBicon icon="mail" />
+                        </a>
+                    </div>
                 </div>
             );
         } else {
-            return <span />;
+            return (
+                <a href={telPhoneNumberLink} tabIndex="-1">
+                    <span>
+                        {this.props.display}
+                    </span>
+                </a>
+            );
         }
-    },
-    renderLinkHref() {
-        let phoneNumberLink = 'callto:' + this.props.value;
-        return encodeURI(phoneNumberLink);
     },
     render() {
         // Remove value from props to be replaced by the formatted email
-        let {value, ...otherProps} = this.props;
-
-        // Format as an email link
+        let {value} = this.props;
         value = (value || this.props.display);
-        // let phoneNumber = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'callto:');
-        // <UrlFieldValueRenderer value={phoneNumber} openInNewWindow={false} {...otherProps} inputType="number" />
         return (
-            <a href={this.renderLinkHref()} tabIndex="-1">
-                <span>
-                    {this.props.display}
-                </span>
-                {this.renderQBIcon()}
-            </a>
+            <div className = "phoneWrapper">
+                {this.renderLink()}
+            </div>
         );
     }
 });
