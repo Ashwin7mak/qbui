@@ -15,16 +15,8 @@
         let routeHelper = require('../../routes/routeHelper');
         var constants = require('../../../../common/src/constants');
 
-        //Module constants:
-        var APPLICATION_JSON = 'application/json';
-        var CONTENT_TYPE = 'Content-Type';
-
         var request = defaultRequest;
 
-        //TODO: only application/json is supported for content type.  Need a plan to support XML
-        //
-        //TODO: move getApps logic into this api  (confirm that their is no special handling for getApps..the
-        //TODO  request is just proxied through to core..
         var appsApi = {
 
             /**
@@ -51,7 +43,7 @@
 
                 return new Promise((resolve, reject) => {
                     var opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppUsersRoute(req.url);
 
                     //  make the api request to get the app users
