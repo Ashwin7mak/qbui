@@ -381,18 +381,18 @@
          * TODO
          *
          * @param appId
-         * @param isGet
-         * @param useMercury
+         * @param isPost
+         * @param openInMercury
          * @returns {*}
          */
-        getApplicationStackRoute: function(appId, isGet, value) {
+        getApplicationStackRoute: function(appId, isPost, openInMercury) {
             let root = getLegacyRoot();
             if (appId) {
                 root += '/' + appId + '?a=';
-                if (isGet) {
-                    root += GET_APPLICATION_STACK_JBI;
+                if (isPost) {
+                    root += SET_APPLICATION_STACK_JBI + '&value=' + openInMercury === true ? '1' : '0';
                 } else {
-                    root += SET_APPLICATION_STACK_JBI + '&value=' + value;
+                    root += GET_APPLICATION_STACK_JBI;
                 }
             }
             return root;

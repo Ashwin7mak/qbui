@@ -12,6 +12,7 @@ class AppService extends BaseService {
             GET_APP           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
             GET_APP_USERS     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.USERS}`,
             GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`,
+            APPLICATION_STACK : `${constants.BASE_URL.LEGACY}/${constants.APPS}/{0}/${constants.STACK}`
         };
     }
 
@@ -43,6 +44,29 @@ class AppService extends BaseService {
      */
     getApps() {
         return super.get(this.API.GET_APPS);
+    }
+
+    /**
+     * Return the stack where the application should be shown
+     *
+     * @param appId
+     * @returns promise
+     */
+    getApplicationStack(appId) {
+        let url = super.constructUrl(this.API.APPLICATION_STACK, [appId]);
+        return super.get(url);
+    }
+
+    /**
+     * Set the stack where the application should be shown
+     *
+     * @param appId
+     * @param openInMercury
+     * @returns promise
+     */
+    setApplicationStack(appId, openInMercury) {
+        let url = super.constructUrl(this.API.APPLICATION_STACK, [appId]);
+        return super.post(url, {openInMercury:openInMercury || false});
     }
 
 }

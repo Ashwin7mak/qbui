@@ -32,6 +32,69 @@ let appsModel = {
 };
 
 let appsActions = {
+
+    getApplicationStack(appId) {
+        let logger = new Logger();
+        return new Promise((resolve, reject) => {
+            if (appId) {
+                //TODO dispatch event
+                let appService = new AppService();
+
+                appService.getApplicationStack(appId).then(
+                    (response) => {
+                        logger.debug('ApplicationService getApplicationStack success:' + JSON.stringify(response));
+                        //TODO dispatch success event
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.getApplicationStack:');
+                        //TODO dispatch failure event
+                        reject();
+                    }
+                ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error('ApplicationService.getApplicationStack: Missing required appId input parameter.');
+                //TODO: dispatch error event
+                reject();
+            }
+        });
+    },
+
+    setApplicationStack(appId, openInMercury) {
+        let logger = new Logger();
+        return new Promise((resolve, reject) => {
+            if (appId) {
+                //TODO dispatch event
+                let appService = new AppService();
+
+                appService.setApplicationStack(appId, openInMercury).then(
+                    (response) => {
+                        logger.debug('ApplicationService setApplicationStack success:' + JSON.stringify(response));
+                        //TODO dispatch success event
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.setApplicationStack:');
+                        //TODO dispatch failure event
+                        reject();
+                    }
+                ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error('ApplicationService.getApplicationStack: Missing required appId input parameter.');
+                //TODO: dispatch error event
+                reject();
+            }
+        });
+    },
+
     loadApps(withTables) {
         let logger = new Logger();
         //  promise is returned in support of unit testing only

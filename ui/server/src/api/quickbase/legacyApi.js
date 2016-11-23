@@ -42,8 +42,17 @@
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 //  reset url to call the legacy stack
-                let value = opts.body;
-                opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackRoute(req.params.appId, requestHelper.isGet(req), value);
+                let isPost = requestHelper.isPost(req);
+                let openInMercury = false;
+                if (isPost === true) {
+                    let resp = JSON.parse(opts.body);
+                    //TODO openInMercury should be a common constant
+                    //TODO confirm the default behavior if invalid value..
+                    if (resp) {
+                        openInMercury = resp.openInMercury;
+                    }
+                }
+                opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackRoute(req.params.appId, isPost, openInMercury);
 
                 //return requestHelper.executeRequest(req, opts);
                 return Promise.resolve('ok');
