@@ -51,6 +51,7 @@
         //  report endpoints
         routeToGetFunction[routeConsts.REPORT_META] = fetchReportMeta;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
+        routeToGetFunction[routeConsts.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
         routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
@@ -65,7 +66,6 @@
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
-        routeToPostFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -465,21 +465,39 @@
     }
 
     /**
+     * This is the function for fetching report results from the reportsAPI endpoint
+     * when paging and when overriding the default report meta data.
+     *
+     * @param req
+     * @param res
+     * @returns {*}
+     */
+    function fetchReportInvokeResults(req, res) {
+        return fetchReportResults(req, res, true);
+    }
+
+    /**
      * This is the function for fetching the report results from the reportsApi endpoint.
      * This endpoint is intended to be used when a client is initially loading a report
      * as the report meta data is used.
      *
      * @param req
      * @param res
+     * @param overrideReportMetaData
      */
     /*eslint no-shadow:0 */
-    function fetchReportResults(req, res) {
+    function fetchReportResults(req, res, overrideReportMetaData) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            //  include facet information if a get request to fetch the report results
-            reportsApi.fetchReport(req, req.params.reportId, requestHelper.isGet(req)).then(
+            //  anything but a true value means we will fetch the report using the default report meta data
+            let useDefaultReportMetaData = overrideReportMetaData !== true;
+
+            //  include facets in the response if we are using the default report meta data
+            let fetchFacets = useDefaultReportMetaData;
+
+            reportsApi.fetchReport(req, req.params.reportId, fetchFacets, useDefaultReportMetaData).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');

@@ -127,8 +127,7 @@ describe('QbGrid functions', () => {
                                 records={this.state.records}
                                 columns={this.state.columns}
                                 onRowClick={()=>{didRowClick = true;}}
-                                uniqueIdentifier="Record ID#"
-                                keyField="Record ID#"
+                                primaryKeyName="Record ID#"
                                 sortFids={[1]}
                                 flux={flux}/>;
                     </div>);
@@ -182,8 +181,7 @@ describe('QbGrid functions', () => {
                                 actions={TableActionsMock}
                                 records={this.state.records}
                                 columns={this.state.columns}
-                                uniqueIdentifier="Record ID#"
-                                keyField="Record ID#"
+                                primaryKeyName="Record ID#"
                                 onEditRecordStart={()=>{}}
                                 flux={flux} />;
                     </div>);

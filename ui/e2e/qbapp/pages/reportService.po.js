@@ -281,7 +281,7 @@
         this.clickEditPencilOnStage = function(recordRowIndex) {
             var self = this;
             return element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).click().then(function() {
-                e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
+                return e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
                     return self.reportEditRecordBtnOnStage.click().then(function() {
                         return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
                             // Let the trowser animate

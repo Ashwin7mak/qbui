@@ -9,11 +9,11 @@ class FieldUtils {
     * @returns {string}
     *
     */
-    static getUniqueIdentifierFieldName(data) {
+    static getPrimaryKeyFieldName(data) {
         if (_.has(data, 'fields')) {
-            return FieldUtils.getUniqueIdentifierFieldNameFromFields(data);
+            return FieldUtils.getPrimaryKeyFieldNameFromFields(data);
         } else {
-            return FieldUtils.getUniqueIdentifierFieldNameFromData(data);
+            return FieldUtils.getPrimaryKeyFieldNameFromData(data);
         }
     }
 
@@ -23,14 +23,37 @@ class FieldUtils {
     * @param {object} fields
     * @returns {string}
     */
-    static getUniqueIdentifierFieldNameFromFields(fields) {
+    static getPrimaryKeyFieldNameFromFields(fields) {
         if (requiredFieldsArePresent(fields)) {
-            let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-            if (uniqueIdentifierField) {
-                return uniqueIdentifierField.name;
+            let primaryKeyField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+
+            if (primaryKeyField) {
+                return primaryKeyField.name;
             } else {
                 return SchemaConsts.DEFAULT_RECORD_KEY;
             }
+        } else {
+            return SchemaConsts.DEFAULT_RECORD_KEY;
+        }
+    }
+
+    /**
+     * Gets the name for the unique identifier row from grid data
+     * even if the Record ID # field has been renamed
+     * @param {object} rowData
+     *    {
+     *        fieldName: {
+     *            id: 3 // this is the field id
+     *            value: 2
+     *            display: "2"
+     *        }
+     *    }
+     * @returns {string}
+     */
+    static getPrimaryKeyFieldNameFromData(rowData) {
+        let primaryKeyFieldName = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+        if (primaryKeyFieldName) {
+            return primaryKeyFieldName;
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
@@ -48,28 +71,6 @@ class FieldUtils {
             maxLength =  fieldDef.datatypeAttributes.clientSideAttributes.max_chars;
         }
         return maxLength;
-    }
-
-    /**
-    * Gets the name for the unique identifier row from grid data
-    * even if the Record ID # field has been renamed
-    * @param {object} rowData
-    *    {
-    *        fieldName: {
-    *            id: 3 // this is the field id
-    *            value: 2
-    *            display: "2"
-    *        }
-    *    }
-    * @returns {string}
-    */
-    static getUniqueIdentifierFieldNameFromData(rowData) {
-        let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-        if (recordIdField) {
-            return recordIdField;
-        } else {
-            return SchemaConsts.DEFAULT_RECORD_KEY;
-        }
     }
 
     /**

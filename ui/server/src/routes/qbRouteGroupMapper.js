@@ -25,7 +25,8 @@
         {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.FORM_AND_RECORD_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         // report endpoints
-        {route: routeConsts.REPORT_RESULTS, methods: [constants.DELETE, constants.PATCH, constants.PUT]},  // get and post allowed
+        {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.REPORT_INVOKE_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_META, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_RECORDS_COUNT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.TABLE_HOMEPAGE_REPORT, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},

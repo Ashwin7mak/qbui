@@ -32,7 +32,7 @@ let CardViewList = React.createClass({
      */
     onEditRecord(data) {
 
-        this.props.onEditRecord(data[this.props.uniqueIdentifier].value);
+        this.props.onEditRecord(data[this.props.primaryKeyName].value);
     },
 
     getRows() {
@@ -49,7 +49,7 @@ let CardViewList = React.createClass({
                                      groupLevel={groupLevel}
                                      node={node}
                                      columns={this.props.columns}
-                                     uniqueIdentifier={this.props.uniqueIdentifier}
+                                     primaryKeyName={this.props.primaryKeyName}
                                      allowCardSelection={this.props.allowCardSelection}
                                      onToggleCardSelection={this.props.onToggleCardSelection}
                                      onRowSelected={this.props.onRowSelected}
@@ -78,11 +78,11 @@ let CardViewList = React.createClass({
                             </div>
                         </Collapse>
                     </div> :
-                    <CardView key={this.props.node[this.props.uniqueIdentifier]}
-                              rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
+                    <CardView key={this.props.node[this.props.primaryKeyName]}
+                              rowId={this.props.node[this.props.primaryKeyName] ? this.props.node[this.props.primaryKeyName].value : null}
                               data={this.props.node}
                               columns={this.props.columns}
-                              uniqueIdentifier={this.props.uniqueIdentifier}
+                              primaryKeyName={this.props.primaryKeyName}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}
                               onRowSelected={this.props.onRowSelected}

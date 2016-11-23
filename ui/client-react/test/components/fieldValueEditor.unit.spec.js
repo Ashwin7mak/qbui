@@ -139,6 +139,7 @@ describe('FieldValueEditor functions', () => {
 
         let fieldDef = {
             id: DEFAULT_RECORD_KEY_ID,
+            keyField: true,
             field: 'Record ID#'
         };
 

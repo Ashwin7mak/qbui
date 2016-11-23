@@ -335,7 +335,7 @@ let recordActions = {
                                 logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
-                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
                                 }
                                 resolve(recId);
                             },

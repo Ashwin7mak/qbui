@@ -25,13 +25,13 @@ const RowEditWrapper = React.createClass({
             <div
                 className="editTools">
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button onClick={this.props.onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
+                    <Button className="rowEditActionsCancel" onClick={this.props.onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
 
                 {this.props.children}
 
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button onClick={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClasses}/></Button>
+                    <Button className="rowEditActionsSaveAndAdd" onClick={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClasses}/></Button>
                 </QBToolTip>
             </div>
         );
@@ -53,45 +53,28 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         //get the current record id
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
         this.props.params.context.onRecordSaveClicked(id);
         this.props.api.deselectAll();
     },
 
-    /**
-     * delete icon is not included but may come back shortly
-     */
-    onClickDelete() {
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
-        this.props.api.deselectAll();
-
-        this.props.flux.actions.deleteRecord(id);
-        setTimeout(()=> {
-            NotificationManager.info('Record deleted', 'Deleted', 1500);
-        }, 1000);
-    },
     onClickCancel() {
         //get the original unchanged values in data to rerender
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
 
-        const {context} = this.props.params;
-        // Escape keydoan handler can fire this onClickCancel, we should cancel only if this is the
-        // row currently being edited
-        if (context.isInlineEditOpen && context.currentEditRid === id.value) {
-            if (this.props.params.node) {
-                //ag-grid
-                this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
-            }
-
-            this.props.api.deselectAll();
-            this.props.flux.actions.selectedRows([]);
-            this.props.params.context.onEditRecordCancel(id);
+        if (this.props.params.node) {
+            //ag-grid
+            this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
         }
+
+        this.props.api.deselectAll();
+        this.props.flux.actions.selectedRows([]);
+        this.props.params.context.onEditRecordCancel(id);
     },
 
     onClickAdd() {
         //get the current record id
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
         this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },
@@ -103,7 +86,7 @@ const RowEditActions = React.createClass({
         if (validRow) {
             saveButton = (
                 <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
-                    <Button onClick={this.onClickSave}>
+                    <Button className="rowEditActionsSave" onClick={this.onClickSave}>
                         <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
                             <QBIcon icon="check" className="saveRecord"/>
                         </Loader>
