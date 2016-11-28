@@ -39,9 +39,9 @@
         res.status(result.status);
         //respond with json if requested - for swagger ajax
         if (req.headers.accept === consts.APPLICATION_JSON) {
-            res.status(result.status).json(result);
+            res.json(result);
         } else {
-            res.status(result.status).render(viewFilePath, {favicons: favicons});
+            res.render(viewFilePath, {favicons: favicons});
         }
         log.error({req: req, res: res}, 'Error fulfilling requested route.');
     }
