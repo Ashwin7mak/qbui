@@ -399,9 +399,9 @@ export default {
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         v2v3: {
-            manageAccessTitle: "Manage User Access to Mercury",
-            versionSelectTitle: "My users will open this app in:",
-            manageAccessTip: "*Only you and other app admins see this toggle menu"
+            manageAccessTitle: "Manage user access to Mercury",
+            versionSelectTitle: "My users will open this app in",
+            manageAccessTip: "*Only app admins can manage user access"
 
         }
     }
