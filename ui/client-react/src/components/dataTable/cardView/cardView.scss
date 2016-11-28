@@ -1,19 +1,14 @@
-
 @import '../../../../src/assets/css/qbVariables';
-
 $report-background-color: $color1;
 $card-expanded-background-color: $color2;
-
 $fieldLabel-font-size: $font-size-small;
 $fieldValue-font-size: $font-size-base;
-
 $fieldLabel-color: $color3;
 $card-border-color: $color4;
 
 /* TODO: move to qbVariables after figuring out relative urls */
 $chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
 $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
-
 $custom-row-card-padding-left: 10px;
 $custom-row-card-padding-right: 5px;
 $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row-card-padding-right;
@@ -36,13 +31,13 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
     padding: 5px $custom-row-card-padding-right 15px $custom-row-card-padding-left;
     background: $card-expanded-background-color;
     margin-bottom: 5px;
-    overflow:hidden;
-    cursor:pointer;
+    overflow: hidden;
+    cursor: pointer;
+
     .card {
         flex: 1 1 auto;
         width: calc(100% - #{$card-view-checkbox-width} + #{$custom-row-card-horizontal-padding});
     }
-
 
     .flexRow {
         position: relative;
@@ -50,50 +45,59 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         flex-direction: row;
         width: calc(100% + #{$custom-row-card-horizontal-padding});
     }
+
     .fieldRow.collapsed {
         max-height: 35px;
-        -moz-transition: .35s;
-        -ms-transition: .35s;
-        -webkit-transition: .35s;
-        transition: .25s;
+        -moz-transition: 0.35s;
+        -ms-transition: 0.35s;
+        -webkit-transition: 0.35s;
+        transition: 0.25s;
         transition-timing-function: ease;
     }
+
     .fieldRow.expanded {
         max-height: 1024px;
-        -moz-transition: .35s;
-        -ms-transition: .35s;
-        -webkit-transition: .35s;
-        transition: .35s;
+        -moz-transition: 0.35s;
+        -ms-transition: 0.35s;
+        -webkit-transition: 0.35s;
+        transition: 0.35s;
         transition-timing-function: ease;
     }
+
     .top-card-row {
         font-size: $fieldLabel-font-size;
         cursor: pointer;
+
         .field {
-            position:relative;
+            position: relative;
         }
     }
+
     .fieldRow {
         display: flex;
         flex-direction: row;
         align-items: stretch;
         flex-wrap: wrap;
         padding: 5px 0;
+
         .field {
             flex: 1 1 auto;
             padding: 0 10px 10px 0;
             width: 50%;
+
             .fieldLabel {
                 color: $fieldLabel-color;
                 padding-bottom: 2px;
                 display: block;
             }
+
             &:nth-child(n+3) {
                 .fieldValue {
                     white-space: normal;
                 }
             }
         }
+
         .fieldValue, .fieldLabel {
             display: block;
             overflow: hidden;
@@ -101,19 +105,23 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
             white-space: nowrap;
         }
     }
+
     .card-expander {
-        position:absolute;
+        position: absolute;
         right: $custom-row-card-horizontal-padding;
-        top:0;
+        top: 0;
+
         .qbPanelHeaderIcon {
-            top:0;
+            top: 0;
         }
+
         .rotateDown {
-            transition: all .25s linear;
+            transition: all 0.25s linear;
             transform: rotate(90deg);
         }
+
         .rotateUp {
-            transition: all .25s linear;
+            transition: all 0.25s linear;
             transform: rotate(0deg);
         }
         //margin-top: $margin-spacer;
@@ -129,7 +137,7 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
             width: 14px;
             height: 14px;
             background: $chevron_closed_icon 0 0 no-repeat;
-            opacity: .7;
+            opacity: 0.7;
         }
     }
 
@@ -137,50 +145,51 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         .field {
             flex-basis: 100%;
             display: block;
-            max-width:100%;
+            max-width: 100%;
+
             &:nth-child(n+3) {
                 .fieldValue {
                     white-space: nowrap;
                 }
             }
+
             &:nth-child(n+4) {
                 white-space: normal;
             }
-
         }
     }
 }
 
 .custom-row-card.expanded {
     border: 0;
-    -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-    -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-    box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -webkit-box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -moz-box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
+    box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
 }
 
 .checkboxContainer {
     width: 40px;
     flex: 0 0 auto;
     padding-left: 10px;
+
     input {
         height: 100%;
-        display:inline-block;
+        display: inline-block;
         position: absolute;
     }
 }
-
 
 .rowActions {
     height: 100%;
     top: 0;
     right: 0;
     overflow-x: hidden;
-
     white-space: nowrap;
     position: absolute;
 
     .recordActions {
         width: 100%;
+
         .actionIcons {
             display: flex;
             flex-direction: row;
@@ -191,6 +200,7 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
                 flex: 1 1 auto;
                 height: 100%;
                 position: relative;
+
                 .qbIcon {
                     position: absolute;
                     top: calc(50% - 8px);
@@ -199,10 +209,12 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
             }
         }
     }
+
     &.closed {
         transition: width 100ms ease-in;
         width: 0;
     }
+
     &.open {
         transition: width 100ms ease-in;
         width: 240px;
@@ -210,6 +222,7 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
 }
 
 /* For mobile phones: */
+
 @include small-breakpoint {
     .custom-row-card {
         .field {

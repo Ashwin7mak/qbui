@@ -1,5 +1,4 @@
 .trowserRecordActions {
-
     position: relative;
 
     .closeRecordActions {
@@ -15,10 +14,12 @@
         margin-left: 0;
         padding-left: 0;
         margin-top: 8px;
+
         li {
             border-top: 1px solid #dcdcdc;
-            padding: 10px 10px;
+            padding: 10px;
         }
+
         li:first-of-type {
             border-top: 0;
         }

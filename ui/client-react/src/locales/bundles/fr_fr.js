@@ -389,7 +389,8 @@ export default {
         pageTitles: {
             pageTitleSeparator: " - ",
             editingRecord: "Modifier l'enregistrement n ° {recordId}",
-            newRecord: "Ajouter un enregistrement"
+            newRecord: "Ajouter un enregistrement",
+            viewRecord: "Afficher le document n ° {recordId}"
         },
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",

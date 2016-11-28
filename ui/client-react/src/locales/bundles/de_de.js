@@ -385,7 +385,8 @@ export default {
             print: "Der Druck ist noch nicht verfügbar",
             copy: "Kopieren ist noch nicht verfügbar",
             email: "E-Mail ist noch nicht verfügbar",
-            delete: "Das Löschen ist noch nicht verfügbar"
+            delete: "Das Löschen ist noch nicht verfügbar",
+            viewRecord: "Eintrag anzeigen # {recordId}"
         },
         pageTitles: {
             pageTitleSeparator: " - ",

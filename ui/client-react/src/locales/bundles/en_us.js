@@ -394,7 +394,8 @@ export default {
         pageTitles: {
             pageTitleSeparator: " - ",
             editingRecord: "Edit Record #{recordId}",
-            newRecord: "Add Record"
+            newRecord: "Add Record",
+            viewRecord: "View Record #{recordId}"
         },
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
