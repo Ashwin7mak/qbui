@@ -17,6 +17,7 @@
         flex: 1 1 auto;
         padding: 0 10px;
     }
+
     .secondaryBar {
         flex: 0 0 auto;
     }
@@ -140,7 +141,7 @@
         /** For Firefox */
         .launchTourImage:after {
             display: inline-block;
-            content: '';
+            content: "";
             background-image: url("Launch-tour.png");
             background-repeat: no-repeat;
             background-size: auto 40px;
@@ -153,7 +154,7 @@
         /** For Firefox */
         .guideMeImage:after {
             display: inline-block;
-            content: '';
+            content: "";
             background-image: url("Guide-me.png");
             background-repeat: no-repeat;
             background-size: auto 40px;
@@ -209,6 +210,7 @@
             .welcomeGuideImage {
                 content: url("Welcome-guide.png");
             }
+
             .welcomeGuideImage:after {
                 content: url("Welcome-guide.png");
             }
@@ -229,6 +231,7 @@
             .giveFeedbackImage {
                 content: url("GiveFeedback.png");
             }
+
             .giveFeedbackImage:after {
                 content: url("GiveFeedback.png");
             }
@@ -306,6 +309,7 @@
         }
 
         .rightBottomPanelContent {
+
             @include medium-breakpoint {
                 padding-bottom: 10px;
             }
@@ -318,6 +322,7 @@
         .homePageTipImage {
             content: url("Tip.png");
         }
+
         .homePageTipImage:after {
             content: url("Tip.png");
         }
@@ -327,6 +332,7 @@
             margin-left: 20px;
             margin-right: 20px;
         }
+
         .homePageHelpImage:after {
             content: url("Need-help.png");
         }
@@ -342,6 +348,7 @@
     }
 
     // On really small devices the layout breaks, this fixes it
+
     @media (max-width: 355px) {
         & {
             padding: 5px;

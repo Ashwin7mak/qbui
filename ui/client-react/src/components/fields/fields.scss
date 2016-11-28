@@ -1,22 +1,23 @@
 @import '../../../src/assets/css/qbVariables';
-
 $data-font-size: $font-size-p;
 
 @mixin text-input-focus {
     border: solid 1px $input-text-focus-border-color;
     //Added border-color for multi choice text box
     border-color: $input-text-focus-border-color !important;
+
     @include focus-shadow();
 }
 
 @mixin text-input-focus-with-rounding {
+
     @include text-input-focus;
     border-radius: 2px;
 }
 
 // plain user data
 .data {
-    color : $data-color;
+    color: $data-color;
     font-family: $font-family;
     font-size: $data-font-size;
     -webkit-font-smoothing: antialiased;
@@ -30,6 +31,7 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input userdata
+
 @mixin error-border() {
     border: 1px solid $input-text-error-border-color;
     border-left-width: 5px;
@@ -59,15 +61,14 @@ $data-font-size: $font-size-p;
     }
 
     &:focus.input {
+
         @include text-input-focus;
     }
 
     // visual style of input error
-    .textField.error &.input, &.input.error,
-    .error .borderOnError,
-    .error .error.borderOnError {
+    .textField.error &.input, &.input.error, .error .borderOnError, .error .error.borderOnError {
         border-top: 1px solid $input-text-error-border-color;
-        border-right: 1px solid  $input-text-error-border-color;
+        border-right: 1px solid $input-text-error-border-color;
         border-bottom: 1px solid $input-text-error-border-color;
         border-left: 5px solid $input-text-error-border-color;
         border-color: $input-text-error-border-color !important;
@@ -75,24 +76,22 @@ $data-font-size: $font-size-p;
     }
 
     // visual style of focus input error
-    .textField.error &:focus.input,
-    &:focus.input.error,
-    .error :focus.borderOnError,
-    .error &:focus.error.borderOnError {
+    .textField.error &:focus.input, &:focus.input.error, .error :focus.borderOnError, .error &:focus.error.borderOnError {
         outline: none;
+
         @include error-border;
         @include focus-shadow($input-text-error-border-color);
     }
 }
 
-textarea:focus,
-.is-focused:not(.is-open)>.Select-control {
+textarea:focus, .is-focused:not(.is-open) > .Select-control {
+
     @include text-input-focus;
 }
 
 .error .borderOnError {
     border-top: 1px solid $input-text-error-border-color;
-    border-right: 1px solid  $input-text-error-border-color;
+    border-right: 1px solid $input-text-error-border-color;
     border-bottom: 1px solid $input-text-error-border-color;
     border-left: 5px solid $input-text-error-border-color;
     border-color: $input-text-error-border-color !important;
@@ -102,14 +101,17 @@ textarea:focus,
 .error :focus.borderOnError {
     outline: none;
     border-top: 1px solid $input-text-error-border-color;
-    border-right: 1px solid  $input-text-error-border-color;
+    border-right: 1px solid $input-text-error-border-color;
     border-bottom: 1px solid $input-text-error-border-color;
     border-left: 5px solid $input-text-error-border-color;
     border-color: $input-text-error-border-color !important;
+
     @include focus-shadow($input-text-error-border-color);
 }
+
 .Select {
-    &.is-open .Select-control{
+    &.is-open .Select-control {
+
         @include text-input-focus;
     }
 }
@@ -117,22 +119,21 @@ textarea:focus,
 .invalidInput.tooltip {
     z-index: 9999;
 }
-.invalidRecord.tooltip >.tooltip-arrow,
-.invalidInput.tooltip >.tooltip-arrow {
+
+.invalidRecord.tooltip > .tooltip-arrow, .invalidInput.tooltip > .tooltip-arrow {
     border-bottom-color: $tootip-error-color;
     border-top-color: $tootip-error-color;
     top: 100%;
 }
-.invalidRecord.tooltip,
-.invalidRecord.tooltip .tooltip-inner,
-.invalidInput.tooltip,
-.invalidInput.tooltip .tooltip-inner {
-    background-color:  $tootip-error-color;
+
+.invalidRecord.tooltip, .invalidRecord.tooltip .tooltip-inner, .invalidInput.tooltip, .invalidInput.tooltip .tooltip-inner {
+    background-color: $tootip-error-color;
 }
 
 .invalidRecord.tooltip .tooltip-arrow {
     top: -5px;
 }
+
 .invalidRecord.tooltip.top .tooltip-arrow {
     bottom: -5px;
     top: initial;
@@ -153,6 +154,7 @@ textarea:focus,
     word-break: break-word;
     white-space: normal;
 }
+
 .textFormat .cellData.NoWrap .textField {
     white-space: nowrap;
 }
@@ -160,14 +162,14 @@ textarea:focus,
 .multiLineCellEditWrapper .cellEdit {
     min-height: 28px;
 }
-.multiLineCellEditWrapper.error .tipChildWrapper,
-.multiLineCellEditWrapper.error .tipChildWrapper textarea {
+
+.multiLineCellEditWrapper.error .tipChildWrapper, .multiLineCellEditWrapper.error .tipChildWrapper textarea {
     height: 28px !important;
 }
 
 .userDisplayValue {
-    overflow:hidden;
-    text-overflow:ellipsis;
+    overflow: hidden; /* stylelint-disable-line */
+    text-overflow: ellipsis;
     display: inline;
 }
 
@@ -181,7 +183,7 @@ textarea:focus,
 
 /* allow wide tooltips */
 .tooltip-inner {
-    max-width:none;
+    max-width: none;
 }
 
 .inputDeleteIcon {
@@ -189,7 +191,7 @@ textarea:focus,
     width: inherit;
 
     input {
-        transition: padding .3s ease-in-out;
+        transition: padding 0.3s ease-in-out;
     }
 
     .clearIcon {
@@ -201,9 +203,8 @@ textarea:focus,
         position: absolute;
         right: -3px;
         top: 50%;
-
         transform: translateY(-50%) rotate(130deg);
-        transition: opacity .2s linear, transform .3s ease-in-out, right .3s ease-in-out;
+        transition: opacity 0.2s linear, transform 0.3s ease-in-out, right 0.3s ease-in-out;
 
         &:hover {
             color: $clearmini-hover-color;
@@ -229,6 +230,5 @@ textarea:focus,
                 transform: translateY(-50%) rotate(0deg);
             }
         }
-
     }
 }
