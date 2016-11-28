@@ -33,7 +33,7 @@
          * @param emails
          * @returns {{isValid: boolean, isInvalid: boolean, invalidEmails: Array}}
          */
-        validateArrayOfEmails(emails) {
+        validateArrayOfEmails: function(emails) {
             var self = this;
             var valid = true;
             var invalidEmails = [];
@@ -84,7 +84,7 @@
          * @returns {Result}
          * @private
          */
-        _formatValidationResults(results, fieldName, invalidEmails) {
+        _formatValidationResults: function(results, fieldName, invalidEmails) {
             var resultsCopy = Object.assign({error: {}}, results);
 
             resultsCopy.error.code = dataErrorCodes.INVALID_ENTRY;
