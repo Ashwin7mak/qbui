@@ -86,7 +86,7 @@
              * @returns Promise
              */
             stackPreference: function(req) {
-                let opts = requestHelper.setOptions(req, true);
+                let opts = requestHelper.setOptions(req);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 //  intentionally declare value as undefined
