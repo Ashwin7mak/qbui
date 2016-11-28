@@ -134,7 +134,7 @@ module.exports = {
         "selector-pseudo-element-no-unknown": true,
         "selector-type-case": "lower",
         "selector-type-no-unknown": true,
-        "shorthand-property-no-redundant-values": [true, {"severity": "warning"}],
+        "shorthand-property-no-redundant-values": [false],
         "string-no-newline": true,
         "string-quotes": ["double", {"severity": "warning"}],
         "unit-case": "lower",
