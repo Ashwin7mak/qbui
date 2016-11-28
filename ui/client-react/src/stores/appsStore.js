@@ -14,6 +14,7 @@ let AppsStore = Fluxxor.createStore({
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.error = false;
+        this.savingAppStack = false;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
@@ -22,7 +23,9 @@ let AppsStore = Fluxxor.createStore({
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
             actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
-            actions.LOAD_APP_RIGHTS_SUCCESS, this.onLoadAppRightsSuccess
+            actions.LOAD_APP_RIGHTS_SUCCESS, this.onLoadAppRightsSuccess,
+            actions.SET_APP_STACK, this.onSetAppStack,
+            actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess
         );
 
         this.logger = new Logger();
@@ -73,6 +76,27 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+    onSetAppStack() {
+        this.savingAppStack = true;
+
+        this.emit('change');
+    },
+    onSetAppStackSuccess(payload) {
+        const {appId, openInV3} = payload;
+
+        this.savingAppStack = false;
+
+        const app = _.find(this.apps, {id: appId});
+
+        if (app) {
+            app.openInV3 = openInV3;
+            this.emit('change');
+        }
+    },
+    onSetAppStackFailed(payLoad) {
+        this.savingAppStack = false;
+        this.emit('change');
+    },
     getState() {
         return {
             apps: this.apps,
@@ -81,6 +105,7 @@ let AppsStore = Fluxxor.createStore({
             appRights: this.appRights,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
+            savingAppStack: this.savingAppStack,
             error: this.error
         };
     },

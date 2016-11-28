@@ -7,17 +7,6 @@ import reportModel from '../models/reportModel';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-//  Custom handling of 'possible unhandled rejection' error,  because we don't want
-//  to see an exception in the console output.  The exception is thrown by bluebird
-//  because the core application code has no logic implemented to handle a rejected
-//  promise.  This is expected as promises are NOT implemented in the application
-//  code.  Promises are returned only to support our unit tests, which are expected
-//  to implement the appropriate handlers.
-Promise.onPossiblyUnhandledRejection(function(err) {
-    let logger = new Logger();
-    logger.debug('Bluebird Unhandled rejection', err);
-});
-
 const DEFAULT_HOMEPAGE_ID = '0';
 
 let tableActions = {

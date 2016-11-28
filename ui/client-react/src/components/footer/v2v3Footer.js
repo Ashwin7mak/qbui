@@ -9,13 +9,13 @@ var V2V3Footer = React.createClass({
 
     propTypes: {
         /**
-         * 2 (classic) or 3 (Mercury)
+         * selected app
          */
-        version: PropTypes.number.isRequired,
+        app: PropTypes.object.isRequired,
         /**
          * callback when radio button is selected
          */
-        onSelectUIVersion: PropTypes.func.isRequired
+        onSelectOpenInV3: PropTypes.func.isRequired
     },
 
     getInitialState() {
@@ -27,6 +27,7 @@ var V2V3Footer = React.createClass({
 
         return (
             <div className={"popupFooter "  + openClosed} >
+
                 <div className="popupFooterTitle" onClick={ ()=> this.setState({open: !this.state.open})}>
                     <div className="popupFooterTitleLabel"><I18nMessage message="v2v3.manageAccessTitle" /></div>
                     <a href="#" className="popupFooterToggle">
@@ -40,21 +41,22 @@ var V2V3Footer = React.createClass({
                         <label>
                             <input type="radio"
                                    name="v2v3"
-                                   checked={this.props.version === 2}
-                                   onChange={()=>this.props.onSelectUIVersion(2)}/> <I18nMessage message="quickBaseClassic" />
+                                   checked={!this.props.app.openInV3}
+                                   onChange={()=>this.props.onSelectOpenInV3(false)}/> <I18nMessage message="quickBaseClassic" />
                         </label>
                     </div>
                     <div>
                         <label>
                             <input type="radio"
                                    name="v2v3"
-                                   checked={this.props.version === 3}
-                                   onChange={()=>this.props.onSelectUIVersion(3)}/> <I18nMessage message="quickBaseMercury" />
+                                   checked={this.props.app.openInV3}
+                                   onChange={()=>this.props.onSelectOpenInV3(true)}/> <I18nMessage message="quickBaseMercury" />
                         </label>
                     </div>
 
                     <div className="popupFooterMainTip"><I18nMessage message="v2v3.manageAccessTip" /></div>
                 </Panel>
+
             </div>
         );
     }

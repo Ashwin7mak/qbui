@@ -274,14 +274,14 @@ export let Nav = React.createClass({
         const hasAdmin = AppUtils.hasAdminAccess(this.state.apps.appRights);
 
         if (this.getSelectedApp() && hasAdmin) {
-            return <V2V3Footer version={this.state.uiVersion} onSelectUIVersion={this.onSelectV2V3}/>;
+            return <V2V3Footer app={this.getSelectedApp()} onSelectOpenInV3={this.onSelectOpenInV3}/>;
         } else {
             return null;
         }
     },
-    onSelectV2V3(uiVersion) {
-        this.setState({uiVersion});
-
+    onSelectOpenInV3(openInV3) {
+        const flux = this.getFlux();
+        flux.actions.setApplicationStack(this.state.apps.selectedAppId, openInV3);
     },
     onSelectItem() {
 
