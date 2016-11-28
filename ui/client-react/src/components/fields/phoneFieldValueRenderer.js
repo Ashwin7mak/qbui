@@ -29,10 +29,10 @@ const PhoneFieldValueRenderer = React.createClass({
                     </a>
                     <div className="urlIcon phoneIcon">
                         <a href={smsPhoneNumberLink} tabIndex="-1">
-                            <QBicon className="smsIcon" icon="edit" />
+                            <QBicon className="smsIcon" icon="speechbubble-outline" />
                         </a>
                         <a href={telPhoneNumberLink} tabIndex="-1">
-                            <QBicon icon="mail" />
+                            <QBicon icon="phone-outline" />
                         </a>
                     </div>
                 </div>

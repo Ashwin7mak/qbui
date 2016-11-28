@@ -50,6 +50,12 @@
 .iconTableUISturdy-print:before {
   content: "\e91a";
 }
+.iconTableUISturdy-phone-outline:before {
+  content: "\e954";
+}
+.iconTableUISturdy-speechbubble-outline:before {
+  content: "\e957";
+}
 .iconTableUISturdy-mail:before {
   content: "\e910";
 }
