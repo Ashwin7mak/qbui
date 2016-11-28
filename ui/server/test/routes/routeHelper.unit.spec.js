@@ -374,4 +374,22 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate getApplicationStackPreferenceRoute method', function() {
+        var testCases = [
+            {name: 'test no app id', appId: '', expectation: '/db'},
+            {name: 'test undefined app id', expectation: '/db'},
+            {name: 'test get app preference with undefined value', appId: '12345', expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
+            {name: 'test get app preference with null value', appId: '12345', value: null,  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
+            {name: 'test set app preference with empty value', appId: '12345', value: '',  expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value='},
+            {name: 'test set app preference', appId: '12345', value: '1', expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=1'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getApplicationStackPreferenceRoute(testCase.appId, testCase.value), testCase.expectation);
+                done();
+            });
+        });
+    });
+
 });

@@ -369,6 +369,13 @@
             return url;
         },
 
+        /**
+         * Return the report invoke route that is used to generate a
+         * report with customized meta data.
+         *
+         * @param url
+         * @returns {*}
+         */
         getInvokeReportRoute: function(url) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
@@ -378,21 +385,28 @@
         },
 
         /**
-         * TODO
+         * Return the Quickbase classic url route to get the application's
+         * current stack preference or set the application's stack preference.
+         *
+         * Examples:
+         *      /db/<appid>/?a=JBI_GetAdminRedirectToV3
+         *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
          *
          * @param appId
-         * @param isPost
-         * @param openInMercury
+         * @param value - optional value to set the application preference
+         *
          * @returns {*}
          */
-        getApplicationStackRoute: function(appId, isPost, openInMercury) {
+        getApplicationStackPreferenceRoute: function(appId, value) {
             let root = getLegacyRoot();
             if (appId) {
-                root += '/' + appId + '?a=';
-                if (isPost) {
-                    root += SET_APPLICATION_STACK_JBI + '&value=' + openInMercury === true ? '1' : '0';
+                root += '/' + appId;
+
+                //  determine JBI based on whether 'value' is undefined/null
+                if (value === undefined || value === null) {
+                    root += '?a=' + GET_APPLICATION_STACK_JBI;
                 } else {
-                    root += GET_APPLICATION_STACK_JBI;
+                    root += '?a=' + SET_APPLICATION_STACK_JBI + '&value=' + value;
                 }
             }
             return root;

@@ -59,7 +59,7 @@
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
-        //  legacy quickbase endpoints
+        //  application endpoints
         routeToGetFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
 
         /*
@@ -67,8 +67,6 @@
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
-
-        //  legacy quickbase endpoints
         routeToPostFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
 
         /*
@@ -622,6 +620,19 @@
         });
     }
 
+    /**
+     * Supports both GET and POST request to resolve an applications run-time stack
+     * preference.
+     *
+     * For a GET request, will return which stack (mercury or classic) the application is
+     * configured to run in.
+     *
+     * For a POST request, will set the application stack (mercury or classic) preference
+     * on where the application is to be run.
+     *
+     * @param req
+     * @param res
+     */
     function applicationStackPreference(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});

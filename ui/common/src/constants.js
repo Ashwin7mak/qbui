@@ -68,7 +68,8 @@
             COLUMNS: 'columns',
             OFFSET: 'offset',
             NUM_ROWS: 'numRows',
-            HOME_PAGE_ID: 'homePageId'
+            HOME_PAGE_ID: 'homePageId',
+            OPEN_IN_V3: 'openInV3'
         },
         FORMAT : {
             DISPLAY: 'display',

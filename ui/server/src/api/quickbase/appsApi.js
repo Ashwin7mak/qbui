@@ -73,28 +73,34 @@
             },
 
             /**
-             * TODO
+             * Supports both GET and POST request to resolve an applications run-time stack
+             * preference.
+             *
+             * For a GET request, will return which stack (mercury or classic) the application is
+             * configured to run in.
+             *
+             * For a POST request, will set the application stack (mercury or classic) preference
+             * on where the application is to be run.
              *
              * @param req
              * @returns Promise
              */
-            //  TODO should the get and post be broken out into 2 separate methods????
             stackPreference: function(req) {
                 let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
-                //  reset url to call the legacy stack
-                let isPost = requestHelper.isPost(req);
-                let openInMercury = false;
-                if (isPost === true) {
+                //  intentionally declare value as undefined
+                let value;
+
+                //  if a post request, then updating stack preference
+                if (requestHelper.isPost(req)) {
+                    //TODO review && document
                     let resp = JSON.parse(opts.body);
-                    //TODO openInMercury should be a common constant
-                    //TODO confirm the default behavior if invalid value..
-                    if (resp) {
-                        openInMercury = resp.openInMercury;
-                    }
+                    value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
                 }
-                opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackRoute(req.params.appId, isPost, openInMercury);
+
+                //  configure the current stack url
+                opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, value);
 
                 //return requestHelper.executeRequest(req, opts);
                 return Promise.resolve(opts.url);

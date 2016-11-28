@@ -64,9 +64,9 @@ class AppService extends BaseService {
      * @param openInMercury
      * @returns promise
      */
-    setApplicationStack(appId, openInMercury) {
+    setApplicationStack(appId, params) {
         let url = super.constructUrl(this.API.APPLICATION_STACK, [appId]);
-        return super.post(url, {openInMercury:openInMercury || false});
+        return super.post(url, params);
     }
 
 }
