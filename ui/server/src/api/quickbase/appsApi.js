@@ -101,9 +101,9 @@
 
                 //  configure the current stack url
                 opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, value);
+                log.debug("Stack preference: " + opts.url);
 
-                //return requestHelper.executeRequest(req, opts);
-                return Promise.resolve(opts.url);
+                return requestHelper.executeRequest(req, opts);
             }
 
         };

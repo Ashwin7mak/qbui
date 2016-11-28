@@ -640,8 +640,22 @@
         processRequest(req, res, function(req, res) {
             appsApi.stackPreference(req).then(
                 function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Application Stack Preference');
+                    //  Legacy Quickbase returns a response status of 200 when controlled
+                    //  errors(ie:unauthorized) are raised.  Need to examine the errorCode
+                    //  value in the response body to determine the true state of the request.
+                    let resp;
+                    try {
+                        resp = JSON.parse(response.body);
+                    } catch (e) {
+                        resp = {'errorText':'No response body returned.'};
+                    }
+
+                    if (resp.errorCode === 0) {
+                        logApiSuccess(req, response, perfLog, 'Application Stack Preference');
+                    } else {
+                        logApiFailure(req, response, perfLog, 'Application Stack Preference');
+                    }
+                    res.send(resp);
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Application Stack Preference');

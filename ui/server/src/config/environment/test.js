@@ -63,7 +63,7 @@
         DOMAIN: nodeHost,
 
         //  legacy quickbase host
-        legacyHost: 'https://jenkinscs1.quickbaserocks.com:443',
+        legacyHost: 'www.qblab-trunk.corp.quickbase.net',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
