@@ -18,8 +18,6 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
-const DEFAULT_HOMEPAGE_ID = '0';
-
 let tableActions = {
 
     /**
@@ -41,7 +39,7 @@ let tableActions = {
 
                 //  even though we don't yet know the home page report id, want a spinner to display,
                 //  so dispatch the LOAD_REPORT event.
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:DEFAULT_HOMEPAGE_ID, offset, numRows});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:null, offset, numRows});
 
                 //  Fetch the home page.  The response will include:
                 //    - report data/grouping data
@@ -53,13 +51,6 @@ let tableActions = {
                     (response) => {
                         let metaData = response.data ? response.data.metaData : null;
                         let model = reportModel.set(metaData, response.data);
-
-                        //  if the report id does not match the default homepage id, re-init the load report
-                        //  event to ensure the reportId is set in the store.
-                        if (model.rptId !== DEFAULT_HOMEPAGE_ID) {
-                            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId: model.rptId, offset, numRows});
-                        }
-
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         resolve();
                     },

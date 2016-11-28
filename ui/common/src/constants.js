@@ -45,6 +45,11 @@
         USER            : 'USER',
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
 
+        SYNTHETIC_TABLE_REPORT: {
+            ID: '0',
+            ROUTE: 'default'
+        },
+
         NUMERIC_SEPARATOR: {
             PERIOD: '.',
             COMMA: ','

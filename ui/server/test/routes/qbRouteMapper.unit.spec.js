@@ -39,6 +39,7 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'GET request to form and record components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord/formComponents', route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FORM_AND_RECORD_COMPONENTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report metadata endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2', route: routeConsts.REPORT_META, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_META), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/results', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/results', route: routeConsts.REPORT_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RESULTS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to report default results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/default/results', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/default/results', route: routeConsts.REPORT_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RESULTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to paged report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2' + testPagingQueryParams, expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2' + testPagingQueryParams, route: routeConsts.REPORT_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RESULTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report invoke endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/invoke', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/invoke', route: routeConsts.REPORT_INVOKE_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_INVOKE_RESULTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report record count endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2/recordsCount', route: routeConsts.REPORT_RECORDS_COUNT, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RECORDS_COUNT), expectedDefined: true, httpVerb: 'GET'},
@@ -122,7 +123,7 @@ describe('Qb Route Mapper Unit Test', function() {
                 //mock out the request and response objects with some utility methods they need in this flow
                 var originalReq = {
                     params: {
-                        reportId: 1
+                        reportId: entry.request && entry.request.indexOf('default/results') !== -1 ? 'default' : '1'
                     }
                 };
 

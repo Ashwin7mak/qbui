@@ -1,5 +1,4 @@
 @import '../../assets/css/_qbVariables.scss';
-
 $error-background-color: $color-black-100;
 
 .alertBanner {
@@ -31,7 +30,6 @@ $error-background-color: $color-black-100;
     &-enter.alertBanner-enter-active {
         opacity: 1;
         max-height: 800px;
-
         transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
     }
 
@@ -43,7 +41,6 @@ $error-background-color: $color-black-100;
     &-leave.alertBanner-leave-active {
         opacity: 0;
         max-height: 0;
-
         transition: opacity 0.5s ease-in 0.7s, max-height 0.5s linear;
     }
 }

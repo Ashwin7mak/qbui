@@ -1,7 +1,5 @@
 @import '../../assets/css/qbVariables';
-
 @import "../../assets/css/main.scss";
-
 
 html, body {
     margin: 0;
@@ -11,8 +9,7 @@ html, body {
 }
 
 html body {
-
-    font-family: Lato, 'Open Sans', Arial, Sans-Serif;
+    font-family: Lato, "Open Sans", Arial, Sans-Serif;
     font-size: $font-size-p;
     font-style: normal;
     font-variant: normal;
@@ -20,22 +17,22 @@ html body {
     line-height: 1.3em;
 
     h1 {
-        font-family: Lato, 'Open Sans', Arial, Sans-Serif;
+        font-family: Lato, "Open Sans", Arial, Sans-Serif;
         font-size: $font-size-h1;
         font-style: normal;
         font-variant: normal;
         font-weight: 500;
         line-height: 24px;
     }
+
     h3 {
-        font-family: Lato, 'Open Sans', Arial, Sans-Serif;
+        font-family: Lato, "Open Sans", Arial, Sans-Serif;
         font-size: $font-size-h3;
         font-style: normal;
         font-variant: normal;
         font-weight: 500;
         line-height: 24px;
     }
-
 }
 
 #content {
@@ -47,16 +44,15 @@ html body {
     width: 100%;
     display: flex;
     flex-direction: row;
-
     transition: transform ease 250ms;
     -webkit-transition: transform ease 250ms;
 
     .main {
-        position:relative;
+        position: relative;
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        min-width:0px; //wtf?
+        min-width: 0; //wtf?
         .topNav {
             min-width: 200px;
             flex: 0 0 auto;
@@ -77,13 +73,15 @@ html body {
                 flex: 0 0 auto;
                 white-space: nowrap;
             }
+
             @include small-breakpoint {
                 .navGroup.left {
                     flex: 1 1 auto;
-                    overflow:hidden;
-                    text-overflow:ellipsis;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
+
             .navGroup.center {
                 flex: 1 0 auto;
 
@@ -91,8 +89,10 @@ html body {
                     display: flex;
                     justify-content: center;
                 }
+
                 @include small-breakpoint {
                     flex: 0 0 auto;
+
                     .navItem {
                         justify-content: flex-end;
                     }
@@ -101,27 +101,28 @@ html body {
 
             .btn-group {
                 height: 40px;
+
                 button {
-                    width:40px;
+                    width: 40px;
                     color: $topnav-icon-color;
                     border-radius: 0;
-                    padding:0;
+                    padding: 0;
                     height: $top-nav-height;
-                    text-align:center;
+                    text-align: center;
                 }
+
                 button:not(.disabled):hover .hi {
                     color: #fff;
                 }
 
                 button.disabled {
-                    opacity: .65;
+                    opacity: 0.65;
                 }
             }
 
             .iconLink {
                 color: $topnav-icon-color;
             }
-
 
             a {
                 text-decoration: none;
@@ -137,7 +138,7 @@ html body {
             // Enable momentum scrolling on iOS devices
             -webkit-overflow-scrolling: touch;
             // Enable hardware acceleration for scrolling through content.
-            transform: translate3d(0,0,0);
+            transform: translate3d(0, 0, 0);
             //min-height is required in order for the scrollbar to work in firefox
             min-height: 0;
             overflow: auto;
@@ -154,16 +155,16 @@ html body {
         }
     }
 }
+
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: #fff;
-    background: $nav-hover-bg
+    background: $nav-hover-bg;
 }
 
 @include small-breakpoint {
     .layout-stage {
-        display:none;
+        display: none;
     }
-
 }
 
 .loader {
