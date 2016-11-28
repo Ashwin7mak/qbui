@@ -1,58 +1,78 @@
 import React, {PropTypes} from 'react';
-import {AsYouTypeFormatter, PhoneNumberUtil, PhoneNumberFormat as PNF} from 'google-libphonenumber';
 import TextFieldValueEditor from './textFieldValueEditor';
 import './phoneFieldValueEditor.scss';
+import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import _ from 'lodash';
 
 
 const PhoneFieldValueEditor = React.createClass({
-    getInitialState() {
-        return {
-            value: '',
-            formatter: new AsYouTypeFormatter('US'),
-            parser: new PhoneNumberUtil()
-        };
-    },
-    onKeyDown(ev) {
-        // var AsYouTypeFormatter = require('google-libphonenumber').AsYouTypeFormatter;
-        // var newNumber = this.state.parser.parse(ev.target.value, PNF.INTERNATIONAL);
+    displayName: 'PhoneFieldValueEditor',
+    propTypes: {
+        /**
+         * the value to render */
+        value: React.PropTypes.any,
+        /**
+         * text field attributes
+         */
+        attributes: React.PropTypes.object
 
-        var newNumber = this.state.formatter.inputDigit(ev.key);
-        this.setState({value: newNumber});
     },
-    homeOrOfficePhoneField() {
-        let {value, classes, ...otherProps} = this.props;
-        value = this.state.value;
-        classes = {
-            officeNumber: "officeNumber",
-            xNumber: "xNumber"
+    onChangeOfficeNumber(ev) {
+       console.log('officeNumberOnChange: ', ev.target.value)
+        console.log('this.props.value: ', this.props.value);
+        let tempExtNumber = this.props.value.split('x')[1];
+        let updatedValue = ev.target.value + 'x' + tempExtNumber;
+        if (this.props.onChange) {
+            this.props.onChange(updatedValue);
         }
-        if (this.props.isHome) {
-            return (
-                <TextFieldValueEditor type="tel"
-                                      onKeyDown={this.onKeyDown}
-                                      value={value}
-                                      {...otherProps} />
-            );
-        } else {
-            return (
-                <div className="officePhone">
-                    <TextFieldValueEditor type="tel"
-                                          classes={classes.officeNumber}
-                                          onKeyDown={this.onKeyDown}
-                                          value={value}
-                                          {...otherProps} />
-                    <span className="x">x</span>
-                    <TextFieldValueEditor type="tel"
-                                          classes={classes.xNumber}
-                                          onKeyDown={this.onKeyDown}
-                                          value={value}
-                                          {...otherProps} />
-                </div>
-            );
+    },
+    onChangeExtNumber(ev) {
+        console.log('onChangeExtNumber: ', ev.target.value);
+        console.log('this.props.value: ', this.props.value);
+        let tempOfficeNumber = this.props.value.split('x')[0];
+        let updatedValue =  tempOfficeNumber + 'x' + ev.target.value;
+        if (this.props.onChange) {
+            this.props.onChange(updatedValue);
+        }
+    },
+    onBlur(ev) {
+        let theVals = {
+            value: ev.target.value
+        };
+        theVals.display = textFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        if (this.props.onBlur) {
+            this.props.onBlur({value: theVals.value, display: theVals.display});
         }
     },
     render() {
-        return this.homeOrOfficePhoneField();
+        let {value, onBlur, onChange, ...otherProps} = this.props;
+        if (this.props.attributes.includeExtension) {
+            let officeNumber = this.props.value.split('x')[0];
+            let officeExt = this.props.value.split('x')[1];
+            return (
+                <div className="officePhone">
+                    <input type="tel"
+                           className="officeNumber"
+                           onChange={this.onChangeOfficeNumber}
+                           onBlur={this.onBlur}
+                           value={officeNumber || ''}
+                           {...otherProps} />
+                    <span className="x">x</span>
+                    <input type="tel"
+                           className="extNumber"
+                           onChange={this.onChangeExtNumber}
+                           onBlur={this.onBlur}
+                           value={officeExt || ''}
+                           {...otherProps} />
+                </div>
+            );
+        } else {
+            return (
+                <TextFieldValueEditor type="tel"
+                                      value={value || ''}
+                                      {...otherProps} />
+            );
+        }
     }
 });
 

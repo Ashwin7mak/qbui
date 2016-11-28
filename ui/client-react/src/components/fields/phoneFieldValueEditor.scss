@@ -1,8 +1,32 @@
 .officePhone {
   display: flex;
+
+  &.input {
+    margin: 0 1px;
+    padding: 0 0 0 2px;
+    width: inherit;
+    height: 30px;
+  }
+  .officeNumber {
+    width: 70%;
+  }
+  .extNumber {
+    width: 30%;
+  }
+  .x {
+    padding: 2px;
+    align-self: center;
+  }
 }
 
-.x {
-  padding: 2px;
-  align-self: center;
+
+
+// Always show the URL icon on Forms
+.formElement .input {
+  &.officeNumber {
+    width: 90%;
+  }
+  &.extNumber {
+    width: 10%;
+  }
 }
