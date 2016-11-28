@@ -78,6 +78,24 @@ consts = require('../../common/src/constants.js');
             word_wrap: false,
             display_graphic: false
         };
+
+        let emailOnlyDisplayBeforeAtSymbol = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+            format: 'UP_TO_AT_SIGN'
+        };
+        let emailOnlyDisplayBeforeUnderscore = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+            format: 'UP_TO_UNDERSCORE'
+        };
+        let emailDefaultDomain = {
+            defaultDomain: "quickbase.dev",
+            clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)
+        };
+
         var emptyChoice = {
             coercedValue: {value: ''},
             displayValue: ''
@@ -108,9 +126,15 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DURATION);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX, "Yes No Checkbox",
-            {dataAttr:{clientSideAttributes: checkboxYNClientProps}});
+            {dataAttr: {clientSideAttributes: checkboxYNClientProps}});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PHONE_NUMBER);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email Only Before @",
+            {dataAttr: {clientSideAttributes: emailOnlyDisplayBeforeAtSymbol}});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email Before Underscore",
+            {dataAttr: {clientSideAttributes: emailOnlyDisplayBeforeUnderscore}});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email with Default Domain",
+            {dataAttr: emailDefaultDomain});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
 
         tableToFieldToFieldTypeMap[table2Name] = {};
