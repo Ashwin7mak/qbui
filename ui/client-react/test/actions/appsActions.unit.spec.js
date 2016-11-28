@@ -16,6 +16,9 @@ describe('Apps Actions functions with Tables', () => {
         getApp(id) {
             return Promise.resolve({data: {id:'tableId'}});
         }
+        getApplicationStack(id) {
+            return Promise.resolve({openInV3:true});
+        }
     }
 
     let stores = {};
@@ -26,6 +29,7 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
+        spyOn(mockAppService.prototype, 'getApplicationStack').and.callThrough();
         appsActions.__Rewire__('AppService', mockAppService);
     });
 
@@ -51,6 +55,30 @@ describe('Apps Actions functions with Tables', () => {
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_SUCCESS, responseData]);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var getApplicationStackTests = [
+        {name:'test with appId', appId: 123}
+    ];
+    getApplicationStackTests.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.getApplicationStack(test.appId).then(
+                () => {
+                    if (test.appId) {
+                        expect(mockAppService.prototype.getApplicationStack).toHaveBeenCalledWith(test.appId);
+                    } else {
+                        expect(mockAppService.prototype.getApplicationStack).not.toHaveBeenCalled();
+                    }
+
+                    //TODO add dispatch tests
                     done();
                 },
                 () => {

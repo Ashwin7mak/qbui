@@ -2,7 +2,7 @@
 import * as actions from '../constants/actions';
 import AppService from '../services/appService';
 import Promise from 'bluebird';
-import Lodash from 'lodash';
+import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -81,7 +81,7 @@ let appsActions = {
     setApplicationStack(appId, openInV3) {
         let logger = new Logger();
         return new Promise((resolve, reject) => {
-            if (appId && Lodash.isBoolean(openInV3)) {
+            if (appId && _.isBoolean(openInV3)) {
                 logger.debug('Setting application stack preference. AppId:' + appId + '; openInV3:' + openInV3);
 
                 //TODO dispatch event
