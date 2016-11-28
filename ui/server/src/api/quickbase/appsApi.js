@@ -89,12 +89,9 @@
                 let opts = requestHelper.setOptions(req);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
-                //  intentionally declare value as undefined
-                let value;
-
-                //  if a post request, then updating stack preference
+                let value = null;
                 if (requestHelper.isPost(req)) {
-                    //TODO review && document
+                    //  if a post request, then updating stack preference
                     let resp = JSON.parse(opts.body);
                     value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
                 }
