@@ -16,7 +16,6 @@
     let REPORT_RESULTS = 'results';
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
-    let DEFAULT_REPORT = 'default';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -82,7 +81,7 @@
      * @returns {string}
      */
     function getReportIdentifier(reportId) {
-        return (reportId === constants.SYNTHETIC_TABLE_REPORT.ID ? DEFAULT_REPORT : reportId);
+        return (reportId === constants.SYNTHETIC_TABLE_REPORT.ID ? constants.SYNTHETIC_TABLE_REPORT.ROUTE : reportId);
     }
 
     /**
@@ -97,7 +96,7 @@
             const reportRouteSuffix = REPORTS + '/' + constants.SYNTHETIC_TABLE_REPORT.ID;
             if (route.endsWith(reportRouteSuffix)) {
                 //  this is a default route; change the report id with the default report suffix
-                const defaultReportRouteSuffix = REPORTS + '/' + DEFAULT_REPORT;
+                const defaultReportRouteSuffix = REPORTS + '/' + constants.SYNTHETIC_TABLE_REPORT.ROUTE;
                 return route.replace(reportRouteSuffix, defaultReportRouteSuffix);
             }
         }
