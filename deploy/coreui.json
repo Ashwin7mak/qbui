@@ -117,6 +117,11 @@
       "Description": "The Security Group ID allowing select outbound Internet traffic",
       "Type": "String",
       "Default": "sg-f5264793"
+    },
+    "paramSslCertificateID": {
+      "Description": "ARN of the SSL cert for the ELB",
+      "Type": "String",
+      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/a5e4a6b9-8a5a-4c87-a602-de2848410b27"
     }
   },
   "Resources": {
@@ -157,7 +162,7 @@
           {
             "LoadBalancerPort": {"Ref": "paramELBSSLPort"},
             "InstancePort": {"Ref": "paramSSLInstancePort"},
-            "SSLCertificateId" : { "Fn::Join" : [ "", [ "arn:aws:iam::", { "Ref" : "AWS::AccountId" }, ":server-certificate/", {"Ref": "AWS::StackName"} ] ] },
+            "SSLCertificateId" : { "Ref": "paramSslCertificateID" },
             "Protocol": "HTTPS",
             "InstanceProtocol": "HTTPS"
           },

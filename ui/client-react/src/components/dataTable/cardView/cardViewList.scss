@@ -1,5 +1,4 @@
 @import '../../../../src/assets/css/qbVariables';
-
 $margin-spacer: 10px;
 $grid-default-cell-padding: 10px;
 $grid-group-expand-icon-size: 18px;
@@ -13,64 +12,67 @@ $checkbox-width: $card-view-checkbox-width;
 
 .tableLoaderContainer {
     flex: 1 1 auto;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
 .reportTable .cardViewListHolder {
-    transform: translate3d(-$checkbox-width,0,0);
-    -webkit-transform: translate3d(-$checkbox-width,0,0);
+    transform: translate3d(-$checkbox-width, 0, 0);
+    -webkit-transform: translate3d(-$checkbox-width, 0, 0);
     width: calc(100% + #{$checkbox-width}) !important;
     position: relative;
 
     &.allowCardSelection {
-        transform: translate3d(0,0,0);
-        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+
         .custom-row-card .card-expander {
-            display:none;
+            display: none;
         }
     }
 }
+
 .cardViewList {
     display: block !important;
     width: inherit !important;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 
     .group-header {
         line-height: 30px;
         font-weight: 600;
         font-size: 14px;
         background-color: $grid-group-row-header-bkgrd-color;
+
         > span {
             display: inline-block;
             vertical-align: middle;
         }
     }
+
     .group-level--1 {
-        >.group-header {
+        > .group-header {
             display: none;
         }
     }
+
     .qbIcon {
-        &.iconTableUISturdy-caret-filled-down,
-        &.iconTableUISturdy-caret-filled-right {
+        &.iconTableUISturdy-caret-filled-down, &.iconTableUISturdy-caret-filled-right {
             font-size: $grid-group-expand-icon-size;
         }
     }
+
     .group-level-0 {
-        >.group-header{
+        > .group-header {
             background-color: $color5;
         }
     }
 
     .cardViewHeader {
         width: 100%;
-
-        display:flex;
+        display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         min-height: 45px;
-
         font-family: "Lato", sans-serif;
         font-size: 14px;
         color: $pagination-mobile-panel-text-color;
@@ -79,37 +81,35 @@ $checkbox-width: $card-view-checkbox-width;
             text-decoration: none;
             border: 1px solid $pagination-mobile-panel-border-color;
             background: $pagination-mobile-panel-background-color;
-            width:100%;
-            height:45px;
+            width: 100%;
+            height: 45px;
 
             .fetchPreviousArrow {
-                padding-right:10px;
+                padding-right: 10px;
             }
         }
     }
 
     .cardViewFooter {
         width: 100%;
-
-        display:flex;
+        display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         min-height: 45px;
-
         font-family: "Lato", sans-serif;
         font-size: 14px;
         color: $pagination-mobile-panel-text-color;
 
         .fetchNextButton {
             text-decoration: none;
-            width:100%;
-            height:45px;
+            width: 100%;
+            height: 45px;
             border: 1px solid $pagination-mobile-panel-border-color;
             background: $pagination-mobile-panel-background-color;
 
             .fetchNextArrow {
-                padding-right:10px;
+                padding-right: 10px;
             }
         }
     }
@@ -117,35 +117,37 @@ $checkbox-width: $card-view-checkbox-width;
     .headerLoadingIndicator, .footerLoadingIndicator {
         width: 100%;
         min-height: 45px;
-
         font-family: "Lato", sans-serif;
         font-size: 14px;
         color: $pagination-mobile-panel-text-color;
-
         display: none;
-        position:relative;
+        position: relative;
         flex-direction: row;
         justify-content: center;
         align-items: center;
     }
 
     @for $i from 0 through 5 {
-        .group-level-#{$i}{
+        .group-level-#{$i} {
             position: relative;
-            >.group-header {
+
+            > .group-header {
                 border-top: 1px solid #dcdcdc;
-                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) + 40 !important;
+                padding-left: $grid-default-cell-padding + $i * ($grid-default-group-padding + $grid-group-expand-icon-size / 2) + 40 !important;
             }
+
             .custom-row-card {
                 border-top: 1px solid #dcdcdc;
+
                 .flexRow > .card {
-                    padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) - 9 !important;
+                    padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i * ($grid-default-group-padding + $grid-group-expand-icon-size / 2) - 9 !important;
                 }
                 margin-bottom: 0;
+
                 &.expanded {
-                  box-shadow: none;
-                  -webkit-box-shadow: none;
-                  -moz-box-shadow: none;
+                    box-shadow: none;
+                    -webkit-box-shadow: none;
+                    -moz-box-shadow: none;
                 }
             }
         }
@@ -155,8 +157,10 @@ $checkbox-width: $card-view-checkbox-width;
 .tableActionsContainer {
     flex: 0 0 auto;
     position: relative;
+
     @include small-breakpoint {
         background-color: $table-actions-container-bg;
+
         &:not(.selectionActionsOpen) {
             background-color: $secondary-bar-bg;
         }

@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    let constants = require('../../../common/src/constants');
+
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -66,9 +68,39 @@
                 //  segements.  Will continue to do this until the type segment is found.
                 path += elements[idx] + '/';
             }
-            //  if fall out of loop, did not found type in url; return null
+            //  if fall out of loop, did not find type in url; return null
         }
         return null;
+    }
+
+    /**
+     * Return the report id segment to use when request a report route(execute, meta, facets and counts)
+     * that supports the default table report.
+     *
+     * @param reportId
+     * @returns {string}
+     */
+    function getReportIdentifier(reportId) {
+        return (reportId === constants.SYNTHETIC_TABLE_REPORT.ID ? constants.SYNTHETIC_TABLE_REPORT.ROUTE : reportId);
+    }
+
+    /**
+     * Modify the report route if rendering the default report
+     *
+     * @param route
+     * @returns {*}
+     */
+    function updateReportRouteIdentifier(route) {
+        if (route) {
+            //  does the route end with a request to generate a synthetic default table report
+            const reportRouteSuffix = REPORTS + '/' + constants.SYNTHETIC_TABLE_REPORT.ID;
+            if (route.endsWith(reportRouteSuffix)) {
+                //  this is a default route; change the report id with the default report suffix
+                const defaultReportRouteSuffix = REPORTS + '/' + constants.SYNTHETIC_TABLE_REPORT.ROUTE;
+                return route.replace(reportRouteSuffix, defaultReportRouteSuffix);
+            }
+        }
+        return route;
     }
 
     module.exports  = {
@@ -256,7 +288,11 @@
         getReportsRoute: function(url, reportId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
-                return root + '/' + REPORTS + (reportId ? '/' + reportId : '');
+                root += '/' + REPORTS;
+                if (reportId) {
+                    root += '/' + getReportIdentifier(reportId);
+                }
+                return root;
             }
 
             //  no url root for TABLES found; return original url unchanged
@@ -271,10 +307,20 @@
          *           return: /apps/123/tables/456/reports/789/count
          *
          * @param url
+         * @param reportId
          * @returns {*}
          */
-        getReportsCountRoute: function(url) {
-            let root = getUrlRoot(url, REPORTS);
+        getReportsCountRoute: function(url, reportId) {
+            let root = '';
+            if (reportId) {
+                root = getUrlRoot(url, TABLES);
+                if (root) {
+                    root += '/' + REPORTS + '/' + getReportIdentifier(reportId);
+                }
+            } else {
+                root = updateReportRouteIdentifier(getUrlRoot(url, REPORTS));
+            }
+
             if (root) {
                 return root + "/" + REPORT_COUNT;
             }
@@ -310,10 +356,10 @@
             if (reportId) {
                 root = getUrlRoot(url, TABLES);
                 if (root) {
-                    root += '/' + REPORTS + '/' + reportId;
+                    root += '/' + REPORTS + '/' + getReportIdentifier(reportId);
                 }
             } else {
-                root = getUrlRoot(url, REPORTS);
+                root = updateReportRouteIdentifier(getUrlRoot(url, REPORTS));
             }
 
             if (root) {
@@ -333,9 +379,10 @@
          *
          *  b) if reportId, extract the APPS and TABLES identifiers/ids and
          *    append the REPORTS identifier and recordId.
-
+         *
          *    Example:  url: /apps/123/tables/456/rest/of/url
          *               return: /apps/123/tables/456/reports/<reportId>/results
+         *
          * @param url
          * @param reportId
          * @returns {*}
@@ -345,10 +392,10 @@
             if (reportId) {
                 root = getUrlRoot(url, TABLES);
                 if (root) {
-                    root += '/' + REPORTS + '/' + reportId;
+                    root += '/' + REPORTS + '/' + getReportIdentifier(reportId);
                 }
             } else {
-                root = getUrlRoot(url, REPORTS);
+                root = updateReportRouteIdentifier(getUrlRoot(url, REPORTS));
             }
 
             if (root) {
@@ -359,7 +406,7 @@
             return url;
         },
 
-        getDynamicReportsResultsRoute: function(url) {
+        getInvokeReportRoute: function(url) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;

@@ -1,7 +1,5 @@
 @import '../../../src/assets/css/qbVariables';
 
-
-
 .report-content {
     display: flex;
     margin-bottom: 35px;
@@ -15,6 +13,7 @@
         .stageTop {
             display: flex;
             flex-direction: row;
+
             .header {
                 flex: 1;
                 font-size: 22px;
@@ -22,11 +21,13 @@
                 line-height: 22px;
                 margin-top: 3px;
             }
+
             .stageActions {
                 a {
                     text-decoration: none;
                 }
                 flex: 0 1 auto;
+
                 .qbIcon {
                     vertical-align: middle;
                     padding-right: 4px;
@@ -46,6 +47,5 @@
             font-size: 14px;
             -webkit-font-smoothing: antialiased;
         }
-
     }
 }

@@ -1,260 +1,295 @@
 @import '../../assets/css/qbVariables';
-
 $edit-field-padding: 5px;
 
 .formContainer {
     padding: 10px;
+
     .formFooter {
         display: inline;
         margin: 15px 0 15px 1px;
         font-size: $font-size-small;
+
         .fieldNormalText {
             color: $color-black-600;
         }
+
         .fieldLinkText {
-            color: $color-indigo-700
+            color: $color-indigo-700;
         }
+
         .div {
             display: inline;
         }
     }
 
-
-.formSection {
-    display: block;
-
-    &.noWrapLabels .formElement.fieldLabel {
-        white-space: nowrap;
-    }
-    .formTable {
-        margin-left: 10px;
-
-        /* Fields in cardview span the width of the small device */
-        @include small-breakpoint {
-            width: 100%;
-            table-layout: fixed;
-        }
-    }
-    .qbPanelHeader {
-        padding: 15px 0 15px 20px;
-        .qbPanelHeaderIcon {
-            top: 4px;
-        }
-    }
-    &.closed {
-        .qbPanelHeader {
-            // if the section doesnt have a header, when its collapsed the height should be same as others
-            min-height: 54px;
-        }
-    }
-    &.nonCollapsible {
-        .qbPanelHeaderIcon {
-            display: none;
-        }
-        .qbPanelHeader {
-            padding-top: 0;
-        }
-    }
-    .fieldRow {
-        td {
-            vertical-align:top;
-            padding-bottom: 25px;
-        }
-        tr:last-child td {
-            padding-bottom:0;
-        }
-
-        .formElement {
-            word-wrap: break-word;
-            max-width: 100%;
-            display: flex;
-            flex-direction: column;
-            margin-right:15px;
-        }
-
-        /* separate field label td left of field */
-        .fieldLabel {
-            text-align:right;
-            display: block;
-            color: $fieldLabel-color;
-            span {
-                display: inline-block;
-                vertical-align:top;
-            }
-            .requiredFlag-layout {
-                padding-right: 2px;
-            }
-        }
-
-        /* field label in field td */
-        .field .fieldLabel {
-            text-align:left;
-            margin-bottom: $edit-field-padding;
-        }
-
-        .field {
-            margin-right: 40px;
-
-            .dateCell {
-                white-space:nowrap;
-            }
-        }
-
-        td:last-child .field {
-            margin-right: 0;
-        }
-    }
-    .errorText {
-        color: $tootip-error-color !important;
-    }
-}
-
-.editForm {
-    .fieldLabel {
-        margin-top: $edit-field-padding;
-    }
-    .field .fieldLabel {
-        margin-top: 0;
-    }
-    .formElement.field .viewElement {
-        padding: $edit-field-padding;
-    }
-    .fieldValueEditor {
-        width: 280px;
-        &.fieldInputWidth {
-            width: inherit;
-            .input {
-                width: inherit;
-            }
-        }
-        .checkbox {
-            top: $edit-field-padding;
-        }
-        .errorDiv {
-            display: flex;
-            flex-direction: column;
-        }
-
-    }
-    .input, textarea.cellEdit {
-        padding: $edit-field-padding;
-    }
-    .input, .select {
-        width: 100%;
-    }
-    /* don't bleed through dropdowns */
-    .input-group .form-control {
-        z-index: inherit;
-    }
-    .cellEdit.dateTimeField {
-        width: calc(50% - 1px);
-        vertical-align: middle;
-
-        //  dateCell styles for date/time combo
-        &.dateCell {
-            margin-right: 2px;
-        }
-
-        //  timeCell styles for date/time combo
-        &.timeCell {
-            .Select-value {
-                padding-right: 20px !important;
-            }
-        }
-    }
-    .cellEdit.timeCell {
-        .Select, .Select-control, .Select-input {
-            height: 30px;
-        }
-        .Select-value, .Select-placeholder {
-            line-height: 30px;
-        }
-    }
-    .dateCell.cellEdit > * {
-        .input-group.date input.form-control {
-            height: 30px;
-        }
-    }
-    /* Dont want to form section to get a scroll bar when the react select menu expands so remove the position absolute -
-     this automatically adds height to the section container */
-    .Select-menu-outer {
-        position: relative !important;
-        top: auto !important;
-    }
-}
-/* For mobile phones: */
-@include small-breakpoint {
     .formSection {
         display: block;
 
-        .qbPanelHeader {
-            padding: 10px 0 20px 10px;
+        &.noWrapLabels .formElement.fieldLabel {
+            white-space: nowrap;
         }
 
         .formTable {
-            margin-left: 0px;
-            width: 100%;
+            margin-left: 10px;
+
+            /* Fields in cardview span the width of the small device */
+
+            @include small-breakpoint {
+                width: 100%;
+                table-layout: fixed;
+            }
+        }
+
+        .qbPanelHeader {
+            padding: 15px 0 15px 20px;
+
+            .qbPanelHeaderIcon {
+                top: 4px;
+            }
+        }
+
+        &.closed {
+            .qbPanelHeader {
+                // if the section doesnt have a header, when its collapsed the height should be same as others
+                min-height: 54px;
+            }
+        }
+
+        &.nonCollapsible {
+            .qbPanelHeaderIcon {
+                display: none;
+            }
+
+            .qbPanelHeader {
+                padding-top: 0;
+            }
         }
 
         .fieldRow {
             td {
-                padding-bottom: 20px;
+                vertical-align: top;
+                padding-bottom: 25px;
             }
-            .field {
+
+            tr:last-child td {
+                padding-bottom: 0;
+            }
+
+            .formElement {
+                word-wrap: break-word;
                 max-width: 100%;
-                .fieldLabel {
-                    font-size: $font-size-small;
-                    margin-bottom: 0px;
+                display: flex;
+                flex-direction: column;
+                margin-right: 15px;
+            }
+
+            /* separate field label td left of field */
+            .fieldLabel {
+                text-align: right;
+                display: block;
+                color: $fieldLabel-color;
+
+                span {
+                    display: inline-block;
+                    vertical-align: top;
                 }
-                .fieldValue {
-                    font-size: $font-size-small;
+
+                .requiredFlag-layout {
+                    padding-right: 2px;
                 }
+            }
+
+            /* field label in field td */
+            .field .fieldLabel {
+                text-align: left;
+                margin-bottom: $edit-field-padding;
+            }
+
+            .field {
+                margin-right: 40px;
+
+                .dateCell {
+                    white-space: nowrap;
+                }
+            }
+
+            td:last-child .field {
+                margin-right: 0;
             }
         }
-        .fieldValueEditor, textarea.cellEdit{
+
+        .errorText {
+            color: $tootip-error-color !important;
+        }
+    }
+
+    .editForm {
+        .fieldLabel {
+            margin-top: $edit-field-padding;
+        }
+
+        .field .fieldLabel {
+            margin-top: 0;
+        }
+
+        .formElement.field .viewElement {
+            padding: $edit-field-padding;
+        }
+
+        .fieldValueEditor {
+            width: 280px;
+
+            &.fieldInputWidth {
+                width: inherit;
+
+                .input {
+                    width: inherit;
+                }
+            }
+
+            .checkbox {
+                top: $edit-field-padding;
+            }
+
+            .errorDiv {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .input, textarea.cellEdit {
+            padding: $edit-field-padding;
+        }
+
+        .input, .select {
             width: 100%;
         }
-        .errorText {
-            font-size: $font-size-small;
+        /* don't bleed through dropdowns */
+        .input-group .form-control {
+            z-index: inherit;
         }
-        .fieldValueEditor {
-            &.fieldInputWidth {
+
+        .cellEdit.dateTimeField {
+            width: calc(50% - 1px);
+            vertical-align: middle;
+
+            //  dateCell styles for date/time combo
+            &.dateCell {
+                margin-right: 2px;
+            }
+
+            //  timeCell styles for date/time combo
+            &.timeCell {
+                .Select-value {
+                    padding-right: 20px !important;
+                }
+            }
+        }
+
+        .cellEdit.timeCell {
+            .Select, .Select-control, .Select-input {
+                height: 30px;
+            }
+
+            .Select-value, .Select-placeholder {
+                line-height: 30px;
+            }
+        }
+
+        .dateCell.cellEdit > * {
+            .input-group.date input.form-control {
+                height: 30px;
+            }
+        }
+        /* Dont want to form section to get a scroll bar when the react select menu expands so remove the position absolute -
+     this automatically adds height to the section container */
+        .Select-menu-outer {
+            position: relative !important;
+            top: auto !important;
+        }
+    }
+    /* For mobile phones: */
+
+    @include small-breakpoint {
+        .formSection {
+            display: block;
+
+            .qbPanelHeader {
+                padding: 10px 0 20px 10px;
+            }
+
+            .formTable {
+                margin-left: 0;
                 width: 100%;
-                .input {
+            }
+
+            .fieldRow {
+                td {
+                    padding-bottom: 20px;
+                }
+
+                .field {
+                    max-width: 100%;
+
+                    .fieldLabel {
+                        font-size: $font-size-small;
+                        margin-bottom: 0;
+                    }
+
+                    .fieldValue {
+                        font-size: $font-size-small;
+                    }
+                }
+            }
+
+            .fieldValueEditor, textarea.cellEdit {
+                width: 100%;
+            }
+
+            .errorText {
+                font-size: $font-size-small;
+            }
+
+            .fieldValueEditor {
+                &.fieldInputWidth {
                     width: 100%;
+
+                    .input {
+                        width: 100%;
+                    }
                 }
             }
         }
     }
-}
 
-.tooltip {
-    z-index: 1;
-}
+    .tooltip {
+        z-index: 1;
+    }
 
-/**
+    /**
  * on forms, we want the form to expand vertically to accomodate the datepicker
  * when it's open (like react-select based components), so make it use relative positioning,
  * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
  * reorder the datepicker AFTER the input using only CSS
  */
-.formElement .fieldValueEditor .dateCell {
-    border:0;
-    > div {
-        display:flex;
-        flex-direction:column;
-        .input-group.date {
-            border: 1px solid #c7c7c7;
-            border-radius: 2px;
-        }
-        .bootstrap-datetimepicker-widget {
-            right:0 !important;
-            top:10px !important;
-            order:2;
-            position: relative !important;
+    .formElement .fieldValueEditor .dateCell {
+        border: 0;
 
+        > div {
+            display: flex;
+            flex-direction: column;
+
+            .input-group.date {
+                border: 1px solid #c7c7c7;
+                border-radius: 2px;
+            }
+
+            .bootstrap-datetimepicker-widget {
+                right: 0 !important;
+                top: 10px !important;
+                order: 2;
+                position: relative !important;
+            }
         }
     }
-}
-
 }

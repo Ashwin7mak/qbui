@@ -21,6 +21,7 @@
 
     var simpleStringify = require('./../../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
+    var commonConstants = require('./../../../common/src/constants.js');
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -51,6 +52,7 @@
         //  report endpoints
         routeToGetFunction[routeConsts.REPORT_META] = fetchReportMeta;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
+        routeToGetFunction[routeConsts.REPORT_INVOKE_RESULTS] = fetchReportInvokeResults;
         routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
@@ -65,7 +67,6 @@
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
-        routeToPostFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -465,21 +466,57 @@
     }
 
     /**
-     * This is the function for fetching the report results from the reportsApi endpoint.
-     * This endpoint is intended to be used when a client is initially loading a report
-     * as the report meta data is used.
+     * This is a wrapper function for fetching report results
+     * when paging and/or overriding the default report meta data.
      *
      * @param req
      * @param res
+     * @returns {*}
      */
-    /*eslint no-shadow:0 */
+    function fetchReportInvokeResults(req, res) {
+        fetchReport(req, res, false, false);
+    }
+
+    /**
+     * This is a wrapper function for fetching report results
+     * when loading a report using the default report meta data.
+     *
+     * @param req
+     * @param res
+     * @returns {*}
+     */
     function fetchReportResults(req, res) {
+        fetchReport(req, res, true, true);
+    }
+
+    /**
+     * This function fetches the report results from the reportsApi endpoint.  It should
+     * only get called from either the fetchReportInvokeResults or fetchReportResults
+     * wrapper functions.
+     *
+     * @param req
+     * @param res
+     * @param includeFacets - should the report facet information be included in the response
+     * @param useReportMetaData - if false, allows for override of report meta data defaults with
+     * a query parameter value included on the request (query expression, clist, slist, etc).
+     */
+    function fetchReport(req, res, includeFacets, useReportMetaData) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            //  include facet information if a get request to fetch the report results
-            reportsApi.fetchReport(req, req.params.reportId, requestHelper.isGet(req)).then(
+
+            //  get the reportId
+            let reportId = req.params ? req.params.reportId : '';
+
+            //  If the route request is for the default table report (/apps/:appId/tables/:tableId/reports/default/results),
+            //  set the report id to ('0'). This is an internal id value that is used to identify that this
+            //  is a request to generate the synthetic default table report.
+            if (reportId === commonConstants.SYNTHETIC_TABLE_REPORT.ROUTE) {
+                reportId = commonConstants.SYNTHETIC_TABLE_REPORT.ID;
+            }
+
+            reportsApi.fetchReport(req, reportId, includeFacets, useReportMetaData).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');
