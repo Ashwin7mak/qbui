@@ -66,7 +66,7 @@
             name: 'aws_' + process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
+            idleTimeout: '280',
             maxDuration: 10800,
             breakpointSize: 'large',
             shardTestFiles: true,
