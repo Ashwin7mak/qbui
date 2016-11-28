@@ -13,6 +13,8 @@ let AppsStore = Fluxxor.createStore({
         this.appRights = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
+        this.loadingAppRights = false;
+        this.loadingAppUsers = false;
         this.error = false;
         this.savingAppStack = false;
 
@@ -22,8 +24,15 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
+
+            actions.LOAD_APP_USERS, this.onLoadAppUsers,
+            actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
             actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
+
+            actions.LOAD_APP_RIGHTS, this.onLoadAppRights,
             actions.LOAD_APP_RIGHTS_SUCCESS, this.onLoadAppRightsSuccess,
+            actions.LOAD_APP_RIGHTS_FAILED, this.onLoadAppRightsFailed,
+
             actions.SET_APP_STACK, this.onSetAppStack,
             actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess
         );
@@ -58,11 +67,29 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+    onLoadAppUsers() {
+        this.loadingAppUsers = true;
+        this.emit('change');
+    },
+    onLoadAppUsersFailed() {
+        this.loadingAppUsers = false;
+        this.emit('change');
+    },
     onLoadAppUsersSuccess(users) {
+        this.loadingAppUsers = false;
         this.appUsers = users;
         this.emit('change');
     },
+    onLoadAppRights() {
+        this.loadingAppRights = true;
+        this.emit('change');
+    },
+    onLoadAppRightsFailed() {
+        this.loadingAppRights = false;
+        this.emit('change');
+    },
     onLoadAppRightsSuccess(rights) {
+        this.loadingAppRights = false;
         this.appRights = rights;
         this.emit('change');
     },
@@ -105,6 +132,8 @@ let AppsStore = Fluxxor.createStore({
             appRights: this.appRights,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
+            loadingAppRights: this.loadingAppRights,
+            loadingAppUsers: this.loadingAppUsers,
             savingAppStack: this.savingAppStack,
             error: this.error
         };

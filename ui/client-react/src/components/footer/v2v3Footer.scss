@@ -41,12 +41,12 @@
     }
 
     &.closed .popupFooterToggle {
-        transition: transform 0.35s ease-in;
+        transition: transform 0.35s linear;
         transform: rotate(0deg);
     }
 
     &.open .popupFooterToggle {
-        transition: transform 0.35s ease-in;
+        transition: transform 0.35s linear;
         transform: rotate(-180deg);
     }
 }

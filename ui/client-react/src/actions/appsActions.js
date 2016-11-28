@@ -113,6 +113,7 @@ let appsActions = {
     },
 
     selectAppId(appId) {
+
         this.dispatch(actions.SELECT_APP, appId);
 
         let appService = new AppService();
@@ -120,18 +121,23 @@ let appsActions = {
         // fetch the app users list if we don't have it already
 
         if (appId !== this.selectedAppId) {
-            appService.getAppUsers(appId).then(response => {
-                this.selectedAppId = appId;
-                this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-            }, () => {
-                this.dispatch(actions.LOAD_APP_USERS_FAILED);
-            });
+            this.selectedAppId = appId;
 
-            appService.getAppRights(appId).then(response => {
-                this.dispatch(actions.LOAD_APP_RIGHTS_SUCCESS, response.data.appRights);
-            }, () => {
-                this.dispatch(actions.LOAD_APP_RIGHTS_FAILED);
-            });
+            if (appId) {
+                this.dispatch(actions.LOAD_APP_USERS);
+                appService.getAppUsers(appId).then(response => {
+                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+                }, () => {
+                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
+                });
+
+                this.dispatch(actions.LOAD_APP_RIGHTS);
+                appService.getAppRights(appId).then(response => {
+                    this.dispatch(actions.LOAD_APP_RIGHTS_SUCCESS, response.data.appRights);
+                }, () => {
+                    this.dispatch(actions.LOAD_APP_RIGHTS_FAILED);
+                });
+            }
         }
     },
 

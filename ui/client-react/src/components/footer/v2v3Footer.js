@@ -41,6 +41,7 @@ var V2V3Footer = React.createClass({
                         <label>
                             <input type="radio"
                                    name="v2v3"
+                                   value={false}
                                    checked={!this.props.app.openInV3}
                                    onChange={()=>this.props.onSelectOpenInV3(false)}/> <I18nMessage message="quickBaseClassic" />
                         </label>
@@ -49,6 +50,7 @@ var V2V3Footer = React.createClass({
                         <label>
                             <input type="radio"
                                    name="v2v3"
+                                   value={true}
                                    checked={this.props.app.openInV3}
                                    onChange={()=>this.props.onSelectOpenInV3(true)}/> <I18nMessage message="quickBaseMercury" />
                         </label>
