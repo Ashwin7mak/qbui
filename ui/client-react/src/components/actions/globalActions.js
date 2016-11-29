@@ -118,10 +118,11 @@ let GlobalActions = React.createClass({
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
                     {this.props.app ? <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem> : null}
-                    {this.props.app ? <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
+                    {this.props.app && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
                                                 onSelect={this.switchToQBClassic}
-                                                 eventKey={eventKeyIdx++}>Switch to QuickBase Classic</MenuItem> : null}
-                    {this.props.app ? <MenuItem divider/> : null}
+                                                 eventKey={eventKeyIdx++}><I18nMessage
+                                                message={'appMenu.qbClassicLink'}/></MenuItem>}
+                    {this.props.app && <MenuItem divider/>}
 
                     <MenuItem href="/qbase/signout" eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.sign_out'}/></MenuItem>
