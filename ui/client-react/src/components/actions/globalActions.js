@@ -78,7 +78,8 @@ let GlobalActions = React.createClass({
         let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
         if (v2tov3Cookie) {
             //make sure it doesn't exist somehow already
-            newCookieValue = CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.name, "1");
+            newCookieValue = CommonCookieUtils.searchCookieValue(v2tov3Cookie, this.props.app.name) ?
+                v2tov3Cookie : CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.name, "1");
         } else {
             newCookieValue = CommonCookieUtils.createQBClassicNameValuePair(this.props.app.name, "1");
         }

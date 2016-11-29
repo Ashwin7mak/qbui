@@ -9,8 +9,12 @@ describe('Test Common Cookie Utils Functions', () => {
 
     var name = "tusk";
     var value = "walrusPunch";
+    var customDelimiter = ";";
+    var matchTrue = "tusk";
+    var matchFalse = "spaceCow";
     var qbClassicCookieValue = "~tusk=walrusPunch~";
     var defaultCookieValue = "|tusk=walrusPunch|";
+    var customCookieValue = ";tusk=walrusPunch;";
 
     it('test createQBClassicNameValuePair with', () => {
         var result = commonCookieUtils.createQBClassicNameValuePair(name, value);
@@ -21,6 +25,10 @@ describe('Test Common Cookie Utils Functions', () => {
         var result = commonCookieUtils.createNameValuePair(name, value);
         assert.equal(result, defaultCookieValue);
     });
+    it('test createNameValuePair with custom delimiter', () => {
+        var result = commonCookieUtils.createNameValuePair(name, value, customDelimiter);
+        assert.equal(result, customCookieValue);
+    });
 
     it('test addQBClassicNameValuePair', () => {
         var newName = "undying";
@@ -30,12 +38,30 @@ describe('Test Common Cookie Utils Functions', () => {
         assert.equal(result, newQBClassicCookieValue);
     });
 
-    it('test addNameValuePair', () => {
+    it('test addNameValuePair with default delimiter', () => {
         var newName = "undying";
         var newValue = "tombstone";
         var newDefaultCookieValue = defaultCookieValue + "undying=tombstone|";
         var result = commonCookieUtils.addNameValuePair(defaultCookieValue, newName, newValue);
         assert.equal(result, newDefaultCookieValue);
+    });
+
+    it('test addNameValuePair with custom delimiter', () => {
+        var newName = "undying";
+        var newValue = "tombstone";
+        var newCustomCookieValue = customCookieValue + "undying=tombstone;";
+        var result = commonCookieUtils.addNameValuePair(customCookieValue, newName, newValue, customDelimiter);
+        assert.equal(result, newCustomCookieValue);
+    });
+
+    it('test searchCookieValue success', () => {
+        var result = commonCookieUtils.searchCookieValue(defaultCookieValue, matchTrue);
+        assert.equal(result, true);
+    });
+
+    it('test searchCookieValue failure', () => {
+        var result = commonCookieUtils.searchCookieValue(defaultCookieValue, matchFalse);
+        assert.equal(result, false);
     });
 
 });

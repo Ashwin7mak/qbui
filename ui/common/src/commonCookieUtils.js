@@ -61,7 +61,7 @@
          * @returns {*}
          */
         searchCookieValue: function(cookieValue, match) {
-            return cookieValue.search.indexOf(match) !== -1;
+            return cookieValue.indexOf(match) !== -1;
         }
     };
 
