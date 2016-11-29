@@ -13,6 +13,7 @@
         {
             platform : 'OS X 10.11',
             browserName     : 'chrome',
+            version: '54.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             screenResolution : '1600x1200',

@@ -26,6 +26,7 @@
         capabilities : {
             platform : 'OS X 10.9',
             browserName     : 'chrome',
+            version: '54.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name            : 'local_' + process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
