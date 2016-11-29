@@ -45,6 +45,11 @@
         USER            : 'USER',
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
 
+        SYNTHETIC_TABLE_REPORT: {
+            ID: '0',
+            ROUTE: 'default'
+        },
+
         NUMERIC_SEPARATOR: {
             PERIOD: '.',
             COMMA: ','
@@ -68,7 +73,8 @@
             COLUMNS: 'columns',
             OFFSET: 'offset',
             NUM_ROWS: 'numRows',
-            HOME_PAGE_ID: 'homePageId'
+            HOME_PAGE_ID: 'homePageId',
+            OPEN_IN_V3: 'openInV3'
         },
         FORMAT : {
             DISPLAY: 'display',

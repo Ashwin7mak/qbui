@@ -4,23 +4,23 @@
  */
 (function() {
     'use strict';
-    var log = require('../logger').getLogger();
-    var perfLogger = require('../perfLogger');
-    var routeConsts = require('./routeConstants');
-    var request = require('request');
 
-    var requestHelper;
+    let log = require('../logger').getLogger();
+    let perfLogger = require('../perfLogger');
+    let routeConsts = require('./routeConstants');
+    let request = require('request');
+    let routeGroupMapper = require('./qbRouteGroupMapper');
+    let simpleStringify = require('./../../../common/src/simpleStringify.js');
+    let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
+    let commonConstants = require('./../../../common/src/constants.js');
 
-    var formsApi;
-    var recordsApi;
-    var reportsApi;
-    var appsApi;
-
-    var routeGroupMapper = require('./qbRouteGroupMapper');
-    var routeGroup;
-
-    var simpleStringify = require('./../../../common/src/simpleStringify.js');
-    var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
+    //  these all are initialized with the config parameter
+    let requestHelper;
+    let formsApi;
+    let recordsApi;
+    let reportsApi;
+    let appsApi;
+    let routeGroup;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -61,11 +61,15 @@
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
+        //  application endpoints
+        routeToGetFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
+
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
+        routeToPostFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -465,39 +469,57 @@
     }
 
     /**
-     * This is the function for fetching report results from the reportsAPI endpoint
-     * when paging and when overriding the default report meta data.
+     * This is a wrapper function for fetching report results
+     * when paging and/or overriding the default report meta data.
      *
      * @param req
      * @param res
      * @returns {*}
      */
     function fetchReportInvokeResults(req, res) {
-        return fetchReportResults(req, res, true);
+        fetchReport(req, res, false, false);
     }
 
     /**
-     * This is the function for fetching the report results from the reportsApi endpoint.
-     * This endpoint is intended to be used when a client is initially loading a report
-     * as the report meta data is used.
+     * This is a wrapper function for fetching report results
+     * when loading a report using the default report meta data.
      *
      * @param req
      * @param res
-     * @param overrideReportMetaData
+     * @returns {*}
      */
-    /*eslint no-shadow:0 */
-    function fetchReportResults(req, res, overrideReportMetaData) {
+    function fetchReportResults(req, res) {
+        fetchReport(req, res, true, true);
+    }
+
+    /**
+     * This function fetches the report results from the reportsApi endpoint.  It should
+     * only get called from either the fetchReportInvokeResults or fetchReportResults
+     * wrapper functions.
+     *
+     * @param req
+     * @param res
+     * @param includeFacets - should the report facet information be included in the response
+     * @param useReportMetaData - if false, allows for override of report meta data defaults with
+     * a query parameter value included on the request (query expression, clist, slist, etc).
+     */
+    function fetchReport(req, res, includeFacets, useReportMetaData) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            //  anything but a true value means we will fetch the report using the default report meta data
-            let useDefaultReportMetaData = overrideReportMetaData !== true;
 
-            //  include facets in the response if we are using the default report meta data
-            let fetchFacets = useDefaultReportMetaData;
+            //  get the reportId
+            let reportId = req.params ? req.params.reportId : '';
 
-            reportsApi.fetchReport(req, req.params.reportId, fetchFacets, useDefaultReportMetaData).then(
+            //  If the route request is for the default table report (/apps/:appId/tables/:tableId/reports/default/results),
+            //  set the report id to ('0'). This is an internal id value that is used to identify that this
+            //  is a request to generate the synthetic default table report.
+            if (reportId === commonConstants.SYNTHETIC_TABLE_REPORT.ROUTE) {
+                reportId = commonConstants.SYNTHETIC_TABLE_REPORT.ID;
+            }
+
+            reportsApi.fetchReport(req, reportId, includeFacets, useReportMetaData).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');
@@ -607,6 +629,56 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Supports both GET and POST request to resolve an applications run-time stack
+     * preference.
+     *
+     * For a GET request, will return which stack (mercury or classic) the application is
+     * configured to run in.
+     *
+     * For a POST request, will set the application stack (mercury or classic) preference
+     * on where the application is to be run.
+     *
+     * @param req
+     * @param res
+     */
+    function applicationStackPreference(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.stackPreference(req).then(
+                function(response) {
+                    //  Legacy Quickbase returns a response status of 200 when controlled
+                    //  errors(ie:unauthorized) are raised.  Need to examine the errorCode
+                    //  value in the response body to determine the true state of the request.
+                    let resp;
+                    try {
+                        resp = JSON.parse(response.body);
+                    } catch (e) {
+                        resp = {'errorText':'No response body returned.'};
+                    }
+
+                    if (resp.errorCode === 0) {
+                        logApiSuccess(req, response, perfLog, 'Application Stack Preference');
+                    } else {
+                        logApiFailure(req, response, perfLog, 'Application Stack Preference');
+                    }
+                    res.send(resp);
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Application Stack Preference');
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);

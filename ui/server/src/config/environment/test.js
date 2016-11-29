@@ -62,6 +62,9 @@
         //DOMAIN: 'https://quickbase-dev.com:9443'
         DOMAIN: nodeHost,
 
+        //  legacy quickbase host
+        legacyHost: '',
+
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
 

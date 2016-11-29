@@ -24,9 +24,9 @@
         padding-top: 10px;
 
         @include small-breakpoint {
-          border-left: 10px white solid;
-          border-radius: 0;
-          border-right: 10px white solid;
+            border-left: 10px white solid;
+            border-radius: 0;
+            border-right: 10px white solid;
         }
     }
 
@@ -34,13 +34,14 @@
         margin: 200px auto;
         width: 450px;
         z-index: 9999;
+
         @include small-breakpoint {
             margin: 0 auto;
             width: 100%;
         }
     }
 
-    &.large .modal-content{
+    &.large .modal-content {
         padding-top: 20px;
         height: 300px;
         width: 510px;
@@ -69,10 +70,10 @@
         padding-bottom: 20px;
         padding-top: 20px;
 
-      @include small-breakpoint {
-          padding-left: 0;
-          padding-right: 0;
-      }
+        @include small-breakpoint {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 
     .title {
@@ -87,7 +88,7 @@
         margin-top: 30px;
         color: $default-text-onlight-color;
 
-        @include small-breakpoint{
+        @include small-breakpoint {
             font-size: $font-size-h4;
             margin-top: 24px;
         }
@@ -134,12 +135,12 @@
 
                 // It is first-child (not last-child) because of 'column-reverse' above
                 &:not(:first-child) {
-                  margin-bottom: 20px;
-              }
+                    margin-bottom: 20px;
+                }
             }
         }
     }
-//style for anchor tag
+    //style for anchor tag
     .anchorButton {
         display: block;
         padding: 10px;
@@ -182,9 +183,9 @@
         justify-content: center;
         align-items: center;
 
-      .primaryButton {
-          margin-right: 0;
-      }
+        .primaryButton {
+            margin-right: 0;
+        }
     }
 
     .smallText {
