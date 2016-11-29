@@ -72,6 +72,12 @@ consts = require('../../common/src/constants.js');
             bold: false,
             word_wrap: false,
         };
+        let checkboxYNClientProps = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+            display_graphic: false
+        };
         var emptyChoice = {
             coercedValue: {value: ''},
             displayValue: ''
@@ -101,6 +107,8 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TIME_OF_DAY);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DURATION);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX, "Yes No Checkbox",
+            {dataAttr:{clientSideAttributes: checkboxYNClientProps}});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PHONE_NUMBER);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);

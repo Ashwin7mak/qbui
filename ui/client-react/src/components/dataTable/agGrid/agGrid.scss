@@ -1,23 +1,17 @@
 @import '../../../../src/assets/css/qbVariables';
-
 $header-cell-border: $color5;
 $header-cell-border-bottom: $color6;
 $header-cell-background-color: $color7;
 $header-cell-color: $color8;
-
 $row-background-color-hover: $color1;
 $row-cell-border-color: $color4;
-
 $grid-font-size: $font-size-p;
-
 $grid-group-row-header-bkgrd-color: $color1;
 $grid-group-row-header-border-top: $color7;
 $grid-group-row-header-divider: $color21;
-
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
-
 $row-bg-color: #fff;
 $row-non-editable-bg-color: $color-black-200;
 $row-border-color: #ddd;
@@ -30,12 +24,11 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .reportTable {
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    flex:1 1 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
 }
-
 
 .inlineEditing .agGrid .ag-body-container {
     margin-bottom: 330px;
@@ -46,10 +39,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .inlineEditing .agGrid {
-    .selectAllCheckbox,
-    .ag-selection-checkbox,
-    .selectionCell .recordActions,
-    .ag-header-icon {
+    .selectAllCheckbox, .ag-selection-checkbox, .selectionCell .recordActions, .ag-header-icon {
         display: none;
     }
 }
@@ -59,23 +49,25 @@ $cell-edit-background-edit: #f3f8fe;
 .ag-pinned-left-cols-viewport {
     height: auto !important;
 }
+
 .agGrid {
     flex: 1 1 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $grid-font-size;
     -webkit-font-smoothing: antialiased;
-    width:100%;
+    width: 100%;
 
     .ag-body-container {
         background-color: $color2;
-        margin-bottom:0;
-        height: 100%
+        margin-bottom: 0;
+        height: 100%;
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
-        overflow:visible;
+        overflow: visible;
     }
+
     .gridHeaderCell {
         color: $header-cell-color;
         font-size: $grid-font-size;
@@ -86,10 +78,11 @@ $cell-edit-background-edit: #f3f8fe;
         text-align: left;
 
         .dropdownToggle {
-            padding:0;
-            border:0;
-            background-color:inherit;
+            padding: 0;
+            border: 0;
+            background-color: inherit;
         }
+
         .collapser {
             position: absolute;
             left: 22px;
@@ -97,67 +90,81 @@ $cell-edit-background-edit: #f3f8fe;
 
         &.selected {
             background-color: $color5;
+
             .ag-header-cell-menu-button {
-                opacity: 1!important;
+                opacity: 1 !important;
                 display: block;
             }
         }
+
         .subHeader {
             text-align: right;
             display: block;
         }
     }
+
     .ag-header {
-        overflow:visible;
+        overflow: visible;
+
         .ag-pinned-left-header {
             position: absolute;
             z-index: 10;
         }
     }
+
     .ag-header-viewport {
-        overflow:visible;
+        overflow: visible;
     }
-    .ag-header-cell-menu-button>.dropdown {
-        padding-top:1px;
+
+    .ag-header-cell-menu-button > .dropdown {
+        padding-top: 1px;
     }
+
     .ag-header-cell-menu-button button {
-        opacity: .2;
+        opacity: 0.2;
     }
+
     .ag-header-cell-menu-button .dropdown-menu {
         max-height: 200px;
         font-size: 12px;
-        margin-top:0;
-        padding-top:0;
+        margin-top: 0;
+        padding-top: 0;
         overflow: auto;
+
         @include height-medium-breakpoint {
             max-height: 320px;
         }
+
         @include height-large-breakpoint {
             max-height: 320px;
         }
+
         @include height-xlarge-breakpoint {
             max-height: 320px;
         }
     }
+
     .ag-header-cell:hover {
         .ag-header-cell-menu-button button {
             opacity: 1;
         }
     }
+
     .ag-header-cell-text {
-        overflow:hidden;
-        text-overflow:ellipsis;
-        padding-right:4px;
-        padding-left:4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 4px;
+        padding-left: 4px;
         padding-top: 4px;
-        display:inline-block;
-        float:left;
+        display: inline-block;
+        float: left;
         width: calc(100% - 20px); /* expand to enable right alignment but allow room for dropdown icon */
     }
 
     .gridCell {
         word-wrap: break-word;
         padding: $grid-default-cell-padding;
+
         .fieldValueEditor .tipChildWrapper {
             width: 100%;
         }
@@ -172,14 +179,16 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $row-cell-border-color;
         border-bottom: 1px solid $row-cell-border-color;
     }
+
     .ag-row-group .gridCell {
-        border-right: 0px;
+        border-right: 0;
     }
 
     .ag-row:hover {
         background-color: $row-background-color-hover;
-        cursor:pointer;
+        cursor: pointer;
     }
+
     .gridCell.Bold {
         font-weight: bold;
     }
@@ -192,7 +201,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .textFormat .requiredFlag-layout {
-        top:1;
+        top: 1;
     }
 
     .multiLineCellEditWrapper .requiredFlag-layout {
@@ -203,32 +212,36 @@ $cell-edit-background-edit: #f3f8fe;
     .NoWrap {
         white-space: nowrap;
     }
+
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
+
     .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
         text-align: center;
     }
+
     .gridCell.selectionCell {
-        overflow:visible;
+        overflow: visible;
+
         .ag-cell-value {
             padding: 0;
             position: absolute;
             left: 30px;
             top: 1px;
-            height:100%;
+            height: 100%;
 
             .iconActions {
-
                 line-height: inherit;
-                .dropdown-menu a {
 
-                    padding-left:4px;
+                .dropdown-menu a {
+                    padding-left: 4px;
+
                     .qbIcon {
-                        margin-right:6px;
-                        vertical-align:middle;
-                        width:28px;
-                        padding:4px;
+                        margin-right: 6px;
+                        vertical-align: middle;
+                        width: 28px;
+                        padding: 4px;
 
                         &.disabled {
                             color: $icon-disabled-color;
@@ -239,50 +252,61 @@ $cell-edit-background-edit: #f3f8fe;
                         .qbIcon {
                             color: #fff;
                         }
+
                         .qbIcon.print {
                             background-color: $icon-print-color;
                         }
+
                         .qbIcon.email {
                             background-color: $icon-mail-color;
                         }
+
                         .qbIcon.duplicate {
                             background-color: $icon-duplicate-color;
                         }
+
                         .qbIcon.delete {
                             background-color: $icon-delete-color;
                         }
                     }
                 }
+
                 .iconActionButton {
-                    opacity: .2;
+                    opacity: 0.2;
                     transition: opacity 200ms ease-in-out;
-                    border:0;
+                    border: 0;
                     height: 30px;
                     width: auto;
                     background: inherit;
                     color: $topnav-icon-color;
-                    padding:0;
+                    padding: 0;
+
                     &:hover {
                         color: $topnav-icon-color;
                     }
                 }
+
                 .qbIcon.print {
                     color: $icon-print-color;
                 }
+
                 .qbIcon.email {
                     color: $icon-mail-color;
                 }
+
                 .qbIcon.duplicate {
                     color: $icon-duplicate-color;
                 }
+
                 .qbIcon.delete {
                     color: $icon-delete-color;
                 }
             }
         }
+
         &:hover .ag-cell-value .iconActions .iconActionButton {
             transition: opacity 200ms ease-in-out;
-            opacity:1;
+            opacity: 1;
         }
     }
 
@@ -296,10 +320,12 @@ $cell-edit-background-edit: #f3f8fe;
         background-color: $grid-group-row-header-bkgrd-color;
         padding: 2px $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding + 18;
     }
+
     .ag-row-level-0 .ag-group-cell-entire-row {
         border-top: 4px solid $grid-group-row-header-border-top;
-        padding-top: 0px;
+        padding-top: 0;
     }
+
     .ag-row-group {
         &:first-of-type {
             .ag-group-cell-entire-row {
@@ -308,6 +334,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
     }
+
     .ag-group-cell-entire-row::before {
         border-top: 1px solid $grid-group-row-header-divider;
         position: absolute;
@@ -317,6 +344,7 @@ $cell-edit-background-edit: #f3f8fe;
         left: 0;
         content: " ";
     }
+
     .group-header {
         margin-left: $grid-default-group-padding + 3;
         display: inline-block;
@@ -324,10 +352,11 @@ $cell-edit-background-edit: #f3f8fe;
         font-weight: bold;
     }
     //assuming that we can have upto 6 group levels
+
     @for $i from 1 through 6 {
-        .ag-row-level-#{$i}{
+        .ag-row-level-#{$i} {
             .ag-group-cell-entire-row {
-                padding-left: 18 + $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
+                padding-left: 18 + $grid-default-cell-padding + $i * ($grid-default-group-padding + $grid-group-expand-icon-size) !important;
             }
         }
     }
@@ -336,16 +365,18 @@ $cell-edit-background-edit: #f3f8fe;
         position: relative;
         height: 30px;
     }
+
     .selectAllCheckbox {
-        margin: 0px;
+        margin: 0;
         height: 20px;
         position: absolute;
         left: 4px;
         top: -2px;
     }
+
     .ag-selection-checkbox {
         position: absolute;
-        margin:0;
+        margin: 0;
         left: $grid-default-cell-padding;
         top: $grid-default-cell-padding;
     }
@@ -354,33 +385,41 @@ $cell-edit-background-edit: #f3f8fe;
         border: 1px solid $color4;
         background: $color2;
     }
+
     .ag-menu-option {
         line-height: 28px;
     }
+
     .ag-menu-separator {
         border-bottom: 1px solid $color4;
     }
+
     .ag-menu-option-text {
         padding-right: 20px;
     }
+
     .ag-menu-option:hover {
         background-color: $color1;
     }
+
     .ag-menu-option-icon {
         padding: 0 5px;
     }
+
     .saveRecord.qbIcon.iconTableUISturdy-check {
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
         color: $color22;
     }
+
     .ag-menu {
-        top: 24px!important;
-        -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
-        -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
-        box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        top: 24px !important;
+        -webkit-box-shadow: 0 4px 15px 0px rgba(70, 66, 66, 0.15);
+        -moz-box-shadow: 0 4px 15px 0px rgba(70, 66, 66, 0.15);
+        box-shadow: 0 4px 15px 0px rgba(70, 66, 66, 0.15);
     }
+
     .ag-tab-selected {
         display: none;
     }
@@ -394,17 +433,16 @@ $cell-edit-background-edit: #f3f8fe;
 
 //Temporary hack - opened an issue with ag-grid
 #centerRow {
-    height: 100%!important;
+    height: 100% !important;
 }
 
 .tableActionsContainer {
     position: relative;
 }
+
 .tableActionsContainer.toolsMenuOpen {
-    overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
+    overflow: visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
 }
-
-
 
 .swipeable {
     position: relative;
@@ -415,38 +453,39 @@ $cell-edit-background-edit: #f3f8fe;
     top: 0;
     right: 0;
     overflow-x: hidden;
-
     white-space: nowrap;
     position: absolute;
 
     .recordActions {
         padding: 0;
-        height:100%;
-        width:200px;
+        height: 100%;
+        width: 200px;
 
         .actionIcons {
-            display:flex;
-            flex-direction:row;
-            width:100%;
-            height:100%;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
 
             .iconLink {
-                flex:1 1 auto;
-                height:100%;
+                flex: 1 1 auto;
+                height: 100%;
+                position: relative;
 
-                position:relative;
                 .qbIcon {
-                    position:absolute;
+                    position: absolute;
                     top: calc(50% - 10px);
                     left: 12px;
                 }
             }
         }
     }
+
     &.closed {
         transition: width 100ms ease-in;
         width: 0;
     }
+
     &.open {
         transition: width 100ms ease-in;
         width: 240px;
@@ -456,23 +495,24 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* hide row editing tools by default */
 .editTools {
-    display:none;
+    display: none;
 }
 
 .emptyCell {
-    visibility:hidden;
+    visibility: hidden;
 }
 
 .ag-body-container {
-    background-color:inherit !important;
+    background-color: inherit !important;
 }
-.ag-row .gridCell .cellWrapper {
 
+.ag-row .gridCell .cellWrapper {
     .cellData {
         .textCell {
-            overflow:hidden;
-            text-overflow:ellipsis;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
         .checkbox {
             text-align: center;
 
@@ -482,10 +522,12 @@ $cell-edit-background-edit: #f3f8fe;
         }
         flex: 1 1 auto;
     }
+
     > :not(.cellData) {
         display: none;
     }
-    &.numberFormat,  &.currencyFormat, &.percentFormat{
+
+    &.numberFormat, &.currencyFormat, &.percentFormat {
         text-align: right;
     }
 }
@@ -495,53 +537,54 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
-    display:none;
+    display: none;
 }
-
 
 .reportToolsAndContentContainer .ag-pinned-left-cols-container .ag-row.editing {
     box-shadow: none;
 }
 
 .reportToolsAndContentContainer .ag-row.editing {
-
-    box-shadow: 0px 0px 14px $row-box-shadow-color;
-    height : 58px !important;
+    box-shadow: 0 0px 14px $row-box-shadow-color;
+    height: 58px !important;
     margin-top: -13px;
     z-index: 999;
 
     &[row='0'] { //top row in table would clip required star so move down and be shorter
-      margin-top: 0px;
-      height: 51px !important;
+        margin-top: 0;
+        height: 51px !important;
     }
-    .ag-cell.gridCell {
 
-        overflow:visible;
+    .ag-cell.gridCell {
+        overflow: visible;
         padding: 0;
         margin: 0;
-
         border-right: 1px solid $row-border-color;
+
         > .cellWrapper.textFormat {
-            align-items:flex-start;
+            align-items: flex-start;
+
             textarea {
                 resize: none;
-                overflow:hidden;
+                overflow: hidden;
             }
         }
-        > .cellWrapper,.ag-cell-wrapper {
-            padding:3px;
+
+        > .cellWrapper, .ag-cell-wrapper {
+            padding: 3px;
             position: absolute;
-            align-items:center;
-            top:0px;
-            left:0px;
-            right:0px;
-            bottom:0px;
+            align-items: center;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: $cell-edit-background-edit;
-            display:flex;
+            display: flex;
 
             .cellData:not(.nonEditable) {
-                display:none;
+                display: none;
             }
+
             .cellData.nonEditable {
                 display: block;
                 padding-top: 5.5px;
@@ -549,8 +592,9 @@ $cell-edit-background-edit: #f3f8fe;
                 padding-left: 5px;
                 padding-right: 5px;
             }
+
             .cellEditWrapper {
-                display:flex;
+                display: flex;
                 flex-direction: row;
                 position: relative;
                 height: 100%;
@@ -558,46 +602,52 @@ $cell-edit-background-edit: #f3f8fe;
                 align-items: center;
                 justify-content: center;
             }
+
             .multiLineCellEditWrapper {
-                display:flex;
+                display: flex;
                 flex-direction: row;
                 position: relative;
                 height: 32px;
                 width: 100%;
                 justify-content: center;
             }
+
             .cellEdit {
-                display:inline-block;
+                display: inline-block;
                 background-color: $input-bg-color;
+
                 &.input-group {
                     flex: 1 1 auto;
-                    display:flex;
+                    display: flex;
                     flex-direction: row;
-                    margin-right:0;
-                    padding-right:0;
-                    border-right:0;
+                    margin-right: 0;
+                    padding-right: 0;
+                    border-right: 0;
 
-                    >input {
-                        flex:1 1 auto;
-                        border-radius:0;
-                        border:0;
-                        height:20px;
-                        margin-right:1px;
+                    > input {
+                        flex: 1 1 auto;
+                        border-radius: 0;
+                        border: 0;
+                        height: 20px;
+                        margin-right: 1px;
                         font-size: 12px;
-                        padding-left:2px;
+                        padding-left: 2px;
                     }
-                    >span.dropdown {
-                        flex:0 0 auto;
+
+                    > span.dropdown {
+                        flex: 0 0 auto;
                         width: 20px;
+
                         button {
-                            padding-left:4px;
-                            padding-top:0;
+                            padding-left: 4px;
+                            padding-top: 0;
                             height: 21px;
-                            width:20px;
-                            border-radius:0;
+                            width: 20px;
+                            border-radius: 0;
                         }
                     }
                 }
+
                 .qbIcon {
                     font-size: $grid-font-size;
                 }
@@ -611,6 +661,7 @@ $cell-edit-background-edit: #f3f8fe;
                 //  dateCell styles for date/time combo
                 &.dateCell {
                     margin-right: 2px;
+
                     .input-group.date input.form-control {
                         font-size: 12px;
                     }
@@ -621,17 +672,21 @@ $cell-edit-background-edit: #f3f8fe;
                     .Select-option {
                         font-size: 12px;
                         padding: 2px 0 2px 20px;
+
                         .qbIcon {
                             font-size: inherit;
                             padding: 3px 4px;
                         }
                     }
+
                     .Select-placeholder {
                         font-size: 12px;
                     }
+
                     .Select-input {
                         font-size: 12px;
                     }
+
                     .Select-value {
                         padding-right: 20px !important;
                         font-size: 12px;
@@ -639,26 +694,25 @@ $cell-edit-background-edit: #f3f8fe;
                 }
             }
         }
+
         > .ag-cell-wrapper:first-child {
-            border-left:1px solid $row-border-color;
-            left:0;
+            border-left: 1px solid $row-border-color;
+            left: 0;
         }
     }
 
     .gridCell {
         .editTools {
-            z-index:1;
-            display:flex;
-            flex-direction:column;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
             flex: 0 0 auto;
-            background-color:$cell-edit-background-edit;
+            background-color: $cell-edit-background-edit;
             box-shadow: -6px 0px 14px $row-box-shadow-color;
-
-            position:absolute;
-            top:-21px;
-            left:-29px;
+            position: absolute;
+            top: -21px;
+            left: -29px;
             padding: 0 24px;
-
             border: 1px solid $row-border-color;
 
             .loadedContent {
@@ -677,57 +731,64 @@ $cell-edit-background-edit: #f3f8fe;
 
             button {
                 flex: 0 0 auto;
-                border:0;
-                background-color:$cell-edit-background-edit;
-                margin-right:2px;
-                padding:6px 4px;
+                border: 0;
+                background-color: $cell-edit-background-edit;
+                margin-right: 2px;
+                padding: 6px 4px;
 
                 .qbIcon:hover {
-                    opacity:1;
+                    opacity: 1;
                 }
+
                 .qbIcon {
-                    opacity:.7;
-                    width:20px;
+                    opacity: 0.7;
+                    width: 20px;
                     font-size: 16px;
-                    vertical-align:top;
+                    vertical-align: top;
                 }
+
                 .qbIcon.saveRecord {
-                    color:green;
-                    font-size:18px;
+                    color: green;
+                    font-size: 18px;
                 }
+
                 .qbIcon.invalidRecord {
-                    color:$tootip-error-color;
-                    font-size:18px;
+                    color: $tootip-error-color;
+                    font-size: 18px;
                     cursor: default;
                 }
+
                 .qbIcon.cancelSelection {
-                    color:$icon-color;
+                    color: $icon-color;
                 }
+
                 .qbIcon.deleteRecord {
-                    color:red;
+                    color: red;
                 }
+
                 .qbIcon.addRecord {
-                    color:$icon-color;
+                    color: $icon-color;
                 }
+
                 .qbIcon.disabled.addRecord {
-                    color:$icon-disabled-color;
+                    color: $icon-disabled-color;
                 }
             }
         }
     }
 }
 
-  /* ensure that group labels are visible with pinned left column */
+/* ensure that group labels are visible with pinned left column */
 
 .reportContent.inlineEditing .ag-pinned-left-cols-container {
-    z-index:999;
+    z-index: 999;
 }
 
 .reportToolsAndContentContainer.singleSelection .ag-pinned-left-cols-container .ag-row.ag-row-selected.ag-row.ag-row-selected {
     .ag-cell.gridCell > .ag-cell-wrapper {
-        border-left:0;
+        border-left: 0;
     }
-    box-shadow:0;
+    box-shadow: 0;
 }
 
 .ag-group-cell-entire-row {
@@ -736,5 +797,5 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* right justify menu on last column */
 .ag-row .ag-cell:last-child .Select-menu-outer {
-    right:0;
+    right: 0;
 }

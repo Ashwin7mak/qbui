@@ -4,13 +4,13 @@
  * Custom css classes for our QBPanel component
 */
 .qbPanel {
-    margin: 2px 2px 6px 2px;
+    margin: 2px 2px 6px;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
-    -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-    -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-    box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -webkit-box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -moz-box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
+    box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
 
     &.closed {
         overflow: hidden;
@@ -20,61 +20,71 @@
         position: absolute;
         top: 0;
     }
+
     .iconLeft {
         left: 4px;
     }
+
     .iconRight {
         right: 20px;
     }
+
     &:not(.nonCollapsible) .qbPanelHeader {
         cursor: pointer;
     }
+
     .qbPanelHeader {
         padding: 20px 0 30px 20px;
-
         min-width: 30%;
         background-color: $panel-background-color;
 
         .qbPanelHeaderTitle {
             position: relative;
+            margin: 0;
 
-            margin:0;
             .qbPanelHeaderTitleText {
                 margin-right: 30px;
                 word-wrap: break-word;
             }
+
             .rotateDown {
-                transition: all .25s linear;
+                transition: all 0.25s linear;
                 transform: rotate(90deg);
                 font-size: 16px;
                 width: auto;
             }
+
             .rotateUp {
-                transition: all .25s linear;
+                transition: all 0.25s linear;
                 transform: rotate(0deg);
                 font-size: 16px;
                 width: auto;
             }
         }
     }
+
     .qbPanelBody {
-        padding: 0 10px 0 10px;
+        padding: 0 10px;
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
         background-color: $panel-background-color;
-        overflow:auto;
+        overflow: auto;
+
         .qbPanelHeaderIcon {
             color: $panel-header-icon-color;
         }
+
         .qbPanelHeaderIcon:hover {
             color: $panel-header-icon-hover-color;
         }
     }
+
     &.iconLeft {
         .qbPanelHeaderTitleText {
             margin-left: 30px;
         }
+
         .qbPanelBody {
             margin-left: 30px;
         }
@@ -84,11 +94,12 @@
      * panel, panel-default, panel-body
     */
     .panel {
-        border:0;
+        border: 0;
         border-top-width: 0;
         border-radius: 0;
         margin-bottom: 5px;
     }
+
     .panel-body {
         padding: 0;
     }
@@ -100,6 +111,7 @@
 }
 
 /* For mobile phones: */
+
 @include small-breakpoint {
     .qbPanel {
         .qbPanelHeader {

@@ -1,5 +1,6 @@
 //  Report model object used by the client to render a report
 import ReportUtils from '../utils/reportUtils';
+import Constants from '../../../common/src/constants';
 
 let reportModel = {
     set: function(reportMeta, reportData) {
@@ -16,6 +17,9 @@ let reportModel = {
             obj.metaData = reportMeta;
             if (reportMeta.id) {
                 obj.rptId = reportMeta.id.toString();
+            } else {
+                //  if there's no id, we're generating the synthetic default table report
+                obj.rptId = Constants.SYNTHETIC_TABLE_REPORT.ID;
             }
 
             //  for convenience, convert from the meta data the sort/group info(if any) into a list delimited string.
