@@ -211,14 +211,6 @@ $edit-field-padding: 5px;
 
     .viewForm {
         -webkit-font-smoothing: antialiased;
-        @include small-breakpoint {
-            .cellWrapper, .viewElement, .data {
-                font-size: 16px;
-            }
-            .field .fieldLabel {
-                font-size: 14px;
-            }
-        }
     }
 
     /* For mobile phones: */
@@ -270,6 +262,14 @@ $edit-field-padding: 5px;
                         width: 100%;
                     }
                 }
+            }
+        }
+        .viewForm {
+            .cellWrapper, .viewElement, .data {
+                font-size: 16px;
+            }
+            .field .fieldLabel {
+                font-size: 14px;
             }
         }
     }
