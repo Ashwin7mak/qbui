@@ -62,11 +62,12 @@
             platform: 'Windows 10',
             browserName: 'MicrosoftEdge',
             //version: '14.14393',
+            version: '13.10586',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name: 'aws_' + process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '280',
+            idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'large',
             shardTestFiles: true,
