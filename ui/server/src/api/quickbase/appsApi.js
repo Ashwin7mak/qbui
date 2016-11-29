@@ -15,14 +15,8 @@
         let routeHelper = require('../../routes/routeHelper');
         var constants = require('../../../../common/src/constants');
 
-        //Module constants:
-        var APPLICATION_JSON = 'application/json';
-        var CONTENT_TYPE = 'Content-Type';
-
         var request = defaultRequest;
 
-        //TODO: only application/json is supported for content type.  Need a plan to support XML
-        //TODO: move getApps logic into this api
         var appsApi = {
 
             /**
@@ -49,7 +43,7 @@
 
                 return new Promise((resolve, reject) => {
                     var opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppUsersRoute(req.url);
 
                     //  make the api request to get the app users
@@ -76,6 +70,37 @@
                             reject(error);
                         });
                 });
+            },
+
+            /**
+             * Supports both GET and POST request to resolve an applications run-time stack
+             * preference.
+             *
+             * For a GET request, will return which stack (mercury or classic) the application is
+             * configured to run in.
+             *
+             * For a POST request, will set the application stack (mercury or classic) preference
+             * on where the application is to be run.
+             *
+             * @param req
+             * @returns Promise
+             */
+            stackPreference: function(req) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+
+                if (requestHelper.isPost(req)) {
+                    //  if a post request, then updating stack preference
+                    let resp = JSON.parse(opts.body);
+                    let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, value);
+                } else {
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
+                }
+
+                log.debug("Stack preference: " + opts.url);
+
+                return requestHelper.executeRequest(req, opts);
             }
 
         };

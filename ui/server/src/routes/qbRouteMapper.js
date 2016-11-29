@@ -4,24 +4,23 @@
  */
 (function() {
     'use strict';
-    var log = require('../logger').getLogger();
-    var perfLogger = require('../perfLogger');
-    var routeConsts = require('./routeConstants');
-    var request = require('request');
 
-    var requestHelper;
+    let log = require('../logger').getLogger();
+    let perfLogger = require('../perfLogger');
+    let routeConsts = require('./routeConstants');
+    let request = require('request');
+    let routeGroupMapper = require('./qbRouteGroupMapper');
+    let simpleStringify = require('./../../../common/src/simpleStringify.js');
+    let queryFormatter = require('../api/quickbase/formatter/queryFormatter');
+    let commonConstants = require('./../../../common/src/constants.js');
 
-    var formsApi;
-    var recordsApi;
-    var reportsApi;
-    var appsApi;
-
-    var routeGroupMapper = require('./qbRouteGroupMapper');
-    var routeGroup;
-
-    var simpleStringify = require('./../../../common/src/simpleStringify.js');
-    var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
-    var commonConstants = require('./../../../common/src/constants.js');
+    //  these all are initialized with the config parameter
+    let requestHelper;
+    let formsApi;
+    let recordsApi;
+    let reportsApi;
+    let appsApi;
+    let routeGroup;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -62,11 +61,15 @@
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
+        //  application endpoints
+        routeToGetFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
+
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
+        routeToPostFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -626,6 +629,56 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Supports both GET and POST request to resolve an applications run-time stack
+     * preference.
+     *
+     * For a GET request, will return which stack (mercury or classic) the application is
+     * configured to run in.
+     *
+     * For a POST request, will set the application stack (mercury or classic) preference
+     * on where the application is to be run.
+     *
+     * @param req
+     * @param res
+     */
+    function applicationStackPreference(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.stackPreference(req).then(
+                function(response) {
+                    //  Legacy Quickbase returns a response status of 200 when controlled
+                    //  errors(ie:unauthorized) are raised.  Need to examine the errorCode
+                    //  value in the response body to determine the true state of the request.
+                    let resp;
+                    try {
+                        resp = JSON.parse(response.body);
+                    } catch (e) {
+                        resp = {'errorText':'No response body returned.'};
+                    }
+
+                    if (resp.errorCode === 0) {
+                        logApiSuccess(req, response, perfLog, 'Application Stack Preference');
+                    } else {
+                        logApiFailure(req, response, perfLog, 'Application Stack Preference');
+                    }
+                    res.send(resp);
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Application Stack Preference');
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
