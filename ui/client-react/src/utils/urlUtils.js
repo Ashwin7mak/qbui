@@ -11,7 +11,6 @@ const UrlUtils = {
         case 'tel':
         case 'callto':
         case 'skype':
-            debugger;
             return 'phone-outline';
         case 'mailto':
             return 'mail';
