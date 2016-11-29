@@ -45,6 +45,7 @@ import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 import QBModalDoc from './docs/qbModal.js';
 
+import InvisibleBackdropDoc from './docs/invisibleBackdrop.js';
 import AlertBannerDoc from './docs/alertBanner.js';
 import PageTitleDoc from './docs/pageTitle.js';
 // END OF IMPORT STATEMENTS
@@ -81,6 +82,7 @@ render((
             <Route path="qBModal" component={QBModalDoc} />
             <Route path="alertBanner" component={AlertBannerDoc} />
             <Route path="pageTitle" component={PageTitleDoc} />
+            <Route path="invisibleBackdrop" component={InvisibleBackdropDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

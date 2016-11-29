@@ -42,15 +42,23 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).originalRecord).toBeDefined();
         expect(flux.store(STORE_NAME).recordChanges).toEqual({});
         expect(flux.store(STORE_NAME).commitChanges.length).toBe(0);
+        expect(flux.store(STORE_NAME).showDTSErrorModal).toBeDefined();
+        expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
+        expect(flux.store(STORE_NAME).saving).toBeDefined();
 
         //  expect these bindActions
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_START).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CHANGE_FIELD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CANCEL).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_SAVE).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_VALIDATE_FIELD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_FAILED).toBeDefined();
@@ -189,6 +197,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -290,6 +299,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(null);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -340,6 +350,79 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
     });
 
+    it('test onDeleteRecord recordPendingEdits action', () => {
+        let onDeleteRecordAction = {
+            type: actions.DELETE_RECORD,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
+
+    });
+
+    it('test onDeleteRecordBulk recordPendingEdits action', () => {
+        let onDeleteRecordBulkAction = {
+            type: actions.DELETE_RECORD_BULK,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordBulkAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
+
+    });
+
+    it('test onDeleteRecordSuccess recordPendingEdits action', () => {
+        let onDeleteRecordSuccessAction = {
+            type: actions.DELETE_RECORD_SUCCESS,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+
+    });
+
+
+    it('test onDeleteRecordFailed recordPendingEdits action', () => {
+        let onDeleteRecordFailedAction = {
+            type: actions.DELETE_RECORD_FAILED,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordFailedAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+
+    });
+    it('test onDeleteRecordBulkSuccess recordPendingEdits action', () => {
+        let onDeleteRecordBulkSuccessAction = {
+            type: actions.DELETE_RECORD_BULK_SUCCESS,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordBulkSuccessAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+
+    });
+
+
+    it('test onDeleteRecordBulkFailed recordPendingEdits action', () => {
+        let onDeleteRecordBulkFailedAction = {
+            type: actions.DELETE_RECORD_BULK_FAILED,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordBulkFailedAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+
+    });
+
+    it('test onAfterEdit recordPendingEdits action', () => {
+        let onAfterEditAction = {
+            type: actions.AFTER_RECORD_EDIT,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onAfterEditAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).saving).toBe(false);
+
+    });
 
 
     it('test getState function', () => {
@@ -355,6 +438,10 @@ describe('Test recordPendingEdits Store ', () => {
         expect(state.originalRecord).toBeDefined();
         expect(state.recordChanges).toBeDefined();
         expect(state.commitChanges).toBeDefined();
+        expect(state.editErrors).toBeDefined();
+        expect(state.showDTSErrorModal).toBeDefined();
+        expect(state.dtsErrorModalTID).toBeDefined();
+        expect(state.saving).toBeDefined();
 
     });
 

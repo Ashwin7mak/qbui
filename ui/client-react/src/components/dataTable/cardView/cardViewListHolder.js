@@ -7,6 +7,7 @@ import CardViewList from './cardViewList';
 import './cardViewList.scss';
 import CardViewFooter from './cardViewFooter';
 import CardViewNavigation from './cardViewNavigation';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -330,7 +331,7 @@ let CardViewListHolder = React.createClass({
             <div className="reportTable">
 
                 <div className="tableLoaderContainer" ref="cardViewListWrapper">
-                    <Loader loaded={!this.props.reportData.loading}>
+                    <Loader loaded={!this.props.reportData.loading} options={SpinnerConfigurations.CARD_VIEW_REPORT}>
                         {results ?
                             this.getRows(results) :
                             <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}
