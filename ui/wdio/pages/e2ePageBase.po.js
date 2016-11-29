@@ -52,5 +52,27 @@
         //TODO Need to implement, use waitUntil method
     };
 
+    //TODO: Refactor this
+    //// Verify the element is located on top of the other
+    //this.isElementOnTop = function(element1, element2) {
+    //    var self = this;
+    //    // First check that both elements are being displayed
+    //    return self.waitForElements(element1, element2).then(function() {
+    //        // Get element1 location
+    //        element1.getLocation().then(function(navDivLocation) {
+    //            var element1xPosition = navDivLocation.x;
+    //            var element1yPosition = navDivLocation.y;
+    //            // Get element2 location
+    //            element2.getLocation().then(function(navDivLocation2) {
+    //                var element2xPosition = navDivLocation2.x;
+    //                var element2yPosition = navDivLocation2.y;
+    //                // Compare element2 coordinates to be greater than element1
+    //                expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
+    //                expect(element2yPosition > element1yPosition).toBeTruthy();
+    //            });
+    //        });
+    //    });
+    //};
+
     module.exports = new PageBase();
 }());
