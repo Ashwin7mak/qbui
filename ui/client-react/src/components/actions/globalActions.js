@@ -8,6 +8,7 @@ import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
 import cookie from 'react-cookie';
 import Constants from '../../services/constants';
+import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -66,9 +67,26 @@ let GlobalActions = React.createClass({
         flux.actions.changeLocale(locale);
     },
 
+    /**
+     * Check to see if the cookie Constants.COOKIE.V2TOV3 exists
+     * if it does, we need to update the value to include a new name/value pair of appId=1
+     * if it doesn't, we need to create a new cookie with the current appId=1 as the name/value pair
+     * @param eventKey
+     */
     switchToQBClassic(eventKey) {
-        //we need to create a new cookie
-        cookie.save(Constants.COOKIE.V2TOV3, 'abort!', {path: '/'});
+        let newCookieValue = "";
+        let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
+        if (v2tov3Cookie) {
+            //make sure it doesn't exist somehow already
+            newCookieValue = CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.name, "1");
+        } else {
+            newCookieValue = CommonCookieUtils.createQBClassicNameValuePair(this.props.app.name, "1");
+        }
+        //DO NOT EVER DO THIS AGAIN! We should never be overriding how cookie-react saves (which by default ENCODES) the value
+        //I am only doing this so that we don't need to change current stack ::shudder::
+        //This is not documented for cookie-react, tossing some serious JS grenades here
+        var encode = function(string) {return string;};
+        cookie.save(Constants.COOKIE.V2TOV3, newCookieValue, {path: '/', encode});
     },
 
     getUserDropdown() {
