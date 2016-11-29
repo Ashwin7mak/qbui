@@ -193,6 +193,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     }
 
     .clearIcon {
+        display: none;
         background-color: transparent;
         color: $clearmini-normal-color;
         max-height: 16px;
@@ -219,6 +220,9 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     }
 
     @include small-breakpoint {
+        .clearIcon {
+            display: inline;
+        }
         input:focus {
             padding-right: 22px;
 

@@ -126,15 +126,12 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField borderOnError';
+        let classes = ['input', 'textField', 'borderOnError'];
         // error state css class
-        if (this.props.invalid) {
-            classes += ' error';
-        }
-        if (this.props.classes) {
-            classes += ' ' + this.props.classes;
-        }
-        let inputBox = this.renderInputBox(classes);
+        classes.push(this.props.invalid ? 'error' : '');
+        classes.push(this.props.classes || '');
+
+        let inputBox = this.renderInputBox(classes.join(' '));
 
         if (this.props.showClearButton) {
             return this.addClearButtonTo(inputBox);
