@@ -37,7 +37,7 @@ var V2V3Footer = React.createClass({
 
                 <Panel className="popupFooterMain" collapsible expanded={this.state.open}>
                     <div className="v2v3radioTitle"><I18nMessage message="v2v3.versionSelectTitle" /></div>
-                    <div>
+                    <div className="openInClassic">
                         <label>
                             <input type="radio"
                                    name="v2v3"
@@ -46,7 +46,7 @@ var V2V3Footer = React.createClass({
                                    onChange={()=>this.props.onSelectOpenInV3(false)}/> <I18nMessage message="quickBaseClassic" />
                         </label>
                     </div>
-                    <div>
+                    <div className="openInMercury">
                         <label>
                             <input type="radio"
                                    name="v2v3"
