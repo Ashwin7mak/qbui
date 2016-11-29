@@ -204,6 +204,16 @@ commenting out the contents of the `destroy` method as shown below.
   - Right click on the tab with the file name up at the top
   - In the menu, click "Run Opportunities Migration Test"
 12. See Step 6 in [Migrating Test Data](#migrating-test-data) for obtaining your Realm ID and viewing it on newstack on your dev machine
+13. Turn off write-to-current stack if you do not have current stack on your dev machine or if you want the app solely in newstack.
+  - After migrating, find your app in SqlDeveloper. Click through the `[ID]_APPPROPS` tables until you find the App ID
+that matches your newly migrated app (from Step 12 or you can view it in the url, `localhost:9000/qbase/apps/{app id}`
+  - Click the pencil in the "DATA" column. Scroll to the beginning of the data in that field and find `shouldWriteToLegacyStack`.
+  Change the value to `false`
+  - Click the "Commit Changes" button (database with a green check mark)
+  - Restart your tomcat server
+  - **Note:** Eventually you will be able to do this through swagger API, but the `operations/shouldWriteToLegacyStack`
+  is not currently working.
+
 
 
 ## Troubleshooting
@@ -252,3 +262,7 @@ Make sure the 'salts' are the same across all of the following files:
 
 - You may be trying to migrate a field (or a field with specific settings) that are not yet supported by the migration service
 - Try simplifying the fields in your table and try again
+
+### I'm getting a bad ticket error when I try to create or edit a record in my migrated app.
+
+- See step #13 in [Migrating a Custom App](#migrating-a-custom-app)
