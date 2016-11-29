@@ -58,7 +58,7 @@
         DOMAIN  : 'http://localhost:9000',
 
         //  legacy quickbase host
-        legacyHost: 'https://legacy.quickbase.com:443',
+        legacyHost: '',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.PRODUCTION,

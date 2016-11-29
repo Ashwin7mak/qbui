@@ -57,7 +57,7 @@
         DOMAIN: 'http://localhost:9001',
 
         //  legacy quickbase host
-        legacyHost: 'https://www.qblab-trunk.corp.quickbase.net:443',
+        legacyHost: '',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,

@@ -440,20 +440,20 @@
          *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
          *
          * @param appId
-         * @param value - optional value to set the application preference
+         * @param isPost - is this a post request
+         * @param value - value to set the application preference for post request
          *
          * @returns {*}
          */
-        getApplicationStackPreferenceRoute: function(appId, value) {
+        getApplicationStackPreferenceRoute: function(appId, isPost, value) {
             let root = getLegacyRoot();
             if (appId) {
                 root += '/' + appId;
 
-                //  determine JBI based on whether 'value' is undefined/null
-                if (value === undefined || value === null) {
-                    root += '?a=' + GET_APPLICATION_STACK_JBI;
-                } else {
+                if (isPost === true) {
                     root += '?a=' + SET_APPLICATION_STACK_JBI + '&value=' + value;
+                } else {
+                    root += '?a=' + GET_APPLICATION_STACK_JBI;
                 }
             }
             return root;

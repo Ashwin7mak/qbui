@@ -63,7 +63,7 @@
         DOMAIN: nodeHost,
 
         //  legacy quickbase host
-        legacyHost: 'www.qblab-trunk.corp.quickbase.net',
+        legacyHost: '',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,

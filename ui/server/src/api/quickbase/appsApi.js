@@ -89,15 +89,15 @@
                 let opts = requestHelper.setOptions(req);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
-                let value = null;
                 if (requestHelper.isPost(req)) {
                     //  if a post request, then updating stack preference
                     let resp = JSON.parse(opts.body);
-                    value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
+                    let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, value);
+                } else {
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
                 }
 
-                //  configure the current stack url
-                opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, value);
                 log.debug("Stack preference: " + opts.url);
 
                 return requestHelper.executeRequest(req, opts);

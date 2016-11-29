@@ -125,7 +125,7 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, 1);
+            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, 1);
 
             executeReqStub.returns(Promise.resolve('ok'));
             var promise = appsApi.stackPreference(req);
@@ -148,7 +148,7 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, 0);
+            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, 0);
 
             executeReqStub.returns(Promise.resolve('ok'));
             var promise = appsApi.stackPreference(req);
