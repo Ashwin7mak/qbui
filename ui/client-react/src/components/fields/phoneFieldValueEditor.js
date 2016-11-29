@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import './phoneFieldValueEditor.scss';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
-import _ from 'lodash';
 
 const PhoneFieldValueEditor = React.createClass({
     displayName: 'PhoneFieldValueEditor',
@@ -45,13 +44,17 @@ const PhoneFieldValueEditor = React.createClass({
     },
     onBlur(ev) {
         let theVals = {
-            value: this.props.value.split('x').join('')
+            value: this.props.value
         };
-
         if (ev.value === this.props.value.split('x')[1]) {
             theVals = {
                 value: this.props.value.split('x')[0] + 'x' + ev.value
             };
+            if (!theVals.value.split('x')[1]) {
+                theVals = {
+                    value: this.props.value.split('x')[0]
+                };
+            }
         } else if (this.props.value.split('x')[1]) {
             theVals = {
                 value: ev.value + 'x' +  this.props.value.split('x')[1]
