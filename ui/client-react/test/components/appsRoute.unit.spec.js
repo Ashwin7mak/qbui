@@ -7,22 +7,32 @@ import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
 
 //TODO this is a placeholder file to add tests as apps home page gets built out
 
+class WindowLocationUtilsMock {
+    static update(url) { }
+}
+
+
 describe('AppsRoute functions', () => {
     'use strict';
 
     let component;
     let flux = {
         actions:{
-            showTopNav: function() {return;},
-            setTopTitle: function() {return;}
+            showTopNav() {return;},
+            setTopTitle() {return;}
         }
     };
 
     let mockRealm = 'Sinatra';
 
     beforeEach(() => {
+        AppsRoute.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
         spyOn(BaseService.prototype, 'getSubdomain').and.returnValue(mockRealm);
         spyOn(HtmlUtils, 'updatePageTitle');
+    });
+
+    afterEach(() => {
+        AppsRoute.__ResetDependency__('WindowLocationUtils');
     });
 
     it('test render of component', () => {
@@ -34,4 +44,43 @@ describe('AppsRoute functions', () => {
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} />);
         expect(HtmlUtils.updatePageTitle).toHaveBeenCalledWith(`${mockRealm} - ${DEFAULT_PAGE_TITLE}`);
     });
+
+    it('redirects to error page if non admin user has no v3 apps', () => {
+        spyOn(WindowLocationUtilsMock, 'update');
+
+        const apps = [
+            {id:"1", accessRights: [], openInV3: false},
+            {id:"2", accessRights: ["READ"], openInV3: false},
+            {id:"3", accessRights: ["READ", "MANAGE_USERS"], openInV3: false}
+        ];
+
+        component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
+
+        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/pageNotFound");
+    });
+
+    it('does not redirect to error page if non admin user has a v3 app', () => {
+        spyOn(WindowLocationUtilsMock, 'update');
+
+        const apps = [
+            {id:"1", accessRights: ["READ"], openInV3: true}
+        ];
+
+        component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
+
+        expect(WindowLocationUtilsMock.update).not.toHaveBeenCalled();
+    });
+
+    it('does not redirect to error page if admin user has no v3 apps', () => {
+        spyOn(WindowLocationUtilsMock, 'update');
+
+        const apps = [
+            {id:"1", accessRights: ["EDIT_SCHEMA"], openInV3: false}
+        ];
+
+        component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
+
+        expect(WindowLocationUtilsMock.update).not.toHaveBeenCalled();
+    });
 });
+

@@ -14,8 +14,7 @@ import AppHomePage from '../app/appHomePage';
 let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
-    componentWillReceiveProps(props) {
-
+    checkAccess(props) {
         if (!props.appsLoading) {
             const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app.accessRights));
 
@@ -27,8 +26,14 @@ let AppsRoute = React.createClass({
             }
         }
     },
+    componentWillReceiveProps(props) {
+
+        this.checkAccess(props);
+    },
 
     componentDidMount() {
+
+        this.checkAccess(this.props);
 
         // no title for now...
         let flux = this.getFlux();
@@ -37,7 +42,7 @@ let AppsRoute = React.createClass({
 
     },
 
-    render: function() {
+    render() {
         return (
             <div>
                 {/* Reset the page title on the apps page to the realm */}
