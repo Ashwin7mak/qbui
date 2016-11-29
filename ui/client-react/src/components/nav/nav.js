@@ -276,16 +276,15 @@ export let Nav = React.createClass({
      * @returns V2V3Footer or null
      */
     getV2V3Footer() {
-        const hasAdmin = AppUtils.hasAdminAccess(this.state.apps.appRights);
         const selectedApp = this.getSelectedApp();
 
-        if (!this.state.apps.loadingAppRights && !this.state.apps.loadingAppUsers) {
-            if (this.getSelectedApp()) {
-                if (hasAdmin) {
-                    return <V2V3Footer app={selectedApp} onSelectOpenInV3={this.onSelectOpenInV3}/>;
-                } else if (!selectedApp.openInV3) {
-                    WindowLocationUtils.update("/qbase/pageNotFound");
-                }
+        if (selectedApp) {
+            const hasAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
+
+            if (hasAdmin) {
+                return <V2V3Footer app={selectedApp} onSelectOpenInV3={this.onSelectOpenInV3}/>;
+            } else if (!selectedApp.openInV3) {
+                WindowLocationUtils.update("/qbase/pageNotFound");
             }
         }
         return null;

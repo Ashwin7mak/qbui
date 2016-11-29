@@ -10,10 +10,8 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = [];
         this.appUsers = [];
-        this.appRights = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
-        this.loadingAppRights = false;
         this.loadingAppUsers = false;
         this.error = false;
         this.savingAppStack = false;
@@ -28,10 +26,6 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_USERS, this.onLoadAppUsers,
             actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
             actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
-
-            actions.LOAD_APP_RIGHTS, this.onLoadAppRights,
-            actions.LOAD_APP_RIGHTS_SUCCESS, this.onLoadAppRightsSuccess,
-            actions.LOAD_APP_RIGHTS_FAILED, this.onLoadAppRightsFailed,
 
             actions.SET_APP_STACK, this.onSetAppStack,
             actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess
@@ -80,19 +74,6 @@ let AppsStore = Fluxxor.createStore({
         this.appUsers = users;
         this.emit('change');
     },
-    onLoadAppRights() {
-        this.loadingAppRights = true;
-        this.emit('change');
-    },
-    onLoadAppRightsFailed() {
-        this.loadingAppRights = false;
-        this.emit('change');
-    },
-    onLoadAppRightsSuccess(rights) {
-        this.loadingAppRights = false;
-        this.appRights = rights;
-        this.emit('change');
-    },
     onSelectApp(appId) {
         this.selectedAppId = appId;
 
@@ -129,10 +110,8 @@ let AppsStore = Fluxxor.createStore({
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
-            appRights: this.appRights,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
-            loadingAppRights: this.loadingAppRights,
             loadingAppUsers: this.loadingAppUsers,
             savingAppStack: this.savingAppStack,
             error: this.error

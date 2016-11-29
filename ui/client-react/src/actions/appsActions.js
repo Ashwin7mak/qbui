@@ -130,13 +130,6 @@ let appsActions = {
                 }, () => {
                     this.dispatch(actions.LOAD_APP_USERS_FAILED);
                 });
-
-                this.dispatch(actions.LOAD_APP_RIGHTS);
-                appService.getAppRights(appId).then(response => {
-                    this.dispatch(actions.LOAD_APP_RIGHTS_SUCCESS, response.data.appRights);
-                }, () => {
-                    this.dispatch(actions.LOAD_APP_RIGHTS_FAILED);
-                });
             }
         }
     },

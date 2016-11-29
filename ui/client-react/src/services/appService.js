@@ -10,7 +10,6 @@ class AppService extends BaseService {
         //  App Service API endpoints
         this.API = {
             GET_APP           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
-            GET_APP_RIGHTS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.RIGHTS}`,
             GET_APP_USERS     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.USERS}`,
             GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`,
         };
@@ -24,15 +23,6 @@ class AppService extends BaseService {
      */
     getApp(appId) {
         let url = super.constructUrl(this.API.GET_APP, [appId]);
-        return super.get(url);
-    }
-
-    /**
-     * get access rights for app
-     * @param appId
-     */
-    getAppRights(appId) {
-        let url = super.constructUrl(this.API.GET_APP_RIGHTS, [appId]);
         return super.get(url);
     }
 
