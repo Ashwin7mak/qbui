@@ -15,7 +15,7 @@ let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
     componentWillReceiveProps(props) {
-        const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app));
+        const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app.accessRights));
 
         if (!hasAnyAdmin) {
             const hasV3 = _.find(props.apps, {openInV3: true});
