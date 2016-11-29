@@ -117,7 +117,7 @@ let GlobalActions = React.createClass({
                     }) : null}
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
-                    {this.props.app ? <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem> : null}
+                    {this.props.app && <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem>}
                     {this.props.app && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
                                                 onSelect={this.switchToQBClassic}
                                                  eventKey={eventKeyIdx++}><I18nMessage
