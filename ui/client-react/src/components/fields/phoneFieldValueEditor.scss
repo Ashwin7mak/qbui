@@ -1,32 +1,32 @@
+@import '../../../src/assets/css/qbVariables';
+
 .officePhone {
   display: flex;
-
-  &.input {
-    margin: 0 1px;
-    padding: 0 0 0 2px;
-    width: inherit;
-    height: 30px;
-  }
-  .officeNumber {
-    width: 70%;
-  }
-  .extNumber {
-    width: 30%;
-  }
   .x {
     padding: 2px;
     align-self: center;
   }
+  @include small-breakpoint {
+    .x {
+      align-self: flex-end;
+    }
+  }
 }
 
-
-
-// Always show the URL icon on Forms
+// Resize office number input box and ext input box when editing on form view
 .formElement .input {
   &.officeNumber {
-    width: 90%;
+    width: 80%;
   }
   &.extNumber {
-    width: 10%;
+    width: 20%;
+  }
+  @include small-breakpoint {
+    &.officeNumber {
+      width: 80%;
+    }
+    &.extNumber {
+      width: 20%;
+    }
   }
 }
