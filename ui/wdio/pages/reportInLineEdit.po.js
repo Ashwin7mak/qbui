@@ -78,15 +78,18 @@
             // Have to click with raw JS
             // See http://stackoverflow.com/questions/10486192/selenium-click-on-element-hangs
             // https://github.com/SeleniumHQ/selenium/issues/709
-            browser.execute(function() {
-                var event = new MouseEvent('click', {
-                    'view': window,
-                    'bubbles': true,
-                    'cancelable': true,
-                    'detail': 1
-                });
-                document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
-            });
+            //browser.execute(function() {
+            //    var event = new MouseEvent('click', {
+            //        'view': window,
+            //        'bubbles': true,
+            //        'cancelable': true,
+            //        'detail': 1
+            //    });
+            //    document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
+            //});
+            saveRecordButtonEl.click();
+            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
+            browser.waitForVisible('.ag-row.editing', 5000, true);
         }},
 
         /**
