@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import './phoneFieldValueEditor.scss';
-import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
 
 const PhoneFieldValueEditor = React.createClass({
     displayName: 'PhoneFieldValueEditor',
@@ -16,7 +16,6 @@ const PhoneFieldValueEditor = React.createClass({
 
     },
     onChangeOfficeNumber(ev) {
-        console.log('onChangeExtNumber: ', ev);
         let updatedValue = ev;
         if (this.props.value && this.props.value.split('x')[1]) {
             updatedValue = ev + 'x' + this.props.value.split('x')[1];
@@ -27,9 +26,11 @@ const PhoneFieldValueEditor = React.createClass({
         }
     },
     onChangeExtNumber(ev) {
-        console.log('onChangeExtNumber: ', ev);
         if (this.props.value) {
-            let updatedValue = this.props.value.split('x')[0] + 'x' + ev;
+            let updatedValue = this.props.value.split('x')[0];
+            if (ev) {
+                updatedValue += 'x' + ev;
+            }
             if (this.props.onChange) {
                 this.props.onChange(updatedValue);
             }
@@ -42,29 +43,11 @@ const PhoneFieldValueEditor = React.createClass({
         }
 
     },
-    onBlur(ev) {
+    onBlur() {
         let theVals = {
             value: this.props.value
         };
-        if (ev.value === this.props.value.split('x')[1]) {
-            theVals = {
-                value: this.props.value.split('x')[0] + 'x' + ev.value
-            };
-            if (!theVals.value.split('x')[1]) {
-                theVals = {
-                    value: this.props.value.split('x')[0]
-                };
-            }
-        } else if (this.props.value.split('x')[1]) {
-            theVals = {
-                value: ev.value + 'x' +  this.props.value.split('x')[1]
-            };
-        }
-        let attrs = null;
-        if (this.props.fieldDef && this.props.fieldDef.datatypeAttributes) {
-            attrs = this.props.fieldDef.datatypeAttributes;
-        }
-        theVals.display = textFormatter.format(theVals, attrs);
+        theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }
