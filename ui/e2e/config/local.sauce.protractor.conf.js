@@ -21,22 +21,22 @@
         },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
-        allScriptsTimeout: 300000,
+        allScriptsTimeout: 600000,
         // Browser and platform configuration to run your tests on
         capabilities : {
-            platform : 'OS X 10.9',
+            platform : 'OS X 10.11',
             browserName     : 'chrome',
             version: '54.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name            : 'local_' + process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '120',
-            screenResolution : '1680x1050',
+            idleTimeout: '180',
+            screenResolution : '1600x1200',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 4
+            maxInstances: 2
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
@@ -70,7 +70,9 @@
             // If true, print colors to the terminal.
             showColors: true,
             // Default time to wait in ms before a test fails.
-            defaultTimeoutInterval: 300000
+            defaultTimeoutInterval: 600000,
+            // Uncomment if you just want to run just the smoke test
+            //grep:'@smoke'
         },
         // Globally accessible variables (params is a property of the Protractor instance)
         // Used for running tests slower / faster if running in Sauce Labs

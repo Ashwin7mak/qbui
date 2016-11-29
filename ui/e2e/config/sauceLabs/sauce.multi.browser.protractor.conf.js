@@ -35,7 +35,7 @@
         {
             platform: 'OS X 10.11',
             browserName: 'safari',
-            version: '9.0',
+            version: '10.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name: 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Safari',
             screenResolution : '1600x1200',
