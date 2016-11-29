@@ -15,7 +15,7 @@ describe('V2V3Footer functions', () => {
 
         const app = {
             openInV3: false
-        }
+        };
 
         component = TestUtils.renderIntoDocument(<V2V3Footer flux={flux} app={app} onSelectOpenInV3={()=>{}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -25,7 +25,7 @@ describe('V2V3Footer functions', () => {
 
         const app = {
             openInV3: true
-        }
+        };
 
         component = TestUtils.renderIntoDocument(<V2V3Footer flux={flux} app={app} onSelectOpenInV3={()=>{}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -40,7 +40,7 @@ describe('V2V3Footer functions', () => {
 
         const app = {
             openInV3: true
-        }
+        };
 
         component = TestUtils.renderIntoDocument(<V2V3Footer flux={flux} app={app} onSelectOpenInV3={(v3)=>{app.openInV3 = v3;}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
