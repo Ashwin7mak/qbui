@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import _ from 'lodash';
 import './invisibleBackdrop.scss';
-
 /**
  * Renders an invisible backdrop over the whole window (usually used when an action is in progress)
  * to disallow additional input
@@ -23,9 +23,16 @@ const InvisibleBackdrop = React.createClass({
     discardInput(evt) {
         //Cancel the event
         //stop the event from continuing
-        evt.cancelBubble = true;
-        evt.cancel = true;
-        evt.returnValue = false;
+
+        if (_.has(evt, 'nativeEvent.cancelBubble')) {
+            evt.nativeEvent.cancelBubble = true;
+        }
+        if (_.has(evt, 'nativeEvent.cancel')) {
+            evt.nativeEvent.cancel = true;
+        }
+        if (_.has(evt, 'nativeEvent.returnValue')) {
+            evt.nativeEvent.returnValue = false;
+        }
         if (evt.stopPropagation) {
             evt.stopPropagation();
         }
@@ -41,7 +48,6 @@ const InvisibleBackdrop = React.createClass({
     render() {
         return (
                 <Modal
-                    aria-labelledby="modal-label"
                     bsClass="invisibleBackdropModal"
                     shouldCloseOnOverlayClick={false}
                     show={this.props.show}
