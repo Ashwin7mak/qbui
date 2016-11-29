@@ -8,7 +8,8 @@
   }
   @include small-breakpoint {
     .x {
-      align-self: flex-end;
+      padding-right: 2px;
+      padding-left: 5px;
     }
   }
 }
@@ -16,17 +17,13 @@
 // Resize office number input box and ext input box when editing on form view
 .formElement .input {
   &.officeNumber {
-    width: 80%;
+    border-radius: 2px;
+    border: solid 1px $input-text-normal-border-color;;
+    width: 70%;
   }
   &.extNumber {
-    width: 20%;
-  }
-  @include small-breakpoint {
-    &.officeNumber {
-      width: 80%;
-    }
-    &.extNumber {
-      width: 20%;
-    }
+    border-radius: 2px;
+    border: solid 1px $input-text-normal-border-color;;
+    width: 30%;
   }
 }
