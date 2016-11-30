@@ -8,7 +8,7 @@ describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithoutExt = "(555) 555-5555";
-    const placeholderText = "(xxx) xxx-xxxx"
+    const placeholderText = "(xxx) xxx-xxxx";
     let component;
     let domComponent;
     let MockParent = React.createClass({

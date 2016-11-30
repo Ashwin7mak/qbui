@@ -53,7 +53,7 @@ const PhoneFieldValueEditor = React.createClass({
         }
     },
     render() {
-        const placeholderNumber = "(xxx) xxx-xxxx"
+        const placeholderNumber = "(xxx) xxx-xxxx";
         if (this.props.attributes.includeExtension) {
             let officeNumber;
             let officeExt;
