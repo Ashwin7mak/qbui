@@ -6,7 +6,6 @@ import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEd
 
 describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
-    const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithoutExt = "(555) 555-5555";
     const placeholderText = "(xxx) xxx-xxxx";
     let component;
@@ -37,7 +36,7 @@ describe('PhoneFieldValueEditor', () => {
     });
 
     it('allows a user to edit the raw value of a phone', () => {
-        component = TestUtils.renderIntoDocument(<MockParent />);
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         domComponent = ReactDOM.findDOMNode(component);
         Simulate.change(domComponent.childNodes[0], {
             target: {value: phoneNumber}
