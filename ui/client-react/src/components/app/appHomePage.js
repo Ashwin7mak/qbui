@@ -3,6 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {NotificationManager} from 'react-notifications';
 import UrlUtils from '../../utils/urlUtils';
+import * as CompConsts from '../../constants/componentConstants';
 
 import './appHomePage.scss';
 
@@ -35,7 +36,7 @@ const AppHomePage = React.createClass({
         try {
             WalkMeAPI.startWalkthruById(228348);
         } catch (err) {
-            NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', 1500);
+            NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
     },
     componentWillMount() {

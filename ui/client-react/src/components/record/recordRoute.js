@@ -16,6 +16,7 @@ import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
+import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import './record.scss';
 
@@ -256,7 +257,8 @@ export let RecordRoute = React.createClass({
 
                     {!formLoadingeErrorStatus ?
                         <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
-                                            loaded={(!this.props.form || !this.props.form.formLoading)}>
+                                            loaded={(!this.props.form || !this.props.form.formLoading)}
+                                options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}

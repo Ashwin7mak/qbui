@@ -34,7 +34,7 @@ class CellRendererFactory  {
             _.has(props.params, 'data') &&
             _.has(props.params, 'rowIndex')) {
 
-            recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
+            recId = props.params.data[FieldUtils.getPrimaryKeyFieldName(props.params.data)].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
         return key;
@@ -101,7 +101,7 @@ const CellRenderer = React.createClass({
     },
 
     /**
-     * get row uniqueIdentifier value that this cells is rendered in (usually record id)
+     * get row primaryKeyName value that this cells is rendered in (usually record id)
      * @returns value primitive
      */
     getRecId() {
@@ -110,11 +110,11 @@ const CellRenderer = React.createClass({
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
             _.has(this.props.params, 'context') &&
-            _.has(this.props.params, 'context.uniqueIdentifier') &&
+            _.has(this.props.params, 'context.primaryKeyName') &&
             !_.isUndefined(this.props.params.data) &&
-            !_.isUndefined(this.props.params.context.uniqueIdentifier) &&
-            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier])) {
-            recIdAnswer = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+            !_.isUndefined(this.props.params.context.primaryKeyName) &&
+            !_.isUndefined(this.props.params.data[this.props.params.context.primaryKeyName])) {
+            recIdAnswer = this.props.params.data[this.props.params.context.primaryKeyName].value;
         }
         return recIdAnswer;
     },
@@ -259,14 +259,14 @@ const CellRenderer = React.createClass({
             _.has(this.props.params, 'column.colId') &&
             _.has(this.props.params, 'colDef.id')) {
 
-            let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
+            let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.params.data);
 
             let change = {
                 values: {
                     oldVal: this.props.params.data[this.props.params.column.colId],
                     newVal: this.state.valueAndDisplay
                 },
-                recId: this.props.params.data[uniqueIdentifier].value,
+                recId: this.props.params.data[primaryKeyName].value,
                 fid: +this.props.params.colDef.id,
                 fieldName: this.props.params.column.colId,
                 fieldDef: this.props.params.colDef.fieldDef
@@ -450,6 +450,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
                             data={this.props.params.data}
+                            saving={_.has(this.props, 'params.context.saving') ? this.props.params.context.saving : false}
                             rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />
