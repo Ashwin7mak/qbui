@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../select/reactSelectWrapper';
 import QbIcon from '../qbIcon/qbIcon';
 import Locale from '../../locales/locales';
 import * as userFormatter from '../../../../common/src/formatter/userFormatter';
