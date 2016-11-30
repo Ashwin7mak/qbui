@@ -1,4 +1,12 @@
 exports.config = {
+    // ============
+    // Debug config
+    // ============
+    // Change this option to true if you want to run tests in debug mode either using IntelliJ breakpoints
+    // or WebdriverIO's browser.debug() command within your spec files
+    // See http://webdriver.io/guide/testrunner/debugging.html for more info.
+    //
+    debug: false,
     //
     // ==================
     // Specify Test Files
