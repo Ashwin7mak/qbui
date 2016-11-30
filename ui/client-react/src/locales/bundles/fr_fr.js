@@ -167,6 +167,13 @@ export default {
                 ownedBy: "Propriétaire "
             }
         },
+        durationWithUnits: {
+            Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {# semaines}\n} ",
+            Days:"{value, plural, \n =0 {0 jours}\n =1 {1 jour}\n other {# jours}\n} ",
+            Hours:"{value, plural, \n =0 {0 heures}\n =1 {1 heure}\n other {# heures}\n} ",
+            Minutes: "{value, plural, \n =0 {0 minutes}\n =1 {1 minute}\n other {# minutes}\n} ",
+            Seconds: "{value, plural, \n =0 {0 secondes}\n =1 {1 seconde}\n other {# secondes}\n} "
+        },
         report : {
             blank : "blanc",
             facets :{

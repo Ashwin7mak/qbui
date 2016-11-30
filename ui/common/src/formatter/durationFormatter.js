@@ -4,6 +4,7 @@
  */
 (function() {
     'use strict';
+
     /*
      * We can't use the JS native number data type when handling records because it is possible to lose
      * decimal precision as a result of the JS implementation the number data type. In JS, all numbers are
@@ -17,30 +18,10 @@
      * of precision. For more info, google it!
      */
     var bigDecimal = require('bigdecimal');
+    var CONSTS = require('../constants').DURATION_CONSTS;
 
     //Module constants:
     var DECIMAL_DEFAULTS = 14;
-    var MILLIS_PER_SECOND = new bigDecimal.BigDecimal(1000);
-    var MILLIS_PER_MIN = new bigDecimal.BigDecimal(60000);
-    var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
-    var MILLIS_PER_DAY = new bigDecimal.BigDecimal(86400000);
-    var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
-    var SECONDS_PER_MINUTE = new bigDecimal.BigDecimal(60);
-    var MINUTES_PER_HOUR = new bigDecimal.BigDecimal(60);
-    var TEN = new bigDecimal.BigDecimal(10);
-    var NEGATIVE_TEN = new bigDecimal.BigDecimal(-10);
-    var ZERO = new bigDecimal.BigDecimal(0);
-
-    var HHMM = ':HH:MM';
-    var HHMMSS = ':HH:MM:SS';
-    var MM = ':MM';
-    var MMSS = ':MM:SS';
-    var SMART_UNITS = 'Smart Units';
-    var WEEKS = 'Weeks';
-    var DAYS = 'Days';
-    var HOURS = 'Hours';
-    var MINUTES = 'Minutes';
-    var SECONDS = 'Seconds';
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -75,12 +56,12 @@
     function formatDurationValue(millis, opts) {
         millis = new bigDecimal.BigDecimal(millis.toString());
         var seconds, minutes, hours, days, weeks;
-        if (millis.compareTo(ZERO) !== 0) {
-            seconds = divideBigDecimals(millis, MILLIS_PER_SECOND, opts);
-            minutes = divideBigDecimals(millis, MILLIS_PER_MIN, opts);
-            hours = divideBigDecimals(millis, MILLIS_PER_HOUR, opts);
-            days = divideBigDecimals(millis, MILLIS_PER_DAY, opts);
-            weeks = divideBigDecimals(millis, MILLIS_PER_WEEK, opts);
+        if (millis.compareTo(CONSTS.ZERO) !== 0) {
+            seconds = divideBigDecimals(millis, CONSTS.MILLIS_PER_SECOND, opts);
+            minutes = divideBigDecimals(millis, CONSTS.MILLIS_PER_MIN, opts);
+            hours = divideBigDecimals(millis, CONSTS.MILLIS_PER_HOUR, opts);
+            days = divideBigDecimals(millis, CONSTS.MILLIS_PER_DAY, opts);
+            weeks = divideBigDecimals(millis, CONSTS.MILLIS_PER_WEEK, opts);
         } else {
             seconds = 0;
             minutes = 0;
@@ -90,29 +71,29 @@
         }
         var returnValue = '';
         switch (opts.scale) {
-        case HHMM:
-        case HHMMSS:
-        case MM:
-        case MMSS:
+        case CONSTS.HHMM:
+        case CONSTS.HHMMSS:
+        case CONSTS.MM:
+        case CONSTS.MMSS:
             returnValue = generateTimeUnits(millis, hours, minutes, seconds, opts);
             break;
-        case SMART_UNITS:
+        case CONSTS.SMART_UNITS:
             returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
             break;
-        case WEEKS:
-            returnValue = divideToString(millis, MILLIS_PER_WEEK, opts);
+        case CONSTS.WEEKS:
+            returnValue = divideToString(millis, CONSTS.MILLIS_PER_WEEK, opts);
             break;
-        case DAYS:
-            returnValue = divideToString(millis, MILLIS_PER_DAY, opts);
+        case CONSTS.DAYS:
+            returnValue = divideToString(millis, CONSTS.MILLIS_PER_DAY, opts);
             break;
-        case HOURS:
-            returnValue = divideToString(millis, MILLIS_PER_HOUR, opts);
+        case CONSTS.HOURS:
+            returnValue = divideToString(millis, CONSTS.MILLIS_PER_HOUR, opts);
             break;
-        case MINUTES:
-            returnValue = divideToString(millis, MILLIS_PER_MIN, opts);
+        case CONSTS.MINUTES:
+            returnValue = divideToString(millis, CONSTS.MILLIS_PER_MIN, opts);
             break;
-        case SECONDS:
-            returnValue = divideToString(millis, MILLIS_PER_SECOND, opts);
+        case CONSTS.SECONDS:
+            returnValue = divideToString(millis, CONSTS.MILLIS_PER_SECOND, opts);
             break;
         default:
             break;
@@ -140,27 +121,27 @@
         var h = Math.round(hours.abs().longValue());
         if (h !== 0) {
             //If its less than 10 and greater than negative ten, prepend a '0'
-            if (hours.compareTo(TEN) === -1 && hours.compareTo(NEGATIVE_TEN) === 1) {
+            if (hours.compareTo(CONSTS.TEN) === -1 && hours.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
             timeUnits += h + ':';
-        } else if (opts.scale === HHMM || opts.scale === HHMMSS) {
+        } else if (opts.scale === CONSTS.HHMM || opts.scale === CONSTS.HHMMSS) {
             timeUnits += '00:';
         }
-        var extraMinutes = minutes.subtract(hours.multiply(MINUTES_PER_HOUR));
+        var extraMinutes = minutes.subtract(hours.multiply(CONSTS.MINUTES_PER_HOUR));
         if (extraMinutes.signum() !== 0) {
-            if (extraMinutes.compareTo(TEN) === -1 && extraMinutes.compareTo(NEGATIVE_TEN) === 1) {
+            if (extraMinutes.compareTo(CONSTS.TEN) === -1 && extraMinutes.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
             timeUnits += Math.round(extraMinutes.abs().longValue());
         } else {
             timeUnits += '00';
         }
-        var extraSeconds = seconds.subtract(minutes.multiply(SECONDS_PER_MINUTE));
-        if (opts.scale === MMSS || opts.scale === HHMMSS) {
-            if (extraSeconds.compareTo(ZERO) !== 0) {
+        var extraSeconds = seconds.subtract(minutes.multiply(CONSTS.SECONDS_PER_MINUTE));
+        if (opts.scale === CONSTS.MMSS || opts.scale === CONSTS.HHMMSS) {
+            if (extraSeconds.compareTo(CONSTS.ZERO) !== 0) {
                 timeUnits += ':';
-                if (extraSeconds.compareTo(TEN) === -1 && extraSeconds.compareTo(NEGATIVE_TEN) === 1) {
+                if (extraSeconds.compareTo(CONSTS.TEN) === -1 && extraSeconds.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                     timeUnits += '0';
                 }
                 timeUnits += Math.round(extraSeconds.abs().longValue());
@@ -187,20 +168,20 @@
     function generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts) {
         //Entered as days
         var smartUnits = '';
-        if (weeks.abs().compareTo(ZERO) > 0) {
-            smartUnits += divideToString(millis, MILLIS_PER_WEEK, opts);
+        if (weeks.abs().compareTo(CONSTS.ZERO) > 0) {
+            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_WEEK, opts);
             smartUnits += ' weeks';
-        } else if (days.abs().compareTo(ZERO) > 0) {
-            smartUnits += divideToString(millis, MILLIS_PER_DAY, opts);
+        } else if (days.abs().compareTo(CONSTS.ZERO) > 0) {
+            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_DAY, opts);
             smartUnits += ' days';
-        } else if (hours.abs().compareTo(ZERO) > 0) {
-            smartUnits += divideToString(millis, MILLIS_PER_HOUR, opts);
+        } else if (hours.abs().compareTo(CONSTS.ZERO) > 0) {
+            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_HOUR, opts);
             smartUnits += ' hours';
-        } else if (minutes.abs().compareTo(ZERO) > 0) {
-            smartUnits += divideToString(millis, MILLIS_PER_MIN, opts);
+        } else if (minutes.abs().compareTo(CONSTS.ZERO) > 0) {
+            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_MIN, opts);
             smartUnits += ' mins';
-        } else if (seconds.abs().compareTo(ZERO) > 0) {
-            smartUnits += divideToString(millis, MILLIS_PER_SECOND, opts);
+        } else if (seconds.abs().compareTo(CONSTS.ZERO) > 0) {
+            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_SECOND, opts);
             smartUnits += ' secs';
         } else {
             smartUnits += millis.toString() + ' msecs';
@@ -223,7 +204,7 @@
                 opts.decimalPlaces = fieldInfo.decimalPlaces;
             }
             if (!opts.scale) {
-                opts.scale = SMART_UNITS;
+                opts.scale = CONSTS.SMART_UNITS;
             }
             if (!opts.decimalPlaces && opts.decimalPlaces !== 0) {
                 opts.decimalPlaces = DECIMAL_DEFAULTS;
