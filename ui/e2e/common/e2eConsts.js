@@ -22,7 +22,7 @@
 
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
             'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
-            'Email Address Field', 'URL Field'],
+            'Email Address Field', 'URL Field', 'User Field'],
 
         TABLE1 : 0,
         TABLE2 : 1,
@@ -215,6 +215,10 @@
             tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[13]] = {
                 fieldType: consts.SCALAR,
                 dataType: consts.URL
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[14]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.USER
             };
             tableToFieldToFieldTypeMap[table2Name] = {};
             tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[1]] = {

@@ -41,6 +41,7 @@
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
+        var BULK_USERS_ENDPOINT = '/users/bulk'
         var ROLES_ENDPOINT = '/roles/';
         var TABLES_RIGHTS = '/tableRights/';
         var FIELD_RIGHTS = '/fieldRights/';
@@ -206,6 +207,9 @@
                     endpoint = endpoint + userId;
                 }
                 return endpoint;
+            },
+            resolveBulkUsersEndpoint        : function() {
+                return JAVA_BASE_ENDPOINT + BULK_USERS_ENDPOINT;
             },
             resolveCreateAppRolesEndpoint        : function(appId, roleId) {
                 var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT;
@@ -402,6 +406,10 @@
                     challengeAnswer  : 'blue'
                 };
                 return this.createSpecificUser(userToMake);
+            },
+            //Create bulk of users, calls execute request and returns a promise
+            createBulkUser : function(userList) {
+                return this.executeRequest(this.resolveBulkUsersEndpoint(), consts.PUT, userList, DEFAULT_HEADERS);
             },
             //Create authentication for a specific user , calls execute request and returns a promise
             createUserAuthentication     : function(userId) {

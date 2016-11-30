@@ -6,21 +6,37 @@
     'use strict';
 
     var chance = require('chance').Chance();
+    var rawValueGenerator = require('./rawValue.generator');
+    var userConsts = require('./user.constants');
 
     chance.mixin({
         user: function(options) {
-            var first = options && options.firstName ? options.firstName : chance.first(options);
-            var last = options && options.lastName ? options.lastName : chance.last(options);
-            var screenName = options && options.screenName ? options.screenName : first.substring(0, 1) + last;
-            var email = options && options.email ? options.email : chance.email(options);
-            var deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : chance.bool();
+            let userId = options && options.id ? options.id : userConsts.DEFAULT_ID;
+            let first = options && options.firstName ? options.firstName : chance.first(options);
+            let last = options && options.lastName ? options.lastName : chance.last(options);
+            let screenName = options && options.screenName ? options.screenName : first.substring(0, 1) + last;
+            let email = options && options.email ? options.email : chance.email(options);
+            let deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : chance.bool();
+            let anonymous = options && (typeof options.anonymous !== 'undefined') ? options.anonymous : false;
+            let administrator = options && (typeof options.administrator !== 'undefined') ? options.administrator : false;
+            let challengeQuestion = options && (typeof options.challengeQuestion !== 'undefined') ? options.challengeQuestion : "";
+            let challengeAnswer = options && (typeof options.challengeAnswer !== 'undefined') ? options.challengeAnswer : "";
+            let password = options && (typeof options.password !== 'undefined') ? options.password : "";
+            let ticketVersion = options && (typeof options.ticketVersion !== 'undefined') ? options.ticketVersion : userConsts.DEFAULT_TICKET_VERSION;
 
             return {
-                firstName  : first,
-                lastName   : last,
-                screenName : screenName,
-                email      : email,
-                deactivated: deactivated
+                id                : userId,
+                firstName         : first,
+                lastName          : last,
+                screenName        : screenName,
+                email             : email,
+                deactivated       : deactivated,
+                anonymous         : anonymous,
+                administrator     : administrator,
+                challengeQuestion : challengeQuestion,
+                challengeAnswer   : challengeAnswer,
+                password          : password,
+                ticketVersion     : ticketVersion
             };
         }
     });
@@ -50,11 +66,18 @@
          * </p>
          * Available options are:
          * {
-         *  first: <firstName>
-         *  last: <lastName>
+         *  id: <id>
+         *  firstName: <firstName>
+         *  lastName: <lastName>
          *  screenName: <screenName>
          *  email: <emailAddress>
          *  deactivated: <activityStatus>
+         *  anonymous: <anonymous>
+         *  administrator: <administrator>
+         *  challengeQuestion: <challengeQuestion>
+         *  challengeAnswer: <challengeAnswer>
+         *  password: <password>
+         *  ticketVersion: <ticketVersion>
          * }
          * </p>
          * These options may be sparsely populated and we will generate values for those keys not present.
@@ -63,6 +86,39 @@
          */
         generatePopulatedUser: function(options) {
             return chance.user(options);
+        },
+
+        /**
+         * Generate a list of users with certain fields populated with concrete values to generate contrived situations
+         * </p>
+         * Available options are:
+         * {
+         *  id: <id>
+         *  firstName: <firstName>
+         *  lastName: <lastName>
+         *  screenName: <screenName>
+         *  email: <emailAddress>
+         *  deactivated: <activityStatus>
+         *  anonymous: <anonymous>
+         *  administrator: <administrator>
+         *  challengeQuestion: <challengeQuestion>
+         *  challengeAnswer: <challengeAnswer>
+         *  password: <password>
+         *  ticketVersion: <ticketVersion>
+         * }
+         * </p>
+         * These options may be sparsely populated and we will generate values for those keys not present.
+         * @param userIdList
+         * @returns {*}
+         */
+        generatePopulatedDefaultUsers: function(userIdList) {
+            let userResultList = [];
+            userIdList = typeof userIdList === 'undefined' || userIdList == null ? [] : userIdList;
+            userIdList.forEach(userId => {
+                userResultList.push(this.generatePopulatedUser({id: userId}));
+            });
+            console.log(userResultList);
+            return userResultList;
         }
     };
 }());

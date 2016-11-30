@@ -17,6 +17,7 @@
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
         var formService = require('./services/formService.js');
+        var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
 
         var e2eBase = {
@@ -46,6 +47,8 @@
             reportService: reportService(recordBase),
             formService: formService(recordBase),
             roleService: roleService(recordBase),
+            userService: userService(recordBase),
+
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
@@ -226,6 +229,10 @@
                     fieldType: consts.SCALAR,
                     dataType: consts.URL
                 };
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[14]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.USER
+                };
                 tableToFieldToFieldTypeMap['Table 2'] = {};
                 tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[2]] = {
                     fieldType: consts.SCALAR,
@@ -290,6 +297,9 @@
                     // Count how many tables in map and loop over them to create records and reports
                     var numberOfTables = createdApp.tables.length;
                     var createAppPromises = [];
+
+                    const userIdList = [1000001, 1000002, 1000003, 1000004, 1000005];
+                    e2eBase.userService.generateDefaultUserList(userIdList);
 
                     for (var i = 0; i < numberOfTables; i++) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)
