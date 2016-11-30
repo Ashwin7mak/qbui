@@ -32,6 +32,9 @@ export default {
                 missingWalkMe: "Tutorial is not available."
             }
         },
+        appMenu: {
+            qbClassicLink: "Switch to QuickBase Classic"
+        },
         pendingEditModal: {
             modalBodyMessage: "Save changes before leaving?",
             modalStayButton: "Stay and keep working",

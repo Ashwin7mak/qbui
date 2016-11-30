@@ -522,7 +522,11 @@ describe('Validate ReportsApi unit tests', function() {
         var fetchReportGroupingResultsPromise = Promise.resolve({'body': '{"records":null, "type":"GROUP", "groups":[{"summaryRef":{"summaries":["groupName"]}, "records":[[{"id":1, "value":"VP Operations"}, {"id":2, "value":1}]]}]}'});
         var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525, "sortList":"1:EQUALS"} ], [ {"id":2, "value": 1234567, "sortList":"1:EQUALS"} ]]'});
         var fetchFieldsPromise = Promise.resolve({'body': '[{ "id":1, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'});
-        var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142,"value":"2015-08-13"}],[{"id":142,"value":"2015-09-10"}]],[[{"id":7,"value":"Email Received"}],[{"id":7,"value":"Email Sent"}]]]'});
+        var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142, "value":"2015-08-13"}], [{"id":142, "value":"2015-09-10"}]], [[{"id":7, "value":"Email Received"}], [{"id":7, "value":"Email Sent"}]]]'});
+        var facetErrorCode = {errorCode:{id:1, msg:'test'}};
+        var fetchFacetsPromiseError = Promise.resolve(facetErrorCode);
+        var fetchFacetsPromiseEmpty = Promise.resolve({body:''});
+        var fetchFacetsPromiseJunk = Promise.resolve({body:'junk'});
         var fetchMetaData = Promise.resolve({'body': '{"id":1,"sortList":[{"fieldId":1, "sortOrder":"ASC", "groupType":"EQUALS"},{"fieldId":1, "sortOrder":"DESC"}]}'});
         var fetchMetaDataWithQuery = Promise.resolve({'body': '{"id":1,"query":"1.EX.2", "sortList":[{"fieldId":1, "sortOrder":"ASC", "groupType":"EQUALS"},{"fieldId":1, "sortOrder":"DESC"}]}'});
 
@@ -613,6 +617,69 @@ describe('Validate ReportsApi unit tests', function() {
             );
         });
 
+        it('Test get report success - with facets error', function(done) {
+            req.method = 'get';
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getFacetsStub.returns(fetchFacetsPromiseError);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1, true, true);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response.facets, [facetErrorCode]);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with facets"));
+                }
+            );
+        });
+
+        it('Test get report success - with facets empty', function(done) {
+            req.method = 'get';
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getFacetsStub.returns(fetchFacetsPromiseEmpty);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1, true, true);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response.facets, []);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with facets"));
+                }
+            );
+        });
+
+        it('Test get report success - with facets junk throwing error', function(done) {
+            req.method = 'get';
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getFacetsStub.returns(fetchFacetsPromiseJunk);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1, true, true);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response.facets, []);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with facets"));
+                }
+            );
+        });
+
         it('Test get report success with max row limit exceeded', function(done) {
             req.method = 'get';
             req.url += '&offset=0&numRows=' + (constants.PAGE.MAX_NUM_ROWS + 1);
@@ -633,7 +700,7 @@ describe('Validate ReportsApi unit tests', function() {
             );
         });
 
-        it('Test get report success with grouping and no facets', function(done) {
+        it('Test get report success with grouping and empty facets', function(done) {
             req.method = 'get';
 
             reportResultsStub.returns(fetchReportGroupingResultsPromise);
@@ -651,6 +718,7 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
+
         it('Test get report error', function(done) {
             req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);

@@ -6,16 +6,30 @@ describe('RecordActions functions', () => {
     'use strict';
 
     let component;
+    let flux = {
+        actions:{
+            deleteRecord: function() {return;}
+        }
+    };
 
     beforeEach(() => {
-        component = TestUtils.renderIntoDocument(<RecordActions/>);
+        spyOn(flux.actions, 'deleteRecord');
     });
+
+    afterEach(() => {
+        flux.actions.deleteRecord.calls.reset();
+    });
+
+    beforeEach(() => {
+        component = TestUtils.renderIntoDocument(<RecordActions flux={flux}/>);
+    });
+
     it('test render of component', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test extra actions', () => {
-        component = TestUtils.renderIntoDocument(<RecordActions/>);
+        component = TestUtils.renderIntoDocument(<RecordActions flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let actions = TestUtils.scryRenderedDOMComponentsWithTag(component, "a");

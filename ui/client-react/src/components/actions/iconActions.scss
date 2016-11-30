@@ -1,8 +1,6 @@
 @import '../../assets/css/qbVariables';
-
-$icon-action-icon-color:#fff;
+$icon-action-icon-color: #fff;
 $page-actions-background-color: #486c8f;
-
 
 @include not-small-breakpoint {
     .secondaryBar .iconActions {
@@ -23,6 +21,7 @@ $page-actions-background-color: #486c8f;
             color: $topnav-icon-color;
             padding: 0;
             line-height: 1px;
+
             &.dropdownToggle {
                 width: 20px;
                 margin-right: 10px;
@@ -34,11 +33,13 @@ $page-actions-background-color: #486c8f;
                 cursor: pointer;
             }
         }
+
         &.pageActions {
             .iconActionButton {
                 width: 40px;
                 height: 40px;
             }
+
             .addRecord {
                 border-radius: 20px;
                 -webkit-border-radius: 20px;
@@ -59,22 +60,22 @@ $page-actions-background-color: #486c8f;
         display: flex;
         flex-direction: row;
         flex: 0 0 auto;
-        justify-content:space-between;
-        height:40px;
+        justify-content: space-between;
+        height: 40px;
         background-color: $secondary-bar-bg;
-        width:100%;
+        width: 100%;
+
         .iconActions {
             flex: 0 0 auto;
             line-height: 40px;
             display: block;
 
-
             .iconActionButton {
-                border:0;
-                border-radius:0;
+                border: 0;
+                border-radius: 0;
                 padding: 0;
-                padding-right:6px;
-                padding-left:6px;
+                padding-right: 6px;
+                padding-left: 6px;
                 display: inline-block;
                 vertical-align: middle;
                 text-align: center;
@@ -84,12 +85,11 @@ $page-actions-background-color: #486c8f;
                 background-color: inherit;
             }
 
-
             &.pageActions .iconActionButton {
                 background-color: $page-actions-background-color;
             }
-
         }
+
         .pageActions {
             background-color: $page-actions-background-color;
         }

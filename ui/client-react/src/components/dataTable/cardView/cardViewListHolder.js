@@ -7,6 +7,7 @@ import CardViewList from './cardViewList';
 import './cardViewList.scss';
 import CardViewFooter from './cardViewFooter';
 import CardViewNavigation from './cardViewNavigation';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -20,7 +21,7 @@ let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
-        uniqueIdentifier: React.PropTypes.string,
+        primaryKeyName: React.PropTypes.string,
         reportHeader: React.PropTypes.element,
         selectionActions: React.PropTypes.element,
         onScroll: React.PropTypes.func,
@@ -72,7 +73,7 @@ let CardViewListHolder = React.createClass({
 
         const flux = this.getFlux();
 
-        const id = row[this.props.uniqueIdentifier].value;
+        const id = row[this.props.primaryKeyName].value;
 
         let selectedRows = this.props.selectedRows;
 
@@ -277,9 +278,11 @@ let CardViewListHolder = React.createClass({
                         <CardViewList ref="cardViewList"
                                       node={recordNodes}
                                       columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
-                                      uniqueIdentifier={this.props.uniqueIdentifier}
+                                      primaryKeyName={this.props.primaryKeyName}
                                       groupId=""
                                       groupLevel={-1}
+                                      appId={this.props.reportData.appId}
+                                      tblId={this.props.reportData.tblId}
                                       allowCardSelection={this.allowCardSelection}
                                       onToggleCardSelection={this.onToggleCardSelection}
                                       onRowSelected={this.onCardRowSelected}
@@ -328,7 +331,7 @@ let CardViewListHolder = React.createClass({
             <div className="reportTable">
 
                 <div className="tableLoaderContainer" ref="cardViewListWrapper">
-                    <Loader loaded={!this.props.reportData.loading}>
+                    <Loader loaded={!this.props.reportData.loading} options={SpinnerConfigurations.CARD_VIEW_REPORT}>
                         {results ?
                             this.getRows(results) :
                             <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}

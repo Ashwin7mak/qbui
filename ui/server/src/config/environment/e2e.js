@@ -56,6 +56,9 @@
         //DOMAIN  : 'http://localhost:9000',
         DOMAIN: 'http://localhost:9001',
 
+        //  legacy quickbase host
+        legacyHost: '',
+
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
 

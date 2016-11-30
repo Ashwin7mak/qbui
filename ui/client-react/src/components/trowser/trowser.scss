@@ -1,27 +1,27 @@
 @import '../../assets/css/qbVariables';
-
 $trowser-fg: #000;
 $trowser-icons-color: #fff;
-$trowser-header-bg:#486c8f;
+$trowser-header-bg: #486c8f;
 $trowser-footer-bg: #193048;
 $action-separator-color: #486c8f;
 
 #alertIconTooltip {
-    z-index:99999;
+    z-index: 99999;
 }
 
-.trowser  {
-    position:absolute;
+.trowser {
+    position: absolute;
     z-index: $zindex-trowser;
-    left:0;right:0;
-    height:100%;
+    left: 0;
+    right: 0;
+    height: 100%;
     color: $trowser-fg;
-    max-height:100%;
-    overflow:hidden;
-    transition: .5s;
+    max-height: 100%;
+    overflow: hidden;
+    transition: 0.5s;
     transition-timing-function: ease-in-out;
     transform: translateY(-100%);
-    padding:0;
+    padding: 0;
 
     &.visible {
         transform: translateY(0);
@@ -32,27 +32,32 @@ $action-separator-color: #486c8f;
     }
 
     .trowserHeader {
-        flex:0 0 auto;
-        flex-basis:40px;
+        flex: 0 0 auto;
+        flex-basis: 40px;
         color: #fff;
         background-color: $trowser-header-bg;
-        display:flex;
-        align-items:center;
+        display: flex;
+        align-items: center;
         padding: 0 10px 0 20px;
+
         .qbIcon {
-            font-size:22px;
+            font-size: 22px;
             vertical-align: middle;
         }
+
         .breadcrumbs {
-            flex:1 1 auto;
-            overflow:hidden;
-            white-space:nowrap;
+            flex: 1 1 auto;
+            overflow: hidden;
+            white-space: nowrap;
+
             .breadcrumbsContent {
-                overflow:hidden;
-                text-overflow:ellipsis;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
                 * {
                     vertical-align: middle;
                 }
+
                 .primaryIcon {
                     margin-right: 10px;
                 }
@@ -60,42 +65,48 @@ $action-separator-color: #486c8f;
         }
 
         button {
-            height:40px;
+            height: 40px;
             font-size: 18px;
             color: #fff;
             background-color: $trowser-header-bg;
             border-radius: 0;
             border: 0;
-
         }
+
         .rightIcons {
             flex: 0 0 auto;
         }
     }
+
     .trowserChildren {
-        display:flex;
-        flex-direction:column;
+        display: flex;
+        flex-direction: column;
         flex: 1 1 auto;
-        overflow:auto;
+        overflow: auto;
     }
+
     .trowserLoadedContent {
-        position:relative;
+        position: relative;
     }
+
     .trowserFooter {
         color: #fff;
-        flex:0 0 auto;
-        display:flex;
+        flex: 0 0 auto;
+        display: flex;
         flex-direction: row;
         background-color: $trowser-footer-bg;
         padding: 3px 0;
+
         .leftActions {
-            flex:0 0 auto;
+            flex: 0 0 auto;
         }
+
         .centerActions {
-            display:flex;
-            flex:1 1 auto;
-            justify-content:center;
-            align-items:center;
+            display: flex;
+            flex: 1 1 auto;
+            justify-content: center;
+            align-items: center;
+
             a {
                 display: flex;
                 height: 23px;
@@ -103,28 +114,33 @@ $action-separator-color: #486c8f;
                 padding: 0 30px;
                 color: #fff;
                 border-left: 1px solid $action-separator-color;
-                text-decoration:none;
+                text-decoration: none;
                 align-items: center;
+
                 .qbIcon {
                     font-size: 16px;
                     margin-right: 10px;
                 }
             }
+
             a:last-child {
-                border-right:1px solid $action-separator-color;
+                border-right: 1px solid $action-separator-color;
             }
         }
+
         .rightIcons {
-            flex:0 0 auto;
-            align-self:center;
+            flex: 0 0 auto;
+            align-self: center;
+
             button {
                 margin: 4px 10px 4px 4px;
-            };
+            }
             display: flex;
         }
+
         .saveAlertButton {
             font-size: 22px;
-            align-self:center;
+            align-self: center;
             color: $color-red-700;
             display: inline-block;
             text-align: center;
@@ -132,50 +148,54 @@ $action-separator-color: #486c8f;
             background-color: transparent;
             border-color: transparent;
             margin: 4px 0px 0px 4px;
-            padding: 0px 0px 0px 1px;
+            padding: 0 0px 0px 1px;
         }
     }
-    .trowserContent {
-        display:flex;
-        flex-direction: column;
-        position:absolute;
-        left:0;
-        right:0;
-        top:0;
-        bottom:0;
-        margin:auto;
-        background-color:#F2F9FE;
-        opacity:1;
-        max-width:1440px;
 
+    .trowserContent {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        background-color: #f2f9fe;
+        opacity: 1;
+        max-width: 1440px;
     }
+
     .trowserBackground {
-        position:absolute;
-        top:0;
-        width:100%;
-        bottom:0;
-        opacity:.4;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        bottom: 0;
+        opacity: 0.4;
         background: black;
     }
 }
 
 .trowser.top {
-    top:0;
+    top: 0;
 }
 
 .trowser.bottom {
-    bottom:0;
+    bottom: 0;
 }
 
 /* 2 rows on small breakpoint */
+
 @include small-breakpoint {
     .trowser {
         .trowserHeader {
-            padding: 0 10px 0 10px;
+            padding: 0 10px;
+
             .rightIcons .btn {
                 margin-top: -3px;
             }
         }
+
         .trowserFooter {
             flex-direction: column;
             flex: 0 0 auto;
@@ -186,20 +206,25 @@ $action-separator-color: #486c8f;
                     align-items: center;
                     justify-content: center;
                 }
+
                 a:first-child {
                     border-left: 0;
                 }
+
                 a:last-child {
                     border-right: 0;
                 }
             }
+
             .rightIcons {
                 text-align: center;
                 align-self: flex-end;
+
                 button {
                     width: 100%;
                 }
             }
+
             .saveAlertButton {
                 text-align: end;
             }
