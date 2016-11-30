@@ -59,6 +59,8 @@
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
 
         //  APP ENDPOINTS for USERS
+        APP                         : baseUrl.QUICKBASE + '/apps/:appId',
+        APPS                        : baseUrl.QUICKBASE + '/apps',
         APP_USERS                   : baseUrl.QUICKBASE + '/apps/:appId/users',
 
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper

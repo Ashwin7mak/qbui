@@ -36,6 +36,8 @@
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
+        routeToGetFunction[routeConsts.APPS] = getApps;
+        routeToGetFunction[routeConsts.APP] = getApp;
         routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
 
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
@@ -229,6 +231,54 @@
             modifyRequestPathForApi(req);
             returnFunction(req, res);
         }
+    }
+
+    function getApp(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            let appId = req.params.appId;
+            appsApi.getApp(req, appId).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function getApps(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get Apps', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.getApps(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get Apps');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get Apps');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
     }
 
     /**

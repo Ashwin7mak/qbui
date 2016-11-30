@@ -3,6 +3,7 @@
 
     let constants = require('../../../common/src/constants');
 
+    let ACCESS_RIGHTS = 'accessRights';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -130,13 +131,29 @@
          */
         transformUrlRoute: function(url, curRoute, newRoute) {
             if (typeof url === 'string') {
-                var offset = url.toLowerCase().indexOf(curRoute);
+                let offset = url.toLowerCase().indexOf(curRoute);
                 if (offset !== -1) {
                     return url.substring(0, offset) + newRoute;
                 }
             }
             //  return requestUrl unchanged
             return url;
+        },
+
+        getAppsRoute: function(url, appId) {
+            let offset = url.toLowerCase().indexOf(APPS);
+            if (offset !== -1) {
+                let root = url.substring(0, offset) + APPS;
+                if (appId) {
+                    root += '/' + appId;
+                }
+                return root;
+            }
+            return url;
+        },
+
+        getAppsAccessRightsRoute(url, appId) {
+            return this.getAppsRoute(url, appId) + '/' + ACCESS_RIGHTS;
         },
 
         /**
