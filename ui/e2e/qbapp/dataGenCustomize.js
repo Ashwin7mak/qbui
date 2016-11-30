@@ -50,6 +50,7 @@ consts = require('../../common/src/constants.js');
         // optional add supplied attrs
         if (settings) {
             table[fieldName] = Object.assign({}, table[fieldName], settings);
+            console.log('SETTINGS!!: ', table[fieldName]);
         }
     }
 
@@ -132,7 +133,9 @@ consts = require('../../common/src/constants.js');
                 }});
 
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
-        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER);
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
+
 
         tableToFieldToFieldTypeMap[table3Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
@@ -218,6 +221,7 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, null, {required:true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.EMAIL_ADDRESS, null, {required:true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {required:true, dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
 
         return tableToFieldToFieldTypeMap;
     }
