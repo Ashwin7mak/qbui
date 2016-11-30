@@ -27,6 +27,9 @@
         // api rest server endpoints...environments must configure
         javaHost: '',
 
+        // api rest server endpoints for legacy quickbase..environments must configure
+        legacyHost: '',
+
         // when starting up express server, fork as many listener forks as there are cpu cores.
         forkWorkers: false
     };

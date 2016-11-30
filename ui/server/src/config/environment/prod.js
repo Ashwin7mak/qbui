@@ -57,6 +57,9 @@
         //DOMAIN: 'http://localhost.intuit.com:9000',
         DOMAIN  : 'http://localhost:9000',
 
+        //  legacy quickbase host
+        legacyHost: '',
+
         //Node understanding of RuntimeEnvironment
         env: envConsts.PRODUCTION,
 

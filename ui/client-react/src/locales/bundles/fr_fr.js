@@ -29,6 +29,9 @@ export default {
                 missingWalkMe: "Le didacticiel n'est pas disponible"
             }
         },
+        appMenu: {
+            qbClassicLink: "Basculer vers QuickBase Classic"
+        },
         pendingEditModal: {
             modalBodyMessage: "Enregistrer les modifications avant de quitte?",
             modalStayButton: "Restez et continuer à travailler",

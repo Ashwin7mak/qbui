@@ -4,7 +4,8 @@ export default {
     //  COOKIES
     COOKIE: {
         TICKET: 'TICKET',
-        NSTICKET: 'NSTICKET'
+        NSTICKET: 'NSTICKET',
+        V2TOV3: 'V2TOV3'
     },
 
     // REQUEST HEADERS
@@ -23,7 +24,8 @@ export default {
     // its request.  Work is done exclusively on the Node server.
     BASE_URL: {
         QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
-        NODE        : '/api/n/' + Configuration.api.nodeVersion
+        NODE        : '/api/n/' + Configuration.api.nodeVersion,
+        LEGACY      : '/api/l/' + Configuration.api.legacyVersion
     },
 
     // API Entities
@@ -47,5 +49,8 @@ export default {
     RESULTS             : 'results',
     INVOKE              : 'invoke',
     PARSE               : 'parse',
-    BULK                : 'bulk'
+    BULK                : 'bulk',
+
+    // API Legacy actions
+    STACK               : 'stack'
 };

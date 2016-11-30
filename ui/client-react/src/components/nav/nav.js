@@ -21,6 +21,8 @@ import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import NavPageTitle from '../pageTitle/navPageTitle';
+import Locale from '../../locales/locales';
+import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -55,7 +57,8 @@ export let Nav = React.createClass({
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
-                               startTabIndex={4}/>);
+                               startTabIndex={4}
+                               app={this.getSelectedApp()}/>);
     },
 
     getLeftGlobalActions() {
@@ -170,6 +173,11 @@ export let Nav = React.createClass({
         }
     },
 
+    renderSavingModal(showIt) {
+        return <InvisibleBackdrop show={showIt}/>;
+    },
+
+
     render() {
         const flux = this.getFlux();
 
@@ -266,7 +274,12 @@ export let Nav = React.createClass({
                         )}
                     </div>}
             </div>
+
             {this.getV2V3Footer()}
+
+            {this.state.pendEdits &&
+                this.renderSavingModal(this.state.pendEdits.saving)
+            }
         </div>);
     },
 

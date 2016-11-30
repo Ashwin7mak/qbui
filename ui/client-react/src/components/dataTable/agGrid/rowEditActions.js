@@ -8,6 +8,7 @@ import FieldUtils from '../../../utils/fieldUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import * as CompConsts from "../../../constants/componentConstants";
 
 import _ from 'lodash';
 
@@ -47,6 +48,7 @@ const RowEditActions = React.createClass({
     onClickAdd() {
         //get the current record id
         const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
+
         this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },
@@ -59,7 +61,7 @@ const RowEditActions = React.createClass({
             saveButton = (
                 <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
                     <Button className="rowEditActionsSave" onClick={this.onClickSave}>
-                        <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
+                        <Loader loaded={!saving} options={SpinnerConfigurations.INLINE_SAVING}>
                             <QBIcon icon="check" className="saveRecord"/>
                         </Loader>
                     </Button>
@@ -69,7 +71,7 @@ const RowEditActions = React.createClass({
             saveButton = (
                 <QBToolTip location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
                     <Button>
-                        <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
+                        <Loader loaded={!saving} options={SpinnerConfigurations.INLINE_SAVING}>
                             <QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/>
                         </Loader>
                     </Button>
@@ -91,14 +93,9 @@ const RowEditActions = React.createClass({
         }
 
 
-        // Get the saving state from the flux store here so that the entire AG Grid does not need to reload
-        let saving = false;
-        if (this.props.flux && this.props.flux.store) {
-            let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
-            if (recordPendingEdits) {
-                saving = recordPendingEdits.saving;
-            }
-        }
+        // Get the saving state from the context
+        let saving = _.has(this.props, 'params.context.saving') ?
+            this.props.params.context.saving : false;
 
         let addRecordClass = 'addRecord';
         if (!validRow || saving) {

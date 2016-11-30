@@ -17,6 +17,9 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
 
+    let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
+    let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
+
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
     //      \/ - escaped forward slash
@@ -27,6 +30,13 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+
+    /**
+     *
+     */
+    function getLegacyRoot() {
+        return '/db';
+    }
 
     /**
      * Private function to extract the root url for the given type.
@@ -406,12 +416,47 @@
             return url;
         },
 
+        /**
+         * Return the report invoke route that is used to generate a
+         * report with customized meta data.
+         *
+         * @param url
+         * @returns {*}
+         */
         getInvokeReportRoute: function(url) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;
             }
             return url;
+        },
+
+        /**
+         * Return the Quickbase classic url route to get the application's
+         * current stack preference or set the application's stack preference.
+         *
+         * Examples:
+         *      /db/<appid>/?a=JBI_GetAdminRedirectToV3
+         *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
+         *
+         * @param appId
+         * @param isPost - is this a post request
+         * @param value - value to set the application preference for post request
+         *
+         * @returns {*}
+         */
+        getApplicationStackPreferenceRoute: function(appId, isPost, value) {
+            let root = getLegacyRoot();
+            if (appId) {
+                root += '/' + appId;
+
+                if (isPost === true) {
+                    root += '?a=' + SET_APPLICATION_STACK_JBI + '&value=' + value;
+                } else {
+                    root += '?a=' + GET_APPLICATION_STACK_JBI;
+                }
+            }
+            return root;
         },
 
         /**

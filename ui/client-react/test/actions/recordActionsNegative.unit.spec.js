@@ -202,7 +202,7 @@ describe('Record actions Edit Record functions -- Error', () => {
             },
             () => {
                 expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
-                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                 expect(errorFlux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.DELETE_RECORD_FAILED, jasmine.any(Object));
                 done();
             }
@@ -217,7 +217,7 @@ describe('Record actions Edit Record functions -- Error', () => {
             },
             () => {
                 expect(mockRecordService.prototype.deleteRecordBulk).toHaveBeenCalled();
-                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                 expect(errorFlux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_RECORD_BULK_FAILED, jasmine.any(Object)]);
                 done();
             }

@@ -2,19 +2,17 @@ import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import './qbModal.scss';
 import QbIcon from '../qbIcon/qbIcon';
-import Loader  from 'react-loader';
 
 const QB_MODAL_ALERT = 'alert';
 const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
-const QB_MODAL_ISBUSY = 'isBusy';
 const QB_MODAL_DTS_APP_DELETED = 'dtsAppDeleted';
 /**
  * qbModal's size automatically defaults to small, QB_MODAL_SIZE will be left as an array,
  * so in the future when there are specs for a 'medium' size it can be added here
  */
 const QB_MODAL_SIZE = ['large'];
-const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY, QB_MODAL_DTS_APP_DELETED];
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_DTS_APP_DELETED];
 
 const QBModal = React.createClass({
     propTypes: {
@@ -43,7 +41,7 @@ const QBModal = React.createClass({
          */
         title: React.PropTypes.string,
         /**
-         * This is the type of alert (alert, success, or standard[no icon], isBusy)
+         * This is the type of alert (alert, success, or standard[no icon])
          */
         type: React.PropTypes.oneOf(QB_MODAL_TYPES),
         /**
@@ -88,13 +86,7 @@ const QBModal = React.createClass({
         }
         let classes = ['modalIcon'];
         let icon = 'alert';
-        let options = {
-            top: '50%',
-            left: '15%',
-        };
-        if (this.props.type === QB_MODAL_ISBUSY) { //switch to look for isBusy type
-            return <Loader options={options} />;
-        }
+
         if (this.props.type === QB_MODAL_ALERT) {
             classes.push('modalIcon--alert');
         }
@@ -125,14 +117,8 @@ const QBModal = React.createClass({
     },
     renderBody() {
         //The conditions below dictates the css style for the body message
-            //A QB_MODAL_ISBUSY does not ever have a title
         if (this.props.title) {
             return <div className="textWithTitle ">
-                {this.props.bodyMessage}
-            </div>;
-        }
-        if (this.props.type === QB_MODAL_ISBUSY) {
-            return <div className="textIsBusy">
                 {this.props.bodyMessage}
             </div>;
         }

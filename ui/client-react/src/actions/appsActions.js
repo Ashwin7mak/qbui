@@ -2,9 +2,11 @@
 import * as actions from '../constants/actions';
 import AppService from '../services/appService';
 import Promise from 'bluebird';
+import _ from 'lodash';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import constants from '../../../common/src/constants';
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -20,7 +22,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 //  Define the model object returned to the UI layer for the list of apps
 //  TODO: initial implementation...still in progress..
 let appsModel = {
-    set(apps) {
+    set: function(apps) {
         if (apps) {
             //  add a link element to each individual app
             apps.forEach((app) => {
@@ -33,14 +35,92 @@ let appsModel = {
 
 let appsActions = {
 
-    setApplicationStack(appId, openInV3) {
-        this.dispatch(actions.SET_APP_STACK);
+    /**
+     * Return which stack (mercury or classic) the application is configured to be viewed.
+     * @param appId
+     * @returns Promise
+     */
+    getApplicationStack(appId) {
+        let logger = new Logger();
         return new Promise((resolve, reject) => {
-            this.dispatch(actions.SET_APP_STACK_SUCCESS, {appId, openInV3});
-            resolve();
+            if (appId) {
+                //TODO dispatch event
+                let appService = new AppService();
+
+                appService.getApplicationStack(appId).then(
+                    (response) => {
+                        logger.debug('ApplicationService getApplicationStack success:' + JSON.stringify(response));
+                        //TODO dispatch success event
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.getApplicationStack:');
+                        //TODO dispatch failure event
+                        reject();
+                    }
+                ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error('ApplicationService.getApplicationStack: Missing required appId input parameter.');
+                //TODO: dispatch error event
+                reject();
+            }
         });
     },
 
+    /**
+     * Set the stack(mercury or classic) where the application is to be viewed.
+     *
+     * @param appId
+     * @param openInV3
+     * @returns Promise
+     */
+    setApplicationStack(appId, openInV3) {
+        let logger = new Logger();
+        return new Promise((resolve, reject) => {
+            if (appId && _.isBoolean(openInV3)) {
+                logger.debug('Setting application stack preference. AppId:' + appId + '; openInV3:' + openInV3);
+
+                //TODO dispatch event
+                let appService = new AppService();
+
+                let params = {};
+                params[constants.REQUEST_PARAMETER.OPEN_IN_V3] = openInV3;
+
+                appService.setApplicationStack(appId, params).then(
+                    (response) => {
+                        logger.debug('ApplicationService setApplicationStack success:' + JSON.stringify(response));
+                        //TODO dispatch success event
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.setApplicationStack:');
+                        //TODO dispatch failure event
+                        reject();
+                    }
+                ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error('ApplicationService.getApplicationStack: Missing required method parameters. AppId:' + appId + ' ;openInV3:' + openInV3);
+                //TODO: dispatch error event
+                reject();
+            }
+        });
+    },
+
+    /**
+     * Retrieve a list of applications for this user.
+     *
+     * @param withTables - no table information is returned with each app unless
+     * explicitly requested to do so.
+     * @returns Promise
+     */
     loadApps(withTables) {
         let logger = new Logger();
         //  promise is returned in support of unit testing only
@@ -113,7 +193,6 @@ let appsActions = {
     },
 
     selectAppId(appId) {
-
         this.dispatch(actions.SELECT_APP, appId);
 
         let appService = new AppService();
@@ -121,16 +200,12 @@ let appsActions = {
         // fetch the app users list if we don't have it already
 
         if (appId !== this.selectedAppId) {
-            this.selectedAppId = appId;
-
-            if (appId) {
-                this.dispatch(actions.LOAD_APP_USERS);
-                appService.getAppUsers(appId).then(response => {
-                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-                }, () => {
-                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
-                });
-            }
+            appService.getAppUsers(appId).then(response => {
+                this.selectedAppId = appId;
+                this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+            }, () => {
+                this.dispatch(actions.LOAD_APP_USERS_FAILED);
+            });
         }
     },
 
