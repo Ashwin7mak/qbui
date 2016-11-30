@@ -14,6 +14,10 @@ import AppHomePage from '../app/appHomePage';
 let AppsRoute = React.createClass({
     mixins: [FluxMixin],
 
+    /**
+     * allow access to apps if user has admin access to any of them
+     * or any app has openInV3 set
+     */
     checkAccess(props) {
         if (!props.appsLoading) {
             const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app.accessRights));
