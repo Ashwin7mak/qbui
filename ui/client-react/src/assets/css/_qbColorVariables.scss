@@ -106,72 +106,73 @@ $selected-color: $color-cyan-500;
 $hover-color: $color-blue-200;
 
 //-- TBD: update usages to reference colors above
-$color1: #f3f8fe; // wispy-water
-$color2: #ffffff; // white
-$color3: #486c8f;
-$color4: #dcdcdc; // rabbit
-$color5: #c0d0e4; // periwinkle
+// These will all be removed and converted to semantic names
+$color1: $color-blue-200; // wispy-water
+$color2: $color-black-100; // white
+$color3: $color-blue-600;
+$color4: $color-black-300; // rabbit
+$color5: $color-blue-400; // periwinkle
 $color6: #d2dce7;
-$color7: #e3eaf3; // clear-day
-$color8: #486c8f;
-$color9: #969696; // walrus
-$color10: #243f7f;
-$color11: #404040; // charcoal
-$color12: #f5f5f5; // kitten
+$color7: $color-blue-300; // clear-day
+$color8: $color-blue-600;
+$color9: $color-black-600; // walrus
+// $color10: #243f7f;   // UNUSED VARIABLE
+$color11: $color-black-700; // charcoal
+$color12: $color-black-200; // kitten
 $color13: #f6f8fb;
 $color14: #f9fafb;
 $color15: #f0f3f9;
-$color16: #2ca01c; // lazy-lizard
-$color17: #f3f5f8;
+$color16: $color-green-700; // lazy-lizard
+// $color17: #f3f5f8;   // UNUSED VARIABLE
 $color18: #cccccc;
-$color19: #c7c7c7; // porpoise
-$color20: #486c8f; // dull-sapphire
-$color21: #b8b8b8; //ghost
-$color22: #56b349; //fiddlehead
-$color23: #7090ab; // dragon-foot
+$color19: $color-black-400; // porpoise
+$color20: $color-blue-600; // dull-sapphire
+$color21: $color-black-500; //ghost
+$color22: $color-green-600; //fiddlehead
+$color23: $color-blue-500; // dragon-foot
 $color24: #002b48;
 $color25: #555555;
-$color26: #254a6d;
-$color27: #00b0c2;
+$color26: $color-cyan-800;
+$color27: $color-teal-600;
 $color28: #264a6d;
 $color29: #bfcfe3;
-$color30: #193048;
-$color31: #13dbf1;
-$color32: #131f2b;
-$color33: #365ebf; //big-leaf
-$color34: #00b0c2; //waterpebble
+$color30: $color-blue-700;
+$color31: $color-teal-400;
+$color32: $color-blue-800;
+$color33: $color-indigo-700; //big-leaf
+$color34: $color-teal-600; //waterpebble
 
 
 
 //================
-$left-nav-bg: $color30; // deep-sea
-$icon-color-hover: #0098cd; // caribbean
+$left-nav-bg: $color-blue-700; // deep-sea
+$icon-color-hover: $color-cyan-600; // caribbean
 $topnav-icon-color: $icon-color;
 $page-actions-icon-color: $color-cyan-700;
-$header-bg: $color7;
+$header-bg: $color-blue-300;
 $nav-hover-bg: #0097cd;
-$nav-hover-fg: $color2;
-$nav-link-fg: $color2;
+$nav-hover-fg: $color-black-100;
+$nav-link-fg: $color-black-100;
 $nav-border: $color18;
-$small-header-bg: $color2;
-$report-container-bg: $color2;
+$small-header-bg: $color-black-100;
+$report-container-bg: $color-black-100;
 //tabs underline color
-$tabsUnderLine: $color33;
+$tabsUnderLine: $color-indigo-700;
 $icon-badge-color: #2d6c92;
-$icon-edit-color: $color27;
-$icon-print-color: #2ca01c;
+$icon-edit-color: $color-teal-600;
+$icon-print-color: $color-green-700;
 $icon-mail-color: #f7a21a;
 $icon-duplicate-color: #c75ac2;
-$icon-delete-color: #d93b42;
-$icon-pickles-color: #404040;
-$selection-badge-color: $color20;
+$icon-delete-color: $color-red-700;
+$icon-pickles-color: $color-black-700;
+$selection-badge-color: $color-blue-600;
 $link-normal-color: $color-indigo-700;
 $link-hover-color: $color-cyan-600;
 $link-press-color: $color-cyan-600;
-$selected-check-color: $color16;
+$selected-check-color: $color-green-700;
 
 //== Stage
-$stage-backgroundColor: $color2;
+$stage-backgroundColor: $color-black-100;
 $stage-headline-icon-color: $color-cyan-500;
 $stage-headline-color: $color-black-700;
 
@@ -183,14 +184,14 @@ $pagination-iconfont-hover-color: $color-cyan-300;
 $pagination-text-normal-color: $color-black-700;
 
 //== Report grouped headers
-$grid-group-row-header-bkgrd-color: $color1;
-$grid-group-row-header-border-top: $color7;
-$grid-group-row-header-divider: $color21;
+$grid-group-row-header-bkgrd-color: $color-blue-200;
+$grid-group-row-header-border-top: $color-blue-300;
+$grid-group-row-header-divider: $color-black-500;
 
 //== Report Toolbar
-$toolBar-borderColor: $color7;
+$toolBar-borderColor: $color-blue-300;
 $toolBar-backgroundColor: $color15;
-$toolBar-input-borderColor: $color4;
+$toolBar-input-borderColor: $color-black-300;
 
 //==CardView
 $pagination-mobile-panel-background-color: $color-black-200;
@@ -199,33 +200,33 @@ $pagination-mobile-panel-text-color: $color-blue-500;
 $pagination-mobile-topbar-text-color: $color-black-100;
 
 //==Facet list
-$facetMenu-backgroundColor: $color2;
+$facetMenu-backgroundColor: $color-black-100;
 $facetSelected-color: $selected-check-color;
-$facetMenu-BorderColor: $color19;
-$facetMenu-NoOptionsColor: $color19;
-$facetMenu-clearButtonColor: $color9;
-$facetMenu-showMoreColor: $color8;
-$facetMenu-facetTokenTextColor: $color20;
-$facetMenu-facetTokenBackgroundColor: $color7;
-$facetMenu-itemHoverColor: rgba($color4, 0.5);
+$facetMenu-BorderColor: $color-black-400;
+$facetMenu-NoOptionsColor: $color-black-400;
+$facetMenu-clearButtonColor: $color-black-600;
+$facetMenu-showMoreColor: $color-blue-600;
+$facetMenu-facetTokenTextColor: $color-blue-600;
+$facetMenu-facetTokenBackgroundColor: $color-blue-300;
+$facetMenu-itemHoverColor: rgba($color-black-300, 0.5);
 
 //===Sort & Group Popover
-$popover-text: $color11;
+$popover-text: $color-black-700;
 $popover-title: $popover-text;
-$popover-background: $color2;
+$popover-background: $color-black-100;
 
 //==report icon colors
-$report-icon-table-color: #f87878;
-$report-icon-summary-color: $color20;
+$report-icon-table-color: $color-red-500;
+$report-icon-summary-color: $color-blue-600;
 $report-icon-pie-color: #f2b835;
-$report-icon-calendar-color: $color22;
-$report-icon-grid-edit-color: #c72f79;
+$report-icon-calendar-color: $color-green-600;
+$report-icon-grid-edit-color: $color-pink-600;
 $report-icon-timeline-color: #e77700;
-$report-icon-map-color: #00c4d8;
+$report-icon-map-color: $color-teal-500;
 $search-input-fg: $color25;
-$popup-fg: #404040;
+$popup-fg: $color-black-700;
 $top-nav-title-icon-color: #009aae;
-$secondary-bar-fg: #fff;
+$secondary-bar-fg: $color-black-100;
 $secondary-bar-bg: #009aae;
 $secondary-bar-page-actions-bg: #476b90;
 
@@ -237,7 +238,7 @@ $nav-icon-hover-bg: $color-cyan-800;
     outline: none;
 }
 //== Field labels used on report card view and forms
-$fieldLabel-color: $color3;
+$fieldLabel-color: $color-blue-600;
 $required-asterisk-color: $color-blue-500;
 
 //== Fields
@@ -248,13 +249,13 @@ $checkbox-background-unchecked-color: $color-black-100;
 $checkbox-border-color: $color-black-500;
 $checkbox-checkmark-editable-color: $color-black-100;
 $checkbox-checkmark-readonly-color: $color-cyan-500;
-$datepicker-header-bg: $color34;
-$datepicker-header-fg: $color2;
+$datepicker-header-bg: $color-teal-600;
+$datepicker-header-fg: $color-black-100;
 $datepicker-date-hover-bg: $color-blue-300;
-$datepicker-select-button-fg: $color3;
-$datepicker-select-button-bg: $color7;
+$datepicker-select-button-fg: $color-blue-600;
+$datepicker-select-button-bg: $color-blue-300;
 $datepicker-select-active: $color-cyan-500;
-$datepicker-bg: $color2;
+$datepicker-bg: $color-black-100;
 $datepicker-bg-today: $color-orange-500;
 
 // UrlField
@@ -284,9 +285,9 @@ $user-picker-user-label-fg: $color-black-700;
 $user-picker-email-label-fg: $color-black-600;
 
 //== QBPanel
-$panel-border-color: $color4;
-$panel-background-color: $color2;
-$panel-header-icon-color: $color11;
+$panel-border-color: $color-black-300;
+$panel-background-color: $color-black-100;
+$panel-header-icon-color: $color-black-700;
 $panel-header-icon-hover-color: $icon-color-hover;
 
 //Error message popup
