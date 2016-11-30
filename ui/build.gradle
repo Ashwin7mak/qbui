@@ -249,7 +249,7 @@ task npmInstallLean(type: NpmTask) {
 }
 
 task npmInstallGruntProtractorRunner(type: NpmTask) {
-    args = ['install', 'grunt-protractor-runner', '--registry https://registry.npmjs.org/']
+    args = ['install', 'grunt-protractor-runner', '--registry', 'https://registry.npmjs.org/']
 }
 
 task npmListConfig(type: NpmTask) {
