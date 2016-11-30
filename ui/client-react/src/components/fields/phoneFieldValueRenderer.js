@@ -15,8 +15,8 @@ const PhoneFieldValueRenderer = React.createClass({
 
     },
     renderLink() {
-        let telPhoneNumberLink = 'tel:' + this.props.value.split('x')[0];
-        let smsPhoneNumberLink = 'sms:' + this.props.value.split('x')[0];
+        let telPhoneNumberLink = 'tel:' + (this.props.value ? this.props.value.split('x')[0] : '');
+        let smsPhoneNumberLink = 'sms:' + (this.props.value ? this.props.value.split('x')[0] : '');
         telPhoneNumberLink = encodeURI(telPhoneNumberLink);
         smsPhoneNumberLink = encodeURI(smsPhoneNumberLink);
         if (this.props.disabled) {
