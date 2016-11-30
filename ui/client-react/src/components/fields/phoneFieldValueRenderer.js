@@ -19,7 +19,14 @@ const PhoneFieldValueRenderer = React.createClass({
         let smsPhoneNumberLink = 'sms:' + this.props.value;
         telPhoneNumberLink = encodeURI(telPhoneNumberLink);
         smsPhoneNumberLink = encodeURI(smsPhoneNumberLink);
-        if (!this.props.showAsButton && !this.props.disabled) {
+        if (this.props.disabled) {
+            return (
+                <span>
+                    {this.props.display}
+                </span>
+            );
+        }
+        if (!this.props.disabled) {
             return (
                 <div className = "phoneQBIconWrapper">
                     <a href={telPhoneNumberLink} tabIndex="-1">
