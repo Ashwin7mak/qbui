@@ -48,11 +48,14 @@ const PhoneFieldValueEditor = React.createClass({
             value: this.props.value
         };
         theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        console.log('theVals: ', theVals);
         if (this.props.onBlur) {
+            debugger;
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }
     },
     render() {
+        const placeholderNumber = "(xxx) xxx-xxxx"
         if (this.props.attributes.includeExtension) {
             let officeNumber;
             let officeExt;
@@ -68,25 +71,29 @@ const PhoneFieldValueEditor = React.createClass({
             return (
                 <div className="officePhone">
                     <TextFieldValueEditor type="tel"
-                           classes={classes.officeNumber}
-                           onChange={this.onChangeOfficeNumber}
-                           onBlur={this.onBlur}
-                           value={officeNumber || ''} />
+                                          classes={classes.officeNumber}
+                                          placeholder={placeholderNumber}
+                                          onChange={this.onChangeOfficeNumber}
+                                          onBlur={this.onBlur}
+                                          value={officeNumber || ''} />
                     <span className="x">x</span>
                     <TextFieldValueEditor type="tel"
-                           classes={classes.extNumber}
-                           onChange={this.onChangeExtNumber}
-                           onBlur={this.onBlur}
-                           value={officeExt || ''} />
+                                          classes={classes.extNumber}
+                                          onChange={this.onChangeExtNumber}
+                                          onBlur={this.onBlur}
+                                          value={officeExt || ''} />
                 </div>
             );
         } else {
             return (
-                <TextFieldValueEditor type="tel"
-                                      value={this.props.value || ''}
-                                      onChange={this.onChange}
-                                      onBlur={this.onBlur}
-                                      {...this.props} />
+                <div>
+                    <TextFieldValueEditor type="tel"
+                                          value={this.props.value || ''}
+                                          placeholder={placeHolderNumber}
+                                          onChange={this.onChange}
+                                          onBlur={this.onBlur}
+                                          {...this.props} />
+                </div>
             );
         }
     }
