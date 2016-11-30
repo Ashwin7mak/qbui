@@ -68,7 +68,6 @@ describe('PhoneFieldValueEditor', () => {
         component.setState({value: phoneNumber, display: ''});
         domComponent = ReactDOM.findDOMNode(component);
         let input = domComponent.childNodes[0];
-        debugger;
         Simulate.blur(input, {
             target: {value: phoneNumber}
         });
