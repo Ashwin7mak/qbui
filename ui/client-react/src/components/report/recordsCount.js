@@ -5,9 +5,10 @@ import Loader  from 'react-loader';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import Breakpoints from "../../utils/breakpoints";
+import {colorBlack700, colorBlack100} from '../../constants/colors';
 
-const largeBreakpointColor = '#404040';
-const smallBreakpointColor = '#ffffff';
+const largeBreakpointColor = colorBlack700;
+const smallBreakpointColor = colorBlack100;
 
 var RecordsCount = React.createClass({
     propTypes: {

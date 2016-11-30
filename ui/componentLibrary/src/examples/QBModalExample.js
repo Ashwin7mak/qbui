@@ -2,7 +2,6 @@
 // This is a basic example for the React playground
 // Please update to include other properties or states for your component
 
-let isBusyTimeOut = 2000;
 
 var BasicQBModalExample = React.createClass({
     getInitialState() {
@@ -13,14 +12,8 @@ var BasicQBModalExample = React.createClass({
             successQBModalOpen: false,
             singleButtonQBModal: false,
             qbIconTitleBodyMessage: false,
-            titleBodyMessageTwoButtons: false,
-            isBusy: false
+            titleBodyMessageTwoButtons: false
         };
-    },
-
-    isBusyTimer() {
-        let self = this;
-        setTimeout(function() {self.setState({isBusy: false});}, isBusyTimeOut);
     },
 
     toggleDefaultQBModal() {
@@ -50,10 +43,7 @@ var BasicQBModalExample = React.createClass({
     titleBodyMessageTwoButtons() {
         this.setState({titleBodyMessageTwoButtons: !this.state.titleBodyMessageTwoButtons});
     },
-    isBusy() {
-        this.setState({isBusy: !this.state.isBusy});
-        this.isBusyTimer();
-    },
+
     closeAll() {
         this.setState({
             defaultQBModalOpen: false,
@@ -62,9 +52,7 @@ var BasicQBModalExample = React.createClass({
             successQBModalOpen: false,
             singleButtonQBModal: false,
             qbIconTitleBodyMessage: false,
-            titleBodyMessageTwoButtons: false,
-            isBusy: false
-        });
+            titleBodyMessageTwoButtons: false});
     },
 
     render() {
@@ -99,10 +87,6 @@ var BasicQBModalExample = React.createClass({
                 {/*Show Title bodyMessage Two Buttons*/}
                 <div style={{paddingTop:"12px"}}>
                     <button onClick={this.titleBodyMessageTwoButtons}>Show Title bodyMessage Two Buttons Modal</button>
-                </div>
-                {/*Show isBusy Modal*/}
-                <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.isBusy}>Show isBusy Modal</button>
                 </div>
                 {/*Default Modal*/}
                 <div>
@@ -187,14 +171,6 @@ var BasicQBModalExample = React.createClass({
                         leftButtonOnClick={this.closeAll}
                         bodyMessage={longBodyMessage}
                         title="Title" />
-                </div>
-                {/*isBusy Modal*/}
-                <div>
-                    <QBModal
-                        show={this.state.isBusy}
-                        bodyMessage="Is Busy..."
-                        type="isBusy"
-                     />
                 </div>
             </div>
 
