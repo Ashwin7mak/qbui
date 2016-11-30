@@ -4,8 +4,6 @@ let appsModel = {
             //  add a link element to each individual app
             apps.forEach((app) => {
                 app.link = '/qbase/app/' + app.id;
-                app.openInV3 = false;
-                app.accessRights = [];
             });
         }
         return apps;

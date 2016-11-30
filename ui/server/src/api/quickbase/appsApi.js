@@ -80,8 +80,33 @@
                 });
             },
 
-            getApps: function(req) {
+            getHydratedApp(req, appId) {
+                return new Promise((resolve, reject) => {
+                    let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId), this.stackPreference(req, appId)];
+                    Promise.all(appRequests).then(
+                        function(response) {
+                            let app = response[0];
+                            app.rights = response[1];
+                            if (response[2].errorCode === 0) {
+                                app.openInV3 = response[2].v3Status;
+                            } else {
+                                log.warn('Error fetching application stack preference.  Setting to open in V3.  Error:' + response[2].errorText);
+                                app.openInV3 = true;
+                            }
+                            resolve(app);
+                        },
+                        function(error) {
+                            log.error({req: req}, "appsApi.getHydratedApp(): Error retrieving hydrated app.");
+                            reject(error);
+                        }
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('reportsAPI..getHydratedApp', error, true);
+                        reject(error);
+                    });
+                });
+            },
 
+            getApps: function(req) {
                 let hydrate = (requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.HYDRATE) === '1');
                 if (hydrate === true) {
                     return new Promise((resolve, reject) => {
@@ -94,9 +119,10 @@
                             (response) => {
                                 let apps = JSON.parse(response.body);
 
+                                //  TODO: investigate...concern if the number of apps is large???
                                 let promises = [];
                                 apps.forEach((app) => {
-                                    promises.push(this.getApp(_.clone(req), app.id));
+                                    promises.push(this.getHydratedApp(_.clone(req), app.id));
                                 });
 
                                 Promise.all(promises).then(
@@ -194,7 +220,7 @@
              * @param req
              * @returns Promise
              */
-            stackPreference: function(req) {
+            stackPreference: function(req, appId) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
@@ -202,14 +228,31 @@
                     //  if a post request, then updating stack preference
                     let resp = JSON.parse(opts.body);
                     let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
-                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, value);
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, true, value);
                 } else {
-                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId);
                 }
 
                 log.debug("Stack preference: " + opts.url);
 
-                return requestHelper.executeRequest(req, opts);
+                return new Promise((resolve, reject) => {
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let msg = JSON.parse(response.body);
+                            if (msg.errorCode !== 0) {
+                                log.error({req: req}, opts.url);
+                            }
+                            resolve(msg);
+                        },
+                        (error) => {
+                            log.error({req: req, res:error}, opts.url);
+                            resolve(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
+                        resolve(ex);
+                    });
+                });
             }
 
         };

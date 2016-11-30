@@ -189,17 +189,17 @@
     }
 
     function logApiSuccess(req, response, perfLog, apiName) {
+        log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
         if (perfLog) {
             perfLog.log();
         }
-        log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
     }
 
     function logApiFailure(req, response, perfLog, apiName) {
+        log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
         if (perfLog) {
             perfLog.log();
         }
-        log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
     }
 
     /**
@@ -708,24 +708,18 @@
         perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            appsApi.stackPreference(req).then(
+            let appId = req.params.appId;
+            appsApi.stackPreference(req, appId).then(
                 function(response) {
                     //  Legacy Quickbase returns a response status of 200 when controlled
                     //  errors(ie:unauthorized) are raised.  Need to examine the errorCode
                     //  value in the response body to determine the true state of the request.
-                    let resp;
-                    try {
-                        resp = JSON.parse(response.body);
-                    } catch (e) {
-                        resp = {'errorText':'No response body returned.'};
-                    }
-
-                    if (resp.errorCode === 0) {
+                    if (response.errorCode === 0) {
                         logApiSuccess(req, response, perfLog, 'Application Stack Preference');
                     } else {
-                        logApiFailure(req, response, perfLog, 'Application Stack Preference');
+                        logApiFailure(req, response, perfLog, 'Application Stack Preference. ' + response.errorText);
                     }
-                    res.send(resp);
+                    res.send(response);
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Application Stack Preference');
