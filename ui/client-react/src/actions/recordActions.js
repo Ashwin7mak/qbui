@@ -9,9 +9,11 @@ import Promise from 'bluebird';
 import Locale from '../locales/locales';
 import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
+import * as CompConsts from '../constants/componentConstants';
 
 let logger = new Logger();
 
+let PRE_REQ_DELAY_MS = 1;
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -95,15 +97,26 @@ let recordActions = {
                                         this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
 
                                         if (!showNotificationOnSuccess) {
-                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
+                                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                                         }
-                                        resolve(resJson.id);
+                                        // this tiny delay allows for saving modal to trap inputs otherwise
+                                        // clicks get queued till after creating
+                                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                                            resolve(resJson.id);
+                                        });
                                     },
                                     getError => {
                                         logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
                                         // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
                                         this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
-                                        reject();
+                                        // this tiny delay allows for saving modal to trap inputs otherwise
+                                        // clicks get queued till after creating
+                                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                                            reject();
+                                        });
                                     }
                                 );
                             }
@@ -111,16 +124,23 @@ let recordActions = {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
                             if (error.response.status === 403) {
-                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
+                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                             }
                             if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
                                 const {status} = error.response.data.response;
                                 if (status !== 422) {
                                     // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
-                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
+                                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                                 }
                             }
-                            reject();
+                            // this delay allows for saving modal to trap inputs otherwise
+                            // clicks get invoked after create
+                            Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                this.dispatch(actions.AFTER_RECORD_EDIT);
+                                reject();
+                            });
                         }
                     },
                     error => {
@@ -128,18 +148,26 @@ let recordActions = {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
                         if (error.response.status === 403) {
-                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         }
                         if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
                             const {status} = error.response.data.response;
                             if (status !== 422) {
                                 // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
-                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
+                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                             }
                         }
-                        reject();
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after create
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
                     }
                 );
+
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
                     appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
@@ -165,25 +193,42 @@ let recordActions = {
                     response => {
                         logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
-                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'), 2000);
-                        resolve();
+                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after deleting
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            resolve();
+                        });
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
-                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
-                        reject();
+                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after delete
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
                     }
                 ).catch(
                     ex => {
                         // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        reject();
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after delete
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
                     }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.deleteRecord. AppId:' +
-                    appId + '; TblId:' + tblId + '; recId:' + recId ;
+                    appId + '; TblId:' + tblId + '; recId:' + recId;
                 logger.error(errMessage);
                 this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: errMessage});
                 reject();
@@ -207,21 +252,36 @@ let recordActions = {
                         logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_RECORD_BULK_SUCCESS, recIds);
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
-                        NotificationManager.success(message, Locale.getMessage('success'), 2000);
-                        resolve();
+                        NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after deleting
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            resolve();
+                        });
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
                         this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
-                        NotificationManager.error(message, Locale.getMessage('failed'), 3000);
-                        reject();
+                        NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after delete
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
                     }
                 ).catch(
                     ex => {
                         // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        reject();
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after delete
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
                     }
                 );
             } else {
@@ -335,15 +395,26 @@ let recordActions = {
                                 logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
-                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
+                                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                                 }
-                                resolve(recId);
+                                // this delay allows for saving modal to trap inputs otherwise
+                                // clicks get invoked after saving
+                                Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                    this.dispatch(actions.AFTER_RECORD_EDIT);
+                                    resolve(recId);
+                                });
                             },
                             getError => {
                                 logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
                                 // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
                                 this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
-                                reject();
+                                // this delay allows for saving modal to trap inputs otherwise
+                                // clicks get invoked after saving
+                                Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                    this.dispatch(actions.AFTER_RECORD_EDIT);
+                                    reject();
+                                });
                             }
                         );
                     },
@@ -351,8 +422,14 @@ let recordActions = {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
                         this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
-                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
-                        reject();
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            // this delay allows for saving modal to trap inputs otherwise
+                            // clicks get invoked after saving
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
                     }
                 );
             } else {
