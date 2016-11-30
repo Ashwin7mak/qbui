@@ -536,6 +536,62 @@ describe('Test recordPendingEdits Store ', () => {
             });
         });
 
+
+        let missingValueObjectsTestCases = [
+            {
+                description: 'adds pendingEdits if the oldValue object is undefined',
+                oldValueObject: undefined,
+                newValueObject: {value: 'something', display: 'something'}
+            },
+            {
+                description: 'adds pendingEdits if the newValue object is undefined',
+                oldValueObject: {value: 'something', display: 'something'},
+                newValueObject: undefined
+            },
+            {
+                description: 'adds pendingEdits if the newValue and oldValue objects are undefined',
+                oldValueObject: undefined,
+                newValueObject: undefined
+            },
+            {
+                description: 'adds pendingEdits if the newValue and oldValue objects are null',
+                oldValueObject: null,
+                newValueObject: null
+            }
+        ];
+
+        missingValueObjectsTestCases.forEach(testCase => {
+            it('adds pendingEdits if the oldValue object is undefined', () => {
+                let payload = {
+                    fieldDef: {},
+                    fieldName: 'test field',
+                    appId: appTableRecPayload.appId,
+                    tbleId: appTableRecPayload.tblId,
+                    recId: 4,
+                    changes: {
+                        fid: currentlyEditingFieldId,
+                        values: {
+                            newVal: testCase.newValueObject,
+                            oldVal: testCase.oldValueObject
+                        }
+                    }
+                };
+
+                flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
+
+                let pendingEditsStore = flux.store(STORE_NAME);
+                let currentState = pendingEditsStore.getState();
+                let changes = currentState.recordChanges[currentlyEditingFieldId];
+
+                expect(changes.newVal).toEqual(testCase.newValueObject);
+                expect(changes.oldVal).toEqual(testCase.oldValueObject);
+                expect(currentState.isPendingEdit).toBeTruthy();
+                expect(pendingEditsStore.emit).toHaveBeenCalled();
+                expect(pendingEditsStore.emit.calls.count()).toBe(1);
+            });
+        });
+
+
         let shouldNotHavePendingEditsTestCases = [
             {
                 description: 'does not add pendingEdits if there are no changes to the underlying value or the display value',
