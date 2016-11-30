@@ -392,6 +392,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
 
     });
+
     it('test onDeleteRecordBulkSuccess recordPendingEdits action', () => {
         let onDeleteRecordBulkSuccessAction = {
             type: actions.DELETE_RECORD_BULK_SUCCESS,
@@ -401,7 +402,6 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
 
     });
-
 
     it('test onDeleteRecordBulkFailed recordPendingEdits action', () => {
         let onDeleteRecordBulkFailedAction = {
@@ -423,7 +423,6 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).saving).toBe(false);
 
     });
-
 
     it('test getState function', () => {
 
@@ -536,7 +535,6 @@ describe('Test recordPendingEdits Store ', () => {
             });
         });
 
-
         let missingValueObjectsTestCases = [
             {
                 description: 'adds pendingEdits if the oldValue object is undefined',
@@ -590,7 +588,6 @@ describe('Test recordPendingEdits Store ', () => {
                 expect(pendingEditsStore.emit.calls.count()).toBe(1);
             });
         });
-
 
         let shouldNotHavePendingEditsTestCases = [
             {
