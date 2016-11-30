@@ -58,6 +58,7 @@
             //check fields max chars not exceeded
             } else if (_.has(fieldDef, 'datatypeAttributes.clientSideAttributes.max_chars') &&
                 fieldDef.datatypeAttributes.clientSideAttributes.max_chars > 0 &&
+                fieldDef.datatypeAttributes.clientSideAttributes.max_chars <= LimitConstants.maxTextFieldValueLength &&
                 value !== undefined && _.has(value, 'length') &&
                 value.length > fieldDef.datatypeAttributes.clientSideAttributes.max_chars) {
                 results.error.messageId = 'invalidMsg.maxChars';
