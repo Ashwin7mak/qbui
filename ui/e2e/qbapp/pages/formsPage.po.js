@@ -159,7 +159,7 @@
                         return elm;
                     }).map(function(elm) {
                         return elm.element(by.className('date')).click().then(function() {
-                            if (browserName === 'safari') {
+                            if (browserName === 'safari' || browserName === 'MicrosoftEdge') {
                                 return fetchEnterCellValuesPromises.push(elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate.replace(/-/g, "/")));
                             } else {
                                 return fetchEnterCellValuesPromises.push(elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate));
