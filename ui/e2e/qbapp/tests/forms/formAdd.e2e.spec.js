@@ -69,8 +69,9 @@
                     });
                 }).then(function() {
                     // Reload the report
-                    //e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                    browser.driver.navigate().refresh();
+                    if (browserName === 'MicrosoftEdge') {
+                        browser.driver.navigate().refresh();
+                    }else {e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);}
                     reportContentPage.waitForReportContent();
                 }).then(function() {
                     // Verify new record is now the last row in a table
