@@ -24,17 +24,12 @@
                 const userIdList = [1000001, 1000002, 1000003, 1000004, 1000005];
 
                 let users = userGenerator.generatePopulatedDefaultUsers(userIdList);
-                let userId;
 
-                recordBase.apiBase.createBulkUser(users).then(function(result) {
+                recordBase.apiBase.createBulkUser(users).then(function() {
                     userIdList.forEach(userId => {
-                        recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]).then(function(result) {
-                            userId = JSON.parse(result.body);
-                        });
+                        recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]);
                     });
                 });
-
-                return userId;
             }
         };
         return userService;

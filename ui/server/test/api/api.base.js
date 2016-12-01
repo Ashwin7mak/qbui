@@ -41,7 +41,7 @@
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
-        var BULK_USERS_ENDPOINT = '/users/bulk'
+        var BULK_USERS_ENDPOINT = '/users/bulk';
         var ROLES_ENDPOINT = '/roles/';
         var TABLES_RIGHTS = '/tableRights/';
         var FIELD_RIGHTS = '/fieldRights/';

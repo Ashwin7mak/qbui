@@ -113,7 +113,7 @@
          */
         generatePopulatedDefaultUsers: function(userIdList) {
             let userResultList = [];
-            userIdList = typeof userIdList === 'undefined' || userIdList == null ? [] : userIdList;
+            userIdList = typeof userIdList === 'undefined' || userIdList === null ? [] : userIdList;
             userIdList.forEach(userId => {
                 userResultList.push(this.generatePopulatedUser({id: userId}));
             });
