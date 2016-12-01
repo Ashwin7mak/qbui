@@ -63,14 +63,14 @@
                     formsPage.clickFormSaveBtn();
                     reportContentPage.waitForReportContent();
                 }).then(function() {
-                    // Reload the report
-                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                    reportContentPage.waitForReportContent();
-                }).then(function() {
                     // Check the record count
                     reportContentPage.agGridRecordElList.then(function(records) {
                         expect(records.length).toBe(origRecordCount + 1);
                     });
+                }).then(function() {
+                    // Reload the report
+                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                    reportContentPage.waitForReportContent();
                 }).then(function() {
                     // Verify new record is now the last row in a table
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
