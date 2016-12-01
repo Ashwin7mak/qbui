@@ -266,3 +266,6 @@ Make sure the 'salts' are the same across all of the following files:
 ### I'm getting a bad ticket error when I try to create or edit a record in my migrated app.
 
 - See step #13 in [Migrating a Custom App](#migrating-a-custom-app)
+- This error typically occurs because Core is attempting to write to Current Stack. It breaks because it cannot
+connect to Current Stack. The default Current Stack endpoint is in pre-production and therefore will not match
+ the developer's local settings.
