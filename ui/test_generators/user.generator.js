@@ -117,7 +117,6 @@
             userIdList.forEach(userId => {
                 userResultList.push(this.generatePopulatedUser({id: userId}));
             });
-            console.log(userResultList);
             return userResultList;
         }
     };
