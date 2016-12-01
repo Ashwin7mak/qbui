@@ -90,6 +90,7 @@
             ONE_WEEK: 1000 * 60 * 60 * 24 * 7
         },
         DURATION_CONSTS : {
+            DEFAULT_DECIMAL_PLACES: 14,
             MILLIS_PER_SECOND: new bigDecimal.BigDecimal(1000),
             MILLIS_PER_MIN: new bigDecimal.BigDecimal(60000),
             MILLIS_PER_HOUR: new bigDecimal.BigDecimal(3600000),
