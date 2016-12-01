@@ -39,7 +39,7 @@
                 var builderInstance = formElementBuilder.builder();
 
                 builderInstance.withUseAlternateLabel(rawValue.generateBool());
-                builderInstance.withReadOnly(rawValue.generateBool());
+                // builderInstance.withReadOnly(rawValue.generateBool());
                 builderInstance.withRequired(rawValue.generateBool());
                 builderInstance.withFieldId(field[fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);

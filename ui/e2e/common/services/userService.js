@@ -18,15 +18,25 @@
             },
 
             /**
-             * Given a list of user with fixed user ID
+             * Given an app, generate a list of users with fixed user ID
              */
-            generateDefaultUserList: function(userIdList) {
+            generateDefaultUserList: function(appId) {
+                const userIdList = [1000001, 1000002, 1000003, 1000004, 1000005];
 
                 let users = userGenerator.generatePopulatedDefaultUsers(userIdList);
+                let userId;
 
-                return recordBase.apiBase.createBulkUser(users).then(function(result) {
-                    var id = JSON.parse(result.body);
+                recordBase.apiBase.createBulkUser(users).then(function(result) {
+                    userId = JSON.parse(result.body);
                 });
+
+                userIdList.forEach(userId => {
+                    recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]).then(function(result) {
+                        var id = JSON.parse(result.body);
+                    });
+                });
+
+                return userId;
             }
         };
         return userService;

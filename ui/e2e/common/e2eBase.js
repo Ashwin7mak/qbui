@@ -293,8 +293,7 @@
                 // Create the app via the API
                 return e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
-                    const userIdList = [1000001, 1000002, 1000003, 1000004, 1000005];
-                    e2eBase.userService.generateDefaultUserList(userIdList);
+                    e2eBase.userService.generateDefaultUserList(createdApp.id);
 
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);

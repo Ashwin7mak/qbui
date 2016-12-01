@@ -16,7 +16,7 @@
             let last = options && options.lastName ? options.lastName : chance.last(options);
             let screenName = options && options.screenName ? options.screenName : first.substring(0, 1) + last;
             let email = options && options.email ? options.email : chance.email(options);
-            let deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : chance.bool();
+            let deactivated = options && (typeof options.deactivated !== 'undefined') ? options.deactivated : false;
             let anonymous = options && (typeof options.anonymous !== 'undefined') ? options.anonymous : false;
             let administrator = options && (typeof options.administrator !== 'undefined') ? options.administrator : false;
             let challengeQuestion = options && (typeof options.challengeQuestion !== 'undefined') ? options.challengeQuestion : "";
