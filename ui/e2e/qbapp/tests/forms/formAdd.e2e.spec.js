@@ -40,7 +40,7 @@
 
         it('@smoke Add a record from the form', function(done) {
             var origRecordCount;
-            var fieldTypeClassNames = ['textField', 'numericField', 'checkbox'];
+            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
 
             reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                 // Load the List All report
