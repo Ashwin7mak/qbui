@@ -26,6 +26,7 @@ const PhoneFieldValueRenderer = React.createClass({
             );
         }
         if (!this.props.disabled) {
+            console.log('this.props.display: ', this.props.display);
             return (
                 <div className = "phoneQBIconWrapper">
                     <a href={telPhoneNumberLink} tabIndex="-1">

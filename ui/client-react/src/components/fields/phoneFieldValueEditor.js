@@ -18,8 +18,8 @@ const PhoneFieldValueEditor = React.createClass({
     onChangeOfficeNumber(ev) {
         let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
         let updatedValue = phoneNumber;
-        if (this.props.value && phoneNumberFormatter.getExtension(this.props.value)) {
-            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, phoneNumberFormatter.getExtension(this.props.value));
+        if (this.props.value && phoneNumberFormatter.getExtension(this.props.display)) {
+            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, phoneNumberFormatter.getExtension(this.props.display));
 
         }
         if (this.props.onChange) {
@@ -30,7 +30,7 @@ const PhoneFieldValueEditor = React.createClass({
         let updatedValue;
         if (ev) {
             let extNumber = phoneNumberFormatter.onChangeMasking(ev);
-            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumberFormatter.getPhoneNumber(this.props.value), extNumber);
+            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumberFormatter.getPhoneNumber(this.props.display), extNumber);
         }
         if (this.props.onChange) {
             this.props.onChange(updatedValue);
@@ -45,11 +45,10 @@ const PhoneFieldValueEditor = React.createClass({
     },
     onBlur() {
         let theVals = {
-            value: this.props.value
+            value:phoneNumberFormatter.onBlurMasking(this.props.value)
         };
         theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
         theVals.value = phoneNumberFormatter.onBlurMasking(theVals.value);
-        //function that strips special characters from theVals.value
         console.log('theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
@@ -61,8 +60,8 @@ const PhoneFieldValueEditor = React.createClass({
         let phoneNumber;
         let officeExt;
         if (value) {
-            phoneNumber = phoneNumberFormatter.getPhoneNumber(value);
-            officeExt = phoneNumberFormatter.getExtension(value);
+            phoneNumber = phoneNumberFormatter.getPhoneNumber(display);
+            officeExt = phoneNumberFormatter.getExtension(display);
         }
 
         if (this.props.attributes && this.props.attributes.includeExtension) {
