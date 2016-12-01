@@ -37,10 +37,6 @@
             return newNums.join('');
         },
         format: function(fieldValue, fieldInfo) {
-            /**
-             * If it is not an object, this will turn it into an object
-             * This way it will work for both onBlur and other formatting requirements
-             * */
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

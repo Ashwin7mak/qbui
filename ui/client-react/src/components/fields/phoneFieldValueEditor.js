@@ -16,8 +16,8 @@ const PhoneFieldValueEditor = React.createClass({
 
     },
     onChangeOfficeNumber(ev) {
-        let updatedValue;
         let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
+        let updatedValue = phoneNumber;
         if (this.props.value && phoneNumberFormatter.getExtension(this.props.value)) {
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, phoneNumberFormatter.getExtension(this.props.value));
 
@@ -38,10 +38,10 @@ const PhoneFieldValueEditor = React.createClass({
 
     },
     onChange(ev) {
+        let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
         if (this.props.onChange) {
-            this.props.onChange(ev.target.value);
+            this.props.onChange(phoneNumber);
         }
-
     },
     onBlur() {
         let theVals = {
@@ -55,27 +55,31 @@ const PhoneFieldValueEditor = React.createClass({
     },
     render() {
         const placeholderNumber = "(xxx) xxx-xxxx";
+        let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
+        let phoneNumber;
+        let officeExt;
+        if (value) {
+            phoneNumber = phoneNumberFormatter.getPhoneNumber(value);
+            officeExt = phoneNumberFormatter.getExtension(value);
+        }
+
         if (this.props.attributes && this.props.attributes.includeExtension) {
-            let officeNumber;
-            let officeExt;
-            if (this.props && this.props.value) {
-                officeNumber = phoneNumberFormatter.getPhoneNumber(this.props.value);
-                officeExt = phoneNumberFormatter.getExtension(this.props.value);
-            }
-            let classes = {
+            classes = {
                 officeNumber: "officeNumber " + (this.props.classes ? this.props.classes : ''),
                 extNumber: "extNumber " + (this.props.classes ? this.props.classes : '')
             };
             return (
                 <div className="officePhone">
                     <TextFieldValueEditor type="tel"
+                                          {...otherProps}
                                           classes={classes.officeNumber}
                                           placeholder={placeholderNumber}
                                           onChange={this.onChangeOfficeNumber}
                                           onBlur={this.onBlur}
-                                          value={officeNumber || ''} />
+                                          value={phoneNumber || ''} />
                     <span className="x">{phoneNumberFormatter.EXTENSION_DELIM}</span>
                     <TextFieldValueEditor type="tel"
+                                          {...otherProps}
                                           classes={classes.extNumber}
                                           onChange={this.onChangeExtNumber}
                                           onBlur={this.onBlur}
@@ -85,11 +89,11 @@ const PhoneFieldValueEditor = React.createClass({
         } else {
             return (
                     <TextFieldValueEditor type="tel"
-                                          value={this.props.value || ''}
+                                          value={phoneNumber || ''}
                                           placeholder={placeholderNumber}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
-                                          classes={this.props.classes || 'cellEdit'} />
+                                          classes={this.props.classes || ''} />
             );
         }
     }
