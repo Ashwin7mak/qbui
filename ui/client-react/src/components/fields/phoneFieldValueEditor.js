@@ -8,17 +8,17 @@ const PhoneFieldValueEditor = React.createClass({
     propTypes: {
         /**
          * the value to render */
-        value: React.PropTypes.any,
+        value: PropTypes.any,
         /**
-         * text field attributes
+         * text field attributes, attributes.includeExtension is set to true it will include an extension input box
          */
-        attributes: React.PropTypes.object
+        attributes: PropTypes.object
 
     },
     onChangeOfficeNumber(ev) {
         let updatedValue = ev;
         if (this.props.value && phoneNumberFormatter.format(this.props.value).extensionVal) {
-            updatedValue = ev + 'x' + phoneNumberFormatter.format(this.props.value).extensionVal;
+            updatedValue = ev + phoneNumberFormatter.ext() + phoneNumberFormatter.format(this.props.value).extensionVal;
 
         }
         if (this.props.onChange) {
@@ -29,7 +29,7 @@ const PhoneFieldValueEditor = React.createClass({
         if (this.props.value) {
             let updatedValue = phoneNumberFormatter.format(this.props.value).phoneNumberVal;
             if (ev) {
-                updatedValue += 'x' + ev;
+                updatedValue += phoneNumberFormatter.ext()  + ev;
             }
             if (this.props.onChange) {
                 this.props.onChange(updatedValue);
@@ -73,7 +73,7 @@ const PhoneFieldValueEditor = React.createClass({
                                           onChange={this.onChangeOfficeNumber}
                                           onBlur={this.onBlur}
                                           value={officeNumber || ''} />
-                    <span className="x">x</span>
+                    <span className="x">{phoneNumberFormatter.ext()}</span>
                     <TextFieldValueEditor type="tel"
                                           classes={classes.extNumber}
                                           onChange={this.onChangeExtNumber}

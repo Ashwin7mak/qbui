@@ -12,10 +12,19 @@
 
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
+        ext: function() {
+            return EXTENSION_DELIM;
+        },
         format: function(fieldValue, fieldInfo) {
+            /**
+             * If it is not an object, this will turn it into an object
+             * This way it will work for both onBlur and other formatting requirements
+             * */
             if (typeof fieldValue !== 'object') {
                 fieldValue = {value: fieldValue};
             }
+            let phoneNumberVal = fieldValue.value.split(EXTENSION_DELIM)[0];
+            let extensionVal = fieldValue.value.split(EXTENSION_DELIM)[1];
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
@@ -74,8 +83,6 @@
             if (fieldInfo && fieldInfo.includeExtension === false) {
                 formattedPhoneVal = formattedPhoneVal.split(EXTENSION_DELIM)[0].trim();
             }
-            let phoneNumberVal = fieldValue.value.split(EXTENSION_DELIM)[0];
-            let extensionVal = fieldValue.value.split(EXTENSION_DELIM)[1];
             return {
                 formattedPhoneVal,
                 phoneNumberVal,
