@@ -104,7 +104,7 @@ describe('emailValidator', () => {
         });
     });
 
-    describe.only('validateAndReturnResults', () => {
+    describe('validateAndReturnResults', () => {
         let fieldName = 'email';
         let resultsFromPreviousValidationCheck = {
             isInvalid: true,
