@@ -34,6 +34,37 @@
 
         },
 
+        format: function(fieldValue, fieldInfo) {
+            var phoneNumber = this.parse(fieldValue.value);
+
+            console.log('----------------------------------------');
+            console.log("FIELD VALUE: ", fieldValue.value);
+            console.log('COUNTRY CODE: ', phoneNumber.countryCode);
+            console.log('NATIONAL NUMBER: ', phoneNumber.nationalFormattedNumber);
+            console.log('FORMATTED NUMBER: ', phoneNumber.formattedNumber);
+            if (phoneNumber.countryCode === 1) {
+                return this._addExtension(phoneNumber.nationalFormattedNumber, phoneNumber.extension);
+            }
+
+            if (phoneNumber.formattedNumber) {
+                return this._addExtension(phoneNumber.formattedNumber, phoneNumber.extension);
+            }
+
+            if (phoneNumber.nationalFormattedNumber) {
+                return this._addExtension(phoneNumber.nationalFormattedNumber, phoneNumber.extension);
+            }
+
+            return this._addExtension(phoneNumber.dialString, phoneNumber.extension);
+        },
+
+        _addExtension(phoneNumber, extension) {
+            if (extension && extension.length > 0) {
+                return phoneNumber + EXTENSION_SPLIT_CHARACTER + extension;
+            } else {
+                return phoneNumber;
+            }
+        },
+
         /**
          * Strips all characters considered "special" in a phone number. For now, that is anything except for integers.
          * @param phoneNumber
@@ -82,17 +113,21 @@
         this.phonenumberWithoutExtension = BLANK_PHONE_NUMBER;
         this.extension = BLANK_PHONE_NUMBER;
 
-        if (phoneNumber && phoneNumber.length > 0) {
-            var splitPhoneNumber = phoneNumber.split(EXTENSION_SPLIT_CHARACTER);
-
-            this.phonenumberWithoutExtension = splitPhoneNumber[0];
-            this.extension = null;
-            if (splitPhoneNumber.length > 1) {
-                this.extension = splitPhoneNumber[1];
-            }
-
-            this.first15Digits = PhoneNumberFormatter.stripSpecialCharacters(this.phonenumberWithoutExtension).slice(0, 15);
+        // Exit with defaults if a phone number was not provided
+        if (!phoneNumber || phoneNumber.length === 0) {
+            return;
         }
+
+        var splitPhoneNumber = phoneNumber.split(EXTENSION_SPLIT_CHARACTER);
+
+        this.phonenumberWithoutExtension = splitPhoneNumber[0];
+        this.extension = null;
+        if (splitPhoneNumber.length > 1) {
+            this.extension = splitPhoneNumber[1];
+        }
+
+        this.first15Digits = PhoneNumberFormatter.stripSpecialCharacters(this.phonenumberWithoutExtension).slice(0, 15);
+
 
         try {
             attemptToParseNumberWithGoogleLibrary();
