@@ -7,6 +7,7 @@
     var _ = require('lodash');
 
     //Module constants:
+    var BLANK_EMAIL = '';
     var WHOLE = 'WHOLE';
     var UP_TO_UNDERSCORE = 'UP_TO_UNDERSCORE';
     var UP_TO_AT_SIGN = 'UP_TO_AT_SIGN';
@@ -60,7 +61,7 @@
          */
         format: function(fieldValue, fieldInfo) {
             if  (this._fieldValueDoesNotExist(fieldValue)) {
-                return '';
+                return BLANK_EMAIL;
             }
 
             //Default behavior is to return the raw value as display
@@ -99,7 +100,7 @@
          */
         formatListOfEmailsFromFieldValueObject: function(fieldValue, fieldInfo) {
             if (this._fieldValueDoesNotExist(fieldValue)) {
-                return '';
+                return BLANK_EMAIL;
             }
 
             return this.formatListOfEmails(fieldValue.value, fieldInfo);
