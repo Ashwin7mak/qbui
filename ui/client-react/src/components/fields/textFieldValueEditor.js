@@ -67,6 +67,12 @@ const TextFieldValueEditor = React.createClass({
         };
     },
 
+    getInitialState() {
+        return {
+            isFocused: false,
+        };
+    },
+
     onChange(ev) {
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
@@ -92,12 +98,15 @@ const TextFieldValueEditor = React.createClass({
                       key={'inp' + this.props.idKey}
                       placeholder={this.props.placeholder}
                       onChange={this.onChange}
+                      onFocus={this.onFocus}
                       onBlur={this.onBlur} />;
     },
 
     addClearButtonTo(inputBox) {
+        let classNames = ['inputDeleteIcon'];
+        classNames.push(this.state.isFocused ? 'isFocused' : '');
         return (
-            <span className="inputDeleteIcon">
+            <span className={classNames.join(" ")}>
                 {inputBox}
                 <div className="clearIcon">
                     <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
@@ -108,8 +117,14 @@ const TextFieldValueEditor = React.createClass({
         );
     },
 
+    onFocus() {
+        this.setState({isFocused: true});
+    },
+
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
+        this.setState({isFocused: false});
+
         let theVals = {
             value: ev.target.value
         };
@@ -126,12 +141,12 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = ['input', 'textField', 'borderOnError'];
+        let classNames = ['input', 'textField', 'borderOnError'];
         // error state css class
-        classes.push(this.props.invalid ? 'error' : '');
-        classes.push(this.props.classes || '');
+        classNames.push(this.props.invalid ? 'error' : '');
+        classNames.push(this.props.classNames || '');
 
-        let inputBox = this.renderInputBox(classes.join(' '));
+        let inputBox = this.renderInputBox(classNames.join(' '));
 
         if (this.props.showClearButton) {
             return this.addClearButtonTo(inputBox);
