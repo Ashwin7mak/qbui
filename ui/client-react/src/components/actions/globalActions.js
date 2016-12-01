@@ -78,10 +78,10 @@ let GlobalActions = React.createClass({
         let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
         if (v2tov3Cookie) {
             //make sure it doesn't exist somehow already
-            newCookieValue = CommonCookieUtils.searchCookieValue(v2tov3Cookie, this.props.app.name) ?
-                v2tov3Cookie : CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.name, "1");
+            newCookieValue = CommonCookieUtils.searchCookieValue(v2tov3Cookie, this.props.app.id) ?
+                v2tov3Cookie : CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.id, "1");
         } else {
-            newCookieValue = CommonCookieUtils.createQBClassicNameValuePair(this.props.app.name, "1");
+            newCookieValue = CommonCookieUtils.createQBClassicNameValuePair(this.props.app.id, "1");
         }
         //DO NOT EVER DO THIS AGAIN! We should never be overriding how cookie-react saves (which by default ENCODES) the value
         //I am only doing this so that we don't need to change current stack ::shudder::
@@ -118,7 +118,7 @@ let GlobalActions = React.createClass({
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
                     {this.props.app && <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem>}
-                    {this.props.app && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
+                    {this.props.app && this.props.app.id && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
                                                 onSelect={this.switchToQBClassic}
                                                  eventKey={eventKeyIdx++}><I18nMessage
                                                 message={'appMenu.qbClassicLink'}/></MenuItem>}

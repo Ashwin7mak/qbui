@@ -606,6 +606,8 @@ let AGGrid = React.createClass({
     startEditRow(id, node) {
         this.setState({currentEditRid: id}); // note which record is being edited used to index into cellComponentsMounted
         this.props.onEditRecordStart(id);
+        this.gridOptions.context.currentEditRid = id;
+        this.gridOptions.context.isInlineEditOpen = this.props.isInlineEditOpen;
         this.editRow(node);
     },
     /**

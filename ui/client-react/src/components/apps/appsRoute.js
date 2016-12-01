@@ -16,10 +16,10 @@ let AppsRoute = React.createClass({
 
     /**
      * allow access to apps if user has admin access to any of them
-     * or any app has openInV3 set
+     * or any app has openInV3 set or there are no apps
      */
     checkAccess(props) {
-        if (!props.appsLoading) {
+        if (this.props.apps && this.props.apps.length > 0 && !props.appsLoading) {
             const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app.accessRights));
 
             if (!hasAnyAdmin) {
