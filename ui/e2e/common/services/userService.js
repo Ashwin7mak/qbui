@@ -27,12 +27,10 @@
                 let userId;
 
                 recordBase.apiBase.createBulkUser(users).then(function(result) {
-                    userId = JSON.parse(result.body);
-                });
-
-                userIdList.forEach(userId => {
-                    recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]).then(function(result) {
-                        var id = JSON.parse(result.body);
+                    userIdList.forEach(userId => {
+                        recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]).then(function(result) {
+                            userId = JSON.parse(result.body);
+                        });
                     });
                 });
 
