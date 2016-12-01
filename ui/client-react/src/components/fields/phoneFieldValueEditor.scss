@@ -17,13 +17,9 @@
 // Resize office number input box and ext input box when editing on form view
 .formElement .input {
   &.officeNumber {
-    border-radius: 2px;
-    border: solid 1px $input-text-normal-border-color;;
     width: 70%;
   }
   &.extNumber {
-    border-radius: 2px;
-    border: solid 1px $input-text-normal-border-color;;
     width: 30%;
   }
 }

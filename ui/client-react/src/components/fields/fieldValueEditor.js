@@ -178,7 +178,10 @@ const FieldValueEditor = React.createClass({
         }
         case FieldFormats.PHONE_FORMAT: {
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
-            return <PhoneFieldValueEditor key={'tfve-' + this.props.idKey} attributes={attributes} {...commonProps} />;
+            return <PhoneFieldValueEditor key={'tfve-' + this.props.idKey}
+                                          attributes={attributes}
+                                          classes="cellEdit"
+                                          {...commonProps} />;
         }
         case FieldFormats.TIME_FORMAT: {
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
