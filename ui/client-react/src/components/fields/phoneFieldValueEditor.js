@@ -16,9 +16,9 @@ const PhoneFieldValueEditor = React.createClass({
 
     },
     onChangeOfficeNumber(ev) {
-        let updatedValue = ev;
-        if (this.props.value && phoneNumberFormatter.format(this.props.value).extensionVal) {
-            updatedValue = ev + phoneNumberFormatter.ext() + phoneNumberFormatter.format(this.props.value).extensionVal;
+        let updatedValue;
+        if (this.props.value && phoneNumberFormatter.getExtension(this.props.value)) {
+            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(ev, phoneNumberFormatter.getExtension(this.props.value));
 
         }
         if (this.props.onChange) {
@@ -26,14 +26,12 @@ const PhoneFieldValueEditor = React.createClass({
         }
     },
     onChangeExtNumber(ev) {
-        if (this.props.value) {
-            let updatedValue = phoneNumberFormatter.format(this.props.value).phoneNumberVal;
-            if (ev) {
-                updatedValue += phoneNumberFormatter.ext()  + ev;
-            }
-            if (this.props.onChange) {
-                this.props.onChange(updatedValue);
-            }
+        let updatedValue;
+        if (ev) {
+            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumberFormatter.getPhoneNumber(this.props.value), ev);
+        }
+        if (this.props.onChange) {
+            this.props.onChange(updatedValue);
         }
 
     },
@@ -48,6 +46,7 @@ const PhoneFieldValueEditor = React.createClass({
             value: this.props.value
         };
         theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        //function that strips special characters from theVals.value
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }
@@ -57,13 +56,13 @@ const PhoneFieldValueEditor = React.createClass({
         if (this.props.attributes && this.props.attributes.includeExtension) {
             let officeNumber;
             let officeExt;
-            if (this.props.value) {
-                officeNumber = phoneNumberFormatter.format(this.props.value).phoneNumberVal;
-                officeExt = phoneNumberFormatter.format(this.props.value).extensionVal;
+            if (this.props && this.props.value) {
+                officeNumber = phoneNumberFormatter.getPhoneNumber(this.props.value);
+                officeExt = phoneNumberFormatter.getExtension(this.props.value);
             }
             let classes = {
-                officeNumber: "officeNumber " + (this.props.classes ? this.props.classes : 'cellEdit'),
-                extNumber: "extNumber " + (this.props.classes ? this.props.classes : 'cellEdit')
+                officeNumber: "officeNumber " + (this.props.classes ? this.props.classes : ''),
+                extNumber: "extNumber " + (this.props.classes ? this.props.classes : '')
             };
             return (
                 <div className="officePhone">
@@ -73,7 +72,7 @@ const PhoneFieldValueEditor = React.createClass({
                                           onChange={this.onChangeOfficeNumber}
                                           onBlur={this.onBlur}
                                           value={officeNumber || ''} />
-                    <span className="x">{phoneNumberFormatter.ext()}</span>
+                    <span className="x">{phoneNumberFormatter.EXTENSION_DELIM}</span>
                     <TextFieldValueEditor type="tel"
                                           classes={classes.extNumber}
                                           onChange={this.onChangeExtNumber}
@@ -88,7 +87,7 @@ const PhoneFieldValueEditor = React.createClass({
                                           placeholder={placeholderNumber}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
-                                          classes={this.props.classes || 'cellEdit'}/>
+                                          classes={this.props.classes || 'cellEdit'} />
             );
         }
     }
