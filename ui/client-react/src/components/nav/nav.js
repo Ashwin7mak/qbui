@@ -1,5 +1,5 @@
 import React from "react";
-
+import cookie from 'react-cookie';
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
@@ -24,6 +24,9 @@ import NavPageTitle from '../pageTitle/navPageTitle';
 import Locale from '../../locales/locales';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
+import UrlUtils from '../../utils/urlUtils';
+import Constants from '../../services/constants';
+import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -283,6 +286,14 @@ export let Nav = React.createClass({
         </div>);
     },
 
+    checkOpenInV2(selectedApp) {
+        let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
+        if (v2tov3Cookie && CommonCookieUtils.searchCookieValue(v2tov3Cookie, selectedApp.id)) {
+            let qbClassicURL = UrlUtils.getQuickBaseClassicLink(selectedApp.id);
+            WindowLocationUtils.update(qbClassicURL);
+        }
+    },
+
     /**
      * get v2/v3 toggle popup (for admins on app pages)
      *
@@ -290,7 +301,7 @@ export let Nav = React.createClass({
      */
     getV2V3Footer() {
         const selectedApp = this.getSelectedApp();
-
+        this.checkOpenInV2(selectedApp);
         if (selectedApp) {
             const hasAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
 
