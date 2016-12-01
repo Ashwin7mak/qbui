@@ -139,20 +139,26 @@ let appsActions = {
     },
 
     selectAppId(appId) {
-        this.dispatch(actions.SELECT_APP, appId);
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            this.dispatch(actions.SELECT_APP, appId);
 
-        let appService = new AppService();
+            let appService = new AppService();
 
-        // fetch the app users list if we don't have it already
-
-        if (appId !== this.selectedAppId) {
-            appService.getAppUsers(appId).then(response => {
-                this.selectedAppId = appId;
-                this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-            }, () => {
-                this.dispatch(actions.LOAD_APP_USERS_FAILED);
-            });
-        }
+            // fetch the app users list if we don't have it already
+            if (appId !== this.selectedAppId) {
+                appService.getAppUsers(appId).then(response => {
+                    this.selectedAppId = appId;
+                    this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+                    resolve();
+                }, () => {
+                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
+                    reject();
+                });
+            } else {
+                resolve();
+            }
+        });
     },
 
     selectTableId(tblId) {
