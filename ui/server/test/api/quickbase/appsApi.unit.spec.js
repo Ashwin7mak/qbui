@@ -36,7 +36,7 @@ describe("Validate appsApi", function() {
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             appsApi.setRequestHelperObject(requestHelper);
-            req.url = '/app/123/users';
+            req.url = '/app/123';
             req.method = 'get';
         });
 
@@ -59,7 +59,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return when testing getAppUser success"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppUsers: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -78,11 +78,11 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppUsers: exception processing fail test: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('unexpected fail return results ', function(done) {
+        it('unexpected exception return results ', function(done) {
             let error_message = "unexpected exception unit test case execution";
 
             executeReqStub.returns(Promise.resolve(new Error(error_message)));
@@ -97,7 +97,7 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppUsers: exception processing unexpected test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
@@ -108,7 +108,7 @@ describe("Validate appsApi", function() {
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             appsApi.setRequestHelperObject(requestHelper);
-            req.url = '/app/123/users';
+            req.url = '/app/123';
             req.method = 'get';
         });
 
@@ -131,7 +131,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return when testing getAppAccessRights success"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppAccessRights: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -150,11 +150,11 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppAccessRights: exception processing failure test: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('unexpected fail return results ', function(done) {
+        it('unexpected exception return results ', function(done) {
             let error_message = "unexpected exception unit test case execution";
 
             executeReqStub.returns(Promise.resolve(new Error(error_message)));
@@ -169,7 +169,7 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getAppAccessRights: exception processing exception test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
@@ -180,7 +180,7 @@ describe("Validate appsApi", function() {
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             appsApi.setRequestHelperObject(requestHelper);
-            req.url = '/app/123/users';
+            req.url = '/app/123';
             req.method = 'get';
         });
 
@@ -203,7 +203,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return when testing getApp success"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getApp: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -222,11 +222,11 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getApp: exception processing failure test: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('unexpected fail return results ', function(done) {
+        it('unexpected exception return results ', function(done) {
             let error_message = "unexpected exception unit test case execution";
 
             executeReqStub.returns(Promise.resolve(new Error(error_message)));
@@ -241,7 +241,7 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getApp: exception processing exception test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
@@ -256,7 +256,7 @@ describe("Validate appsApi", function() {
             getAppAccessRightsStub = sinon.stub(appsApi, "getAppAccessRights");
             getStackPrefStub = sinon.stub(appsApi, "stackPreference");
 
-            req.url = '/app/123/users';
+            req.url = '/app/123';
             req.method = 'get';
         });
 
@@ -292,7 +292,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return when testing getApp success"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getHydratedApp: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -320,7 +320,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return when testing getApp success"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getHydratedApp: exception processing success test2: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -344,7 +344,7 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getHydratedApp: exception processing failure test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -368,9 +368,205 @@ describe("Validate appsApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('getHydratedApp: exception processing failure test2: ' + JSON.stringify(errorMsg)));
             });
         });
+    });
+
+    describe("validate getApps function: hydate = false", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            appsApi.setRequestHelperObject(requestHelper);
+
+            req.url = '/app/123';
+            req.method = 'get';
+        });
+
+        afterEach(function() {
+            req.method = 'get';
+            req.url = '';
+            executeReqStub.restore();
+        });
+
+        it('success return results', function(done) {
+            let resp = {'body': '[{"id":1},{"id":2}]'};
+            executeReqStub.returns(Promise.resolve(resp));
+
+            //  build the expected response object
+            let responseObj = JSON.parse(resp.body);
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, responseObj);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApps success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing success test(hydrate=false): ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('failure return results', function(done) {
+            let resp = new Error('errorMsg');
+            executeReqStub.returns(Promise.reject(resp));
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getApps failure"));
+                },
+                function(error) {
+                    assert.deepEqual(error, resp);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing failure test(hydrate=false): ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('expection return results', function(done) {
+            let resp = new Error('errorMsg');
+            executeReqStub.returns(Promise.resolve(resp));
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getApps exception"));
+                },
+                function(error) {
+                    assert.ok(true);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing exception test(hydrate=false): ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("validate getApps function: hydate = true", function() {
+        let executeReqStub = null;
+        let hydratedAppStub = null;
+
+        beforeEach(function() {
+            hydratedAppStub = sinon.stub(appsApi, "getHydratedApp");
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            appsApi.setRequestHelperObject(requestHelper);
+
+            req.url = '/app/123?hydrate=1';
+            req.method = 'get';
+            req.params.hydrate = true;
+        });
+
+        afterEach(function() {
+            req.method = 'get';
+            req.url = '';
+            executeReqStub.restore();
+            hydratedAppStub.restore();
+        });
+
+        it('success return results - 2 apps', function(done) {
+            let resp = {'body': '[{"id":1},{"id":2}]'};
+            let hydratedResp = {"id":1};
+            executeReqStub.returns(Promise.resolve(resp));
+            hydratedAppStub.returns(Promise.resolve(hydratedResp));
+
+            //  build the expected response object
+            let responseObj = JSON.parse(resp.body);
+
+            let hydratedRespList = [];
+            for (let i = 0; i < responseObj.length; i++) {
+                hydratedRespList.push(hydratedResp);
+            }
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, hydratedRespList);
+                    assert.equal(hydratedAppStub.callCount, 2);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApps success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing success test(hydrate=true): ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return results - 0 apps', function(done) {
+            let resp = {'body': '[]'};
+            let hydratedResp = {};
+            executeReqStub.returns(Promise.resolve(resp));
+            hydratedAppStub.returns(Promise.resolve(hydratedResp));
+
+            //  build the expected response object
+            let responseObj = JSON.parse(resp.body);
+
+            let hydratedRespList = [];
+            for (let i = 0; i < responseObj.length; i++) {
+                hydratedRespList.push(hydratedResp);
+            }
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, hydratedRespList);
+                    assert.equal(hydratedAppStub.callCount, 0);
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing getApps success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing success test2(hydrate=true): ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('failure return results', function(done) {
+            let resp = new Error('error');
+            let hydratedResp = {"id":1};
+            executeReqStub.returns(Promise.reject(resp));
+            hydratedAppStub.returns(Promise.resolve(hydratedResp));
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getApps failure"));
+                },
+                function(error) {
+                    assert.deepEqual(error, resp);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing failure test(hydrate=true): ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('exception return results', function(done) {
+            let resp = new Error('error');
+            let hydratedResp = {"id":1};
+            executeReqStub.returns(Promise.resolve(resp));
+            hydratedAppStub.returns(Promise.resolve(hydratedResp));
+
+            let promise = appsApi.getApps(req);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getApps exception"));
+                },
+                function(error) {
+                    assert.deepEqual(error, resp);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getApps: exception processing exception test(hydrate=true): ' + JSON.stringify(errorMsg)));
+            });
+        });
+
     });
 
     describe("validate stack preference function", function() {
@@ -413,7 +609,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return with testing get stack preference"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('stackPreference: exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -437,7 +633,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return with testing get stack preference with success error"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('stackPreference(get): exception processing success test2: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -461,7 +657,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return with testing get stack preference failure"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('stackPreference(get): exception processing failure test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -484,7 +680,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return with testing get stack preference exception"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('stackPreference(get): exception processing unexpected test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -510,7 +706,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return with testing post stack preference with openInV3=true"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('stackPreference(post): exception processing success test: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -536,7 +732,7 @@ describe("Validate appsApi", function() {
                     done(new Error("Unexpected failure promise return with testing post stack preference with openInV3=false"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve /app/1/users: ' + JSON.stringify(errorMsg)));
+                done(new Error('stackPreference(post): exception processing success test2: ' + JSON.stringify(errorMsg)));
             });
 
         });
