@@ -33,7 +33,7 @@
                 if (ALLOWED_FOR_PHONE_NUMBERS.indexOf(num) !== -1) {
                     newNums.push(num);
                 }
-            })
+            });
             return newNums.join('');
         },
         format: function(fieldValue, fieldInfo) {
