@@ -48,7 +48,9 @@ const PhoneFieldValueEditor = React.createClass({
             value: this.props.value
         };
         theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        theVals.value = phoneNumberFormatter.onBlurMasking(theVals.value);
         //function that strips special characters from theVals.value
+        console.log('theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }
