@@ -1,6 +1,7 @@
 import React from 'react';
 import QBicon from '../../components/qbIcon/qbIcon.js';
 import './urlField.scss';
+import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
 
 const PhoneFieldValueRenderer = React.createClass({
     displayName: 'PhoneFieldValueRenderer',
@@ -15,10 +16,8 @@ const PhoneFieldValueRenderer = React.createClass({
 
     },
     renderLink() {
-        let telPhoneNumberLink = 'tel:' + (this.props.value ? this.props.value.split('x')[0] : '');
-        let smsPhoneNumberLink = 'sms:' + (this.props.value ? this.props.value.split('x')[0] : '');
-        telPhoneNumberLink = encodeURI(telPhoneNumberLink);
-        smsPhoneNumberLink = encodeURI(smsPhoneNumberLink);
+        let telPhoneNumberLink = 'tel:' + (this.props.value ? phoneNumberFormatter.format(this.props.value).rawPhoneNumberValue : '');
+        let smsPhoneNumberLink = 'sms:' + (this.props.value ? phoneNumberFormatter.format(this.props.value).rawPhoneNumberValue : '');
         if (this.props.disabled) {
             return (
                 <span>

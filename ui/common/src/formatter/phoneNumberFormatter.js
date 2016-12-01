@@ -13,6 +13,10 @@
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         format: function(fieldValue, fieldInfo) {
+            if (typeof fieldValue !== 'object') {
+                fieldValue = {value: fieldValue};
+            }
+            console.log('fieldValue: ', fieldValue);
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
@@ -71,7 +75,13 @@
             if (fieldInfo && fieldInfo.includeExtension === false) {
                 formattedPhoneVal = formattedPhoneVal.split(EXTENSION_DELIM)[0].trim();
             }
-            return formattedPhoneVal;
+            let rawPhoneNumberValue = fieldValue.value.split(EXTENSION_DELIM)[0];
+            let rawExtension = fieldValue.value.split(EXTENSION_DELIM)[1];
+            return {
+                formattedPhoneVal,
+                rawPhoneNumberValue,
+                rawExtension
+            };
         }
     };
 }());
