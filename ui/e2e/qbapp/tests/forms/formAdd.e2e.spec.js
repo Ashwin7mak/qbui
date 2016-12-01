@@ -69,7 +69,8 @@
                     });
                 }).then(function() {
                     // Reload the report
-                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                    //e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                    browser.driver.navigate().refresh();
                     reportContentPage.waitForReportContent();
                 }).then(function() {
                     // Verify new record is now the last row in a table
