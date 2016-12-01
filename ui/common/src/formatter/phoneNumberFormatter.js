@@ -9,6 +9,7 @@
     var OPEN_PAREN = '(';
     var CLOSE_PAREN = ')';
     var DASH = '-';
+    var ALLOWED_FOR_PHONE_NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '(', ')', '+', '-', '.', ' '];
 
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
@@ -26,8 +27,14 @@
             return phoneNum + EXTENSION_DELIM + extNum;
         },
         onChangeMasking: function(nums) {
-            let newNums = nums.replace(/\D+/g, '');
-            return newNums;
+            nums = nums.split('');
+            let newNums = [];
+            nums.forEach(function(num) {
+                if (ALLOWED_FOR_PHONE_NUMBERS.indexOf(num) !== -1) {
+                    newNums.push(num);
+                }
+            })
+            return newNums.join('');
         },
         format: function(fieldValue, fieldInfo) {
             /**
