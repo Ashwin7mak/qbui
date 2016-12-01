@@ -223,3 +223,8 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
         }
     }
 }
+
+.formContainer {
+    display: table;
+    min-width: 100%;
+}
