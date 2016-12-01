@@ -107,6 +107,7 @@
                             if (height === '0') {
                                 return e2ePageBase.waitForElement(facetGroupElement).then(function() {
                                     return facetGroupElement.element(by.className('facetName')).click().then(function() {
+                                        e2eBase.sleep(browser.params.mediumSleep);
                                         return facetGroupElement;
                                     });
                                 });
