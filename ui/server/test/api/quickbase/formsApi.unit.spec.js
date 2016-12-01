@@ -1,6 +1,6 @@
 'use strict';
 
-var config = {
+let config = {
     javaHost: 'http://javaHost',
     SSL_KEY : {
         private    : 'privateKey',
@@ -8,11 +8,11 @@ var config = {
         requireCert: true
     }
 };
-var sinon = require('sinon');
-var assert = require('assert');
-var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-var formsApi = require('../../../src/api/quickbase/formsApi')(config);
-var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
+let sinon = require('sinon');
+let assert = require('assert');
+let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
+let formsApi = require('../../../src/api/quickbase/formsApi')(config);
+let recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
 let errorCodes = require('../../../src/api/errorCodes');
 let errorStatus = 403;
 
@@ -20,7 +20,7 @@ let errorStatus = 403;
  * Unit tests for report apis
  */
 describe('Validate FormsApi unit tests', function() {
-    var req = {
+    let req = {
         headers: {
             'Content-Type': 'content-type'
         },
@@ -41,7 +41,7 @@ describe('Validate FormsApi unit tests', function() {
      */
     describe('validate fetchFormMetaData api', function() {
 
-        var executeReqStub;
+        let executeReqStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
@@ -54,9 +54,9 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results ', function(done) {
             req.url = '/apps/123/tables/456?format=display';
 
-            var targetObject = "[{formMeta: [id:1]}]";
+            let targetObject = "[{formMeta: [id:1]}]";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = formsApi.fetchFormMetaData(req);
+            let promise = formsApi.fetchFormMetaData(req);
 
             promise.then(
                 function(response) {
@@ -75,10 +75,10 @@ describe('Validate FormsApi unit tests', function() {
 
         it('fail return results ', function(done) {
             req.url = '/apps/123/tables/456';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = formsApi.fetchFormMetaData(req);
+            let promise = formsApi.fetchFormMetaData(req);
 
             promise.then(
                 function(error) {
@@ -103,7 +103,7 @@ describe('Validate FormsApi unit tests', function() {
      */
     describe('validate fetchTableFields api', function() {
 
-        var executeReqStub;
+        let executeReqStub;
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             formsApi.setRequestHelperObject(requestHelper);
@@ -116,9 +116,9 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results ', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var targetObject = '[{"id":1}]';
+            let targetObject = '[{"id":1}]';
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = formsApi.fetchTableFields(req);
+            let promise = formsApi.fetchTableFields(req);
 
             promise.then(
                 function(response) {
@@ -137,10 +137,10 @@ describe('Validate FormsApi unit tests', function() {
 
         it('fail return results ', function(done) {
             req.url = '/apps/123/tables/456';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = formsApi.fetchTableFields(req);
+            let promise = formsApi.fetchTableFields(req);
 
             promise.then(
                 function(error) {
@@ -165,10 +165,10 @@ describe('Validate FormsApi unit tests', function() {
      */
     describe('validate fetchFormComponents api', function() {
 
-        var fetchFormMetaStub;
-        var fetchTableFieldsStub;
-        var fetchRecordStub;
-        var addQuerySpy;
+        let fetchFormMetaStub;
+        let fetchTableFieldsStub;
+        let fetchRecordStub;
+        let addQuerySpy;
         beforeEach(function() {
             fetchFormMetaStub = sinon.stub(formsApi, "fetchFormMetaData");
             fetchTableFieldsStub = sinon.stub(formsApi, "fetchTableFields");
@@ -189,13 +189,13 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results without elements', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
+            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
                 '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
                 '"sections": {"0": {"orderIndex": 0}}' +
                 '}}' +   // close tabs
                 '}';
-            var bodyFields = '[{"id":1}]';
-            var expectedSuccessResponse = {
+            let bodyFields = '[{"id":1}]';
+            let expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
                 record: [],
@@ -206,7 +206,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedSuccessResponse);
@@ -226,7 +226,7 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results with fids in table', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
+            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
                 '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
                 '"sections": {"0": {"orderIndex": 0,' +
                 '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
@@ -236,8 +236,8 @@ describe('Validate FormsApi unit tests', function() {
                 '}}' +   // close sections
                 '}}' +   // close tabs
                 '}';
-            var bodyFields = '[{"id":3},{"id":2}]';
-            var expectedSuccessResponse = {
+            let bodyFields = '[{"id":3},{"id":2}]';
+            let expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
                 record: 'record1',
@@ -248,7 +248,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedSuccessResponse);
@@ -268,7 +268,7 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results with fid not in table', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
+            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
                 '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
                 '"sections": {"0": {"orderIndex": 0,' +
                 '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
@@ -277,8 +277,8 @@ describe('Validate FormsApi unit tests', function() {
                 '}}' +   // close sections
                 '}}' +   // close tabs
                 '}';
-            var bodyFields = '[{"id":3}]';
-            var expectedSuccessResponse = {
+            let bodyFields = '[{"id":3}]';
+            let expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
                 record: 'record1',
@@ -289,7 +289,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedSuccessResponse);
@@ -309,14 +309,14 @@ describe('Validate FormsApi unit tests', function() {
         it('return results with fetchFormMetaData failure', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var error_message = {
+            let error_message = {
                 status:errorStatus,
                 message: 'error',
                 body: '{"msg":"fail unit test case execution"}'
             };
-            var body = '{"formId":"1"}';
-            var bodyFields = '[{"id":1}]';
-            var expectedSuccessResponse = {
+            let body = '{"formId":"1"}';
+            let bodyFields = '[{"id":1}]';
+            let expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
                 record: [{recordData:2}],
@@ -327,7 +327,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {
@@ -348,12 +348,12 @@ describe('Validate FormsApi unit tests', function() {
         it('return results with fetchSingleRecordAndFields failure', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var error_message = {
+            let error_message = {
                 status:errorStatus,
                 message: 'error',
                 body: '{"msg":"NOT_CONNECTED"}'
             };
-            var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
+            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
                 '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
                 '"sections": {"0": {"orderIndex": 0,' +
                 '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
@@ -361,13 +361,13 @@ describe('Validate FormsApi unit tests', function() {
                 '}}' +   // close sections
                 '}}' +   // close tabs
                 '}';
-            var bodyFields = '[{"id":3}]';
+            let bodyFields = '[{"id":3}]';
 
             fetchFormMetaStub.returns(Promise.resolve({body:body}));
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.reject(error_message));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {
@@ -392,7 +392,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.reject({message:'someError', status:errorStatus}));
             fetchRecordStub.returns(Promise.reject({message:'someError', status:errorStatus}));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {
@@ -417,7 +417,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({}));
             fetchRecordStub.returns(Promise.resolve({}));
 
-            var promise = formsApi.fetchFormComponents(req, true);
+            let promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {

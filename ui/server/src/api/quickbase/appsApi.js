@@ -52,7 +52,7 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getAppAccessRights(): unexpected error fetching app access rights.', ex, true);
-                        reject1(ex);
+                        reject(ex);
                     });
                 });
             },
@@ -75,7 +75,7 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsApi.getApp(): unexpected error fetching app', ex, true);
-                        reject1(ex);
+                        reject(ex);
                     });
                 });
             },
@@ -145,7 +145,7 @@
                             }
                         ).catch((ex) => {
                             requestHelper.logUnexpectedError('appsApi.getApps()..unexpected error retrieving list of hydrated apps', ex, true);
-                            reject1(ex);
+                            reject(ex);
                         });
                     });
                 } else {
@@ -166,7 +166,7 @@
                             }
                         ).catch((ex) => {
                             requestHelper.logUnexpectedError('appsApi.getApps()..unexpected error fetching apps', ex, true);
-                            reject1(ex);
+                            reject(ex);
                         });
                     });
                 }
@@ -202,7 +202,7 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('appsAPI..unexpected error fetching app user in getAppUsers method', ex, true);
-                        reject1(ex);
+                        reject(ex);
                     });
                 });
             },
@@ -235,7 +235,7 @@
 
                 log.debug("Stack preference: " + opts.url);
 
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let msg = JSON.parse(response.body);

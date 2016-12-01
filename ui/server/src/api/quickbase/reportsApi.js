@@ -196,13 +196,13 @@
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
                 //  promise to return report meta data
-                return new Promise((resolve1, reject1) => {
+                return new Promise((resolve, reject) => {
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            resolve1(response);
+                            resolve(response);
                         },
                         (error) => {
-                            reject1(error);
+                            reject(error);
                         }
                     );
                 });
@@ -328,7 +328,7 @@
 
                 if (useReportMetaData === true) {
                     //  Call the the report results endpoint, which will generate a report using the saved report meta data.
-                    return new Promise((resolve1, reject1) => {
+                    return new Promise((resolve, reject) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
@@ -346,23 +346,23 @@
                                     (result) => {
                                         responseObj.metaData = reportMetaData;
                                         responseObj.report = result;
-                                        resolve1(responseObj);
+                                        resolve(responseObj);
                                     },
                                     (error) => {
-                                        reject1(error);
+                                        reject(error);
                                     }
                                 ).catch((ex) => {
                                     requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
-                                    reject1(ex);
+                                    reject(ex);
                                 });
                             },
                             (metaDataError) => {
                                 log.error({req: req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
-                                reject1(metaDataError);
+                                reject(metaDataError);
                             }
                         ).catch((ex) => {
                             requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
-                            reject1(ex);
+                            reject(ex);
                         });
                     });
                 } else {
@@ -370,7 +370,7 @@
                     //  and then override the sortList, query and columnList(future) to generate a custom report.
                     //  NOTE: if no overrides, then the baseline report is generated, no different than if
                     //  loadReportWithDefaultMetaData == true.
-                    return new Promise((resolve1, reject1) => {
+                    return new Promise((resolve, reject) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
@@ -437,23 +437,23 @@
                                     (result) => {
                                         responseObj.metaData = reportMetaData;
                                         responseObj.report = result;
-                                        resolve1(responseObj);
+                                        resolve(responseObj);
                                     },
                                     (error) => {
-                                        reject1(error);
+                                        reject(error);
                                     }
                                 ).catch((ex) => {
                                     requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
-                                    reject1(ex);
+                                    reject(ex);
                                 });
                             },
                             (metaDataError) => {
                                 log.error({req: req2}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
-                                reject1(metaDataError);
+                                reject(metaDataError);
                             }
                         ).catch((ex) => {
                             requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
-                            reject1(ex);
+                            reject(ex);
                         });
                     });
                 }
