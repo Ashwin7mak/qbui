@@ -90,7 +90,8 @@
                             if (response[2].errorCode === 0) {
                                 app.openInV3 = response[2].v3Status;
                             } else {
-                                log.warn('Error fetching application stack preference.  Setting to open in V3.  Error:' + response[2].errorText);
+                                //TODO comment out until legacy stack configuration is in place
+                                //log.warn('Error fetching application stack preference.  Setting to open in V3.  Error: ' + response[2].errorText);
                                 app.openInV3 = true;
                             }
                             resolve(app);
@@ -245,12 +246,12 @@
                             resolve(msg);
                         },
                         (error) => {
-                            //TODO: comment out log message until current stack config is done for prod env
+                            //TODO comment out until legacy stack configuration is in place
                             //log.error({req: req, res:error}, opts.url);
-                            resolve(error);
+                            resolve({errorText: error ? error.message : 'Unknown error thrown calling for stack preference.'});
                         }
                     ).catch((ex) => {
-                        //TODO: comment out log message until current stack config is done for prod env
+                        //TODO comment out until legacy stack configuration is in place
                         //requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
                         resolve(ex);
                     });
