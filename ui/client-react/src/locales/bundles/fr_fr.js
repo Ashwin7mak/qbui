@@ -376,6 +376,7 @@ export default {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
             email: 'Formater la {fieldName} comme prénom@domaine.fr',
+            emails: 'Formatez toutes les adresses comme prénom@domaine.fr',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },

@@ -377,6 +377,7 @@ export default {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
             email: 'Formatieren Sie die {fieldName} wie name@domaine.de',
+            emails: 'Formatieren Sie alle Adressen wie name@domaine.de',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
