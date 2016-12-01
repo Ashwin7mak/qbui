@@ -12,9 +12,7 @@
 
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
-        ext: function() {
-            return EXTENSION_DELIM;
-        },
+        EXTENSION_DELIM: EXTENSION_DELIM,
         getExtension: function(phoneNumber) {
             return phoneNumber.split(EXTENSION_DELIM)[1];
         },
@@ -22,7 +20,14 @@
             return phoneNumber.split(EXTENSION_DELIM)[0];
         },
         getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {
+            if (!extNum) {
+                return phoneNum;
+            }
             return phoneNum + EXTENSION_DELIM + extNum;
+        },
+        onChangeMasking: function(nums) {
+            let newNums = nums.replace(/\D+/g, '');
+            return newNums;
         },
         format: function(fieldValue, fieldInfo) {
             /**
