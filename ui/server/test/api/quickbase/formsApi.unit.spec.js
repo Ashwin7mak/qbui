@@ -223,10 +223,10 @@ describe('Validate FormsApi unit tests', function() {
 
         });
 
-        it('success return results with fids in table', function(done) {
+        it('success return results with fids in table including built-ins', function(done) {
             req.url = '/apps/123/tables/456';
 
-            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
+            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab","includeBuiltIns":true,' +
                 '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
                 '"sections": {"0": {"orderIndex": 0,' +
                 '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
@@ -236,7 +236,7 @@ describe('Validate FormsApi unit tests', function() {
                 '}}' +   // close sections
                 '}}' +   // close tabs
                 '}';
-            let bodyFields = '[{"id":3},{"id":2}]';
+            let bodyFields = '[{"id":3},{"id":2},{"id":1,"builtIn":true}]';
             let expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
