@@ -16,7 +16,6 @@
             if (typeof fieldValue !== 'object') {
                 fieldValue = {value: fieldValue};
             }
-            console.log('fieldValue: ', fieldValue);
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
@@ -75,12 +74,12 @@
             if (fieldInfo && fieldInfo.includeExtension === false) {
                 formattedPhoneVal = formattedPhoneVal.split(EXTENSION_DELIM)[0].trim();
             }
-            let rawPhoneNumberValue = fieldValue.value.split(EXTENSION_DELIM)[0];
-            let rawExtension = fieldValue.value.split(EXTENSION_DELIM)[1];
+            let phoneNumberVal = fieldValue.value.split(EXTENSION_DELIM)[0];
+            let extensionVal = fieldValue.value.split(EXTENSION_DELIM)[1];
             return {
                 formattedPhoneVal,
-                rawPhoneNumberValue,
-                rawExtension
+                phoneNumberVal,
+                extensionVal
             };
         }
     };

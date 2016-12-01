@@ -17,8 +17,8 @@ const PhoneFieldValueEditor = React.createClass({
     },
     onChangeOfficeNumber(ev) {
         let updatedValue = ev;
-        if (this.props.value && this.props.value.split('x')[1]) {
-            updatedValue = ev + 'x' + this.props.value.split('x')[1];
+        if (this.props.value && phoneNumberFormatter.format(this.props.value).extensionVal) {
+            updatedValue = ev + 'x' + phoneNumberFormatter.format(this.props.value).extensionVal;
 
         }
         if (this.props.onChange) {
@@ -27,7 +27,7 @@ const PhoneFieldValueEditor = React.createClass({
     },
     onChangeExtNumber(ev) {
         if (this.props.value) {
-            let updatedValue = this.props.value.split('x')[0];
+            let updatedValue = phoneNumberFormatter.format(this.props.value).phoneNumberVal;
             if (ev) {
                 updatedValue += 'x' + ev;
             }
@@ -58,9 +58,8 @@ const PhoneFieldValueEditor = React.createClass({
             let officeNumber;
             let officeExt;
             if (this.props.value) {
-                let tempValue = this.props.value.split('x');
-                officeNumber = tempValue[0];
-                officeExt = tempValue[1];
+                officeNumber = phoneNumberFormatter.format(this.props.value).phoneNumberVal;
+                officeExt = phoneNumberFormatter.format(this.props.value).extensionVal;
             }
             let classes = {
                 officeNumber: "officeNumber " + (this.props.classes ? this.props.classes : 'cellEdit'),
