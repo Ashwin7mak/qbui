@@ -53,6 +53,22 @@ exports.config = {
         //
         browserName: 'chrome'
     }],
+    //capabilities: [{
+    //    platform : 'OS X 10.9',
+    //    browserName     : 'chrome',
+    //    tunnelIdentifier: 'webdriverIOTunnel',
+    //    name            : 'local_webdriverIO_OSX_Chrome',
+    //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+    //    idleTimeout: '120',
+    //    screenResolution : '1600x1200',
+    //    maxDuration: 10800,
+    //    breakpointSize: 'xlarge',
+    //    // These two values enable parallel testing which will run a spec file per instance
+    //    shardTestFiles: true,
+    //    maxInstances: 4
+    //}],
+
+
     //
     // ===================
     // Test Configurations
@@ -110,6 +126,7 @@ exports.config = {
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: ['sauce', 'selenium-standalone'],
+    //services: ['sauce'],
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -138,7 +155,25 @@ exports.config = {
             // do something
         }
     },
-    
+    //protocol: 'http',
+    //user: 'QuickBaseNS',
+    //key: 'f814e1b3-ac25-4369-af02-90d61c6b1c04',
+    //sauceConnect: true,
+    //sauceConnectOpts: {
+    //    tunnelIdentifier: 'webdriverIOTunnel',
+    //    verbose         : true,
+    //    logger          : console.log,
+    //    dns             : '127.0.0.1'
+    //    //TODO: Figure out how to use custom port for selenium server
+    //    //port            : 4400
+    //},
+
+    // Selenium server config
+    //host: '127.0.0.1',
+    //port: 4400,
+    //path: '/wd/hub',
+    //sauceSeleniumAddress: 'localhost:4400/wd/hub',
+
     //
     // =====
     // Hooks
