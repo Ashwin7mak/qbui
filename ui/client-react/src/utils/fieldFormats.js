@@ -83,5 +83,8 @@ FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
 FieldFormats.URL = 14;
 FieldFormats.EMAIL_ADDRESS = 15;
+FieldFormats.TEXT_FORMULA_FORMAT = 16;
+FieldFormats.URL_FORMULA_FORMAT = 17;
+FieldFormats.NUMERIC_FORMULA_FORMAT = 18;
 
 export default FieldFormats;

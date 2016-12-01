@@ -11,6 +11,9 @@ import TextFieldValueRenderer from './textFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
 import UrlFieldValueRenderer from './urlFieldValueRenderer';
+import TextFormulaFieldRenderer from './textFormulaFieldRenderer';
+import NumericFormulaFieldRenderer from './numericFormulaFieldRenderer';
+import UrlFormulaFieldRenderer from './urlFormulaFieldRenderer';
 
 /**
  * # FieldValueRenderer
@@ -51,6 +54,9 @@ const FieldValueRenderer = React.createClass({
          * - MULTI_LINE_TEXT_FORMAT = 13;
          * - URL = 14;
          * - EMAIL_ADDRESS = 15;
+         * - TEXT_FORMULA_FORMAT = 16;
+         * - URL_FORMULA_FORMAT = 17;
+         * - NUMERIC_FORMULA_FORMAT = 18;
          **/
         type: React.PropTypes.number,
 
@@ -132,6 +138,15 @@ const FieldValueRenderer = React.createClass({
 
         case FieldFormats.EMAIL_ADDRESS:
             return <EmailFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
+
+        case FieldFormats.TEXT_FORMULA_FORMAT:
+            return <TextFormulaFieldRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
+
+        case FieldFormats.NUMERIC_FORMULA_FORMAT:
+            return <NumericFormulaFieldRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
+
+        case FieldFormats.URL_FORMULA_FORMAT:
+            return <UrlFormulaFieldRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
 
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
