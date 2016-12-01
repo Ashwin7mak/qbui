@@ -48,10 +48,10 @@
 
             return results;
         },
-        _hasManyAddresses(emails) {
+        _hasManyAddresses: function(emails) {
             return (emails && emailFormatter.splitEmails(emails).length > 1);
         },
-        _getInvalidEmailMessage(emails) {
+        _getInvalidEmailMessage: function(emails) {
             if (this._hasManyAddresses(emails)) {
                 return 'invalidMsg.emails';
             }
