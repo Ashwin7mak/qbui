@@ -11,13 +11,13 @@
     let _ = require('lodash');
 
     module.exports = function(config) {
-        var requestHelper = require('./requestHelper')(config);
+        let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
-        var constants = require('../../../../common/src/constants');
+        let constants = require('../../../../common/src/constants');
 
-        var request = defaultRequest;
+        let request = defaultRequest;
 
-        var appsApi = {
+        let appsApi = {
 
             /**
              * Allows you to override the request object
@@ -80,13 +80,13 @@
                 });
             },
 
-            getHydratedApp(req, appId) {
+            getHydratedApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId), this.stackPreference(req, appId)];
                     Promise.all(appRequests).then(
                         function(response) {
                             let app = response[0];
-                            app.rights = response[1];
+                            app.accessRights = response[1];
                             if (response[2].errorCode === 0) {
                                 app.openInV3 = response[2].v3Status;
                             } else {
@@ -245,11 +245,13 @@
                             resolve(msg);
                         },
                         (error) => {
-                            log.error({req: req, res:error}, opts.url);
+                            //TODO: comment out log message until current stack config is done for prod env
+                            //log.error({req: req, res:error}, opts.url);
                             resolve(error);
                         }
                     ).catch((ex) => {
-                        requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
+                        //TODO: comment out log message until current stack config is done for prod env
+                        //requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
                         resolve(ex);
                     });
                 });

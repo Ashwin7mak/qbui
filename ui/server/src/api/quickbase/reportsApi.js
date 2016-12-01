@@ -304,7 +304,7 @@
              *
              * @returns {bluebird|exports|module.exports}
              */
-            fetchReportResult(req, reportId, useReportMetaData) {
+            fetchReportResult: function(req, reportId, useReportMetaData) {
 
                 var responseObj = {
                     metaData: null,
