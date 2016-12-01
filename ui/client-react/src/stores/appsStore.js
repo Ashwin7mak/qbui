@@ -28,7 +28,8 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
 
             actions.SET_APP_STACK, this.onSetAppStack,
-            actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess
+            actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess,
+            actions.SET_APP_STACK_FAILED, this.onSetAppStackFailed
         );
 
         this.logger = new Logger();

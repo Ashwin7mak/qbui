@@ -22,7 +22,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 //  Define the model object returned to the UI layer for the list of apps
 //  TODO: initial implementation...still in progress..
 let appsModel = {
-    set: function(apps) {
+    set(apps) {
         if (apps) {
             //  add a link element to each individual app
             apps.forEach((app) => {
@@ -90,15 +90,16 @@ let appsActions = {
                 let params = {};
                 params[constants.REQUEST_PARAMETER.OPEN_IN_V3] = openInV3;
 
+                this.dispatch(actions.SET_APP_STACK);
                 appService.setApplicationStack(appId, params).then(
                     (response) => {
                         logger.debug('ApplicationService setApplicationStack success:' + JSON.stringify(response));
-                        //TODO dispatch success event
+                        this.dispatch(actions.SET_APP_STACK_SUCCESS, {appId, openInV3});
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'ApplicationService.setApplicationStack:');
-                        //TODO dispatch failure event
+                        this.dispatch(actions.SET_APP_STACK_FAILED);
                         reject();
                     }
                 ).catch((ex) => {
