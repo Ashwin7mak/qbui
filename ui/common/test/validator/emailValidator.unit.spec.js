@@ -104,36 +104,59 @@ describe('emailValidator', () => {
         });
     });
 
-    describe('validateAndReturnResults', () => {
+    describe.only('validateAndReturnResults', () => {
         let fieldName = 'email';
-
-        it('returns a result, to be used with validatorUtils, if the email is invalid', () => {
-            let expectedResult = {
-                isInvalid: true,
-                error: {
-                    code: dataErrorCodes.INVALID_ENTRY,
-                    messageId: 'invalidMsg.email',
-                    data: {fieldName: fieldName}
+        let resultsFromPreviousValidationCheck = {
+            isInvalid: true,
+            error: {
+                messageId: 'invalidMsg.required',
+                code: dataErrorCodes.REQUIRED_FIELD_EMPTY,
+                data: {
+                    fieldId: 1,
+                    fieldName: fieldName
                 }
-            };
+            }
+        };
 
-            assert.deepEqual(emailValidator.validateAndReturnResults('invalidemail', fieldName), expectedResult);
-        });
-
-        it('passes through the result if the email is valid', () => {
-            let requiredResult = {
-                isInvalid: true,
-                error: {
-                    messageId: 'invalidMsg.required',
-                    code: dataErrorCodes.REQUIRED_FIELD_EMPTY,
-                    data: {
-                        fieldId: 1,
-                        fieldName: fieldName
+        let testCases = [
+            {
+                description: 'returns a result (including an error message), to be used with validatorUtils, if the email is invalid',
+                email: 'invalidemail',
+                previousResults: null,
+                expectedResult: {
+                    isInvalid: true,
+                    error: {
+                        code: dataErrorCodes.INVALID_ENTRY,
+                        messageId: 'invalidMsg.email',
+                        data: {fieldName: fieldName}
                     }
                 }
-            };
+            },
+            {
+                description: 'returns an invalid message about multiple emails if multiple emails are in the string',
+                email: 'valid@test.com;invalid;valid@dev.de',
+                previousResults: null,
+                expectedResult: {
+                    isInvalid: true,
+                    error: {
+                        code: dataErrorCodes.INVALID_ENTRY,
+                        messageId: 'invalidMsg.emails', // note the s in emails for this error code
+                        data: {fieldName: fieldName}
+                    }
+                }
+            },
+            {
+                description: 'passes through the result if the email is valid',
+                email: 'valid@test.com',
+                previousResults: resultsFromPreviousValidationCheck,
+                expectedResult: resultsFromPreviousValidationCheck
+            }
+        ];
 
-            assert.deepEqual(emailValidator.validateAndReturnResults('valid@test.com', fieldName, requiredResult), requiredResult);
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                assert.deepEqual(emailValidator.validateAndReturnResults(testCase.email, fieldName, testCase.previousResults), testCase.expectedResult);
+            });
         });
     });
 });

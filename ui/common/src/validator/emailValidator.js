@@ -40,13 +40,23 @@
                     };
                 }
 
+                results.error.messageId = this._getInvalidEmailMessage(email);
                 results.error.code = dataErrorCodes.INVALID_ENTRY;
-                results.error.messageId = 'invalidMsg.email';
                 results.error.data = {fieldName: fieldName};
                 results.isInvalid = true;
             }
 
             return results;
+        },
+        _hasManyAddresses(emails) {
+            return (emails && emailFormatter.splitEmails(emails).length > 1);
+        },
+        _getInvalidEmailMessage(emails) {
+            if (this._hasManyAddresses(emails)) {
+                return 'invalidMsg.emails';
+            }
+
+            return 'invalidMsg.email';
         }
     };
 }());
