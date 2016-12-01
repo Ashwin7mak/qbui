@@ -643,14 +643,14 @@ describe("Validate appsApi", function() {
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
             opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
 
-            let errorResp = {"errorCode":99, "v3Status":"true"};
+            let errorResp = {"errorCode":99, "message":"some error"};
             executeReqStub.returns(Promise.reject(errorResp));
 
             let promise = appsApi.stackPreference(req, req.params.appId);
             promise.then(
                 function(response) {
                     assert(executeReqStub.calledWith(sinon.match.any, opts), 'Assert failure calling get stack preference error.  Options mismatch.');
-                    assert.deepEqual(response, errorResp);
+                    assert.deepEqual(response, {"errorText": errorResp.message});
                     done();
                 },
                 function(error) {
