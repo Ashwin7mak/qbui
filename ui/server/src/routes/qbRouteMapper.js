@@ -218,6 +218,7 @@
      * processRequest is the default implementation for processing a request coming through the router. We first log the
      * request and then we check whether the route has been enabled. We will then modify the request path and send it
      * along to the return function.
+     *
      * @param req
      * @param res
      * @param returnFunction
@@ -232,6 +233,15 @@
         }
     }
 
+    /**
+     * Return list of apps.
+     *
+     * Note: if request includes query parameter hydrate=1, then the return object will
+     * include appRights and v2/v3 stack preference.
+     *
+     * @param req
+     * @param res
+     */
     function getApps(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get Apps', {req:filterNodeReq(req)});
