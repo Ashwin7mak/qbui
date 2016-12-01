@@ -14,7 +14,7 @@
         },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
-        allScriptsTimeout: 300000,
+        allScriptsTimeout: 600000,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
