@@ -17,6 +17,7 @@
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
         var formService = require('./services/formService.js');
+        var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
 
         var e2eBase = {
@@ -45,6 +46,7 @@
             tableService: tableService(recordBase),
             reportService: reportService(recordBase),
             formService: formService(recordBase),
+            userService: userService(recordBase),
             roleService: roleService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
@@ -226,6 +228,10 @@
                     fieldType: consts.SCALAR,
                     dataType: consts.URL
                 };
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[14]] = {
+                    fieldType: consts.SCALAR,
+                    dataType: consts.USER
+                };
                 tableToFieldToFieldTypeMap['Table 2'] = {};
                 tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[2]] = {
                     fieldType: consts.SCALAR,
@@ -287,6 +293,8 @@
                 // Create the app via the API
                 return e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
+                    e2eBase.userService.generateDefaultUserList(createdApp.id);
+
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     // Generate the record JSON objects
