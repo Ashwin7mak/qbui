@@ -274,7 +274,7 @@
              * Setup method that generates an application, table, report and a specified number of records
              * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
              */
-            defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords, shouldGenerateBlankRecords) {
+            defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
                 var MIN_RECORDSCOUNT = 11;
 
@@ -297,40 +297,40 @@
 
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-
-                    var table1GeneratedRecords;
-                    if (shouldGenerateBlankRecords) {
-                        table1GeneratedRecords = e2eBase.recordService.generateEmptyRecords(table1NonBuiltInFields, numberOfRecords);
-                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    } else {
-                        // Generate the record JSON objects
-                        table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                        // Add 1 duplicate record
-                        var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
-                        var dupRecord = clonedArray[0];
-                        // Edit the numeric field so we can check the second level sort (ex: 6.7)
-                        dupRecord.forEach(function(field) {
-                            if (field.id === 7) {
-                                field.value = 1.90;
-                            }
-                            if (field.id === 11) {
-                                field.value = '1977-12-12';
-                            }
-                        });
-                        // Add the new record back in to create
-                        table1GeneratedRecords.push(dupRecord);
-                        if (numberOfRecords < MIN_RECORDSCOUNT) {
-                            // Via the API create the records, a new report, then run the report.
-                            e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                        } else {
-                            // Via the API create the bulk records
-                            e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                    // Generate the record JSON objects
+                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
+                    // Add 1 duplicate record
+                    var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
+                    var dupRecord = clonedArray[0];
+                    // Edit the numeric field so we can check the second level sort (ex: 6.7)
+                    dupRecord.forEach(function(field) {
+                        if (field.id === 7) {
+                            field.value = 1.90;
                         }
+                        if (field.id === 11) {
+                            field.value = '1977-12-12';
+                        }
+                    });
+                    // Add the new record back in to create
+                    table1GeneratedRecords.push(dupRecord);
+                    if (numberOfRecords < MIN_RECORDSCOUNT) {
+                        // Via the API create the records, a new report, then run the report.
+                        return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                    } else {
+                        // Via the API create the bulk records
+                        return e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
                     }
-
+                }).then(function() {
                     // Create a List all report for the first table
                     return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
                 }).then(function() {
+                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
+                    // Generate 1 empty record for Table 1
+                    var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(table1NonBuiltInFields, 1);
+                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedEmptyRecords);
+                }).then(function() {
+                    // Create the above for table 2
                     if (createdApp.tables[1]) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                         var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
@@ -363,10 +363,10 @@
              * Setup function that will create you all currently supported report types. Calls the default setup functions as well.
              * @param numRecords is how many records will be generated per table
              */
-            fullReportsSetup: function(numRecords, shouldGenerateBlankRecords) {
+            fullReportsSetup: function(numRecords) {
                 var createdApp;
 
-                return this.defaultAppSetup(null, numRecords, shouldGenerateBlankRecords).then(function(createdAppResponse) {
+                return this.defaultAppSetup(null, numRecords).then(function(createdAppResponse) {
                     createdApp = createdAppResponse;
 
                     var TEXT_FID = 6;
