@@ -1,7 +1,6 @@
 import React from 'react';
 import UrlUtils from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
-import WindowUtils from '../../src/utils/windowLocationUtils';
 
 describe('UrlUtils', () => {
     let phoneIcon = 'phone-outline';
@@ -95,16 +94,15 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                let baseService =  {
-                    getSubdomain() {return testRealmId;},
-                    getDomain() {return testDomainId;}
+                let windowLocationUtils =  {
+                    getHostname() {return testRealmId + '.' + testDomainId;}
                 };
 
-                UrlUtils.__Rewire__('baseService', baseService);
+                UrlUtils.__Rewire__('WindowLocationUtils', windowLocationUtils);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
-                UrlUtils.__ResetDependency__('baseService');
+                UrlUtils.__ResetDependency__('WindowLocationUtils');
             });
         });
     });

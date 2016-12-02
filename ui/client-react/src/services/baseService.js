@@ -5,6 +5,7 @@ import axios from 'axios';
 import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
+import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
@@ -173,38 +174,12 @@ class BaseService {
      * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.quickbase.com/qbase/apps
      */
     constructRedirectUrl() {
+        let hostname = WindowLocationUtils.getHostname();
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
         let newStackDestination = WindowLocationUtils.getHref();
-        let currentStackDomain = this.getSubdomain() + "." +  this.getDomain();
+        let currentStackDomain = CommonUrlUtils.getSubdomain(hostname) + "." +  CommonUrlUtils.getDomain(hostname);
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
-    }
-
-    /**
-     * We need to get the subdomain for redirect url construction
-     * To get the real subdomain we need to split on the '.' character
-     * And then take the first entry in the array
-     * Example: team.quickbase.com
-     * Example returns {team}
-     */
-    getSubdomain() {
-        let hostname = WindowLocationUtils.getHostname();
-        return hostname.split(".").shift();
-    }
-
-    /**
-     * We need to get the domain for redirect url construction
-     * To get the real domain we need to split on the '.' character
-     * And then take the last 2 entries in the array
-     * Example: team.quickbase.com
-     * Example returns {quickbase.com}
-     */
-    getDomain() {
-        let hostname = WindowLocationUtils.getHostname();
-        let hostnameSplit = hostname.split(".");
-        let domainAndTLD = hostnameSplit.pop(); //we can't assume that we are deployed on TLD .com
-        domainAndTLD = hostnameSplit.pop() + "." + domainAndTLD;
-        return domainAndTLD;
     }
 
 }
