@@ -1,6 +1,6 @@
 
-let editValue1 = '';
-let editValue2 = '';
+let editValue1 = '(555) 555-5555';
+let editValue2 = '(555) 555-5555 x5555';
 
 var BasicPhoneFieldValueEditor = React.createClass({
     getInitialState() {
