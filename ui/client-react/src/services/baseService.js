@@ -5,6 +5,7 @@ import axios from 'axios';
 import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
+import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
@@ -173,9 +174,10 @@ class BaseService {
      * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.quickbase.com/qbase/apps
      */
     constructRedirectUrl() {
+        let hostname = WindowLocationUtils.getHostname();
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
         let newStackDestination = WindowLocationUtils.getHref();
-        let currentStackDomain = this.getSubdomain() + "." +  this.getDomain();
+        let currentStackDomain = CommonUrlUtils.getSubdomain(hostname) + "." +  CommonUrlUtils.getDomain(hostname);
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
     }
