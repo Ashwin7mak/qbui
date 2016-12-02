@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
-import './phoneFieldValueEditor.scss';
+import './phoneField.scss';
 import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
 
 const PhoneFieldValueEditor = React.createClass({
