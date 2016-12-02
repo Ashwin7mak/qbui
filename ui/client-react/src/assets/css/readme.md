@@ -33,7 +33,7 @@ assets/
 Don't inline styles in React. Inlined styles are difficult to override (thereby breaking the specificity graph), make it hard to share styles and can't make use of pseudo-selectors/media queries.
 
 # Formatting
-For the most part our formatting guide will be enforced by the Sass linting tool but here's a full writeup on how it all works.
+For the most part our formating guide will be enforced by the Sass linting tool but here's a full writeup on how it all works.
 
 For automatic formatting of a file based on the rules indicated in `stylint.config.js`, you can run the stylefmt command.
 
