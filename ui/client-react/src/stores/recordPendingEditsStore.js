@@ -130,6 +130,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _isDifferentThanPreviousValue(payload) {
         let {newVal, oldVal} = payload.changes.values;
+
+        // Cannot check for differences if one of the objects doesn't exist. Assume a change in that case.
+        if (!newVal || !oldVal) {
+            return true;
+        }
+
         // Some components modify display values and some modify the underlying value so we check for both
         return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
     },
@@ -142,6 +148,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _isDifferentThanOriginalFieldValue(payload) {
         let {newVal} = payload.changes.values;
+
+        // If there is no newValue object then assume a change
+        if (!newVal) {
+            return true;
+        }
+
         let originalRecord = this.originalRecord.fids[payload.changes.fid];
         let originalRecordValue = null;
         let originalRecordDisplay = null;
