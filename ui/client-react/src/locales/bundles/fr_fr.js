@@ -100,7 +100,8 @@ export default {
             user: "Utilisateur",
             alerts: "Alertes",
             help: "Aidez-moi",
-            logout: "Se déconnecter"
+            logout: "Se déconnecter",
+            missingWalkMe: "Le didacticiel n'est pas disponible"
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",

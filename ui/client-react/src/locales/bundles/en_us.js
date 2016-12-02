@@ -103,7 +103,8 @@ export default {
             user: "User",
             alerts: "Alerts",
             help: "Help",
-            logout: "Logout"
+            logout: "Logout",
+            missingWalkMe: "Tutorial is not available"
         },
         pageActions: {
             addRecord: "Add a record",

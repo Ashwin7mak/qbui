@@ -100,7 +100,8 @@ export default {
             user: "Benutzer",
             alerts: "Benachrichtigung",
             help: "Hilfe",
-            logout: "Abmelden"
+            logout: "Abmelden",
+            missingWalkMe: "Tutorial ist nicht verfügbar"
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
