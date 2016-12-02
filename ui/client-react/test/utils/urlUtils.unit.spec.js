@@ -1,12 +1,20 @@
 import React from 'react';
 import UrlUtils from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
+import {SUPPORT_LINK_PATH} from '../../src/constants/urlConstants';
 
 describe('UrlUtils', () => {
-    let phoneIcon = 'phone-outline';
-    let mailIcon = 'mail';
-    let messageIcon = 'speechbubble-outline';
-    let fileIcon = ''; // No file icon currently available
+    const phoneIcon = 'phone-outline';
+    const mailIcon = 'mail';
+    const messageIcon = 'speechbubble-outline';
+    const fileIcon = ''; // No file icon currently available
+
+    const testRealmId = 'realmId';
+    const testAppId = 'testAppId';
+    const testDomainId = 'quickbase.com';
+    const mockWindowLocationUtils =  {
+        getHostname() {return testRealmId + '.' + testDomainId;}
+    };
 
     describe('getIconForProtocol', () => {
         let testCases = [
@@ -75,10 +83,6 @@ describe('UrlUtils', () => {
     });
 
     describe('getQuickBaseClassicLink', () => {
-        let testRealmId = 'realmId';
-        let testAppId = 'testAppId';
-        let testDomainId = 'quickbase.com';
-
         let testCases = [
             {
                 description: 'returns the main quickbase classic link if selectedAppId is provided',
@@ -94,16 +98,22 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                let windowLocationUtils =  {
-                    getHostname() {return testRealmId + '.' + testDomainId;}
-                };
-
-                UrlUtils.__Rewire__('WindowLocationUtils', windowLocationUtils);
+                UrlUtils.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
                 UrlUtils.__ResetDependency__('WindowLocationUtils');
             });
+        });
+    });
+
+    describe('getSupportLink', () => {
+        it('returns a link to the support app that includes the current realm', () => {
+            UrlUtils.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
+
+            expect(UrlUtils.getSupportLink()).toEqual(`https://${testRealmId}.${testDomainId}${SUPPORT_LINK_PATH}`);
+
+            UrlUtils.__ResetDependency__('WindowLocationUtils');
         });
     });
 });
