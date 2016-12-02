@@ -7,7 +7,11 @@
     module.exports = {
         /**
          *
-         * A helper method that creates a new name=value pairing for a cookie
+         * A helper method that returns the subdomain for a given hostname
+         * To get the real subdomain we need to split on the '.' character
+         * And then take the first entry in the array
+         * Example: team.quickbase.com
+         * Example returns {team}
          * @param hostname: the character used as the delimiter
          * @returns {*}
          */
