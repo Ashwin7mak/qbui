@@ -18,7 +18,7 @@ const PhoneFieldValueEditor = React.createClass({
     onChangeOfficeNumber(ev) {
         let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
         let updatedValue = phoneNumber;
-        if (this.props.value && phoneNumberFormatter.getExtension(this.props.display)) {
+        if (this.props.display && phoneNumberFormatter.getExtension(this.props.display)) {
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, phoneNumberFormatter.getExtension(this.props.display));
 
         }
@@ -45,18 +45,16 @@ const PhoneFieldValueEditor = React.createClass({
     },
     onBlur() {
         let theVals = {
-            value:phoneNumberFormatter.onBlurMasking(this.props.value)
+            value: phoneNumberFormatter.onBlurMasking(this.props.value)
         };
         theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
-        theVals.value = phoneNumberFormatter.onBlurMasking(theVals.value);
-        console.log('theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }
     },
     render() {
-        const placeholderNumber = "(xxx) xxx-xxxx";
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
+        placeholder = "(xxx) xxx-xxxx";
         let phoneNumber;
         let officeExt;
         if (value) {
@@ -74,7 +72,7 @@ const PhoneFieldValueEditor = React.createClass({
                     <TextFieldValueEditor type="tel"
                                           {...otherProps}
                                           classes={classes.officeNumber}
-                                          placeholder={placeholderNumber}
+                                          placeholder={placeholder}
                                           onChange={this.onChangeOfficeNumber}
                                           onBlur={this.onBlur}
                                           value={phoneNumber || ''} />
@@ -91,10 +89,10 @@ const PhoneFieldValueEditor = React.createClass({
             return (
                     <TextFieldValueEditor type="tel"
                                           value={phoneNumber || ''}
-                                          placeholder={placeholderNumber}
+                                          placeholder={placeholder}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
-                                          classes={this.props.classes || ''} />
+                                          classes={classes || ''} />
             );
         }
     }
