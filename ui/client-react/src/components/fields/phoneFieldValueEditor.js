@@ -87,12 +87,14 @@ const PhoneFieldValueEditor = React.createClass({
             );
         } else {
             return (
+                <div className="officePhone">
                     <TextFieldValueEditor type="tel"
                                           value={phoneNumber || ''}
                                           placeholder={placeholder}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
                                           classes={classes || ''} />
+                </div>
             );
         }
     }
