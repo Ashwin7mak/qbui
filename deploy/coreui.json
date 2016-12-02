@@ -340,6 +340,7 @@
           "configSets": {
             "default": [
               "run_chef",
+              "activate_threatstack",
               "verify_instance_health"
             ]
           },
@@ -507,6 +508,19 @@
               },
               "03_enable_and_start_splunk": {
                 "command": "systemctl enable splunk && systemctl start splunk"
+              }
+            }
+          },
+          "activate_threatstack": {
+            "commands": {
+              "01_get_deploykey":{
+                "command": "/usr/local/bin/secrets get --kms-cmk-id alias/iss-qbase-secrets --output /dev/shm/secrets/threatstack-deploykey --region $(cat /tmp/region) --s3-bucket $(cat /tmp/secrets-bucket) --secret-name threatstack/deploy-key"
+              },
+              "02_activate_agent": {
+                "command": "/bin/cloudsight setup --deploy-key=$(cat /dev/shm/secrets/threatstack-deploykey)"
+              },
+              "03_remove_deploykey_secret": {
+                "command": "rm /dev/shm/secrets/threatstack-deploykey"
               }
             }
           },
