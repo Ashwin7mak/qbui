@@ -61,9 +61,7 @@
                     });
                 }).then(function() {
                     //reload the report
-                    if (browserName === 'MicrosoftEdge') {
-                        browser.driver.navigate().refresh();
-                    }else {e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);}
+                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
                     reportContentPage.waitForReportContent();
                 }).then(function() {
                     //Verify record is added on top row in a table
