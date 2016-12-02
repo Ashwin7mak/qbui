@@ -1,25 +1,25 @@
 @import '../../../src/assets/css/qbVariables';
 
 .officePhone {
-  display: flex;
-  .x {
-    padding: 2px;
-    align-self: center;
-  }
-  @include small-breakpoint {
+    display: flex;
     .x {
-      padding-right: 2px;
-      padding-left: 5px;
+        padding: 2px;
+        align-self: center;
     }
-  }
+    @include small-breakpoint {
+        .x {
+            padding-right: 2px;
+            padding-left: 5px;
+        }
+    }
 }
 
 // Resize office number input box and ext input box when editing on form view
 .formElement .input {
-  &.officeNumber {
-    width: 70%;
-  }
-  &.extNumber {
-    width: 30%;
-  }
+    &.officeNumber {
+        width: 70%;
+    }
+    &.extNumber {
+        width: 30%;
+    }
 }
