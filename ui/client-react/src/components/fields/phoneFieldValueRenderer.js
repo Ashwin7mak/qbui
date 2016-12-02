@@ -7,13 +7,15 @@ const PhoneFieldValueRenderer = React.createClass({
     displayName: 'PhoneFieldValueRenderer',
     propTypes: {
         /**
-         * the value to render */
+         * the value to for sms and tel link */
         value: React.PropTypes.any,
+        /**
+         * the display to render */
+        display: React.PropTypes.any,
         /**
          * text field attributes
          */
         attributes: React.PropTypes.object
-
     },
     renderLink() {
         let telPhoneNumberLink = 'tel:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');

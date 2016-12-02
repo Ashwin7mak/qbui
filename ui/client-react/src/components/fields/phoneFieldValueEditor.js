@@ -7,12 +7,27 @@ const PhoneFieldValueEditor = React.createClass({
     displayName: 'PhoneFieldValueEditor',
     propTypes: {
         /**
-         * the value to render */
-        value: PropTypes.any,
+         * the raw value to be saved */
+        value: React.PropTypes.string,
         /**
-         * text field attributes, attributes.includeExtension is set to true it will include an extension input box
+         * the display to render */
+        display: React.PropTypes.any,
+        /**
+         * the class to use */
+        classes: React.PropTypes.string,
+        /**
+         * optional string to display when input is empty aka ghost text */
+        placeholder: React.PropTypes.string,
+        /**
+         * phone field attributes
          */
-        attributes: PropTypes.object
+        attributes: React.PropTypes.object,
+        /**
+         *listen for changes by setting a callback to the onChange prop */
+        onChange: React.PropTypes.func,
+        /**
+         * listen for losing focus by setting a callback to the onBlur prop */
+        onBlur: React.PropTypes.func,
 
     },
     onChangeOfficeNumber(ev) {
@@ -54,7 +69,7 @@ const PhoneFieldValueEditor = React.createClass({
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        placeholder = "(xxx) xxx-xxxx";
+        placeholder = placeholder || "(xxx) xxx-xxxx";
         let phoneNumber;
         let officeExt;
         if (value) {
