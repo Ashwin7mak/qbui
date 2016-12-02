@@ -3,6 +3,7 @@ import QBicon from '../components/qbIcon/qbIcon.js';
 import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
+import {SUPPORT_LINK_PATH} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -24,7 +25,7 @@ const UrlUtils = {
         let protocol = UrlFileAttachmentReportLinkFormatter.getProtocolFromUrl(url);
         if (protocol) {
             return (
-                <QBicon icon={UrlUtils.getIconForProtocol(protocol)} />
+                <QBicon icon={this.getIconForProtocol(protocol)} />
             );
         } else {
             return <span />;
@@ -43,6 +44,10 @@ const UrlUtils = {
         }
 
         return link;
+    },
+    getSupportLink() {
+        let hostname = WindowLocationUtils.getHostname();
+        return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
     },
 };
 

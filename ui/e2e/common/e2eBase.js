@@ -315,14 +315,22 @@
                     table1GeneratedRecords.push(dupRecord);
                     if (numberOfRecords < MIN_RECORDSCOUNT) {
                         // Via the API create the records, a new report, then run the report.
-                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                        return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
                     } else {
                         // Via the API create the bulk records
-                        e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                        return e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
                     }
+                }).then(function() {
                     // Create a List all report for the first table
                     return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
                 }).then(function() {
+                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
+                    // Generate 1 empty record for Table 1
+                    var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(table1NonBuiltInFields, 1);
+                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedEmptyRecords);
+                }).then(function() {
+                    // Create the above for table 2
                     if (createdApp.tables[1]) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                         var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);

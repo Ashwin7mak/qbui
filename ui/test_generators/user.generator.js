@@ -115,7 +115,8 @@
             let userResultList = [];
             userIdList = typeof userIdList === 'undefined' || userIdList === null ? [] : userIdList;
             userIdList.forEach(userId => {
-                userResultList.push(this.generatePopulatedUser({id: userId}));
+                //userResultList.push(this.generatePopulatedUser({id: userId}));
+                userResultList.push(this.generatePopulatedUser());
             });
             return userResultList;
         }
