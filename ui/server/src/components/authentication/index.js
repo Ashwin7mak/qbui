@@ -5,6 +5,7 @@
     'use strict';
     var consts = require('../../../../common/src/constants');
     var cookies = require('../../constants/cookie');
+    var CommonUrlUtils = require('../../../../common/src/commonUrlUtils');
     var log = require('../../logger').getLogger();
 
     module.exports.signout = function signout(req, res) {
@@ -12,8 +13,9 @@
         var statusCode = 200;
         var message = "User is signing out";
         var hostname = (req.headers.host.match(/:/g)) ? req.headers.host.slice(0, req.headers.host.indexOf(":")) : req.headers.host;
+        var nsTicketDomain = "." + CommonUrlUtils.getDomain(hostname);
         res.cookie(cookies.TICKET, "", {domain: hostname, expires: new Date(0)});
-        res.cookie(cookies.NSTICKET, "", {domain: hostname, expires: new Date(0)});
+        res.cookie(cookies.NSTICKET, "", {domain: nsTicketDomain, expires: new Date(0)});
         res.clearCookie(cookies.TICKET);
         res.clearCookie(cookies.NSTICKET);
         processAuthentication(req, res, viewFilePath, statusCode, message);

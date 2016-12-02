@@ -2,6 +2,7 @@
 
 var recordFormatter = require('../../../../src/api/quickbase/formatter/recordFormatter')();
 var assert = require('assert');
+var consts = require('../../../../../common/src/constants');
 /*
  * We can't use the JS native number data type when handling records because it is possible to lose
  * decimal precision as a result of the JS implementation the number data type. In JS, all numbers are
@@ -20,22 +21,6 @@ var bigDecimal = require('bigdecimal');
  * Unit tests for Duration field formatting
  */
 describe('Duration record formatter unit test', function() {
-    var MILLIS_PER_SECOND = new bigDecimal.BigDecimal(1000);
-    var MILLIS_PER_MIN = new bigDecimal.BigDecimal(60000);
-    var MILLIS_PER_HOUR = new bigDecimal.BigDecimal(3600000);
-    var MILLIS_PER_DAY = new bigDecimal.BigDecimal(86400000);
-    var MILLIS_PER_WEEK = new bigDecimal.BigDecimal(604800000);
-
-    var HHMM = ':HH:MM';
-    var HHMMSS = ':HH:MM:SS';
-    var MM = ':MM';
-    var MMSS = ':MM:SS';
-    //    var SMART_UNITS ='Smart Units';
-    var WEEKS = 'Weeks';
-    var DAYS = 'Days';
-    var HOURS = 'Hours';
-    var MINUTES = 'Minutes';
-    var SECONDS = 'Seconds';
 
     //    var DAYS_VAL = 10;
     var OVER_HOUR_VAL = 2;
@@ -88,12 +73,12 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = MAX.divide(MILLIS_PER_WEEK,
+        expectedMaxDuration[0][0].display = MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
                                                        DEFAULT_DECIMAL_PLACES,
                                                        bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = MIN.divide(MILLIS_PER_WEEK,
+        expectedMinDuration[0][0].display = MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
                                                        DEFAULT_DECIMAL_PLACES,
                                                        bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
 
@@ -148,7 +133,7 @@ describe('Duration record formatter unit test', function() {
             type              : 'SCALAR',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: WEEKS
+                scale: consts.DURATION_CONSTS.WEEKS
             }
         }];
 
@@ -175,13 +160,13 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(MILLIS_PER_WEEK,
+                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(MILLIS_PER_WEEK,
+                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
@@ -236,7 +221,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: DAYS
+                scale: consts.DURATION_CONSTS.DAYS
             },
             type              : 'SCALAR'
         }];
@@ -264,13 +249,13 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(MILLIS_PER_DAY,
+                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_DAY,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(MILLIS_PER_DAY,
+                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_DAY,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
@@ -320,7 +305,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: HOURS
+                scale: consts.DURATION_CONSTS.HOURS
             },
             type              : 'SCALAR'
         }];
@@ -345,13 +330,13 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(MILLIS_PER_HOUR,
+                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_HOUR,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(MILLIS_PER_HOUR,
+                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_HOUR,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
@@ -405,7 +390,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: MINUTES
+                scale: consts.DURATION_CONSTS.MINUTES
             },
             type              : 'SCALAR'
         }];
@@ -433,13 +418,13 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(MILLIS_PER_MIN,
+                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_MIN,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(MILLIS_PER_MIN,
+                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_MIN,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
@@ -493,7 +478,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: SECONDS
+                scale: consts.DURATION_CONSTS.SECONDS
             },
             type              : 'SCALAR'
         }];
@@ -518,13 +503,13 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(MILLIS_PER_SECOND,
+                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_SECOND,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(MILLIS_PER_SECOND,
+                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_SECOND,
                            DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
@@ -578,7 +563,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: HHMM
+                scale: consts.DURATION_CONSTS.HHMM
             },
             type              : 'SCALAR'
         }];
@@ -667,7 +652,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: HHMMSS
+                scale: consts.DURATION_CONSTS.HHMMSS
             },
             type              : 'SCALAR'
         }];
@@ -756,7 +741,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: MM
+                scale: consts.DURATION_CONSTS.MM
             },
             type              : 'SCALAR'
         }];
@@ -845,7 +830,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: MMSS
+                scale: consts.DURATION_CONSTS.MMSS
             },
             type              : 'SCALAR'
         }];

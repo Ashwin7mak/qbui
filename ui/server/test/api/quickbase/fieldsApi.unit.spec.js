@@ -1,17 +1,17 @@
 'use strict';
 
-var config = {javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
-var sinon = require('sinon');
-var assert = require('assert');
-var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-var fieldsApi = require('../../../src/api/quickbase/fieldsApi')(config);
-var constants = require('../../../../common/src/constants');
+let config = {javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
+let sinon = require('sinon');
+let assert = require('assert');
+let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
+let fieldsApi = require('../../../src/api/quickbase/fieldsApi')(config);
+let constants = require('../../../../common/src/constants');
 
 /**
  * Unit tests for fields apis
  */
 describe("Validate fieldsApi", function() {
-    var req = {
+    let req = {
         headers: {
             'Content-Type': 'content-type'
         },
@@ -29,15 +29,15 @@ describe("Validate fieldsApi", function() {
 
     describe("test removeUnusedFields", function() {
 
-        var fieldList = [];
+        let fieldList = [];
 
         beforeEach(function() {
             fieldList = [];
         });
 
         function addRecords(i) {
-            var recordList = [];
-            for (var idx = 0; idx < i; idx++) {
+            let recordList = [];
+            for (let idx = 0; idx < i; idx++) {
                 recordList.push({id: idx});
             }
             return recordList;
@@ -45,15 +45,15 @@ describe("Validate fieldsApi", function() {
 
         function addFields(i) {
             fieldList = [];
-            for (var idx = 0; idx < i; idx++) {
+            for (let idx = 0; idx < i; idx++) {
                 fieldList.push({id:idx});
             }
             return fieldList;
         }
 
         function getFields(i) {
-            var list = [];
-            for (var idx = 0; idx < i; idx++) {
+            let list = [];
+            for (let idx = 0; idx < i; idx++) {
                 if (idx < fieldList.length) {
                     list.push(fieldList[idx]);
                 }
@@ -61,7 +61,7 @@ describe("Validate fieldsApi", function() {
             return list;
         }
 
-        var testCases = [
+        let testCases = [
             {name: 'record and fields empty', records: [], fields: [], expectation: []},
             {name: 'record and fields not arrays', records: 'rec', fields: 5, expectation: 5},
             {name: 'record and fields - test 1', records: addRecords(3), fields: addFields(3), expectation: getFields(3)},
@@ -70,7 +70,7 @@ describe("Validate fieldsApi", function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                var flds = fieldsApi.removeUnusedFields(testCase.records, testCase.fields);
+                let flds = fieldsApi.removeUnusedFields(testCase.records, testCase.fields);
                 assert.deepEqual(flds, testCase.expectation);
                 done();
             });
@@ -78,7 +78,7 @@ describe("Validate fieldsApi", function() {
     });
 
     describe("when getFields is called", function() {
-        var executeReqStub = null;
+        let executeReqStub = null;
 
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
@@ -92,9 +92,9 @@ describe("Validate fieldsApi", function() {
 
         it('success return select all fields with no parameter ', function(done) {
             req.url = '/apps/1/tables/1/fields';
-            var targetObject = "{'body':[]}";
+            let targetObject = "{'body':[]}";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req);
+            let promise = fieldsApi.fetchFields(req);
 
             promise.then(
                 function(response) {
@@ -115,10 +115,10 @@ describe("Validate fieldsApi", function() {
             req.url = '/apps/123/tables/456/fields/789?show=tell';
             req.params.fieldId = '789';
 
-            var targetObject = "[{fields: []}]";
+            let targetObject = "[{fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req, true);
+            let promise = fieldsApi.fetchFields(req, true);
 
             promise.then(
                 function(response) {
@@ -138,10 +138,10 @@ describe("Validate fieldsApi", function() {
             req.url = '/apps/123/tables/456/fields/789';
             req.params.fieldId = '789';
 
-            var targetObject = "[{fields: []}]";
+            let targetObject = "[{fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req, true);
+            let promise = fieldsApi.fetchFields(req, true);
 
             promise.then(
                 function(response) {
@@ -161,10 +161,10 @@ describe("Validate fieldsApi", function() {
             req.url = '/apps/123/tables/456/fields/789?show=tell';
             req.params.fieldId = '789';
 
-            var targetObject = "[{fields: []}]";
+            let targetObject = "[{fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = fieldsApi.fetchFields(req);
+            let promise = fieldsApi.fetchFields(req);
 
             promise.then(
                 function(response) {
@@ -182,10 +182,10 @@ describe("Validate fieldsApi", function() {
 
         it('fail return results ', function(done) {
             req.url = '/apps/1/tables/1/fields';
-            var error_message = "fail fieldsApi unit test case execution";
+            let error_message = "fail fieldsApi unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = fieldsApi.fetchFields(req);
+            let promise = fieldsApi.fetchFields(req);
 
             promise.then(
                 function(success) {

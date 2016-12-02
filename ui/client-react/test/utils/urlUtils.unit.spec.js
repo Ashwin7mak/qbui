@@ -12,9 +12,8 @@ describe('UrlUtils', () => {
     const testRealmId = 'realmId';
     const testAppId = 'testAppId';
     const testDomainId = 'quickbase.com';
-    const mockBaseService =  {
-        getSubdomain() {return testRealmId;},
-        getDomain() {return testDomainId;}
+    const mockWindowLocationUtils =  {
+        getHostname() {return testRealmId + '.' + testDomainId;}
     };
 
     describe('getIconForProtocol', () => {
@@ -99,22 +98,22 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                UrlUtils.__Rewire__('baseService', mockBaseService);
+                UrlUtils.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
-                UrlUtils.__ResetDependency__('baseService');
+                UrlUtils.__ResetDependency__('WindowLocationUtils');
             });
         });
     });
 
     describe('getSupportLink', () => {
         it('returns a link to the support app that includes the current realm', () => {
-            UrlUtils.__Rewire__('baseService', mockBaseService);
+            UrlUtils.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
 
             expect(UrlUtils.getSupportLink()).toEqual(`https://${testRealmId}.${testDomainId}${SUPPORT_LINK_PATH}`);
 
-            UrlUtils.__ResetDependency__('baseService');
+            UrlUtils.__ResetDependency__('WindowLocationUtils');
         });
     });
 });

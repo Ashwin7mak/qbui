@@ -242,7 +242,14 @@ task npmInstallVerbose(type: NpmTask) {
 }
 
 task npmInstallLean(type: NpmTask) {
+    doFirst {
+        tasks.npmInstallGruntProtractorRunner.execute();
+    }
     args = ['install']
+}
+
+task npmInstallGruntProtractorRunner(type: NpmTask) {
+    args = ['install', 'grunt-protractor-runner', '--registry', 'https://registry.npmjs.org/']
 }
 
 task npmListConfig(type: NpmTask) {
