@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import AppsRoute  from '../../src/components/apps/appsRoute';
 import HtmlUtils from '../../src/utils/htmlUtils';
-import BaseService from '../../src/services/baseService';
+import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
 
 //TODO this is a placeholder file to add tests as apps home page gets built out
@@ -27,7 +27,9 @@ describe('AppsRoute functions', () => {
 
     beforeEach(() => {
         AppsRoute.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
-        spyOn(BaseService.prototype, 'getSubdomain').and.returnValue(mockRealm);
+
+        spyOn(WindowLocationUtils, 'getHostname').and.returnValue(mockRealm);
+
         spyOn(HtmlUtils, 'updatePageTitle');
     });
 
