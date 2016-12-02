@@ -5,6 +5,7 @@
     'use strict';
     var consts = require('../../../../common/src/constants');
     var log = require('../../logger').getLogger();
+    var favicons = require('../../constants/favicons');
 
     module.exports[401] = function unauthorized(req, res) {
         var viewFilePath = '401.html';
@@ -38,16 +39,11 @@
         res.status(result.status);
         //respond with json if requested - for swagger ajax
         if (req.headers.accept === consts.APPLICATION_JSON) {
-            res.json(result, result.status);
+            res.json(result);
         } else {
-            res.render(viewFilePath, function(err) {
-                if (err) {
-                    return res.json(result, result.status);
-                }
-                res.render(viewFilePath);
-            });
+            res.render(viewFilePath, {favicons: favicons});
         }
-        log.error({req: req, res:res}, 'Error fulfilling requested route.');
+        log.error({req: req, res: res}, 'Error fulfilling requested route.');
     }
 
 }());
