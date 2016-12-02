@@ -40,7 +40,7 @@
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppsAccessRightsRoute(req.url, appId);
 
-                    //  make the api request to get the app
+                    //  make the api request to get the app rights
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let rights = JSON.parse(response.body);
@@ -88,7 +88,7 @@
                             let app = response[0];
                             app.accessRights = response[1];
                             if (response[2].errorCode === 0) {
-                                app.openInV3 = response[2].v3Status;
+                                app.openInV3 = (response[2].v3Status === true);
                             } else {
                                 //TODO comment out until legacy stack configuration is in place
                                 //log.warn('Error fetching application stack preference.  Setting to open in V3.  Error: ' + response[2].errorText);
@@ -187,13 +187,16 @@
                     //  make the api request to get the app users
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            let users = JSON.parse(response.body);
-                            if (users) {
-                                //  convert id property to userId for consistency with user values in records
-                                users.forEach(user => {
-                                    user.userId = user.id;
-                                    _.unset(user, "id");
-                                });
+                            let users = {};
+                            if (response.body) {
+                                users = JSON.parse(response.body);
+                                if (users) {
+                                    //  convert id property to userId for consistency with user values in records
+                                    users.forEach(user => {
+                                        user.userId = user.id;
+                                        _.unset(user, "id");
+                                    });
+                                }
                             }
                             resolve(users);
                         },
