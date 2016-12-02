@@ -179,7 +179,9 @@
                 return self.reportFacetPopUpMenu.all(by.className('selected')).map(
                     function(selectedGroupItem, index) {
                         return e2ePageBase.waitForElement(selectedGroupItem).then(function() {
-                            return selectedGroupItem.getText().replace(/(\r\n|\n|\r)/gm, '');
+                            return selectedGroupItem.getText().then(function(text) {
+                                return text.replace(/(\r\n|\n|\r)/gm, '');
+                            });
                         });
                     }
                 );
