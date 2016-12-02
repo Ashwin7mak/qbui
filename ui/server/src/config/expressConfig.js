@@ -8,7 +8,7 @@ var config = require('./environment');
 
     var express = require('express');
     var useragent = require('express-useragent');
-    var serveStatic = require('serve-static');
+    var favicon = require('serve-favicon');
     var compression = require('compression');
     var bodyParser = require('body-parser');
     var methodOverride = require('method-override');
@@ -74,8 +74,13 @@ var config = require('./environment');
             if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
                 var fs = require('fs');
                 config.isProduction = true;
+                var faviconFile = path.join(config.root, 'dist', 'public', 'favicon.ico');
+                if (fs.existsSync(faviconFile)) {
+                    app.use(favicon(faviconFile));
+                }
             }
 
+            app.use(express.static(path.join(config.root, 'public')));
             app.set('appPath', config.root + '/public');
 
             //  Error handler - has to be last.  NON-PROD environment only
@@ -83,9 +88,6 @@ var config = require('./environment');
                 app.use(errorHandler());
             }
         }
-
-        // Public directory for serving static files such as favicons
-        app.use('/qbase', serveStatic(path.join(config.root, 'public')));
 
         if (!config.ip) {
             if (config.DOMAIN) {
