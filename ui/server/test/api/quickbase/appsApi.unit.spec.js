@@ -81,25 +81,6 @@ describe("Validate appsApi", function() {
                 done(new Error('getAppUsers: exception processing fail test: ' + JSON.stringify(errorMsg)));
             });
         });
-
-        it('unexpected exception return results ', function(done) {
-            let error_message = "unexpected exception unit test case execution";
-
-            executeReqStub.returns(Promise.resolve(new Error(error_message)));
-            let promise = appsApi.getAppUsers(req);
-
-            promise.then(
-                function(error) {
-                    done(new Error("Unexpected success promise return when testing getAppUser exception"));
-                },
-                function(error) {
-                    assert.ok(true);
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('getAppUsers: exception processing unexpected test: ' + JSON.stringify(errorMsg)));
-            });
-        });
     });
 
     describe("validate getAppAccessRights function", function() {
