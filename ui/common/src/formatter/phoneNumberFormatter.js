@@ -19,7 +19,7 @@
             return phoneNumber.split(EXTENSION_DELIM)[1];
         },
         getPhoneNumber: function(phoneNumber) {
-            return phoneNumber.split(EXTENSION_DELIM)[0];
+            return phoneNumber.split(EXTENSION_DELIM)[0].trim();
         },
         getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {
             if (!extNum) {

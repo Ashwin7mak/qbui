@@ -7,7 +7,9 @@ import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEd
 describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
     const phoneNumberWithoutExt = "(555) 555-5555";
+    const phoneNumberWithExt = "(555) 555-5555 x5555";
     const placeholderText = "(xxx) xxx-xxxx";
+    const ext = "5555"
     let component;
     let domComponent;
     let MockParent = React.createClass({
@@ -71,5 +73,13 @@ describe('PhoneFieldValueEditor', () => {
             target: {value: phoneNumber}
         });
         expect(component.state.display).toEqual(phoneNumberWithoutExt);
+    });
+
+    fit('displays phone number in phone number input box and ext in extension input box', () => {
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
+        component.setState({value: phoneNumber, display: phoneNumberWithExt});
+        domComponent = ReactDOM.findDOMNode(component);
+        expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt);
+        expect(domComponent.childNodes[2].value).toEqual(ext);
     });
 });
