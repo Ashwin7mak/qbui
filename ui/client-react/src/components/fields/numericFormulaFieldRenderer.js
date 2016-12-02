@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import './numericFormulaField.scss';
 
 /**
  * # NumericFormulaFieldValueRenderer
@@ -8,7 +9,7 @@ import React, {PropTypes} from 'react';
 const NumericFormulaFieldRenderer = React.createClass({
     displayName: 'NumericFormulaFieldRenderer',
     propTypes: {
-        value: PropTypes.string,
+        value: PropTypes.number,
         display: PropTypes.string,
     },
     getDefaultProps() {
@@ -18,9 +19,12 @@ const NumericFormulaFieldRenderer = React.createClass({
         };
     },
     render() {
+        let value = this.props.value;
+        value = (value || this.props.display);
+
         return (
             <div>
-                Numeric Formula Field
+                {value}
             </div>
         );
     }

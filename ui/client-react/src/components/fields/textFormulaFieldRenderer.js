@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import './textFormulaField.scss';
 
 /**
  * # TextFormulaFieldValueRenderer
@@ -18,9 +19,12 @@ const TextFormulaFieldRenderer = React.createClass({
         };
     },
     render() {
+        let value = this.props.value;
+        value = (value || this.props.display);
+
         return (
             <div>
-                Text Formula Field
+                {value}
             </div>
         );
     }

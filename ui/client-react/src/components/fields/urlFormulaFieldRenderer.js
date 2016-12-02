@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-
+import './urlFormulaField.scss';
 /**
  * # UrlFormulaFieldRenderer
  *
@@ -18,9 +18,12 @@ const UrlFormulaFieldRenderer = React.createClass({
         };
     },
     render() {
+        let value = this.props.value;
+        value = (value || this.props.display);
+
         return (
             <div>
-                Url Formula Field
+                {value}
             </div>
         );
     }
