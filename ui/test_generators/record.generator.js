@@ -117,5 +117,5 @@
     recordTypeMapping[consts.DATE] = function() {return rawValueGenerator.generateDate();};
     recordTypeMapping[consts.TIME_OF_DAY] = function() {return rawValueGenerator.generateTime();};
     recordTypeMapping[consts.FILE_ATTACHMENT] = function() {return rawValueGenerator.generateUrl();};
-    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) {return rawValueGenerator.pickUserIdFromList(['1000001', '1000002', '1000003', '1000004', '1000005']);};
+    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) {return rawValueGenerator.pickUserIdFromList(['10000']);};
 }());
