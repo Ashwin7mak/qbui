@@ -1,9 +1,9 @@
 import React from 'react';
 import QBicon from '../components/qbIcon/qbIcon.js';
 import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
-import BaseService from '../services/baseService';
-
-let baseService = new BaseService();
+import WindowLocationUtils from '../utils/windowLocationUtils';
+import CommonUrlUtils from '../../../common/src/commonUrlUtils';
+import {SUPPORT_LINK_PATH} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -26,15 +26,16 @@ const UrlUtils = {
 
         if (protocol) {
             return (
-                <QBicon icon={UrlUtils.getIconForProtocol(protocol)} />
+                <QBicon icon={this.getIconForProtocol(protocol)} />
             );
         } else {
             return <span />;
         }
     },
     getQuickBaseClassicLink(selectedAppId) {
-        let realmId = baseService.getSubdomain();
-        let domain = baseService.getDomain();
+        let hostname = WindowLocationUtils.getHostname();
+        let realmId = CommonUrlUtils.getSubdomain(hostname);
+        let domain = CommonUrlUtils.getDomain(hostname);
         let link = `https://${realmId}.${domain}/db/`;
 
         if (selectedAppId) {
@@ -44,6 +45,10 @@ const UrlUtils = {
         }
 
         return link;
+    },
+    getSupportLink() {
+        let hostname = WindowLocationUtils.getHostname();
+        return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
     },
 };
 

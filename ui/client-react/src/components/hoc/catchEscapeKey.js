@@ -1,4 +1,5 @@
 import React from 'react';
+
 /*
 
  This higher-order component (HoC) captures key in the window and if its escape it calls the
@@ -15,25 +16,29 @@ var catchEscapeKeyWrapper = (Component) =>{
         wrapped  : Component,
 
         propTypes: {
-            onClose  : React.PropTypes.func
+            onClose  : React.PropTypes.func,
         },
 
         handleKey(e) {
             // close when Esc is pressed
-            if (e.keyCode === 27 && this.props.onClose) {
+            if (e.key === 'Escape' && this.props.onClose) {
                 this.props.onClose();
             }
         },
 
         componentWillMount() {
-            if (document && document.addEventListener) {
-                document.addEventListener("keydown", this.handleKey, false);
+            // Need to listen to window so this listener will fire after react's onKeydown handlers
+            // as well as components/select/reactSelectWrapper
+            if (window && window.addEventListener) {
+                window.addEventListener("keydown", this.handleKey);
             }
         },
 
         componentWillUnmount() {
-            if (document && document.removeEventListener) {
-                document.removeEventListener("keydown", this.handleKey, false);
+            // Need to listen to window so this listener will fire after react's onKeydown handlers
+            // as well as components/select/reactSelectWrapper
+            if (window && window.removeEventListener) {
+                window.removeEventListener("keydown", this.handleKey);
             }
         },
 

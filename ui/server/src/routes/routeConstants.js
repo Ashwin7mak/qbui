@@ -7,12 +7,15 @@
 
     var _ = require('lodash');
 
-    //  Quickbase and Node server base url
+    /*
+     *  Mercury Quickbase, Legacy Quickbase and Node server base url's
+     */
     var baseUrl = {
         // TODO: merge the 2 quickbase_api constants into 1...need to fix integration tests first..
-        QUICKBASE   : '/api/api/:version',
-        QUICKBASE_2 : '/api/:version',
-        NODE        : '/api/n/:version'
+        QUICKBASE           : '/api/api/:version',
+        QUICKBASE_HEALTH    : '/api/:version',
+        NODE                : '/api/n/:version',
+        QUICKBASE_LEGACY    : '/api/l/:version'
     };
 
     /*
@@ -27,11 +30,18 @@
     };
 
     /*
+     *  List of Legacy Quickbase endpoints used by the Quickbase client.
+     */
+    var legacyApiEndpoints = {
+        APP_STACK_PREFERENCE        : baseUrl.QUICKBASE_LEGACY + '/apps/:appId/stack'
+    };
+
+    /*
      *  List of QuickBase public API endpoints used by the client which perform pre/post operations
      *  in the node layer and are not just proxied through to the quickbase public api.
      */
     var quickBaseApiEndpoints = {
-        HEALTH_CHECK            : baseUrl.QUICKBASE_2 + '/health',
+        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
         //
@@ -48,7 +58,8 @@
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
 
-        //  APP ENDPOINTS for USERS
+        //  APP ENDPOINTS
+        APPS                        : baseUrl.QUICKBASE + '/apps',
         APP_USERS                   : baseUrl.QUICKBASE + '/apps/:appId/users',
 
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
@@ -67,6 +78,6 @@
     };
 
     //  Export the combined list of endpoints.
-    module.exports = Object.freeze(_.assign({}, swaggerApiEndpoints, nodeApiEndpoints, quickBaseApiEndpoints));
+    module.exports = Object.freeze(_.assign({}, swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints));
 
 }());

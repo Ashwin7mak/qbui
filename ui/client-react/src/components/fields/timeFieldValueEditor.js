@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QbIcon from '../qbIcon/qbIcon';
 
-import Select from "react-select";
+import Select from '../select/reactSelectWrapper';
 import 'react-select/dist/react-select.css';
 
 import Breakpoints from "../../utils/breakpoints";

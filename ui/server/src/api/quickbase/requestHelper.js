@@ -41,6 +41,9 @@
             getRequestUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
+            getLegacyHost : function() {
+                return config ? config.legacyHost : '';
+            },
             getAgentOptions: function(req) {
                 let agentOptions = {
                     rejectUnauthorized: false

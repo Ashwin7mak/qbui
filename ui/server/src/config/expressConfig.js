@@ -8,7 +8,7 @@ var config = require('./environment');
 
     var express = require('express');
     var useragent = require('express-useragent');
-    var serveStatic = require('serve-static');
+    var favicon = require('serve-favicon');
     var compression = require('compression');
     var bodyParser = require('body-parser');
     var methodOverride = require('method-override');
