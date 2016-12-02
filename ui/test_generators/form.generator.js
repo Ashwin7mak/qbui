@@ -14,8 +14,6 @@
     var chance = require('chance').Chance();
     var _ = require('lodash');
 
-    var singleTabAndSectionForm = {};
-
     var singleTabAndSectionViewForm = {};
     var singleTabAndSectionEditForm = {};
     var singleTabAndSectionCreateForm = {};
@@ -29,7 +27,7 @@
         generateFormProperties: function(app, formTabWithDisplayOptions) {
             var tables = app[appConsts.TABLES];
             var tableIndex = 0;
-
+            var singleTabAndSectionForm = [];
             _.forEach(tables, function(table) {
                 var builderInstance = formBuilder.builder();
                 var appId = table[tableConsts.APP_ID];
@@ -45,7 +43,7 @@
                 builderInstance.withNewFieldAction('DO_NOTHING');
                 builderInstance.withTab(formTabWithDisplayOptions(table));
 
-                singleTabAndSectionForm[tableIndex] = builderInstance.build();
+                singleTabAndSectionForm[tableIndex] = JSON.parse(JSON.stringify(builderInstance.build()));
                 tableIndex++;
             });
 
