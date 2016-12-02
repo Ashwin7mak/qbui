@@ -63,8 +63,8 @@
         {
             platform: 'Windows 10',
             browserName: 'MicrosoftEdge',
-            //version: '14.14393',
-            version: '13.10586',
+            version: '14.14393',
+            //version: '13.10586',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name: 'aws_' + process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution : '1600x1200',
