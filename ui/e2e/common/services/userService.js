@@ -25,11 +25,7 @@
 
                 let users = userGenerator.generatePopulatedDefaultUsers(userIdList);
 
-                recordBase.apiBase.createBulkUser(users).then(function() {
-                    userIdList.forEach(userId => {
-                        //recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]);
-                    });
-                });
+                recordBase.apiBase.createBulkUser(users);
             }
         };
         return userService;
