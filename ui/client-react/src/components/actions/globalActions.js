@@ -11,7 +11,6 @@ import Constants from '../../services/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as CompConsts from '../../constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
-import Breakpoints from '../../utils/breakpoints';
 import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -141,14 +140,11 @@ let GlobalActions = React.createClass({
     },
 
     getHelpLink() {
-        const isSmall = Breakpoints.isSmallBreakpoint();
         return (
-            isSmall ?
             <a className="dropdownToggle globalActionLink" onClick={this.getHelpWalkme}>
                 <QBicon icon={'help'}/>
                 <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
-            </a> :
-            null);
+            </a>);
     },
     render() {
         return (

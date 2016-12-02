@@ -53,7 +53,7 @@ export let Nav = React.createClass({
     },
 
     getTopGlobalActions() {
-        const actions = [{msg:'globalActions.help', link:'/qbase/help', icon:'help'}];
+        const actions = [];
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
