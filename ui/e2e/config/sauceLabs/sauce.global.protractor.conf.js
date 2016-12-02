@@ -27,7 +27,7 @@
             baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/forms/formPermissionsViewerRole.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [
