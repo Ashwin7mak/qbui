@@ -48,7 +48,7 @@ describe('Nav functions', () => {
     });
     let appsStoreWithAdminApp = Fluxxor.createStore({
         getState: function() {
-            return {apps: [{id:"1", accessRights: ["EDIT_SCHEMA"]}], selectedAppId: "1"};
+            return {apps: [{id:"1", accessRights: {appRights: ["EDIT_SCHEMA"]}}], selectedAppId: "1"};
         }
     });
     let appsStoreWithV3App = Fluxxor.createStore({

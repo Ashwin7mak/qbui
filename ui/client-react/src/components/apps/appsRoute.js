@@ -19,6 +19,7 @@ let AppsRoute = React.createClass({
      * or any app has openInV3 set or there are no apps
      */
     checkAccess(props) {
+
         if (this.props.apps && this.props.apps.length > 0 && !props.appsLoading) {
             const hasAnyAdmin = _.find(props.apps, app => AppUtils.hasAdminAccess(app.accessRights));
 

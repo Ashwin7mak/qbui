@@ -49,9 +49,9 @@ describe('AppsRoute functions', () => {
         spyOn(WindowLocationUtilsMock, 'update');
 
         const apps = [
-            {id:"1", accessRights: [], openInV3: false},
-            {id:"2", accessRights: ["READ"], openInV3: false},
-            {id:"3", accessRights: ["READ", "MANAGE_USERS"], openInV3: false}
+            {id:"1", accessRights: {appRights: []}, openInV3: false},
+            {id:"2", accessRights: {appRights: ["READ"]}, openInV3: false},
+            {id:"3", accessRights: {appRights: ["READ", "MANAGE_USERS"]}, openInV3: false}
         ];
 
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
@@ -63,7 +63,7 @@ describe('AppsRoute functions', () => {
         spyOn(WindowLocationUtilsMock, 'update');
 
         const apps = [
-            {id:"1", accessRights: ["READ"], openInV3: true}
+            {id:"1", accessRights: {appRights: ["READ"]}, openInV3: true}
         ];
 
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
@@ -75,7 +75,7 @@ describe('AppsRoute functions', () => {
         spyOn(WindowLocationUtilsMock, 'update');
 
         const apps = [
-            {id:"1", accessRights: ["EDIT_SCHEMA"], openInV3: false}
+            {id:"1", accessRights: {appRights: ["EDIT_SCHEMA"]}, openInV3: false}
         ];
 
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);

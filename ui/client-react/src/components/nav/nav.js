@@ -302,6 +302,7 @@ export let Nav = React.createClass({
     getV2V3Footer() {
         const selectedApp = this.getSelectedApp();
         this.checkOpenInV2(selectedApp);
+
         if (selectedApp) {
             const hasAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
 
@@ -315,6 +316,7 @@ export let Nav = React.createClass({
     },
     onSelectOpenInV3(openInV3) {
         const flux = this.getFlux();
+
         flux.actions.setApplicationStack(this.state.apps.selectedAppId, openInV3);
     },
     onSelectItem() {

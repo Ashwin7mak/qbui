@@ -17,7 +17,7 @@ const AppUtils = {
     },
 
     hasAdminAccess(accessRights) {
-        return Array.isArray(accessRights) && accessRights.indexOf("EDIT_SCHEMA") !== -1;
+        return accessRights && Array.isArray(accessRights.appRights) && accessRights.appRights.indexOf("EDIT_SCHEMA") !== -1;
     }
 };
 

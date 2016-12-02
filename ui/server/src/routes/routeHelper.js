@@ -3,6 +3,7 @@
 
     let constants = require('../../../common/src/constants');
 
+    let ACCESS_RIGHTS = 'accessRights';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -130,12 +131,51 @@
          */
         transformUrlRoute: function(url, curRoute, newRoute) {
             if (typeof url === 'string') {
-                var offset = url.toLowerCase().indexOf(curRoute);
+                let offset = url.toLowerCase().indexOf(curRoute);
                 if (offset !== -1) {
                     return url.substring(0, offset) + newRoute;
                 }
             }
             //  return requestUrl unchanged
+            return url;
+        },
+
+        /**
+         * Return the get apps route from the req.url.
+         * Append the appid if one is supplied.
+         *
+         * @param url
+         * @param appId
+         * @returns {*}
+         */
+        getAppsRoute: function(url, appId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(APPS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + APPS;
+                    if (appId) {
+                        root += '/' + appId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return get the et apps access rights route from the req.url.
+         * Both url and appId must be supplied.
+         *
+         * @param url
+         * @param appId
+         * @returns {*}
+         */
+        getAppsAccessRightsRoute(url, appId) {
+            if (typeof url === 'string' && appId) {
+                if (url.toLowerCase().indexOf(APPS) !== -1) {
+                    return this.getAppsRoute(url, appId) + '/' + ACCESS_RIGHTS;
+                }
+            }
             return url;
         },
 
