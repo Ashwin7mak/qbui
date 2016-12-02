@@ -8,7 +8,6 @@
     var reportServicePage = new ReportServicePage();
     var ReportContentPage = requirePO('reportContent');
     var reportContentPage = new ReportContentPage();
-
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
@@ -17,35 +16,26 @@
     var app;
     var recordList;
 
-    /**
-     * Creates a table/report and navigates to a page where you can access a form
-     * @param done
-     * @param shouldGenerateBlankRecords mark as true to have a report with all blank records
-     */
-    function setupReportForFormEditingTest(done, shouldGenerateBlankRecords) {
-        e2eBase.fullReportsSetup(5, shouldGenerateBlankRecords).then(function(appAndRecords) {
-            app = appAndRecords[0];
-            recordList = appAndRecords[1];
-        }).then(function() {
-            // Get a session ticket for that subdomain and realmId (stores it in the browser)
-            // Gather the necessary values to make the requests via the browser
-            realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-            realmId = e2eBase.recordBase.apiBase.realm.id;
-            return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-        }).then(function() {
-            // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-            return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-        }).then(function() {
-            // Wait for the leftNav to load
-            return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                done();
-            });
-        });
-    }
-
     describe('Edit a record Via Form Tests :', function() {
         beforeAll(function(done) {
-            setupReportForFormEditingTest(done);
+            e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
+            }).then(function() {
+                // Get a session ticket for that subdomain and realmId (stores it in the browser)
+                // Gather the necessary values to make the requests via the browser
+                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                realmId = e2eBase.recordBase.apiBase.realm.id;
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
+                // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
+                // Wait for the leftNav to load
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                    done();
+                });
+            });
         });
 
         it('@smoke Edit a record via recordActions edit pencil using basic report', function(done) {
@@ -146,21 +136,16 @@
                 });
             });
         });
-    });
 
-    describe('Edit a record Via Form Tests (blank records) :', function() {
-        beforeAll(function(done) {
-            setupReportForFormEditingTest(done, true);
-        });
-
-        it('@smoke Edit a record with blank/null values via recordActions edit pencil using basic report', function(done) {
+        it('Edit a record with blank/null values via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
 
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent().then(function() {
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(2);
+                // Click edit record from the grid recordActions
+                // Edit the last record in the report which is empty
+                reportServicePage.clickRecordEditPencil(6);
             }).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
@@ -180,7 +165,7 @@
             }).then(function() {
                 //Verify record is added on top row in a table
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                    formsPage.verifyFieldValuesInReportTable(6, fieldTypeClassNames[j]);
                 }
             }).then(function() {
                 done();
