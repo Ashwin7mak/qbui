@@ -38,6 +38,9 @@
             return newNums.join('');
         },
         onBlurMasking(nums) {
+            if (!nums) {
+                return '';
+            }
             nums = nums.split('');
             let newNums = [];
             nums.forEach(function(num) {
