@@ -27,7 +27,7 @@
 
                 recordBase.apiBase.createBulkUser(users).then(function() {
                     userIdList.forEach(userId => {
-                        recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]);
+                        //recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]);
                     });
                 });
             }
