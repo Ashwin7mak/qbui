@@ -37,7 +37,7 @@ let QBErrorMessage = React.createClass({
         const errorNum = this.props.message ? this.props.message.length : 0;
         const headerMessage = errorNum <= 1 ?
             <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.singleErrorLabel"/> :
-            <div><I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelPrefix"/> {errorNum} <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelSuffix"/></div>;
+            <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabel" numFields={errorNum} />;
 
         let qbErrorMessageClasses = "qbErrorMessage";
         if (!(this.props.hidden || errorNum === 0)) {
