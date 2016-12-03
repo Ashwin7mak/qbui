@@ -257,7 +257,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (!this.editErrors) {
             this.editErrors = {
                 ok: true,
-                errors:[]
+                errors: []
             };
         }
 
