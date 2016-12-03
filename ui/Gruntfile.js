@@ -493,6 +493,44 @@ module.exports = function(grunt) {
             }
         },
 
+       //TODO: Figure out how to define multiple webdriver tasks
+        webdriver: {
+            options: {
+                specs: './wdio/tests/reportAddRecord.e2e.spec.js',
+                capabilities: {
+                    platform : 'OS X 10.9',
+                    browserName     : 'chrome',
+                    tunnelIdentifier: 'webdriverIOTunnel',
+                    name            : 'Jenkins_webdriverIO_OSX_Chrome',
+                    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+                    idleTimeout: '120',
+                    screenResolution : '1600x1200',
+                    maxDuration: 10800,
+                    breakpointSize: 'xlarge',
+                    // These two values enable parallel testing which will run a spec file per instance
+                    shardTestFiles: true,
+                    maxInstances: 4
+                },
+                protocol: 'http',
+                user: 'QuickBaseNS',
+                key: 'f814e1b3-ac25-4369-af02-90d61c6b1c04',
+                sauceConnect: true,
+                sauceConnectOpts: {
+                    tunnelIdentifier: 'webdriverIOTunnel',
+                    verbose: true,
+                    logger: console.log
+                    //Use this when testing Sauce against local dev
+                    //dns: '127.0.0.1'
+                    //TODO: Figure out how to use custom port for selenium server
+                    //port            : 4400
+                }
+            },
+            test: {
+                configFile: './wdio/config/wdio.conf.js'
+            }
+        },
+
+
         env: {
             test : {
                 NODE_ENV                    : 'test',
@@ -949,4 +987,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-sauce-connect-launcher');
+    grunt.loadNpmTasks('grunt-webdriver');
 };

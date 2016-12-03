@@ -126,7 +126,6 @@ exports.config = {
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: ['sauce', 'selenium-standalone'],
-    //services: ['sauce'],
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -146,7 +145,7 @@ exports.config = {
     jasmineNodeOpts: {
         //
         // Jasmine default timeout
-        defaultTimeoutInterval: 120000,
+        defaultTimeoutInterval: 300000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time
@@ -172,7 +171,6 @@ exports.config = {
     //host: '127.0.0.1',
     //port: 4400,
     //path: '/wd/hub',
-    //sauceSeleniumAddress: 'localhost:4400/wd/hub',
 
     //
     // =====
