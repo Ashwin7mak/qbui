@@ -4,6 +4,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import QBicon from '../qbIcon/qbIcon';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
+import Breakpoints from '../../utils/breakpoints';
 
 /**
  * # TextFieldValueEditor
@@ -138,7 +139,7 @@ const TextFieldValueEditor = React.createClass({
 
         let inputBox = this.renderInputBox(classes);
 
-        if (this.props.showClearButton) {
+        if (this.props.showClearButton && Breakpoints.isSmallBreakpoint()) {
             return this.addClearButtonTo(inputBox);
         } else {
             return inputBox;
