@@ -64,7 +64,7 @@ const EmailFieldValueEditor = React.createClass({
 
         if (disabled || readOnly) {
             // Return a read only email
-            return <EmailFieldValueRenderer {...otherProps} />;
+            return <EmailFieldValueRenderer display={display} {...otherProps} />;
         }
 
         return <TextFieldValueEditor onBlur={this.onBlur}
