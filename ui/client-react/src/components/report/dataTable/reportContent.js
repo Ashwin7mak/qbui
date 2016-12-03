@@ -22,6 +22,7 @@ import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import FieldUtils from '../../../utils/fieldUtils';
+import * as CompConsts from '../../../constants/componentConstants';
 
 let logger = new Logger();
 
@@ -259,7 +260,8 @@ export let ReportContent = React.createClass({
         newBlankReportPromise.then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
             // due to the speed of re-rendering
-            NotificationManager.success(Locales.getMessage('recordNotifications.recordSaved'), Locales.getMessage('success'), 1500);
+            NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         });
     },
 
@@ -826,7 +828,6 @@ export let ReportContent = React.createClass({
                                 validateRecord={this.validateRecord}
                                 validateFieldValue={this.handleValidateFieldValue}
                                 getOrigRec={this.getOrigRec}
-                                getPendingChanges={this.getPendingChanges}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}

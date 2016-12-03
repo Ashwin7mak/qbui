@@ -104,7 +104,7 @@
     "grunt-newer": "~0.7.0",
     "grunt-nodemon": "~0.4.0",
     "grunt-open": "~0.2.3",
-    "grunt-protractor-runner": "^3.2.0",
+    "grunt-protractor-runner": "4.0.0",
     "grunt-rev": "~0.1.0",
     "grunt-sauce-connect-launcher": "^0.3.1",
     "grunt-shell-spawn": "^0.3.9",
@@ -193,7 +193,7 @@
     "testClient": "karma start",
     "testIntegration": "grunt test:integration",
     "testServer": "grunt test:server",
-    "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update",
+    "update-webdriver": "node node_modules/grunt-protractor-runner/scripts/webdriver-manager-update",
     "watch": "webpack --config webpack.config.js --watch",
     "webpack": "webpack --config webpack.config.js"
   },

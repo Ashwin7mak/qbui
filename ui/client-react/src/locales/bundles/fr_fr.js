@@ -29,6 +29,9 @@ export default {
                 missingWalkMe: "Le didacticiel n'est pas disponible"
             }
         },
+        appMenu: {
+            qbClassicLink: "Basculer vers QuickBase Classic"
+        },
         pendingEditModal: {
             modalBodyMessage: "Enregistrer les modifications avant de quitte?",
             modalStayButton: "Restez et continuer à travailler",
@@ -392,6 +395,13 @@ export default {
             newRecord: "Ajouter un enregistrement",
             viewRecord: "Afficher le document n ° {recordId}"
         },
-        quickBaseClassic: "QuickBase Classique"
+        quickBaseClassic: "QuickBase Classique",
+        quickBaseMercury: "QuickBase Mercury",
+        v2v3: {
+            manageAccessTitle: "Gérer l'accès des utilisateurs au Mercure",
+            versionSelectTitle: "Mes utilisateurs ouvriront cette application dans",
+            manageAccessTip: "*Seuls les administrateurs d'applications peuvent gérer l'accès des utilisateurs"
+
+        }
     }
 };

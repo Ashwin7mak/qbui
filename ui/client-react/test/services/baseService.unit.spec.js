@@ -129,18 +129,6 @@ describe('BaseService rewire tests', () => {
         expect(expectedUrl).toEqual(url);
     });
 
-    it('test getSubdomain method with simple subdomain', () => {
-        baseService = new BaseService();
-        var subdomain = baseService.getSubdomain();
-        expect(simpleSubdomain.subdomain).toEqual(subdomain);
-    });
-
-    it('test getDomain method with simple subdomain', () => {
-        baseService = new BaseService();
-        var domain = baseService.getDomain();
-        expect(simpleSubdomain.domain).toEqual(domain);
-    });
-
     it('test constructRedirectUrl method with complex subdomain', () => {
         mockWindowUtils.getHref = function() {return complexSubdomain.href;};
         mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
@@ -149,18 +137,6 @@ describe('BaseService rewire tests', () => {
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();
         expect(expectedUrl).toEqual(url);
-    });
-
-    it('test getSubdomain method with complex subdomain', () => {
-        baseService = new BaseService();
-        var subdomain = baseService.getSubdomain();
-        expect(complexSubdomain.subdomain).toEqual(subdomain);
-    });
-
-    it('test getDomain method with complex subdomain', () => {
-        baseService = new BaseService();
-        var domain = baseService.getDomain();
-        expect(complexSubdomain.domain).toEqual(domain);
     });
 
 });

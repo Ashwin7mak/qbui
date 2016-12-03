@@ -1,6 +1,6 @@
 'use strict';
 
-var config = {
+let config = {
     javaHost: 'http://javaHost',
     SSL_KEY : {
         private    : 'privateKey',
@@ -9,19 +9,19 @@ var config = {
     }
 };
 
-var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-var should = require('should');
-var assert = require('assert');
-var sinon = require('sinon');
-var log = require('./../../../src/logger').getLogger();
-var consts = require('./../../../../common/src/constants');
+let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
+let should = require('should');
+let assert = require('assert');
+let sinon = require('sinon');
+let log = require('./../../../src/logger').getLogger();
+let consts = require('./../../../../common/src/constants');
 
 /**
  * Unit tests for User field formatting
  */
 describe('Validate RequestHelper unit tests', function() {
 
-    var stubLog;
+    let stubLog;
 
     beforeEach(function() {
         stubLog = sinon.stub(log, 'error').returns(true);
@@ -35,9 +35,9 @@ describe('Validate RequestHelper unit tests', function() {
      */
     describe('validate the http request methods', function() {
 
-        var reqMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+        let reqMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
         reqMethods.forEach(function(reqMethod, idx) {
-            var req = {};
+            let req = {};
             req.method = reqMethod;
             it('Test request method: ' + reqMethod, function(done) {
                 //  make sure the order of the tests match the array order
@@ -52,7 +52,7 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate the http protocol', function() {
-        var req = {};
+        let req = {};
         it('Test secure protocol method', function(done) {
             req.protocol = 'https';
             should(requestHelper.isSecure(req)).be.exactly(true);
@@ -66,21 +66,21 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate the request url', function() {
-        var req = {};
+        let req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
-            var request = requestHelper.getRequestUrl(req);
+            let request = requestHelper.getRequestUrl(req);
             should(request).be.exactly(config.javaHost + req.url);
             done();
         });
     });
 
     describe('validate agent options', function() {
-        var req = {};
+        let req = {};
 
         it('validate getting agent options on non-secure protocol', function(done) {
             req.protocol = 'http';
-            var agentOptions = requestHelper.getAgentOptions(req);
+            let agentOptions = requestHelper.getAgentOptions(req);
             agentOptions.rejectUnauthorized.should.equal(false);
             done();
         });
@@ -88,10 +88,10 @@ describe('Validate RequestHelper unit tests', function() {
         it('validate getting agent options on secure protocol', function(done) {
             req.protocol = 'https';
 
-            var fs = require('fs');
-            var stub = sinon.stub(fs, 'readFileSync', function() {return 'file';});
+            let fs = require('fs');
+            let stub = sinon.stub(fs, 'readFileSync', function() {return 'file';});
 
-            var agentOptions = requestHelper.getAgentOptions(req);
+            let agentOptions = requestHelper.getAgentOptions(req);
 
             agentOptions.strictSSL.should.equal(true);
             agentOptions.rejectUnauthorized.should.equal(true);
@@ -105,8 +105,8 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate copy headers to response method', function() {
-        var res = {header0: 'header0'};
-        var headers = {header1: 'header1', header2: 'header2'};
+        let res = {header0: 'header0'};
+        let headers = {header1: 'header1', header2: 'header2'};
 
         it('validate copy', function(done) {
             requestHelper.copyHeadersToResponse(res, headers);
@@ -118,7 +118,7 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate setting options', function() {
-        var req = {};
+        let req = {};
         req.url = '/someurl.com';
         req.headers = {tid: 'tid'};
         req.protocol = 'http';
@@ -126,7 +126,7 @@ describe('Validate RequestHelper unit tests', function() {
 
         it('Test setOptions with GET method', function(done) {
             req.method = 'GET';
-            var request = requestHelper.setOptions(req);
+            let request = requestHelper.setOptions(req);
             should(request.url).be.exactly(config.javaHost + req.url);
             should.not.exist(request.body);
             should(request.method).be.exactly(req.method);
@@ -135,7 +135,7 @@ describe('Validate RequestHelper unit tests', function() {
 
         it('Test setOptions with POST method', function(done) {
             req.method = 'POST';
-            var request = requestHelper.setOptions(req);
+            let request = requestHelper.setOptions(req);
             should(request.url).be.exactly(config.javaHost + req.url);
             should(request.body).be.exactly(req.rawBody);
             should(request.method).be.exactly(req.method);
@@ -144,7 +144,7 @@ describe('Validate RequestHelper unit tests', function() {
 
         it('Test setOptions with PUT method', function(done) {
             req.method = 'PUT';
-            var request = requestHelper.setOptions(req);
+            let request = requestHelper.setOptions(req);
             should(request.url).be.exactly(config.javaHost + req.url);
             should(request.body).be.exactly(req.rawBody);
             should(request.method).be.exactly(req.method);
@@ -153,7 +153,7 @@ describe('Validate RequestHelper unit tests', function() {
 
         it('Test setOptions with PATCH method', function(done) {
             req.method = 'PATCH';
-            var request = requestHelper.setOptions(req);
+            let request = requestHelper.setOptions(req);
             should(request.url).be.exactly(config.javaHost + req.url);
             should(request.body).be.exactly(req.rawBody);
             should(request.method).be.exactly(req.method);
@@ -162,7 +162,7 @@ describe('Validate RequestHelper unit tests', function() {
 
         it('Test setOptions with DELETE method', function(done) {
             req.method = 'DELETE';
-            var request = requestHelper.setOptions(req);
+            let request = requestHelper.setOptions(req);
             should(request.url).be.exactly(config.javaHost + req.url);
             should(request.body).be.exactly(req.rawBody);
             should(request.method).be.exactly(req.method);
@@ -172,13 +172,13 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate setting the TID on the header with other headers', function() {
-        var req = {};
+        let req = {};
         req.protocol = 'https';
         req.method = 'POST';
         req.headers = {someOtherid: 'some-other-header'};
 
         it('Test adding the TID header field', function(done) {
-            var newReq = requestHelper.setTidHeader(req);
+            let newReq = requestHelper.setTidHeader(req);
             req.headers.should.have.property('tid');
             req.headers.should.have.property('someOtherid');
             assert.deepEqual(newReq, req, 'request object != input request after adding TID');
@@ -188,12 +188,12 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate setting the TID on the header', function() {
-        var req = {};
+        let req = {};
         req.protocol = 'https';
         req.method = 'POST';
 
         it('Test adding the TID header field', function(done) {
-            var newReq = requestHelper.setTidHeader(req);
+            let newReq = requestHelper.setTidHeader(req);
             req.headers.should.have.property('tid');
             assert.deepEqual(newReq, req, 'request object != input request after adding TID');
             done();
@@ -202,10 +202,10 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate setting the TID on the header with an initialized req object', function() {
-        var tid = 'tid';
-        var method = 'post';
+        let tid = 'tid';
+        let method = 'post';
 
-        var req = {
+        let req = {
             headers: {
                 tid: tid
             }
@@ -213,7 +213,7 @@ describe('Validate RequestHelper unit tests', function() {
         req.method = method;
 
         it('Test the TID header field does change', function(done) {
-            var newReq = requestHelper.setTidHeader(req);
+            let newReq = requestHelper.setTidHeader(req);
 
             //  new tid should always get generated
             assert.notEqual(req.headers.tid, tid);
@@ -225,17 +225,17 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate executeRequest method with TID', function() {
-        var tid = 'tid';
+        let tid = 'tid';
 
-        var req = {
+        let req = {
             headers: {
                 tid: tid
             }
         };
-        var requestStub = sinon.stub();
+        let requestStub = sinon.stub();
         requestHelper.setRequestObject(requestStub);
         it('Test executeRequest with immediateResolve ', function(done) {
-            var promise = requestHelper.executeRequest(req, {}, true);
+            let promise = requestHelper.executeRequest(req, {}, true);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
@@ -246,7 +246,7 @@ describe('Validate RequestHelper unit tests', function() {
         });
         it('Test executeRequest success', function(done) {
             requestStub.yields(null, {statusCode: 200}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, false);
+            let promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
@@ -256,9 +256,9 @@ describe('Validate RequestHelper unit tests', function() {
             done();
         });
         it('Test executeRequest error', function(done) {
-            var errorResponse = new Error('error');
+            let errorResponse = new Error('error');
             requestStub.yields(errorResponse, {}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, false);
+            let promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
@@ -271,7 +271,7 @@ describe('Validate RequestHelper unit tests', function() {
         });
         it('Test executeRequest status not OK', function(done) {
             requestStub.yields(null, {statusCode: 400}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, false);
+            let promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.equal(req.headers.tid, tid);
@@ -286,16 +286,16 @@ describe('Validate RequestHelper unit tests', function() {
 
     describe('validate executeRequest method with out TID', function() {
 
-        var requestStub = sinon.stub();
+        let requestStub = sinon.stub();
         requestHelper.setRequestObject(requestStub);
 
         it('Test executeRequest', function(done) {
-            var req = {
+            let req = {
                 headers: {}
             };
 
             requestStub.yields(null, {statusCode: 200}, {}); // override the params (error, response, body)
-            var promise = requestHelper.executeRequest(req, {}, false);
+            let promise = requestHelper.executeRequest(req, {}, false);
             promise.then(
                 function(response) {
                     assert.ok(req.headers.tid, 'Tid not defined');
@@ -306,9 +306,9 @@ describe('Validate RequestHelper unit tests', function() {
         });
 
         it('Test executeRequest with immediateResolve ', function(done) {
-            var req = {};
+            let req = {};
 
-            var promise = requestHelper.executeRequest(req, {}, true);
+            let promise = requestHelper.executeRequest(req, {}, true);
             promise.then(
                 function(response) {
                     assert.ok(req.headers.tid, 'Tid not defined');
@@ -320,12 +320,12 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate logUnexpected Error function', function() {
-        var error = {
+        let error = {
             message: 'error message',
             stack: 'stack trace'
         };
 
-        var testCases = [
+        let testCases = [
             {name: 'log standard error exception', func: 'function name', error: error, includeStackTrace: true},
             {name: 'log standard error exception -- null input', func: 'function name', error: null, includeStackTrace: null},
             {name: 'log standard error exception -- no error obj', func: 'function name', error: '', includeStackTrace: false},
@@ -343,11 +343,11 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate addQueryParameter function', function() {
-        var req = {
+        let req = {
             url: '',
             params: {}
         };
-        var testCases = [
+        let testCases = [
             {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?clist=1.2.3'},
             {name: 'test missing parameter name', url: 'apps/123/tables/456', parameterName: '', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456'},
             {name: 'test valid use case with no query parameter value', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist='},
@@ -377,11 +377,11 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate addQueryParameter function', function() {
-        var req = {
+        let req = {
             url: '',
             params: {}
         };
-        var testCases = [
+        let testCases = [
             {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: false},
             {name: 'test parameter name in url', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: true},
             {name: 'test parameter name not found in url', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', expectation: false}];
@@ -400,11 +400,11 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate getQueryParameter function', function() {
-        var req = {
+        let req = {
             url: '',
             params: {}
         };
-        var testCases = [
+        let testCases = [
             {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: null},
             {name: 'test parameter name in url', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: '9'},
             {name: 'test parameter name in url that is empty', url: 'apps/123/tables/456?clist=9&param1=&param2=blah', parameterName: 'param1', expectation: ''},
@@ -422,11 +422,11 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate removeRequestParameter function', function() {
-        var req = {
+        let req = {
             url: '',
             params: {}
         };
-        var testCases = [
+        let testCases = [
             {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: 'apps/123/tables/456'},
             {name: 'test parameter name in url - test 0', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: 'apps/123/tables/456'},
             {name: 'test parameter name in url - test 1', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'param2', expectation: 'apps/123/tables/456?param1=one'},
@@ -447,7 +447,7 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate isRawFormat function', function() {
-        var req = {
+        let req = {
             url: '',
             params: {}
         };
@@ -456,7 +456,7 @@ describe('Validate RequestHelper unit tests', function() {
             req.url = 'app/1/tables/2';
         });
 
-        var testCases = [
+        let testCases = [
             {name: 'test format = raw is true', format: consts.FORMAT.RAW, expectation: true},
             {name: 'test format = raw is false empty', format: '', expectation: false},
             {name: 'test format = raw is false', format: consts.FORMAT.DISPLAY, expectation: false}];
@@ -473,7 +473,7 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate isDisplayFormat function', function() {
-        var req = {
+        let req = {
             url: '',
             params: {}
         };
@@ -482,7 +482,7 @@ describe('Validate RequestHelper unit tests', function() {
             req.url = 'app/1/tables/2';
         });
 
-        var testCases = [
+        let testCases = [
             {name: 'test format = display is true', format: consts.FORMAT.DISPLAY, expectation: true},
             {name: 'test format = display is false empty', format: '', expectation: false},
             {name: 'test format = display is false', format: consts.FORMAT.RAW, expectation: false}];

@@ -2,8 +2,9 @@ import React, {PropTypes} from 'react';
 
 import Locale from '../../locales/locales';
 import HtmlUtils from '../../utils/htmlUtils';
-import BaseService from '../../services/baseService';
 import {DEFAULT_PAGE_TITLE} from '../../constants/urlConstants';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
+import CommonUrlUtils from '../../../../common/src/commonUrlUtils';
 
 /**
  * # Page Title
@@ -24,8 +25,8 @@ const PageTitle = React.createClass({
      * If there is no context or page title provided, use the realm in the title of the page
      */
     addRealm() {
-        let baseService = new BaseService();
-        this.pageTitles.unshift(baseService.getSubdomain());
+        let hostname = WindowLocationUtils.getHostname();
+        this.pageTitles.unshift(CommonUrlUtils.getSubdomain(hostname));
     },
 
     /**

@@ -208,8 +208,12 @@ $edit-field-padding: 5px;
             top: auto !important;
         }
     }
-    /* For mobile phones: */
 
+    .viewForm {
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* For mobile phones: */
     @include small-breakpoint {
         .formSection {
             display: block;
@@ -230,16 +234,16 @@ $edit-field-padding: 5px;
 
                 .field {
                     max-width: 100%;
-
-                    .fieldLabel {
-                        font-size: $font-size-small;
-                        margin-bottom: 0;
-                    }
-
-                    .fieldValue {
-                        font-size: $font-size-small;
-                    }
                 }
+            }
+
+            .fieldLabel {
+                font-size: $font-size-small;
+                margin-bottom: 0;
+            }
+
+            .fieldValue {
+                font-size: $font-size-small;
             }
 
             .fieldValueEditor, textarea.cellEdit {
@@ -258,6 +262,14 @@ $edit-field-padding: 5px;
                         width: 100%;
                     }
                 }
+            }
+        }
+        .viewForm {
+            .cellWrapper, .viewElement, .data {
+                font-size: 16px;
+            }
+            .field .fieldLabel {
+                font-size: 14px;
             }
         }
     }

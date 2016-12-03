@@ -32,6 +32,9 @@ export default {
                 missingWalkMe: "Tutorial is not available."
             }
         },
+        appMenu: {
+            qbClassicLink: "Switch to QuickBase Classic"
+        },
         pendingEditModal: {
             modalBodyMessage: "Save changes before leaving?",
             modalStayButton: "Stay and keep working",
@@ -397,6 +400,13 @@ export default {
             newRecord: "Add Record",
             viewRecord: "View Record #{recordId}"
         },
-        quickBaseClassic: "QuickBase Classic"
+        quickBaseClassic: "QuickBase Classic",
+        quickBaseMercury: "QuickBase Mercury",
+        v2v3: {
+            manageAccessTitle: "Manage user access to Mercury",
+            versionSelectTitle: "My users will open this app in",
+            manageAccessTip: "*Only app admins can manage user access"
+
+        }
     }
 };
