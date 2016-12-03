@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import Locales from "../../locales/locales";
+import Breakpoints from '../../utils/breakpoints';
 
 import EmailFormatter from '../../../../common/src/formatter/emailFormatter';
 
@@ -71,7 +72,7 @@ const EmailFieldValueEditor = React.createClass({
                                      placeholder={(this.props.placeholder || Locales.getMessage('placeholder.email'))}
                                      inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
-                                     showClearButton={true}
+                                     showClearButton={Breakpoints.isSmallBreakpoint()}
                                      {...otherProps} />;
     }
 });
