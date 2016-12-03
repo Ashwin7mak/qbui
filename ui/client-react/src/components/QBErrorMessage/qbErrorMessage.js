@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactBootstrap from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
@@ -28,9 +27,16 @@ let QBErrorMessage = React.createClass({
     },
 
     renderErrorMessages() {
-        return this.props.message.map(
-            msg => <span className="qbErrorMessageItem" key={msg.id}>{msg.def.fieldName}</span>
-        );
+        return this.props.message.map(msg => {
+            let fieldLabel;
+
+            if (msg.def) {
+                // Prefer the fieldLabel if it is available
+                fieldLabel = (msg.def.fieldLabel || msg.def.fieldName);
+            }
+
+            return <span className="qbErrorMessageItem" key={msg.id}>{fieldLabel}</span>;
+        });
     },
 
     render() {
