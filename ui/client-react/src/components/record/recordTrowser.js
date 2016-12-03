@@ -38,6 +38,14 @@ let RecordTrowser = React.createClass({
         errorPopupHidden: React.PropTypes.bool
     },
 
+    _hasErrorsAndAttemptedSave() {
+        return (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length > 0 && this.props.pendEdits.hasAttemptedSave);
+    },
+
+    _doesNotHaveErrors() {
+        return (this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
+    },
+
     /**
      * get trowser content (report nav for now)
      */
@@ -45,7 +53,7 @@ let RecordTrowser = React.createClass({
         let hideErrorMessage = this.props.errorPopupHidden;
         let errorMessage = [];
         if (_.has(this.props, 'pendEdits.editErrors.errors')) {
-            hideErrorMessage = hideErrorMessage || (this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length === 0);
+            hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
             errorMessage = this.props.pendEdits.editErrors.errors;
         }
 
@@ -256,7 +264,7 @@ let RecordTrowser = React.createClass({
 
     },
     getTrowserRightIcons() {
-        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
+        const errorFlg = this._hasErrorsAndAttemptedSave();
 
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 

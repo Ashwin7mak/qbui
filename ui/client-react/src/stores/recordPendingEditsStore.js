@@ -5,6 +5,8 @@ import Logger from '../utils/logger';
 import ValidationUtils from '../../../common/src/validationUtils';
 import ValidationMessage from '../utils/validationMessage';
 import Constants from '../../../common/src/constants';
+import Locale from '../locales/locales';
+
 var logger = new Logger();
 
 const [DTS_ERR0R_CODE, DTS_ERROR_MESSAGES_CODE] = [Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, Constants.ERROR_CODE.DTS_ERROR_CODE];
@@ -61,6 +63,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             errors:[]
         };
         this.saving = false;
+        this.hasAttemptedSave = false;
     },
 
     /**
@@ -214,6 +217,36 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     },
 
     /**
+     * Remove an error from editErrors.errors by the field id
+     * @param fieldId
+     * @private
+     */
+    _removeErrorByFieldId(fieldId) {
+        this.editErrors.errors = this.editErrors.errors.filter(error => {
+            return error.id !== fieldId;
+        });
+
+        if (this.editErrors.errors.length === 0) {
+            this.editErrors.ok = true;
+        }
+    },
+
+    /**
+     * Removes any validation results that don't match the current value of the field
+     * If the user previously had "myemail" in the email field and changed it to "myemail@test.com"
+     * we want to remove the validation result for "myemail"
+     * @private
+     */
+    _clearOutdatedValidationResults(payload) {
+        let recentlyChangedFieldId = (_.has(payload, 'fieldDef') ? payload.fieldDef.id : null);
+
+        // Get out if we can't find a valid field ID
+        if (recentlyChangedFieldId) {
+            this._removeErrorByFieldId(recentlyChangedFieldId);
+        }
+    },
+
+    /**
      * Called when a field is validated typically on blur.
      * editErrors is an object of type {fid, {isInvalid, invalidMessgage}}
      * @param def
@@ -227,8 +260,21 @@ let RecordPendingEditsStore = Fluxxor.createStore({
                 errors:[]
             };
         }
+
+        this._clearOutdatedValidationResults(payload);
+
         let results = ValidationUtils.checkFieldValue(payload, payload.fieldLabel, payload.value, payload.checkRequired);
         if (results.isInvalid) {
+            // Make sure the id is added so that forms can correctly detect which field to mark as invalid
+            // and so that the id can be found by the _clearOutdatedValidationResults method
+            if (!results.id && _.has(results, 'def.fieldDef')) {
+                results.id = results.def.fieldDef.id;
+            }
+
+            if (!results.invalidMessage && _.has(results, 'error.messageId')) {
+                results.invalidMessage = Locale.getMessage(results.error.messageId, {fieldName: (_.has(results, 'def') ? results.def.fieldLabel : null)});
+            }
+
             this.editErrors.ok = false;
             this.editErrors.errors.push(results);
         }
@@ -351,6 +397,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.handleErrors(payload);
         this.recordEditOpen = true;
+        this.hasAttemptedSave = true;
         this.emit('change');
     },
 
@@ -417,6 +464,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
 
         this.handleErrors(payload);
+        this.hasAttemptedSave = true;
         this.emit('change');
     },
     onDeleteRecordFailed(payload) {
@@ -466,7 +514,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             editErrors: this.editErrors,
             showDTSErrorModal: this.showDTSErrorModal,
             dtsErrorModalTID: this.dtsErrorModalTID,
-            saving: this.saving
+            saving: this.saving,
+            hasAttemptedSave: this.hasAttemptedSave,
         };
     },
 });
