@@ -1,3 +1,5 @@
+var testJsConfig = require('../../server/src/config/environment/test.js');
+
 exports.config = {
     // ============
     // Debug config
@@ -91,7 +93,7 @@ exports.config = {
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", then the base url gets prepended.
-    baseUrl: 'http://localhost:9001',
+    baseUrl: testJsConfig.DOMAIN,
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
