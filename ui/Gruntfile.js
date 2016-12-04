@@ -499,20 +499,20 @@ module.exports = function(grunt) {
                 //TODO: This doesn't seem to be working
                 //baseUrl   : testJsConfig.DOMAIN,
                 specs: './wdio/tests/reportAddRecord.e2e.spec.js',
-                capabilities: {
-                    platform : 'OS X 10.9',
-                    browserName     : 'chrome',
-                    tunnelIdentifier: 'webdriverIOTunnel',
-                    name            : 'Jenkins_webdriverIO_OSX_Chrome',
-                    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-                    idleTimeout: '120',
-                    screenResolution : '1600x1200',
-                    maxDuration: 10800,
-                    breakpointSize: 'xlarge',
-                    // These two values enable parallel testing which will run a spec file per instance
-                    shardTestFiles: true,
-                    maxInstances: 4
-                },
+                //capabilities: {
+                //    platform : 'OS X 10.9',
+                //    browserName     : 'chrome',
+                //    tunnelIdentifier: 'webdriverIOTunnel',
+                //    name            : 'Jenkins_webdriverIO_OSX_Chrome',
+                //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+                //    idleTimeout: '120',
+                //    screenResolution : '1600x1200',
+                //    maxDuration: 10800,
+                //    breakpointSize: 'xlarge',
+                //    // These two values enable parallel testing which will run a spec file per instance
+                //    shardTestFiles: true,
+                //    maxInstances: 4
+                //},
                 protocol: 'http',
                 user: 'QuickBaseNS',
                 key: 'f814e1b3-ac25-4369-af02-90d61c6b1c04',

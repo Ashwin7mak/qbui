@@ -47,28 +47,28 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
-    capabilities: [{
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instances available you can make sure that not more than
-        // 5 instances get started at a time.
-        maxInstances: 5,
-        //
-        browserName: 'chrome'
-    }],
     //capabilities: [{
-    //    platform : 'OS X 10.9',
-    //    browserName     : 'chrome',
-    //    tunnelIdentifier: 'webdriverIOTunnel',
-    //    name            : 'local_webdriverIO_OSX_Chrome',
-    //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-    //    idleTimeout: '120',
-    //    screenResolution : '1600x1200',
-    //    maxDuration: 10800,
-    //    breakpointSize: 'xlarge',
-    //    // These two values enable parallel testing which will run a spec file per instance
-    //    shardTestFiles: true,
-    //    maxInstances: 4
+    //    // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+    //    // grid with only 5 firefox instances available you can make sure that not more than
+    //    // 5 instances get started at a time.
+    //    maxInstances: 5,
+    //    //
+    //    browserName: 'chrome'
     //}],
+    capabilities: [{
+        platform : 'OS X 10.9',
+        browserName     : 'chrome',
+        tunnelIdentifier: 'webdriverIOTunnel',
+        name            : 'local_webdriverIO_OSX_Chrome',
+        //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        idleTimeout: '120',
+        screenResolution : '1600x1200',
+        maxDuration: 10800,
+        breakpointSize: 'xlarge',
+        // These two values enable parallel testing which will run a spec file per instance
+        shardTestFiles: true,
+        maxInstances: 4
+    }],
 
 
     //
