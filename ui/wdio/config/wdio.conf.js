@@ -139,7 +139,6 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
     reporters: ['spec'],
-    
     //
     // Options to be passed to Jasmine.
     jasmineNodeOpts: {
@@ -182,76 +181,77 @@ exports.config = {
     // resolved to continue.
     //
     // Gets executed once before all workers get launched.
-     onPrepare: function (config, capabilities) {
-         console.log('onPrepare function - Starting up Node');
-         //Have the tests start an instance of node
-         require('../../server/src/app');
+    onPrepare: function(config, capabilities) {
+        console.log('onPrepare function - Starting up Node');
+        //Have the tests start an instance of node
+        require('../../server/src/app');
 
-         // This setting allow devs to gendata / e2etest to a single known realm not random as needed for testing
-         // by setting realmToUse in e2e.conf file and then supplying the E2E_CUSTOMCONFIG env var
-         if (process.env.E2E_CUSTOMCONFIG === 'true') {
-             localConf = require('../../server/src/config/environment');
-         }
-     },
+        // This setting allow devs to gendata / e2etest to a single known realm not random as needed for testing
+        // by setting realmToUse in e2e.conf file and then supplying the E2E_CUSTOMCONFIG env var
+        if (process.env.E2E_CUSTOMCONFIG === 'true') {
+            localConf = require('../../server/src/config/environment');
+        }
+    },
     //
     // Gets executed before test execution begins. At this point you can access all global
     // variables, such as `browser`. It is the perfect place to define custom commands.
-     before: function (capabilities, specs) {
-         console.log('before function - Setting up e2eBase, services and utilities');
-         var baseE2EPath = '../../wdio/';
-         var e2eUtils = require('../common/e2eUtils')();
-         var localConf;
+    before: function(capabilities, specs) {
+        console.log('before function - Setting up e2eBase, services and utilities');
+        var baseE2EPath = '../../wdio/';
+        var e2eUtils = require('../common/e2eUtils')();
+        var localConf;
 
-         // Initialize all Page Objects
-         //global.requirePO = function(relativePath) {
-         //    return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
-         //};
+        // Initialize all Page Objects
+        //global.requirePO = function(relativePath) {
+        //    return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
+        //};
 
-         // Initialize all Common Files
-         global.requireCommon = function(relativePath) {
-             return require(baseE2EPath + relativePath + '.js');
-         };
+        // Initialize all Common Files
+        global.requireCommon = function(relativePath) {
+            return require(baseE2EPath + relativePath + '.js');
+        };
 
-         // Initialize the base classes
-         if (localConf) {
-             // Pass down your config object to e2eBase -> recordApi.base -> api.base
-             // api.base will use the DOMAIN param set in your config as the baseUrl if you pass a config object down through the stack
-             global.e2eBase = requireCommon('common/e2eBase')(localConf);
-         } else {
-             // Get an instance of e2eBase (which gives you an instance of recordApi.base and api.base)
-             // e2eBase then uses the instance of recordApi.base and initializes the services classes with this instance
-             global.e2eBase = requireCommon('common/e2eBase')();
-             // browser is a global object setup by protractor. baseUrl is a param that can be passed in via IntelliJ config or via grunt
-             // since we aren't passing a config object set it here
-             global.e2eBase.setBaseUrl(this.baseUrl);
-         }
-         global.e2eConsts = requireCommon('common/e2eConsts');
-         global.e2eUtils = requireCommon('common/e2eUtils')();
-         global.consts = require('../../common/src/constants');
+        // Initialize the base classes
+        if (localConf) {
+            // Pass down your config object to e2eBase -> recordApi.base -> api.base
+            // api.base will use the DOMAIN param set in your config as the baseUrl if you pass a config object down through the stack
+            global.e2eBase = requireCommon('common/e2eBase')(localConf);
+        } else {
+            // Get an instance of e2eBase (which gives you an instance of recordApi.base and api.base)
+            // e2eBase then uses the instance of recordApi.base and initializes the services classes with this instance
+            global.e2eBase = requireCommon('common/e2eBase')();
+            // browser is a global object setup by protractor. baseUrl is a param that can be passed in via IntelliJ config or via grunt
+            // since we aren't passing a config object set it here
+            global.e2eBase.setBaseUrl(this.baseUrl);
+        }
+        global.e2eConsts = requireCommon('common/e2eConsts');
+        global.e2eUtils = requireCommon('common/e2eUtils')();
+        global.consts = require('../../common/src/constants');
 
-         // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
-         // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
-         // This call creates a your test realm down in api.base
-         return e2eBase.initialize();
+        // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
+        // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
+        // This call creates a your test realm down in api.base
+        return e2eBase.initialize();
 
-         //// Grab the browser name to use in spec files
-         //browser.getCapabilities().then(function(cap) {
-         //    global.browserName = cap.get('browserName');
-         //});
-         //
-         //// Grab the browser settings from the processed config and set the browser size
-         //browser.getProcessedConfig().then(function(config) {
-         //    var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
-         //    global.breakpointSize = browserDimensions.breakpointSize;
-         //    global.browserWidth = browserDimensions.browserWidth;
-         //    global.browserHeight = browserDimensions.browserHeight;
-         //
-         //    //TODO: MB-386 - Need to use the logger wrapper instead of console.log
-         //    console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-         //    browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
-         //});
+        //// Grab the browser name to use in spec files
+        //browser.getCapabilities().then(function(cap) {
+        //    global.browserName = cap.get('browserName');
+        //});
+        //
+        //// Grab the browser settings from the processed config and set the browser size
+        //browser.getProcessedConfig().then(function(config) {
+        //    var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+        //    global.breakpointSize = browserDimensions.breakpointSize;
+        //    global.browserWidth = browserDimensions.browserWidth;
+        //    global.browserHeight = browserDimensions.browserHeight;
+        //
+        //    //TODO: MB-386 - Need to use the logger wrapper instead of console.log
+        //    console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+        //    browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
+        //});
+        //
+    },
 
-     },
     //
     // Hook that gets executed before the suite starts
     // beforeSuite: function (suite) {
@@ -289,13 +289,13 @@ exports.config = {
     //
     // Gets executed after all tests are done. You still have access to all global variables from
     // the test.
-     after: function (result, capabilities, specs) {
-         console.log('after function - Cleaning up the test realm');
-         return e2eBase.cleanup();
-     }
+    after: function(result, capabilities, specs) {
+        console.log('after function - Cleaning up the test realm');
+        return e2eBase.cleanup();
+    }
     //
     // Gets executed after all workers got shut down and the process is about to exit. It is not
     // possible to defer the end of the process using a promise.
     // onComplete: function(exitCode) {
     // }
-}
+};

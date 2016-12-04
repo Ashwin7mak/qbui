@@ -4,8 +4,6 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
-    var promise = require('bluebird');
     var formGenerator = require('../../../test_generators/form.generator.js');
     module.exports = function(recordBase) {
         var formService = {
@@ -37,13 +35,16 @@
                     var tableId = app.tables[i].id;
                     var formJSON = generatedForms[i];
                     var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                    recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON).then(function(result) {
-                        var id = JSON.parse(result.body);
-                        createdFormIds.push(id);
-                    });
+                    var formId = this.parseFormResult(formJSON, formsEndpoint);
+                    createdFormIds.push(formId);
                 }
-
                 return createdFormIds;
+            },
+
+            parseFormResult: function(formJSON, formsEndpoint) {
+                return recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON).then(function(result) {
+                    return JSON.parse(result.body);
+                });
             },
 
             /**
@@ -58,12 +59,9 @@
                     var tableId = app.tables[i].id;
                     var formJSON = generatedForms[i];
                     var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                    recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON).then(function(result) {
-                        var id = JSON.parse(result.body);
-                        createdFormIds.push(id);
-                    });
+                    var formId = this.parseFormResult(formJSON, formsEndpoint);
+                    createdFormIds.push(formId);
                 }
-
                 return createdFormIds;
             },
 

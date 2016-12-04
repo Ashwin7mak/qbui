@@ -9,23 +9,23 @@
 
     var ReportPagingPage = Object.create(e2ePageBase, {
         // Report Toolbar
-        reportToolbarEl: { get: function() { return browser.element('.reportToolbar'); } },
+        reportToolbarEl: {get: function() {return browser.element('.reportToolbar');}},
 
         // Report Toolbar Pagination Container
-        pagingToolbarContainer: { get: function() { return this.reportToolbarEl.element('.reportNavigation'); } },
+        pagingToolbarContainer: {get: function() {return this.reportToolbarEl.element('.reportNavigation');}},
 
         // Paging navigation buttons
-        pagingToolbarPrevButton: { get: function() { return this.pagingToolbarContainer.elements('.navigationButton').value[0]; } },
-        pagingToolbarNextButton: { get: function() { return this.pagingToolbarContainer.elements('.navigationButton').value[1]; } },
+        pagingToolbarPrevButton: {get: function() {return this.pagingToolbarContainer.elements('.navigationButton').value[0];}},
+        pagingToolbarNextButton: {get: function() {return this.pagingToolbarContainer.elements('.navigationButton').value[1];}},
         // Page numbers
-        pagingToolbarPageNumbers: { get: function() { return this.pagingToolbarContainer.element('.pageNumbers'); } },
+        pagingToolbarPageNumbers: {get: function() {return this.pagingToolbarContainer.element('.pageNumbers');}},
 
         /*
          * Function will get the current state of a previous paging button (whether it is disabled or not)
          * @param Prev button element
          * @returns boolean whether or not the button is disabled
          */
-        getPagingPrevButtonDisabled: { value: function(pagingPrevButtonElement) {
+        getPagingPrevButtonDisabled: {value: function(pagingPrevButtonElement) {
             return e2ePageBase.hasClass(pagingPrevButtonElement.element(by.className('previousButton')), 'disabled');
         }},
 
@@ -34,7 +34,7 @@
          * @param Next button element
          * @returns boolean whether or not the button is disabled
          */
-        getPagingNextButtonDisabled: { value: function(pagingNextButtonElement) {
+        getPagingNextButtonDisabled: {value: function(pagingNextButtonElement) {
             return e2ePageBase.hasClass(pagingNextButtonElement.element(by.className('nextButton')), 'disabled');
         }},
 
@@ -42,7 +42,7 @@
          * Generic interaction function for clicking on paging nav buttons
          * @param Any paging button element that you want to click
          */
-        clickPagingNavButton: { value: function(pagingButtonElement) {
+        clickPagingNavButton: {value: function(pagingButtonElement) {
             pagingButtonElement.click();
             browser.waitForVisible('.ag-body-container');
         }}

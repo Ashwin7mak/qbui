@@ -33,32 +33,32 @@
 
         // We append the editing class to the row being edited
         // Return the row being edited
-        getInLineEditRecordMenu: { value: function() {
+        getInLineEditRecordMenu: {value: function() {
             return browser.element('.ag-row.editing');
         }},
 
         // Returns the save record button for the record being edited
-        getSaveRecordButton: { value: function() {
+        getSaveRecordButton: {value: function() {
             return browser.element('.ag-row.editing .saveRecord');
         }},
         // Returns the cancel button
-        getCancelRecordButton: { value: function() {
+        getCancelRecordButton: {value: function() {
             return browser.element('.ag-row.editing .cancelSelection');
         }},
         // Returns the Save and Add New record butotn
-        getSaveAddNewRecordButton: { value: function() {
+        getSaveAddNewRecordButton: {value: function() {
             return browser.element('.ag-row.editing .addRecord');
         }},
 
         // Notification Container for In-line edit actions
-        notificationContainerEl: { get: function() { return browser.element('.notification-container'); } },
-        notificationSuccessPopupEl: { get: function() { return this.notificationContainerEl.element('.notification-success'); } },
+        notificationContainerEl: {get: function() {return browser.element('.notification-container');}},
+        notificationSuccessPopupEl: {get: function() {return this.notificationContainerEl.element('.notification-success');}},
 
         /**
          * Given a record element in agGrid, double click on the record to open the edit menu
          * @param recordRowIndex
          */
-        openRecordEditMenu: { value: function(recordIndex) {
+        openRecordEditMenu: {value: function(recordIndex) {
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
             // Hardcoded to click on the first cell of the record
             var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
@@ -70,7 +70,7 @@
         /**
          * Find and click the save button for the record being edited
          */
-        clickSaveChangesButton: { value: function() {
+        clickSaveChangesButton: {value: function() {
             var saveRecordButtonEl = this.getSaveRecordButton();
 
             saveRecordButtonEl.waitForVisible();
@@ -95,35 +95,35 @@
         /**
          * Find and click inline Edit Menu 'Save and Add a new Row' button
          */
-        clickSaveAddNewRowButton: { value: function() {
+        clickSaveAddNewRowButton: {value: function() {
             this.getSaveAddNewRecordButton().waitForVisible();
             this.getSaveAddNewRecordButton().click();
-        } },
+        }},
 
         /**
          * Find and click the cancel button for the record being edited
          */
-        clickCancelButton: { value: function() {
+        clickCancelButton: {value: function() {
             this.getCancelRecordButton().waitForVisible();
             //TODO: Might need raw JS click here too
             this.getCancelRecordButton().click();
-        } },
+        }},
 
         /**
          * Asserts that the notification contains a particular text value
          * @param Text to assert is the notification element
          */
-        assertSuccessMessage: { value: function(successMessage) {
+        assertSuccessMessage: {value: function(successMessage) {
             this.notificationSuccessPopupEl.waitForVisible();
             var messageText = this.notificationSuccessPopupEl.getText();
             expect(messageText).toContain(successMessage.toString());
-        } },
+        }},
 
         /**
          * Loop through the records being displayed and return the one being edited
          * @returns The record element being edited
          */
-        getInlineEditRecord: { value: function() {
+        getInlineEditRecord: {value: function() {
             var recordRowElements = reportContent.agGridRecordElList;
             var recordBeingEdited;
 
@@ -144,7 +144,7 @@
          * Returns all input cells for the record being edited (regardless of field type)
          * @returns Array of input cells
          */
-        getInlineEditRecordInputCells: { value: function() {
+        getInlineEditRecordInputCells: {value: function() {
             var recordBeingEdited = this.getInlineEditRecord();
             return recordBeingEdited.elements('input');
         }},
@@ -153,7 +153,7 @@
          * Returns all text input cells for record being edited
          * @returns Array of text input cells
          */
-        getTextFieldInputCells: { value: function() {
+        getTextFieldInputCells: {value: function() {
             var recordBeingEdited = this.getInlineEditRecord();
             return recordBeingEdited.elements('input[type="text"].textField');
         }},
@@ -163,7 +163,7 @@
          * @param textFieldIndex - The text field to edit by index
          * @param textToEnter - The text to enter
          */
-        editTextField: { value: function(textFieldIndex, textToEnter) {
+        editTextField: {value: function(textFieldIndex, textToEnter) {
             var textFieldInputCells = this.getTextFieldInputCells();
             var textInputCell = textFieldInputCells.value[textFieldIndex];
             textInputCell.moveToObject();
@@ -174,7 +174,7 @@
          * Returns all numeric input cells for record being edited
          * @returns Array of numeric input cells
          */
-        getNumericFieldInputCells: { value: function(){
+        getNumericFieldInputCells: {value: function() {
             var recordBeingEdited = this.getInlineEditRecord();
             return recordBeingEdited.elements('input[type="text"].numericField');
         }},
@@ -184,7 +184,7 @@
          * @param numericFieldIndex - The numeric field to edit by index
          * @param numToEnter - The number to enter
          */
-        editNumericField: { value: function(numericFieldIndex, numToEnter) {
+        editNumericField: {value: function(numericFieldIndex, numToEnter) {
             //TODO: This code is duplicated. Can create a generic function w/ some wrappers
             var numericFieldInputCells = this.getNumericFieldInputCells();
             var numericInputCell = numericFieldInputCells.value[numericFieldIndex];
@@ -196,7 +196,7 @@
          * Returns all numeric input cells for record being edited
          * @returns Array of numeric input cells
          */
-        getDateFieldInputCells: { value: function(){
+        getDateFieldInputCells: {value: function() {
             var recordBeingEdited = this.getInlineEditRecord();
             return recordBeingEdited.elements('.cellEdit.dateCell input');
         }},
@@ -206,7 +206,7 @@
          * @param dateFieldIndex - The date field to edit by index
          * @param dateToEnter - The date to enter
          */
-        editDateField: { value: function(dateFieldIndex, dateToEnter) {
+        editDateField: {value: function(dateFieldIndex, dateToEnter) {
             var dateFieldInputCells = this.getDateFieldInputCells();
             var dateInputCell = dateFieldInputCells.value[dateFieldIndex];
             dateInputCell.moveToObject();
@@ -218,7 +218,7 @@
          * Opens the date picker widget for the specified date field
          * @param Date field to edit by index
          */
-        openDateFieldCalWidget: { value: function(dateFieldIndex) {
+        openDateFieldCalWidget: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
             var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"');
 
@@ -234,7 +234,7 @@
          * @param date field cell element
          * @returns the calendar icon element
          */
-        getDateFieldCalendarIconEl: { value: function(dateFieldCellEl) {
+        getDateFieldCalendarIconEl: {value: function(dateFieldCellEl) {
             return dateFieldCellEl.element('.glyphicon.glyphicon-calendar');
         }},
 
@@ -243,7 +243,7 @@
          * @param date field cell
          * @returns the calendar widget element
          */
-        getDateFieldCalendarWidgetEl: { value: function(dateFieldCellEl) {
+        getDateFieldCalendarWidgetEl: {value: function(dateFieldCellEl) {
             return dateFieldCellEl.element('.datepicker');
         }},
 
@@ -252,8 +252,8 @@
          * @param date calendar widget
          * @returns the selected date element
          */
-        getCurrentSelectedDate: { value: function(dateFieldCalendarWidget) {
-           return dateFieldCalendarWidget.element('.day.active');
+        getCurrentSelectedDate: {value: function(dateFieldCalendarWidget) {
+            return dateFieldCalendarWidget.element('.day.active');
         }},
 
         /**
@@ -261,7 +261,7 @@
          * @param Selected date element
          * @returns The parent row element for the date
          */
-        getDateRowForSelectedDate: { value: function(selectedDateEl) {
+        getDateRowForSelectedDate: {value: function(selectedDateEl) {
             return selectedDateEl.element('..');
         }},
 
@@ -269,7 +269,7 @@
          * Function figures out the currently selected date in the date picker and advances it by one day
          * @param Index of date field to edit
          */
-        advanceCurrentlySelectedDate: { value: function(dateFieldIndex) {
+        advanceCurrentlySelectedDate: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
             var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"');
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
