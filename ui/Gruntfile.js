@@ -496,6 +496,7 @@ module.exports = function(grunt) {
        //TODO: Figure out how to define multiple webdriver tasks
         webdriver: {
             options: {
+                baseUrl   : testJsConfig.DOMAIN,
                 specs: './wdio/tests/reportAddRecord.e2e.spec.js',
                 capabilities: {
                     platform : 'OS X 10.9',
