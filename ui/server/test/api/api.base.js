@@ -407,6 +407,10 @@
                 };
                 return this.createSpecificUser(userToMake);
             },
+            //Create user helper method generates an arbitrary user, calls execute request and returns a promise
+            createDefaultUser        : function(userToMake) {
+                return this.createSpecificUser(userToMake);
+            },
             //Create bulk of users, calls execute request and returns a promise
             createBulkUser : function(userList) {
                 return this.executeRequest(this.resolveBulkUsersEndpoint(), consts.PUT, userList, DEFAULT_HEADERS);

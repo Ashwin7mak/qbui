@@ -17,15 +17,22 @@
                 return user;
             },
 
-            /**
-             * Given an app, generate a list of users with fixed user ID
-             */
             generateDefaultUserList: function(appId) {
-                const userIdList = [1000001, 1000002, 1000003, 1000004, 1000005];
+                let userIdList = [];
+                let users = userGenerator.generateDefaultAdminUsers();
 
-                let users = userGenerator.generatePopulatedDefaultUsers(userIdList);
+                users.forEach(user => {
+                    recordBase.apiBase.createDefaultUser(user).then(function(userResponse) {
+                        let userId = JSON.parse(userResponse.body).id;
+                        userIdList.push(userId);
 
-                recordBase.apiBase.createBulkUser(users);
+                        recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]).then(function(result) {
+                            console.log("User " + userId + " has been associated with role 12" + result.body);
+                        });
+                    });
+                });
+
+                return userIdList;
             }
         };
         return userService;
