@@ -18,6 +18,7 @@
         PASSWORD            : 'password',
         TICKET_VERSION      : 'ticketVersion',
         DEFAULT_ID          : 1000000,
-        DEFAULT_TICKET_VERSION: 8
+        DEFAULT_TICKET_VERSION: 8,
+        DEFAULT_NUM_USERS : 5
     });
 }());

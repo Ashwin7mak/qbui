@@ -24,11 +24,12 @@
                 users.forEach(user => {
                     recordBase.apiBase.createSpecificUser(user).then(function(userResponse) {
                         let userId = JSON.parse(userResponse.body).id;
-                        userIdList.push(userId);
-
-                        recordBase.apiBase.assignUsersToAppRole(appId, "12", [userId]).then(function(result) {
-                            console.log("User " + userId + " has been associated with role 12" + result.body);
-                        });
+                        if (userId) {
+                            userIdList.push(userId);
+                            recordBase.apiBase.assignUsersToAppRole(appId, e2eConsts.DEFAULT_ADMIN_ROLE, [userId]).then(function(result) {
+                                console.log("User " + userId + " has been associated with admin role " + result.body);
+                            });
+                        }
                     });
                 });
 

@@ -137,11 +137,16 @@
          * }
          * </p>
          * These options may be sparsely populated and we will generate values for those keys not present.
+         * @param numberOfUser override the default value in the constant def file.
          * @returns {*}
          */
-        generateDefaultAdminUsers: function() {
+        generateDefaultAdminUsers: function(numberOfUser) {
             let userResultList = [];
-            Array(5).fill().map((_, i) => {userResultList.push(this.generatePopulatedUser());});
+
+            if (numberOfUser === undefined) {
+                numberOfUser = userConsts.DEFAULT_NUM_USERS;
+            }
+            Array(numberOfUser).fill().map((_, i) => {userResultList.push(this.generatePopulatedUser());});
             return userResultList;
         }
     };
