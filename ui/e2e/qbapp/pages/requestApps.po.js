@@ -22,6 +22,21 @@
         this.get = function(requestAppsPageEndPoint) {
             return browser.get(requestAppsPageEndPoint);
         };
+
+        this.selectApp = function(app) {
+            return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return element(by.className('appsList')).all(by.className('leftNavLink')).filter(function(elm) {
+                    return elm.getAttribute('textContent').then(function(text) {
+                        return text === app.name;
+                    });
+                }).then(function(filteredMenuItem) {
+                    return filteredMenuItem[0].click();
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+                });
+            });
+        };
+
     };
     module.exports = new RequestAppsPage();
 }());
