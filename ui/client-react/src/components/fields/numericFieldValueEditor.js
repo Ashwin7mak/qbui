@@ -12,26 +12,23 @@ import * as consts from '../../../../common/src/constants';
  *
  */
 
-
 const numericInput = React.createClass({
     render() {
-        let classes, placeholder, width;
         return (
             <input
-                ref="textInput"
-                className={classes}
+                className={this.props.classes}
                 value={this.props.display ? this.props.display : this.props.value}
                 type="text"
                 key={'inp' + this.props.idKey}
-                placeholder={placeholder}
-                onChange={this.onChange}
-                onBlur={this.onBlur}
-                size={width}
+                placeholder={this.props.placeholder}
+                onChange={this.props.onChange}
+                onBlur={this.props.onBlur}
+                size={this.props.width}
             />
         );
     }
 });
-//const ClearableNumericField = ClearableInput(numericInput);
+const ClearableNumericField = ClearableInput(numericInput);
 
 const NumericFieldValueEditor = React.createClass({
     displayName: 'NumericFieldValueEditor',
@@ -141,10 +138,6 @@ const NumericFieldValueEditor = React.createClass({
         }
     },
 
-    clearInput() {
-        console.log('clear')
-    },
-
     render() {
         let placeholder = '';
         if (this.props.placeholder) {
@@ -161,19 +154,14 @@ const NumericFieldValueEditor = React.createClass({
         let width = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width', null);
 
         return (
-            <ClearableInput clearInput={this.clearInput} >
-                <input
-                    ref="textInput"
-                    className={classes}
-                    value={this.props.display ? this.props.display : this.props.value}
-                    type="text"
-                    key={'inp' + this.props.idKey}
-                    placeholder={placeholder}
-                    onChange={this.onChange}
-                    onBlur={this.onBlur}
-                    size={width}
+            <ClearableNumericField
+                {...this.props}
+                onChange={this.onChange}
+                onBlur={this.onBlur}
+                classes={classes}
+                placeholder={placeholder}
+                width={width}
                 />
-            </ClearableInput>
         );
     }
 });
