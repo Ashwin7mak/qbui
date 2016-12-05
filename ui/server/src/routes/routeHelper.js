@@ -3,6 +3,7 @@
 
     let constants = require('../../../common/src/constants');
 
+    let ACCESS_RIGHTS = 'accessRights';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -17,6 +18,9 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
 
+    let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
+    let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
+
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
     //      \/ - escaped forward slash
@@ -27,6 +31,13 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+
+    /**
+     *
+     */
+    function getLegacyRoot() {
+        return '/db';
+    }
 
     /**
      * Private function to extract the root url for the given type.
@@ -120,12 +131,51 @@
          */
         transformUrlRoute: function(url, curRoute, newRoute) {
             if (typeof url === 'string') {
-                var offset = url.toLowerCase().indexOf(curRoute);
+                let offset = url.toLowerCase().indexOf(curRoute);
                 if (offset !== -1) {
                     return url.substring(0, offset) + newRoute;
                 }
             }
             //  return requestUrl unchanged
+            return url;
+        },
+
+        /**
+         * Return the get apps route from the req.url.
+         * Append the appid if one is supplied.
+         *
+         * @param url
+         * @param appId
+         * @returns {*}
+         */
+        getAppsRoute: function(url, appId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(APPS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + APPS;
+                    if (appId) {
+                        root += '/' + appId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return get the et apps access rights route from the req.url.
+         * Both url and appId must be supplied.
+         *
+         * @param url
+         * @param appId
+         * @returns {*}
+         */
+        getAppsAccessRightsRoute(url, appId) {
+            if (typeof url === 'string' && appId) {
+                if (url.toLowerCase().indexOf(APPS) !== -1) {
+                    return this.getAppsRoute(url, appId) + '/' + ACCESS_RIGHTS;
+                }
+            }
             return url;
         },
 
@@ -406,12 +456,47 @@
             return url;
         },
 
+        /**
+         * Return the report invoke route that is used to generate a
+         * report with customized meta data.
+         *
+         * @param url
+         * @returns {*}
+         */
         getInvokeReportRoute: function(url) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;
             }
             return url;
+        },
+
+        /**
+         * Return the Quickbase classic url route to get the application's
+         * current stack preference or set the application's stack preference.
+         *
+         * Examples:
+         *      /db/<appid>/?a=JBI_GetAdminRedirectToV3
+         *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
+         *
+         * @param appId
+         * @param isPost - is this a post request
+         * @param value - value to set the application preference for post request
+         *
+         * @returns {*}
+         */
+        getApplicationStackPreferenceRoute: function(appId, isPost, value) {
+            let root = getLegacyRoot();
+            if (appId) {
+                root += '/' + appId;
+
+                if (isPost === true) {
+                    root += '?a=' + SET_APPLICATION_STACK_JBI + '&value=' + value;
+                } else {
+                    root += '?a=' + GET_APPLICATION_STACK_JBI;
+                }
+            }
+            return root;
         },
 
         /**

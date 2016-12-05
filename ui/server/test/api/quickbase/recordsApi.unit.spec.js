@@ -3,20 +3,20 @@
  */
 'use strict';
 
-var config = {javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
-var sinon = require('sinon');
-var assert = require('assert');
-var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
-var constants = require('../../../../common/src/constants');
-var dataErrorCodes = require('../../../../common/src/dataEntryErrorCodes');
-var groupTypes = require('../../../../common/src/groupTypes').GROUP_TYPE;
+let config = {javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
+let sinon = require('sinon');
+let assert = require('assert');
+let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
+let recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
+let constants = require('../../../../common/src/constants');
+let dataErrorCodes = require('../../../../common/src/dataEntryErrorCodes');
+let groupTypes = require('../../../../common/src/groupTypes').GROUP_TYPE;
 
 /**
  * Unit tests for records apis
  */
 describe("Validate recordsApi", function() {
-    var req = {
+    let req = {
         headers: {
             'Content-Type': 'content-type'
         },
@@ -32,8 +32,8 @@ describe("Validate recordsApi", function() {
         }
     };
 
-    var executeReqStub = null;
-    var fieldsApiStub = null;
+    let executeReqStub = null;
+    let fieldsApiStub = null;
 
     beforeEach(function() {
         executeReqStub = sinon.stub(requestHelper, "executeRequest");
@@ -54,9 +54,9 @@ describe("Validate recordsApi", function() {
         it('success return results for all records', function(done) {
             req.url = '/apps/123/tables/456/records';
 
-            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            let targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.fetchRecords(req);
+            let promise = recordsApi.fetchRecords(req);
 
             promise.then(
                 function(response) {
@@ -76,9 +76,9 @@ describe("Validate recordsApi", function() {
             req.url = '/apps/123/tables/456/records/1?param=true&offset=0&numRows=' + constants.PAGE.MAX_NUM_ROWS + 1;
             req.params.recordId = 1;
 
-            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            let targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.fetchRecords(req);
+            let promise = recordsApi.fetchRecords(req);
 
             promise.then(
                 function(response) {
@@ -97,9 +97,9 @@ describe("Validate recordsApi", function() {
         it('success return results for report results', function(done) {
             req.url = '/apps/123/tables/456/reports/2/results';
 
-            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            let targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.fetchRecords(req);
+            let promise = recordsApi.fetchRecords(req);
 
             promise.then(
                 function(response) {
@@ -119,9 +119,9 @@ describe("Validate recordsApi", function() {
             req.url = '/apps/123/tables/456/reports/2/results?sortList=1';
             req.params.sortList = '1';
 
-            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            let targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.fetchRecords(req);
+            let promise = recordsApi.fetchRecords(req);
 
             promise.then(
                 function(response) {
@@ -139,10 +139,10 @@ describe("Validate recordsApi", function() {
 
         it('fail return results ', function(done) {
             req.url = '/reports/2/results';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = recordsApi.fetchRecords(req);
+            let promise = recordsApi.fetchRecords(req);
 
             promise.then(
                 function(error) {
@@ -164,9 +164,9 @@ describe("Validate recordsApi", function() {
 
         it('success return records array with raw parameter type', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=raw';
-            var expectedID = '12345.22';
+            let expectedID = '12345.22';
             executeReqStub.returns(Promise.resolve({'body': expectedID}));
-            var promise = recordsApi.fetchSingleRecordAndFields(req);
+            let promise = recordsApi.fetchSingleRecordAndFields(req);
             promise.then(
                 function(response) {
                     assert.equal(response, expectedID);
@@ -181,7 +181,7 @@ describe("Validate recordsApi", function() {
         it('success return records array with display parameter type', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[{ "id":2, "value": 1234525}, { "id":2, "value": 1234525}]'}));
-            var promise = recordsApi.fetchSingleRecordAndFields(req);
+            let promise = recordsApi.fetchSingleRecordAndFields(req);
             promise.then(
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
@@ -202,7 +202,7 @@ describe("Validate recordsApi", function() {
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             //fetch fields is already stubbed
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '10'}));
-            var promise = recordsApi.fetchRecordsAndFields(req);
+            let promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
@@ -218,7 +218,7 @@ describe("Validate recordsApi", function() {
         it('success return records array with raw parameter type', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=raw';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
-            var promise = recordsApi.fetchRecordsAndFields(req);
+            let promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
                     assert.equal(response.fields, undefined);
@@ -240,7 +240,7 @@ describe("Validate recordsApi", function() {
         it('success return count when no query parameter is set', function(done) {
             req.url = '/apps/1/tables/2/records/countQuery';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
-            var promise = recordsApi.fetchCountForRecords(req);
+            let promise = recordsApi.fetchCountForRecords(req);
             promise.then(
                 function(response) {
                     assert.equal(response.body, '10');
@@ -261,7 +261,7 @@ describe("Validate recordsApi", function() {
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
 
-            var promise = recordsApi.fetchCountForRecords(req);
+            let promise = recordsApi.fetchCountForRecords(req);
             promise.then(
                 function(response) {
                     assert.equal(response.body, '10');
@@ -278,9 +278,9 @@ describe("Validate recordsApi", function() {
         it('success return results ', function(done) {
             req.url = '/records/2';
             req.body = [];
-            var targetObject = "{}";
+            let targetObject = "{}";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.saveSingleRecord(req);
+            let promise = recordsApi.saveSingleRecord(req);
 
             promise.then(
                 function(response) {
@@ -295,10 +295,10 @@ describe("Validate recordsApi", function() {
 
         it('fail return results ', function(done) {
             req.url = '/records/2';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = recordsApi.saveSingleRecord(req);
+            let promise = recordsApi.saveSingleRecord(req);
 
             promise.then(
                 function(error) {
@@ -318,9 +318,9 @@ describe("Validate recordsApi", function() {
         it('success return results ', function(done) {
             req.url = '/records/2';
             req.body = [{value: "1234", field : {type: "TEXT", clientSideAttributes : {max_chars : 4}}}];
-            var targetObject = "{}";
+            let targetObject = "{}";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.saveSingleRecord(req);
+            let promise = recordsApi.saveSingleRecord(req);
 
             promise.then(
                 function(response) {
@@ -338,7 +338,7 @@ describe("Validate recordsApi", function() {
             req.url = '/records/2';
             req.body = [{value: "12345", fieldDef: testField}];
             let errType = dataErrorCodes.MAX_LEN_EXCEEDED;
-            var promise = recordsApi.saveSingleRecord(req);
+            let promise = recordsApi.saveSingleRecord(req);
 
             promise.then(
                 function(error) {
@@ -356,8 +356,8 @@ describe("Validate recordsApi", function() {
             let testField =  {datatypeAttributes :{type: "TEXT"}, required : true};
             req.url = '/records/2';
             req.body = [{value: "", fieldDef: testField}];
-            var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
-            var promise = recordsApi.saveSingleRecord(req);
+            let errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
+            let promise = recordsApi.saveSingleRecord(req);
 
             promise.then(
                 function(error) {
@@ -376,9 +376,9 @@ describe("Validate recordsApi", function() {
         it('success return results ', function(done) {
             req.url = '/records/';
             req.body = {data:'here'};
-            var targetObject = "{}";
+            let targetObject = "{}";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.createSingleRecord(req);
+            let promise = recordsApi.createSingleRecord(req);
 
             promise.then(
                 function(response) {
@@ -393,10 +393,10 @@ describe("Validate recordsApi", function() {
 
         it('fail return results ', function(done) {
             req.url = '/records/';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = recordsApi.createSingleRecord(req);
+            let promise = recordsApi.createSingleRecord(req);
 
             promise.then(
                 function(error) {
@@ -415,8 +415,8 @@ describe("Validate recordsApi", function() {
             let testField =  {datatypeAttributes :{type: "TEXT"}, required : true};
             req.url = '/records/2';
             req.body = [{value: "", fieldDef: testField}];
-            var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
-            var promise = recordsApi.createSingleRecord(req);
+            let errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
+            let promise = recordsApi.createSingleRecord(req);
 
             promise.then(
                 function(error) {
@@ -436,9 +436,9 @@ describe("Validate recordsApi", function() {
         it('success return results ', function(done) {
             req.url = '/record/';
             req.body = {data:'here'};
-            var targetObject = "{}";
+            let targetObject = "{}";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.deleteSingleRecord(req);
+            let promise = recordsApi.deleteSingleRecord(req);
 
             promise.then(
                 function(response) {
@@ -453,10 +453,10 @@ describe("Validate recordsApi", function() {
 
         it('fail return results ', function(done) {
             req.url = '/record/';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = recordsApi.deleteSingleRecord(req);
+            let promise = recordsApi.deleteSingleRecord(req);
 
             promise.then(
                 function(error) {
@@ -477,9 +477,9 @@ describe("Validate recordsApi", function() {
         it('success return results ', function(done) {
             req.url = '/records/bulk/';
             req.body = {data:'here'};
-            var targetObject = "{}";
+            let targetObject = "{}";
             executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.deleteRecordsBulk(req);
+            let promise = recordsApi.deleteRecordsBulk(req);
 
             promise.then(
                 function(response) {
@@ -494,10 +494,10 @@ describe("Validate recordsApi", function() {
 
         it('fail return results ', function(done) {
             req.url = '/records/bulk/';
-            var error_message = "fail unit test case execution";
+            let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = recordsApi.deleteRecordsBulk(req);
+            let promise = recordsApi.deleteRecordsBulk(req);
 
             promise.then(
                 function(error) {

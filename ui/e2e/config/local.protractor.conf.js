@@ -99,7 +99,9 @@
             // If true, print colors to the terminal.
             showColors: true,
             // Default time to wait in ms before a test fails.
-            defaultTimeoutInterval: 60000
+            defaultTimeoutInterval: 60000,
+            // Uncomment if you just want to run just the smoke test
+            //grep:'@smoke'
         },
         // Globally accessible variables (params is a property of the Protractor instance)
         params: {

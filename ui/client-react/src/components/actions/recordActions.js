@@ -3,15 +3,23 @@ import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {MenuItem, Dropdown, Input} from 'react-bootstrap';
-
+import * as SchemaConsts from "../../constants/schema";
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';
-
+import QBModal from '../qbModal/qbModal';
+import Fluxxor from "fluxxor";
 import './recordActions.scss';
+
+let IntlMixin = ReactIntl.IntlMixin;
+let FluxMixin = Fluxxor.FluxMixin(React);
+
 /**
  * a set of record-level action icons
  */
 let RecordActions = React.createClass({
+    mixins: [FluxMixin, IntlMixin],
+    nameForRecords: "Records",
+
     propTypes: {
         selection: React.PropTypes.array
     },
@@ -33,6 +41,53 @@ let RecordActions = React.createClass({
         // prevent navigation to records
         e.stopPropagation();
     },
+
+    getInitialState() {
+        return {
+            confirmDeletesDialogOpen: false
+        };
+    },
+
+    /**
+     * delete the selected records, after confirmation if multiple records selected
+     */
+    handleDelete(record) {
+        if (this.props.data) {
+            this.setState({selectedRecordId: this.props.data[SchemaConsts.DEFAULT_RECORD_KEY].value});
+            this.setState({confirmDeletesDialogOpen: true});
+        }
+    },
+
+
+    handleRecordDelete() {
+        const flux = this.getFlux();
+        flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.nameForRecords);
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+
+    cancelRecordDelete() {
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+
+    /**
+     * render a QBModal
+     * @returns {XML}
+     */
+    getConfirmDialog() {
+
+        let msg = Locale.getMessage('selection.deleteThisRecord');
+
+        return (
+            <QBModal
+                show={this.state.confirmDeletesDialogOpen}
+                primaryButtonName={Locale.getMessage('selection.delete')}
+                primaryButtonOnClick={this.handleRecordDelete}
+                leftButtonName={Locale.getMessage('selection.dontDelete')}
+                leftButtonOnClick={this.cancelRecordDelete}
+                bodyMessage={msg}
+                type="alert"/>);
+    },
+
     getEmailAction() {
         //TODO Email action is disabled for now until its implemented.
         //return <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
@@ -51,9 +106,9 @@ let RecordActions = React.createClass({
                     <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
                     {this.getEmailAction()}
                     <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
-                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
+                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record} onClick={this.handleDelete}/>
                 </div>
-
+                {this.getConfirmDialog()}
             </div>
         );
     }

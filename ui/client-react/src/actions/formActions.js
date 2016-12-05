@@ -9,19 +9,9 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import * as UrlConsts from "../constants/urlConstants";
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
+import * as CompConsts from '../constants/componentConstants';
 
 let logger = new Logger();
-
-//  Custom handling of 'possible unhandled rejection' error,  because we don't want
-//  to see an exception in the console output.  The exception is thrown by bluebird
-//  because the core application code has no logic implemented to handle a rejected
-//  promise.  This is expected as promises are NOT implemented in the application
-//  code.  Promises are returned only to support our unit tests, which are expected
-//  to implement the appropriate handlers.
-Promise.onPossiblyUnhandledRejection(function(err) {
-    logger.debug('Bluebird Unhandled rejection', err);
-});
-
 
 
 let formActions = {
@@ -116,9 +106,11 @@ let formActions = {
                         }
 
                         if (error.response.status === 403) {
-                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                         } else {
-                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         }
 
                         // remove the editRec query string since we are not successfully editing the form
@@ -178,9 +170,11 @@ let formActions = {
                         // remove the editRec query string since we are not successfully editing the form
                         WindowLocationUtils.pushWithoutQuery();
                         if (error.response.status === 403) {
-                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         } else {
-                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         }
                         this.dispatch(failedAction, error.response.status);
 

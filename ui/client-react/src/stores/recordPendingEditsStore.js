@@ -25,11 +25,14 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
+            actions.DELETE_RECORD, this.onStartEdit,
+            actions.DELETE_RECORD_BULK, this.onStartEdit,
+            actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
+            actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
-            actions.DELETE_RECORD_FAILED, this.deleteRecordFailed,
-            actions.DELETE_RECORD_BULK_FAILED, this.deleteRecordBulkFailed,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
+            actions.AFTER_RECORD_EDIT, this.onAfterEdit,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
         this._initData();
@@ -127,6 +130,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _isDifferentThanPreviousValue(payload) {
         let {newVal, oldVal} = payload.changes.values;
+
+        // Cannot check for differences if one of the objects doesn't exist. Assume a change in that case.
+        if (!newVal || !oldVal) {
+            return true;
+        }
+
         // Some components modify display values and some modify the underlying value so we check for both
         return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
     },
@@ -139,6 +148,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _isDifferentThanOriginalFieldValue(payload) {
         let {newVal} = payload.changes.values;
+
+        // If there is no newValue object then assume a change
+        if (!newVal) {
+            return true;
+        }
+
         let originalRecord = this.originalRecord.fids[payload.changes.fid];
         let originalRecordValue = null;
         let originalRecordDisplay = null;
@@ -270,8 +285,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let changes = payload.changes;
         logger.debug('saving changes: ' + JSON.stringify(payload));
-        this.saving = true;
-        this.emit('change');
+        this.onStartEdit();
     },
 
     /**
@@ -293,7 +307,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.saving = false;
         this.emit('change');
 
     },
@@ -338,7 +351,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.handleErrors(payload);
         this.recordEditOpen = true;
-        this.saving = false;
         this.emit('change');
     },
 
@@ -352,9 +364,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
         this.recordChanges = payload.changes;
-        this.saving = true;
         logger.debug('saving added record: ' + JSON.stringify(payload));
-        this.emit('change');
+        this.onStartEdit();
     },
 
     /**
@@ -386,7 +397,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.saving = false;
         this.emit('change');
     },
 
@@ -407,16 +417,24 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
 
         this.handleErrors(payload);
+        this.emit('change');
+    },
+    onDeleteRecordFailed(payload) {
+        this.handleErrors(payload);
+        this.emit('change');
+    },
+    onDeleteRecordBulkFailed(payload) {
+        this.handleErrors(payload);
+        this.emit('change');
+    },
+    onStartEdit(emit = true) {
+        this.saving = true;
+        if (emit) {
+            this.emit('change');
+        }
+    },
+    onAfterEdit() {
         this.saving = false;
-        this.emit('change');
-    },
-
-    deleteRecordFailed(payload) {
-        this.handleErrors(payload);
-        this.emit('change');
-    },
-    deleteRecordBulkFailed(payload) {
-        this.handleErrors(payload);
         this.emit('change');
     },
     /**
