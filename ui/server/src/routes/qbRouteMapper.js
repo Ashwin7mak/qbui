@@ -36,7 +36,11 @@
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
+
+        //  app endpoints
+        routeToGetFunction[routeConsts.APPS] = getApps;
         routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
+        routeToGetFunction[routeConsts.APP_STACK_PREFERENCE] = applicationStackPreference;
 
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
@@ -61,15 +65,12 @@
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
-        //  application endpoints
-        routeToGetFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
-
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
-        routeToPostFunction[routeConsts.STACK_PREFERENCE] = applicationStackPreference;
+        routeToPostFunction[routeConsts.APP_STACK_PREFERENCE] = applicationStackPreference;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -187,17 +188,17 @@
     }
 
     function logApiSuccess(req, response, perfLog, apiName) {
+        log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
         if (perfLog) {
             perfLog.log();
         }
-        log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
     }
 
     function logApiFailure(req, response, perfLog, apiName) {
+        log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
         if (perfLog) {
             perfLog.log();
         }
-        log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
     }
 
     /**
@@ -217,6 +218,7 @@
      * processRequest is the default implementation for processing a request coming through the router. We first log the
      * request and then we check whether the route has been enabled. We will then modify the request path and send it
      * along to the return function.
+     *
      * @param req
      * @param res
      * @param returnFunction
@@ -229,6 +231,39 @@
             modifyRequestPathForApi(req);
             returnFunction(req, res);
         }
+    }
+
+    /**
+     * Return list of apps.
+     *
+     * Note: if request includes query parameter hydrate=1, then the return object will
+     * include appRights and v2/v3 stack preference.
+     *
+     * @param req
+     * @param res
+     */
+    function getApps(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get Apps', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.getApps(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get Apps');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get Apps');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
     }
 
     /**
@@ -658,24 +693,18 @@
         perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            appsApi.stackPreference(req).then(
+            let appId = req.params.appId;
+            appsApi.stackPreference(req, appId).then(
                 function(response) {
                     //  Legacy Quickbase returns a response status of 200 when controlled
                     //  errors(ie:unauthorized) are raised.  Need to examine the errorCode
                     //  value in the response body to determine the true state of the request.
-                    let resp;
-                    try {
-                        resp = JSON.parse(response.body);
-                    } catch (e) {
-                        resp = {'errorText':'No response body returned.'};
-                    }
-
-                    if (resp.errorCode === 0) {
+                    if (response.errorCode === 0) {
                         logApiSuccess(req, response, perfLog, 'Application Stack Preference');
                     } else {
-                        logApiFailure(req, response, perfLog, 'Application Stack Preference');
+                        logApiFailure(req, response, perfLog, 'Application Stack Preference. ' + response.errorText);
                     }
-                    res.send(resp);
+                    res.send(response);
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Application Stack Preference');
