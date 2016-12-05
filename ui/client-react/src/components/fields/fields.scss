@@ -52,12 +52,6 @@ $data-font-size: $font-size-p;
         padding: 0 0 0 2px;
         width: inherit;
         height: 30px;
-        &.officeNumber {
-            width: 70%;
-        }
-        &.extNumber {
-            width: 30%;
-        }
     }
 
     &:focus.input {

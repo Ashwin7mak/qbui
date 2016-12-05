@@ -42,12 +42,14 @@ var BasicPhoneFieldValueEditor = React.createClass({
                 </dd>
                 <dt>Phone Field Editor with extension and a value:</dt>
                 <dd>
+                    <div style={{width:'200px'}}>
                     <PhoneFieldValueEditor display={this.state.inputValue2}
                                            value={this.state.inputValue2}
                                            onBlur={this.onBlur2}
                                            onChange={this.onChangeInput2}
                                            fieldDef={{dataTypeAttributes:"PHONE_NUMBER"}}
                                            attributes={{includeExtension: true}}/>
+                    </div>
                 </dd>
             </div>
         );

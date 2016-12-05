@@ -147,17 +147,21 @@ $urlIcon-margin-left: 10px;
             position: relative;
             top: 2px;
         }
+        .smsIcon {
+            padding-right: 5px;
+        }
+
+        &.phoneIcon {
+            display: flex;
+        }
     }
     .phoneQBIconWrapper {
         display: flex;
-    }
-    .smsIcon {
-        padding-right: 5px;
+        a:hover, a:active {
+            text-decoration: none;
+        }
     }
 
-    .phoneIcon {
-        display: flex;
-    }
 
 }
 
