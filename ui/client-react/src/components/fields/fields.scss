@@ -198,8 +198,10 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
         box-shadow: 0 0 2px 1.5px rgba(54, 94, 191, 0.25);
     }
 
-    input.input.textField {
+    input {
         height: 30px;
+        width: 100%;
+        transition: padding 0.3s;
         // need to remove the browser default styling on a focused input since the focus styling
         // is on the parent class which contains both the input and the clearIcon
         outline: none;
@@ -209,7 +211,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 
     .clearIcon {
         display: none;
-        position: relative;
+        position: absolute;
         background-color: transparent;
         color: $clearmini-normal-color;
         max-height: 16px;
@@ -239,8 +241,9 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
         .clearIcon {
             display: inline;
         }
-        input:focus {
-            padding-right: 22px;
+        // need this specificity to override generic input styles in qbforms.scss
+        &.isFocused input:focus {
+            padding-right: 23px;
 
             & + .clearIcon {
                 opacity: 1;

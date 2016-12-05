@@ -1,48 +1,26 @@
 import React from 'react';
 
-/**
- * A higher-order component which adds a "clear" icon to the wrapped component.
- */
+import QBToolTip from '../qbToolTip/qbToolTip';
+import QBicon from '../qbIcon/qbIcon';
 
-export default clearableInputWrapper = (Component) =>{
+const ClearableInputWrapper = React.createClass({
+    displayName: 'ClearableInputWrapper',
 
-    const ClearableInput = React.createClass({
+    propTypes: {
+        clearInput  : React.PropTypes.func,
+    },
 
-        displayName: 'clearable_' + Component.displayName,
-
-        propTypes: {
-            clearInput  : React.PropTypes.func,
-        },
-
-        getInitialState() {
-            return {
-                isFocused: false,
-            };
-        },
-
-        onFocus() {
-            this.setState({isFocused: true});
-        },
-
-        onBlur(ev) {
-            this.setState({isFocused: false});
-        },
-
-        render() {
-            const classNames = ['inputDeleteIcon'];
-            classNames.push(this.state.isFocused ? 'isFocused' : '');
-            return (
-                <span className={classNames.join(" ")}>
-                    <Component {...this.props} onFocus={this.onFocus} onBlur={this.onBlur} />
-                    <div className="clearIcon">
-                        <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
-                            <QBicon onClick={this.props.clearInput} icon="clear-mini" />
-                        </QBToolTip>
-                    </div>
-                </span>
-            );
-        }
-    });
-
-    return ClearableInput;
-};
+    render() {
+        return (
+            <span className="inputDeleteIcon isFocused">
+                {this.props.children}
+                <div className="clearIcon">
+                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
+                        <QBicon onClick={this.props.clearInput} icon="clear-mini" />
+                    </QBToolTip>
+                </div>
+            </span>
+        );
+    }
+});
+export default ClearableInputWrapper;

@@ -1,6 +1,7 @@
 import React from 'react';
 import './fields.scss';
 
+import ClearableInput from '../hoc/ClearableInput';
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
 
@@ -10,6 +11,27 @@ import * as consts from '../../../../common/src/constants';
  * An editable rendering of a number field as an input box. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
+
+
+const numericInput = React.createClass({
+    render() {
+        let classes, placeholder, width;
+        return (
+            <input
+                ref="textInput"
+                className={classes}
+                value={this.props.display ? this.props.display : this.props.value}
+                type="text"
+                key={'inp' + this.props.idKey}
+                placeholder={placeholder}
+                onChange={this.onChange}
+                onBlur={this.onBlur}
+                size={width}
+            />
+        );
+    }
+});
+//const ClearableNumericField = ClearableInput(numericInput);
 
 const NumericFieldValueEditor = React.createClass({
     displayName: 'NumericFieldValueEditor',
@@ -119,35 +141,40 @@ const NumericFieldValueEditor = React.createClass({
         }
     },
 
+    clearInput() {
+        console.log('clear')
+    },
+
     render() {
-        let placeholder = "";
+        let placeholder = '';
         if (this.props.placeholder) {
             placeholder = this.props.placeholder;
         } else if (_.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.symbol')) {
             placeholder = this.props.fieldDef.datatypeAttributes.clientSideAttributes.symbol;
         }
 
-        let classes = 'input numericField borderOnError';
+        let classes = ['input', 'numericField', 'borderOnError'];
         // error state css class
-        if (this.props.invalid) {
-            classes += ' error';
-        }
-        if (this.props.classes) {
-            classes += ' ' + this.props.classes;
-        }
-        let width = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
+        classes.push(this.props.invalid ? 'error' : '');
+        classes.push(this.props.classes || '');
 
+        let width = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width', null);
 
-        return <input ref="textInput"
-                      className={classes}
-                      value={this.props.display ? this.props.display : this.props.value}
-                      type="text"
-                      key={'inp' + this.props.idKey}
-                      placeholder={placeholder}
-                      onChange={this.onChange}
-                      onBlur={this.onBlur}
-                      size={width}/>;
+        return (
+            <ClearableInput clearInput={this.clearInput} >
+                <input
+                    ref="textInput"
+                    className={classes}
+                    value={this.props.display ? this.props.display : this.props.value}
+                    type="text"
+                    key={'inp' + this.props.idKey}
+                    placeholder={placeholder}
+                    onChange={this.onChange}
+                    onBlur={this.onBlur}
+                    size={width}
+                />
+            </ClearableInput>
+        );
     }
 });
-
 export default NumericFieldValueEditor;
