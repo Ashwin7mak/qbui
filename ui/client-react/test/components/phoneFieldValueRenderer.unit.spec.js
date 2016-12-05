@@ -11,7 +11,8 @@ describe('PhoneFieldValueRenderer functions', () => {
     beforeEach(function() {
         jasmine.addMatchers(matchers(TestUtils));
     });
-    const phoneNumber = "5555555555";
+    const rawPhoneNumberVal = "5555555555";
+    const rawPhoneNumberValWithExt = "5555555555x5555"
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithoutExt = "(555) 555-5555";
     const smsIcon = "iconTableUISturdy-speechbubble-outline";
@@ -24,7 +25,7 @@ describe('PhoneFieldValueRenderer functions', () => {
     });
 
     it('test render of component without extension', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
                                                                           display={phoneNumberWithoutExt}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
@@ -40,45 +41,55 @@ describe('PhoneFieldValueRenderer functions', () => {
     });
 
     it('test render of sms Icon', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
-                                                                          display={phoneNumber}/>);
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
+                                                                          display={rawPhoneNumberVal}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
         expect(phoneFieldValueRenderer[2].childNodes[0].firstChild.classList[2]).toEqual(smsIcon);
     });
     it('test if href for sms Icon exists', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
-                                                                          display={phoneNumber}/>);
-        // domComponent = ReactDOM.findDOMNode(component);
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
+                                                                          display={rawPhoneNumberVal}/>);
         const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
-        expect(phoneFieldValueRenderer[2].childNodes[0].href).toEqual('sms:' + phoneNumber);
+        expect(phoneFieldValueRenderer[2].childNodes[0].href).toEqual('sms:' + rawPhoneNumberVal);
+});
+    it('test if href for smsIcon removes extension', () => {
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberValWithExt}
+                                                                          display={rawPhoneNumberValWithExt}/>);
+        const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
+        expect(phoneFieldValueRenderer[2].childNodes[0].href).toEqual('sms:' + rawPhoneNumberVal);
     });
 
     it('test render of phoneIcon', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
-                                                                          display={phoneNumber}/>);
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
+                                                                          display={rawPhoneNumberVal}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
         expect(phoneFieldValueRenderer[2].childNodes[1].firstChild.classList[1]).toEqual(phoneIcon);
     });
 
     it('test if href for phone Icon exists', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
-                                                                          display={phoneNumber}/>);
-        // domComponent = ReactDOM.findDOMNode(component);
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
+                                                                          display={rawPhoneNumberVal}/>);
         const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
-        expect(phoneFieldValueRenderer[2].childNodes[1].href).toEqual('tel:' + phoneNumber);
+        expect(phoneFieldValueRenderer[2].childNodes[1].href).toEqual('tel:' + rawPhoneNumberVal);
+    });
+    it('test if href for phoneIcon removes extension', () => {
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberValWithExt}
+                                                                          display={rawPhoneNumberValWithExt}/>);
+        const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
+        expect(phoneFieldValueRenderer[2].childNodes[1].href).toEqual('tel:' + rawPhoneNumberVal);
     });
     it('displays a url as a clickable link by default', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
                                                                           display={phoneNumberWithExt} />);
         domComponent = ReactDOM.findDOMNode(component).querySelector('a');
-        expect(domComponent.href).toEqual('tel:' + phoneNumber);
+        expect(domComponent.href).toEqual('tel:' + rawPhoneNumberVal);
         expect(domComponent.text).toEqual(phoneNumberWithExt);
     });
 
     it('displays only text if disabled', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
                                                                           display={phoneNumberWithExt}
                                                                           disabled={true} />);
         domComponent = ReactDOM.findDOMNode(component);
@@ -89,11 +100,11 @@ describe('PhoneFieldValueRenderer functions', () => {
     });
 
     it('displays alternate text for the link', () => {
-        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={phoneNumber}
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberVal}
                                                                           display={phoneNumberWithExt} />);
 
         domComponent = ReactDOM.findDOMNode(component).querySelector('a');
-        expect(domComponent.href).toEqual('tel:' + phoneNumber);
+        expect(domComponent.href).toEqual('tel:' + rawPhoneNumberVal);
         expect(domComponent.textContent).toEqual(phoneNumberWithExt);
     });
 });
