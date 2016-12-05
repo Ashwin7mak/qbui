@@ -272,7 +272,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             }
 
             if (!results.invalidMessage && _.has(results, 'error.messageId')) {
-                results.invalidMessage = Locale.getMessage(results.error.messageId, {fieldName: (_.has(results, 'def') ? results.def.fieldLabel : null)});
+                results.invalidMessage = ValidationMessage.getMessage(results);
             }
 
             this.editErrors.ok = false;
