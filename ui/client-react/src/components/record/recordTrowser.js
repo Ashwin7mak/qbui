@@ -43,7 +43,7 @@ let RecordTrowser = React.createClass({
     },
 
     _doesNotHaveErrors() {
-        return (this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
+        return (!_.has(this.props, 'pendEdits.editErrors.errors') || this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
     },
 
     /**
