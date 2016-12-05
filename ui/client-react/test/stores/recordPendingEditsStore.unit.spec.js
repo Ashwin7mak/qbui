@@ -392,6 +392,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
 
     });
+
     it('test onDeleteRecordBulkSuccess recordPendingEdits action', () => {
         let onDeleteRecordBulkSuccessAction = {
             type: actions.DELETE_RECORD_BULK_SUCCESS,
@@ -401,7 +402,6 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
 
     });
-
 
     it('test onDeleteRecordBulkFailed recordPendingEdits action', () => {
         let onDeleteRecordBulkFailedAction = {
@@ -423,7 +423,6 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).saving).toBe(false);
 
     });
-
 
     it('test getState function', () => {
 
@@ -530,6 +529,60 @@ describe('Test recordPendingEdits Store ', () => {
 
                 expect(changes.newVal).toEqual({display: testCase.newDisplayValue, value: testCase.newValue});
                 expect(changes.oldVal).toEqual({display: testCase.oldDisplayValue, value: testCase.oldValue});
+                expect(currentState.isPendingEdit).toBeTruthy();
+                expect(pendingEditsStore.emit).toHaveBeenCalled();
+                expect(pendingEditsStore.emit.calls.count()).toBe(1);
+            });
+        });
+
+        let missingValueObjectsTestCases = [
+            {
+                description: 'adds pendingEdits if the oldValue object is undefined',
+                oldValueObject: undefined,
+                newValueObject: {value: 'something', display: 'something'}
+            },
+            {
+                description: 'adds pendingEdits if the newValue object is undefined',
+                oldValueObject: {value: 'something', display: 'something'},
+                newValueObject: undefined
+            },
+            {
+                description: 'adds pendingEdits if the newValue and oldValue objects are undefined',
+                oldValueObject: undefined,
+                newValueObject: undefined
+            },
+            {
+                description: 'adds pendingEdits if the newValue and oldValue objects are null',
+                oldValueObject: null,
+                newValueObject: null
+            }
+        ];
+
+        missingValueObjectsTestCases.forEach(testCase => {
+            it('adds pendingEdits if the oldValue object is undefined', () => {
+                let payload = {
+                    fieldDef: {},
+                    fieldName: 'test field',
+                    appId: appTableRecPayload.appId,
+                    tbleId: appTableRecPayload.tblId,
+                    recId: 4,
+                    changes: {
+                        fid: currentlyEditingFieldId,
+                        values: {
+                            newVal: testCase.newValueObject,
+                            oldVal: testCase.oldValueObject
+                        }
+                    }
+                };
+
+                flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
+
+                let pendingEditsStore = flux.store(STORE_NAME);
+                let currentState = pendingEditsStore.getState();
+                let changes = currentState.recordChanges[currentlyEditingFieldId];
+
+                expect(changes.newVal).toEqual(testCase.newValueObject);
+                expect(changes.oldVal).toEqual(testCase.oldValueObject);
                 expect(currentState.isPendingEdit).toBeTruthy();
                 expect(pendingEditsStore.emit).toHaveBeenCalled();
                 expect(pendingEditsStore.emit.calls.count()).toBe(1);

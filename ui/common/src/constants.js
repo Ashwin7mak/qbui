@@ -76,7 +76,8 @@
             OFFSET: 'offset',
             NUM_ROWS: 'numRows',
             HOME_PAGE_ID: 'homePageId',
-            OPEN_IN_V3: 'openInV3'
+            OPEN_IN_V3: 'openInV3',
+            HYDRATE: 'hydrate'
         },
         FORMAT : {
             DISPLAY: 'display',
