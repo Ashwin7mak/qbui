@@ -9,7 +9,7 @@ import Locale from '../locales/locales';
 
 var logger = new Logger();
 
-const [DTS_ERR0R_CODE, DTS_ERROR_MESSAGES_CODE] = [Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, Constants.ERROR_CODE.DTS_ERROR_CODE];
+const [DTS_ERROR_CODE, DTS_ERROR_MESSAGES_CODE] = [Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, Constants.ERROR_CODE.DTS_ERROR_CODE];
 
 /**
    RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
@@ -359,7 +359,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     handleErrors(payload) {
         this.getServerErrs(payload);
         if (payload.error) {
-            if (payload.error.statusCode === DTS_ERR0R_CODE && payload.error.errorMessages[0].code === DTS_ERROR_MESSAGES_CODE) {
+            if (payload.error.statusCode === DTS_ERROR_CODE && payload.error.errorMessages[0].code === DTS_ERROR_MESSAGES_CODE) {
                 this.onDTSErrorModal(payload);
             }
         }

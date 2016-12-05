@@ -248,7 +248,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Please fix this field",
-                multipleErrorLabel: "Please fix these {numFields} fields.",
+                multipleErrorLabel: "Please fix these {numFields} fields."
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Show error list",

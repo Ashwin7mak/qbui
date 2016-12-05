@@ -689,7 +689,7 @@ describe('Test recordPendingEdits Store ', () => {
 
         let requiredFieldWithValue = Object.assign({}, requiredFieldWithEmptyValue, {value: 'something'});
 
-        it('creates a default editErrors object if one has not already been build', () => {
+        it('creates a default editErrors object if one has not already been built', () => {
             flux.dispatcher.dispatch({type: actions.RECORD_EDIT_VALIDATE_FIELD, payload: {}});
 
             let currentState = flux.store(STORE_NAME).getState();
