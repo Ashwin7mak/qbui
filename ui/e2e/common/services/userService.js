@@ -22,7 +22,7 @@
                 let users = userGenerator.generateDefaultAdminUsers();
 
                 users.forEach(user => {
-                    recordBase.apiBase.createDefaultUser(user).then(function(userResponse) {
+                    recordBase.apiBase.createSpecificUser(user).then(function(userResponse) {
                         let userId = JSON.parse(userResponse.body).id;
                         userIdList.push(userId);
 
