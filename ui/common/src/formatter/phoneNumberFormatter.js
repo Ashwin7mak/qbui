@@ -28,27 +28,17 @@
             return phoneNum + EXTENSION_DELIM + extNum;
         },
         onChangeMasking: function(nums) {
-            nums = nums.split('');
-            var newNums = [];
-            nums.forEach(function(num) {
-                if (ALLOWED_CHARACTERS_ONCHANGE.indexOf(num) !== -1) {
-                    newNums.push(num);
-                }
-            });
-            return newNums.join('');
+            return nums.split('')
+                .filter(function(num) {return ALLOWED_CHARACTERS_ONCHANGE.indexOf(num) > -1;})
+                .join('');
         },
         onBlurMasking: function(nums) {
             if (!nums) {
                 return '';
             }
-            nums = nums.split('');
-            var newNums = [];
-            nums.forEach(function(num) {
-                if (ALLOWED_CHARACTERS_ONBLUR.indexOf(num) !== -1) {
-                    newNums.push(num);
-                }
-            });
-            return newNums.join('');
+            return nums.split('')
+                .filter(function(num) {return ALLOWED_CHARACTERS_ONBLUR.indexOf(num) > -1;})
+                .join('');
         },
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
