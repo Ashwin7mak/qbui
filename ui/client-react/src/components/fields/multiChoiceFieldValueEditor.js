@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select from '../select/reactSelectWrapper';
 import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';

@@ -20,6 +20,7 @@ describe('Group Route Mapper Unit Test', function() {
     function routeIsEnabledForGroupProvider() {
         return [
             //LIGHTHOUSE V1 ROUTE GROUP
+            {message: 'LH_V1, ' + routeConsts.APPS + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'get', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'get', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'get', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.FORM_AND_RECORD_COMPONENTS + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: 'get', expectedOutput: true},
@@ -37,6 +38,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'get', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'get', expectedOutput: true},
 
+            {message: 'LH_V1, ' + routeConsts.APPS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_AND_RECORD_COMPONENTS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: 'post', expectedOutput: false},
@@ -54,6 +56,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: false},
 
+            {message: 'LH_V1, ' + routeConsts.APPS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_AND_RECORD_COMPONENTS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: 'delete', expectedOutput: false},
@@ -71,6 +74,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: false},
 
+            {message: 'LH_V1, ' + routeConsts.APPS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_AND_RECORD_COMPONENTS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: 'patch', expectedOutput: false},
@@ -88,6 +92,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: false},
 
+            {message: 'LH_V1, ' + routeConsts.APPS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.FORM_AND_RECORD_COMPONENTS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_AND_RECORD_COMPONENTS, method: 'put', expectedOutput: false},
@@ -106,6 +111,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: false},
 
             //DEBUG
+            {message: 'DEBUG, ' + routeConsts.APPS + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.APPS, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.APP_USERS + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.APP_USERS, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORD + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'get', expectedOutput: true},
@@ -118,6 +124,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'DEBUG, ' + routeConsts.SWAGGER_DOCUMENTATION + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.TOMCAT_ALL + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.APP_USERS + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.APP_USERS, method: 'post', expectedOutput: false},
+            {message: 'DEBUG, ' + routeConsts.APPS + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.APPS, method: 'post', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.RECORD + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'post', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'post', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS_BULK + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS_BULK, method: 'post', expectedOutput: true},
@@ -129,6 +136,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'DEBUG, ' + routeConsts.SWAGGER_IMAGES + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_IMAGES, method: 'post', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.SWAGGER_DOCUMENTATION + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'post', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: true},
+            {message: 'DEBUG, ' + routeConsts.APPS + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.APPS, method: 'delete', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.APP_USERS + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.APP_USERS, method: 'delete', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.RECORD + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'delete', expectedOutput: true},
@@ -140,6 +148,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'DEBUG, ' + routeConsts.SWAGGER_IMAGES + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_IMAGES, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: true},
+            {message: 'DEBUG, ' + routeConsts.APPS + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.APPS, method: 'patch', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.APP_USERS + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.APP_USERS, method: 'patch', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.RECORD + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'patch', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'patch', expectedOutput: true},
@@ -151,6 +160,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'DEBUG, ' + routeConsts.SWAGGER_IMAGES + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_IMAGES, method: 'patch', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.SWAGGER_DOCUMENTATION + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'patch', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.TOMCAT_ALL + ' PATCH', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'patch', expectedOutput: true},
+            {message: 'DEBUG, ' + routeConsts.APPS + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.APPS, method: 'put', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.APP_USERS + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.APP_USERS, method: 'put', expectedOutput: false},
             {message: 'DEBUG, ' + routeConsts.RECORD + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'put', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS + ' PUT', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'put', expectedOutput: true},

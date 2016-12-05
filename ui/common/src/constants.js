@@ -3,6 +3,8 @@
  */
 (function() {
     'use strict';
+    var bigDecimal = require('bigdecimal');
+
     module.exports = Object.freeze({
         POST            : 'POST',
         GET             : 'GET',
@@ -74,7 +76,8 @@
             OFFSET: 'offset',
             NUM_ROWS: 'numRows',
             HOME_PAGE_ID: 'homePageId',
-            OPEN_IN_V3: 'openInV3'
+            OPEN_IN_V3: 'openInV3',
+            HYDRATE: 'hydrate'
         },
         FORMAT : {
             DISPLAY: 'display',
@@ -86,6 +89,24 @@
             ONE_HOUR: 1000 * 60 * 60,
             ONE_DAY: 1000 * 60 * 60 * 24,
             ONE_WEEK: 1000 * 60 * 60 * 24 * 7
+        },
+        DURATION_CONSTS : {
+            MILLIS_PER_SECOND: new bigDecimal.BigDecimal(1000),
+            MILLIS_PER_MIN: new bigDecimal.BigDecimal(60000),
+            MILLIS_PER_HOUR: new bigDecimal.BigDecimal(3600000),
+            MILLIS_PER_DAY: new bigDecimal.BigDecimal(86400000),
+            MILLIS_PER_WEEK: new bigDecimal.BigDecimal(604800000),
+
+            HHMM: ':HH:MM',
+            HHMMSS: ':HH:MM:SS',
+            MM: ':MM',
+            MMSS: ':MM:SS',
+            //var SMART_UNITS:'Smart Units',
+            WEEKS: 'Weeks',
+            DAYS: 'Days',
+            HOURS: 'Hours',
+            MINUTES: 'Minutes',
+            SECONDS: 'Seconds',
         },
         PAGE : {
             DEFAULT_OFFSET : 0,

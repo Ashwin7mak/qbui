@@ -1,5 +1,6 @@
 import constants from './constants';
 import BaseService from './baseService';
+import * as query from '../constants/query';
 import Promise from 'bluebird';
 
 class AppService extends BaseService {
@@ -32,7 +33,6 @@ class AppService extends BaseService {
      * @param appId
      */
     getAppUsers(appId) {
-
         let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
         return super.get(url);
     }
@@ -40,10 +40,17 @@ class AppService extends BaseService {
     /**
      * Return all QuickBase apps
      *
+     * @param hydrate
      * @returns promise
      */
-    getApps() {
-        return super.get(this.API.GET_APPS);
+    getApps(hydrate) {
+        //  should the information returned for each table be the table id
+        //  only or a fully hydrated table object.
+        let params = {};
+        if (hydrate) {
+            params[query.HYDRATE] = '1';
+        }
+        return super.get(this.API.GET_APPS, {params:params});
     }
 
     /**

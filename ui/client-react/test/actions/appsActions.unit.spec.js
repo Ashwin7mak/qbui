@@ -23,6 +23,9 @@ describe('Apps Actions functions with Tables', () => {
         setApplicationStack(id, open) {
             return Promise.resolve();
         }
+        getAppUsers(id) {
+            return Promise.resolve({data: responseData});
+        }
     }
 
     let stores = {};
@@ -35,6 +38,7 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
         spyOn(mockAppService.prototype, 'getApplicationStack').and.callThrough();
         spyOn(mockAppService.prototype, 'setApplicationStack').and.callThrough();
+        spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
         appsActions.__Rewire__('AppService', mockAppService);
     });
 
@@ -43,8 +47,8 @@ describe('Apps Actions functions with Tables', () => {
     });
 
     var appsActionTests = [
-        {name:'test load apps action', withTables: true},
-        {name:'test load apps action without tables', withTables: false}
+        {name:'test load apps action', hydrate: true},
+        {name:'test load apps action without tables', hydrate: false}
     ];
 
     appsActionTests.forEach(function(test) {
@@ -52,11 +56,6 @@ describe('Apps Actions functions with Tables', () => {
             flux.actions.loadApps(test.withTables).then(
                 () => {
                     expect(mockAppService.prototype.getApps).toHaveBeenCalled();
-                    if (test.withTables === true) {
-                        expect(mockAppService.prototype.getApp).toHaveBeenCalled();
-                    } else {
-                        expect(mockAppService.prototype.getApp).not.toHaveBeenCalled();
-                    }
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_SUCCESS, responseData]);
@@ -108,6 +107,33 @@ describe('Apps Actions functions with Tables', () => {
                     expect(mockAppService.prototype.setApplicationStack).toHaveBeenCalledWith(test.appId, param);
 
                     //TODO add dispatch tests
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var selectAppIdTests = [
+        {name:'select app id', appId: 123, cached: false},
+        {name:'select app id cached', appId: 123, cached: true}
+    ];
+    selectAppIdTests.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.selectedAppId = test.cached === true ? test.appId : '';
+            flux.actions.selectAppId(test.appId).then(
+                () => {
+                    if (test.cached === true) {
+                        expect(mockAppService.prototype.getAppUsers).not.toHaveBeenCalled();
+                    } else {
+                        expect(mockAppService.prototype.getAppUsers).toHaveBeenCalledWith(test.appId);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APP_USERS_SUCCESS, responseData]);
+                    }
                     done();
                 },
                 () => {

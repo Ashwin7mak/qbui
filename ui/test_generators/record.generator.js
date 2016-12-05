@@ -13,6 +13,7 @@
     var rawValueGenerator = require('./rawValue.generator');
     var log = require('../server/src/logger').getLogger();
     var recordTypeMapping = {};
+    var chance = require('chance').Chance();
 
     module.exports = {
         /**
@@ -116,6 +117,5 @@
     recordTypeMapping[consts.DATE] = function() {return rawValueGenerator.generateDate();};
     recordTypeMapping[consts.TIME_OF_DAY] = function() {return rawValueGenerator.generateTime();};
     recordTypeMapping[consts.FILE_ATTACHMENT] = function() {return rawValueGenerator.generateUrl();};
-    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) {return rawValueGenerator.pickUserIdFromList(userIdsToPickFrom);};
-
+    recordTypeMapping[consts.USER] = function(userIdsToPickFrom) {return rawValueGenerator.pickUserIdFromList(['10000']);};
 }());

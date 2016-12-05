@@ -1,9 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-
 import NavPageTitle from '../../src/components/pageTitle/navPageTitle';
 import HtmlUtils from '../../src/utils/htmlUtils';
-import BaseService from '../../src/services/baseService';
+import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import Locale from '../../src/locales/locales';
 import {DEFAULT_PAGE_TITLE, NEW_RECORD_VALUE} from '../../src/constants/urlConstants';
 
@@ -13,7 +12,7 @@ let testRealm = 'Astley';
 describe('NavPageTitle', () => {
     beforeEach(() => {
         spyOn(HtmlUtils, 'updatePageTitle');
-        spyOn(BaseService.prototype, 'getSubdomain').and.returnValue(testRealm);
+        spyOn(WindowLocationUtils, 'getHostname').and.returnValue(testRealm);
     });
 
     function generateTestTitle(titles) {

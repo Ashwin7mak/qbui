@@ -215,11 +215,11 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.URL: {
-            return <UrlFieldValueEditor {...commonProps} />;
+            return <UrlFieldValueEditor {...commonProps} classes="cellEdit" />;
         }
 
         case FieldFormats.EMAIL_ADDRESS: {
-            return <EmailFieldValueEditor {...commonProps} />;
+            return <EmailFieldValueEditor {...commonProps} classes="cellEdit" />;
         }
 
         case FieldFormats.TEXT_FORMAT:

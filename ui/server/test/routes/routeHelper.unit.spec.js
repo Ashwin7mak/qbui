@@ -39,18 +39,54 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate getAppsRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', appId:'', expectation: ''},
+            {name: 'test null url', url: null, appId:'123', expectation: null},
+            {name: 'test null appId with invalid url', url: '/url/prefix/', appId:null, expectation: '/url/prefix/'},
+            {name: 'test null appId with valid url', url: '/url/prefix/apps/1/tables/2', appId:null, expectation: '/url/prefix/apps'},
+            {name: 'test appid with valid url', url: '/non/parsing/url/apps/1/tables/2', appId:'123', expectation: '/non/parsing/url/apps/123'},
+            {name: 'test appid with invalid url', url: '/non/parsing/url/a/2', appId:'123', expectation: '/non/parsing/url/a/2'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getAppsRoute(testCase.url, testCase.appId), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate getAppsAccessRightsRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', appId:'', expectation: ''},
+            {name: 'test null url', url: null, appId:'123', expectation: null},
+            {name: 'test null appId with invalid url', url: '/url/prefix/', appId:null, expectation: '/url/prefix/'},
+            {name: 'test null appId with valid url', url: '/url/prefix/apps/1/tables/2', appId:null, expectation: '/url/prefix/apps/1/tables/2'},
+            {name: 'test appid with valid url', url: '/non/parsing/url/apps/1/tables/2', appId:'123', expectation: '/non/parsing/url/apps/123/accessRights'},
+            {name: 'test appid with invalid url', url: '/non/parsing/url/a/2', appId:'123', expectation: '/non/parsing/url/a/2'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getAppsAccessRightsRoute(testCase.url, testCase.appId), testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('validate getAppUsersRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},
             {name: 'test null url', url: null, expectation: null},
             {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
             {name: 'test invalid url - no app', url: '/apps/', expectation: '/apps/'},
-            {name: 'test valid url', url: '/apps/123/users', expectation: '/apps/123/users'}
+            {name: 'test valid url', url: '/apps/123/users', expectation: '/apps/123/users/'}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getReportsCountRoute(testCase.url, testCase.id), testCase.expectation);
+                assert.equal(routeHelper.getAppUsersRoute(testCase.url), testCase.expectation);
                 done();
             });
         });
