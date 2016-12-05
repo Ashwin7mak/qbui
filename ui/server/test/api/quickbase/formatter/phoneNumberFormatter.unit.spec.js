@@ -1,5 +1,6 @@
 var assert = require('assert');
 var PhoneNumberFormatter = require('../../../../src/api/quickbase/formatter/phoneNumberFormatter');
+var CommonPhoneNumberFormatter = require('../../../../../common/src/formatter/phoneNumberFormatter');
 
 // national format for anything with US region/code
 // starting with a zero, we will not apply any formatting
@@ -98,23 +99,8 @@ describe.only('PhoneNumberFormatter (server side)', () => {
             expectedFormattedNumber: null,
             expectedInternetDialableNumber: null,
             expectedPhoneNumberWithoutExtension: '5084811234567890',
-            expectedNationalFormattedNumber: '508481 (123) 456-7890',
-            expectedUserFormattedNumber: null,
-            expectedExtension: null,
-        },
-
-        {
-            description: 'uses the standard US formatting for a number that is too short',
-            phoneNumber: '911',
-            region: null,
-            expectedRegion: null,
-            expectedCountryCode: null,
-            expectedDialString: '911',
-            expectedInternationalNumber: null,
-            expectedFormattedNumber: null,
-            expectedInternetDialableNumber: null,
-            expectedPhoneNumberWithoutExtension: '911',
-            expectedNationalFormattedNumber: '911',
+            // This test uses the constants because it gets its formatting from the CommonPhoneNumberFormatter. Other tests use Google Lib which does not have constants setup.
+            expectedNationalFormattedNumber: `${CommonPhoneNumberFormatter.OPEN_PAREN}508${CommonPhoneNumberFormatter.CLOSE_PAREN} 481${CommonPhoneNumberFormatter.DASH}1234 567890`,
             expectedUserFormattedNumber: null,
             expectedExtension: null,
         },
@@ -254,8 +240,6 @@ describe.only('PhoneNumberFormatter (server side)', () => {
     phoneNumberTestCases.forEach((testCase) => {
         it(testCase.description, () => {
             var phoneNumber = new PhoneNumberFormatter.QbPhoneNumber(testCase.phoneNumber, testCase.region);
-
-            console.log(phoneNumber);
 
             assert.equal(phoneNumber.region, testCase.expectedRegion, 'Regions are not equal');
             assert.equal(phoneNumber.countryCode, testCase.expectedCountryCode, 'Country codes is not equal');

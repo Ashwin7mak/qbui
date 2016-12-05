@@ -9,8 +9,15 @@
     var OPEN_PAREN = '(';
     var CLOSE_PAREN = ')';
     var DASH = '-';
+    var US_SEVEN_DIGIT_FORMAT = "$1" + DASH + "$2";
+    var US_TEN_DIGIT_FORMAT = OPEN_PAREN + "$1" + CLOSE_PAREN + " $2" + DASH + "$3";
 
     module.exports = {
+        // Export these constants so the same one can be used in tests
+        EXTENSION_DELIM: EXTENSION_DELIM,
+        OPEN_PAREN: OPEN_PAREN,
+        CLOSE_PAREN: CLOSE_PAREN,
+        DASH: DASH,
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
@@ -38,29 +45,22 @@
              *
              * the phoneWithOutExtension var carries the remaining raw values which still needs to inserted into the formatted value.
              */
-            if (phoneWithOutExtension.length <= 4) {
+            var phoneWithOutExtensionLength = phoneWithOutExtension.length;
+            if (phoneWithOutExtensionLength <= 4) {
                 formattedPhoneVal = phoneWithOutExtension;
+            } else if (phoneWithOutExtensionLength <= 7) {
+                formattedPhoneVal = phoneWithOutExtension.replace(/^(\d{0,3})(\d{4})/, US_SEVEN_DIGIT_FORMAT);
+            } else if (phoneWithOutExtensionLength <= 10) {
+                formattedPhoneVal = phoneWithOutExtension.replace(/^(\d{0,3})(\d{3})(\d{4})/, US_TEN_DIGIT_FORMAT);
             } else {
-                var lastFour = phoneWithOutExtension.substring(phoneWithOutExtension.length - 4);
-                formattedPhoneVal = DASH + lastFour;
-
-                phoneWithOutExtension = phoneWithOutExtension.substring(0, phoneWithOutExtension.length - 4);
-                if (phoneWithOutExtension.length <= 3) {
-                    formattedPhoneVal =  phoneWithOutExtension + formattedPhoneVal;
-                } else {
-                    var midThree = phoneWithOutExtension.substring(phoneWithOutExtension.length - 3, phoneWithOutExtension.length);
-                    formattedPhoneVal = CLOSE_PAREN + " " + midThree + formattedPhoneVal;
-
-                    phoneWithOutExtension = phoneWithOutExtension.substring(0, phoneWithOutExtension.length - 3);
-                    if (phoneWithOutExtension.length <= 3) {
-                        formattedPhoneVal = OPEN_PAREN + phoneWithOutExtension + formattedPhoneVal;
-                    } else {
-                        var firstThree = phoneWithOutExtension.substring(phoneWithOutExtension.length - 3, phoneWithOutExtension.length);
-                        formattedPhoneVal = OPEN_PAREN + firstThree + formattedPhoneVal;
-                        phoneWithOutExtension = phoneWithOutExtension.substring(0, phoneWithOutExtension.length - 3);
-
-                        formattedPhoneVal = phoneWithOutExtension + " " + formattedPhoneVal;
-                    }
+                // Cannot use shorthand here because of some conditional spaces
+                var matches = phoneWithOutExtension.match(/^(1?)(\d{0,3})(\d{3})(\d{4})(.*)/);
+                formattedPhoneVal = OPEN_PAREN + matches[2] + CLOSE_PAREN + " " + matches[3] + DASH + matches[4];
+                if (matches[1] && matches[1].length > 0) {
+                    formattedPhoneVal = matches[1] + " " + formattedPhoneVal;
+                }
+                if (matches[5] && matches[5].length > 0) {
+                    formattedPhoneVal += " " + matches[5];
                 }
             }
 
