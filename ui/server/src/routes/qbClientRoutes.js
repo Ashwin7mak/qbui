@@ -25,8 +25,9 @@ var lodash = require('lodash');
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
             bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
             walkMeJS: config.walkmeJSSnippet,
+            wistiaJs1: config.wistiaScriptPart1,
+            wistiaJs2: config.wistiaScriptPart2,
             isClientPerfTrackingEnabled: config.isProduction || !!config.isClientPerfTrackingEnabled
-
         };
     }
 

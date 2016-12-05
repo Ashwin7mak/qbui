@@ -17,6 +17,8 @@ var Index = React.createClass({
                 <script src={this.props.hostBase +
                              this.props.jsPath + this.props.bundleFileName}></script>
                 <script type="text/javascript" async="" src={this.props.walkMeJS}></script>
+                <script type="text/javascript" async src={this.props.wistiaJs1}></script>
+                <script type="text/javascript" async src={this.props.wistiaJs2}></script>
             </Html>
         );
     }

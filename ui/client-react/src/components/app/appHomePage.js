@@ -3,6 +3,8 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {NotificationManager} from 'react-notifications';
 import UrlUtils from '../../utils/urlUtils';
+import {WALKME_ID_FOR_LARGE, WALKME_ID_FOR_SMALL_AND_MEDIUM} from '../../constants/urlConstants';
+import Breakpoints from '../../utils/breakpoints';
 import * as CompConsts from '../../constants/componentConstants';
 
 import './appHomePage.scss';
@@ -16,36 +18,16 @@ const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickB
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
 /**
- * Scripts for Wistia video popover
- * These script tags are only relevant to this homepage
- * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
- */
-const wistiaScriptPart1 = document.createElement("script");
-wistiaScriptPart1.src = "//fast.wistia.com/embed/medias/zl4za7cf5e.jsonp";
-wistiaScriptPart1.async = true;
-
-const wistiaScriptPart2 = document.createElement("script");
-wistiaScriptPart2.src = "//fast.wistia.com/assets/external/E-v1.js";
-wistiaScriptPart2.async = true;
-
-/**
  * App Home page (displays when no app or table is selected)
  */
 const AppHomePage = React.createClass({
     launchGuideMe() {
         try {
-            WalkMeAPI.startWalkthruById(228348);
+            var walkMeId = (Breakpoints.isSmallOrMediumBreakpoint() ? WALKME_ID_FOR_SMALL_AND_MEDIUM : WALKME_ID_FOR_LARGE);
+            WalkMeAPI.startWalkthruById(walkMeId);
         } catch (err) {
             NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
-    },
-    componentWillMount() {
-        document.body.appendChild(wistiaScriptPart1);
-        document.body.appendChild(wistiaScriptPart2);
-    },
-    componentWillUnmount() {
-        document.body.removeChild(wistiaScriptPart1);
-        document.body.removeChild(wistiaScriptPart2);
     },
     render() {
         return (
