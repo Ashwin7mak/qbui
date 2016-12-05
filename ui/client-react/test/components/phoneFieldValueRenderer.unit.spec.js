@@ -12,7 +12,7 @@ describe('PhoneFieldValueRenderer functions', () => {
         jasmine.addMatchers(matchers(TestUtils));
     });
     const rawPhoneNumberVal = "5555555555";
-    const rawPhoneNumberValWithExt = "5555555555x5555"
+    const rawPhoneNumberValWithExt = "5555555555x5555";
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithoutExt = "(555) 555-5555";
     const smsIcon = "iconTableUISturdy-speechbubble-outline";
@@ -52,7 +52,7 @@ describe('PhoneFieldValueRenderer functions', () => {
                                                                           display={rawPhoneNumberVal}/>);
         const phoneFieldValueRenderer = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
         expect(phoneFieldValueRenderer[2].childNodes[0].href).toEqual('sms:' + rawPhoneNumberVal);
-});
+    });
     it('test if href for smsIcon removes extension', () => {
         component = TestUtils.renderIntoDocument(<PhoneFieldValueRenderer value={rawPhoneNumberValWithExt}
                                                                           display={rawPhoneNumberValWithExt}/>);
