@@ -54,7 +54,7 @@
             done();
         });
 
-        it('Validate all required fields by not entering anything into them on form', function(done) {
+        it('@smoke Validate all required fields by not entering anything into them on form', function(done) {
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage().then(function() {

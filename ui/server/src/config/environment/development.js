@@ -40,6 +40,8 @@
         //DEV REST endpoint (protocol,server,port)
         javaHost: '',
 
+        legacyHost: '',
+
         //DEV Express Server
         DOMAIN: '',
 

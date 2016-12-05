@@ -20,7 +20,6 @@ let alertIconClass = `iconTableUISturdy-alert`;
 let successType = 'success';
 let successIconClass = `iconTableUISturdy-check-reversed`;
 let standardType = 'standard';
-let isBusyType = 'isBusy';
 
 
 function buildMockParent(options = {show: false, title: null, bodyMessage: null, type: null}) {
@@ -208,10 +207,6 @@ describe('QbModal', () => {
             iconClass: alertIconClass
         },
         {
-            description: 'can show an alert modal type with an alert icon',
-            modalType: isBusyType,
-        },
-        {
             description: 'can show a success modal type with a check icon',
             modalType: successType,
             iconClass: successIconClass
@@ -243,10 +238,4 @@ describe('QbModal', () => {
         });
     });
 
-    it('can have a loader', () => {
-        component = buildMockParentComponent({show: true, body:{testBodyMessage}, type: isBusyType});
-
-        let loader = document.querySelector(`${qbModalClass} .loader`);
-        expect(loader).not.toBeNull();
-    });
 });

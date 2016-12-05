@@ -1,115 +1,133 @@
 @import '../../assets/css/qbVariables';
 
 .reportActions {
-    display:flex;
+    display: flex;
+    margin-left: 8px;
+    justify-content: space-between;
+    line-height: 32px;
 
-    margin-left:8px;
-    justify-content:space-between;
-    line-height:32px;
     button {
-        margin-right:8px;
+        margin-right: 8px;
     }
+
     a {
-        cursor:pointer;
-        margin:0 4px;
+        cursor: pointer;
+        margin: 0 4px;
         text-decoration: none;
     }
+
     .selectedRowsLabel {
-        padding:2px 8px;
-        margin-right:10px;
-        color:#fff;
+        padding: 2px 8px;
+        margin-right: 10px;
+        color: #fff;
         background-color: $selection-badge-color;
         border-radius: 12px;
-        font-size:10px;
-        font-weight:500;
-        vertical-align:top;
+        font-size: 10px;
+        font-weight: 500;
+        vertical-align: top;
     }
+
     .actionButtons {
-        display:inline-block;
+        display: inline-block;
         margin: 0 20px;
     }
-    .actionIcons {
-        >* {
-            display:inline-block;
-            width:32px;
-            height:32px;
-            margin:0;
 
-            text-align:center;
+    .actionIcons {
+        > * {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            margin: 0;
+            text-align: center;
             color: #fff;
         }
 
         a.iconLink {
-            color:#fff;
-            display:inline-block;
-            height:32px;
-            width:32px;
-            margin:0;
+            color: #fff;
+            display: inline-block;
+            height: 32px;
+            width: 32px;
+            margin: 0;
         }
+
         a.iconLink[disabled] {
             cursor: not-allowed;
+
             .qbIcon {
                 color: $icon-disabled-color;
             }
         }
 
-
         div.dropdown {
-            vertical-align:baseline;
+            vertical-align: baseline;
         }
-        display:inline-block;
+        display: inline-block;
     }
-
 }
+
 .reportActions {
     a.iconLink.icon-badge {
         color: $icon-badge-color;
     }
+
     a.iconLink.icon-edit {
         color: $icon-edit-color;
     }
+
     a.iconLink.icon-print {
         color: $icon-print-color;
     }
+
     a.iconLink.icon-mail {
         color: $icon-mail-color;
     }
+
     a.iconLink.icon-duplicate {
         color: $icon-duplicate-color;
     }
+
     a.iconLink.icon-delete {
         color: $icon-delete-color;
     }
+
     a.iconLink.icon-pickles {
         color: $icon-pickles-color;
     }
+
     a.iconLink {
-        text-decoration:none;
+        text-decoration: none;
     }
+
     a.iconLink.icon-badge:hover {
         background-color: $icon-badge-color;
     }
+
     a.iconLink.icon-edit:hover {
         background-color: $icon-edit-color;
     }
+
     a.iconLink.icon-print:hover {
         background-color: $icon-print-color;
     }
+
     a.iconLink.icon-mail:hover {
         background-color: $icon-mail-color;
     }
+
     a.iconLink.icon-duplicate:hover {
         background-color: $icon-duplicate-color;
     }
+
     a.iconLink.icon-delete:hover {
         background-color: $icon-delete-color;
     }
+
     a.iconLink.icon-pickles:hover {
         background-color: $icon-pickles-color;
     }
 
     a.iconLink:hover {
-        text-decoration:none;
+        text-decoration: none;
         color: #fff;
     }
 
@@ -118,26 +136,25 @@
     }
 }
 
-
 .reportActions {
-    font-size:20px;
+    font-size: 20px;
 
     .actionIcons a.iconLink .qbIcon {
-        line-height:32px;
+        line-height: 32px;
     }
 }
-
 $tableActionsContainerMinHeight: 52px;
 $reportActionsMinHeight: $tableActionsContainerMinHeight;
+
 @include not-small-breakpoint {
     .tableActionsContainer {
         min-height: $tableActionsContainerMinHeight;
     }
+
     .reportActions {
         line-height: $reportActionsMinHeight;
-        align-items:center;
+        align-items: center;
     }
-
 }
 
 

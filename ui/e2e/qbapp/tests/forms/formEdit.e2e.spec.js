@@ -8,16 +8,15 @@
     var reportServicePage = new ReportServicePage();
     var ReportContentPage = requirePO('reportContent');
     var reportContentPage = new ReportContentPage();
-
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
-    describe('Edit a record Via Form Tests :', function() {
-        var realmName;
-        var realmId;
-        var app;
-        var recordList;
+    var realmName;
+    var realmId;
+    var app;
+    var recordList;
 
+    describe('Edit a record Via Form Tests :', function() {
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
                 app = appAndRecords[0];
@@ -39,7 +38,7 @@
             });
         });
 
-        it('Edit a record via recordActions edit pencil using basic report', function(done) {
+        it('@smoke Edit a record via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
 
             //Open the report
@@ -54,19 +53,22 @@
                 }
             }).then(function() {
                 //Save the form
-                formsPage.clickFormSaveBtn();
-                reportContentPage.waitForReportContent();
+                formsPage.clickFormSaveBtn().then(function() {
+                    reportContentPage.waitForReportContent().then(function() {
+                        reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
+                    });
+                });
             }).then(function() {
                 //reload the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                reportContentPage.waitForReportContent().then(function() {
-                    //Verify record is added on top row in a table
-                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
-                    }
-                }).then(function() {
-                    done();
-                });
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                //Verify record is added on top row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
             });
         });
 
@@ -132,6 +134,41 @@
                 }).then(function() {
                     done();
                 });
+            });
+        });
+
+        it('Edit a record with blank/null values via recordActions edit pencil using basic report', function(done) {
+            var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
+
+            //Open the report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent().then(function() {
+                // Click edit record from the grid recordActions
+                // Edit the last record in the report which is empty
+                reportServicePage.clickRecordEditPencil(6);
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickFormSaveBtn().then(function() {
+                    reportContentPage.waitForReportContent().then(function() {
+                        reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
+                    });
+                });
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                //Verify record is added on top row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(6, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
             });
         });
     });

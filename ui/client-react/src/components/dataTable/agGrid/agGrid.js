@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
 import {Button, Dropdown, MenuItem} from 'react-bootstrap';
 import QBicon from '../../qbIcon/qbIcon';
-import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Locale from '../../../locales/locales';
@@ -12,11 +11,9 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
-import * as SchemaConsts from '../../../constants/schema';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
-    CellRenderer,
     CheckBoxCellRenderer,
     CurrencyCellRenderer,
     DateCellRenderer,
@@ -73,7 +70,7 @@ let AGGrid = React.createClass({
     rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 
     propTypes: {
-        uniqueIdentifier: React.PropTypes.string,
+        primaryKeyName: React.PropTypes.string.isRequired,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
         reportFooter: React.PropTypes.element,
@@ -382,7 +379,7 @@ let AGGrid = React.createClass({
      */
     openRecordForEdit(data) {
 
-        const recordId = data[this.props.uniqueIdentifier].value;
+        const recordId = data[this.props.primaryKeyName].value;
 
         const flux = this.getFlux();
 
@@ -468,17 +465,16 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordNewBlank = this.handleRecordNewBlank; // does local method, then calls prop method
         this.gridOptions.context.onFieldChange = this.handleFieldChange;// does local method, then calls prop method
         this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method, then calls prop method
-        this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
         this.gridOptions.context.validateRecord = this.handleValidateRecord;
         this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
-        this.gridOptions.context.keyField = this.props.keyField;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
+        this.gridOptions.context.primaryKeyName = this.props.primaryKeyName;
         this.gridOptions.context.onAttach = this.onAttach;
         this.gridOptions.context.onDetach = this.onDetach;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
+        this.gridOptions.context.saving = _.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
@@ -508,11 +504,11 @@ let AGGrid = React.createClass({
             this.editRow();
             logger.debug('edit completed');
         }
-        // we have a new inserted row put ite.data && node.data[SchemaConsts.DEFAULT_RECORD_KEY]  in edit mode
+        // we have a new inserted row put ite.data && node.data[props.primaryKeyName]  in edit mode
         if (typeof (this.props.editingIndex) !== 'undefined') {
             let found = false;
             this.api.forEachNode((node) => {
-                if (!found && node.data && node.data[SchemaConsts.DEFAULT_RECORD_KEY] && this.props.editingId === node.data[SchemaConsts.DEFAULT_RECORD_KEY].value) {
+                if (!found && node.data && node.data[this.props.primaryKeyName] && this.props.editingId === node.data[this.props.primaryKeyName].value) {
                     this.startEditRow(this.props.editingId, node);
                     found = true;
                 }
@@ -543,6 +539,16 @@ let AGGrid = React.createClass({
             this.setState({rowEditErrors: nextProps.editErrors}, () => {
                 this.updateCellErrors(nextProps);
             });
+            return false;
+        }
+        if (_.has(this.props, 'pendEdits.saving') &&
+            (!_.isEqual(nextProps.pendEdits.saving, this.props.pendEdits.saving) ||
+             !_.isEqual(nextProps.pendEdits.saving, this.gridOptions.context.saving))) {
+            this.gridOptions.context.saving = nextProps.pendEdits.saving;
+            //rerender the editRow action col only
+            if (this.state.editingRowNode !== null) {
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+            }
             return false;
         }
         return false;
@@ -600,6 +606,8 @@ let AGGrid = React.createClass({
     startEditRow(id, node) {
         this.setState({currentEditRid: id}); // note which record is being edited used to index into cellComponentsMounted
         this.props.onEditRecordStart(id);
+        this.gridOptions.context.currentEditRid = id;
+        this.gridOptions.context.isInlineEditOpen = this.props.isInlineEditOpen;
         this.editRow(node);
     },
     /**
@@ -636,7 +644,12 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
+            //edit a row if not already editing a row or
+            //if you are editing a row but there are no pending changes start new edit
+            if (!this.state.editingRowNode || !_.has(this.props, '.pendEdits.isPendingEdit') ||
+                   !this.props.pendEdits.isPendingEdit) {
+                this.startEditRow(params.data[this.props.primaryKeyName].value, params.node);
+            }
             return;
         }
         if (this.clickTimeout) {
@@ -677,6 +690,7 @@ let AGGrid = React.createClass({
         // the refresh needs the new state so refresh in the setState callback
         this.setState({editingRowNode: node, rowEditErrors: null}, () => {
             this.gridOptions.context.rowEditErrors = null;
+            this.gridOptions.context.saving = _.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false;
             this.api.refreshRows(rowsToRefresh);
         });
     },
@@ -725,8 +739,8 @@ let AGGrid = React.createClass({
         let rows = [];
         if (this.api) {
             this.api.getSelectedRows().forEach(row => {
-                if (row[SchemaConsts.DEFAULT_RECORD_KEY]) {
-                    rows.push(row[SchemaConsts.DEFAULT_RECORD_KEY].value);
+                if (row[this.props.primaryKeyName]) {
+                    rows.push(row[this.props.primaryKeyName].value);
                 }
             });
         }
@@ -777,14 +791,7 @@ let AGGrid = React.createClass({
         if (!this.props.onRecordSaveClicked) {
             return;
         }
-        let validation = this.props.onRecordSaveClicked(id);
-        if (validation && !validation.ok) {
-            //keep in edit and show error
-            this.setState({rowEditErrors: validation}, () => {
-                this.gridOptions.context.rowEditErrors = validation;
-                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
-            });
-        }
+        return this.props.onRecordSaveClicked(id);
     },
 
 

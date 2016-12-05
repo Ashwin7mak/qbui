@@ -13,10 +13,9 @@ describe('Table Actions functions', () => {
     let tblId = 'tblId';
     let offset = Constants.PAGE.DEFAULT_OFFSET;
     let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
-    let DEFAULT_HOMEPAGE_ID = '0';
 
     let responseData = {
-        reportMetaData: {data: {id: '2'}},
+        reportMetaData: {data: {id: null}},
         reportData: {data:{filteredCount: 1}}
     };
 
@@ -52,10 +51,10 @@ describe('Table Actions functions', () => {
                 () => {
                     done();
                     let model = reportModel.set(responseData.reportMetaData, responseData.reportData);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId:DEFAULT_HOMEPAGE_ID, offset:test.offset, numRows:test.numRows}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId:responseData.reportMetaData.data.id, offset:test.offset, numRows:test.numRows}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId:null, offset:test.offset, numRows:test.numRows}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
+                    expect(model.rptId, Constants.SYNTHETIC_TABLE_REPORT.id);
                 },
                 () => {
                     done();

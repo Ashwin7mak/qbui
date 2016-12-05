@@ -117,6 +117,11 @@
       "Description": "The Security Group ID allowing select outbound Internet traffic",
       "Type": "String",
       "Default": "sg-f5264793"
+    },
+    "paramSslCertificateID": {
+      "Description": "ARN of the SSL cert for the ELB",
+      "Type": "String",
+      "Default": "arn:aws:acm:us-west-2:723670383381:certificate/a5e4a6b9-8a5a-4c87-a602-de2848410b27"
     }
   },
   "Resources": {
@@ -157,7 +162,7 @@
           {
             "LoadBalancerPort": {"Ref": "paramELBSSLPort"},
             "InstancePort": {"Ref": "paramSSLInstancePort"},
-            "SSLCertificateId" : { "Fn::Join" : [ "", [ "arn:aws:iam::", { "Ref" : "AWS::AccountId" }, ":server-certificate/", {"Ref": "AWS::StackName"} ] ] },
+            "SSLCertificateId" : { "Ref": "paramSslCertificateID" },
             "Protocol": "HTTPS",
             "InstanceProtocol": "HTTPS"
           },
@@ -335,6 +340,7 @@
           "configSets": {
             "default": [
               "run_chef",
+              "activate_threatstack",
               "verify_instance_health"
             ]
           },
@@ -502,6 +508,19 @@
               },
               "03_enable_and_start_splunk": {
                 "command": "systemctl enable splunk && systemctl start splunk"
+              }
+            }
+          },
+          "activate_threatstack": {
+            "commands": {
+              "01_get_deploykey":{
+                "command": "/usr/local/bin/secrets get --kms-cmk-id alias/iss-qbase-secrets --output /dev/shm/secrets/threatstack-deploykey --region $(cat /tmp/region) --s3-bucket $(cat /tmp/secrets-bucket) --secret-name threatstack/deploy-key"
+              },
+              "02_activate_agent": {
+                "command": "/bin/cloudsight setup --deploy-key=$(cat /dev/shm/secrets/threatstack-deploykey)"
+              },
+              "03_remove_deploykey_secret": {
+                "command": "rm /dev/shm/secrets/threatstack-deploykey"
               }
             }
           },

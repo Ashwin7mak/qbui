@@ -29,6 +29,9 @@ export default {
                 missingWalkMe: "Tutorial ist nicht verfügbar"
             }
         },
+        appMenu: {
+            qbClassicLink: "Wechseln zu QuickBase Classic"
+        },
         pendingEditModal: {
             modalBodyMessage: "Speichern Sie die Änderungen vor dem Verlassen?",
             modalStayButton: "Bleiben Sie und halten Sie arbeiten",
@@ -385,13 +388,20 @@ export default {
             print: "Der Druck ist noch nicht verfügbar",
             copy: "Kopieren ist noch nicht verfügbar",
             email: "E-Mail ist noch nicht verfügbar",
-            delete: "Das Löschen ist noch nicht verfügbar"
+            delete: "Das Löschen ist noch nicht verfügbar",
+            viewRecord: "Eintrag anzeigen # {recordId}"
         },
         pageTitles: {
             pageTitleSeparator: " - ",
             editingRecord: "Datensatz #{recordId} bearbeiten",
             newRecord: "Datensatz hinzufügen"
         },
-        quickBaseClassic: "QuickBase Klassik"
+        quickBaseClassic: "QuickBase Klassik",
+        quickBaseMercury: "QuickBase Mercury",
+        v2v3: {
+            manageAccessTitle: "Benutzerzugriff auf Mercury verwalten",
+            versionSelectTitle: "Meine nutzer öffnen diese app in",
+            manageAccessTip: "*Nur app-administratoren können den benutzerzugriff verwalten"
+        }
     }
 };

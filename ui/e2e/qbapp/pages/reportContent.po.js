@@ -259,9 +259,9 @@
         this.editTextField = function(textFieldIndex, textToEnter) {
             return this.getTextFieldInputCells().then(function(textInputCells) {
                 var textFieldInput = textInputCells[textFieldIndex];
-                e2ePageBase.scrollElementIntoView(textFieldInput);
-                textFieldInput.clear();
-                textFieldInput.sendKeys(textToEnter);
+                return e2ePageBase.scrollElementIntoView(textFieldInput).then(function() {
+                    return textFieldInput.clear().sendKeys(textToEnter);
+                });
             });
         };
 
@@ -269,9 +269,9 @@
             var self = this;
             return self.getDateFieldInputCells().then(function(inputCells) {
                 var dateFieldCell = inputCells[dateFieldIndex];
-                e2ePageBase.scrollElementIntoView(dateFieldCell);
-                self.getDateFieldInputBoxEl(dateFieldCell).clear();
-                self.getDateFieldInputBoxEl(dateFieldCell).sendKeys(dateToEnter);
+                return e2ePageBase.scrollElementIntoView(dateFieldCell).then(function() {
+                    return self.getDateFieldInputBoxEl(dateFieldCell).clear().sendKeys(dateToEnter.replace(/-/g, "/"));
+                });
             });
         };
 
@@ -280,10 +280,11 @@
             return self.getDateFieldInputCells().then(function(inputCells) {
                 var dateFieldCell = inputCells[dateFieldIndex];
                 // Open the calendar widget
-                e2ePageBase.scrollElementIntoView(dateFieldCell);
-                //TODO: Safari is having an issue opening this widget (it works manually of course)
-                self.getDateFieldCalendarIconEl(dateFieldCell).click();
-                return dateFieldCell;
+                return e2ePageBase.scrollElementIntoView(dateFieldCell).then(function() {
+                    //TODO: Safari is having an issue opening this widget (it works manually of course)
+                    self.getDateFieldCalendarIconEl(dateFieldCell).click();
+                    return dateFieldCell;
+                });
             });
         };
 
@@ -472,8 +473,11 @@
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
                 return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(buttonIndex).click().then(function() {
+                    //Need this for growl to come and go off
+                    return e2eBase.sleep(browser.params.smallSleep);
+                }).then(function() {
                     // Wait for the report to be ready
-                    self.waitForReportContent();
+                    return self.waitForReportContent();
                 });
             });
         };
@@ -485,7 +489,7 @@
         this.waitForReportContent = function() {
             var self = this;
             // First wait for the containers
-            return e2ePageBase.waitForElements(self.reportContainerEl, self.reportContentEl).then(function() {
+            return e2ePageBase.waitForElements(self.reportContainerEl, self.reportContentEl, reportServicePage.loadedContentEl).then(function() {
                 // Then wait for records to be shown in the grid
                 return e2ePageBase.waitForElement(self.agGridBodyViewportEl);
             }).catch(function(e) {

@@ -22,6 +22,7 @@ class ReportService extends BaseService {
             GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
             GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            GET_INVOKE_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.INVOKE}`,
             PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
     }
@@ -195,8 +196,8 @@ class ReportService extends BaseService {
         //  cList, sList and query(if any).  If none are supplied, then the result of the request
         //  is no different than calling 'getReportResults' method as the default report meta
         //  data will be used to generate the report.
-        let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
-        return super.post(url, {}, {params:params});
+        let url = super.constructUrl(this.API.GET_INVOKE_RESULTS, [appId, tableId, reportId]);
+        return super.get(url, {params:params});
     }
 
     /**

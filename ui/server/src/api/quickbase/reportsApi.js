@@ -196,13 +196,13 @@
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
                 //  promise to return report meta data
-                return new Promise((resolve1, reject1) => {
+                return new Promise((resolve, reject) => {
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            resolve1(response);
+                            resolve(response);
                         },
                         (error) => {
-                            reject1(error);
+                            reject(error);
                         }
                     );
                 });
@@ -291,13 +291,20 @@
             },
 
             /**
-             * Fetch the report result for a given report id
+             * Fetch the report result for a given report id.
+             *
+             * If useReportMetaData is set to true, then the report/results endpoint is called, which
+             * uses the default report meta data to generate the report.  Otherwise, the report/invoke
+             * endpoint is called, which uses the default report meta data as a baseline, but allows
+             * for override's based on request query parameter input.
              *
              * @param req
-             * @param opts
+             * @param report id
+             * @param useReportMetaData
+             *
              * @returns {bluebird|exports|module.exports}
              */
-            fetchReportResult(req, reportId) {
+            fetchReportResult: function(req, reportId, useReportMetaData) {
 
                 var responseObj = {
                     metaData: null,
@@ -319,10 +326,9 @@
                     }
                 }
 
-                //  A get request means fetch the report with the default report meta data definition
-                if (requestHelper.isGet(req)) {
-                    //  Use the default report meta data to build and return the report results
-                    return new Promise((resolve1, reject1) => {
+                if (useReportMetaData === true) {
+                    //  Call the the report results endpoint, which will generate a report using the saved report meta data.
+                    return new Promise((resolve, reject) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
@@ -340,46 +346,50 @@
                                     (result) => {
                                         responseObj.metaData = reportMetaData;
                                         responseObj.report = result;
-                                        resolve1(responseObj);
+                                        resolve(responseObj);
                                     },
                                     (error) => {
-                                        reject1(error);
+                                        reject(error);
                                     }
                                 ).catch((ex) => {
                                     requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
-                                    reject1(ex);
+                                    reject(ex);
                                 });
                             },
                             (metaDataError) => {
                                 log.error({req: req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
-                                reject1(metaDataError);
+                                reject(metaDataError);
                             }
                         ).catch((ex) => {
                             requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
-                            reject1(ex);
+                            reject(ex);
                         });
                     });
                 } else {
-                    //  A post request means fetch the report with using the default report meta data definition as a baseline
+                    //  A request to fetch the report using the default report meta data definition as a baseline
                     //  and then override the sortList, query and columnList(future) to generate a custom report.
-                    return new Promise((resolve1, reject1) => {
+                    //  NOTE: if no overrides, then the baseline report is generated, no different than if
+                    //  loadReportWithDefaultMetaData == true.
+                    return new Promise((resolve, reject) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                //  Call the report result endpoint as a POST request to generate a report that
-                                //  is customized based on the below changes to the report's metadatasortList,
-                                //  columnList and query values are supported.
-                                let opts = requestHelper.setOptions(req);
+                                //  The report invoke endpoint is a POST request as it allows for override of
+                                //  the report's default meta data in the body of the request.
+                                let req2 = lodash.clone(req);
+                                req2.method = 'POST';
+
+                                let opts = requestHelper.setOptions(req2);
                                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-                                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getDynamicReportsResultsRoute(req.url);
+                                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getInvokeReportRoute(req2.url);
 
                                 //  Add the offset and num row parameters to the request
                                 requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
                                 requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
 
                                 //  override the default report meta data setting for sort list
-                                let sList = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.SORT_LIST);
+                                let sList = requestHelper.getQueryParameterValue(req2, constants.REQUEST_PARAMETER.SORT_LIST);
                                 if (sList !== null) {
                                     //  we have a sort List parameter; initialize the sort list in the event the parameter value is empty.
                                     reportMetaData.sortList = [];
@@ -397,11 +407,11 @@
                                 }
 
                                 //  Supplement the default report meta data setting(if any) with any client query(if any)
-                                let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                                let query = requestHelper.getQueryParameterValue(req2, constants.REQUEST_PARAMETER.QUERY);
                                 reportMetaData.query = getQueryExpression(reportMetaData, query);
 
                                 //  override the default report meta data column fid list
-                                let columnFids = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.COLUMNS);
+                                let columnFids = requestHelper.getQueryParameterValue(req2, constants.REQUEST_PARAMETER.COLUMNS);
                                 if (columnFids !== null) {
                                     //  we have a cList parameter; initialize the fid list in the event the parameter value is empty.
                                     reportMetaData.fids = [];
@@ -423,27 +433,27 @@
                                 opts.body = JSON.stringify(reportMetaData);
                                 opts.headers[constants.CONTENT_LENGTH] = opts.body.length;
 
-                                requestHelper.executeRequest(req, opts).then(
+                                requestHelper.executeRequest(req2, opts).then(
                                     (result) => {
                                         responseObj.metaData = reportMetaData;
                                         responseObj.report = result;
-                                        resolve1(responseObj);
+                                        resolve(responseObj);
                                     },
                                     (error) => {
-                                        reject1(error);
+                                        reject(error);
                                     }
                                 ).catch((ex) => {
                                     requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
-                                    reject1(ex);
+                                    reject(ex);
                                 });
                             },
                             (metaDataError) => {
-                                log.error({req: req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
-                                reject1(metaDataError);
+                                log.error({req: req2}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                reject(metaDataError);
                             }
                         ).catch((ex) => {
                             requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
-                            reject1(ex);
+                            reject(ex);
                         });
                     });
                 }
@@ -453,11 +463,16 @@
              * Fetch report content.  Use report result endpoint to fetch a report using its meta data.
              *
              * @param req
+             * @param reportId
+             * @param includeFacets
+             * @param useReportMetaData
+             *
              * @returns Promise
              */
-            fetchReport: function(req, reportId, includeFacets) {
+            fetchReport: function(req, reportId, includeFacets, useReportMetaData) {
                 return new Promise(function(resolve, reject) {
-                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportCount(req, reportId)];
+                    let fetchRequests = [this.fetchReportResult(req, reportId, useReportMetaData), this.fetchFields(req), this.fetchReportCount(req, reportId)];
+
                     if (includeFacets === true) {
                         fetchRequests.push(this.fetchReportFacets(req, reportId));
                     }
@@ -487,7 +502,12 @@
                                 if (report.type === constants.RECORD_TYPE.GROUP) {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report
-                                    let groupedRecords = report.groups[0] ? report.groups[0].records : null;
+                                    let groupedRecords = null;
+                                    if (Array.isArray(report.groups)) {
+                                        if (report.groups[0]) {
+                                            groupedRecords = report.groups[0].records;
+                                        }
+                                    }
                                     responseObject[FIELDS] = getFieldsOnReport(groupedRecords, fields);
 
                                     //  Organize the grouping data for the client
@@ -526,9 +546,13 @@
                                         //  Parse the facet response and format into an object that the client can consume and process
                                         //  IE: Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
                                         if (facets.body && facets.body.length > 0) {
-                                            //  jsonBigNum.parse throws exception if the input is empty array
-                                            let facetRecords = jsonBigNum.parse(facets.body);
-                                            responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                                            try {
+                                                let facetRecords = jsonBigNum.parse(facets.body);
+                                                responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
+                                            } catch (e) {
+                                                //  log as a warning..no faceting returned
+                                                log.warn('Unexpected error parsing facet result.  Facet object is not in expected format. Error stack:\n' + e.stack);
+                                            }
                                         }
                                     }
                                 }
@@ -561,29 +585,31 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            // parse out the id and use to fetch the report meta data.  Process the meta data
-                            // to fetch and return the report content.
-                            let homepageReportId = '1'; // assume 1st report List All
-                            let responseBodyParsed;
-                            if (response.body && ('0' !== (responseBodyParsed = JSON.parse(response.body)))) {
-                                //if had a default report defined use that
-                                homepageReportId = responseBodyParsed;
+                            //  As a default, will generate a synthetic report using the table defaults if
+                            //  a saved report is not defined as the homepage.
+                            let homepageReportId = constants.SYNTHETIC_TABLE_REPORT.ID;
+                            if (response.body) {
+                                let responseBodyParsed = JSON.parse(response.body);
+                                if (responseBodyParsed) {
+                                    //  fetch the specified report home page report id..who don't necessarily
+                                    //  know if the id value is valid, so fetch it and find out..
+                                    homepageReportId = responseBodyParsed;
+                                }
                             }
 
-                            //  have a homepage id; fetch the report
-                            this.fetchReport(req, homepageReportId, true).then(
-                                    (reportResponse) => {
-                                        resolve(reportResponse);
-                                    },
-                                    (reportError) => {
-                                        log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
-                                        reject(reportError);
-                                    }
-                                    ).catch((ex) => {
-                                        requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
-                                        reject(ex);
-                                    });
-
+                            //  fetch the report
+                            this.fetchReport(req, homepageReportId, true, true).then(
+                                (reportResponse) => {
+                                    resolve(reportResponse);
+                                },
+                                (reportError) => {
+                                    log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
+                                    reject(reportError);
+                                }
+                            ).catch((ex) => {
+                                requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
+                                reject(ex);
+                            });
                         },
                         (error) => {
                             log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
@@ -596,6 +622,7 @@
                 });
             }
         };
+
         return reportsApi;
     };
 }());

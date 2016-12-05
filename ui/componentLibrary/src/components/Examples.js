@@ -25,6 +25,7 @@ import QBIconExample from 'raw!../examples/QBIconExample.js';
 
 import TrowserExample from 'raw!../examples/TrowserExample.js';
 import QBModalExample from 'raw!../examples/QBModalExample.js';
+import InvisibleBackdropExample from 'raw!../examples/InvisibleBackdropExample.js';
 import AlertBannerExample from 'raw!../examples/AlertBannerExample.js';
 import PageTitleExample from 'raw!../examples/PageTitleExample.js';
 // END OF IMPORT STATEMENTS
@@ -58,6 +59,7 @@ export default {
     QBModal: QBModalExample,
     AlertBanner: AlertBannerExample,
     PageTitle: PageTitleExample,
+    InvisibleBackdrop: InvisibleBackdropExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };

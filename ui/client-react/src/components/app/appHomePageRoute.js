@@ -4,6 +4,7 @@ import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import AppHomePage from './appHomePage';
+import PageTitle from '../pageTitle/pageTitle';
 
 import './appHomePage.scss';
 
@@ -52,6 +53,19 @@ let AppHomePageRoute = React.createClass({
         }
     },
 
+    /**
+     * Gets the name of the currently selected app or returns null
+     * @returns {null|string}
+     */
+    getSelectedAppName() {
+        if (this.props.apps && this.props.selectedAppId) {
+            let app = _.find(this.props.apps, {id: this.props.selectedAppId});
+            return (app ? app.name : null);
+        }
+
+        return null;
+    },
+
     getTopTitle() {
         return (this.props.selectedApp &&
             <div className="topTitle">
@@ -81,6 +95,7 @@ let AppHomePageRoute = React.createClass({
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
     },
+
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
@@ -88,6 +103,7 @@ let AppHomePageRoute = React.createClass({
             </div>
         );
     },
+
     getSecondaryBar() {
         return (
             <div className="secondaryAppHomePageActions">
@@ -102,6 +118,7 @@ let AppHomePageRoute = React.createClass({
     render() {
         return (
             <div className="appHomePageContainer">
+                <PageTitle title={this.getSelectedAppName()} />
                 <AppHomePage />
             </div>
         );
