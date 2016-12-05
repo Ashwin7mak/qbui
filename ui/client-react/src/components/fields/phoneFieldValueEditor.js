@@ -79,8 +79,8 @@ const PhoneFieldValueEditor = React.createClass({
 
         if (this.props.attributes && this.props.attributes.includeExtension) {
             classes = {
-                officeNumber: "officeNumber " + (this.props.classes ? this.props.classes : ''),
-                extNumber: "extNumber " + (this.props.classes ? this.props.classes : '')
+                officeNumber: "officeNumber " + (this.props.classes || ''),
+                extNumber: "extNumber " + (this.props.classes || '')
             };
             return (
                 <div className="officePhone">
