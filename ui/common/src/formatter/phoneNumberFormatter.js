@@ -29,7 +29,7 @@
         },
         onChangeMasking: function(nums) {
             nums = nums.split('');
-            let newNums = [];
+            var newNums = [];
             nums.forEach(function(num) {
                 if (ALLOWED_CHARACTERS_ONCHANGE.indexOf(num) !== -1) {
                     newNums.push(num);
@@ -37,12 +37,12 @@
             });
             return newNums.join('');
         },
-        onBlurMasking(nums) {
+        onBlurMasking: function(nums) {
             if (!nums) {
                 return '';
             }
             nums = nums.split('');
-            let newNums = [];
+            var newNums = [];
             nums.forEach(function(num) {
                 if (ALLOWED_CHARACTERS_ONBLUR.indexOf(num) !== -1) {
                     newNums.push(num);
