@@ -45,13 +45,13 @@ const AppHomePage = React.createClass({
     },
     componentWillMount() {
 
-        if (this.context.touch) {
+        if (!this.context.touch) {
             document.body.appendChild(wistiaScriptPart1);
             document.body.appendChild(wistiaScriptPart2);
         }
     },
     componentWillUnmount() {
-        if (this.context.touch) {
+        if (!this.context.touch) {
             document.body.removeChild(wistiaScriptPart1);
             document.body.removeChild(wistiaScriptPart2);
         }
