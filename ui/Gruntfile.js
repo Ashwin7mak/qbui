@@ -496,39 +496,10 @@ module.exports = function(grunt) {
        //TODO: Figure out how to define multiple webdriver tasks
         webdriver: {
             options: {
-                //TODO: This doesn't seem to be working
-                //baseUrl   : testJsConfig.DOMAIN,
-                specs: './wdio/tests/reportAddRecord.e2e.spec.js',
-                //capabilities: {
-                //    platform : 'OS X 10.9',
-                //    browserName     : 'chrome',
-                //    tunnelIdentifier: 'webdriverIOTunnel',
-                //    name            : 'Jenkins_webdriverIO_OSX_Chrome',
-                //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-                //    idleTimeout: '120',
-                //    screenResolution : '1600x1200',
-                //    maxDuration: 10800,
-                //    breakpointSize: 'xlarge',
-                //    // These two values enable parallel testing which will run a spec file per instance
-                //    shardTestFiles: true,
-                //    maxInstances: 4
-                //},
-                protocol: 'http',
-                user: 'QuickBaseNS',
-                key: 'f814e1b3-ac25-4369-af02-90d61c6b1c04',
-                sauceConnect: true,
-                sauceConnectOpts: {
-                    tunnelIdentifier: 'webdriverIOTunnel',
-                    verbose: true,
-                    logger: console.log
-                    //Use this when testing Sauce against local dev
-                    //dns: '127.0.0.1'
-                    //TODO: Figure out how to use custom port for selenium server
-                    //port            : 4400
-                }
+                specs: './wdio/tests/reportAddRecord.e2e.spec.js'
             },
             test: {
-                configFile: './wdio/config/wdio.conf.js'
+                configFile: './wdio/config/wdioSauce.conf.js'
             }
         },
 
@@ -539,7 +510,8 @@ module.exports = function(grunt) {
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey
+                SAUCE_KEY                   : sauceKey,
+                SAUCE_DOMAIN                : testJsConfig.DOMAIN
             },
             e2e  : {
                 NODE_ENV                    : 'e2e',
@@ -924,6 +896,13 @@ module.exports = function(grunt) {
                 'env:test',
                 'sauce_connect:aws',
                 'protractor:sauce_production'
+            ]);
+        }
+
+        if (target === 'e2eWebdriver') {
+            return grunt.task.run([
+                'env:test',
+                'webdriver'
             ]);
         }
 

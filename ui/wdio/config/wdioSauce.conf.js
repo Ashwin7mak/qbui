@@ -1,4 +1,35 @@
 exports.config = {
+    //
+    // ========================
+    // Sauce Labs Configuration
+    // ========================
+    // Define all options that are relevant for connecting WebdriverIO to Sauce Labs via Sauce Connect here
+    //
+    protocol: 'http',
+    user: 'QuickBaseNS',
+    key: process.env.SAUCE_KEY,
+    sauceConnect: true,
+    sauceConnectOpts: {
+        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        verbose         : true,
+        logger          : console.log
+        // Uncomment this if you are running Sauce against your local dev
+        //dns             : '127.0.0.1',
+        //TODO: Figure out how to use custom Selenium port
+        //port            : 4400
+    },
+    //
+    //
+    // =============================
+    // Selenium Server Configuration
+    // =============================
+    // Define all options that are relevant for connecting WebdriverIO to a Sauce Labs Selenium Server here
+    //
+    //host: '127.0.0.1',
+    //TODO: Figure out how to use custom Selenium port
+    //port: 4400,
+    //path: '/wd/hub',
+    //
     // ============
     // Debug config
     // ============
@@ -46,12 +77,18 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [{
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instances available you can make sure that not more than
-        // 5 instances get started at a time.
-        maxInstances: 5,
-        //
-        browserName: 'chrome'
+        platform : 'OS X 10.9',
+        browserName     : 'chrome',
+        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        name            : process.env.SAUCE_JOB_NAME,
+        //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        idleTimeout: '120',
+        screenResolution : '1600x1200',
+        maxDuration: 10800,
+        breakpointSize: 'xlarge',
+        // These two values enable parallel testing which will run a spec file per instance
+        shardTestFiles: true,
+        maxInstances: 4
     }],
     //
     // ===================
@@ -75,10 +112,10 @@ exports.config = {
     //
     // Set a base URL in order to shorten url command calls. If your url parameter starts
     // with "/", then the base url gets prepended.
-    baseUrl: 'http://localhost:9001',
+    baseUrl: process.env.SAUCE_DOMAIN,
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+    waitforTimeout: 30000,
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
@@ -109,7 +146,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone'],
+    services: ['sauce'],
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -128,7 +165,7 @@ exports.config = {
     jasmineNodeOpts: {
         //
         // Jasmine default timeout
-        defaultTimeoutInterval: 120000,
+        defaultTimeoutInterval: 300000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time
