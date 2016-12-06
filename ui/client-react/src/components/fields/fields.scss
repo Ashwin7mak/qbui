@@ -191,6 +191,8 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 
     input {
         height: 30px;
+    }
+    input, textarea {
         width: 100%;
         transition: padding 0.3s;
         // need to remove the browser default styling on a focused input since the focus styling
@@ -235,7 +237,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
                 display: inline;
             }
 
-            input:focus {
+            input:focus, textarea:focus {
                 padding-right: 22px;
                 border: solid 1px #2544a7;
                 border-color: #2544a7;

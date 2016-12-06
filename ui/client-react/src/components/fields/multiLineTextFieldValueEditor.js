@@ -1,4 +1,5 @@
 import React from 'react';
+import ClearableInput from '../hoc/ClearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import Breakpoints from "../../utils/breakpoints";
 import FieldUtils from '../../utils/fieldUtils';
@@ -8,6 +9,36 @@ import FieldUtils from '../../utils/fieldUtils';
  * A multi-line text editor that dynamically changes its height. The text editor will not exceed
  * the MAX_TEXTAREA_HEIGHT of 100. If it exceeds this height a scrollbar will appear.
  */
+const TextArea = React.createClass({
+    render() {
+        let cols;
+        if (Breakpoints.isSmallBreakpoint()) {
+            cols = 1;
+        } else {
+            cols = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width', null);
+        }
+        let rows = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines', 1);
+
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
+
+        return (<textarea
+                    style={this.props.style}
+                    onChange={this.props.onChange}
+                    onBlur={this.props.onBlur}
+                    tabIndex="0"
+                    maxLength={maxLength}
+                    onKeyUp={this.props.onKeyUp}
+                    placeholder={this.props.placeholder}
+                    className="cellEdit borderOnError"
+                    rows={rows}
+                    cols={cols}
+                    value={this.props.value || ''}
+                    type="text"
+                />);
+    }
+});
+const ClearableTextArea = ClearableInput(TextArea);
+
 const MultiLineTextFieldValueEditor = React.createClass({
     displayName: 'MultiLineTextFieldValueEditor',
 
@@ -108,27 +139,14 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let cols = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
-        if (Breakpoints.isSmallBreakpoint()) {
-            cols = 1;
-        }
-        let rows = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.num_lines : 1;
         let style = this.props.showScrollForMultiLine ? this.state.style : {};
-
-        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
-
-        return <textarea ref="textarea" style={style}
-                                        onChange={this.onChange}
-                                        onBlur={this.onBlur}
-                                        tabIndex="0"
-                                        maxLength={maxLength}
-                                        onKeyUp={this.onKeyUp}
-                                        placeholder={this.props.placeholder}
-                                        className="cellEdit borderOnError"
-                                        rows={rows}
-                                        cols={cols}
-                                        value={this.props.value || ''}
-                                        type="text" />;
+        return <ClearableTextArea
+                    ref="textarea"
+                    {...this.props}
+                    style={style}
+                    onChange={this.onChange}
+                    onBlur={this.onBlur}
+                    onKeyUp={this.onKeyUp}/>;
     }
 });
 
