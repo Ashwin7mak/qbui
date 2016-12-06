@@ -208,11 +208,12 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
         max-height: 16px;
         max-width: 16px;
         opacity: 0;
+        visibility: hidden;
         right: -7px;
         top: 7px;
         margin-right: 4px;
         transform: rotate(130deg);
-        transition: opacity 0.2s linear, transform 0.3s ease-in-out, right 0.3s ease-in-out;
+        transition: opacity 0.2s linear, transform 0.3s ease-in-out, right 0.3s ease-in-out, visibility 0.3s;
 
         &:hover {
             color: $clearmini-hover-color;
@@ -229,21 +230,25 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     }
 
     @include small-breakpoint {
-        .clearIcon {
-            display: inline;
-        }
+        .editForm & {
+            .clearIcon {
+                display: inline;
+            }
 
-        input:focus {
-            padding-right: 23px;
-            border: solid 1px #2544a7;
-            border-color: #2544a7;
-            border-radius: 2px;
-            box-shadow: 0 0 2px 1.5px rgba(54, 94, 191, 0.25);
+            input:focus {
+                padding-right: 22px;
+                border: solid 1px #2544a7;
+                border-color: #2544a7;
+                border-radius: 2px;
+                box-shadow: 0 0 2px 1.5px rgba(54, 94, 191, 0.25);
 
-            & + .clearIcon {
-                opacity: 1;
-                right: 0;
-                transform: rotate(0deg);
+                & + .clearIcon {
+                    opacity: 1;
+                    right: 0;
+                    height: auto;
+                    transform: rotate(0deg);
+                    visibility: visible;
+                }
             }
         }
     }
