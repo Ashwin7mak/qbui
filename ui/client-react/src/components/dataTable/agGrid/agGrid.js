@@ -539,7 +539,9 @@ let AGGrid = React.createClass({
         // update the errors on the table and appropriate cells
         // WARNING: this necessary hack is to update just the cell component errors
         // instead of redrawing the whole table because AgGrid is not using real react dom diffing
-        this.updateCellErrors(nextProps, this.props);
+        if (nextProps.isInlineEditOpen) {
+            this.updateCellErrors(nextProps, this.props);
+        }
 
         if (_.has(this.props, 'pendEdits.saving') &&
             (!_.isEqual(nextProps.pendEdits.saving, this.props.pendEdits.saving) ||
