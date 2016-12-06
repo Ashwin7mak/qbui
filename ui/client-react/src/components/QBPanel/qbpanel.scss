@@ -27,6 +27,9 @@
 
     .iconRight {
         right: 20px;
+        @include small-breakpoint {
+            right: 10px;
+        }
     }
 
     &:not(.nonCollapsible) .qbPanelHeader {
