@@ -195,7 +195,8 @@ let Apps = React.createClass({
 
 let history = AppHistory.setup(flux).history;
 
-const store = createStore(qbui);
+//const store = createStore(qbui);
+const store = createStore(qbui, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 render((
     <Provider store={store}>
