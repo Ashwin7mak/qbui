@@ -32,6 +32,10 @@ wistiaScriptPart2.async = true;
  * App Home page (displays when no app or table is selected)
  */
 const AppHomePage = React.createClass({
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
+
     launchGuideMe() {
         try {
             WalkMeAPI.startWalkthruById(228348);
@@ -40,12 +44,17 @@ const AppHomePage = React.createClass({
         }
     },
     componentWillMount() {
-        document.body.appendChild(wistiaScriptPart1);
-        document.body.appendChild(wistiaScriptPart2);
+
+        if (this.context.touch) {
+            document.body.appendChild(wistiaScriptPart1);
+            document.body.appendChild(wistiaScriptPart2);
+        }
     },
     componentWillUnmount() {
-        document.body.removeChild(wistiaScriptPart1);
-        document.body.removeChild(wistiaScriptPart2);
+        if (this.context.touch) {
+            document.body.removeChild(wistiaScriptPart1);
+            document.body.removeChild(wistiaScriptPart2);
+        }
     },
     render() {
         return (
@@ -62,7 +71,7 @@ const AppHomePage = React.createClass({
                                     <img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span>
                                 </a>
                             </span>
-                            <a className="linkWithImage" onClick={this.launchGuideMe}><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>
+                            {!this.context.touch && <a className="linkWithImage" onClick={this.launchGuideMe}><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>}
                         </div>
                     </div>
                     <div className="mainPanel">
