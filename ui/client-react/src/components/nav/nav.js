@@ -301,9 +301,9 @@ export let Nav = React.createClass({
      */
     getV2V3Footer() {
         const selectedApp = this.getSelectedApp();
-        this.checkOpenInV2(selectedApp);
 
         if (selectedApp) {
+            this.checkOpenInV2(selectedApp);
             const hasAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
 
             if (hasAdmin) {

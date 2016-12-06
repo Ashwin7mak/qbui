@@ -1,6 +1,7 @@
 @font-face {
     font-family: 'QuickBaseIconUISturdy';
-    src: url('fonts/QuickBaseIconUISturdy.woff2?vg8bto') format('woff2'), url('fonts/QuickBaseIconUISturdy.ttf?vg8bto') format('truetype'), url('fonts/QuickBaseIconUISturdy.woff?vg8bto') format('woff'), url('fonts/QuickBaseIconUISturdy.svg?vg8bto#QuickBaseIconUISturdy') format('svg');
+    src: url('fonts/QuickBaseIconUISturdy.eot?qrf4jq');
+    src: url('fonts/QuickBaseIconUISturdy.eot?qrf4jq#iefix') format('embedded-opentype'), url('fonts/QuickBaseIconUISturdy.woff2?qrf4jq') format('woff2'), url('fonts/QuickBaseIconUISturdy.ttf?qrf4jq') format('truetype'), url('fonts/QuickBaseIconUISturdy.woff?qrf4jq') format('woff'), url('fonts/QuickBaseIconUISturdy.svg?qrf4jq#QuickBaseIconUISturdy') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -376,14 +377,39 @@
     content: "\e955";
 }
 
-.iconTableUISturdy-scroll:before {
-    content: "\e952";
+.iconTableUISturdy-phone-outline:before {
+    content: "\e954";
 }
 
-.iconTableUISturdy-check-reversed:before {
-    content: "\e953";
+.iconTableUISturdy-phone-fill:before {
+    content: "\e956";
 }
 
-.iconTableUISturdy-info:before {
-    content: "\e955";
+.iconTableUISturdy-speechbubble-outline:before {
+    content: "\e957";
 }
+
+.iconTableUISturdy-speechbubble-fill:before {
+    content: "\e958";
+}
+
+.iconTableUISturdy-checkmarkincircle-outline:before {
+    content: "\e959";
+}
+
+.iconTableUISturdy-infoincircle-fill:before {
+    content: "\e95a";
+}
+
+.iconTableUISturdy-alert-fill:before {
+    content: "\e95b";
+}
+
+.iconTableUISturdy-errorincircle-fill:before {
+    content: "\e95c";
+}
+
+.iconTableUISturdy-errorincircle-outline:before {
+    content: "\e95d";
+}
+
