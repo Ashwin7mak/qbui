@@ -417,7 +417,7 @@ let reportModel = {
             break;
         case FieldFormats.URL:
             answer = urlFormatter;
-             break;
+            break;
         }
         return answer;
     },
