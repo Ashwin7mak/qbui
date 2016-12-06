@@ -2,6 +2,7 @@ import React from 'react';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QBicon from '../qbIcon/qbIcon';
+import ClearableInput from '../hoc/ClearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
 
@@ -11,6 +12,22 @@ import FieldUtils from '../../utils/fieldUtils';
  * An editable rendering of a single line text field as an input box. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
+const TextInput = React.createClass({
+    render() {
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
+        return (<input
+                       className={this.props.classes}
+                       value={this.props.value || ''}
+                       maxLength={maxLength}
+                       type={this.props.inputType}
+                       key={'inp' + this.props.idKey}
+                       placeholder={this.props.placeholder}
+                       onChange={this.props.onChange}
+                       onBlur={this.props.onBlur}
+                 />);
+    }
+});
+const ClearableTextInput = ClearableInput(TextInput);
 
 const TextFieldValueEditor = React.createClass({
     displayName: 'TextFieldValueEditor',
@@ -79,52 +96,8 @@ const TextFieldValueEditor = React.createClass({
         }
     },
 
-    clearInput(ev) {
-        if (this.props.onChange) {
-            this.props.onChange('');
-            this.refs.textInput.focus();
-        }
-    },
-
-    renderInputBox(classes) {
-        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
-
-        // use the raw value as the input value, not the formatted display value that may include escaped content
-        return <input ref="textInput"
-                      className={classes}
-                      value={this.props.value}
-                      maxLength={maxLength}
-                      type={this.props.inputType}
-                      key={'inp' + this.props.idKey}
-                      placeholder={this.props.placeholder}
-                      onChange={this.onChange}
-                      onFocus={this.onFocus}
-                      onBlur={this.onBlur} />;
-    },
-
-    addClearButtonTo(inputBox) {
-        let classNames = ['inputDeleteIcon'];
-        classNames.push(this.state.isFocused ? 'isFocused' : '');
-        return (
-            <span className={classNames.join(" ")}>
-                {inputBox}
-                <div className="clearIcon">
-                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
-                        <QBicon onClick={this.clearInput} icon="clear-mini" />
-                    </QBToolTip>
-                </div>
-            </span>
-        );
-    },
-
-    onFocus() {
-        this.setState({isFocused: true});
-    },
-
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
-        this.setState({isFocused: false});
-
         let theVals = {
             value: ev.target.value
         };
@@ -146,13 +119,14 @@ const TextFieldValueEditor = React.createClass({
         classNames.push(this.props.invalid ? 'error' : '');
         classNames.push(this.props.classNames || '');
 
-        let inputBox = this.renderInputBox(classNames.join(' '));
-
-        if (this.props.showClearButton) {
-            return this.addClearButtonTo(inputBox);
-        } else {
-            return inputBox;
-        }
+        let Input = this.props.showClearButton ? ClearableTextInput : TextInput;
+        // use the raw value as the input value, not the formatted display value that may include escaped content
+        return (<Input
+                    {...this.props}
+                    classes={classNames.join(' ')}
+                    onChange={this.onChange}
+                    onBlur={this.onBlur}
+                />);
     }
 });
 

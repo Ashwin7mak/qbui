@@ -12,7 +12,7 @@ import * as consts from '../../../../common/src/constants';
  *
  */
 
-const numericInput = React.createClass({
+const input = React.createClass({
     render() {
         return (
             <input
@@ -28,7 +28,7 @@ const numericInput = React.createClass({
         );
     }
 });
-const ClearableNumericField = ClearableInput(numericInput);
+const ClearableNumericField = ClearableInput(input);
 
 const NumericFieldValueEditor = React.createClass({
     displayName: 'NumericFieldValueEditor',
