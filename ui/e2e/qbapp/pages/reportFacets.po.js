@@ -107,6 +107,7 @@
                             if (height === '0') {
                                 return e2ePageBase.waitForElement(facetGroupElement).then(function() {
                                     return facetGroupElement.element(by.className('facetName')).click().then(function() {
+                                        e2eBase.sleep(browser.params.mediumSleep);
                                         return facetGroupElement;
                                     });
                                 });
@@ -178,7 +179,9 @@
                 return self.reportFacetPopUpMenu.all(by.className('selected')).map(
                     function(selectedGroupItem, index) {
                         return e2ePageBase.waitForElement(selectedGroupItem).then(function() {
-                            return selectedGroupItem.getText();
+                            return selectedGroupItem.getText().then(function(text) {
+                                return text.replace(/(\r\n|\n|\r)/gm, '');
+                            });
                         });
                     }
                 );
