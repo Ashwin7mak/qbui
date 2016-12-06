@@ -54,6 +54,7 @@
     "react-radio-group": "3.0.1",
     "react-redux": "^4.4.6",
     "react-router": "2.6.1",
+    "react-router-redux": "^4.0.7",
     "react-select": "^1.0.0-rc.2",
     "react-swipeable": "^3.6.0",
     "reactabular": "^0.14.2",

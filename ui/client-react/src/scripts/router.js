@@ -7,8 +7,8 @@ import Nav from "../components/nav/nav";
 import {Provider,connect} from "react-redux";
 import {showTrowser,hideTrowser} from '../actions';
 
-import {createStore} from 'redux';
-import qbui from '../reducers';
+import {createStore,compose} from 'redux';
+import rootReducer from '../reducers';
 
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";
@@ -42,6 +42,7 @@ import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
 import "react-fastclick";
+import {syncHistoryWithStore} from 'react-router-redux';
 
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
@@ -195,8 +196,8 @@ let Apps = React.createClass({
 
 let history = AppHistory.setup(flux).history;
 
-//const store = createStore(qbui);
-const store = createStore(qbui, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+//const store = createStore(rootReducer);
+const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 render((
     <Provider store={store}>
