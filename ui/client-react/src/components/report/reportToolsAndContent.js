@@ -74,7 +74,6 @@ const ReportToolsAndContent = React.createClass({
         this.mapFacetFields();
     },
 
-
     //when report changed from not loading to loading start measure of components performance
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
@@ -324,7 +323,7 @@ const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
+        let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;
@@ -397,9 +396,7 @@ const ReportToolsAndContent = React.createClass({
                                    reportHeader={toolbar}
                                    reportFooter={reportFooter}
                                    cardViewPagination={cardViewPagination }
-                                   keyField={this.props.fields && this.props.fields.keyField ?
-                                       this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
-                                   uniqueIdentifier={uniqueIdentifier}
+                                   primaryKeyName={primaryKeyName}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}

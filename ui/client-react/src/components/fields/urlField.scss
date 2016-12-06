@@ -1,6 +1,5 @@
 @import '../../../src/assets/css/qbVariables';
 @import './fields';
-
 $urlIcon-margin-left: 10px;
 
 .urlField {
@@ -36,7 +35,6 @@ $urlIcon-margin-left: 10px;
         }
     }
 
-
     a:focus, a:active {
         /* Don't show focus state on the whole link. Should be on link and icon separately */
         border: none;
@@ -44,11 +42,11 @@ $urlIcon-margin-left: 10px;
         outline: none;
     }
 
-    a .link:focus:not(:active),
-    a .urlIcon:focus:not(:active) {
+    a .link:focus:not(:active), a .urlIcon:focus:not(:active) {
         background-color: $stage-backgroundColor;
         outline: none;
         padding: 1px 3px;
+
         @include text-input-focus-with-rounding;
         margin-top: -2px;
     }
@@ -72,8 +70,7 @@ $urlIcon-margin-left: 10px;
     }
 
     /* Remove border when pressing */
-    a .link:active,
-    a .urlIcon:active {
+    a .link:active, a .urlIcon:active {
         box-shadow: none;
         border: none;
         outline: none;
@@ -95,11 +92,13 @@ $urlIcon-margin-left: 10px;
         }
 
         &.btn-default {
+
             @include urlButtonBackgroundGradient();
             color: $link-normal-color;
         }
 
         &.btn-default:focus, &.btn-default:active {
+
             @include focus-shadow();
             @include urlButtonBackgroundFocusGradient();
             color: $link-normal-color;
@@ -113,6 +112,7 @@ $urlIcon-margin-left: 10px;
         }
 
         &.btn-default.disabled {
+
             @include urlButtonDisabled();
         }
     }
@@ -127,8 +127,7 @@ $urlIcon-margin-left: 10px;
         margin-left: $urlIcon-margin-left;
         opacity: 0;
         text-decoration: none;
-
-        transition: opacity .2s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
 
         @include small-breakpoint {
             opacity: 1;
@@ -137,6 +136,10 @@ $urlIcon-margin-left: 10px;
 
         .qbIcon {
             font-size: $font-size-p;
+
+            @include small-breakpoint {
+                font-size: 16px;
+            }
         }
 
         /* Mail Icon is a slightly different size and needs to be adjusted */

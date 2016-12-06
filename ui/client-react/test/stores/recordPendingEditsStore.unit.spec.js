@@ -42,15 +42,23 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).originalRecord).toBeDefined();
         expect(flux.store(STORE_NAME).recordChanges).toEqual({});
         expect(flux.store(STORE_NAME).commitChanges.length).toBe(0);
+        expect(flux.store(STORE_NAME).showDTSErrorModal).toBeDefined();
+        expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
+        expect(flux.store(STORE_NAME).saving).toBeDefined();
 
         //  expect these bindActions
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_START).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CHANGE_FIELD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CANCEL).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_SAVE).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_VALIDATE_FIELD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_RECORD_BULK_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_FAILED).toBeDefined();
@@ -189,6 +197,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -290,6 +299,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(null);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -340,7 +350,79 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
     });
 
+    it('test onDeleteRecord recordPendingEdits action', () => {
+        let onDeleteRecordAction = {
+            type: actions.DELETE_RECORD,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
 
+    });
+
+    it('test onDeleteRecordBulk recordPendingEdits action', () => {
+        let onDeleteRecordBulkAction = {
+            type: actions.DELETE_RECORD_BULK,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordBulkAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).saving).toBe(true);
+
+    });
+
+    it('test onDeleteRecordSuccess recordPendingEdits action', () => {
+        let onDeleteRecordSuccessAction = {
+            type: actions.DELETE_RECORD_SUCCESS,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+
+    });
+
+
+    it('test onDeleteRecordFailed recordPendingEdits action', () => {
+        let onDeleteRecordFailedAction = {
+            type: actions.DELETE_RECORD_FAILED,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordFailedAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+
+    });
+
+    it('test onDeleteRecordBulkSuccess recordPendingEdits action', () => {
+        let onDeleteRecordBulkSuccessAction = {
+            type: actions.DELETE_RECORD_BULK_SUCCESS,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordBulkSuccessAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+
+    });
+
+    it('test onDeleteRecordBulkFailed recordPendingEdits action', () => {
+        let onDeleteRecordBulkFailedAction = {
+            type: actions.DELETE_RECORD_BULK_FAILED,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onDeleteRecordBulkFailedAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+
+    });
+
+    it('test onAfterEdit recordPendingEdits action', () => {
+        let onAfterEditAction = {
+            type: actions.AFTER_RECORD_EDIT,
+            payload : {}
+        };
+        flux.dispatcher.dispatch(onAfterEditAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).saving).toBe(false);
+
+    });
 
     it('test getState function', () => {
 
@@ -355,8 +437,241 @@ describe('Test recordPendingEdits Store ', () => {
         expect(state.originalRecord).toBeDefined();
         expect(state.recordChanges).toBeDefined();
         expect(state.commitChanges).toBeDefined();
+        expect(state.editErrors).toBeDefined();
+        expect(state.showDTSErrorModal).toBeDefined();
+        expect(state.dtsErrorModalTID).toBeDefined();
+        expect(state.saving).toBeDefined();
 
     });
 
 
+    describe('onRecordEditChangeField', () => {
+        let currentlyEditingFieldId = 2;
+        let originalDisplayValue = 'hello';
+        let originalValue = 'hello';
+
+        const originalRecord = {
+            fids: {
+                2: {
+                    id: currentlyEditingFieldId,
+                    display: originalDisplayValue,
+                    value: originalValue
+                }
+            }
+        };
+
+        function createPayload({
+            oldValue = originalValue,
+            oldDisplayValue = originalDisplayValue,
+            newValue = originalValue,
+            newDisplayValue = originalDisplayValue,
+            fid = currentlyEditingFieldId
+        }) {
+            return {
+                fieldDef: {},
+                fieldName: 'test field',
+                appId: appTableRecPayload.appId,
+                tbleId: appTableRecPayload.tblId,
+                recId: 4,
+                changes: {
+                    fid: fid,
+                    values: {
+                        newVal: {value: newValue, display: newDisplayValue},
+                        oldVal: {value: oldValue, display: oldDisplayValue}
+                    }
+                }
+            };
+        }
+
+        beforeEach(() => {
+            let recordEditStartAction = {
+                type: actions.RECORD_EDIT_START,
+                payload : Object.assign({}, appTableRecPayload, {origRec: originalRecord}, {changes: {}})
+            };
+
+            flux.dispatcher.dispatch(recordEditStartAction);
+            flux.store(STORE_NAME).emit.calls.reset();
+        });
+
+        let shouldHavePendingEditsTestCases = [
+            {
+                description: 'adds pendingEdits if there are changes to the underlying value',
+                newValue: "it's me",
+                newDisplayValue: originalDisplayValue,
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'adds pendingEdits if there are changes to the display value',
+                newValue: originalValue,
+                newDisplayValue: 'can you hear me?',
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'adds pendingEdits if the newValue is different than the original, even if it is the same as the old value (this affects forms)',
+                newValue: "it's me",
+                newDisplayValue: "it's me",
+                oldValue: 'from the other side',
+                oldDisplayValue: 'from the other side'
+            }
+        ];
+
+        shouldHavePendingEditsTestCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let payload = createPayload(testCase);
+
+                flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
+
+                let pendingEditsStore = flux.store(STORE_NAME);
+                let currentState = pendingEditsStore.getState();
+                let changes = currentState.recordChanges[currentlyEditingFieldId];
+
+                expect(changes.newVal).toEqual({display: testCase.newDisplayValue, value: testCase.newValue});
+                expect(changes.oldVal).toEqual({display: testCase.oldDisplayValue, value: testCase.oldValue});
+                expect(currentState.isPendingEdit).toBeTruthy();
+                expect(pendingEditsStore.emit).toHaveBeenCalled();
+                expect(pendingEditsStore.emit.calls.count()).toBe(1);
+            });
+        });
+
+        let missingValueObjectsTestCases = [
+            {
+                description: 'adds pendingEdits if the oldValue object is undefined',
+                oldValueObject: undefined,
+                newValueObject: {value: 'something', display: 'something'}
+            },
+            {
+                description: 'adds pendingEdits if the newValue object is undefined',
+                oldValueObject: {value: 'something', display: 'something'},
+                newValueObject: undefined
+            },
+            {
+                description: 'adds pendingEdits if the newValue and oldValue objects are undefined',
+                oldValueObject: undefined,
+                newValueObject: undefined
+            },
+            {
+                description: 'adds pendingEdits if the newValue and oldValue objects are null',
+                oldValueObject: null,
+                newValueObject: null
+            }
+        ];
+
+        missingValueObjectsTestCases.forEach(testCase => {
+            it('adds pendingEdits if the oldValue object is undefined', () => {
+                let payload = {
+                    fieldDef: {},
+                    fieldName: 'test field',
+                    appId: appTableRecPayload.appId,
+                    tbleId: appTableRecPayload.tblId,
+                    recId: 4,
+                    changes: {
+                        fid: currentlyEditingFieldId,
+                        values: {
+                            newVal: testCase.newValueObject,
+                            oldVal: testCase.oldValueObject
+                        }
+                    }
+                };
+
+                flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
+
+                let pendingEditsStore = flux.store(STORE_NAME);
+                let currentState = pendingEditsStore.getState();
+                let changes = currentState.recordChanges[currentlyEditingFieldId];
+
+                expect(changes.newVal).toEqual(testCase.newValueObject);
+                expect(changes.oldVal).toEqual(testCase.oldValueObject);
+                expect(currentState.isPendingEdit).toBeTruthy();
+                expect(pendingEditsStore.emit).toHaveBeenCalled();
+                expect(pendingEditsStore.emit.calls.count()).toBe(1);
+            });
+        });
+
+        let shouldNotHavePendingEditsTestCases = [
+            {
+                description: 'does not add pendingEdits if there are no changes to the underlying value or the display value',
+                newValue: originalValue,
+                newDisplayValue: originalDisplayValue,
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'does not add pendingEdits if the new value is the same as the original one',
+                newValue: originalValue,
+                newDisplayValue: originalDisplayValue,
+                oldValue: 'must have called a thousand times',
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'does not add pendingEdits if the new display value is the same as the original one',
+                newValue: originalValue,
+                newDisplayValue: originalDisplayValue,
+                oldValue: originalDisplayValue,
+                oldDisplayValue: 'from the other side'
+            }
+        ];
+
+        shouldNotHavePendingEditsTestCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let payload = createPayload(testCase);
+
+                flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
+
+                let pendingEditsStore = flux.store(STORE_NAME);
+                let currentState = pendingEditsStore.getState();
+                let changes = currentState.recordChanges;
+
+                expect(Object.keys(changes).length).toEqual(0);
+                expect(currentState.isPendingEdit).toBeFalsy();
+            });
+        });
+
+        it('removes an existing pending edits if the value returns to the original one', () => {
+            let intermediateChange = {
+                newValue: 'from the outside',
+                newDisplayValue: 'can you hear me?'
+            };
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: createPayload(intermediateChange)});
+
+            let finalChangePutsRecordBackToOriginalState = {
+                newValue: originalValue,
+                displayValue: originalDisplayValue
+            };
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: createPayload(finalChangePutsRecordBackToOriginalState)});
+
+            let currentState = flux.store(STORE_NAME).getState();
+            let changes = currentState.recordChanges;
+
+            expect(currentState.isPendingEdit).toBeFalsy();
+            expect(Object.keys(changes).length).toEqual(0);
+        });
+
+        it('removes an existing pending edits if the value returns to the original one (with change in another field)', () => {
+            let intermediateChange = {
+                newValue: 'from the outside',
+                newDisplayValue: 'can you hear me?'
+            };
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: createPayload(intermediateChange)});
+
+            // Change an unrelated record
+            let anotherFieldId = 25;
+            let changesForAnotherField = createPayload(Object.assign({fid: anotherFieldId}, intermediateChange));
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: changesForAnotherField});
+
+            let finalChangePutsRecordBackToOriginalState = {
+                newValue: originalValue,
+                displayValue: originalDisplayValue
+            };
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: createPayload(finalChangePutsRecordBackToOriginalState)});
+
+            let currentState = flux.store(STORE_NAME).getState();
+            let changes = currentState.recordChanges;
+
+            expect(currentState.isPendingEdit).toBeTruthy();
+            expect(changes[currentlyEditingFieldId]).toEqual(undefined);
+            expect(changes[anotherFieldId]).not.toEqual(undefined);
+        });
+    });
 });

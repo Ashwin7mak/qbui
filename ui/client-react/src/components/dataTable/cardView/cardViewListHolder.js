@@ -7,6 +7,7 @@ import CardViewList from './cardViewList';
 import './cardViewList.scss';
 import CardViewFooter from './cardViewFooter';
 import CardViewNavigation from './cardViewNavigation';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -20,7 +21,7 @@ let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
-        uniqueIdentifier: React.PropTypes.string,
+        primaryKeyName: React.PropTypes.string,
         reportHeader: React.PropTypes.element,
         selectionActions: React.PropTypes.element,
         onScroll: React.PropTypes.func,
@@ -30,6 +31,7 @@ let CardViewListHolder = React.createClass({
     getInitialState() {
         return {
             allowCardSelection: false,
+            rowActionsRowId: -1,
             swiping: false
         };
     },
@@ -46,6 +48,10 @@ let CardViewListHolder = React.createClass({
      * or has finished card selection (by swiping left to hide selection column)
      */
     onToggleCardSelection(allow = true, rowData = null) {
+
+        if (this.state.rowActionsRowId !== -1) {
+            return;
+        }
         this.setState({allowCardSelection: allow, swiping:false});
 
         const flux = this.getFlux();
@@ -72,7 +78,7 @@ let CardViewListHolder = React.createClass({
 
         const flux = this.getFlux();
 
-        const id = row[this.props.uniqueIdentifier].value;
+        const id = row[this.props.primaryKeyName].value;
 
         let selectedRows = this.props.selectedRows;
 
@@ -88,6 +94,9 @@ let CardViewListHolder = React.createClass({
 
     /** swiping to expose/hide checkbox column */
     onSwipe(delta) {
+        if (this.state.rowActionsRowId !== -1) {
+            return;
+        }
         // delta is number of pixels swiped to the LEFT!
 
         let horizontalOffset = this.state.allowCardSelection ? 0 : -CHECKBOX_COL_WIDTH;
@@ -123,6 +132,13 @@ let CardViewListHolder = React.createClass({
         }
     },
 
+    rowActionsOpened(rowId) {
+        this.setState({rowActionsRowId: rowId});
+    },
+
+    rowActionsClosed() {
+        this.setState({rowActionsRowId: -1});
+    },
     /**
      * Checks if the event target element or its parent element matches the supplied classname
      * @param evTarget
@@ -277,16 +293,21 @@ let CardViewListHolder = React.createClass({
                         <CardViewList ref="cardViewList"
                                       node={recordNodes}
                                       columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
-                                      uniqueIdentifier={this.props.uniqueIdentifier}
+                                      primaryKeyName={this.props.primaryKeyName}
                                       groupId=""
                                       groupLevel={-1}
+                                      appId={this.props.reportData.appId}
+                                      tblId={this.props.reportData.tblId}
                                       allowCardSelection={this.allowCardSelection}
                                       onToggleCardSelection={this.onToggleCardSelection}
                                       onRowSelected={this.onCardRowSelected}
                                       onRowClicked={this.props.onRowClicked}
                                       isRowSelected={this.isRowSelected}
                                       onEditRecord={this.openRecordForEdit}
-                                      onSwipe={this.onSwipe} />
+                                      onSwipe={this.onSwipe}
+                                      onActionsOpened={this.rowActionsOpened}
+                                      onActionsClosed={this.rowActionsClosed}
+                                      rowActionsRowId={this.state.rowActionsRowId}/>
 
                         {showNextButton ?
                             (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :
@@ -328,7 +349,7 @@ let CardViewListHolder = React.createClass({
             <div className="reportTable">
 
                 <div className="tableLoaderContainer" ref="cardViewListWrapper">
-                    <Loader loaded={!this.props.reportData.loading}>
+                    <Loader loaded={!this.props.reportData.loading} options={SpinnerConfigurations.CARD_VIEW_REPORT}>
                         {results ?
                             this.getRows(results) :
                             <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}

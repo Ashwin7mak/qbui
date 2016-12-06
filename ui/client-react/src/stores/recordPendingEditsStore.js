@@ -25,11 +25,14 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
+            actions.DELETE_RECORD, this.onStartEdit,
+            actions.DELETE_RECORD_BULK, this.onStartEdit,
+            actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
+            actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
-            actions.DELETE_RECORD_FAILED, this.deleteRecordFailed,
-            actions.DELETE_RECORD_BULK_FAILED, this.deleteRecordBulkFailed,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
+            actions.AFTER_RECORD_EDIT, this.onAfterEdit,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
         this._initData();
@@ -45,7 +48,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     _initData() {
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
-        this.recordEditOpen = false;
+        this.recordEditOpen = undefined;
         this.currentEditingRecordId = null;
         this.currentEditingAppId = null;
         this.currentEditingTableId = null;
@@ -99,6 +102,88 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     },
 
     /**
+     * Checks if a field actually has changes (i.e., prevents change detection if a user picks the same item from a
+     * dropdown as they had originally selected)
+     * @param payload
+     * @returns {boolean}
+     */
+    _hasChanges(payload) {
+        if (_.has(payload, 'changes.values') && _.has(this.originalRecord, 'fids')) {
+            return (
+                // If the new and previous values are the same, but different from the original, then the change
+                // has already been registered by pendEdits. Therefore, we check to make sure the change is different
+                // from both the previous value AND the original value.
+                this._isDifferentThanOriginalFieldValue(payload) && this._isDifferentThanPreviousValue(payload)
+            );
+        }
+
+        // Assume there was a change if not all required properties are present.
+        // This is primarily for testing purposes.
+        return true;
+    },
+
+    /**
+     * Checks if the newest value is different than the previous one
+     * @param payload
+     * @returns {boolean}
+     * @private
+     */
+    _isDifferentThanPreviousValue(payload) {
+        let {newVal, oldVal} = payload.changes.values;
+
+        // Cannot check for differences if one of the objects doesn't exist. Assume a change in that case.
+        if (!newVal || !oldVal) {
+            return true;
+        }
+
+        // Some components modify display values and some modify the underlying value so we check for both
+        return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
+    },
+
+    /**
+     * Checks if the newest value is different than the original record
+     * @param payload
+     * @returns {boolean}
+     * @private
+     */
+    _isDifferentThanOriginalFieldValue(payload) {
+        let {newVal} = payload.changes.values;
+
+        // If there is no newValue object then assume a change
+        if (!newVal) {
+            return true;
+        }
+
+        let originalRecord = this.originalRecord.fids[payload.changes.fid];
+        let originalRecordValue = null;
+        let originalRecordDisplay = null;
+        if (originalRecord) {
+            originalRecordValue = originalRecord.value;
+            originalRecordDisplay = originalRecord.display;
+        }
+        return (newVal.value !== originalRecordValue || newVal.display !== originalRecordDisplay);
+    },
+
+    /**
+     * If there were previously changes, but user put the values back to the original
+     * then we need to remove those from pendingEdits.
+     * @param payload
+     * @private
+     */
+    _removePriorChangesIfTheyExist(payload) {
+        if (this.recordChanges && this.recordChanges[payload.changes.fid] && !this._isDifferentThanOriginalFieldValue(payload)) {
+            delete this.recordChanges[payload.changes.fid];
+
+            // If there are no remaining changes, then the record is not pending edits anymore
+            if (Object.keys(this.recordChanges).length === 0) {
+                this.isPendingEdit = false;
+            }
+
+            this.emit('change');
+        }
+    },
+
+    /**
      * On the change of a fields value not yet committed
      * @param payload -
      *      app/tbl/recIds
@@ -111,16 +196,21 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
             this.recordChanges[payload.changes.fid] = {};
         }
-        this.recordChanges =  _.cloneDeep(this.recordChanges);
-        this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
-        this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
-        this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
-        this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
-        this.currentEditingAppId = payload.appId;
-        this.currentEditingTableId = payload.tblId;
-        this.currentEditingRecordId = payload.recId;
-        this.isPendingEdit = true;
-        this.emit('change');
+
+        if (this._hasChanges(payload)) {
+            this.recordChanges =  _.cloneDeep(this.recordChanges);
+            this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
+            this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
+            this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
+            this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
+            this.currentEditingAppId = payload.appId;
+            this.currentEditingTableId = payload.tblId;
+            this.currentEditingRecordId = payload.recId;
+            this.isPendingEdit = true;
+            this.emit('change');
+        } else {
+            this._removePriorChangesIfTheyExist(payload);
+        }
     },
 
     /**
@@ -195,8 +285,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let changes = payload.changes;
         logger.debug('saving changes: ' + JSON.stringify(payload));
-        this.saving = true;
-        this.emit('change');
+        this.onStartEdit();
     },
 
     /**
@@ -218,7 +307,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.saving = false;
         this.emit('change');
 
     },
@@ -263,7 +351,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.handleErrors(payload);
         this.recordEditOpen = true;
-        this.saving = false;
         this.emit('change');
     },
 
@@ -277,9 +364,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
         this.recordChanges = payload.changes;
-        this.saving = true;
         logger.debug('saving added record: ' + JSON.stringify(payload));
-        this.emit('change');
+        this.onStartEdit();
     },
 
     /**
@@ -311,7 +397,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
-        this.saving = false;
         this.emit('change');
     },
 
@@ -332,16 +417,24 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
 
         this.handleErrors(payload);
+        this.emit('change');
+    },
+    onDeleteRecordFailed(payload) {
+        this.handleErrors(payload);
+        this.emit('change');
+    },
+    onDeleteRecordBulkFailed(payload) {
+        this.handleErrors(payload);
+        this.emit('change');
+    },
+    onStartEdit(emit = true) {
+        this.saving = true;
+        if (emit) {
+            this.emit('change');
+        }
+    },
+    onAfterEdit() {
         this.saving = false;
-        this.emit('change');
-    },
-
-    deleteRecordFailed(payload) {
-        this.handleErrors(payload);
-        this.emit('change');
-    },
-    deleteRecordBulkFailed(payload) {
-        this.handleErrors(payload);
         this.emit('change');
     },
     /**

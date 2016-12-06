@@ -67,6 +67,7 @@ describe('test validateFieldValue', () => {
     describe('max field length test ', () => {
         var maxChars = 4;
         var def = {fieldDef: {required: false, datatypeAttributes : {clientSideAttributes : {max_chars: maxChars}}}};
+        var defOverSysMax = {fieldDef: {required: false, datatypeAttributes : {clientSideAttributes : {max_chars: LimitConstants.maxTextFieldValueLength + 20}}}};
         var defSys = {fieldDef: {required: false}};
         var chance = require('chance').Chance();
         var sysMaxString = chance.string({length: LimitConstants.maxTextFieldValueLength + 1});
@@ -82,6 +83,7 @@ describe('test validateFieldValue', () => {
             {test: `max: ${maxChars}`, value: -44, isInvalid: false, def: def},
             {test: `max: ${maxChars}`, value: 'abcde', isInvalid: true, def: def},
             {test: `max: ${LimitConstants.maxTextFieldValueLength}`, value: sysMaxString, isInvalid: true, def: defSys},
+            {test: `max: ${LimitConstants.maxTextFieldValueLength + 1}`, value: sysMaxString, isInvalid: true, def: defOverSysMax},
 
         ];
         dataProvider.forEach((data) => {

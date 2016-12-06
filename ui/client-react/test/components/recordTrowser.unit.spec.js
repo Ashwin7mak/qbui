@@ -61,14 +61,23 @@ describe('RecordTrowser functions', () => {
 
     it('test cancelling the record trowser', () => {
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser pendEdits={{recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(
+            <RecordTrowser
+                pendEdits={{recordChanges: {}}}
+                flux={flux}
+                recId={"1"}
+                visible={true}
+                errorPopupHidden={true}
+            />
+        );
+        spyOn(component, 'clearEditsAndClose');
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const closeIcon = TestUtils.findRenderedDOMComponentWithClass(component, "iconTableUISturdy-close");
         TestUtils.Simulate.click(closeIcon);
 
-        expect(flux.actions.hideTrowser).toHaveBeenCalled();
+        expect(component.clearEditsAndClose).toHaveBeenCalled();
     });
 
     it('test saving new record in the trowser', () => {

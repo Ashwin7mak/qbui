@@ -17,7 +17,9 @@ let CardViewList = React.createClass({
         onRowClicked: React.PropTypes.func,
         isRowSelected: React.PropTypes.func,
         onSwipe: React.PropTypes.func,
-        columns: React.PropTypes.array
+        columns: React.PropTypes.array,
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string
     },
 
     getInitialState() {
@@ -32,7 +34,7 @@ let CardViewList = React.createClass({
      */
     onEditRecord(data) {
 
-        this.props.onEditRecord(data[this.props.uniqueIdentifier].value);
+        this.props.onEditRecord(data[this.props.primaryKeyName].value);
     },
 
     getRows() {
@@ -48,20 +50,27 @@ let CardViewList = React.createClass({
                                      groupId={groupId}
                                      groupLevel={groupLevel}
                                      node={node}
+                                     appId={this.props.appId}
+                                     tblId={this.props.tblId}
                                      columns={this.props.columns}
-                                     uniqueIdentifier={this.props.uniqueIdentifier}
+                                     primaryKeyName={this.props.primaryKeyName}
                                      allowCardSelection={this.props.allowCardSelection}
                                      onToggleCardSelection={this.props.onToggleCardSelection}
                                      onRowSelected={this.props.onRowSelected}
                                      onRowClicked={this.props.onRowClicked}
                                      isRowSelected={this.props.isRowSelected}
                                      onEditRecord={this.props.onEditRecord}
-                                     onSwipe={this.props.onSwipe}/>;
+                                     onSwipe={this.props.onSwipe}
+                                     rowActionsRowId={this.props.rowActionsRowId}
+                                     onActionsOpened={this.props.onActionsOpened}
+                                     onActionsClosed={this.props.onActionsClosed}/>;
             });
         }
 
         let className = "cardViewList group-level-" + this.props.groupLevel;
         let groupIcon = this.state.open ? "caret-filled-down" : "caret-filled-right";
+
+        let rowId = this.props.node[this.props.primaryKeyName] ? this.props.node[this.props.primaryKeyName].value : null;
 
         return (
             <div>
@@ -78,18 +87,24 @@ let CardViewList = React.createClass({
                             </div>
                         </Collapse>
                     </div> :
-                    <CardView key={this.props.node[this.props.uniqueIdentifier]}
-                              rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
+                    <CardView key={this.props.node[this.props.primaryKeyName]}
+                              rowId={rowId}
                               data={this.props.node}
                               columns={this.props.columns}
-                              uniqueIdentifier={this.props.uniqueIdentifier}
+                              primaryKeyName={this.props.primaryKeyName}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}
                               onRowSelected={this.props.onRowSelected}
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.props.isRowSelected}
                               onSwipe={this.props.onSwipe}
-                              onEditAction={this.onEditRecord} />
+                              appId={this.props.appId}
+                              tblId={this.props.tblId}
+                              onEditAction={this.onEditRecord}
+                              enableRowActions={this.props.rowActionsRowId === -1 || this.props.rowActionsRowId === rowId}
+                              onActionsOpened={this.props.onActionsOpened}
+                              onActionsClosed={this.props.onActionsClosed}
+                    />
                 }
             </div>
         );
