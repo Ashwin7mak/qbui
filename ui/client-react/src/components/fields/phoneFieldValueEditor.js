@@ -93,7 +93,7 @@ const PhoneFieldValueEditor = React.createClass({
         const ext = (<span className="ext">{phoneNumberFormatter.EXTENSION_DELIM}</span>);
 
         return (
-            <div className="officePhone">
+            <div className="phoneWrapper">
                 <TextFieldValueEditor {...otherProps}
                                       classes={classes.officeNumber || classes}
                                       placeholder={placeholder}
