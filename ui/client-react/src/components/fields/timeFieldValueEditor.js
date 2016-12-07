@@ -24,6 +24,7 @@ import momentTz from 'moment-timezone';
 import lodash from 'lodash';
 
 const MILITARY_FORMAT_VALUE = 'HH:mm';
+const MILITARY_FORMAT_VALUE_WITH_SECONDS = 'HH:mm:ss';
 const DROPLIST_FORMAT_VALUE = MILITARY_FORMAT_VALUE;
 const DROPLIST_FORMAT_LABEL = 'hh:mm a';
 const DROPLIST_FORMAT_LABEL_MILITARY = 'HH:mm';
@@ -216,7 +217,7 @@ const TimeFieldValueEditor = React.createClass({
                     let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
                     for (let idx = 0; idx < formats.length; idx++) {
                         if (moment(newValue, formats[idx]).isValid()) {
-                            militaryTime = moment(newValue, formats[idx]).format('H:mm:ss');
+                            militaryTime = moment(newValue, formats[idx]).format(MILITARY_FORMAT_VALUE_WITH_SECONDS);
                             break;
                         }
                     }
