@@ -86,7 +86,7 @@ const PhoneFieldValueEditor = React.createClass({
             };
         }
         const extInput = (<TextFieldValueEditor {...otherProps}
-                                                classes={classes.extNumber}
+                                                classes={classes ? classes.extNumber : ''}
                                                 onChange={this.onChangeExtNumber}
                                                 onBlur={this.onBlur}
                                                 value={officeExt || ''} />);
@@ -95,7 +95,7 @@ const PhoneFieldValueEditor = React.createClass({
         return (
             <div className="phoneWrapper">
                 <TextFieldValueEditor {...otherProps}
-                                      classes={classes.officeNumber || classes}
+                                      classes={classes && classes.officeNumber ? classes.officeNumber : classes}
                                       placeholder={placeholder}
                                       onChange={this.onChangeOfficeNumber}
                                       onBlur={this.onBlur}

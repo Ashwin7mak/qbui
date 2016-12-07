@@ -17,9 +17,15 @@
         EXTENSION_DELIM: EXTENSION_DELIM,
         PLACEHOLDER: PLACEHOLDER,
         getExtension: function(phoneNumber) {
+            if (!phoneNumber) {
+                return '';
+            }
             return phoneNumber.split(EXTENSION_DELIM)[1];
         },
         getPhoneNumber: function(phoneNumber) {
+            if (!phoneNumber) {
+                return '';
+            }
             return phoneNumber.split(EXTENSION_DELIM)[0].trim();
         },
         getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
+import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
 import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEditor';
 
 describe('PhoneFieldValueEditor', () => {
