@@ -20,31 +20,25 @@ const PhoneFieldValueRenderer = React.createClass({
     renderLink() {
         let telPhoneNumberLink = 'tel:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');
         let smsPhoneNumberLink = 'sms:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');
-        if (this.props.disabled) {
-            return (
-                <span>
-                    {this.props.display}
-                </span>
-            );
-        } else {
-            return (
-                <div className = "phoneQBIconWrapper">
-                    <a href={telPhoneNumberLink} tabIndex="-1">
-                        <span>
-                            {this.props.display}
-                        </span>
-                    </a>
-                    <div className="urlIcon phoneIcon">
-                        <a href={smsPhoneNumberLink} tabIndex="-1">
-                            <QBicon className="smsIcon" icon="speechbubble-outline" />
-                        </a>
-                        <a href={telPhoneNumberLink} tabIndex="-1">
-                            <QBicon icon="phone-outline" />
-                        </a>
-                    </div>
-                </div>
-            );
-        }
+        const disabledDisplay = (<span>
+                                    {this.props.display}
+                                 </span>);
+        const displayWithIcons = (<div className="phoneQBIconWrapper">
+                                        <a href={telPhoneNumberLink} tabIndex="-1">
+                                                        <span>
+                                                            {this.props.display}
+                                                        </span>
+                                        </a>
+                                        <div className="urlIcon phoneIcon">
+                                            <a href={smsPhoneNumberLink} tabIndex="-1">
+                                                <QBicon className="smsIcon" icon="speechbubble-outline"/>
+                                            </a>
+                                            <a href={telPhoneNumberLink} tabIndex="-1">
+                                                <QBicon icon="phone-outline"/>
+                                            </a>
+                                        </div>
+                                    </div>);
+        return this.props.disabled ? disabledDisplay : displayWithIcons;
     },
     render() {
         let classes = 'urlField';
