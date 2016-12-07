@@ -6,6 +6,7 @@ import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEd
 
 describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
+    const rawPhoneNumberWithExtVal = "5555555555x5555"
     const phoneNumberWithoutExt = "(555) 555-5555";
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithSpecialCharacters = "+1 (555) 555-5555.";
@@ -84,12 +85,17 @@ describe('PhoneFieldValueEditor', () => {
         component.setState({value: phoneNumber, display: ''});
         domComponent = ReactDOM.findDOMNode(component);
         let input = domComponent.childNodes[0];
-        Simulate.blur(input, {
-            target: {value: phoneNumber}
-        });
+        Simulate.blur(input);
         expect(component.state.display).toEqual(phoneNumberWithoutExt);
     });
-
+    it('formats the phone number for display onBlur on extension input box', () => {
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
+        component.setState({value: rawPhoneNumberWithExtVal, display: ''});
+        domComponent = ReactDOM.findDOMNode(component);
+        let input = domComponent.childNodes[2];
+        Simulate.blur(input);
+        expect(component.state.display).toEqual(phoneNumberWithExt);
+    });
     it('displays phone number in phone number input box and ext in extension input box', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         component.setState({value: phoneNumber, display: phoneNumberWithExt});
