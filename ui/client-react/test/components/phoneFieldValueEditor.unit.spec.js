@@ -6,7 +6,7 @@ import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEd
 
 describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
-    const rawPhoneNumberWithExtVal = "5555555555x5555"
+    const rawPhoneNumberWithExtVal = "5555555555x5555";
     const phoneNumberWithoutExt = "(555) 555-5555";
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithSpecialCharacters = "+1 (555) 555-5555.";
