@@ -175,7 +175,13 @@ export default {
             Minutes: "{value, plural, \n =0 {0 minuten}\n =1 {1 minute}\n other {# minuten}\n} ",
             Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {# sekunden}\n} "
         },
-        report : {
+        durationTableHeader: {
+            Weeks:"wochen",
+            Days:"tage",
+            Hours:"stunden",
+            Minutes: "minuten",
+            Seconds: "sekunden"
+        },        report : {
             blank : "leer",
             facets :{
                 noFacets :"Nein werte",

@@ -172,7 +172,6 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
     Look at the .eslintrc files for the lint rules and coding standards
     and set the following settings for coding style errors to appear in the IDE inspection. (This step is manual due to difference user code paths)
 
-
     *  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings
 
     *  ESLint dialog
@@ -185,7 +184,6 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
     * ESLint is part of the build and build will fail if there are errors.
 
     * The script to run eslint from the command line is `NODE_ENV=local npm run lint` or to fix the stylistic [fixable errors][http://eslint.org/docs/rules/) run `NODE_ENV=local npm run lintFix` our build does lintFix. The lint npm script runs ` node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .`
-
 
     * Also to run the eslint on the source from Intellij *custom tool* with clickable links to error location, do the following
         1. Create a external tool (`IntelliJ\Preferences...\Tools\Exterenal Tools`) to run eslint using this
@@ -291,7 +289,7 @@ To setup protractor e2e tests, you must first run
 
 `npm run update-webdriver` from the qbui/ui directory
 
-Edit and configure your own copy of e2e.js located in qbui/ui/server/config/environment if needed.
+Edit and configure your own copy of e2e.js located in qbui/ui/server/src/config/environment if needed.
 
 Use `grunt test:e2eLocal` to have protractor go through tests located in the `e2e` folder. You will need to have both your local node server
 and your java server running.
@@ -333,19 +331,28 @@ To run a gradle task, cd to the dist dir and run:
         which will install all the necessary modules for the release in node_modules under dist.
         NOTE: using --production will not include all the development node_modules needed to build/compile/compress/test the code.
 
-To run the production distribution node server, run one of the following (may need sudo):
+To run the production distribution node server: 
+1. run build to create the dist dir with grunt or gradle
 
-        NODE_ENV=aws PORT=9000 node server/app.js
-        NODE_ENV=aws PORT=9000 npm start
+* with grunt, go to the ui dir:        
+    `NODE_ENV=prod grunt clean build`
+    
+* or with gradle, go to the project root dir:      
+    `NODE_ENV=prod gradle build`
+    
+2. run one of the following (may need sudo) to start the server, go to the ui/dist dir:
+
+        NODE_ENV=prod node server/src/app.js
+        NODE_ENV=prod npm start
 
 ##Running with Forever
 To start a node server with forever which ensures that a given node script runs continuously:
 
-        NODE_ENV=aws PORT=9000 node_modules/forever/bin/forever start server/app.js
+        NODE_ENV=prod PORT=9000 node_modules/forever/bin/forever start server/src/app.js
 
 To stop a running node server with forever:
 
-        NODE_ENV=aws PORT=9000 node_modules/forever/bin/forever stop server/app.js
+        NODE_ENV=prod PORT=9000 node_modules/forever/bin/forever stop server/src/app.js
 
 add forever option -w to automatically restart server on change to js files
 other forever options

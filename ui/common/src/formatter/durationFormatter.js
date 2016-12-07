@@ -32,7 +32,7 @@
      * @returns {*}
      */
     function divideToString(numerator, denominator, opts) {
-        return divideBigDecimals(numerator, denominator, opts).stripTrailingZeros().toString();
+        return divideBigDecimals(numerator, denominator, opts).stripTrailingZeros().toPlainString();
     }
 
     /**
@@ -46,11 +46,20 @@
         return numerator.divide(denominator, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
     }
 
+    function hasUnitsText(scale) {
+        var answer = false;
+        if (scale && scale !== CONSTS.SMART_UNITS && !scale.match(/:/g)) {
+            answer = true;
+        }
+        return answer;
+    }
+
     /**
      * Given a duration value and an options object with display config properties set on it, this method
      * formats the duration value as a string and returns the formatted string.
      * @param millis A millisecond value to format
      * @param opts display options
+     * @param resultObj result object to fill with string and units if exists
      * @returns the duration value formatted as a string
      */
     function formatDurationValue(millis, opts) {
@@ -69,6 +78,7 @@
             days = 0;
             weeks = 0;
         }
+
         var returnValue = '';
         switch (opts.scale) {
         case CONSTS.HHMM:
@@ -99,6 +109,14 @@
             break;
         }
 
+        // if result in an object was requested and its not yet set set the
+        // value and units measure
+        if (typeof (opts.resultObj) !== 'undefined' && typeof (opts.resultObj.string) !== 'undefined' && opts.resultObj.string.length === 0) {
+            opts.resultObj.string = returnValue;
+            if (hasUnitsText(opts.scale)) {
+                opts.resultObj.units = opts.scale;
+            }
+        }
         return returnValue;
     }
 
@@ -118,33 +136,49 @@
         if (millis.signum() < 0) {
             timeUnits += '-';
         }
-        var h = Math.round(hours.abs().longValue());
-        if (h !== 0) {
+        var wholeHours = Math.floor(hours.abs().longValue());
+        if (wholeHours !== 0) {
             //If its less than 10 and greater than negative ten, prepend a '0'
             if (hours.compareTo(CONSTS.TEN) === -1 && hours.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += h + ':';
+            timeUnits += wholeHours + ':';
         } else if (opts.scale === CONSTS.HHMM || opts.scale === CONSTS.HHMMSS) {
             timeUnits += '00:';
         }
-        var extraMinutes = minutes.subtract(hours.multiply(CONSTS.MINUTES_PER_HOUR));
+        var wholeHoursBd = new bigDecimal.BigDecimal(wholeHours);
+        //var portionOfAnHour = hours.subtract(wholeHoursBd);
+        //var portionOfAnHourAsMinutes = portionOfAnHour.multiply(CONSTS.MINUTES_PER_HOUR);
+        var extraMinutes = minutes.subtract(wholeHoursBd.multiply(CONSTS.MINUTES_PER_HOUR));
+       // extraMinutes = extraMinutes.add(portionOfAnHourAsMinutes) ;
+
+        if (timeUnits === '') { // no hours but minutes preface with :
+            timeUnits += ':';
+        }
         if (extraMinutes.signum() !== 0) {
             if (extraMinutes.compareTo(CONSTS.TEN) === -1 && extraMinutes.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += Math.round(extraMinutes.abs().longValue());
+            timeUnits += Math.floor(extraMinutes.abs().intValue());
         } else {
             timeUnits += '00';
         }
-        var extraSeconds = seconds.subtract(minutes.multiply(CONSTS.SECONDS_PER_MINUTE));
+        var wholeMinutes = Math.floor(minutes.abs().longValue());
+        var wholeMinutesBd = new bigDecimal.BigDecimal(wholeMinutes);
+
+        //var portionOfAMinute = minutes.subtract(wholeMinutesBd);
+        //var portionOfAMinuteAsSeconds = portionOfAMinute.multiply(CONSTS.SECONDS_PER_MINUTE);
+
+        var extraSeconds = seconds.subtract(wholeMinutesBd.multiply(CONSTS.SECONDS_PER_MINUTE));
+        //extraSeconds = extraSeconds.add(portionOfAMinuteAsSeconds);
+
         if (opts.scale === CONSTS.MMSS || opts.scale === CONSTS.HHMMSS) {
             if (extraSeconds.compareTo(CONSTS.ZERO) !== 0) {
                 timeUnits += ':';
                 if (extraSeconds.compareTo(CONSTS.TEN) === -1 && extraSeconds.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                     timeUnits += '0';
                 }
-                timeUnits += Math.round(extraSeconds.abs().longValue());
+                timeUnits += extraSeconds.abs().longValue();
             } else {
                 timeUnits += ':00';
             }
@@ -162,28 +196,53 @@
      * @param hours The whole hours value of the milliseconds
      * @param minutes The whole minutes value of the milliseconds
      * @param seconds The whole seconds value of the milliseconds
+     * @param opts options for decimalplaces and optional resultobj
      *
      * @returns the duration value formatted as a string
      */
     function generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts) {
         //Entered as days
         var smartUnits = '';
-        if (weeks.abs().compareTo(CONSTS.ZERO) > 0) {
+        if (weeks.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_WEEK, opts);
+            if (opts.resultObj) {
+                opts.resultObj.string = smartUnits;
+                opts.resultObj.units = CONSTS.WEEKS;
+            }
             smartUnits += ' weeks';
-        } else if (days.abs().compareTo(CONSTS.ZERO) > 0) {
+        } else if (days.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_DAY, opts);
+            if (opts.resultObj) {
+                opts.resultObj.string = smartUnits;
+                opts.resultObj.units = CONSTS.DAYS;
+            }
             smartUnits += ' days';
-        } else if (hours.abs().compareTo(CONSTS.ZERO) > 0) {
+        } else if (hours.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_HOUR, opts);
+            if (opts.resultObj) {
+                opts.resultObj.string = smartUnits;
+                opts.resultObj.units = CONSTS.HOURS;
+            }
             smartUnits += ' hours';
-        } else if (minutes.abs().compareTo(CONSTS.ZERO) > 0) {
+        } else if (minutes.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_MIN, opts);
+            if (opts.resultObj) {
+                opts.resultObj.string = smartUnits;
+                opts.resultObj.units = CONSTS.MINUTES;
+            }
             smartUnits += ' mins';
-        } else if (seconds.abs().compareTo(CONSTS.ZERO) > 0) {
+        } else if (seconds.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_SECOND, opts);
+            if (opts.resultObj) {
+                opts.resultObj.string = smartUnits;
+                opts.resultObj.units = CONSTS.SECONDS;
+            }
             smartUnits += ' secs';
         } else {
+            if (opts.resultObj) {
+                opts.resultObj.string =  millis.toString();
+                opts.resultObj.units = 'msecs';
+            }
             smartUnits += millis.toString() + ' msecs';
         }
         return smartUnits;
@@ -226,8 +285,14 @@
             if (!opts) {
                 opts = this.generateFormat(fieldInfo);
             }
+            if (fieldInfo && fieldInfo.resultObj) {
+                opts.resultObj = fieldInfo.resultObj;
+            }
             var formattedValue = formatDurationValue(fieldValue.value, opts);
             return formattedValue;
-        }
+        },
+
+        hasUnitsText,
+
     };
 }());

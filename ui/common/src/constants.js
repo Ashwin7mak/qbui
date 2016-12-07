@@ -102,6 +102,7 @@
             TEN: new bigDecimal.BigDecimal(10),
             NEGATIVE_TEN: new bigDecimal.BigDecimal(-10),
             ZERO: new bigDecimal.BigDecimal(0),
+            ONE: new bigDecimal.BigDecimal(1),
 
             HHMM: ':HH:MM',
             HHMMSS: ':HH:MM:SS',

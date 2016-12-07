@@ -58,11 +58,12 @@ const DurationFieldValueRenderer = React.createClass({
         }
 
         //  use display value if passed in, otherwise format the value based on the field attributes
-        let display = this.props.display ? this.props.display : durationFormatter.format({value: this.props.value}, this.props.attributes);
+        let display = this.props.display ? this.props.display :
+                    durationFormatter.format({value: this.props.value}, this.props.attributes);
 
         if (this.props.includeUnits) {
             let opts = durationFormatter.generateFormat(this.props.attributes);
-            if (opts.scale && opts.scale !== consts.DURATION_CONSTS.SMART_UNITS && !opts.scale.match(/:/g)) {
+            if (opts && durationFormatter.hasUnitsText(opts.scale)) {
                 display = <I18nMessage message={"durationWithUnits." + opts.scale} value={display}/>;
             }
         }

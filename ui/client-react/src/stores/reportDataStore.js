@@ -16,6 +16,7 @@ import * as userFormatter from '../../../common/src/formatter/userFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
+let durationFormatter = require('../../../common/src/formatter/durationFormatter');
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -40,6 +41,17 @@ let reportModel = {
         sortFids: [],
         groupEls: [],
         originalMetaData: null
+    },
+
+    getReportColumnUnits(fieldDef) {
+        let answer = null;
+        if (fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
+            let scale = fieldDef.datatypeAttributes.scale;
+            if (durationFormatter.hasUnitsText(scale)) {
+                answer = Locale.getMessage('durationTableHeader.' + scale);
+            }
+        }
+        return answer;
     },
 
     /**
@@ -76,9 +88,13 @@ let reportModel = {
                     let column = {};
                     column.order = index;
                     column.id = fieldDef.id;
-                    column.headerName = fieldDef.name;//
+                    column.headerName = fieldDef.name;
                     column.field = fieldDef.name; //name needed for aggrid
                     column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
+                    let durUnits = this.getReportColumnUnits(fieldDef);
+                    if (durUnits) {
+                        column.fieldDef.datatypeAttributes.unitsDescription = durUnits;
+                    }
                     column.fieldType = fieldDef.type;
                     column.defaultValue = null;
                     if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
