@@ -238,7 +238,7 @@
                     opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, subDomain);
                 }
 
-                log.debug("Stack preference: " + opts.url);
+                log.debug("Legacy Stack preference endpoint: " + opts.url);
 
                 return new Promise((resolve) => {
                     requestHelper.executeRequest(req, opts).then(
