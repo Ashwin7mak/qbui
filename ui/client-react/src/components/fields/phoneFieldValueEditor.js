@@ -84,16 +84,14 @@ const PhoneFieldValueEditor = React.createClass({
             };
             return (
                 <div className="officePhone">
-                    <TextFieldValueEditor type="tel"
-                                          {...otherProps}
+                    <TextFieldValueEditor {...otherProps}
                                           classes={classes.officeNumber}
                                           placeholder={placeholder}
                                           onChange={this.onChangeOfficeNumber}
                                           onBlur={this.onBlur}
                                           value={phoneNumber || ''} />
                     <span className="x">{phoneNumberFormatter.EXTENSION_DELIM}</span>
-                    <TextFieldValueEditor type="tel"
-                                          {...otherProps}
+                    <TextFieldValueEditor {...otherProps}
                                           classes={classes.extNumber}
                                           onChange={this.onChangeExtNumber}
                                           onBlur={this.onBlur}
@@ -103,8 +101,7 @@ const PhoneFieldValueEditor = React.createClass({
         } else {
             return (
                 <div className="officePhone">
-                    <TextFieldValueEditor type="tel"
-                                          value={phoneNumber || ''}
+                    <TextFieldValueEditor value={phoneNumber || ''}
                                           placeholder={placeholder}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
