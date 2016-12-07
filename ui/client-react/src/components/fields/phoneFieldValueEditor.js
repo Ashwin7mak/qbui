@@ -73,43 +73,38 @@ const PhoneFieldValueEditor = React.createClass({
         placeholder = placeholder || "(xxx) xxx-xxxx";
         let phoneNumber;
         let officeExt;
+        let hasExtInput = this.props.attributes && this.props.attributes.includeExtension;
         if (value) {
             phoneNumber = phoneNumberFormatter.getPhoneNumber(display);
             officeExt = phoneNumberFormatter.getExtension(display);
         }
 
-        if (this.props.attributes && this.props.attributes.includeExtension) {
+        if (hasExtInput) {
             classes = {
-                officeNumber: "officeNumber " + (this.props.classes || ''),
-                extNumber: "extNumber " + (this.props.classes || '')
+                officeNumber: "officeNumber " + (classes || ''),
+                extNumber: "extNumber " + (classes || '')
             };
-            return (
-                <div className="officePhone">
-                    <TextFieldValueEditor {...otherProps}
-                                          classes={classes.officeNumber}
-                                          placeholder={placeholder}
-                                          onChange={this.onChangeOfficeNumber}
-                                          onBlur={this.onBlur}
-                                          value={phoneNumber || ''} />
-                    <span className="ext">{phoneNumberFormatter.EXTENSION_DELIM}</span>
-                    <TextFieldValueEditor {...otherProps}
-                                          classes={classes.extNumber}
-                                          onChange={this.onChangeExtNumber}
-                                          onBlur={this.onBlur}
-                                          value={officeExt || ''} />
-                </div>
-            );
-        } else {
-            return (
-                <div className="officePhone">
-                    <TextFieldValueEditor value={phoneNumber || ''}
-                                          placeholder={placeholder}
-                                          onChange={this.onChange}
-                                          onBlur={this.onBlur}
-                                          classes={classes || ''} />
-                </div>
-            );
         }
+        const extInput = (<TextFieldValueEditor {...otherProps}
+                                                classes={classes.extNumber}
+                                                onChange={this.onChangeExtNumber}
+                                                onBlur={this.onBlur}
+                                                value={officeExt || ''} />);
+        const ext = (<span className="ext">{phoneNumberFormatter.EXTENSION_DELIM}</span>);
+
+        return (
+            <div className="officePhone">
+                <TextFieldValueEditor {...otherProps}
+                                      classes={classes.officeNumber || classes}
+                                      placeholder={placeholder}
+                                      onChange={this.onChangeOfficeNumber}
+                                      onBlur={this.onBlur}
+                                      value={phoneNumber || ''} />
+                {hasExtInput ? ext : null}
+                {hasExtInput ? extInput : null}
+
+            </div>
+        );
     }
 });
 
