@@ -35,11 +35,18 @@
             return phoneNum + EXTENSION_DELIM + extNum;
         },
         onChangeMasking: function(nums) {
+            /**
+             * onChangeMasking only allows user to type the allowed characters in the ALLOWED_CHARACTERS_ONCHANGE array.
+             * A user will be unable to type any characters that are not allowed into the input box
+             * */
             return nums.split('')
                 .filter(function(num) {return ALLOWED_CHARACTERS_ONCHANGE.indexOf(num) > -1;})
                 .join('');
         },
         onBlurMasking: function(nums) {
+            /**
+             * onBlurMasking removes all special characters. It modifies the value to be a string of numbers with or without an ext
+             * */
             if (!nums) {
                 return '';
             }
