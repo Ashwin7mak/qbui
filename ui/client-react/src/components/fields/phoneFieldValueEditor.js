@@ -70,7 +70,7 @@ const PhoneFieldValueEditor = React.createClass({
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        placeholder = placeholder || "(xxx) xxx-xxxx";
+        placeholder = phoneNumberFormatter.PLACEHOLDER || "(xxx) xxx-xxxx";
         let phoneNumber;
         let officeExt;
         let hasExtInput = this.props.attributes && this.props.attributes.includeExtension;

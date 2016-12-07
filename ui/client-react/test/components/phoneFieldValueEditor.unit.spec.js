@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-
+import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
 import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEditor';
 
 describe('PhoneFieldValueEditor', () => {
@@ -10,7 +10,7 @@ describe('PhoneFieldValueEditor', () => {
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithSpecialCharacters = "+1 (555) 555-5555.";
     const badInput =  "+1 abc(555)!!! 555-5555.:::fffeee";
-    const placeholderText = "(xxx) xxx-xxxx";
+    const placeholderText = phoneNumberFormatter.PLACEHOLDER;
     const ext = "5555";
     let component;
     let domComponent;

@@ -4,7 +4,7 @@
  */
 (function() {
     'use strict';
-
+    var PLACEHOLDER = "(xxx) xxx-xxxx";
     var EXTENSION_DELIM = 'x';
     var OPEN_PAREN = '(';
     var CLOSE_PAREN = ')';
@@ -15,6 +15,7 @@
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         EXTENSION_DELIM: EXTENSION_DELIM,
+        PLACEHOLDER: PLACEHOLDER,
         getExtension: function(phoneNumber) {
             return phoneNumber.split(EXTENSION_DELIM)[1];
         },
