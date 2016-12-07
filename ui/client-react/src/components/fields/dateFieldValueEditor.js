@@ -38,7 +38,7 @@ const DateFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
          * message to display in the tool tip when isInvalid */
@@ -159,7 +159,7 @@ const DateFieldValueEditor = React.createClass({
         let classes = ['cellEdit', 'dateCell', 'borderOnError', 'place'];
 
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes.push('error');
         }
         if (this.props.classes) {
