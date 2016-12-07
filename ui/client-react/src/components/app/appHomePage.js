@@ -23,8 +23,7 @@ const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 const AppHomePage = React.createClass({
     launchGuideMe() {
         try {
-            var walkMeId = (Breakpoints.isSmallOrMediumBreakpoint() ? WALKME_ID_FOR_SMALL_AND_MEDIUM : WALKME_ID_FOR_LARGE);
-            WalkMeAPI.startWalkthruById(walkMeId);
+            WalkMeAPI.startWalkthruById(WALKME_ID_FOR_LARGE);
         } catch (err) {
             NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
