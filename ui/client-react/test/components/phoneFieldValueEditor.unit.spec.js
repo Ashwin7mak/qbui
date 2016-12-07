@@ -63,7 +63,11 @@ describe('PhoneFieldValueEditor', () => {
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes.length).toEqual(3);
     });
-
+    it('does not render an extension input box if includeExtension is not defined', () => {
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        domComponent = ReactDOM.findDOMNode(component);
+        expect(domComponent.childNodes.length).toEqual(1);
+    });
     it('does not render an extension input box if includeExtension is false', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: false}} />);
         domComponent = ReactDOM.findDOMNode(component);
