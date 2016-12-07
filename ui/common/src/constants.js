@@ -77,7 +77,14 @@
             NUM_ROWS: 'numRows',
             HOME_PAGE_ID: 'homePageId',
             OPEN_IN_V3: 'openInV3',
-            HYDRATE: 'hydrate'
+            HYDRATE: 'hydrate',
+
+            //  legacy stack request paameters
+            LEGACY_STACK: {
+                ACTION: 'a',
+                REALM_HOST: 'realmhost',
+                VALUE: 'value'
+            }
         },
         FORMAT : {
             DISPLAY: 'display',

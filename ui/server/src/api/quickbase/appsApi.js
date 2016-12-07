@@ -228,13 +228,14 @@
                 let opts = requestHelper.setOptions(req);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
+                let subDomain = requestHelper.getLegacySubDomain(req);
                 if (requestHelper.isPost(req)) {
                     //  if a post request, then updating stack preference
                     let resp = JSON.parse(opts.body);
                     let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
-                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, true, value);
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, subDomain, true, value);
                 } else {
-                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId);
+                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, subDomain);
                 }
 
                 log.debug("Stack preference: " + opts.url);

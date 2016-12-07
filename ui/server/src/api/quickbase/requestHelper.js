@@ -44,6 +44,17 @@
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';
             },
+            getLegacySubDomain: function(req) {
+                let host = req && req.headers ? req.headers.host : '';
+                if (host) {
+                    // remove port
+                    let portOffset = host.indexOf(':');
+                    if (portOffset !== -1) {
+                        host = host.substring(0, portOffset);
+                    }
+                }
+                return host;
+            },
             getAgentOptions: function(req) {
                 let agentOptions = {
                     rejectUnauthorized: false
