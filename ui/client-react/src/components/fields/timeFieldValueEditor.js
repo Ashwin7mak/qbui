@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Logger from '../../utils/logger';
+
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QbIcon from '../qbIcon/qbIcon';
 
@@ -106,10 +108,10 @@ const TimeFieldValueEditor = React.createClass({
 
         /**
          *  renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         *  message to display in the tool tip when isInvalid */
+         *  message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -134,8 +136,27 @@ const TimeFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            invalid: false
         };
+    },
+
+    /**
+     * Must focus on the timePicker input box after selecting a date from the dropdown so
+     * that blur is called when the user moves to a new field. This is important for
+     * validation checks as validation is typically called onBlur. Without this, validation errors
+     * may not be cleared correctly when a user fixes the field and then blurs out.
+     * @private
+     */
+    _focusOnTimeFieldInput() {
+        // if there isn't a ref, it is the native component and we don't need to focus after change
+        if (this.refs.timePicker) {
+            var timeFieldInput = ReactDOM.findDOMNode(this.refs.timePicker).querySelector('input');
+            if (timeFieldInput) {
+                timeFieldInput.focus();
+            } else {
+                Logger().warn('Could not find input on TimeFieldValueEditor. Can not focus. onBlur validation may not be working correctly.');
+            }
+        }
     },
 
     /**
@@ -152,6 +173,7 @@ const TimeFieldValueEditor = React.createClass({
             if (onChange) {
                 onChange(newValue.value);
             }
+            this._focusOnTimeFieldInput();
         }
     },
 
@@ -163,8 +185,27 @@ const TimeFieldValueEditor = React.createClass({
         this.onChange({value: event.target.value || null});
     },
 
+    _getCurrentTimeInputValue(event) {
+        let inputValue;
+
+        // When event.target is null, that means it is probably coming from the dateTimeValueEditor so
+        // the value of the current input is the value of the "event"
+        if (event.target === null) {
+            inputValue = event;
+        // React-select always returns an empty string in the event.target.value so we need to
+        // use the current props (formatted as military time) instead
+        } else if (event.target.value === '') {
+            inputValue = this.getMilitaryTime();
+        // Otherwise, we can use what is in the current input's value
+        } else {
+            inputValue = event.target.value;
+        }
+
+        return inputValue;
+    },
+
     onBlur(event) {
-        var newValue = event.target === null ? event : event.target.value;
+        let newValue = this._getCurrentTimeInputValue(event);
 
         if (this.props.onBlur || this.props.onDateTimeBlur) {
             if (newValue === null || newValue) {
@@ -286,7 +327,7 @@ const TimeFieldValueEditor = React.createClass({
         let classes = ['cellEdit', 'timeCell', 'borderOnError'];
 
         //  error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes.push('error');
         }
         if (this.props.classes) {
@@ -324,6 +365,7 @@ const TimeFieldValueEditor = React.createClass({
                 <div className={classes.join(' ')}>
                     <Select
                         name="time-select"
+                        ref="timePicker"
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         value={dropListTime || ''}

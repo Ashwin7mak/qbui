@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import Logger from '../../utils/logger';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
 import Breakpoints from "../../utils/breakpoints";
@@ -70,6 +70,25 @@ const DateFieldValueEditor = React.createClass({
         };
     },
 
+    /**
+     * Must focus on the datePicker input box after selecting a date from the dropdown so
+     * that blur is called when the user moves to a new field. This is important for
+     * validation checks as validation is typically called onBlur. Without this, validation errors
+     * may not be cleared correctly when a user fixes the field and then blurs out.
+     * @private
+     */
+    _focusDateInputField() {
+        // Can skip if datePicker is not defined because it is a native input
+        if (this.refs.datePicker) {
+            var datePickerInput = ReactDOM.findDOMNode(this.refs.datePicker).querySelector('input');
+            if (datePickerInput) {
+                datePickerInput.focus();
+            } else {
+                Logger().warn('Could not find input on DateTimeFieldValueEditor. Can not focus. onBlur validation may not be working correctly.');
+            }
+        }
+    },
+
     onChange(newValue, enteredValue) {
         const onChange = this.props.onDateTimeChange || this.props.onChange;
         if (onChange) {
@@ -84,6 +103,7 @@ const DateFieldValueEditor = React.createClass({
                 }
                 // onChange callbacks expect date in YYYY-MM-DD format
                 onChange(formattedDate);
+                this._focusDateInputField();
             }
         }
     },
@@ -173,6 +193,7 @@ const DateFieldValueEditor = React.createClass({
             <div className={classes.join(' ')}>
                 <DatePicker
                     name="date-picker"
+                    ref="datePicker"
                     dateTime={theDate}
                     format={DATE_INPUT}
                     inputFormat={DATE_INPUT}
