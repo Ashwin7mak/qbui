@@ -3,12 +3,12 @@
 .officePhone {
     display: flex;
     width: 100%;
-    .x {
+    .ext {
         padding: 2px;
         align-self: center;
     }
     @include small-breakpoint {
-        .x {
+        .ext {
             padding-right: 2px;
             padding-left: 5px;
         }

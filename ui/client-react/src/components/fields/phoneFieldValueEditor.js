@@ -90,7 +90,7 @@ const PhoneFieldValueEditor = React.createClass({
                                           onChange={this.onChangeOfficeNumber}
                                           onBlur={this.onBlur}
                                           value={phoneNumber || ''} />
-                    <span className="x">{phoneNumberFormatter.EXTENSION_DELIM}</span>
+                    <span className="ext">{phoneNumberFormatter.EXTENSION_DELIM}</span>
                     <TextFieldValueEditor {...otherProps}
                                           classes={classes.extNumber}
                                           onChange={this.onChangeExtNumber}
