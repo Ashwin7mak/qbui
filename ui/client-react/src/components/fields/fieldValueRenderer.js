@@ -137,8 +137,6 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.PHONE_FORMAT:
             return <PhoneFieldValueRenderer value={this.props.value}
                                             display={this.props.display}
-                                            openInNewWindow={open_in_new_window}
-                                            showAsButton={show_as_button}
                                             {...commonProperties}/>;
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
