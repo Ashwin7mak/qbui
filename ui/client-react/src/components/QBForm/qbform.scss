@@ -1,4 +1,6 @@
 @import '../../assets/css/qbVariables';
+@import '../fields/fields';
+
 $edit-field-padding: 5px;
 
 .formContainer {
@@ -155,6 +157,16 @@ $edit-field-padding: 5px;
                 display: flex;
                 flex-direction: column;
             }
+
+            /** Error border for dateTime needs this specificity to show up on forms */
+            .dateCell.error {
+                @include error-border;
+
+                .input-group.date {
+                    border: none;
+                }
+            }
+
         }
 
         .input, textarea.cellEdit {
