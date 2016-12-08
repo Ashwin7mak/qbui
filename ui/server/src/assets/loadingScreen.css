@@ -1,14 +1,5 @@
-.loadingScreen {
-    min-height: 100vh;
-    display: flex;
-}
-
 html, body {
     margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    color: #333333;
 }
 
 @keyframes loadInElement {
@@ -20,13 +11,20 @@ html, body {
     }
 }
 
+.loadingScreen {
+    min-height: 100vh;
+    display: flex;
+}
+
+.leftNav, .topNav, .header, .addButton, .mobileAddButton, .tableHeader, .cards {
+    opacity: 0;
+    animation: loadInElement 1s normal forwards;
+}
+
 .leftNav {
     background: #404040;
     width: 100px;
     flex: 0 1 auto;
-
-    opacity: 0;
-    animation: loadInElement 1s normal forwards;
 }
 
 .mainBody {
@@ -46,8 +44,6 @@ html, body {
     background-color: #969696;
     height: 45px;
 
-    opacity: 0;
-    animation: loadInElement 1s normal forwards;
     animation-delay: .5s;
 }
 
@@ -57,8 +53,6 @@ html, body {
     display: flex;
     align-items: center;
 
-    opacity: 0;
-    animation: loadInElement 1s normal forwards;
     animation-delay: 1s;
 }
 
@@ -70,8 +64,6 @@ html, body {
     margin-right: 115px;
     border-radius: 50%;
 
-    opacity: 0;
-    animation: loadInElement 1s normal forwards;
     animation-delay: 1.5s;
 }
 
@@ -83,7 +75,76 @@ html, body {
     width: 42px;
     border-radius: 50%;
     background-color: #b8b8b8;
-    visibility: hidden;
+    display: none;
+
+    animation-delay: 1.5s;
+}
+
+.table {
+    z-index: 0;
+    height: 40%;
+    margin-top: 79px;
+    width: 90%;
+}
+
+.table .tableHeader {
+    height: 28px;
+    border-bottom: 2px solid #dcdcdc;
+    background-color: #404040;
+
+    animation-delay: 2.0s;
+}
+
+.table .tableRow {
+    background-color: #969696;
+    height: 37px;
+    margin-bottom: 0.1%;
+    width: 100%;
+}
+
+.cards {
+    display: none;
+    flex: 1 auto;
+    flex-direction: column;
+}
+
+.card {
+    height: 75px;
+    margin-bottom: 5px;
+    background-color: #b8b8b8;
+}
+
+@keyframes animateTableRow {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: .1;
+    }
+}
+
+.row1, .row2, .row3, .row4, .row5 {
+    opacity: 0;
+    animation: animateTableRow 3.5s infinite;
+}
+
+.row1 {
+    animation-delay: 2.5s;
+}
+.row2 {
+    animation-delay: 3s;
+}
+.row3 {
+    animation-delay: 3.5s;
+}
+.row4 {
+    animation-delay: 4s;
+}
+.row5 {
+    animation-delay: 4.5s;
 }
 
 /*Small breakpoing*/
@@ -93,19 +154,43 @@ html, body {
     }
 
     .topNav {
-        height: 40px;
+        height: 41px;
     }
 
     .header {
-        height: 38px;
+        height: 40px;
     }
 
     .addButton {
-        visibility: hidden;
+        display: none;
     }
 
     .mobileAddButton {
-        visibility: visible;
+        display: block;
+    }
+
+    .table {
+        display: none;
+    }
+
+    .cards {
+        display: flex;
+    }
+
+    .row1 {
+        animation-delay: 1.5s;
+    }
+    .row2 {
+        animation-delay: 2s;
+    }
+    .row3 {
+        animation-delay: 2.5s;
+    }
+    .row4 {
+        animation-delay: 3s;
+    }
+    .row5 {
+        animation-delay: 3.5s;
     }
 }
 
@@ -130,72 +215,6 @@ html, body {
     }
 }
 
-.table {
-    z-index: 0;
-    height: 40%;
-    margin-top: 79px;
-    width: 90%;
-
-    opacity: 0;
-    animation: loadInElement 1s normal forwards;
-    animation-delay: 2s;
-}
-
-.table .tableHeader {
-    height: 28px;
-    border-bottom: 2px solid #dcdcdc;
-    background-color: #404040;
-
-    opacity: 0;
-    animation: loadInElement 1s normal forwards;
-    animation-delay: 2.5s;
-}
-
-.table .tableRow {
-    height: 37px;
-    margin-bottom: 0.1%;
-    width: 100%;
-}
-
-.table .tableRow {
-    background-color: #969696;
-}
-
-@keyframes animateTableRow {
-    0% {
-        opacity: .2;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: .2;
-    }
-}
-
-.row1, .row2, .row3, .row4, .row5 {
-    opacity: 0;
-    animation: animateTableRow 3.5s infinite;
-}
-
-.row1 {
-    animation-delay: 3.0s;
-}
-.row2 {
-    animation-delay: 3.5s;
-}
-.row3 {
-    animation-delay: 4s;
-}
-.row4 {
-    animation-delay: 4.5s;
-}
-.row5 {
-    animation-delay: 5s;
-}
-
-
-/*Alternative spinner?*/
 .sk-circle {
     margin: 100px auto;
     width: 100px;
