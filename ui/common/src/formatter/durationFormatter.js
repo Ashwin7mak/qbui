@@ -268,27 +268,76 @@
             }
             return opts;
         },
+        convertToMilliseconds(num, millis) {
+            return num * millis;
+        },
+        getMilliseconds(num, type) {
+            console.log(num, type);
+            var returnValue;
+            switch (type) {
+            case CONSTS.HHMM:
+            case CONSTS.HHMMSS:
+            case CONSTS.MM:
+            case CONSTS.MMSS:
+                returnValue = this.convertToMilliseconds(num);
+                break;
+            // case CONSTS.SMART_UNITS:
+            //     returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
+            //     break;
+            case CONSTS.WEEKS:
+                returnValue = returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_WEEK);
+                break;
+            case CONSTS.DAYS:
+                returnValue = returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_DAY);;
+                break;
+            case CONSTS.HOURS:
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_HOUR);
+                break;
+            case CONSTS.MINUTES:
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_MIN);
+                break;
+            case CONSTS.SECONDS:
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_SECOND);
+                break;
+            default:
+                break;
+            }
+            return returnValue;
+        },
+        convertHourMinutesSeconds(num) {
+            var hours;
+            var minutes;
+            var seconds;
+            if (num.length === 3) {
+                hours = num[0] || 0;
+                minutes = num[1] || 0;
+                seconds = num[2] || 0;
+                return this.convertToMilliseconds(hours, CONSTS.MILLIS_PER_HOUR) + this.convertToMilliseconds(minutes, CONSTS.MILLIS_PER_HOUR) + this.convertToMilliseconds(seconds, CONSTS.MILLIS_PER_HOUR);
+            }
+            console.log(num);
+        },
 
         onBlurMasking(value) {
-            var splitOn = ' ';
             var type = [];
             var num;
+
             if (typeof value === 'string') {
                 value = value.toLowerCase();
             }
 
             if (typeof value === 'string' && value.split('').indexOf(':') !== -1) {
-                splitOn = ':';
+                num = value.split(':');
+                return this.convertHourMinutesSeconds(num);
             }
             if (value && typeof value !== 'number') {
-                value = value.split(splitOn);
+                value = value.split(' ');
                 num = value[0];
             }
             value.forEach(function(val) {
                 if (ALLOWED_DURATION_TEXT.indexOf(val) !== -1) {
                     type.push(val);
                 }
-            })
+            });
             if (type.length > 1) {
                 console.log('ERROR!');
                 type = [];
@@ -302,15 +351,12 @@
                 if (type[type.length - 1] !== 's') {
                     type = type + 's';
                 }
-            }
-            if (type === 'Minutes') {
-                value = num * CONSTS.MILLIS_PER_MIN;
+                return this.getMilliseconds(num, type);
             }
 
             console.log('onBlurMasking value: ', value);
             console.log('onBlurMasking num: ', num);
             console.log('onBlurMasking type: ', type);
-            return value;
         },
         /**
          * Given a raw number as input, formats the duration value for display.
