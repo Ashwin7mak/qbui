@@ -18,12 +18,11 @@ describe('PhoneFieldValueEditor', () => {
     let MockParent = React.createClass({
         getInitialState() {
             return {
-                phone: null,
-                displayNumber: phoneNumberWithoutExt,
+                value: null,
             };
         },
         onChange(newValue) {
-            this.setState({phone: newValue});
+            this.setState({value: newValue});
         },
         onBlur(updatedValueObject) {
             this.setState(updatedValueObject);
@@ -46,8 +45,7 @@ describe('PhoneFieldValueEditor', () => {
         Simulate.change(domComponent.childNodes[0], {
             target: {value: phoneNumber}
         });
-        expect(component.state.phone).toEqual(phoneNumber);
-        expect(component.state.displayNumber).toEqual(phoneNumberWithoutExt);
+        expect(component.state.value).toEqual(phoneNumber);
     });
 
     it('allows a user to only enter digits and the following special characters "( ) . - + "', () => {
@@ -102,5 +100,13 @@ describe('PhoneFieldValueEditor', () => {
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt);
         expect(domComponent.childNodes[2].value).toEqual(ext);
+    });
+    it('renders a single phone input field when all props are null', () => {
+        component = TestUtils.renderIntoDocument(<MockParent attributes={undefined}
+                                                             onChange={undefined}
+                                                             onBlur={undefined}/>);
+        component.setState({value: undefined, display: undefined});
+        domComponent = ReactDOM.findDOMNode(component);
+        expect(domComponent.childNodes[0].tagName).toEqual("INPUT");
     });
 });
