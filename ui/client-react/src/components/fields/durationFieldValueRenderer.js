@@ -8,9 +8,11 @@ import {I18nMessage} from '../../utils/i18nMessage';
 /**
  * # DurationFieldValueRenderer
  *
- * A read only rendering of a duration value. The value is rendered according to the
- * display attributes defined durationFormatter.  Classes can be optionally passed in for
- * custom styling.
+ * A read only rendering of a duration value. The value is a millisecond number which
+ * is rendered according to the defined scale attribute. `classes` can be optionally passed in for
+ * custom styling. `includeUnits` also can be set to true to include the units with the
+ * formatted value. includeUnits only applies to scales that are not Smart Units and
+ * not time (hh:mm:ss) formatted scale types. Smart units always include the units when formatted.
  */
 const DurationFieldValueRenderer = React.createClass({
     displayName: 'DurationFieldValueRenderer',
@@ -70,6 +72,8 @@ const DurationFieldValueRenderer = React.createClass({
         let display = this.props.display ? this.props.display :
                     durationFormatter.format({value: this.props.value}, this.props.attributes);
 
+        // get the units key if this format type has one and its requested
+        // map key to the localized units
         if (this.props.includeUnits) {
             let opts = durationFormatter.generateFormat(this.props.attributes);
             if (opts && durationFormatter.hasUnitsText(opts.scale)) {

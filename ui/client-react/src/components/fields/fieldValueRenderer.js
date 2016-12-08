@@ -141,10 +141,10 @@ const FieldValueRenderer = React.createClass({
             return (
                 <DurationFieldValueRenderer value={this.props.value}
                                             display={this.props.display}
-                                        attributes={this.props.attributes}
-                                        includeUnits={this.props.includeUnits}
-                                        key={'drfvr-' + this.props.idKey}
-                                        {...commonProperties}/>
+                                            attributes={this.props.attributes}
+                                            includeUnits={this.props.includeUnits}
+                                            key={'drfvr-' + this.props.idKey}
+                                            {...commonProperties}/>
             );
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:

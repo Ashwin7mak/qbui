@@ -20,9 +20,6 @@
     var bigDecimal = require('bigdecimal');
     var CONSTS = require('../constants').DURATION_CONSTS;
 
-    //Module constants:
-    var DECIMAL_DEFAULTS = 14;
-
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
      * and then stringifies the quotient, removing any trailing zeros.
@@ -46,6 +43,13 @@
         return numerator.divide(denominator, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
     }
 
+    /**
+     * Given a duration scale returns true if it has a fixed unit, false otherwise
+     * will return false for 'Smart Units' and any time based scale 'HH:MM' 'HH:MM:SS' etc
+     *
+     * @param scale
+     * @returns {boolean}
+     */
     function hasUnitsText(scale) {
         var answer = false;
         if (scale && scale !== CONSTS.SMART_UNITS && !scale.match(/:/g)) {
@@ -259,7 +263,7 @@
                 opts.scale = CONSTS.SMART_UNITS;
             }
             if (!opts.decimalPlaces && opts.decimalPlaces !== 0) {
-                opts.decimalPlaces = DECIMAL_DEFAULTS;
+                opts.decimalPlaces = CONSTS.DEFAULT_DECIMAL_PLACES;
             }
             return opts;
         },

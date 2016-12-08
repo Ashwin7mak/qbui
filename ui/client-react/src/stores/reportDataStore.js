@@ -43,6 +43,12 @@ let reportModel = {
         originalMetaData: null
     },
 
+    /**
+     * get the column units to add to the column header, currently only duration fields gets the units from
+     * the field definition if its a scale that has units (non time type and non smart units)
+     * @param fieldDef
+     * @returns null or string containing the localized units
+     */
     getReportColumnUnits(fieldDef) {
         let answer = null;
         if (fieldDef && _.has(fieldDef, '.datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
