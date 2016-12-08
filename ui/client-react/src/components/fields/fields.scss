@@ -195,8 +195,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     input, textarea {
         width: 100%;
         transition: padding 0.3s;
-        // need to remove the browser default styling on a focused input since the focus styling
-        // is on the parent class which contains both the input and the clearIcon
+        // need to remove the browser default styling on focused inputs
         outline: none;
         border: 1px solid #c7c7c7;
         border-radius: 2px;
@@ -247,7 +246,6 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
                 & + .clearIcon {
                     opacity: 1;
                     right: 0;
-                    height: auto;
                     transform: rotate(0deg);
                     visibility: visible;
                 }

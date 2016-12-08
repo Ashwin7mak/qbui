@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ClearableInput from '../hoc/ClearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import Breakpoints from "../../utils/breakpoints";
@@ -135,7 +136,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     getScrollHeight() {
-        return this.refs.textarea.scrollHeight;
+        return ReactDOM.findDOMNode(this.refs.textarea).scrollHeight;
     },
 
     render() {

@@ -117,7 +117,7 @@ const TextFieldValueEditor = React.createClass({
         let classNames = ['input', 'textField', 'borderOnError'];
         // error state css class
         classNames.push(this.props.invalid ? 'error' : '');
-        classNames.push(this.props.classNames || '');
+        classNames.push(this.props.classes || '');
 
         let Input = this.props.showClearButton ? ClearableTextInput : TextInput;
         // use the raw value as the input value, not the formatted display value that may include escaped content

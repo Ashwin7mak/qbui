@@ -158,7 +158,7 @@ const NumericFieldValueEditor = React.createClass({
                 {...this.props}
                 onChange={this.onChange}
                 onBlur={this.onBlur}
-                classes={classes}
+                classes={classes.join(' ')}
                 placeholder={placeholder}
                 width={width}
                 />
