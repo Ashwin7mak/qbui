@@ -35,6 +35,7 @@ const QBModal = require('../../../client-react/src/components/qbModal/qbModal.js
 const AlertBanner = require('../../../client-react/src/components/alertBanner/alertBanner.js');
 const PageTitle = require('../../../client-react/src/components/pageTitle/pageTitle.js');
 const InvisibleBackdrop = require('../../../client-react/src/components/qbModal/invisibleBackdrop.js');
+const DurationFieldValueRenderer = require('../../../client-react/src/components/fields/durationFieldValueRenderer.js');
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

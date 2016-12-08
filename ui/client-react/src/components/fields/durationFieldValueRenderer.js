@@ -1,7 +1,7 @@
 import React from 'react';
 import './fields.scss';
 import _ from 'lodash';
-import * as consts from '../../../../common/src/constants';
+import {DURATION_CONSTS} from '../../../../common/src/constants';
 import durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import {I18nMessage} from '../../utils/i18nMessage';
 
@@ -16,11 +16,11 @@ const DurationFieldValueRenderer = React.createClass({
     displayName: 'DurationFieldValueRenderer',
     propTypes: {
         /**
-         *  raw duration value */
-        value:  React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+         *  raw duration value in milliseconds */
+        value: React.PropTypes.number,
 
         /**
-         *  optionally include the display value */
+         *  optionally overrides value a hardcoded display value */
         display: React.PropTypes.string,
 
         /**
@@ -32,7 +32,20 @@ const DurationFieldValueRenderer = React.createClass({
         includeUnits:  React.PropTypes.bool,
 
         /**
-         *  field attributes */
+         *  field attributes {scale : '...'} see ../common/src/constants.js
+         *
+         *  Choices for scale are :
+         * -   'Smart Units',
+         * -   'Weeks',
+         * -   'Days',
+         * -   'Hours',
+         * -   'Minutes',
+         * -   'Seconds'
+         * -   ':HH:MM',
+         * -   ':HH:MM:SS',
+         * -   ':MM',
+         * -   ':MM:SS'
+         **/
         attributes: React.PropTypes.object
     },
 
@@ -40,11 +53,7 @@ const DurationFieldValueRenderer = React.createClass({
         return {
             classes: null,
             includeUnits : false,
-            attributes: {
-                clientSideAttributes: {
-                    bold: false
-                }
-            }
+            attributes : {scale:DURATION_CONSTS.SMART_UNITS}
         };
     },
 

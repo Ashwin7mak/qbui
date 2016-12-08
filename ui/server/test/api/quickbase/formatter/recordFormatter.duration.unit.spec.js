@@ -592,10 +592,10 @@ describe('Duration record formatter unit test', function() {
         expectedOverHourDuration[0][0].display = '00:00';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -678,13 +678,13 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = '00:00:00';
+        expectedOverHourDuration[0][0].display = '00:00:00.002';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12:55.807';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12:55.807';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -770,10 +770,10 @@ describe('Duration record formatter unit test', function() {
         expectedOverHourDuration[0][0].display = ':00';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -856,13 +856,13 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = ':00:00';
+        expectedOverHourDuration[0][0].display = ':00:00.002';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12:55.807';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12:55.807';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));

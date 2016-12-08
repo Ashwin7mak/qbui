@@ -110,7 +110,7 @@
         }
 
         // if result in an object was requested and its not yet set set the
-        // value and units measure
+        // value and units measure, this form of result allows for localizing the results scale units
         if (typeof (opts.resultObj) !== 'undefined' && typeof (opts.resultObj.string) !== 'undefined' && opts.resultObj.string.length === 0) {
             opts.resultObj.string = returnValue;
             if (hasUnitsText(opts.scale)) {
@@ -147,10 +147,7 @@
             timeUnits += '00:';
         }
         var wholeHoursBd = new bigDecimal.BigDecimal(wholeHours);
-        //var portionOfAnHour = hours.subtract(wholeHoursBd);
-        //var portionOfAnHourAsMinutes = portionOfAnHour.multiply(CONSTS.MINUTES_PER_HOUR);
-        var extraMinutes = minutes.subtract(wholeHoursBd.multiply(CONSTS.MINUTES_PER_HOUR));
-       // extraMinutes = extraMinutes.add(portionOfAnHourAsMinutes) ;
+        var extraMinutes = minutes.abs().subtract(wholeHoursBd.multiply(CONSTS.MINUTES_PER_HOUR));
 
         if (timeUnits === '') { // no hours but minutes preface with :
             timeUnits += ':';
@@ -159,18 +156,14 @@
             if (extraMinutes.compareTo(CONSTS.TEN) === -1 && extraMinutes.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
-            timeUnits += Math.floor(extraMinutes.abs().intValue());
+            timeUnits += Math.floor(extraMinutes.abs().longValue());
         } else {
             timeUnits += '00';
         }
         var wholeMinutes = Math.floor(minutes.abs().longValue());
         var wholeMinutesBd = new bigDecimal.BigDecimal(wholeMinutes);
 
-        //var portionOfAMinute = minutes.subtract(wholeMinutesBd);
-        //var portionOfAMinuteAsSeconds = portionOfAMinute.multiply(CONSTS.SECONDS_PER_MINUTE);
-
-        var extraSeconds = seconds.subtract(wholeMinutesBd.multiply(CONSTS.SECONDS_PER_MINUTE));
-        //extraSeconds = extraSeconds.add(portionOfAMinuteAsSeconds);
+        var extraSeconds = seconds.abs().subtract(wholeMinutesBd.multiply(CONSTS.SECONDS_PER_MINUTE));
 
         if (opts.scale === CONSTS.MMSS || opts.scale === CONSTS.HHMMSS) {
             if (extraSeconds.compareTo(CONSTS.ZERO) !== 0) {
@@ -292,7 +285,7 @@
             return formattedValue;
         },
 
-        hasUnitsText,
+        hasUnitsText : hasUnitsText
 
     };
 }());

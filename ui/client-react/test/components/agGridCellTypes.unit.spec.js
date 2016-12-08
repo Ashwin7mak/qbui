@@ -4,7 +4,16 @@ import TestUtils from 'react-addons-test-utils';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
 
-import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
+import {
+    DateCellRenderer,
+    DateTimeCellRenderer,
+    TimeCellRenderer,
+    NumericCellRenderer,
+    TextCellRenderer,
+    CheckBoxCellRenderer,
+    DurationCellRenderer
+} from '../../src/components/dataTable/agGrid/cellRenderers';
+
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
 import consts from '../../../common/src/constants';
 
@@ -464,6 +473,25 @@ describe('AGGrid cell editor functions', () => {
         };
 
         component = TestUtils.renderIntoDocument(<TimeCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    it('test DurationFormatter', () => {
+        const params = {
+            value: {
+                value: 3000
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        datatypeAttributes: {},
+                        type: consts.SCALAR
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DurationCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 });

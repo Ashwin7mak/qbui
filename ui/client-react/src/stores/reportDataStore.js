@@ -45,7 +45,7 @@ let reportModel = {
 
     getReportColumnUnits(fieldDef) {
         let answer = null;
-        if (fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
+        if (fieldDef && _.has(fieldDef, '.datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
             let scale = fieldDef.datatypeAttributes.scale;
             if (durationFormatter.hasUnitsText(scale)) {
                 answer = Locale.getMessage('durationTableHeader.' + scale);
@@ -415,6 +415,9 @@ let reportModel = {
             break;
         case FieldFormats.USER_FORMAT:
             answer = userFormatter;
+            break;
+        case FieldFormats.DURATION:
+            answer = durationFormatter;
             break;
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.RATING_FORMAT:

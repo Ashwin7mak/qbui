@@ -19,6 +19,7 @@ import UrlFieldValueEditorExample from 'raw!../examples/UrlFieldValueEditorExamp
 import UrlFieldValueRendererExample from 'raw!../examples/UrlFieldValueRendererExample.js';
 import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExample.js';
 import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
+import DurationFieldValueRendererExample from 'raw!../examples/DurationFieldValueRendererExample.js';
 
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
@@ -60,6 +61,7 @@ export default {
     AlertBanner: AlertBannerExample,
     PageTitle: PageTitleExample,
     InvisibleBackdrop: InvisibleBackdropExample,
+    DurationFieldValueRenderer: DurationFieldValueRendererExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };

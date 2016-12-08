@@ -65,4 +65,4 @@ So once any changes that are merged into master they get pushed just like everyt
 
 To run the components use the /components route
 
-For example the latest master build is live at [https://team.newstack.quickbase.com/components](https://team.newstack.quickbase.com/components)
+For example the latest master build is live at [https://team.newstack.quickbase.com/qbase/components](https://team.newstack.quickbase.com/qbase/scomponents)

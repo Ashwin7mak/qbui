@@ -30,18 +30,18 @@ describe('DurationFieldValueRenderer', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test render of component with includeUnits smart units', () => {
+    it('test render of component smart units', () => {
         let millisecs = 23456;
         component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        let expected = "" + moment.duration(millisecs).asWeeks();
-        expect(durationFieldValueRenderer).toHaveText(Number(expected).toFixed(consts.DURATION_CONSTS.DEFAULT_DECIMAL_PLACES));
-        expect(durationFieldValueRenderer).toHaveText('weeks');
+        let expected = "" + moment.duration(millisecs).asSeconds();
+        expect(durationFieldValueRenderer).toHaveText(Number(expected));
+        expect(durationFieldValueRenderer).toHaveText('secs');
     });
 
 
-    it('test render of component with ms value', () => {
+    it('test render of component with ms value with includeUnits ', () => {
         let millisecs = 23456;
         component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}
                                                                              includeUnits={true}
@@ -51,6 +51,7 @@ describe('DurationFieldValueRenderer', () => {
         const durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         let expected = "" + moment.duration(millisecs).asSeconds();
         expect(durationFieldValueRenderer).toHaveText(expected);
+        expect(durationFieldValueRenderer).toHaveText('seconds');
     });
 
     describe('test various unit types', () => {
