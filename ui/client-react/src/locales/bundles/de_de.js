@@ -25,8 +25,7 @@ export default {
                 helpTitle: "Brauche Hilfe?",
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
                 helpLinkPreText: "Bitte ",
-                helpLinkText: "wenden Sie sich an unser Care-Team",
-                missingWalkMe: "Tutorial ist nicht verfügbar"
+                helpLinkText: "wenden Sie sich an unser Care-Team"
             }
         },
         appMenu: {
@@ -100,8 +99,7 @@ export default {
             user: "Benutzer",
             alerts: "Benachrichtigung",
             help: "Hilfe",
-            logout: "Abmelden",
-            missingWalkMe: "Tutorial ist nicht verfügbar"
+            logout: "Abmelden"
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
@@ -403,6 +401,7 @@ export default {
             manageAccessTitle: "Benutzerzugriff auf Mercury verwalten",
             versionSelectTitle: "Meine nutzer öffnen diese app in",
             manageAccessTip: "*Nur app-administratoren können den benutzerzugriff verwalten"
-        }
+        },
+        missingWalkMe: "Tutorial ist nicht verfügbar"
     }
 };

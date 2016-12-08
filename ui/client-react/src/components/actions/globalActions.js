@@ -144,7 +144,7 @@ let GlobalActions = React.createClass({
         try {
             WalkMePlayerAPI.toggleMenu();
         } catch (err) {
-            NotificationManager.info(Locale.getMessage('globalActions.missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
     },
 

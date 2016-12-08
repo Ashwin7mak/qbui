@@ -36,7 +36,7 @@ const AppHomePage = React.createClass({
         try {
             WalkMeAPI.startWalkthruById(228348);
         } catch (err) {
-            NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
     },
     componentWillMount() {
