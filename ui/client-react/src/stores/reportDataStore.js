@@ -33,6 +33,7 @@ let reportModel = {
         keyField: null,
         fieldsMap: null,
         groupFields: null,
+        gridColumns: null,
         groupLevel: 0,
         hasGrouping: false,
         name: null,
@@ -51,13 +52,17 @@ let reportModel = {
      */
     getReportColumnUnits(fieldDef) {
         let answer = null;
-        if (fieldDef && _.has(fieldDef, '.datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
+        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
             let scale = fieldDef.datatypeAttributes.scale;
             if (durationFormatter.hasUnitsText(scale)) {
                 answer = Locale.getMessage('durationTableHeader.' + scale);
             }
         }
         return answer;
+    },
+
+    refreshReportColumns() {
+        this.model.columns = this.getReportColumns(this.model.hasGrouping ? this.model.gridColumns : this.model.fields);
     },
 
     /**
@@ -200,9 +205,11 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
+            this.model.gridColumns = recordData.groups.gridColumns;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
+            this.model.gridColumns = null;
             this.model.groupFields = null;
         }
 
@@ -341,12 +348,14 @@ let reportModel = {
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
             this.model.groupFields = recordData.groups.fields;
+            this.model.gridColumns = recordData.groups.gridColumns;
             this.model.hasGrouping = recordData.groups.hasGrouping;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
             this.model.groupFields = null;
+            this.model.gridColumns = null;
             this.model.hasGrouping = false;
         }
     },
@@ -591,7 +600,9 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.EDIT_REPORT_RECORD, this.onEditRecord,
             actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
-            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord
+            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
+
+            actions.CHANGE_LOCALE, this.onChangeLocale,
 
         );
     },
@@ -658,6 +669,15 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+
+    onChangeLocale() {
+        if (this.reportModel && !this.loading) {
+            // recalc column names based on locale
+            this.reportModel.refreshReportColumns();
+            this.emit('change');
+        }
+    },
+
 
     onLoadRecords(payload) {
         this.isRecordDeleted = false;

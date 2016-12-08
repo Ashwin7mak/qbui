@@ -72,7 +72,7 @@ const basicDurationFieldValueRendererExample = (
 
         <dt>Default (a display prop overrides any specified value): </dt>
         <dd>
-            <DurationFieldValueRenderer value={durVal} display={"123 days for billing"}/>
+            <DurationFieldValueRenderer value={durVal} display={"123 days till Christmas"}/>
         </dd>
 
         <dt>Weeks: </dt>
