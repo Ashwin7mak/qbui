@@ -44,22 +44,6 @@
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';
             },
-            getRequestHost: function(req, removePort, addProtocol) {
-                let host = req && req.headers ? req.headers.host : '';
-                if (host) {
-                    // remove port(if any)
-                    if (removePort) {
-                        let portOffset = host.indexOf(':');
-                        if (portOffset !== -1) {
-                            host = host.substring(0, portOffset);
-                        }
-                    }
-                    if (addProtocol) {
-                        host = consts.PROTOCOL.HTTPS + host;
-                    }
-                }
-                return host;
-            },
             getAgentOptions: function(req) {
                 let agentOptions = {
                     rejectUnauthorized: false
@@ -75,6 +59,34 @@
                     };
                 }
                 return agentOptions;
+            },
+
+            /**
+             * Construct a host reference from the req.header.host value.  This is
+             * used when referencing a Quickbase legacy JBI endpoint.
+             *
+             * @param req
+             * @param removePort
+             * @param addProtocol
+             * @returns {*}
+             */
+            getRequestHost: function(req, removePort, addProtocol) {
+                let host = req && req.headers ? req.headers.host : '';
+                if (host) {
+                    // remove port(if any)
+                    if (removePort) {
+                        let portOffset = host.indexOf(':');
+                        if (portOffset !== -1) {
+                            host = host.substring(0, portOffset);
+                        }
+                    }
+                    //  protocol is not included in the header.host, so prepend
+                    //  https is requested.
+                    if (addProtocol) {
+                        host = consts.PROTOCOL.HTTPS + host;
+                    }
+                }
+                return host;
             },
 
             /**
