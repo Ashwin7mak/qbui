@@ -14,7 +14,6 @@
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
-        let urlUtils = require('../../../../common/src/commonUrlUtils');
 
         let request = defaultRequest;
 
