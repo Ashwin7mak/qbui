@@ -9,7 +9,6 @@
     let perfLogger = require('../../perfLogger');
     let url = require('url');
     let consts = require('../../../../common/src/constants');
-    let urlUtils = require('../../../../common/src/commonUrlUtils');
 
     module.exports = function(config) {
         let request = defaultRequest;

@@ -1,6 +1,7 @@
 'use strict';
 
 let config = {
+    legacyHost: 'http://legacyHost',
     javaHost: 'http://javaHost',
     SSL_KEY : {
         private    : 'privateKey',
@@ -72,6 +73,35 @@ describe('Validate RequestHelper unit tests', function() {
             let request = requestHelper.getRequestUrl(req);
             should(request).be.exactly(config.javaHost + req.url);
             done();
+        });
+    });
+
+    describe('validate the legacy host', function() {
+        it('Test request url method', function(done) {
+            let host = requestHelper.getLegacyHost();
+            should(host).be.exactly(config.legacyHost);
+            done();
+        });
+    });
+
+    describe('validate the request host', function() {
+        let testCases = [
+            {name:'empty domain - removePort=true/addProtocol=true', host: '', removePort: false, addProtocol: false, expectation: ''},
+            {name:'null domain - removePort=true/addProtocol=true', host: null, removePort: false, addProtocol: false, expectation: null},
+            {name:'valid domain - removePort=false/addProtocol=false', host: 'someDomain.domain.com:900', removePort: false, addProtocol: false, expectation: 'someDomain.domain.com:900'},
+            {name:'valid domain - removePort=true/addProtocol=true', host: 'someDomain.domain.com:900', removePort: true, addProtocol: true, expectation: consts.PROTOCOL.HTTPS + 'someDomain.domain.com'},
+            {name:'valid domain - removePort=true/addProtocol=false', host: 'someDomain.domain.com:900', removePort: true, addProtocol: false, expectation: 'someDomain.domain.com'},
+            {name:'valid domain - removePort=false/addProtocol=true', host: 'someDomain.domain.com:900', removePort: false, addProtocol: true, expectation: consts.PROTOCOL.HTTPS + 'someDomain.domain.com:900'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                let req = {headers: []};
+                req.headers.host = testCase.host;
+                let requestHost = requestHelper.getRequestHost(req, testCase.removePort, testCase.addProtocol);
+                should(requestHost).be.exactly(testCase.expectation);
+                done();
+            });
         });
     });
 
