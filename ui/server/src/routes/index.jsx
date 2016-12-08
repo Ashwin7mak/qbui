@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import Html from './html';
+import LoadingScreen from './loadingScreen';
 
 var Index = React.createClass({
     propTypes: {
@@ -13,10 +14,11 @@ var Index = React.createClass({
         return (
             <Html {...this.props}>
                 <div id="content">
+                    <LoadingScreen/>
                 </div>
-                <script src={this.props.hostBase +
+                <script async={true} src={this.props.hostBase +
                              this.props.jsPath + this.props.bundleFileName}></script>
-                <script type="text/javascript" async="" src={this.props.walkMeJS}></script>
+                <script type="text/javascript" async={true} src={this.props.walkMeJS}></script>
             </Html>
         );
     }
