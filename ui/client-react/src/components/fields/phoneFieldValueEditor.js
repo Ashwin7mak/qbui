@@ -79,6 +79,10 @@ const PhoneFieldValueEditor = React.createClass({
             officeExt = phoneNumberFormatter.getExtension(display);
         }
 
+        /**
+         * When a phone number has an extension, the phone number's input box is referred to as an office number
+         * The office number input box needs to be styled differently than a regular phone number input box
+         * */
         if (hasExtInput) {
             classes = {
                 officeNumber: "officeNumber " + (classes || ''),
