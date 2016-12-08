@@ -19,6 +19,9 @@ export const VIEW_FORM_TYPE = "view";
 export const ADD_FORM_TYPE = "add";
 export const EDIT_FORM_TYPE = "edit";
 
+// APPS API PARAMETERS
+export const HYDRATE = "hydrate";
+
 //  NODE API PARAMETERS
 export const FORMAT_PARAM = "format";
 //export const RAW_FORMAT = "raw";
