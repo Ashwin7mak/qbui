@@ -54,7 +54,7 @@ describe('PhoneFieldValueEditor', () => {
         Simulate.change(domComponent.childNodes[0], {
             target: {value: badInput}
         });
-        expect(component.state.phone).toEqual(phoneNumberWithSpecialCharacters);
+        expect(component.state.value).toEqual(phoneNumberWithSpecialCharacters);
     });
 
     it('renders an extension input box if includeExtension is true', () => {
