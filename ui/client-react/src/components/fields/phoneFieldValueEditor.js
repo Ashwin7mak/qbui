@@ -74,7 +74,7 @@ const PhoneFieldValueEditor = React.createClass({
         let phoneNumber;
         let officeExt;
         let hasExtInput = this.props.attributes && this.props.attributes.includeExtension;
-        if (value) {
+        if (value && display) {
             phoneNumber = phoneNumberFormatter.getPhoneNumber(display);
             officeExt = phoneNumberFormatter.getExtension(display);
         }
