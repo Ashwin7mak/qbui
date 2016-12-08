@@ -89,6 +89,8 @@ var config = require('./environment');
             }
         }
 
+        app.use('/qbase', express.static(path.join(config.root, 'server/src/assets')));
+
         if (!config.ip) {
             if (config.DOMAIN) {
                 var url = require('url');
