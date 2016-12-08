@@ -29,7 +29,11 @@ const DurationFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func,
 
     },
-    onChange() {},
+    onChange(ev) {
+        if (this.props.onChange) {
+            this.props.onChange(ev);
+        }
+    },
     onBlur() {},
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
