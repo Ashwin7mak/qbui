@@ -38,7 +38,9 @@ $data-font-size: $font-size-p;
     box-shadow: none;
 }
 
-[type="text"], [type="url"], [type="email"] {
+[type="text"],
+[type="url"],
+[type="email"] {
     &.input {
         background-color: $input-bg-color;
     }

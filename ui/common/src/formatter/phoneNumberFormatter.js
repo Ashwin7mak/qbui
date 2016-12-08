@@ -4,14 +4,56 @@
  */
 (function() {
     'use strict';
-
+    var PLACEHOLDER = "(xxx) xxx-xxxx";
     var EXTENSION_DELIM = 'x';
     var OPEN_PAREN = '(';
     var CLOSE_PAREN = ')';
     var DASH = '-';
+    var ALLOWED_CHARACTERS_ONCHANGE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '(', ')', '+', '-', '.', ' '];
+    var ALLOWED_CHARACTERS_ONBLUR = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x'];
 
     module.exports = {
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
+        EXTENSION_DELIM: EXTENSION_DELIM,
+        PLACEHOLDER: PLACEHOLDER,
+        getExtension: function(phoneNumber) {
+            if (!phoneNumber) {
+                return '';
+            }
+            return phoneNumber.split(EXTENSION_DELIM)[1];
+        },
+        getPhoneNumber: function(phoneNumber) {
+            if (!phoneNumber) {
+                return '';
+            }
+            return phoneNumber.split(EXTENSION_DELIM)[0].trim();
+        },
+        getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {
+            if (!extNum) {
+                return phoneNum;
+            }
+            return phoneNum + EXTENSION_DELIM + extNum;
+        },
+        onChangeMasking: function(nums) {
+            /**
+             * onChangeMasking only allows user to type the allowed characters in the ALLOWED_CHARACTERS_ONCHANGE array.
+             * A user will be unable to type any characters that are not allowed into the input box
+             * */
+            return nums.split('')
+                .filter(function(num) {return ALLOWED_CHARACTERS_ONCHANGE.indexOf(num) > -1;})
+                .join('');
+        },
+        onBlurMasking: function(nums) {
+            /**
+             * onBlurMasking removes all special characters. It modifies the value to be a string of numbers with or without an ext
+             * */
+            if (!nums) {
+                return '';
+            }
+            return nums.split('')
+                .filter(function(num) {return ALLOWED_CHARACTERS_ONBLUR.indexOf(num) > -1;})
+                .join('');
+        },
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
