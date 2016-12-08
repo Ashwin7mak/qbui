@@ -14,7 +14,7 @@
         },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
-        allScriptsTimeout: 300000,
+        allScriptsTimeout: 600000,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
@@ -22,9 +22,12 @@
         // sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/forms/*.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/forms/formAdd.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/forms/formAddValidation.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/forms/formPermissionsViewerRole.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [

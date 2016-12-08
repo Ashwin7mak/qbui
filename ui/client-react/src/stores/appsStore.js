@@ -7,12 +7,14 @@ import TableIconUtils from '../utils/tableIconUtils';
 
 let AppsStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.apps = [];
         this.appUsers = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
+        this.loadingAppUsers = false;
         this.error = false;
+        this.savingAppStack = false;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
@@ -20,16 +22,23 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
             actions.SELECT_TABLE, this.onSelectTable,
-            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess
+
+            actions.LOAD_APP_USERS, this.onLoadAppUsers,
+            actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
+            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
+
+            actions.SET_APP_STACK, this.onSetAppStack,
+            actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess,
+            actions.SET_APP_STACK_FAILED, this.onSetAppStackFailed
         );
 
         this.logger = new Logger();
     },
-    onLoadApps: function() {
+    onLoadApps() {
         this.loading = true;
         this.emit("change");
     },
-    onLoadAppsFailed: function() {
+    onLoadAppsFailed() {
         this.loading = false;
         this.error = true;
         this.emit("change");
@@ -43,7 +52,7 @@ let AppsStore = Fluxxor.createStore({
             }
         });
     },
-    onLoadAppsSuccess: function(apps) {
+    onLoadAppsSuccess(apps) {
 
         this.loading = false;
         this.error = false;
@@ -53,27 +62,59 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onLoadAppUsersSuccess: function(users) {
+    onLoadAppUsers() {
+        this.loadingAppUsers = true;
+        this.emit('change');
+    },
+    onLoadAppUsersFailed() {
+        this.loadingAppUsers = false;
+        this.emit('change');
+    },
+    onLoadAppUsersSuccess(users) {
+        this.loadingAppUsers = false;
         this.appUsers = users;
         this.emit('change');
     },
-    onSelectApp: function(appId) {
+    onSelectApp(appId) {
         this.selectedAppId = appId;
 
         this.emit('change');
     },
-    onSelectTable: function(tblId) {
+    onSelectTable(tblId) {
         this.selectedTableId = tblId;
 
         this.emit('change');
     },
-    getState: function() {
+    onSetAppStack() {
+        this.savingAppStack = true;
+
+        this.emit('change');
+    },
+    onSetAppStackSuccess(payload) {
+        const {appId, openInV3} = payload;
+
+        this.savingAppStack = false;
+
+        const app = _.find(this.apps, {id: appId});
+
+        if (app) {
+            app.openInV3 = openInV3;
+            this.emit('change');
+        }
+    },
+    onSetAppStackFailed(payLoad) {
+        this.savingAppStack = false;
+        this.emit('change');
+    },
+    getState() {
         return {
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
+            loadingAppUsers: this.loadingAppUsers,
+            savingAppStack: this.savingAppStack,
             error: this.error
         };
     },

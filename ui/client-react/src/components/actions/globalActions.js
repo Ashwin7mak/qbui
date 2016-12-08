@@ -9,6 +9,7 @@ import UrlUtils from '../../utils/urlUtils';
 import cookie from 'react-cookie';
 import Constants from '../../services/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -78,16 +79,24 @@ let GlobalActions = React.createClass({
         let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
         if (v2tov3Cookie) {
             //make sure it doesn't exist somehow already
-            newCookieValue = CommonCookieUtils.searchCookieValue(v2tov3Cookie, this.props.app.name) ?
-                v2tov3Cookie : CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.name, "1");
+            newCookieValue = CommonCookieUtils.searchCookieValue(v2tov3Cookie, this.props.app.id) ?
+                v2tov3Cookie : CommonCookieUtils.addQBClassicNameValuePair(v2tov3Cookie, this.props.app.id, "1");
         } else {
-            newCookieValue = CommonCookieUtils.createQBClassicNameValuePair(this.props.app.name, "1");
+            newCookieValue = CommonCookieUtils.createQBClassicNameValuePair(this.props.app.id, "1");
         }
         //DO NOT EVER DO THIS AGAIN! We should never be overriding how cookie-react saves (which by default ENCODES) the value
         //I am only doing this so that we don't need to change current stack ::shudder::
         //This is not documented for cookie-react, tossing some serious JS grenades here
         var encode = function(string) {return string;};
         cookie.save(Constants.COOKIE.V2TOV3, newCookieValue, {path: '/', encode});
+    },
+
+    /**
+     * sign out user using explicit nav
+     * (MenuItem href is currently incompatible with react-fastclick)
+     */
+    signOutUser() {
+        WindowLocationUtils.update("/qbase/signout");
     },
 
     getUserDropdown() {
@@ -105,7 +114,7 @@ let GlobalActions = React.createClass({
 
                 <Dropdown.Menu>
 
-                    <MenuItem href="/qbase/user" eventKey={eventKeyIdx++} disabled><I18nMessage
+                    <MenuItem eventKey={eventKeyIdx++} disabled><I18nMessage
 
                         message={'header.menu.preferences'}/></MenuItem>
                     <MenuItem divider/>
@@ -118,13 +127,13 @@ let GlobalActions = React.createClass({
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
                     {this.props.app && <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem>}
-                    {this.props.app && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
+                    {this.props.app && this.props.app.id && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
                                                 onSelect={this.switchToQBClassic}
                                                  eventKey={eventKeyIdx++}><I18nMessage
                                                 message={'appMenu.qbClassicLink'}/></MenuItem>}
                     {this.props.app && <MenuItem divider/>}
 
-                    <MenuItem href="/qbase/signout" eventKey={eventKeyIdx++}><I18nMessage
+                    <MenuItem onClick={this.signOutUser} eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.sign_out'}/></MenuItem>
                 </Dropdown.Menu>
             </Dropdown>);

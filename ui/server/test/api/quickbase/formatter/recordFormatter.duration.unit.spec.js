@@ -2,6 +2,7 @@
 
 var recordFormatter = require('../../../../src/api/quickbase/formatter/recordFormatter')();
 var assert = require('assert');
+var consts = require('../../../../../common/src/constants');
 /*
  * We can't use the JS native number data type when handling records because it is possible to lose
  * decimal precision as a result of the JS implementation the number data type. In JS, all numbers are
@@ -21,7 +22,6 @@ var CONSTS = require('../../../../../common/src/constants').DURATION_CONSTS;
  * Unit tests for Duration field formatting
  */
 describe('Duration record formatter unit test', function() {
-
 
     var OVER_HOUR_VAL = 2;
     var UNDER_HOUR_VAL = 0;
