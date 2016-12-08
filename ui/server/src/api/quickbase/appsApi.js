@@ -234,7 +234,7 @@
                     //  if a post request, then updating stack preference
                     let resp = JSON.parse(opts.body);
                     let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
-                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appid, true, value);
+                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId, true, value);
                 } else {
                     opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId);
                 }
