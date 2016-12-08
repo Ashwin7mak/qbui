@@ -67,22 +67,22 @@
              *
              * @param req
              * @param removePort
-             * @param addProtocol
+             * @param addSecureProtocol
              * @returns {*}
              */
-            getRequestHost: function(req, removePort, addProtocol) {
+            getRequestHost: function(req, removePort, addSecureProtocol) {
                 let host = req && req.headers ? req.headers.host : '';
                 if (host) {
-                    // remove port(if any)
+                    // if requested, remove port if one is included
                     if (removePort) {
                         let portOffset = host.indexOf(':');
                         if (portOffset !== -1) {
                             host = host.substring(0, portOffset);
                         }
                     }
-                    //  protocol is not included in the header.host, so prepend
-                    //  https is requested.
-                    if (addProtocol) {
+                    //  protocol is not included in the header.host, so if requested,
+                    //  prepend https to the host.
+                    if (addSecureProtocol) {
                         host = consts.PROTOCOL.HTTPS + host;
                     }
                 }
