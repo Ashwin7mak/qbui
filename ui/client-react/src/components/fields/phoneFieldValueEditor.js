@@ -31,6 +31,11 @@ const PhoneFieldValueEditor = React.createClass({
 
     },
     onChangeOfficeNumber(ev) {
+        /**
+         * When a user is typing in the officeNumber input box, this onChange will be triggered
+         * The ext is stripped off of the phone number and then the user's new input value in the officeNumber
+         * input box is then concatenated back with the ext
+         * */
         let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
         let ext = phoneNumberFormatter.getExtension(this.props.display);
         let updatedValue = phoneNumber;
@@ -43,6 +48,11 @@ const PhoneFieldValueEditor = React.createClass({
         }
     },
     onChangeExtNumber(ev) {
+        /**
+         * When a user is typing in the ext input box, this onChange will be triggered
+         * The phone number is stripped out of the phone number and ext string, and then the user's new input value in the ext number
+         * input box is then concatenated back with the phone number
+         * */
         let updatedValue = phoneNumberFormatter.getPhoneNumber(this.props.display);
         if (ev) {
             let extNumber = phoneNumberFormatter.onChangeMasking(ev);
