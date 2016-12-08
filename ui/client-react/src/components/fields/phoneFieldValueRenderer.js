@@ -13,7 +13,7 @@ const PhoneFieldValueRenderer = React.createClass({
          * the display to render */
         display: React.PropTypes.any,
         /**
-         * text field attributes
+         * phone field attributes
          */
         attributes: React.PropTypes.object
     },
