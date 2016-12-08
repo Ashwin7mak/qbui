@@ -92,8 +92,7 @@ const TextFieldValueEditor = React.createClass({
                       key={'inp' + this.props.idKey}
                       placeholder={this.props.placeholder}
                       onChange={this.onChange}
-                      onBlur={this.onBlur}
-                      onKeyDown={this.props.onKeyDown} />;
+                      onBlur={this.onBlur} />;
     },
 
     addClearButtonTo(inputBox) {
