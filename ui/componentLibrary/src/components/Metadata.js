@@ -30,6 +30,7 @@ import QBModalMetadata from 'component-metadata!../../../client-react/src/compon
 import AlertBannerMetadata from 'component-metadata!../../../client-react/src/components/alertBanner/alertBanner.js';
 import InvisibleBackdropMetadata from 'component-metadata!../../../client-react/src/components/qbModal/invisibleBackdrop.js';
 import PageTitleMetadata from 'component-metadata!../../../client-react/src/components/pageTitle/pageTitle.js';
+import DurationFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueRenderer.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -61,7 +62,8 @@ var Metadata = _.merge(
     QBModalMetadata,
     AlertBannerMetadata,
     PageTitleMetadata,
-    InvisibleBackdropMetadata
+    InvisibleBackdropMetadata,
+    DurationFieldValueRendererMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );

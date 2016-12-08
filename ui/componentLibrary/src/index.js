@@ -48,6 +48,7 @@ import QBModalDoc from './docs/qbModal.js';
 import InvisibleBackdropDoc from './docs/invisibleBackdrop.js';
 import AlertBannerDoc from './docs/alertBanner.js';
 import PageTitleDoc from './docs/pageTitle.js';
+import DurationFieldValueRendererDoc from './docs/durationFieldValueRenderer.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -60,6 +61,7 @@ render((
             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
             <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
             <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
+            <Route path="durationFieldValueRenderer" component={DurationFieldValueRendererDoc} />
             <Route path="emailFieldValueEditor" component={EmailFieldValueEditorDoc} />
             <Route path="emailFieldValueRenderer" component={EmailFieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />

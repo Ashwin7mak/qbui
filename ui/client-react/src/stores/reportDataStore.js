@@ -16,6 +16,7 @@ import * as userFormatter from '../../../common/src/formatter/userFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
+let durationFormatter = require('../../../common/src/formatter/durationFormatter');
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -32,6 +33,7 @@ let reportModel = {
         keyField: null,
         fieldsMap: null,
         groupFields: null,
+        gridColumns: null,
         groupLevel: 0,
         hasGrouping: false,
         name: null,
@@ -40,6 +42,27 @@ let reportModel = {
         sortFids: [],
         groupEls: [],
         originalMetaData: null
+    },
+
+    /**
+     * get the column units to add to the column header, currently only duration fields gets the units from
+     * the field definition if its a scale that has units (non time type and non smart units)
+     * @param fieldDef
+     * @returns null or string containing the localized units
+     */
+    getReportColumnUnits(fieldDef) {
+        let answer = null;
+        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
+            let scale = fieldDef.datatypeAttributes.scale;
+            if (durationFormatter.hasUnitsText(scale)) {
+                answer = Locale.getMessage('durationTableHeader.' + scale);
+            }
+        }
+        return answer;
+    },
+
+    refreshReportColumns() {
+        this.model.columns = this.getReportColumns(this.model.hasGrouping ? this.model.gridColumns : this.model.fields);
     },
 
     /**
@@ -76,9 +99,13 @@ let reportModel = {
                     let column = {};
                     column.order = index;
                     column.id = fieldDef.id;
-                    column.headerName = fieldDef.name;//
+                    column.headerName = fieldDef.name;
                     column.field = fieldDef.name; //name needed for aggrid
                     column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
+                    let durUnits = this.getReportColumnUnits(fieldDef);
+                    if (durUnits) {
+                        column.fieldDef.datatypeAttributes.unitsDescription = durUnits;
+                    }
                     column.fieldType = fieldDef.type;
                     column.defaultValue = null;
                     if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
@@ -178,9 +205,11 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
+            this.model.gridColumns = recordData.groups.gridColumns;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
+            this.model.gridColumns = null;
             this.model.groupFields = null;
         }
 
@@ -319,12 +348,14 @@ let reportModel = {
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
             this.model.groupFields = recordData.groups.fields;
+            this.model.gridColumns = recordData.groups.gridColumns;
             this.model.hasGrouping = recordData.groups.hasGrouping;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
             this.model.groupFields = null;
+            this.model.gridColumns = null;
             this.model.hasGrouping = false;
         }
     },
@@ -399,6 +430,9 @@ let reportModel = {
             break;
         case FieldFormats.USER_FORMAT:
             answer = userFormatter;
+            break;
+        case FieldFormats.DURATION:
+            answer = durationFormatter;
             break;
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.RATING_FORMAT:
@@ -566,7 +600,9 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.EDIT_REPORT_RECORD, this.onEditRecord,
             actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
-            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord
+            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
+
+            actions.CHANGE_LOCALE, this.onChangeLocale,
 
         );
     },
@@ -633,6 +669,15 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+
+    onChangeLocale() {
+        if (this.reportModel && !this.loading) {
+            // recalc column names based on locale
+            this.reportModel.refreshReportColumns();
+            this.emit('change');
+        }
+    },
+
 
     onLoadRecords(payload) {
         this.isRecordDeleted = false;

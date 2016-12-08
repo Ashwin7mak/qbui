@@ -4,6 +4,7 @@ import _ from 'lodash';
 import FieldFormats from '../../utils/fieldFormats';
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
+import DurationFieldValueRenderer from './durationFieldValueRenderer';
 import EmailFieldValueRenderer from './emailFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
@@ -96,20 +97,20 @@ const FieldValueRenderer = React.createClass({
             return (
                 <DateTimeFieldValueRenderer value={this.props.value}
                                             attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
+                                            key={'dtfvr-' + this.props.idKey}
                     {...commonProperties}/>
             );
         case FieldFormats.TIME_FORMAT:
             return (
                     <TimeFieldValueRenderer value={this.props.value}
                                             attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
+                                            key={'tfvr-' + this.props.idKey}
                                                 {...commonProperties}/>
                 );
         case FieldFormats.CHECKBOX_FORMAT:
             return (
                     <CheckBoxFieldValueRenderer value={this.props.value}
-                                                key={'inp-' + this.props.idKey}
+                                                key={'cbfvr-' + this.props.idKey}
                                                 hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
                                                 label={this.props.label}
                                                 {...commonProperties} />
@@ -128,14 +129,25 @@ const FieldValueRenderer = React.createClass({
                                           display={this.props.display}
                                           openInNewWindow={open_in_new_window}
                                           showAsButton={show_as_button}
+                                          key={'ufvr-' + this.props.idKey}
                                           {...commonProperties} />;
 
         case FieldFormats.EMAIL_ADDRESS:
-            return <EmailFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
+            return <EmailFieldValueRenderer value={this.props.value} display={this.props.display}
+                                            key={'efvr-' + this.props.idKey}
+                                            {...commonProperties} />;
 
+        case FieldFormats.DURATION_FORMAT:
+            return (
+                <DurationFieldValueRenderer value={this.props.value}
+                                            display={this.props.display}
+                                            attributes={this.props.attributes}
+                                            includeUnits={this.props.includeUnits}
+                                            key={'drfvr-' + this.props.idKey}
+                                            {...commonProperties}/>
+            );
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
-        case FieldFormats.DURATION_FORMAT:
         default: {
             return (
                     <TextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
