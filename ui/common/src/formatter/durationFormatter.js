@@ -19,6 +19,7 @@
      */
     var bigDecimal = require('bigdecimal');
     var CONSTS = require('../constants').DURATION_CONSTS;
+    var ALLOWED_DURATION_TEXT = ['second', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day', 'days', 'week', 'weeks'];
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -268,6 +269,49 @@
             return opts;
         },
 
+        onBlurMasking(value) {
+            var splitOn = ' ';
+            var type = [];
+            var num;
+            if (typeof value === 'string') {
+                value = value.toLowerCase();
+            }
+
+            if (typeof value === 'string' && value.split('').indexOf(':') !== -1) {
+                splitOn = ':';
+            }
+            if (value && typeof value !== 'number') {
+                value = value.split(splitOn);
+                num = value[0];
+            }
+            value.forEach(function(val) {
+                if (ALLOWED_DURATION_TEXT.indexOf(val) !== -1) {
+                    type.push(val);
+                }
+            })
+            if (type.length > 1) {
+                console.log('ERROR!');
+                type = [];
+            }
+
+            if (type.length === 1) {
+                type = type.join('');
+                var firstLetter = type.slice(0, 1).toUpperCase();
+                type = type.slice(1);
+                type = firstLetter + type;
+                if (type[type.length - 1] !== 's') {
+                    type = type + 's';
+                }
+            }
+            if (type === 'Minutes') {
+                value = num * CONSTS.MILLIS_PER_MIN;
+            }
+
+            console.log('onBlurMasking value: ', value);
+            console.log('onBlurMasking num: ', num);
+            console.log('onBlurMasking type: ', type);
+            return value;
+        },
         /**
          * Given a raw number as input, formats the duration value for display.
          * @param fieldValue the field value object

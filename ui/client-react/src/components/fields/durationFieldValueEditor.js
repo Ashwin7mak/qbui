@@ -34,7 +34,18 @@ const DurationFieldValueEditor = React.createClass({
             this.props.onChange(ev);
         }
     },
-    onBlur() {},
+    onBlur() {
+        console.log('onBlur: ', this.props.value);
+        let value = durationFormatter.onBlurMasking(this.props.value);
+        let theVals = {
+            value: value
+        }
+        theVals.display = value;
+        theVals.display = durationFormatter.format(theVals, this.props.attributes)
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
+    },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         return <TextFieldValueEditor {...otherProps}
@@ -42,7 +53,7 @@ const DurationFieldValueEditor = React.createClass({
                                      onChange={this.onChange}
                                      onBlur={this.onBlur}
                                      placeholder={placeholder || ''}
-                                     value={value || ''} />;
+                                     value={display || ''} />;
     }
 });
 
