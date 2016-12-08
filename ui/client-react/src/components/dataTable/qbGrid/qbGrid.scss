@@ -1,11 +1,11 @@
 @import '../../../../src/assets/css/qbVariables';
-$row-background-color-hover: $color1;
-$row-cell-border-color: $color4;
-$row-bg-color: $color2;
-$row-non-editable-bg-color: $color12;
-$row-border-color: $color4;
-$row-box-shadow-color: $color4;
-$cell-edit-background-edit: $color1;
+$row-background-color-hover: $color-blue-200;
+$row-cell-border-color: $color-black-300;
+$row-bg-color: $color-black-100;
+$row-non-editable-bg-color: $color-black-200;
+$row-border-color: $color-black-300;
+$row-box-shadow-color: $color-black-300;
+$cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
 
 .qbGrid > thead, .qbGrid > tbody {
@@ -43,7 +43,7 @@ $grid-font-size: $font-size-p;
         }
 
         .qbIcon.iconTableUISturdy-check {
-            color: $color22;
+            color: $color-green-600;
         }
 
         .dropdownToggle {

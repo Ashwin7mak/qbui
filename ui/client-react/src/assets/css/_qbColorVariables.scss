@@ -89,10 +89,14 @@ $color-pink-600: #c72f79;
 
 //-------------------------------------------------------------------
 // BEGIN NEW SEMANTIC NAMES
-// These are defined here so they will be overridden below until
-// we start using them more fully in a second pass through the code.
-// We will merge this section and the semantic names outside this
-// section together.
+// These are the new semantic names. We are not using them yet.
+// They are defined here so that if the names happen to conflict
+// with a semantic name that was already created in the code,
+// but used differently than expected, the value defined here
+// will be changed by a definition later in this file. We do it
+// this way so as to not break the existing UI. In a future pass
+// through the code, we will begin using the new names everywhere
+// and remove any conflicts that may exist outside this section.
 //-------------------------------------------------------------------
 
 //== general
@@ -199,43 +203,6 @@ $badcolor13-icon-duplicate-color:           #c75ac2;
 $badcolor14-top-nav-title-icon-color:       #009aae;
 $badcolor15-secondary-bar-page-actions-bg:  #476b90;
 
-
-// These will all be removed and converted to semantic names
-$color1: $color-blue-200; // wispy-water
-$color2: $color-black-100; // white
-$color3: $color-blue-600;
-$color4: $color-black-300; // rabbit
-$color5: $color-blue-400; // periwinkle
-$color6: $badcolor1-color6;
-$color7: $color-blue-300; // clear-day
-$color8: $color-blue-600;
-$color9: $color-black-600; // walrus
-// $color10: #243f7f;   // UNUSED VARIABLE
-$color11: $color-black-700; // charcoal
-$color12: $color-black-200; // kitten
-$color13: $badcolor2-color13;
-$color14: $badcolor3-color14;
-$color15: $badcolor4-color15;
-$color16: $color-green-700; // lazy-lizard
-// $color17: #f3f5f8;   // UNUSED VARIABLE
-$color18: $badcolor5-color18;
-$color19: $color-black-400; // porpoise
-$color20: $color-blue-600; // dull-sapphire
-$color21: $color-black-500; //ghost
-$color22: $color-green-600; //fiddlehead
-$color23: $color-blue-500; // dragon-foot
-$color24: $badcolor6-color24;
-$color25: $badcolor7-color25;
-$color26: $color-cyan-800;
-$color27: $color-teal-600;
-$color28: $badcolor8-color28;
-$color29: $badcolor9-color29;
-$color30: $color-blue-700;
-$color31: $color-teal-400;
-$color32: $color-blue-800;
-$color33: $color-indigo-700; //big-leaf
-$color34: $color-teal-600; //waterpebble
-
 //-------------------------------------------------------------------
 // END COLOR VARIABLES TO BE ELIMINATED
 //-------------------------------------------------------------------
@@ -261,15 +228,15 @@ $hover-color: $color-blue-200;
 
 
 //================
-$left-nav-bg: $color-blue-700; // deep-sea
-$icon-color-hover: $color-cyan-600; // caribbean
+$left-nav-bg: $color-blue-700;
+$icon-color-hover: $color-cyan-600;
 $topnav-icon-color: $icon-color;
 $page-actions-icon-color: $color-cyan-700;
 $header-bg: $color-blue-300;
 $nav-hover-bg: $badcolor10-nav-hover-bg;
 $nav-hover-fg: $color-black-100;
 $nav-link-fg: $color-black-100;
-$nav-border: $color18;
+$nav-border: $badcolor5-color18;
 $small-header-bg: $color-black-100;
 $report-container-bg: $color-black-100;
 //tabs underline color
@@ -293,7 +260,7 @@ $stage-headline-icon-color: $color-cyan-500;
 $stage-headline-color: $color-black-700;
 
 //== Report
-$report-backgroundColor: $color13;
+$report-backgroundColor: $badcolor2-color13;
 $pagination-iconfont-normal-color: $color-cyan-700;
 $pagination-iconfont-disabled-color: $color-black-400;
 $pagination-iconfont-hover-color: $color-cyan-300;
@@ -306,7 +273,7 @@ $grid-group-row-header-divider: $color-black-500;
 
 //== Report Toolbar
 $toolBar-borderColor: $color-blue-300;
-$toolBar-backgroundColor: $color15;
+$toolBar-backgroundColor: $badcolor4-color15;
 $toolBar-input-borderColor: $color-black-300;
 
 //==CardView
@@ -339,7 +306,7 @@ $report-icon-calendar-color: $color-green-600;
 $report-icon-grid-edit-color: $color-pink-600;
 $report-icon-timeline-color: $color-orange-700;
 $report-icon-map-color: $color-teal-500;
-$search-input-fg: $color25;
+$search-input-fg: $badcolor7-color25;
 $popup-fg: $color-black-700;
 $top-nav-title-icon-color: $badcolor14-top-nav-title-icon-color;
 $secondary-bar-fg: $color-black-100;
