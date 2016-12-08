@@ -62,7 +62,7 @@ describe('PhoneFieldValueEditor', () => {
     it('renders an extension input box if includeExtension is true', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}}/>);
         domComponent = ReactDOM.findDOMNode(component);
-        expect(domComponent.childNodes.length).toEqual(3);
+        expect(domComponent.childNodes[2].classList[3]).toEqual("extNumber");
     });
     it('does not render an extension input box if includeExtension is not defined', () => {
         component = TestUtils.renderIntoDocument(<MockParent />);
