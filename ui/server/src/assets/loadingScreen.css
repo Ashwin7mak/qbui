@@ -62,10 +62,32 @@ html, body {
     border-radius: 50%;
 }
 
+.mobileAddButton {
+    position: absolute;
+    bottom: 21px;
+    right: 25px;
+    height: 42px;
+    width: 42px;
+    border-radius: 50%;
+    background-color: #b8b8b8;
+}
+
 /*Small breakpoing*/
 @media (max-width: 640px) {
     .leftNav {
         width: 0;
+    }
+
+    .topNav {
+        height: 40px;
+    }
+
+    .header {
+        height: 38px;
+    }
+
+    .addButton {
+        visibility: hidden;
     }
 }
 
