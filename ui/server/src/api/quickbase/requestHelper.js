@@ -9,6 +9,7 @@
     let perfLogger = require('../../perfLogger');
     let url = require('url');
     let consts = require('../../../../common/src/constants');
+    let urlUtils = require('../../../../common/src/commonUrlUtils');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -44,13 +45,18 @@
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';
             },
-            getLegacySubDomain: function(req) {
+            getRequestHost: function(req, removePort, addProtocol) {
                 let host = req && req.headers ? req.headers.host : '';
                 if (host) {
-                    // remove port
-                    let portOffset = host.indexOf(':');
-                    if (portOffset !== -1) {
-                        host = host.substring(0, portOffset);
+                    // remove port(if any)
+                    if (removePort) {
+                        let portOffset = host.indexOf(':');
+                        if (portOffset !== -1) {
+                            host = host.substring(0, portOffset);
+                        }
+                    }
+                    if (addProtocol) {
+                        host = consts.PROTOCOL.HTTPS + host;
                     }
                 }
                 return host;

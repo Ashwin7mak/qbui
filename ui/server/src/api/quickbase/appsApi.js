@@ -14,6 +14,7 @@
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
+        let urlUtils = require('../../../../common/src/commonUrlUtils');
 
         let request = defaultRequest;
 
@@ -88,10 +89,9 @@
                             let app = response[0];
                             app.accessRights = response[1];
                             if (response[2].errorCode === 0) {
-                                app.openInV3 = (response[2].v3Status === true);
+                                app.openInV3 = (response[2].value === true);
                             } else {
-                                //TODO comment out until legacy stack configuration is in place
-                                //log.warn('Error fetching application stack preference.  Setting to open in V3.  Error: ' + response[2].errorText);
+                                log.warn('Error fetching application stack preference.  Setting to open in V3.  Error: ' + response[2].errorText);
                                 app.openInV3 = true;
                             }
                             resolve(app);
@@ -228,14 +228,15 @@
                 let opts = requestHelper.setOptions(req);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
-                let subDomain = requestHelper.getLegacySubDomain(req);
+                //  get the request host to help buld the Quickbase classic route
+                let host = requestHelper.getRequestHost(req, true, true);
                 if (requestHelper.isPost(req)) {
                     //  if a post request, then updating stack preference
                     let resp = JSON.parse(opts.body);
                     let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
-                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, subDomain, true, value);
+                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appid, true, value);
                 } else {
-                    opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(appId, subDomain);
+                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId);
                 }
 
                 log.debug("Legacy Stack preference endpoint: " + opts.url);
@@ -250,13 +251,11 @@
                             resolve(msg);
                         },
                         (error) => {
-                            //TODO comment out until legacy stack configuration is in place
-                            //log.error({req: req, res:error}, opts.url);
+                            log.error({req: req, res:error}, opts.url);
                             resolve({errorText: error ? error.message : 'Unknown error thrown calling for stack preference.'});
                         }
                     ).catch((ex) => {
-                        //TODO comment out until legacy stack configuration is in place
-                        //requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
+                        requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
                         resolve(ex);
                     });
                 });

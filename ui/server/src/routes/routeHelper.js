@@ -480,13 +480,12 @@
          *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
          *
          * @param appId
-         * @param subdomain
          * @param isPost - is this a post request
          * @param value - value to set the application preference for post request
          *
          * @returns {*}
          */
-        getApplicationStackPreferenceRoute: function(appId, subDomain, isPost, value) {
+        getApplicationStackPreferenceRoute: function(appId, isPost, value) {
             let root = getLegacyRoot();
             if (appId) {
                 root += '/' + appId;
@@ -495,9 +494,6 @@
                     root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + SET_APPLICATION_STACK_JBI + '&' + constants.REQUEST_PARAMETER.LEGACY_STACK.VALUE + '=' + value;
                 } else {
                     root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + GET_APPLICATION_STACK_JBI;
-                }
-                if (subDomain) {
-                    root += '&' + constants.REQUEST_PARAMETER.LEGACY_STACK.REALM_HOST + '=' + subDomain;
                 }
             }
             return root;

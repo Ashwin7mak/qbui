@@ -82,7 +82,6 @@
             //  legacy stack request paameters
             LEGACY_STACK: {
                 ACTION: 'a',
-                REALM_HOST: 'realmhost',
                 VALUE: 'value'
             }
         },
@@ -113,7 +112,7 @@
             DAYS: 'Days',
             HOURS: 'Hours',
             MINUTES: 'Minutes',
-            SECONDS: 'Seconds',
+            SECONDS: 'Seconds'
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
@@ -136,6 +135,10 @@
         },
         ERROR_CODE:{
             DTS_ERROR_CODE: "DataOperationOrSyncError"
+        },
+        PROTOCOL: {
+            HTTP: 'http://',
+            HTTPS: 'https://'
         },
         HttpStatusCode: {
             'CONTINUE': 100,
