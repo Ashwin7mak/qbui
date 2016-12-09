@@ -4,13 +4,14 @@ var LoadingScreen = () => {
     return (
         <div className="loadingScreen">
             <div className="leftNav">
+                <div className="logoArea"></div>
+                <div className="appsListArea"></div>
             </div>
 
             <div className="mainBody">
                 <div className="topNav"></div>
 
                 <div className="header">
-                    <div className="addButton"></div>
                 </div>
 
                 <div className="mainContent">
@@ -50,8 +51,6 @@ var LoadingScreen = () => {
                             <div className="loading-circle12 loading-circle-child"></div>
                         </div>
                     </div>
-
-                    <div className="mobileAddButton"></div>
                 </div>
             </div>
         </div>
