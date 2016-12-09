@@ -12,12 +12,12 @@ describe('DurationFieldValueEditor', () => {
     let MockParent = React.createClass({
         getInitialState() {
             return {
-                rawValue: null,
+                value: null,
                 displayValue: null
             };
         },
         onChange(newValue) {
-            this.setState({rawValue: newValue});
+            this.setState({value: newValue});
         },
         onBlur(updatedValueObject) {
             this.setState(updatedValueObject);
@@ -29,7 +29,8 @@ describe('DurationFieldValueEditor', () => {
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
                                           scale = {this.props.scale}
-                                          fieldDef={{datatypeAttributes: {displayProtocol: false}}}/>
+                                          fieldDef={{datatypeAttributes: {displayProtocol: false}}}
+                                          attributes={this.props.attributes}/>
             );
         }
     });
@@ -39,17 +40,19 @@ describe('DurationFieldValueEditor', () => {
         Simulate.change(domComponent, {
             target: {value: 12345}
         });
+        Simulate.blur(domComponent);
         expect(component.state.rawValue).toEqual(12345);
     });
 
-    it('converts an input of seconds to minutes', () => {
-        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}}
-                                                             scale={DURATION_CONSTS.MINUTES} />);
+    fit('converts an input of seconds to minutes', () => {
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: DURATION_CONSTS.SECONDS}} />);
         domComponent = ReactDOM.findDOMNode(component);
-        Simulate.change(domComponent.childNodes[0], {
+        Simulate.change(domComponent, {
             target: {value: numValue + ' ' + DURATION_CONSTS.SECONDS}
         });
-        expect(component.state.phone).toEqual(phoneNumberWithSpecialCharacters);
+        Simulate.blur(domComponent);
+        debugger;
+        expect(component.state.value).toEqual(12345);
     });
     //
     // it('renders an extension input box if includeExtension is true', () => {
