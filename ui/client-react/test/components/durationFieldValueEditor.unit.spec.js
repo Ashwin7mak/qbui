@@ -2,10 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
+import {DURATION_CONSTS} from '../../../common/src/constants';
+
 
 describe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
+    let numValue = "55";
     let MockParent = React.createClass({
         getInitialState() {
             return {
@@ -25,6 +28,7 @@ describe('DurationFieldValueEditor', () => {
                                           display={this.state.display}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
+                                          scale = {this.props.scale}
                                           fieldDef={{datatypeAttributes: {displayProtocol: false}}}/>
             );
         }
@@ -38,14 +42,15 @@ describe('DurationFieldValueEditor', () => {
         expect(component.state.rawValue).toEqual(12345);
     });
 
-    // it('allows a user to only enter digits and the following special characters "( ) . - + "', () => {
-    //     component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
-    //     domComponent = ReactDOM.findDOMNode(component);
-    //     Simulate.change(domComponent.childNodes[0], {
-    //         target: {value: badInput}
-    //     });
-    //     expect(component.state.phone).toEqual(phoneNumberWithSpecialCharacters);
-    // });
+    it('converts an input of seconds to minutes', () => {
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}}
+                                                             scale={DURATION_CONSTS.MINUTES} />);
+        domComponent = ReactDOM.findDOMNode(component);
+        Simulate.change(domComponent.childNodes[0], {
+            target: {value: numValue + ' ' + DURATION_CONSTS.SECONDS}
+        });
+        expect(component.state.phone).toEqual(phoneNumberWithSpecialCharacters);
+    });
     //
     // it('renders an extension input box if includeExtension is true', () => {
     //     component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}}/>);

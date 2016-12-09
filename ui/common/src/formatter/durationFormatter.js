@@ -249,7 +249,8 @@
         return num * millis;
     }
     function convertDisplayTypeToAcceptedType(displayType) {
-        let type;
+        console.log('convertDisplayTypeToAcceptedType: ', displayType);
+        var type;
         switch (displayType) {
         case CONSTS.MSECS:
         case CONSTS.SECONDS:
@@ -261,6 +262,7 @@
         default:
             break;
         }
+        console.log('convertedType: ', type);
         return type;
     }
     function getMilliseconds(num, type) {
@@ -383,7 +385,7 @@
             }
             return opts;
         },
-        onBlurMasking(value, fieldInfo, display) {
+        onBlurMasking: function(value, fieldInfo, display) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             /**
              * Accepted Type:
@@ -466,10 +468,13 @@
                 return getMilliseconds(num, type);
             }
             if (display && type.length === 0 && fieldInfo.scale === "Smart Units") {
+                console.log('before split: ', display);
                 display = display.split(' ');
+                console.log('onBlurMasking: ', display);
                 num = display[0];
                 type = display[1];
                 type = convertDisplayTypeToAcceptedType(type);
+                console.log('onBlurMasking type: ', type);
                 return getMilliseconds(num, type);
             }
             /**
