@@ -8,40 +8,62 @@ const PhoneFieldValueRenderer = React.createClass({
     propTypes: {
         /**
          * the value to for sms and tel link */
-        value: React.PropTypes.any,
+        value: React.PropTypes.string,
         /**
          * the display to render */
-        display: React.PropTypes.any,
+        display: React.PropTypes.object.isRequired,
         /**
          * phone field attributes
          */
         attributes: React.PropTypes.object
     },
     renderLink() {
-        let telPhoneNumberLink = 'tel:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');
-        let smsPhoneNumberLink = 'sms:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');
+        let displayValue;
+        let telPhoneNumberLink;
+        let smsPhoneNumberLink;
+        let extraDigits;
+        let extension;
+        if (typeof this.props.display === 'object') {
+            displayValue = this.props.display.display;
+            telPhoneNumberLink = this.props.display.internetDialableNumber;
+            smsPhoneNumberLink = 'sms:' + this.props.display.internationalNumber;
+            extraDigits = (this.props.display.isDialable ? this.props.display.extraDigits : '');
+            extension = ((this.props.display.extension && this.props.display.extension.length) ? `${phoneNumberFormatter.EXTENSION_DELIM}${this.props.display.extension}` : null);
+        }
         const disabledDisplay = (<span>
-                                    {this.props.display}
+                                    {displayValue}{extraDigits}{extension}
                                  </span>);
-        const displayWithIcons = (<div className="phoneQBIconWrapper">
+        const displayWithIcons = (<div className="phoneQBIconWrapper phoneWrapper">
                                         <a href={telPhoneNumberLink} tabIndex="-1">
-                                                        <span>
-                                                            {this.props.display}
-                                                        </span>
+                                            <span tabIndex="0">
+                                                {displayValue}
+                                            </span>
+                                            {extraDigits && (
+                                                <span className="extraDigits" tabIndex="0">
+                                                {extraDigits}
+                                                </span>
+                                            )}
+                                            {extension && <span className="extension" tabIndex="0">{extension}</span>}
                                         </a>
                                         <div className="urlIcon phoneIcon">
-                                            <a href={smsPhoneNumberLink} tabIndex="-1">
+                                            <a href={smsPhoneNumberLink} tabIndex="0">
                                                 <QBicon className="smsIcon" icon="speechbubble-outline"/>
                                             </a>
+                                            {/*The phone icon is not in the tabindex because it does the same thing as the phoneNumber link*/}
                                             <a href={telPhoneNumberLink} tabIndex="-1">
                                                 <QBicon icon="phone-outline"/>
                                             </a>
                                         </div>
                                     </div>);
-        return this.props.disabled ? disabledDisplay : displayWithIcons;
+
+        if (this.props.disabled || !this.props.display.isDialable) {
+            return disabledDisplay;
+        } else {
+            return displayWithIcons;
+        }
     },
     render() {
-        let classes = 'urlField';
+        let classes = (this.props.display.isDialable ? 'urlField' : '');
         classes += (this.props.disabled ? ' disabled' : '');
         return (
             <div className = {classes}>

@@ -32,18 +32,18 @@
             var phoneNumber = this.parse(fieldValue.value);
 
             if (phoneNumber.countryCode === 1) {
-                return this._addExtension(phoneNumber.nationalFormattedNumber, phoneNumber.extension);
+                return phoneNumber.nationalFormattedNumber;
             }
 
             if (phoneNumber.formattedNumber) {
-                return this._addExtension(phoneNumber.formattedNumber, phoneNumber.extension);
+                return phoneNumber.formattedNumber;
             }
 
             if (phoneNumber.nationalFormattedNumber) {
-                return this._addExtension(phoneNumber.nationalFormattedNumber, phoneNumber.extension);
+                return phoneNumber.nationalFormattedNumber;
             }
 
-            return this._addExtension(phoneNumber.dialString, phoneNumber.extension);
+            return phoneNumber.dialString;
         },
 
         _addExtension(phoneNumber, extension) {
@@ -73,7 +73,8 @@
         function attemptToParseNumberWithGoogleLibrary(currentPhoneNumber, countryCode) {
             var GooglePhoneNumber = PhoneNumberUtil.parse((currentPhoneNumber || self.phonenumberWithoutExtension), (countryCode || self.countryCode));
 
-            if (!PhoneNumberUtil.isValidNumber(GooglePhoneNumber, (countryCode || self.countryCode))) {
+            let isValidNumber = PhoneNumberUtil.isValidNumber(GooglePhoneNumber, (countryCode || self.countryCode));
+            if (!isValidNumber) {
                 throw 'Invalid Phone Number';
             }
 
@@ -88,6 +89,7 @@
             self.nationalFormattedNumber = PhoneNumberUtil.format(GooglePhoneNumber, PhoneNumberFormat.NATIONAL);
             self.userFormattedNumber = PhoneNumberUtil.formatInOriginalFormat(GooglePhoneNumber, self.region);
             self.internetDialableNumber = PhoneNumberUtil.format(GooglePhoneNumber, PhoneNumberFormat.RFC3966);
+            self.isDialable = isValidNumber;
         }
 
         this.region = _.clone(region);
@@ -96,8 +98,12 @@
         this.internationalNumber = null;
         this.formattedNumber = null;
         this.internetDialableNumber = null;
+        this.isDialable = false;
 
-        this.first15DigitsOfNumber = BLANK_PHONE_NUMBER;
+        this.first15Digits = BLANK_PHONE_NUMBER;
+        this.first11Digits = BLANK_PHONE_NUMBER;
+        this.first10Digits = BLANK_PHONE_NUMBER;
+        this.extraDigits = BLANK_PHONE_NUMBER;
         this.phonenumberWithoutExtension = BLANK_PHONE_NUMBER;
         this.extension = BLANK_PHONE_NUMBER;
 
@@ -114,22 +120,36 @@
             this.extension = splitPhoneNumber[1];
         }
 
-        this.first15Digits = PhoneNumberFormatter.stripSpecialCharacters(this.phonenumberWithoutExtension).slice(0, 15);
-
+        this.withoutSpecialCharacters = PhoneNumberFormatter.stripSpecialCharacters(this.phonenumberWithoutExtension);
+        this.first15Digits = this.withoutSpecialCharacters.slice(0, 15);
+        this.first11Digits = this.first15Digits.slice(0, 11);
+        this.first10Digits = this.first15Digits.slice(0, 10);
         try {
+            // Try to parse the number as is
             attemptToParseNumberWithGoogleLibrary();
         } catch (firstTryError) {
-            // Don't do anything
             try {
+                // Attempt to parse the number with a leading plus sign to catch international numbers
                 attemptToParseNumberWithGoogleLibrary('+' + this.first15Digits);
+                this.extraDigits = this.withoutSpecialCharacters.slice(15);
             } catch (secondTryError) {
                 try {
                     // Retry and default to a US number
-                    attemptToParseNumberWithGoogleLibrary(this.first15Digits, DEFAULT_REGION);
+                    if (this.dialString.charAt(0) === '1') {
+                        attemptToParseNumberWithGoogleLibrary(this.first11Digits, DEFAULT_REGION);
+                        this.extraDigits = this.withoutSpecialCharacters.slice(11);
+                    } else {
+                        attemptToParseNumberWithGoogleLibrary(this.first10Digits, DEFAULT_REGION);
+                        this.extraDigits = this.withoutSpecialCharacters.slice(10);
+                    }
                 } catch (thirdTryError) {
+                    // Give up on a valid number and use the standard US formatter unless the number starts with a 0.
+                    // Numbers that start with 0 are likely international and shouldn't be formatted like US numbers
                     if (this.first15Digits.charAt(0) !== '0') {
                         this.nationalFormattedNumber = StandardPhoneFormatter.format({value: this.dialString});
                     }
+                    // A number cannot be dialed unless we can verify it is valid and can obtain an international number from libPhoneNumber
+                    this.isDialable = false;
                 }
             }
         }

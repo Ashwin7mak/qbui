@@ -65,10 +65,17 @@
             var tempFieldInfo = fieldInfo ? _.cloneDeep(fieldInfo.datatypeAttributes) : {};
             switch (tempFieldInfo.type) {
             case consts.PHONE_NUMBER:
-                fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);
                 var phoneNumber = phoneFormatter.parse(fieldValue.value);
-                fieldValue.internetDialableNumber = phoneNumber.internetDialableNumber;
-                fieldValue.internationalNumber = phoneNumber.internationalNumber;
+
+                fieldValue.display = {
+                    display: phoneFormatter.format(fieldValue, tempFieldInfo),
+                    isDialable: phoneNumber.isDialable,
+                    internetDialableNumber: phoneNumber.internetDialableNumber,
+                    internationalNumber: phoneNumber.internationalNumber,
+                    extraDigits: phoneNumber.extraDigits,
+                    extension: phoneNumber.extension
+                };
+
                 break;
             case consts.DATE_TIME:
             case consts.DATE:
