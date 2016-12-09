@@ -291,30 +291,56 @@
         var hours;
         var minutes;
         var seconds;
+        /**
+         * If a user enters a semicolon without a number, just return the value
+         * */
+        if (!num.match(/\d+/g, '')) {
+            return num;
+        }
+        /**
+         * ::SS
+         * */
         if (num[0] === ':' && num[1] === ':') {
-            num = num.slice(2);
-            return convertToMilliseconds(num, CONSTS.MILLIS_PER_SECOND) || 0;
+            num = num.match(/\d+/g, '');
+            return convertToMilliseconds(num[0], CONSTS.MILLIS_PER_SECOND);
         }
+        /**
+         * :MM:SS
+         * */
         if (num[0] === ':') {
-            num = num.split(':');
-            console.log(num);
+            num = num.match(/\d+/g, '');
             if (num.length === 2) {
-                return convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN) || 0;
+                minutes = convertToMilliseconds(num[0], CONSTS.MILLIS_PER_MIN);
+                seconds = convertToMilliseconds(num[1], CONSTS.MILLIS_PER_SECOND);
+                return minutes + seconds;
             }
-            minutes = convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN) || 0;
-            seconds = convertToMilliseconds(num[2], CONSTS.MILLIS_PER_SECOND) || 0;
-            return minutes + seconds;
+            /**
+             * :MM
+             * */
+            return minutes = convertToMilliseconds(num[0], CONSTS.MILLIS_PER_MIN);
         }
-        num = num.split(':');
+        num = num.match(/\d+/g, '');
+        /**
+         * HH:
+         * */
+        if (num.length === 1) {
+            return hours = convertToMilliseconds(num[0], CONSTS.MILLIS_PER_HOUR);
+        }
+        /**
+         * HH:MM
+         * */
         if (num.length === 2) {
-            hours = convertToMilliseconds(num[0], CONSTS.MILLIS_PER_HOUR) || 0;
-            minutes = convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN) || 0;
+            hours = convertToMilliseconds(num[0], CONSTS.MILLIS_PER_HOUR);
+            minutes = convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN);
             return hours + minutes;
         }
+        /**
+         * HH:MM:SS
+         * */
         if (num.length === 3) {
-            hours = convertToMilliseconds(hours, CONSTS.MILLIS_PER_HOUR) || 0;
-            minutes = convertToMilliseconds(minutes, CONSTS.MILLIS_PER_HOUR) || 0;
-            seconds = convertToMilliseconds(seconds, CONSTS.MILLIS_PER_HOUR) || 0;
+            hours = convertToMilliseconds(num[0], CONSTS.MILLIS_PER_HOUR);
+            minutes = convertToMilliseconds(num[1], CONSTS.MILLIS_PER_HOUR);
+            seconds = convertToMilliseconds(num[2], CONSTS.MILLIS_PER_HOUR);
             return  hours + minutes + seconds;
         }
     }
@@ -360,7 +386,7 @@
             var notAllowedType = [];
             var num;
             /**
-             * If value is a number, then the value will be converted to milliseconds based on
+             * If value is only a number, then the value will be converted to milliseconds based on
              * the field that the user is typing in
              * */
             if (typeof value === 'number') {
@@ -371,7 +397,7 @@
                 value = value.toLowerCase();
             }
             /**
-             * If ther user inserted a semicolon, then the string needs to be parsed based off of
+             * If the user inserted a semicolon, then the string needs to be parsed based off of
              * the HHMMSS, HHMM, MMSS requirements
              * */
             if (value && value.split('').indexOf(':') !== -1) {
