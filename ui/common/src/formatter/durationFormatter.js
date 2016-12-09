@@ -272,7 +272,6 @@
             return num * millis;
         },
         getMilliseconds(num, type) {
-            console.log(num, type);
             var returnValue;
             switch (type) {
             case CONSTS.HHMM:
@@ -285,10 +284,10 @@
             //     returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
             //     break;
             case CONSTS.WEEKS:
-                returnValue = returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_WEEK);
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_WEEK);
                 break;
             case CONSTS.DAYS:
-                returnValue = returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_DAY);;
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_DAY);
                 break;
             case CONSTS.HOURS:
                 returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_HOUR);
@@ -308,41 +307,80 @@
             var hours;
             var minutes;
             var seconds;
-            if (num.length === 3) {
-                hours = num[0] || 0;
-                minutes = num[1] || 0;
-                seconds = num[2] || 0;
-                return this.convertToMilliseconds(hours, CONSTS.MILLIS_PER_HOUR) + this.convertToMilliseconds(minutes, CONSTS.MILLIS_PER_HOUR) + this.convertToMilliseconds(seconds, CONSTS.MILLIS_PER_HOUR);
+            if (num[0] === ':' && num[1] === ':') {
+                num = num.slice(2);
+                return this.convertToMilliseconds(num, CONSTS.MILLIS_PER_SECOND) || 0;
             }
-            console.log(num);
+            if (num[0] === ':') {
+                num = num.split(':');
+                console.log(num);
+                if (num.length === 1) {
+                    return this.convertToMilliseconds(num[0], CONSTS.MILLIS_PER_MIN) || 0;
+                }
+                minutes = this.convertToMilliseconds(num[0], CONSTS.MILLIS_PER_MIN) || 0;
+                seconds = this.convertToMilliseconds(num[1], CONSTS.MILLIS_PER_SECOND) || 0;
+                return minutes + seconds;
+            }
+            num = num.split(':');
+            if (num.length === 2) {
+                hours = this.convertToMilliseconds(num[0], CONSTS.MILLIS_PER_HOUR) || 0;
+                minutes = this.convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN) || 0;
+                return hours + minutes;
+            }
+            if (num.length === 3) {
+                hours = this.convertToMilliseconds(hours, CONSTS.MILLIS_PER_HOUR) || 0;
+                minutes = this.convertToMilliseconds(minutes, CONSTS.MILLIS_PER_HOUR) || 0;
+                seconds = this.convertToMilliseconds(seconds, CONSTS.MILLIS_PER_HOUR) || 0;
+                return  hours + minutes + seconds;
+            }
         },
 
-        onBlurMasking(value) {
+        onBlurMasking(value, fieldInfo) {
+            //http://www.calculateme.com/time/days/to-milliseconds/1
             var type = [];
             var num;
-
+            /**
+             * If value is a number, then the value will be converted to milliseconds based on
+             * the field that the user is typing in
+             * */
+            if (typeof value === 'number') {
+                console.log('info: ', fieldInfo.scale);
+                return this.convertToMilliseconds(value, fieldInfo.scale);
+            }
             if (typeof value === 'string') {
                 value = value.toLowerCase();
             }
-
-            if (typeof value === 'string' && value.split('').indexOf(':') !== -1) {
-                num = value.split(':');
-                return this.convertHourMinutesSeconds(num);
+            /**
+             * If ther user inserted a semicolon, then the string needs to be parsed based off of
+             * the HHMMSS, HHMM, MMSS requirements
+             * */
+            if (value && value.split('').indexOf(':') !== -1) {
+                return this.convertHourMinutesSeconds(value);
             }
-            if (value && typeof value !== 'number') {
+            /**
+             * If the user passes in a string containing a number and a type, we split the string here
+             * and seperate the number and type from each other
+             * */
+            if (value) {
                 value = value.split(' ');
                 num = value[0];
+                value.forEach(function(val) {
+                    if (ALLOWED_DURATION_TEXT.indexOf(val) !== -1) {
+                        type.push(val);
+                    }
+                });
             }
-            value.forEach(function(val) {
-                if (ALLOWED_DURATION_TEXT.indexOf(val) !== -1) {
-                    type.push(val);
-                }
-            });
+            /**
+             * If a user enters more than one type (e.g., "days minutes"), then an error will be thrown
+             * */
             if (type.length > 1) {
                 console.log('ERROR!');
                 type = [];
             }
-
+            /**
+             * If a user only entered a single type (e.g., "minutes")
+             * then the num will be converted to milliseconds, based off of the type passed in by the user
+             * */
             if (type.length === 1) {
                 type = type.join('');
                 var firstLetter = type.slice(0, 1).toUpperCase();
@@ -353,10 +391,9 @@
                 }
                 return this.getMilliseconds(num, type);
             }
-
-            console.log('onBlurMasking value: ', value);
-            console.log('onBlurMasking num: ', num);
-            console.log('onBlurMasking type: ', type);
+            if (num && type.length === 0) {
+                return this.getMilliseconds(num, fieldInfo.scale);
+            }
         },
         /**
          * Given a raw number as input, formats the duration value for display.
