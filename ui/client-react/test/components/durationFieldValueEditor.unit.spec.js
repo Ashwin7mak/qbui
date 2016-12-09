@@ -46,14 +46,13 @@ describe('DurationFieldValueEditor', () => {
             target: {value: numValue + ' ' + DURATION_CONSTS.SECONDS}
         });
         Simulate.blur(domComponent);
-        let newExpectedMilliSeconds;
+        let expectedMinutes;
         let expectedMilliSeconds = moment.duration(numValue, 'seconds').asMilliseconds();
-        let expectedMinutes = moment.duration(expectedMilliSeconds, 'milliseconds').asMinutes();
-        newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
-        newExpectedMilliSeconds = newExpectedMilliSeconds.divide(DURATION_CONSTS.MILLIS_PER_MIN, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
+        let newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
+        expectedMinutes = newExpectedMilliSeconds.divide(DURATION_CONSTS.MILLIS_PER_MIN, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
         debugger;
         expect(component.state.value).toEqual(expectedMilliSeconds);
-        expect(component.state.display).toEqual(newExpectedMilliSeconds);
+        expect(component.state.display).toEqual(expectedMinutes);
     });
     //
     // it('renders an extension input box if includeExtension is true', () => {
