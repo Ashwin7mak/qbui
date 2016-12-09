@@ -1,6 +1,6 @@
 @import '../../assets/css/qbVariables';
-$icon-action-icon-color: #fff;
-$page-actions-background-color: #486c8f;
+$icon-action-icon-color: $color-black-100;
+$page-actions-background-color: $color-blue-600;
 
 @include not-small-breakpoint {
     .secondaryBar .iconActions {
