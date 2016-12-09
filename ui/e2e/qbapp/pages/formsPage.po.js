@@ -247,8 +247,8 @@
                     //close the alert
                     return self.formErrorMessageHeaderCloseBtn.click();
                 }).then(function() {
-                    //give some time for the popup to slide in after closing
-                    return e2eBase.sleep(browser.params.smallSleep);
+                    //give some time for the popup to slide out (and invalid save growl notification to disappear) after closing
+                    return e2eBase.sleep(browser.params.mediumSleep);
                 });
             });
         };
