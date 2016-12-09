@@ -114,7 +114,10 @@
             DAYS: 'Days',
             HOURS: 'Hours',
             MINUTES: 'Minutes',
-            SECONDS: 'Seconds'
+            MINS: 'mins',
+            SECONDS: 'Seconds',
+            SECS: 'secs',
+            MSECS:'msecs'
         },
         PAGE : {
             DEFAULT_OFFSET : 0,

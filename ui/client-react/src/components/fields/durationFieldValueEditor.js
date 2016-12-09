@@ -36,7 +36,7 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     onBlur() {
-        let value = durationFormatter.onBlurMasking(this.props.value, this.props.attributes);
+        let value = durationFormatter.onBlurMasking(this.props.value, this.props.attributes, this.props.display);
         let theVals = {
             value: value || this.props.value
         };

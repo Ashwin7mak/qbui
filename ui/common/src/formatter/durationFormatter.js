@@ -207,48 +207,64 @@
                 opts.resultObj.string = smartUnits;
                 opts.resultObj.units = CONSTS.WEEKS;
             }
-            smartUnits += ' weeks';
+            smartUnits += ' ' + CONSTS.WEEKS.toLocaleLowerCase();
         } else if (days.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_DAY, opts);
             if (opts.resultObj) {
                 opts.resultObj.string = smartUnits;
                 opts.resultObj.units = CONSTS.DAYS;
             }
-            smartUnits += ' days';
+            smartUnits += ' ' + CONSTS.DAYS;
         } else if (hours.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_HOUR, opts);
             if (opts.resultObj) {
                 opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.HOURS;
+                opts.resultObj.units = CONSTS.HOURS.toLowerCase();
             }
-            smartUnits += ' hours';
+            smartUnits += ' ' + CONSTS.HOURS;
         } else if (minutes.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_MIN, opts);
             if (opts.resultObj) {
                 opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.MINUTES;
+                opts.resultObj.units = CONSTS.MINUTES.toLocaleLowerCase();
             }
-            smartUnits += ' mins';
+            smartUnits += ' ' + CONSTS.MINS;
         } else if (seconds.abs().compareTo(CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, CONSTS.MILLIS_PER_SECOND, opts);
             if (opts.resultObj) {
                 opts.resultObj.string = smartUnits;
                 opts.resultObj.units = CONSTS.SECONDS;
             }
-            smartUnits += ' secs';
+            smartUnits += ' ' + CONSTS.SECS;
         } else {
             if (opts.resultObj) {
                 opts.resultObj.string =  millis.toString();
-                opts.resultObj.units = 'msecs';
+                opts.resultObj.units = CONSTS.MSECS;
             }
-            smartUnits += millis.toString() + ' msecs';
+            smartUnits += millis.toString() + ' ' + CONSTS.MSECS;
         }
         return smartUnits;
     }
     function convertToMilliseconds(num, millis) {
         return num * millis;
     }
+    function convertDisplayTypeToAcceptedType(displayType) {
+        let type;
+        switch (displayType) {
+        case CONSTS.MSECS:
+        case CONSTS.SECONDS:
+            type = CONSTS.SECONDS;
+            break;
+        case CONSTS.MINS:
+            type = CONSTS.MINUTES;
+            break;
+        default:
+            break;
+        }
+        return type;
+    }
     function getMilliseconds(num, type) {
+        console.log('type: ', type);
         var returnValue;
         switch (type) {
         /**
@@ -367,7 +383,7 @@
             }
             return opts;
         },
-        onBlurMasking(value, fieldInfo) {
+        onBlurMasking(value, fieldInfo, display) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             /**
              * Accepted Type:
@@ -381,7 +397,7 @@
                  * :00
                  * :00:00
                  * ::00
-             * */
+             **/
             var type = [];
             var notAllowedType = [];
             var num;
@@ -449,12 +465,20 @@
                 }
                 return getMilliseconds(num, type);
             }
+            if (display && type.length === 0 && fieldInfo.scale === "Smart Units") {
+                display = display.split(' ');
+                num = display[0];
+                type = display[1];
+                type = convertDisplayTypeToAcceptedType(type);
+                return getMilliseconds(num, type);
+            }
             /**
              * If a user enters a value without entering a type
              * Then the value will convert to milliseconds based off of the field the user
              * is typing in
              * */
             if (num && type.length === 0) {
+                console.log('fieldInfo.scale: ', fieldInfo.scale);
                 return getMilliseconds(num, fieldInfo.scale);
             }
         },
