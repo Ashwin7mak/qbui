@@ -41,7 +41,6 @@
      * @param opts
      */
     function divideBigDecimals(numerator, denominator, opts) {
-        console.log("NUMERATOR: ", numerator);
         return numerator.divide(denominator, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
     }
 
@@ -69,9 +68,7 @@
      * @returns the duration value formatted as a string
      */
     function formatDurationValue(millis, opts) {
-        console.log('WHAT IS MILLIS!?!??!: ', millis);
         millis = new bigDecimal.BigDecimal(millis.toString());
-        console.log('WHAT IS MILLIS NOW!?!??!: ', millis);
         var seconds, minutes, hours, days, weeks;
         if (millis.compareTo(CONSTS.ZERO) !== 0) {
             seconds = divideBigDecimals(millis, CONSTS.MILLIS_PER_SECOND, opts);
@@ -252,7 +249,6 @@
         return num * millis;
     }
     function convertDisplayTypeToAcceptedType(displayType) {
-        console.log('convertDisplayTypeToAcceptedType: ', displayType);
         var type;
         switch (displayType) {
         case CONSTS.MSECS:
@@ -265,11 +261,9 @@
         default:
             break;
         }
-        console.log('convertedType: ', type);
         return type;
     }
     function getMilliseconds(num, type) {
-        console.log('type: ', type);
         var returnValue;
         switch (type) {
         /**
@@ -411,7 +405,6 @@
              * the field that the user is typing in
              * */
             if (typeof value === 'number') {
-                console.log('info: ', fieldInfo.scale);
                 return convertToMilliseconds(value, fieldInfo.scale);
             }
             /**
@@ -471,13 +464,10 @@
                 return getMilliseconds(num, type);
             }
             if (display && type.length === 0 && fieldInfo.scale === "Smart Units") {
-                console.log('before split: ', display);
                 display = display.split(' ');
-                console.log('onBlurMasking: ', display);
                 num = display[0];
                 type = display[1];
                 type = convertDisplayTypeToAcceptedType(type);
-                console.log('onBlurMasking type: ', type);
                 return getMilliseconds(num, type);
             }
             /**
@@ -486,7 +476,6 @@
              * is typing in
              * */
             if (num && type.length === 0) {
-                console.log('fieldInfo.scale: ', fieldInfo.scale);
                 return getMilliseconds(num, fieldInfo.scale);
             }
         },

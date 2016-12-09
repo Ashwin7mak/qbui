@@ -41,7 +41,6 @@ const DurationFieldValueEditor = React.createClass({
             value: value || this.props.value
         };
         theVals.display = durationFormatter.format(theVals, this.props.attributes);
-        console.log('onBlur theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
