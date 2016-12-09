@@ -12,7 +12,7 @@ import QBicon from '../qbIcon/qbIcon';
 const ClearableInputWrapper = (Component) => {
     const ClearableInput = React.createClass({
         propTypes: {
-            onClose  : React.PropTypes.func,
+            onChange  : React.PropTypes.func,
         },
 
         clearInput() {

@@ -10,7 +10,6 @@ describe('UrlFieldValueEditor', () => {
     let testUrl = 'www.google.com';
     let testUrlWithProtocol = 'http://www.google.com';
     let testDisplayUrl = "Don't edit me";
-    let cb;
 
     let MockParent = React.createClass({
         getInitialState() {
