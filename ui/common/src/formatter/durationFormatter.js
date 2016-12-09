@@ -274,11 +274,18 @@
         getMilliseconds(num, type) {
             var returnValue;
             switch (type) {
+            /**
+             * If a user enters a number without entering a type, then the default for .scale
+             * HHMM && HHMMSS will default to converting the value to milliseconds by hours
+             * MM && MMSS will default to converting the value to milliseconds by minutes
+             * */
             case CONSTS.HHMM:
             case CONSTS.HHMMSS:
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_HOUR);
+                break;
             case CONSTS.MM:
             case CONSTS.MMSS:
-                returnValue = this.convertToMilliseconds(num);
+                returnValue = this.convertToMilliseconds(num, CONSTS.MILLIS_PER_MIN);
                 break;
             // case CONSTS.SMART_UNITS:
             //     returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
@@ -391,6 +398,11 @@
                 }
                 return this.getMilliseconds(num, type);
             }
+            /**
+             * If a user enters a value without entering a type
+             * Then the value will convert to milliseconds based off of the .scale field the user
+             * is typing in
+             * */
             if (num && type.length === 0) {
                 return this.getMilliseconds(num, fieldInfo.scale);
             }
