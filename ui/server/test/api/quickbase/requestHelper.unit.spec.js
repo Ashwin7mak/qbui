@@ -90,6 +90,7 @@ describe('Validate RequestHelper unit tests', function() {
             {name:'null domain - removePort=true/addProtocol=true', host: null, removePort: false, addProtocol: false, expectation: null},
             {name:'valid domain - removePort=false/addProtocol=false', host: 'someDomain.domain.com:900', removePort: false, addProtocol: false, expectation: 'someDomain.domain.com:900'},
             {name:'valid domain - removePort=true/addProtocol=true', host: 'someDomain.domain.com:900', removePort: true, addProtocol: true, expectation: consts.PROTOCOL.HTTPS + 'someDomain.domain.com'},
+            {name:'valid domain2 - removePort=true/addProtocol=true', host: 'someDomain.domain.domain2.com:900', removePort: true, addProtocol: true, expectation: consts.PROTOCOL.HTTPS + 'someDomain.domain.domain2.com'},
             {name:'valid domain with no port - removePort=true/addProtocol=true', host: 'someDomain.domain.com', removePort: true, addProtocol: true, expectation: consts.PROTOCOL.HTTPS + 'someDomain.domain.com'},
             {name:'valid domain - removePort=true/addProtocol=false', host: 'someDomain.domain.com:900', removePort: true, addProtocol: false, expectation: 'someDomain.domain.com'},
             {name:'valid domain - removePort=false/addProtocol=true', host: 'someDomain.domain.com:900', removePort: false, addProtocol: true, expectation: consts.PROTOCOL.HTTPS + 'someDomain.domain.com:900'}
