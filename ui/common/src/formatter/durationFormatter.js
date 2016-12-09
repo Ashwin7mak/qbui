@@ -41,6 +41,7 @@
      * @param opts
      */
     function divideBigDecimals(numerator, denominator, opts) {
+        console.log("NUMERATOR: ", numerator);
         return numerator.divide(denominator, opts.decimalPlaces, bigDecimal.RoundingMode.HALF_UP());
     }
 
@@ -68,7 +69,9 @@
      * @returns the duration value formatted as a string
      */
     function formatDurationValue(millis, opts) {
+        console.log('WHAT IS MILLIS!?!??!: ', millis);
         millis = new bigDecimal.BigDecimal(millis.toString());
+        console.log('WHAT IS MILLIS NOW!?!??!: ', millis);
         var seconds, minutes, hours, days, weeks;
         if (millis.compareTo(CONSTS.ZERO) !== 0) {
             seconds = divideBigDecimals(millis, CONSTS.MILLIS_PER_SECOND, opts);

@@ -3,17 +3,21 @@ import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
 import {DURATION_CONSTS} from '../../../common/src/constants';
+import moment from 'moment';
+import bigDecimal from 'bigdecimal';
+
+
 
 
 describe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
-    let numValue = "55";
+    let numValue = 55;
     let MockParent = React.createClass({
         getInitialState() {
             return {
                 value: null,
-                displayValue: null
+                display: null
             };
         },
         onChange(newValue) {
@@ -34,25 +38,22 @@ describe('DurationFieldValueEditor', () => {
             );
         }
     });
-    it('allows a user to edit the raw value of a duration field', () => {
-        component = TestUtils.renderIntoDocument(<MockParent />);
-        domComponent = ReactDOM.findDOMNode(component);
-        Simulate.change(domComponent, {
-            target: {value: 12345}
-        });
-        Simulate.blur(domComponent);
-        expect(component.state.rawValue).toEqual(12345);
-    });
 
     fit('converts an input of seconds to minutes', () => {
-        component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: DURATION_CONSTS.SECONDS}} />);
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: DURATION_CONSTS.MINUTES}} />);
         domComponent = ReactDOM.findDOMNode(component);
         Simulate.change(domComponent, {
             target: {value: numValue + ' ' + DURATION_CONSTS.SECONDS}
         });
         Simulate.blur(domComponent);
+        let newExpectedMilliSeconds;
+        let expectedMilliSeconds = moment.duration(numValue, 'seconds').asMilliseconds();
+        let expectedMinutes = moment.duration(expectedMilliSeconds, 'milliseconds').asMinutes();
+        newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
+        newExpectedMilliSeconds = newExpectedMilliSeconds.divide(DURATION_CONSTS.MILLIS_PER_MIN, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
         debugger;
-        expect(component.state.value).toEqual(12345);
+        expect(component.state.value).toEqual(expectedMilliSeconds);
+        expect(component.state.display).toEqual(newExpectedMilliSeconds);
     });
     //
     // it('renders an extension input box if includeExtension is true', () => {
