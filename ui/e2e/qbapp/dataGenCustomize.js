@@ -50,6 +50,7 @@ consts = require('../../common/src/constants.js');
         // optional add supplied attrs
         if (settings) {
             table[fieldName] = Object.assign({}, table[fieldName], settings);
+            console.log('SETTINGS!!: ', table[fieldName]);
         }
     }
 
@@ -59,6 +60,7 @@ consts = require('../../common/src/constants.js');
         var table3Name = 'Table 3 ';
         var table4Name = 'Table 4 ';
         var table5Name = 'All Required';
+        var table6Name = 'Durations';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -78,6 +80,24 @@ consts = require('../../common/src/constants.js');
             word_wrap: false,
             display_graphic: false
         };
+
+        let emailOnlyDisplayBeforeAtSymbol = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+            format: 'UP_TO_AT_SIGN'
+        };
+        let emailOnlyDisplayBeforeUnderscore = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+            format: 'UP_TO_UNDERSCORE'
+        };
+        let emailDefaultDomain = {
+            defaultDomain: "quickbase.dev",
+            clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)
+        };
+
         var emptyChoice = {
             coercedValue: {value: ''},
             displayValue: ''
@@ -88,9 +108,14 @@ consts = require('../../common/src/constants.js');
         tableToFieldToFieldTypeMap[table1Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
-        var numericChoices = e2eBase.choicesSetUp(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
+        var numericChoices = e2eBase.choicesSetUp(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
+            int: true,
+            min: 1,
+            max: 1000
+        });
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
-            {dataAttr:{clientSideAttributes: baseNumClientRequiredProps},
+            {
+                dataAttr: {clientSideAttributes: baseNumClientRequiredProps},
                 decimalPlaces: 0,
                 treatNullAsZero: true,
                 unitsDescription: "",
@@ -98,7 +123,8 @@ consts = require('../../common/src/constants.js');
                     choices: numericChoices,
                     allowNew: false,
                     sortAsGiven: false
-                }});
+                }
+            });
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CURRENCY);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PERCENT);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.RATING);
@@ -108,31 +134,41 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DURATION);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX, "Yes No Checkbox",
-            {dataAttr:{clientSideAttributes: checkboxYNClientProps}});
+            {dataAttr: {clientSideAttributes: checkboxYNClientProps}});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PHONE_NUMBER);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email Only Before @",
+            {dataAttr: {clientSideAttributes: emailOnlyDisplayBeforeAtSymbol}});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email Before Underscore",
+            {dataAttr: {clientSideAttributes: emailOnlyDisplayBeforeUnderscore}});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email with Default Domain",
+            {dataAttr: emailDefaultDomain});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
 
         tableToFieldToFieldTypeMap[table2Name] = {};
         var textChoices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
             capitalize: true,
-            numWords:2,
-            randNumWords:true,
-            wordType : 'randomLetters',
-            wordLength :6
+            numWords: 2,
+            randNumWords: true,
+            wordType: 'randomLetters',
+            wordLength: 6
         });
         //temporarily add a placeholder blank(unchosen) selection to top of list
         textChoices.unshift(emptyChoice);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
-            {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+            {
+                dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
                 multipleChoice: {
                     choices: textChoices,
                     allowNew: false,
                     sortAsGiven: false
-                }});
+                }
+            });
 
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
-        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER);
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
+
 
         tableToFieldToFieldTypeMap[table3Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
@@ -142,31 +178,36 @@ consts = require('../../common/src/constants.js');
 
         tableToFieldToFieldTypeMap[table4Name] = {};
 
-        addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line required", {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line required", {required: true});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiLine",
-            {dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 6})}});
+            {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 6})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Max 10 chars",
-            {dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {max_chars : 10})}});
+            {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {max_chars: 10})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Wordwrap",
-            {dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {word_wrap : true})}});
+            {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {word_wrap: true})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Input width 10",
-            {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {width : 10})}});
+            {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {width: 10})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed single line",
-            {dataAttr:{htmlAllowed: true}});
+            {dataAttr: {htmlAllowed: true}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed multiLine",
-            {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 4})}});
+            {
+                dataAttr: {
+                    htmlAllowed: true,
+                    clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 4})
+                }
+            });
 
         var choices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
             capitalize: true,
-            numWords:1,
-            randNumWords:false,
-            wordType : 'realEnglishNouns'
+            numWords: 1,
+            randNumWords: false,
+            wordType: 'realEnglishNouns'
         });
         //temporarily add a placeholder blank(unchosen) selection to top of list
         //once backend is fixed to support null/empty entry for choice to clear/unset choice then
@@ -174,31 +215,39 @@ consts = require('../../common/src/constants.js');
         // this can happen in the client editor component
         choices.unshift(emptyChoice);
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiChoice",
-            {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
-             multipleChoice: {
-                 choices: choices,
-                 allowNew: false,
-                 sortAsGiven: false
-             }});
+            {
+                dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+                multipleChoice: {
+                    choices: choices,
+                    allowNew: false,
+                    sortAsGiven: false
+                }
+            });
 
 
         tableToFieldToFieldTypeMap[table5Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
-            {required:true,
-             dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+            {
+                required: true,
+                dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
                 multipleChoice: {
                     choices: _.clone(textChoices),
                     allowNew: false,
                     sortAsGiven: true
-                }});
+                }
+            });
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, "MultiLine",
-            {required:true, dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 5})}});
+            {
+                required: true,
+                dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
+            });
 
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
-            {required:true,
-                dataAttr:{clientSideAttributes: baseNumClientRequiredProps},
+            {
+                required: true,
+                dataAttr: {clientSideAttributes: baseNumClientRequiredProps},
                 decimalPlaces: 0,
                 treatNullAsZero: true,
                 unitsDescription: "",
@@ -206,18 +255,85 @@ consts = require('../../common/src/constants.js');
                     choices: _.clone(numericChoices),
                     allowNew: false,
                     sortAsGiven: false
-                }});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CURRENCY, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.RATING, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE_TIME, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TIME_OF_DAY, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DURATION, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CHECKBOX, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.EMAIL_ADDRESS, null, {required:true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required:true});
+                }
+            });
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CURRENCY, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.RATING, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE_TIME, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TIME_OF_DAY, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DURATION, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CHECKBOX, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.EMAIL_ADDRESS, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {required:true, dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
+
+
+        tableToFieldToFieldTypeMap[table6Name] = {};
+        let baseDurationProps = {
+            dataAttr: {
+                clientSideAttributes: baseNumClientRequiredProps,
+                type : 'DURATION',
+            }
+        };
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration default');
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Weeks',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.WEEKS
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Days',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.DAYS
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Hours',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.HOURS
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Minutes',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.MINUTES
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Seconds',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.SECONDS
+                }
+            }));
+
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.HHMM
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM:SS',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.HHMMSS
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :MM',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.MM
+                }
+            }));
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :MM:SS',
+            Object.assign({}, baseDurationProps, {
+                dataAttr: {
+                    scale: consts.DURATION_CONSTS.MMSS
+                }
+            }));
 
         return tableToFieldToFieldTypeMap;
     }

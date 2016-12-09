@@ -22,6 +22,7 @@ import {
     EmailCellRenderer,
     NumericCellRenderer,
     PercentCellRenderer,
+    PhoneCellRenderer,
     RatingCellRenderer,
     SelectionColumnCheckBoxCellRenderer,
     TextCellRenderer,
@@ -606,6 +607,8 @@ let AGGrid = React.createClass({
     startEditRow(id, node) {
         this.setState({currentEditRid: id}); // note which record is being edited used to index into cellComponentsMounted
         this.props.onEditRecordStart(id);
+        this.gridOptions.context.currentEditRid = id;
+        this.gridOptions.context.isInlineEditOpen = this.props.isInlineEditOpen;
         this.editRow(node);
     },
     /**
@@ -1053,6 +1056,10 @@ let AGGrid = React.createClass({
 
                             case serverTypeConsts.URL :
                                 obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
+                                break;
+
+                            case serverTypeConsts.PHONE_NUMBER :
+                                obj.cellRenderer = reactCellRendererFactory(PhoneCellRenderer);
                                 break;
 
                             case serverTypeConsts.EMAIL_ADDRESS :

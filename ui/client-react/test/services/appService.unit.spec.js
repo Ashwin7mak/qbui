@@ -2,6 +2,7 @@ import AppService from '../../src/services/appService';
 import BaseService from '../../src/services/baseService';
 import constants from '../../src/services/constants';
 import StringUtils from '../../src/utils/stringUtils';
+import * as query from '../../src/constants/query';
 
 describe('AppService functions', () => {
     'use strict';
@@ -34,12 +35,15 @@ describe('AppService functions', () => {
 
     it('test getApps function', () => {
         appService.getApps();
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS);
+        let params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS, {params:params});
     });
 
-    it('test getApps function', () => {
-        appService.getApps();
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS);
+    it('test getApps function with hydrate', () => {
+        appService.getApps(true);
+        let params = {};
+        params[query.HYDRATE] = '1';
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(appService.API.GET_APPS, {params:params});
     });
 
     it('test getApplicationStack function', () => {

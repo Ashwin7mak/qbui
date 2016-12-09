@@ -204,12 +204,16 @@ $edit-field-padding: 5px;
         /* Dont want to form section to get a scroll bar when the react select menu expands so remove the position absolute -
      this automatically adds height to the section container */
         .Select-menu-outer {
-            position: relative !important;
             top: auto !important;
+            margin-bottom: 10px;
         }
     }
-    /* For mobile phones: */
 
+    .viewForm {
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* For mobile phones: */
     @include small-breakpoint {
         .formSection {
             display: block;
@@ -230,16 +234,16 @@ $edit-field-padding: 5px;
 
                 .field {
                     max-width: 100%;
-
-                    .fieldLabel {
-                        font-size: $font-size-small;
-                        margin-bottom: 0;
-                    }
-
-                    .fieldValue {
-                        font-size: $font-size-small;
-                    }
                 }
+            }
+
+            .fieldLabel {
+                font-size: $font-size-small;
+                margin-bottom: 0;
+            }
+
+            .fieldValue {
+                font-size: $font-size-small;
             }
 
             .fieldValueEditor, textarea.cellEdit {
@@ -260,6 +264,14 @@ $edit-field-padding: 5px;
                 }
             }
         }
+        .viewForm {
+            .cellWrapper, .viewElement, .data {
+                font-size: 16px;
+            }
+            .field .fieldLabel {
+                font-size: 14px;
+            }
+        }
     }
 
     .tooltip {
@@ -267,11 +279,11 @@ $edit-field-padding: 5px;
     }
 
     /**
- * on forms, we want the form to expand vertically to accomodate the datepicker
- * when it's open (like react-select based components), so make it use relative positioning,
- * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
- * reorder the datepicker AFTER the input using only CSS
- */
+     * on forms, we want the form to expand vertically to accomodate the datepicker
+     * when it's open (like react-select based components), so make it use relative positioning,
+     * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
+     * reorder the datepicker AFTER the input using only CSS
+     */
     .formElement .fieldValueEditor .dateCell {
         border: 0;
 
@@ -285,10 +297,8 @@ $edit-field-padding: 5px;
             }
 
             .bootstrap-datetimepicker-widget {
-                right: 0 !important;
-                top: 10px !important;
                 order: 2;
-                position: relative !important;
+                margin-bottom: 10px;
             }
         }
     }

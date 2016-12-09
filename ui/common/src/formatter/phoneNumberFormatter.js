@@ -4,13 +4,17 @@
  */
 (function() {
     'use strict';
-
+    var PLACEHOLDER = "(xxx) xxx-xxxx";
     var EXTENSION_DELIM = 'x';
     var OPEN_PAREN = '(';
     var CLOSE_PAREN = ')';
     var DASH = '-';
+
     var US_SEVEN_DIGIT_FORMAT = "$1" + DASH + "$2";
     var US_TEN_DIGIT_FORMAT = OPEN_PAREN + "$1" + CLOSE_PAREN + " $2" + DASH + "$3";
+
+    var ALLOWED_CHARACTERS_ONCHANGE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '(', ')', '+', '-', '.', ' '];
+    var ALLOWED_CHARACTERS_ONBLUR = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x'];
 
     module.exports = {
         // Export these constants so the same one can be used in tests
@@ -18,7 +22,46 @@
         OPEN_PAREN: OPEN_PAREN,
         CLOSE_PAREN: CLOSE_PAREN,
         DASH: DASH,
+        PLACEHOLDER: PLACEHOLDER,
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
+        getExtension: function(phoneNumber) {
+            if (!phoneNumber) {
+                return '';
+            }
+            return phoneNumber.split(EXTENSION_DELIM)[1];
+        },
+        getPhoneNumber: function(phoneNumber) {
+            if (!phoneNumber) {
+                return '';
+            }
+            return phoneNumber.split(EXTENSION_DELIM)[0].trim();
+        },
+        getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {
+            if (!extNum) {
+                return phoneNum;
+            }
+            return phoneNum + EXTENSION_DELIM + extNum;
+        },
+        onChangeMasking: function(nums) {
+            /**
+             * onChangeMasking only allows user to type the allowed characters in the ALLOWED_CHARACTERS_ONCHANGE array.
+             * A user will be unable to type any characters that are not allowed into the input box
+             * */
+            return nums.split('')
+                .filter(function(num) {return ALLOWED_CHARACTERS_ONCHANGE.indexOf(num) > -1;})
+                .join('');
+        },
+        onBlurMasking: function(nums) {
+            /**
+             * onBlurMasking removes all special characters. It modifies the value to be a string of numbers with or without an ext
+             * */
+            if (!nums) {
+                return '';
+            }
+            return nums.split('')
+                .filter(function(num) {return ALLOWED_CHARACTERS_ONBLUR.indexOf(num) > -1;})
+                .join('');
+        },
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';

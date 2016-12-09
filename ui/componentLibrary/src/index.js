@@ -48,6 +48,8 @@ import QBModalDoc from './docs/qbModal.js';
 import InvisibleBackdropDoc from './docs/invisibleBackdrop.js';
 import AlertBannerDoc from './docs/alertBanner.js';
 import PageTitleDoc from './docs/pageTitle.js';
+import PhoneFieldValueEditorDoc from './docs/phoneFieldValueEditor.js';
+import PhoneFieldValueRendererDoc from './docs/phoneFieldValueRenderer.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -83,6 +85,8 @@ render((
             <Route path="alertBanner" component={AlertBannerDoc} />
             <Route path="pageTitle" component={PageTitleDoc} />
             <Route path="invisibleBackdrop" component={InvisibleBackdropDoc} />
+            <Route path="phoneFieldValueEditor" component={PhoneFieldValueEditorDoc} />
+            <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

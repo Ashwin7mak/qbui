@@ -1,8 +1,9 @@
 import React from "react";
-
+import cookie from 'react-cookie';
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
+import V2V3Footer from '../footer/v2v3Footer';
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
@@ -14,6 +15,7 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
+import AppUtils from '../../utils/appUtils';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
@@ -22,6 +24,9 @@ import NavPageTitle from '../pageTitle/navPageTitle';
 import Locale from '../../locales/locales';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
+import UrlUtils from '../../utils/urlUtils';
+import Constants from '../../services/constants';
+import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -55,7 +60,8 @@ export let Nav = React.createClass({
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
-                               startTabIndex={4}/>);
+                               startTabIndex={4}
+                               app={this.getSelectedApp()}/>);
     },
 
     getLeftGlobalActions() {
@@ -271,10 +277,47 @@ export let Nav = React.createClass({
                         )}
                     </div>}
             </div>
+
+            {this.getV2V3Footer()}
+
             {this.state.pendEdits &&
                 this.renderSavingModal(this.state.pendEdits.saving)
             }
         </div>);
+    },
+
+    checkOpenInV2(selectedApp) {
+        let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
+        if (v2tov3Cookie && CommonCookieUtils.searchCookieValue(v2tov3Cookie, selectedApp.id)) {
+            let qbClassicURL = UrlUtils.getQuickBaseClassicLink(selectedApp.id);
+            WindowLocationUtils.update(qbClassicURL);
+        }
+    },
+
+    /**
+     * get v2/v3 toggle popup (for admins on app pages)
+     *
+     * @returns V2V3Footer or null
+     */
+    getV2V3Footer() {
+        const selectedApp = this.getSelectedApp();
+
+        if (selectedApp) {
+            this.checkOpenInV2(selectedApp);
+            const hasAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
+
+            if (hasAdmin) {
+                return <V2V3Footer app={selectedApp} onSelectOpenInV3={this.onSelectOpenInV3}/>;
+            } else if (!selectedApp.openInV3) {
+                WindowLocationUtils.update("/qbase/pageNotFound");
+            }
+        }
+        return null;
+    },
+    onSelectOpenInV3(openInV3) {
+        const flux = this.getFlux();
+
+        flux.actions.setApplicationStack(this.state.apps.selectedAppId, openInV3);
     },
     onSelectItem() {
 
@@ -284,7 +327,7 @@ export let Nav = React.createClass({
             flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
         }
     },
-    toggleNav: function() {
+    toggleNav() {
         let flux = this.getFlux();
         flux.actions.toggleLeftNav();
     }
