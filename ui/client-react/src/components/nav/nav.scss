@@ -112,7 +112,7 @@ html body {
                 }
 
                 button:not(.disabled):hover .hi {
-                    color: #fff;
+                    color: $color-black-100;
                 }
 
                 button.disabled {
@@ -157,7 +157,7 @@ html body {
 }
 
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
-    color: #fff;
+    color: $color-black-100;
     background: $nav-hover-bg;
 }
 

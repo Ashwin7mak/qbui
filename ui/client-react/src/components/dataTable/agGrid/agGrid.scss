@@ -1,22 +1,22 @@
 @import '../../../../src/assets/css/qbVariables';
-$header-cell-border: $color5;
-$header-cell-border-bottom: $color6;
-$header-cell-background-color: $color7;
-$header-cell-color: $color8;
-$row-background-color-hover: $color1;
-$row-cell-border-color: $color4;
+$header-cell-border: $color-blue-400;
+$header-cell-border-bottom: $badcolor1-color6;
+$header-cell-background-color: $color-blue-300;
+$header-cell-color: $color-blue-600;
+$row-background-color-hover: $color-blue-200;
+$row-cell-border-color: $color-black-300;
 $grid-font-size: $font-size-p;
-$grid-group-row-header-bkgrd-color: $color1;
-$grid-group-row-header-border-top: $color7;
-$grid-group-row-header-divider: $color21;
+$grid-group-row-header-bkgrd-color: $color-blue-200;
+$grid-group-row-header-border-top: $color-blue-300;
+$grid-group-row-header-divider: $color-black-500;
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
-$row-bg-color: #fff;
+$row-bg-color: $color-black-100;
 $row-non-editable-bg-color: $color-black-200;
-$row-border-color: #ddd;
-$row-box-shadow-color: #dcdcdc;
-$cell-edit-background-edit: #f3f8fe;
+$row-border-color: $badcolor16;
+$row-box-shadow-color: $color-black-300;
+$cell-edit-background-edit: $color-blue-200;
 
 // override default font style
 .ag-font-style {
@@ -60,7 +60,7 @@ $cell-edit-background-edit: #f3f8fe;
     width: 100%;
 
     .ag-body-container {
-        background-color: $color2;
+        background-color: $color-black-100;
         margin-bottom: 0;
         height: 100%;
     }
@@ -90,7 +90,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
 
         &.selected {
-            background-color: $color5;
+            background-color: $color-blue-400;
 
             .ag-header-cell-menu-button {
                 opacity: 1 !important;
@@ -251,7 +251,7 @@ $cell-edit-background-edit: #f3f8fe;
 
                     &:hover {
                         .qbIcon {
-                            color: #fff;
+                            color: $color-black-100;
                         }
 
                         .qbIcon.print {
@@ -383,8 +383,8 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .ag-menu-list {
-        border: 1px solid $color4;
-        background: $color2;
+        border: 1px solid $color-black-300;
+        background: $color-black-100;
     }
 
     .ag-menu-option {
@@ -392,7 +392,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .ag-menu-separator {
-        border-bottom: 1px solid $color4;
+        border-bottom: 1px solid $color-black-300;
     }
 
     .ag-menu-option-text {
@@ -400,7 +400,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .ag-menu-option:hover {
-        background-color: $color1;
+        background-color: $color-blue-200;
     }
 
     .ag-menu-option-icon {
@@ -411,7 +411,7 @@ $cell-edit-background-edit: #f3f8fe;
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
-        color: $color22;
+        color: $color-green-600;
     }
 
     .ag-menu {
