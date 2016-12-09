@@ -37,9 +37,9 @@ const PhoneFieldValueEditor = React.createClass({
          * input box is then concatenated back with the ext
          * */
         let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
-        let ext = phoneNumberFormatter.getExtension(this.props.display);
+        let ext = phoneNumberFormatter.getExtension(this.props.value);
         let updatedValue = phoneNumber;
-        if (this.props.display && ext) {
+        if (this.props.value && ext) {
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, ext);
 
         }
@@ -53,7 +53,7 @@ const PhoneFieldValueEditor = React.createClass({
          * The phone number is stripped out of the phone number and ext string, and then the user's new input value in the ext number
          * input box is then concatenated back with the phone number
          * */
-        let updatedValue = phoneNumberFormatter.getPhoneNumber(this.props.display);
+        let updatedValue = phoneNumberFormatter.getPhoneNumber(this.props.value);
         if (ev) {
             let extNumber = phoneNumberFormatter.onChangeMasking(ev);
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumberFormatter.getPhoneNumber(this.props.display), extNumber);
@@ -81,12 +81,12 @@ const PhoneFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         placeholder = phoneNumberFormatter.PLACEHOLDER;
-        let phoneNumber;
-        let officeExt;
+        let phoneNumber = '';
+        let officeExt = '';
         let hasExtInput = this.props.attributes && this.props.attributes.includeExtension;
-        if (value && display) {
-            phoneNumber = phoneNumberFormatter.getPhoneNumber(display);
-            officeExt = phoneNumberFormatter.getExtension(display);
+        if (value) {
+            phoneNumber = phoneNumberFormatter.getPhoneNumber(value);
+            officeExt = phoneNumberFormatter.getExtension(value);
         }
 
         /**
@@ -116,7 +116,6 @@ const PhoneFieldValueEditor = React.createClass({
                                       value={phoneNumber || ''} />
                 {hasExtInput ? ext : null}
                 {hasExtInput ? extInput : null}
-
             </div>
         );
     }
