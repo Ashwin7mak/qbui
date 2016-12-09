@@ -19,7 +19,7 @@
      */
     var bigDecimal = require('bigdecimal');
     var CONSTS = require('../constants').DURATION_CONSTS;
-    var ALLOWED_DURATION_TEXT = ['second', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day', 'days', 'week', 'weeks'];
+    var ALLOWED_DURATION_TYPE = ['second', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day', 'days', 'week', 'weeks'];
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -393,6 +393,11 @@
                 console.log('info: ', fieldInfo.scale);
                 return convertToMilliseconds(value, fieldInfo.scale);
             }
+            /**
+             * This sets the string to lowerCase()
+             * to make it easier to convert the type later
+             * (e.g., 'minute' will later be converted to 'Minutes)
+             * */
             if (typeof value === 'string') {
                 value = value.toLowerCase();
             }
@@ -411,7 +416,7 @@
                 value = value.split(' ');
                 num = value.splice(0, 1);
                 value.forEach(function(val) {
-                    if (ALLOWED_DURATION_TEXT.indexOf(val) !== -1) {
+                    if (ALLOWED_DURATION_TYPE.indexOf(val) !== -1) {
                         type.push(val);
                     } else {
                         notAllowedType.push(val);
