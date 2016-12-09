@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
+import ErrorWrapper from './errorWrapper';
 
 const DurationFieldValueEditor = React.createClass({
     displayName: 'DurationFieldValueEditor',
@@ -47,12 +48,13 @@ const DurationFieldValueEditor = React.createClass({
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        return <TextFieldValueEditor {...otherProps}
-                                     classes={classes || ''}
-                                     onChange={this.onChange}
-                                     onBlur={this.onBlur}
-                                     placeholder={placeholder || ''}
-                                     value={display || ''} />;
+        return  <TextFieldValueEditor classes={classes || ''}
+                                      onChange={this.onChange}
+                                      onBlur={this.onBlur}
+                                      placeholder={placeholder || ''}
+                                      value={display || ''}
+                                      invalidMessage={this.props.invalidMessage || 'Error'}
+                                      {...otherProps}/>;
     }
 });
 

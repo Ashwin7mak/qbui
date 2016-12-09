@@ -344,7 +344,21 @@
 
         onBlurMasking(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
+            /**
+             * Accepted Type:
+                 * second || seconds
+                 * minute || minutes
+                 * hour || hours
+                 * week || weeks
+             * Accepted Format For Seconds, Minutes, Hours:
+                 * 00:00:00
+                 * 00:00
+                 * :00
+                 * :00:00
+                 * ::00
+             * */
             var type = [];
+            var notAllowedType = [];
             var num;
             /**
              * If value is a number, then the value will be converted to milliseconds based on
@@ -366,33 +380,34 @@
             }
             /**
              * If the user passes in a string containing a number and a type, we split the string here
-             * and seperate the number and type from each other
+             * and separate the number and type from each other
              * */
             if (value) {
                 value = value.split(' ');
-                num = value[0];
+                num = value.splice(0, 1);
                 value.forEach(function(val) {
                     if (ALLOWED_DURATION_TEXT.indexOf(val) !== -1) {
                         type.push(val);
+                    } else {
+                        notAllowedType.push(val);
                     }
                 });
             }
             /**
-             * If a user enters more than one type (e.g., "days minutes"), then an error will be thrown
+             * If a user enters more than one type (e.g., "days minutes") or an unaccepted type,
+             * then we just returned the value that the user typed in without any conversion,
+             * a validation error will be thrown onSave
              * */
-            if (type.length > 1) {
-                console.log('ERROR!');
-                type = [];
+            if (type.length > 1 || notAllowedType.length > 0) {
+                return value;
             }
             /**
-             * If a user only entered a single type (e.g., "minutes")
+             * If a user only entered a single accepted type (e.g., "minutes")
              * then the num will be converted to milliseconds, based off of the type passed in by the user
              * */
             if (type.length === 1) {
-                type = type.join('');
-                var firstLetter = type.slice(0, 1).toUpperCase();
-                type = type.slice(1);
-                type = firstLetter + type;
+                var firstLetter = type.splice(0, 1).toUpperCase();
+                type = type.join('') + firstLetter;
                 if (type[type.length - 1] !== 's') {
                     type = type + 's';
                 }
@@ -400,7 +415,7 @@
             }
             /**
              * If a user enters a value without entering a type
-             * Then the value will convert to milliseconds based off of the .scale field the user
+             * Then the value will convert to milliseconds based off of the type (.scale) field the user
              * is typing in
              * */
             if (num && type.length === 0) {
