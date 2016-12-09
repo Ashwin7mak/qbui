@@ -27,12 +27,16 @@
         var APPID = 'bkj4bmc3s';
         var TABLEID = 'bkj4bmc7r';
 
-        var CURRENT_STACK_USERNAME = 'QuickBaseall';
-        var CURRENT_STACK_PASSWORD = 'quickbase1';
+        var ADMIN_USERNAME = 'QuickBaseall';
+        var ADMIN_PASSWORD = 'quickbase1';
+
+        var USER_VIEWER_ROLE_USERNAME = 'qbautomationviewer@gmail.com';
+        var USER_VIEWER_ROLE_PASSWORD = 'Quickbase123';
 
         var currentStackRecordCount;
         var currentStackRecordValues;
         var testRecordIndex = 4;
+        var userId;
 
         /**
          * Logs into current stack prod to get a proper ticket. Navigates to the Bicycle app to get a record from the list all
@@ -42,7 +46,7 @@
             // Log in to current stack env
             return browser.get(PROD_REALM).then(function() {
                 // Enter login creds
-                return currentStackLoginPage.loginUser(CURRENT_STACK_USERNAME, CURRENT_STACK_PASSWORD);
+                return currentStackLoginPage.loginUser(ADMIN_USERNAME, ADMIN_PASSWORD);
             }).then(function() {
                 // Go to Bicycle app
                 return browser.get(PROD_REALM + '/db/' + APPID);
@@ -74,7 +78,7 @@
         });
 
         /**
-         * Test methods
+         * Tests
          */
         it('Verify the specified record in the List All report matches the one from the current stack', function(done) {
             browser.get(PROD_REALM + '/qbase/app/' + APPID + '/table/' + TABLEID + '/report/1').then(function() {
@@ -96,6 +100,30 @@
         it('Verify admin(quickbaseall) can switch from V3 to V2 from user Menu', function(done) {
             // Log in to the new stack env and go to Bicycle app
             browser.get(PROD_REALM + '/qbase/app/' + APPID).then(function() {
+                //wait untill table lists loaded at leftNav
+                reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+            }).then(function() {
+                //select switch to quickbase classic Toggle under user Menu
+                v2Tov3PO.clickUserMenuItem('Switch to QuickBase Classic');
+            }).then(function() {
+                //verify its switched to classic view (ie V2)
+                browser.getCurrentUrl().then(function(url) {
+                    expect(url).toBe(PROD_REALM + '/db/' + APPID);
+                });
+                //TODO switch back to V3 once the code is available in production
+            }).then(function() {
+                done();
+            });
+        });
+
+        it('Verify user(testUser) can switch from V3 to V2 from user Menu', function(done) {
+            browser.get(PROD_REALM).then(function() {
+                // Enter login creds
+                currentStackLoginPage.loginUser(USER_VIEWER_ROLE_USERNAME, USER_VIEWER_ROLE_PASSWORD);
+            }).then(function() {
+                // Go to Bicycle app
+                browser.get(PROD_REALM + '/qbase/app/' + APPID);
+            }).then(function() {
                 //wait untill table lists loaded at leftNav
                 reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
             }).then(function() {
