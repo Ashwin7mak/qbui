@@ -81,7 +81,22 @@ const RowEditActions = React.createClass({
         this.props.api.deselectAll();
     },
 
+    /**
+     * If a user hovers over the save button before clicking it, and there are validation errors, and the user continues to
+     * hover over the new invalid icon, then two tooltips will appear.
+     * We need to remove the stale ones manually, because the button changes and no longer throws a mouseOut event for the
+     * old tooltip to to go away until the user clicks somewhere else on the screen.
+     */
+    removeStaleTooltips() {
+        let staleTooltips = document.querySelectorAll("div[id^='qbtooltip_']");
+        staleTooltips.forEach(staleTooltip => {
+            staleTooltip.remove();
+        });
+    },
+
     renderSaveRecordButton(validRow, saving) {
+        this.removeStaleTooltips();
+
         let errorMessage = "editErrors";
 
         let saveButton;
