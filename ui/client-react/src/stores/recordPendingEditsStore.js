@@ -137,7 +137,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
 
         // Some components modify display values and some modify the underlying value so we check for both
-        return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
+        return (!_.isEqual(newVal.value, oldVal.value) || !_.isEqual(newVal.display, oldVal.display));
     },
 
     /**
@@ -161,7 +161,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             originalRecordValue = originalRecord.value;
             originalRecordDisplay = originalRecord.display;
         }
-        return (newVal.value !== originalRecordValue || newVal.display !== originalRecordDisplay);
+        return (!_.isEqual(newVal.value, originalRecordValue) || !_.isEqual(newVal.display, originalRecordDisplay));
     },
 
     /**

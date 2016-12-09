@@ -447,8 +447,8 @@ describe('Test recordPendingEdits Store ', () => {
 
     describe('onRecordEditChangeField', () => {
         let currentlyEditingFieldId = 2;
-        let originalDisplayValue = 'hello';
-        let originalValue = 'hello';
+        let originalDisplayValue = {thing: 'hello'};
+        let originalValue = {thing: 'hello'};
 
         const originalRecord = {
             fids: {
@@ -509,7 +509,7 @@ describe('Test recordPendingEdits Store ', () => {
                 oldDisplayValue: originalDisplayValue
             },
             {
-                description: 'adds pendingEdits if the newValue is different than the original, even if it is the same as the old value (this affects forms)',
+                description: 'adds pendingEdits if the newValue is different from both the original value and the old value',
                 newValue: "it's me",
                 newDisplayValue: "it's me",
                 oldValue: 'from the other side',
@@ -594,6 +594,20 @@ describe('Test recordPendingEdits Store ', () => {
                 description: 'does not add pendingEdits if there are no changes to the underlying value or the display value',
                 newValue: originalValue,
                 newDisplayValue: originalDisplayValue,
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'does not add pendingEdits if the new value is equivalent to the original value',
+                newValue: {thing: 'hello'},
+                newDisplayValue: originalDisplayValue,
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'does not add pendingEdits if the new display value is equivalent to the original display value',
+                newValue: originalValue,
+                newDisplayValue: {thing: 'hello'},
                 oldValue: originalValue,
                 oldDisplayValue: originalDisplayValue
             },
