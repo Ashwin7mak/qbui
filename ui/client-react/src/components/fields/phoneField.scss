@@ -19,4 +19,12 @@
     .input.extNumber {
         width: 30%;
     }
+
+    .extraDigits, .extension {
+        color: $text-color;
+    }
+
+    .extraDigits::before, .extension::before {
+        content: "\00a0";
+    }
 }
