@@ -35,7 +35,11 @@
 
             //More than 10 digit number
             var largeInput = [{id: fid, value: '1234567890123'}];
-            var largeExpected = {id: fid, value: '1234567890123', display: '123 (456) 789-0123'};
+            var largeExpected = {id: fid, value: '1234567890123', display: '1 (234) 567-8901 23'};
+
+            //Possible international number
+            var possibleInternationalInput = [{id: fid, value: '33970736012'}];
+            var possibleInternationalExpected = {id: fid, value: '33970736012', display: '+33 9 70 73 60 12'};
 
             //Empty records
             var emptyPhoneRecords = [{id: fid, value: ''}];
@@ -88,7 +92,20 @@
                     record            : nullPhoneRecords,
                     format            : 'raw',
                     expectedFieldValue: nullPhoneRecords
-                }];
+                },
+                {
+                    message           : 'display a possible international phone number',
+                    record            : possibleInternationalInput,
+                    format            : 'display',
+                    expectedFieldValue: possibleInternationalExpected
+                },
+                {
+                    message           : 'raw null phone number',
+                    record            : possibleInternationalInput,
+                    format            : 'raw',
+                    expectedFieldValue: possibleInternationalInput
+                }
+            ];
         }
 
         /**

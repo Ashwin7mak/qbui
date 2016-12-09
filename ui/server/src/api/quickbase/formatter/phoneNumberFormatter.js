@@ -6,7 +6,6 @@
     var PhoneNumberUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
     var StandardPhoneFormatter = require('../../../../../common/src/formatter/phoneNumberFormatter');
 
-    var EXTENSION_SPLIT_CHARACTER = 'x';
     var BLANK_PHONE_NUMBER = '';
     var DEFAULT_COUNTRY_CODE = 1;
     var DEFAULT_REGION = 'US';
@@ -22,26 +21,15 @@
          */
         parse: function(phoneNumber, countryCode) {
             return new QbPhoneNumber(phoneNumber, countryCode);
-
-
-            // Try to find a valid phone number
-            // Reduce to 15 digits
-
-
-            // Add a plus at the beginning
-
-            // Assume US
-
         },
 
         format: function(fieldValue, fieldInfo) {
+            if (!fieldValue || !fieldValue.value) {
+                return '';
+            }
+
             var phoneNumber = this.parse(fieldValue.value);
 
-            console.log('----------------------------------------');
-            console.log("FIELD VALUE: ", fieldValue.value);
-            console.log('COUNTRY CODE: ', phoneNumber.countryCode);
-            console.log('NATIONAL NUMBER: ', phoneNumber.nationalFormattedNumber);
-            console.log('FORMATTED NUMBER: ', phoneNumber.formattedNumber);
             if (phoneNumber.countryCode === 1) {
                 return this._addExtension(phoneNumber.nationalFormattedNumber, phoneNumber.extension);
             }
@@ -59,7 +47,7 @@
 
         _addExtension(phoneNumber, extension) {
             if (extension && extension.length > 0) {
-                return phoneNumber + EXTENSION_SPLIT_CHARACTER + extension;
+                return phoneNumber + StandardPhoneFormatter.EXTENSION_DELIM + extension;
             } else {
                 return phoneNumber;
             }
@@ -84,7 +72,6 @@
         function attemptToParseNumberWithGoogleLibrary(currentPhoneNumber, countryCode) {
             var GooglePhoneNumber = PhoneNumberUtil.parse((currentPhoneNumber || self.phonenumberWithoutExtension), (countryCode || self.countryCode));
 
-            console.log('is valid number', PhoneNumberUtil.isValidNumber(GooglePhoneNumber));
             if (!PhoneNumberUtil.isValidNumber(GooglePhoneNumber, (countryCode || self.countryCode))) {
                 throw 'Invalid Phone Number';
             }
@@ -118,7 +105,7 @@
             return;
         }
 
-        var splitPhoneNumber = phoneNumber.split(EXTENSION_SPLIT_CHARACTER);
+        var splitPhoneNumber = phoneNumber.split(StandardPhoneFormatter.EXTENSION_DELIM);
 
         this.phonenumberWithoutExtension = splitPhoneNumber[0];
         this.extension = null;
@@ -133,11 +120,9 @@
             attemptToParseNumberWithGoogleLibrary();
         } catch (firstTryError) {
             // Don't do anything
-            console.log('1) GOOGLE LIB FAILED', firstTryError);
             try {
                 attemptToParseNumberWithGoogleLibrary('+' + this.first15Digits);
             } catch (secondTryError) {
-                console.log('2) GOOGLE LIB FAILED', secondTryError);
                 try {
                     // Retry and default to a US number
                     attemptToParseNumberWithGoogleLibrary(this.first15Digits, DEFAULT_REGION);
