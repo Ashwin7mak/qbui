@@ -314,11 +314,11 @@
             if (num[0] === ':') {
                 num = num.split(':');
                 console.log(num);
-                if (num.length === 1) {
-                    return this.convertToMilliseconds(num[0], CONSTS.MILLIS_PER_MIN) || 0;
+                if (num.length === 2) {
+                    return this.convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN) || 0;
                 }
-                minutes = this.convertToMilliseconds(num[0], CONSTS.MILLIS_PER_MIN) || 0;
-                seconds = this.convertToMilliseconds(num[1], CONSTS.MILLIS_PER_SECOND) || 0;
+                minutes = this.convertToMilliseconds(num[1], CONSTS.MILLIS_PER_MIN) || 0;
+                seconds = this.convertToMilliseconds(num[2], CONSTS.MILLIS_PER_SECOND) || 0;
                 return minutes + seconds;
             }
             num = num.split(':');
