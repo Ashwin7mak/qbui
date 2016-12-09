@@ -66,6 +66,9 @@
             switch (tempFieldInfo.type) {
             case consts.PHONE_NUMBER:
                 fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);
+                var phoneNumber = phoneFormatter.parse(fieldValue.value);
+                fieldValue.internetDialableNumber = phoneNumber.internetDialableNumber;
+                fieldValue.internationalNumber = phoneNumber.internationalNumber;
                 break;
             case consts.DATE_TIME:
             case consts.DATE:

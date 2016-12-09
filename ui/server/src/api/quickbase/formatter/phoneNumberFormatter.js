@@ -18,6 +18,7 @@
          * the country code and locally formatted numbers.
          * @param phoneNumber
          * @param countryCode
+         * @returns {QbPhoneNumber}
          */
         parse: function(phoneNumber, countryCode) {
             return new QbPhoneNumber(phoneNumber, countryCode);
@@ -114,7 +115,6 @@
         }
 
         this.first15Digits = PhoneNumberFormatter.stripSpecialCharacters(this.phonenumberWithoutExtension).slice(0, 15);
-
 
         try {
             attemptToParseNumberWithGoogleLibrary();
