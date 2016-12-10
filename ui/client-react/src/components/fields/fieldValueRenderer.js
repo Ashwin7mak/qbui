@@ -12,6 +12,7 @@ import TextFieldValueRenderer from './textFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
 import UrlFieldValueRenderer from './urlFieldValueRenderer';
+import PhoneFieldValueRenderer from './phoneFieldValueRenderer';
 
 /**
  * # FieldValueRenderer
@@ -137,13 +138,21 @@ const FieldValueRenderer = React.createClass({
                                           openInNewWindow={open_in_new_window}
                                           showAsButton={show_as_button}
                                           key={'ufvr-' + this.props.idKey}
-                                           />;
+                                          />;
 
         case FieldFormats.EMAIL_ADDRESS:
             return <EmailFieldValueRenderer {...commonProperties}
                                             value={this.props.value} display={this.props.display}
                                             key={'efvr-' + this.props.idKey}
-                                             />;
+                                            />;
+
+        case FieldFormats.PHONE_FORMAT:
+            return <PhoneFieldValueRenderer {...commonProperties}
+                                            value={this.props.value}
+                                            display={this.props.display}
+                                            key={'pfvr-' + this.props.idKey}
+                                            />;
+
 
         case FieldFormats.DURATION_FORMAT:
             return (

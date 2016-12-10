@@ -13,6 +13,9 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
+import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
+import * as urlFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
+import * as emailFormatter from '../../../common/src/formatter/emailFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
@@ -422,6 +425,12 @@ let reportModel = {
         case FieldFormats.DATE_FORMAT:
             answer = dateTimeFormatter;
             break;
+        case FieldFormats.EMAIL_ADDRESS:
+            answer = emailFormatter;
+            break;
+        case FieldFormats.PHONE_FORMAT:
+            answer = phoneNumberFormatter;
+            break;
         case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
             break;
@@ -439,6 +448,9 @@ let reportModel = {
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
             answer = numericFormatter;
+            break;
+        case FieldFormats.URL:
+            answer = urlFormatter;
             break;
         }
         return answer;

@@ -37,7 +37,7 @@ describe('DurationFieldValueRenderer', () => {
         let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         let expected = "" + moment.duration(millisecs).asSeconds();
         expect(durationFieldValueRenderer).toHaveText(Number(expected));
-        expect(durationFieldValueRenderer).toHaveText('secs');
+        expect(durationFieldValueRenderer).toHaveText('durationWithUnits.Seconds');
     });
 
 

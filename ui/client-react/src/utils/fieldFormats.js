@@ -49,6 +49,9 @@ class FieldFormats {
             case serverTypeConsts.EMAIL_ADDRESS :
                 return FieldFormats.EMAIL_ADDRESS;
 
+            case serverTypeConsts.PHONE_NUMBER :
+                return FieldFormats.PHONE_FORMAT;
+
             case serverTypeConsts.TEXT :
                 let numLines = 1;
                 if (_.has(datatypeAttributes, 'clientSideAttributes.num_lines')) {
