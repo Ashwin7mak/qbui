@@ -168,12 +168,12 @@ export default {
             }
         },
         durationWithUnits: {
-            Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {# semaines}\n} ",
-            Days:"{value, plural, \n =0 {0 jours}\n =1 {1 jour}\n other {# jours}\n} ",
-            Hours:"{value, plural, \n =0 {0 heures}\n =1 {1 heure}\n other {# heures}\n} ",
-            Minutes: "{value, plural, \n =0 {0 minutes}\n =1 {1 minute}\n other {# minutes}\n} ",
-            Seconds: "{value, plural, \n =0 {0 secondes}\n =1 {1 seconde}\n other {# secondes}\n} ",
-            Milliseconds: "{value, plural, \n =0 {0 millisecondes}\n =1 {1 milliseconde}\n other {# millisecondes}\n} "
+            Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
+            Days:"{value, plural, \n =0 {0 jours}\n =1 {1 jour}\n other {{value}  jours}\n} ",
+            Hours:"{value, plural, \n =0 {0 heures}\n =1 {1 heure}\n other {{value}  heures}\n} ",
+            Minutes: "{value, plural, \n =0 {0 minutes}\n =1 {1 minute}\n other {{value}  minutes}\n} ",
+            Seconds: "{value, plural, \n =0 {0 secondes}\n =1 {1 seconde}\n other {{value}  secondes}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 millisecondes}\n =1 {1 milliseconde}\n other {{value}  millisecondes}\n} "
         },
         durationTableHeader: {
             Weeks:"semaines",

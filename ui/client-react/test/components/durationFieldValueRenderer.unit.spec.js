@@ -35,8 +35,8 @@ describe('DurationFieldValueRenderer', () => {
         component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        let expected = "" + moment.duration(millisecs).asSeconds();
-        expect(durationFieldValueRenderer).toHaveText(Number(expected));
+        let expected = moment.duration(millisecs).asSeconds();
+        expect(durationFieldValueRenderer).toHaveText(expected);
         expect(durationFieldValueRenderer).toHaveText('durationWithUnits.Seconds');
     });
 
@@ -49,7 +49,7 @@ describe('DurationFieldValueRenderer', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        let expected = "" + moment.duration(millisecs).asSeconds();
+        let expected = String(moment.duration(millisecs).asSeconds());
         expect(durationFieldValueRenderer).toHaveText(expected);
         expect(durationFieldValueRenderer).toHaveText('seconds');
     });
@@ -89,7 +89,7 @@ describe('DurationFieldValueRenderer', () => {
             }
         ];
         dataProvider.forEach((test) => {
-            it(test.description, () => {
+            it("displays ms value as " + test.description, () => {
                 let millisecs = test.milli;
                 component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}
                                                                                      includeUnits={true}

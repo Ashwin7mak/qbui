@@ -188,7 +188,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
 
             it(testCase.description + ' ' + msg, () => {
                 var formattedDuration = durationFormatter.format(testCase.fieldValue, testCase.fieldInfo);
-                assert.equal(testCase.expectation, formattedDuration,  msg);
+                assert.equal(formattedDuration, testCase.expectation,  msg);
             });
         });
     });
@@ -212,13 +212,89 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
 
                 if (_.has(testCase, 'fieldInfo.scale')) {
                     if (durationFormatter.hasUnitsText(testCase.fieldInfo.scale)) {
-                        assert.equal(testCase.fieldInfo.scale, formattedDuration.units, msg);
+                        assert.equal(formattedDuration.units, testCase.fieldInfo.scale, msg);
                     } else if (testCase.fieldInfo.scale === consts.DURATION_CONSTS.SMART_UNITS) {
-                        assert.equal(testCase.expectUnits, formattedDuration.units,  msg);
+                        assert.equal(formattedDuration.units, testCase.expectUnits, msg);
                     }
                 }
 
             });
         });
     });
+
+    describe('hasUnitsText for table header', () => {
+        let hasUnitsCases = [
+            {scale: consts.DURATION_CONSTS.WEEKS, expectation: true},
+            {scale: consts.DURATION_CONSTS.DAYS, expectation: true},
+            {scale: consts.DURATION_CONSTS.HOURS, expectation: true},
+            {scale: consts.DURATION_CONSTS.MINUTES, expectation: true},
+            {scale: consts.DURATION_CONSTS.SECONDS, expectation: true},
+            {scale: consts.DURATION_CONSTS.MILLISECONDS, expectation: true},
+            {scale: consts.DURATION_CONSTS.HHMM, expectation: false},
+            {scale: consts.DURATION_CONSTS.HHMMSS, expectation: false},
+            {scale: consts.DURATION_CONSTS.MM, expectation: false},
+            {scale: consts.DURATION_CONSTS.MMSS, expectation: false},
+            {scale: consts.DURATION_CONSTS.SMART_UNITS, expectation: false},
+            {scale: 'invalid', expectation: false},
+            {scale: null, expectation: false},
+            {scale: undefined, expectation: false},
+        ];
+        hasUnitsCases.forEach((testCase) => {
+            it(testCase.scale + ' should be ' + testCase.expectation, () => {
+                var hasUnits = durationFormatter.hasUnitsText(testCase.scale);
+                assert.equal(hasUnits, testCase.expectation);
+            });
+        });
+    });
+
+
+    describe('isSmartUnitsField ', () => {
+        describe('test scales', () => {
+            let isSmartUnitsCases = [
+                {scale: consts.DURATION_CONSTS.WEEKS, expectation: false},
+                {scale: consts.DURATION_CONSTS.DAYS, expectation: false},
+                {scale: consts.DURATION_CONSTS.HOURS, expectation: false},
+                {scale: consts.DURATION_CONSTS.MINUTES, expectation: false},
+                {scale: consts.DURATION_CONSTS.SECONDS, expectation: false},
+                {scale: consts.DURATION_CONSTS.MILLISECONDS, expectation: false},
+                {scale: consts.DURATION_CONSTS.HHMM, expectation: false},
+                {scale: consts.DURATION_CONSTS.HHMMSS, expectation: false},
+                {scale: consts.DURATION_CONSTS.MM, expectation: false},
+                {scale: consts.DURATION_CONSTS.MMSS, expectation: false},
+                {scale: 'invalid', expectation: false},
+                {scale: null, expectation: false},
+                {scale: undefined, expectation: false},
+                {scale: consts.DURATION_CONSTS.SMART_UNITS, expectation: true},
+
+            ];
+            isSmartUnitsCases.forEach((testCase) => {
+                it(testCase.scale + ' should be ' + testCase.expectation, () => {
+                    var fieldDef = {
+                        datatypeAttributes : {
+                            scale : testCase.scale
+                        }
+                    };
+                    var isSmartUnits = durationFormatter.isSmartUnitsField(fieldDef);
+                    assert.equal(isSmartUnits, testCase.expectation);
+                });
+            });
+        });
+        describe('test input parameter', () => {
+            let param = [
+                {message: 'null fieldDef', param: null, expectation: false},
+                {message: 'undefined fieldDef', param: undefined, expectation: false},
+                {message: 'partial fieldDef', param: {}, expectation: false},
+                {message: 'partial fieldDef datatypeAttributes', param: {datatypeAttributes : {}}, expectation: false},
+                {message: 'invalid fieldDef ', param: 23, expectation: false},
+            ];
+            param.forEach((testCase) => {
+                it(testCase.message, () => {
+                    var isSmartUnits = durationFormatter.isSmartUnitsField(testCase.param);
+                    assert.equal(isSmartUnits, testCase.expectation);
+                });
+            });
+        });
+
+    });
+
 });

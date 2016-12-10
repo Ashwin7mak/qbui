@@ -19,6 +19,7 @@
      */
     var bigDecimal = require('bigdecimal');
     var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
+    var _ = require('lodash');
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -44,7 +45,7 @@
     }
 
     /**
-     * Given a duration scale returns true if it has a fixed unit, false otherwise
+     * Given a duration scale returns true if it his a duration scale that has as a fixed unit, false otherwise
      * will return false for 'Smart Units' and any time based scale 'HH:MM' 'HH:MM:SS' etc
      *
      * @param scale
@@ -52,7 +53,26 @@
      */
     function hasUnitsText(scale) {
         var answer = false;
-        if (scale && scale !== DURATION_CONSTS.SMART_UNITS && !scale.match(/:/g)) {
+        if (scale &&
+            //it's one of the duration scale values
+            _.findKey(DURATION_CONSTS, function(entry) {return entry === scale;}) &&
+            // and its not smart unit or time based type e.g. HH:MM
+            scale !== DURATION_CONSTS.SMART_UNITS && !scale.match(/:/g)) {
+
+            answer = true;
+        }
+        return answer;
+    }
+
+    /**
+     * Given a fieldDefinition returns true if it is a smartunits duration field
+     *
+     * @param scale
+     * @returns {boolean}
+     */
+    function isSmartUnitsField(fieldDef) {
+        var answer = false;
+        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.scale') && fieldDef.datatypeAttributes.scale === DURATION_CONSTS.SMART_UNITS) {
             answer = true;
         }
         return answer;
@@ -292,7 +312,8 @@
             return formattedValue;
         },
 
-        hasUnitsText : hasUnitsText
+        hasUnitsText : hasUnitsText,
+        isSmartUnitsField: isSmartUnitsField
 
     };
 }());
