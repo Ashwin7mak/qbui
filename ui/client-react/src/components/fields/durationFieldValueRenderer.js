@@ -3,6 +3,7 @@ import './fields.scss';
 import _ from 'lodash';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import durationFormatter from '../../../../common/src/formatter/durationFormatter';
+import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 
 /**
@@ -69,13 +70,33 @@ const DurationFieldValueRenderer = React.createClass({
         }
 
         //  use display value if passed in, otherwise format the value based on the field attributes
-        let display = this.props.display ? this.props.display :
-                    durationFormatter.format({value: this.props.value}, this.props.attributes);
+        let display = this.props.display;
 
-        // get the units key if this format type has one and its requested
-        // map key to the localized units
-        if (this.props.includeUnits) {
-            let opts = durationFormatter.generateFormat(this.props.attributes);
+        // get the normalized format options
+        let opts = durationFormatter.generateFormat(this.props.attributes);
+        let fieldInfo = Object.assign({}, this.props.attributes);
+
+        let formattedObj = {};
+        if (opts.scale === DURATION_CONSTS.SMART_UNITS) {
+            // request the formatter fill in a deconstructed formatted value for localizing smartunits
+            // by adding formattedObj with the field info
+            fieldInfo = Object.assign({}, fieldInfo, {formattedObj});
+        }
+
+        //smart units get formatted and destructured for localizing
+        if (opts.scale === DURATION_CONSTS.SMART_UNITS || !display) {
+            display = durationFormatter.format({value: this.props.value}, fieldInfo);
+        }
+
+        // for smart units localize the units
+        if (opts.scale === DURATION_CONSTS.SMART_UNITS) {
+            if (formattedObj.units) {
+                display = <I18nMessage message={"durationWithUnits." + formattedObj.units}
+                                       value={formattedObj.string}/>;
+            }
+        } else if (this.props.includeUnits) {
+            // get the units key if this format type has one and its requested
+            // map key to the localized units
             if (opts && durationFormatter.hasUnitsText(opts.scale)) {
                 display = <I18nMessage message={"durationWithUnits." + opts.scale} value={display}/>;
             }

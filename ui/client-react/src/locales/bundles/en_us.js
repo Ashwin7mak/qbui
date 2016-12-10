@@ -171,11 +171,14 @@ export default {
             }
         },
         durationWithUnits: {
+            // these keys can't change they correspond to the
+            // duration consts for localization lookup
             Weeks:"{value, plural, \n =0 {0 weeks}\n =1 {1 week}\n other {# weeks}\n} ",
             Days:"{value, plural, \n =0 {0 days}\n =1 {1 day}\n other {# days}\n} ",
             Hours:"{value, plural, \n =0 {0 hours}\n =1 {1 hour}\n other {# hours}\n} ",
             Minutes: "{value, plural, \n =0 {0 minutes}\n =1 {1 minute}\n other {# minutes}\n} ",
-            Seconds: "{value, plural, \n =0 {0 seconds}\n =1 {1 second}\n other {# seconds}\n} "
+            Seconds: "{value, plural, \n =0 {0 seconds}\n =1 {1 second}\n other {# seconds}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 milliseconds}\n =1 {1 millisecond}\n other {# milliseconds}\n} "
         },
         durationTableHeader: {
             Weeks:"weeks",

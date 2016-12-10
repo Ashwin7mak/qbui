@@ -173,7 +173,8 @@ export default {
             Days:"{value, plural, \n =0 {0 tage}\n =1 {1 tag}\n other {# tage}\n} ",
             Hours:"{value, plural, \n =0 {0 stunden}\n =1 {1 stunde}\n other {# stunden}\n} ",
             Minutes: "{value, plural, \n =0 {0 minuten}\n =1 {1 minute}\n other {# minuten}\n} ",
-            Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {# sekunden}\n} "
+            Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {# sekunden}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 millisekunden}\n =1 {1 millisekunde}\n other {# millisekunden}\n} "
         },
         durationTableHeader: {
             Weeks:"wochen",

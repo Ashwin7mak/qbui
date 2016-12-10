@@ -5,13 +5,12 @@ var moment = require('moment');
 var _ = require('lodash');
 var durationFormatter = require('../../src/formatter/durationFormatter');
 var consts = require('../../src/constants');
+
+// gen a repeatable seed for random values, so it can be reproduced
 var Chance = require('chance');
 var seed = new Chance().integer({min: 1, max: 1000000000});
 
-//seed = 33;
 var chance = new Chance(seed);
-//console.log('DurationFormatter seed:' + seed + '\n');
-
 
 describe('DurationFormatter (seed ' + seed + ')', () => {
 
@@ -21,11 +20,11 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
             var scale = consts.DURATION_CONSTS[scaleKey];
             if (typeof (scale) === 'string') {
                 if (durationFormatter.hasUnitsText(scale)) {
-                    var val = chance.integer({fixed: 4, min: 0, max: 99999});
-                    var ms = (moment.duration(val, scale).asMilliseconds());
+                    var val = chance.floating({min: 0, max: 99999});
+                    var ms = moment.duration(val, scale).asMilliseconds();
                     item.description = "test scale " + scale;
                     item.fieldValue = {value: ms};
-                    item.fieldInfo = {scale: scale};
+                    item.fieldInfo = {scale: scale, decimalPlaces:4};
                     item.expectation = '' + val;
                     array.push(item);
                 } else if (scale !== consts.DURATION_CONSTS.SMART_UNITS) {
@@ -65,56 +64,61 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                     if (testInfo[scale]) {
                         item.description = "test scale " + scale;
                         item.fieldValue = {value: testInfo[scale].ms};
-                        item.fieldInfo = {scale: scale};
+                        item.fieldInfo = {scale: scale, decimalPlaces:4};
                         item.expectation = testInfo[scale].exp;
                         item.input = {hours, mins, secs};
                         array.push(item);
                     }
                 } else { //smartunit scale
-                    var weeks = chance.integer({min: 1, max: 999999});
-                    item.description = 'returns a smart units fieldvalue.value is ' + weeks + ' weeks ';
-                    item.fieldValue = {value: weeks * consts.DURATION_CONSTS.MILLIS_PER_WEEK};
-                    item.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS};
-                    item.expectation = '' + weeks + ' weeks';
-                    item.expectRaw = '' + weeks;
-                    item.expectUnits = consts.DURATION_CONSTS.WEEKS;
-                    array.push(item);
+                    var weeks = chance.floating({min: 1, max: 999999});
+                    var itemWeeks = {};
+                    itemWeeks.description = 'returns a smart units fieldvalue.value is ' + weeks + ' weeks ';
+                    itemWeeks.fieldValue = {value: weeks * consts.DURATION_CONSTS.MILLIS_PER_WEEK};
+                    itemWeeks.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemWeeks.expectation = '' + weeks + ' weeks';
+                    itemWeeks.expectRaw = '' + weeks;
+                    itemWeeks.expectUnits = consts.DURATION_CONSTS.WEEKS;
+                    array.push(itemWeeks);
 
-                    var days = chance.integer({min: 1, max: 6});
-                    item.description = 'returns a smart units fieldvalue.value is ' + days + ' days ';
-                    item.fieldValue = {value: days * consts.DURATION_CONSTS.MILLIS_PER_DAY};
-                    item.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS};
-                    item.expectation = '' + days + ' days';
-                    item.expectRaw = '' + days;
-                    item.expectUnits = consts.DURATION_CONSTS.DAYS;
-                    array.push(item);
+                    var days = chance.floating({min: 1, max: 6});
+                    var itemDays = {};
+                    itemDays.description = 'returns a smart units fieldvalue.value is ' + days + ' days ';
+                    itemDays.fieldValue = {value: days * consts.DURATION_CONSTS.MILLIS_PER_DAY};
+                    itemDays.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemDays.expectation = '' + days + ' days';
+                    itemDays.expectRaw = '' + days;
+                    itemDays.expectUnits = consts.DURATION_CONSTS.DAYS;
+                    array.push(itemDays);
 
-                    var _hours = chance.integer({min: 1, max: 23});
-                    item.description = 'returns a smart units fieldvalue.value is ' + _hours + ' hours ';
-                    item.fieldValue = {value: _hours * consts.DURATION_CONSTS.MILLIS_PER_HOUR};
-                    item.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS};
-                    item.expectation = '' + _hours + ' hours';
-                    item.expectRaw = '' + _hours;
-                    item.expectUnits = consts.DURATION_CONSTS.HOURS;
-                    array.push(item);
+                    var _hours = chance.floating({min: 1, max: 23});
+                    var itemHours = {};
+                    itemHours.description = 'returns a smart units fieldvalue.value is ' + _hours + ' hours ';
+                    itemHours.fieldValue = {value: _hours * consts.DURATION_CONSTS.MILLIS_PER_HOUR};
+                    itemHours.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemHours.expectation = '' + _hours + ' hours';
+                    itemHours.expectRaw = '' + _hours;
+                    itemHours.expectUnits = consts.DURATION_CONSTS.HOURS;
+                    array.push(itemHours);
 
-                    var _mins = chance.integer({min: 1, max: 59});
-                    item.description = 'returns a smart units fieldvalue.value is ' + _mins + ' mins ';
-                    item.fieldValue = {value: _mins * consts.DURATION_CONSTS.MILLIS_PER_MIN};
-                    item.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS};
-                    item.expectation = '' + _mins + ' mins';
-                    item.expectRaw = '' + _mins;
-                    item.expectUnits = consts.DURATION_CONSTS.MINUTES;
-                    array.push(item);
+                    var _mins = chance.floating({min: 1, max: 59});
+                    var itemMinutes = {};
+                    itemMinutes.description = 'returns a smart units fieldvalue.value is ' + _mins + ' mins ';
+                    itemMinutes.fieldValue = {value: _mins * consts.DURATION_CONSTS.MILLIS_PER_MIN};
+                    itemMinutes.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemMinutes.expectation = '' + _mins + ' mins';
+                    itemMinutes.expectRaw = '' + _mins;
+                    itemMinutes.expectUnits = consts.DURATION_CONSTS.MINUTES;
+                    array.push(itemMinutes);
 
-                    var _secs = chance.integer({min: 1, max: 59});
-                    item.description = 'returns a smart units fieldvalue.value is ' + _secs + ' secs ';
-                    item.fieldValue = {value: _secs * consts.DURATION_CONSTS.MILLIS_PER_SECOND};
-                    item.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS};
-                    item.expectation = '' + _secs + ' secs';
-                    item.expectRaw = '' + _secs;
-                    item.expectUnits = consts.DURATION_CONSTS.SECONDS;
-                    array.push(item);
+                    var _secs = chance.floating({min: 1, max: 59});
+                    var itemSeconds = {};
+                    itemSeconds.description = 'returns a smart units fieldvalue.value is ' + _secs + ' secs ';
+                    itemSeconds.fieldValue = {value: (_secs * consts.DURATION_CONSTS.MILLIS_PER_SECOND).toFixed(4)};
+                    itemSeconds.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemSeconds.expectation = '' + _secs + ' secs';
+                    itemSeconds.expectRaw = '' + _secs;
+                    itemSeconds.expectUnits = consts.DURATION_CONSTS.SECONDS;
+                    array.push(itemSeconds);
                 }
             }
         });
@@ -135,6 +139,18 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
             expectation: ''
         },
         {
+            description: 'returns a blank string if fieldvalue.value and fieldInfo is undefined',
+            fieldValue: undefined,
+            fieldInfo: undefined,
+            expectation: ''
+        },
+        {
+            description: 'returns a blank string if fieldvalue.value and fieldInfo is null',
+            fieldValue: null,
+            fieldInfo: null,
+            expectation: ''
+        },
+        {
             description: 'returns a blank string if fieldInfo is null',
             fieldValue: {value: null},
             fieldInfo: null,
@@ -151,25 +167,11 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
             fieldValue: {value: 0},
             fieldInfo: {scale: consts.DURATION_CONSTS.SMART_UNITS},
             expectation: ''
-        },
-        // {
-        //     description: 'fails 361195020000',
-        //     fieldValue: {value: 361195020000},
-        //     fieldInfo: {scale: consts.DURATION_CONSTS.HHMM},
-        //     expectation: '3933.5939:57'
-        // },
-        // {
-        //     description: 'fails 544378500000',
-        //     fieldValue: {value: 544378500000},
-        //     fieldInfo: {scale: consts.DURATION_CONSTS.HHMM},
-        //     expectation: "6227.1768:15"
-        // },
-        //8948460000
-        //34710725789.9 - MM:SS
+        }
     ];
 
     //generate test case sets x times randomized test data
-    var times = 2;
+    var times = 1;
     Array.apply(null, {length: times}).forEach(() => {
         addAllScales(dataProvider);
     });
@@ -201,7 +203,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                     units : null
                 };
                 if (testCase.fieldInfo) {
-                    testCase.fieldInfo.resultObj = answer;
+                    testCase.fieldInfo.formattedObj = answer;
                 }
                 durationFormatter.format(testCase.fieldValue, testCase.fieldInfo);
                 var formattedDuration = answer;
