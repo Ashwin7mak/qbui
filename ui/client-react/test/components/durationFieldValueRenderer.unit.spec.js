@@ -110,13 +110,24 @@ describe('DurationFieldValueRenderer', () => {
         expect(durationFieldValueRenderer.classList.contains('testclass')).toBeTruthy();
     });
 
-    it('test render of component with display', () => {
+    it('test render of component with display does not get reformatted', () => {
         let millisecs = 23456;
-        let display = '123 pre calculated value';
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.WEEKS}} display={display}/>);
+        let displayProp = '123 pre calculated value';
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.WEEKS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(durationFieldValueRenderer.toHaveText(display)).toBeTruthy();
+        let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+        expect(componentDiv).toBeTruthy();
+        expect(componentDiv).toHaveText(displayProp);
+    });
+
+    it('test render of component with display and smart units gets formatted', () => {
+        let millisecs = 23456;
+        let displayProp = '123 pre calculated value';
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SMART_UNITS}} display={displayProp}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+        expect(componentDiv).toBeTruthy();
+        expect(componentDiv).not.toHaveText(displayProp);
     });
 
 });
