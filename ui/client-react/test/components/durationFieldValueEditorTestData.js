@@ -349,33 +349,48 @@
         placeholderData: [
             {
                 scale: undefined,
+                placeholder: ''
             },
             {
                 scale: CONSTS.SMART_UNITS,
+                placeholder: CONSTS.PLACEHOLDER.DAYS
             },
             {
                 scale: CONSTS.HHMMSS,
+                placeholder: CONSTS.PLACEHOLDER.HHMMSS
             },
             {
                 scale: CONSTS.HHMM,
+                placeholder: CONSTS.PLACEHOLDER.HHMM
             },
             {
                 scale: CONSTS.MM,
+                placeholder: CONSTS.PLACEHOLDER.MM
             },
             {
                 scale: CONSTS.MMSS,
+                placeholder: CONSTS.PLACEHOLDER.MMSS
+
             },
             {
                 scale: CONSTS.SECONDS,
+                placeholder: CONSTS.PLACEHOLDER.SECONDS
+
             },
             {
                 scale: CONSTS.HOURS,
+                placeholder: CONSTS.PLACEHOLDER.HOURS
+
             },
             {
                 scale: CONSTS.DAYS,
+                placeholder: CONSTS.PLACEHOLDER.DAYS
+
             },
             {
                 scale: CONSTS.WEEKS,
+                placeholder: CONSTS.PLACEHOLDER.WEEKS
+
             }
         ]
     };

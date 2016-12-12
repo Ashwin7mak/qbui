@@ -328,63 +328,63 @@
         return returnValue;
     }
     function convertHourMinutesSeconds(num) {
-        //::90
-        //::Banana
         var hours;
         var minutes;
         var seconds;
+        var numArray = num.match(/\d+/g, '');
         /**
-         * If a user enters a semicolon without a number, just return the value
+         * ::SS => num[0] === ':' && num[1] === ':'
+         * H::S =>  num[1] === ':' && num[2] === ':'
+         * HH::SS => num[2] === ':' && num[3] === ':'
          * */
-        if (!num.match(/\d+/g, '') ||  num.indexOf('.') === -1) {
-            return num;
-        }
-        /**
-         * ::SS
-         * */
-        if (num[0] === ':' && num[1] === ':') {
-            num = num.match(/\d+/g, '');
-            return convertToMilliseconds(num[0], DURATION_CONSTS.MILLIS_PER_SECOND);
+        if (num[0] === ':' && num[1] === ':' ||
+            num[1] === ':' && num[2] === ':' ||
+            num[2] === ':' && num[3] === ':') {
+            if (numArray.length === 2) {
+                hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
+                seconds = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_SECOND);
+                return hours + seconds;
+            }
+            return convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_SECOND);
         }
         /**
          * :MM:SS
          * */
         if (num[0] === ':') {
-            num = num.match(/\d+/g, '');
-            if (num.length === 2) {
-                minutes = convertToMilliseconds(num[0], DURATION_CONSTS.MILLIS_PER_MIN);
-                seconds = convertToMilliseconds(num[1], DURATION_CONSTS.MILLIS_PER_SECOND);
+            if (numArray.length === 2) {
+                minutes = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_MIN);
+                seconds = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_SECOND);
                 return minutes + seconds;
             }
             /**
              * :MM
              * */
-            return minutes = convertToMilliseconds(num[0], DURATION_CONSTS.MILLIS_PER_MIN);
+            return convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_MIN);
         }
-        num = num.match(/\d+/g, '');
         /**
          * HH:
          * */
-        if (num.length === 1) {
-            return hours = convertToMilliseconds(num[0], DURATION_CONSTS.MILLIS_PER_HOUR);
+        if (numArray.length === 1) {
+            return convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
         }
         /**
          * HH:MM
          * */
-        if (num.length === 2) {
-            hours = convertToMilliseconds(num[0], DURATION_CONSTS.MILLIS_PER_HOUR);
-            minutes = convertToMilliseconds(num[1], DURATION_CONSTS.MILLIS_PER_MIN);
+        if (numArray.length === 2) {
+            hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
+            minutes = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_MIN);
             return hours + minutes;
         }
         /**
          * HH:MM:SS
          * */
-        if (num.length === 3) {
-            hours = convertToMilliseconds(num[0], DURATION_CONSTS.MILLIS_PER_HOUR);
-            minutes = convertToMilliseconds(num[1], DURATION_CONSTS.MILLIS_PER_HOUR);
-            seconds = convertToMilliseconds(num[2], DURATION_CONSTS.MILLIS_PER_HOUR);
+        if (numArray.length === 3) {
+            hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
+            minutes = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_HOUR);
+            seconds = convertToMilliseconds(numArray[2], DURATION_CONSTS.MILLIS_PER_HOUR);
             return  hours + minutes + seconds;
         }
+        return result;
     }
 
     module.exports = {
