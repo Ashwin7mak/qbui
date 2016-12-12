@@ -279,31 +279,31 @@ consts = require('../../common/src/constants.js');
             }
         };
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration default');
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Weeks',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration A',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.WEEKS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Days',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration B',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.DAYS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Hours',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration C',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.HOURS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Minutes',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration D',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.MINUTES
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Seconds',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration E',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SECONDS
