@@ -15,55 +15,65 @@ const PhoneFieldValueRenderer = React.createClass({
         /**
          * phone field attributes
          */
-        attributes: React.PropTypes.object
+        attributes: React.PropTypes.object,
+
+        /**
+         * Disable the phone link */
+        disabled: React.PropTypes.bool
     },
+
+    getDefaultProps() {
+        return {disabled: false};
+    },
+
     renderLink() {
         let displayValue;
         let telPhoneNumberLink;
         let smsPhoneNumberLink;
         let extraDigits;
         let extension;
+        let isDialable = false;
         if (typeof this.props.display === 'object') {
-            displayValue = this.props.display.display;
-            telPhoneNumberLink = this.props.display.internetDialableNumber;
-            smsPhoneNumberLink = 'sms:' + this.props.display.internationalNumber;
-            extraDigits = (this.props.display.isDialable ? this.props.display.extraDigits : '');
-            extension = ((this.props.display.extension && this.props.display.extension.length) ? `${phoneNumberFormatter.EXTENSION_DELIM}${this.props.display.extension}` : null);
+            let displayInfo = this.props.display;
+            displayValue = displayInfo.display;
+            telPhoneNumberLink = displayInfo.internetDialableNumber;
+            smsPhoneNumberLink = 'sms:' + displayInfo.internationalNumber;
+            extraDigits = displayInfo.extraDigits;
+            extension = ((displayInfo.extension && displayInfo.extension.length) ? `${phoneNumberFormatter.EXTENSION_DELIM}${displayInfo.extension}` : null);
+            isDialable = displayInfo.isDialable;
+        } else {
+            displayValue = this.props.display;
         }
-        const disabledDisplay = (<span>
+        const disabledDisplay = (<span className="disabledPhoneFieldValueRenderer">
                                     {displayValue}{extraDigits}{extension}
                                  </span>);
         const displayWithIcons = (<div className="phoneQBIconWrapper phoneWrapper">
-                                        <a href={telPhoneNumberLink} tabIndex="-1">
+                                        <a href={telPhoneNumberLink} tabIndex="-1" className="telLink">
                                             <span tabIndex="0">
                                                 {displayValue}
                                             </span>
-                                            {extraDigits && (
-                                                <span className="extraDigits" tabIndex="0">
-                                                {extraDigits}
-                                                </span>
-                                            )}
-                                            {extension && <span className="extension" tabIndex="0">{extension}</span>}
                                         </a>
+                                        {extraDigits && (<span className="extraDigits" tabIndex="0">{extraDigits}</span>)}
+                                        {extension && <span className="extension" tabIndex="0">{extension}</span>}
                                         <div className="urlIcon phoneIcon">
-                                            <a href={smsPhoneNumberLink} tabIndex="0">
+                                            <a href={smsPhoneNumberLink} tabIndex="0" className="smsIconLink">
                                                 <QBicon className="smsIcon" icon="speechbubble-outline"/>
                                             </a>
                                             {/*The phone icon is not in the tabindex because it does the same thing as the phoneNumber link*/}
-                                            <a href={telPhoneNumberLink} tabIndex="-1">
+                                            <a href={telPhoneNumberLink} tabIndex="-1" className="telIconLink">
                                                 <QBicon icon="phone-outline"/>
                                             </a>
                                         </div>
                                     </div>);
 
-        if (this.props.disabled || !this.props.display.isDialable) {
+        if (this.props.disabled || !isDialable) {
             return disabledDisplay;
         } else {
             return displayWithIcons;
         }
     },
     render() {
-        let classes = (this.props.display.isDialable ? 'urlField' : '');
+        let classes = (typeof this.props.display === 'object' && this.props.display.isDialable ? 'urlField' : '');
         classes += (this.props.disabled ? ' disabled' : '');
         return (
             <div className = {classes}>

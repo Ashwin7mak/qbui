@@ -30,7 +30,6 @@ describe('PhoneFieldValueEditor', () => {
         render() {
             return (
                 <PhoneFieldValueEditor value={this.state.value}
-                                       display={this.state.display}
                                        onChange={this.onChange}
                                        onBlur={this.onBlur}
                                        fieldDef={{datatypeAttributes: {displayProtocol: false}}}
@@ -62,16 +61,19 @@ describe('PhoneFieldValueEditor', () => {
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes[2].classList[3]).toEqual("extNumber");
     });
+
     it('does not render an extension input box if includeExtension is not defined', () => {
         component = TestUtils.renderIntoDocument(<MockParent />);
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes.length).toEqual(1);
     });
+
     it('does not render an extension input box if includeExtension is false', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: false}} />);
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes.length).toEqual(1);
     });
+
     it('has placeholder text', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         domComponent = ReactDOM.findDOMNode(component);
@@ -80,32 +82,35 @@ describe('PhoneFieldValueEditor', () => {
 
     it('formats the phone number for display onBlur', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: false}} />);
-        component.setState({value: phoneNumber, display: ''});
+        component.setState({value: phoneNumber});
         domComponent = ReactDOM.findDOMNode(component);
         let input = domComponent.childNodes[0];
         Simulate.blur(input);
         expect(component.state.display).toEqual(phoneNumberWithoutExt);
     });
+
     it('formats the phone number for display onBlur on extension input box', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
-        component.setState({value: rawPhoneNumberWithExtVal, display: ''});
+        component.setState({value: rawPhoneNumberWithExtVal});
         domComponent = ReactDOM.findDOMNode(component);
         let input = domComponent.childNodes[2];
         Simulate.blur(input);
         expect(component.state.display).toEqual(phoneNumberWithExt);
     });
+
     it('displays phone number in phone number input box and ext in extension input box', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
-        component.setState({value: phoneNumber, display: phoneNumberWithExt});
+        component.setState({value: phoneNumberWithExt});
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt);
         expect(domComponent.childNodes[2].value).toEqual(ext);
     });
+
     it('renders a single phone input field when all props are null', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={undefined}
                                                              onChange={undefined}
                                                              onBlur={undefined}/>);
-        component.setState({value: undefined, display: undefined});
+        component.setState({value: undefined});
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes[0].tagName).toEqual("INPUT");
     });
