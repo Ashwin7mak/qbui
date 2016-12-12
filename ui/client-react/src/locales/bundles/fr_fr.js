@@ -25,8 +25,7 @@ export default {
                 helpTitle: "Besoin d'aide?",
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
                 helpLinkPreText: "Veuillez ",
-                helpLinkText: "contacter notre équipe de soins",
-                missingWalkMe: "Le didacticiel n'est pas disponible"
+                helpLinkText: "contacter notre équipe de soins"
             }
         },
         appMenu: {
@@ -417,6 +416,7 @@ export default {
             versionSelectTitle: "Mes utilisateurs ouvriront cette application dans",
             manageAccessTip: "*Seuls les administrateurs d'applications peuvent gérer l'accès des utilisateurs"
 
-        }
+        },
+        missingWalkMe: "Le didacticiel n'est pas disponible"
     }
 };

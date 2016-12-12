@@ -28,8 +28,7 @@ export default {
                 helpTitle: "Need help?",
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
                 helpLinkPreText: "Please ",
-                helpLinkText: "contact our Care team",
-                missingWalkMe: "Tutorial is not available."
+                helpLinkText: "contact our Care team"
             }
         },
         appMenu: {
@@ -424,6 +423,7 @@ export default {
             versionSelectTitle: "My users will open this app in",
             manageAccessTip: "*Only app admins can manage user access"
 
-        }
+        },
+        missingWalkMe: "Tutorial is not available"
     }
 };
