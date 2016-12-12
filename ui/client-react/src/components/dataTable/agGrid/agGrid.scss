@@ -97,11 +97,17 @@ $cell-edit-background-edit: $color-blue-200;
                 display: block;
             }
         }
-
         .subHeader {
             text-align: right;
             display: block;
         }
+
+        &.duration {
+            .subHeader {
+                text-align: left;
+            }
+        }
+
     }
 
     .ag-header {
