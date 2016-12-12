@@ -29,6 +29,8 @@ import QBModalExample from 'raw!../examples/QBModalExample.js';
 import InvisibleBackdropExample from 'raw!../examples/InvisibleBackdropExample.js';
 import AlertBannerExample from 'raw!../examples/AlertBannerExample.js';
 import PageTitleExample from 'raw!../examples/PageTitleExample.js';
+import PhoneFieldValueEditorExample from 'raw!../examples/PhoneFieldValueEditorExample.js';
+import PhoneFieldValueRendererExample from 'raw!../examples/PhoneFieldValueRendererExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -61,6 +63,8 @@ export default {
     AlertBanner: AlertBannerExample,
     PageTitle: PageTitleExample,
     InvisibleBackdrop: InvisibleBackdropExample,
+    PhoneFieldValueEditor: PhoneFieldValueEditorExample,
+    PhoneFieldValueRenderer: PhoneFieldValueRendererExample,
     DurationFieldValueRenderer: DurationFieldValueRendererExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.

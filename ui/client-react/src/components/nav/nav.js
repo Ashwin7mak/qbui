@@ -180,8 +180,13 @@ export let Nav = React.createClass({
         return <InvisibleBackdrop show={showIt}/>;
     },
 
-
     render() {
+
+        if (!this.state.apps || this.state.apps.apps === null) {
+            // don't render anything until we've made this first api call without being redirected to V2
+            return null;
+        }
+
         const flux = this.getFlux();
 
         let classes = "navShell";
@@ -265,6 +270,7 @@ export let Nav = React.createClass({
                             appsLoading: this.state.apps.loading,
                             reportData: this.state.reportData,
                             appUsers: this.state.apps.appUsers,
+                            locale: this.state.nav.locale,
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,

@@ -28,6 +28,8 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/multiLineTextFieldValueEditor" activeClassName="active">MultiLineTextFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/numericFieldValueEditor" activeClassName="active">NumericFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/numericFieldValueRenderer" activeClassName="active">NumericFieldValueRenderer</Link></li>
+                            <li><Link to="/qbase/components/phoneFieldValueEditor" activeClassName="active">PhoneFieldValueEditor</Link></li>
+                            <li><Link to="/qbase/components/phoneFieldValueRenderer" activeClassName="active">PhoneFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/textFieldValueEditor" activeClassName="active">TextFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/textFieldValueRenderer" activeClassName="active">TextFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/timeFieldValueEditor" activeClassName="active">TimeFieldValueEditor</Link></li>

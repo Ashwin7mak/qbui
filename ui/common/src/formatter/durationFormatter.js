@@ -20,6 +20,7 @@
     var bigDecimal = require('bigdecimal');
     var CONSTS = require('../constants').DURATION_CONSTS;
     var ALLOWED_DURATION_TYPE = ['second', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day', 'days', 'week', 'weeks'];
+    var _ = require('lodash');
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -45,7 +46,7 @@
     }
 
     /**
-     * Given a duration scale returns true if it has a fixed unit, false otherwise
+     * Given a duration scale returns true if it his a duration scale that has as a fixed unit, false otherwise
      * will return false for 'Smart Units' and any time based scale 'HH:MM' 'HH:MM:SS' etc
      *
      * @param scale
@@ -53,7 +54,26 @@
      */
     function hasUnitsText(scale) {
         var answer = false;
-        if (scale && scale !== CONSTS.SMART_UNITS && !scale.match(/:/g)) {
+        if (scale &&
+            //it's one of the duration scale values
+            _.findKey(DURATION_CONSTS, function(entry) {return entry === scale;}) &&
+            // and its not smart unit or time based type e.g. HH:MM
+            scale !== DURATION_CONSTS.SMART_UNITS && !scale.match(/:/g)) {
+
+            answer = true;
+        }
+        return answer;
+    }
+
+    /**
+     * Given a fieldDefinition returns true if it is a smartunits duration field
+     *
+     * @param scale
+     * @returns {boolean}
+     */
+    function isSmartUnitsField(fieldDef) {
+        var answer = false;
+        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.scale') && fieldDef.datatypeAttributes.scale === DURATION_CONSTS.SMART_UNITS) {
             answer = true;
         }
         return answer;
@@ -64,18 +84,18 @@
      * formats the duration value as a string and returns the formatted string.
      * @param millis A millisecond value to format
      * @param opts display options
-     * @param resultObj result object to fill with string and units if exists
+     * @param formattedObj result formatted object to fill with string and units if exists
      * @returns the duration value formatted as a string
      */
     function formatDurationValue(millis, opts) {
         millis = new bigDecimal.BigDecimal(millis.toString());
         var seconds, minutes, hours, days, weeks;
-        if (millis.compareTo(CONSTS.ZERO) !== 0) {
-            seconds = divideBigDecimals(millis, CONSTS.MILLIS_PER_SECOND, opts);
-            minutes = divideBigDecimals(millis, CONSTS.MILLIS_PER_MIN, opts);
-            hours = divideBigDecimals(millis, CONSTS.MILLIS_PER_HOUR, opts);
-            days = divideBigDecimals(millis, CONSTS.MILLIS_PER_DAY, opts);
-            weeks = divideBigDecimals(millis, CONSTS.MILLIS_PER_WEEK, opts);
+        if (millis.compareTo(DURATION_CONSTS.ZERO) !== 0) {
+            seconds = divideBigDecimals(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
+            minutes = divideBigDecimals(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
+            hours = divideBigDecimals(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
+            days = divideBigDecimals(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
+            weeks = divideBigDecimals(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
         } else {
             seconds = 0;
             minutes = 0;
@@ -86,29 +106,32 @@
 
         var returnValue = '';
         switch (opts.scale) {
-        case CONSTS.HHMM:
-        case CONSTS.HHMMSS:
-        case CONSTS.MM:
-        case CONSTS.MMSS:
+        case DURATION_CONSTS.HHMM:
+        case DURATION_CONSTS.HHMMSS:
+        case DURATION_CONSTS.MM:
+        case DURATION_CONSTS.MMSS:
             returnValue = generateTimeUnits(millis, hours, minutes, seconds, opts);
             break;
-        case CONSTS.SMART_UNITS:
+        case DURATION_CONSTS.SMART_UNITS:
             returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
             break;
-        case CONSTS.WEEKS:
-            returnValue = divideToString(millis, CONSTS.MILLIS_PER_WEEK, opts);
+        case DURATION_CONSTS.WEEKS:
+            returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
             break;
-        case CONSTS.DAYS:
-            returnValue = divideToString(millis, CONSTS.MILLIS_PER_DAY, opts);
+        case DURATION_CONSTS.DAYS:
+            returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
             break;
-        case CONSTS.HOURS:
-            returnValue = divideToString(millis, CONSTS.MILLIS_PER_HOUR, opts);
+        case DURATION_CONSTS.HOURS:
+            returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
             break;
-        case CONSTS.MINUTES:
-            returnValue = divideToString(millis, CONSTS.MILLIS_PER_MIN, opts);
+        case DURATION_CONSTS.MINUTES:
+            returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
             break;
-        case CONSTS.SECONDS:
-            returnValue = divideToString(millis, CONSTS.MILLIS_PER_SECOND, opts);
+        case DURATION_CONSTS.SECONDS:
+            returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
+            break;
+        case DURATION_CONSTS.MILLISECONDS:
+            returnValue = millis;
             break;
         default:
             break;
@@ -116,10 +139,10 @@
 
         // if result in an object was requested and its not yet set set the
         // value and units measure, this form of result allows for localizing the results scale units
-        if (typeof (opts.resultObj) !== 'undefined' && typeof (opts.resultObj.string) !== 'undefined' && opts.resultObj.string.length === 0) {
-            opts.resultObj.string = returnValue;
+        if (typeof (opts.formattedObj) !== 'undefined' && typeof (opts.formattedObj.string) !== 'undefined' && opts.formattedObj.string.length === 0) {
+            opts.formattedObj.string = returnValue;
             if (hasUnitsText(opts.scale)) {
-                opts.resultObj.units = opts.scale;
+                opts.formattedObj.units = opts.scale;
             }
         }
         return returnValue;
@@ -144,21 +167,21 @@
         var wholeHours = Math.floor(hours.abs().longValue());
         if (wholeHours !== 0) {
             //If its less than 10 and greater than negative ten, prepend a '0'
-            if (hours.compareTo(CONSTS.TEN) === -1 && hours.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
+            if (hours.compareTo(DURATION_CONSTS.TEN) === -1 && hours.compareTo(DURATION_CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
             timeUnits += wholeHours + ':';
-        } else if (opts.scale === CONSTS.HHMM || opts.scale === CONSTS.HHMMSS) {
+        } else if (opts.scale === DURATION_CONSTS.HHMM || opts.scale === DURATION_CONSTS.HHMMSS) {
             timeUnits += '00:';
         }
         var wholeHoursBd = new bigDecimal.BigDecimal(wholeHours);
-        var extraMinutes = minutes.abs().subtract(wholeHoursBd.multiply(CONSTS.MINUTES_PER_HOUR));
+        var extraMinutes = minutes.abs().subtract(wholeHoursBd.multiply(DURATION_CONSTS.MINUTES_PER_HOUR));
 
         if (timeUnits === '') { // no hours but minutes preface with :
             timeUnits += ':';
         }
         if (extraMinutes.signum() !== 0) {
-            if (extraMinutes.compareTo(CONSTS.TEN) === -1 && extraMinutes.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
+            if (extraMinutes.compareTo(DURATION_CONSTS.TEN) === -1 && extraMinutes.compareTo(DURATION_CONSTS.NEGATIVE_TEN) === 1) {
                 timeUnits += '0';
             }
             timeUnits += Math.floor(extraMinutes.abs().longValue());
@@ -168,12 +191,12 @@
         var wholeMinutes = Math.floor(minutes.abs().longValue());
         var wholeMinutesBd = new bigDecimal.BigDecimal(wholeMinutes);
 
-        var extraSeconds = seconds.abs().subtract(wholeMinutesBd.multiply(CONSTS.SECONDS_PER_MINUTE));
+        var extraSeconds = seconds.abs().subtract(wholeMinutesBd.multiply(DURATION_CONSTS.SECONDS_PER_MINUTE));
 
-        if (opts.scale === CONSTS.MMSS || opts.scale === CONSTS.HHMMSS) {
-            if (extraSeconds.compareTo(CONSTS.ZERO) !== 0) {
+        if (opts.scale === DURATION_CONSTS.MMSS || opts.scale === DURATION_CONSTS.HHMMSS) {
+            if (extraSeconds.compareTo(DURATION_CONSTS.ZERO) !== 0) {
                 timeUnits += ':';
-                if (extraSeconds.compareTo(CONSTS.TEN) === -1 && extraSeconds.compareTo(CONSTS.NEGATIVE_TEN) === 1) {
+                if (extraSeconds.compareTo(DURATION_CONSTS.TEN) === -1 && extraSeconds.compareTo(DURATION_CONSTS.NEGATIVE_TEN) === 1) {
                     timeUnits += '0';
                 }
                 timeUnits += extraSeconds.abs().longValue();
@@ -194,52 +217,52 @@
      * @param hours The whole hours value of the milliseconds
      * @param minutes The whole minutes value of the milliseconds
      * @param seconds The whole seconds value of the milliseconds
-     * @param opts options for decimalplaces and optional resultobj
+     * @param opts options for decimalplaces and optional formattedObj
      *
      * @returns the duration value formatted as a string
      */
     function generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts) {
         //Entered as days
         var smartUnits = '';
-        if (weeks.abs().compareTo(CONSTS.ONE) !== -1) {
-            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_WEEK, opts);
-            if (opts.resultObj) {
-                opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.WEEKS;
+        if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+            smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.WEEKS;
             }
-            smartUnits += ' ' + CONSTS.WEEKS.toLocaleLowerCase();
-        } else if (days.abs().compareTo(CONSTS.ONE) !== -1) {
-            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_DAY, opts);
-            if (opts.resultObj) {
-                opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.DAYS;
+            smartUnits += ' weeks';
+        } else if (days.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+            smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.DAYS;
             }
-            smartUnits += ' ' + CONSTS.DAYS;
-        } else if (hours.abs().compareTo(CONSTS.ONE) !== -1) {
-            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_HOUR, opts);
-            if (opts.resultObj) {
-                opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.HOURS.toLowerCase();
+            smartUnits += ' days';
+        } else if (hours.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+            smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.HOURS;
             }
-            smartUnits += ' ' + CONSTS.HOURS;
-        } else if (minutes.abs().compareTo(CONSTS.ONE) !== -1) {
-            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_MIN, opts);
-            if (opts.resultObj) {
-                opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.MINUTES.toLocaleLowerCase();
+            smartUnits += ' hours';
+        } else if (minutes.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+            smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.MINUTES;
             }
-            smartUnits += ' ' + CONSTS.MINS;
-        } else if (seconds.abs().compareTo(CONSTS.ONE) !== -1) {
-            smartUnits += divideToString(millis, CONSTS.MILLIS_PER_SECOND, opts);
-            if (opts.resultObj) {
-                opts.resultObj.string = smartUnits;
-                opts.resultObj.units = CONSTS.SECONDS;
+            smartUnits += ' mins';
+        } else if (seconds.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+            smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.SECONDS;
             }
             smartUnits += ' ' + CONSTS.SECS;
         } else {
-            if (opts.resultObj) {
-                opts.resultObj.string =  millis.toString();
-                opts.resultObj.units = CONSTS.MSECS;
+            if (opts.formattedObj) {
+                opts.formattedObj.string =  millis.toString();
+                opts.formattedObj.units = DURATION_CONSTS.MILLISECONDS;
             }
             smartUnits += millis.toString() + ' ' + CONSTS.MSECS;
         }
@@ -375,10 +398,10 @@
                 opts.decimalPlaces = fieldInfo.decimalPlaces;
             }
             if (!opts.scale) {
-                opts.scale = CONSTS.SMART_UNITS;
+                opts.scale = DURATION_CONSTS.SMART_UNITS;
             }
             if (!opts.decimalPlaces && opts.decimalPlaces !== 0) {
-                opts.decimalPlaces = CONSTS.DEFAULT_DECIMAL_PLACES;
+                opts.decimalPlaces = DURATION_CONSTS.DEFAULT_DECIMAL_PLACES;
             }
             return opts;
         },
@@ -493,14 +516,15 @@
             if (!opts) {
                 opts = this.generateFormat(fieldInfo);
             }
-            if (fieldInfo && fieldInfo.resultObj) {
-                opts.resultObj = fieldInfo.resultObj;
+            if (fieldInfo && fieldInfo.formattedObj) {
+                opts.formattedObj = fieldInfo.formattedObj;
             }
             var formattedValue = formatDurationValue(fieldValue.value, opts);
             return formattedValue;
         },
 
-        hasUnitsText : hasUnitsText
+        hasUnitsText : hasUnitsText,
+        isSmartUnitsField: isSmartUnitsField
 
     };
 }());

@@ -12,6 +12,7 @@ import {DefaultFieldValueEditor} from './fieldValueEditors';
 import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
+import DurationFieldValueEditor from './durationFieldValueEditor';
 import EmailFieldValueEditor from './emailFieldValueEditor';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
@@ -21,7 +22,7 @@ import TimeFieldValueEditor from './timeFieldValueEditor';
 import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 import ErrorWrapper from '../fields/errorWrapper';
-import DurationFieldValueEditor from './durationFieldValueEditor'
+import PhoneFieldValueEditor from './phoneFieldValueEditor';
 
 /**
  * # FieldValueEditor
@@ -162,7 +163,6 @@ const FieldValueEditor = React.createClass({
         if (fieldId === DEFAULT_RECORD_KEY_ID) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
-
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
             return <CheckBoxFieldValueEditor {...commonProps} label={this.props.label} />;
@@ -177,7 +177,13 @@ const FieldValueEditor = React.createClass({
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
             return <DateTimeFieldValueEditor key={'dtfve-' + this.props.idKey} attributes={attributes} {...commonProps}/>;
         }
-
+        case FieldFormats.PHONE_FORMAT: {
+            let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
+            return <PhoneFieldValueEditor key={'pfve-' + this.props.idKey}
+                                          {...commonProps}
+                                          attributes={attributes}
+                                          classes="cellEdit" />;
+        }
         case FieldFormats.TIME_FORMAT: {
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
             return <TimeFieldValueEditor key={'tfve-' + this.props.idKey} attributes={attributes} {...commonProps} />;
