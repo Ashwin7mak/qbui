@@ -522,6 +522,9 @@
         },
         getPlaceholder: function(fieldInfo) {
             var placeholder = '';
+            if (!fieldInfo) {
+                return placeholder;
+            }
             switch (fieldInfo.scale) {
             case DURATION_CONSTS.HHMM:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;

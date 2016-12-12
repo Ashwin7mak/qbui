@@ -111,8 +111,8 @@
             ZERO: new bigDecimal.BigDecimal(0),
             ONE: new bigDecimal.BigDecimal(1),
 
-            HHMM: ':HH:MM',
-            HHMMSS: ':HH:MM:SS',
+            HHMM: 'HH:MM',
+            HHMMSS: 'HH:MM:SS',
             MM: ':MM',
             MMSS: ':MM:SS',
             SMART_UNITS:'Smart Units',

@@ -7,7 +7,7 @@ import {DURATION_CONSTS} from '../../../common/src/constants';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-fdescribe('DurationFieldValueEditor', () => {
+describe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -60,6 +60,16 @@ fdescribe('DurationFieldValueEditor', () => {
             // debugger;
             expect(component.state.value).toEqual(expectedMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
+        });
+    });
+
+    TestData.placeholderData.forEach(function(test) {
+        it('displays the correct placeholder for ' + test.scale, () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            domComponent = ReactDOM.findDOMNode(component);
+            let expectedPlaceholder = test.scale.toLowerCase();
+            let placeholder = domComponent.placeholder;
+            expect(placeholder).toEqual(expectedPlaceholder);
         });
     });
     // fit('converts an input of seconds to minutes', () => {

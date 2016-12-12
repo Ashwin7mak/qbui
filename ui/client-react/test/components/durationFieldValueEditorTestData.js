@@ -345,6 +345,32 @@
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                 type: CONSTS.W
             }
-        ]
+        ],
+        placeholderData: [
+            {
+                scale: CONSTS.HHMMSS,
+            },
+            {
+                scale: CONSTS.HHMM,
+            },
+            {
+                scale: CONSTS.MM,
+            },
+            {
+                scale: CONSTS.MMSS,
+            },
+            {
+                scale: CONSTS.SECONDS,
+            },
+            {
+                scale: CONSTS.HOURS,
+            },
+            {
+                scale: CONSTS.DAYS,
+            },
+            {
+                scale: CONSTS.WEEKS,
+            }
+    ]
     };
 }());
