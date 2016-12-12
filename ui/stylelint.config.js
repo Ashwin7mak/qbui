@@ -1,7 +1,8 @@
 module.exports = {
     "plugins": [
         "stylelint-scss",
-        "stylelint-declaration-use-variable"
+        "stylelint-declaration-use-variable",
+        "stylelint-declaration-strict-value"
     ],
     "defaultSeverity": "error",
     "rules": {
@@ -11,12 +12,17 @@ module.exports = {
         "scss/dollar-variable-pattern": ["^[a-z-0-9]+$", {"severity": "warning"}],
         "sh-waqar/declaration-use-variable": [
             [
-                "/(^[^$].*(color).*|^color)/",
                 "z-index",
                 "font-size",
                 "font-family"
             ],
             {"severity": "warning"}
+        ],
+        "scale-unlimited/declaration-strict-value": [
+            [
+                "/(^[^$].*(color).*|^color)/"
+            ],
+            {"ignoreKeywords": ["currentColor", "inherit", "initial", "transparent"]}
         ],
         "at-rule-empty-line-before": ["always", {
             "except": ["blockless-group", "first-nested"],
@@ -151,6 +157,7 @@ module.exports = {
     "ignoreFiles": [
         "client-react/src/assets/css/vendor/**/*.{scss,css}",
         "client-react/src/**/*.min.css",
-        "client-react/src/components/node/datetimePicker/css/bootstrap-datetimepicker.css"
+        "client-react/src/components/node/datetimePicker/css/bootstrap-datetimepicker.css",
+        "client-react/src/components/apps/apps.css"
     ]
 };
