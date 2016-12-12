@@ -2,6 +2,7 @@ import React from 'react';
 import QBicon from '../../components/qbIcon/qbIcon.js';
 import './urlField.scss';
 import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
+import _ from 'lodash';
 
 const PhoneFieldValueRenderer = React.createClass({
     displayName: 'PhoneFieldValueRenderer',
@@ -33,7 +34,7 @@ const PhoneFieldValueRenderer = React.createClass({
         let extraDigits;
         let extension;
         let isDialable = false;
-        if (typeof this.props.display === 'object') {
+        if (_.isObject(this.props.display)) {
             let displayInfo = this.props.display;
             displayValue = displayInfo.display;
             telPhoneNumberLink = displayInfo.internetDialableNumber;
@@ -73,7 +74,7 @@ const PhoneFieldValueRenderer = React.createClass({
         }
     },
     render() {
-        let classes = (typeof this.props.display === 'object' && this.props.display.isDialable ? 'urlField' : '');
+        let classes = (_.isObject(this.props.display) && this.props.display.isDialable ? 'urlField' : '');
         classes += (this.props.disabled ? ' disabled' : '');
         return (
             <div className = {classes}>
