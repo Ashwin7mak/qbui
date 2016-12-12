@@ -74,5 +74,18 @@
     //    });
     //};
 
+    /**
+     * Helper method that will load a report for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
+        browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        return browser.waitForVisible('.ag-body-container');
+    };
+
     module.exports = new PageBase();
 }());

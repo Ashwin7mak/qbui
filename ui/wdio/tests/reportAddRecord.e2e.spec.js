@@ -6,6 +6,7 @@
     'use strict';
 
     //Load the page Objects
+    var e2ePageBase = require('../pages/e2ePageBase.po');
     var NewStackAuthPO = require('../pages/newStackAuth.po');
     var ReportContentPO = require('../pages/reportContent.po');
     var ReportInLineEditPO = require('../pages/reportInLineEdit.po');
@@ -33,7 +34,7 @@
                 return NewStackAuthPO.realmLogin(realmName, realmId);
             }).then(function() {
                 // Load the List All report on Table 1
-                return e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -43,7 +44,6 @@
 
         it('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
             browser.logger.info('it spec function - Running the test');
-            browser.waitForVisible('.ag-body-container');
 
             var textToEnter = 'SaveAndAddANewRow';
             var numToEnter = 20;
@@ -71,8 +71,7 @@
             ReportInLineEditPO.assertSuccessMessage(successMessage);
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            browser.waitForVisible('.ag-body-container');
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);

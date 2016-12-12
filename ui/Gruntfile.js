@@ -899,6 +899,8 @@ module.exports = function(grunt) {
             ]);
         }
 
+        // Run your webdriverIO tests via Sauce Labs against a local stack in the CI env
+        // Currently used for e2e-webdriverIO try job
         if (target === 'e2eWebdriver') {
             return grunt.task.run([
                 'env:test',
