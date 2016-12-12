@@ -19,8 +19,7 @@
      */
     var bigDecimal = require('bigdecimal');
     var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
-    // var CONSTS = require('../constants');
-    var ALLOWED_DURATION_TYPE = ['second', 'seconds', 'minute', 'minutes', 'hour', 'hours', 'day', 'days', 'week', 'weeks'];
+    var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
     var _ = require('lodash');
 
     /**
@@ -288,23 +287,33 @@
         case DURATION_CONSTS.MMSS:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
-        // case DURATION_CONSTS.SMART_UNITS:
-        //     returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
-        //     break;
         case DURATION_CONSTS.WEEKS:
+        case DURATION_CONSTS.W:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_WEEK);
             break;
+        /**
+         * XD Specs state that smart units default to days
+         * */
+        case DURATION_CONSTS.SMART_UNITS:
         case DURATION_CONSTS.DAYS:
+        case DURATION_CONSTS.D:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_DAY);
             break;
         case DURATION_CONSTS.HOURS:
+        case DURATION_CONSTS.H:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
         case DURATION_CONSTS.MINUTES:
+        case DURATION_CONSTS.M:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
         case DURATION_CONSTS.SECONDS:
+        case DURATION_CONSTS.S:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_SECOND);
+            break;
+        case DURATION_CONSTS.MILLISECONDS:
+        case DURATION_CONSTS.MS:
+            returnValue = num;
             break;
         default:
             break;
@@ -442,7 +451,7 @@
                 //splitting on spaces is a little rigid,
                 // will update later to make more flexible
                 //value = [789, 'minutes']
-                num = value.splice(0, 1);
+                num = parseInt(value.splice(0, 1)[0]);
                 //value = ['minutes', 'banana']
                 value.forEach(function(val) {
                     if (ALLOWED_DURATION_TYPE.indexOf(val) !== -1) {
@@ -469,6 +478,12 @@
              * */
             if (type.length === 1) {
                 /**
+                 * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
+                 * */
+                if (type.join('').length <= 2) {
+                    return getMilliseconds(num, type.join(''));
+                }
+                /**
                  * Removes first letter and sets it toUpperCase
                  * Sets type to a string and concatenates the upperCaseLetter back on
                  * If type is not plural, then it concatenates an 's'
@@ -485,12 +500,6 @@
                 }
                 return getMilliseconds(num, type);
             }
-            if (type.length === 0 && fieldInfo.scale === "Smart Units") {
-                /**
-                 *If a user does not input a type then type defaults to 'Days'
-                 * */
-                return getMilliseconds(num, DURATION_CONSTS.DAYS);
-            }
             /**
              * If a user enters a value without entering a type
              * Then the value will convert to milliseconds based off of the field the user
@@ -499,6 +508,10 @@
             if (num && type.length === 0) {
                 return getMilliseconds(num, fieldInfo.scale);
             }
+            /**
+             * If it does not convert, then just return the value
+             * */
+            return value;
         },
         /**
          * Given a raw number as input, formats the duration value for display.

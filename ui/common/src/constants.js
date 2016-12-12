@@ -117,11 +117,17 @@
             MMSS: ':MM:SS',
             SMART_UNITS:'Smart Units',
             WEEKS: 'Weeks',
+            W: 'w',
             DAYS: 'Days',
+            D: 'd',
             HOURS: 'Hours',
+            H: 'h',
             MINUTES: 'Minutes',
+            M:'m',
             SECONDS: 'Seconds',
-            MILLISECONDS: 'Milliseconds'
+            S: 's',
+            MILLISECONDS: 'Milliseconds',
+            MS: 'ms'
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
