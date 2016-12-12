@@ -74,7 +74,7 @@ if (__QB_LOCAL__) {
         },
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
-        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
+        walkmeJSSnippet : ''
     });
 }
 
