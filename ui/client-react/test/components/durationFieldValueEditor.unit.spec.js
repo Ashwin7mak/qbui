@@ -58,6 +58,7 @@ fdescribe('DurationFieldValueEditor', () => {
             }
             let expectedMilliSeconds = moment.duration(test.numValue, type).asMilliseconds();
             let newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
+            debugger;
             expectedResult = divideBigDecimal(newExpectedMilliSeconds, test.MILLIS_PER_SCALE);
             expect(component.state.value).toEqual(expectedMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
