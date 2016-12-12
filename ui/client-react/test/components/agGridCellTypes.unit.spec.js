@@ -15,6 +15,7 @@ import {
 } from '../../src/components/dataTable/agGrid/cellRenderers';
 
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
+import {__RewireAPI__ as DurationFieldValueRendererRewire}  from '../../src/components/fields/durationFieldValueRenderer';
 import consts from '../../../common/src/constants';
 
 describe('AGGrid cell editor functions', () => {
@@ -33,6 +34,7 @@ describe('AGGrid cell editor functions', () => {
         CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
         CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+        DurationFieldValueRendererRewire.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
@@ -40,6 +42,7 @@ describe('AGGrid cell editor functions', () => {
         CellRenderers.__ResetDependency__('I18nDate');
         CellRenderers.__ResetDependency__('I18nNumber');
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+        DurationFieldValueRendererRewire.__ResetDependency__('I18nMessage');
     });
 
     it('test TextCellRenderer scalar', () => {

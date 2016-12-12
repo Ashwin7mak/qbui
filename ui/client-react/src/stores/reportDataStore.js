@@ -13,6 +13,9 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
+import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
+import * as urlFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
+import * as emailFormatter from '../../../common/src/formatter/emailFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
@@ -41,12 +44,15 @@ let reportModel = {
         recordsCount: null,
         sortFids: [],
         groupEls: [],
-        originalMetaData: null
+        originalMetaData: null,
+        columnsHaveLocalization: false
     },
 
     /**
      * get the column units to add to the column header, currently only duration fields gets the units from
      * the field definition if its a scale that has units (non time type and non smart units)
+     * this value will show next to the field name in the table header, similar to numerics units e.g. Revenue (Thousands)
+     *
      * @param fieldDef
      * @returns null or string containing the localized units
      */
@@ -61,6 +67,9 @@ let reportModel = {
         return answer;
     },
 
+    /**
+     * Reload the report column information as locale change need refresh
+     */
     refreshReportColumns() {
         this.model.columns = this.getReportColumns(this.model.hasGrouping ? this.model.gridColumns : this.model.fields);
     },
@@ -89,7 +98,7 @@ let reportModel = {
      */
     getReportColumns(fields) {
         let columns = [];
-
+        let columnsHaveLocalization = false;
         if (fields) {
             fields.forEach((fieldDef, index) => {
                 let groupedField = _.find(this.model.groupEls, el => el.split(groupDelimiter)[0] === fieldDef.id);
@@ -104,9 +113,22 @@ let reportModel = {
                     column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
                     let durUnits = this.getReportColumnUnits(fieldDef);
                     if (durUnits) {
+                        // the unitsDescription display option on a field will show next to the column header in a table
+                        // the app builder can optionally specify unitsDescription text for numeric fields and that
+                        // text is added to the column header name for a field for example Revenues (thousands)
+                        // where thousands is the unitsDescription.
+                        // for durations the same presentation is desired when the duration values units
+                        // is the same for all cells in the column. i.e non-smart units, non HH:MM: type units
+                        // when the locale changes this value is updated and thus the table column header names updated
                         column.fieldDef.datatypeAttributes.unitsDescription = durUnits;
                     }
+                    // note if this the table needs updates when locale changes
+                    if (durUnits || durationFormatter.isSmartUnitsField(fieldDef)) {
+                        columnsHaveLocalization = true;
+                    }
+
                     column.fieldType = fieldDef.type;
+
                     column.defaultValue = null;
                     if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
                         column.defaultValue = {value: fieldDef.defaultValue.coercedValue.value, display: fieldDef.defaultValue.displayValue};
@@ -125,7 +147,12 @@ let reportModel = {
                 }
             });
         }
+        this.columnsHaveLocalization = columnsHaveLocalization;
         return columns;
+    },
+
+    getColumnsHaveLocalization() {
+        return this.columnsHaveLocalization;
     },
 
     /**
@@ -422,6 +449,12 @@ let reportModel = {
         case FieldFormats.DATE_FORMAT:
             answer = dateTimeFormatter;
             break;
+        case FieldFormats.EMAIL_ADDRESS:
+            answer = emailFormatter;
+            break;
+        case FieldFormats.PHONE_FORMAT:
+            answer = phoneNumberFormatter;
+            break;
         case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
             break;
@@ -439,6 +472,9 @@ let reportModel = {
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
             answer = numericFormatter;
+            break;
+        case FieldFormats.URL:
+            answer = urlFormatter;
             break;
         }
         return answer;
@@ -564,6 +600,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.navigateAfterSave = false;
         this.isRecordDeleted = false;
+        this.columnsHaveLocalization = false;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -671,8 +708,9 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onChangeLocale() {
-        if (this.reportModel && !this.loading) {
+        if (this.reportModel && !this.loading && this.reportModel.getColumnsHaveLocalization()) {
             // recalc column names based on locale
+            // duration column units need refresh
             this.reportModel.refreshReportColumns();
             this.emit('change');
         }

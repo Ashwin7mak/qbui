@@ -3,7 +3,7 @@ $margin-spacer: 10px;
 $grid-default-cell-padding: 10px;
 $grid-group-expand-icon-size: 18px;
 $grid-default-group-padding: 0px;
-$table-actions-container-bg: #fff;
+$table-actions-container-bg: $color-black-100;
 
 // this is the space on the left that is saved for the checkbox
 // the whole container translates on X axis by this many pixels on swipe left
@@ -62,7 +62,7 @@ $checkbox-width: $card-view-checkbox-width;
 
     .group-level-0 {
         > .group-header {
-            background-color: $color5;
+            background-color: $color-blue-400;
         }
     }
 
@@ -132,12 +132,12 @@ $checkbox-width: $card-view-checkbox-width;
             position: relative;
 
             > .group-header {
-                border-top: 1px solid #dcdcdc;
+                border-top: 1px solid $color-black-300;
                 padding-left: $grid-default-cell-padding + $i * ($grid-default-group-padding + $grid-group-expand-icon-size / 2) + 40 !important;
             }
 
             .custom-row-card {
-                border-top: 1px solid #dcdcdc;
+                border-top: 1px solid $color-black-300;
 
                 .flexRow > .card {
                     padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i * ($grid-default-group-padding + $grid-group-expand-icon-size / 2) - 9 !important;

@@ -1,9 +1,11 @@
 import React from 'react';
 import './fields.scss';
 import _ from 'lodash';
+import Intl from 'intl';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import durationFormatter from '../../../../common/src/formatter/durationFormatter';
-import {I18nMessage} from '../../utils/i18nMessage';
+import Locale from '../../locales/locales';
+import {I18nMessage, I18nNumber, IntlNumberOnly} from '../../utils/i18nMessage';
 
 /**
  * # DurationFieldValueRenderer
@@ -22,7 +24,10 @@ const DurationFieldValueRenderer = React.createClass({
         value: React.PropTypes.number,
 
         /**
-         *  optionally overrides value a hardcoded display value */
+         *  optional, specifies the value for display,
+         *  uses this value instead of formatting supplied value
+         *  unless the scale is smartunits then the
+         *  value is formatted and resulting units localized  */
         display: React.PropTypes.string,
 
         /**
@@ -68,19 +73,48 @@ const DurationFieldValueRenderer = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        //  use display value if passed in, otherwise format the value based on the field attributes
-        let display = this.props.display ? this.props.display :
-                    durationFormatter.format({value: this.props.value}, this.props.attributes);
+        // use display value if passed in, otherwise format the value based on the field attributes
+        let display = this.props.display;
 
-        // get the units key if this format type has one and its requested
-        // map key to the localized units
-        if (this.props.includeUnits) {
-            let opts = durationFormatter.generateFormat(this.props.attributes);
-            if (opts && durationFormatter.hasUnitsText(opts.scale)) {
-                display = <I18nMessage message={"durationWithUnits." + opts.scale} value={display}/>;
-            }
+        // get the normalized format options
+        let opts = durationFormatter.generateFormat(this.props.attributes);
+
+        let fieldInfo = Object.assign({}, this.props.attributes);
+        let formattedObj = {};
+        if (opts.scale === DURATION_CONSTS.SMART_UNITS) {
+            // request the formatter fill in a deconstructed formatted value for localizing smartunits
+            // by extending the field info with formattedObj
+            fieldInfo = Object.assign({}, fieldInfo, {formattedObj});
         }
 
+        //format the value based on the field attributes
+        //since the units are dynamic for smart units
+        //it need to get formatted and destructured(string and units) for localizing
+        //server side rendered display value is not localized
+        if (opts.scale === DURATION_CONSTS.SMART_UNITS || !display) {
+            display = durationFormatter.format({value: this.props.value}, fieldInfo);
+        }
+
+        // for smart units localize the units
+        let durationNumberIntl = {maximumFractionDigits:opts.decimalPlaces};
+        if (opts.scale === DURATION_CONSTS.SMART_UNITS) {
+            if (formattedObj.units) {
+                let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(formattedObj.string));
+                display = <I18nMessage message={"durationWithUnits." + formattedObj.units}
+                                       value={numberValue}/>;
+            }
+        } else if (!this.props.display) {
+            if (durationFormatter.hasUnitsText(opts.scale)) {
+                if (this.props.includeUnits) {
+                    let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
+                    display = <I18nMessage message={"durationWithUnits." + opts.scale}
+                                           value={numberValue}/>;
+                } else {
+                    display = <I18nNumber value={display}
+                                          maximumFractionDigits={opts.decimalPlaces}/>;
+                }
+            }
+        }
         return <div className={classes}>{display}</div>;
     }
 });

@@ -37,42 +37,50 @@ let toMilli =  {
         return  numSeconds *
             consts.millisecondsPerSecond; //  seconds
     },
-    milliseconds : function secondsAsMilliseconds(numMilliseconds) {
+    milliseconds : function millisecondsAsMilliseconds(numMilliseconds) {
         return numMilliseconds; //  milliseconds
     },
 };
 
 let testDur = {weeks:.5, days:1, hours:3, minutes:24, seconds:31, milliseconds:4};
+let decimals = 7;
 let durVal =  getAsMilliseconds(testDur);
-
-let weekScale = {scale:'Weeks'};
-let dayScale = {scale:'Days'};
-let minuteScale = {scale:'Minutes'};
-let secondScale = {scale:'Seconds'};
-let HHMMSSScale = {scale:':HH:MM:SS'};
-let HHMMScale = {scale:':HH:MM'};
-let MMSSScale = {scale:':MM:SS'};
-let MMScale = {scale:':MM'};
+let SmartUnitScale = {scale:'Smart Units', decimalPlaces:decimals};
+let weekScale = {scale:'Weeks', decimalPlaces:decimals};
+let dayScale = {scale:'Days', decimalPlaces:decimals};
+let minuteScale = {scale:'Minutes', decimalPlaces:decimals};
+let secondScale = {scale:'Seconds', decimalPlaces:decimals};
+let HHMMSSScale = {scale:':HH:MM:SS', decimalPlaces:decimals};
+let HHMMScale = {scale:':HH:MM', decimalPlaces:decimals};
+let MMSSScale = {scale:':MM:SS', decimalPlaces:decimals};
+let MMScale = {scale:':MM', decimalPlaces:decimals};
 
 const basicDurationFieldValueRendererExample = (
     <div>
         <div>Given {JSON.stringify(testDur)}</div>
         <div>All using value {durVal}(ms)</div>
+        <div>with up to {decimals} decimals</div>
         <br/>
 
-        <dt>Duration Default (smart units): </dt>
+        <dt>Duration Default (scale default is smart units,  decimals default is 14): </dt>
         <dd>
             <DurationFieldValueRenderer value={durVal} />
         </dd>
 
-        <dt>Duration Field with some added bootstrap classes:</dt>
+        <dt>Duration Smart Units: </dt>
         <dd>
-            <DurationFieldValueRenderer value={durVal} classes="mark lead"/>
+            <DurationFieldValueRenderer value={durVal} attributes={SmartUnitScale}/>
         </dd>
 
-        <dt>Default (a display prop overrides any specified value): </dt>
+        <dt>Duration Smart Units with some added bootstrap classes:</dt>
         <dd>
-            <DurationFieldValueRenderer value={durVal} display={"123 days till Christmas"}/>
+            <DurationFieldValueRenderer value={durVal}  attributes={SmartUnitScale} classes="mark lead"/>
+        </dd>
+
+
+        <dt>A display prop provided is used instead of formatting the value: </dt>
+        <dd>
+            <DurationFieldValueRenderer value={durVal} display={"123 days till Christmas"} attributes={weekScale}/>
         </dd>
 
         <dt>Weeks: </dt>
