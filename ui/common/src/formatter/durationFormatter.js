@@ -520,6 +520,45 @@
              * */
             return value;
         },
+        getPlaceholder: function(fieldInfo) {
+            var placeholder = '';
+            switch (fieldInfo.scale) {
+            case DURATION_CONSTS.HHMM:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;
+                break;
+            case DURATION_CONSTS.HHMMSS:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.HHMMSS;
+                break;
+            case DURATION_CONSTS.MM:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.MM;
+                break;
+            case DURATION_CONSTS.MMSS:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.MMSS;
+                break;
+            case DURATION_CONSTS.WEEKS:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.WEEKS;
+                break;
+            /**
+             * XD Specs state that smart units default to days
+             * */
+            case DURATION_CONSTS.SMART_UNITS:
+            case DURATION_CONSTS.DAYS:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.DAYS;
+                break;
+            case DURATION_CONSTS.HOURS:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.HOURS;
+                break;
+            case DURATION_CONSTS.MINUTES:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.MINUTES;
+                break;
+            case DURATION_CONSTS.SECONDS:
+                placeholder = DURATION_CONSTS.PLACEHOLDER.SECONDS;
+                break;
+            default:
+                break;
+            }
+            return placeholder;
+        },
         /**
          * Given a raw number as input, formats the duration value for display.
          * @param fieldValue the field value object

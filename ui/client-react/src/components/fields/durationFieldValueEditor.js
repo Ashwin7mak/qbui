@@ -47,6 +47,7 @@ const DurationFieldValueEditor = React.createClass({
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
+        placeholder = durationFormatter.getPlaceholder(this.props.attributes);
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}

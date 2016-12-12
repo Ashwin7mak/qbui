@@ -127,7 +127,18 @@
             SECONDS: 'Seconds',
             S: 's',
             MILLISECONDS: 'Milliseconds',
-            MS: 'ms'
+            MS: 'ms',
+            PLACEHOLDER: {
+                HHMM: 'hh:mm',
+                HHMMSS: 'hh:mm:ss',
+                MM: ':mm',
+                MMSS: ':mm:ss',
+                WEEKS: 'weeks',
+                DAYS: 'days',
+                HOURS: 'hours',
+                MINUTES: 'minutes',
+                SECONDS: 'seconds',
+            }
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
