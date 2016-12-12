@@ -62,8 +62,21 @@
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
             // Hardcoded to click on the first cell of the record
             var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
-            //TODO: Does not work in FF or Safari (will have to use raw JS)
-            recordCellEl.doubleClick();
+            // See http://webdriver.io/api/protocol/execute.html
+            //TODO: Make generic double click function in e2ePageBase
+            if (browserName === 'chrome') {
+                recordCellEl.doubleClick();
+            } else {
+                browser.execute(function(recordCellElement) {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 2
+                    });
+                    recordCellElement.dispatchEvent(event);
+                }, recordCellEl);
+            }
             this.getInlineEditRecord().waitForVisible();
         }},
 
@@ -89,7 +102,7 @@
             //});
             saveRecordButtonEl.click();
             // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-            browser.waitForVisible('.ag-row.editing', 5000, true);
+            browser.waitForExist('.ag-row.editing', 5000, true);
         }},
 
         /**
@@ -163,10 +176,19 @@
          * @param textFieldIndex - The text field to edit by index
          * @param textToEnter - The text to enter
          */
+        //TODO: Lots of duplication with these editField functions (make generic)
         editTextField: {value: function(textFieldIndex, textToEnter) {
             var textFieldInputCells = this.getTextFieldInputCells();
             var textInputCell = textFieldInputCells.value[textFieldIndex];
-            textInputCell.moveToObject();
+
+            //TODO: Make generic moveToObject function in e2ePageBase
+            if (browserName === 'chrome') {
+                textInputCell.moveToObject();
+            } else {
+                browser.execute(function(textInputCellElement) {
+                    textInputCellElement.scrollIntoView();
+                }, textInputCell);
+            }
             textInputCell.setValue(textToEnter);
         }},
 
@@ -188,7 +210,14 @@
             //TODO: This code is duplicated. Can create a generic function w/ some wrappers
             var numericFieldInputCells = this.getNumericFieldInputCells();
             var numericInputCell = numericFieldInputCells.value[numericFieldIndex];
-            numericInputCell.moveToObject();
+
+            if (browserName === 'chrome') {
+                numericInputCell.moveToObject();
+            } else {
+                browser.execute(function(numericInputCellElement) {
+                    numericInputCellElement.scrollIntoView();
+                }, numericInputCell);
+            }
             numericInputCell.setValue(numToEnter);
         }},
 
@@ -209,7 +238,14 @@
         editDateField: {value: function(dateFieldIndex, dateToEnter) {
             var dateFieldInputCells = this.getDateFieldInputCells();
             var dateInputCell = dateFieldInputCells.value[dateFieldIndex];
-            dateInputCell.moveToObject();
+
+            if (browserName === 'chrome') {
+                dateInputCell.moveToObject();
+            } else {
+                browser.execute(function(dateInputCellElement) {
+                    dateInputCellElement.scrollIntoView();
+                }, dateInputCell);
+            }
             dateInputCell.setValue(dateToEnter);
         }},
 
@@ -220,12 +256,18 @@
          */
         openDateFieldCalWidget: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
-            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"');
+            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
 
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
             var dateFieldCalIcon = this.getDateFieldCalendarIconEl(dateFieldCell);
-            dateFieldCalIcon.moveToObject();
-            //TODO: Test with FF and Safari
+
+            if (browserName === 'chrome') {
+                dateFieldCalIcon.moveToObject();
+            } else {
+                browser.execute(function(dateCalIconElement) {
+                    dateCalIconElement.scrollIntoView();
+                }, dateFieldCalIcon.value);
+            }
             dateFieldCalIcon.click();
         }},
 
@@ -271,7 +313,7 @@
          */
         advanceCurrentlySelectedDate: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
-            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"');
+            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
 
             var selectedRow = this.getDateRowForSelectedDate(this.getCurrentSelectedDate(this.getDateFieldCalendarWidgetEl(dateFieldCell)));
@@ -292,6 +334,15 @@
             // So now select the next date after the current one
             //TODO: Will need to handle a date at the end of the calendar row
             var nextDate = datesInRow.value[currentDateIndex + 1];
+
+            if (browserName === 'chrome' || browserName === 'safari') {
+                nextDate.moveToObject();
+            } else {
+                browser.execute(function(dateElement) {
+                    dateElement.scrollIntoView();
+                }, nextDate);
+            }
+            nextDate.waitForVisible();
             nextDate.click();
         }}
 

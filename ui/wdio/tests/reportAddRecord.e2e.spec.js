@@ -20,7 +20,7 @@
          * Setup method. Creates test app then authenticates into the new stack
          */
         beforeAll(function() {
-            console.log('beforeAll function - Generating test data and logging in');
+            browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
             return e2eBase.defaultAppSetup().then(function(createdApp) {
@@ -42,7 +42,7 @@
         });
 
         it('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
-            console.log('Running the test!');
+            browser.logger.info('it spec function - Running the test');
             browser.waitForVisible('.ag-body-container');
 
             var textToEnter = 'SaveAndAddANewRow';

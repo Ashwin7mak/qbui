@@ -1,3 +1,7 @@
+// Global variable that allows you to set wdio to use a realm defined in your node config file
+// (see onPrepare hook below)
+var localConf;
+
 exports.config = {
     // ============
     // Debug config
@@ -50,8 +54,10 @@ exports.config = {
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
         maxInstances: 5,
-        //
-        browserName: 'chrome'
+        // what browser instance you want to launch
+        browserName: 'chrome',
+        // Custom variable we use to set the size of the browser
+        breakpointSize: 'large'
     }],
     //
     // ===================
@@ -148,12 +154,13 @@ exports.config = {
     //
     // Gets executed once before all workers get launched.
     onPrepare: function(config, capabilities) {
-        console.log('onPrepare function - Starting up Node');
+        // browser object has not been created yet so need to use console.log here
+        console.log('onPrepare function hook - Starting up Node');
         //Have the tests start an instance of node
         require('../../server/src/app');
 
         // This setting allow devs to gendata / e2etest to a single known realm not random as needed for testing
-        // by setting realmToUse in e2e.conf file and then supplying the E2E_CUSTOMCONFIG env var
+        // by setting realmToUse in e2e.conf file and then supplying the E2E_CUSTOMCONFIG env var when running wdio
         if (process.env.E2E_CUSTOMCONFIG === 'true') {
             localConf = require('../../server/src/config/environment');
         }
@@ -162,10 +169,9 @@ exports.config = {
     // Gets executed before test execution begins. At this point you can access all global
     // variables, such as `browser`. It is the perfect place to define custom commands.
     before: function(capabilities, specs) {
-        console.log('before function - Setting up e2eBase, services and utilities');
+        browser.logger.info('before function hook - Setting up e2eBase, services and utilities');
         var baseE2EPath = '../../wdio/';
         var e2eUtils = require('../common/e2eUtils')();
-        var localConf;
 
         // Initialize all Page Objects
         //global.requirePO = function(relativePath) {
@@ -194,28 +200,22 @@ exports.config = {
         global.e2eUtils = requireCommon('common/e2eUtils')();
         global.consts = require('../../common/src/constants');
 
-        // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
-        // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
+        // Grab the browser name to use in spec files
+        // See http://webdriver.io/guide/testrunner/browserobject.html for working with config file variables
+        global.browserName = browser.desiredCapabilities.browserName;
+
+        // Grab the browser settings from the capabilities object and set the browser size
+        var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(browser.desiredCapabilities.breakpointSize);
+        global.breakpointSize = browserDimensions.breakpointSize;
+        global.browserWidth = browserDimensions.browserWidth;
+        global.browserHeight = browserDimensions.browserHeight;
+
+        browser.logger.info('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+        browser.windowHandleSize({width: global.browserWidth, height: global.browserHeight});
+
+        // recordApi.base (and api.base) will not initialize itself if you don't pass in a config object
         // This call creates a your test realm down in api.base
         return e2eBase.initialize();
-
-        //// Grab the browser name to use in spec files
-        //browser.getCapabilities().then(function(cap) {
-        //    global.browserName = cap.get('browserName');
-        //});
-        //
-        //// Grab the browser settings from the processed config and set the browser size
-        //browser.getProcessedConfig().then(function(config) {
-        //    var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
-        //    global.breakpointSize = browserDimensions.breakpointSize;
-        //    global.browserWidth = browserDimensions.browserWidth;
-        //    global.browserHeight = browserDimensions.browserHeight;
-        //
-        //    //TODO: MB-386 - Need to use the logger wrapper instead of console.log
-        //    console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
-        //    browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
-        //});
-        //
     },
     //
     // Hook that gets executed before the suite starts
@@ -255,7 +255,7 @@ exports.config = {
     // Gets executed after all tests are done. You still have access to all global variables from
     // the test.
     after: function(result, capabilities, specs) {
-        console.log('after function - Cleaning up the test realm');
+        browser.logger.info('after function hook - Cleaning up the test realm');
         return e2eBase.cleanup();
     }
     //

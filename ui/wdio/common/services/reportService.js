@@ -276,7 +276,7 @@
              * @returns A promise that will resolve after loading the generated URL
              */
             loadReportByIdInBrowser: function(realmName, appId, tableId, reportId) {
-                return browser.navigate().to(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+                return browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
             }
         };
         return reportService;
