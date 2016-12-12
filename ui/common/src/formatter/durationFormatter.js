@@ -327,6 +327,8 @@
         return returnValue;
     }
     function convertHourMinutesSeconds(num) {
+        //::90
+        //::Banana
         var hours;
         var minutes;
         var seconds;
@@ -406,7 +408,7 @@
             }
             return opts;
         },
-        onBlurMasking: function(value, fieldInfo, display) {
+        onBlurParsing: function(value, fieldInfo, display) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             /**
              * Accepted Type:
@@ -429,7 +431,7 @@
              * the field that the user is typing in
              * */
             if (typeof value === 'number') {
-                return convertToMilliseconds(value, fieldInfo.scale);
+                return getMilliseconds(value, fieldInfo.scale);
             }
             /**
              * This sets the string to lowerCase()
@@ -452,7 +454,11 @@
              * */
             if (value) {
                 value = value.split(' ');
+                //splitting on spaces is a little rigid,
+                // will update later to make more flexible
+                //value = [789, 'minutes']
                 num = value.splice(0, 1);
+                //value = ['minutes', 'banana']
                 value.forEach(function(val) {
                     if (ALLOWED_DURATION_TYPE.indexOf(val) !== -1) {
                         type.push(val);
@@ -466,11 +472,14 @@
              * then we just returned the value that the user typed in without any conversion,
              * a validation error will be thrown onSave
              * */
+            //type = ['minute', 'seconds', 'hours'];
+            //notAllowedType = ['hotdog'];
             if (type.length > 1 || notAllowedType.length > 0) {
+                //return not accepted value to user, and throw validation error
                 return value;
             }
             /**
-             * If a user only entered a single accepted type (e.g., "minutes")
+             * If a user only entered a single accepted type (e.g., ["minutes"])
              * then the num will be converted to milliseconds, based off of the type passed in by the user
              * */
             if (type.length === 1) {
@@ -479,15 +488,20 @@
                  * Sets type to a string and concatenates the upperCaseLetter back on
                  * If type is not plural, then it concatenates an 's'
                  */
+                //['minutes'];
                 var firstLetter = type.join('').split('').splice(0, 1).join('').toUpperCase();
+                //firstLetter = 'M'
                 type = type.join('').slice(1);
+                //type = 'inutes'
                 type =  firstLetter + type;
+                //type = "Minutes"
                 if (type[type.length - 1] !== 's') {
                     type = type + 's';
                 }
                 return getMilliseconds(num, type);
             }
             if (display && type.length === 0 && fieldInfo.scale === "Smart Units") {
+                //If a user does not input a type, then we default to 'Days'
                 display = display.split(' ');
                 num = display[0];
                 type = display[1];
