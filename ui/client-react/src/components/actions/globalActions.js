@@ -12,7 +12,6 @@ import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as CompConsts from '../../constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-import Breakpoints from '../../utils/breakpoints';
 import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -142,8 +141,8 @@ let GlobalActions = React.createClass({
             </Dropdown>);
     },
     getHelpWalkme() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
-        if (isSmall) {
+        let touch = "ontouchstart" in window;
+        if (touch) {
             return;
         }
         try {
