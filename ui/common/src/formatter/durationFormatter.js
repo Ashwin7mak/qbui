@@ -272,21 +272,6 @@
     function convertToMilliseconds(num, millis) {
         return num * millis;
     }
-    function convertDisplayTypeToAcceptedType(displayType) {
-        var type;
-        switch (displayType) {
-        case DURATION_CONSTS.MSECS:
-        case DURATION_CONSTS.SECONDS:
-            type = DURATION_CONSTS.SECONDS;
-            break;
-        case DURATION_CONSTS.MINS:
-            type = DURATION_CONSTS.MINUTES;
-            break;
-        default:
-            break;
-        }
-        return type;
-    }
     function getMilliseconds(num, type) {
         var returnValue;
         switch (type) {
@@ -408,7 +393,7 @@
             }
             return opts;
         },
-        onBlurParsing: function(value, fieldInfo, display) {
+        onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             /**
              * Accepted Type:
@@ -500,13 +485,11 @@
                 }
                 return getMilliseconds(num, type);
             }
-            if (display && type.length === 0 && fieldInfo.scale === "Smart Units") {
-                //If a user does not input a type, then we default to 'Days'
-                display = display.split(' ');
-                num = display[0];
-                type = display[1];
-                type = convertDisplayTypeToAcceptedType(type);
-                return getMilliseconds(num, type);
+            if (type.length === 0 && fieldInfo.scale === "Smart Units") {
+                /**
+                 *If a user does not input a type then type defaults to 'Days'
+                 * */
+                return getMilliseconds(num, DURATION_CONSTS.DAYS);
             }
             /**
              * If a user enters a value without entering a type
