@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
+import TestData from './durationFieldValueEditorTestData';
 import {DURATION_CONSTS} from '../../../common/src/constants';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
@@ -9,75 +10,9 @@ import bigDecimal from 'bigdecimal';
 fdescribe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
-    let numValue = 55;
-    let dataProvider = [
-        /**
-         * Converts all values to Seconds
-         * */
-        {
-            scale: DURATION_CONSTS.SECONDS,
-            numValue: numValue,
-            type: ''
-        },
-        {
-            scale: DURATION_CONSTS.SECONDS,
-            numValue: numValue,
-            type: DURATION_CONSTS.SECONDS
-        },
-        {
-            scale: DURATION_CONSTS.SECONDS,
-            numValue: numValue,
-            type: DURATION_CONSTS.MINUTES
-        },
-        {
-            scale: DURATION_CONSTS.SECONDS,
-            numValue: numValue,
-            type: DURATION_CONSTS.HOURS
-        },
-        {
-            scale: DURATION_CONSTS.SECONDS,
-            numValue: numValue,
-            type: DURATION_CONSTS.DAYS
-        },
-        {
-            scale: DURATION_CONSTS.SECONDS,
-            numValue: numValue,
-            type: DURATION_CONSTS.WEEKS
-        },
-        /**
-         * Converts all values to minutes
-         * */
-        {
-            scale: DURATION_CONSTS.MINUTES,
-            numValue: numValue,
-            type: ''
-        },
-        {
-            scale: DURATION_CONSTS.MINUTES,
-            numValue: numValue,
-            type: DURATION_CONSTS.SECONDS
-        },
-        {
-            scale: DURATION_CONSTS.MINUTES,
-            numValue: numValue,
-            type: DURATION_CONSTS.MINUTES
-        },
-        {
-            scale: DURATION_CONSTS.MINUTES,
-            numValue: numValue,
-            type: DURATION_CONSTS.HOURS
-        },
-        {
-            scale: DURATION_CONSTS.MINUTES,
-            numValue: numValue,
-            type: DURATION_CONSTS.DAYS
-        },
-        {
-            scale: DURATION_CONSTS.MINUTES,
-            numValue: numValue,
-            type: DURATION_CONSTS.WEEKS
-        }
-    ];
+    let divideBigDecimal = function(numerator, millis) {
+        return numerator.divide(millis, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
+    };
     let MockParent = React.createClass({
         getInitialState() {
             return {
@@ -104,18 +39,26 @@ fdescribe('DurationFieldValueEditor', () => {
         }
     });
 
-    dataProvider.forEach(function(test) {
-        it('converts all values according to type provided to scale type ', () => {
+    TestData.dataProvider.forEach(function(test) {
+        it('converts a user input of ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
+            let userInput = test.numValue + ' ' + test.type;
+            if (test.type === '') {
+                userInput = test.numValue;
+            }
             Simulate.change(domComponent, {
-                target: {value: test.numValue + ' ' + test.type}
+                target: {value: userInput}
             });
             Simulate.blur(domComponent);
             let expectedResult;
-            let expectedMilliSeconds = moment.duration(test.numValue, test.type).asMilliseconds();
+            let type = test.type;
+            if (type === '') {
+                type = test.scale;
+            }
+            let expectedMilliSeconds = moment.duration(test.numValue, type).asMilliseconds();
             let newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
-            expectedResult = newExpectedMilliSeconds.divide(DURATION_CONSTS.MILLIS_PER_MIN, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
+            expectedResult = divideBigDecimal(newExpectedMilliSeconds, test.MILLIS_PER_SCALE);
             expect(component.state.value).toEqual(expectedMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
         });
