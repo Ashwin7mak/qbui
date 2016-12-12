@@ -269,7 +269,14 @@
         return smartUnits;
     }
     function convertToMilliseconds(num, millis) {
-        return num * millis;
+        var result = num * millis;
+        /**
+         * One last check to be sure the result is a number
+         * */
+        if (isNaN(num)) {
+            return num;
+        }
+        return result;
     }
     function getMilliseconds(num, type) {
         var returnValue;
@@ -292,7 +299,7 @@
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_WEEK);
             break;
         /**
-         * XD Specs state that smart units default to days
+         * XD Specs state that smart units default to days when a user does not input a type
          * */
         case DURATION_CONSTS.SMART_UNITS:
         case DURATION_CONSTS.DAYS:
@@ -329,7 +336,7 @@
         /**
          * If a user enters a semicolon without a number, just return the value
          * */
-        if (!num.match(/\d+/g, '')) {
+        if (!num.match(/\d+/g, '') ||  num.indexOf('.') === -1) {
             return num;
         }
         /**
