@@ -4,24 +4,22 @@
 (function() {
     'use strict';
 
-    //Bluebird Promise library
-    var Promise = require('bluebird');
-
     describe('E2E DataGen Test Setup', function() {
         var testApp;
 
         /**
          * Setup method. Creates application via the API.
          */
-        beforeAll(function() {
-            // Need to return this promise otherwise WebdriverIO won't wait for completion before starting the tests
-            return e2eBase.fullReportsSetup().then(function(responses) {
+        beforeAll(function(done) {
+            e2eBase.fullReportsSetup().then(function(responses) {
                 // Set your global app to use in the test functions
                 testApp = responses[0];
+            }).then(function() {
+                done();
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                done.fail('Error during test setup beforeAll: ' + error.message);
             });
         });
 
