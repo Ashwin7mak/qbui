@@ -103,9 +103,9 @@
         this.first15Digits = BLANK_PHONE_NUMBER;
         this.first11Digits = BLANK_PHONE_NUMBER;
         this.first10Digits = BLANK_PHONE_NUMBER;
-        this.extraDigits = BLANK_PHONE_NUMBER;
         this.phonenumberWithoutExtension = BLANK_PHONE_NUMBER;
-        this.extension = BLANK_PHONE_NUMBER;
+        this.extraDigits = null;
+        this.extension = null;
 
         // Exit with defaults if a phone number was not provided
         if (!phoneNumber || phoneNumber.length === 0) {
@@ -113,10 +113,8 @@
         }
 
         var splitPhoneNumber = phoneNumber.split(StandardPhoneFormatter.EXTENSION_DELIM);
-
         this.phonenumberWithoutExtension = splitPhoneNumber[0];
-        this.extension = null;
-        if (splitPhoneNumber.length > 1) {
+        if (splitPhoneNumber.length > 1 && splitPhoneNumber[1] && splitPhoneNumber[1].length > 0) {
             this.extension = splitPhoneNumber[1];
         }
 
@@ -152,6 +150,10 @@
                     this.isDialable = false;
                 }
             }
+        }
+
+        if (!this.extraDigits || this.extraDigits.length === 0) {
+            this.extraDigits = null;
         }
     }
 
