@@ -348,6 +348,12 @@
         ],
         placeholderData: [
             {
+                scale: undefined,
+            },
+            {
+                scale: CONSTS.SMART_UNITS,
+            },
+            {
                 scale: CONSTS.HHMMSS,
             },
             {
@@ -371,6 +377,6 @@
             {
                 scale: CONSTS.WEEKS,
             }
-    ]
+        ]
     };
 }());

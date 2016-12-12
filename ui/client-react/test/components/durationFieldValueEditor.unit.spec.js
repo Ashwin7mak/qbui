@@ -67,9 +67,11 @@ describe('DurationFieldValueEditor', () => {
         it('displays the correct placeholder for ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
-            let expectedPlaceholder = test.scale.toLowerCase();
-            let placeholder = domComponent.placeholder;
-            expect(placeholder).toEqual(expectedPlaceholder);
+            let expectedPlaceholder = test.scale ? test.scale.toLowerCase() : '';
+            if (test.scale === DURATION_CONSTS.SMART_UNITS) {
+                expectedPlaceholder = DURATION_CONSTS.DAYS.toLocaleLowerCase();
+            }
+            expect(domComponent.placeholder).toEqual(expectedPlaceholder);
         });
     });
     // fit('converts an input of seconds to minutes', () => {
