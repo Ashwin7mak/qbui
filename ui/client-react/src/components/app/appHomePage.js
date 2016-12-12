@@ -78,7 +78,7 @@ const AppHomePage = React.createClass({
                                     <img src={LaunchTourImg} /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span>
                                 </a>
                             </span>
-                            {!this.context.touch &&<a className="linkWithImage" onClick={this.launchGuideMe}><img src={GuideMeImg} /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>}
+                            {!this.context.touch && <a className="linkWithImage" onClick={this.launchGuideMe}><img src={GuideMeImg} /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>}
                         </div>
                     </div>
                     <div className="mainPanel">
