@@ -43,6 +43,8 @@ const CellValueRenderer = React.createClass({
                             type={this.props.type}
                             key={"fvr-" + this.props.idKey}
                             idKey={"fvr-" + this.props.idKey}
+                            // Don't show duration units in the grid
+                            includeUnits={false}
                             // Don't show unchecked checkboxes in the grid
                             hideUncheckedCheckbox={true}
                     />);

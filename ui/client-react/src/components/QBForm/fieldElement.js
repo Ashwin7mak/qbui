@@ -121,6 +121,7 @@ const FieldElement = React.createClass({
                                                value={fieldRawValue}
                                                display={fieldDisplayValue}
                                                attributes={fieldDatatypeAttributes}
+                                               includeUnits={true}
                                                fieldDef={this.props.relatedField}
                                                label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
             />;

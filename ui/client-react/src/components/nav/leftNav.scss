@@ -2,20 +2,20 @@
 
 /* left nav vars */
 $left-nav-padding: 15px;
-$left-nav-fg: $color2;
-$left-nav-link-fg: $color23;
-$left-nav-link-hover-fg: $color2;
-$left-nav-heading-bg: $color24;
-$left-nav-input-fg: $color25;
-$left-nav-hover-bg: $color26;
-$left-nav-hover-bg-hover: $color27;
-$left-nav-heading-bg: $color28;
-$left-nav-heading-fg: $color29;
-$left-nav-bg: $color30;
-$selected-table-fg: $color2;
-$right-icon-separator-color: $color3;
-$right-icon-separator-color-hover: $color31;
-$left-nav-horizontal-icon-border-color: $color32;
+$left-nav-fg: $color-black-100;
+$left-nav-link-fg: $color-blue-500;
+$left-nav-link-hover-fg: $color-black-100;
+$left-nav-heading-bg: $badcolor6-color24;
+$left-nav-input-fg: $badcolor7-color25;
+$left-nav-hover-bg: $color-cyan-800;
+$left-nav-hover-bg-hover: $color-teal-600;
+$left-nav-heading-bg: $badcolor8-color28;
+$left-nav-heading-fg: $badcolor9-color29;
+$left-nav-bg: $color-blue-700;
+$selected-table-fg: $color-black-100;
+$right-icon-separator-color: $color-blue-600;
+$right-icon-separator-color-hover: $color-teal-400;
+$left-nav-horizontal-icon-border-color: $color-blue-800;
 
 .leftNav.expanded {
     overflow: visible;

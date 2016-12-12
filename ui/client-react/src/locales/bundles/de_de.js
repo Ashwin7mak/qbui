@@ -168,7 +168,21 @@ export default {
                 ownedBy: "gehört "
             }
         },
-        report : {
+        durationWithUnits: {
+            Weeks:"{value, plural, \n =0 {0 wochen}\n =1 {1 woche}\n other {{value} wochen}\n} ",
+            Days:"{value, plural, \n =0 {0 tage}\n =1 {1 tag}\n other {{value}  tage}\n} ",
+            Hours:"{value, plural, \n =0 {0 stunden}\n =1 {1 stunde}\n other {{value}  stunden}\n} ",
+            Minutes: "{value, plural, \n =0 {0 minuten}\n =1 {1 minute}\n other {{value}  minuten}\n} ",
+            Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {{value}  sekunden}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 millisekunden}\n =1 {1 millisekunde}\n other {{value}  millisekunden}\n} "
+        },
+        durationTableHeader: {
+            Weeks:"wochen",
+            Days:"tage",
+            Hours:"stunden",
+            Minutes: "minuten",
+            Seconds: "sekunden"
+        },        report : {
             blank : "leer",
             facets :{
                 noFacets :"Nein werte",
