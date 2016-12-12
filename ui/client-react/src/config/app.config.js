@@ -42,7 +42,9 @@ if (__QB_PROD__) {
             logToConsole: false,
             logToServer: true
         },
-        unauthorizedRedirect: null
+        unauthorizedRedirect: null,
+        // walkme java script
+        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
     });
 }
 
@@ -55,7 +57,9 @@ if (__QB_TEST__) {
             logToConsole: true,
             logToServer: true
         },
-        unauthorizedRedirect: '/qbase/unauthorized'
+        unauthorizedRedirect: '/qbase/unauthorized',
+        // walkme java script
+        walkmeJSSnippet : ''
     });
 }
 
@@ -68,7 +72,9 @@ if (__QB_LOCAL__) {
             logToConsole: true,
             logToServer: false
         },
-        unauthorizedRedirect: '/qbase/unauthorized'
+        unauthorizedRedirect: '/qbase/unauthorized',
+        // walkme java script
+        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
     });
 }
 
