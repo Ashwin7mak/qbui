@@ -77,7 +77,13 @@
             NUM_ROWS: 'numRows',
             HOME_PAGE_ID: 'homePageId',
             OPEN_IN_V3: 'openInV3',
-            HYDRATE: 'hydrate'
+            HYDRATE: 'hydrate',
+
+            //  legacy stack request paameters
+            LEGACY_STACK: {
+                ACTION: 'a',
+                VALUE: 'value'
+            }
         },
         FORMAT : {
             DISPLAY: 'display',
@@ -138,6 +144,10 @@
         },
         ERROR_CODE:{
             DTS_ERROR_CODE: "DataOperationOrSyncError"
+        },
+        PROTOCOL: {
+            HTTP: 'http://',
+            HTTPS: 'https://'
         },
         HttpStatusCode: {
             'CONTINUE': 100,
