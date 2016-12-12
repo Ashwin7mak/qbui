@@ -110,4 +110,13 @@ describe('DurationFieldValueRenderer', () => {
         expect(durationFieldValueRenderer.classList.contains('testclass')).toBeTruthy();
     });
 
+    it('test render of component with display', () => {
+        let millisecs = 23456;
+        let display = '123 pre calculated value';
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.WEEKS}} display={display}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+        expect(durationFieldValueRenderer.toHaveText(display)).toBeTruthy();
+    });
+
 });
