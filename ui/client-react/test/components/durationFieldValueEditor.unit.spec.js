@@ -32,9 +32,7 @@ fdescribe('DurationFieldValueEditor', () => {
                                           display={this.state.display}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
-                                          scale = {this.props.scale}
-                                          fieldDef={{datatypeAttributes: {displayProtocol: false}}}
-                                          attributes={this.props.attributes}/>
+                                          attributes={this.props.attributes} />
             );
         }
     });
@@ -44,7 +42,7 @@ fdescribe('DurationFieldValueEditor', () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
             let userInput = test.numValue + ' ' + test.type;
-            if (test.type === '') {
+            if (test.type === undefined) {
                 userInput = test.numValue;
             }
             Simulate.change(domComponent, {
@@ -53,13 +51,13 @@ fdescribe('DurationFieldValueEditor', () => {
             Simulate.blur(domComponent);
             let expectedResult;
             let type = test.type;
-            if (type === '') {
+            if (type === undefined) {
                 type = test.scale;
             }
             let expectedMilliSeconds = moment.duration(test.numValue, type).asMilliseconds();
             let newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
-            debugger;
             expectedResult = divideBigDecimal(newExpectedMilliSeconds, test.MILLIS_PER_SCALE);
+            // debugger;
             expect(component.state.value).toEqual(expectedMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
         });
