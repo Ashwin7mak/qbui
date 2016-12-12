@@ -22,6 +22,7 @@ import {
     EmailCellRenderer,
     NumericCellRenderer,
     PercentCellRenderer,
+    PhoneCellRenderer,
     RatingCellRenderer,
     SelectionColumnCheckBoxCellRenderer,
     TextCellRenderer,
@@ -1055,6 +1056,10 @@ let AGGrid = React.createClass({
 
                             case serverTypeConsts.URL :
                                 obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
+                                break;
+
+                            case serverTypeConsts.PHONE_NUMBER :
+                                obj.cellRenderer = reactCellRendererFactory(PhoneCellRenderer);
                                 break;
 
                             case serverTypeConsts.EMAIL_ADDRESS :

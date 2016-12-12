@@ -370,6 +370,7 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-perf1"
                     }
@@ -400,6 +401,7 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-dev1"
                     }
@@ -430,6 +432,7 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-qual1"
                     }
@@ -460,6 +463,7 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-int1"
                     }
@@ -491,6 +495,7 @@
                       "secrets_s3_bucket": {"Fn::Join": ["", ["iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]},
                       "node_internal_env": "PRODUCTION",
                       "rest_endpoint": "https://t.tomcat.PROD1.newstack.quickbase.com:8443",
+                      "legacy_endpoint": "https://login.quickbase.com",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-prod1"
                     }

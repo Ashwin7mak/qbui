@@ -5,6 +5,13 @@ import {NotificationManager} from 'react-notifications';
 import UrlUtils from '../../utils/urlUtils';
 import * as CompConsts from '../../constants/componentConstants';
 
+import LaunchTourImg from './Launch-tour.png';
+import GuideMeImg from './Guide-me.png';
+import WelcomeGuideImg from './Welcome-guide.png';
+import GiveFeedbackImg from './GiveFeedback.png';
+import TipImg from './Tip.png';
+import NeedHelpImg from './Need-help.png';
+
 import './appHomePage.scss';
 
 function i18nKey(subkey) {
@@ -68,23 +75,23 @@ const AppHomePage = React.createClass({
                         <div className="topPanelLinks">
                             <span className="wistia_embed wistia_async_zl4za7cf5e popover=true popoverContent=link">
                                 <a className="linkWithImage" href={videoTourLink} target="_blank">
-                                    <img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span>
+                                    <img src={LaunchTourImg} /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span>
                                 </a>
                             </span>
-                            {!this.context.touch && <a className="linkWithImage" onClick={this.launchGuideMe}><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>}
+                            {!this.context.touch &&<a className="linkWithImage" onClick={this.launchGuideMe}><img src={GuideMeImg} /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>}
                         </div>
                     </div>
                     <div className="mainPanel">
                         <div className="homePanel leftContent">
                             <h4><I18nMessage message={i18nKey('guideTitle')} /></h4>
-                            <img className="welcomeGuideImage" />
+                            <img src={WelcomeGuideImg} />
                             <p><I18nMessage message={i18nKey('guideText')} /></p>
                             <a className="btn btn-primary" href={welcomeGuideLink} target="_blank"><I18nMessage message={i18nKey('guideButton')} /> <small>(.pdf)</small></a>
                         </div>
                         <div className="homePanel rightContent">
                             <h4><I18nMessage message={i18nKey('feedbackTitle')} /></h4>
                             <div className="giveFeedbackImageContainer">
-                                <img className="giveFeedbackImage" />
+                                <img src={GiveFeedbackImg} />
                             </div>
                             <p><I18nMessage message={i18nKey('feedbackText')} /></p>
                             <a className="btn btn-primary btn-feedback" href={feedbackLink} target="_blank"><I18nMessage message={i18nKey('feedbackButton')} /></a>
@@ -93,7 +100,7 @@ const AppHomePage = React.createClass({
                     <div className="bottomPanel">
                         <div className="homePanel bottomSubPanel leftBottomPanel">
                             <div className="homePageTipImageContainer">
-                                <img className="homePageTipImage" />
+                                <img src={TipImg} />
                             </div>
                             <div className="leftBottomPanelContent">
                                 <h4><I18nMessage message={i18nKey('tipTitle')} /></h4>
@@ -101,7 +108,7 @@ const AppHomePage = React.createClass({
                             </div>
                         </div>
                         <div className="homePanel bottomSubPanel rightBottomPanel">
-                            <img className="homePageHelpImage" />
+                            <img src={NeedHelpImg} />
                             <div className="rightBottomPanelContent">
                                 <h4><I18nMessage message={i18nKey('helpTitle')} /></h4>
                                 <p><I18nMessage message={i18nKey('helpText')} /></p>
