@@ -151,7 +151,6 @@ module.exports = {
     "ignoreFiles": [
         "client-react/src/assets/css/vendor/**/*.{scss,css}",
         "client-react/src/**/*.min.css",
-        "client-react/src/components/node/datetimePicker/css/bootstrap-datetimepicker.css",
-        "client-react/src/components/apps/apps.css"
+        "client-react/src/components/node/datetimePicker/css/bootstrap-datetimepicker.css"
     ]
 };
