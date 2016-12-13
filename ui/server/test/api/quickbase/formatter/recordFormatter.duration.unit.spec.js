@@ -16,20 +16,17 @@ var consts = require('../../../../../common/src/constants');
  * of precision. For more info, google it!
  */
 var bigDecimal = require('bigdecimal');
+var CONSTS = require('../../../../../common/src/constants').DURATION_CONSTS;
 
 /**
  * Unit tests for Duration field formatting
  */
 describe('Duration record formatter unit test', function() {
 
-    //    var DAYS_VAL = 10;
     var OVER_HOUR_VAL = 2;
     var UNDER_HOUR_VAL = 0;
-    //    var MINUTES_VAL = 0.025;
-    //    var SECONDS_VAL = 0.00025;
 
     // 2^63 = 4294967296
-    var DEFAULT_DECIMAL_PLACES = 14;
     var MAX = new bigDecimal.BigDecimal('9223372036854775807');
     var MIN = new bigDecimal.BigDecimal('-9223372036854775807');
 
@@ -73,13 +70,13 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
-                                                       DEFAULT_DECIMAL_PLACES,
+        expectedMaxDuration[0][0].display = MAX.divide(CONSTS.MILLIS_PER_WEEK,
+                                                       CONSTS.DEFAULT_DECIMAL_PLACES,
                                                        bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
-                                                       DEFAULT_DECIMAL_PLACES,
+        expectedMinDuration[0][0].display = MIN.divide(CONSTS.MILLIS_PER_WEEK,
+                                                       CONSTS.DEFAULT_DECIMAL_PLACES,
                                                        bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString() + ' weeks';
 
         // Null record input and expectations
@@ -133,7 +130,7 @@ describe('Duration record formatter unit test', function() {
             type              : 'SCALAR',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.WEEKS
+                scale: CONSTS.WEEKS
             }
         }];
 
@@ -160,14 +157,14 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
-                           DEFAULT_DECIMAL_PLACES,
+                MAX.divide(CONSTS.MILLIS_PER_WEEK,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_WEEK,
-                           DEFAULT_DECIMAL_PLACES,
+                MIN.divide(CONSTS.MILLIS_PER_WEEK,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
@@ -221,7 +218,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.DAYS
+                scale: CONSTS.DAYS
             },
             type              : 'SCALAR'
         }];
@@ -249,14 +246,14 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_DAY,
-                           DEFAULT_DECIMAL_PLACES,
+                MAX.divide(CONSTS.MILLIS_PER_DAY,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_DAY,
-                           DEFAULT_DECIMAL_PLACES,
+                MIN.divide(CONSTS.MILLIS_PER_DAY,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
@@ -305,7 +302,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.HOURS
+                scale: CONSTS.HOURS
             },
             type              : 'SCALAR'
         }];
@@ -330,14 +327,14 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_HOUR,
-                           DEFAULT_DECIMAL_PLACES,
+                MAX.divide(CONSTS.MILLIS_PER_HOUR,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_HOUR,
-                           DEFAULT_DECIMAL_PLACES,
+                MIN.divide(CONSTS.MILLIS_PER_HOUR,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
@@ -390,7 +387,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.MINUTES
+                scale: CONSTS.MINUTES
             },
             type              : 'SCALAR'
         }];
@@ -418,14 +415,14 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_MIN,
-                           DEFAULT_DECIMAL_PLACES,
+                MAX.divide(CONSTS.MILLIS_PER_MIN,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_MIN,
-                           DEFAULT_DECIMAL_PLACES,
+                MIN.divide(CONSTS.MILLIS_PER_MIN,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
@@ -478,7 +475,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.SECONDS
+                scale: CONSTS.SECONDS
             },
             type              : 'SCALAR'
         }];
@@ -503,14 +500,14 @@ describe('Duration record formatter unit test', function() {
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
         expectedMaxDuration[0][0].display =
-                MAX.divide(consts.DURATION_CONSTS.MILLIS_PER_SECOND,
-                           DEFAULT_DECIMAL_PLACES,
+                MAX.divide(CONSTS.MILLIS_PER_SECOND,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
         expectedMinDuration[0][0].display =
-                MIN.divide(consts.DURATION_CONSTS.MILLIS_PER_SECOND,
-                           DEFAULT_DECIMAL_PLACES,
+                MIN.divide(CONSTS.MILLIS_PER_SECOND,
+                           CONSTS.DEFAULT_DECIMAL_PLACES,
                            bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toString();
 
         // Null record input and expectations
@@ -551,25 +548,25 @@ describe('Duration record formatter unit test', function() {
     });
 
     /**
-     * DataProvider containing Records, FieldProperties and record display expectations for HHMM Duration fields
+     * DataProvider containing Records, FieldProperties and record display expectations for CONSTS.HHMM Duration fields
      */
     function durationHHMMDataProvider() {
 
         /**
-         * FieldInfo for flag: HHMM
+         * FieldInfo for flag: CONSTS.HHMM
          */
         var fieldInfo = [{
             id                : 7,
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.HHMM
+                scale: CONSTS.HHMM
             },
             type              : 'SCALAR'
         }];
 
         /**
-         * Duration inputs for flag: HHMM
+         * Duration inputs for flag: CONSTS.HHMM
          */
         var recordInputHours = [[{
             id   : 7,
@@ -583,7 +580,7 @@ describe('Duration record formatter unit test', function() {
         recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: HHMM
+         * Expectations for flag: CONSTS.HHMM
          */
         var expectedHoursDuration = [[{
             id     : 7,
@@ -595,10 +592,10 @@ describe('Duration record formatter unit test', function() {
         expectedOverHourDuration[0][0].display = '00:00';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -615,21 +612,21 @@ describe('Duration record formatter unit test', function() {
         expectedEmpty[0][0].value = '';
 
         var cases = [
-            {message: 'Duration - under hour value with HHMM flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
-            {message: 'Duration - over hour value with HHMM flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
-            {message: 'Duration - minimum value with HHMM flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
-            {message: 'Duration - maximum value with HHMM flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
-            {message: 'Duration - null value with HHMM flag -> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
-            {message: 'Duration - empty value with HHMM flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
+            {message: 'Duration - under hour value with CONSTS.HHMM flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
+            {message: 'Duration - over hour value with CONSTS.HHMM flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
+            {message: 'Duration - minimum value with CONSTS.HHMM flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
+            {message: 'Duration - maximum value with CONSTS.HHMM flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
+            {message: 'Duration - null value with CONSTS.HHMM flag -> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
+            {message: 'Duration - empty value with CONSTS.HHMM flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
         ];
 
         return cases;
     }
 
     /**
-     * Unit test that validates Duration records formatting with HHMM field property flags set
+     * Unit test that validates Duration records formatting with CONSTS.HHMM field property flags set
      */
-    describe('should format HHMM duration record with various properties for display', function() {
+    describe('should format CONSTS.HHMM duration record with various properties for display', function() {
         durationHHMMDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -640,25 +637,25 @@ describe('Duration record formatter unit test', function() {
     });
 
     /**
-     * DataProvider containing Records, FieldProperties and record display expectations for HHMMSS Duration fields
+     * DataProvider containing Records, FieldProperties and record display expectations for CONSTS.HHMMSS Duration fields
      */
     function durationHHMMSSDataProvider() {
 
         /**
-         * FieldInfo for flag: HHMMSS
+         * FieldInfo for flag: CONSTS.HHMMSS
          */
         var fieldInfo = [{
             id                : 7,
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.HHMMSS
+                scale: CONSTS.HHMMSS
             },
             type              : 'SCALAR'
         }];
 
         /**
-         * Duration inputs for flag: HHMMSS
+         * Duration inputs for flag: CONSTS.HHMMSS
          */
         var recordInputHours = [[{
             id   : 7,
@@ -672,7 +669,7 @@ describe('Duration record formatter unit test', function() {
         recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: HHMMSS
+         * Expectations for flag: CONSTS.HHMMSS
          */
         var expectedHoursDuration = [[{
             id     : 7,
@@ -681,13 +678,13 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = '00:00:00';
+        expectedOverHourDuration[0][0].display = '00:00:00.002';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12:55.807';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12:55.807';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -704,21 +701,21 @@ describe('Duration record formatter unit test', function() {
         expectedEmpty[0][0].value = '';
 
         var cases = [
-            {message: 'Duration - under hour value with HHMMSS flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
-            {message: 'Duration - over hour value with HHMMSS flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
-            {message: 'Duration - minimum value with HHMMSS flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
-            {message: 'Duration - maximum value with HHMMSS flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
-            {message: 'Duration - null value with HHMMSS flag-> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
-            {message: 'Duration - empty value with HHMMSS flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
+            {message: 'Duration - under hour value with CONSTS.HHMMSS flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
+            {message: 'Duration - over hour value with CONSTS.HHMMSS flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
+            {message: 'Duration - minimum value with CONSTS.HHMMSS flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
+            {message: 'Duration - maximum value with CONSTS.HHMMSS flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
+            {message: 'Duration - null value with CONSTS.HHMMSS flag-> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
+            {message: 'Duration - empty value with CONSTS.HHMMSS flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
         ];
 
         return cases;
     }
 
     /**
-     * Unit test that validates Duration records formatting with HHMMSS field property flags set
+     * Unit test that validates Duration records formatting with CONSTS.HHMMSS field property flags set
      */
-    describe('should format HHMMSS duration record with various properties for display', function() {
+    describe('should format CONSTS.HHMMSS duration record with various properties for display', function() {
         durationHHMMSSDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -729,25 +726,25 @@ describe('Duration record formatter unit test', function() {
     });
 
     /**
-     * DataProvider containing Records, FieldProperties and record display expectations for MM Duration fields
+     * DataProvider containing Records, FieldProperties and record display expectations for CONSTS.MM Duration fields
      */
     function durationMMDataProvider() {
 
         /**
-         * FieldInfo for flag: MM
+         * FieldInfo for flag: CONSTS.MM
          */
         var fieldInfo = [{
             id                : 7,
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.MM
+                scale: CONSTS.MM
             },
             type              : 'SCALAR'
         }];
 
         /**
-         * Duration inputs for flag: MM
+         * Duration inputs for flag: CONSTS.MM
          */
         var recordInputHours = [[{
             id   : 7,
@@ -761,7 +758,7 @@ describe('Duration record formatter unit test', function() {
         recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: MM
+         * Expectations for flag: CONSTS.MM
          */
         var expectedHoursDuration = [[{
             id     : 7,
@@ -770,13 +767,13 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = '00';
+        expectedOverHourDuration[0][0].display = ':00';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -793,21 +790,21 @@ describe('Duration record formatter unit test', function() {
         expectedEmpty[0][0].value = '';
 
         var cases = [
-            {message: 'Duration - under hour value with MM flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
-            {message: 'Duration - over hour value with MM flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
-            {message: 'Duration - minimum value with MM flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
-            {message: 'Duration - maximum value with MM flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
-            {message: 'Duration - null value with MM flag-> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
-            {message: 'Duration - empty value with MM flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
+            {message: 'Duration - under hour value with CONSTS.MM flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
+            {message: 'Duration - over hour value with CONSTS.MM flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
+            {message: 'Duration - minimum value with CONSTS.MM flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
+            {message: 'Duration - maximum value with CONSTS.MM flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
+            {message: 'Duration - null value with CONSTS.MM flag-> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
+            {message: 'Duration - empty value with CONSTS.MM flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
         ];
 
         return cases;
     }
 
     /**
-     * Unit test that validates Duration records formatting with MM field property flags set
+     * Unit test that validates Duration records formatting with CONSTS.MM field property flags set
      */
-    describe('should format MM duration record with various properties for display', function() {
+    describe('should format CONSTS.MM duration record with various properties for display', function() {
         durationMMDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
@@ -818,25 +815,25 @@ describe('Duration record formatter unit test', function() {
     });
 
     /**
-     * DataProvider containing Records, FieldProperties and record display expectations for MMSS Duration fields
+     * DataProvider containing Records, FieldProperties and record display expectations for CONSTS.MMSS Duration fields
      */
     function durationMMSSDataProvider() {
 
         /**
-         * FieldInfo for flag: MMSS
+         * FieldInfo for flag: CONSTS.MMSS
          */
         var fieldInfo = [{
             id                : 7,
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: consts.DURATION_CONSTS.MMSS
+                scale: CONSTS.MMSS
             },
             type              : 'SCALAR'
         }];
 
         /**
-         * Duration inputs for flag: MMSS
+         * Duration inputs for flag: CONSTS.MMSS
          */
         var recordInputHours = [[{
             id   : 7,
@@ -850,7 +847,7 @@ describe('Duration record formatter unit test', function() {
         recordInputMax[0][0].value = MAX.stripTrailingZeros().toString();
 
         /**
-         * Expectations for flag: MMSS
+         * Expectations for flag: CONSTS.MMSS
          */
         var expectedHoursDuration = [[{
             id     : 7,
@@ -859,13 +856,13 @@ describe('Duration record formatter unit test', function() {
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
-        expectedOverHourDuration[0][0].display = '00:00';
+        expectedOverHourDuration[0][0].display = ':00:00.002';
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
-        expectedMaxDuration[0][0].display = '2562047788015:00:00';
+        expectedMaxDuration[0][0].display = '2562047788015:12:55.807';
         var expectedMinDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMinDuration[0][0].value = MIN.stripTrailingZeros().toString();
-        expectedMinDuration[0][0].display = '-2562047788015:00:00';
+        expectedMinDuration[0][0].display = '-2562047788015:12:55.807';
 
         // Null record input and expectations
         var recordsNull = JSON.parse(JSON.stringify(recordInputHours));
@@ -882,21 +879,21 @@ describe('Duration record formatter unit test', function() {
         expectedEmpty[0][0].value = '';
 
         var cases = [
-            {message: 'Duration - under hour value with MMSS flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
-            {message: 'Duration - over hour value with MMSS flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
-            {message: 'Duration - minimum value with MMSS flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
-            {message: 'Duration - maximum value with MMSS flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
-            {message: 'Duration - null value with MMSS flag-> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
-            {message: 'Duration - empty value with MMSS flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
+            {message: 'Duration - under hour value with CONSTS.MMSS flag', records: recordInputHours, fieldInfo: fieldInfo, expectedRecords: expectedHoursDuration},
+            {message: 'Duration - over hour value with CONSTS.MMSS flag', records: recordInputOverHour, fieldInfo: fieldInfo, expectedRecords: expectedOverHourDuration},
+            {message: 'Duration - minimum value with CONSTS.MMSS flag', records: recordInputMin, fieldInfo: fieldInfo, expectedRecords: expectedMinDuration},
+            {message: 'Duration - maximum value with CONSTS.MMSS flag', records: recordInputMax, fieldInfo: fieldInfo, expectedRecords: expectedMaxDuration},
+            {message: 'Duration - null value with CONSTS.MMSS flag-> empty string', records: recordsNull, fieldInfo: fieldInfo, expectedRecords: expectedNull},
+            {message: 'Duration - empty value with CONSTS.MMSS flag -> empty string', records: recordsEmpty, fieldInfo: fieldInfo, expectedRecords: expectedEmpty}
         ];
 
         return cases;
     }
 
     /**
-     * Unit test that validates Duration records formatting with MMSS field property flags set
+     * Unit test that validates Duration records formatting with CONSTS.MMSS field property flags set
      */
-    describe('should format MMSS duration record with various properties for display', function() {
+    describe('should format CONSTS.MMSS duration record with various properties for display', function() {
         durationMMSSDataProvider().forEach(function(entry) {
             it('Test case: ' + entry.message, function(done) {
                 var formattedRecords = recordFormatter.formatRecords(entry.records, entry.fieldInfo);
