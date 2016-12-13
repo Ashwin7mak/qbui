@@ -284,6 +284,7 @@
 
         .bootstrap-datetimepicker-widget {
             top: 34px !important;
+            right: 0px !important;
         }
     }
 
@@ -294,6 +295,16 @@
 
 .dateTimeFieldValueEditor {
     display: flex;
+    .editForm & .bootstrap-datetimepicker-widget {
+        position: relative !important;
+        top: 6px !important;
+        &:after, &:before {
+            // alight the pointer to the calendar icon when the date picker is a part of the
+            // dateTimeField
+            left: 121px;
+            right: auto;
+        }
+    }
 }
 
 .dateCell, .timeCell {
