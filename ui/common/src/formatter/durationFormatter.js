@@ -320,7 +320,7 @@
             break;
         case DURATION_CONSTS.MILLISECONDS:
         case DURATION_CONSTS.MS:
-            returnValue = num;
+            returnValue = parseInt(num);
             break;
         default:
             break;

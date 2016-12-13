@@ -7,7 +7,7 @@ import {DURATION_CONSTS} from '../../../common/src/constants';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-fdescribe('DurationFieldValueEditor', () => {
+describe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -38,17 +38,15 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.dataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.type + ' to  ' + test.scale, () => {
+        fit('converts a user input of ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            domComponent = ReactDOM.findDOMNode(component);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
                 userInput = test.numValue;
             }
-            Simulate.change(domComponent, {
-                target: {value: userInput}
-            });
-            Simulate.blur(domComponent);
+            component.setState({value: userInput, display: ''});
+            let input = ReactDOM.findDOMNode(component);
+            Simulate.blur(input);
             let type = test.type;
             if (type === undefined) {
                 type = test.scale;

@@ -56,7 +56,7 @@ const DurationFieldValueEditor = React.createClass({
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || ''}
-                                      value={display || ''}
+                                      value={display || value}
                                       invalidMessage={this.props.invalidMessage || 'Error'}
                                       {...otherProps}/>;
     }
