@@ -70,7 +70,7 @@
             var emailValidationResult = this.validateArrayOfEmails(emails);
 
             if (emailValidationResult.isInvalid) {
-                return this._formatValidationResults(results, fieldName, emailValidationResult.invalidEmails);
+                return this._formatValidationResults(email, results, fieldName, emailValidationResult.invalidEmails);
             }
 
             return results;
@@ -84,15 +84,25 @@
          * @returns {Result}
          * @private
          */
-        _formatValidationResults: function(results, fieldName, invalidEmails) {
+        _formatValidationResults: function(email, results, fieldName, invalidEmails) {
             var resultsCopy = Object.assign({error: {}}, results);
 
             resultsCopy.error.code = dataErrorCodes.INVALID_ENTRY;
-            resultsCopy.error.messageId = 'invalidMsg.email';
+            resultsCopy.error.messageId = this._getInvalidEmailMessage(email);
             resultsCopy.error.data = {fieldName: fieldName, invalidEmails: invalidEmails};
             resultsCopy.isInvalid = true;
 
             return resultsCopy;
+        },
+        _hasManyAddresses: function(emails) {
+            return (emails && emailFormatter.splitEmails(emails).length > 1);
+        },
+        _getInvalidEmailMessage: function(emails) {
+            if (this._hasManyAddresses(emails)) {
+                return 'invalidMsg.emails';
+            }
+
+            return 'invalidMsg.email';
         }
     };
 }());

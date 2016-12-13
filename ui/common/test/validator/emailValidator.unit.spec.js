@@ -138,36 +138,65 @@ describe('emailValidator', () => {
 
     describe('validateAndReturnResults', () => {
         let fieldName = 'email';
+        let invalidEmail = 'invalidemail';
 
-        it('returns a result, to be used with validatorUtils, if the email is invalid', () => {
-            let invalidEmail = 'invalidEmail';
-
-            let expectedResult = {
-                isInvalid: true,
-                error: {
-                    code: dataErrorCodes.INVALID_ENTRY,
-                    messageId: 'invalidMsg.email',
-                    data: {fieldName: fieldName, invalidEmails: [{index: 0, email: invalidEmail}]}
+        let resultsFromPreviousValidationCheck = {
+            isInvalid: true,
+            error: {
+                messageId: 'invalidMsg.required',
+                code: dataErrorCodes.REQUIRED_FIELD_EMPTY,
+                data: {
+                    fieldId: 1,
+                    fieldName: fieldName
                 }
-            };
+            }
+        };
 
-            assert.deepEqual(emailValidator.validateAndReturnResults(invalidEmail, fieldName), expectedResult);
-        });
-
-        it('passes through the result if the email is valid', () => {
-            let expectedResult = {
-                isInvalid: true,
-                error: {
-                    messageId: 'invalidMsg.required',
-                    code: dataErrorCodes.REQUIRED_FIELD_EMPTY,
-                    data: {
-                        fieldId: 1,
-                        fieldName: fieldName
+        let testCases = [
+            {
+                description: 'returns a result (including an error message), to be used with validatorUtils, if the email is invalid',
+                email: invalidEmail,
+                previousResults: null,
+                expectedResult: {
+                    isInvalid: true,
+                    error: {
+                        code: dataErrorCodes.INVALID_ENTRY,
+                        messageId: 'invalidMsg.email',
+                        data: {
+                            fieldName: fieldName,
+                            invalidEmails: [{index: 0, email: invalidEmail}]
+                        }
                     }
                 }
-            };
+            },
+            {
+                description: 'returns an invalid message about multiple emails if multiple emails are in the string',
+                email: `valid@test.com;${invalidEmail};valid@dev.de`,
+                previousResults: null,
+                expectedResult: {
+                    isInvalid: true,
+                    error: {
+                        code: dataErrorCodes.INVALID_ENTRY,
+                        messageId: 'invalidMsg.emails', // note the s in emails for this error code
+                        data: {
+                            fieldName: fieldName,
+                            invalidEmails: [{index: 1, email: invalidEmail}]
+                        }
+                    }
+                }
+            },
+            {
+                description: 'passes through the result if the email is valid',
+                email: 'valid@test.com',
+                previousResults: resultsFromPreviousValidationCheck,
+                expectedResult: resultsFromPreviousValidationCheck
+            }
+        ];
 
-            assert.deepEqual(emailValidator.validateAndReturnResults('valid@test.com', fieldName, expectedResult), expectedResult);
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                assert.deepEqual(emailValidator.validateAndReturnResults(testCase.email, fieldName, testCase.previousResults), testCase.expectedResult);
+            });
         });
     });
 });
