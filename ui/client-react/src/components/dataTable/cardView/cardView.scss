@@ -68,6 +68,14 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         font-size: $fieldLabel-font-size;
         cursor: pointer;
 
+        .topFieldValue {
+            font-weight: bold;
+            height: 18px;
+            margin-right: 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
         .field {
             position: relative;
         }
