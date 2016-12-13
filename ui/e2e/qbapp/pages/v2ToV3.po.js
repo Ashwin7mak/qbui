@@ -25,6 +25,13 @@
         this.openInClassic = this.popUpFooter.element(by.className('popupFooterMain')).element(by.className('openInClassic'));
         this.openInMercury = this.popUpFooter.element(by.className('popupFooterMain')).element(by.className('openInMercury'));
 
+        //switch back to mercury elements
+        this.signInAsButtonInCurrentStack = element(by.id('signedInAsButton'));
+        this.signInAsButtonDropDown = this.signInAsButtonInCurrentStack.element(by.className('BlueCaret'));
+        this.signInMenu = element(by.id('signedInAsMenu'));
+        this.switchToMercuryLinkInCurrentStack = this.signInMenu.element(by.id('switchToMercuryLink'));
+
+
 
         //Select the User menu item
         this.clickUserMenuItem = function(menuItemName) {
@@ -45,13 +52,29 @@
             });
         };
 
+        //Verify item not in User menu items
+        this.verifyUserMenuItem = function(menuItemName) {
+            var self = this;
+            return reportServicePO.topNavUserGlobActEl.click().then(function() {
+                return e2ePageBase.waitForElement(reportServicePO.topNavUserGlobActEl.element(by.className('open'))).then(function() {
+                    return self.userMenuListItems.filter(function(elm) {
+                        return elm.getAttribute('textContent').then(function(text) {
+                            return text !== menuItemName;
+                        });
+                    });
+                });
+            });
+        };
+
         //Click the Manage User Access To Mercury Toggle
         this.clickManageUserAccessToggle = function() {
             var self = this;
-            expect(self.popUpTitle.element(by.className('popupFooterTitleLabel')).getAttribute('textContent')).toBe('Manage user access to Mercury');
-            return self.manageUserAccessToMercuryToggle.click().then(function() {
-                //wait until popup is open
-                return element(by.id('content')).element(by.className('open'));
+            return e2ePageBase.waitForElement(self.popUpTitle).then(function() {
+                expect(self.popUpTitle.element(by.className('popupFooterTitleLabel')).getAttribute('textContent')).toBe('Manage user access to Mercury');
+                return self.manageUserAccessToMercuryToggle.click().then(function() {
+                    //wait until popup is open
+                    return element(by.id('content')).element(by.className('open'));
+                });
             });
         };
 
@@ -61,7 +84,7 @@
             expect(self.popUpPanelTitle.getAttribute('textContent')).toBe('My users will open this app in');
             return self.openInClassic.click().then(function() {
                 //wait until value of radio is true after selecting radio
-                return expect(self.openInClassic.element(by.tagName('input')).getAttribute('value')).toBe('true');
+                return expect(self.openInClassic.element(by.tagName('input')).getAttribute('checked')).toBe('true');
             });
         };
 
@@ -71,7 +94,19 @@
             expect(self.popUpPanelTitle.getAttribute('textContent')).toBe('My users will open this app in');
             return self.openInMercury.click().then(function() {
                 //wait until value of radio is true after selecting radio
-                return expect(self.openInMercury.element(by.tagName('input')).getAttribute('value')).toBe('true');
+                return expect(self.openInMercury.element(by.tagName('input')).getAttribute('checked')).toBe('true');
+            });
+        };
+
+        //Click on switch to mercury in current stack
+        this.clickSwitchToMercuryLink = function() {
+            var self = this;
+            return e2ePageBase.waitForElement(self.signInAsButtonInCurrentStack).then(function() {
+                return self.signInAsButtonDropDown.click().then(function() {
+                    return e2ePageBase.waitForElement(self.signInMenu);
+                }).then(function() {
+                    return self.switchToMercuryLinkInCurrentStack.click();
+                });
             });
         };
 

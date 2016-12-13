@@ -10,12 +10,14 @@
 
     // Load the page objects
     var ReportServicePage = require('../pages/reportService.po');
+    var ReportContentPage = require('../pages/reportContent.po');
     var CurrentStackLoginPage = require('../pages/currentStackLogin.po');
     var CurrentStackReportsPage = require('../pages/currentStackReports.po');
     var WalkMePage = require('../pages/walkMe.po');
     var v2Tov3Page = require('../pages/v2Tov3.po');
 
     var reportServicePage = new ReportServicePage();
+    var reportContentPage = new ReportContentPage();
     var currentStackLoginPage = new CurrentStackLoginPage();
     var currentStackReportsPage = new CurrentStackReportsPage();
     var walkMePage = new WalkMePage();
@@ -24,19 +26,19 @@
     describe('New Stack Production Smoke Test', function() {
 
         var PROD_REALM = 'https://team.quickbase.com';
-        var APPID = 'bkj4bmc3s';
-        var TABLEID = 'bkj4bmc7r';
+
+        var BICYCLE_APPID = 'bkj4bmc3s';
+        var FASCINATING_APPID = 'bkebkzy3d';
+        var COLLEGE_UNIVERSITIES_APPID = 'bkh4jji9q';
+
+        var BICYCLE_TABLEID = 'bkj4bmc7r';
 
         var ADMIN_USERNAME = 'QuickBaseall';
         var ADMIN_PASSWORD = 'quickbase1';
 
-        var USER_VIEWER_ROLE_USERNAME = 'qbautomationviewer@gmail.com';
-        var USER_VIEWER_ROLE_PASSWORD = 'Quickbase123';
-
         var currentStackRecordCount;
         var currentStackRecordValues;
         var testRecordIndex = 4;
-        var userId;
 
         /**
          * Logs into current stack prod to get a proper ticket. Navigates to the Bicycle app to get a record from the list all
@@ -49,10 +51,10 @@
                 return currentStackLoginPage.loginUser(ADMIN_USERNAME, ADMIN_PASSWORD);
             }).then(function() {
                 // Go to Bicycle app
-                return browser.get(PROD_REALM + '/db/' + APPID);
+                return browser.get(PROD_REALM + '/db/' + BICYCLE_APPID);
             }).then(function() {
                 // Go to List All report of test table
-                return browser.get(PROD_REALM + '/db/' + TABLEID + '?a=q&qid=1');
+                return browser.get(PROD_REALM + '/db/' + BICYCLE_TABLEID + '?a=q&qid=1');
             }).then(function() {
                 // Count current stack records in report
                 return currentStackReportsPage.getRecordCount().then(function(count) {
@@ -72,16 +74,20 @@
                 });
             }).then(function() {
                 //dismiss walkme
-                walkMePage.dismissWalkMe();
+                return walkMePage.dismissWalkMe();
+            }).then(function() {
                 done();
             });
         });
 
         /**
          * Tests
+         * V3 Enabled in below tests means (Admin toggels switch to mercury in app home page footer popup + feature switch V2 to V3 turned on in V2 + App is migrated Successfully
          */
         it('Verify the specified record in the List All report matches the one from the current stack', function(done) {
-            browser.get(PROD_REALM + '/qbase/app/' + APPID + '/table/' + TABLEID + '/report/1').then(function() {
+            browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID + '/table/' + BICYCLE_TABLEID + '/report/1').then(function() {
+                reportContentPage.waitForReportContent();
+            }).then(function() {
                 // Get the records out of the table report
                 reportServicePage.agGridRecordElList.then(function(records) {
                     // Assert we have all records being displayed from current stack
@@ -97,33 +103,66 @@
             });
         });
 
-        it('Verify admin(quickbaseall) can switch from V3 to V2 from user Menu', function(done) {
+        it('V3 not enabled on a app - Admin Request to V3 app page - Verify popup shows and in footer and switch to classic is selected by default', function(done) {
             // Log in to the new stack env and go to Bicycle app
-            browser.get(PROD_REALM + '/qbase/app/' + APPID).then(function() {
+            browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
                 reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
             }).then(function() {
-                //select switch to quickbase classic Toggle under user Menu
-                v2Tov3PO.clickUserMenuItem('Switch to QuickBase Classic');
-            }).then(function() {
-                //verify its switched to classic view (ie V2)
-                browser.getCurrentUrl().then(function(url) {
-                    expect(url).toBe(PROD_REALM + '/db/' + APPID);
+                //Click on popup in the footer
+                v2Tov3PO.clickManageUserAccessToggle().then(function() {
+                    //Verify switch to classic is selected by default
+                    expect(v2Tov3PO.openInClassic.element(by.tagName('input')).getAttribute('checked')).toBe('true');
                 });
-                //TODO switch back to V3 once the code is available in production
             }).then(function() {
                 done();
             });
         });
 
-        it('Verify user(testUser) can switch from V3 to V2 from user Menu', function(done) {
-            browser.get(PROD_REALM).then(function() {
-                // Enter login creds
-                currentStackLoginPage.loginUser(USER_VIEWER_ROLE_USERNAME, USER_VIEWER_ROLE_PASSWORD);
+        it('V3 not enabled on a app - Admin Request to V3 - Verify goes to V3 and also Verify user menu dosent show switch to classic for that app', function(done) {
+            // Log in to the new stack env and go to Bicycle app
+            browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID).then(function() {
+                //wait untill table lists loaded at leftNav
+                reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+                e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
-                // Go to Bicycle app
-                browser.get(PROD_REALM + '/qbase/app/' + APPID);
+                //verify switch to quickbase classic Toggle not present under user Menu
+                v2Tov3PO.verifyUserMenuItem('Switch to QuickBase Classic');
             }).then(function() {
+                done();
+            });
+        });
+
+        it('V3 not enabled on a app - Admin Request to V2 - Verify goes to V2 app page', function(done) {
+            //go to V3 bicycle app
+            browser.get(PROD_REALM + '/db/' + BICYCLE_APPID).then(function() {
+                //wait untill table lists loaded at leftNav
+                reportServicePage.waitForElement(v2Tov3PO.signInAsButtonInCurrentStack);
+            }).then(function() {
+                //verify its goes to V2
+                browser.getCurrentUrl().then(function(url) {
+                    expect(url).toBe(PROD_REALM + '/db/' + BICYCLE_APPID);
+                });
+            }).then(function() {
+                done();
+            });
+        });
+
+        it('V3 enabled - User Request to V3 app page - Verify Mange user access to Mercury popup dont show up in the apps page footer', function(done) {
+            // Log in to the new stack env and go to Bicycle app
+            browser.get(PROD_REALM + '/qbase/app/' + FASCINATING_APPID).then(function() {
+                //wait untill table lists loaded at leftNav
+                reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+            }).then(function() {
+                expect(v2Tov3PO.popUpTitle.element(by.className('popupFooterTitleLabel')).isPresent()).toBeFalsy();
+            }).then(function() {
+                done();
+            });
+        });
+
+        it('V3 enabled - User Request to V3 app - Switch to V2 and Switch back to V3 from User menu', function(done) {
+            // Log in to the new stack env and go to Bicycle app
+            browser.get(PROD_REALM + '/qbase/app/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
                 reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
             }).then(function() {
@@ -132,12 +171,50 @@
             }).then(function() {
                 //verify its switched to classic view (ie V2)
                 browser.getCurrentUrl().then(function(url) {
-                    expect(url).toBe(PROD_REALM + '/db/' + APPID);
+                    expect(url).toBe(PROD_REALM + '/db/' + FASCINATING_APPID);
                 });
-                //TODO switch back to V3 once the code is available in production
+            }).then(function() {
+                //switch bck to V3
+                v2Tov3PO.clickSwitchToMercuryLink().then(function() {
+                    //wait untill table lists loaded at leftNav
+                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+                });
+            }).then(function() {
+                //verify it redirects to V3
+                browser.getCurrentUrl().then(function(url) {
+                    expect(url).toBe(PROD_REALM + '/qbase/app/' + FASCINATING_APPID);
+                });
             }).then(function() {
                 done();
             });
+        });
+
+        it('V3 enabled - User Request to V2 app - Verify redirects to V3', function(done) {
+            // Log in to the new stack env and go to Bicycle app
+            browser.get(PROD_REALM + '/db/' + FASCINATING_APPID).then(function() {
+                //wait untill table lists loaded at leftNav
+                reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+            }).then(function() {
+                //verify its switched to classic view (ie V2)
+                browser.getCurrentUrl().then(function(url) {
+                    expect(url).toBe(PROD_REALM + '/qbase/app/' + FASCINATING_APPID);
+                });
+            }).then(function() {
+                done();
+            });
+        });
+
+        it('V3 NOT enabled - User Request to V3 app - Verify gives Page not found error', function(done) {
+            // Log in to the new stack env and go to Bicycle app
+            browser.get(PROD_REALM + '/qbase/app/' + COLLEGE_UNIVERSITIES_APPID).then(function() {
+                e2eBase.sleep(browser.params.mediumSleep);
+            }).then(function() {
+                //verify page not found error
+                expect(element(by.tagName('h1')).getAttribute('textContent')).toBe('Page Not Found');
+            }).then(function() {
+                done();
+            });
+
         });
 
         /**
