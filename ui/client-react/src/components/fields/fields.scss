@@ -38,7 +38,9 @@ $data-font-size: $font-size-p;
     box-shadow: none;
 }
 
-[type="text"], [type="url"], [type="email"] {
+[type="text"],
+[type="url"],
+[type="email"] {
     &.input {
         background-color: $input-bg-color;
     }
@@ -221,5 +223,13 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
                 transform: translateY(-50%) rotate(0deg);
             }
         }
+    }
+}
+
+.formContainer {
+    display: table;
+    min-width: 100%;
+    @include small-breakpoint {
+        display: block;
     }
 }

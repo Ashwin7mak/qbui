@@ -63,7 +63,7 @@ $font-path: '../../../client-react/src/assets/fonts/';
     li a {
         display: block;
         line-height: 1.8;
-        color: #fff;
+        color: $color-black-100;
         width: 100%;
         font-size: 14px;
         text-decoration: none;
@@ -128,9 +128,9 @@ $font-path: '../../../client-react/src/assets/fonts/';
     float: right;
     display: inline-block;
     position: relative;
-    border: 1px solid #ddd;
+    border: 1px solid $badcolor16;
     border-top: none;
-    background: #fff;
+    background: $color-black-100;
   }
 
   .highlight, .code-toggle.open {
@@ -138,7 +138,7 @@ $font-path: '../../../client-react/src/assets/fonts/';
   }
 
   .code-toggle.open {
-    color: #fff;
+    color: $color-black-100;
   }
 
   .highlight {
@@ -162,7 +162,7 @@ $font-path: '../../../client-react/src/assets/fonts/';
 
   .highlight pre code {
     font-size: inherit;
-    color: #fff; /* Effectively the base text color */
+    color: $color-black-100; /* Effectively the base text color */
   }
 
   .highlight pre code:first-child {
@@ -213,8 +213,8 @@ $font-path: '../../../client-react/src/assets/fonts/';
     .bs-example {
       margin-right: 0;
       margin-left: 0;
-      background-color: #fff;
-      border-color: #ddd;
+      background-color: $color-black-100;
+      border-color: $badcolor16;
       border-width: 1px;
       border-radius: 4px 4px 0 0;
       -webkit-box-shadow: none;

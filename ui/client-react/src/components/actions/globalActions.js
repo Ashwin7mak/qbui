@@ -9,6 +9,8 @@ import UrlUtils from '../../utils/urlUtils';
 import cookie from 'react-cookie';
 import Constants from '../../services/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
+import * as CompConsts from '../../constants/componentConstants';
+import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -138,11 +140,31 @@ let GlobalActions = React.createClass({
                 </Dropdown.Menu>
             </Dropdown>);
     },
+    getHelpWalkme() {
+        let touch = "ontouchstart" in window;
+        if (touch) {
+            return;
+        }
+        try {
+            WalkMePlayerAPI.toggleMenu();
+        } catch (err) {
+            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+        }
+    },
+
+    getHelpLink() {
+        return (
+            <a className="dropdownToggle globalActionLink" onClick={this.getHelpWalkme}>
+                <QBicon icon={'help'}/>
+                <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
+            </a>);
+    },
     render() {
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
+                    <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
                     {this.props.actions && this.props.actions.map((action, index) => {
                         return <GlobalAction tabIndex={this.props.startTabIndex + index}
