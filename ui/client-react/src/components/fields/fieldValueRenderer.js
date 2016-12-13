@@ -4,6 +4,7 @@ import _ from 'lodash';
 import FieldFormats from '../../utils/fieldFormats';
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
+import DurationFieldValueRenderer from './durationFieldValueRenderer';
 import EmailFieldValueRenderer from './emailFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
@@ -11,9 +12,11 @@ import TextFieldValueRenderer from './textFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
 import UrlFieldValueRenderer from './urlFieldValueRenderer';
+
 import TextFormulaFieldRenderer from './textFormulaFieldRenderer';
 import NumericFormulaFieldRenderer from './numericFormulaFieldRenderer';
 import UrlFormulaFieldRenderer from './urlFormulaFieldRenderer';
+import PhoneFieldValueRenderer from './phoneFieldValueRenderer';
 
 /**
  * # FieldValueRenderer
@@ -84,60 +87,78 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.RATING_FORMAT: {
-            let rendered = <NumericFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+            let rendered = <NumericFieldValueRenderer {...commonProperties}
+                                              value={this.props.display ? this.props.display : this.props.value}
                                               attributes={this.props.attributes}
                                               key={'nfvr-' + this.props.idKey}
-                                              {...commonProperties}/>;
+                                              />;
             return (rendered);
         }
         case FieldFormats.USER_FORMAT:
             return (
-                    <UserFieldValueRenderer value={this.props.value} display={this.props.display}
+                    <UserFieldValueRenderer {...commonProperties}
+                                            value={this.props.value} display={this.props.display}
                                             key={'ufvr-' + this.props.idKey}
-                                            {...commonProperties}/>
+                                            />
                 );
         //  Date and dateTime use the same view formatter
         case FieldFormats.DATE_FORMAT:
         case FieldFormats.DATETIME_FORMAT:
             return (
-                <DateTimeFieldValueRenderer value={this.props.value}
+                <DateTimeFieldValueRenderer {...commonProperties}
+                                            value={this.props.value}
                                             attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
-                    {...commonProperties}/>
+                                            key={'dtfvr-' + this.props.idKey}
+                                            />
             );
         case FieldFormats.TIME_FORMAT:
             return (
-                    <TimeFieldValueRenderer value={this.props.value}
+                    <TimeFieldValueRenderer {...commonProperties}
+                                            value={this.props.value}
                                             attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
-                                                {...commonProperties}/>
+                                            key={'tfvr-' + this.props.idKey}
+                                            />
                 );
         case FieldFormats.CHECKBOX_FORMAT:
             return (
-                    <CheckBoxFieldValueRenderer value={this.props.value}
-                                                key={'inp-' + this.props.idKey}
+                    <CheckBoxFieldValueRenderer {...commonProperties}
+                                                value={this.props.value}
+                                                key={'cbfvr-' + this.props.idKey}
                                                 hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
                                                 label={this.props.label}
-                                                {...commonProperties} />
+                                                 />
                 );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
-                    <MultiLineTextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+                    <MultiLineTextFieldValueRenderer {...commonProperties}
+                                                     value={this.props.display ? this.props.display : this.props.value}
                                                      attributes={this.props.attributes}
                                                      key={'mltfvr-' + this.props.idKey}
-                                                 {...commonProperties}/>
+                                                 />
                 );
         case FieldFormats.URL:
             let {open_in_new_window, show_as_button} = this.props.attributes.clientSideAttributes;
-            return <UrlFieldValueRenderer value={this.props.value}
+            return <UrlFieldValueRenderer {...commonProperties}
+                                          value={this.props.value}
                                           display={this.props.display}
                                           openInNewWindow={open_in_new_window}
                                           showAsButton={show_as_button}
-                                          {...commonProperties} />;
+                                          key={'ufvr-' + this.props.idKey}
+                                          />;
 
         case FieldFormats.EMAIL_ADDRESS:
-            return <EmailFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
+            return <EmailFieldValueRenderer {...commonProperties}
+                                            value={this.props.value} display={this.props.display}
+                                            key={'efvr-' + this.props.idKey}
+                                            />;
+
+        case FieldFormats.PHONE_FORMAT:
+            return <PhoneFieldValueRenderer {...commonProperties}
+                                            value={this.props.value}
+                                            display={this.props.display}
+                                            key={'pfvr-' + this.props.idKey}
+                                            />;
 
         case FieldFormats.TEXT_FORMULA_FORMAT:
             return <TextFormulaFieldRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
@@ -148,15 +169,25 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.URL_FORMULA_FORMAT:
             return <UrlFormulaFieldRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
 
+        case FieldFormats.DURATION_FORMAT:
+            return (
+                <DurationFieldValueRenderer {...commonProperties}
+                                            value={this.props.value}
+                                            display={this.props.display}
+                                            attributes={this.props.attributes}
+                                            includeUnits={this.props.includeUnits}
+                                            key={'drfvr-' + this.props.idKey}
+                                            />
+            );
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
-        case FieldFormats.DURATION_FORMAT:
         default: {
             return (
-                    <TextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+                    <TextFieldValueRenderer {...commonProperties}
+                                            value={this.props.display ? this.props.display : this.props.value}
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
-                                            {...commonProperties}/>
+                                            />
                 );
         }
         }
@@ -168,7 +199,6 @@ const FieldValueRenderer = React.createClass({
             commonProperties.isBold = attributes.bold;
             commonProperties.displayGraphic = attributes.display_graphic;
         }
-
         return commonProperties;
     },
 

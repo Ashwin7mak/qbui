@@ -1,8 +1,8 @@
 @import '../../../src/assets/css/qbVariables';
-$search-bar-bg: #5f8ba7;
-$report-group-bg: #fff;
-$report-icon-color: #f87878;
-$report-link-color: #404040;
+$search-bar-bg: $badcolor20;
+$report-group-bg: $color-black-100;
+$report-icon-color: $color-red-500;
+$report-link-color: $color-black-700;
 
 .reportsList {
     display: flex;

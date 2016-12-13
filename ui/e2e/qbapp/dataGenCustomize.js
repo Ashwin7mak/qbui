@@ -50,6 +50,7 @@ consts = require('../../common/src/constants.js');
         // optional add supplied attrs
         if (settings) {
             table[fieldName] = Object.assign({}, table[fieldName], settings);
+            console.log('SETTINGS!!: ', table[fieldName]);
         }
     }
 
@@ -165,7 +166,9 @@ consts = require('../../common/src/constants.js');
             });
 
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
-        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER);
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
+
 
         tableToFieldToFieldTypeMap[table3Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
@@ -265,6 +268,8 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.EMAIL_ADDRESS, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {required:true, dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
+
 
         tableToFieldToFieldTypeMap[table6Name] = {};
         let baseDurationProps = {
@@ -274,31 +279,31 @@ consts = require('../../common/src/constants.js');
             }
         };
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration default');
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Weeks',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration A',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.WEEKS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Days',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration B',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.DAYS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Hours',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration C',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.HOURS
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Minutes',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration D',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.MINUTES
                 }
             }));
-        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration Seconds',
+        addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration E',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
                     scale: consts.DURATION_CONSTS.SECONDS
