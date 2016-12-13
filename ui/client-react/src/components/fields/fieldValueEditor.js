@@ -104,6 +104,10 @@ const FieldValueEditor = React.createClass({
         invalidMessage: React.PropTypes.string,
 
         /**
+         * Additional information about an invalid field (e.g., list of which emails are invalid in a long string of emails) */
+        invalidResultData: React.PropTypes.object,
+
+        /**
          * callback method called when the editor is mounted */
         onAttach: React.PropTypes.func,
 
@@ -150,6 +154,7 @@ const FieldValueEditor = React.createClass({
             readOnly: (this.props.fieldDef ? !this.props.fieldDef.userEditableValue : false),
             invalid: this.props.isInvalid,
             invalidMessage: this.props.invalidMessage,
+            invalidResultData: this.props.invalidResultData,
             fieldDef: this.props.fieldDef,
             fieldName: this.props.fieldName,
             // add the .cellEdit css class if working inside an agGrid
@@ -308,7 +313,7 @@ const FieldValueEditor = React.createClass({
 
                 {/* render type specific editor */}
                 <ErrorWrapper isInvalid={this.props.isInvalid}
-                               invalidMessage={this.props.invalidMessage}>
+                              invalidMessage={this.props.invalidMessage}>
                 {renderedType}
                 </ErrorWrapper>
             </div>

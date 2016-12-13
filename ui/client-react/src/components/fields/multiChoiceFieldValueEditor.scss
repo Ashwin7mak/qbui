@@ -104,11 +104,11 @@ $multi-choice-field-box-height: 32px;
                     width: 16px;
                     height: 16px;
                     box-shadow: 0 0 2px 1.5px rgba(54, 93, 191, 0.25);
-                    border: solid 1px #2544a7;
+                    border: solid 1px $color-indigo-800;
 
                     .inside {
                         border-radius: 100%;
-                        background-color: #fff;
+                        background-color: $color-black-100;
                         height: 100%;
                         width: 100%;
                     }
@@ -128,8 +128,8 @@ $multi-choice-field-box-height: 32px;
 
                 input[type=radio]:checked ~ .check {
                     .inside {
-                        background-color: #fff;
-                        border: 4px solid #00abf4;
+                        background-color: $color-black-100;
+                        border: 4px solid $color-cyan-500;
                         transition: border 0.25s linear;
                         -webkit-transition: border 0.25s linear;
                     }
@@ -138,14 +138,14 @@ $multi-choice-field-box-height: 32px;
                 &:hover {
                     .check {
                         .inside {
-                            background-color: #c7c7c7;
-                            border: 4px solid #fff;
+                            background-color: $color-black-400;
+                            border: 4px solid $color-black-100;
                         }
                     }
 
                     input[type=radio]:checked ~ .check {
                         .inside {
-                            border: 4px solid #0098cd;
+                            border: 4px solid $color-cyan-600;
                         }
                     }
                 }

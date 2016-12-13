@@ -24,6 +24,7 @@ let NavStore = Fluxxor.createStore({
             scrollingReport: false,
             filterReportsName: '',
             errorPopupHidden: true,
+            locale: null,
             openCount: 0
         };
 
@@ -148,6 +149,7 @@ let NavStore = Fluxxor.createStore({
     },
 
     setLocaleBundle() {
+        this.state.locale = Locale.getLocale();
         this.state.i18n = Locale.getI18nBundle();
     },
     onShowErrorMsgDialog() {

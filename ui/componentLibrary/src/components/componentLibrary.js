@@ -19,6 +19,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/dateFieldValueEditor" activeClassName="active">DateFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/dateTimeFieldValueEditor" activeClassName="active">DateTimeFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/dateTimeFieldValueRenderer" activeClassName="active">DateTimeFieldValueRenderer</Link></li>
+                            <li><Link to="/qbase/components/durationFieldValueRenderer" activeClassName="active">DurationFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/emailFieldValueEditor" activeClassName="active">EmailFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/emailFieldValueRenderer" activeClassName="active">EmailFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/fieldValueEditor" activeClassName="active">FieldValueEditor</Link></li>

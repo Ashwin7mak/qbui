@@ -19,7 +19,7 @@
     .selectedRowsLabel {
         padding: 2px 8px;
         margin-right: 10px;
-        color: #fff;
+        color: $color-black-100;
         background-color: $selection-badge-color;
         border-radius: 12px;
         font-size: 10px;
@@ -39,11 +39,11 @@
             height: 32px;
             margin: 0;
             text-align: center;
-            color: #fff;
+            color: $color-black-100;
         }
 
         a.iconLink {
-            color: #fff;
+            color: $color-black-100;
             display: inline-block;
             height: 32px;
             width: 32px;
@@ -128,7 +128,7 @@
 
     a.iconLink:hover {
         text-decoration: none;
-        color: #fff;
+        color: $color-black-100;
     }
 
     a.iconLink[disabled]:hover {

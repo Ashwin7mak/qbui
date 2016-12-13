@@ -110,6 +110,11 @@ var I18nRelative = I18nFlux.renderMessage(
     })
 );
 
+// number format without component wrapper for use within another I18nMessage
+var IntlNumberOnly = function(locale, intlOps, number) {
+    return new Intl.NumberFormat(locale, intlOps).format(number);
+};
+
 //  export the 5 support i18n data types
-export {I18nMessage, I18nDate, I18nTime, I18nNumber, I18nRelative};
+export {I18nMessage, I18nDate, I18nTime, I18nNumber, I18nRelative, IntlNumberOnly};
 
