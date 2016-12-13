@@ -106,7 +106,7 @@ let CardView = React.createClass({
             firstFieldValue = firstFieldObject.display;
         }
         var topField = this.createTopField(_.unescape(firstFieldValue));
-        for (var i = 1; i < keys.length && i< CardView.MAX_FIELDS; i++) {
+        for (var i = 1; i < keys.length && i < CardView.MAX_FIELDS; i++) {
             fields.push(this.createField(i, keys[i]));
         }
 
