@@ -5,6 +5,12 @@
     'use strict';
     var CONSTS = require('../../../common/src/constants').DURATION_CONSTS;
     var numValue = 55;
+    var HHMMSS = "55:55:55";
+    var HHMM = "55:55";
+    var MMSS = ":55:55";
+    var MM = ":55";
+    var SS = "::55";
+    var HHSS = "55::55";
     module.exports = {
         dataProvider : [
             /**
@@ -392,6 +398,49 @@
                 placeholder: CONSTS.PLACEHOLDER.WEEKS
 
             }
+        ],
+        timeFormatData: [
+            {
+                scale: CONSTS.MINUTES,
+                timeFormatVal: HHMMSS,
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                HH: numValue,
+                MM: numValue,
+                SS: numValue
+            },
+            {
+                scale: CONSTS.MINUTES,
+                timeFormatVal: HHMM,
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                HH: numValue,
+                MM: numValue
+            },
+            {
+                scale: CONSTS.MINUTES,
+                timeFormatVal: HHSS,
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                HH: numValue,
+                SS: numValue
+            },
+            {
+                scale: CONSTS.MINUTES,
+                timeFormatVal: MMSS,
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                MM: numValue,
+                SS: numValue
+            },
+            {
+                scale: CONSTS.MINUTES,
+                timeFormatVal: MM,
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                MM: numValue
+            },
+            {
+                scale: CONSTS.MINUTES,
+                timeFormatVal: SS,
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                SS: numValue
+            },
         ]
     };
 }());

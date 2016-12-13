@@ -328,9 +328,9 @@
         return returnValue;
     }
     function convertHourMinutesSeconds(num) {
-        var hours;
-        var minutes;
-        var seconds;
+        var hours = 0;
+        var minutes = 0;
+        var seconds = 0;
         var numArray = num.match(/\d+/g, '');
         /**
          * ::SS => num[0] === ':' && num[1] === ':'
