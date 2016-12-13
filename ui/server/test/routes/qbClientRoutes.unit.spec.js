@@ -103,11 +103,4 @@ describe('Express Client Routes', function() {
         expect(200);
         done();
     });
-
-    //TODO: Should this test be removed and/or moved to a diff location
-    it('Validate config has walkmeJS', function(done) {
-        var testConfig = require('../../src/config/expressConfig')(app);
-        should.exist(testConfig.walkmeJSSnippet);
-        done();
-    });
 });

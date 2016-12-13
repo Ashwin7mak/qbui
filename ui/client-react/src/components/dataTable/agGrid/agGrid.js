@@ -22,6 +22,7 @@ import {
     EmailCellRenderer,
     NumericCellRenderer,
     PercentCellRenderer,
+    PhoneCellRenderer,
     RatingCellRenderer,
     SelectionColumnCheckBoxCellRenderer,
     TextCellRenderer,
@@ -987,7 +988,7 @@ let AGGrid = React.createClass({
         let cell = document.createElement('div');
         cell.className = "ag-header-cell";
 
-        cell.innerHTML = `<div class="ag-header-cell-text">${headerName}${headerSubscriptHTML}</div>
+        cell.innerHTML = `<div class="ag-header-cell-text ">${headerName}${headerSubscriptHTML}</div>
             <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
 
         return cell;
@@ -1050,11 +1051,16 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
+                                obj.headerClass += " duration";
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
                                 break;
 
                             case serverTypeConsts.URL :
                                 obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
+                                break;
+
+                            case serverTypeConsts.PHONE_NUMBER :
+                                obj.cellRenderer = reactCellRendererFactory(PhoneCellRenderer);
                                 break;
 
                             case serverTypeConsts.EMAIL_ADDRESS :

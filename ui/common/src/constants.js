@@ -77,7 +77,13 @@
             NUM_ROWS: 'numRows',
             HOME_PAGE_ID: 'homePageId',
             OPEN_IN_V3: 'openInV3',
-            HYDRATE: 'hydrate'
+            HYDRATE: 'hydrate',
+
+            //  legacy stack request paameters
+            LEGACY_STACK: {
+                ACTION: 'a',
+                VALUE: 'value'
+            }
         },
         FORMAT : {
             DISPLAY: 'display',
@@ -91,22 +97,31 @@
             ONE_WEEK: 1000 * 60 * 60 * 24 * 7
         },
         DURATION_CONSTS : {
+            DEFAULT_DECIMAL_PLACES: 14,
             MILLIS_PER_SECOND: new bigDecimal.BigDecimal(1000),
             MILLIS_PER_MIN: new bigDecimal.BigDecimal(60000),
             MILLIS_PER_HOUR: new bigDecimal.BigDecimal(3600000),
             MILLIS_PER_DAY: new bigDecimal.BigDecimal(86400000),
             MILLIS_PER_WEEK: new bigDecimal.BigDecimal(604800000),
 
+            SECONDS_PER_MINUTE: new bigDecimal.BigDecimal(60),
+            MINUTES_PER_HOUR: new bigDecimal.BigDecimal(60),
+            TEN: new bigDecimal.BigDecimal(10),
+            NEGATIVE_TEN: new bigDecimal.BigDecimal(-10),
+            ZERO: new bigDecimal.BigDecimal(0),
+            ONE: new bigDecimal.BigDecimal(1),
+
             HHMM: ':HH:MM',
             HHMMSS: ':HH:MM:SS',
             MM: ':MM',
             MMSS: ':MM:SS',
-            //var SMART_UNITS:'Smart Units',
+            SMART_UNITS:'Smart Units',
             WEEKS: 'Weeks',
             DAYS: 'Days',
             HOURS: 'Hours',
             MINUTES: 'Minutes',
             SECONDS: 'Seconds',
+            MILLISECONDS: 'Milliseconds'
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
@@ -129,6 +144,10 @@
         },
         ERROR_CODE:{
             DTS_ERROR_CODE: "DataOperationOrSyncError"
+        },
+        PROTOCOL: {
+            HTTP: 'http://',
+            HTTPS: 'https://'
         },
         HttpStatusCode: {
             'CONTINUE': 100,
