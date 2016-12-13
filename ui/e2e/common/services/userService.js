@@ -17,15 +17,23 @@
                 return user;
             },
 
-            /**
-             * Given an app, generate a list of users with fixed user ID
-             */
             generateDefaultUserList: function(appId) {
-                const userIdList = [1000001, 1000002, 1000003, 1000004, 1000005];
+                let userIdList = [];
+                let users = userGenerator.generateDefaultAdminUsers();
 
-                let users = userGenerator.generatePopulatedDefaultUsers(userIdList);
+                users.forEach(user => {
+                    recordBase.apiBase.createSpecificUser(user).then(function(userResponse) {
+                        let userId = JSON.parse(userResponse.body).id;
+                        if (userId) {
+                            userIdList.push(userId);
+                            recordBase.apiBase.assignUsersToAppRole(appId, e2eConsts.DEFAULT_ADMIN_ROLE, [userId]).then(function(result) {
+                                console.log("User " + userId + " has been associated with admin role " + result.body);
+                            });
+                        }
+                    });
+                });
 
-                recordBase.apiBase.createBulkUser(users);
+                return userIdList;
             }
         };
         return userService;

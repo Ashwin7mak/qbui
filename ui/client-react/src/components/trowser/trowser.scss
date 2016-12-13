@@ -1,9 +1,9 @@
 @import '../../assets/css/qbVariables';
-$trowser-fg: #000;
-$trowser-icons-color: #fff;
-$trowser-header-bg: #486c8f;
-$trowser-footer-bg: #193048;
-$action-separator-color: #486c8f;
+$trowser-fg: $color-black-800;
+$trowser-icons-color: $color-black-100;
+$trowser-header-bg: $color-blue-600;
+$trowser-footer-bg: $color-blue-700;
+$action-separator-color: $color-blue-600;
 
 #alertIconTooltip {
     z-index: 99999;
@@ -34,7 +34,7 @@ $action-separator-color: #486c8f;
     .trowserHeader {
         flex: 0 0 auto;
         flex-basis: 40px;
-        color: #fff;
+        color: $color-black-100;
         background-color: $trowser-header-bg;
         display: flex;
         align-items: center;
@@ -67,7 +67,7 @@ $action-separator-color: #486c8f;
         button {
             height: 40px;
             font-size: 18px;
-            color: #fff;
+            color: $color-black-100;
             background-color: $trowser-header-bg;
             border-radius: 0;
             border: 0;
@@ -90,7 +90,7 @@ $action-separator-color: #486c8f;
     }
 
     .trowserFooter {
-        color: #fff;
+        color: $color-black-100;
         flex: 0 0 auto;
         display: flex;
         flex-direction: row;
@@ -112,7 +112,7 @@ $action-separator-color: #486c8f;
                 height: 23px;
                 line-height: 23px;
                 padding: 0 30px;
-                color: #fff;
+                color: $color-black-100;
                 border-left: 1px solid $action-separator-color;
                 text-decoration: none;
                 align-items: center;
@@ -161,7 +161,7 @@ $action-separator-color: #486c8f;
         top: 0;
         bottom: 0;
         margin: auto;
-        background-color: #f2f9fe;
+        background-color: $badcolor22;
         opacity: 1;
         max-width: 1440px;
     }
