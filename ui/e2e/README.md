@@ -51,8 +51,8 @@ Note that we currently have two test spec files so a test realm for each will be
 
 **Remember not to check the commented out function into Git!** Run it a few times and then uncomment it.
 
-As long as you don’t run **db-reset.sql** or **db-cleanup.sql** on your OracleVM you won’t clean out any test data you created above.
+As long as you don’t run **db-reset.sql** on your OracleVM you won’t clean out any test data you created above.
 
 Also if you leave it commented out your database will eventually fill up if you run more E2E tests.  
 
-If this happens run the **db-cleanup.sql** script located in the QuickBase (Tomcat) project on your OracleVM (via SQLDeveloper).
+If this happens run the **db-reset.sql** script located in the QuickBase (Tomcat) project on your OracleVM (via SQLDeveloper).
