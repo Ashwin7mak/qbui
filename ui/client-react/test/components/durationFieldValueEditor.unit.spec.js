@@ -38,7 +38,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.dataProvider.forEach(function(test) {
-        fit('converts a user input of ' + test.type + ' to  ' + test.scale, () => {
+        it('converts a user input of ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
