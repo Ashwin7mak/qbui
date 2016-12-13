@@ -409,6 +409,29 @@
             }
             return opts;
         },
+        isValid: function(value) {
+            // Don't validate empty strings
+            var valid = true;
+            var newVal = value.replace(/[0-9]/g, '');
+            if (newVal === '') {
+                return valid;
+            }
+            newVal = newVal.split(' ');
+            /**
+             * Strips out all numbers
+             * This will only check for valid types
+             * If there are no types, return true
+             * */
+            console.log('newVal: ', newVal);
+
+            newVal.forEach(function(val) {
+                if (ALLOWED_DURATION_TYPE.indexOf(val) === -1) {
+                    valid = false;
+                }
+            });
+            console.log('valid: ', valid);
+            return valid;
+        },
         onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             /**
@@ -434,6 +457,14 @@
             if (typeof value === 'number') {
                 return getMilliseconds(value, fieldInfo.scale);
             }
+            /**
+             * Checks to see if the value is valid
+             * */
+            if (!this.isValid(value)) {
+                debugger;
+                return value;
+            }
+
             /**
              * This sets the string to lowerCase()
              * to make it easier to convert the type later
@@ -463,7 +494,6 @@
                  * */
                 num = value.splice(0, 1)[0];
                 num = num.replace(/[,]+/g, '');
-                //value = ['minutes', 'banana']
                 value.forEach(function(val) {
                     if (ALLOWED_DURATION_TYPE.indexOf(val) !== -1) {
                         type.push(val);
@@ -471,17 +501,6 @@
                         notAllowedType.push(val);
                     }
                 });
-            }
-            /**
-             * If a user enters more than one type (e.g., "days minutes") or an unaccepted type,
-             * then we just returned the value that the user typed in without any conversion,
-             * a validation error will be thrown onSave
-             * */
-            //type = ['minute', 'seconds', 'hours'];
-            //notAllowedType = ['hotdog'];
-            if (type.length > 1 || notAllowedType.length > 0) {
-                //return not accepted value to user, and throw validation error
-                return value;
             }
             /**
              * If a user only entered a single accepted type (e.g., ["minutes"])

@@ -14,6 +14,7 @@
     var constants = require('./constants');
     var _ = require('lodash');
     var EmailValidator = require('./validator/emailValidator');
+    var DurationValidator = require('./validator/durationValidator');
 
     module.exports = {
 
@@ -96,6 +97,10 @@
                 case constants.EMAIL_ADDRESS :
                     // Uncomment the line below to activate email validation
                     // results = EmailValidator.validateAndReturnResults(value, name, results);
+                    break;
+                case constants.DURATION :
+                    // Uncomment the line below to activate email validation
+                    results = DurationValidator.validateAndReturnResults(value, name, results);
                     break;
                 }
 

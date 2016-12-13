@@ -44,7 +44,11 @@ const DurationFieldValueEditor = React.createClass({
         let theVals = {
             value: value
         };
-        theVals.display = durationFormatter.format(theVals, this.props.attributes);
+        if (typeof theVals.value === 'number') {
+            theVals.display = durationFormatter.format(theVals, this.props.attributes);
+        } else {
+            theVals.display = value;
+        }
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
