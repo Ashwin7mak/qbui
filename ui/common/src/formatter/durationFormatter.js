@@ -380,8 +380,8 @@
          * */
         if (numArray.length === 3) {
             hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
-            minutes = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_HOUR);
-            seconds = convertToMilliseconds(numArray[2], DURATION_CONSTS.MILLIS_PER_HOUR);
+            minutes = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_MIN);
+            seconds = convertToMilliseconds(numArray[2], DURATION_CONSTS.MILLIS_PER_SECOND);
             return  hours + minutes + seconds;
         }
         return result;
