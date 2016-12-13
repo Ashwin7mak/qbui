@@ -102,7 +102,7 @@
             //});
             saveRecordButtonEl.click();
             // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-            browser.waitForExist('.ag-row.editing', 5000, true);
+            browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
         }},
 
         /**
