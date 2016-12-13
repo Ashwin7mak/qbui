@@ -234,6 +234,7 @@ exports.config = {
         global.e2eConsts = requireCommon('common/e2eConsts');
         global.e2eUtils = requireCommon('common/e2eUtils')();
         global.consts = require('../../common/src/constants');
+        global.e2ePageBase = require('../pages/e2ePageBase.po');
 
         // Grab the browser name to use in spec files
         // See http://webdriver.io/guide/testrunner/browserobject.html for working with config file variables

@@ -52,7 +52,20 @@
         //TODO Need to implement, use waitUntil method
     };
 
-    //TODO: Refactor this
+    /**
+     * Helper method that will load a report for you in your browser by directly hitting a generated URL
+     * @param realmName
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @returns A promise that will resolve after loading the generated URL
+     */
+    PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
+        browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        return browser.waitForVisible('.ag-body-container');
+    };
+
+    //TODO: Refactor these if needed
     //// Verify the element is located on top of the other
     //this.isElementOnTop = function(element1, element2) {
     //    var self = this;
@@ -74,18 +87,43 @@
     //    });
     //};
 
-    /**
-     * Helper method that will load a report for you in your browser by directly hitting a generated URL
-     * @param realmName
-     * @param appId
-     * @param tableId
-     * @param reportId
-     * @returns A promise that will resolve after loading the generated URL
-     */
-    PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
-        browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        return browser.waitForVisible('.ag-body-container');
-    };
+    //// Resize the browser window to the given pixel width and height. Returns a promise
+    //resizeBrowser: function(width, height) {
+    //    var deferred = Promise.pending();
+    //    // Define the window size if there is a browser object
+    //    if (typeof browser !== 'undefined') {
+    //        browser.driver.manage().window().getSize().then(function(dimension) {
+    //            // Currently our breakpoints only change when browser width is changed so don't need to check height (yet)
+    //            if (dimension.width === width) {
+    //                // Do nothing because we are already at the current width
+    //                deferred.resolve();
+    //            } else {
+    //                // Resize browser if not at same width
+    //                browser.driver.manage().window().setSize(width, height).then(function() {
+    //                    e2eBase.sleep(browser.params.mediumSleep).then(function() {
+    //                        deferred.resolve();
+    //                    });
+    //                });
+    //            }
+    //        });
+    //        return deferred.promise;
+    //    } else {
+    //        return deferred.resolve();
+    //    }
+    //},
+
+    //// Helper method to sleep a specified number of seconds
+    //sleep: function(ms) {
+    //    var deferred = Promise.pending();
+    //    try {
+    //        browser.driver.sleep(ms);
+    //        deferred.resolve();
+    //    } catch (error) {
+    //        console.error(JSON.stringify(error));
+    //        deferred.reject(error);
+    //    }
+    //    return deferred.promise;
+    //}
 
     module.exports = new PageBase();
 }());

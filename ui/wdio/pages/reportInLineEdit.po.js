@@ -186,7 +186,7 @@
                 textInputCell.moveToObject();
             } else {
                 browser.execute(function(textInputCellElement) {
-                    textInputCellElement.scrollIntoView();
+                    textInputCellElement.scrollIntoView(false);
                 }, textInputCell);
             }
             textInputCell.setValue(textToEnter);
@@ -215,7 +215,7 @@
                 numericInputCell.moveToObject();
             } else {
                 browser.execute(function(numericInputCellElement) {
-                    numericInputCellElement.scrollIntoView();
+                    numericInputCellElement.scrollIntoView(false);
                 }, numericInputCell);
             }
             numericInputCell.setValue(numToEnter);
@@ -243,7 +243,7 @@
                 dateInputCell.moveToObject();
             } else {
                 browser.execute(function(dateInputCellElement) {
-                    dateInputCellElement.scrollIntoView();
+                    dateInputCellElement.scrollIntoView(false);
                 }, dateInputCell);
             }
             dateInputCell.setValue(dateToEnter);
@@ -265,7 +265,7 @@
                 dateFieldCalIcon.moveToObject();
             } else {
                 browser.execute(function(dateCalIconElement) {
-                    dateCalIconElement.scrollIntoView();
+                    dateCalIconElement.scrollIntoView(false);
                 }, dateFieldCalIcon.value);
             }
             dateFieldCalIcon.click();
@@ -277,7 +277,7 @@
          * @returns the calendar icon element
          */
         getDateFieldCalendarIconEl: {value: function(dateFieldCellEl) {
-            return dateFieldCellEl.element('.glyphicon.glyphicon-calendar');
+            return dateFieldCellEl.element('.input-group-addon');
         }},
 
         /**
@@ -339,10 +339,9 @@
                 nextDate.moveToObject();
             } else {
                 browser.execute(function(dateElement) {
-                    dateElement.scrollIntoView();
+                    dateElement.scrollIntoView(false);
                 }, nextDate);
             }
-            nextDate.waitForVisible();
             nextDate.click();
         }}
 
