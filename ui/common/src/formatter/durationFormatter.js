@@ -462,7 +462,7 @@
                  * Strips out all commas
                  * */
                 num = value.splice(0, 1)[0];
-                num = parseInt(num.replace(/[,]+/g, ''));
+                num = num.replace(/[,]+/g, '');
                 //value = ['minutes', 'banana']
                 value.forEach(function(val) {
                     if (ALLOWED_DURATION_TYPE.indexOf(val) !== -1) {
