@@ -142,8 +142,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             // when only one of newValue or oldValue is falsy
             return true;
         } else {
-            // Some components modify display values and some modify the underlying value so we check for both
-            return (!_.isEqual(newVal.value, oldVal.value) || !_.isEqual(newVal.display, oldVal.display));
+            return (!_.isEqual(newVal.value, oldVal.value));
         }
     },
 
@@ -179,8 +178,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             // when only one of newValue or oldValue is falsy
             return true;
         } else {
-            // Some components modify display values and some modify the underlying value so we check for both
-            return (!_.isEqual(newVal.value, originalRecordValue) || !_.isEqual(newVal.display, originalRecordDisplay));
+            return (!_.isEqual(newVal.value, originalRecordValue));
         }
     },
 
