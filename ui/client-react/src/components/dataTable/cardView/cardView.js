@@ -13,7 +13,10 @@ let CardView = React.createClass({
         data: React.PropTypes.object,
         columns: React.PropTypes.array,
         rowId: React.PropTypes.number,
-        onSwipe: React.PropTypes.func
+        enableRowActions: React.PropTypes.bool,
+        onSwipe: React.PropTypes.func,
+        onActionsOpened: React.PropTypes.func,
+        onActionsClosed: React.PropTypes.func
     },
 
     getInitialState() {
@@ -131,7 +134,7 @@ let CardView = React.createClass({
 
             this.setState({
                 swipingSelection,
-                swipingActions
+                swipingActions: swipingActions && this.props.enableRowActions
             });
         }
 
@@ -141,7 +144,7 @@ let CardView = React.createClass({
             deltaX = -deltaX;
         }
 
-        if (swipingActions) {
+        if (swipingActions && this.props.enableRowActions) {
             // add deltaX to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
             this.setState({
                 resizeWidth: Math.max(this.state.showActions ? (deltaX + MAX_ACTIONS_RESIZE_WITH) : deltaX, 0)
@@ -159,16 +162,19 @@ let CardView = React.createClass({
      */
     swipedLeft(e) {
         if (this.state.swipingSelection) {
-            this.props.onToggleCardSelection(false);
+            this.setState({
+                swipingSelection:false
+            }, () => {
+                this.props.onToggleCardSelection(false);
+            });
         } else if (this.state.swipingActions) {
             this.setState({
-                showActions: true
+                showActions: true,
+                swipingActions:false
+            }, ()=> {
+                this.props.onActionsOpened(this.props.rowId);
             });
         }
-        this.setState({
-            swipingActions:false,
-            swipingSelection:false
-        });
     },
 
     /**
@@ -177,15 +183,18 @@ let CardView = React.createClass({
     swipedRight() {
         if (this.state.swipingActions) {
             this.setState({
-                showActions: false
+                showActions: false,
+                swipingActions: false
+            }, () => {
+                this.props.onActionsClosed();
             });
         } else if (!this.props.allowCardSelection()) {
-            this.props.onToggleCardSelection(true, this.props.data);
+            this.setState({
+                swipingSelection:false
+            }, () => {
+                this.props.onToggleCardSelection(true, this.props.data);
+            });
         }
-        this.setState({
-            swipingActions:false,
-            swipingSelection:false
-        });
     },
     /* callback when row is selected */
     onRowSelected(e) {

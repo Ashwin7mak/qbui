@@ -78,10 +78,6 @@
         noHotLoad : true,
 
         // the client to use
-        client: client,
-
-        // walkme java script
-        walkmeJSSnippet : ''
-
+        client: client
     };
 }());

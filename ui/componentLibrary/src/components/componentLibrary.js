@@ -19,6 +19,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/dateFieldValueEditor" activeClassName="active">DateFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/dateTimeFieldValueEditor" activeClassName="active">DateTimeFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/dateTimeFieldValueRenderer" activeClassName="active">DateTimeFieldValueRenderer</Link></li>
+                            <li><Link to="/qbase/components/durationFieldValueRenderer" activeClassName="active">DurationFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/emailFieldValueEditor" activeClassName="active">EmailFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/emailFieldValueRenderer" activeClassName="active">EmailFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/fieldValueEditor" activeClassName="active">FieldValueEditor</Link></li>
@@ -27,6 +28,8 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/qbase/components/multiLineTextFieldValueEditor" activeClassName="active">MultiLineTextFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/numericFieldValueEditor" activeClassName="active">NumericFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/numericFieldValueRenderer" activeClassName="active">NumericFieldValueRenderer</Link></li>
+                            <li><Link to="/qbase/components/phoneFieldValueEditor" activeClassName="active">PhoneFieldValueEditor</Link></li>
+                            <li><Link to="/qbase/components/phoneFieldValueRenderer" activeClassName="active">PhoneFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/textFieldValueEditor" activeClassName="active">TextFieldValueEditor</Link></li>
                             <li><Link to="/qbase/components/textFieldValueRenderer" activeClassName="active">TextFieldValueRenderer</Link></li>
                             <li><Link to="/qbase/components/timeFieldValueEditor" activeClassName="active">TimeFieldValueEditor</Link></li>
