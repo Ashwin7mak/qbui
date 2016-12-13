@@ -24,80 +24,91 @@
                  * If a user does not insert a type, it defaults to scale
                  * */
                 type: undefined,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.MILLISECONDS
+                type: CONSTS.MILLISECONDS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.MS
+                type: CONSTS.MS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: CONSTS.SECONDS,
-                description: CONSTS.SECONDS
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: CONSTS.SECONDS,
-                description: CONSTS.S
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.MINUTES
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.M
+                type: CONSTS.M,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.HOURS
+                type: CONSTS.HOURS,
+                momentJSTYPE: CONSTS.HOURS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.H
+                type: CONSTS.H,
+                momentJSTYPE: CONSTS.HOURS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.DAYS
+                type: CONSTS.DAYS,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.D
+                type: CONSTS.D,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.WEEKS
+                type: CONSTS.WEEKS,
+                momentJSTYPE: CONSTS.WEEKS
             },
             {
                 scale: CONSTS.SECONDS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
-                type: CONSTS.W
+                type: CONSTS.W,
+                momentJSTYPE: CONSTS.WEEKS
             },
             /**
              * Converts all values to minutes
@@ -109,79 +120,92 @@
                 /**
                  * If a user does not insert a type, it defaults to scale
                  * */
-                type: undefined
+                type: undefined,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.MILLISECONDS
+                type: CONSTS.MILLISECONDS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.MS
+                type: CONSTS.MS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.SECONDS
+                type: CONSTS.SECONDS,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.S
+                type: CONSTS.S,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.MINUTES
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.M
+                type: CONSTS.M,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.HOURS
+                type: CONSTS.HOURS,
+                momentJSTYPE: CONSTS.HOURS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.H
+                type: CONSTS.H,
+                momentJSTYPE: CONSTS.HOURS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.DAYS
+                type: CONSTS.DAYS,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.D
+                type: CONSTS.D,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.WEEKS
+                type: CONSTS.WEEKS,
+                momentJSTYPE: CONSTS.WEEKS
             },
             {
                 scale: CONSTS.MINUTES,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                type: CONSTS.W
+                type: CONSTS.W,
+                momentJSTYPE: CONSTS.WEEKS
             },
             /**
              * Converts all values to hours
@@ -193,79 +217,93 @@
                 /**
                  * If a user does not insert a type, it defaults to scale
                  * */
-                type: undefined
+                type: undefined,
+                momentJSTYPE: CONSTS.HOURS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.MILLISECONDS
+                type: CONSTS.MILLISECONDS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.MS
+                type: CONSTS.MS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.SECONDS
+                type: CONSTS.SECONDS,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.S
+                type: CONSTS.S,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.MINUTES
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.M
+                type: CONSTS.M,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.HOURS
+                type: CONSTS.HOURS,
+                momentJSTYPE: CONSTS.H
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.H
+                type: CONSTS.H,
+                momentJSTYPE: CONSTS.H
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.DAYS
+                type: CONSTS.DAYS,
+                momentJSTYPE: CONSTS.DAYS
+
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.D
+                type: CONSTS.D,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.WEEKS
+                type: CONSTS.WEEKS,
+                momentJSTYPE: CONSTS.WEEKS
             },
             {
                 scale: CONSTS.HOURS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
-                type: CONSTS.W
+                type: CONSTS.W,
+                momentJSTYPE: CONSTS.WEEKS
             },
             /**
              * Converts all values to weeks
@@ -277,79 +315,92 @@
                 /**
                  * If a user does not insert a type, it defaults to scale
                  * */
-                type: undefined
+                type: undefined,
+                momentJSTYPE: CONSTS.WEEKS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.SECONDS
+                type: CONSTS.SECONDS,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.MILLISECONDS
+                type: CONSTS.MILLISECONDS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.MS
+                type: CONSTS.MS,
+                momentJSTYPE: CONSTS.MILLISECONDS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.S
+                type: CONSTS.S,
+                momentJSTYPE: CONSTS.SECONDS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.MINUTES
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.M
+                type: CONSTS.M,
+                momentJSTYPE: CONSTS.MINUTES
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.HOURS
+                type: CONSTS.HOURS,
+                momentJSTYPE: CONSTS.HOURS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.H
+                type: CONSTS.H,
+                momentJSTYPE: CONSTS.HOUR
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.DAYS
+                type: CONSTS.DAYS,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.D
+                type: CONSTS.D,
+                momentJSTYPE: CONSTS.DAYS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.WEEKS
+                type: CONSTS.WEEKS,
+                momentJSTYPE: CONSTS.WEEKS
             },
             {
                 scale: CONSTS.WEEKS,
                 numValue: numValue,
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                type: CONSTS.W
+                type: CONSTS.W,
+                momentJSTYPE: CONSTS.WEEKS
             }
         ],
         placeholderData: [

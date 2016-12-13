@@ -7,7 +7,7 @@ import {DURATION_CONSTS} from '../../../common/src/constants';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-describe('DurationFieldValueEditor', () => {
+fdescribe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -47,11 +47,8 @@ describe('DurationFieldValueEditor', () => {
             component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
             Simulate.blur(input);
-            let type = test.type;
-            if (type === undefined) {
-                type = test.scale;
-            }
-            let totalMilliSeconds = moment.duration(test.numValue, type).asMilliseconds();
+
+            let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
             expect(component.state.value).toEqual(totalMilliSeconds);

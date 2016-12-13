@@ -19,7 +19,11 @@
      */
     var bigDecimal = require('bigdecimal');
     var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
-    var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
+    var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*|minute*|minutes*|h*|hour*|hours*|d*|day*|days*|w*|week*|weeks)/;
+    // var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
+    // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S.toLowerCase()*| DURATION_CONSTS.SECOND.toLowerCase()*| DURATION_CONSTS.SECONDS.toLowerCase()*| DURATION_CONSTS.MS.toLowerCase()*| DURATION_CONSTS.MILLISECOND.toLowerCase()*| DURATION_CONSTS.MILLISECONDS.toLowerCase()*| DURATION_CONSTS.M.toLowerCase()*| DURATION_CONSTS.MINUTE.toLowerCase()*| DURATION_CONSTS.MINUTES.toLowerCase(), DURATION_CONSTS.H.toLowerCase()*| DURATION_CONSTS.HOUR.toLowerCase()*| DURATION_CONSTS.HOURS.toLowerCase()*| DURATION_CONSTS.D.toLowerCase()*| DURATION_CONSTS.DAY.toLowerCase()*| DURATION_CONSTS.DAYS.toLowerCase()*| DURATION_CONSTS.W.toLowerCase()*| DURATION_CONSTS.WEEKS.toLowerCase()*| DURATION_CONSTS.WEEKS.toLowerCase()*)/;
+    // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S*|DURATION_CONSTS.SECOND*|DURATION_CONSTS.SECONDS*)/;
+    // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*)/;
     var _ = require('lodash');
 
     /**
@@ -412,24 +416,23 @@
         isValid: function(value) {
             // Don't validate empty strings
             var valid = true;
-            var newVal = value.replace(/[0-9]/g, '');
-            if (newVal === '') {
+            if (typeof value === 'number') {
                 return valid;
             }
-            newVal = newVal.split(' ');
+            value = value.replace(/[0-9]/g, '').trim().split(' ');
+            if (!value) {
+                return valid;
+            }
             /**
              * Strips out all numbers
              * This will only check for valid types
              * If there are no types, return true
              * */
-            console.log('newVal: ', newVal);
-
-            newVal.forEach(function(val) {
-                if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
+            value.forEach(function(val) {
+                if (!ALLOWED_DURATION_TYPE.test(val)) {
                     valid = false;
                 }
             });
-            console.log('valid: ', valid);
             return valid;
         },
         onBlurParsing: function(value, fieldInfo) {
@@ -447,16 +450,10 @@
                  * :00:00
                  * ::00
              **/
-            var type = [];
-            var notAllowedType = [];
+            var total = 0;
+            var listOfTypes = [];
+            var type;
             var num;
-            /**
-             * If value is only a number, then the value will be converted to milliseconds based on
-             * the field that the user is typing in
-             * */
-            if (typeof value === 'number') {
-                return getMilliseconds(value, fieldInfo.scale);
-            }
             /**
              * If the user inserted a semicolon, then the string needs to be parsed based off of
              * the HHMMSS, HHMM, MMSS requirements
@@ -470,77 +467,44 @@
             if (!this.isValid(value)) {
                 return value;
             }
-
-            /**
-             * This sets the string to lowerCase()
-             * to make it easier to convert the type later
-             * (e.g., 'minute' will later be converted to 'Minutes)
-             * */
-            if (typeof value === 'string') {
-                value = value.toLowerCase();
-            }
             /**
              * If the user passes in a string containing a number and a type, we split the string here
              * and separate the number and type from each other
+             * Strips out all commas
              * */
-            if (value) {
-                value = value.split(' ');
-                //splitting on spaces is a little rigid,
-                // will update later to make more flexible
-                //value = [789, 'minutes']
-                /**
-                 * Strips out all commas
-                 * */
-                num = value.splice(0, 1)[0];
-                num = num.replace(/[,]+/g, '');
-                value.forEach(function(val) {
-                    if (ALLOWED_DURATION_TYPE.indexOf(val) !== -1) {
-                        type.push(val);
-                    } else {
-                        notAllowedType.push(val);
-                    }
-                });
-            }
-            /**
-             * If a user only entered a single accepted type (e.g., ["minutes"])
-             * then the num will be converted to milliseconds, based off of the type passed in by the user
-             * */
-            if (type.length === 1) {
+            num = value.replace(/[,]+/g, '');
+            num = num.match(/[0-9]+/g);
+            type = value.replace(/[0-9]/g, '').split(' ')
+            type.forEach(function(val) {
                 /**
                  * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
                  * */
-                if (type.join('').length <= 2) {
-                    return getMilliseconds(num, type.join(''));
+                if (val.length <= 2 && val !== '') {
+                    val = val.toUpperCase();
+                    listOfTypes.push(val);
+                } else if (val !== '') {
+                    val = val.toLowerCase();
+                    /**
+                     * Removes first letter and sets it toUpperCase
+                     * Sets type to a string and concatenates the upperCaseLetter back on
+                     * If type is not plural, then it concatenates an 's'
+                     */
+                    var firstLetter = val[0].toUpperCase();
+                    val = val.slice(1);
+                    val = firstLetter + val;
+                    if (val[val.length - 1] !== 's') {
+                        val = val + 's';
+                    }
+                    listOfTypes.push(val);
                 }
-                /**
-                 * Removes first letter and sets it toUpperCase
-                 * Sets type to a string and concatenates the upperCaseLetter back on
-                 * If type is not plural, then it concatenates an 's'
-                 */
-                //['minutes'];
-                var firstLetter = type.join('').split('').splice(0, 1).join('').toUpperCase();
-                //firstLetter = 'M'
-                type = type.join('').slice(1);
-                //type = 'inutes'
-                type =  firstLetter + type;
-                //type = "Minutes"
-                if (type[type.length - 1] !== 's') {
-                    type = type + 's';
-                }
-                return getMilliseconds(num, type);
+            });
+            if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
+                num.forEach(function(val, i) {
+                    total += getMilliseconds(num[i], listOfTypes[i]);
+                });
+                return total;
             }
-            /**
-             * If a user enters a value without entering a type
-             * Then the value will convert to milliseconds based off of the field the user
-             * is typing in
-             * */
-            if (num && type.length === 0) {
-                return getMilliseconds(num, fieldInfo.scale);
-            }
-            /**
-             * If it does not convert, then just return the value
-             * */
-            return value;
+            return getMilliseconds(num[0], fieldInfo.scale);
         },
         getPlaceholder: function(fieldInfo) {
             var placeholder = '';
