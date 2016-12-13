@@ -284,6 +284,13 @@ const FieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+
+        // For checkbox, need a class at the parent level so that we can target the ErrorWrapper
+        // and reset the width so that checkbox doesn't get left-aligned when it is in validation error state
+        if (this.props.type === FieldFormats.CHECKBOX_FORMAT) {
+            classes += ' checkboxField';
+        }
+
         // error state css class
         if (this.props.isInvalid) {
             classes += ' error';

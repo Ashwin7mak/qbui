@@ -172,10 +172,10 @@ describe('CheckBoxFieldValueEditor', () => {
         spyOn(mockParent, 'onBlur');
 
         component = TestUtils.renderIntoDocument(<CheckBoxFieldValueEditor onBlur={mockParent.onBlur} />);
-        let domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+        let domComponent = ReactDOM.findDOMNode(component);
 
         Simulate.blur(domComponent);
 
-        expect(mockParent.onBlur).toHaveBeenCalled();
+        expect(mockParent.onBlur).toHaveBeenCalledWith({value: false});
     });
 });
