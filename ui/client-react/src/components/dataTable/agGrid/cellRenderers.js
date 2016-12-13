@@ -91,11 +91,13 @@ const CellRenderer = React.createClass({
                     id: this.props.initialValue.id,
                     value: this.props.initialValue.value,
                     display: this.props.initialValue.display
-                }
+                },
+                // Key is use to force a re-rendering when there are validation changes
+                rerenderKey: -1
             };
         } else {
             logger.warn('"this.props.initialValue" in getInitialState is undefined');
-            return {};
+            return {rerenderKey: -1};
         }
     },
 
@@ -262,10 +264,10 @@ const CellRenderer = React.createClass({
     },
 
     onValidated(results) {
-        // Force the component to update so we can display the new validation errors
+        // Cause the component to update so we can display the new validation errors
         // Without this, the field does not show the most recent validation coming from the grid context
         if (results && results.isInvalid) {
-            this.forceUpdate();
+            this.setState({rerenderKey: Math.random()});
         }
     },
 
