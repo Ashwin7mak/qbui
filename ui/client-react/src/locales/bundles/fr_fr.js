@@ -259,8 +259,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "S'il vous plaît corriger ce domaine",
-                multipleErrorLabelPrefix: "S'il vous plaît corriger ces",
-                multipleErrorLabelSuffix: "des champs",
+                multipleErrorLabel: "S'il vous plaît corriger ces {numFields} des champs"
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Afficher la liste des erreurs",

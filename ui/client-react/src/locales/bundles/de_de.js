@@ -259,8 +259,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Bitte repariere dieses feld",
-                multipleErrorLabelPrefix: "Bitte beheben sie diese",
-                multipleErrorLabelSuffix: "felder",
+                multipleErrorLabel: "Bitte beheben sie diese {numFields} felder"
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Fehlerliste anzeigen",
