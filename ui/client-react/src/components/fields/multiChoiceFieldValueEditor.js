@@ -48,22 +48,37 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 choice: val
             };
         }
-        // React select expects an object
-        return this.props.value ? {choice: {label: this.props.value}} : {choice: ""};
+
+        let value = '';
+        let display = '';
+        if (this.props.value || this.props.value === 0) {
+            value = this.props.value;
+            display = this.props.display;
+        }
+        return {choice: {
+            value: this.props.value,
+            display: this.props.display,
+        }};
     },
     /**
      * Set the user selection to component state
      * @param choice
      */
     selectChoice(event) {
-        let value = null;
+        let value, display;
 
         if (event.target) {
             value = event.target.value;
+            display = event.target.value;
         } else {
-            value = {label: event.value.coercedValue.value};
+            value = event.value.coercedValue.value;
+            display = event.value.displayValue;
         }
-        this.setState({choice: value});
+        this.setState(
+            {choice: {
+                value: value,
+                display: display,
+            }});
         if (this.props.onChange) {
             this.props.onChange(value);
         }
@@ -78,18 +93,21 @@ const MultiChoiceFieldValueEditor = React.createClass({
             };
         } else {
             theVals = {
-                value: this.state.choice.label,
-                display: this.state.choice.label
+                value: this.state.choice.value,
+                display: this.state.choice.display,
             };
         }
-
+        // If the user picked the blank entry (none), the display contains a space character.
+        if (this.state.choice.value === '') {
+            theVals.display = '';
+        }
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
     },
 
     renderOption(choice) {
-        let isSelected = this.state.choice.label !== '' && this.state.choice.label === choice.label;
+        let isSelected = this.state.choice.value !== '' && this.state.choice.display === choice.label;
         let classes = 'choiceLabel';
         classes += isSelected ? ' selected' : '';
         return (
@@ -143,7 +161,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const emptyOptionText = '\u00a0'; //Non breaking space
 
         let choices = this.props.choices;
-        let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
+        let selectedValue = this.state.choice ? {label: this.state.choice.display} : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
         /**
          *This is commented out right now, because the current Schema in core does not accept/save null inputs
          * This gives the user the ability to select an empty space as an input
