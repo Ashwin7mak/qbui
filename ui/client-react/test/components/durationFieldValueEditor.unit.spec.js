@@ -49,15 +49,14 @@ fdescribe('DurationFieldValueEditor', () => {
                 target: {value: userInput}
             });
             Simulate.blur(domComponent);
-            let expectedResult;
             let type = test.type;
             if (type === undefined) {
                 type = test.scale;
             }
-            let expectedMilliSeconds = moment.duration(test.numValue, type).asMilliseconds();
-            let newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
-            expectedResult = divideBigDecimal(newExpectedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(expectedMilliSeconds);
+            let totalMilliSeconds = moment.duration(test.numValue, type).asMilliseconds();
+            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            expect(component.state.value).toEqual(totalMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
         });
     });
@@ -71,12 +70,9 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.timeFormatData.forEach(function(test) {
-        fit('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
+        it('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
-            let newExpectedMilliSeconds;
-            let expectedMilliSeconds;
-            let expectedResult;
             let seconds = 0;
             let minutes = 0;
             let hours = 0;
@@ -93,10 +89,10 @@ fdescribe('DurationFieldValueEditor', () => {
             if (test.HH) {
                 hours = moment.duration(test.HH, 'Hours').asMilliseconds();
             }
-            expectedMilliSeconds = seconds + minutes + hours;
-            newExpectedMilliSeconds = new bigDecimal.BigDecimal(expectedMilliSeconds.toString());
-            expectedResult = divideBigDecimal(newExpectedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(expectedMilliSeconds);
+            let totalMilliSeconds = seconds + minutes + hours;
+            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            expect(component.state.value).toEqual(totalMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
         });
     });
