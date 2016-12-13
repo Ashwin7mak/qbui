@@ -227,6 +227,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                invalidResultData={invalidStatus.invalidResultData}
                                 appUsers={this.props.appUsers}
                     />
                 }
@@ -297,6 +298,7 @@ const CellRenderer = React.createClass({
         let current = Object.assign({}, this.state.validationStatus);
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
+        current.invalidResultData = result;
         this.setState({validationStatus : current});
     }
 });
