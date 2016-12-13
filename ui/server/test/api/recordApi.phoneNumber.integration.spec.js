@@ -131,7 +131,7 @@
                     message           : 'raw null phone number',
                     record            : possibleInternationalInput,
                     format            : 'raw',
-                    expectedFieldValue: possibleInternationalInput
+                    expectedFieldValue: possibleInternationalExpected
                 }
             ];
         }
