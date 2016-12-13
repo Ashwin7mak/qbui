@@ -247,6 +247,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                invalidResultData={invalidStatus.invalidResultData}
                                 appUsers={this.props.appUsers}
                     />
                 }

@@ -264,8 +264,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Please fix this field",
-                multipleErrorLabelPrefix: "Please fix these",
-                multipleErrorLabelSuffix: "fields",
+                multipleErrorLabel: "Please fix these {numFields} fields."
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Show error list",
@@ -395,6 +394,7 @@ export default {
             unknown: 'Invalid unknown type. Results: ',
             required: 'Fill in the {fieldName}',
             email: 'Format the {fieldName} like name@domain.com',
+            emails: 'Format all the addresses like name@domain.com',
             maxChars: 'Use up to {maxNum} characters',
             choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },

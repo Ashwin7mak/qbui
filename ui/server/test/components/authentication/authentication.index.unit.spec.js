@@ -49,8 +49,8 @@ describe('Validate https response authentication functions', function() {
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
         assert(stubMockJson.calledOnce);
-        assert(spyCookie.callCount === 2, true);
-        assert(spyClearCookie.callCount === 2, true);
+        assert(spyCookie.callCount === 3, true);
+        assert(spyClearCookie.callCount === 3, true);
         assert(spyRender.callCount === 0, true);
     });
 
@@ -67,8 +67,8 @@ describe('Validate https response authentication functions', function() {
         assert.equal(mockRes.httpStatus, 200);
         assert(stubLog.calledOnce);
         assert(stubMockJson.callCount === 0, true);
-        assert(spyCookie.callCount === 2, true);
-        assert(spyClearCookie.callCount === 2, true);
+        assert(spyCookie.callCount === 3, true);
+        assert(spyClearCookie.callCount === 3, true);
         assert(spyRender.calledOnce);
     });
 
