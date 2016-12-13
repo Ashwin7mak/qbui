@@ -397,7 +397,8 @@ export default {
             required: 'Fill in the {fieldName}',
             email: 'Format the {fieldName} like name@domain.com',
             maxChars: 'Use up to {maxNum} characters',
-            choiceMaxLength :"Select a choice with {maxNum} characters or less"
+            choiceMaxLength :"Select a choice with {maxNum} characters or less",
+            duration: "Format the {fieldName} in {scale}"
         },
         createInQuickBaseClassicMessage: {
         },

@@ -392,7 +392,8 @@ export default {
             required: 'Füllen Sie das {fieldName}',
             email: 'Formatieren Sie die {fieldName} wie name@domaine.de',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
-            choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
+            choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger",
+            duration: "Formatieren Sie die {fieldName} im {scale}"
         },
         noneOption: "\<Keiner\>",
         unimplemented: {

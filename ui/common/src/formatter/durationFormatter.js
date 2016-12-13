@@ -425,7 +425,7 @@
             console.log('newVal: ', newVal);
 
             newVal.forEach(function(val) {
-                if (ALLOWED_DURATION_TYPE.indexOf(val) === -1) {
+                if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
                     valid = false;
                 }
             });
@@ -458,10 +458,16 @@
                 return getMilliseconds(value, fieldInfo.scale);
             }
             /**
-             * Checks to see if the value is valid
+             * If the user inserted a semicolon, then the string needs to be parsed based off of
+             * the HHMMSS, HHMM, MMSS requirements
+             * */
+            if (value && value.split('').indexOf(':') !== -1) {
+                return convertHourMinutesSeconds(value);
+            }
+            /**
+             * Checks to see if the value is a valid input
              * */
             if (!this.isValid(value)) {
-                debugger;
                 return value;
             }
 
@@ -472,13 +478,6 @@
              * */
             if (typeof value === 'string') {
                 value = value.toLowerCase();
-            }
-            /**
-             * If the user inserted a semicolon, then the string needs to be parsed based off of
-             * the HHMMSS, HHMM, MMSS requirements
-             * */
-            if (value && value.split('').indexOf(':') !== -1) {
-                return convertHourMinutesSeconds(value);
             }
             /**
              * If the user passes in a string containing a number and a type, we split the string here

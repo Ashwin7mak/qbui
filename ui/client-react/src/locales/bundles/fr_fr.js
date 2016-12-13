@@ -392,7 +392,8 @@ export default {
             required: 'Remplissez {fieldName}',
             email: 'Formater la {fieldName} comme prénom@domaine.fr',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
-            choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
+            choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins",
+            duration: "Formater le  {fieldName} dans {scale}"
         },
         noneOption: "\<Aucun\>",
         unimplemented: {
