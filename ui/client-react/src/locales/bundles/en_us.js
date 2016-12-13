@@ -28,8 +28,7 @@ export default {
                 helpTitle: "Need help?",
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
                 helpLinkPreText: "Please ",
-                helpLinkText: "contact our Care team",
-                missingWalkMe: "Tutorial is not available."
+                helpLinkText: "contact our Care team"
             }
         },
         appMenu: {
@@ -38,7 +37,7 @@ export default {
         pendingEditModal: {
             modalBodyMessage: "Save changes before leaving?",
             modalStayButton: "Stay and keep working",
-            modalDoNotSaveButton: "Don't Save",
+            modalDoNotSaveButton: "Don't save",
             modalSaveButton: "Save"
         },
         dtsErrorModal: {
@@ -169,6 +168,23 @@ export default {
                 createdOn: "Created on ",
                 ownedBy: "Owned by "
             }
+        },
+        durationWithUnits: {
+            // these keys can't change they correspond to the
+            // duration consts for localization lookup
+            Weeks:"{value, plural, \n =0 {0 weeks}\n =1 {1 week}\n other {{value}  weeks}\n} ",
+            Days:"{value, plural, \n =0 {0 days}\n =1 {1 day}\n other {{value}  days}\n} ",
+            Hours:"{value, plural, \n =0 {0 hours}\n =1 {1 hour}\n other {{value}  hours}\n} ",
+            Minutes: "{value, plural, \n =0 {0 minutes}\n =1 {1 minute}\n other {{value}  minutes}\n} ",
+            Seconds: "{value, plural, \n =0 {0 seconds}\n =1 {1 second}\n other {{value}  seconds}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 milliseconds}\n =1 {1 millisecond}\n other {{value}  milliseconds}\n} "
+        },
+        durationTableHeader: {
+            Weeks:"weeks",
+            Days:"days",
+            Hours:"hours",
+            Minutes: "minutes",
+            Seconds: "seconds"
         },
         report : {
             blank : "blank",
@@ -408,6 +424,7 @@ export default {
             versionSelectTitle: "My users will open this app in",
             manageAccessTip: "*Only app admins can manage user access"
 
-        }
+        },
+        missingWalkMe: "Tutorial is not available"
     }
 };

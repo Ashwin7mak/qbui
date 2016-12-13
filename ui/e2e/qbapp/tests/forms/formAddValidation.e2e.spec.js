@@ -38,9 +38,9 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    done();
-                });
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl);
+            }).then(function() {
+                done();
             });
         });
 
@@ -49,7 +49,7 @@
          */
         beforeEach(function(done) {
             //go to report page directly.
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent();
             done();
         });

@@ -19,10 +19,10 @@
                 .btn {
                     &:hover {
                         background-color: $nav-icon-hover-bg;
-                        color: $color2;
+                        color: $color-black-100;
                     }
                     background-color: inherit;
-                    color: $color2;
+                    color: $color-black-100;
                     padding: 0;
 
                     .qbIcon {

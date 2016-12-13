@@ -27,6 +27,9 @@
 
     .iconRight {
         right: 20px;
+        @include small-breakpoint {
+            right: 10px;
+        }
     }
 
     &:not(.nonCollapsible) .qbPanelHeader {
@@ -69,7 +72,6 @@
         flex-wrap: wrap;
         flex-direction: column;
         background-color: $panel-background-color;
-        overflow: auto;
 
         .qbPanelHeaderIcon {
             color: $panel-header-icon-color;

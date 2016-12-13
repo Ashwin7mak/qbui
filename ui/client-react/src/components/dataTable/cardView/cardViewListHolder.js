@@ -31,6 +31,7 @@ let CardViewListHolder = React.createClass({
     getInitialState() {
         return {
             allowCardSelection: false,
+            rowActionsRowId: -1,
             swiping: false
         };
     },
@@ -47,6 +48,10 @@ let CardViewListHolder = React.createClass({
      * or has finished card selection (by swiping left to hide selection column)
      */
     onToggleCardSelection(allow = true, rowData = null) {
+
+        if (this.state.rowActionsRowId !== -1) {
+            return;
+        }
         this.setState({allowCardSelection: allow, swiping:false});
 
         const flux = this.getFlux();
@@ -89,6 +94,9 @@ let CardViewListHolder = React.createClass({
 
     /** swiping to expose/hide checkbox column */
     onSwipe(delta) {
+        if (this.state.rowActionsRowId !== -1) {
+            return;
+        }
         // delta is number of pixels swiped to the LEFT!
 
         let horizontalOffset = this.state.allowCardSelection ? 0 : -CHECKBOX_COL_WIDTH;
@@ -124,6 +132,13 @@ let CardViewListHolder = React.createClass({
         }
     },
 
+    rowActionsOpened(rowId) {
+        this.setState({rowActionsRowId: rowId});
+    },
+
+    rowActionsClosed() {
+        this.setState({rowActionsRowId: -1});
+    },
     /**
      * Checks if the event target element or its parent element matches the supplied classname
      * @param evTarget
@@ -289,7 +304,10 @@ let CardViewListHolder = React.createClass({
                                       onRowClicked={this.props.onRowClicked}
                                       isRowSelected={this.isRowSelected}
                                       onEditRecord={this.openRecordForEdit}
-                                      onSwipe={this.onSwipe} />
+                                      onSwipe={this.onSwipe}
+                                      onActionsOpened={this.rowActionsOpened}
+                                      onActionsClosed={this.rowActionsClosed}
+                                      rowActionsRowId={this.state.rowActionsRowId}/>
 
                         {showNextButton ?
                             (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :

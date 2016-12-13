@@ -1,7 +1,7 @@
 //need to import colors and update accordingly where I changed css code.
 
 @import '../../assets/css/qbVariables';
-$activeTab-color: $color9;
+$activeTab-color: $color-black-600;
 $disabledTab-color: $nav-border;
 $chevronFontSize: 16px;
 
@@ -95,7 +95,7 @@ $chevronFontSize: 16px;
 }
 
 .rc-tabs-nav div.rc-tabs-tab-active > .rc-tabs-tab-inner, .rc-tabs-nav div.rc-tabs-tab-active > .rc-tabs-tab-inner:hover {
-    color: #404040;
+    color: $color-black-700;
     cursor: default;
 }
 
@@ -127,7 +127,7 @@ $chevronFontSize: 16px;
 }
 
 .rc-tabs-nav .rc-tabs-tab > .rc-tabs-tab-inner:hover {
-    color: #404040;
+    color: $color-black-700;
 }
 
 .rc-tabs-tabpane-hidden {
@@ -282,7 +282,7 @@ $chevronFontSize: 16px;
 }
 
 .rc-tabs-top .rc-tabs-tabs-bar {
-    border-bottom: 1px solid #f3f3f3;
+    border-bottom: 1px solid $badcolor18;
 }
 
 .rc-tabs-top .rc-tabs-nav-container-scrolling {

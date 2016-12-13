@@ -25,7 +25,6 @@
             let ticketVersion = options && (typeof options.ticketVersion !== 'undefined') ? options.ticketVersion : userConsts.DEFAULT_TICKET_VERSION;
 
             return {
-                id                : userId,
                 firstName         : first,
                 lastName          : last,
                 screenName        : screenName,
@@ -35,8 +34,9 @@
                 administrator     : administrator,
                 challengeQuestion : challengeQuestion,
                 challengeAnswer   : challengeAnswer,
-                password          : password,
-                ticketVersion     : ticketVersion
+                password          : password
+                //id                : userId,
+                // ticketVersion     : ticketVersion
             };
         }
     });
@@ -66,7 +66,6 @@
          * </p>
          * Available options are:
          * {
-         *  id: <id>
          *  firstName: <firstName>
          *  lastName: <lastName>
          *  screenName: <screenName>
@@ -77,7 +76,6 @@
          *  challengeQuestion: <challengeQuestion>
          *  challengeAnswer: <challengeAnswer>
          *  password: <password>
-         *  ticketVersion: <ticketVersion>
          * }
          * </p>
          * These options may be sparsely populated and we will generate values for those keys not present.
@@ -118,6 +116,37 @@
                 //userResultList.push(this.generatePopulatedUser({id: userId}));
                 userResultList.push(this.generatePopulatedUser());
             });
+            return userResultList;
+        },
+
+        /**
+         * Generate 5 default users with certain fields populated with concrete values to generate contrived situations
+         * </p>
+         * Available options are:
+         * {
+         *  firstName: <firstName>
+         *  lastName: <lastName>
+         *  screenName: <screenName>
+         *  email: <emailAddress>
+         *  deactivated: <activityStatus>
+         *  anonymous: <anonymous>
+         *  administrator: <administrator>
+         *  challengeQuestion: <challengeQuestion>
+         *  challengeAnswer: <challengeAnswer>
+         *  password: <password>
+         * }
+         * </p>
+         * These options may be sparsely populated and we will generate values for those keys not present.
+         * @param numberOfUser override the default value in the constant def file.
+         * @returns {*}
+         */
+        generateDefaultAdminUsers: function(numberOfUser) {
+            let userResultList = [];
+
+            if (numberOfUser === undefined) {
+                numberOfUser = userConsts.DEFAULT_NUM_USERS;
+            }
+            Array(numberOfUser).fill().map((_, i) => {userResultList.push(this.generatePopulatedUser());});
             return userResultList;
         }
     };

@@ -491,9 +491,9 @@
                 root += '/' + appId;
 
                 if (isPost === true) {
-                    root += '?a=' + SET_APPLICATION_STACK_JBI + '&value=' + value;
+                    root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + SET_APPLICATION_STACK_JBI + '&' + constants.REQUEST_PARAMETER.LEGACY_STACK.VALUE + '=' + value;
                 } else {
-                    root += '?a=' + GET_APPLICATION_STACK_JBI;
+                    root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + GET_APPLICATION_STACK_JBI;
                 }
             }
             return root;
