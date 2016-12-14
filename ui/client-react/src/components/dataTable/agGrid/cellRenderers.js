@@ -20,6 +20,7 @@ import _ from 'lodash';
 import FieldFormats from '../../../utils/fieldFormats';
 import FieldUtils from '../../../utils/fieldUtils';
 import Logger from "../../../utils/logger";
+import * as durationFormatter from "../../../../../common/src/formatter/durationFormatter";
 
 
 let logger = new Logger();
@@ -163,10 +164,24 @@ const CellRenderer = React.createClass({
     },
 
     /**
+     * gets the classname for duration, scales with fixed text units get wUnitsText
+     * in addition to durationFormat
+     * @param coldef
+     * @returns {string}
+     */
+    getClassNameForDuration(coldef) {
+        let answer = "durationFormat";
+        if (coldef && _.has(coldef, 'fieldDef.datatypeAttributes.scale') &&
+            durationFormatter.hasUnitsText(coldef.fieldDef.datatypeAttributes.scale)) {
+            answer += " wUnitsText";
+        }
+        return answer;
+    },
+    /**
      *
      * @returns {*}
      */
-    getClassNameForType(cellType) {
+    getClassNameForType(cellType, coldef) {
         switch (cellType) {
         case FieldFormats.DATE_FORMAT:            return "dateFormat";
         case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
@@ -175,7 +190,7 @@ const CellRenderer = React.createClass({
         case FieldFormats.RATING_FORMAT:          return "ratingFormat";
         case FieldFormats.CURRENCY_FORMAT:        return "currencyFormat";
         case FieldFormats.PERCENT_FORMAT:         return "percentFormat";
-        case FieldFormats.DURATION_FORMAT:        return "durationFormat";
+        case FieldFormats.DURATION_FORMAT:        return this.getClassNameForDuration(coldef);
         case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
         case FieldFormats.TEXT_FORMAT:            return "textFormat";
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
@@ -230,7 +245,7 @@ const CellRenderer = React.createClass({
         let invalidStatus = this._getValidationErrors();
 
         return (
-            <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
+            <span className={"cellWrapper " + this.getClassNameForType(this.props.type, this.props.colDef)}>
 
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={cellType}
