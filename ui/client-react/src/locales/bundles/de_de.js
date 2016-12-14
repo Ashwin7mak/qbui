@@ -354,7 +354,8 @@ export default {
         placeholder:  {
             email: 'name@domaine.de',
             maxLength :"bis zu {maxLength} Zeichen",
-            url: 'www.beispiel.de'
+            url: 'www.beispiel.de',
+            phone: '+x x xx xx xx xx',
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         errors: {

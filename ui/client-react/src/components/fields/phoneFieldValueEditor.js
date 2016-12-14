@@ -1,7 +1,9 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
-import './phoneField.scss';
 import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
+import Locale from '../../locales/locales';
+
+import './phoneField.scss';
 
 const PhoneFieldValueEditor = React.createClass({
     displayName: 'PhoneFieldValueEditor',
@@ -80,7 +82,7 @@ const PhoneFieldValueEditor = React.createClass({
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        placeholder = phoneNumberFormatter.PLACEHOLDER;
+        placeholder = Locale.getMessage('placeholder.phone');
         let phoneNumber = '';
         let officeExt = '';
         let hasExtInput = this.props.attributes && this.props.attributes.includeExtension;

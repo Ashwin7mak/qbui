@@ -4,7 +4,6 @@
  */
 (function() {
     'use strict';
-    var PLACEHOLDER = "(xxx) xxx-xxxx";
     var EXTENSION_DELIM = 'x';
     var OPEN_PAREN = '(';
     var CLOSE_PAREN = ')';
@@ -22,7 +21,6 @@
         OPEN_PAREN: OPEN_PAREN,
         CLOSE_PAREN: CLOSE_PAREN,
         DASH: DASH,
-        PLACEHOLDER: PLACEHOLDER,
         //Given a raw number as input, formats as a legacy QuickBase phone number. Note, not internationalized
         getExtension: function(phoneNumber) {
             if (!phoneNumber) {
