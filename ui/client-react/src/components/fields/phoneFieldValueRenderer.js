@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import QBicon from '../../components/qbIcon/qbIcon.js';
 import './urlField.scss';
 import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
@@ -9,22 +9,34 @@ const PhoneFieldValueRenderer = React.createClass({
     propTypes: {
         /**
          * the value to for sms and tel link */
-        value: React.PropTypes.string,
+        value: PropTypes.string,
         /**
          * the display to render */
-        display: React.PropTypes.object.isRequired,
+        display: PropTypes.object.isRequired,
         /**
          * phone field attributes
          */
-        attributes: React.PropTypes.object,
+        attributes: PropTypes.object,
 
         /**
          * Disable the phone link */
-        disabled: React.PropTypes.bool
+        disabled: PropTypes.bool,
+
+        /**
+         * if false, extension will not be displayed */
+        includeExtension: PropTypes.bool,
     },
 
     getDefaultProps() {
-        return {disabled: false};
+        return {
+            disabled: false,
+            includeExtension: true,
+        };
+    },
+
+    shouldIncludeExtension() {
+        let displayInfo = this.props.display;
+        return (this.props.includeExtension && (displayInfo.extension && displayInfo.extension.length));
     },
 
     renderLink() {
@@ -40,7 +52,7 @@ const PhoneFieldValueRenderer = React.createClass({
             telPhoneNumberLink = displayInfo.internetDialableNumber;
             smsPhoneNumberLink = 'sms:' + displayInfo.internationalNumber;
             extraDigits = displayInfo.extraDigits;
-            extension = ((displayInfo.extension && displayInfo.extension.length) ? `${phoneNumberFormatter.EXTENSION_DELIM}${displayInfo.extension}` : null);
+            extension = (this.shouldIncludeExtension() ? `${phoneNumberFormatter.EXTENSION_DELIM}${displayInfo.extension}` : null);
             isDialable = displayInfo.isDialable;
         } else {
             displayValue = this.props.display;
