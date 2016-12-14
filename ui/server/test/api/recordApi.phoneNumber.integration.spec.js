@@ -57,7 +57,7 @@
                 countryCode: 1,
                 display: '(234) 567-8901',
                 extraDigits: '23',
-                internationalNumber: '+12345678901',
+                internationalNumber: '+1 234-567-8901',
                 internetDialableNumber: 'tel:+1-234-567-8901',
                 isDialable: true,
             })};
@@ -67,7 +67,7 @@
             var possibleInternationalExpected = {id: fid, value: '33970736012', display: buildDisplayValue({
                 countryCode: 33,
                 display: '+33 9 70 73 60 12',
-                internationalNumber: '+33970736012',
+                internationalNumber: '+33 9 70 73 60 12',
                 internetDialableNumber: 'tel:+33-9-70-73-60-12',
                 isDialable: true
             })};
