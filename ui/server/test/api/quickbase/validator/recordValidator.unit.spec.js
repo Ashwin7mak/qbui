@@ -36,29 +36,33 @@ describe('RecordValidator', () => {
         assert.deepEqual(results, testPreviousResults);
     });
 
-    // Test cases to make sure field specific validators are called within recordValidator
-    var fieldSpecificValidatorTestCases = [
-        {
-            description: 'validates phone numbers',
-            validatorVariableName: 'phoneValidator',
-            fieldType: constants.PHONE_NUMBER
-        }
-    ];
+    // These tests only ensure a field type validator was called correctly. Please add separate unit tests for
+    // confirming the field specific validators work as expected
+    describe('field specific validators', () => {
+        var fieldSpecificValidatorTestCases = [
+            {
+                description: 'validates phone numbers',
+                validatorVariableName: 'phoneValidator',
+                fieldType: constants.PHONE_NUMBER
+            }
+        ];
 
-    fieldSpecificValidatorTestCases.forEach(testCase => {
-        it(testCase.description, () => {
-            var mockValidator = {validateAndReturnResults: sinon.spy()};
-            var mockDependencies = {};
-            mockDependencies[testCase.validatorVariableName] = mockValidator;
-            var revert = recordValidator.__set__(mockDependencies);
+        fieldSpecificValidatorTestCases.forEach(testCase => {
+            it(testCase.description, () => {
+                var mockValidator = {validateAndReturnResults: sinon.spy()};
+                var mockDependencies = {};
+                mockDependencies[testCase.validatorVariableName] = mockValidator;
+                var revert = recordValidator.__set__(mockDependencies);
 
-            var fieldDef = {fieldDef: {datatypeAttributes: {type: testCase.fieldType}}};
+                var fieldDef = {fieldDef: {datatypeAttributes: {type: testCase.fieldType}}};
 
-            recordValidator.checkFieldValue(fieldDef, testName, testValue, testCheckRequired);
+                recordValidator.checkFieldValue(fieldDef, testName, testValue, testCheckRequired);
 
-            assert(mockValidator.validateAndReturnResults.calledWith(testValue, testName, testPreviousResults));
+                assert(mockValidator.validateAndReturnResults.calledWith(testValue, testName, testPreviousResults));
 
-            revert();
+                revert();
+            });
         });
     });
+
 });
