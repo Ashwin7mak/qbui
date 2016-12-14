@@ -74,11 +74,11 @@
 
             //Empty records
             var emptyPhoneRecords = [{id: fid, value: ''}];
-            var expectedEmptyPhoneRecords = {id: fid, value: null, display: buildDisplayValue({display: ''})};
+            var expectedEmptyPhoneRecords = {id: fid, value: null, display: buildDisplayValue({display: '', countryCode: null})};
 
             //null record value
             var nullPhoneRecords = [{id: fid, value: null}];
-            var nullExpectedPhoneRecords = {id: fid, value: null, display: buildDisplayValue({display: ''})};
+            var nullExpectedPhoneRecords = {id: fid, value: null, display: buildDisplayValue({display: '', countryCode: null})};
 
             return [
                 {
