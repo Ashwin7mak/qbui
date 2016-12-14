@@ -105,7 +105,8 @@ const PhoneFieldValueEditor = React.createClass({
                                                 classes={classes ? classes.extNumber : ''}
                                                 onChange={this.onChangeExtNumber}
                                                 onBlur={this.onBlur}
-                                                value={officeExt || ''} />);
+                                                value={officeExt || ''}
+                                                inputType="tel" />);
         const ext = (<span className="ext">{phoneNumberFormatter.EXTENSION_DELIM}</span>);
 
         return (
@@ -115,7 +116,8 @@ const PhoneFieldValueEditor = React.createClass({
                                       placeholder={placeholder}
                                       onChange={this.onChangeOfficeNumber}
                                       onBlur={this.onBlur}
-                                      value={phoneNumber || ''} />
+                                      value={phoneNumber || ''}
+                                      inputType="tel" />
                 {hasExtInput ? ext : null}
                 {hasExtInput ? extInput : null}
             </div>

@@ -29,4 +29,3 @@ var recordValidator = {
 };
 
 module.exports = recordValidator;
-
