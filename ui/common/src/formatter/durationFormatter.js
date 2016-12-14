@@ -462,8 +462,11 @@
         },
         isValid: function(value) {
             var regexHasNums = /[0-9]+/g;
-
-            // Don't validate empty strings
+            /**
+             * Don't validate empty strings
+             * */
+            var tempNum;
+            var tempType = [];
             var valid = true;
             var type;
             /**
@@ -472,9 +475,15 @@
             if (!regexHasNums.test(value)) {
                 return false;
             }
+            /**
+             * If the input is only a number, return true
+             * */
             if (typeof value === 'number' || !value) {
                 return true;
             }
+            /**
+             * If a user inserted a colon, it will be validated based off of time formats
+             * */
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             if (value.split('').indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
@@ -488,8 +497,19 @@
             type.forEach(function(val) {
                 if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
                     valid = false;
+                } else if (val !== '') {
+                    tempType.push(val);
                 }
             });
+            tempNum = value.match(regexNumsDecimalsColons);
+            /**
+             * If a user inserts more types than nums return false
+             * 1 week day invalid format
+             * 1 week 2 days valid format
+             * */
+            if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
+                return false;
+            }
             return valid;
         },
         onBlurParsing: function(value, fieldInfo) {
