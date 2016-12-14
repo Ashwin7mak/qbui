@@ -51,6 +51,7 @@ import PageTitleDoc from './docs/pageTitle.js';
 import PhoneFieldValueEditorDoc from './docs/phoneFieldValueEditor.js';
 import PhoneFieldValueRendererDoc from './docs/phoneFieldValueRenderer.js';
 import DurationFieldValueRendererDoc from './docs/durationFieldValueRenderer.js';
+import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -89,6 +90,7 @@ render((
             <Route path="invisibleBackdrop" component={InvisibleBackdropDoc} />
             <Route path="phoneFieldValueEditor" component={PhoneFieldValueEditorDoc} />
             <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
+            <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
