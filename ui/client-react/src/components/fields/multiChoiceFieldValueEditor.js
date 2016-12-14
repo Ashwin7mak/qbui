@@ -58,6 +58,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     selectChoice(event) {
         let newValue = {};
         if (event.target) {
+            newValue.value = ''; // for when the user selects the 'none' choice
             newValue.display = event.target.value;
             // find the real value that corresponds to the displayValue
             this.props.choices.some((choice) => {

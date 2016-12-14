@@ -157,11 +157,11 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         var inputs = node.querySelectorAll('input');
         TestUtils.Simulate.click(inputs[2], {
             target: {
-                value: 'Banana'
+                value: 'Bananas'
             }
         });
 
-        expect(parent.state.value).toEqual("Banana");
+        expect(parent.state.value).toEqual("Bananas");
     });
 
     // For radio group, test click on text selects radio item
@@ -174,7 +174,16 @@ describe('MultiChoiceFieldValueEditor functions', () => {
                 this.setState({value: val});
             },
             render() {
-                return <MultiChoiceFieldValueEditor ref="field" fieldDef={radioBoxData.fieldDefNotRequired} value={this.state.value} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices} onChange={this.onChange}/>;
+                return <MultiChoiceFieldValueEditor
+                    ref="field"
+                    fieldDef={radioBoxData.fieldDefNotRequired}
+                    value={this.state.value}
+                    radioGroupName={"myRadioGroupName"}
+                    showAsRadio={true}
+                    choices={radioBoxData.choices}
+                    onChange={this.onChange}
+                    display={this.state.value}
+                />;
             }
         }));
 
