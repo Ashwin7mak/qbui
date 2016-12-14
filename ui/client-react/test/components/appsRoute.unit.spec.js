@@ -58,7 +58,7 @@ describe('AppsRoute functions', () => {
 
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
 
-        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/pageNotFound");
+        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable");
     });
 
     it('does not redirect to error page if non admin user has a v3 app', () => {

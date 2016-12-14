@@ -82,12 +82,26 @@ describe('Validate https response error functions', function() {
 
         error[500](mockReq, mockRes);
 
-        // expect the http status to be 400, the json to be added to the response
+        // expect the http status to be 4500, the json to be added to the response
         // and the logger to have been called
         assert.equal(mockRes.httpStatus, 500);
         assert(stubLog.calledOnce);
         assert(stubMockJson.calledOnce);
         assert(spyRender.callCount === 0, true);
+    });
+
+    it('validate app not availabe in mercury', function() {
+        mockReq.headers = {
+            accept: consts.TEXT_HTML
+        };
+
+        error.notAvailable(mockReq, mockRes);
+
+        // expect the http status to be 200
+        assert.equal(mockRes.httpStatus, 200);
+        assert(stubLog.calledOnce);
+        assert(stubMockJson.callCount === 0, true);
+        assert(spyRender.callCount === 1, true);
     });
 
 });
