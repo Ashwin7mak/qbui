@@ -1,8 +1,8 @@
 'use strict';
 
 var assert = require('assert');
-var phoneValidator = require('../../src/validator/phoneValidator');
-var dataErrorCodes = require('../../src/dataEntryErrorCodes');
+var phoneValidator = require('../../../../src/api/quickbase/validator/phoneValidator');
+var dataErrorCodes = require('../../../../../common/src/dataEntryErrorCodes');
 
 describe('PhoneValidator', () => {
     describe('validateAndReturnResults', () => {
@@ -28,50 +28,50 @@ describe('PhoneValidator', () => {
 
         var testCases = [
             {
-                description: 'passes through the results if a number is not provided',
-                phoneNumber: '',
-                previousResults: testPreviousResults,
-                expectedResults: testPreviousResults,
-            },
-            {
-                description: 'passes through the results if the number is null',
-                phoneNumber: null,
-                previousResults: testPreviousResults,
-                expectedResults: testPreviousResults,
-            },
-            {
-                description: 'is invalid for a number that is too short',
-                phoneNumber: '86',
+                description: 'is invalid for numbers that are too short',
+                phoneNumber: '12',
                 previousResults: null,
-                expectedResults: invalidPhoneNumberResults,
+                expectedResults: invalidPhoneNumberResults
             },
             {
-                description: 'is invalid for a number that is an unlikely phone number length',
-                phoneNumber: '86753',
+                description: 'is invalid for numbers that are too short and have an extension',
+                phoneNumber: '12 x 1235',
                 previousResults: null,
-                expectedResults: invalidPhoneNumberResults,
+                expectedResults: invalidPhoneNumberResults
             },
             {
-                description: 'is valid for a likely emergency number (3 characters)',
-                phoneNumber: '911',
+                description: 'is invalid for fake numbers',
+                phoneNumber: '555-555-5555',
+                previousResults: null,
+                expectedResults: invalidPhoneNumberResults
+            },
+            {
+                description: 'is valid for US numbers',
+                phoneNumber: '(508) 481-1015',
                 previousResults: null,
                 expectedResults: null
             },
             {
-                description: 'is valid for a number that is 7 characters',
-                phoneNumber: '8675309',
+                description: 'is valid for international numbers',
+                phoneNumber: '+33 9 68 68 68 58',
                 previousResults: null,
                 expectedResults: null
             },
             {
-                description: 'is valid for numbers longer than 7 characters (valid numbers must only start with a valid number, but could have extra digits)',
-                phoneNumber: '8675309 18009453669',
+                description: 'is valid for numbers with an extension',
+                phoneNumber: '+33 9 68 68 68 58 x 12354',
                 previousResults: null,
                 expectedResults: null
             },
             {
-                description: 'does not include special characters in the length count (this number is invalid because it has less than 3 digits)',
-                phoneNumber: '1- 2 - ()',
+                description: 'is valid for long numbers that contain a valid number at the beginning',
+                phoneNumber: '(508) 481-10158675309 x 12354',
+                previousResults: null,
+                expectedResults: null
+            },
+            {
+                description: 'is invalid for long numbers that do not contain a valid number',
+                phoneNumber: '(000) 555-5555558675309 x 12354',
                 previousResults: null,
                 expectedResults: invalidPhoneNumberResults
             },

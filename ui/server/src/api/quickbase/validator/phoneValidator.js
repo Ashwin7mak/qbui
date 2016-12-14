@@ -5,7 +5,7 @@
     var dataErrorCodes = require('../../../../../common/src/dataEntryErrorCodes');
 
 
-    var phoneNumberValidator = {
+    var phoneValidator = {
         /**
          * Validate a phone number and either pass through the existing result or update with new validation error
          * A number is valid when it is determined to be a real number by Google Libphonenumber or could be
@@ -46,5 +46,5 @@
         }
     };
 
-    module.exports = phoneNumberValidator;
+    module.exports = phoneValidator;
 }());

@@ -3,7 +3,7 @@
     var _ = require('lodash');
     var ValidatorUtils = require('../../../../../common/src/validationUtils');
     var constants = require('../../../../../common/src/constants');
-    var phoneNumberValidator = require('./phoneNumberValidator');
+    var phoneValidator = require('./phoneValidator');
 
     /**
      * A wrapper for the common validator utils that has additional server-side only validations
@@ -19,7 +19,7 @@
             if (_.has(fieldDef, 'datatypeAttributes.type')) {
                 switch (fieldDef.datatypeAttributes.type) {
                 case constants.PHONE_NUMBER :
-                    results = phoneNumberValidator.validateAndReturnResults(value, name, results);
+                    results = phoneValidator.validateAndReturnResults(value, name, results);
                     break;
                 }
             }
