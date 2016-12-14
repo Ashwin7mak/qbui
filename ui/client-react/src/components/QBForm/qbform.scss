@@ -1,4 +1,6 @@
 @import '../../assets/css/qbVariables';
+@import '../fields/fields';
+
 $edit-field-padding: 5px;
 
 .formContainer {
@@ -155,6 +157,16 @@ $edit-field-padding: 5px;
                 display: flex;
                 flex-direction: column;
             }
+
+            /** Error border for dateTime needs this specificity to show up on forms */
+            .dateCell.error {
+                @include error-border;
+
+                .input-group.date {
+                    border: none;
+                }
+            }
+
         }
 
         .input, textarea.cellEdit {
@@ -204,8 +216,8 @@ $edit-field-padding: 5px;
         /* Dont want to form section to get a scroll bar when the react select menu expands so remove the position absolute -
      this automatically adds height to the section container */
         .Select-menu-outer {
-            position: relative !important;
             top: auto !important;
+            margin-bottom: 10px;
         }
     }
 
@@ -279,11 +291,11 @@ $edit-field-padding: 5px;
     }
 
     /**
- * on forms, we want the form to expand vertically to accomodate the datepicker
- * when it's open (like react-select based components), so make it use relative positioning,
- * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
- * reorder the datepicker AFTER the input using only CSS
- */
+     * on forms, we want the form to expand vertically to accomodate the datepicker
+     * when it's open (like react-select based components), so make it use relative positioning,
+     * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
+     * reorder the datepicker AFTER the input using only CSS
+     */
     .formElement .fieldValueEditor .dateCell {
         border: 0;
 
@@ -292,15 +304,13 @@ $edit-field-padding: 5px;
             flex-direction: column;
 
             .input-group.date {
-                border: 1px solid #c7c7c7;
+                border: 1px solid $color-black-400;
                 border-radius: 2px;
             }
 
             .bootstrap-datetimepicker-widget {
-                right: 0 !important;
-                top: 10px !important;
                 order: 2;
-                position: relative !important;
+                margin-bottom: 10px;
             }
         }
     }

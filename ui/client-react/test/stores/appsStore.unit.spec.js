@@ -29,7 +29,7 @@ describe('Test Apps Store', () => {
     it('test default apps store state', () => {
 
         // verify default states
-        expect(flux.store(STORE_NAME).apps.length).toEqual(0);
+        expect(flux.store(STORE_NAME).apps).toBeNull();
         expect(flux.store(STORE_NAME).selectedAppId).toBeFalsy();
         expect(flux.store(STORE_NAME).selectedTableId).toBeFalsy();
         expect(flux.store(STORE_NAME).loading).toBeTruthy();

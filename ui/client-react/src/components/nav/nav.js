@@ -21,11 +21,10 @@ import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import NavPageTitle from '../pageTitle/navPageTitle';
-import Locale from '../../locales/locales';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
 import UrlUtils from '../../utils/urlUtils';
-import Constants from '../../services/constants';
+import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -53,9 +52,7 @@ export let Nav = React.createClass({
     },
 
     getTopGlobalActions() {
-        const actions = [
-            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
-        ];
+        const actions = [];
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
@@ -65,9 +62,7 @@ export let Nav = React.createClass({
     },
 
     getLeftGlobalActions() {
-        const actions = [
-            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
-        ];
+        const actions = [];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
                                dropdownIcon="user"
@@ -181,8 +176,13 @@ export let Nav = React.createClass({
         return <InvisibleBackdrop show={showIt}/>;
     },
 
-
     render() {
+
+        if (!this.state.apps || this.state.apps.apps === null) {
+            // don't render anything until we've made this first api call without being redirected to V2
+            return null;
+        }
+
         const flux = this.getFlux();
 
         let classes = "navShell";
@@ -268,6 +268,7 @@ export let Nav = React.createClass({
                             appsLoading: this.state.apps.loading,
                             reportData: this.state.reportData,
                             appUsers: this.state.apps.appUsers,
+                            locale: this.state.nav.locale,
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
@@ -290,7 +291,7 @@ export let Nav = React.createClass({
     },
 
     checkOpenInV2(selectedApp) {
-        let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
+        let v2tov3Cookie = cookie.load(CookieConstants.COOKIES.V2TOV3);
         if (v2tov3Cookie && CommonCookieUtils.searchCookieValue(v2tov3Cookie, selectedApp.id)) {
             let qbClassicURL = UrlUtils.getQuickBaseClassicLink(selectedApp.id);
             WindowLocationUtils.update(qbClassicURL);

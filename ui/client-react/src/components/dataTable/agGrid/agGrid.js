@@ -22,6 +22,7 @@ import {
     EmailCellRenderer,
     NumericCellRenderer,
     PercentCellRenderer,
+    PhoneCellRenderer,
     RatingCellRenderer,
     SelectionColumnCheckBoxCellRenderer,
     TextCellRenderer,
@@ -109,7 +110,6 @@ let AGGrid = React.createClass({
     getInitialState() {
         return {
             editingRowNode: null, // which ag-grid row node object is being edited
-            rowEditErrors: null, // the current edit row errors found
             currentEditRid: null // the record id currently inline editing, null when not editing
         };
     },
@@ -427,6 +427,7 @@ let AGGrid = React.createClass({
             }
         }
     },
+
     /**
      * for each field error get it's cellRender component
      * and call onValidated to set the error state which will rerender it
@@ -434,22 +435,26 @@ let AGGrid = React.createClass({
      * input in the inline edit cells in response to save to server
      * @param props - has the new editError
      */
-    updateCellErrors(props) {
-        this.gridOptions.context.rowEditErrors = props.editErrors;
-        if (this.state.editingRowNode !== null && _.has(props, 'editErrors.errors') && _.has(props, 'editErrors.errors.length')) {
+    updateCellErrors(nextProps) {
+        this.gridOptions.context.rowEditErrors = nextProps.editErrors;
+        if (this.state.editingRowNode !== null && _.has(nextProps, 'editErrors.errors.length')) {
             //edit row components
             let editRowComponents = this.cellComponentsMounted[this.state.currentEditRid];
-            props.editErrors.errors.forEach(errorField => {
-                //get the component
+
+            nextProps.editErrors.errors.forEach(errorField => {
                 let fieldComponent = editRowComponents[errorField.id];
-                let fieldResult = {
-                    isInvalid : errorField.isInvalid,
-                    invalidMessage : errorField.invalidMessage
-                };
-                fieldComponent.onValidated(fieldResult);
+                if (fieldComponent) {
+                    let fieldResult = {
+                        isInvalid: errorField.isInvalid,
+                        invalidMessage: errorField.invalidMessage
+                    };
+                    fieldComponent.onValidated(fieldResult);
+                }
             });
+
+            // Need to always refreshCells so that the rowEdit actions display the most up to date validation status
+            this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
         }
-        this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
     },
 
 
@@ -465,11 +470,10 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordNewBlank = this.handleRecordNewBlank; // does local method, then calls prop method
         this.gridOptions.context.onFieldChange = this.handleFieldChange;// does local method, then calls prop method
         this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method, then calls prop method
-        this.gridOptions.context.validateRecord = this.handleValidateRecord;
         this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
-        this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
+        this.gridOptions.context.rowEditErrors = this.props.editErrors;
         this.gridOptions.context.primaryKeyName = this.props.primaryKeyName;
         this.gridOptions.context.onAttach = this.onAttach;
         this.gridOptions.context.onDetach = this.onDetach;
@@ -515,10 +519,10 @@ let AGGrid = React.createClass({
             });
         }
     },
-    // Performance improvement - only update the component when certain state/props change
-    // Since this is a heavy component we dont want this updating all times.
-    shouldComponentUpdate(nextProps) {
 
+    // Performance improvement - only update the component when certain state/props change
+    // Since this is a heavy component we don't want this updating all times.
+    shouldComponentUpdate(nextProps) {
         if (!_.isEqual(nextProps.loading, this.props.loading)) {
             return true;
         }
@@ -531,16 +535,15 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.isInlineEditOpen, this.props.isInlineEditOpen) && !nextProps.isInlineEditOpen) {
             return true;
         }
+
         // if we are still editing and there are new errors
         // update the errors on the table and appropriate cells
         // WARNING: this necessary hack is to update just the cell component errors
         // instead of redrawing the whole table because AgGrid is not using real react dom diffing
-        if (!_.isEqual(nextProps.editErrors, this.props.editErrors) && nextProps.isInlineEditOpen) {
-            this.setState({rowEditErrors: nextProps.editErrors}, () => {
-                this.updateCellErrors(nextProps);
-            });
-            return false;
+        if (nextProps.isInlineEditOpen) {
+            this.updateCellErrors(nextProps, this.props);
         }
+
         if (_.has(this.props, 'pendEdits.saving') &&
             (!_.isEqual(nextProps.pendEdits.saving, this.props.pendEdits.saving) ||
              !_.isEqual(nextProps.pendEdits.saving, this.gridOptions.context.saving))) {
@@ -608,6 +611,7 @@ let AGGrid = React.createClass({
         this.props.onEditRecordStart(id);
         this.gridOptions.context.currentEditRid = id;
         this.gridOptions.context.isInlineEditOpen = this.props.isInlineEditOpen;
+        this.gridOptions.context.rowEditErrors = this.props.editErrors;
         this.editRow(node);
     },
     /**
@@ -688,7 +692,7 @@ let AGGrid = React.createClass({
         }
 
         // the refresh needs the new state so refresh in the setState callback
-        this.setState({editingRowNode: node, rowEditErrors: null}, () => {
+        this.setState({editingRowNode: node}, () => {
             this.gridOptions.context.rowEditErrors = null;
             this.gridOptions.context.saving = _.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false;
             this.api.refreshRows(rowsToRefresh);
@@ -760,30 +764,6 @@ let AGGrid = React.createClass({
             return;
         }
 
-        // if field was in error remove error since a change was made
-        if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
-            // is the field being changed currently in error state if so remove error
-            // and it will get re-validated on blur or save
-            let found = _.findIndex(this.state.rowEditErrors.errors, err => err.def.fieldDef.id === change.fid);
-            if (found !== -1) {
-                let newErrors = _.cloneDeep(this.state.rowEditErrors);
-
-                // remove the error from the array of errors
-                newErrors.errors.splice(found, 1);
-                // was it last error? whole row is ok now
-                if (newErrors.errors.length === 0) {
-                    newErrors.errors = [];
-                    newErrors.ok = true;
-                }
-
-                //update state, edit tool column
-                this.setState({rowEditErrors: newErrors}, () => {
-                    this.gridOptions.context.rowEditErrors = newErrors;
-                    this.props.onFieldChange(change);
-                    this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
-                });
-            }
-        }
         this.props.onFieldChange(change);
     },
 
@@ -796,77 +776,13 @@ let AGGrid = React.createClass({
 
 
     handleValidateFieldValue(def, name, value, checkRequired) {
-        let status = this.props.validateFieldValue(def, name, value, checkRequired);
-        let origErrors = this.state.rowEditErrors;
-        let newErrors;
-        let found = -1;
-
-        // find any existing error on the field
-        if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
-            found = _.findIndex(this.state.rowEditErrors.errors, err =>
-                err.def.fieldDef.id === status.def.fieldDef.id);
-        }
-
-        // if field was in error
-        if (status.isInvalid) {
-            // has exiting error update it
-            if (found !== -1) {
-                newErrors = _.cloneDeep(this.state.rowEditErrors);
-                newErrors.errors[found] = status;
-            } else {
-                // add into to list of errors in the row
-                newErrors = {
-                    ok : false,
-                    errors: []
-                };
-                if (this.state.rowEditErrors) {
-                    _.cloneDeep(this.state.rowEditErrors);
-                }
-                newErrors.errors.push(status);
-            }
-            newErrors.ok = false;
-        } else if (found !== -1) {
-            // not invalid error, remove from list if its there.
-            // remove the error from the array of errors
-            newErrors = _.cloneDeep(this.state.rowEditErrors);
-            newErrors.errors.splice(found, 1);
-
-            // was it last one? row is ok now
-            if (newErrors.errors.length === 0) {
-                newErrors.errors = [];
-                newErrors.ok = true;
-            }
-        }
-        //update state of errors in the grid
-        if (newErrors !== undefined && !_.isEqual(origErrors, newErrors)) {
-            this.setState({rowEditErrors: newErrors}, () => {
-                this.gridOptions.context.rowEditErrors = newErrors;
-            });
-        }
-        return status;
-    },
-
-    handleValidateRecord() {
-        if (!this.props.validateRecord) {
-            return;
-        }
-        // in the aggrid record validate so we have
-        // the current state and its node/row
-        // we can just loop thru the cells and validate each
-        this.props.validateRecord(arguments);
+        let flux = this.getFlux();
+        flux.actions.recordPendingValidateField(def, name, value, checkRequired);
     },
 
     handleRecordNewBlank(id) {
-        let validation = this.props.onRecordNewBlank(id);
-        if (validation && !validation.ok) {
-            //keep in edit and show error
-            this.setState({rowEditErrors: validation}, () => {
-                this.gridOptions.context.rowEditErrors = validation;
-                this.api.refreshRows([this.state.editingRowNode]);
-            });
-        }
+        this.props.onRecordNewBlank(id);
     },
-
 
     /**
      * Callback - what to do when the master group expand/collapse is clicked
@@ -987,7 +903,7 @@ let AGGrid = React.createClass({
         let cell = document.createElement('div');
         cell.className = "ag-header-cell";
 
-        cell.innerHTML = `<div class="ag-header-cell-text">${headerName}${headerSubscriptHTML}</div>
+        cell.innerHTML = `<div class="ag-header-cell-text ">${headerName}${headerSubscriptHTML}</div>
             <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
 
         return cell;
@@ -1050,11 +966,16 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
+                                obj.headerClass += " duration";
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
                                 break;
 
                             case serverTypeConsts.URL :
                                 obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
+                                break;
+
+                            case serverTypeConsts.PHONE_NUMBER :
+                                obj.cellRenderer = reactCellRendererFactory(PhoneCellRenderer);
                                 break;
 
                             case serverTypeConsts.EMAIL_ADDRESS :

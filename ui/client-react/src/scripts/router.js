@@ -41,6 +41,7 @@ import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
+import Configuration from '../config/app.config';
 import "react-fastclick";
 import {syncHistoryWithStore} from 'react-router-redux';
 
@@ -83,6 +84,8 @@ flux.setDispatchInterceptor(function(action, dispatch) {
     });
 });
 
+const walkMeScript = document.createElement("script");
+walkMeScript.src = Configuration.walkmeJSSnippet;
 
 let NavWrapper = React.createClass({
 
@@ -110,6 +113,9 @@ let NavWrapper = React.createClass({
     },
 
     componentDidMount() {
+        if (!this.isTouchDevice()) {
+            document.body.appendChild(walkMeScript);
+        }
         // listen for resizes (nicely) in case we need to re-render for a new breakpoint
         window.addEventListener('resize', this.handleResize);
 
