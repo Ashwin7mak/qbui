@@ -74,7 +74,7 @@
             }
 
             // Return the user entered string without formatting if other attempts to format have failed
-            return phoneNumber.phonenumberWithoutExtension;
+            return phoneNumber.phoneNumberWithoutExtension;
         },
     };
 
@@ -119,7 +119,7 @@
             self.first15Digits = BLANK_PHONE_NUMBER;
             self.first11Digits = BLANK_PHONE_NUMBER;
             self.first10Digits = BLANK_PHONE_NUMBER;
-            self.phonenumberWithoutExtension = BLANK_PHONE_NUMBER;
+            self.phoneNumberWithoutExtension = BLANK_PHONE_NUMBER;
             self.extraDigits = null;
             self.extension = null;
         }
@@ -129,14 +129,14 @@
          */
         function splitOutExtension() {
             var splitPhoneNumber = phoneNumber.split(new RegExp(`\\s*${StandardPhoneFormatter.EXTENSION_DELIM}\\s*`, 'g'));
-            self.phonenumberWithoutExtension = splitPhoneNumber[0];
+            self.phoneNumberWithoutExtension = splitPhoneNumber[0];
             if (splitPhoneNumber.length > 1 && splitPhoneNumber[1] && splitPhoneNumber[1].length > 0) {
                 self.extension = StandardPhoneFormatter.stripSpecialCharacters(splitPhoneNumber[1]);
             }
         }
 
         function getValidPhoneNumberLengths() {
-            self.withoutSpecialCharacters = StandardPhoneFormatter.stripSpecialCharacters(self.phonenumberWithoutExtension);
+            self.withoutSpecialCharacters = StandardPhoneFormatter.stripSpecialCharacters(self.phoneNumberWithoutExtension);
             self.first15Digits = self.withoutSpecialCharacters.slice(0, 15);
             self.first11Digits = self.withoutSpecialCharacters.slice(0, 11);
             self.first10Digits = self.withoutSpecialCharacters.slice(0, 10);
