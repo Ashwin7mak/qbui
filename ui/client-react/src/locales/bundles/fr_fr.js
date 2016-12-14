@@ -259,8 +259,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "S'il vous plaît corriger ce domaine",
-                multipleErrorLabelPrefix: "S'il vous plaît corriger ces",
-                multipleErrorLabelSuffix: "des champs",
+                multipleErrorLabel: "S'il vous plaît corriger ces {numFields} des champs"
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Afficher la liste des erreurs",
@@ -390,6 +389,7 @@ export default {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
             email: 'Formater la {fieldName} comme prénom@domaine.fr',
+            emails: 'Formatez toutes les adresses comme prénom@domaine.fr',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },

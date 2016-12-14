@@ -92,11 +92,12 @@ const CellRenderer = React.createClass({
                     value: this.props.initialValue.value,
                     display: this.props.initialValue.display
                 },
-                validationStatus : null
+                // Key is use to force a re-rendering when there are validation changes
+                rerenderKey: -1
             };
         } else {
             logger.warn('"this.props.initialValue" in getInitialState is undefined');
-            return {};
+            return {rerenderKey: -1};
         }
     },
 
@@ -187,6 +188,29 @@ const CellRenderer = React.createClass({
         }
     },
 
+    /**
+     * Get validation status from current context
+     * @returns {{isInvalid: boolean, invalidMessage: null, invalidResultData: null}}
+     * @private
+     */
+    _getValidationErrors() {
+        let validationErrors = {
+            isInvalid: false,
+            invalidMessage: null,
+            invalidResultData: null
+        };
+
+        if (_.has(this.props, 'params.context.rowEditErrors.errors.length')) {
+            let currentValidationErrors = _.find(this.props.params.context.rowEditErrors.errors, {id: this.getFieldId()});
+
+            if (currentValidationErrors) {
+                validationErrors = Object.assign({}, currentValidationErrors);
+            }
+        }
+
+        return validationErrors;
+    },
+
     render() {
         let isEditable = FieldUtils.isFieldEditable(this.props.colDef.fieldDef);
 
@@ -206,11 +230,7 @@ const CellRenderer = React.createClass({
 
         let cellType = FieldUtils.getFieldType(this.props.colDef.fieldDef, this.props.type, attributes);
 
-        let invalidStatus = {isInvalid: false, invalidMessage: null};
-        // did the validation on blur report an error
-        if (this.state.validationStatus && this.state.validationStatus.isInvalid) {
-            invalidStatus = this.state.validationStatus;
-        }
+        let invalidStatus = this._getValidationErrors();
 
         return (
             <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
@@ -230,6 +250,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                invalidResultData={invalidStatus.invalidResultData}
                                 appUsers={this.props.appUsers}
                     />
                 }
@@ -247,7 +268,11 @@ const CellRenderer = React.createClass({
     },
 
     onValidated(results) {
-        this.cellValidated(results);
+        // Cause the component to update so we can display the new validation errors
+        // Without this, the field does not show the most recent validation coming from the grid context
+        if (results && results.isInvalid) {
+            this.setState({rerenderKey: Math.random()});
+        }
     },
 
     onBlur(theVals) {
@@ -288,19 +313,8 @@ const CellRenderer = React.createClass({
             display: value
         };
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}},
+        this.setState({valueAndDisplay : Object.assign({}, theVals)},
             ()=>{this.cellChanges();});
-    },
-
-    /**
-     * cell validate change update
-     * @param result of validation
-     */
-    cellValidated(result) {
-        let current = Object.assign({}, this.state.validationStatus);
-        current.isInvalid = result ? result.isInvalid : false;
-        current.invalidMessage = result ? result.invalidMessage : null;
-        this.setState({validationStatus : current});
     }
 });
 

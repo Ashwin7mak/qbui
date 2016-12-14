@@ -22,6 +22,7 @@ const CellEditor = React.createClass({
         validateFieldValue: React.PropTypes.func,
         isInvalid: React.PropTypes.bool,
         invalidMessage: React.PropTypes.string,
+        invalidResultData: React.PropTypes.object,
         appUsers: React.PropTypes.array
     },
 
@@ -69,6 +70,7 @@ const CellEditor = React.createClass({
                               key={'fve' + this.props.idKey}
                               idKey={this.props.idKey}
                               invalidMessage={this.props.invalidMessage}
+                              invalidResultData={this.props.invalidResultData}
                               appUsers={this.props.appUsers}
                               showScrollForMultiLine={true}
                               ref={(c) => {

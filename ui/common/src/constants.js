@@ -55,6 +55,12 @@
             ROUTE: 'default'
         },
 
+        COOKIES: {
+            TICKET: 'TICKET',
+            NSTICKET: 'NSTICKET',
+            V2TOV3: 'V2TOV3'
+        },
+
         NUMERIC_SEPARATOR: {
             PERIOD: '.',
             COMMA: ','

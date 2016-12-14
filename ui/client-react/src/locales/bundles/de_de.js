@@ -259,8 +259,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Bitte repariere dieses feld",
-                multipleErrorLabelPrefix: "Bitte beheben sie diese",
-                multipleErrorLabelSuffix: "felder",
+                multipleErrorLabel: "Bitte beheben sie diese {numFields} felder"
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Fehlerliste anzeigen",
@@ -390,6 +389,7 @@ export default {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
             email: 'Formatieren Sie die {fieldName} wie name@domaine.de',
+            emails: 'Formatieren Sie alle Adressen wie name@domaine.de',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },

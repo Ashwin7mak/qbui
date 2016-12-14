@@ -22,17 +22,23 @@ const RowEditWrapper = React.createClass({
     },
 
     render() {
+        /**
+         * Note: On all the buttons in this component, we use onMouseDown instead of onClick. This is to prevent validations
+         * events that occur onBlur from conflicting with clicks on these buttons. onMouseDown fires before onBlur.
+         * When using onClick, the user might enter an invalid value in a field, then try to click save, but the click is not registered
+         * because the onBlur takes priority.
+         */
         return (
             <div
                 className="editTools">
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button className="rowEditActionsCancel" onClick={this.props.onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
+                    <Button className="rowEditActionsCancel" onMouseDown={this.props.onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
 
                 {this.props.children}
 
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button className="rowEditActionsSaveAndAdd" onClick={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClasses}/></Button>
+                    <Button className="rowEditActionsSaveAndAdd" onMouseDown={this.props.onClickAdd}><QBIcon icon="add" className={this.props.addRecordClasses}/></Button>
                 </QBToolTip>
             </div>
         );
@@ -81,14 +87,31 @@ const RowEditActions = React.createClass({
         this.props.api.deselectAll();
     },
 
+    /**
+     * If a user hovers over the save button before clicking it, and there are validation errors, and the user continues to
+     * hover over the new invalid icon, then two tooltips will appear.
+     * We need to remove the stale saveTooltip manually, because the button changes and no longer throws a mouseOut event for the
+     * old tooltip to to go away until the user clicks somewhere else on the screen.
+     */
+    removeStaleSaveTooltip() {
+        let staleTooltips = document.querySelectorAll(".qbtooltip.saveRecord");
+        if (staleTooltips && _.isArrayLike(staleTooltips)) {
+            for (var i = 0; i < staleTooltips.length; i++) {
+                staleTooltips[i].remove();
+            }
+        }
+    },
+
     renderSaveRecordButton(validRow, saving) {
+        this.removeStaleSaveTooltip();
+
         let errorMessage = "editErrors";
 
         let saveButton;
         if (validRow) {
             saveButton = (
                 <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
-                    <Button className="rowEditActionsSave" onClick={this.onClickSave}>
+                    <Button className="rowEditActionsSave" onMouseDown={this.onClickSave}>
                         <Loader loaded={!saving} options={SpinnerConfigurations.INLINE_SAVING}>
                             <QBIcon icon="check" className="saveRecord"/>
                         </Loader>
@@ -98,9 +121,9 @@ const RowEditActions = React.createClass({
         } else {
             saveButton = (
                 <QBToolTip location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
-                    <Button>
+                    <Button onMouseDown={this.onClickSave}>
                         <Loader loaded={!saving} options={SpinnerConfigurations.INLINE_SAVING}>
-                            <QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/>
+                            <QBIcon icon="alert" className="invalidRecord"/>
                         </Loader>
                     </Button>
                 </QBToolTip>
