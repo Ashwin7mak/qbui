@@ -408,6 +408,27 @@ export const UrlCellRenderer = React.createClass({
     }
 });
 
+export const TextFormulaCellRenderer = React.createClass({
+    displayName: 'TextFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.TEXT_FORMULA_FORMAT, this.props);
+    }
+});
+
+export const UrlFormulaCellRenderer = React.createClass({
+    displayName: 'UrlFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.URL_FORMULA_FORMAT, this.props);
+    }
+});
+
+export const NumericFormulaCellRenderer = React.createClass({
+    displayName: 'NumericFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.NUMERIC_FORMULA_FORMAT, this.props);
+    }
+});
+
 export const SelectionColumnCheckBoxCellRenderer = React.createClass({
     displayName: 'SelectionColumnCheckBoxCellRenderer',
 

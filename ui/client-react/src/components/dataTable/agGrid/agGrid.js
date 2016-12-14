@@ -29,6 +29,9 @@ import {
     TimeCellRenderer,
     UrlCellRenderer,
     UserCellRenderer,
+    TextFormulaCellRenderer,
+    UrlFormulaCellRenderer,
+    NumericFormulaCellRenderer,
 }  from './cellRenderers';
 
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
@@ -1065,6 +1068,18 @@ let AGGrid = React.createClass({
 
                             case serverTypeConsts.EMAIL_ADDRESS :
                                 obj.cellRenderer = reactCellRendererFactory(EmailCellRenderer);
+                                break;
+
+                            case serverTypeConsts.TEXT_FORMULA :
+                                obj.cellRenderer = reactCellRendererFactory(TextFormulaCellRenderer);
+                                break;
+
+                            case serverTypeConsts.NUMERIC_FORMULA :
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormulaCellRenderer);
+                                break;
+
+                            case serverTypeConsts.URL_FORMULA :
+                                obj.cellRenderer = reactCellRendererFactory(UrlFormulaCellRenderer);
                                 break;
 
                             default:

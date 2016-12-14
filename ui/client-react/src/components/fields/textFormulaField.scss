@@ -1,0 +1,22 @@
+@import '../../../src/assets/css/qbVariables';
+
+.emptyTextFormula {
+  border: 1px solid red;
+  @include small-breakpoint {
+    .ext {
+      height: $formula-background-small-height;
+      background-color: $formula-background-empty-color;
+    }
+  }
+}
+
+.filledTextFormula {
+  border: 1px solid blue;
+  @include small-breakpoint {
+    .ext {
+      height: $formula-background-small-height;
+      background-color: $formula-background-empty-color;
+    }
+  }
+
+}

@@ -46,6 +46,9 @@
         EMAIL_ADDRESS   : 'EMAIL_ADDRESS',
         USER            : 'USER',
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
+        TEXT_FORMULA    : 'TEXT_FORMULA',
+        URL_FORMULA     : 'URL_FORMULA',
+        NUMERIC_FORMULA : 'NUMERIC_FORMULA',
 
         SYNTHETIC_TABLE_REPORT: {
             ID: '0',

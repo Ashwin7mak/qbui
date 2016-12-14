@@ -62,6 +62,15 @@ class FieldFormats {
                 }
                 return FieldFormats.TEXT_FORMAT;
 
+            case serverTypeConsts.TEXT_FORMULA :
+                return FieldFormats.TEXT_FORMULA_FORMAT;
+
+            case serverTypeConsts.URL_FORMULA :
+                return FieldFormats.URL_FORMULA_FORMAT;
+
+            case serverTypeConsts.NUMERIC_FORMULA :
+                return FieldFormats.NUMERIC_FORMULA_FORMAT;
+
             default:
                 return FieldFormats.TEXT_FORMAT;
 
