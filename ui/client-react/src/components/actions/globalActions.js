@@ -7,8 +7,10 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
 import cookie from 'react-cookie';
-import Constants from '../../services/constants';
+import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
+import * as CompConsts from '../../constants/componentConstants';
+import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "./globalActions.scss";
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -76,7 +78,7 @@ let GlobalActions = React.createClass({
      */
     switchToQBClassic(eventKey) {
         let newCookieValue = "";
-        let v2tov3Cookie = cookie.load(Constants.COOKIE.V2TOV3);
+        let v2tov3Cookie = cookie.load(CookieConstants.COOKIES.V2TOV3);
         if (v2tov3Cookie) {
             //make sure it doesn't exist somehow already
             newCookieValue = CommonCookieUtils.searchCookieValue(v2tov3Cookie, this.props.app.id) ?
@@ -88,7 +90,7 @@ let GlobalActions = React.createClass({
         //I am only doing this so that we don't need to change current stack ::shudder::
         //This is not documented for cookie-react, tossing some serious JS grenades here
         var encode = function(string) {return string;};
-        cookie.save(Constants.COOKIE.V2TOV3, newCookieValue, {path: '/', encode});
+        cookie.save(CookieConstants.COOKIES.V2TOV3, newCookieValue, {path: '/', encode});
     },
 
     /**
@@ -127,7 +129,7 @@ let GlobalActions = React.createClass({
                     {supportedLocales.length > 1 ? <MenuItem divider/> : null}
 
                     {this.props.app && <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem>}
-                    {this.props.app && this.props.app.id && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
+                    {this.props.app && this.props.app.id && this.props.app.openInV3 && <MenuItem href={UrlUtils.getQuickBaseClassicLink(this.props.app.id)}
                                                 onSelect={this.switchToQBClassic}
                                                  eventKey={eventKeyIdx++}><I18nMessage
                                                 message={'appMenu.qbClassicLink'}/></MenuItem>}
@@ -138,11 +140,31 @@ let GlobalActions = React.createClass({
                 </Dropdown.Menu>
             </Dropdown>);
     },
+    getHelpWalkme() {
+        let touch = "ontouchstart" in window;
+        if (touch) {
+            return;
+        }
+        try {
+            WalkMePlayerAPI.toggleMenu();
+        } catch (err) {
+            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+        }
+    },
+
+    getHelpLink() {
+        return (
+            <a className="dropdownToggle globalActionLink" onClick={this.getHelpWalkme}>
+                <QBicon icon={'help'}/>
+                <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
+            </a>);
+    },
     render() {
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
+                    <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
                     {this.props.actions && this.props.actions.map((action, index) => {
                         return <GlobalAction tabIndex={this.props.startTabIndex + index}

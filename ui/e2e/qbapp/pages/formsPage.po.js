@@ -16,6 +16,7 @@
     var reportContentPage = new ReportContentPage();
 
     var sText = '9782341234';
+    var sEmail = 'test@gmail.com';
     var sNumeric = '33.33';
     var sTime = "12:00 am";
     var date = new Date();
@@ -176,7 +177,11 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sText));
+                        return elm.getAttribute('type').then(function(type) {
+                            if (type === 'email') {
+                                return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sEmail));
+                            } else {return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sText));}
+                        });
                     });
                 } else if (fieldLabel === 'numericField') {
                     //enter numeric fields
@@ -247,8 +252,8 @@
                     //close the alert
                     return self.formErrorMessageHeaderCloseBtn.click();
                 }).then(function() {
-                    //give some time for the popup to slide in after closing
-                    return e2eBase.sleep(browser.params.smallSleep);
+                    //give some time for the popup to slide out (and invalid save growl notification to disappear) after closing
+                    return e2eBase.sleep(browser.params.mediumSleep);
                 });
             });
         };

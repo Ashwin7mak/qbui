@@ -755,7 +755,7 @@ $cell-edit-background-edit: $color-blue-200;
                 }
 
                 .qbIcon.saveRecord {
-                    color: green;
+                    color: $color-green-700;
                     font-size: 18px;
                 }
 
@@ -770,7 +770,7 @@ $cell-edit-background-edit: $color-blue-200;
                 }
 
                 .qbIcon.deleteRecord {
-                    color: red;
+                    color: $color-red-700;
                 }
 
                 .qbIcon.addRecord {

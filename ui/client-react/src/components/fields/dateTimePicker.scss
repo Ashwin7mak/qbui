@@ -1,4 +1,5 @@
 @import '../../../src/assets/css/qbVariables';
+@import './fields';
 
 /* CSS hacks to the 3rd part date time picker to meet visual spec */
 .bootstrap-datetimepicker-widget.dropdown-menu {
@@ -324,5 +325,11 @@
             flex-grow: 1;
             border: 1px solid $input-text-normal-border-color;
         }
+    }
+}
+
+.timeCell.error {
+    .Select-control {
+        @include error-border;
     }
 }
