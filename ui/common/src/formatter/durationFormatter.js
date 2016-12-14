@@ -288,7 +288,7 @@
         var returnValue;
         switch (type) {
         /**
-         * If a user enters a number without entering a type, then the default for .scale
+         * If a user enters a number without entering a type, then the default for .scale is to convert milliseconds by days
          * HHMM && HHMMSS will default to converting the value to milliseconds by hours
          * MM && MMSS will default to converting the value to milliseconds by minutes
          * */
@@ -459,7 +459,7 @@
                 return true;
             }
             /**
-             * If a user inserted a colon, it will be validated based off of time formats
+             * If a user inserted a colon, it will be validated based off of time formats validation requirements
              * */
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             if (value.split('').indexOf(':') !== -1) {
@@ -478,12 +478,12 @@
                     tempType.push(val);
                 }
             });
-            tempNum = value.match(regexNumsDecimalsColons);
             /**
              * If a user inserts more types than nums return false
              * 1 week day invalid format
              * 1 week 2 days valid format
              * */
+            tempNum = value.match(regexNumsDecimalsColons);
             if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
                 return false;
             }
@@ -540,12 +540,13 @@
                     val = val.toUpperCase();
                     listOfTypes.push(val);
                 } else if (val !== '') {
-                    val = val.toLowerCase();
                     /**
                      * Removes first letter and sets it toUpperCase
                      * Sets type to a string and concatenates the upperCaseLetter back on
                      * If type is not plural, then it concatenates an 's'
+                     * This formats it to make it easier to check it against constants later
                      */
+                    val = val.toLowerCase();
                     var firstLetter = val[0].toUpperCase();
                     val = val.slice(1);
                     val = firstLetter + val;
@@ -555,6 +556,15 @@
                     listOfTypes.push(val);
                 }
             });
+            /**
+             * If a user only inputed one num and one type, then this function will only be called once
+             * However if the user inserted more than one num and more than one type then this function calls each num with its type
+             * The isValid function above, checks to be sure each num as a type, if it did not an error would be thrown
+             * Example 1 week 2 days becomes
+             * num = [1,2]
+             * listOfTypes = [week, days]
+             * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumlated to total;
+             * */
             if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
                 num.forEach(function(val, i) {
                     total += getMilliseconds(num[i], listOfTypes[i]);
