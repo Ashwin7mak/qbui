@@ -6,7 +6,7 @@ var CommonPhoneNumberFormatter = require('../../../../../common/src/formatter/ph
 // starting with a zero, we will not apply any formatting
 // formatted number for recognized international numbers
 
-describe.only('PhoneNumberFormatter (server side)', () => {
+describe('PhoneNumberFormatter (server side)', () => {
     var phoneNumberTestCases = [
         {
             description: 'correctly identifies an international number',
