@@ -393,8 +393,7 @@
         return num;
     }
     function isTimeFormatValid(value, type) {
-        var timeFormat;
-        var nums;
+        var regexTimeFormat = /\./g;
         /**
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
@@ -403,37 +402,12 @@
             return false;
         }
         /**
-         * H::SS decimal points allowed
-         * :M:SS decimal points allowed
-         * :MM:SS decimal points allowed
-         * HH:MM:SS decimal points allowed
-         * H:M:SS decimal points allowed
+         * Decimals are not a valid input with time formats
+         * Example 5.5:5.5:5.5 is an invalid input
+         * 5:5:5 is a valid input
          * */
-        timeFormat = value.match(/[:]+/g).join('').split('');
-        if (timeFormat.length === 1) {
-            /**
-             * 1.5: invalid format      (H:)
-             * 1.5: invalid format      (HH:)
-             * 1.5:1.5 invalid format   (HH:MM)
-             * 1.5:1.5 invalid format   (H:M)
-             * :1.5 invalid format      (:MM)
-             **/
-            if (value.indexOf('.') !== -1) {
-                return false;
-            }
-        }
-        if (timeFormat.length === 2) {
-            nums = value.split(':').join(' ').trim().split(' ');
-            if (nums.length === 2) {
-                if (nums[0].indexOf('.') !== -1) {
-                    return false;
-                }
-            } else if (nums.length === 3) {
-                if (nums[0].indexOf('.') !== -1 ||
-                    nums[1].indexOf('.') !== -1) {
-                    return false;
-                }
-            }
+        if (regexTimeFormat.test(value)) {
+            return false;
         }
         return true;
     }
@@ -462,13 +436,16 @@
         },
         isValid: function(value) {
             var regexHasNums = /[0-9]+/g;
-            /**
-             * Don't validate empty strings
-             * */
             var tempNum;
             var tempType = [];
             var valid = true;
             var type;
+            /**
+             * Don't validate empty strings
+             * */
+            if (!value) {
+                return true;
+            }
             /**
              * If a user does not input a number, throw an error
              * */
