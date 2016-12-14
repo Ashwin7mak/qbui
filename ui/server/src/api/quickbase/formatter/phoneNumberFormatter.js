@@ -64,7 +64,7 @@
             }
 
             // Return the user entered string without formatting if other attempts to format have failed
-            return phoneNumber.dialString;
+            return phoneNumber.phonenumberWithoutExtension;
         },
 
         /**
@@ -235,7 +235,7 @@
             // Give up on a valid number and use the standard US formatter unless the number starts with a 0.
             // Numbers that start with 0 are likely international and shouldn't be formatted like US numbers
             if (self.first15Digits.charAt(0) !== '0') {
-                self.nationalFormattedNumber = StandardPhoneFormatter.format({value: self.dialString});
+                self.nationalFormattedNumber = StandardPhoneFormatter.format({value: self.withoutSpecialCharacters});
                 self.countryCode = DEFAULT_COUNTRY_CODE;
                 self.region = DEFAULT_REGION;
             }
