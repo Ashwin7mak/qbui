@@ -94,8 +94,7 @@
             if (_.has(fieldDef, 'datatypeAttributes.type')) {
                 switch (fieldDef.datatypeAttributes.type) {
                 case constants.EMAIL_ADDRESS :
-                    // Uncomment the line below to activate email validation
-                    // results = EmailValidator.validateAndReturnResults(value, name, results);
+                    results = EmailValidator.validateAndReturnResults(value, name, results);
                     break;
                 }
 

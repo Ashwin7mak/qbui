@@ -333,15 +333,15 @@
 }
 
 .navigationButton {
-    background-color: Transparent;
+    background-color: transparent;
     background-repeat: no-repeat;
     border: none;
     cursor: pointer;
     overflow: hidden;
     outline: none;
 }
-$add-record-fg: #fff;
-$add-record-bg: #a52363;
+$add-record-fg: $color-black-100;
+$add-record-bg: $badcolor19;
 $add-record-radius: 20px;
 
 @include small-breakpoint {

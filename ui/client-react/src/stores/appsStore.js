@@ -8,7 +8,7 @@ import TableIconUtils from '../utils/tableIconUtils';
 let AppsStore = Fluxxor.createStore({
 
     initialize() {
-        this.apps = [];
+        this.apps = null;
         this.appUsers = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;

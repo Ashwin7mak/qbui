@@ -7,6 +7,7 @@
     var _ = require('lodash');
 
     //Module constants:
+    var BLANK_EMAIL = '';
     var WHOLE = 'WHOLE';
     var UP_TO_UNDERSCORE = 'UP_TO_UNDERSCORE';
     var UP_TO_AT_SIGN = 'UP_TO_AT_SIGN';
@@ -41,11 +42,28 @@
 
             return emails.join(';');
         },
-        //Given a email string as input, formats as a email with display preferences applied.
+
+        /**
+         * Check if a fieldValue was not passed in or does not have the required value property
+         * @param fieldValue
+         * @returns {boolean}
+         * @private
+         */
+        _fieldValueDoesNotExist: function(fieldValue) {
+            return (!fieldValue || !fieldValue.value);
+        },
+
+        /**
+         * Given a email string as input, formats as a email with display preferences applied.
+         * @param fieldValue
+         * @param fieldInfo
+         * @returns {String}
+         */
         format: function(fieldValue, fieldInfo) {
-            if (!fieldValue || !fieldValue.value) {
-                return '';
+            if  (this._fieldValueDoesNotExist(fieldValue)) {
+                return BLANK_EMAIL;
             }
+
             //Default behavior is to return the raw value as display
             var baseValue = fieldValue.value;
 
@@ -72,6 +90,22 @@
             }
             return baseValue;
         },
+
+
+        /**
+         * Formats a single email or a field with a value that contains a list of emails from the fieldValue object
+         * @param fieldValue
+         * @param fieldInfo
+         * @returns {String}
+         */
+        formatListOfEmailsFromFieldValueObject: function(fieldValue, fieldInfo) {
+            if (this._fieldValueDoesNotExist(fieldValue)) {
+                return BLANK_EMAIL;
+            }
+
+            return this.formatListOfEmails(fieldValue.value, fieldInfo);
+        },
+
         /**
          * Formats a list of emails in a string.
          * Emails can be separated by a semicolon (;), comma (,), or passed in as an array

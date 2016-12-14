@@ -4,6 +4,8 @@ import Store from '../../src/stores/recordPendingEditsStore';
 import Fluxxor from 'fluxxor';
 import Constants from '../../../common/src/constants';
 
+import Locale from '../../src/locales/locales';
+
 describe('Test recordPendingEdits Store ', () => {
     'use strict';
 
@@ -730,6 +732,82 @@ describe('Test recordPendingEdits Store ', () => {
             expect(currentState.isPendingEdit).toBeTruthy();
             expect(changes[currentlyEditingFieldId]).toEqual(undefined);
             expect(changes[anotherFieldId]).not.toEqual(undefined);
+        });
+    });
+
+    describe('onRecordEditValidateField', () => {
+        const defaultEditErrors = {ok: true, errors: []};
+
+        const requiredFieldWithEmptyValue = {
+            fieldLabel: 'Required Test Field',
+            fieldDef: {required: true, id: 4},
+            value: '',
+            checkRequired: true
+        };
+
+        let requiredFieldWithValue = Object.assign({}, requiredFieldWithEmptyValue, {value: 'something'});
+
+        it('creates a default editErrors object if one has not already been built', () => {
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_VALIDATE_FIELD, payload: {}});
+
+            let currentState = flux.store(STORE_NAME).getState();
+            expect(currentState.editErrors).toEqual(defaultEditErrors);
+        });
+
+        it('adds any invalidation errors to editErrors', () => {
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_VALIDATE_FIELD, payload: requiredFieldWithEmptyValue});
+
+            let currentState = flux.store(STORE_NAME).getState();
+            const validationResponse = {
+                ok: false,
+                errors: [
+                    {
+                        value: requiredFieldWithEmptyValue.value,
+                        def: {
+                            checkRequired: true,
+                            fieldLabel: requiredFieldWithEmptyValue.fieldLabel,
+                            value: requiredFieldWithEmptyValue.value,
+                            fieldDef: requiredFieldWithEmptyValue.fieldDef
+                        },
+                        isInvalid: true,
+                        error: {
+                            messageId: 'invalidMsg.required',
+                            code: 3,
+                            data: {
+                                fieldId: requiredFieldWithEmptyValue.fieldDef.id,
+                                fieldName: requiredFieldWithEmptyValue.fieldLabel
+                            },
+                        },
+                        id: requiredFieldWithEmptyValue.fieldDef.id,
+                        invalidMessage: Locale.getMessage('invalidMsg.required', {fieldName: requiredFieldWithEmptyValue.fieldLabel})
+                    }
+                ]
+            };
+
+            expect(currentState.editErrors).toEqual(validationResponse);
+        });
+
+        it('removes outdated validation errors to prevent validation errors from being added twice and to make sure fields can show most up to date errors', () => {
+            const changes = {changes : {
+                fid: 5,
+                fieldName: requiredFieldWithValue.fieldLabel,
+                values: {
+                    oldVal : requiredFieldWithEmptyValue.value,
+                    newVal : requiredFieldWithValue.value
+                }
+            }};
+
+            // Create a validation error
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_VALIDATE_FIELD, payload: requiredFieldWithEmptyValue});
+            // Simulate fixing the validation error (user types in a value in a required field)
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: Object.assign({}, appTableRecPayload, changes)});
+
+            // Check validation again (e.g., user blurred out of field after making the change)
+            flux.dispatcher.dispatch({type: actions.RECORD_EDIT_VALIDATE_FIELD, payload: requiredFieldWithValue});
+
+            let currentState = flux.store(STORE_NAME).getState();
+            expect(currentState.editErrors.ok).toEqual(true);
+            expect(currentState.editErrors.errors.length).toEqual(0);
         });
     });
 });

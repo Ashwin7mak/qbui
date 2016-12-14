@@ -2,11 +2,11 @@
 
 .searchInputBox {
     position: relative;
-    background-color: #fff;
+    background-color: $color-black-100;
     border-radius: 3px;
 
     .searchInput {
-        border: 1px solid #ccc;
+        border: 1px solid $badcolor5-color18;
         border-radius: 3px;
         padding: 0.8rem 30px 0.8rem 5px;
         font-style: italic;
