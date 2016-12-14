@@ -419,6 +419,7 @@
             if (typeof value === 'number') {
                 return valid;
             }
+            value = value.toLowerCase();
             value = value.replace(/[0-9]/g, '').trim().split(' ');
             if (!value || value[0] === '') {
                 return valid;

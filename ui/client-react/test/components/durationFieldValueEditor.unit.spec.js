@@ -47,7 +47,6 @@ fdescribe('DurationFieldValueEditor', () => {
             component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
             Simulate.blur(input);
-
             let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
