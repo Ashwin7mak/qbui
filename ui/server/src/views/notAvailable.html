@@ -73,7 +73,9 @@
                     var el = queryStr.substr(1).split('&');
                     for (var i = 0; i < el.length; i++) {
                         var pair = el[i].split('=');
-                        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                        if (pair.length === 2) {
+                            query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                        }
                     }
                 }
             } catch (e) {
@@ -89,6 +91,9 @@
         var queryParams = parseQuery(window.location.search);
         var currentStackLink = "https://" + currentStackDomain + "/db/" + (queryParams.appId || "main");
         document.getElementById("curstacklink").href = currentStackLink;
+        if (!queryParams.appId) {
+            document.getElementById("curstacklink").innerHTML = 'open your apps';
+        }
     </script>
 
 </div>

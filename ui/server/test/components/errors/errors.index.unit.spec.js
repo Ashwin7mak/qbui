@@ -82,7 +82,7 @@ describe('Validate https response error functions', function() {
 
         error[500](mockReq, mockRes);
 
-        // expect the http status to be 4500, the json to be added to the response
+        // expect the http status to be 500, the json to be added to the response
         // and the logger to have been called
         assert.equal(mockRes.httpStatus, 500);
         assert(stubLog.calledOnce);
@@ -90,7 +90,7 @@ describe('Validate https response error functions', function() {
         assert(spyRender.callCount === 0, true);
     });
 
-    it('validate app not availabe in mercury', function() {
+    it('validate app not available in mercury', function() {
         mockReq.headers = {
             accept: consts.TEXT_HTML
         };
