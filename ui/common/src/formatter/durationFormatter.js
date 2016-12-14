@@ -422,8 +422,8 @@
                 return valid;
             }
             value = value.toLowerCase();
-            value = value.replace(regexNums, '').trim().split(' ');
             console.log('value: ', value);
+            value = value.replace(regexNums, '').trim().split(' ');
             if (!value || value[0] === '') {
                 return valid;
             }
@@ -441,6 +441,7 @@
         },
         onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
+            value = value.replace(removeCommas, '').trim().split(' ').join('');
             /**
              * Accepted Type:
                  * second || seconds
@@ -477,9 +478,7 @@
              * Strips out all commas
              * */
 
-            num = value.replace(removeCommas, '');
-            console.log('removeComma nums: ', num);
-            num = num.match(regexNums);
+            num = value.match(regexNums);
             console.log('match nums: ', num);
             type = value.replace(regexNums, '').split(' ');
             type.forEach(function(val) {
