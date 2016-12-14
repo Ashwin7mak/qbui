@@ -494,7 +494,7 @@
             value = value.replace(removeCommas, '').split(' ').join(' ');
             value = value.toLowerCase();
             /**
-             * Accepted Type:
+             * Accepted Types:
                  * millisecond || milliseconds || ms
                  * second || seconds || s
                  * minute || minutes || m
