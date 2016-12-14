@@ -107,18 +107,18 @@ fdescribe('DurationFieldValueEditor', () => {
             expect(component.state.display).toEqual(expectedTimeFormat);
         });
     });
-    // TestData.invalidInput.forEach(function(test) {
-    //     fit('throws a validation error with an invalid input of ' + test.invalidInput, () => {
-    //         component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-    //         let userInput = test.invalidInput;
-    //         component.setState({value: userInput, display: ''});
-    //         domComponent = ReactDOM.findDOMNode(component);
-    //         let input = ReactDOM.findDOMNode(domComponent);
-    //         Simulate.blur(input, {
-    //             target:{value: test.invalidInput}
-    //         });
-    //         debugger;
-    //         expect(domComponent.classList[3]).toEqual('error');
-    //     });
-    // });
+    TestData.invalidInput.forEach(function(test) {
+        fit('throws a validation error with an invalid input of ' + test.invalidInput, () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let userInput = test.invalidInput;
+            component.setState({value: userInput, display: ''});
+            domComponent = ReactDOM.findDOMNode(component);
+            let input = ReactDOM.findDOMNode(domComponent);
+            Simulate.blur(input, {
+                target:{value: test.invalidInput}
+            });
+            debugger;
+            expect(component.state.display).toEqual(test.invalidInput);
+        });
+    });
 });
