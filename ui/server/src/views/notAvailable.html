@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>App not viewable</title>
+    <style>
+        html {
+            padding                  : 30px 10px;
+            font-size                : 16px;
+            line-height              : 1.4;
+            color                    : #404040;
+            background               : #f3f8fe;
+            -webkit-text-size-adjust : 100%;
+            -ms-text-size-adjust     : 100%;
+        }
+
+        html,
+        input {
+            font-family : "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            max-width     : 500px;
+            width         : 500px;
+            padding       : 30px 20px 50px;
+            border        : 1px solid #e3eaf3;
+            border-radius : 4px;
+            margin        : 0 auto;
+            background    : #ffffff;
+        }
+
+        h1 {
+            margin     : 0 10px;
+            font-size  : 24px;
+            text-align : center;
+        }
+
+        p {
+            margin : 1em 0;
+        }
+
+        ul {
+            padding : 0 0 0 40px;
+            margin  : 1em 0;
+        }
+
+        a {
+            cursor : pointer;
+            color  : #365ebf;
+        }
+
+        .container {
+            max-width : 425px;
+            width     : 425px;
+            margin    : 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Oh, not quite yet....</h1>
+
+    <p>When your app admin enables access, you can use this app in our new experience, Mercury.</p>
+
+    <p>For now, <a id="curstacklink" href="#">open this app</a> in QuickBase classic.</p>
+
+    <script type="text/javascript">
+        function parseQuery(queryStr) {
+            var query = {};
+            try {
+                if (queryStr && queryStr.length > 1) {
+                    var el = queryStr.substr(1).split('&');
+                    for (var i = 0; i < el.length; i++) {
+                        var pair = el[i].split('=');
+                        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                    }
+                }
+            } catch (e) {
+                //  swallow any exception
+            }
+            return query;
+        }
+
+        var hostnameSplit = window.location.hostname.split(".");
+        var hostname = "." + hostnameSplit.pop();
+        var currentStackDomain = hostnameSplit.shift() + "." + hostnameSplit.pop() + hostname;
+
+        var queryParams = parseQuery(window.location.search);
+        var currentStackLink = "https://" + currentStackDomain + "/db/" + (queryParams.appId || "main");
+        document.getElementById("curstacklink").href = currentStackLink;
+    </script>
+
+</div>
+</body>
+</html>
