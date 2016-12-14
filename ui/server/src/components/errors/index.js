@@ -30,12 +30,6 @@
         renderView(req, res, viewFilePath, statusCode);
     };
 
-    module.exports[404] = function pageNotFound(req, res) {
-        var viewFilePath = '404.html';
-        var statusCode = 404;
-        renderView(req, res, viewFilePath, statusCode);
-    };
-
     module.exports.notAvailable = function notAvailable(req, res) {
         var viewFilePath = 'notAvailable.html';
         var statusCode = 200;
