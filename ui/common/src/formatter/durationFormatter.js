@@ -25,7 +25,7 @@
     // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S*|DURATION_CONSTS.SECOND*|DURATION_CONSTS.SECONDS*)/;
     // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*)/;
     var _ = require('lodash');
-    var regexNums = /[0-9.:]+/g;
+    var regexNumsDecimalsColons = /[0-9.:]+/g;
     var removeCommas = /[,]+/g;
 
     /**
@@ -461,20 +461,29 @@
             return opts;
         },
         isValid: function(value) {
+            var regexHasNums = /[0-9]+/g;
+
             // Don't validate empty strings
             var valid = true;
             var type;
-            if (typeof value === 'number' || !value) {
-                return valid;
+            /**
+             * If a user does not input a number, throw an error
+             * */
+            if (!regexHasNums.test(value)) {
+                return false;
             }
-            type = value.replace(regexNums, ' ').split(' ');
+            if (typeof value === 'number' || !value) {
+                return true;
+            }
+            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             if (value.split('').indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
             }
             /**
              * Strips out all numbers
-             * This will only check for valid types
+             * If there is an invalid type return false
              * If there are no types, return true
+             * If there are only accepted types return true
              * */
             type.forEach(function(val) {
                 if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
@@ -524,8 +533,8 @@
              * Strips out all commas
              * */
 
-            num = value.match(regexNums);
-            type = value.replace(regexNums, ' ').split(' ');
+            num = value.match(regexNumsDecimalsColons);
+            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             type.forEach(function(val) {
                 /**
                  * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
