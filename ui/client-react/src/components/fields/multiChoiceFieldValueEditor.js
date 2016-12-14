@@ -58,8 +58,15 @@ const MultiChoiceFieldValueEditor = React.createClass({
     selectChoice(event) {
         let newValue = {};
         if (event.target) {
-            newValue.value = event.target.value;
             newValue.display = event.target.value;
+            // find the real value that corresponds to the displayValue
+            this.props.choices.some((choice) => {
+                if (choice.displayValue === event.target.value) {
+                    newValue.value = choice.coercedValue.value;
+                    return true;
+                }
+                return false;
+            });
         } else {
             newValue.value = event.value.coercedValue.value;
             newValue.display = event.value.displayValue;
@@ -106,7 +113,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                                onClick={this.selectChoice}
                                onBlur={this.onBlur}>
                     <input type="radio" name={this.props.radioGroupName}
-                           value={choice.coercedValue.value}
+                           value={choice.displayValue}
                            checked={selectedValue === choice.coercedValue.value}
                            onChange={this.onClick} onBlur={this.onBlur}></input><span className="choiceText">{choice.displayValue}</span>
                     <div className="check"><div className="inside"></div></div>
