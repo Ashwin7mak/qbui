@@ -133,6 +133,15 @@
             }
         }},
 
+        /**
+         * Count the number of records showing on the report page
+         * @returns the number of displayed records on the report
+         */
+        reportDisplayedRecordCount: {value: function() {
+            this.agGridRecordElList.waitForVisible();
+            return this.agGridRecordElList.value.length;
+        }}
+
         //TODO: Will have to see if we actually need this going forward
         ///**
         // * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -168,15 +177,6 @@
         //reportRowSelected: { value: function(recordRow) {
         //    this.recordCheckBoxes.get(recordRow).click();
         //} },
-
-        /**
-         * Count the number of records showing on the report page
-         * @returns the number of displayed records on the report
-         */
-        reportDisplayedRecordCount: {value: function() {
-            this.agGridRecordElList.waitForVisible();
-            return this.agGridRecordElList.value.length;
-        }}
     });
 
     module.exports = ReportContentPage;

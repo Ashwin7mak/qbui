@@ -10,7 +10,7 @@ exports.config = {
     // or WebdriverIO's browser.debug() command within your spec files
     // See http://webdriver.io/guide/testrunner/debugging.html for more info.
     //
-    debug: false,
+    debug: true,
     //
     // ==================
     // Specify Test Files

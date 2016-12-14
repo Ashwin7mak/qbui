@@ -32,14 +32,19 @@
             }).then(function() {
                 // Auth into the new stack
                 return NewStackAuthPO.realmLogin(realmName, realmId);
-            }).then(function() {
-                // Load the List All report on Table 1
-                return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
                 Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
             });
+        });
+
+        /**
+         * Before each it block reload the list all report (can be used as a way to reset state between tests)
+         */
+        beforeEach(function() {
+            // Load the List All report on Table 1
+            return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
         it('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
@@ -61,8 +66,10 @@
             ReportInLineEditPO.editDateField(0, dateToEnter);
 
             // Step 3 - Open the calendar widget and Advance the date ahead 1 day
-            ReportInLineEditPO.openDateFieldCalWidget(0);
-            ReportInLineEditPO.advanceCurrentlySelectedDate(0);
+            if (browserName !== 'safari') {
+                ReportInLineEditPO.openDateFieldCalWidget(0);
+                ReportInLineEditPO.advanceCurrentlySelectedDate(0);
+            }
 
             // Step 4 - Save the new added row
             ReportInLineEditPO.clickSaveChangesButton();
@@ -75,11 +82,19 @@
 
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
+
+            // Step 8 - Check the record values
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
             var recordValues = ReportContentPO.getRecordValues(numOfRows - 1);
             expect(recordValues[1]).toBe(textToEnter);
-            expect(recordValues[6]).toBe(dateToExpect);
-        });
+
+            if (browserName !== 'safari') {
+                expect(recordValues[6]).toBe(dateToExpect);
+            } else {
+                expect(recordValues[6]).toBe(dateToEnter);
+            }
+
+        }, 3); // Built in retry mechanism for flaky tests
 
         //TODO: Editing a row after pressing 'Save and Add new row' button
     });

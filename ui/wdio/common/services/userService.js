@@ -27,7 +27,7 @@
                         if (userId) {
                             userIdList.push(userId);
                             recordBase.apiBase.assignUsersToAppRole(appId, e2eConsts.DEFAULT_ADMIN_ROLE, [userId]).then(function(result) {
-                                console.log("User " + userId + " has been associated with admin role " + result.body);
+                                //console.log("User " + userId + " has been associated with admin role " + result.body);
                             });
                         }
                     });

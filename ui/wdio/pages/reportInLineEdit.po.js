@@ -101,6 +101,7 @@
             //    document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
             //});
             saveRecordButtonEl.click();
+
             // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
             browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
         }},
@@ -268,6 +269,8 @@
                     dateCalIconElement.scrollIntoView(false);
                 }, dateFieldCalIcon.value);
             }
+
+            //TODO: This does not work in Safari (widget opens manually just not with automation)
             dateFieldCalIcon.click();
         }},
 
@@ -277,7 +280,7 @@
          * @returns the calendar icon element
          */
         getDateFieldCalendarIconEl: {value: function(dateFieldCellEl) {
-            return dateFieldCellEl.element('.input-group-addon');
+            return dateFieldCellEl.element('.glyphicon.glyphicon-calendar');
         }},
 
         /**
@@ -335,7 +338,7 @@
             //TODO: Will need to handle a date at the end of the calendar row
             var nextDate = datesInRow.value[currentDateIndex + 1];
 
-            if (browserName === 'chrome' || browserName === 'safari') {
+            if (browserName === 'chrome') {
                 nextDate.moveToObject();
             } else {
                 browser.execute(function(dateElement) {
