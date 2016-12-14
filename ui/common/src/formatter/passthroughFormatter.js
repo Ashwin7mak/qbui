@@ -9,7 +9,7 @@
          * @returns {String}
          */
         format: function(fieldValue, fieldInfo) {
-            if (fieldValue.display) {
+            if (fieldValue.display || fieldValue.display === '') {
                 return fieldValue.display;
             }
 
