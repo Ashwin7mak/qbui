@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import TextFieldValueEditor from './textFieldValueEditor';
 import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
 import Locale from '../../locales/locales';
@@ -10,45 +11,58 @@ const PhoneFieldValueEditor = React.createClass({
     propTypes: {
         /**
          * the raw value to be saved */
-        value: React.PropTypes.string,
+        value: PropTypes.string,
         /**
          * the display to render */
-        display: React.PropTypes.any,
+        display: PropTypes.any,
         /**
          * the class to use */
-        classes: React.PropTypes.string,
+        classes: PropTypes.string,
         /**
          * optional string to display when input is empty aka ghost text */
-        placeholder: React.PropTypes.string,
+        placeholder: PropTypes.string,
         /**
          * phone field attributes
          */
-        attributes: React.PropTypes.object,
+        attributes: PropTypes.object,
         /**
          *listen for changes by setting a callback to the onChange prop */
-        onChange: React.PropTypes.func,
+        onChange: PropTypes.func,
         /**
          * listen for losing focus by setting a callback to the onBlur prop */
-        onBlur: React.PropTypes.func,
+        onBlur: PropTypes.func,
 
     },
-    onChangeOfficeNumber(ev) {
-        /**
-         * When a user is typing in the officeNumber input box, this onChange will be triggered
-         * The ext is stripped off of the phone number and then the user's new input value in the officeNumber
-         * input box is then concatenated back with the ext
-         * */
-        let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
+
+    pressedExtensionHotkey(value) {
+        return value.indexOf(phoneNumberFormatter.EXTENSION_DELIM) >= 0;
+    },
+
+    /**
+     *
+     * When a user is typing in the officeNumber input box, this onChange will be triggered
+     * The ext is stripped off of the phone number and then the user's new input value in the officeNumber
+     * input box is then concatenated back with the ext
+     *
+     * @param newValue
+     */
+    onChangePhoneNumber(newValue) {
+        if (this.pressedExtensionHotkey(newValue)) {
+            this.focusOnExtension();
+            return;
+        }
+
+        let phoneNumber = phoneNumberFormatter.onChangeMasking(newValue);
         let ext = phoneNumberFormatter.getExtension(this.props.value);
         let updatedValue = phoneNumber;
         if (this.props.value && ext) {
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, ext);
-
         }
         if (this.props.onChange) {
             this.props.onChange(updatedValue);
         }
     },
+
     onChangeExtNumber(ev) {
         /**
          * When a user is typing in the ext input box, this onChange will be triggered
@@ -65,12 +79,7 @@ const PhoneFieldValueEditor = React.createClass({
         }
 
     },
-    onChange(ev) {
-        let phoneNumber = phoneNumberFormatter.onChangeMasking(ev);
-        if (this.props.onChange) {
-            this.props.onChange(phoneNumber);
-        }
-    },
+
     onBlur() {
         let theVals = {
             value: phoneNumberFormatter.onBlurMasking(this.props.value),
@@ -80,12 +89,22 @@ const PhoneFieldValueEditor = React.createClass({
             this.props.onBlur({value: theVals.value, display: theVals.display});
         }
     },
+
+    focusOnExtension() {
+        if (this.hasExtension()) {
+            ReactDOM.findDOMNode(this).querySelector('input.extNumber').focus();
+        }
+    },
+
+    hasExtension() {
+        return this.props.attributes && this.props.attributes.includeExtension;
+    },
+
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         placeholder = Locale.getMessage('placeholder.phone');
         let phoneNumber = '';
         let officeExt = '';
-        let hasExtInput = this.props.attributes && this.props.attributes.includeExtension;
         if (value) {
             phoneNumber = phoneNumberFormatter.getPhoneNumber(value);
             officeExt = phoneNumberFormatter.getExtension(value);
@@ -95,7 +114,7 @@ const PhoneFieldValueEditor = React.createClass({
          * When a phone number has an extension, the phone number's input box is referred to as an office number
          * The office number input box needs to be styled differently than a regular phone number input box
          * */
-        if (hasExtInput) {
+        if (this.hasExtension()) {
             classes = {
                 officeNumber: "officeNumber " + (classes || ''),
                 extNumber: "extNumber " + (classes || '')
@@ -114,12 +133,12 @@ const PhoneFieldValueEditor = React.createClass({
                 <TextFieldValueEditor {...otherProps}
                                       classes={classes && classes.officeNumber ? classes.officeNumber : classes}
                                       placeholder={placeholder}
-                                      onChange={this.onChangeOfficeNumber}
+                                      onChange={this.onChangePhoneNumber}
                                       onBlur={this.onBlur}
                                       value={phoneNumber || ''}
                                       inputType="tel" />
-                {hasExtInput ? ext : null}
-                {hasExtInput ? extInput : null}
+                {this.hasExtension() ? ext : null}
+                {this.hasExtension() ? extInput : null}
             </div>
         );
     }

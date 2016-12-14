@@ -130,4 +130,17 @@ describe('PhoneFieldValueEditor', () => {
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes[0].tagName).toEqual("INPUT");
     });
+
+    it('switches focus to the extension if the extension delimiter is pressed', () => {
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueEditor attributes={{includeExtension: true}} />);
+        component.setState({value: phoneNumberWithExt});
+
+        domComponent = ReactDOM.findDOMNode(component);
+        spyOn(component, 'focusOnExtension');
+
+        let phoneInput = domComponent.querySelector('input.officeNumber');
+        Simulate.change(phoneInput, {target: {value: phoneNumberFormatter.EXTENSION_DELIM}});
+
+        expect(component.focusOnExtension).toHaveBeenCalled();
+    });
 });

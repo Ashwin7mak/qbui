@@ -29,7 +29,7 @@
             return results;
         },
 
-        _isValidLengthForPhoneNumber(phoneNumber) {
+        _isValidLengthForPhoneNumber: function(phoneNumber) {
             return (phoneNumber.length === 3 || phoneNumber.length === 4 || phoneNumber.length >= 7);
         },
     };
