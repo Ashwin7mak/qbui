@@ -27,6 +27,7 @@
 
         function buildDisplayValue(options) {
             var defaults = {
+                countryCode: 1,
                 display: '',
                 extension: null,
                 extraDigits: null,
@@ -55,7 +56,6 @@
             var largeExpected = {id: fid, value: '1234567890123', display: buildDisplayValue({
                 countryCode: 1,
                 display: '(234) 567-8901',
-                extension: null,
                 extraDigits: '23',
                 internationalNumber: '+12345678901',
                 internetDialableNumber: 'tel:+1-234-567-8901',
@@ -67,8 +67,6 @@
             var possibleInternationalExpected = {id: fid, value: '33970736012', display: buildDisplayValue({
                 countryCode: 33,
                 display: '+33 9 70 73 60 12',
-                extension: null,
-                extraDigits: null,
                 internationalNumber: '+33970736012',
                 internetDialableNumber: 'tel:+33-9-70-73-60-12',
                 isDialable: true
