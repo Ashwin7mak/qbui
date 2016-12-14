@@ -217,6 +217,10 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.URL
             };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[14]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.USER
+            };
             tableToFieldToFieldTypeMap[table2Name] = {};
             tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[1]] = {
                 fieldType: consts.SCALAR,
