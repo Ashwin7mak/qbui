@@ -400,7 +400,6 @@
          * HH:MM:SS minutes is not a valid format
          * */
         if (type.length === 1 && type[0] === '') {
-            console.log('bet this is it');
             return false;
         }
         /**
@@ -411,7 +410,6 @@
          * H:M:SS decimal points allowed
          * */
         timeFormat = value.match(/[:]+/g).join('').split('');
-        console.log('timeFormat: ', timeFormat);
         if (timeFormat.length === 1) {
             /**
              * 1.5: invalid format      (H:)
@@ -420,14 +418,12 @@
              * 1.5:1.5 invalid format   (H:M)
              * :1.5 invalid format      (:MM)
              **/
-            console.log('yo: ', value);
             if (value.indexOf('.') !== -1) {
                 return false;
             }
         }
         if (timeFormat.length === 2) {
             nums = value.split(':').join(' ').trim().split(' ');
-            console.log('nums: ', nums);
             if (nums.length === 2) {
                 if (nums[0].indexOf('.') !== -1) {
                     return false;
@@ -480,7 +476,6 @@
              * This will only check for valid types
              * If there are no types, return true
              * */
-            console.log('TYPE: ', type);
             type.forEach(function(val) {
                 if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
                     valid = false;
@@ -530,7 +525,6 @@
              * */
 
             num = value.match(regexNums);
-            console.log('match nums: ', num);
             type = value.replace(regexNums, ' ').split(' ');
             type.forEach(function(val) {
                 /**
@@ -555,14 +549,12 @@
                     listOfTypes.push(val);
                 }
             });
-            console.log('final num: ', num, '\nfinallistofTypes: ', listOfTypes);
             if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
                 num.forEach(function(val, i) {
                     total += getMilliseconds(num[i], listOfTypes[i]);
                 });
                 return total;
             }
-            console.log('final num: ', num, '\nfinallistofTypes: ', listOfTypes);
             return getMilliseconds(num[0], fieldInfo.scale);
         },
         getPlaceholder: function(fieldInfo) {
