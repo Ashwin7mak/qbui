@@ -25,6 +25,8 @@
     // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S*|DURATION_CONSTS.SECOND*|DURATION_CONSTS.SECONDS*)/;
     // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*)/;
     var _ = require('lodash');
+    var regexNums = /[0-9.]+/g;
+    var removeCommas = /[,]+/g;
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -420,7 +422,8 @@
                 return valid;
             }
             value = value.toLowerCase();
-            value = value.replace(/[0-9]/g, '').trim().split(' ');
+            value = value.replace(regexNums, '').trim().split(' ');
+            console.log('value: ', value);
             if (!value || value[0] === '') {
                 return valid;
             }
@@ -473,9 +476,12 @@
              * and separate the number and type from each other
              * Strips out all commas
              * */
-            num = value.replace(/[,]+/g, '');
-            num = num.match(/[0-9]+/g);
-            type = value.replace(/[0-9]/g, '').split(' ');
+
+            num = value.replace(removeCommas, '');
+            console.log('removeComma nums: ', num);
+            num = num.match(regexNums);
+            console.log('match nums: ', num);
+            type = value.replace(regexNums, '').split(' ');
             type.forEach(function(val) {
                 /**
                  * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
@@ -499,12 +505,14 @@
                     listOfTypes.push(val);
                 }
             });
+            console.log('final num: ', num, '\nfinallistofTypes: ', listOfTypes);
             if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
                 num.forEach(function(val, i) {
                     total += getMilliseconds(num[i], listOfTypes[i]);
                 });
                 return total;
             }
+            console.log('final num: ', num, '\nfinallistofTypes: ', listOfTypes);
             return getMilliseconds(num[0], fieldInfo.scale);
         },
         getPlaceholder: function(fieldInfo) {
