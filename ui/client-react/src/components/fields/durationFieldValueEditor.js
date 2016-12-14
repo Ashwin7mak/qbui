@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants'
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
-import ErrorWrapper from './errorWrapper';
 
 const DurationFieldValueEditor = React.createClass({
     displayName: 'DurationFieldValueEditor',
