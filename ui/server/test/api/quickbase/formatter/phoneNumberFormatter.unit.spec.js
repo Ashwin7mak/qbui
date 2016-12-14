@@ -267,6 +267,37 @@ describe.only('PhoneNumberFormatter (server side)', () => {
             expectedExtraDigits: null
         },
 
+        {
+            description: 'handles null values',
+            phoneNumber: null,
+            region: null,
+            expectedRegion: null,
+            expectedCountryCode: null,
+            expectedDialString: null,
+            expectedE164FormattedNumber: null,
+            expectedInternationalNumber: null,
+            expectedInternetDialableNumber: null,
+            expectedPhoneNumberWithoutExtension: '',
+            expectedNationalFormattedNumber: null,
+            expectedExtension: null,
+            expectedExtraDigits: null
+        },
+
+        {
+            description: 'handles blank values',
+            phoneNumber: '',
+            region: null,
+            expectedRegion: null,
+            expectedCountryCode: null,
+            expectedDialString: '',
+            expectedE164FormattedNumber: null,
+            expectedInternationalNumber: null,
+            expectedInternetDialableNumber: null,
+            expectedPhoneNumberWithoutExtension: '',
+            expectedNationalFormattedNumber: null,
+            expectedExtension: null,
+            expectedExtraDigits: null
+        },
     ];
 
     function buildCustomMessage(message, actual, expected) {
