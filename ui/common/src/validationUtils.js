@@ -14,6 +14,7 @@
     var constants = require('./constants');
     var _ = require('lodash');
     var EmailValidator = require('./validator/emailValidator');
+    var PhoneValidator = require('./validator/phoneValidator');
 
     module.exports = {
 
@@ -96,8 +97,10 @@
                 case constants.EMAIL_ADDRESS :
                     results = EmailValidator.validateAndReturnResults(value, name, results);
                     break;
+                case constants.PHONE_NUMBER :
+                    results = PhoneValidator.validateAndReturnResults(value, name, results);
+                    break;
                 }
-
             }
 
             return results;
