@@ -399,7 +399,8 @@
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
          * */
-        if (!(type.length === 1 && type[0] === '')) {
+        if (type.length === 1 && type[0] === '') {
+            console.log('bet this is it');
             return false;
         }
         /**
@@ -419,6 +420,7 @@
              * 1.5:1.5 invalid format   (H:M)
              * :1.5 invalid format      (:MM)
              **/
+            console.log('yo: ', value);
             if (value.indexOf('.') !== -1) {
                 return false;
             }
@@ -469,8 +471,7 @@
             if (typeof value === 'number' || !value) {
                 return valid;
             }
-            value = value.toLowerCase();
-            type = value.replace(regexNums, '').trim().split(' ');
+            type = value.replace(regexNums, ' ').split(' ');
             if (value.split('').indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
             }
@@ -479,6 +480,7 @@
              * This will only check for valid types
              * If there are no types, return true
              * */
+            console.log('TYPE: ', type);
             type.forEach(function(val) {
                 if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
                     valid = false;
@@ -489,6 +491,7 @@
         onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             value = value.replace(removeCommas, '').trim().split(' ').join('');
+            value = value.toLowerCase();
             /**
              * Accepted Type:
                  * millisecond || milliseconds || ms
@@ -528,7 +531,7 @@
 
             num = value.match(regexNums);
             console.log('match nums: ', num);
-            type = value.replace(regexNums, '').split(' ');
+            type = value.replace(regexNums, ' ').split(' ');
             type.forEach(function(val) {
                 /**
                  * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
