@@ -6,6 +6,7 @@ import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
+import CookieConstants from '../../../common/src/constants';
 import uuid from 'uuid';
 import Promise from 'bluebird';
 import QbResponseError from './QbResponseError';
@@ -94,7 +95,7 @@ class BaseService {
             //  not including now, but this is where we would add another header
             //  if want to send unique id per user session --> config.uid
 
-            let ticket = this.getCookie(constants.COOKIE.TICKET);
+            let ticket = this.getCookie(CookieConstants.COOKIES.TICKET);
             if (ticket) {
                 config.headers[constants.HEADER.TICKET] = ticket;
             }
