@@ -213,14 +213,14 @@ describe('MultiChoiceFieldValueEditor functions', () => {
                 this.setState({value: val});
             },
             render() {
-                return <MultiChoiceFieldValueEditor ref="field" value={this.state.value} choices={radioBoxData.choices} onBlur={this.onBlur}/>;
+                return <MultiChoiceFieldValueEditor ref="field" value={this.state.value} choices={radioBoxData.choices} onBlur={this.onBlur} />;
             }
         }));
 
         var parent = TestUtils.renderIntoDocument(TestParent());
         component = parent.refs.field;
         component.selectChoice({
-            value: {coercedValue : {value: 'Banana'}}
+            value: {coercedValue : {value: 'Banana'}, displayValue: 'Banana'}
         });
         component.onBlur();
         expect(parent.state.value).toEqual({value: 'Banana', display: 'Banana'});
