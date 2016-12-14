@@ -485,7 +485,7 @@
         },
         onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
-            value = value.replace(removeCommas, '').trim().split(' ').join('');
+            value = value.replace(removeCommas, '').split(' ').join(' ');
             value = value.toLowerCase();
             /**
              * Accepted Type:

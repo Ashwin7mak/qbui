@@ -4,10 +4,11 @@ import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
 import TestData from './durationFieldValueEditorTestData';
 import {DURATION_CONSTS} from '../../../common/src/constants';
+import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-describe('DurationFieldValueEditor', () => {
+fdescribe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -38,7 +39,7 @@ describe('DurationFieldValueEditor', () => {
     });
 
     TestData.dataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.type + ' to  ' + test.scale, () => {
+        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
@@ -90,4 +91,34 @@ describe('DurationFieldValueEditor', () => {
             expect(component.state.display).toEqual(expectedResult);
         });
     });
+    TestData.timeFormatDataProvider.forEach(function(test) {
+        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let userInput = test.numValue + ' ' + test.type;
+            if (test.type === undefined) {
+                userInput = test.numValue;
+            }
+            component.setState({value: userInput, display: ''});
+            let input = ReactDOM.findDOMNode(component);
+            Simulate.blur(input);
+            let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
+            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            let expectedTimeFormat = durationFormatter.format({value:convertedMilliSeconds}, test);
+            expect(component.state.display).toEqual(expectedTimeFormat);
+        });
+    });
+    // TestData.invalidInput.forEach(function(test) {
+    //     fit('throws a validation error with an invalid input of ' + test.invalidInput, () => {
+    //         component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+    //         let userInput = test.invalidInput;
+    //         component.setState({value: userInput, display: ''});
+    //         domComponent = ReactDOM.findDOMNode(component);
+    //         let input = ReactDOM.findDOMNode(domComponent);
+    //         Simulate.blur(input, {
+    //             target:{value: test.invalidInput}
+    //         });
+    //         debugger;
+    //         expect(domComponent.classList[3]).toEqual('error');
+    //     });
+    // });
 });

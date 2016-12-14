@@ -11,6 +11,9 @@
     var MM = ":55";
     var SS = "::55";
     var HHSS = "55::55";
+    var invalidInput = {
+        HHMMSS: '5.5:5.5:5.5',
+    };
     module.exports = {
         dataProvider : [
             /**
@@ -492,6 +495,53 @@
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
                 SS: numValue
             },
+        ],
+        timeFormatDataProvider: [
+            {
+                scale: CONSTS.HHMMSS,
+                numValue: numValue,
+                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                type: undefined,
+                momentJSTYPE: CONSTS.HOURS
+            },
+            {
+                scale: CONSTS.HHMMSS,
+                numValue: numValue,
+                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
+            },
+            {
+                scale: CONSTS.HHMM,
+                numValue: numValue,
+                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
+            },
+            {
+                scale: CONSTS.MMSS,
+                numValue: numValue,
+                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
+            },
+            {
+                scale: CONSTS.MM,
+                numValue: numValue,
+                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                type: CONSTS.MINUTES,
+                momentJSTYPE: CONSTS.MINUTES
+            },
+        ],
+        invalidInput: [
+            {
+                scale: CONSTS.SECONDS,
+                invalidInput: invalidInput.HHMMSS,
+            },
+            // {
+            //     scale: CONSTS.SECONDS,
+            //     invalidInput: "90 seconds",
+            // },
         ]
     };
 }());
