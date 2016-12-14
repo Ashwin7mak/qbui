@@ -54,7 +54,7 @@ class RecordService extends BaseService {
             if (StringUtils.isNonEmptyString(optionalParams[query.FORMAT_PARAM])) {
                 params[query.FORMAT_PARAM] = optionalParams[query.FORMAT_PARAM];
             }
-            if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalParams[query.NUMROWS_PARAM])) {
+            if (NumberUtils.isInt(optionalParams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalParams[query.NUMROWS_PARAM])) {
                 params[query.OFFSET_PARAM] = optionalParams[query.OFFSET_PARAM];
                 params[query.NUMROWS_PARAM] = optionalParams[query.NUMROWS_PARAM];
             }
@@ -73,7 +73,7 @@ class RecordService extends BaseService {
      * @returns {*}
      */
 
-    getRecord(appId, tableId, recId, clist, optionalParams) {
+    getRecord(appId, tableId, recId, clist, optionalParams = {}) {
         let params = {};
         if (StringUtils.isNonEmptyString(clist)) {
             params[query.COLUMNS_PARAM] = clist;

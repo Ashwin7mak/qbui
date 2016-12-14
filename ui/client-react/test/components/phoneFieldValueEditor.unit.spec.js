@@ -11,7 +11,7 @@ describe('PhoneFieldValueEditor', () => {
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithSpecialCharacters = "+1 (555) 555-5555.";
     const badInput =  "+1 abc(555)!!! 555-5555.:::fffeee";
-    const placeholderText = phoneNumberFormatter.PLACEHOLDER;
+    const placeholderText = '(xxx) xxx-xxxx';
     const ext = "5555";
     let component;
     let domComponent;
@@ -36,6 +36,20 @@ describe('PhoneFieldValueEditor', () => {
                                        attributes={this.props.attributes} />
             );
         }
+    });
+
+    const mockLocale = {
+        getMessage(_messageKey) {
+            return placeholderText;
+        }
+    };
+
+    beforeAll(() => {
+        PhoneFieldValueEditor.__Rewire__('Locale', mockLocale);
+    });
+
+    afterAll(() => {
+        PhoneFieldValueEditor.__ResetDependency__('Locale');
     });
 
     it('allows a user to edit the raw value of a phone', () => {
@@ -75,9 +89,11 @@ describe('PhoneFieldValueEditor', () => {
     });
 
     it('has placeholder text', () => {
+        spyOn(mockLocale, 'getMessage').and.callThrough();
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         domComponent = ReactDOM.findDOMNode(component);
         expect(domComponent.childNodes[0].placeholder).toEqual(placeholderText);
+        expect(mockLocale.getMessage).toHaveBeenCalledWith('placeholder.phone');
     });
 
     it('formats the phone number for display onBlur', () => {
