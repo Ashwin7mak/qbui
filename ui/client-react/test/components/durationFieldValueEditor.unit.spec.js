@@ -7,7 +7,7 @@ import {DURATION_CONSTS} from '../../../common/src/constants';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-fdescribe('DurationFieldValueEditor', () => {
+describe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
