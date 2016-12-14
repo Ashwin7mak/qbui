@@ -66,7 +66,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         }
         this.setState({choice: newValue});
         if (this.props.onChange) {
-            this.props.onChange(newValue);
+            this.props.onChange(newValue.value);
         }
     },
 
@@ -139,7 +139,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const emptyOptionText = '\u00a0'; //Non breaking space
 
         let choices = this.props.choices;
-        let selectedValue = this.state.choice ? {label: this.state.choice.display} : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
+        let selectedValue = _.get(this, 'state.choice.value');
         /**
          *This is commented out right now, because the current Schema in core does not accept/save null inputs
          * This gives the user the ability to select an empty space as an input
@@ -158,7 +158,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         return <Select
             tabIndex="0"
-            value={selectedValue}
+            value={selectedValue && {label: selectedValue}}
             optionRenderer={this.renderOption}
             options={choices}
             onChange={this.selectChoice}
