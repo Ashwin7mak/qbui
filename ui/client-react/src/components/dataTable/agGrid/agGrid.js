@@ -967,7 +967,7 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
-                                if (durationFormatter.hasUnitsText(obj.fieldDef.scale)) {
+                                if (durationFormatter.hasUnitsText(datatypeAttributes.scale)) {
                                     obj.headerClass += " AlignRight";
                                 }
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
