@@ -56,6 +56,9 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         placeholder = durationFormatter.getPlaceholder(this.props.attributes);
+        if (this.props.attributes.scale !== 'Smart Units') {
+            classes = 'rightAlignInlineEditNumberFields ' + classes;
+        }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
