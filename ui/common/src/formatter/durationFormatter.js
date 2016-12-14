@@ -25,7 +25,7 @@
     // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S*|DURATION_CONSTS.SECOND*|DURATION_CONSTS.SECONDS*)/;
     // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*)/;
     var _ = require('lodash');
-    var regexNums = /[0-9.]+/g;
+    var regexNums = /[0-9.:]+/g;
     var removeCommas = /[,]+/g;
 
     /**
@@ -390,7 +390,54 @@
             seconds = convertToMilliseconds(numArray[2], DURATION_CONSTS.MILLIS_PER_SECOND);
             return  hours + minutes + seconds;
         }
-        return result;
+        return num;
+    }
+    function isTimeFormatValid(value, type) {
+        var timeFormat;
+        var nums;
+        /**
+         * If a type is inserted with time format, it is not valid
+         * HH:MM:SS minutes is not a valid format
+         * */
+        if (!(type.length === 1 && type[0] === '')) {
+            return false;
+        }
+        /**
+         * H::SS decimal points allowed
+         * :M:SS decimal points allowed
+         * :MM:SS decimal points allowed
+         * HH:MM:SS decimal points allowed
+         * H:M:SS decimal points allowed
+         * */
+        timeFormat = value.match(/[:]+/g).join('').split('');
+        console.log('timeFormat: ', timeFormat);
+        if (timeFormat.length === 1) {
+            /**
+             * 1.5: invalid format      (H:)
+             * 1.5: invalid format      (HH:)
+             * 1.5:1.5 invalid format   (HH:MM)
+             * 1.5:1.5 invalid format   (H:M)
+             * :1.5 invalid format      (:MM)
+             **/
+            if (value.indexOf('.') !== -1) {
+                return false;
+            }
+        }
+        if (timeFormat.length === 2) {
+            nums = value.split(':').join(' ').trim().split(' ');
+            console.log('nums: ', nums);
+            if (nums.length === 2) {
+                if (nums[0].indexOf('.') !== -1) {
+                    return false;
+                }
+            } else if (nums.length === 3) {
+                if (nums[0].indexOf('.') !== -1 ||
+                    nums[1].indexOf('.') !== -1) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     module.exports = {
@@ -418,21 +465,21 @@
         isValid: function(value) {
             // Don't validate empty strings
             var valid = true;
-            if (typeof value === 'number') {
+            var type;
+            if (typeof value === 'number' || !value) {
                 return valid;
             }
             value = value.toLowerCase();
-            console.log('value: ', value);
-            value = value.replace(regexNums, '').trim().split(' ');
-            if (!value || value[0] === '') {
-                return valid;
+            type = value.replace(regexNums, '').trim().split(' ');
+            if (value.split('').indexOf(':') !== -1) {
+                return isTimeFormatValid(value, type);
             }
             /**
              * Strips out all numbers
              * This will only check for valid types
              * If there are no types, return true
              * */
-            value.forEach(function(val) {
+            type.forEach(function(val) {
                 if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
                     valid = false;
                 }
@@ -444,10 +491,11 @@
             value = value.replace(removeCommas, '').trim().split(' ').join('');
             /**
              * Accepted Type:
-                 * second || seconds
-                 * minute || minutes
-                 * hour || hours
-                 * week || weeks
+                 * millisecond || milliseconds || ms
+                 * second || seconds || s
+                 * minute || minutes || m
+                 * hour || hours || h
+                 * week || weeks || w
              * Accepted Format For Seconds, Minutes, Hours:
                  * 00:00:00
                  * 00:00
@@ -460,17 +508,17 @@
             var type;
             var num;
             /**
+             * Checks to see if the value is a valid input
+             * */
+            if (!this.isValid(value)) {
+                return value;
+            }
+            /**
              * If the user inserted a semicolon, then the string needs to be parsed based off of
              * the HHMMSS, HHMM, MMSS requirements
              * */
             if (value && value.split('').indexOf(':') !== -1) {
                 return convertHourMinutesSeconds(value);
-            }
-            /**
-             * Checks to see if the value is a valid input
-             * */
-            if (!this.isValid(value)) {
-                return value;
             }
             /**
              * If the user passes in a string containing a number and a type, we split the string here
