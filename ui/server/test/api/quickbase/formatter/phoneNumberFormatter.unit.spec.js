@@ -21,7 +21,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '+1 508 481 1234',
             expectedNationalFormattedNumber: '(508) 481-1234',
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -37,7 +39,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '+33-970736058',
             expectedNationalFormattedNumber: '09 70 73 60 58',
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -53,7 +57,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '+33-970736058 777777777777',
             expectedNationalFormattedNumber: '09 70 73 60 58',
             expectedExtension: null,
-            expectedExtraDigits: '777777777777'
+            expectedExtraDigits: '777777777777',
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -69,7 +75,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '5084814567',
             expectedNationalFormattedNumber: '(508) 481-4567',
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -85,7 +93,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '5084814567',
             expectedNationalFormattedNumber: '(508) 481-4567',
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -101,7 +111,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '33-970736058',
             expectedNationalFormattedNumber: '09 70 73 60 58',
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -118,7 +130,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             // This test uses the constants because it gets its formatting from the CommonPhoneNumberFormatter. Other tests use Google Lib which does not have constants setup.
             expectedNationalFormattedNumber: `${CommonPhoneNumberFormatter.OPEN_PAREN}508${CommonPhoneNumberFormatter.CLOSE_PAREN} 481${CommonPhoneNumberFormatter.DASH}1234`,
             expectedExtension: null,
-            expectedExtraDigits: '567890'
+            expectedExtraDigits: '567890',
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -134,7 +148,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '911',
             expectedNationalFormattedNumber: '911',
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: false,
+            expectedIsDialable: false,
         },
 
         {
@@ -150,7 +166,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '0-800-180-0566',
             expectedNationalFormattedNumber: null,
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: false,
+            expectedIsDialable: false,
         },
 
         // --------------- WITH EXTENSION --------------------------
@@ -168,7 +186,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '+1 508 481 1234',
             expectedNationalFormattedNumber: '(508) 481-1234',
             expectedExtension: '7890',
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -184,7 +204,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '+33-970736058',
             expectedNationalFormattedNumber: '09 70 73 60 58',
             expectedExtension: '7890',
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -200,7 +222,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '+33-970736058 777777777777',
             expectedNationalFormattedNumber: '09 70 73 60 58',
             expectedExtension: '9890',
-            expectedExtraDigits: '777777777777'
+            expectedExtraDigits: '777777777777',
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -216,7 +240,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '5084814567',
             expectedNationalFormattedNumber: '(508) 481-4567',
             expectedExtension: '7890',
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -232,7 +258,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '5084814567',
             expectedNationalFormattedNumber: '(508) 481-4567',
             expectedExtension: '7890',
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -248,7 +276,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '33-970736058',
             expectedNationalFormattedNumber: '09 70 73 60 58',
             expectedExtension: '7890',
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: true,
+            expectedIsDialable: true,
         },
 
         {
@@ -264,7 +294,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '0-800-180-0566',
             expectedNationalFormattedNumber: null,
             expectedExtension: '7890',
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: false,
+            expectedIsDialable: false,
         },
 
         {
@@ -280,7 +312,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '',
             expectedNationalFormattedNumber: null,
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: false,
+            expectedIsDialable: false,
         },
 
         {
@@ -296,7 +330,9 @@ describe('PhoneNumberFormatter (server side)', () => {
             expectedPhoneNumberWithoutExtension: '',
             expectedNationalFormattedNumber: null,
             expectedExtension: null,
-            expectedExtraDigits: null
+            expectedExtraDigits: null,
+            expectedIsValid: false,
+            expectedIsDialable: false,
         },
     ];
 
@@ -318,6 +354,8 @@ describe('PhoneNumberFormatter (server side)', () => {
             assert.equal(phoneNumber.phonenumberWithoutExtension, testCase.expectedPhoneNumberWithoutExtension, buildCustomMessage('Phone number without extension is not equal', phoneNumber.phonenumberWithoutExtension, testCase.expectedPhoneNumberWithoutExtension));
             assert.equal(phoneNumber.internetDialableNumber, testCase.expectedInternetDialableNumber, buildCustomMessage('Internet dialable number is not equal', phoneNumber.internetDialableNumber, testCase.expectedInternetDialableNumber));
             assert.equal(phoneNumber.nationalFormattedNumber, testCase.expectedNationalFormattedNumber, buildCustomMessage('National phone number is not equal', phoneNumber.nationalFormattedNumber, testCase.expectedNationalFormattedNumber));
+            assert.equal(phoneNumber.isValid, testCase.expectedIsValid, buildCustomMessage('isValid is not equal', phoneNumber.isValid, testCase.isValid));
+            assert.equal(phoneNumber.isDialable, testCase.expectedIsDialable, buildCustomMessage('isDialable is not equal', phoneNumber.isDialable, testCase.isDialable));
         });
     });
 });

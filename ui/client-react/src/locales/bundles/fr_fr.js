@@ -387,12 +387,14 @@ export default {
             }
         },
         invalidMsg : {
-            unknown: 'Type inconnu non valide. Résultats: ',
-            required: 'Remplissez {fieldName}',
-            email: 'Formater la {fieldName} comme prénom@domaine.fr',
-            emails: 'Formatez toutes les adresses comme prénom@domaine.fr',
+            unknown: "Type inconnu non valide. Résultats: ",
+            required: "Remplissez {fieldName}",
+            email: "Formater la {fieldName} comme prénom@domaine.fr",
+            emails: "Formatez toutes les adresses comme prénom@domaine.fr",
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
-            choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
+            choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
+            phone: "Formater le {fieldName} comme +x x xx xx xx xx",
+            phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
         },
         noneOption: "\<Aucun\>",
         unimplemented: {

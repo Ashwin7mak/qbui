@@ -392,12 +392,14 @@ export default {
             }
         },
         invalidMsg : {
-            unknown: 'Invalid unknown type. Results: ',
-            required: 'Fill in the {fieldName}',
-            email: 'Format the {fieldName} like name@domain.com',
-            emails: 'Format all the addresses like name@domain.com',
-            maxChars: 'Use up to {maxNum} characters',
-            choiceMaxLength :"Select a choice with {maxNum} characters or less"
+            unknown: "Invalid unknown type. Results: ",
+            required: "Fill in the {fieldName}",
+            email: "Format the {fieldName} like name@domain.com",
+            emails: "Format all the addresses like name@domain.com",
+            maxChars: "Use up to {maxNum} characters",
+            choiceMaxLength : "Select a choice with {maxNum} characters or less",
+            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phoneInvalidCountryCode: "Format the country code like +x for international numbers",
         },
         createInQuickBaseClassicMessage: {
         },

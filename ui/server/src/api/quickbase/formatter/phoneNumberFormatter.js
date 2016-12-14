@@ -10,8 +10,18 @@
     var DEFAULT_COUNTRY_CODE = 1;
     var DEFAULT_REGION = 'US';
 
+    // Error codes produced by Google libphonenumber
+    var PHONE_VALIDATION_ERRORS = {
+        INVALID_COUNTRY_CODE: 'Invalid country calling code',
+        NOT_A_NUMBER: 'The string supplied did not seem to be a phone number',
+        TOO_SHORT_AFTER_IDD: 'Phone number too short after IDD',
+        TOO_SHORT: 'The string supplied is too short to be a phone number',
+        TOO_LONG: 'The string supplied is too long to be a phone number',
+    };
+
     var PhoneNumberFormatter = {
         QbPhoneNumber: QbPhoneNumber,
+        PHONE_VALIDATION_ERRORS: PHONE_VALIDATION_ERRORS,
 
         /**
          * Parse a phone number string into a QbPhoneNumber object with additional information such as
@@ -66,18 +76,6 @@
             // Return the user entered string without formatting if other attempts to format have failed
             return phoneNumber.phonenumberWithoutExtension;
         },
-
-        /**
-         * Strips all characters considered "special" in a phone number. For now, that is anything except for integers.
-         * @param phoneNumber
-         */
-        stripSpecialCharacters: function(phoneNumber) {
-            if (!phoneNumber || phoneNumber.length === 0) {
-                return '';
-            }
-
-            return phoneNumber.replace(/[^0-9]/g, '');
-        },
     };
 
     function QbPhoneNumber(phoneNumber, region) {
@@ -115,6 +113,7 @@
             self.internetDialableNumber = null;
             self.isDialable = false;
             self.isValid = false;
+            self.invalidReason = null;
 
             self.withoutSpecialCharacters = BLANK_PHONE_NUMBER;
             self.first15Digits = BLANK_PHONE_NUMBER;
@@ -132,12 +131,12 @@
             var splitPhoneNumber = phoneNumber.split(new RegExp(`\\s*${StandardPhoneFormatter.EXTENSION_DELIM}\\s*`, 'g'));
             self.phonenumberWithoutExtension = splitPhoneNumber[0];
             if (splitPhoneNumber.length > 1 && splitPhoneNumber[1] && splitPhoneNumber[1].length > 0) {
-                self.extension = PhoneNumberFormatter.stripSpecialCharacters(splitPhoneNumber[1]);
+                self.extension = StandardPhoneFormatter.stripSpecialCharacters(splitPhoneNumber[1]);
             }
         }
 
         function getValidPhoneNumberLengths() {
-            self.withoutSpecialCharacters = PhoneNumberFormatter.stripSpecialCharacters(self.phonenumberWithoutExtension);
+            self.withoutSpecialCharacters = StandardPhoneFormatter.stripSpecialCharacters(self.phonenumberWithoutExtension);
             self.first15Digits = self.withoutSpecialCharacters.slice(0, 15);
             self.first11Digits = self.withoutSpecialCharacters.slice(0, 11);
             self.first10Digits = self.withoutSpecialCharacters.slice(0, 10);
@@ -156,13 +155,12 @@
             var currentPhoneNumberLength = currentPhoneNumber.length;
 
             var googlePhoneNumber;
-            var isValidNumber = false;
             do {
                 try {
                     // Splice doesn't include the last number so we need to add one to the length
                     googlePhoneNumber = PhoneNumberUtil.parse((currentPhoneNumber.slice(0, currentPhoneNumberLength + 1)), (currentRegion || self.region));
-                    isValidNumber = PhoneNumberUtil.isValidNumber(googlePhoneNumber, (region || self.region));
-                    if (!isValidNumber) {
+                    self.isValid = PhoneNumberUtil.isValidNumber(googlePhoneNumber, (region || self.region));
+                    if (!self.isValid) {
                         currentPhoneNumberLength = currentPhoneNumberLength - 1;
                     } else {
                         break;
@@ -170,21 +168,23 @@
                 // Catch errors thrown by Google LibPhone number parse and isValidNumber methods
                 // and try again with a shorter number in case there are extra digits at the end
                 } catch (invalidNumber) {
+                    self.invalidReason = invalidNumber.message;
+
                     // Break out of the loop if there is an invalid country calling code because
                     // shortening the number will not fix that problem.
-                    if (invalidNumber.message === 'Invalid country calling code') {
+                    if (self.invalidReason === PHONE_VALIDATION_ERRORS.INVALID_COUNTRY_CODE) {
                         break;
                     }
                     currentPhoneNumberLength = currentPhoneNumberLength - 1;
                 }
             } while (currentPhoneNumberLength > 6);
 
-            if (isValidNumber) {
-                setFormats(googlePhoneNumber, isValidNumber);
+            if (self.isValid) {
+                setFormats(googlePhoneNumber);
             }
         }
 
-        function setFormats(googlePhoneNumber, isValidNumber) {
+        function setFormats(googlePhoneNumber) {
             self.countryCode = googlePhoneNumber.getCountryCode();
 
             if (!self.countryCode) {
@@ -197,11 +197,11 @@
             self.internationalNumber = PhoneNumberUtil.format(googlePhoneNumber, PhoneNumberFormat.INTERNATIONAL);
             self.nationalFormattedNumber = PhoneNumberUtil.format(googlePhoneNumber, PhoneNumberFormat.NATIONAL);
             self.internetDialableNumber = PhoneNumberUtil.format(googlePhoneNumber, PhoneNumberFormat.RFC3966);
-            self.isDialable = isValidNumber;
+            self.isDialable = self.isValid;
         }
 
         function findExtraDigits(formattedNumber) {
-            var lengthOfNumberWithoutSpecialCharacters = PhoneNumberFormatter.stripSpecialCharacters(formattedNumber).length;
+            var lengthOfNumberWithoutSpecialCharacters = StandardPhoneFormatter.stripSpecialCharacters(formattedNumber).length;
             return self.withoutSpecialCharacters.slice(lengthOfNumberWithoutSpecialCharacters);
         }
 

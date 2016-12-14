@@ -60,6 +60,17 @@
                 .filter(function(num) {return ALLOWED_CHARACTERS_ONBLUR.indexOf(num) > -1;})
                 .join('');
         },
+        /**
+         * Strips all characters considered "special" in a phone number. For now, that is anything except for integers.
+         * @param phoneNumber
+         */
+        stripSpecialCharacters: function(phoneNumber) {
+            if (!phoneNumber || phoneNumber.length === 0) {
+                return '';
+            }
+
+            return phoneNumber.replace(/[^0-9]/g, '');
+        },
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';

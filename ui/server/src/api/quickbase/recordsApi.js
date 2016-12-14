@@ -45,7 +45,7 @@
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
     var httpStatusCodes = require('../../constants/httpStatusCodes');
-    var ValidationUtils = require('../../../../common/src/validationUtils');
+    var recordValidator = require('./validator/recordValidator');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -350,13 +350,13 @@
             req.body.forEach((change) => {
                 if (change && change.fieldDef) {
                     // validate it
-                    let results = ValidationUtils.checkFieldValue(change, change.fieldName, change.value, true);
+                    let results = recordValidator.checkFieldValue(change, change.fieldName, change.value, true);
                     if (results.isInvalid) {
                         errors.push(results);
                     }
                 }
             });
         }
-        return  errors;
+        return errors;
     }
 }());
