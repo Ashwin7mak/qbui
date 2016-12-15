@@ -11,7 +11,7 @@ let defaultDomain = 'quickbase.com';
 function buildMockParent(options = {disabled: false, readOnly: false, initialValue: null}) {
     return React.createClass({
         getInitialState() {
-            return {value: options.initialValue, display: null};
+            return {value: options.initialValue, display: options.initialValue};
         },
         onChange(newValue) {
             this.setState({value: newValue});
@@ -35,12 +35,25 @@ function buildMockParent(options = {disabled: false, readOnly: false, initialVal
     });
 }
 
+let mockBreakpoints = {
+    isSmallBreakpoint() {return false;}
+};
+
 let component, domComponent, emailInput;
 
 describe('EmailFieldValueEditor', () => {
+
+    beforeAll(() => {
+        EmailFieldValueEditor.__Rewire__('Breakpoints', mockBreakpoints);
+    });
+
+    afterAll(() => {
+        EmailFieldValueEditor.__ResetDependency__('Breakpoints');
+    });
+
     it('has placeholder text', () => {
         component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component);
 
         expect(emailInput.placeholder).toEqual(placeholderText);
     });
@@ -49,7 +62,7 @@ describe('EmailFieldValueEditor', () => {
         let updatedEmail = 'test@quickbase.com';
 
         component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component);
 
         Simulate.change(emailInput, {
             target: {value: updatedEmail}
@@ -64,7 +77,7 @@ describe('EmailFieldValueEditor', () => {
 
         let mockParentElement = buildMockParent({initialValue: initialValue});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component);
 
         Simulate.blur(emailInput, {
             value: initialValue
@@ -73,7 +86,9 @@ describe('EmailFieldValueEditor', () => {
         expect(component.state.display).toEqual(formattedValue);
     });
 
-    it('can be cleared', () => {
+    it('can be cleared on small breakpoints', () => {
+        spyOn(mockBreakpoints, 'isSmallBreakpoint').and.returnValue(true);
+
         let initialValue = 'test@quickbase.com';
 
         let mockParentElement = buildMockParent({initialValue: initialValue});
@@ -87,19 +102,23 @@ describe('EmailFieldValueEditor', () => {
     });
 
     it('shows only text when disabled', () => {
-        let mockParentElement = buildMockParent({disabled: true});
+        let testValue = 'test@quickbase.com';
+        let mockParentElement = buildMockParent({disabled: true, initialValue: testValue});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component);
 
-        expect(emailInput).toBeNull();
+        expect(emailInput.value).toEqual(undefined);
+        expect(emailInput.innerText).toEqual(testValue);
     });
 
     it('shows only text when readOnly', () => {
-        let mockParentElement = buildMockParent({readOnly: true});
+        let testValue = 'test@quickbase.com';
+        let mockParentElement = buildMockParent({readOnly: true, initialValue: testValue});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component);
 
-        expect(emailInput).toBeNull();
+        expect(emailInput.value).toEqual(undefined);
+        expect(emailInput.innerText).toEqual(testValue);
     });
 
     it('uses the value (not the display) for editing', () => {
@@ -109,7 +128,7 @@ describe('EmailFieldValueEditor', () => {
         let display = 'display';
 
         component = TestUtils.renderIntoDocument(<EmailFieldValueEditor value={value} display={display} />);
-        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component);
 
         expect(emailInput.value).toEqual(value);
     });

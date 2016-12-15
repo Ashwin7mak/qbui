@@ -21,6 +21,7 @@ import TimeFieldValueEditor from './timeFieldValueEditor';
 import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 import ErrorWrapper from '../fields/errorWrapper';
+import PhoneFieldValueEditor from './phoneFieldValueEditor';
 
 /**
  * # FieldValueEditor
@@ -103,6 +104,10 @@ const FieldValueEditor = React.createClass({
         invalidMessage: React.PropTypes.string,
 
         /**
+         * Additional information about an invalid field (e.g., list of which emails are invalid in a long string of emails) */
+        invalidResultData: React.PropTypes.object,
+
+        /**
          * callback method called when the editor is mounted */
         onAttach: React.PropTypes.func,
 
@@ -149,6 +154,7 @@ const FieldValueEditor = React.createClass({
             readOnly: (this.props.fieldDef ? !this.props.fieldDef.userEditableValue : false),
             invalid: this.props.isInvalid,
             invalidMessage: this.props.invalidMessage,
+            invalidResultData: this.props.invalidResultData,
             fieldDef: this.props.fieldDef,
             fieldName: this.props.fieldName,
             // add the .cellEdit css class if working inside an agGrid
@@ -161,7 +167,6 @@ const FieldValueEditor = React.createClass({
         if (fieldId === DEFAULT_RECORD_KEY_ID) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
-
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
             return <CheckBoxFieldValueEditor {...commonProps} label={this.props.label} />;
@@ -176,7 +181,13 @@ const FieldValueEditor = React.createClass({
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
             return <DateTimeFieldValueEditor key={'dtfve-' + this.props.idKey} attributes={attributes} {...commonProps}/>;
         }
-
+        case FieldFormats.PHONE_FORMAT: {
+            let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
+            return <PhoneFieldValueEditor key={'pfve-' + this.props.idKey}
+                                          {...commonProps}
+                                          attributes={attributes}
+                                          classes="cellEdit" />;
+        }
         case FieldFormats.TIME_FORMAT: {
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
             return <TimeFieldValueEditor key={'tfve-' + this.props.idKey} attributes={attributes} {...commonProps} />;
@@ -273,6 +284,13 @@ const FieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+
+        // For checkbox, need a class at the parent level so that we can target the ErrorWrapper
+        // and reset the width so that checkbox doesn't get left-aligned when it is in validation error state
+        if (this.props.type === FieldFormats.CHECKBOX_FORMAT) {
+            classes += ' checkboxField';
+        }
+
         // error state css class
         if (this.props.isInvalid) {
             classes += ' error';
@@ -302,7 +320,7 @@ const FieldValueEditor = React.createClass({
 
                 {/* render type specific editor */}
                 <ErrorWrapper isInvalid={this.props.isInvalid}
-                               invalidMessage={this.props.invalidMessage}>
+                              invalidMessage={this.props.invalidMessage}>
                 {renderedType}
                 </ErrorWrapper>
             </div>

@@ -91,7 +91,7 @@
                 fieldValue.display = urlAndFileReportLinkFormatter.format(fieldValue, tempFieldInfo);
                 break;
             case consts.EMAIL_ADDRESS:
-                fieldValue.display = emailFormatter.format(fieldValue, tempFieldInfo);
+                fieldValue.display = emailFormatter.formatListOfEmailsFromFieldValueObject(fieldValue, tempFieldInfo);
                 break;
             case consts.DURATION:
             case consts.FORMULA_DURATION:

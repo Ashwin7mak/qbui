@@ -20,6 +20,7 @@ import _ from 'lodash';
 import FieldFormats from '../../../utils/fieldFormats';
 import FieldUtils from '../../../utils/fieldUtils';
 import Logger from "../../../utils/logger";
+import * as durationFormatter from "../../../../../common/src/formatter/durationFormatter";
 
 
 let logger = new Logger();
@@ -92,11 +93,12 @@ const CellRenderer = React.createClass({
                     value: this.props.initialValue.value,
                     display: this.props.initialValue.display
                 },
-                validationStatus : null
+                // Key is use to force a re-rendering when there are validation changes
+                rerenderKey: -1
             };
         } else {
             logger.warn('"this.props.initialValue" in getInitialState is undefined');
-            return {};
+            return {rerenderKey: -1};
         }
     },
 
@@ -162,10 +164,24 @@ const CellRenderer = React.createClass({
     },
 
     /**
+     * gets the classname for duration, scales with fixed text units get wUnitsText
+     * in addition to durationFormat
+     * @param coldef
+     * @returns {string}
+     */
+    getClassNameForDuration(coldef) {
+        let answer = "durationFormat";
+        if (coldef && _.has(coldef, 'fieldDef.datatypeAttributes.scale') &&
+            durationFormatter.hasUnitsText(coldef.fieldDef.datatypeAttributes.scale)) {
+            answer += " wUnitsText";
+        }
+        return answer;
+    },
+    /**
      *
      * @returns {*}
      */
-    getClassNameForType(cellType) {
+    getClassNameForType(cellType, coldef) {
         switch (cellType) {
         case FieldFormats.DATE_FORMAT:            return "dateFormat";
         case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
@@ -174,7 +190,7 @@ const CellRenderer = React.createClass({
         case FieldFormats.RATING_FORMAT:          return "ratingFormat";
         case FieldFormats.CURRENCY_FORMAT:        return "currencyFormat";
         case FieldFormats.PERCENT_FORMAT:         return "percentFormat";
-        case FieldFormats.DURATION_FORMAT:        return "durationFormat";
+        case FieldFormats.DURATION_FORMAT:        return this.getClassNameForDuration(coldef);
         case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
         case FieldFormats.TEXT_FORMAT:            return "textFormat";
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
@@ -182,6 +198,29 @@ const CellRenderer = React.createClass({
         case FieldFormats.URL:                    return "urlFormat";
         default:                                  return "textFormat";
         }
+    },
+
+    /**
+     * Get validation status from current context
+     * @returns {{isInvalid: boolean, invalidMessage: null, invalidResultData: null}}
+     * @private
+     */
+    _getValidationErrors() {
+        let validationErrors = {
+            isInvalid: false,
+            invalidMessage: null,
+            invalidResultData: null
+        };
+
+        if (_.has(this.props, 'params.context.rowEditErrors.errors.length')) {
+            let currentValidationErrors = _.find(this.props.params.context.rowEditErrors.errors, {id: this.getFieldId()});
+
+            if (currentValidationErrors) {
+                validationErrors = Object.assign({}, currentValidationErrors);
+            }
+        }
+
+        return validationErrors;
     },
 
     render() {
@@ -203,14 +242,10 @@ const CellRenderer = React.createClass({
 
         let cellType = this.props.type;
 
-        let invalidStatus = {isInvalid: false, invalidMessage: null};
-        // did the validation on blur report an error
-        if (this.state.validationStatus && this.state.validationStatus.isInvalid) {
-            invalidStatus = this.state.validationStatus;
-        }
+        let invalidStatus = this._getValidationErrors();
 
         return (
-            <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
+            <span className={"cellWrapper " + this.getClassNameForType(this.props.type, this.props.colDef)}>
 
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={cellType}
@@ -227,6 +262,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                invalidResultData={invalidStatus.invalidResultData}
                                 appUsers={this.props.appUsers}
                     />
                 }
@@ -244,7 +280,11 @@ const CellRenderer = React.createClass({
     },
 
     onValidated(results) {
-        this.cellValidated(results);
+        // Cause the component to update so we can display the new validation errors
+        // Without this, the field does not show the most recent validation coming from the grid context
+        if (results && results.isInvalid) {
+            this.setState({rerenderKey: Math.random()});
+        }
     },
 
     onBlur(theVals) {
@@ -285,19 +325,8 @@ const CellRenderer = React.createClass({
             display: value
         };
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}},
+        this.setState({valueAndDisplay : Object.assign({}, theVals)},
             ()=>{this.cellChanges();});
-    },
-
-    /**
-     * cell validate change update
-     * @param result of validation
-     */
-    cellValidated(result) {
-        let current = Object.assign({}, this.state.validationStatus);
-        current.isInvalid = result ? result.isInvalid : false;
-        current.invalidMessage = result ? result.invalidMessage : null;
-        this.setState({validationStatus : current});
     }
 });
 

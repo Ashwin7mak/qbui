@@ -19,7 +19,6 @@ var Index = React.createClass({
                 </div>
                 <script async={true} src={this.props.hostBase +
                              this.props.jsPath + this.props.bundleFileName}></script>
-                <script type="text/javascript" async={true} src={this.props.walkMeJS}></script>
             </Html>
         );
     }

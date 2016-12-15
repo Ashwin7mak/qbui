@@ -62,6 +62,34 @@
             },
 
             /**
+             * Construct a host reference from the req.header.host value.  This is
+             * used when referencing a Quickbase legacy JBI endpoint.
+             *
+             * @param req
+             * @param removePort
+             * @param addSecureProtocol
+             * @returns {*}
+             */
+            getRequestHost: function(req, removePort, addSecureProtocol) {
+                let host = req && req.headers ? req.headers.host : '';
+                if (host) {
+                    // if requested, remove port if one is included
+                    if (removePort) {
+                        let portOffset = host.indexOf(':');
+                        if (portOffset !== -1) {
+                            host = host.substring(0, portOffset);
+                        }
+                    }
+                    //  protocol is not included in the header.host, so if requested,
+                    //  prepend https to the host.
+                    if (addSecureProtocol) {
+                        host = consts.PROTOCOL.HTTPS + host;
+                    }
+                }
+                return host;
+            },
+
+            /**
              * Given an express response object and POJO, copy POJO attributes to the response headers object
              *
              * @param res

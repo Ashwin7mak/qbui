@@ -77,11 +77,7 @@ Usually rebuilding allServices is enough but you have to be in that directory / 
 
 * You might have bad / out of date data in your Oracle VM: 
         
- Run **db-cleanup.sql** (note you will lose any test data you have generated!)
-        
-* If all else fails do a reset of your Oracle VM: 
-
- Run **db-cleanup.sql**, **db-reset.sql** and then **QBFunctions.sql**
+ Run **db-reset.sql** (note you will lose any test data you have generated!)
         
 ####You are still here?
 * Restart your Mac - honestly this sometimes does work :)
