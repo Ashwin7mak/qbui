@@ -412,6 +412,10 @@
                 momentJSTYPE: CONSTS.WEEKS
             },
         ],
+        /**
+         * A user can input multiple values and types
+         * For example 55 weeks 55 days 55 minutes is a valid input
+         * */
         multiInputData: [
             {
                 scale: CONSTS.MINUTES,
@@ -426,7 +430,22 @@
                     firstInput: CONSTS.WEEKS,
                     secondInput: CONSTS.HOURS,
                     thirdInput: CONSTS.MINUTES
-                }
+                },
+                description: numValue + ' ' + CONSTS.WEEKS + ' ' + numValue + ' ' + CONSTS.HOURS + ' ' + numValue + ' ' + CONSTS.MINUTES
+            },
+            {
+                scale: CONSTS.MINUTES,
+                numValue: numValue,
+                multiInput: {
+                    firstInput: CONSTS.SECONDS,
+                    secondInput: CONSTS.HOURS
+                },
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                momentJSTYPE: {
+                    firstInput: CONSTS.SECONDS,
+                    secondInput: CONSTS.HOUR
+                },
+                description: numValue + ' ' + CONSTS.SECONDS + ' ' + numValue + ' ' + CONSTS.HOURS
             }
         ],
         placeholderData: [

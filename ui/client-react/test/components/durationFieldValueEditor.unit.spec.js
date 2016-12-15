@@ -57,7 +57,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.multiInputData.forEach(function(test) {
-        fit('converts a multi input of ' + test.numValue + ' ' + test.multiInput.firstInput + ' ' + test.numValue + ' ' + test.multiInput.secondInput + ' ' + test.numValue + ' ' + test.multiInput.thirdInput + ' to  ' + test.scale, () => {
+        it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let input = ReactDOM.findDOMNode(component);
             let userInput = '';
@@ -69,7 +69,6 @@ fdescribe('DurationFieldValueEditor', () => {
             let convertedResult;
             if (test.multiInput.firstInput) {
                 userInput += test.numValue + ' ' + test.multiInput.firstInput;
-
                 firstInputTotalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.firstInput).asMilliseconds();
             }
 
