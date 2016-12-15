@@ -87,7 +87,7 @@
          * V3 Enabled in below tests means (Admin toggels switch to mercury in app home page footer popup + feature switch V2 to V3 turned on in V2 + App is migrated Successfully
          * V3 not enabled in below tests means (Bicycle app has admin toggle set to classic instead of Mercury, COLLEGE_UNIVERSITIES app has no feature switch(v2-v3) turned on in current stack
          */
-        it('Verify the specified record in the List All report matches the one from the current stack', function(done) {
+        it('@smoke Verify the specified record in the List All report matches the one from the current stack', function(done) {
             browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID + '/table/' + BICYCLE_TABLEID + '/report/1').then(function() {
                 reportContentPage.waitForReportContent();
             }).then(function() {
@@ -106,7 +106,7 @@
             });
         });
 
-        it('V3 not enabled on a app - Admin Request to V3 app page - Verify popup shows and in footer and switch to classic is selected by default', function(done) {
+        it('@smoke V3 not enabled on a app - Admin Request to V3 app page - Verify popup shows and in footer and switch to classic is selected by default', function(done) {
             // Log in to the new stack env and go to Bicycle app
             browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -122,7 +122,7 @@
             });
         });
 
-        it('V3 not enabled on a app - Admin Request to V3 - Verify goes to V3 and also Verify user menu dosent show switch to classic for that app', function(done) {
+        it('@smoke V3 not enabled on a app - Admin Request to V3 - Verify goes to V3 and also Verify user menu dosent show switch to classic for that app', function(done) {
             // Log in to the new stack env and go to Bicycle app
             browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID).then(function() {
                 //wait until table lists loaded at leftNav
@@ -136,7 +136,7 @@
             });
         });
 
-        it('V3 not enabled on a app - Admin Request to V2 - Verify goes to V2 app page', function(done) {
+        it('@smoke V3 not enabled on a app - Admin Request to V2 - Verify goes to V2 app page', function(done) {
             //go to V2 bicycle app
             browser.get(PROD_REALM + '/db/' + BICYCLE_APPID).then(function() {
                 //wait untill sign In dropdown button shows up
@@ -151,7 +151,7 @@
             });
         });
 
-        it('V3 enabled/Not enabled - Any User Request to V3 app page - Verify Mange user access to Mercury popup dont show up in the apps page footer', function(done) {
+        it('@smoke V3 enabled/Not enabled - Any User Request to V3 app page - Verify Mange user access to Mercury popup dont show up in the apps page footer', function(done) {
             // Log in to the new stack env and go to Fascinating app
             browser.get(PROD_REALM + '/qbase/app/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -163,7 +163,7 @@
             });
         });
 
-        it('V3 enabled - User Request to V3 app - Switch to V2 and Switch back to V3 from User menu', function(done) {
+        it('@smoke V3 enabled - User Request to V3 app - Switch to V2 and Switch back to V3 from User menu', function(done) {
             // Log in to the new stack env and go to Fascinating app
             browser.get(PROD_REALM + '/qbase/app/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -192,7 +192,7 @@
             });
         });
 
-        it('V3 enabled - User Request to V2 app - Verify redirects to V3', function(done) {
+        it('@smoke V3 enabled - User Request to V2 app - Verify redirects to V3', function(done) {
             // Log in to the new stack env and go to Fascinating app
             browser.get(PROD_REALM + '/db/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -207,7 +207,7 @@
             });
         });
 
-        it('V3 NOT enabled - User Request to V3 app - Verify gives Page not found error', function(done) {
+        it('@smoke V3 NOT enabled - User Request to V3 app - Verify gives Page not found error', function(done) {
             // Log in to the new stack env and go to College Universities App
             browser.get(PROD_REALM + '/qbase/app/' + COLLEGE_UNIVERSITIES_APPID).then(function() {
                 e2eBase.sleep(browser.params.mediumSleep);
