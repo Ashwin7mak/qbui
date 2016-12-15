@@ -3,30 +3,30 @@
  */
 import React from "react";
 import TestUtils from "react-addons-test-utils";
-import TextFormulaFieldRenderer from "../../src/components/fields/textFormulaFieldRenderer";
+import UrlFormulaFieldRenderer from "../../src/components/fields/urlFormulaFieldRenderer";
 
-describe('TextFormulaFieldRenderer: ', () => {
+describe('UrlFormulaFieldRenderer: ', () => {
     'use strict';
     let component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<TextFormulaFieldRenderer />);
+        component = TestUtils.renderIntoDocument(<UrlFormulaFieldRenderer />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of component with no props', () => {
-        component = TestUtils.renderIntoDocument(<TextFormulaFieldRenderer />);
+        component = TestUtils.renderIntoDocument(<UrlFormulaFieldRenderer />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(textFieldValueRenderer.classList.contains('emptyTextFormula')).toBeTruthy();
+        expect(textFieldValueRenderer.classList.contains('emptyUrlFormula')).toBeTruthy();
     });
 
     it('test render of component with value prop', () => {
         let text = "some text";
-        component = TestUtils.renderIntoDocument(<TextFormulaFieldRenderer value={text}/>);
+        component = TestUtils.renderIntoDocument(<UrlFormulaFieldRenderer value={text}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(textFieldValueRenderer.classList.contains('filledTextFormula')).toBeTruthy();
+        expect(textFieldValueRenderer.classList.contains('filledUrlFormula')).toBeTruthy();
     });
 
 
