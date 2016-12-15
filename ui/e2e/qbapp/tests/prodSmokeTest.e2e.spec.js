@@ -14,7 +14,7 @@
     var CurrentStackLoginPage = require('../pages/currentStackLogin.po');
     var CurrentStackReportsPage = require('../pages/currentStackReports.po');
     var WalkMePage = require('../pages/walkMe.po');
-    var v2Tov3Page = require('../pages/v2Tov3.po');
+    var v2Tov3Page = require('../pages/v2ToV3.po');
 
     var reportServicePage = new ReportServicePage();
     var reportContentPage = new ReportContentPage();
@@ -106,7 +106,7 @@
             });
         });
 
-        it('V3 not enabled on a app - Admin Request to V3 app page - Verify popup shows and in footer and switch to classic is selected by default', function(done) {
+        it('@smoke V3 not enabled on a app - Admin Request to V3 app page - Verify popup shows and in footer and switch to classic is selected by default', function(done) {
             // Log in to the new stack env and go to Bicycle app
             browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -122,7 +122,7 @@
             });
         });
 
-        it('V3 not enabled on a app - Admin Request to V3 - Verify goes to V3 and also Verify user menu dosent show switch to classic for that app', function(done) {
+        it('@smoke V3 not enabled on a app - Admin Request to V3 - Verify goes to V3 and also Verify user menu dosent show switch to classic for that app', function(done) {
             // Log in to the new stack env and go to Bicycle app
             browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID).then(function() {
                 //wait until table lists loaded at leftNav
@@ -136,7 +136,7 @@
             });
         });
 
-        it('V3 not enabled on a app - Admin Request to V2 - Verify goes to V2 app page', function(done) {
+        it('@smoke V3 not enabled on a app - Admin Request to V2 - Verify goes to V2 app page', function(done) {
             //go to V2 bicycle app
             browser.get(PROD_REALM + '/db/' + BICYCLE_APPID).then(function() {
                 //wait untill sign In dropdown button shows up
@@ -151,7 +151,7 @@
             });
         });
 
-        it('V3 enabled/Not enabled - Any User Request to V3 app page - Verify Mange user access to Mercury popup dont show up in the apps page footer', function(done) {
+        it('@smoke V3 enabled/Not enabled - Any User Request to V3 app page - Verify Mange user access to Mercury popup dont show up in the apps page footer', function(done) {
             // Log in to the new stack env and go to Fascinating app
             browser.get(PROD_REALM + '/qbase/app/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -163,7 +163,7 @@
             });
         });
 
-        it('V3 enabled - User Request to V3 app - Switch to V2 and Switch back to V3 from User menu', function(done) {
+        it('@smoke V3 enabled - User Request to V3 app - Switch to V2 and Switch back to V3 from User menu', function(done) {
             // Log in to the new stack env and go to Fascinating app
             browser.get(PROD_REALM + '/qbase/app/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -192,7 +192,7 @@
             });
         });
 
-        it('V3 enabled - User Request to V2 app - Verify redirects to V3', function(done) {
+        it('@smoke V3 enabled - User Request to V2 app - Verify redirects to V3', function(done) {
             // Log in to the new stack env and go to Fascinating app
             browser.get(PROD_REALM + '/db/' + FASCINATING_APPID).then(function() {
                 //wait untill table lists loaded at leftNav
@@ -207,7 +207,7 @@
             });
         });
 
-        it('V3 NOT enabled - User Request to V3 app - Verify gives Page not found error', function(done) {
+        it('@smoke V3 NOT enabled - User Request to V3 app - Verify gives Page not found error', function(done) {
             // Log in to the new stack env and go to College Universities App
             browser.get(PROD_REALM + '/qbase/app/' + COLLEGE_UNIVERSITIES_APPID).then(function() {
                 e2eBase.sleep(browser.params.mediumSleep);
