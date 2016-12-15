@@ -4,6 +4,20 @@ import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import {I18nMessage, I18nNumber, IntlNumberOnly} from '../../utils/i18nMessage';
 
+/**
+ * # DurationFieldValueEditor
+ *
+ * An editor that allows a user to edit a duration value. The value is a millisecond number which
+ * is rendered in the input box according to the defined scale attribute. Users can input different numeric
+ * values and scales. Some examples of valid inputs are the following:
+ * 1 week
+ * 1 week 2 days
+ * 10:10:10
+ * ::90
+ * `classes` can be optionally passed in for custom styling. `includeUnits` also can be set to true to include
+ * the units with the formatted value. includeUnits only applies to scales that are not Smart Units and
+ * not time (hh:mm:ss) formatted scale types. Smart units always include the units when formatted.
+ */
 const DurationFieldValueEditor = React.createClass({
     displayName: 'DurationFieldValueEditor',
     propTypes: {
@@ -50,7 +64,7 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     render() {
-        // console.log('includeUnits: ', this.props);
+        console.log('includeUnits: ', this.props.includeUnits);
         // let display;
         // if (this.props.includeUnits) {
         //     let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
