@@ -586,6 +586,7 @@
             },
             {
                 scale: CONSTS.MINUTES,
+
                 invalidInput: invalidInput.MM,
             },
             {
