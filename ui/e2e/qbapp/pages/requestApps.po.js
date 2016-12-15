@@ -13,6 +13,7 @@
         // Page Elements using Locators
         this.appContainerEl = element(by.className('apps-container'));
         this.appsDivEl = this.appContainerEl.all(by.className('apps'));
+        this.appsLinks = element(by.className('appsList')).all(by.className('leftNavLink'));
         this.tablesDivEl = element(by.className('tables'));
         this.tableLinksElList = this.tablesDivEl.all(by.tagName('a'));
         /*
@@ -22,6 +23,22 @@
         this.get = function(requestAppsPageEndPoint) {
             return browser.get(requestAppsPageEndPoint);
         };
+
+        this.selectApp = function(app) {
+            var self = this;
+            return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return self.appsLinks.filter(function(elm) {
+                    return elm.getAttribute('textContent').then(function(text) {
+                        return text === app.name;
+                    });
+                }).then(function(filteredMenuItem) {
+                    return filteredMenuItem[0].click();
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
+                });
+            });
+        };
+
     };
     module.exports = new RequestAppsPage();
 }());

@@ -104,6 +104,9 @@
         app.route('/qbase/signout')
                 .get(authentication.signout);
 
+        app.route('/qbase/notAvailable')
+            .get(errors.notAvailable);
+
         // unauthorized
         app.route('/qbase/unauthorized*')
             .get(errors[httpStatusCodes.UNAUTHORIZED]);

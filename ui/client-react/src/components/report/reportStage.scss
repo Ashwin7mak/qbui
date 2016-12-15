@@ -17,7 +17,7 @@
             .header {
                 flex: 1;
                 font-size: 22px;
-                color: #404040;
+                color: $color-black-700;
                 line-height: 22px;
                 margin-top: 3px;
             }
@@ -38,12 +38,12 @@
         .subheader {
             margin-top: 7px;
             font-size: 14px;
-            color: #6e8ba8;
+            color: $badcolor21;
             text-transform: inherit;
         }
 
         .content {
-            color: #404040;
+            color: $color-black-700;
             font-size: 14px;
             -webkit-font-smoothing: antialiased;
         }

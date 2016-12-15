@@ -14,7 +14,8 @@ let constants = require('../../../../common/src/constants');
 describe("Validate appsApi", function() {
     let req = {
         headers: {
-            'Content-Type': 'content-type'
+            'Content-Type': 'content-type',
+            'host': 'subdomain.domain.com:9000'
         },
         'url': '',
         'method': '',
@@ -576,7 +577,7 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
+            opts.url = requestHelper.getRequestHost(req, true, true) + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
 
             executeReqStub.returns(Promise.resolve(resp));
             let promise = appsApi.stackPreference(req, req.params.appId);
@@ -598,9 +599,9 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
+            opts.url = requestHelper.getRequestHost(req, true, true) + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
 
-            resp = {'body':'{"errorCode":1, "v3Status":"true"}'};
+            resp = {'body':'{"errorCode":1, "status":"true"}'};
             respObj = JSON.parse(resp.body);
             executeReqStub.returns(Promise.resolve(resp));
             let promise = appsApi.stackPreference(req, req.params.appId);
@@ -622,7 +623,7 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
+            opts.url = requestHelper.getRequestHost(req, true, true) + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
 
             let errorResp = {"errorCode":99, "message":"some error"};
             executeReqStub.returns(Promise.reject(errorResp));
@@ -646,9 +647,9 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
+            opts.url = requestHelper.getRequestHost(req, true, true) + routeHelper.getApplicationStackPreferenceRoute(req.params.appId);
 
-            let badResp = {"errorCode":99, "v3Status":"true"};
+            let badResp = {"errorCode":99, "status":"true"};
             executeReqStub.returns(Promise.resolve(badResp));
 
             let promise = appsApi.stackPreference(req, req.params.appId);
@@ -672,7 +673,7 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, 1);
+            opts.url = requestHelper.getRequestHost(req, true, true) + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, 1);
 
             executeReqStub.returns(Promise.resolve(resp));
             let promise = appsApi.stackPreference(req, req.params.appId);
@@ -698,7 +699,7 @@ describe("Validate appsApi", function() {
             //  setup options for the get request
             opts = requestHelper.setOptions(req);
             opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-            opts.url = requestHelper.getLegacyHost() + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, 0);
+            opts.url = requestHelper.getRequestHost(req, true, true) + routeHelper.getApplicationStackPreferenceRoute(req.params.appId, true, 0);
 
             executeReqStub.returns(Promise.resolve(resp));
             let promise = appsApi.stackPreference(req, req.params.appId);

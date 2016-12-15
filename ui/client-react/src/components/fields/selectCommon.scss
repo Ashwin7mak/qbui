@@ -34,6 +34,7 @@ $select-control-height: 28px;
         max-height: 340px; // shouldn't be taller than bottom margin on grid or it will clip
         min-width: 100%;
         width: auto;
+        margin-bottom: 10px;
 
         .Select-menu {
             max-height: 338px;

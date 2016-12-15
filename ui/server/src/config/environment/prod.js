@@ -75,15 +75,11 @@
         // the client to use
         client : client,
 
-        // walkme java script
-        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/walkme_897ca46385a543cbbeaffbc655cdf312_https.js',
-
         /**
          * Scripts for Wistia video popover
          * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
          */
         wistiaScriptPart1: 'https://fast.wistia.com/embed/medias/zl4za7cf5e.jsonp',
         wistiaScriptPart2: 'https://fast.wistia.com/assets/external/E-v1.js',
-
     };
 }());

@@ -32,43 +32,44 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    done();
-                });
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl);
+            }).then(function() {
+                done();
             });
         });
 
         it('@smoke Edit a record via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
-
-            //Open the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent().then(function() {
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(2);
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveBtn().then(function() {
-                    reportContentPage.waitForReportContent().then(function() {
-                        reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
-                    });
-                });
-            }).then(function() {
-                //reload the report
+            reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                reportContentPage.waitForReportContent();
-            }).then(function() {
-                //Verify record is added on top row in a table
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
-                }
-            }).then(function() {
-                done();
+                reportContentPage.waitForReportContent().then(function() {
+                    //click edit record from the grid recordActions
+                    reportServicePage.clickRecordEditPencil(2);
+                }).then(function() {
+                    //get the fields from the table and generate a record
+                    for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                        formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    }
+                }).then(function() {
+                    //Save the form
+                    formsPage.clickFormSaveBtn().then(function() {
+                        reportContentPage.waitForReportContent().then(function() {
+                            reportServicePage.waitForElement(reportServicePage.reportRecordsCount);
+                        });
+                    });
+                }).then(function() {
+                    //reload the report
+                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                    reportContentPage.waitForReportContent();
+                }).then(function() {
+                    //Verify record is added on top row in a table
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
         });
 
