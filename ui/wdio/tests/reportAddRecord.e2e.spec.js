@@ -94,7 +94,7 @@
                 expect(recordValues[6]).toBe(dateToEnter);
             }
 
-        }, 3); // Built in retry mechanism for flaky tests
+        });
 
         //TODO: Editing a row after pressing 'Save and Add new row' button
     });

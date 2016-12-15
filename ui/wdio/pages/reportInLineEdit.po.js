@@ -273,13 +273,15 @@
                 }, dateFieldCalIcon.value);
             }
 
-            // Firefox needs extra room so scroll past to the Date Time field next to it
-            if (browserName === 'firefox') {
+            // Sauce Labs needs extra room so scroll past to the Date Time field next to it
+            if (browserName === 'chrome') {
+                dateTimeFieldCell.moveToObject();
+            } else {
                 browser.execute(function(dateTimeElement) {
                     dateTimeElement.scrollIntoView(false);
                 }, dateTimeFieldCell.value);
             }
-            
+
             //TODO: This does not work in Safari (widget opens manually just not with automation)
             dateFieldCalIcon.click();
         }},
