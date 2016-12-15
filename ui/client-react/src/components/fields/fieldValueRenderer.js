@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 
 import FieldFormats from '../../utils/fieldFormats';
+import FieldUtils from '../../utils/fieldUtils';
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
 import DurationFieldValueRenderer from './durationFieldValueRenderer';
@@ -83,7 +84,16 @@ const FieldValueRenderer = React.createClass({
     },
 
     getRendererForType(commonProperties) {
-        switch (this.props.type) {
+        let fieldType = this.props.type;
+
+        let attributes = null;
+        if (typeof this.props.fieldDef !== 'undefined' &&
+            typeof this.props.fieldDef.datatypeAttributes !== 'undefined') {
+            attributes = this.props.fieldDef.datatypeAttributes;
+            fieldType = FieldUtils.getFieldType(this.props.fieldDef, this.props.type, attributes);
+        }
+
+        switch (fieldType) {
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.RATING_FORMAT: {

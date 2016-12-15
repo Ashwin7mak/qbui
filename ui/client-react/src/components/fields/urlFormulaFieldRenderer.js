@@ -21,11 +21,9 @@ const UrlFormulaFieldRenderer = React.createClass({
         let value = this.props.value;
         value = (value || this.props.display);
 
-        return (
-            <div>
-                {value}
-            </div>
-        );
+        const emptyValue = (<div className="emptyUrlFormula"/>);
+        const filledValue = (<div className="filledUrlFormula">{value}</div>);
+        return value && value !== "" ? filledValue : emptyValue;
     }
 });
 

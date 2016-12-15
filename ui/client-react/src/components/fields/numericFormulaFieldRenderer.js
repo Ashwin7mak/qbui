@@ -9,24 +9,22 @@ import './numericFormulaField.scss';
 const NumericFormulaFieldRenderer = React.createClass({
     displayName: 'NumericFormulaFieldRenderer',
     propTypes: {
-        value: PropTypes.object,
+        value: PropTypes.any.isRequired,
         display: PropTypes.string,
     },
     getDefaultProps() {
         return {
             display: '',
-            value: null
+            value: ''
         };
     },
     render() {
-        let value = (this.props.value && this.props.value.numberStr) ? this.props.value.numberStr : null;
+        let value = (this.props.value && this.props.value.numberStr) ? this.props.value.numberStr : '';
         value = (value || this.props.display);
 
-        return (
-            <div>
-                {value}
-            </div>
-        );
+        const emptyValue = (<div className="emptyNumericFormula"/>);
+        const filledValue = (<div className="filledNumericFormula">{value}</div>);
+        return value && value !== "" ? filledValue : emptyValue;
     }
 });
 

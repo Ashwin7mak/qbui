@@ -2,7 +2,7 @@
 /* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
  * of $color-x we are replacing every use of it with a new color(i.e colorblind can't see $color-x, or for theme usage).
  * If we want to modify a category of colors use we will change the semantic category
- * ie from $icon_background: $color-x to $icon_background:$color-y
+ * ie from $icon_background: $color-x to $icon_`:$color-y
  * and the scss for color will refer to the semantic category not the color number
 */
 /* see http://quickbase.design/colors/ */
@@ -390,3 +390,7 @@ $errorMessage-header-text-color: $color-black-100;
 // QBModal
 $modal-icon-color: $color-orange-500;
 $default-text-onlight-color: $color-black-700;
+
+// Formula field colors
+$formula-background-empty-color: $color-blue-300;
+$formula-spinner-color: $color-black-700;
