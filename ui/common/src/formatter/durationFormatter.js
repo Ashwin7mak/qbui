@@ -516,7 +516,7 @@
              * */
             if (!this.isValid(value)) {
                 console.log('value: ', value);
-                return value;
+                return null;
             }
             /**
              * If the user inserted a semicolon, then the string needs to be parsed based off of

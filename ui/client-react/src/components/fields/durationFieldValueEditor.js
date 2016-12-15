@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
+import {I18nMessage, I18nNumber, IntlNumberOnly} from '../../utils/i18nMessage';
 
 const DurationFieldValueEditor = React.createClass({
     displayName: 'DurationFieldValueEditor',
@@ -36,24 +37,29 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     onBlur(ev) {
-        let value = this.props.value;
-        if (ev) {
-            value = ev.value;
-        }
-        value = durationFormatter.onBlurParsing(value, this.props.attributes);
-        let theVals = {
-            value: value
-        };
-        if (typeof theVals.value === 'number') {
-            theVals.display = durationFormatter.format(theVals, this.props.attributes);
+        let value = durationFormatter.onBlurParsing(ev.value, this.props.attributes);
+        let theVals = {};
+        if (value === null) {
+            theVals.display = ev.value;
         } else {
-            theVals.display = value;
+            theVals.value = value;
+            theVals.display = durationFormatter.format(theVals, this.props.attributes);
         }
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
     },
     render() {
+        // console.log('includeUnits: ', this.props);
+        // let display;
+        // if (this.props.includeUnits) {
+        //     let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
+        //     display = <I18nMessage message={"durationWithUnits." + opts.scale}
+        //                            value={numberValue}/>;
+        // } else {
+        //     display = <I18nNumber value={display}
+        //                           maximumFractionDigits={opts.decimalPlaces}/>;
+        // }
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         placeholder = durationFormatter.getPlaceholder(this.props.attributes);
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
