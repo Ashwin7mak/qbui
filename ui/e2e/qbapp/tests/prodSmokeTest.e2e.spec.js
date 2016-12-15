@@ -213,7 +213,7 @@
                 e2eBase.sleep(browser.params.mediumSleep);
             }).then(function() {
                 //verify page not found error
-                expect(element(by.tagName('h1')).getAttribute('textContent')).toBe('Page Not Found');
+                expect(element.all(by.tagName('p')).first().getAttribute('textContent')).toBe('When your app admin enables access, you can use this app in our new experience, Mercury.');
             }).then(function() {
                 done();
             });
