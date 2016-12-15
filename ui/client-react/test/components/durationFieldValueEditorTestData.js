@@ -550,7 +550,7 @@
             },
             {
                 scale: CONSTS.MINUTES,
-                invalidInput: invalidInput.,
+                invalidInput: invalidInput,
             },
         ]
     };
