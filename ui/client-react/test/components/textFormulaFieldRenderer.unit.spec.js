@@ -2,7 +2,6 @@
  * Created by rbeyer on 12/15/16.
  */
 import React from "react";
-import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import TextFormulaFieldRenderer from "../../src/components/fields/textFormulaFieldRenderer";
 
