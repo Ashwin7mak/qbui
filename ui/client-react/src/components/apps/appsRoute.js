@@ -26,7 +26,7 @@ let AppsRoute = React.createClass({
             if (!hasAnyAdmin) {
                 const hasV3 = _.find(props.apps, {openInV3: true});
                 if (!hasV3) {
-                    WindowLocationUtils.update("/qbase/pageNotFound");
+                    WindowLocationUtils.update("/qbase/notAvailable");
                 }
             }
         }

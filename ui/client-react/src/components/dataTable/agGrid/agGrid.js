@@ -11,6 +11,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
@@ -969,7 +970,9 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
-                                obj.headerClass += " duration";
+                                if (durationFormatter.hasUnitsText(datatypeAttributes.scale)) {
+                                    obj.headerClass += " AlignRight";
+                                }
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
                                 break;
 

@@ -9,28 +9,34 @@
     module.exports[401] = function unauthorized(req, res) {
         var viewFilePath = '401.html';
         var statusCode = 401;
-        processError(req, res, viewFilePath, statusCode);
+        renderView(req, res, viewFilePath, statusCode);
     };
 
     module.exports[403] = function forbidden(req, res) {
         var viewFilePath = '403.html';
         var statusCode = 403;
-        processError(req, res, viewFilePath, statusCode);
+        renderView(req, res, viewFilePath, statusCode);
     };
 
     module.exports[404] = function pageNotFound(req, res) {
         var viewFilePath = '404.html';
         var statusCode = 404;
-        processError(req, res, viewFilePath, statusCode);
+        renderView(req, res, viewFilePath, statusCode);
     };
 
     module.exports[500] = function internalServerError(req, res) {
         var viewFilePath = '500.html';
         var statusCode = 500;
-        processError(req, res, viewFilePath, statusCode);
+        renderView(req, res, viewFilePath, statusCode);
     };
 
-    function processError(req, res, viewFilePath, statusCode) {
+    module.exports.notAvailable = function notAvailable(req, res) {
+        var viewFilePath = 'notAvailable.html';
+        var statusCode = 200;
+        renderView(req, res, viewFilePath, statusCode);
+    };
+
+    function renderView(req, res, viewFilePath, statusCode) {
         var result = {
             status: statusCode
         };

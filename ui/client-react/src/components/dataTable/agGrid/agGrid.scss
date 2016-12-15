@@ -102,12 +102,6 @@ $cell-edit-background-edit: $color-blue-200;
             display: block;
         }
 
-        &.duration {
-            .subHeader {
-                text-align: left;
-            }
-        }
-
     }
 
     .ag-header {
@@ -534,7 +528,7 @@ $cell-edit-background-edit: $color-blue-200;
         display: none;
     }
 
-    &.numberFormat, &.currencyFormat, &.percentFormat {
+    &.numberFormat, &.currencyFormat, &.percentFormat, &.durationFormat.wUnitsText {
         text-align: right;
     }
 }
