@@ -27,6 +27,8 @@ import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
+import * as ShellActions from '../../actions/shellActions';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -80,9 +82,13 @@ export let Nav = React.createClass({
                 flux.actions.toggleLeftNav(false);
             }, 0);
         }
-        this.props.onShowTrowser(TrowserConsts.TROWSER_REPORTS);
-        //flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
+
+        this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+    },
+
+    hideTrowser() {
+        this.props.dispatch(ShellActions.hideTrowser())
     },
 
     getSelectedApp() {
@@ -145,18 +151,18 @@ export let Nav = React.createClass({
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
 
 
             const flux = this.getFlux();
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
-                    this.props.onShowTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                    this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
                 });
             } else {
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
-                    this.props.onShowTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                    this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
                 });
             }
         }
@@ -226,7 +232,7 @@ export let Nav = React.createClass({
                                selectedTable={this.getSelectedTable()}
                                reportData={this.state.reportData}
                                errorPopupHidden={this.state.nav.errorPopupHidden}
-                               onHideTrowser={this.props.onHideTrowser}/>
+                               onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
@@ -234,7 +240,7 @@ export let Nav = React.createClass({
                                       selectedTable={this.getSelectedTable()}
                                       filterReportsName={this.state.nav.filterReportsName}
                                       reportsData={this.state.reportsData}
-                                      onHideTrowser={this.props.onHideTrowser}/>
+                                      onHideTrowser={this.hideTrowser}/>
             }
 
             <LeftNav

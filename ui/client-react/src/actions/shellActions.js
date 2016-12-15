@@ -1,3 +1,4 @@
+// action creators (no dispatching in Redux)
 
 export const showTrowser = (content) => {
     return {
