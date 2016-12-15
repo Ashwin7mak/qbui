@@ -19,10 +19,11 @@ describe('PhoneFieldValueEditor', () => {
         getInitialState() {
             return {
                 value: null,
+                display: null
             };
         },
         onChange(newValue) {
-            this.setState({value: newValue});
+            this.setState({value: newValue, display: newValue});
         },
         onBlur(updatedValueObject) {
             this.setState(updatedValueObject);
@@ -30,6 +31,7 @@ describe('PhoneFieldValueEditor', () => {
         render() {
             return (
                 <PhoneFieldValueEditor value={this.state.value}
+                                       display={this.state.display}
                                        onChange={this.onChange}
                                        onBlur={this.onBlur}
                                        fieldDef={{datatypeAttributes: {displayProtocol: false}}}
@@ -73,7 +75,7 @@ describe('PhoneFieldValueEditor', () => {
     it('renders an extension input box if includeExtension is true', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}}/>);
         domComponent = ReactDOM.findDOMNode(component);
-        expect(domComponent.childNodes[2].classList[3]).toEqual("extNumber");
+        expect(domComponent.childNodes[2].classList[3]).toEqual("extension");
     });
 
     it('does not render an extension input box if includeExtension is not defined', () => {
@@ -105,10 +107,26 @@ describe('PhoneFieldValueEditor', () => {
         expect(component.state.display).toEqual(phoneNumberWithoutExt);
     });
 
+    it('formats an international phone number for display onBlur', () => {
+        const internationalNumber = '+33968686868';
+        const formattedInternationalNumber = '+33 9 68 68 68 68';
+
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: false}} />);
+        component.setState({value: internationalNumber});
+
+        domComponent = ReactDOM.findDOMNode(component);
+        let input = domComponent.childNodes[0];
+
+        Simulate.blur(input);
+
+        expect(component.state.display).toEqual(formattedInternationalNumber);
+    });
+
     it('formats the phone number for display onBlur on extension input box', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         component.setState({value: rawPhoneNumberWithExtVal});
         domComponent = ReactDOM.findDOMNode(component);
+
         let input = domComponent.childNodes[2];
         Simulate.blur(input);
         expect(component.state.display).toEqual(phoneNumberWithExt);
@@ -116,9 +134,11 @@ describe('PhoneFieldValueEditor', () => {
 
     it('displays phone number in phone number input box and ext in extension input box', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
-        component.setState({value: phoneNumberWithExt});
+        component.setState({value: phoneNumberWithExt, display: phoneNumberWithExt});
         domComponent = ReactDOM.findDOMNode(component);
-        expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt);
+        // There is an extra space in the input, because extra spaces are not trimmed until blur so that users
+        // can enter spaces as needed until the value is formatted
+        expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt + ' ');
         expect(domComponent.childNodes[2].value).toEqual(ext);
     });
 
@@ -138,7 +158,7 @@ describe('PhoneFieldValueEditor', () => {
         domComponent = ReactDOM.findDOMNode(component);
         spyOn(component, 'focusOnExtension');
 
-        let phoneInput = domComponent.querySelector('input.officeNumber');
+        let phoneInput = domComponent.querySelector('input.phoneNumber');
         Simulate.change(phoneInput, {target: {value: phoneNumberFormatter.EXTENSION_DELIM}});
 
         expect(component.focusOnExtension).toHaveBeenCalled();
