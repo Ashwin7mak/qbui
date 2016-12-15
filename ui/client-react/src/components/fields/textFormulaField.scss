@@ -18,6 +18,7 @@
   .cellWrapper {
     .emptyTextFormula {
       background-color: $formula-background-empty-color;
+
       @include small-breakpoint {
         .ext {
           height: $formula-background-small-height;

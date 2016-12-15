@@ -9,18 +9,15 @@ import './textFormulaField.scss';
 const TextFormulaFieldRenderer = React.createClass({
     displayName: 'TextFormulaFieldRenderer',
     propTypes: {
-        value: PropTypes.string,
-        display: PropTypes.string,
+        value: PropTypes.string
     },
     getDefaultProps() {
         return {
-            display: '',
-            value: null
+            value: ''
         };
     },
     render() {
         let value = this.props.value;
-        value = (value || this.props.display);
 
         const emptyValue = (<div className="emptyTextFormula"/>);
         const filledValue = (<div className="filledTextFormula">{value}</div>);

@@ -8,18 +8,15 @@ import './urlFormulaField.scss';
 const UrlFormulaFieldRenderer = React.createClass({
     displayName: 'UrlFormulaFieldRenderer',
     propTypes: {
-        value: PropTypes.string,
-        display: PropTypes.string,
+        value: PropTypes.string
     },
     getDefaultProps() {
         return {
-            display: '',
-            value: null
+            value: ''
         };
     },
     render() {
         let value = this.props.value;
-        value = (value || this.props.display);
 
         const emptyValue = (<div className="emptyUrlFormula"/>);
         const filledValue = (<div className="filledUrlFormula">{value}</div>);

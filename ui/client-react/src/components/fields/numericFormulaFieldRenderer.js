@@ -10,17 +10,17 @@ const NumericFormulaFieldRenderer = React.createClass({
     displayName: 'NumericFormulaFieldRenderer',
     propTypes: {
         value: PropTypes.any.isRequired,
-        display: PropTypes.string,
+        display: PropTypes.any,
     },
     getDefaultProps() {
         return {
-            display: '',
-            value: ''
+            value: '',
+            display: ''
         };
     },
     render() {
         let value = (this.props.value && this.props.value.numberStr) ? this.props.value.numberStr : '';
-        value = (value || this.props.display);
+        value = value || this.props.display;
 
         const emptyValue = (<div className="emptyNumericFormula"/>);
         const filledValue = (<div className="filledNumericFormula">{value}</div>);
