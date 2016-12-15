@@ -18,6 +18,7 @@
         //Admin V2 to V3 popup
         this.popUpFooter = element(by.id('content')).element(by.className('popupFooter'));
         this.popUpTitle = this.popUpFooter.element(by.className('popupFooterTitle'));
+        this.popUpTitleLabel = this.popUpTitle.element(by.className('popupFooterTitleLabel'));
         this.manageUserAccessToMercuryToggle = this.popUpTitle.element(by.className('iconTableUISturdy-caret-down'));
 
         //elements inside popup
@@ -37,7 +38,9 @@
         this.clickUserMenuItem = function(menuItemName) {
             var self = this;
             return reportServicePO.topNavUserGlobActEl.click().then(function() {
+                // wait until the User dropDown in open
                 return e2ePageBase.waitForElement(reportServicePO.topNavUserGlobActEl.element(by.className('open'))).then(function() {
+                    //get the listItems from the drop down menu and filter their text
                     return self.userMenuListItems.filter(function(elm) {
                         return elm.getAttribute('textContent').then(function(text) {
                             return text === menuItemName;
@@ -56,7 +59,9 @@
         this.verifyUserMenuItem = function(menuItemName) {
             var self = this;
             return reportServicePO.topNavUserGlobActEl.click().then(function() {
+                // wait until the User dropDown in open
                 return e2ePageBase.waitForElement(reportServicePO.topNavUserGlobActEl.element(by.className('open'))).then(function() {
+                    //get the listItems from the drop down menu and filter their text
                     return self.userMenuListItems.filter(function(elm) {
                         return elm.getAttribute('textContent').then(function(text) {
                             return text !== menuItemName;

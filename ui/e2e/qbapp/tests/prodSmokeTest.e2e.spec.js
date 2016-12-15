@@ -157,7 +157,7 @@
                 //wait untill table lists loaded at leftNav
                 reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
             }).then(function() {
-                expect(v2Tov3PO.popUpTitle.element(by.className('popupFooterTitleLabel')).isPresent()).toBeFalsy();
+                expect(v2Tov3PO.popUpTitleLabel.isPresent()).toBeFalsy();
             }).then(function() {
                 done();
             });
