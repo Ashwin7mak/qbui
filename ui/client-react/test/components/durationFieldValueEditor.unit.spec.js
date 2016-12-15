@@ -56,6 +56,42 @@ fdescribe('DurationFieldValueEditor', () => {
         });
     });
 
+    TestData.multiInputData.forEach(function(test) {
+        fit('converts a multi input of ' + test.numValue + ' ' + test.multiInput.firstInput + ' ' + test.numValue + ' ' + test.multiInput.secondInput + ' ' + test.numValue + ' ' + test.multiInput.thirdInput + ' to  ' + test.scale, () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let input = ReactDOM.findDOMNode(component);
+            let userInput = '';
+            let totalMilliSeconds = 0;
+            let firstInputTotalMilliSeconds = 0;
+            let secondInputTotalMilliSeconds = 0;
+            let thirdInputMilliSeconds = 0;
+            let convertedMilliSeconds;
+            let convertedResult;
+            if (test.multiInput.firstInput) {
+                userInput += test.numValue + ' ' + test.multiInput.firstInput;
+
+                firstInputTotalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.firstInput).asMilliseconds();
+            }
+
+            if (test.multiInput.secondInput) {
+                userInput += ' ' + test.numValue + ' ' + test.multiInput.secondInput;
+                secondInputTotalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.secondInput).asMilliseconds();
+            }
+
+            if (test.multiInput.thirdInput) {
+                userInput += ' ' + test.numValue + ' ' + test.multiInput.thirdInput;
+                thirdInputMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.thirdInput).asMilliseconds();
+            }
+            component.setState({value: userInput, display: ''});
+            Simulate.blur(input);
+            totalMilliSeconds += firstInputTotalMilliSeconds + secondInputTotalMilliSeconds + thirdInputMilliSeconds;
+            convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            convertedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            expect(component.state.value).toEqual(totalMilliSeconds);
+            expect(component.state.display).toEqual(convertedResult);
+        });
+    });
+
     TestData.placeholderData.forEach(function(test) {
         it('displays the correct placeholder for ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
@@ -107,8 +143,11 @@ fdescribe('DurationFieldValueEditor', () => {
             expect(component.state.display).toEqual(expectedTimeFormat);
         });
     });
+    /**
+     * If a user enters an invalid input, it returns the value to the user without any conversion
+     * */
     TestData.invalidInput.forEach(function(test) {
-        fit('throws a validation error with an invalid input of ' + test.invalidInput, () => {
+        it('throws a validation error with an invalid input of ' + test.invalidInput, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.invalidInput;
             component.setState({value: userInput, display: ''});
@@ -117,7 +156,6 @@ fdescribe('DurationFieldValueEditor', () => {
             Simulate.blur(input, {
                 target:{value: test.invalidInput}
             });
-            // debugger;
             expect(component.state.display).toEqual(test.invalidInput);
         });
     });

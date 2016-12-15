@@ -436,6 +436,7 @@
         },
         isValid: function(value) {
             var regexHasNums = /[0-9]+/g;
+            value = value.toLowerCase();
             var tempNum;
             var tempType = [];
             var valid = true;
@@ -492,7 +493,6 @@
         onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
             value = value.replace(removeCommas, '').split(' ').join(' ');
-            value = value.toLowerCase();
             /**
              * Accepted Types:
                  * millisecond || milliseconds || ms
@@ -515,6 +515,7 @@
              * Checks to see if the value is a valid input
              * */
             if (!this.isValid(value)) {
+                console.log('value: ', value);
                 return value;
             }
             /**
@@ -529,7 +530,7 @@
              * and separate the number and type from each other
              * Strips out all commas
              * */
-
+            value = value.toLowerCase();
             num = value.match(regexNumsDecimalsColons);
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             type.forEach(function(val) {

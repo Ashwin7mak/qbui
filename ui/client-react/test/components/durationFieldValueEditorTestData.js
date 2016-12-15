@@ -15,7 +15,7 @@
         HHMMSS: "5.5:5.5:5.5",
         HHMM: "5.5:5.5",
         MM: ":5.5",
-        banana: '1 Banana',
+        bananaNinja: '1 Banana 6 Ninjas',
         invalidNoNums: 'days',
         invalidMultiTypes: '1 day week',
         notAcceptedType: '23 years',
@@ -410,6 +410,23 @@
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                 type: CONSTS.W,
                 momentJSTYPE: CONSTS.WEEKS
+            },
+        ],
+        multiInputData: [
+            {
+                scale: CONSTS.MINUTES,
+                numValue: numValue,
+                multiInput: {
+                    firstInput: CONSTS.WEEKS,
+                    secondInput: CONSTS.HOURS,
+                    thirdInput: CONSTS.MINUTES
+                },
+                MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                momentJSTYPE: {
+                    firstInput: CONSTS.WEEKS,
+                    secondInput: CONSTS.HOURS,
+                    thirdInput: CONSTS.MINUTES
+                }
             }
         ],
         placeholderData: [
@@ -550,7 +567,19 @@
             },
             {
                 scale: CONSTS.MINUTES,
-                invalidInput: invalidInput.,
+                invalidInput: invalidInput.MM,
+            },
+            {
+                scale: CONSTS.MINUTES,
+                invalidInput: invalidInput.bananaNinja,
+            },
+            {
+                scale: CONSTS.MINUTES,
+                invalidInput: invalidInput.invalidNoNums,
+            },
+            {
+                scale: CONSTS.MINUTES,
+                invalidInput: invalidInput.notAcceptedType,
             },
         ]
     };
