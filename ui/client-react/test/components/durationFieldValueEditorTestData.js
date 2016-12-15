@@ -12,7 +12,13 @@
     var SS = "::55";
     var HHSS = "55::55";
     var invalidInput = {
-        HHMMSS: '5.5:5.5:5.5',
+        HHMMSS: "5.5:5.5:5.5",
+        HHMM: "5.5:5.5",
+        MM: ":5.5",
+        banana: '1 Banana',
+        invalidNoNums: 'days',
+        invalidMultiTypes: '1 day week',
+        notAcceptedType: '23 years',
     };
     module.exports = {
         dataProvider : [
@@ -535,13 +541,17 @@
         ],
         invalidInput: [
             {
-                scale: CONSTS.SECONDS,
+                scale: CONSTS.MINUTES,
                 invalidInput: invalidInput.HHMMSS,
             },
-            // {
-            //     scale: CONSTS.SECONDS,
-            //     invalidInput: "90 seconds",
-            // },
+            {
+                scale: CONSTS.MINUTES,
+                invalidInput: invalidInput.HHMM,
+            },
+            {
+                scale: CONSTS.MINUTES,
+                invalidInput: invalidInput.,
+            },
         ]
     };
 }());

@@ -117,7 +117,7 @@ fdescribe('DurationFieldValueEditor', () => {
             Simulate.blur(input, {
                 target:{value: test.invalidInput}
             });
-            debugger;
+            // debugger;
             expect(component.state.display).toEqual(test.invalidInput);
         });
     });
