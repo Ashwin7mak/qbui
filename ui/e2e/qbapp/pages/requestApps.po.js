@@ -13,6 +13,7 @@
         // Page Elements using Locators
         this.appContainerEl = element(by.className('apps-container'));
         this.appsDivEl = this.appContainerEl.all(by.className('apps'));
+        this.appsLinks = element(by.className('appsList')).all(by.className('leftNavLink'));
         this.tablesDivEl = element(by.className('tables'));
         this.tableLinksElList = this.tablesDivEl.all(by.tagName('a'));
         /*
@@ -24,8 +25,9 @@
         };
 
         this.selectApp = function(app) {
+            var self = this;
             return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                return element(by.className('appsList')).all(by.className('leftNavLink')).filter(function(elm) {
+                return self.appsLinks.filter(function(elm) {
                     return elm.getAttribute('textContent').then(function(text) {
                         return text === app.name;
                     });
