@@ -17,8 +17,7 @@ import Logger from "../utils/logger";
 
 import "react-fastclick";
 
-import {Provider,connect} from "react-redux";
-import * as ShellActions from '../actions/shellActions';
+import {Provider, connect} from "react-redux";
 
 import createAppStore from './store';
 
@@ -34,12 +33,10 @@ let history = AppHistory.setup(fluxxor).history;
 const mapStateToProps = (state) => {
     return {
         qbui: state
-    }
+    };
 };
 
-const NavContainer = connect(mapStateToProps)(NavWrapper);
-
-//const NavContainer = () => <NavWrapper flux={fluxxor}/>;
+const ConnectedNav = connect(mapStateToProps)(NavWrapper);
 
 const store = createAppStore();
 
@@ -50,11 +47,11 @@ render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
 
-            <Route path="/qbase/apps" component={NavContainer} >
+            <Route path="/qbase/apps" component={ConnectedNav} >
                 <IndexRoute component={AppsRoute} />
             </Route>
 
-            <Route path="/qbase/app/:appId" component={NavContainer} >
+            <Route path="/qbase/app/:appId" component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />

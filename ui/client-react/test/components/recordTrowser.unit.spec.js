@@ -36,7 +36,6 @@ describe('RecordTrowser functions', () => {
         spyOn(flux.actions, 'recordPendingEditsCancel');
         spyOn(flux.actions, 'saveRecord').and.callThrough();
         spyOn(flux.actions, 'saveNewRecord').and.callThrough();
-        spyOn(flux.actions, 'hideTrowser');
         spyOn(flux.actions, 'hideErrorMsgDialog');
     });
 
@@ -47,7 +46,6 @@ describe('RecordTrowser functions', () => {
         flux.actions.recordPendingEditsCancel.calls.reset();
         flux.actions.saveRecord.calls.reset();
         flux.actions.saveNewRecord.calls.reset();
-        flux.actions.hideTrowser.calls.reset();
         flux.actions.hideErrorMsgDialog.calls.reset();
     });
 

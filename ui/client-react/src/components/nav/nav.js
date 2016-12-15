@@ -88,7 +88,7 @@ export let Nav = React.createClass({
     },
 
     hideTrowser() {
-        this.props.dispatch(ShellActions.hideTrowser())
+        this.props.dispatch(ShellActions.hideTrowser());
     },
 
     getSelectedApp() {

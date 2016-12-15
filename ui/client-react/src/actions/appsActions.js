@@ -15,10 +15,10 @@ import appsModel from '../models/appsModel';
 //  promise.  This is expected as promises are NOT implemented in the application
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
-// Promise.onPossiblyUnhandledRejection(function(err) {
-//     let logger = new Logger();
-//     logger.debug('Bluebird Unhandled rejection', err);
-// });
+Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
+    logger.debug('Bluebird Unhandled rejection', err);
+});
 
 let appsActions = {
 

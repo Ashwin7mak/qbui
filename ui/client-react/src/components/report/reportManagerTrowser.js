@@ -4,8 +4,6 @@ import Trowser from "../trowser/trowser";
 import ReportManager from "./reportManager";
 import {I18nMessage} from "../../utils/i18nMessage";
 import Button from 'react-bootstrap/lib/Button';
-
-import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
 
 let FluxMixin = Fluxxor.FluxMixin(React);

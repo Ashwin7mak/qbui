@@ -4,15 +4,15 @@ const nav = (state = {}, action) => {
         return {
             trowserOpen: true,
             trowserContent: action.content
-        }
+        };
     case 'HIDE_TROWSER':
         return {
             trowserOpen: false
-        }
+        };
 
     default:
         return state;
     }
-}
+};
 
 export default nav;

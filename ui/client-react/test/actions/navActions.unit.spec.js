@@ -22,16 +22,6 @@ describe('Nav Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
 
-    it('test show trowser action', () => {
-        flux.actions.showTrowser("content");
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROWSER, "content");
-    });
-
-    it('test hide trouwser action', () => {
-        flux.actions.hideTrowser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROWSER);
-    });
-
     it('test toggle left nav action with state', () => {
         flux.actions.toggleLeftNav(true);
 

@@ -1,5 +1,5 @@
 import rootReducer from '../reducers/root';
-import {createStore,compose} from 'redux';
+import {createStore} from 'redux';
 
 export default function createAppStore() {
     //const store = createStore(rootReducer);

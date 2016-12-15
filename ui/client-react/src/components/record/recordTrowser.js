@@ -124,7 +124,7 @@ let RecordTrowser = React.createClass({
                 if (saveAnother) {
                     flux.actions.editNewRecord(false);
                 } else {
-                    this.hideTrowser();
+                    this.props.onHideTrowser();
                     this.navigateToNewRecord(recId);
                 }
 
@@ -288,8 +288,7 @@ let RecordTrowser = React.createClass({
     hideTrowser() {
         WindowLocationUtils.pushWithoutQuery();
 
-        let flux = this.getFlux();
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
 
     saveAndClose() {
@@ -303,12 +302,10 @@ let RecordTrowser = React.createClass({
         HideAppModal();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
 
     cancelEditing() {
-        const flux = this.getFlux();
-
         if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {

@@ -36,7 +36,6 @@ export default function getFlux() {
         FormStore: new FormStore(),
         PerfStore: new PerfStore()
     };
-    
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportActions);
     flux.addActions(reportDataActions);
