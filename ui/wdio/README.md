@@ -23,17 +23,19 @@ The wdio GitHub repo is here: [https://github.com/webdriverio](https://github.co
 
 ##Configuration:
 The WebdriverIO configuration file **wdio.conf.js** contains all the information needed to run the test suite. 
-Things like what spec files and browsers to run can be configured here. The file is located in
+Things like what spec files and browsers to run can be configured here. 
+
+First copy the checked in **sample** file to the same directory renaming it to **wdio.conf.js** to create your local config (this has already been added to **.gitignore**). The sample file is located in
 
 ```
-qbui/ui/wdio/config/wdio.conf.js
+qbui/ui/wdio/config/wdio.conf.js.sample
 ```
 
 This config file will be set by default to run your tests locally. The config file will read in environment variables set by your Node server.
-By default the E2E tests will launch a **separate** Node server automatically using the **e2e.js** config file on port **9001** (aka **NODE_ENV=e2e** environment variable)
-(this is to prevent port collision if you have Node already running). 
+By default the E2E tests will launch a **separate** Node server automatically using the **e2e.js** config file on port **9001** (aka **NODE_ENV=e2e** environment variable if you run from the command line).
+This is to prevent port collision if you have Node already running. 
 
-It is this config file were you need to make sure the values match what your dev env is running at (specifically the **DOMAIN** and **javaHost** properties). The node config file is located in
+**e2e.js** is were you need to make sure the values match what your dev env is currently running at (specifically the **DOMAIN** and **javaHost** properties). The node config file is located in
 
 ```
 qbui/ui/server/src/config/environment/e2e.js
@@ -74,7 +76,7 @@ specs: [
     ]
 ```
 
-* In the Mac OS X terminal cd to your checked out repository into the ```qbui/ui/wdio``` directory.
+* In the Mac OS X terminal ```cd``` to your checked out repository into the ```qbui/ui/wdio``` directory.
 * Enter the following: 
 ```
 NODE_ENV=e2e ../node_modules/.bin/wdio ./config/wdio.conf.js
@@ -89,13 +91,13 @@ Next you'll probably need to increase the Jasmine global timeout (so your test o
 
 If you are running wdio via IntelliJ (which you should be) simply put a breakpoint in your code and run your IntelliJ config in Debug mode.
 
-If you are running wdio via the command line you'll need to add ```browser.debug()``` to your code to pause your test. Then run the tests via the command listed above.
+If you are running wdio via the command line you'll need to add ```browser.debug();``` to your code to pause your test. Then run the tests via the command listed above.
 
 See the guide here on more info for debugging tests:
 [http://webdriver.io/guide/testrunner/debugging.html](http://webdriver.io/guide/testrunner/debugging.html)
 
 ##Node Modules
-Here are the current modules we are using as defined in our package.json:
+Here are the current modules we are using as defined in our **package.json** file:
 
 * "wdio-jasmine-framework": "^0.2.15",
 * "wdio-sauce-service": "^0.2.5",

@@ -29,3 +29,5 @@ npm-debug.log
 
 #we don't want to track node_modules anymore
 node_modules/
+
+/wdio/config/wdio.conf.js
