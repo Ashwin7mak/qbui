@@ -19,6 +19,8 @@ This guide will help you get wdio setup on your local dev machine.
 
 For more info on WebdriverIO please see their website here: [http://webdriver.io/](http://webdriver.io/)
 
+The wdio GitHub repo is here: [https://github.com/webdriverio](https://github.com/webdriverio)
+
 ##Configuration:
 The WebdriverIO configuration file **wdio.conf.js** contains all the information needed to run the test suite. 
 Things like what spec files and browsers to run can be configured here. The file is located in
@@ -92,3 +94,12 @@ If you are running wdio via the command line you'll need to add ```browser.debug
 See the guide here on more info for debugging tests:
 [http://webdriver.io/guide/testrunner/debugging.html](http://webdriver.io/guide/testrunner/debugging.html)
 
+##Node Modules
+Here are the current modules we are using as defined in our package.json:
+
+* "wdio-jasmine-framework": "^0.2.15",
+* "wdio-sauce-service": "^0.2.5",
+* "wdio-selenium-standalone-service": "0.0.7",
+* "wdio-spec-reporter": "0.0.3",
+* "webdriverio": "^4.4.0",
+* "grunt-webdriver": "^2.0.2",
