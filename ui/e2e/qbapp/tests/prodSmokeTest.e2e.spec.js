@@ -87,7 +87,7 @@
          * V3 Enabled in below tests means (Admin toggels switch to mercury in app home page footer popup + feature switch V2 to V3 turned on in V2 + App is migrated Successfully
          * V3 not enabled in below tests means (Bicycle app has admin toggle set to classic instead of Mercury, COLLEGE_UNIVERSITIES app has no feature switch(v2-v3) turned on in current stack
          */
-        it('@smoke Verify the specified record in the List All report matches the one from the current stack', function(done) {
+        it('Verify the specified record in the List All report matches the one from the current stack', function(done) {
             browser.get(PROD_REALM + '/qbase/app/' + BICYCLE_APPID + '/table/' + BICYCLE_TABLEID + '/report/1').then(function() {
                 reportContentPage.waitForReportContent();
             }).then(function() {
