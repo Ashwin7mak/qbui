@@ -8,7 +8,7 @@ var config = require('./environment');
 
     var express = require('express');
     var useragent = require('express-useragent');
-    var favicon = require('serve-favicon');
+    var serveStatic = require('serve-static');
     var compression = require('compression');
     var bodyParser = require('body-parser');
     var methodOverride = require('method-override');
@@ -74,10 +74,6 @@ var config = require('./environment');
             if (envConsts.PRODUCTION === env || envConsts.PRE_PROD === env) {
                 var fs = require('fs');
                 config.isProduction = true;
-                var faviconFile = path.join(config.root, 'dist', 'public', 'favicon.ico');
-                if (fs.existsSync(faviconFile)) {
-                    app.use(favicon(faviconFile));
-                }
             }
 
             app.use(express.static(path.join(config.root, 'public')));
@@ -88,6 +84,8 @@ var config = require('./environment');
                 app.use(errorHandler());
             }
         }
+
+        app.use('/qbase', serveStatic(path.join(config.root, 'server/src/publicAssets')));
 
         if (!config.ip) {
             if (config.DOMAIN) {
