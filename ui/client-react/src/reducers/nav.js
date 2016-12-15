@@ -1,4 +1,4 @@
-const nav = (state = {}, action) => {
+const nav = (state = { trowserOpen: false, trowserContent: null }, action) => {
     switch (action.type) {
     case 'SHOW_TROWSER':
         return {
