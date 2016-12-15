@@ -64,18 +64,13 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     render() {
-        console.log('includeUnits: ', this.props.includeUnits);
-        // let display;
-        // if (this.props.includeUnits) {
-        //     let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
-        //     display = <I18nMessage message={"durationWithUnits." + opts.scale}
-        //                            value={numberValue}/>;
-        // } else {
-        //     display = <I18nNumber value={display}
-        //                           maximumFractionDigits={opts.decimalPlaces}/>;
-        // }
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         let defaultPlaceholder = durationFormatter.getPlaceholder(this.props.attributes);
+        if (this.props.includeUnits) {
+            display = display + ' ' + defaultPlaceholder;
+        } else {
+            display = display;
+        }
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }

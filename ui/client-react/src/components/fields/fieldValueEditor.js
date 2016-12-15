@@ -198,6 +198,7 @@ const FieldValueEditor = React.createClass({
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
             return <DurationFieldValueEditor key={'dfve-' + this.props.idKey}
                                              {...commonProps}
+                                             includeUnits={this.props.includeUnits}
                                              attributes={attributes}
                                              classes="cellEdit"/>;
         }
