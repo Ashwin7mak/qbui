@@ -17,7 +17,7 @@
 
     var sText = '9782341234';
     var sEmail = 'test@gmail.com';
-    var sPhone = '15084811015'
+    var sPhone = '15084811015';
     var sNumeric = '33.33';
     var sTime = "12:00 am";
     var date = new Date();

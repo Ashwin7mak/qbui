@@ -75,6 +75,12 @@ describe('PhoneValidator', () => {
                 previousResults: null,
                 expectedResults: invalidPhoneNumberResults
             },
+            {
+                description: 'does not validate null values',
+                phoneNumber: null,
+                previousResults: testPreviousResults,
+                expectedResults: testPreviousResults
+            }
         ];
 
         testCases.forEach(testCase => {

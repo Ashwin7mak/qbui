@@ -16,6 +16,10 @@
          * @returns {*}
          */
         validateAndReturnResults: function(value, fieldName, result) {
+            if (!value) {
+                return result;
+            }
+
             var phoneNumber = phoneFormatter.parse(value);
 
             if (!phoneNumber.isValid && this._isNotLikelyEmergencyNumber(phoneNumber)) {
