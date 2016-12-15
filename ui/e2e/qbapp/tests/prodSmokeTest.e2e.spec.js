@@ -99,7 +99,7 @@
                     reportServicePage.getRecordValues(records[testRecordIndex]).then(function(newStackRecordValues) {
                         // Currently showing record Id column on new stack so don't use that in assert
                         newStackRecordValues.shift();
-                        expect(newStackRecordValues).toContain(currentStackRecordValues);
+                        expect(newStackRecordValues).toEqual(currentStackRecordValues);
                         done();
                     });
                 });
