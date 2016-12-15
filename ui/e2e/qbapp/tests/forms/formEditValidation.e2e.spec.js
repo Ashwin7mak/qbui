@@ -36,9 +36,9 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    done();
-                });
+                reportServicePage.waitForElement(reportServicePage.appsListDivEl);
+            }).then(function() {
+                done();
             });
         });
 
