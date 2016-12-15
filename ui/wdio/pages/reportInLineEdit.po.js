@@ -262,6 +262,9 @@
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
             var dateFieldCalIcon = this.getDateFieldCalendarIconEl(dateFieldCell);
 
+            var dateTimeFieldCells = recordBeingEdited.elements('div[colid="Date Time Field"]');
+            var dateTimeFieldCell = dateTimeFieldCells.value[0];
+
             if (browserName === 'chrome') {
                 dateFieldCalIcon.moveToObject();
             } else {
@@ -270,6 +273,13 @@
                 }, dateFieldCalIcon.value);
             }
 
+            // Firefox needs extra room so scroll past to the Date Time field next to it
+            if (browserName === 'firefox') {
+                browser.execute(function(dateTimeElement) {
+                    dateTimeElement.scrollIntoView(false);
+                }, dateTimeFieldCell.value);
+            }
+            
             //TODO: This does not work in Safari (widget opens manually just not with automation)
             dateFieldCalIcon.click();
         }},
