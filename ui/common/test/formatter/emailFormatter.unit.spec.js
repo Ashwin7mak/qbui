@@ -8,31 +8,31 @@ describe('EmailFormatter', () => {
     describe('addDefaultDomain', () => {
         let testCases = [
             {
-                name: 'adds a default domain if one is provided and the email does not have one',
+                description: 'adds a default domain if one is provided and the email does not have one',
                 email: 'test',
                 domain: '@quickbase.com',
                 expectation: 'test@quickbase.com'
             },
             {
-                name: 'does not add the default domain if the email already has a domain',
+                description: 'does not add the default domain if the email already has a domain',
                 email: 'test@test.com',
                 domain: '@quickbase.com',
                 expectation: 'test@test.com'
             },
             {
-                name: 'adds the @ symbol to the domain if it was not provided',
+                description: 'adds the @ symbol to the domain if it was not provided',
                 email: 'test',
                 domain: 'quickbase.com',
                 expectation: 'test@quickbase.com'
             },
             {
-                name: 'does not add a default domain if a domain is not provided',
+                description: 'does not add a default domain if a domain is not provided',
                 email: 'test',
                 domain: '',
                 expectation: 'test'
             },
             {
-                name: 'adds the default domain to every email in a list that does not have one',
+                description: 'adds the default domain to every email in a list that does not have one',
                 email: 'test;test@hasdomain.com,test2,test3',
                 domain: 'quickbase.com',
                 expectation: 'test@quickbase.com;test@hasdomain.com;test2@quickbase.com;test3@quickbase.com'
@@ -40,7 +40,7 @@ describe('EmailFormatter', () => {
         ];
 
         testCases.forEach(testCase => {
-            it(testCase.name, () => {
+            it(testCase.description, () => {
                 assert.equal(emailFormatter.addDefaultDomain(testCase.email, testCase.domain), testCase.expectation);
             });
         });
@@ -49,55 +49,81 @@ describe('EmailFormatter', () => {
     describe('splitEmails', () => {
         let testCases = [
             {
-                name: 'does not split a single email',
+                description: 'does not split a single email',
                 emails: 'test@test.com',
                 expectation: ['test@test.com']
             },
             {
-                name: 'splits emails separated by a semicolon',
+                description: 'splits emails separated by a semicolon',
                 emails: 'test@test.com;test+2@test.com;test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'splits emails separated by a semicolon (with a space)',
+                description: 'splits emails separated by a semicolon (with a space)',
                 emails: 'test@test.com; test+2@test.com; test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'splits emails separated by a comma',
+                description: 'splits emails separated by a comma',
                 emails: 'test@test.com,test+2@test.com,test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'splits emails separated by a comma (and a space)',
+                description: 'splits emails separated by a comma (and a space)',
                 emails: 'test@test.com, test+2@test.com, test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'splits emails separated by a delimiter (; or ,) and multiple spaces',
+                description: 'splits emails separated by a delimiter (; or ,) and multiple spaces',
                 emails: 'test@test.com ,    test+2@test.com    ; test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'splits emails separated by a space (or multiple spaces)',
+                description: 'splits emails separated by a space (or multiple spaces)',
                 emails: 'test@test.com test+2@test.com    test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'splits emails separated by a tab',
+                description: 'splits emails separated by a tab',
                 emails: "test@test.com\ttest+2@test.com\ttest+3@quickbase.com",
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {
-                name: 'does not add a blank email if the string ends in a delimiter (; or ,)',
+                description: 'does not add a blank email if the string ends in a delimiter (; or ,)',
                 emails: 'test@test.com;test2@test.com;',
                 expectation: ['test@test.com', 'test2@test.com']
             }
         ];
 
         testCases.forEach(testCase => {
-            it(testCase.name, () => {
+            it(testCase.description, () => {
                 assert.deepEqual(emailFormatter.splitEmails(testCase.emails), testCase.expectation);
+            });
+        });
+    });
+
+    describe('formatListOfEmailsFromFieldValueObject', () => {
+        let testCases = [
+            {
+                description: 'returns a blank string if the fieldValue is null',
+                fieldValue: null,
+                expectation: ''
+            },
+            {
+                description: "returns a blank string if the fieldValue's value property is null",
+                fieldValue: {value: null},
+                expectation: ''
+            },
+            {
+                description: 'formats the field value if it exists (with support for multiple email addresses in the value string)',
+                fieldValue: {value: 'email@test.com;emailb@quickbase.com'},
+                expectation: 'email@test.com;emailb@quickbase.com'
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                assert.equal(emailFormatter.formatListOfEmailsFromFieldValueObject(testCase.fieldValue, {}), testCase.expectation);
             });
         });
     });
@@ -109,24 +135,24 @@ describe('EmailFormatter', () => {
 
         let testCases = [
             {
-                name: 'formats a single email correctly',
+                description: 'formats a single email correctly',
                 emails: 'test',
                 expectation: 'test@test.com'
             },
             {
-                name: 'formats multiple emails',
+                description: 'formats multiple emails',
                 emails: 'test;test+2;test3',
                 expectation: 'test@test.com;test+2@test.com;test3@test.com'
             },
             {
-                name: 'formats multiple emails even if there are spaces',
+                description: 'formats multiple emails even if there are spaces',
                 emails: 'test; test+2; test3',
                 expectation: 'test@test.com;test+2@test.com;test3@test.com'
             },
         ];
 
         testCases.forEach(testCase => {
-            it(testCase.name, () => {
+            it(testCase.description, () => {
                 assert.equal(emailFormatter.formatListOfEmails(testCase.emails, fieldInfo), testCase.expectation);
             });
         });

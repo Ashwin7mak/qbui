@@ -25,6 +25,8 @@
     // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S*|DURATION_CONSTS.SECOND*|DURATION_CONSTS.SECONDS*)/;
     // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*)/;
     var _ = require('lodash');
+    var regexNumsDecimalsColons = /[0-9.:]+/g;
+    var removeCommas = /[,]+/g;
 
     /**
      * Takes two BigDecimal inputs, divides them using the opts.decimalPlaces property for precision,
@@ -286,7 +288,7 @@
         var returnValue;
         switch (type) {
         /**
-         * If a user enters a number without entering a type, then the default for .scale
+         * If a user enters a number without entering a type, then the default for .scale is to convert milliseconds by days
          * HHMM && HHMMSS will default to converting the value to milliseconds by hours
          * MM && MMSS will default to converting the value to milliseconds by minutes
          * */
@@ -388,7 +390,26 @@
             seconds = convertToMilliseconds(numArray[2], DURATION_CONSTS.MILLIS_PER_SECOND);
             return  hours + minutes + seconds;
         }
-        return result;
+        return num;
+    }
+    function isTimeFormatValid(value, type) {
+        var regexTimeFormat = /\./g;
+        /**
+         * If a type is inserted with time format, it is not valid
+         * HH:MM:SS minutes is not a valid format
+         * */
+        if (type.length === 1 && type[0] === '') {
+            return false;
+        }
+        /**
+         * Decimals are not a valid input with time formats
+         * Example 5.5:5.5:5.5 is an invalid input
+         * 5:5:5 is a valid input
+         * */
+        if (regexTimeFormat.test(value)) {
+            return false;
+        }
+        return true;
     }
 
     module.exports = {
@@ -414,35 +435,71 @@
             return opts;
         },
         isValid: function(value) {
-            // Don't validate empty strings
+            var regexHasNums = /[0-9]+/g;
+            var tempNum;
+            var tempType = [];
             var valid = true;
-            if (typeof value === 'number') {
-                return valid;
+            var type;
+            /**
+             * Don't validate empty strings
+             * */
+            if (!value) {
+                return true;
             }
-            value = value.replace(/[0-9]/g, '').trim().split(' ');
-            if (!value || value[0] === '') {
-                return valid;
+            /**
+             * If a user does not input a number, throw an error
+             * */
+            if (!regexHasNums.test(value)) {
+                return false;
+            }
+            /**
+             * If the input is only a number, return true
+             * */
+            if (typeof value === 'number' || !value) {
+                return true;
+            }
+            /**
+             * If a user inserted a colon, it will be validated based off of time formats validation requirements
+             * */
+            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
+            if (value.split('').indexOf(':') !== -1) {
+                return isTimeFormatValid(value, type);
             }
             /**
              * Strips out all numbers
-             * This will only check for valid types
+             * If there is an invalid type return false
              * If there are no types, return true
+             * If there are only accepted types return true
              * */
-            value.forEach(function(val) {
+            type.forEach(function(val) {
                 if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
                     valid = false;
+                } else if (val !== '') {
+                    tempType.push(val);
                 }
             });
+            /**
+             * If a user inserts more types than nums return false
+             * 1 week day invalid format
+             * 1 week 2 days valid format
+             * */
+            tempNum = value.match(regexNumsDecimalsColons);
+            if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
+                return false;
+            }
             return valid;
         },
         onBlurParsing: function(value, fieldInfo) {
             //http://www.calculateme.com/time/days/to-milliseconds/1
+            value = value.replace(removeCommas, '').split(' ').join(' ');
+            value = value.toLowerCase();
             /**
-             * Accepted Type:
-                 * second || seconds
-                 * minute || minutes
-                 * hour || hours
-                 * week || weeks
+             * Accepted Types:
+                 * millisecond || milliseconds || ms
+                 * second || seconds || s
+                 * minute || minutes || m
+                 * hour || hours || h
+                 * week || weeks || w
              * Accepted Format For Seconds, Minutes, Hours:
                  * 00:00:00
                  * 00:00
@@ -455,6 +512,12 @@
             var type;
             var num;
             /**
+             * Checks to see if the value is a valid input
+             * */
+            if (!this.isValid(value)) {
+                return value;
+            }
+            /**
              * If the user inserted a semicolon, then the string needs to be parsed based off of
              * the HHMMSS, HHMM, MMSS requirements
              * */
@@ -462,19 +525,13 @@
                 return convertHourMinutesSeconds(value);
             }
             /**
-             * Checks to see if the value is a valid input
-             * */
-            if (!this.isValid(value)) {
-                return value;
-            }
-            /**
              * If the user passes in a string containing a number and a type, we split the string here
              * and separate the number and type from each other
              * Strips out all commas
              * */
-            num = value.replace(/[,]+/g, '');
-            num = num.match(/[0-9]+/g);
-            type = value.replace(/[0-9]/g, '').split(' ');
+
+            num = value.match(regexNumsDecimalsColons);
+            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             type.forEach(function(val) {
                 /**
                  * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
@@ -483,12 +540,13 @@
                     val = val.toUpperCase();
                     listOfTypes.push(val);
                 } else if (val !== '') {
-                    val = val.toLowerCase();
                     /**
                      * Removes first letter and sets it toUpperCase
                      * Sets type to a string and concatenates the upperCaseLetter back on
                      * If type is not plural, then it concatenates an 's'
+                     * This formats it to make it easier to check it against constants later
                      */
+                    val = val.toLowerCase();
                     var firstLetter = val[0].toUpperCase();
                     val = val.slice(1);
                     val = firstLetter + val;
@@ -498,6 +556,15 @@
                     listOfTypes.push(val);
                 }
             });
+            /**
+             * If a user only inputed one num and one type, then this function will only be called once
+             * However if the user inserted more than one num and more than one type then this function calls each num with its type
+             * The isValid function above, checks to be sure each num as a type, if it did not an error would be thrown
+             * Example 1 week 2 days becomes
+             * num = [1,2]
+             * listOfTypes = [week, days]
+             * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumlated to total;
+             * */
             if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
                 num.forEach(function(val, i) {
                     total += getMilliseconds(num[i], listOfTypes[i]);

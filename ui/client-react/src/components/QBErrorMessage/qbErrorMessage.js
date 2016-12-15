@@ -1,11 +1,12 @@
 import React from 'react';
-import ReactBootstrap from 'react-bootstrap';
+import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
-import './qbErrorMessage.scss';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
+
+import './qbErrorMessage.scss';
 
 /**
  * QBErrorMessage displays a list of passed-in errors
@@ -28,16 +29,25 @@ let QBErrorMessage = React.createClass({
     },
 
     renderErrorMessages() {
-        return this.props.message.map(
-            msg => <span className="qbErrorMessageItem" key={msg.id}>{msg.def.fieldName}</span>
-        );
+        return this.props.message.map(msg => {
+            let fieldLabel;
+
+            if (msg.def) {
+                // Prefer the fieldLabel if it is available
+                fieldLabel = (msg.def.fieldLabel || msg.def.fieldName);
+            } else {
+                Logger().warn('Field definition for validation message on QbErrorMessage was not defined');
+            }
+
+            return <span className="qbErrorMessageItem" key={msg.id}>{fieldLabel}</span>;
+        });
     },
 
     render() {
         const errorNum = this.props.message ? this.props.message.length : 0;
         const headerMessage = errorNum <= 1 ?
             <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.singleErrorLabel"/> :
-            <div><I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelPrefix"/> {errorNum} <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelSuffix"/></div>;
+            <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabel" numFields={errorNum} />;
 
         let qbErrorMessageClasses = "qbErrorMessage";
         if (!(this.props.hidden || errorNum === 0)) {

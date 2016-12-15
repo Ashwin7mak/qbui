@@ -25,8 +25,7 @@ export default {
                 helpTitle: "Besoin d'aide?",
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
                 helpLinkPreText: "Veuillez ",
-                helpLinkText: "contacter notre équipe de soins",
-                missingWalkMe: "Le didacticiel n'est pas disponible"
+                helpLinkText: "contacter notre équipe de soins"
             }
         },
         appMenu: {
@@ -260,8 +259,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "S'il vous plaît corriger ce domaine",
-                multipleErrorLabelPrefix: "S'il vous plaît corriger ces",
-                multipleErrorLabelSuffix: "des champs",
+                multipleErrorLabel: "S'il vous plaît corriger ces {numFields} des champs"
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Afficher la liste des erreurs",
@@ -391,6 +389,7 @@ export default {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
             email: 'Formater la {fieldName} comme prénom@domaine.fr',
+            emails: 'Formatez toutes les adresses comme prénom@domaine.fr',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins",
             duration: "Formater le  {fieldName} dans {scale}"
@@ -418,6 +417,7 @@ export default {
             versionSelectTitle: "Mes utilisateurs ouvriront cette application dans",
             manageAccessTip: "*Seuls les administrateurs d'applications peuvent gérer l'accès des utilisateurs"
 
-        }
+        },
+        missingWalkMe: "Le didacticiel n'est pas disponible"
     }
 };

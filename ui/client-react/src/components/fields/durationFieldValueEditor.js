@@ -1,14 +1,14 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
+import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
-import ErrorWrapper from './errorWrapper';
 
 const DurationFieldValueEditor = React.createClass({
     displayName: 'DurationFieldValueEditor',
     propTypes: {
         /**
          * the raw value to be saved */
-        value: React.PropTypes.string,
+        value: React.PropTypes.number,
         /**
          * the display to render */
         display: React.PropTypes.any,
@@ -56,6 +56,9 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         placeholder = durationFormatter.getPlaceholder(this.props.attributes);
+        if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
+            classes = 'rightAlignInlineEditNumberFields ' + classes;
+        }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
