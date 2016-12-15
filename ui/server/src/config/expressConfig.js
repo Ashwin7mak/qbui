@@ -76,8 +76,6 @@ var config = require('./environment');
                 config.isProduction = true;
             }
 
-            app.use('/qbase', serveStatic(path.join(config.root, 'server/src/staticAssets')));
-
             app.use(express.static(path.join(config.root, 'public')));
             app.set('appPath', config.root + '/public');
 
@@ -86,6 +84,8 @@ var config = require('./environment');
                 app.use(errorHandler());
             }
         }
+
+        app.use('/qbase', serveStatic(path.join(config.root, 'server/src/publicAssets')));
 
         if (!config.ip) {
             if (config.DOMAIN) {
