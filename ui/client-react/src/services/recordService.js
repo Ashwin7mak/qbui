@@ -1,8 +1,11 @@
 import constants from './constants';
+import commonConstants from '../../../common/src/constants';
+import SaveRecordFormatter from '../../../common/src/formatter/saveRecordFormatter';
 import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
 import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
+import _ from 'lodash';
 
 class RecordService extends BaseService {
 
@@ -86,28 +89,6 @@ class RecordService extends BaseService {
     }
 
     /**
-     * replace user objects in value property with user IDs
-     * @param changes record or changes containing objects with value keys
-     * @returns copy of changes with user objects replaced with user ID strings
-     */
-    convertUserValueObjectsToIds(changes) {
-
-        const fixedChanges = _.cloneDeep(changes);
-
-        // patching user fields expects user ID only on server not the user object we got originally
-
-        if (_.isArray(fixedChanges)) {
-            fixedChanges.forEach(change => {
-                if (_.has(change, 'fieldDef.datatypeAttributes.type') && change.fieldDef.datatypeAttributes.type === "USER") {
-                    change.value = change.value ? change.value.userId : "";
-                }
-            });
-        }
-
-        return fixedChanges;
-    }
-
-    /**
      * Save changes to a record
      *
      * @param appId
@@ -117,8 +98,7 @@ class RecordService extends BaseService {
      * @returns promise
      */
     saveRecord(appId, tableId, recordId, changes) {
-
-        const fixedChanges = this.convertUserValueObjectsToIds(changes);
+        const fixedChanges = SaveRecordFormatter.formatRecordForSaving(changes);
 
         let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
         return super.patch(url, fixedChanges);
@@ -134,10 +114,9 @@ class RecordService extends BaseService {
      * @returns promise
      */
     createRecord(appId, tableId, record) {
+        const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
+
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
-
-        const fixedRecord = this.convertUserValueObjectsToIds(record);
-
         return super.post(url, fixedRecord);
     }
 

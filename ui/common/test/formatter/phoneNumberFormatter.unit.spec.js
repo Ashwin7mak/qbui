@@ -48,12 +48,97 @@ describe('PhoneNumberFormatter (common)', () => {
                 description: 'formats numbers longer that are longer than 11 characters like a US phone number with any remaining characters at the end (leading digit is not a 1)',
                 testPhoneNumber: '01234567890234567',
                 expectedPhoneNumber: `${PhoneNumberFormatter.OPEN_PAREN}012${PhoneNumberFormatter.CLOSE_PAREN} 345${PhoneNumberFormatter.DASH}6789 0234567`
+            },
+            {
+                description: 'formats as an international number if the first character is a +',
+                testPhoneNumber: '+33968686868',
+                expectedPhoneNumber: '+33 9 68 68 68 68'
             }
         ];
 
         testCases.forEach((testCase) => {
             it(testCase.description, () => {
                 assert.equal(PhoneNumberFormatter.format({value: testCase.testPhoneNumber}), testCase.expectedPhoneNumber);
+            });
+        });
+    });
+
+    describe('formatAsBasicInternationalNumber', () => {
+        var testCases = [
+            {
+                description: 'formats numbers that start with a 1 as US numbers',
+                phoneNumber: '12345678901',
+                includeExtension: false,
+                expectedValue: '1 (234) 567-8901'
+            },
+            {
+                description: 'formats numbers that do not start with a 1 as basic international numbers',
+                phoneNumber: '33968686868',
+                includeExtension: false,
+                expectedValue: '+33 9 68 68 68 68'
+            },
+            {
+                description: 'adds extra numbers to the end',
+                phoneNumber: '339686868681234',
+                includeExtension: false,
+                expectedValue: '+33 9 68 68 68 68 1234'
+            },
+            {
+                description: 'hides the extension if includeExtension is false',
+                phoneNumber: '33968686868x1234',
+                includeExtension: false,
+                expectedValue: '+33 9 68 68 68 68'
+            },
+            {
+                description: 'shows the extension if includeExtension is true',
+                phoneNumber: '33968686868   x1234',
+                includeExtension: true,
+                expectedValue: '+33 9 68 68 68 68 x1234'
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                var fieldInfo = {includeExtension: testCase.includeExtension};
+
+                assert.equal(PhoneNumberFormatter.formatAsBasicInternationalNumber({value: testCase.phoneNumber}, fieldInfo), testCase.expectedValue);
+            });
+        });
+    });
+
+    describe('splitPhoneNumberAndExtension', () => {
+        var testCases = [
+            {
+                description: 'returns empty strings for a null value',
+                phoneNumber: null,
+                expectedPhoneNumber: '',
+                expectedExtension: ''
+            },
+            {
+                description: 'splits the phone number and extension',
+                phoneNumber: '12345' + PhoneNumberFormatter.EXTENSION_DELIM + '6789',
+                expectedPhoneNumber: '12345',
+                expectedExtension: '6789'
+            },
+            {
+                description: 'removes extra spaces around the extension',
+                phoneNumber: '12345' + PhoneNumberFormatter.EXTENSION_DELIM + '   6789',
+                expectedPhoneNumber: '12345',
+                expectedExtension: '6789'
+            },
+            {
+                description: 'does not remove extra spaces after the number so users can enter spaces in the input box',
+                phoneNumber: '12345  ' + PhoneNumberFormatter.EXTENSION_DELIM + '6789',
+                expectedPhoneNumber: '12345  ',
+                expectedExtension: '6789'
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                var splitPhoneNumber = PhoneNumberFormatter.splitPhoneNumberAndExtension(testCase.phoneNumber);
+                assert.equal(splitPhoneNumber.getPhoneNumber, testCase.expectedPhoneNumber);
+                assert.equal(splitPhoneNumber.getExtension, testCase.expectedExtension);
             });
         });
     });
