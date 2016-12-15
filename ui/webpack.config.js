@@ -84,10 +84,11 @@ var config = {
                 // we get ES6/7 syntax and JSX transpiling out of the box with babel
                 // the react-hot-loader loader when processing the .js
                 // (it will add some js to magically do the hot reloading)
-                test: /\.js?$/,
+                test: /\.jsx?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'client-react/test'),
+                    path.resolve(__dirname, 'server/src/routes'),
                     componentLibraryPath
                 ],
                 exclude: [
@@ -138,7 +139,7 @@ var config = {
     },
     resolve: {
         // extensions are so we can require('file') instead of require('file.js')
-        extensions: ['', '.js', '.json', '.scss']
+        extensions: ['', '.js', '.jsx', '.json', '.scss']
     },
     plugins: PROD ? [
         // This has beneficial effect on the react lib size for deploy

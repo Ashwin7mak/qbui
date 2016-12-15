@@ -27,6 +27,11 @@ import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
+// This is loaded from the server directory because the server needs the file, but in prod, this file
+// would not exist but instead be part of the bundle.js. Plus the react transformer on the server can only handle jsx
+// files in the view route. On the server, this file loads before bundle.js is loaded.
+import LoadingScreen from '../../../../server/src/routes/loadingScreen';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -179,7 +184,8 @@ export let Nav = React.createClass({
 
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
-            return null;
+            // TODO: Display a better error message if apps cannot be resolved and the user is not redirected
+            return <LoadingScreen />;
         }
 
         const flux = this.getFlux();
