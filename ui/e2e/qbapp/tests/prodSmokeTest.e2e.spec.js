@@ -14,7 +14,7 @@
     var CurrentStackLoginPage = require('../pages/currentStackLogin.po');
     var CurrentStackReportsPage = require('../pages/currentStackReports.po');
     var WalkMePage = require('../pages/walkMe.po');
-    var v2Tov3Page = require('../pages/v2Tov3.po');
+    var v2Tov3Page = require('../pages/v2ToV3.po');
 
     var reportServicePage = new ReportServicePage();
     var reportContentPage = new ReportContentPage();
