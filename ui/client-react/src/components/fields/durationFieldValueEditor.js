@@ -61,14 +61,14 @@ const DurationFieldValueEditor = React.createClass({
         //                           maximumFractionDigits={opts.decimalPlaces}/>;
         // }
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        placeholder = durationFormatter.getPlaceholder(this.props.attributes);
+        let defaultPlaceholder = durationFormatter.getPlaceholder(this.props.attributes);
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
-                                      placeholder={placeholder || ''}
+                                      placeholder={placeholder || defaultPlaceholder}
                                       value={display || value}
                                       invalidMessage={this.props.invalidMessage || 'Error'}
                                       {...otherProps}/>;
