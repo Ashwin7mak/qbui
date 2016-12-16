@@ -266,16 +266,16 @@
                 return self.formTable.all(by.css(css)).map(function(elm) {
                     return elm.click().then(function() {
                         browser.executeScript('arguments[0].click()', elm.getWebElement());
-                        return e2ePageBase.waitForElement(element(by.css(`.${fieldLabel}:focus+.clearIcon`)));
+                        return e2ePageBase.waitForElement(element(by.css('.' + fieldLabel + ':focus+.clearIcon')));
                     }).then(function() {
                         return elm.getAttribute('value');
                     }).then(function(previousValue) {
-                        console.log(`previous value: ${previousValue}`);
-                        return self.formTable.all(by.css(`.${fieldLabel}:focus+.clearIcon`)).each(function(arr) {
+                        console.log('previous value: ' + previousValue);
+                        return self.formTable.all(by.css('.' + fieldLabel + ':focus+.clearIcon')).each(function(arr) {
                             return arr.click().then(function(clicked) {
                                 return arr.getAttribute('value');
                             }).then(function(newValue) {
-                                console.log(`new value: ${newValue}`);
+                                console.log('new value: ' + newValue);
                                 return true;
                             });
                         });
