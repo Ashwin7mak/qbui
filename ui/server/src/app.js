@@ -11,8 +11,7 @@
 
     var express = require('express'),
         http = require('http'),
-        config = require('./config/environment'),
-        _ = require('lodash');
+        config = require('./config/environment');
     var fs = require('fs'),
         https = require('https');
     var CookieConsts = require('../../common/src/constants');
@@ -92,8 +91,8 @@
 
 
     require('./routes')(app, config);
-    //  log some server config info...but don't include the secrets configuration
-    log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
+    //  log some server config info.
+    log.info('Express Server configuration:', JSON.stringify(config));
 
     /**
      * only listen via a specific ip/hostname when not in production mode or when
