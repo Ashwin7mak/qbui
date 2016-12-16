@@ -28,6 +28,4 @@ describe('UrlFormulaFieldRenderer: ', () => {
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(textFieldValueRenderer.classList.contains('filledUrlFormula')).toBeTruthy();
     });
-
-
 });

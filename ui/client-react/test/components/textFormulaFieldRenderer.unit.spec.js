@@ -28,6 +28,4 @@ describe('TextFormulaFieldRenderer: ', () => {
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(textFieldValueRenderer.classList.contains('filledTextFormula')).toBeTruthy();
     });
-
-
 });
