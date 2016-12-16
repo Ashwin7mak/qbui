@@ -30,6 +30,7 @@
     "findup-sync": "^0.2.1",
     "fluxxor": "^1.7.3",
     "forever": "^0.14.1",
+    "google-libphonenumber": "^2.0.7",
     "history": "^2.1.2",
     "html-minifier": "^0.7.0",
     "json-bignum": "0.0.3",

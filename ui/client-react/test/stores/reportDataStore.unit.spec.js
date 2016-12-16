@@ -1649,6 +1649,4 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).error).toBeFalsy();
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(payload.body.recordsCount);
     });
-
-
 });
