@@ -400,7 +400,8 @@
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
          * */
-        if (type.length === 1 && type[0] === '') {
+        type = type.join('').trim().split(' ');
+        if (type.length > 1 || type.length === 1 && type[0] !== '') {
             return false;
         }
         /**
@@ -470,6 +471,7 @@
              * */
             value = value.toLowerCase();
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
+            console.log('value: ', value);
             if (value.split('').indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
             }
