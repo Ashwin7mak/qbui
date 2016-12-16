@@ -17,15 +17,17 @@ describe('UrlFormulaFieldRenderer: ', () => {
     it('test render of component with no props', () => {
         component = TestUtils.renderIntoDocument(<UrlFormulaFieldRenderer />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(textFieldValueRenderer.classList.contains('emptyUrlFormula')).toBeTruthy();
+        let urlFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+        expect(urlFieldValueRenderer.classList.contains('emptyFormula')).toBeTruthy();
     });
 
     it('test render of component with value prop', () => {
         let text = "some text";
         component = TestUtils.renderIntoDocument(<UrlFormulaFieldRenderer value={text}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(textFieldValueRenderer.classList.contains('filledUrlFormula')).toBeTruthy();
+        let urlFormulaFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'filledFormula');
+        let urlFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'urlField');
+        expect(urlFormulaFieldRenderer.length).toEqual(1);
+        expect(urlFieldRenderer.length).toEqual(1);
     });
 });

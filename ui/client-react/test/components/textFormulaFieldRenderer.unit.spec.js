@@ -18,14 +18,16 @@ describe('TextFormulaFieldRenderer: ', () => {
         component = TestUtils.renderIntoDocument(<TextFormulaFieldRenderer />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(textFieldValueRenderer.classList.contains('emptyTextFormula')).toBeTruthy();
+        expect(textFieldValueRenderer.classList.contains('emptyFormula')).toBeTruthy();
     });
 
     it('test render of component with value prop', () => {
         let text = "some text";
         component = TestUtils.renderIntoDocument(<TextFormulaFieldRenderer value={text}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
-        expect(textFieldValueRenderer.classList.contains('filledTextFormula')).toBeTruthy();
+        let textFormulaFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'filledFormula');
+        let textFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'textField');
+        expect(textFormulaFieldRenderer.length).toEqual(1);
+        expect(textFieldRenderer.length).toEqual(1);
     });
 });

@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import './formulaField.scss';
 
 /**
@@ -19,10 +20,16 @@ const NumericFormulaFieldRenderer = React.createClass({
         };
     },
     render() {
-        let value = this.props.display;
+        let value = this.props.display ? this.props.display : this.props.value;
 
         const emptyValue = (<div className="emptyFormula"/>);
-        const filledValue = (<div className="filledFormula">{value}</div>);
+        const filledValue = (<div className="filledFormula">
+                                <NumericFieldValueRenderer
+                                    value={value}
+                                    attributes={this.props.attributes}
+                                    key={'nfvr-' + this.props.idKey}
+                                />
+                            </div>);
         return value && value !== '' ? filledValue : emptyValue;
     }
 });
