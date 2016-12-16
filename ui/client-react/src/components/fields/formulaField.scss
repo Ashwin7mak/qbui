@@ -20,7 +20,7 @@
             width: $formula-background-large-width;
 
             @include small-breakpoint {
-                width:100%;
+                width: 100%;
                 height: $formula-background-small-height;
             }
         }
