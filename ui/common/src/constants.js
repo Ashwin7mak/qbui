@@ -117,6 +117,21 @@
             ZERO: new bigDecimal.BigDecimal(0),
             ONE: new bigDecimal.BigDecimal(1),
 
+            //Do not modify this map, key values are used for locale string lookup
+            SCALES : {
+                HHMM: ':HH:MM',
+                HHMMSS: ':HH:MM:SS',
+                MM: ':MM',
+                MMSS: ':MM:SS',
+                SMART_UNITS:'Smart Units',
+                WEEKS: 'Weeks',
+                DAYS: 'Days',
+                HOURS: 'Hours',
+                MINUTES: 'Minutes',
+                SECONDS: 'Seconds',
+                MILLISECONDS: 'Milliseconds',
+            },
+
             HHMM: ':HH:MM',
             HHMMSS: ':HH:MM:SS',
             MM: ':MM',
@@ -139,6 +154,8 @@
             MILLISECONDS: 'Milliseconds',
             MILLISECOND: 'Millisecond',
             MS: 'MS',
+            SECS: 'secs',
+            MSECS: 'msecs',
             PLACEHOLDER: {
                 HHMM: 'hh:mm',
                 HHMMSS: 'hh:mm:ss',

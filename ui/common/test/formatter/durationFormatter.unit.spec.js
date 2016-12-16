@@ -5,6 +5,8 @@ var moment = require('moment');
 var _ = require('lodash');
 var durationFormatter = require('../../src/formatter/durationFormatter');
 var consts = require('../../src/constants');
+var DURATION_CONSTS = consts.DURATION_CONSTS;
+var DURATION_SCALES = DURATION_CONSTS.SCALES;
 
 // gen a repeatable seed for random values, so it can be reproduced
 var Chance = require('chance');
@@ -15,9 +17,9 @@ var chance = new Chance(seed);
 describe('DurationFormatter (seed ' + seed + ')', () => {
 
     function addAllScales(array) {
-        Object.keys(consts.DURATION_CONSTS).forEach(function(scaleKey) {
+        Object.keys(DURATION_SCALES).forEach(function(scaleKey) {
             var item = {};
-            var scale = consts.DURATION_CONSTS[scaleKey];
+            var scale = DURATION_SCALES[scaleKey];
             if (typeof (scale) === 'string') {
                 if (durationFormatter.hasUnitsText(scale)) {
                     var val = chance.floating({min: 0, max: 99999});
@@ -27,7 +29,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                     item.fieldInfo = {scale: scale, decimalPlaces:4};
                     item.expectation = '' + val;
                     array.push(item);
-                } else if (scale !== consts.DURATION_CONSTS.SMART_UNITS) {
+                } else if (scale !== DURATION_SCALES.SMART_UNITS) {
                     var hours = chance.integer({min: 0, max: 9999});
                     var mins = chance.integer({min: 0, max: 59});
                     var secs = chance.floating({min: 0, max: 59});
@@ -73,51 +75,51 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                     var weeks = chance.floating({min: 1, max: 999999});
                     var itemWeeks = {};
                     itemWeeks.description = 'returns a smart units fieldvalue.value is ' + weeks + ' weeks ';
-                    itemWeeks.fieldValue = {value: weeks * consts.DURATION_CONSTS.MILLIS_PER_WEEK};
-                    itemWeeks.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemWeeks.fieldValue = {value: weeks * DURATION_CONSTS.MILLIS_PER_WEEK};
+                    itemWeeks.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
                     itemWeeks.expectation = '' + weeks + ' weeks';
                     itemWeeks.expectRaw = '' + weeks;
-                    itemWeeks.expectUnits = consts.DURATION_CONSTS.WEEKS;
+                    itemWeeks.expectUnits = DURATION_SCALES.WEEKS;
                     array.push(itemWeeks);
 
                     var days = chance.floating({min: 1, max: 6});
                     var itemDays = {};
                     itemDays.description = 'returns a smart units fieldvalue.value is ' + days + ' days ';
-                    itemDays.fieldValue = {value: days * consts.DURATION_CONSTS.MILLIS_PER_DAY};
-                    itemDays.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemDays.fieldValue = {value: days * DURATION_CONSTS.MILLIS_PER_DAY};
+                    itemDays.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
                     itemDays.expectation = '' + days + ' days';
                     itemDays.expectRaw = '' + days;
-                    itemDays.expectUnits = consts.DURATION_CONSTS.DAYS;
+                    itemDays.expectUnits = DURATION_SCALES.DAYS;
                     array.push(itemDays);
 
                     var _hours = chance.floating({min: 1, max: 23});
                     var itemHours = {};
                     itemHours.description = 'returns a smart units fieldvalue.value is ' + _hours + ' hours ';
-                    itemHours.fieldValue = {value: _hours * consts.DURATION_CONSTS.MILLIS_PER_HOUR};
-                    itemHours.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemHours.fieldValue = {value: _hours * DURATION_CONSTS.MILLIS_PER_HOUR};
+                    itemHours.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
                     itemHours.expectation = '' + _hours + ' hours';
                     itemHours.expectRaw = '' + _hours;
-                    itemHours.expectUnits = consts.DURATION_CONSTS.HOURS;
+                    itemHours.expectUnits = DURATION_SCALES.HOURS;
                     array.push(itemHours);
 
                     var _mins = chance.floating({min: 1, max: 59});
                     var itemMinutes = {};
                     itemMinutes.description = 'returns a smart units fieldvalue.value is ' + _mins + ' mins ';
-                    itemMinutes.fieldValue = {value: _mins * consts.DURATION_CONSTS.MILLIS_PER_MIN};
-                    itemMinutes.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
+                    itemMinutes.fieldValue = {value: _mins * DURATION_CONSTS.MILLIS_PER_MIN};
+                    itemMinutes.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
                     itemMinutes.expectation = '' + _mins + ' mins';
                     itemMinutes.expectRaw = '' + _mins;
-                    itemMinutes.expectUnits = consts.DURATION_CONSTS.MINUTES;
+                    itemMinutes.expectUnits = DURATION_SCALES.MINUTES;
                     array.push(itemMinutes);
 
                     var _secs = chance.floating({min: 1, max: 59});
                     var itemSeconds = {};
                     itemSeconds.description = 'returns a smart units fieldvalue.value is ' + _secs + ' secs ';
-                    itemSeconds.fieldValue = {value: (_secs * consts.DURATION_CONSTS.MILLIS_PER_SECOND).toFixed(4)};
-                    itemSeconds.fieldInfo = {scale: consts.DURATION_CONSTS.SMART_UNITS, decimalPlaces:4};
-                    itemSeconds.expectation = '' + _secs + ' secs';
+                    itemSeconds.fieldValue = {value: (_secs * DURATION_CONSTS.MILLIS_PER_SECOND).toFixed(4)};
+                    itemSeconds.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
+                    itemSeconds.expectation = '' + _secs + ' ' + DURATION_CONSTS.SECONDS;
                     itemSeconds.expectRaw = '' + _secs;
-                    itemSeconds.expectUnits = consts.DURATION_CONSTS.SECONDS;
+                    itemSeconds.expectUnits = DURATION_SCALES.SECONDS;
                     array.push(itemSeconds);
                 }
             }
@@ -165,7 +167,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
         {
             description: 'returns a blank string if fieldvalue.value is 0 for smartunits',
             fieldValue: {value: 0},
-            fieldInfo: {scale: consts.DURATION_CONSTS.SMART_UNITS},
+            fieldInfo: {scale: DURATION_SCALES.SMART_UNITS},
             expectation: ''
         }
     ];
@@ -213,7 +215,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                 if (_.has(testCase, 'fieldInfo.scale')) {
                     if (durationFormatter.hasUnitsText(testCase.fieldInfo.scale)) {
                         assert.equal(formattedDuration.units, testCase.fieldInfo.scale, msg);
-                    } else if (testCase.fieldInfo.scale === consts.DURATION_CONSTS.SMART_UNITS) {
+                    } else if (testCase.fieldInfo.scale === DURATION_SCALES.SMART_UNITS) {
                         assert.equal(formattedDuration.units, testCase.expectUnits, msg);
                     }
                 }
@@ -224,17 +226,17 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
 
     describe('hasUnitsText for table header', () => {
         let hasUnitsCases = [
-            {scale: consts.DURATION_CONSTS.WEEKS, expectation: true},
-            {scale: consts.DURATION_CONSTS.DAYS, expectation: true},
-            {scale: consts.DURATION_CONSTS.HOURS, expectation: true},
-            {scale: consts.DURATION_CONSTS.MINUTES, expectation: true},
-            {scale: consts.DURATION_CONSTS.SECONDS, expectation: true},
-            {scale: consts.DURATION_CONSTS.MILLISECONDS, expectation: true},
-            {scale: consts.DURATION_CONSTS.HHMM, expectation: false},
-            {scale: consts.DURATION_CONSTS.HHMMSS, expectation: false},
-            {scale: consts.DURATION_CONSTS.MM, expectation: false},
-            {scale: consts.DURATION_CONSTS.MMSS, expectation: false},
-            {scale: consts.DURATION_CONSTS.SMART_UNITS, expectation: false},
+            {scale: DURATION_SCALES.WEEKS, expectation: true},
+            {scale: DURATION_SCALES.DAYS, expectation: true},
+            {scale: DURATION_SCALES.HOURS, expectation: true},
+            {scale: DURATION_SCALES.MINUTES, expectation: true},
+            {scale: DURATION_SCALES.SECONDS, expectation: true},
+            {scale: DURATION_SCALES.MILLISECONDS, expectation: true},
+            {scale: DURATION_SCALES.HHMM, expectation: false},
+            {scale: DURATION_SCALES.HHMMSS, expectation: false},
+            {scale: DURATION_SCALES.MM, expectation: false},
+            {scale: DURATION_SCALES.MMSS, expectation: false},
+            {scale: DURATION_SCALES.SMART_UNITS, expectation: false},
             {scale: 'invalid', expectation: false},
             {scale: null, expectation: false},
             {scale: undefined, expectation: false},
@@ -251,20 +253,20 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
     describe('isSmartUnitsField ', () => {
         describe('test scales', () => {
             let isSmartUnitsCases = [
-                {scale: consts.DURATION_CONSTS.WEEKS, expectation: false},
-                {scale: consts.DURATION_CONSTS.DAYS, expectation: false},
-                {scale: consts.DURATION_CONSTS.HOURS, expectation: false},
-                {scale: consts.DURATION_CONSTS.MINUTES, expectation: false},
-                {scale: consts.DURATION_CONSTS.SECONDS, expectation: false},
-                {scale: consts.DURATION_CONSTS.MILLISECONDS, expectation: false},
-                {scale: consts.DURATION_CONSTS.HHMM, expectation: false},
-                {scale: consts.DURATION_CONSTS.HHMMSS, expectation: false},
-                {scale: consts.DURATION_CONSTS.MM, expectation: false},
-                {scale: consts.DURATION_CONSTS.MMSS, expectation: false},
+                {scale: DURATION_SCALES.WEEKS, expectation: false},
+                {scale: DURATION_SCALES.DAYS, expectation: false},
+                {scale: DURATION_SCALES.HOURS, expectation: false},
+                {scale: DURATION_SCALES.MINUTES, expectation: false},
+                {scale: DURATION_SCALES.SECONDS, expectation: false},
+                {scale: DURATION_SCALES.MILLISECONDS, expectation: false},
+                {scale: DURATION_SCALES.HHMM, expectation: false},
+                {scale: DURATION_SCALES.HHMMSS, expectation: false},
+                {scale: DURATION_SCALES.MM, expectation: false},
+                {scale: DURATION_SCALES.MMSS, expectation: false},
                 {scale: 'invalid', expectation: false},
                 {scale: null, expectation: false},
                 {scale: undefined, expectation: false},
-                {scale: consts.DURATION_CONSTS.SMART_UNITS, expectation: true},
+                {scale: DURATION_SCALES.SMART_UNITS, expectation: true},
 
             ];
             isSmartUnitsCases.forEach((testCase) => {
