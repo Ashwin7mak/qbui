@@ -11,6 +11,7 @@
     var sText = '9782341234';
     var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
+    var sEmail = 'test@faketestdomain.com';
 
     var sDate = date[1] + '-' + date[2] + '-' + date[0];
 
@@ -204,7 +205,10 @@
                 } else if (fieldLabel === 'textField') {
                     //enter text fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                        return elm;
+                        // email fields also have 'textField' in its classnames, don't include email fields
+                        return elm.getAttribute('class').then(function(classes) {
+                            return classes.indexOf('emailField') === -1;
+                        });
                     }).map(function(elm) {
                         return elm.clear().sendKeys(sText);
                     });
@@ -233,7 +237,50 @@
                             browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
                         });
                     });
+                } else if (fieldLabel === 'emailField') {
+                    return self.formTable.all(by.className('emailField'))
+                        .map(function(elm) {
+                            return elm.clear().sendKeys(sEmail);
+                        });
                 }
+            });
+        };
+
+        /**
+         * Clear field values on small breakpoint form
+         */
+        this.clearFormValues = function(fieldLabel) {
+            var self = this;
+            var css;
+            var text = sText;
+            if (fieldLabel === 'textField') {
+                css = '.textField:not(.emailField):not(.extNumber)';
+            } else if (fieldLabel === 'emailField') {
+                text = sEmail;
+                css = '.emailField';
+            } else if (fieldLabel === 'numericField') {
+                css = '.numericField';
+                text = sNumeric;
+            }
+            return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                return self.formTable.all(by.css(css)).map(function(elm) {
+                    return elm.click().then(function() {
+                        browser.executeScript('arguments[0].click()', elm.getWebElement());
+                        return e2ePageBase.waitForElement(element(by.css(`.${fieldLabel}:focus+.clearIcon`)));
+                    }).then(function() {
+                        return elm.getAttribute('value');
+                    }).then(function(previousValue) {
+                        console.log(`previous value: ${previousValue}`);
+                        return self.formTable.all(by.css(`.${fieldLabel}:focus+.clearIcon`)).each(function(arr) {
+                            return arr.click().then(function(clicked) {
+                                return arr.getAttribute('value');
+                            }).then(function(newValue) {
+                                console.log(`new value: ${newValue}`);
+                                return true;
+                            });
+                        });
+                    });
+                });
             });
         };
 
