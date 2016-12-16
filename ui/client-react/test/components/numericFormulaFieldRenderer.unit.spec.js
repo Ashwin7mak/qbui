@@ -45,6 +45,4 @@ describe('NumericFormulaFieldRenderer: ', () => {
         let textFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(textFieldValueRenderer.classList.contains('filledNumericFormula')).toBeTruthy();
     });
-
-
 });

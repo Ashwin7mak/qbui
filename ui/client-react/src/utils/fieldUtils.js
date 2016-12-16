@@ -137,15 +137,15 @@ class FieldUtils {
             if (fieldDef.type === consts.FORMULA) {
                 if (attributes && attributes.type) {
                     switch (attributes.type) {
-                        case consts.NUMERIC:
-                            fieldType = FieldFormats.NUMERIC_FORMULA_FORMAT;
-                            break;
-                        case consts.URL:
-                            fieldType = FieldFormats.URL_FORMULA_FORMAT;
-                            break;
-                        case consts.TEXT:
-                        default:
-                            fieldType = FieldFormats.TEXT_FORMULA_FORMAT;
+                    case consts.NUMERIC:
+                        fieldType = FieldFormats.NUMERIC_FORMULA_FORMAT;
+                        break;
+                    case consts.URL:
+                        fieldType = FieldFormats.URL_FORMULA_FORMAT;
+                        break;
+                    case consts.TEXT:
+                    default:
+                        fieldType = FieldFormats.TEXT_FORMULA_FORMAT;
                     }
                 }
             }
