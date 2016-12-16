@@ -1,5 +1,8 @@
 (function() {
     var dataErrorCodes = require('../dataEntryErrorCodes');
+    var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
+    var regexNumsDecimalsColons = /[0-9.:]+/g;
+    var removeCommas = /[,]+/g;
     /**
      * ******IMPORTANT****
      * Currently the isValid and isTimeFormatValid methods are both in this file and the durationEditorParsing file
@@ -104,7 +107,7 @@
                         error: {}
                     };
                 }
-                scale = durationEditorParsing.getPlaceholder(results.def.fieldDef.datatypeAttributes);
+                scale = results.def.fieldDef.datatypeAttributes.scale;
                 results.error.code = dataErrorCodes.INVALID_ENTRY;
                 results.error.messageId = 'invalidMsg.duration';
                 results.error.data = {fieldName: fieldName, scale: scale};
