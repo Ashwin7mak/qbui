@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import './urlFormulaField.scss';
+import UrlFieldValueRenderer from './urlFieldValueRenderer';
+import './formulaField.scss';
 /**
  * # UrlFormulaFieldRenderer
  *
@@ -8,18 +9,29 @@ import './urlFormulaField.scss';
 const UrlFormulaFieldRenderer = React.createClass({
     displayName: 'UrlFormulaFieldRenderer',
     propTypes: {
-        value: PropTypes.string
+        value: PropTypes.string,
+        display: PropTypes.string,
     },
     getDefaultProps() {
         return {
-            value: ''
+            value: '',
+            display: '',
         };
     },
     render() {
         let value = this.props.value;
 
-        const emptyValue = (<div className="emptyUrlFormula"/>);
-        const filledValue = (<div className="filledUrlFormula">{value}</div>);
+        const emptyValue = (<div className="emptyFormula"/>);
+        const filledValue = (<div className="filledFormula">
+            <UrlFieldValueRenderer
+                value={this.props.value}
+                display={this.props.display}
+                openInNewWindow={false}
+                showAsButton={false}
+                key={'ufvr-' + this.props.idKey}
+            />;
+
+        </div>);
         return value && value !== "" ? filledValue : emptyValue;
     }
 });

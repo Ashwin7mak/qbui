@@ -242,8 +242,10 @@ const CellRenderer = React.createClass({
         }
 
         // the reactabular grid doesn't need to render an editor unless it's actually editing
-
-        let cellType = FieldUtils.getFieldType(this.props.colDef.fieldDef, this.props.type, attributes);
+        let cellType = this.props.type;
+        if (_.has(this.props, 'colDef')) {
+            cellType = FieldUtils.getFieldType(this.props.colDef.fieldDef, this.props.type, attributes);
+        }
 
         let invalidStatus = this._getValidationErrors();
 

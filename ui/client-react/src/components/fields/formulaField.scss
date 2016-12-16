@@ -1,42 +1,34 @@
 @import '../../../src/assets/css/qbVariables';
 
-.emptyNumericFormula {
+.emptyFormula {
   display: block;
 
-  width: 100%;
   height: $formula-background-large-height;
 
   @include small-breakpoint {
-    .ext {
-      height: $formula-background-small-height;
-    }
+    height: $formula-background-small-height;
   }
 }
 
 // For forms
 .formElement.field {
   .cellWrapper {
-    .emptyNumericFormula {
+    .emptyFormula {
       background-color: $formula-background-empty-color;
 
       @include small-breakpoint {
-        .ext {
-          height: $formula-background-small-height;
-        }
+        height: $formula-background-small-height;
       }
     }
   }
 }
 
-.filledNumericFormula {
+.filledFormula {
   display: block;
 
-  width: 100%;
   height: $formula-background-large-height;
 
   @include small-breakpoint {
-    .ext {
-      height: $formula-background-small-height;
-    }
+    height: $formula-background-small-height;
   }
 }

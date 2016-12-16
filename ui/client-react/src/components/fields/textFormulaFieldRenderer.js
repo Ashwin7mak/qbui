@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import './textFormulaField.scss';
+import './formulaField.scss';
 
 /**
  * # TextFormulaFieldValueRenderer
@@ -19,8 +19,8 @@ const TextFormulaFieldRenderer = React.createClass({
     render() {
         let value = this.props.value;
 
-        const emptyValue = (<div className="emptyTextFormula"/>);
-        const filledValue = (<div className="filledTextFormula">{value}</div>);
+        const emptyValue = (<div className="emptyFormula"/>);
+        const filledValue = (<div className="filledFormula">{value}</div>);
         return value && value !== "" ? filledValue : emptyValue;
     }
 });
