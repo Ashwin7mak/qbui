@@ -11,8 +11,7 @@
 
     var express = require('express'),
         http = require('http'),
-        config = require('./config/environment'),
-        _ = require('lodash');
+        config = require('./config/environment');
     var fs = require('fs'),
         https = require('https');
     var CookieConsts = require('../../common/src/constants');
