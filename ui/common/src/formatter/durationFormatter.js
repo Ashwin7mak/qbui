@@ -19,11 +19,7 @@
      */
     var bigDecimal = require('bigdecimal');
     var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
-    // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*|minute*|minutes*|h*|hour*|hours*|d*|day*|days*|w*|week*|weeks)/;
     var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
-    // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S.toLowerCase()*| DURATION_CONSTS.SECOND.toLowerCase()*| DURATION_CONSTS.SECONDS.toLowerCase()*| DURATION_CONSTS.MS.toLowerCase()*| DURATION_CONSTS.MILLISECOND.toLowerCase()*| DURATION_CONSTS.MILLISECONDS.toLowerCase()*| DURATION_CONSTS.M.toLowerCase()*| DURATION_CONSTS.MINUTE.toLowerCase()*| DURATION_CONSTS.MINUTES.toLowerCase(), DURATION_CONSTS.H.toLowerCase()*| DURATION_CONSTS.HOUR.toLowerCase()*| DURATION_CONSTS.HOURS.toLowerCase()*| DURATION_CONSTS.D.toLowerCase()*| DURATION_CONSTS.DAY.toLowerCase()*| DURATION_CONSTS.DAYS.toLowerCase()*| DURATION_CONSTS.W.toLowerCase()*| DURATION_CONSTS.WEEKS.toLowerCase()*| DURATION_CONSTS.WEEKS.toLowerCase()*)/;
-    // var ALLOWED_DURATION_TYPE = /(DURATION_CONSTS.S*|DURATION_CONSTS.SECOND*|DURATION_CONSTS.SECONDS*)/;
-    // var ALLOWED_DURATION_TYPE = /(s*|second*|seconds*|ms*|millisecond*|milliseconds*|m*)/;
     var _ = require('lodash');
     var regexNumsDecimalsColons = /[0-9.:]+/g;
     var removeCommas = /[,]+/g;
