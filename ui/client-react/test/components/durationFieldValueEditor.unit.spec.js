@@ -40,7 +40,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.dataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+        fit('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
@@ -51,7 +51,8 @@ fdescribe('DurationFieldValueEditor', () => {
             Simulate.blur(input, {
                 value: userInput
             });
-            let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
+            // let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
+            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
             // let expectedResult = durationFormatter.format({value: totalMilliSeconds}, test.scale);
