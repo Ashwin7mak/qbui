@@ -8,7 +8,7 @@ import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-fdescribe('DurationFieldValueEditor', () => {
+describe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -130,7 +130,7 @@ fdescribe('DurationFieldValueEditor', () => {
         });
     });
     TestData.timeFormatDataProvider.forEach(function(test) {
-        fit('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
