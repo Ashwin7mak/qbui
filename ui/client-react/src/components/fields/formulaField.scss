@@ -6,7 +6,7 @@
     height: $formula-background-large-height;
 
     @include small-breakpoint {
-      height: $formula-background-small-height;
+        height: $formula-background-small-height;
     }
 }
 
@@ -17,7 +17,7 @@
             background-color: $formula-background-empty-color;
 
             @include small-breakpoint {
-              height: $formula-background-small-height;
+                height: $formula-background-small-height;
             }
         }
     }
