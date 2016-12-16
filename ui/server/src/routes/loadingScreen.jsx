@@ -54,7 +54,6 @@ var LoadingScreen = () => {
                 </div>
             </div>
         </div>
-
     );
 };
 
