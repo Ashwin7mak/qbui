@@ -16,14 +16,20 @@ let logger = new Logger();
 
 let PRE_REQ_DELAY_MS = 1;
 
+/**
+ * Add the option to return display values when getting a record from the server
+ * You can pass in other options that will be used in addition to the format property.
+ * @param options
+ * @returns {*}
+ * @private
+ */
+function _withDisplayFormat(options = {}) {
+    let displayOptions = {};
+    displayOptions[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+    return Object.assign(displayOptions, options);
+}
+
 let recordActions = {
-
-    _withDisplayFormat(options = {}) {
-        let displayOptions = {};
-        displayOptions[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        return Object.assign(displayOptions, options);
-    },
-
     /**
      * Action to save a new record. On successful save get a copy of the newly created record from server.
      * @param appId
@@ -87,7 +93,7 @@ let recordActions = {
                                 }
                                 clist = clist.join('.');
                                 this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
-                                recordService.getRecord(appId, tblId, resJson.id, clist, recordActions._withDisplayFormat()).then(
+                                recordService.getRecord(appId, tblId, resJson.id, clist, _withDisplayFormat()).then(
                                     getResponse => {
                                         logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
                                         this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
@@ -386,7 +392,7 @@ let recordActions = {
                         }
                         clist = clist.join('.');
                         this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
-                        recordService.getRecord(appId, tblId, recId, clist, recordActions._withDisplayFormat()).then(
+                        recordService.getRecord(appId, tblId, recId, clist, _withDisplayFormat()).then(
                             getResponse => {
                                 logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
