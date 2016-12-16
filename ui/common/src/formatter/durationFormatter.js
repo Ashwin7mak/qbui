@@ -394,6 +394,7 @@
     }
     function isTimeFormatValid(value, type) {
         var regexTimeFormat = /\./g;
+        var colons;
         /**
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
@@ -407,6 +408,11 @@
          * 5:5:5 is a valid input
          * */
         if (regexTimeFormat.test(value)) {
+            return false;
+        }
+        colons = value.match(/:/g);
+        console.log('colons: ', colons);
+        if (colons.length > 3) {
             return false;
         }
         return true;
@@ -491,7 +497,6 @@
             return valid;
         },
         onBlurParsing: function(value, fieldInfo) {
-            //http://www.calculateme.com/time/days/to-milliseconds/1
             value = value.replace(removeCommas, '').split(' ').join(' ');
             /**
              * Accepted Types:
@@ -514,7 +519,6 @@
             /**
              * Checks to see if the value is a valid input
              * */
-            console.log('isValid value: ', this.isValid(value));
             if (this.isValid(value)) {
                 /**
                  * If the user inserted a semicolon, then the string needs to be parsed based off of
@@ -572,7 +576,10 @@
                 }
                 return getMilliseconds(num[0], fieldInfo.scale);
             }
-            return value;
+            return {
+                value: value,
+                valid: false
+            };
         },
         getPlaceholder: function(fieldInfo) {
             var placeholder = '';

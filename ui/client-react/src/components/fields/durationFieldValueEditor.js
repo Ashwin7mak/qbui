@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
-import {I18nMessage, I18nNumber, IntlNumberOnly} from '../../utils/i18nMessage';
 
 /**
  * # DurationFieldValueEditor
@@ -54,10 +53,13 @@ const DurationFieldValueEditor = React.createClass({
         let value = durationFormatter.onBlurParsing(ev.value, this.props.attributes);
         let theVals = {};
         theVals.value = value;
-        if (typeof value === 'number') {
+        if (theVals.value.valid === false) {
+            theVals.display = theVals.value.value;
+            theVals.value = value.value;
+        } else {
             theVals.display = durationFormatter.format(theVals, this.props.attributes);
+
         }
-        console.log('theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
@@ -65,11 +67,6 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         let defaultPlaceholder = durationFormatter.getPlaceholder(this.props.attributes);
-        // if (this.props.includeUnits) {
-        //     display = display + ' ' + defaultPlaceholder;
-        // } else {
-        //     display = display;
-        // }
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
