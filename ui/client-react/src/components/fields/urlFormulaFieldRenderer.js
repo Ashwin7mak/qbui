@@ -22,16 +22,13 @@ const UrlFormulaFieldRenderer = React.createClass({
         let value = this.props.value;
 
         const emptyValue = (<div className="emptyFormula"/>);
-        const filledValue = (<div className="filledFormula">
-            <UrlFieldValueRenderer
-                value={this.props.value}
-                display={this.props.display}
-                openInNewWindow={false}
-                showAsButton={false}
-                key={'ufvr-' + this.props.idKey}
-            />;
-
-        </div>);
+        const filledValue = (<UrlFieldValueRenderer
+                                value={this.props.value}
+                                display={this.props.display}
+                                openInNewWindow={false}
+                                showAsButton={false}
+                                key={'ufvr-' + this.props.idKey}
+                            />);
         return value && value !== "" ? filledValue : emptyValue;
     }
 });

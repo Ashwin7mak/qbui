@@ -23,12 +23,10 @@ const TextFormulaFieldRenderer = React.createClass({
         let value = this.props.display ? this.props.display : this.props.value;
 
         const emptyValue = (<div className="emptyFormula"/>);
-        const filledValue = (<div className="filledFormula">
-                                <TextFieldValueRenderer value={value}
+        const filledValue = (<TextFieldValueRenderer value={value}
                                                         attributes={this.props.attributes}
                                                         key={'tfvr-' + this.props.idKey}
-                                />
-                            </div>);
+                                />);
         return value && value !== "" ? filledValue : emptyValue;
     }
 });

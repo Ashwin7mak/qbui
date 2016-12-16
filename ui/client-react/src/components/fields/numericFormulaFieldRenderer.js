@@ -23,13 +23,11 @@ const NumericFormulaFieldRenderer = React.createClass({
         let value = this.props.display ? this.props.display : this.props.value;
 
         const emptyValue = (<div className="emptyFormula"/>);
-        const filledValue = (<div className="filledFormula">
-                                <NumericFieldValueRenderer
+        const filledValue = (<NumericFieldValueRenderer
                                     value={value}
                                     attributes={this.props.attributes}
                                     key={'nfvr-' + this.props.idKey}
-                                />
-                            </div>);
+                                />);
         return value && value !== '' ? filledValue : emptyValue;
     }
 });

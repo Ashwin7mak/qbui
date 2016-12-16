@@ -28,13 +28,6 @@
 }
 
 .filledFormula {
-    display: block;
-
-    height: $formula-background-large-height;
-    width: $formula-background-large-width;
-
     @include small-breakpoint {
-        width: 100%;
-        height: $formula-background-small-height;
     }
 }
