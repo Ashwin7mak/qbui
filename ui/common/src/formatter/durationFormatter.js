@@ -326,7 +326,8 @@
             break;
         case DURATION_CONSTS.MILLISECONDS:
         case DURATION_CONSTS.MS:
-            returnValue = parseInt(num);
+            console.log('MILLI NUM: ', num);
+            returnValue = num;
             break;
         default:
             break;
@@ -570,7 +571,11 @@
                  * */
                 if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
                     num.forEach(function(val, i) {
-                        total += getMilliseconds(num[i], listOfTypes[i]);
+                        if (num.length === 1 && listOfTypes[i] === DURATION_CONSTS.MILLISECONDS || listOfTypes[i] === DURATION_CONSTS.MS){
+                            total = Number(getMilliseconds(num[i], listOfTypes[i]));
+                        } else {
+                            total += getMilliseconds(num[i], listOfTypes[i]);
+                        }
                     });
                     return total;
                 }
