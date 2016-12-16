@@ -436,7 +436,6 @@
         },
         isValid: function(value) {
             var regexHasNums = /[0-9]+/g;
-            value = value.toLowerCase();
             var tempNum;
             var tempType = [];
             var valid = true;
@@ -462,6 +461,7 @@
             /**
              * If a user inserted a colon, it will be validated based off of time formats validation requirements
              * */
+            value = value.toLowerCase();
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             if (value.split('').indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
@@ -514,65 +514,65 @@
             /**
              * Checks to see if the value is a valid input
              * */
-            if (!this.isValid(value)) {
-                console.log('value: ', value);
-                return null;
-            }
-            /**
-             * If the user inserted a semicolon, then the string needs to be parsed based off of
-             * the HHMMSS, HHMM, MMSS requirements
-             * */
-            if (value && value.split('').indexOf(':') !== -1) {
-                return convertHourMinutesSeconds(value);
-            }
-            /**
-             * If the user passes in a string containing a number and a type, we split the string here
-             * and separate the number and type from each other
-             * Strips out all commas
-             * */
-            value = value.toLowerCase();
-            num = value.match(regexNumsDecimalsColons);
-            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-            type.forEach(function(val) {
+            console.log('isValid value: ', this.isValid(value));
+            if (this.isValid(value)) {
                 /**
-                 * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
+                 * If the user inserted a semicolon, then the string needs to be parsed based off of
+                 * the HHMMSS, HHMM, MMSS requirements
                  * */
-                if (val.length <= 2 && val !== '') {
-                    val = val.toUpperCase();
-                    listOfTypes.push(val);
-                } else if (val !== '') {
-                    /**
-                     * Removes first letter and sets it toUpperCase
-                     * Sets type to a string and concatenates the upperCaseLetter back on
-                     * If type is not plural, then it concatenates an 's'
-                     * This formats it to make it easier to check it against constants later
-                     */
-                    val = val.toLowerCase();
-                    var firstLetter = val[0].toUpperCase();
-                    val = val.slice(1);
-                    val = firstLetter + val;
-                    if (val[val.length - 1] !== 's') {
-                        val = val + 's';
-                    }
-                    listOfTypes.push(val);
+                if (value && value.split('').indexOf(':') !== -1) {
+                    return convertHourMinutesSeconds(value);
                 }
-            });
-            /**
-             * If a user only inputs one num and one type, then this function will only be called once
-             * However if the user inserted more than one num and more than one type then this function calls each num with its type
-             * The isValid function above, checks to be sure each num has a type, if it did not an error will be thrown
-             * Example 1 week 2 days becomes
-             * num = [1,2]
-             * listOfTypes = [week, days]
-             * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
-             * */
-            if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
-                num.forEach(function(val, i) {
-                    total += getMilliseconds(num[i], listOfTypes[i]);
+                /**
+                 * If the user passes in a string containing a number and a type, we split the string here
+                 * and separate the number and type from each other
+                 * Strips out all commas
+                 * */
+                value = value.toLowerCase();
+                num = value.match(regexNumsDecimalsColons);
+                type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
+                type.forEach(function(val) {
+                    /**
+                     * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
+                     * */
+                    if (val.length <= 2 && val !== '') {
+                        val = val.toUpperCase();
+                        listOfTypes.push(val);
+                    } else if (val !== '') {
+                        /**
+                         * Removes first letter and sets it toUpperCase
+                         * Sets type to a string and concatenates the upperCaseLetter back on
+                         * If type is not plural, then it concatenates an 's'
+                         * This formats it to make it easier to check it against constants later
+                         */
+                        val = val.toLowerCase();
+                        var firstLetter = val[0].toUpperCase();
+                        val = val.slice(1);
+                        val = firstLetter + val;
+                        if (val[val.length - 1] !== 's') {
+                            val = val + 's';
+                        }
+                        listOfTypes.push(val);
+                    }
                 });
-                return total;
+                /**
+                 * If a user only inputs one num and one type, then this function will only be called once
+                 * However if the user inserted more than one num and more than one type then this function calls each num with its type
+                 * The isValid function above, checks to be sure each num has a type, if it did not an error will be thrown
+                 * Example 1 week 2 days becomes
+                 * num = [1,2]
+                 * listOfTypes = [week, days]
+                 * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
+                 * */
+                if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
+                    num.forEach(function(val, i) {
+                        total += getMilliseconds(num[i], listOfTypes[i]);
+                    });
+                    return total;
+                }
+                return getMilliseconds(num[0], fieldInfo.scale);
             }
-            return getMilliseconds(num[0], fieldInfo.scale);
+            return value;
         },
         getPlaceholder: function(fieldInfo) {
             var placeholder = '';
