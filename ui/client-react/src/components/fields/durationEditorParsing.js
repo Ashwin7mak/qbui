@@ -295,7 +295,7 @@
                  * listOfTypes = [week, days]
                  * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
                  * */
-                if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
+                if (num !== null && num.length === listOfTypes.length && listOfTypes[0] !== '') {
                     num.forEach(function(val, i) {
                         if (num.length === 1 && listOfTypes[i] === DURATION_CONSTS.MILLISECONDS || listOfTypes[i] === DURATION_CONSTS.MS) {
                             total = Number(getMilliseconds(num[i], listOfTypes[i]));
@@ -305,7 +305,9 @@
                     });
                     return {value: total, valid: true};
                 }
-                return {value: getMilliseconds(num[0], fieldInfo.scale), valid: true};
+                if (num !== null) {
+                    return {value: getMilliseconds(num[0], fieldInfo.scale), valid: true};
+                }
             }
             return {
                 value: value,
