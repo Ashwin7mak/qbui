@@ -563,7 +563,7 @@ $cell-edit-background-edit: $color-blue-200;
         border-right: 1px solid $row-border-color;
 
         > .cellWrapper.textFormat {
-            align-items: flex-start;
+            align-items: center;
 
             textarea {
                 resize: none;

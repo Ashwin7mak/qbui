@@ -145,7 +145,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 
 .textFormat .cellData .textField {
     word-break: break-word;
-    white-space: normal;
+    white-space: nowrap;
 }
 
 .textFormat .cellData.NoWrap .textField {

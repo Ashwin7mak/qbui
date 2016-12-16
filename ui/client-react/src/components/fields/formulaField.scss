@@ -1,0 +1,28 @@
+@import '../../../src/assets/css/qbVariables';
+
+.emptyFormula {
+    display: block;
+
+    height: $formula-background-large-height;
+    width: $formula-background-large-width;
+
+    @include small-breakpoint {
+        width: 100%;
+        height: $formula-background-small-height;
+    }
+}
+
+// For forms
+.formElement.field {
+    .cellWrapper {
+        .emptyFormula {
+            background-color: $formula-background-empty-color;
+            width: $formula-background-large-width;
+
+            @include small-breakpoint {
+                width: 100%;
+                height: $formula-background-small-height;
+            }
+        }
+    }
+}

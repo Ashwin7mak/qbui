@@ -196,6 +196,9 @@ const CellRenderer = React.createClass({
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
         case FieldFormats.USER_FORMAT:            return "userFormat";
         case FieldFormats.URL:                    return "urlFormat";
+        case FieldFormats.TEXT_FORMULA_FORMAT:    return "formulaTextFormat";
+        case FieldFormats.NUMERIC_FORMULA_FORMAT: return "formulaNumericFormat";
+        case FieldFormats.URL_FORMULA_FORMAT:     return "formulaUrlFormat";
         default:                                  return "textFormat";
         }
     },
@@ -239,8 +242,10 @@ const CellRenderer = React.createClass({
         }
 
         // the reactabular grid doesn't need to render an editor unless it's actually editing
-
         let cellType = this.props.type;
+        if (_.has(this.props, 'colDef')) {
+            cellType = FieldUtils.getFieldType(this.props.colDef.fieldDef, this.props.type, attributes);
+        }
 
         let invalidStatus = this._getValidationErrors();
 
@@ -431,6 +436,27 @@ export const UrlCellRenderer = React.createClass({
     displayName: 'UrlCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.URL, this.props);
+    }
+});
+
+export const TextFormulaCellRenderer = React.createClass({
+    displayName: 'TextFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.TEXT_FORMULA_FORMAT, this.props);
+    }
+});
+
+export const UrlFormulaCellRenderer = React.createClass({
+    displayName: 'UrlFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.URL_FORMULA_FORMAT, this.props);
+    }
+});
+
+export const NumericFormulaCellRenderer = React.createClass({
+    displayName: 'NumericFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.NUMERIC_FORMULA_FORMAT, this.props);
     }
 });
 
