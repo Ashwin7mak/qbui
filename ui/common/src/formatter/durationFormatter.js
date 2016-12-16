@@ -288,41 +288,40 @@
          * HHMM && HHMMSS will default to converting the value to milliseconds by hours
          * MM && MMSS will default to converting the value to milliseconds by minutes
          * */
-        case DURATION_CONSTS.HHMM:
-        case DURATION_CONSTS.HHMMSS:
+        case DURATION_CONSTS.SCALES.HHMM:
+        case DURATION_CONSTS.SCALES.HHMMSS:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
-        case DURATION_CONSTS.MM:
+        case DURATION_CONSTS.SCALES.MM:
         case DURATION_CONSTS.MMSS:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
-        case DURATION_CONSTS.WEEKS:
+            case DURATION_CONSTS.SCALES.WEEKS:
         case DURATION_CONSTS.W:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_WEEK);
             break;
         /**
          * XD Specs state that smart units default to days when a user does not input a type
          * */
-        case DURATION_CONSTS.SMART_UNITS:
-        case DURATION_CONSTS.DAYS:
+        case DURATION_CONSTS.SCALES.SMART_UNITS:
+        case DURATION_CONSTS.SCALES.DAYS:
         case DURATION_CONSTS.D:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_DAY);
             break;
-        case DURATION_CONSTS.HOURS:
+        case DURATION_CONSTS.SCALES.HOURS:
         case DURATION_CONSTS.H:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
-        case DURATION_CONSTS.MINUTES:
+        case DURATION_CONSTS.SCALES.MINUTES:
         case DURATION_CONSTS.M:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
-        case DURATION_CONSTS.SECONDS:
+        case DURATION_CONSTS.SCALES.SECONDS:
         case DURATION_CONSTS.S:
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_SECOND);
             break;
-        case DURATION_CONSTS.MILLISECONDS:
+        case DURATION_CONSTS.SCALES.MILLISECONDS:
         case DURATION_CONSTS.MS:
-            console.log('MILLI NUM: ', num);
             returnValue = num;
             break;
         default:
@@ -569,15 +568,15 @@
                  * */
                 if (num.length === listOfTypes.length && listOfTypes[0] !== '') {
                     num.forEach(function(val, i) {
-                        if (num.length === 1 && listOfTypes[i] === DURATION_CONSTS.MILLISECONDS || listOfTypes[i] === DURATION_CONSTS.MS){
+                        if (num.length === 1 && listOfTypes[i] === DURATION_CONSTS.MILLISECONDS || listOfTypes[i] === DURATION_CONSTS.MS) {
                             total = Number(getMilliseconds(num[i], listOfTypes[i]));
                         } else {
                             total += getMilliseconds(num[i], listOfTypes[i]);
                         }
                     });
-                    return total;
+                    return {value: total, valid: true};
                 }
-                return getMilliseconds(num[0], fieldInfo.scale);
+                return {value: getMilliseconds(num[0], fieldInfo.scale), valid: true};
             }
             return {
                 value: value,

@@ -92,7 +92,9 @@ const DurationFieldValueRenderer = React.createClass({
         //it need to get formatted and destructured(string and units) for localizing
         //server side rendered display value is not localized
         if (opts.scale === DURATION_CONSTS.SMART_UNITS || !display) {
-            display = durationFormatter.format({value: this.props.value}, fieldInfo);
+            if (typeof this.props.value === 'number') {
+                display = durationFormatter.format({value: this.props.value}, fieldInfo);
+            }
         }
 
         // for smart units localize the units

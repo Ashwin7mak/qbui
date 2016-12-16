@@ -50,13 +50,14 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     onBlur(ev) {
-        let value = durationFormatter.onBlurParsing(ev.value, this.props.attributes);
+        let parseResult = durationFormatter.onBlurParsing(ev.value, this.props.attributes);
         let theVals = {};
-        theVals.value = value;
-        if (theVals.value.valid === false) {
-            theVals.display = theVals.value.value;
-            theVals.value = value.value;
+        if (parseResult.valid === false) {
+            //Clientside validator needs the value, in order to throw an error
+            theVals.value = parseResult.value;
+            theVals.display = parseResult.value;
         } else {
+            theVals.value = parseResult.value;
             theVals.display = durationFormatter.format(theVals, this.props.attributes);
 
         }
