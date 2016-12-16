@@ -330,6 +330,17 @@
         return returnValue;
     }
     function convertHourMinutesSeconds(num) {
+        /**
+         * This function is used to convert the following formats into milliseconds
+         * HH:MM:SS
+         * HH:MM
+         * :MM:SS
+         * ::SS
+         * The above formats are split on the colons and then, by locating the placements of the colons
+         * converted to milliseconds by hours, minutes or seconds
+         * finally the resulting milliseconds from hours, minutes and seconds are added together to get the
+         * total milliseconds.
+         * */
         var hours = 0;
         var minutes = 0;
         var seconds = 0;
