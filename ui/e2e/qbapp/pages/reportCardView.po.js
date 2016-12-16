@@ -251,33 +251,24 @@
          */
         this.clearFormValues = function(fieldLabel) {
             var self = this;
-            var css;
-            var text = sText;
-            if (fieldLabel === 'textField') {
-                css = '.textField:not(.emailField):not(.extNumber)';
-            } else if (fieldLabel === 'emailField') {
-                text = sEmail;
-                css = '.emailField';
-            } else if (fieldLabel === 'numericField') {
-                css = '.numericField';
-                text = sNumeric;
-            }
+            //fieldValueEditor
             return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
-                return self.formTable.all(by.css(css)).map(function(elm) {
-                    return elm.click().then(function() {
-                        browser.executeScript('arguments[0].click()', elm.getWebElement());
-                        return e2ePageBase.waitForElement(element(by.css('.' + fieldLabel + ':focus+.clearIcon')));
-                    }).then(function() {
-                        return elm.getAttribute('value');
-                    }).then(function(previousValue) {
-                        console.log('previous value: ' + previousValue);
-                        return self.formTable.all(by.css('.' + fieldLabel + ':focus+.clearIcon')).each(function(arr) {
-                            return arr.click().then(function(clicked) {
-                                return arr.getAttribute('value');
-                            }).then(function(newValue) {
-                                console.log('new value: ' + newValue);
-                                return true;
-                            });
+                //filter all field Validators on form
+                return self.formTable.all(by.className('fieldValueEditor')).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.all(by.className(fieldLabel)).map(function(elminput) {
+                        return elminput.click().then(function() {
+                            var clearIcon = elm.element(by.className('clearIconButton')).getWebElement();
+                            if (browserName === 'safari') {
+                                return browser.executeScript('arguments[0].click()', clearIcon);
+                            } else {
+                                return clearIcon.click();
+                            }
+                        }).then(function() {
+                            return elm.element(by.className(fieldLabel)).getAttribute('value');
+                        }).then(function(value) {
+                            return expect(value).toEqual('');
                         });
                     });
                 });

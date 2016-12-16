@@ -138,14 +138,13 @@
         });
 
         it('Form field inputs should be clearable', function(done) {
-            var fieldTypeClassNames = ['textField', 'numericField', 'emailField'];
             //Select record 1
             reportCardViewPage.clickRecord(1).then(function() {
                 //Click edit record
                 return reportCardViewPage.clickEditRecord();
             }).then(function() {
                 //get the fields from the table and generate a record
-                return fieldTypeClassNames.forEach(fieldType => {
+                return ['textField', 'numericField'].forEach(fieldType => {
                     reportCardViewPage.clearFormValues(fieldType);
                 });
             }).then(function() {
