@@ -10,43 +10,99 @@
          * @param email
          * @returns {boolean}
          */
-        isValid: function(email) {
+        isSingleEmailValid: function(email) {
             // Don't validate empty strings
             if (!email) {
                 return true;
             }
 
-            // Split multiple email addresses
+            return FULL_EMAIL_ADDRESS_REGEX.test(email);
+        },
+
+        /**
+         * Helper method for React property isInvalid on many components. Returns opposite value of validate
+         * @param email
+         * @returns {boolean}
+         */
+        isSingleEmailInvalid: function(email) {
+            return !this.isSingleEmailValid(email);
+        },
+
+        /**
+         * Checks an array of emails. If any email in the array is invalid it marks the list as invalid
+         * @param emails
+         * @returns {{isValid: boolean, isInvalid: boolean, invalidEmails: Array}}
+         */
+        validateArrayOfEmails: function(emails) {
+            var self = this;
+            var valid = true;
+            var invalidEmails = [];
+
+            if (emails) {
+                emails.forEach(function(singleEmail, index) {
+                    if (self.isSingleEmailInvalid(singleEmail)) {
+                        valid = false;
+                        invalidEmails.push({
+                            index: index,
+                            email: singleEmail
+                        });
+                    }
+                });
+            }
+
+            return {
+                isValid: valid,
+                isInvalid: !valid,
+                invalidEmails: invalidEmails
+            };
+        },
+
+        /**
+         * Validates a single email, or a string with multiple emails, and returns a result for use in validationUtils
+         * @param email
+         * @param fieldName
+         * @param results
+         * @returns {Result}
+         */
+        validateAndReturnResults: function(email, fieldName, results) {
             var emails = emailFormatter.splitEmails(email);
 
-            var valid = true;
-            emails.forEach(function(splitEmail) {
-                if (!FULL_EMAIL_ADDRESS_REGEX.test(splitEmail)) {
-                    valid = false;
-                }
-            });
+            var emailValidationResult = this.validateArrayOfEmails(emails);
 
-            return valid;
-        },
-        // Helper method for React property isInvalid on many components. Returns opposite value of validate
-        isInvalid: function(email) {
-            return !this.isValid(email);
-        },
-        validateAndReturnResults: function(email, fieldName, results) {
-            if (this.isInvalid(email)) {
-                if (!results) {
-                    results = {
-                        error: {}
-                    };
-                }
-
-                results.error.code = dataErrorCodes.INVALID_ENTRY;
-                results.error.messageId = 'invalidMsg.email';
-                results.error.data = {fieldName: fieldName};
-                results.isInvalid = true;
+            if (emailValidationResult.isInvalid) {
+                return this._formatValidationResults(email, results, fieldName, emailValidationResult.invalidEmails);
             }
 
             return results;
+        },
+
+        /**
+         * A private method to format the validation results object appropriately
+         * @param results
+         * @param fieldName
+         * @param invalidEmails
+         * @returns {Result}
+         * @private
+         */
+        _formatValidationResults: function(email, results, fieldName, invalidEmails) {
+            var resultsCopy = Object.assign({error: {}}, results);
+
+            resultsCopy.error.code = dataErrorCodes.INVALID_ENTRY;
+            resultsCopy.error.messageId = this._getInvalidEmailMessage(email);
+            resultsCopy.error.data = {fieldName: fieldName, invalidEmails: invalidEmails};
+            resultsCopy.isInvalid = true;
+
+            return resultsCopy;
+        },
+        _hasManyAddresses: function(emails) {
+            return (emails && emailFormatter.splitEmails(emails).length > 1);
+        },
+        _getInvalidEmailMessage: function(emails) {
+            if (this._hasManyAddresses(emails)) {
+                return 'invalidMsg.emails';
+            }
+
+            return 'invalidMsg.email';
         }
     };
 }());

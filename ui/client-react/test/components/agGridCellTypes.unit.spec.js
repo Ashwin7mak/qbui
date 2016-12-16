@@ -4,8 +4,18 @@ import TestUtils from 'react-addons-test-utils';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
 
-import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
+import {
+    DateCellRenderer,
+    DateTimeCellRenderer,
+    TimeCellRenderer,
+    NumericCellRenderer,
+    TextCellRenderer,
+    CheckBoxCellRenderer,
+    DurationCellRenderer
+} from '../../src/components/dataTable/agGrid/cellRenderers';
+
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
+import {__RewireAPI__ as DurationFieldValueRendererRewire}  from '../../src/components/fields/durationFieldValueRenderer';
 import consts from '../../../common/src/constants';
 
 describe('AGGrid cell editor functions', () => {
@@ -19,11 +29,31 @@ describe('AGGrid cell editor functions', () => {
         }
     });
 
+    /**
+     * @return {string}
+     */
+    var IntlNumberOnlyMock = function(locale, intlOps, number) {
+        return `locale formatted number ${number}`;
+    };
+
+    var LocalesMock = {
+        getLocale: function() {
+            return 'en-us';
+        },
+        getMessage: function(message) {
+            return message;
+        }
+    };
+
     beforeEach(() => {
 
         CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
         CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+        DurationFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+        DurationFieldValueRendererRewire.__Rewire__('I18nMessage', I18nMessageMock);
+        DurationFieldValueRendererRewire.__Rewire__('Locale', LocalesMock);
+        DurationFieldValueRendererRewire.__Rewire__('IntlNumberOnly', IntlNumberOnlyMock);
     });
 
     afterEach(() => {
@@ -31,6 +61,10 @@ describe('AGGrid cell editor functions', () => {
         CellRenderers.__ResetDependency__('I18nDate');
         CellRenderers.__ResetDependency__('I18nNumber');
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+        DurationFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+        DurationFieldValueRendererRewire.__ResetDependency__('I18nMessage');
+        DurationFieldValueRendererRewire.__ResetDependency__('Locale');
+        DurationFieldValueRendererRewire.__ResetDependency__('IntlNumberOnly');
     });
 
     it('test TextCellRenderer scalar', () => {
@@ -465,5 +499,78 @@ describe('AGGrid cell editor functions', () => {
 
         component = TestUtils.renderIntoDocument(<TimeCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    it('test DurationFormatter default (smart units)', () => {
+        const params = {
+            value: {
+                value: 3000
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        datatypeAttributes: {},
+                        type: consts.SCALAR
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DurationCellRenderer params={params} />);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        var node = ReactDOM.findDOMNode(component);
+        const cell = node.getElementsByClassName("durationCell");
+        expect(cell.length).toBe(1);
+        let hasUnitsClass = node.classList.contains('wUnitsText');
+        expect(hasUnitsClass).toBeFalsy();
+    });
+
+    it('test DurationFormatter units', () => {
+        const params = {
+            value: {
+                value: 3000
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        datatypeAttributes: {scale:consts.DURATION_CONSTS.WEEKS},
+                        type: consts.SCALAR
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DurationCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        var node = ReactDOM.findDOMNode(component);
+        const cell = node.getElementsByClassName("durationCell");
+        expect(cell.length).toBe(1);
+        let hasUnitsClass = node.classList.contains('wUnitsText');
+        expect(hasUnitsClass).toBeTruthy();
+    });
+
+    it('test DurationFormatter HHMM', () => {
+        const params = {
+            value: {
+                value: 3000
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        datatypeAttributes: {scale:consts.DURATION_CONSTS.HHMM},
+                        type: consts.SCALAR
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DurationCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        var node = ReactDOM.findDOMNode(component);
+        const cell = node.getElementsByClassName("durationCell");
+        expect(cell.length).toBe(1);
+        let hasUnitsClass = node.classList.contains('wUnitsText');
+        expect(hasUnitsClass).toBeFalsy();
     });
 });

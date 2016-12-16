@@ -221,7 +221,7 @@ describe('Nav functions', () => {
 
         component = TestUtils.renderIntoDocument(<Nav flux={fluxWithoutV3App}></Nav>);
 
-        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/pageNotFound");
+        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable?appId=1");
     });
 
 

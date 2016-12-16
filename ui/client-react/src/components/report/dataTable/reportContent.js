@@ -230,7 +230,7 @@ export let ReportContent = React.createClass({
     handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
 
-        // Don't allow a user to add multiple records in rapid success (i.e., clicking "Save and add new" multiple times rapidly)
+        // Don't allow a user to add multiple records in rapid succession (i.e., clicking "Save and add new" multiple times rapidly)
         if (this.props.pendEdits.saving) {
             return;
         }
@@ -243,10 +243,10 @@ export let ReportContent = React.createClass({
             // After saving the record successfully, then add the new row
             // Don't do anything if the record wasn't saved successfully or a promise was not returned
             if (saveRecordPromise) {
-                saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
+                return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
             }
         } else {
-            flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+            return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
         return null;
     },
@@ -363,19 +363,14 @@ export let ReportContent = React.createClass({
         }
     },
 
-
     handleValidateFieldValue(fieldDef, fieldName, value, checkRequired) {
-        let results;
-
         // check the value against the fieldDef
         if (fieldDef) {
-            results = ValidationUtils.checkFieldValue({fieldDef}, fieldName, value, checkRequired);
-            if (results.isInvalid) {
-                // format the message for the client
-                results.invalidMessage = ValidationMessage.getMessage(results);
-            }
+            const flux = this.getFlux();
+            return flux.actions.recordPendingValidateField(fieldDef, fieldName, value, checkRequired);
+        } else {
+            logger.warn('Field Def not provided for field validation in reportContent');
         }
-        return results;
     },
 
     /**

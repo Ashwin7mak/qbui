@@ -1,7 +1,7 @@
 module.exports = {
     "plugins": [
         "stylelint-scss",
-        "stylelint-declaration-use-variable"
+        "stylelint-declaration-strict-value"
     ],
     "defaultSeverity": "error",
     "rules": {
@@ -9,14 +9,14 @@ module.exports = {
         // https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md
         "scss/selector-no-redundant-nesting-selector": [true, {"severity": "warning"}],
         "scss/dollar-variable-pattern": ["^[a-z-0-9]+$", {"severity": "warning"}],
-        "sh-waqar/declaration-use-variable": [
+        "scale-unlimited/declaration-strict-value": [
             [
-                "/(^[^$].*(color).*|^color)/",
-                "z-index",
+                "/(^[^$].*(color).*|^color)/"
+                /* "z-index",
                 "font-size",
-                "font-family"
+                "font-family" */
             ],
-            {"severity": "warning"}
+            {"ignoreKeywords": ["currentColor", "inherit", "initial", "transparent"]}
         ],
         "at-rule-empty-line-before": ["always", {
             "except": ["blockless-group", "first-nested"],

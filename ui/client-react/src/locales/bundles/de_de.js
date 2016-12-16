@@ -25,8 +25,7 @@ export default {
                 helpTitle: "Brauche Hilfe?",
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
                 helpLinkPreText: "Bitte ",
-                helpLinkText: "wenden Sie sich an unser Care-Team",
-                missingWalkMe: "Tutorial ist nicht verfügbar"
+                helpLinkText: "wenden Sie sich an unser Care-Team"
             }
         },
         appMenu: {
@@ -168,7 +167,21 @@ export default {
                 ownedBy: "gehört "
             }
         },
-        report : {
+        durationWithUnits: {
+            Weeks:"{value, plural, \n =0 {0 wochen}\n =1 {1 woche}\n other {{value} wochen}\n} ",
+            Days:"{value, plural, \n =0 {0 tage}\n =1 {1 tag}\n other {{value}  tage}\n} ",
+            Hours:"{value, plural, \n =0 {0 stunden}\n =1 {1 stunde}\n other {{value}  stunden}\n} ",
+            Minutes: "{value, plural, \n =0 {0 minuten}\n =1 {1 minute}\n other {{value}  minuten}\n} ",
+            Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {{value}  sekunden}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 millisekunden}\n =1 {1 millisekunde}\n other {{value}  millisekunden}\n} "
+        },
+        durationTableHeader: {
+            Weeks:"wochen",
+            Days:"tage",
+            Hours:"stunden",
+            Minutes: "minuten",
+            Seconds: "sekunden"
+        },        report : {
             blank : "leer",
             facets :{
                 noFacets :"Nein werte",
@@ -246,8 +259,7 @@ export default {
         errorMessagePopup: {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Bitte repariere dieses feld",
-                multipleErrorLabelPrefix: "Bitte beheben sie diese",
-                multipleErrorLabelSuffix: "felder",
+                multipleErrorLabel: "Bitte beheben sie diese {numFields} felder"
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Fehlerliste anzeigen",
@@ -377,6 +389,7 @@ export default {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
             email: 'Formatieren Sie die {fieldName} wie name@domaine.de',
+            emails: 'Formatieren Sie alle Adressen wie name@domaine.de',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
@@ -402,6 +415,7 @@ export default {
             manageAccessTitle: "Benutzerzugriff auf Mercury verwalten",
             versionSelectTitle: "Meine nutzer öffnen diese app in",
             manageAccessTip: "*Nur app-administratoren können den benutzerzugriff verwalten"
-        }
+        },
+        missingWalkMe: "Tutorial ist nicht verfügbar"
     }
 };

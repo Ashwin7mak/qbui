@@ -19,12 +19,10 @@ var lodash = require('lodash');
         BASE_PROPS = {
             title   : '',
             lang    : 'en-us',
-            favicon : '/favicon.ico',
             jsPath  : '/dist/',
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
             bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
-            walkMeJS: config.walkmeJSSnippet,
             isClientPerfTrackingEnabled: config.isProduction || !!config.isClientPerfTrackingEnabled
 
         };

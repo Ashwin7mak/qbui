@@ -137,15 +137,25 @@ describe('RecordTrowser functions', () => {
     });
 
     it('test saving record which has server side errors, and error state icon displayed in footer section', () => {
-
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, hasAttemptedSave: true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlertButton");
         expect(errorMessageAlertIcon.length).toBe(1);
+    });
+
+    it('does not display the error icon if there is a client-side validation error, but the user has not attempted to save the record', () => {
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, hasAttemptedSave: false, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlertButton");
+        expect(errorMessageAlertIcon.length).toBe(0);
     });
 
     it('test dismiss error message popup in trowser', () => {
