@@ -1,5 +1,6 @@
 import * as SchemaConsts from '../constants/schema';
 import consts from '../../../common/src/constants';
+import FieldFormats from '../utils/fieldFormats';
 
 class FieldUtils {
     /**
@@ -118,6 +119,38 @@ class FieldUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Determines the field type for formula fields, for rendering purposes.
+     * Defaults to the type that is sent in as argument. If the field definition indicates
+     * a formula field type, attempt to get the type of formula field
+     *
+     * @param fieldDef
+     * @param type
+     * @param attributes
+     * @returns {*}
+     */
+    static getFieldType(fieldDef, type, attributes) {
+        let fieldType = type;
+        if (fieldDef) {
+            if (fieldDef.type === consts.FORMULA) {
+                if (attributes && attributes.type) {
+                    switch (attributes.type) {
+                    case consts.NUMERIC:
+                        fieldType = FieldFormats.NUMERIC_FORMULA_FORMAT;
+                        break;
+                    case consts.URL:
+                        fieldType = FieldFormats.URL_FORMULA_FORMAT;
+                        break;
+                    case consts.TEXT:
+                    default:
+                        fieldType = FieldFormats.TEXT_FORMULA_FORMAT;
+                    }
+                }
+            }
+        }
+        return fieldType;
     }
 }
 

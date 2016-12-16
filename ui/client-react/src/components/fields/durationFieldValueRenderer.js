@@ -1,7 +1,5 @@
 import React from 'react';
 import './fields.scss';
-import _ from 'lodash';
-import Intl from 'intl';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import Locale from '../../locales/locales';

@@ -71,6 +71,7 @@ const NumericFieldValueEditor = React.createClass({
         let currencySymbol = datatypeAttributes && datatypeAttributes.type === consts.CURRENCY &&  clientSideAttributes.symbol ?  clientSideAttributes.symbol : "";
 
         let theVals = {value: null, display: null};
+        value = value.trim();
         if (value) {
             // user can enter a value with repeated decimal marks. We need to keep the 1st one and remove the rest
             // example 50.9.9 => 50.90 (for 2 decimal place)
@@ -101,7 +102,12 @@ const NumericFieldValueEditor = React.createClass({
             theVals.value = theVals.value !== null ? theVals.value / 100 : null;
         }
 
-        theVals.display = theVals.value ? numericFormatter.format(theVals, datatypeAttributes) : '';
+        // for when value === 0
+        if (typeof theVals.value === 'number') {
+            theVals.display = numericFormatter.format(theVals, datatypeAttributes);
+        } else {
+            theVals.display = '';
+        }
         return theVals;
     },
 
