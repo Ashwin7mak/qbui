@@ -40,7 +40,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.dataProvider.forEach(function(test) {
-        fit('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
@@ -51,23 +51,16 @@ fdescribe('DurationFieldValueEditor', () => {
             Simulate.blur(input, {
                 value: userInput
             });
-            // let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
             let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            // let expectedResult = durationFormatter.format({value: totalMilliSeconds}, test.scale);
-            // debugger;
-            console.log('MOMENTJS: ', totalMilliSeconds);
-            console.log('DURATIONCOMPONENT: ', component.state.value);
-            // console.log('EXPECTED RESULTS: ', expectedResult);
-            // console.log('component.state.display: ', component.state.display);
             expect(component.state.value).toEqual(totalMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
         });
     });
 
     TestData.multiInputData.forEach(function(test) {
-        it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
+        fit('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let input = ReactDOM.findDOMNode(component);
             let userInput = '';
@@ -79,17 +72,17 @@ fdescribe('DurationFieldValueEditor', () => {
             let convertedResult;
             if (test.multiInput.firstInput) {
                 userInput += test.numValue + ' ' + test.multiInput.firstInput;
-                firstInputTotalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.firstInput).asMilliseconds();
+                firstInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.firstInput;
             }
 
             if (test.multiInput.secondInput) {
                 userInput += ' ' + test.numValue + ' ' + test.multiInput.secondInput;
-                secondInputTotalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.secondInput).asMilliseconds();
+                secondInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.secondInput;
             }
 
             if (test.multiInput.thirdInput) {
                 userInput += ' ' + test.numValue + ' ' + test.multiInput.thirdInput;
-                thirdInputMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE.thirdInput).asMilliseconds();
+                thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
             }
             component.setState({value: userInput, display: ''});
             Simulate.blur(input);

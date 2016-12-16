@@ -430,10 +430,10 @@
                     thirdInput: CONSTS.MINUTES
                 },
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                momentJSTYPE: {
-                    firstInput: CONSTS.WEEKS,
-                    secondInput: CONSTS.HOURS,
-                    thirdInput: CONSTS.MINUTES
+                MILLIS_PER_TYPE: {
+                    firstInput:  CONSTS.MILLIS_PER_WEEK,
+                    secondInput:  CONSTS.MILLIS_PER_HOUR,
+                    thirdInput: CONSTS.MILLIS_PER_MIN
                 },
                 description: numValue + ' ' + CONSTS.WEEKS + ' ' + numValue + ' ' + CONSTS.HOURS + ' ' + numValue + ' ' + CONSTS.MINUTES
             },
@@ -445,9 +445,9 @@
                     secondInput: CONSTS.HOURS
                 },
                 MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
-                momentJSTYPE: {
-                    firstInput: CONSTS.SECONDS,
-                    secondInput: CONSTS.HOUR
+                MILLIS_PER_TYPE: {
+                    firstInput:  CONSTS.MILLIS_PER_SECOND,
+                    secondInput:  CONSTS.MILLIS_PER_HOUR
                 },
                 description: numValue + ' ' + CONSTS.SECONDS + ' ' + numValue + ' ' + CONSTS.HOURS
             }
