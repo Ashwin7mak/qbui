@@ -4,6 +4,7 @@
 (function() {
     'use strict';
     var consts = require('../../../../common/src/constants');
+    var favicons = require('../../constants/favicons');
     var log = require('../../logger').getLogger();
 
     module.exports[401] = function unauthorized(req, res) {
@@ -46,11 +47,11 @@
         if (req.headers.accept === consts.APPLICATION_JSON) {
             res.json(result, result.status);
         } else {
-            res.render(viewFilePath, function(err) {
+            res.render(viewFilePath, {favicons: favicons}, function(err) {
                 if (err) {
                     return res.json(result, result.status);
                 }
-                res.render(viewFilePath);
+                res.render(viewFilePath, {favicons: favicons});
             });
         }
         log.error({req: req, res:res}, 'Error fulfilling requested route.');
