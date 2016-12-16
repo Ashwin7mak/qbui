@@ -160,7 +160,6 @@
             return false;
         }
         colons = value.match(/:/g);
-        console.log('colons: ', colons);
         if (colons.length > 3) {
             return false;
         }
@@ -197,7 +196,6 @@
              * */
             value = value.toLowerCase();
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-            console.log('value: ', value);
             if (value.split('').indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
             }
