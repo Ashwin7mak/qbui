@@ -60,7 +60,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.multiInputData.forEach(function(test) {
-        fit('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
+        it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let input = ReactDOM.findDOMNode(component);
             let userInput = '';
@@ -103,7 +103,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.timeFormatData.forEach(function(test) {
-        it('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
+        fit('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
             let seconds = 0;
@@ -114,13 +114,13 @@ fdescribe('DurationFieldValueEditor', () => {
             });
             Simulate.blur(domComponent);
             if (test.SS) {
-                seconds = moment.duration(test.SS, 'Seconds').asMilliseconds();
+                seconds = test.SS * DURATION_CONSTS.MILLIS_PER_SECOND;
             }
             if (test.MM) {
-                minutes = moment.duration(test.MM, 'Minutes').asMilliseconds();
+                minutes = test.MM * DURATION_CONSTS.MILLIS_PER_MIN;
             }
             if (test.HH) {
-                hours = moment.duration(test.HH, 'Hours').asMilliseconds();
+                hours = test.HH * DURATION_CONSTS.MILLIS_PER_HOUR;
             }
             let totalMilliSeconds = seconds + minutes + hours;
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
@@ -139,7 +139,7 @@ fdescribe('DurationFieldValueEditor', () => {
             component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
             Simulate.blur(input);
-            let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
+            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedTimeFormat = durationFormatter.format({value:convertedMilliSeconds}, test);
             expect(component.state.display).toEqual(expectedTimeFormat);

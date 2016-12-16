@@ -5,12 +5,12 @@
     'use strict';
     var CONSTS = require('../../../common/src/constants').DURATION_CONSTS;
     var numValue = 55 * Math.random();
-    var HHMMSS = "55:55:55";
-    var HHMM = "55:55";
-    var MMSS = ":55:55";
-    var MM = ":55";
-    var SS = "::55";
-    var HHSS = "55::55";
+    var HHMMSS = Math.floor(numValue) + ':' + Math.floor(numValue) + ':' + Math.floor(numValue);
+    var HHMM = Math.floor(numValue) + ':' + Math.floor(numValue);
+    var MMSS = ':' + Math.floor(numValue) + ':' + Math.floor(numValue);
+    var MM = ':' + Math.floor(numValue);
+    var SS = '::' + Math.floor(numValue);
+    var HHSS = Math.floor(numValue) + '::' + Math.floor(numValue);
     var invalidInput = {
         HHMMSS: "5.5:5.5:5.5",
         HHMM: "5.5:5.5",
