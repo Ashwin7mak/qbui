@@ -8,7 +8,7 @@ import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
-describe('DurationFieldValueEditor', () => {
+fdescribe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -33,7 +33,8 @@ describe('DurationFieldValueEditor', () => {
                                           display={this.state.display}
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
-                                          attributes={this.props.attributes} />
+                                          attributes={this.props.attributes}
+                                          includeUnits={false}/>
             );
         }
     });
@@ -47,10 +48,18 @@ describe('DurationFieldValueEditor', () => {
             }
             component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
-            Simulate.blur(input);
+            Simulate.blur(input, {
+                value: userInput
+            });
             let totalMilliSeconds = moment.duration(test.numValue, test.momentJSTYPE).asMilliseconds();
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            // let expectedResult = durationFormatter.format({value: totalMilliSeconds}, test.scale);
+            // debugger;
+            console.log('MOMENTJS: ', totalMilliSeconds);
+            console.log('DURATIONCOMPONENT: ', component.state.value);
+            // console.log('EXPECTED RESULTS: ', expectedResult);
+            // console.log('component.state.display: ', component.state.display);
             expect(component.state.value).toEqual(totalMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
         });
