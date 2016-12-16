@@ -548,37 +548,32 @@
             {
                 scale: CONSTS.HHMMSS,
                 numValue: Math.floor(numValue),
-                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: undefined,
-                momentJSTYPE: CONSTS.HOURS
+                MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
             },
             {
                 scale: CONSTS.HHMMSS,
                 numValue: Math.floor(numValue),
-                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: CONSTS.MINUTES,
-                momentJSTYPE: CONSTS.MINUTES
+                MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
             {
                 scale: CONSTS.HHMM,
                 numValue: Math.floor(numValue),
-                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: CONSTS.MINUTES,
-                momentJSTYPE: CONSTS.MINUTES
+                MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
             {
                 scale: CONSTS.MMSS,
                 numValue: Math.floor(numValue),
-                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: CONSTS.MINUTES,
-                momentJSTYPE: CONSTS.MINUTES
+                MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
             {
                 scale: CONSTS.MM,
                 numValue: Math.floor(numValue),
-                // MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                 type: CONSTS.MINUTES,
-                momentJSTYPE: CONSTS.MINUTES
+                MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
         ],
         invalidInput: [

@@ -103,7 +103,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.timeFormatData.forEach(function(test) {
-        fit('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
+        it('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
             let seconds = 0;
@@ -130,7 +130,7 @@ fdescribe('DurationFieldValueEditor', () => {
         });
     });
     TestData.timeFormatDataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+        fit('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
