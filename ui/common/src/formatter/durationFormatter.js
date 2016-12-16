@@ -281,6 +281,10 @@
         return result;
     }
     function getMilliseconds(num, type) {
+        /**
+         * This functions will convert the number the user entered into milliseconds based off of the type the user entered
+         * For example if a user entered "2 hours" it will be converted into a total of 2 hours worth of milliseconds
+         * */
         var returnValue;
         switch (type) {
         /**
