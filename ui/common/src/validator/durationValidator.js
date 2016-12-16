@@ -1,5 +1,5 @@
 (function() {
-    var durationFormatter = require('../formatter/durationFormatter');
+    var durationEditorParsing = require('../../../client-react/src/components/fields/durationEditorParsing');
     var dataErrorCodes = require('../dataEntryErrorCodes');
 
     module.exports = {
@@ -9,7 +9,7 @@
          * @returns {boolean}
          */
         isValid: function(value) {
-            return durationFormatter.isValid(value);
+            return durationEditorParsing.isValid(value);
         },
         // Helper method for React property isInvalid on many components. Returns opposite value of validate
         isInvalid: function(value) {
@@ -23,7 +23,7 @@
                         error: {}
                     };
                 }
-                scale = durationFormatter.getPlaceholder(results.def.fieldDef.datatypeAttributes);
+                scale = durationEditorParsing.getPlaceholder(results.def.fieldDef.datatypeAttributes);
                 results.error.code = dataErrorCodes.INVALID_ENTRY;
                 results.error.messageId = 'invalidMsg.duration';
                 results.error.data = {fieldName: fieldName, scale: scale};

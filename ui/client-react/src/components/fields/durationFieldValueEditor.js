@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
+import * as durationEditorParsing from './durationEditorParsing'
 
 /**
  * # DurationFieldValueEditor
@@ -50,7 +51,7 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     onBlur(ev) {
-        let parseResult = durationFormatter.onBlurParsing(ev.value, this.props.attributes);
+        let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes);
         let theVals = {};
         if (parseResult.valid === false) {
             //Clientside validator needs the value, in order to throw an error

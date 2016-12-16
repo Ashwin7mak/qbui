@@ -5,7 +5,6 @@ import DurationFieldValueEditor from '../../src/components/fields/durationFieldV
 import TestData from './durationFieldValueEditorTestData';
 import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
-import moment from 'moment';
 import bigDecimal from 'bigdecimal';
 
 describe('DurationFieldValueEditor', () => {
@@ -105,14 +104,16 @@ describe('DurationFieldValueEditor', () => {
     TestData.timeFormatData.forEach(function(test) {
         it('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            domComponent = ReactDOM.findDOMNode(component);
+            let input = ReactDOM.findDOMNode(component);
             let seconds = 0;
             let minutes = 0;
             let hours = 0;
-            Simulate.change(domComponent, {
-                target: {value: test.timeFormatVal}
-            });
-            Simulate.blur(domComponent);
+            // Simulate.change(domComponent, {
+            //     target: {value: test.timeFormatVal}
+            // });
+            component.setState({value: test.timeFormatVal, display: ''});
+            // debugger;
+            Simulate.blur(input);
             if (test.SS) {
                 seconds = test.SS * DURATION_CONSTS.MILLIS_PER_SECOND;
             }
