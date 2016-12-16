@@ -25,9 +25,7 @@ describe('NumericFormulaFieldRenderer: ', () => {
         let numberStr = {numberStr: "123"};
         component = TestUtils.renderIntoDocument(<NumericFormulaFieldRenderer value={numberStr} display="123"/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let numericFormulaFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'filledFormula');
         let numericFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'numericField');
-        expect(numericFormulaFieldRenderer.length).toEqual(1);
         expect(numericFieldRenderer.length).toEqual(1);
     });
 
@@ -35,9 +33,7 @@ describe('NumericFormulaFieldRenderer: ', () => {
         let numberStr = "1337";
         component = TestUtils.renderIntoDocument(<NumericFormulaFieldRenderer display={numberStr}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let numericFormulaFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'filledFormula');
         let numericFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'numericField');
-        expect(numericFormulaFieldRenderer.length).toEqual(1);
         expect(numericFieldRenderer.length).toEqual(1);
     });
 
@@ -46,9 +42,7 @@ describe('NumericFormulaFieldRenderer: ', () => {
         let moreNumberStr = "1337";
         component = TestUtils.renderIntoDocument(<NumericFormulaFieldRenderer value={numberStr} display={moreNumberStr}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let numericFormulaFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'filledFormula');
         let numericFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'numericField');
-        expect(numericFormulaFieldRenderer.length).toEqual(1);
         expect(numericFieldRenderer.length).toEqual(1);
     });
 });

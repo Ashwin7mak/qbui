@@ -25,9 +25,7 @@ describe('TextFormulaFieldRenderer: ', () => {
         let text = "some text";
         component = TestUtils.renderIntoDocument(<TextFormulaFieldRenderer value={text}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let textFormulaFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'filledFormula');
         let textFieldRenderer = TestUtils.scryRenderedDOMComponentsWithClass(component, 'textField');
-        expect(textFormulaFieldRenderer.length).toEqual(1);
         expect(textFieldRenderer.length).toEqual(1);
     });
 });
