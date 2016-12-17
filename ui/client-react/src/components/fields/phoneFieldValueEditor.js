@@ -59,7 +59,7 @@ const PhoneFieldValueEditor = React.createClass({
         }
 
         let phoneNumber = phoneNumberFormatter.onChangeMasking(newValue);
-        let ext = phoneNumberFormatter.getExtension(this.props.value);
+        let ext = phoneNumberFormatter.getExtension(this.props.display);
         let updatedValue = phoneNumber;
         if (this.props.value && ext) {
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, ext);
@@ -75,10 +75,16 @@ const PhoneFieldValueEditor = React.createClass({
          * The phone number is stripped out of the phone number and ext string, and then the user's new input value in the ext number
          * input box is then concatenated back with the phone number
          * */
-        let updatedValue = phoneNumberFormatter.getPhoneNumber(this.props.value);
+        let updatedValue = this.props.display;
+        // Check if the phone display is an object with a display property and use that value instead if it is
+        if (this.props.display && this.props.display.display) {
+            updatedValue = this.props.display.display;
+        }
+
+        updatedValue = phoneNumberFormatter.getPhoneNumber(updatedValue);
         if (newValue) {
             let extNumber = phoneNumberFormatter.onChangeMasking(newValue);
-            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumberFormatter.getPhoneNumber(this.props.display), extNumber);
+            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(updatedValue, extNumber);
         }
         if (this.props.onChange) {
             this.props.onChange(updatedValue);
