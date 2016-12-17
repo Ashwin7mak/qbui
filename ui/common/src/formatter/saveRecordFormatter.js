@@ -30,6 +30,9 @@ var SaveRecordFormatter =  {
     formatFieldForSaving: function(change) {
         if (_.has(change, 'fieldDef.datatypeAttributes.type')) {
             switch (change.fieldDef.datatypeAttributes.type) {
+            case constants.DURATION :
+                change.value = /^\d+$/g.test(change.value) ? Number(change.value) : change.value;
+                break;
             case constants.PHONE_NUMBER :
                 // removes special characters from phone
                 change.value = phoneFormatter.stripSpecialCharacters(change.value);
