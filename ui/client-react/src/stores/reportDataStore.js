@@ -13,9 +13,9 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
-import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
 import * as urlFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import * as emailFormatter from '../../../common/src/formatter/emailFormatter';
+import * as passThroughFormatter from '../../../common/src/formatter/passthroughFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
@@ -453,7 +453,9 @@ let reportModel = {
             answer = emailFormatter;
             break;
         case FieldFormats.PHONE_FORMAT:
-            answer = phoneNumberFormatter;
+            // All phone formatting happens on the server because of the large library required.
+            // The formatter should only pass through the display value from the server
+            answer = passThroughFormatter;
             break;
         case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
@@ -1044,7 +1046,6 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onSaveRecordSuccess(payload) {
         // update the  record values
-
         this.editingIndex = undefined;
         let record = payload.record ? payload.record.record : [];
         let fields = payload.record ? payload.record.fields : [];
@@ -1080,7 +1081,6 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit("change");
     },
-
 
     /**
      * Cancels an record edit

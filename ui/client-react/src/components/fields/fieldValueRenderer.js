@@ -148,7 +148,11 @@ const FieldValueRenderer = React.createClass({
                                                  />
                 );
         case FieldFormats.URL:
-            let {open_in_new_window, show_as_button} = this.props.attributes.clientSideAttributes;
+            let open_in_new_window, show_as_button;
+            if (_.has(this.props, 'attributes.clientSideAttributes')) {
+                ({open_in_new_window, show_as_button} = this.props.attributes.clientSideAttributes);
+            }
+
             return <UrlFieldValueRenderer {...commonProperties}
                                           value={this.props.value}
                                           display={this.props.display}
@@ -164,9 +168,11 @@ const FieldValueRenderer = React.createClass({
                                             />;
 
         case FieldFormats.PHONE_FORMAT:
+            let includeExtension = (this.props.attributes ? this.props.attributes.includeExtension : false);
             return <PhoneFieldValueRenderer {...commonProperties}
                                             value={this.props.value}
                                             display={this.props.display}
+                                            includeExtension={includeExtension}
                                             key={'pfvr-' + this.props.idKey}
                                             />;
 
