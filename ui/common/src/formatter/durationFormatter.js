@@ -296,7 +296,7 @@
          * @returns A formatted display string
          */
         format: function(fieldValue, fieldInfo) {
-            if (!fieldValue || !fieldValue.value) {
+            if (typeof fieldValue === 'undefined' || typeof fieldValue.value === 'undefined') {
                 return '';
             }
             var opts = fieldInfo.jsFormat;
