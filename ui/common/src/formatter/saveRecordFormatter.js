@@ -32,7 +32,7 @@ var SaveRecordFormatter =  {
             switch (change.fieldDef.datatypeAttributes.type) {
             case constants.PHONE_NUMBER :
                 // removes special characters from phone
-                change.value = phoneFormatter.stripSpecialCharacters(change.value);
+                change.value = phoneFormatter.stripSpecialCharactersExceptExtension(change.value);
                 break;
             case constants.USER :
                 // replace user objects in value property with user IDs

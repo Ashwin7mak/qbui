@@ -168,4 +168,25 @@ describe('PhoneNumberFormatter (common)', () => {
             });
         });
     });
+
+    describe('stripSpecialCharactersExceptExtension', () => {
+        var testCases = [
+            {
+                description: 'strips all special characters from a phone number',
+                phoneNumber: '+1*23%-*!@45',
+                expectedValue: '12345'
+            },
+            {
+                description: 'strips all special characters from a phone number with an extension',
+                phoneNumber: '12345x6&*$(%*!)@-_+7+=89',
+                expectedValue: '12345x6789'
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                assert.equal(PhoneNumberFormatter.stripSpecialCharactersExceptExtension(testCase.phoneNumber), testCase.expectedValue);
+            });
+        });
+    });
 });

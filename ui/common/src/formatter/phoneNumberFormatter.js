@@ -103,6 +103,21 @@
             return phoneNumber.replace(/[^0-9]/g, '');
         },
 
+        stripSpecialCharactersExceptExtension: function(phoneNumber) {
+            if (!phoneNumber || phoneNumber.length === 0) {
+                return '';
+            }
+
+            var splitNumber = this.splitPhoneNumberAndExtension(phoneNumber);
+
+            var phoneWithoutSpecialCharacters = this.stripSpecialCharacters(splitNumber.getPhoneNumber);
+            if (splitNumber.getExtension && splitNumber.getExtension.length > 0) {
+                phoneWithoutSpecialCharacters = phoneWithoutSpecialCharacters + 'x' + this.stripSpecialCharacters(splitNumber.getExtension);
+            }
+
+            return phoneWithoutSpecialCharacters;
+        },
+
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
