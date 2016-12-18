@@ -45,7 +45,6 @@ describe('DurationFieldValueEditor', () => {
             if (test.type === undefined) {
                 userInput = test.numValue;
             }
-            //component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
             Simulate.change(input, {
                 target: {value: userInput}
