@@ -55,9 +55,9 @@
         var answer = false;
         if (scale &&
             //it's one of the duration scale values
-            _.findKey(DURATION_CONSTS, function(entry) {return entry === scale;}) &&
+            _.findKey(DURATION_CONSTS.SCALES, function(entry) {return entry === scale;}) &&
             // and its not smart unit or time based type e.g. HH:MM
-            scale !== DURATION_CONSTS.SMART_UNITS && !scale.match(/:/g)) {
+            scale !== DURATION_CONSTS.SCALES.SMART_UNITS && !scale.match(/:/g)) {
 
             answer = true;
         }
@@ -72,7 +72,7 @@
      */
     function isSmartUnitsField(fieldDef) {
         var answer = false;
-        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.scale') && fieldDef.datatypeAttributes.scale === DURATION_CONSTS.SMART_UNITS) {
+        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.scale') && fieldDef.datatypeAttributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             answer = true;
         }
         return answer;
@@ -105,31 +105,31 @@
 
         var returnValue = '';
         switch (opts.scale) {
-        case DURATION_CONSTS.HHMM:
-        case DURATION_CONSTS.HHMMSS:
-        case DURATION_CONSTS.MM:
-        case DURATION_CONSTS.MMSS:
+        case DURATION_CONSTS.SCALES.HHMM:
+        case DURATION_CONSTS.SCALES.HHMMSS:
+        case DURATION_CONSTS.SCALES.MM:
+        case DURATION_CONSTS.SCALES.MMSS:
             returnValue = generateTimeUnits(millis, hours, minutes, seconds, opts);
             break;
-        case DURATION_CONSTS.SMART_UNITS:
+        case DURATION_CONSTS.SCALES.SMART_UNITS:
             returnValue = generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts);
             break;
-        case DURATION_CONSTS.WEEKS:
+        case DURATION_CONSTS.SCALES.WEEKS:
             returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
             break;
-        case DURATION_CONSTS.DAYS:
+        case DURATION_CONSTS.SCALES.DAYS:
             returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
             break;
-        case DURATION_CONSTS.HOURS:
+        case DURATION_CONSTS.SCALES.HOURS:
             returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
             break;
-        case DURATION_CONSTS.MINUTES:
+        case DURATION_CONSTS.SCALES.MINUTES:
             returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
             break;
-        case DURATION_CONSTS.SECONDS:
+        case DURATION_CONSTS.SCALES.SECONDS:
             returnValue = divideToString(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
             break;
-        case DURATION_CONSTS.MILLISECONDS:
+        case DURATION_CONSTS.SCALES.MILLISECONDS:
             returnValue = millis;
             break;
         default:
@@ -160,6 +160,10 @@
      */
     function generateTimeUnits(millis, hours, minutes, seconds, opts) {
         var timeUnits = '';
+        if (millis.compareTo(DURATION_CONSTS.ZERO) === 0) {
+            timeUnits = '0';
+            return timeUnits;
+        }
         if (millis.signum() < 0) {
             timeUnits += '-';
         }
@@ -170,7 +174,7 @@
                 timeUnits += '0';
             }
             timeUnits += wholeHours + ':';
-        } else if (opts.scale === DURATION_CONSTS.HHMM || opts.scale === DURATION_CONSTS.HHMMSS) {
+        } else if (opts.scale === DURATION_CONSTS.SCALES.HHMM || opts.scale === DURATION_CONSTS.SCALES.HHMMSS) {
             timeUnits += '00:';
         }
         var wholeHoursBd = new bigDecimal.BigDecimal(wholeHours);
@@ -192,7 +196,7 @@
 
         var extraSeconds = seconds.abs().subtract(wholeMinutesBd.multiply(DURATION_CONSTS.SECONDS_PER_MINUTE));
 
-        if (opts.scale === DURATION_CONSTS.MMSS || opts.scale === DURATION_CONSTS.HHMMSS) {
+        if (opts.scale === DURATION_CONSTS.SCALES.MMSS || opts.scale === DURATION_CONSTS.SCALES.HHMMSS) {
             if (extraSeconds.compareTo(DURATION_CONSTS.ZERO) !== 0) {
                 timeUnits += ':';
                 if (extraSeconds.compareTo(DURATION_CONSTS.TEN) === -1 && extraSeconds.compareTo(DURATION_CONSTS.NEGATIVE_TEN) === 1) {
@@ -223,51 +227,56 @@
     function generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts) {
         //Entered as days
         var smartUnits = '';
-        if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+        if (millis.compareTo(DURATION_CONSTS.ZERO) === 0) {
+            smartUnits += '0 weeks';
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
+            }
+        } else if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.WEEKS;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
             }
             smartUnits += ' weeks';
         } else if (days.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.DAYS;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.DAYS;
             }
             smartUnits += ' days';
         } else if (hours.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.HOURS;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.HOURS;
             }
             smartUnits += ' hours';
         } else if (minutes.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.MINUTES;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.MINUTES;
             }
             smartUnits += ' mins';
         } else if (seconds.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.SECONDS;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.SECONDS;
             }
-            smartUnits += ' secs';
+            smartUnits += ' ' + DURATION_CONSTS.SECONDS;
         } else {
             if (opts.formattedObj) {
-                opts.formattedObj.string =  millis.toString();
-                opts.formattedObj.units = DURATION_CONSTS.MILLISECONDS;
+                opts.formattedObj.string = millis.toString();
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.MILLISECONDS;
             }
-            smartUnits += millis.toString() + ' msecs';
+            smartUnits += millis.toString() + ' ' + DURATION_CONSTS.MILLISECONDS;
         }
         return smartUnits;
     }
-
     module.exports = {
         /**
          * Given a duration field's meta data, construct the formatting options, setting defaults
@@ -290,7 +299,6 @@
             }
             return opts;
         },
-
         /**
          * Given a raw number as input, formats the duration value for display.
          * @param fieldValue the field value object
@@ -298,7 +306,11 @@
          * @returns A formatted display string
          */
         format: function(fieldValue, fieldInfo) {
-            if (!fieldValue || !fieldValue.value) {
+            if (typeof fieldValue === 'undefined' ||
+                fieldValue === null ||
+                typeof fieldValue.value === 'undefined' ||
+                fieldValue.value === null ||
+                fieldValue.value === '') {
                 return '';
             }
             var opts = fieldInfo.jsFormat;
