@@ -17,11 +17,11 @@
         }
         return result;
     }
+    /**
+     * This functions will convert the number the user entered into milliseconds based off of the type the user entered
+     * For example if a user entered "2 hours" it will be converted into a total of 2 hours worth of milliseconds
+     * */
     function getMilliseconds(num, type) {
-        /**
-         * This functions will convert the number the user entered into milliseconds based off of the type the user entered
-         * For example if a user entered "2 hours" it will be converted into a total of 2 hours worth of milliseconds
-         * */
         var returnValue;
         switch (type) {
         /**
@@ -70,22 +70,22 @@
         }
         return returnValue;
     }
+    /**
+     * This function is used to convert the following formats into milliseconds
+     * HH:MM:SS
+     * HH:MM
+     * :MM:SS
+     * ::SS
+     * The above formats are split on the colons and then, by locating the placements of the colons
+     * converted to milliseconds by hours, minutes or seconds
+     * finally the resulting milliseconds from hours, minutes and seconds are added together to get the
+     * total milliseconds.
+     * */
     function convertHourMinutesSeconds(num) {
-        /**
-         * This function is used to convert the following formats into milliseconds
-         * HH:MM:SS
-         * HH:MM
-         * :MM:SS
-         * ::SS
-         * The above formats are split on the colons and then, by locating the placements of the colons
-         * converted to milliseconds by hours, minutes or seconds
-         * finally the resulting milliseconds from hours, minutes and seconds are added together to get the
-         * total milliseconds.
-         * */
         var hours = 0;
         var minutes = 0;
         var seconds = 0;
-        var numArray = num.match(/\d+/g, '');
+        var numArray = num.match(/[^:]+/g, '');
         /**
          * ::SS => num[0] === ':' && num[1] === ':'
          * H::S =>  num[1] === ':' && num[2] === ':'
@@ -141,8 +141,9 @@
         return num;
     }
     function isTimeFormatValid(value, type) {
-        var regexTimeFormat = /\./g;
         var colons;
+        var regexValidNum = /^((-?\d+)|(-?\d+\.\d*)|(-?\d*\.\d+))$/;
+
         /**
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
@@ -151,19 +152,21 @@
         if (type.length > 1 || type.length === 1 && type[0] !== '') {
             return false;
         }
-        /**
-         * Decimals are not a valid input with time formats
-         * Example 5.5:5.5:5.5 is an invalid input
-         * 5:5:5 is a valid input
-         * */
-        if (regexTimeFormat.test(value)) {
-            return false;
-        }
         colons = value.match(/:/g);
         if (colons.length > 3) {
             return false;
         }
-        return true;
+        let numArray = value.match(/[^:]+/g, '');
+        if (numArray.length > 3 || numArray.length === 0) {
+            return false;
+        }
+        let numbersValid = true;
+        numArray.forEach((numval) => {
+            if (!regexValidNum.test(numval)) {
+                numbersValid  = false;
+            }
+        });
+        return numbersValid;
     }
 
     module.exports = {
@@ -180,7 +183,7 @@
                 return true;
             }
             /**
-             * If a user does not input a number, throw an error
+             * If a user does not input a number, return invalid
              * */
             if (!regexHasNums.test(value)) {
                 return false;
@@ -196,7 +199,7 @@
              * */
             value = value.toLowerCase();
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-            if (value.split('').indexOf(':') !== -1) {
+            if (value.indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
             }
             /**
@@ -251,7 +254,7 @@
                  * If the user inserted a semicolon, then the string needs to be parsed based off of
                  * the HHMMSS, HHMM, MMSS requirements
                  * */
-                if (value && value.split('').indexOf(':') !== -1) {
+                if (value && value.indexOf(':') !== -1) {
                     return {value: convertHourMinutesSeconds(value), valid: true};
                 }
                 /**

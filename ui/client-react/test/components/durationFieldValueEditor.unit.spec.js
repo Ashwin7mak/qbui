@@ -45,8 +45,11 @@ describe('DurationFieldValueEditor', () => {
             if (test.type === undefined) {
                 userInput = test.numValue;
             }
-            component.setState({value: userInput, display: ''});
+            //component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
             Simulate.blur(input, {
                 value: userInput
             });
@@ -83,7 +86,10 @@ describe('DurationFieldValueEditor', () => {
                 userInput += ' ' + test.numValue + ' ' + test.multiInput.thirdInput;
                 thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
             }
-            component.setState({value: userInput, display: ''});
+            //component.setState({value: userInput, display: ''});
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
             Simulate.blur(input);
             totalMilliSeconds += firstInputTotalMilliSeconds + secondInputTotalMilliSeconds + thirdInputMilliSeconds;
             convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
@@ -108,11 +114,9 @@ describe('DurationFieldValueEditor', () => {
             let seconds = 0;
             let minutes = 0;
             let hours = 0;
-            // Simulate.change(domComponent, {
-            //     target: {value: test.timeFormatVal}
-            // });
-            component.setState({value: test.timeFormatVal, display: ''});
-            // debugger;
+            Simulate.change(input, {
+                target: {value: test.timeFormatVal}
+            });
             Simulate.blur(input);
             if (test.SS) {
                 seconds = test.SS * DURATION_CONSTS.MILLIS_PER_SECOND;
@@ -137,8 +141,10 @@ describe('DurationFieldValueEditor', () => {
             if (test.type === undefined) {
                 userInput = test.numValue;
             }
-            component.setState({value: userInput, display: ''});
             let input = ReactDOM.findDOMNode(component);
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
             Simulate.blur(input);
             let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
@@ -153,9 +159,11 @@ describe('DurationFieldValueEditor', () => {
         it('throws a validation error with an invalid input of ' + test.invalidInput, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.invalidInput;
-            component.setState({value: userInput, display: ''});
             domComponent = ReactDOM.findDOMNode(component);
             let input = ReactDOM.findDOMNode(domComponent);
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
             Simulate.blur(input, {
                 target:{value: test.invalidInput}
             });

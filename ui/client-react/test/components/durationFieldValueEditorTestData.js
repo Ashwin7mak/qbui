@@ -12,9 +12,9 @@
     var SS = '::' + Math.floor(numValue);
     var HHSS = Math.floor(numValue) + '::' + Math.floor(numValue);
     var invalidInput = {
-        HHMMSS: "5.5:5.5:5.5",
-        HHMM: "5.5:5.5",
-        MM: ":5.5",
+        HHMMSS: "55:5.x.5:5.5",
+        HHMM: "55:5..5",
+        MM: ":5.5.",
         bananaNinja: '1 Banana 6 Ninjas',
         invalidNoNums: 'days',
         invalidMultiTypes: '1 day week',
