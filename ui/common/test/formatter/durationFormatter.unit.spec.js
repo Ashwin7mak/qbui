@@ -159,16 +159,17 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
             expectation: ''
         },
         {
-            description: 'returns a blank string if fieldvalue.value is 0',
+            description: 'returns 0 weeks if fieldvalue.value is 0',
             fieldValue: {value: 0},
             fieldInfo: {},
-            expectation: ''
+            expectation: '0 weeks'
         },
         {
             description: 'returns a blank string if fieldvalue.value is 0 for smartunits',
             fieldValue: {value: 0},
             fieldInfo: {scale: DURATION_SCALES.SMART_UNITS},
-            expectation: ''
+            expectation: '0 weeks',
+            expectUnits : DURATION_SCALES.WEEKS
         }
     ];
 

@@ -223,7 +223,13 @@
     function generateSmartUnit(millis, weeks, days, hours, minutes, seconds, opts) {
         //Entered as days
         var smartUnits = '';
-        if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
+        if (millis.compareTo(DURATION_CONSTS.ZERO) === 0) {
+            smartUnits += '0 weeks';
+            if (opts.formattedObj) {
+                opts.formattedObj.string = smartUnits;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
+            }
+        } else if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
@@ -260,7 +266,7 @@
             smartUnits += ' ' + DURATION_CONSTS.SECONDS;
         } else {
             if (opts.formattedObj) {
-                opts.formattedObj.string =  millis.toString();
+                opts.formattedObj.string = millis.toString();
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.MILLISECONDS;
             }
             smartUnits += millis.toString() + ' ' + DURATION_CONSTS.MILLISECONDS;
@@ -296,7 +302,10 @@
          * @returns A formatted display string
          */
         format: function(fieldValue, fieldInfo) {
-            if (typeof fieldValue === 'undefined' || typeof fieldValue.value === 'undefined') {
+            if (typeof fieldValue === 'undefined' ||
+                fieldValue === null ||
+                typeof fieldValue.value === 'undefined' ||
+                fieldValue.value === null) {
                 return '';
             }
             var opts = fieldInfo.jsFormat;
