@@ -160,6 +160,10 @@
      */
     function generateTimeUnits(millis, hours, minutes, seconds, opts) {
         var timeUnits = '';
+        if (millis.compareTo(DURATION_CONSTS.ZERO) === 0) {
+            timeUnits = '0';
+            return timeUnits;
+        }
         if (millis.signum() < 0) {
             timeUnits += '-';
         }
@@ -305,7 +309,8 @@
             if (typeof fieldValue === 'undefined' ||
                 fieldValue === null ||
                 typeof fieldValue.value === 'undefined' ||
-                fieldValue.value === null) {
+                fieldValue.value === null ||
+                fieldValue.value === '') {
                 return '';
             }
             var opts = fieldInfo.jsFormat;
