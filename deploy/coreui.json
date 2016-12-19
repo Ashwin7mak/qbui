@@ -303,6 +303,11 @@
             "PropagateAtLaunch": "true"
           },
           {
+            "Key": "SwimlaneID",
+            "Value": {"Ref": "paramSwimlane"},
+            "PropagateAtLaunch": "true"
+          },
+          {
             "Key": "ServiceName",
             "Value": {"Ref": "paramServiceName"},
             "PropagateAtLaunch": "true"
