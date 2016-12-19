@@ -11,6 +11,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
@@ -29,6 +30,9 @@ import {
     TimeCellRenderer,
     UrlCellRenderer,
     UserCellRenderer,
+    TextFormulaCellRenderer,
+    UrlFormulaCellRenderer,
+    NumericFormulaCellRenderer,
 }  from './cellRenderers';
 
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
@@ -966,7 +970,9 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
-                                obj.headerClass += " duration";
+                                if (durationFormatter.hasUnitsText(datatypeAttributes.scale)) {
+                                    obj.headerClass += " AlignRight";
+                                }
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
                                 break;
 
@@ -980,6 +986,18 @@ let AGGrid = React.createClass({
 
                             case serverTypeConsts.EMAIL_ADDRESS :
                                 obj.cellRenderer = reactCellRendererFactory(EmailCellRenderer);
+                                break;
+
+                            case serverTypeConsts.TEXT_FORMULA :
+                                obj.cellRenderer = reactCellRendererFactory(TextFormulaCellRenderer);
+                                break;
+
+                            case serverTypeConsts.NUMERIC_FORMULA :
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormulaCellRenderer);
+                                break;
+
+                            case serverTypeConsts.URL_FORMULA :
+                                obj.cellRenderer = reactCellRendererFactory(UrlFormulaCellRenderer);
                                 break;
 
                             default:

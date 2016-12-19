@@ -26,10 +26,13 @@ describe('FieldValueRenderer functions', () => {
             {test: "DURATION_FORMAT", type: FieldFormats.DURATION_FORMAT},
             {test: "PHONE_FORMAT", type: FieldFormats.PHONE_FORMAT},
             {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT},
+            {test: "EMAIL_FORMAT", type: FieldFormats.EMAIL_ADDRESS},
+            {test: "URL", type: FieldFormats.URL},
         ];
+
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueRenderer type={data.type}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueRenderer type={data.type} />);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });
@@ -67,7 +70,4 @@ describe('FieldValueRenderer functions', () => {
         let addedClass = ReactDOM.findDOMNode(component);
         expect(addedClass.classList.contains(classToAdd)).toBeTruthy();
     });
-
-
-
 });

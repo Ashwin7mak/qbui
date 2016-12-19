@@ -62,6 +62,15 @@ class FieldFormats {
                 }
                 return FieldFormats.TEXT_FORMAT;
 
+            case serverTypeConsts.TEXT_FORMULA :
+                return FieldFormats.TEXT_FORMULA_FORMAT;
+
+            case serverTypeConsts.URL_FORMULA :
+                return FieldFormats.URL_FORMULA_FORMAT;
+
+            case serverTypeConsts.NUMERIC_FORMULA :
+                return FieldFormats.NUMERIC_FORMULA_FORMAT;
+
             default:
                 return FieldFormats.TEXT_FORMAT;
 
@@ -86,5 +95,8 @@ FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
 FieldFormats.URL = 14;
 FieldFormats.EMAIL_ADDRESS = 15;
+FieldFormats.TEXT_FORMULA_FORMAT = 16;
+FieldFormats.URL_FORMULA_FORMAT = 17;
+FieldFormats.NUMERIC_FORMULA_FORMAT = 18;
 
 export default FieldFormats;

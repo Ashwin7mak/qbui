@@ -9,6 +9,10 @@ import _ from 'lodash';
 const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
+    statics: {
+        MAX_FIELDS: 9
+    },
+
     propTypes: {
         data: React.PropTypes.object,
         columns: React.PropTypes.array,
@@ -61,8 +65,12 @@ let CardView = React.createClass({
         let fieldObject = this.props.data[curKey];
 
         let fieldValue = "";
-        if (fieldObject) {
+        if (fieldObject && typeof fieldObject.display !== 'object') {
             fieldValue = fieldObject.display;
+        } else if (fieldObject && typeof fieldObject.display === 'object') {
+            fieldValue = fieldObject.display.display;
+        } else {
+            fieldValue = '';
         }
 
         if (this.allowHTML(fieldObject)) {
@@ -80,9 +88,10 @@ let CardView = React.createClass({
         }
     },
     createTopField(firstFieldValue) {
+
         return (
             <div className="top-card-row field">
-                <strong>{firstFieldValue}</strong>
+                <div className="topFieldValue">{firstFieldValue}</div>
                 <div className="card-expander" onClick={this.handleMoreCard}>
                     <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                 </div>
@@ -100,8 +109,8 @@ let CardView = React.createClass({
         if (firstFieldObject) {
             firstFieldValue = firstFieldObject.display;
         }
-        var topField = this.createTopField(firstFieldValue);
-        for (var i = 1; i < keys.length; i++) {
+        var topField = this.createTopField(_.unescape(firstFieldValue));
+        for (var i = 1; i < keys.length && i < CardView.MAX_FIELDS; i++) {
             fields.push(this.createField(i, keys[i]));
         }
 

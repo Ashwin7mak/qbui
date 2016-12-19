@@ -310,7 +310,7 @@ export let Nav = React.createClass({
             if (hasAdmin) {
                 return <V2V3Footer app={selectedApp} onSelectOpenInV3={this.onSelectOpenInV3}/>;
             } else if (!selectedApp.openInV3) {
-                WindowLocationUtils.update("/qbase/pageNotFound");
+                WindowLocationUtils.update("/qbase/notAvailable?appId=" + selectedApp.id);
             }
         }
         return null;

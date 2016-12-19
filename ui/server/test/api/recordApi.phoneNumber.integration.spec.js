@@ -6,7 +6,7 @@
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
     var promise = require('bluebird');
-
+    var _ = require('lodash');
 
 
     /**
@@ -25,25 +25,60 @@
             ]
         };
 
+        function buildDisplayValue(options) {
+            var defaults = {
+                countryCode: 1,
+                display: '',
+                extension: null,
+                extraDigits: null,
+                internationalNumber: null,
+                internetDialableNumber: null,
+                isDialable: false
+            };
+
+            if (!options) {
+                return defaults;
+            }
+
+            return _.assign(defaults, options);
+        }
+
         /**
          * DataProvider containing Records and record display expectations for PhoneNumber field with various record values
          */
         function phoneRecordsDataProvider(fid) {
             //Standard phone number
             var recordsInput = [{id: fid, value: '12345678'}];
-            var expectedRecords = {id: fid, value: '12345678', display: '(1) 234-5678'};
+            var expectedRecords = {id: fid, value: '12345678', display: buildDisplayValue({display: '(1) 234-5678'})};
 
             //More than 10 digit number
             var largeInput = [{id: fid, value: '1234567890123'}];
-            var largeExpected = {id: fid, value: '1234567890123', display: '123 (456) 789-0123'};
+            var largeExpected = {id: fid, value: '1234567890123', display: buildDisplayValue({
+                countryCode: 1,
+                display: '(234) 567-8901',
+                extraDigits: '23',
+                internationalNumber: '+1 234-567-8901',
+                internetDialableNumber: 'tel:+1-234-567-8901',
+                isDialable: true,
+            })};
+
+            //Possible international number
+            var possibleInternationalInput = [{id: fid, value: '33970736012'}];
+            var possibleInternationalExpected = {id: fid, value: '33970736012', display: buildDisplayValue({
+                countryCode: 33,
+                display: '+33 9 70 73 60 12',
+                internationalNumber: '+33 9 70 73 60 12',
+                internetDialableNumber: 'tel:+33-9-70-73-60-12',
+                isDialable: true
+            })};
 
             //Empty records
             var emptyPhoneRecords = [{id: fid, value: ''}];
-            var expectedEmptyPhoneRecords = {id: fid, value: null, display: ''};
+            var expectedEmptyPhoneRecords = {id: fid, value: null, display: buildDisplayValue({display: '', countryCode: null})};
 
             //null record value
             var nullPhoneRecords = [{id: fid, value: null}];
-            var nullExpectedPhoneRecords = {id: fid, value: null, display: ''};
+            var nullExpectedPhoneRecords = {id: fid, value: null, display: buildDisplayValue({display: '', countryCode: null})};
 
             return [
                 {
@@ -88,7 +123,20 @@
                     record            : nullPhoneRecords,
                     format            : 'raw',
                     expectedFieldValue: nullPhoneRecords
-                }];
+                },
+                {
+                    message           : 'display a possible international phone number',
+                    record            : possibleInternationalInput,
+                    format            : 'display',
+                    expectedFieldValue: possibleInternationalExpected
+                },
+                {
+                    message           : 'raw null phone number',
+                    record            : possibleInternationalInput,
+                    format            : 'raw',
+                    expectedFieldValue: possibleInternationalInput
+                }
+            ];
         }
 
         /**
