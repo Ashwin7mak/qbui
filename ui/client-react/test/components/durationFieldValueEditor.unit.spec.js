@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
+import DurationEditorParsing from '../../src/components/fields/durationEditorParsing';
 import TestData from './durationFieldValueEditorTestData';
 import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
@@ -33,7 +34,7 @@ describe('DurationFieldValueEditor', () => {
                                           onChange={this.onChange}
                                           onBlur={this.onBlur}
                                           attributes={this.props.attributes}
-                                          includeUnits={false}/>
+                                          includeUnits={this.props.includeUnits}/>
             );
         }
     });
@@ -167,6 +168,25 @@ describe('DurationFieldValueEditor', () => {
                 target:{value: test.invalidInput}
             });
             expect(component.state.display).toEqual(test.invalidInput);
+        });
+    });
+    TestData.dataProvider.forEach(function(test) {
+        it('displays value and scale on form edit', () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
+            let userInput = test.numValue + ' ' + test.type;
+            if (test.type === undefined) {
+                userInput = test.numValue;
+            }
+            let input = ReactDOM.findDOMNode(component);
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
+            Simulate.blur(input, {
+                value: userInput
+            });
+            let result = component.state.display.replace(/[0-9.:]+/g, '').trim();
+            let expectedResult = DurationEditorParsing.getPlaceholder(test.scale);
+            expect(result).toEqual(expectedResult);
         });
     });
 });
