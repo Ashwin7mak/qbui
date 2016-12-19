@@ -299,19 +299,19 @@ $grid-font-size: $font-size-p;
             }
 
             .qbIcon.print {
-                background-color: $icon-print-color;
+                background-color: $print-icon-normal-color;
             }
 
             .qbIcon.email {
-                background-color: $icon-mail-color;
+                background-color: $mail-icon-normal-color;
             }
 
             .qbIcon.duplicate {
-                background-color: $icon-duplicate-color;
+                background-color: $copy-icon-normal-color;
             }
 
             .qbIcon.delete {
-                background-color: $icon-delete-color;
+                background-color: $delete-icon-normal-color;
             }
         }
     }
@@ -329,19 +329,19 @@ $grid-font-size: $font-size-p;
     }
 
     .qbIcon.print {
-        color: $icon-print-color;
+        color: $print-icon-normal-color;
     }
 
     .qbIcon.email {
-        color: $icon-mail-color;
+        color: $mail-icon-normal-color;
     }
 
     .qbIcon.duplicate {
-        color: $icon-duplicate-color;
+        color: $copy-icon-normal-color;
     }
 
     .qbIcon.delete {
-        color: $icon-delete-color;
+        color: $delete-icon-normal-color;
     }
 }
 

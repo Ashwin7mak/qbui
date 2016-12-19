@@ -10,32 +10,24 @@
         text-decoration: none;
     }
 
-    a.iconLink.icon-badge {
-        background-color: $icon-badge-color;
-    }
-
     a.iconLink.icon-edit {
-        background-color: $icon-edit-color;
+        background-color: $edit-icon-normal-color;
     }
 
     a.iconLink.icon-print {
-        background-color: $icon-print-color;
+        background-color: $print-icon-normal-color;
     }
 
     a.iconLink.icon-mail {
-        background-color: $icon-mail-color;
+        background-color: $mail-icon-normal-color;
     }
 
     a.iconLink.icon-duplicate {
-        background-color: $icon-duplicate-color;
+        background-color: $copy-icon-normal-color;
     }
 
     a.iconLink.icon-delete {
-        background-color: $icon-delete-color;
-    }
-
-    a.iconLink.icon-pickles {
-        background-color: $icon-pickles-color;
+        background-color: $delete-icon-normal-color;
     }
 
     a.iconLink {

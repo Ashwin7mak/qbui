@@ -99,43 +99,108 @@ $color-pink-600: #c72f79;
 // and remove any conflicts that may exist outside this section.
 //-------------------------------------------------------------------
 
-//== general
-$border-focused-color:      $color-indigo-800;
-$border-nofocus-color:      $color-black-400;
-$border-shadow-base-color:  $color-indigo-700;
-$ghost-text-color:          $color-black-500;
-$required-asterisk-color:   $color-blue-500;
-$selected-choice-color:     $color-cyan-500;
-$dropdown-hover-color:      $color-blue-200;
-$selected-color:            $color-cyan-500;
-$error-color:               $color-red-700;
-$modal-icon-color:          $color-orange-200;
+//== FRAMEWORK / GENERAL
 
-//== elements
-$microtext-link-color:      $color-indigo-700;
-$microtext-normal-color:    $color-black-600;
+// universal
+$default-text-ondark-color:     $color-black-100;
+$default-text-onlight-color:    $color-black-700;
+$text-color: $default-text-onlight-color;   // This is overriding a bootstrap variable. We need to keep it until we go through bootstrap in another pass.
 
-//== checkboxes and radio buttons
+$default-hover-color:           $color-cyan-600;
+$page-background-color:         $color-black-200;
+
+// general
+$border-focused-color:          $color-indigo-800;
+$border-nofocus-color:          $color-black-400;
+$border-shadow-base-color:      $color-indigo-700;
+$ghost-text-color:              $color-black-500;
+$required-asterisk-color:       $color-blue-500;
+$selected-choice-color:         $color-cyan-500;
+$dropdown-hover-color:          $color-blue-300;
+$selected-color:                $color-cyan-500;
+$error-color:                   $color-red-700;
+$modal-icon-color:              $color-orange-200;
+
+// text
+//TBD
+
+// icon font
+$iconfont-on-dark-normal-color:         $color-black-100;
+$iconfont-on-dark-hover-color:          $color-black-250;
+$iconfont-on-dark-disabled-color:       $color-black-300;
+
+$iconfont-on-light-normal-color:        $color-cyan-700;
+$iconfont-on-light-alternate-color:     $color-black-700;
+$report-columnheaderarrow-normal-color: $color-cyan-800;
+$mail-icon-normal-color:                $color-orange-600;
+$print-icon-normal-color:               $color-green-600;
+$copy-icon-normal-color:                $color-pink-600;
+$edit-icon-normal-color:                $color-teal-600;
+$delete-icon-normal-color:              $color-red-700;
+$add-record-background-color:           $color-orange-500;
+$inline-icon-normal-color:              $color-black-300;
+$inline-icon-hover-color:               $color-blue-300;
+
+$chevron-normal-color:                  $color-black-700;
+
+// borders
+$card-border-color:                     $color-black-500;
+
+// backgrounds
+$inline-row-selected-background-color:  $color-blue-200;
+$tooltip-background-color:              $color-black-700;
+
+// dividers
+$table-divider-color:                   $color-black-400;
+$global-divider-color:                  $color-black-400;
+
+// buttons
+$primary-background-color:              $color-indigo-700;
+$secondary-background-color:            $color-black-200;
+$secondary-stroke-color:                $color-black-300;
+$primary-hover-color:                   $color-indigo-800;
+$secondary-hover-color:                 $color-black-400;
+$primary-on-dark-background-color:      $color-indigo-700;
+$primary-on-dark-hover-color:           $color-indigo-800;
+$secondary-on-dark-background-color:    $color-black-200;
+$secondary-on-dark-hover-color:         $color-black-400;
+$secondary-on-dark-stroke-color:        $color-black-300;
+
+// calendar
+$selected-choice-color:                 $color-cyan-500;
+
+$datepicker-today-background-color:     $color-orange-500;
+
+$today-link-background-color:           $color-black-250;
+$hover-color:                           $color-blue-300;
+
+// elements
+$microtext-link-color:                  $color-indigo-700;
+$microtext-normal-color:                $color-black-600;
+
+
+//== COMPONENTS
+
+
+// checkboxes and radio buttons
 $booleansymbol-inside-on-normal-color:  $color-black-700;
 $booleansymbol-inside-on-hover-color:   $color-cyan-600;
-$booleansymbol-inside-on-press-color:   $color-cyan-600;
 $booleansymbol-inside-off-hover-color:  $color-black-400;
-$booleansymbol-inside-off-press-color:  $color-black-400;
 $booleansymbol-background-color:        $color-black-100;
 
-//== general colors for changed areas
+// general colors for changed areas
 $field-background-changed-base-color:   $color-orange-200;
 $field-border-changed-color:            $color-orange-200;
 $field-changed-focus-color:             $color-orange-500;
 $field-shadow-changed-focus-base-color: $color-orange-500;
 $field-label-normal-color:              $color-blue-500;
 
-//== email / phone / URL link
+// email / phone / URL link
 $link-normal-color: $color-indigo-700;
 $link-hover-color:  $color-cyan-600;
 $link-press-color:  $color-cyan-600;
 
-//== URL button
+// URL button
 $urlbutton-background-normal-colorstop1-color:          $color-black-200;
 $urlbutton-background-normal-colorstop2-color:          $color-black-100;
 $urlbutton-border-color:                                $color-black-300;
@@ -150,24 +215,29 @@ $urlbutton-background-changed-colorstop2-color:         $color-black-100;
 $urlbutton-background-changed-pressed-base-color:       $color-orange-200;
 $urlbutton-background-changed-hover-color:              $color-black-100;
 
-//== Formula Field
-$formula-background-empty-color:    $color-black-300;
-$formula-spinner-color:             $color-black-700;
+// Formula Field
+$formula-background-empty-color:            $color-black-300;
+$formula-spinner-color:                     $color-black-700;
 
-//== pagination
-$iconfont-normal-color:                     $color-black-400;
-$iconfont-hover-color:                      $color-cyan-600;
-$iconfont-pressed-color:                    $color-cyan-600;
-$iconfont-disabled-color:                   $color-black-400;
+// pagination
+$arrow-normal-color:                        $color-black-700;
+$arrow-disabled-color:                      $color-black-300;
+$pageicon-normal-color:                     $color-cyan-700;
+$pageicon-hover-color:                      $color-cyan-600;
+$pageicon-disabled-color:                   $color-black-300;
 $pagination-mobile-panel-background-color:  $color-black-200;
 $pagination-mobile-panel-border-color:      $color-black-400;
 $pagination-mobile-panel-text-color:        $color-blue-500;
 $pagination-mobile-topbar-text-color:       $color-black-100;
 
-//== rating
+// rating
 $rating-selected-color:     $color-orange-500;
 $rating-unselected-color:   $color-black-400;
 $rating-hover-color:        $color-orange-200;
+
+// menu
+$menu-header-color:         $color-black-800;   // not in XD spreadsheet
+$menu-item-disabled-color:  $color-black-400;   // not in XD spreadsheet
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES
@@ -197,9 +267,9 @@ $badcolor7-color25:         #555555;
 $badcolor8-color28:         #264a6d;
 $badcolor9-color29:         #bfcfe3;
 $badcolor10-nav-hover-bg:                   #0097cd;
-$badcolor11-icon-badge-color:               #2d6c92;
-$badcolor12-icon-mail-color:                #f7a21a;
-$badcolor13-icon-duplicate-color:           #c75ac2;
+//$badcolor11-icon-badge-color:               #2d6c92;
+//$badcolor12-icon-mail-color:                #f7a21a;
+//$badcolor13-icon-duplicate-color:           #c75ac2;
 $badcolor14-top-nav-title-icon-color:       #009aae;
 $badcolor15-secondary-bar-page-actions-bg:  #476b90;
 $badcolor16:                #dddddd;
@@ -216,11 +286,11 @@ $badcolor22:                #f2f9fe;
 
 
 //----- semantic color usage
-$error-color: $color-red-700;
-$text-color: $color-black-700;
+//$error-color: $color-red-700;
+//$text-color: $color-black-700;
 $icon-color: $color-blue-500;
 $icon-disabled-color: $color-black-400;
-$menu-item-disabled-color: $color-black-400;
+//$menu-item-disabled-color: $color-black-400;
 $data-color: $color-black-700;
 $input-bg-color: $color-black-100;
 $input-text-focus-border-color: $color-indigo-800;
@@ -248,13 +318,6 @@ $small-header-bg: $color-black-100;
 $report-container-bg: $color-black-100;
 //tabs underline color
 $tabsUnderLine: $color-indigo-700;
-$icon-badge-color: $badcolor11-icon-badge-color;
-$icon-edit-color: $color-teal-600;
-$icon-print-color: $color-green-700;
-$icon-mail-color: $badcolor12-icon-mail-color;
-$icon-duplicate-color: $badcolor13-icon-duplicate-color;
-$icon-delete-color: $color-red-700;
-$icon-pickles-color: $color-black-700;
 $selection-badge-color: $color-blue-600;
 $link-normal-color: $color-indigo-700;
 $link-hover-color: $color-cyan-600;
