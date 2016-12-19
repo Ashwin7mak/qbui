@@ -4,20 +4,11 @@
     display: flex;
     width: 100%;
     .ext {
-        width: 4%;
+        width: 5%;
         text-align: center;
         align-self: center;
     }
-    @include small-breakpoint {
-        .ext {
-            padding-right: 2px;
-            padding-left: 5px;
-        }
-    }
 
-    .input.phoneNumber {
-        width: 66%;
-    }
     .input.extension {
         width: 28%;
     }
