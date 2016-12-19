@@ -45,10 +45,23 @@ const DurationFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func,
 
     },
+    display: '',
     onChange(ev) {
+        this.display = ev;
         if (this.props.onChange) {
             this.props.onChange(ev);
         }
+    },
+    includeUnitsInInput(display, scale, includeUnits) {
+        if (includeUnits && durationFormatter.hasUnitsText(scale)) {
+            console.log('hello');
+            this.display = display + ' ' + durationEditorParsing.getPlaceholder(scale);
+        } else {
+            this.display = display;
+        }
+    },
+    componentDidMount() {
+        this.includeUnitsInInput(this.props.display, this.props.attributes.scale, this.props.includeUnits);
     },
     onBlur(ev) {
         let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes);
@@ -60,23 +73,30 @@ const DurationFieldValueEditor = React.createClass({
         } else {
             theVals.value = parseResult.value;
             theVals.display = durationFormatter.format(theVals, this.props.attributes);
-
+            if (this.props.includeUnits) {
+                this.includeUnitsInInput(theVals.display, this.props.attributes.scale, this.props.includeUnits);
+                theVals.display = this.display;
+            }
         }
+        console.log('theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        let defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes);
+        let defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
+        // if (!this.props.includeUnits) {
+        //     this.display = display;
+        // }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={display || value}
+                                      value={this.display || value}
                                       invalidMessage={this.props.invalidMessage || 'Error'}
                                       {...otherProps}/>;
     }

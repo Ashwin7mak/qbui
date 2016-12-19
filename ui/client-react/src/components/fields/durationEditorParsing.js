@@ -317,12 +317,12 @@
                 valid: false
             };
         },
-        getPlaceholder: function(fieldInfo) {
+        getPlaceholder: function(scale) {
             var placeholder = '';
-            if (!fieldInfo) {
+            if (!scale) {
                 return placeholder;
             }
-            switch (fieldInfo.scale) {
+            switch (scale) {
             case DURATION_CONSTS.HHMM:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;
                 break;
