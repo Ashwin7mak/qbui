@@ -48,11 +48,30 @@
             };
         },
 
+        /**
+         * Get an extension from a phone number string or a phone number display object
+         * @param phoneNumber
+         * @returns {*}
+         */
         getExtension: function(phoneNumber) {
             if (!phoneNumber) {
                 return '';
             }
-            return this.splitPhoneNumberAndExtension(phoneNumber).getExtension;
+
+            if (_.isString(phoneNumber)) {
+                return this.splitPhoneNumberAndExtension(phoneNumber).getExtension;
+            }
+
+            // prefer the extension in the display string as it is likely the most up to date
+            if (phoneNumber.display && phoneNumber.display.indexOf('x') >= 0) {
+                return this.splitPhoneNumberAndExtension(phoneNumber.display).getExtension;
+            }
+
+            if (_.has(phoneNumber, 'extension') && phoneNumber.extension !== null) {
+                return phoneNumber.extension;
+            }
+
+            return '';
         },
 
         getPhoneNumber: function(phoneNumber) {

@@ -189,4 +189,60 @@ describe('PhoneNumberFormatter (common)', () => {
             });
         });
     });
+
+    describe('getExtension', () => {
+        var testCases = [
+            {
+                description: 'returns an extension from a phone number string',
+                phoneNumber: '8675309x123',
+                expectedValue: '123'
+            },
+            {
+                description: 'returns an extension when the extension is in the display string of a phone object',
+                phoneNumber: {display: '8675309x123'},
+                expectedValue: '123'
+            },
+            {
+                description: 'returns an extension when the extension is provided in the phone display object',
+                phoneNumber: {display: '8675309', extension: '123'},
+                expectedValue: '123'
+            },
+            {
+                description: 'uses the extension in the display string if an extension is provided in the display string and in the extension property',
+                phoneNumber: {display: '8675309x123', extension: '456'},
+                expectedValue: '123'
+            },
+            {
+                description: 'returns a blank string for null values',
+                phoneNumber: null,
+                expectedValue: ''
+            },
+            {
+                description: 'returns a blank string for empty objects',
+                phoneNumber: {},
+                expectedValue: ''
+            },
+            {
+                description: 'returns a blank string if an extension is not present in a phone string',
+                phoneNumber: '8675309',
+                expectedValue: ''
+            },
+            {
+                description: 'returns a blank string if an extension is not present in a phone display object',
+                phoneNumber: {display: '8675309'},
+                expectedValue: ''
+            },
+            {
+                description: 'returns a blank string if the extension property is set to null',
+                phoneNumber: {display: '8675309', extension: null},
+                expectedValue: ''
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                assert.equal(PhoneNumberFormatter.getExtension(testCase.phoneNumber), testCase.expectedValue);
+            });
+        });
+    });
 });

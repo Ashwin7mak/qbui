@@ -86,6 +86,7 @@ const PhoneFieldValueEditor = React.createClass({
             let extNumber = phoneNumberFormatter.onChangeMasking(newValue);
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(updatedValue, extNumber);
         }
+
         if (this.props.onChange) {
             this.props.onChange(updatedValue);
         }
