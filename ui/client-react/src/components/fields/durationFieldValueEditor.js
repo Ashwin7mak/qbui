@@ -53,8 +53,12 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     includeUnitsInInput(display, scale, includeUnits) {
-        if (includeUnits && durationFormatter.hasUnitsText(scale)) {
-            console.log('hello');
+        /**
+         * includeUnitsInInput checks to see if includeUnits is true
+         * It then checks to see if display is only a number
+         * If it is only a number it will concatenate the scale type of the field to the input
+         * */
+        if (includeUnits && durationFormatter.hasUnitsText(scale) && !isNaN(Number(display))) {
             this.display = display + ' ' + durationEditorParsing.getPlaceholder(scale);
         } else {
             this.display = display;
@@ -78,7 +82,6 @@ const DurationFieldValueEditor = React.createClass({
                 theVals.display = this.display;
             }
         }
-        console.log('theVals: ', theVals);
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
@@ -89,14 +92,11 @@ const DurationFieldValueEditor = React.createClass({
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
-        // if (!this.props.includeUnits) {
-        //     this.display = display;
-        // }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={this.display || value}
+                                      value={this.display || display}
                                       invalidMessage={this.props.invalidMessage || 'Error'}
                                       {...otherProps}/>;
     }
