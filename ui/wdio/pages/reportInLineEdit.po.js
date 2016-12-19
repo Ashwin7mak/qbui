@@ -102,8 +102,29 @@
             //});
             saveRecordButtonEl.click();
 
-            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-            browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
+           //TODO: Firefox having issues sometimes clicking on the save button, so if it fails do another click and retry the wait command
+            if (browserName === 'firefox') {
+                try {
+                    // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
+                    browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
+                } catch (err) {
+                    // Single click
+                    browser.execute(function() {
+                        var event = new MouseEvent('click', {
+                            'view': window,
+                            'bubbles': true,
+                            'cancelable': true,
+                            'detail': 1
+                        });
+                        document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
+                    });
+                    browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
+                }
+            } else {
+                browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
+            }
+
+
         }},
 
         /**

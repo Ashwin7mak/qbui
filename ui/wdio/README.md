@@ -96,6 +96,11 @@ If you are running wdio via the command line you'll need to add ```browser.debug
 See the guide here on more info for debugging tests:
 [http://webdriver.io/guide/testrunner/debugging.html](http://webdriver.io/guide/testrunner/debugging.html)
 
+
+##Error screenshots
+Wdio is configured by default to take a screenshot when it encounters a test error. The images will be stored in ```qbui/ui/wdio/screenshots```
+
+
 ##Node Modules
 Here are the current modules we are using as defined in our **package.json** file:
 
