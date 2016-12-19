@@ -1,12 +1,13 @@
 import React, {PropTypes} from "react";
 import _ from "lodash";
 
+import favicons from '../constants/favicons';
+
 var Html = React.createClass({
     propTypes: {
-        title   : PropTypes.string,
-        lang    : PropTypes.string,
-        favicon : PropTypes.string,
-        jsPath  : PropTypes.string,
+        title: PropTypes.string,
+        lang: PropTypes.string,
+        jsPath: PropTypes.string,
         hostBase: PropTypes.string,
         isClientPerfTrackingEnabled: PropTypes.bool
     },
@@ -54,17 +55,32 @@ var Html = React.createClass({
         return components;
     },
 
+    renderFavicons() {
+        // This an array to get around JSX requirement that sibling elements must be wrapped in a parent component
+        return [
+            <link key="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href={favicons.appleTouch} />,
+            <link key="small-icon" rel="icon" type="image/png" href={favicons.smallIcon} sizes="16x16" />,
+            <link key="large-icon" rel="icon" type="image/png" href={favicons.largeIcon} sizes="32x32" />,
+            <link key="android-manifest" rel="manifest" href={favicons.androidConfig} />,
+            <link key="safari-mask" rel="mask-icon" href={favicons.safariMaskIcon} color="#5bbad5" />,
+            <link key="favicon" rel="shortcut icon" href={favicons.ico} />,
+            <meta key="microsoft-config" name="msapplication-config" content={favicons.microsoftConfig} />,
+            <meta key="icon-theme-color" name="theme-color" content={favicons.themeColor} />,
+        ];
+    },
+
     render() {
         return (
             <html lang={this.props.lang}>
                 <head>
                     <meta charSet="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
-                        {this.renderPerfList()}
+                    <link rel="stylesheet" href="/qbase/css/loadingScreen.css" />
+                    {this.renderPerfList()}
 
                         <title>{this.props.title}</title>
 
-                        <link rel="icon" type="image/png" href={this.props.hostBase + this.props.favicon} />
+                        {this.renderFavicons()}
+
                         {this.props.styleTagStringContent ? (
                                 <style type="text/css">
                                     {this.props.styleTagStringContent}

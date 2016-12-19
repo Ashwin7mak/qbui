@@ -20,6 +20,7 @@ import _ from 'lodash';
 import FieldFormats from '../../../utils/fieldFormats';
 import FieldUtils from '../../../utils/fieldUtils';
 import Logger from "../../../utils/logger";
+import * as durationFormatter from "../../../../../common/src/formatter/durationFormatter";
 
 
 let logger = new Logger();
@@ -163,10 +164,24 @@ const CellRenderer = React.createClass({
     },
 
     /**
+     * gets the classname for duration, scales with fixed text units get wUnitsText
+     * in addition to durationFormat
+     * @param coldef
+     * @returns {string}
+     */
+    getClassNameForDuration(coldef) {
+        let answer = "durationFormat";
+        if (coldef && _.has(coldef, 'fieldDef.datatypeAttributes.scale') &&
+            durationFormatter.hasUnitsText(coldef.fieldDef.datatypeAttributes.scale)) {
+            answer += " wUnitsText";
+        }
+        return answer;
+    },
+    /**
      *
      * @returns {*}
      */
-    getClassNameForType(cellType) {
+    getClassNameForType(cellType, coldef) {
         switch (cellType) {
         case FieldFormats.DATE_FORMAT:            return "dateFormat";
         case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
@@ -175,12 +190,15 @@ const CellRenderer = React.createClass({
         case FieldFormats.RATING_FORMAT:          return "ratingFormat";
         case FieldFormats.CURRENCY_FORMAT:        return "currencyFormat";
         case FieldFormats.PERCENT_FORMAT:         return "percentFormat";
-        case FieldFormats.DURATION_FORMAT:        return "durationFormat";
+        case FieldFormats.DURATION_FORMAT:        return this.getClassNameForDuration(coldef);
         case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
         case FieldFormats.TEXT_FORMAT:            return "textFormat";
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
         case FieldFormats.USER_FORMAT:            return "userFormat";
         case FieldFormats.URL:                    return "urlFormat";
+        case FieldFormats.TEXT_FORMULA_FORMAT:    return "formulaTextFormat";
+        case FieldFormats.NUMERIC_FORMULA_FORMAT: return "formulaNumericFormat";
+        case FieldFormats.URL_FORMULA_FORMAT:     return "formulaUrlFormat";
         default:                                  return "textFormat";
         }
     },
@@ -224,13 +242,15 @@ const CellRenderer = React.createClass({
         }
 
         // the reactabular grid doesn't need to render an editor unless it's actually editing
-
         let cellType = this.props.type;
+        if (_.has(this.props, 'colDef')) {
+            cellType = FieldUtils.getFieldType(this.props.colDef.fieldDef, this.props.type, attributes);
+        }
 
         let invalidStatus = this._getValidationErrors();
 
         return (
-            <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
+            <span className={"cellWrapper " + this.getClassNameForType(this.props.type, this.props.colDef)}>
 
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={cellType}
@@ -419,6 +439,27 @@ export const UrlCellRenderer = React.createClass({
     }
 });
 
+export const TextFormulaCellRenderer = React.createClass({
+    displayName: 'TextFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.TEXT_FORMULA_FORMAT, this.props);
+    }
+});
+
+export const UrlFormulaCellRenderer = React.createClass({
+    displayName: 'UrlFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.URL_FORMULA_FORMAT, this.props);
+    }
+});
+
+export const NumericFormulaCellRenderer = React.createClass({
+    displayName: 'NumericFormulaCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.NUMERIC_FORMULA_FORMAT, this.props);
+    }
+});
+
 export const SelectionColumnCheckBoxCellRenderer = React.createClass({
     displayName: 'SelectionColumnCheckBoxCellRenderer',
 
@@ -459,6 +500,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             {msg: Locale.getMessage('selection.copy')   + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate', tooltipMsg: 'unimplemented.copy', disabled:true},
             {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete', onClick: this.onClickDelete}
         ];
+        let recId = this.props.params.data[FieldUtils.getPrimaryKeyFieldName(this.props.params.data)].value;
 
         return (<div>
             <RowEditActions flux={this.props.params.context.flux}
@@ -467,6 +509,8 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
                             saving={_.has(this.props, 'params.context.saving') ? this.props.params.context.saving : false}
                             rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
+                            key={"rea-" + this.props.params.rowIndex + "-fidrowAct-recId" + recId}
+                            idKey={"rea-" + this.props.params.rowIndex + "-fidrowAct-recId" + recId}
             />
             <IconActions flux={this.props.params.context.flux} dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);

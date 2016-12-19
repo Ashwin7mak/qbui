@@ -13,13 +13,13 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
-import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
 import * as urlFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import * as emailFormatter from '../../../common/src/formatter/emailFormatter';
+import * as passThroughFormatter from '../../../common/src/formatter/passthroughFormatter';
+import * as durationFormatter from '../../../common/src/formatter/durationFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
-let durationFormatter = require('../../../common/src/formatter/durationFormatter');
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -453,7 +453,9 @@ let reportModel = {
             answer = emailFormatter;
             break;
         case FieldFormats.PHONE_FORMAT:
-            answer = phoneNumberFormatter;
+            // All phone formatting happens on the server because of the large library required.
+            // The formatter should only pass through the display value from the server
+            answer = passThroughFormatter;
             break;
         case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
@@ -464,7 +466,7 @@ let reportModel = {
         case FieldFormats.USER_FORMAT:
             answer = userFormatter;
             break;
-        case FieldFormats.DURATION:
+        case FieldFormats.DURATION_FORMAT:
             answer = durationFormatter;
             break;
         case FieldFormats.NUMBER_FORMAT:
@@ -1044,7 +1046,6 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onSaveRecordSuccess(payload) {
         // update the  record values
-
         this.editingIndex = undefined;
         let record = payload.record ? payload.record.record : [];
         let fields = payload.record ? payload.record.fields : [];
@@ -1080,7 +1081,6 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit("change");
     },
-
 
     /**
      * Cancels an record edit

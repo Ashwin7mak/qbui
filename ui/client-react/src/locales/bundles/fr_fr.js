@@ -354,7 +354,8 @@ export default {
         placeholder:  {
             email: "nom@domaine.com",
             maxLength :"jusqu'à {maxLength} caractères",
-            url: 'www.exemple.fr'
+            url: 'www.exemple.fr',
+            phone: '+x x xx xx xx xx',
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
         errors: {
@@ -386,12 +387,15 @@ export default {
             }
         },
         invalidMsg : {
-            unknown: 'Type inconnu non valide. Résultats: ',
-            required: 'Remplissez {fieldName}',
-            email: 'Formater la {fieldName} comme prénom@domaine.fr',
-            emails: 'Formatez toutes les adresses comme prénom@domaine.fr',
+            unknown: "Type inconnu non valide. Résultats: ",
+            required: "Remplissez {fieldName}",
+            email: "Formater la {fieldName} comme prénom@domaine.fr",
+            emails: "Formatez toutes les adresses comme prénom@domaine.fr",
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
-            choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
+            choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
+            phone: "Formater le {fieldName} comme +x x xx xx xx xx",
+            phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
+            duration: "Formater le  {fieldName} dans {scale}"
         },
         noneOption: "\<Aucun\>",
         unimplemented: {

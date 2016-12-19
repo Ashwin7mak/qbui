@@ -152,7 +152,7 @@ describe('Duration record formatter unit test', function() {
         var expectedHoursDuration = [[{
             id     : 7,
             value  : UNDER_HOUR_VAL,
-            display: ''
+            display: '0'
         }]];
         var expectedMaxDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedMaxDuration[0][0].value = MAX.stripTrailingZeros().toString();
@@ -585,7 +585,7 @@ describe('Duration record formatter unit test', function() {
         var expectedHoursDuration = [[{
             id     : 7,
             value  : UNDER_HOUR_VAL,
-            display: ''
+            display: '0'
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
@@ -674,7 +674,7 @@ describe('Duration record formatter unit test', function() {
         var expectedHoursDuration = [[{
             id     : 7,
             value  : UNDER_HOUR_VAL,
-            display: ''
+            display: '0'
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
@@ -763,7 +763,7 @@ describe('Duration record formatter unit test', function() {
         var expectedHoursDuration = [[{
             id     : 7,
             value  : UNDER_HOUR_VAL,
-            display: ''
+            display: '0'
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;
@@ -852,7 +852,7 @@ describe('Duration record formatter unit test', function() {
         var expectedHoursDuration = [[{
             id     : 7,
             value  : UNDER_HOUR_VAL,
-            display: ''
+            display: '0'
         }]];
         var expectedOverHourDuration = JSON.parse(JSON.stringify(expectedHoursDuration));
         expectedOverHourDuration[0][0].value = OVER_HOUR_VAL;

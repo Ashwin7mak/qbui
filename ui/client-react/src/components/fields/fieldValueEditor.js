@@ -12,6 +12,7 @@ import {DefaultFieldValueEditor} from './fieldValueEditors';
 import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
+import DurationFieldValueEditor from './durationFieldValueEditor';
 import EmailFieldValueEditor from './emailFieldValueEditor';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
@@ -193,9 +194,16 @@ const FieldValueEditor = React.createClass({
             return <TimeFieldValueEditor key={'tfve-' + this.props.idKey} attributes={attributes} {...commonProps} />;
         }
 
+        case FieldFormats.DURATION_FORMAT: {
+            let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
+            return <DurationFieldValueEditor key={'dfve-' + this.props.idKey}
+                                             {...commonProps}
+                                             includeUnits={this.props.includeUnits}
+                                             attributes={attributes}
+                                             classes="cellEdit"/>;
+        }
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.RATING_FORMAT:
-        case FieldFormats.DURATION_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
             if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {

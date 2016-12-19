@@ -7,7 +7,7 @@
     'use strict';
     var _ = require('lodash');
     var consts = require('../../../../../common/src/constants');
-    var phoneFormatter = require('../../../../../common/src/formatter/phoneNumberFormatter');
+    var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('../../../../../common/src/formatter/timeOfDayFormatter');
     var numericFormatter = require('../../../../../common/src/formatter/numericFormatter');
     var urlAndFileReportLinkFormatter = require('../../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter');
@@ -65,7 +65,9 @@
             var tempFieldInfo = fieldInfo ? _.cloneDeep(fieldInfo.datatypeAttributes) : {};
             switch (tempFieldInfo.type) {
             case consts.PHONE_NUMBER:
-                fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);
+                // An object that contains all relevant information to display phone numbers correctly
+                fieldValue.display = phoneFormatter.formatAndReturnDisplayObject(fieldValue, fieldInfo);
+
                 break;
             case consts.DATE_TIME:
             case consts.DATE:

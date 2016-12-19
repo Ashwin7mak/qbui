@@ -9,7 +9,7 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import simpleStringify from '../../../../common/src/simpleStringify';
-
+import _ from 'lodash';
 let logger = new Logger();
 
 
@@ -43,6 +43,7 @@ class FacetsAspect extends Component {
      */
     render() {
         let itemValue =  this.props.item ? this.props.item.value : null;
+        itemValue = _.unescape(itemValue);
         return (
             <ListGroupItem
                            onClick={(e)=>this.props.handleSelectValue(e, this.props.facet, itemValue)}

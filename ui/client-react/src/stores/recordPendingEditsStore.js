@@ -134,13 +134,19 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     _isDifferentThanPreviousValue(payload) {
         let {newVal, oldVal} = payload.changes.values;
 
-        // Cannot check for differences if one of the objects doesn't exist. Assume a change in that case.
-        if (!newVal || !oldVal) {
+        // We treat '', null, undefined as equivalent since it represents a blank input or a
+        // dropdown with no selection.
+        const isOldValFalsy = !oldVal || (oldVal && !oldVal.value && oldVal.value !== 0);
+        const isNewValFalsy = !newVal || (newVal && !newVal.value && newVal.value !== 0);
+        if (isOldValFalsy && isNewValFalsy) {
+            // both oldValue and newValue is falsy, no change
+            return false;
+        } else if (isOldValFalsy || isNewValFalsy) {
+            // when only one of newValue or oldValue is falsy
             return true;
+        } else {
+            return (!_.isEqual(newVal.value, oldVal.value));
         }
-
-        // Some components modify display values and some modify the underlying value so we check for both
-        return (newVal.value !== oldVal.value || newVal.display !== oldVal.display);
     },
 
     /**
@@ -164,7 +170,19 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             originalRecordValue = originalRecord.value;
             originalRecordDisplay = originalRecord.display;
         }
-        return (newVal.value !== originalRecordValue || newVal.display !== originalRecordDisplay);
+
+        // We treat '', null, undefined as equivalent since it represents a blank input or a
+        // dropdown with no selection.
+        const isOldValFalsy = !originalRecord || (!originalRecordValue && originalRecordValue !== 0);
+        const isNewValFalsy = !newVal || (newVal && !newVal.value && newVal.value !== 0);
+        if (isOldValFalsy && isNewValFalsy) {
+            return false;
+        } else if (isOldValFalsy || isNewValFalsy) {
+            // when only one of newValue or oldValue is falsy
+            return true;
+        } else {
+            return (!_.isEqual(newVal.value, originalRecordValue));
+        }
     },
 
     /**

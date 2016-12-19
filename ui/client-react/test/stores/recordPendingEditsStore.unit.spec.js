@@ -449,8 +449,8 @@ describe('Test recordPendingEdits Store ', () => {
 
     describe('onRecordEditChangeField', () => {
         let currentlyEditingFieldId = 2;
-        let originalDisplayValue = 'hello';
-        let originalValue = 'hello';
+        let originalDisplayValue = {thing: 'hello'};
+        let originalValue = {thing: 'hello'};
 
         const originalRecord = {
             fids: {
@@ -504,14 +504,7 @@ describe('Test recordPendingEdits Store ', () => {
                 oldDisplayValue: originalDisplayValue
             },
             {
-                description: 'adds pendingEdits if there are changes to the display value',
-                newValue: originalValue,
-                newDisplayValue: 'can you hear me?',
-                oldValue: originalValue,
-                oldDisplayValue: originalDisplayValue
-            },
-            {
-                description: 'adds pendingEdits if the newValue is different than the original, even if it is the same as the old value (this affects forms)',
+                description: 'adds pendingEdits if the newValue is different from both the original value and the old value',
                 newValue: "it's me",
                 newDisplayValue: "it's me",
                 oldValue: 'from the other side',
@@ -537,7 +530,7 @@ describe('Test recordPendingEdits Store ', () => {
             });
         });
 
-        let missingValueObjectsTestCases = [
+        let pendingEditMissingValueObjectsTestCases = [
             {
                 description: 'adds pendingEdits if the oldValue object is undefined',
                 oldValueObject: undefined,
@@ -549,25 +542,20 @@ describe('Test recordPendingEdits Store ', () => {
                 newValueObject: undefined
             },
             {
-                description: 'adds pendingEdits if the newValue and oldValue objects are undefined',
-                oldValueObject: undefined,
-                newValueObject: undefined
+                description: 'adds pendingEdits if the oldValue object is null',
+                oldValueObject: null,
+                newValueObject: {value: 'something', display: 'something'}
             },
             {
-                description: 'adds pendingEdits if the newValue and oldValue objects are null',
-                oldValueObject: null,
+                description: 'adds pendingEdits if the newValue object is null',
+                oldValueObject: {value: 'something', display: 'something'},
                 newValueObject: null
             }
         ];
 
-        missingValueObjectsTestCases.forEach(testCase => {
-            it('adds pendingEdits if the oldValue object is undefined', () => {
-                let payload = {
-                    fieldDef: {},
-                    fieldName: 'test field',
-                    appId: appTableRecPayload.appId,
-                    tbleId: appTableRecPayload.tblId,
-                    recId: 4,
+        pendingEditMissingValueObjectsTestCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let payload = Object.assign(createPayload({}), {
                     changes: {
                         fid: currentlyEditingFieldId,
                         values: {
@@ -575,7 +563,7 @@ describe('Test recordPendingEdits Store ', () => {
                             oldVal: testCase.oldValueObject
                         }
                     }
-                };
+                });
 
                 flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
 
@@ -591,11 +579,81 @@ describe('Test recordPendingEdits Store ', () => {
             });
         });
 
+        let noPendingEditMissingValueObjectsTestCases = [
+            {
+                description: 'does not add pendingEdits if the newValue and oldValue objects are undefined',
+                oldValueObject: undefined,
+                newValueObject: undefined
+            },
+            {
+                description: 'does not add pendingEdits if the newValue and oldValue objects are null',
+                oldValueObject: null,
+                newValueObject: null
+            },
+            {
+                description: 'does not add pendingEdits if the oldValue object is undefined and the new value is falsy',
+                oldValueObject: undefined,
+                newValueObject: {value: '', display: ''}
+            },
+            {
+                description: 'does not add pendingEdits if the oldValue object is null and the new value is falsy',
+                oldValueObject: null,
+                newValueObject: {value: '', display: ''}
+            },
+            {
+                description: 'does not add pendingEdits if the old value is falsy and the newValue object is undifined',
+                oldValueObject: {value: '', display: ''},
+                newValueObject: undefined
+            },
+            {
+                description: 'does not add pendingEdits if the old value is falsy and the newValue object are null',
+                oldValueObject: {value: '', display: ''},
+                newValueObject: null
+            }
+        ];
+
+        noPendingEditMissingValueObjectsTestCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let payload = Object.assign(createPayload({}), {
+                    changes: {
+                        fid: currentlyEditingFieldId,
+                        values: {
+                            newVal: testCase.newValueObject,
+                            oldVal: testCase.oldValueObject
+                        }
+                    }
+                });
+
+                flux.dispatcher.dispatch({type: actions.RECORD_EDIT_CHANGE_FIELD, payload: payload});
+
+                let pendingEditsStore = flux.store(STORE_NAME);
+                let currentState = pendingEditsStore.getState();
+                expect(currentState.isPendingEdit).toBeFalsy();
+                expect(pendingEditsStore.emit).not.toHaveBeenCalled();
+                expect(pendingEditsStore.emit.calls.count()).toBe(0);
+            });
+        });
+
+
         let shouldNotHavePendingEditsTestCases = [
             {
                 description: 'does not add pendingEdits if there are no changes to the underlying value or the display value',
                 newValue: originalValue,
                 newDisplayValue: originalDisplayValue,
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'does not add pendingEdits if the new value is equivalent to the original value',
+                newValue: {thing: 'hello'},
+                newDisplayValue: originalDisplayValue,
+                oldValue: originalValue,
+                oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'does not add pendingEdits if the new display value is equivalent to the original display value',
+                newValue: originalValue,
+                newDisplayValue: {thing: 'hello'},
                 oldValue: originalValue,
                 oldDisplayValue: originalDisplayValue
             },

@@ -11,7 +11,20 @@ $urlIcon-margin-left: 10px;
     /* Align url icons with flex instead of absolute positioning */
     a {
         display: flex;
+
+
+        /* link text expands, overflow hidden */
+        .link {
+            flex: 0 1 auto;
+            overflow: hidden;
+        }
+
+        /* icon fixed width */
+        .urlIcon {
+            flex: 0 0 auto;
+        }
     }
+
 
     &:not(.disabled) {
         a:hover, a:active {
@@ -131,7 +144,6 @@ $urlIcon-margin-left: 10px;
 
         @include small-breakpoint {
             opacity: 1;
-            margin-left: auto;
         }
 
         .qbIcon {
@@ -157,12 +169,35 @@ $urlIcon-margin-left: 10px;
     }
     .phoneQBIconWrapper {
         display: flex;
+
+        a {
+            flex: 0 1 auto;
+            overflow: hidden;
+            span {
+                overflow: hidden;
+            }
+        }
+        .urlIcon {
+            flex: 0 0 auto;
+        }
+
         a:hover, a:active {
             text-decoration: none;
         }
     }
+}
 
-
+@include small-breakpoint {
+    .urlField {
+        a {
+            .link {
+                flex: 1 1 auto;
+            }
+        }
+        .phoneQBIconWrapper a {
+            flex: 1 1 auto;
+        }
+    }
 }
 
 // Always show the URL icon on Forms
