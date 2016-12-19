@@ -108,7 +108,7 @@ describe('RowEditActions', () => {
 
             let button = TestUtils.findRenderedDOMComponentWithClass(component, testCase.buttonClass);
 
-            Simulate.mouseDown(button);
+            Simulate.click(button);
 
             expect(mockParams.context[testCase.expectedFunction]).toHaveBeenCalledWith({display: currentlyEditingRecordId, id: DEFAULT_RECORD_KEY_ID, value: currentlyEditingRecordId});
         });
