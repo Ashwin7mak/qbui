@@ -14,7 +14,7 @@ var Index = React.createClass({
         return (
             <Html {...this.props}>
                 <div id="content">
-                    {/*The content in here will be replaced as soon as React loads*/}
+                    {/*The content in here will be replaced as soon as React in client-side bundle loads*/}
                     <LoadingScreen/>
                 </div>
                 <script async={true} src={this.props.hostBase +

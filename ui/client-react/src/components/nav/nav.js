@@ -27,6 +27,10 @@ import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
+// This shared view with the server layer must be loaded from the server directory because
+// our current backend setup cannot handle a react component in a common directory
+import LoadingScreen from '../../../../server/src/routes/viewComponents/loadingScreen';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -176,10 +180,9 @@ export let Nav = React.createClass({
     },
 
     render() {
-
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
-            return null;
+            return <LoadingScreen/>;
         }
 
         const flux = this.getFlux();
