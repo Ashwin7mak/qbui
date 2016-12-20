@@ -3,6 +3,7 @@ import './fields.scss';
 
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 
 /**
  * # NumericFieldValueEditor
@@ -127,10 +128,10 @@ const NumericFieldValueEditor = React.createClass({
             placeholder = this.props.fieldDef.datatypeAttributes.clientSideAttributes.symbol;
         }
 
-        let classes = 'input numericField borderOnError';
+        let classes = 'input numericField';
         // error state css class
         if (this.props.invalid) {
-            classes += ' error';
+            classes += ' ' + ERROR_CSS_CLASSES.join(' ');
         }
         if (this.props.classes) {
             classes += ' ' + this.props.classes;

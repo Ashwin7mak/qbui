@@ -3,6 +3,7 @@ import Select from '../select/reactSelectWrapper';
 import QbIcon from '../qbIcon/qbIcon';
 import Locale from '../../locales/locales';
 import * as userFormatter from '../../../../common/src/formatter/userFormatter';
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 import _ from 'lodash';
 import 'react-select/dist/react-select.min.css';
 import './userFieldValueEditor.scss';
@@ -162,11 +163,11 @@ const UserFieldValueEditor = React.createClass({
      * user picker wrapper on react-select component
      */
     render() {
-        let classes = "cellEdit userFormat borderOnError";
+        let classes = "cellEdit userFormat";
 
         // error state css class
         if (this.props.invalid) {
-            classes += ' error';
+            classes += ' ' + ERROR_CSS_CLASSES;
         }
 
         if (this.props.classes) {
