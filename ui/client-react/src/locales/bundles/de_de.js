@@ -175,6 +175,13 @@ export default {
             Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {{value}  sekunden}\n} ",
             Milliseconds: "{value, plural, \n =0 {0 millisekunden}\n =1 {1 millisekunde}\n other {{value}  millisekunden}\n} "
         },
+        formEditDurationWithUnits: {
+            Weeks: "wochen",
+            Days: 'tage',
+            Hours: 'stunden',
+            Minutes: 'minuten',
+            Seconds: 'sekunden',
+        },
         durationTableHeader: {
             Weeks:"wochen",
             Days:"tage",

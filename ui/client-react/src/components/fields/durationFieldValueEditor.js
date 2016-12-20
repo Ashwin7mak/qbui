@@ -3,6 +3,9 @@ import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import * as durationEditorParsing from './durationEditorParsing';
+import Locale from '../../locales/locales';
+import {I18nMessage, I18nNumber, IntlNumberOnly} from '../../utils/i18nMessage';
+
 
 /**
  * # DurationFieldValueEditor
@@ -59,7 +62,10 @@ const DurationFieldValueEditor = React.createClass({
          * If it is only a number it will concatenate the scale type of the field to the input
          * */
         if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
-            this.display = display + ' ' + durationEditorParsing.getPlaceholder(fieldInfo.scale);
+            let tempObj = {
+                value: display
+            };
+            this.display = display + ' ' + Locale.getMessage("formEditDurationWithUnits." + fieldInfo.scale, tempObj);
         } else {
             this.display = display;
         }
