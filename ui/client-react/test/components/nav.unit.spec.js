@@ -249,7 +249,7 @@ describe('Nav functions', () => {
         let leftMenu = domComponent.querySelector('.leftMenu');
 
         expect(loadingScreen).not.toBeNull();
-        // Logo is an element that is not on the loading screen, but is on the final nav screen
+        // Left Menu is an element that is not on the loading screen, but is on the final nav screen
         expect(leftMenu).toBeNull();
     });
 
@@ -273,7 +273,7 @@ describe('Nav functions', () => {
         let leftMenu = domComponent.querySelector('.leftMenu');
 
         expect(loadingScreen).toBeNull();
-        // Logo is an element that is not on the loading screen, but is on the final nav screen
+        // Left Menu is an element that is not on the loading screen, but is on the final nav screen
         expect(leftMenu).not.toBeNull();
     });
 });
