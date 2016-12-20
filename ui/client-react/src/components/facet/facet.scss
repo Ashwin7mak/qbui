@@ -36,7 +36,7 @@
     }
 
     .facetButtons {
-        color: $icon-color;
+        color: $iconfont-on-light-normal-color;
 
         @include small-breakpoint {
             color: $secondary-bar-fg;

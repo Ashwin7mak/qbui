@@ -83,7 +83,7 @@ $breadCrumbsSeparatorColor: $color-black-400;
         }
 
         .iconActionButton.disabled {
-            color: $icon-disabled-color;
+            color: $iconfont-on-light-disabled-color;
         }
     }
 }
@@ -104,7 +104,7 @@ $breadCrumbsSeparatorColor: $color-black-400;
         border-top: 0;
         border-radius: 0 0 2px 2px;
         background-color: $color-black-100;
-        color: $icon-color;
+        color: $iconfont-on-light-normal-color;
     }
 
     .well {

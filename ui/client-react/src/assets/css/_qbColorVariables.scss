@@ -115,11 +115,12 @@ $border-nofocus-color:          $color-black-400;
 $border-shadow-base-color:      $color-indigo-700;
 $ghost-text-color:              $color-black-500;
 $required-asterisk-color:       $color-blue-500;
-$selected-choice-color:         $color-cyan-500;
 $dropdown-hover-color:          $color-blue-300;
 $selected-color:                $color-cyan-500;
 $error-color:                   $color-red-700;
-$modal-icon-color:              $color-orange-200;
+$alert-color:                   $color-orange-500;  // not in XD spreadsheet
+$success-color:                 $color-green-600;   // not in XD spreadsheet
+$modal-icon-color:              $color-orange-500;  // new spec has this set to $color-orange-200 (to be updated later) // should be set to $alert-color
 
 // text
 //TBD
@@ -129,8 +130,10 @@ $iconfont-on-dark-normal-color:         $color-black-100;
 $iconfont-on-dark-hover-color:          $color-black-250;
 $iconfont-on-dark-disabled-color:       $color-black-300;
 
-$iconfont-on-light-normal-color:        $color-cyan-700;
+$iconfont-on-light-normal-color:        $color-blue-500;    // new spec has this set to $color-cyan-700 (to be updated later)
 $iconfont-on-light-alternate-color:     $color-black-700;
+$iconfont-on-light-disabled-color:      $color-black-400;   // not in XD spreadsheet
+
 $report-columnheaderarrow-normal-color: $color-cyan-800;
 $mail-icon-normal-color:                $color-orange-600;
 $print-icon-normal-color:               $color-green-600;
@@ -167,12 +170,12 @@ $secondary-on-dark-hover-color:         $color-black-400;
 $secondary-on-dark-stroke-color:        $color-black-300;
 
 // calendar
-$selected-choice-color:                 $color-cyan-500;
+$selected-choice-color:                 $color-cyan-500;    // comment in spreadsheet that this needs to be replaced by $selected-color
 
 $datepicker-today-background-color:     $color-orange-500;
 
 $today-link-background-color:           $color-black-250;
-$hover-color:                           $color-blue-300;
+$hover-color:                           $color-blue-200;    // new spec has this set to $color-blue-300; (to be updated later)   // comment in spreadsheet that this needs to be replaced by $dropdown-hover-color
 
 // elements
 $microtext-link-color:                  $color-indigo-700;
@@ -181,6 +184,10 @@ $microtext-normal-color:                $color-black-600;
 
 //== COMPONENTS
 
+//breadcrumbs
+$breadcrumbs-mouse-normal-color:        $color-cyan-500;
+$breadcrumbs-touch-background-color:    $color-black-250;
+$breadcrumbs-touch-normal-color:        $color-black-700;
 
 // checkboxes and radio buttons
 $booleansymbol-inside-on-normal-color:  $color-black-700;
@@ -193,7 +200,7 @@ $field-background-changed-base-color:   $color-orange-200;
 $field-border-changed-color:            $color-orange-200;
 $field-changed-focus-color:             $color-orange-500;
 $field-shadow-changed-focus-base-color: $color-orange-500;
-$field-label-normal-color:              $color-blue-500;
+$field-label-normal-color:              $color-blue-600;    // new spec has this set to: $color-blue-500 (to be updated later)
 
 // email / phone / URL link
 $link-normal-color: $color-indigo-700;
@@ -238,6 +245,12 @@ $rating-hover-color:        $color-orange-200;
 // menu
 $menu-header-color:         $color-black-800;   // not in XD spreadsheet
 $menu-item-disabled-color:  $color-black-400;   // not in XD spreadsheet
+
+// popover dialogs (sort and group)
+$popover-text-color: $color-black-700;          // not in XD spreadsheet
+$popover-title-color: $popover-text-color;      // not in XD spreadsheet
+$popover-background-color: $color-black-100;    // not in XD spreadsheet
+$popover-shadow-color: rgba(70, 66, 66, 0.15);  // not in XD spreadsheet
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES
@@ -286,11 +299,6 @@ $badcolor22:                #f2f9fe;
 
 
 //----- semantic color usage
-//$error-color: $color-red-700;
-//$text-color: $color-black-700;
-$icon-color: $color-blue-500;
-$icon-disabled-color: $color-black-400;
-//$menu-item-disabled-color: $color-black-400;
 $data-color: $color-black-700;
 $input-bg-color: $color-black-100;
 $input-text-focus-border-color: $color-indigo-800;
@@ -299,15 +307,12 @@ $input-text-normal-border-color: $color-black-400;
 $input-text-error-border-color: $error-color;
 $tootip-error-color: $error-color;
 $input-email-normal-text-color: $color-cyan-500;
-$field-label-normal-color: $color-blue-600;
-$selected-color: $color-cyan-500;
-$hover-color: $color-blue-200;
 
 
 //================
 $left-nav-bg: $color-blue-700;
 $icon-color-hover: $color-cyan-600;
-$topnav-icon-color: $icon-color;
+$topnav-icon-color: $iconfont-on-light-normal-color;
 $page-actions-icon-color: $color-cyan-700;
 $header-bg: $color-blue-300;
 $nav-hover-bg: $badcolor10-nav-hover-bg;
@@ -363,11 +368,6 @@ $facetMenu-facetTokenTextColor: $color-blue-600;
 $facetMenu-facetTokenBackgroundColor: $color-blue-300;
 $facetMenu-itemHoverColor: rgba($color-black-300, 0.5);
 
-//===Sort & Group Popover
-$popover-text: $color-black-700;
-$popover-title: $popover-text;
-$popover-background: $color-black-100;
-
 //==report icon colors
 $report-icon-table-color: $color-red-500;
 $report-icon-summary-color: $color-blue-600;
@@ -377,11 +377,15 @@ $report-icon-grid-edit-color: $color-pink-600;
 $report-icon-timeline-color: $color-orange-700;
 $report-icon-map-color: $color-teal-500;
 $search-input-fg: $badcolor7-color25;
-$popup-fg: $color-black-700;
 $top-nav-title-icon-color: $badcolor14-top-nav-title-icon-color;
 $secondary-bar-fg: $color-black-100;
 $secondary-bar-bg: $badcolor14-top-nav-title-icon-color;
 $secondary-bar-page-actions-bg: $badcolor15-secondary-bar-page-actions-bg;
+
+$report-search-bar-bg: $badcolor20;
+$report-group-bg: $color-black-100;
+$report-link-color: $color-black-700;
+
 
 //==recordtrowser
 $nav-icon-hover-bg: $color-cyan-800;
@@ -390,9 +394,6 @@ $nav-icon-hover-bg: $color-cyan-800;
     box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
     outline: none;
 }
-//== Field labels used on report card view and forms
-$fieldLabel-color: $color-blue-600;
-$required-asterisk-color: $color-blue-500;
 
 //== Fields
 $clearmini-normal-color: $color-black-500;
@@ -449,10 +450,6 @@ $errorMessage-header-background: $error-color;
 $errorMessage-content-background: $color-black-100;
 $errorMessage-content-text-color: $color-blue-600;
 $errorMessage-header-text-color: $color-black-100;
-
-// QBModal
-$modal-icon-color: $color-orange-500;
-$default-text-onlight-color: $color-black-700;
 
 // Formula field colors
 $formula-background-empty-color: $color-blue-300;

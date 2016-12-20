@@ -1,8 +1,4 @@
 @import '../../../src/assets/css/qbVariables';
-$search-bar-bg: $badcolor20;
-$report-group-bg: $color-black-100;
-$report-icon-color: $color-red-500;
-$report-link-color: $color-black-700;
 
 .reportsList {
     display: flex;
@@ -16,7 +12,7 @@ $report-link-color: $color-black-700;
     flex: 1 1 auto;
 
     .reportsTop {
-        background-color: $search-bar-bg;
+        background-color: $report-search-bar-bg;
         padding: 15px 16px;
         flex: 0 0 auto;
     }
