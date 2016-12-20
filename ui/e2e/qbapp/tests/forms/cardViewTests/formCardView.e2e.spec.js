@@ -144,7 +144,7 @@
                 return reportCardViewPage.clickEditRecord();
             }).then(function() {
                 //get the fields from the table and generate a record
-                return ['textField', 'numericField'].forEach(fieldType => {
+                return ['textField', 'numericField'].forEach(function(fieldType) {
                     reportCardViewPage.clearFormValues(fieldType);
                 });
             }).then(function() {
