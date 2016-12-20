@@ -15,9 +15,13 @@ import FieldUtils from '../../utils/fieldUtils';
 const TextInput = React.createClass({
     render() {
         let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
+        let value = '';
+        if (this.props.value || this.props.value === 0) {
+            value = this.props.value;
+        }
         return (<input
                        className={this.props.classes}
-                       value={this.props.value || ''}
+                       value={value}
                        maxLength={maxLength}
                        type={this.props.inputType}
                        key={'inp' + this.props.idKey}

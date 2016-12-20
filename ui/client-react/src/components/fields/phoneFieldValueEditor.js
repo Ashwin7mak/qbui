@@ -138,6 +138,7 @@ const PhoneFieldValueEditor = React.createClass({
             phoneNumberClasses = "phoneNumber " + classes;
             let extensionClasses = "extension " + classes;
             extInput = (<TextFieldValueEditor {...otherProps}
+                                              ref="extention"
                                               classes={extensionClasses}
                                               onChange={this.onChangeExtNumber}
                                               onBlur={this.onBlur}
@@ -149,6 +150,7 @@ const PhoneFieldValueEditor = React.createClass({
         return (
             <div className="phoneWrapper">
                 <TextFieldValueEditor {...otherProps}
+                                      ref="phoneNumber"
                                       classes={phoneNumberClasses || classes}
                                       placeholder={placeholder}
                                       onChange={this.onChangePhoneNumber}
