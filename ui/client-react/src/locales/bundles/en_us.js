@@ -93,7 +93,7 @@ export default {
         },
         field: {
             search: "Search",
-            searchNoMatch: "No users found"
+            searchNoMatch: "No users found for"
         },
         grid: {
             no_data: "There is no data to display."

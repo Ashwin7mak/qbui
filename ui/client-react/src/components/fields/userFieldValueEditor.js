@@ -50,8 +50,10 @@ const UserFieldValueEditor = React.createClass({
      * @returns {{selectedUserId: null}}
      */
     getInitialState() {
-
-        return {selectedUserId: this.props.value ? this.props.value.userId : null};
+        return {
+            selectedUserId: this.props.value ? this.props.value.userId : null,
+            inputValue: '',
+        };
     },
 
     /**
@@ -158,6 +160,10 @@ const UserFieldValueEditor = React.createClass({
             user.screenName && user.screenName.toLowerCase().indexOf(filter) === 0;
     },
 
+    onInputChange(newInputValue) {
+        this.setState({inputValue: newInputValue});
+    },
+
     /**
      * user picker wrapper on react-select component
      */
@@ -181,8 +187,9 @@ const UserFieldValueEditor = React.createClass({
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
                 onChange={this.selectUser}
+                onInputChange={this.onInputChange}
                 placeholder={Locale.getMessage("field.search")}
-                noResultsText={Locale.getMessage("field.searchNoMatch")}
+                noResultsText={`${Locale.getMessage("field.searchNoMatch")} "${this.state.inputValue}"`}
                 autosize={false}
                 clearable={false}
                 onBlur={this.onBlur} />
