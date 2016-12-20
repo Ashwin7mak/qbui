@@ -61,6 +61,11 @@ describe('Nav functions', () => {
             return {apps: [{id:"1", openInV3: false}], selectedAppId: "1"};
         }
     });
+    let appsStoreWithNoApps = Fluxxor.createStore({
+        getState: function() {
+            return {apps: null};
+        }
+    });
     let reportsStore = Fluxxor.createStore({
         getState: function() {
             return {list: []};
@@ -224,5 +229,51 @@ describe('Nav functions', () => {
         expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable?appId=1");
     });
 
+    it('renders the loading screen while no apps are loaded', () => {
+        let storesWithoutApps = {
+            NavStore: new navStore(),
+            AppsStore: new appsStoreWithNoApps(),  // no admin rights and has no app with openInV3 = true
+            ReportsStore: new reportsStore(),
+            ReportDataStore: new reportDataStore(),
+            RecordPendingEditsStore: new recordPendingEditsStore(),
+            FieldsStore : new fieldsStore(),
+            FormStore : new formStore(),
+            ReportDataSearchStore: new reportDataSearchStore()
+        };
 
+        let fluxWithoutApps = new Fluxxor.Flux(storesWithoutApps);
+        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithoutApps} />);
+
+        let domComponent = ReactDOM.findDOMNode(component);
+        let loadingScreen = domComponent.querySelector('.loadingScreen');
+        let leftMenu = domComponent.querySelector('.leftMenu');
+
+        expect(loadingScreen).not.toBeNull();
+        // Logo is an element that is not on the loading screen, but is on the final nav screen
+        expect(leftMenu).toBeNull();
+    });
+
+    it('does not render the loading screen if apps are loaded', () => {
+        let storesWithApps = {
+            NavStore: new navStore(),
+            AppsStore: new appsStoreWithV3App(),  // no admin rights and has no app with openInV3 = true
+            ReportsStore: new reportsStore(),
+            ReportDataStore: new reportDataStore(),
+            RecordPendingEditsStore: new recordPendingEditsStore(),
+            FieldsStore : new fieldsStore(),
+            FormStore : new formStore(),
+            ReportDataSearchStore: new reportDataSearchStore()
+        };
+
+        let fluxWithApps = new Fluxxor.Flux(storesWithApps);
+        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithApps} />);
+
+        let domComponent = ReactDOM.findDOMNode(component);
+        let loadingScreen = domComponent.querySelector('.loadingScreen');
+        let leftMenu = domComponent.querySelector('.leftMenu');
+
+        expect(loadingScreen).toBeNull();
+        // Logo is an element that is not on the loading screen, but is on the final nav screen
+        expect(leftMenu).not.toBeNull();
+    });
 });
