@@ -445,39 +445,39 @@ let reportModel = {
     getFormatter(formatType) {
         let answer = textFormatter;
         switch (formatType) {
-            case FieldFormats.DATETIME_FORMAT:
-            case FieldFormats.DATE_FORMAT:
-                answer = dateTimeFormatter;
-                break;
-            case FieldFormats.EMAIL_ADDRESS:
-                answer = emailFormatter;
-                break;
-            case FieldFormats.PHONE_FORMAT:
-                // All phone formatting happens on the server because of the large library required.
-                // The formatter should only pass through the display value from the server
-                answer = passThroughFormatter;
-                break;
-            case FieldFormats.TIME_FORMAT:
-                answer = timeOfDayFormatter;
-                break;
-            case FieldFormats.TEXT_FORMAT:
-                answer = textFormatter;
-                break;
-            case FieldFormats.USER_FORMAT:
-                answer = userFormatter;
-                break;
-            case FieldFormats.DURATION_FORMAT:
-                answer = durationFormatter;
-                break;
-            case FieldFormats.NUMBER_FORMAT:
-            case FieldFormats.RATING_FORMAT:
-            case FieldFormats.CURRENCY_FORMAT:
-            case FieldFormats.PERCENT_FORMAT:
-                answer = numericFormatter;
-                break;
-            case FieldFormats.URL:
-                answer = urlFormatter;
-                break;
+        case FieldFormats.DATETIME_FORMAT:
+        case FieldFormats.DATE_FORMAT:
+            answer = dateTimeFormatter;
+            break;
+        case FieldFormats.EMAIL_ADDRESS:
+            answer = emailFormatter;
+            break;
+        case FieldFormats.PHONE_FORMAT:
+            // All phone formatting happens on the server because of the large library required.
+            // The formatter should only pass through the display value from the server
+            answer = passThroughFormatter;
+            break;
+        case FieldFormats.TIME_FORMAT:
+            answer = timeOfDayFormatter;
+            break;
+        case FieldFormats.TEXT_FORMAT:
+            answer = textFormatter;
+            break;
+        case FieldFormats.USER_FORMAT:
+            answer = userFormatter;
+            break;
+        case FieldFormats.DURATION_FORMAT:
+            answer = durationFormatter;
+            break;
+        case FieldFormats.NUMBER_FORMAT:
+        case FieldFormats.RATING_FORMAT:
+        case FieldFormats.CURRENCY_FORMAT:
+        case FieldFormats.PERCENT_FORMAT:
+            answer = numericFormatter;
+            break;
+        case FieldFormats.URL:
+            answer = urlFormatter;
+            break;
         }
         return answer;
     },
@@ -497,7 +497,7 @@ let reportModel = {
             //get the corresponding field meta data
             let fieldMeta = _.find(this.model.fields, (item) => {
                 return (((recField.id !== undefined) && (item.id === recField.id) ||
-                ((recField.fieldName !== undefined) && (item.name === recField.fieldName))));
+                       ((recField.fieldName !== undefined) && (item.name === recField.fieldName))));
             });
 
             //format the value by field display type
