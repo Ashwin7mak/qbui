@@ -52,20 +52,22 @@ const DurationFieldValueEditor = React.createClass({
             this.props.onChange(ev);
         }
     },
-    includeUnitsInInput(display, scale, includeUnits) {
+    includeUnitsInInput(display, fieldInfo) {
         /**
          * includeUnitsInInput checks to see if includeUnits is true
          * It then checks to see if display is only a number
          * If it is only a number it will concatenate the scale type of the field to the input
          * */
-        if (includeUnits && durationFormatter.hasUnitsText(scale) && !isNaN(Number(display))) {
-            this.display = display + ' ' + durationEditorParsing.getPlaceholder(scale);
+        if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
+            this.display = display + ' ' + durationEditorParsing.getPlaceholder(fieldInfo.scale);
         } else {
             this.display = display;
         }
     },
     componentDidMount() {
-        this.includeUnitsInInput(this.props.display, this.props.attributes.scale, this.props.includeUnits);
+        if (this.props.attributes && this.props.includeUnits) {
+            this.includeUnitsInInput(this.props.display, this.props.attributes);
+        }
     },
     onBlur(ev) {
         let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes);
@@ -78,7 +80,7 @@ const DurationFieldValueEditor = React.createClass({
             theVals.value = parseResult.value;
             theVals.display = durationFormatter.format(theVals, this.props.attributes);
             if (this.props.includeUnits) {
-                this.includeUnitsInInput(theVals.display, this.props.attributes.scale, this.props.includeUnits);
+                this.includeUnitsInInput(theVals.display, this.props.attributes);
                 theVals.display = this.display;
             }
         }
@@ -88,7 +90,10 @@ const DurationFieldValueEditor = React.createClass({
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        let defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
+        let defaultPlaceholder = '';
+        if (this.props.attributes) {
+            defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
+        }
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
