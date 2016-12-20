@@ -160,6 +160,10 @@ const UserFieldValueEditor = React.createClass({
             user.screenName && user.screenName.toLowerCase().indexOf(filter) === 0;
     },
 
+    /**
+     * Called when the user types text into the react-select input.
+     * @param {String} newInputValue value of the react-select input
+     */
     onInputChange(newInputValue) {
         this.setState({inputValue: newInputValue});
     },
@@ -178,6 +182,8 @@ const UserFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        // this text is displayed in the dropdown when there are no users that matches a search
+        const noResultsText = `${Locale.getMessage("field.searchNoMatch")} "${this.state.inputValue}"`;
         return (
             <Select
                 className={classes}
@@ -189,7 +195,7 @@ const UserFieldValueEditor = React.createClass({
                 onChange={this.selectUser}
                 onInputChange={this.onInputChange}
                 placeholder={Locale.getMessage("field.search")}
-                noResultsText={`${Locale.getMessage("field.searchNoMatch")} "${this.state.inputValue}"`}
+                noResultsText={noResultsText}
                 autosize={false}
                 clearable={false}
                 onBlur={this.onBlur} />
