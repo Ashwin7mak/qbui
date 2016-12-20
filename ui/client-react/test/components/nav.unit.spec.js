@@ -232,7 +232,7 @@ describe('Nav functions', () => {
     it('renders the loading screen while no apps are loaded', () => {
         let storesWithoutApps = {
             NavStore: new navStore(),
-            AppsStore: new appsStoreWithNoApps(),  // no admin rights and has no app with openInV3 = true
+            AppsStore: new appsStoreWithNoApps(),
             ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
@@ -256,7 +256,7 @@ describe('Nav functions', () => {
     it('does not render the loading screen if apps are loaded', () => {
         let storesWithApps = {
             NavStore: new navStore(),
-            AppsStore: new appsStoreWithV3App(),  // no admin rights and has no app with openInV3 = true
+            AppsStore: new appsStoreWithV3App(),
             ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
