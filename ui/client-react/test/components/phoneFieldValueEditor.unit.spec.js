@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
 import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEditor';
+import FieldValueEditor from '../../src/components/fields/fieldValueEditor';
+import FieldFormats from '../../src/utils/fieldFormats';
+import {ERROR_CSS_CLASSES} from '../../src/constants/componentConstants';
 
 describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
@@ -75,7 +78,7 @@ describe('PhoneFieldValueEditor', () => {
     it('renders an extension input box if includeExtension is true', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}}/>);
         domComponent = ReactDOM.findDOMNode(component);
-        expect(domComponent.childNodes[2].classList[3]).toEqual("extension");
+        expect(domComponent.childNodes[2].classList.contains('extension')).toEqual(true);
     });
 
     it('does not render an extension input box if includeExtension is not defined', () => {
@@ -162,5 +165,16 @@ describe('PhoneFieldValueEditor', () => {
         Simulate.change(phoneInput, {target: {value: phoneNumberFormatter.EXTENSION_DELIM}});
 
         expect(component.focusOnExtension).toHaveBeenCalled();
+    });
+
+    it('does not display an error border for the extension input', () => {
+        component = TestUtils.renderIntoDocument(<FieldValueEditor isInvalid={true} type={FieldFormats.PHONE_FORMAT} fieldDef={{datatypeAttributes: {includeExtension: true}}} />);
+        let phoneInput = TestUtils.findRenderedDOMComponentWithClass(component, 'phoneNumber');
+        let extensionInput = TestUtils.findRenderedDOMComponentWithClass(component, 'extension');
+
+        ERROR_CSS_CLASSES.forEach(errorClass => {
+            expect(phoneInput.classList.contains(errorClass)).toEqual(true);
+            expect(extensionInput.classList.contains(errorClass)).toEqual(false);
+        });
     });
 });

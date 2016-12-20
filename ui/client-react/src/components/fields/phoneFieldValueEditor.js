@@ -137,6 +137,7 @@ const PhoneFieldValueEditor = React.createClass({
             };
         }
         const extInput = (<TextFieldValueEditor {...otherProps}
+                                                showInvalidState={false}
                                                 classes={classes ? classes.extension : ''}
                                                 onChange={this.onChangeExtNumber}
                                                 onBlur={this.onBlur}

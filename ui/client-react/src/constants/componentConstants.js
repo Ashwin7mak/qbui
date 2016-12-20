@@ -5,3 +5,5 @@ export const ERROR_TIP_TIMEOUT = 2000;
 
 export const NOTIFICATION_MESSAGE_DISMISS_TIME = 2000;
 export const NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME = 2500;
+
+export const ERROR_CSS_CLASSES = ['error', 'borderOnError'];
