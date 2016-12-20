@@ -16,8 +16,8 @@
     var US_TEN_DIGIT_FORMAT = OPEN_PAREN + "$1" + CLOSE_PAREN + " $2" + DASH + "$3";
     var BASIC_INTERNATIONAL_FORMAT = INTERNATIONAL_SYMBOL + "$1 $2 $3 $4 $5 $6 $7";
 
-    var ALLOWED_CHARACTERS_ONCHANGE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x', '(', ')', '+', '-', '.', ' '];
-    var ALLOWED_CHARACTERS_ONBLUR = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x', '+'];
+    var ALLOWED_CHARACTERS_ONCHANGE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', EXTENSION_DELIM, OPEN_PAREN, CLOSE_PAREN, INTERNATIONAL_SYMBOL, DASH, '.', ' '];
+    var ALLOWED_CHARACTERS_ONBLUR = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', EXTENSION_DELIM, INTERNATIONAL_SYMBOL];
 
     // Basic phone number formatting for client side. More complex formatting occurs on the server side in
     // server/src/api/quickbase/formatter/phoneNumberFormatter
@@ -63,7 +63,7 @@
             }
 
             // prefer the extension in the display string as it is likely the most up to date
-            if (phoneNumber.display && phoneNumber.display.indexOf('x') >= 0) {
+            if (_.isString(phoneNumber.display) && phoneNumber.display.indexOf(EXTENSION_DELIM) >= 0) {
                 return this.splitPhoneNumberAndExtension(phoneNumber.display).getExtension;
             }
 
@@ -131,7 +131,7 @@
 
             var phoneWithoutSpecialCharacters = this.stripSpecialCharacters(splitNumber.getPhoneNumber);
             if (splitNumber.getExtension && splitNumber.getExtension.length > 0) {
-                phoneWithoutSpecialCharacters = phoneWithoutSpecialCharacters + 'x' + this.stripSpecialCharacters(splitNumber.getExtension);
+                phoneWithoutSpecialCharacters = phoneWithoutSpecialCharacters + EXTENSION_DELIM + this.stripSpecialCharacters(splitNumber.getExtension);
             }
 
             return phoneWithoutSpecialCharacters;

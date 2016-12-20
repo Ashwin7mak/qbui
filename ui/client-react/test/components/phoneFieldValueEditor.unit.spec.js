@@ -54,13 +54,20 @@ describe('PhoneFieldValueEditor', () => {
         PhoneFieldValueEditor.__ResetDependency__('Locale');
     });
 
-    it('allows a user to edit the raw value of a phone', () => {
+    it('allows a user to edit the value of a phone number', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         domComponent = ReactDOM.findDOMNode(component);
         Simulate.change(domComponent.childNodes[0], {
             target: {value: phoneNumber}
         });
         expect(component.state.value).toEqual(phoneNumber);
+    });
+
+    it('allows a user to edit extra digits beyond the phone number', () => {
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueEditor display={{display: '8675309', extraDigits: '1234'}} />);
+        let phoneInput = TestUtils.findRenderedDOMComponentWithClass(component, 'textField');
+
+        expect(phoneInput.value).toEqual('8675309 1234');
     });
 
     it('allows a user to only enter digits and the following special characters "( ) . - + "', () => {
