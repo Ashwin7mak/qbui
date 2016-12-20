@@ -23,6 +23,15 @@
     .extraDigits::before, .extension::before {
         content: "\00a0";
     }
+
+    .phoneData {
+        overflow: visible;
+    }
+
+    .phoneData.extraDigits {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 // Don't show phone field icons on a report
