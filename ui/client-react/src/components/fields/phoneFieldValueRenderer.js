@@ -65,9 +65,9 @@ const PhoneFieldValueRenderer = React.createClass({
                                             <span tabIndex="0">
                                                 {displayValue}
                                             </span>
+                                            {extraDigits && (<span className="extraDigits" tabIndex="0">{extraDigits}</span>)}
+                                            {extension && <span className="extension" tabIndex="0">{extension}</span>}
                                         </a>
-                                        {extraDigits && (<span className="extraDigits" tabIndex="0">{extraDigits}</span>)}
-                                        {extension && <span className="extension" tabIndex="0">{extension}</span>}
                                         <div className="urlIcon phoneIcon">
                                             <a href={smsPhoneNumberLink} tabIndex="0" className="smsIconLink">
                                                 <QBicon className="smsIcon" icon="speechbubble-outline"/>

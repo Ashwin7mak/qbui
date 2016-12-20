@@ -24,3 +24,9 @@
         content: "\00a0";
     }
 }
+
+// Don't show phone field icons on a report
+// Never show the URL icon on Reports
+.cellData .urlField .phoneIcon {
+    display: none;
+}
