@@ -24,11 +24,11 @@
         content: "\00a0";
     }
 
-    .phoneData {
+    a span.phoneData {
         overflow: visible;
     }
 
-    .phoneData.extraDigits {
+    a span.phoneData.extraDigits {
         overflow: hidden;
         text-overflow: ellipsis;
     }
