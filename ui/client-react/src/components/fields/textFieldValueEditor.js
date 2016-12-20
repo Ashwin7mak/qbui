@@ -2,7 +2,7 @@ import React from 'react';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QBicon from '../qbIcon/qbIcon';
-import ClearableInput from '../hoc/ClearableInput';
+import clearableInput from '../hoc/clearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
 
@@ -31,7 +31,7 @@ const TextInput = React.createClass({
                  />);
     }
 });
-const ClearableTextInput = ClearableInput(TextInput);
+const ClearableTextInput = clearableInput(TextInput);
 
 const TextFieldValueEditor = React.createClass({
     displayName: 'TextFieldValueEditor',

@@ -1,7 +1,7 @@
 import React from 'react';
 import './fields.scss';
 
-import ClearableInput from '../hoc/ClearableInput';
+import clearableInput from '../hoc/clearableInput';
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
 
@@ -28,7 +28,7 @@ const input = React.createClass({
         );
     }
 });
-const ClearableNumericField = ClearableInput(input);
+const ClearableNumericField = clearableInput(input);
 
 const NumericFieldValueEditor = React.createClass({
     displayName: 'NumericFieldValueEditor',

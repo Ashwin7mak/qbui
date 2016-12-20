@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClearableInput from '../hoc/ClearableInput';
+import clearableInput from '../hoc/clearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import Breakpoints from "../../utils/breakpoints";
 import FieldUtils from '../../utils/fieldUtils';
@@ -38,7 +38,7 @@ const TextArea = React.createClass({
                 />);
     }
 });
-const ClearableTextArea = ClearableInput(TextArea);
+const ClearableTextArea = clearableInput(TextArea);
 
 const MultiLineTextFieldValueEditor = React.createClass({
     displayName: 'MultiLineTextFieldValueEditor',
