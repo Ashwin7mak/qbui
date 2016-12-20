@@ -50,6 +50,26 @@ describe('TextFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
+    it('test render of component with 0 value', () => {
+        component = TestUtils.renderIntoDocument(<TextFieldValueEditor value={0}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        const textField = TestUtils.findRenderedDOMComponentWithClass(component, "textField");
+        expect(textField.value).toEqual('0');
+    });
+
+    it('test render of component with null value', () => {
+        component = TestUtils.renderIntoDocument(<TextFieldValueEditor value={null}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        const textField = TestUtils.findRenderedDOMComponentWithClass(component, "textField");
+        expect(textField.value).toEqual('');
+    });
+
+    it('test render of component with no value', () => {
+        component = TestUtils.renderIntoDocument(<TextFieldValueEditor />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        const textField = TestUtils.findRenderedDOMComponentWithClass(component, "textField");
+        expect(textField.value).toEqual('');
+    });
 
     it('test render of component required not shown', () => {
         component = TestUtils.renderIntoDocument(<TextFieldValueEditor fieldDef={{required : true}} indicateRequired={false}/>);

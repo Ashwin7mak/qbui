@@ -33,6 +33,7 @@ import PageTitleMetadata from 'component-metadata!../../../client-react/src/comp
 import PhoneFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/phoneFieldValueEditor.js';
 import PhoneFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/phoneFieldValueRenderer.js';
 import DurationFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueRenderer.js';
+import DurationFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -67,7 +68,8 @@ var Metadata = _.merge(
     InvisibleBackdropMetadata,
     PhoneFieldValueEditorMetadata,
     PhoneFieldValueRendererMetadata,
-    DurationFieldValueRendererMetadata
+    DurationFieldValueRendererMetadata,
+    DurationFieldValueEditorMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );

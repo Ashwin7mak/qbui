@@ -68,6 +68,23 @@
             ]
         };
 
+        var appWithHHMMSSFlags = {
+            name  : 'Duration App - all flags',
+            tables: [{
+                name: 'table1', fields: [{
+                    name              : 'duration',
+                    type              : 'SCALAR',
+                    datatypeAttributes: {
+                        type         : 'DURATION',
+                        scale        : ':HH:MM:SS',
+                        decimalPlaces: 4
+                    }
+                }
+                ]
+            }
+            ]
+        };
+
         /**
          * DataProvider containing Records and record display expectations for Duration field with no display props set
          */
@@ -295,6 +312,83 @@
                 });
                 assert(durationField, 'failed to find duration field');
                 var records = allFlagsDurationDataProvider(durationField.id);
+                //For each of the cases, create the record and execute the request
+                var fetchRecordPromises = [];
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList) {
+                    assert(recordIdList.length, records.length, 'Num of records created does not match num of expected records');
+                    for (var i = 0; i < records.length; i++) {
+                        //Get newly created records
+                        fetchRecordPromises.push(recordBase.getRecord(recordsEndpoint, recordIdList[i], '?format=' + records[i].format));
+                    }
+
+                    //When all the records have been fetched, assert the values match expectations
+                    promise.all(fetchRecordPromises)
+                            .then(function(results) {
+                                for (var j = 0; j < results.length; j++) {
+                                    var currentRecord = results[j];
+                                    if (results[j].record) {
+                                        currentRecord = results[j].record;
+                                    }
+
+                                    currentRecord.forEach(function(fieldValue) {
+                                        if (fieldValue.id === records[j].expectedFieldValue.id) {
+                                            assert.deepEqual(fieldValue, records[j].expectedFieldValue, 'Unexpected field value returned: ' +
+                                                                                                              JSON.stringify(fieldValue) + ', ' + JSON.stringify(records[j].expectedFieldValue));
+                                        }
+                                    });
+                                }
+                                done();
+                            }).catch(function(errorMsg) {
+                                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+                            });
+                });
+            });
+        });
+
+        /**
+         * DataProvider containing Records and record display expectations for Duration field with all display props set
+         */
+        function hhmmssFlagsDurationDataProvider(fid) {
+            // Default duration
+            var durationWithFractionSecs = new bigDecimal.BigDecimal('234566');
+            //var durationInput = '[{id: ' + fid + ', value: ' + durationWithFractionSecs + '}]';
+            var durationInput = [{id: fid, value:durationWithFractionSecs.floatValue()}];
+            var durationExpectedDisplay = '00:03:54.566';
+            var expectedDurationRecord = {id:fid, value: durationWithFractionSecs.floatValue(), display:durationExpectedDisplay};
+
+
+            return [
+                {
+                    message           : 'raw duration with hhmmss format flags',
+                    record            : durationInput,
+                    format            : 'raw',
+                    expectedFieldValue: durationInput
+                },
+                {
+                    message           : 'display duration with hhmmss format flags',
+                    record            : durationInput,
+                    format            : 'display',
+                    expectedFieldValue: expectedDurationRecord
+                }
+            ];
+        }
+
+        /**
+         * Integration test that validates Duration records formatting with hhmmss field property flags set
+         */
+        it('Should create and retrieve duration display records when hhmmss format flags set', function(done) {
+            this.timeout(testConsts.INTEGRATION_TIMEOUT * hhmmssFlagsDurationDataProvider().length);
+            recordBase.createApp(appWithHHMMSSFlags).then(function(appResponse) {
+                var app = JSON.parse(appResponse.body);
+                var durationField;
+                app.tables[0].fields.forEach(function(field) {
+                    if (field.name === 'duration') {
+                        durationField = field;
+                    }
+                });
+                assert(durationField, 'failed to find duration field');
+                var records = hhmmssFlagsDurationDataProvider(durationField.id);
                 //For each of the cases, create the record and execute the request
                 var fetchRecordPromises = [];
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
