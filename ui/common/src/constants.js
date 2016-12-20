@@ -140,6 +140,7 @@
             MM: ':MM',
             MMSS: ':MM:SS',
             SMART_UNITS:'Smart Units',
+            //===========================================My Focus
             WEEKS: 'Weeks',
             W: 'W',
             DAYS: 'Days',
@@ -159,6 +160,7 @@
             MS: 'MS',
             SECS: 'secs',
             MSECS: 'msecs',
+            //==========================================My Focus
             PLACEHOLDER: {
                 HHMM: 'hh:mm',
                 HHMMSS: 'hh:mm:ss',
