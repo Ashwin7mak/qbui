@@ -102,7 +102,9 @@ const PhoneFieldValueEditor = React.createClass({
             value: phoneNumberFormatter.onBlurMasking(this.props.value),
         };
 
-        theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        // Format the value for easier user editing. Formatting is cleared on save.
+        theVals.value = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        theVals.display = theVals.value;
 
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});

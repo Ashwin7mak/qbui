@@ -83,9 +83,9 @@
 
         getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {
             if (!extNum) {
-                return phoneNum.trim();
+                return phoneNum;
             }
-            return phoneNum.trim() + EXTENSION_DELIM + extNum.trim();
+            return phoneNum + EXTENSION_DELIM + extNum.trim();
         },
 
         onChangeMasking: function(nums) {
@@ -160,6 +160,7 @@
 
             // get the phone number and extension
             var phoneWithOutExtension = this.splitPhoneNumberAndExtension(fieldValue.value).getPhoneNumber.trim();
+            phoneWithOutExtension = this.stripSpecialCharacters(phoneWithOutExtension);
             var extension = this.splitPhoneNumberAndExtension(fieldValue.value).getExtension.trim();
 
             var formattedPhoneVal = "";
