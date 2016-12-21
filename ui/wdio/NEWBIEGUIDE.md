@@ -1,4 +1,4 @@
-#WebdriverIO NEWBIEGUIDE.md
+#WebdriverIO Newbie Guide.md
 Written by klabak 12/15/16
 
 

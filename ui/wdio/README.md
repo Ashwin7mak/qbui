@@ -1,4 +1,4 @@
-#WebdriverIO README.md Setup Guide
+#WebdriverIO ReadMe Setup Guide
 Written by klabak 12/14/16
 
 ##Pre-requisites:
