@@ -211,7 +211,7 @@ describe('Validate Logger', function() {
             assert.equal(req.useragent.platform, reqSerializer.platform);
             assert.equal(req.headers['x-forwarded-for'], reqSerializer.ip);
             assert.equal(req.headers.referer, reqSerializer.referer);
-            assert.deepEqual(req.body, reqSerializer.body);
+            assert.equal(undefined, reqSerializer.body);
 
             done();
         });
@@ -233,7 +233,7 @@ describe('Validate Logger', function() {
             assert.equal(req.useragent.platform, reqSerializer.platform);
             assert.equal(req.connection.remoteAddress, reqSerializer.ip);
             assert.equal(req.headers.referer, reqSerializer.referer);
-            assert.deepEqual(req.body, reqSerializer.body);
+            assert.equal(undefined, reqSerializer.body);
 
             done();
         });
@@ -255,7 +255,7 @@ describe('Validate Logger', function() {
             assert.equal(req.useragent.platform, reqSerializer.platform);
             assert.equal(req.socket.remoteAddress, reqSerializer.ip);
             assert.equal(req.headers.referer, reqSerializer.referer);
-            assert.deepEqual(req.body, reqSerializer.body);
+            assert.equal(undefined, reqSerializer.body);
 
             done();
         });
@@ -263,6 +263,31 @@ describe('Validate Logger', function() {
         it('validate a log request serializer is defined with socket connection', function(done) {
             //  clear out any logger configuration
             var logConfig = {};
+            var logger = initLoggerWithConfig(logConfig);
+
+            var req = generateRequestWithSocketConnection();
+            var reqSerializer = logger.serializers.req(req);
+
+            assert.equal(req.method, reqSerializer.method);
+            assert.equal(req.url, reqSerializer.url);
+            assert.equal(req.headers.host, reqSerializer.host);
+            assert.equal(req.headers.tid, reqSerializer.tid);
+            assert.equal(req.headers.sid, reqSerializer.sid);
+            assert.equal(req.useragent.source, reqSerializer.browser);
+            assert.equal(req.useragent.platform, reqSerializer.platform);
+            assert.equal(req.connection.socket.remoteAddress, reqSerializer.ip);
+            assert.equal(req.headers.referer, reqSerializer.referer);
+            assert.equal(undefined, reqSerializer.body);
+
+            done();
+        });
+
+        it('validate a log request serializer is defined with socket connection in debug mode', function(done) {
+            //  clear out any logger configuration
+            var logConfig = {
+                name: 'unittest',
+                level: 'debug'
+            };
             var logger = initLoggerWithConfig(logConfig);
 
             var req = generateRequestWithSocketConnection();
