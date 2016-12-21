@@ -337,11 +337,13 @@
                 valid: false
             };
         },
-        getPlaceholder: function(scale) {
+        getPlaceholder: function(scale, value) {
             var placeholder = '';
+            value = Number(value);
             if (!scale) {
                 return placeholder;
             }
+
             switch (scale) {
             case DURATION_CONSTS.SCALES.HHMM:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;
@@ -356,23 +358,29 @@
                 placeholder = DURATION_CONSTS.PLACEHOLDER.MMSS;
                 break;
             case DURATION_CONSTS.SCALES.WEEKS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.WEEKS;
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEKS);
+
                 break;
             /**
              * XD Specs state that smart units default to days
              * */
             case DURATION_CONSTS.SCALES.SMART_UNITS:
             case DURATION_CONSTS.SCALES.DAYS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.DAYS;
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAY) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAYS);
                 break;
             case DURATION_CONSTS.SCALES.HOURS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.HOURS;
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOUR) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOURS);
                 break;
             case DURATION_CONSTS.SCALES.MINUTES:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.MINUTES;
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTE) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTES);
                 break;
             case DURATION_CONSTS.SCALES.SECONDS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.SECONDS;
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECOND) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECONDS);
                 break;
             default:
                 break;

@@ -62,10 +62,7 @@ const DurationFieldValueEditor = React.createClass({
          * If it is only a number it will concatenate the scale type of the field to the input
          * */
         if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
-            let tempObj = {
-                value: display
-            };
-            this.display = display + ' ' + Locale.getMessage("formEditDurationWithUnits." + fieldInfo.scale, tempObj);
+            this.display = display + ' ' + durationEditorParsing.getPlaceholder(fieldInfo.scale, display);
         } else {
             this.display = display;
         }
