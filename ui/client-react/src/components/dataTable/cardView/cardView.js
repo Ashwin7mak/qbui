@@ -88,13 +88,19 @@ let CardView = React.createClass({
         }
     },
     createTopField(firstFieldValue) {
-
+        // If there are less than 2 fields, there's no need to expand the card.
+        // props.data contains a total of <number of fields>+1 fields since one of the fields is
+        // the Record ID#.
+        let cardExpander = null;
+        if (Object.keys(this.props.data).length > 3) {
+            cardExpander = (<div className="card-expander" onClick={this.handleMoreCard}>
+                                <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
+                            </div>);
+        }
         return (
             <div className="top-card-row field">
                 <div className="topFieldValue">{firstFieldValue}</div>
-                <div className="card-expander" onClick={this.handleMoreCard}>
-                    <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
-                </div>
+                {cardExpander}
             </div>
         );
     },
