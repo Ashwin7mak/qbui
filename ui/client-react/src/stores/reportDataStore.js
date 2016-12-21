@@ -250,7 +250,7 @@ let reportModel = {
             });
         }
         this.model.fieldsMap = map;
-        this.model.keyField = _.find(this.model.fields, field => field.keyField);
+        this.model.keyField = _.find(this.model.fields, field => field.id === SchemaConsts.DEFAULT_RECORD_KEY_ID);
 
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
