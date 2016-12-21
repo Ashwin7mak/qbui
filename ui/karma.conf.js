@@ -150,7 +150,15 @@ module.exports = function(config) {
             reporters: [
                 {type: "lcov", subdir: "coverage"},
                 {type: "text-summary"}    // outputs to the console by default
-            ]
+            ],
+            check : {
+                global: {
+                    statements: 90,
+                    branches: 60,
+                    functions: 90,
+                    lines: 90
+                }
+            }
         },
 
         // will be resolved to basePath (in the same way as files/exclude patterns)
