@@ -57,7 +57,6 @@ export function loadEditForm(appId, tblId, rptId) {
                         resolve();
 
                         response.data.record = null;
-                        debugger;
                         dispatch(loadedForm(response.data));
                     },
                     (error) => {
