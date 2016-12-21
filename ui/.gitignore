@@ -27,7 +27,10 @@ npm-debug.log
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
-#we don't want to track node_modules anymore
+# we don't want to track node_modules anymore
 node_modules/
 
+# don't want local configs accidentally checked in
 wdio/config/wdio.conf.js
+# generated error screenshots shouldn't be tracked either
+wdio/screenshots/
