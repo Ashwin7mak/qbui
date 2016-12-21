@@ -99,7 +99,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.placeholderData.forEach(function(test) {
-        fit('displays the correct placeholder for ' + test.scale, () => {
+        it('displays the correct placeholder for ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
             expect(domComponent.placeholder).toEqual(test.placeholder);
@@ -134,7 +134,7 @@ fdescribe('DurationFieldValueEditor', () => {
         });
     });
     TestData.timeFormatDataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+        fit('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {

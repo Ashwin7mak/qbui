@@ -564,25 +564,25 @@
             {
                 scale: CONSTS.SCALES.HHMMSS,
                 numValue: Math.floor(numValue),
-                type: CONSTS.MINUTES,
+                type: CONSTS.SCALES.MINUTES,
                 MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
             {
                 scale: CONSTS.SCALES.HHMM,
                 numValue: Math.floor(numValue),
-                type: CONSTS.MINUTES,
+                type: CONSTS.SCALES.MINUTES,
                 MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
             {
                 scale: CONSTS.SCALES.MMSS,
                 numValue: Math.floor(numValue),
-                type: CONSTS.MINUTES,
+                type: CONSTS.SCALES.MINUTES,
                 MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
             {
                 scale: CONSTS.SCALES.MM,
                 numValue: Math.floor(numValue),
-                type: CONSTS.MINUTES,
+                type: CONSTS.SCALES.MINUTES,
                 MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
             },
         ],
