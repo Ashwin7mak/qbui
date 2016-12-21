@@ -61,6 +61,7 @@ consts = require('../../common/src/constants.js');
         var table4Name = 'Table 4 ';
         var table5Name = 'All Required';
         var table6Name = 'Durations';
+        var table7Name = 'Unique Fields';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -334,6 +335,49 @@ consts = require('../../common/src/constants.js');
                     scale: consts.DURATION_CONSTS.SCALES.MMSS
                 }
             }));
+
+        tableToFieldToFieldTypeMap[table7Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text MultiChoice',
+            {
+                unique: true,
+                dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+                multipleChoice: {
+                    choices: _.clone(textChoices),
+                    allowNew: false,
+                    sortAsGiven: true
+                }
+            });
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique MultiLine',
+            {
+                unique: true,
+                dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
+            });
+
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric MultiChoice',
+            {
+                unique: true,
+                dataAttr: {clientSideAttributes: baseNumClientRequiredProps},
+                decimalPlaces: 0,
+                treatNullAsZero: true,
+                unitsDescription: "",
+                multipleChoice: {
+                    choices: _.clone(numericChoices),
+                    allowNew: false,
+                    sortAsGiven: false
+                }
+            });
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.CURRENCY, 'Unique Currency', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PERCENT, 'Unique Percent', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.RATING, 'Unique Rating', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DATE, 'Unique Date', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DATE_TIME, 'Unique Date Time', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TIME_OF_DAY, 'Unique Time', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DURATION, 'Unique Duration', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PHONE_NUMBER, 'Unique Phone', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
 
         return tableToFieldToFieldTypeMap;
     }
