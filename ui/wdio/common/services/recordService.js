@@ -17,6 +17,7 @@
              * Returns a promise.
              */
             addRecords: function(app, table, genRecords) {
+                //TODO: Remove deferred pattern
                 var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
@@ -33,14 +34,11 @@
                     });
                 return deferred.promise;
             },
-
-
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
              * Returns a promise.
              */
             addBulkRecords: function(app, table, genRecords) {
-                var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
@@ -53,7 +51,6 @@
                 var generatedRecords = [];
                 for (var i = 0; i < numRecords; i++) {
                     var generatedRecord = recordGenerator.generateRecord(fields);
-                    //console.log(generatedRecord);
                     generatedRecords.push(generatedRecord);
                 }
                 return generatedRecords;
@@ -66,7 +63,6 @@
                 var generatedEmptyRecords = [];
                 for (var i = 0; i < numRecords; i++) {
                     var generatedRecord = recordGenerator.generateEmptyRecord(fields);
-                    //console.log(generatedRecord);
                     generatedEmptyRecords.push(generatedRecord);
                 }
                 return generatedEmptyRecords;
@@ -101,11 +97,8 @@
                     var actualRecIdValue = actualRecord[0];
                     // If the record Ids match, compare the other fields in the records
                     if (Number(expectedRecIdValue) === Number(actualRecIdValue)) {
-                        //console.log('Comparing record values for records with ID: ' + expectedRecIdValue);
                         for (var j = 1; j < expectedRecord.length; j++) {
-                            //console.log('Comparing expected field value:' + expectedRecord[j].value +
-                            // ' with actual field value: ' + actualRecord[j]);
-                            if (recordService.isNumeric(expectedRecord[j].value)) {
+                            if (e2eUtils.isNumeric(expectedRecord[j].value)) {
                                 expect(Number(expectedRecord[j].value)).toEqual(Number(actualRecord[j]), 'Ensure number values are equivalent not including precision');
                                 //TODO: QBSE-15108: Fix test expected value for precision adhering to default display DECIMAL_PLACES option
                                 //expect(expectedRecord[j].value).toEqual(actualRecord[j], '1. Ensure number values are equivalent including precision');
@@ -117,10 +110,70 @@
                 }
             },
             /**
-             * Function that checks to make sure a value is of Numeric type
+             * given an app with schema defined in the db
+             * create
+             *   - records for each table
+             *   - a form and
+             *   - report for each table
+             * @param app - the created app
+             * @param recordsConfig - optional
+             *  { numRecordsToCreate : number  //defaults to Consts.DEFAULT_NUM_RECORDS_TO_CREATE,
+              *  tableConfig: hash by tablename of configs for table (numRecordsToCreate)}
+             * @returns {*|promise}
              */
-            isNumeric: function(n) {
-                return !isNaN(parseFloat(n)) && isFinite(n);
+            createRecords : function(app, recordsConfig, services) {
+                //TODO: Remove deferred pattern
+                var deferred = promise.pending();
+                var results = {allPromises:[], tablePromises:[]};
+                if (app) {
+                    try {
+                        var createdApp = app;
+                        var numberOfRecords = e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE;
+                        // get the number of records to create if specified
+                        if (recordsConfig && recordsConfig.numRecordsToCreate) {
+                            numberOfRecords = recordsConfig.numRecordsToCreate;
+                        }
+                        //create records for each table in the app
+                        createdApp.tables.forEach(function(table, index) {
+                            // get the number of records to create if specified for this table
+                            if (recordsConfig && recordsConfig.tablesConfig && recordsConfig.tablesConfig[table.name] &&
+                                recordsConfig.tablesConfig[table.name].numRecordsToCreate &&
+                                typeof recordsConfig.tablesConfig[table.name].numRecordsToCreate === 'number') {
+                                numberOfRecords = recordsConfig.tablesConfig[table.name].numRecordsToCreate;
+                            }
+                            // Get the created non builtin field Ids
+                            var nonBuiltInFields = services.tableService.getNonBuiltInFields(table);
+                            // Generate the record JSON input objects
+                            var generatedRecords = services.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
+
+                            // Via the serices API create the records, a new report and form
+                            var reportPromise = services.reportService.createReport(createdApp.id, table.id);
+                            var recordsPromise = services.recordService.addBulkRecords(createdApp, table, generatedRecords);
+                            reportPromise.then(function() {
+                                // Set default table homepage for Table
+                                return services.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
+                            });
+
+                            results.allPromises.push(reportPromise);
+                            results.allPromises.push(recordsPromise);
+
+                            results.tablePromises[index] = {
+                                reportPromise: reportPromise,
+                                recordsPromise: recordsPromise,
+                                nonBuiltInFields: nonBuiltInFields
+                            };
+                        });
+                        deferred.resolve(results);
+                    } catch (error) {
+                        console.error(JSON.stringify(error));
+                        deferred.reject(error);
+                    }
+                } else {
+                    var error = new Error("No app to generate records for");
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                }
+                return deferred.promise;
             }
         };
         return recordService;

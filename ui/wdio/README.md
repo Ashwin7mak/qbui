@@ -27,9 +27,7 @@ Things like what spec files and browsers to run can be configured here.
 
 First copy the checked in **sample** file to the same directory renaming it to **wdio.conf.js** to create your local config (this has already been added to **.gitignore**). The sample file is located in
 
-```
-qbui/ui/wdio/config/wdio.conf.js.sample
-```
+`qbui/ui/wdio/config/wdio.conf.js.sample`
 
 This config file will be set by default to run your tests locally. The config file will read in environment variables set by your Node server.
 By default the E2E tests will launch a **separate** Node server automatically using the **e2e.js** config file on port **9001** (aka **NODE_ENV=e2e** environment variable if you run from the command line).
@@ -37,9 +35,7 @@ This is to prevent port collision if you have Node already running.
 
 **e2e.js** is were you need to make sure the values match what your dev env is currently running at (specifically the **DOMAIN** and **javaHost** properties). The node config file is located in
 
-```
-qbui/ui/server/src/config/environment/e2e.js
-```
+`qbui/ui/server/src/config/environment/e2e.js`
 
 For more on the wdio config file and all the different options see the page here: [http://webdriver.io/guide/testrunner/configurationfile.html](http://webdriver.io/guide/testrunner/configurationfile.html)
 
@@ -70,17 +66,15 @@ You’ll see the Chrome browser launch and run a few tests. If you get errors ch
 
 ###Via the command-line (local):
 * The wdio config file is set to be run via IntelliJ by default. You'll need to update the **specs** parameter in **wdio.conf.js** first before proceeding. Change it to: 
-```
+``` javascript
 specs: [
         './tests/reportAddRecord.e2e.spec.js'
     ]
 ```
 
-* In the Mac OS X terminal ```cd``` to your checked out repository into the ```qbui/ui/wdio``` directory.
+* In the Mac OS X terminal `cd` to your checked out repository into the `qbui/ui/wdio` directory.
 * Enter the following: 
-```
-NODE_ENV=e2e ../node_modules/.bin/wdio ./config/wdio.conf.js
-```
+`NODE_ENV=e2e ../node_modules/.bin/wdio ./config/wdio.conf.js`
 
 We will be adding a grunt task to handle spec configuration automatically in the future!
 
@@ -91,14 +85,14 @@ Next you'll probably need to increase the Jasmine global timeout (so your test o
 
 If you are running wdio via IntelliJ (which you should be) simply put a breakpoint in your code and run your IntelliJ config in Debug mode.
 
-If you are running wdio via the command line you'll need to add ```browser.debug();``` to your code to pause your test. Then run the tests via the command listed above.
+If you are running wdio via the command line you'll need to add `browser.debug();` to your code to pause your test. Then run the tests via the command listed above.
 
 See the guide here on more info for debugging tests:
 [http://webdriver.io/guide/testrunner/debugging.html](http://webdriver.io/guide/testrunner/debugging.html)
 
 
 ##Error screenshots
-Wdio is configured by default to take a screenshot when it encounters a test error. The images will be stored in ```qbui/ui/wdio/screenshots```
+Wdio is configured by default to take a screenshot when it encounters a test error. The images will be stored in `qbui/ui/wdio/screenshots`
 
 
 ##Node Modules

@@ -60,6 +60,12 @@
                     array[index] = array[index].toUpperCase();
                 }
                 return array;
+            },
+            /**
+             * Function that checks to make sure a value is of Numeric type
+             */
+            isNumeric: function(n) {
+                return !isNaN(parseFloat(n)) && isFinite(n);
             }
         };
         return e2eUtils;

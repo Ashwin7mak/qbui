@@ -159,6 +159,7 @@
         //    });
         //};
 
+        //TODO: Refactor these once we port over the delete record tests
         /// Checking for the deleted record on the first page
         //this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord) {
         //    var self = this;

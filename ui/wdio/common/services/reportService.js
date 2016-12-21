@@ -12,9 +12,9 @@
              * Generates a report and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
-            // TODO: QBSE-13518 Write a report generator in the test_generators package
-            // TODO: Fix promise anti-pattern QBSE-20581
+            //TODO: Write a report generator in the test_generators package
             createReport: function(appId, tableId, query, reportName, facetFids) {
+                //TODO: Remove deferred pattern
                 var deferred = promise.pending();
                 var reportJSON = {
                     name      : reportName || 'Test Report',
@@ -29,7 +29,6 @@
                 }
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);
@@ -45,8 +44,10 @@
              * Generates a report with Fids and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
-            // TODO: QBSE-13518 Write a report generator in the test_generators package
+            //TODO: QBSE-13518 Write a report generator in the test_generators package
+            //TODO: Remove all this code duplication with these functions (since we have a generic function below)
             createReportWithFids: function(appId, tableId, fids, query, reportName) {
+                //TODO: Remove deferred pattern
                 var deferred = promise.pending();
                 var reportJSON = {
                     name      : reportName || 'Report With Sorting',
@@ -57,7 +58,6 @@
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);
@@ -73,7 +73,6 @@
              * Generates a report with sorting and grouping and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
-            // TODO: QBSE-13518 Write a report generator in the test_generators package
             createReportWithSortAndGroup: function(appId, tableId, fids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
@@ -85,7 +84,6 @@
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);
@@ -101,7 +99,6 @@
              * Generates a report with Fids and sorting and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
-            // TODO: QBSE-13518 Write a report generator in the test_generators package
             createReportWithFidsAndSortList: function(appId, tableId, fids, sortfids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
@@ -114,7 +111,6 @@
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);
@@ -130,7 +126,6 @@
              * Generates a report with filters and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
-            // TODO: QBSE-13518 Write a report generator in the test_generators package
             createReportWithFacets: function(appId, tableId, fids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
@@ -142,7 +137,6 @@
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);
@@ -158,7 +152,6 @@
              * Generates a report with filters and sortLists and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
-            // TODO: QBSE-13518 Write a report generator in the test_generators package
             createReportWithFidsAndFacetsAndSortLists: function(appId, tableId, fids, facetFids, sortFids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
@@ -172,7 +165,6 @@
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);
@@ -188,6 +180,7 @@
              * Helper function that will run an existing report in a table via the API. Returns a promise.
              */
             runReport: function(appId, tableId, reportId) {
+                //TODO: Remove deferred pattern
                 var deferred = promise.pending();
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId);
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'GET').then(function(result) {
@@ -201,10 +194,20 @@
                 });
                 return deferred.promise;
             },
+            /**
+             * Function that calls down to api.base that will create you a report via the API
+             * @param appId
+             * @param tableId
+             * @param name
+             * @param fids
+             * @param sortList
+             * @param facetFids
+             * @param query
+             * @returns {*|promise}
+             */
             createDefaultReport: function(appId, tableId, name, fids, sortList, facetFids, query) {
                 var deferred = promise.pending();
                 var printableSortList = [];
-
 
                 if (sortList) {
                     sortList.forEach(function(sortObj) {
@@ -254,7 +257,7 @@
                 };
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
 
-                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                //TODO: Remove deferred pattern
                 recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
                     //console.log('Report create result');
                     var parsed = JSON.parse(result.body);

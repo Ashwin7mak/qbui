@@ -4,8 +4,6 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
-    var promise = require('bluebird');
     var userGenerator = require('../../../test_generators/user.generator.js');
     module.exports = function(recordBase) {
         var userService = {
@@ -16,7 +14,6 @@
                 let user = userGenerator.generatePopulatedUser(options);
                 return user;
             },
-
             generateDefaultUserList: function(appId) {
                 let userIdList = [];
                 let users = userGenerator.generateDefaultAdminUsers();

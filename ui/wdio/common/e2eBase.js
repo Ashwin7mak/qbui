@@ -1,7 +1,7 @@
 /**
  * e2e base module that initializes the domain service modules as well as the base class defined in the server layer
  * Currently recordApi.base.js is the server module which communicates with the Java API.
- * This module needs to be 'required' by all Protractor tests (make sure to run the initialize function and set the baseUrl).
+ * This module needs to be 'required' by all wdio tests (make sure to run the initialize function and set the baseUrl).
  * Created by klabak on 9/17/15.
  */
 (function() {
@@ -25,7 +25,7 @@
             recordBase: recordBase,
             /**
              * Set the baseUrl we want to use to reach out for testing
-             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see wdio config files)
              * Run this BEFORE initialize function below
              * @param baseUrl - The url where your nodejs server is running. example: http://localhost:9001 for e2e tests
              */
@@ -34,7 +34,7 @@
             },
             /**
              * Initialize recordApi.base.js and api.base.js in the Mocha layer (qbui/server package)
-             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see wdio config files)
              * Make sure to run this AFTER setBaseUrl to avoid authentication errors due to ticket for wrong realm
              */
             initialize: function() {
@@ -258,7 +258,7 @@
                     reportService : this.reportService,
                     formService : this.formService
                 };
-                return e2eBase.appService.createRecords(app, recordsConfig, services);
+                return e2eBase.recordService.createRecords(app, recordsConfig, services);
             },
 
             /**

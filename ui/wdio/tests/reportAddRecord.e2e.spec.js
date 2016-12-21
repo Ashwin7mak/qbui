@@ -75,6 +75,7 @@
             ReportInLineEditPO.clickSaveChangesButton();
 
             // Step 5 - Check for the success message 'Record added'
+            //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
             //ReportInLineEditPO.assertSuccessMessage(successMessage);
 
             // Step 6 - Reload the report after saving row as the row is added at the last page

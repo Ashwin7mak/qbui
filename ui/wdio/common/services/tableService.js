@@ -4,10 +4,8 @@
  */
 (function() {
     'use strict';
-    // TODO: Will need to add in recordBase as a parameter here when we need it in future functions
     // Field generator module
     var fieldGenerator = require('../../../test_generators/field.generator.js');
-
     module.exports = function(recordBase) {
         var tableService = {
             /**

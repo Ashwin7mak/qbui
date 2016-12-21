@@ -1,9 +1,5 @@
 (function() {
     'use strict';
-    //Bluebird Promise library
-    var promise = require('bluebird');
-    //Node.js assert library
-    var assert = require('assert');
     //App generator module
     var appGenerator = require('../../../test_generators/app.generator.js');
     module.exports = function(recordBase) {
@@ -25,15 +21,13 @@
                 var rolesEndpoint = recordBase.apiBase.resolveAppRoleFieldRightsEndpoint(appId, roleId, tableId, fieldId);
                 return recordBase.apiBase.executeRequest(rolesEndpoint, 'POST', fieldRightsJSON);
             },
-
             /**
              * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
              */
             createRoleReportMapJSON: function(roleId, report_Id) {
                 var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
                 return JSON.parse(jsonStr);
-            },
-
+            }
         };
         return roleService;
     };

@@ -14,7 +14,6 @@
                 var generatedForms = formGenerator.generateSingleTabAndSecViewOnlyForm(app);
                 return generatedForms;
             },
-
             /**
              * Given a created app object (returned via the API), generate default forms JSON for each table in the app based on it's table schema
              */
@@ -22,7 +21,6 @@
                 var generatedForms = formGenerator.generateSingleTabAndSecFormWithAddAndEdit(app);
                 return generatedForms;
             },
-
             /**
              * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
              */
@@ -40,13 +38,11 @@
                 }
                 return createdFormIds;
             },
-
             parseFormResult: function(formJSON, formsEndpoint) {
                 return recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON).then(function(result) {
                     return JSON.parse(result.body);
                 });
             },
-
             /**
              * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
              */
@@ -64,7 +60,6 @@
                 }
                 return createdFormIds;
             },
-
             /**
              * Generates a form and creates it in a table via the API.
              */
