@@ -322,7 +322,14 @@
                     return {value: total, valid: true};
                 }
                 if (num !== null) {
-                    return {value: getMilliseconds(num[0], fieldInfo.scale), valid: true};
+                    let scale = fieldInfo.scale;
+                    if (fieldInfo.scale !== DURATION_CONSTS.SCALES.HHMMSS ||
+                        fieldInfo.scale !== DURATION_CONSTS.SCALES.HHMM ||
+                        fieldInfo.scale !== DURATION_CONSTS.SCALES.MMSS ||
+                        fieldInfo.scale !== DURATION_CONSTS.SCALES.MM) {
+                        scale = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + fieldInfo.scale.toLowerCase());
+                    }
+                    return {value: getMilliseconds(num[0], scale), valid: true};
                 }
             }
             return {

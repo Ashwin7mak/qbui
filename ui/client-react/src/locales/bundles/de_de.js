@@ -196,7 +196,7 @@ export default {
             minute: 'minute',
             m: 'm',
             seconds: 'sekunden',
-            sECOND: 'zweite',
+            second: 'zweite',
             s: 'z',
             milliseconds: 'millisekunden',
             millisecond: 'millisekunde',
