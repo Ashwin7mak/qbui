@@ -67,6 +67,8 @@ const CellEditor = React.createClass({
                               onValidated={this.props.onValidated}
                               validateFieldValue={this.props.validateFieldValue}
                               isInvalid={this.props.isInvalid}
+                              //don't show units in grid
+                              includeUnits={false}
                               key={'fve' + this.props.idKey}
                               idKey={this.props.idKey}
                               invalidMessage={this.props.invalidMessage}

@@ -282,56 +282,56 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration A',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.WEEKS
+                    scale: consts.DURATION_CONSTS.SCALES.WEEKS
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration B',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.DAYS
+                    scale: consts.DURATION_CONSTS.SCALES.DAYS
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration C',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.HOURS
+                    scale: consts.DURATION_CONSTS.SCALES.HOURS
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration D',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.MINUTES
+                    scale: consts.DURATION_CONSTS.SCALES.MINUTES
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration E',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.SECONDS
+                    scale: consts.DURATION_CONSTS.SCALES.SECONDS
                 }
             }));
 
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.HHMM
+                    scale: consts.DURATION_CONSTS.SCALES.HHMM
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :HH:MM:SS',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.HHMMSS
+                    scale: consts.DURATION_CONSTS.SCALES.HHMMSS
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :MM',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.MM
+                    scale: consts.DURATION_CONSTS.SCALES.MM
                 }
             }));
         addColumn(tableToFieldToFieldTypeMap[table6Name], e2eConsts.dataType.DURATION, 'Duration :MM:SS',
             Object.assign({}, baseDurationProps, {
                 dataAttr: {
-                    scale: consts.DURATION_CONSTS.MMSS
+                    scale: consts.DURATION_CONSTS.SCALES.MMSS
                 }
             }));
 

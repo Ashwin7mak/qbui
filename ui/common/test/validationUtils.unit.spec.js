@@ -1,6 +1,9 @@
-var LimitConstants = require('../src/limitConstants');
-var ValidationUtils = require('../src/validationUtils');
 var assert = require('assert');
+var rewire = require('rewire');
+var sinon = require('sinon');
+var LimitConstants = require('../src/limitConstants');
+var constants = require('../src/constants');
+var ValidationUtils = rewire('../src/validationUtils');
 
 describe('test validateFieldValue', () => {
 
@@ -92,6 +95,44 @@ describe('test validateFieldValue', () => {
                 var result = ValidationUtils.checkFieldValue(data.def, name, value);
                 assert.notEqual(result, null);
                 assert.equal(result.isInvalid, data.isInvalid);
+            });
+        });
+    });
+
+    // These tests only ensure a field type validator was called correctly. Please add separate unit tests for
+    // confirming the field specific validators work as expected
+    describe('field type specific validation tests', () => {
+        var fieldSpecificValidatorTestCases = [
+            {
+                description: 'validates emails',
+                validatorVariableName: 'EmailValidator',
+                fieldType: constants.EMAIL_ADDRESS
+            },
+            {
+                description: 'validates phone numbers',
+                validatorVariableName: 'PhoneValidator',
+                fieldType: constants.PHONE_NUMBER
+            }
+        ];
+
+        fieldSpecificValidatorTestCases.forEach(testCase => {
+            it(testCase.description, () => {
+                var fieldDef = {fieldDef: {datatypeAttributes: {type: testCase.fieldType}}};
+
+                var testFieldName = 'my field';
+                var testValue = '1234';
+                var testCheckRequired = false;
+
+                var mockValidator = {validateAndReturnResults: sinon.spy()};
+                var mockDependencies = {};
+                mockDependencies[testCase.validatorVariableName] = mockValidator;
+                var revert = ValidationUtils.__set__(mockDependencies);
+
+                ValidationUtils.checkFieldValue(fieldDef, testFieldName, testValue, testCheckRequired);
+
+                assert(mockValidator.validateAndReturnResults.calledOnce);
+
+                revert();
             });
         });
     });

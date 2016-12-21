@@ -1,7 +1,5 @@
 import React from 'react';
 import './fields.scss';
-import _ from 'lodash';
-import Intl from 'intl';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import Locale from '../../locales/locales';
@@ -92,7 +90,9 @@ const DurationFieldValueRenderer = React.createClass({
         //it need to get formatted and destructured(string and units) for localizing
         //server side rendered display value is not localized
         if (opts.scale === DURATION_CONSTS.SMART_UNITS || !display) {
-            display = durationFormatter.format({value: this.props.value}, fieldInfo);
+            if (typeof this.props.value === 'number') {
+                display = durationFormatter.format({value: this.props.value}, fieldInfo);
+            }
         }
 
         // for smart units localize the units

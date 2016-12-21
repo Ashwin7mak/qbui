@@ -359,7 +359,8 @@ export default {
         placeholder:  {
             email: 'name@domain.com',
             maxLength :"up to {maxLength} characters",
-            url: 'www.example.com'
+            url: 'www.example.com',
+            phone: '(xxx) xxx-xxxx',
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         errors: {
@@ -391,12 +392,15 @@ export default {
             }
         },
         invalidMsg : {
-            unknown: 'Invalid unknown type. Results: ',
-            required: 'Fill in the {fieldName}',
-            email: 'Format the {fieldName} like name@domain.com',
-            emails: 'Format all the addresses like name@domain.com',
-            maxChars: 'Use up to {maxNum} characters',
-            choiceMaxLength :"Select a choice with {maxNum} characters or less"
+            unknown: "Invalid unknown type. Results: ",
+            required: "Fill in the {fieldName}",
+            email: "Format the {fieldName} like name@domain.com",
+            emails: "Format all the addresses like name@domain.com",
+            maxChars: "Use up to {maxNum} characters",
+            choiceMaxLength : "Select a choice with {maxNum} characters or less",
+            phone: "Format the {fieldName} like (xxx) xxx-xxxx",
+            phoneInvalidCountryCode: "Format the country code like +x for international numbers",
+            duration: "Format the {fieldName} in {scale}"
         },
         createInQuickBaseClassicMessage: {
         },

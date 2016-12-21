@@ -1,47 +1,92 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import QBicon from '../../components/qbIcon/qbIcon.js';
 import './urlField.scss';
 import * as phoneNumberFormatter from '../../../../common/src/formatter/phoneNumberFormatter';
+import _ from 'lodash';
 
 const PhoneFieldValueRenderer = React.createClass({
     displayName: 'PhoneFieldValueRenderer',
     propTypes: {
         /**
          * the value to for sms and tel link */
-        value: React.PropTypes.any,
+        value: PropTypes.string,
         /**
          * the display to render */
-        display: React.PropTypes.any,
+        display: PropTypes.any.isRequired,
         /**
          * phone field attributes
          */
-        attributes: React.PropTypes.object
+        attributes: PropTypes.object,
+
+        /**
+         * Disable the phone link */
+        disabled: PropTypes.bool,
+
+        /**
+         * if false, extension will not be displayed */
+        includeExtension: PropTypes.bool,
     },
+
+    getDefaultProps() {
+        return {
+            disabled: false,
+            includeExtension: true,
+        };
+    },
+
+    shouldIncludeExtension() {
+        let displayInfo = this.props.display;
+        return (this.props.includeExtension && (displayInfo.extension && displayInfo.extension.length));
+    },
+
     renderLink() {
-        let telPhoneNumberLink = 'tel:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');
-        let smsPhoneNumberLink = 'sms:' + (this.props.value ? phoneNumberFormatter.getPhoneNumber(this.props.value) : '');
-        const disabledDisplay = (<span>
-                                    {this.props.display}
+        let displayValue;
+        let telPhoneNumberLink;
+        let smsPhoneNumberLink;
+        let extraDigits;
+        let extension;
+        let isDialable = false;
+        if (_.isObject(this.props.display)) {
+            let displayInfo = this.props.display;
+            displayValue = displayInfo.display;
+            telPhoneNumberLink = displayInfo.internetDialableNumber;
+            smsPhoneNumberLink = 'sms:' + displayInfo.internationalNumber;
+            extraDigits = displayInfo.extraDigits;
+            extension = (this.shouldIncludeExtension() ? `${phoneNumberFormatter.EXTENSION_DELIM}${displayInfo.extension}` : null);
+            isDialable = displayInfo.isDialable;
+        } else {
+            displayValue = this.props.display;
+        }
+        const disabledDisplay = (<span className="disabledPhoneFieldValueRenderer">
+                                    {displayValue}{extraDigits}{extension}
                                  </span>);
-        const displayWithIcons = (<div className="phoneQBIconWrapper">
-                                        <a href={telPhoneNumberLink} tabIndex="-1">
-                                                        <span>
-                                                            {this.props.display}
-                                                        </span>
+        const displayWithIcons = (<div className="phoneQBIconWrapper phoneWrapper">
+                                        <a href={telPhoneNumberLink} tabIndex="-1" className="telLink">
+                                            <span tabIndex="0" className="phoneData mainNumber">
+                                                {displayValue}
+                                            </span>
+                                            {extraDigits && (<span className="phoneData noLink extraDigits" tabIndex="0">{extraDigits}</span>)}
+                                            {extension && <span className="phoneData noLink extension" tabIndex="0">{extension}</span>}
                                         </a>
                                         <div className="urlIcon phoneIcon">
-                                            <a href={smsPhoneNumberLink} tabIndex="-1">
+                                            <a href={smsPhoneNumberLink} tabIndex="0" className="smsIconLink">
                                                 <QBicon className="smsIcon" icon="speechbubble-outline"/>
                                             </a>
-                                            <a href={telPhoneNumberLink} tabIndex="-1">
+                                            {/*The phone icon is not in the tabindex because it does the same thing as the phoneNumber link*/}
+                                            <a href={telPhoneNumberLink} tabIndex="-1" className="telIconLink">
                                                 <QBicon icon="phone-outline"/>
                                             </a>
                                         </div>
                                     </div>);
-        return this.props.disabled ? disabledDisplay : displayWithIcons;
+
+        if (this.props.disabled || !isDialable) {
+            return disabledDisplay;
+        } else {
+            return displayWithIcons;
+        }
     },
     render() {
-        let classes = 'urlField';
+        let classes = (_.isObject(this.props.display) && this.props.display.isDialable ? 'urlField' : '');
         classes += (this.props.disabled ? ' disabled' : '');
         return (
             <div className = {classes}>

@@ -17,6 +17,7 @@
 
     var sText = '9782341234';
     var sEmail = 'test@gmail.com';
+    var sPhone = '15084811015';
     var sNumeric = '33.33';
     var sTime = "12:00 am";
     var date = new Date();
@@ -180,7 +181,11 @@
                         return elm.getAttribute('type').then(function(type) {
                             if (type === 'email') {
                                 return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sEmail));
-                            } else {return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sText));}
+                            } else if (type === 'tel') {
+                                return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sPhone));
+                            } else {
+                                return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sText));
+                            }
                         });
                     });
                 } else if (fieldLabel === 'numericField') {
@@ -265,7 +270,7 @@
                 return reportServicePage.waitForElement(self.formsSaveChangesDialog).then(function() {
                     expect(self.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
                     //close the dialogue by clicking on dont save
-                    return self.clickButtonOnSaveChangesDialog("Don't Save");
+                    return self.clickButtonOnSaveChangesDialog("Don't save");
                 });
             });
         };

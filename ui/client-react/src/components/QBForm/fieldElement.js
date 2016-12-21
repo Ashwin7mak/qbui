@@ -107,6 +107,7 @@ const FieldElement = React.createClass({
                                              onKeyDown={this.onKeyDown}
                                              onValidated={this.props.onValidated}
                                              isInvalid={this.props.isInvalid}
+                                             includeUnits={true}
                                              key={'fve-' + this.props.idKey}
                                              idKey={'fve-' + this.props.idKey}
                                              invalidMessage={this.props.invalidMessage}

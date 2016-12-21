@@ -40,7 +40,8 @@ $data-font-size: $font-size-p;
 
 [type="text"],
 [type="url"],
-[type="email"] {
+[type="email"],
+[type="tel"] {
     &.input {
         background-color: $input-bg-color;
     }
@@ -51,6 +52,10 @@ $data-font-size: $font-size-p;
         padding: 0 0 0 2px;
         width: inherit;
         height: 30px;
+        &.rightAlignInlineEditNumberFields {
+            text-align: right;
+            padding-right: 2px;
+        }
     }
 
     &:focus.input {
@@ -145,7 +150,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 
 .textFormat .cellData .textField {
     word-break: break-word;
-    white-space: normal;
+    white-space: nowrap;
 }
 
 .textFormat .cellData.NoWrap .textField {
