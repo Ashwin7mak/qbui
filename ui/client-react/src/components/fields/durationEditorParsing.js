@@ -25,12 +25,7 @@
      * For example if a user entered "2 hours" it will be converted into a total of 2 hours worth of milliseconds
      * */
     function getMilliseconds(num, type) {
-        var tempObj = {};
-        ALLOWED_DURATION_TYPE.forEach(function(currentType) {
-            tempObj[currentType] = Locale.getMessage('durationAcceptedType.' + currentType);
-        });
         console.log('getMilliseconds: ', type);
-        console.log('tempObj: ', tempObj);
         console.log('num: ', num);
         var returnValue;
         switch (type) {
@@ -59,13 +54,12 @@
         // case DURATION_CONSTS.D:
         //     returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_DAY);
         //     break;
-        // case tempObj[DURATION_CONSTS.HOURS]:
-        // case DURATION_CONSTS.H:
-        case Locale.getMessage('durationAcceptedType.' + DURATION_CONSTS.HOURS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.HOURS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.H):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
-        case Locale.getMessage('durationAcceptedType.' + DURATION_CONSTS.MINUTES):
-        // case DURATION_CONSTS.M:
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.MINUTES):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.M):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
         // case DURATION_CONSTS.SCALES.SECONDS:
@@ -221,7 +215,7 @@
              * If there are only accepted types return true
              * */
             ALLOWED_DURATION_TYPE.forEach(function(currentType) {
-                localizedTypes.push(Locale.getMessage('durationAcceptedType.' + currentType).toLowerCase());
+                localizedTypes.push(Locale.getMessage(DURATION_CONSTS.ACCEPTED_DURATION_TYPE + currentType).toLowerCase());
             });
             type.forEach(function(val) {
                 if (localizedTypes.indexOf(val) === -1 && val !== '') {

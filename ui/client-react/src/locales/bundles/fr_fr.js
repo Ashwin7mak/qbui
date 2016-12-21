@@ -181,7 +181,7 @@ export default {
             Minutes: 'minutes',
             Seconds: 'secondes',
         },
-        durationAcceptedType: {
+        acceptedDurationType: {
             // WEEKS: 'Weeks',
             // W: 'W',
             // DAYS: 'Days',

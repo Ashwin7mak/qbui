@@ -141,6 +141,7 @@
             MMSS: ':MM:SS',
             SMART_UNITS:'Smart Units',
             //===========================================My Focus
+            ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
             WEEKS: 'Weeks',
             W: 'W',
             DAYS: 'Days',
