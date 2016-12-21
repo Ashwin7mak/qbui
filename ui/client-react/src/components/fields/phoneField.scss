@@ -32,10 +32,18 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .telLink {
+        flex-direction: column;
+    }
 }
 
 // Don't show phone field icons on a report
-// Never show the URL icon on Reports
 .cellData .urlField .phoneIcon {
     display: none;
+}
+
+// Keep everything inline in a report
+.phoneFormat .cellData .telLink {
+    flex-direction: row;
 }
