@@ -177,8 +177,7 @@
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
          * */
-        type = type.join('').trim().split(' ');
-        if (type.length > 1 || type.length === 1 && type[0] !== '') {
+        if (type.length > 1 || type.length === 1) {
             return false;
         }
         colons = value.match(/:/g);
@@ -228,7 +227,9 @@
              * If a user inserted a colon, it will be validated based off of time formats validation requirements
              * */
             value = value.toLowerCase();
-            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
+            type = value.replace(regexNumsDecimalsColons, ' ')
+                                .split(' ')
+                                .filter(function(val) {return val !== '';});
             if (value.indexOf(':') !== -1) {
                 return isTimeFormatValid(value, type);
             }
@@ -242,9 +243,9 @@
                 return Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + currentType);
             });
             type.forEach(function(val) {
-                if (localizedTypes.indexOf(val) === -1 && val !== '') {
+                if (localizedTypes.indexOf(val) === -1) {
                     valid = false;
-                } else if (val !== '') {
+                } else {
                     tempType.push(val);
                 }
             });
