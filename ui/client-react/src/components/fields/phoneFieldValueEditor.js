@@ -59,7 +59,7 @@ const PhoneFieldValueEditor = React.createClass({
         }
 
         let phoneNumber = phoneNumberFormatter.onChangeMasking(newValue);
-        let ext = phoneNumberFormatter.getExtension(this.props.value);
+        let ext = phoneNumberFormatter.getExtension(this.props.display);
         let updatedValue = phoneNumber;
         if (this.props.value && ext) {
             updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumber, ext);
@@ -75,11 +75,18 @@ const PhoneFieldValueEditor = React.createClass({
          * The phone number is stripped out of the phone number and ext string, and then the user's new input value in the ext number
          * input box is then concatenated back with the phone number
          * */
-        let updatedValue = phoneNumberFormatter.getPhoneNumber(this.props.value);
+        let updatedValue = this.props.display;
+        // Check if the phone display is an object with a display property and use that value instead if it is
+        if (this.props.display && this.props.display.display) {
+            updatedValue = this.props.display.display + this.getExtraDigits();
+        }
+
+        updatedValue = phoneNumberFormatter.getPhoneNumber(updatedValue);
         if (newValue) {
             let extNumber = phoneNumberFormatter.onChangeMasking(newValue);
-            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(phoneNumberFormatter.getPhoneNumber(this.props.display), extNumber);
+            updatedValue = phoneNumberFormatter.getUpdatedPhoneNumberWithExt(updatedValue, extNumber);
         }
+
         if (this.props.onChange) {
             this.props.onChange(updatedValue);
         }
@@ -95,7 +102,9 @@ const PhoneFieldValueEditor = React.createClass({
             value: phoneNumberFormatter.onBlurMasking(this.props.value),
         };
 
-        theVals.display = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        // Format the value for easier user editing. Formatting is cleared on save.
+        theVals.value = phoneNumberFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        theVals.display = theVals.value;
 
         if (this.props.onBlur) {
             this.props.onBlur({value: theVals.value, display: theVals.display});
@@ -114,16 +123,25 @@ const PhoneFieldValueEditor = React.createClass({
         return this.props.attributes && this.props.attributes.includeExtension;
     },
 
+    getExtraDigits() {
+        if (_.has(this.props, 'display.extraDigits') && this.props.display.extraDigits) {
+            return ' ' + this.props.display.extraDigits;
+        }
+
+        return '';
+    },
+
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         placeholder = Locale.getMessage('placeholder.phone');
         let phoneNumber = '';
         let extension = '';
-        if (value) {
+        if (display) {
             // We use the display value as the input value for the phoneNumber so that the user can edit a friendlier looking value
             // e.g., (555) 555-5555 instead of 5555555555 (we currently cannot save any special characters)
             phoneNumber = phoneNumberFormatter.getPhoneNumber(_.has(display, 'display') ? display.display : display);
-            extension = phoneNumberFormatter.getExtension(value);
+            phoneNumber += this.getExtraDigits();
+            extension = phoneNumberFormatter.getExtension(display);
         }
 
         /**

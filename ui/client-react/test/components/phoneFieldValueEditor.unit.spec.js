@@ -57,13 +57,20 @@ describe('PhoneFieldValueEditor', () => {
         PhoneFieldValueEditor.__ResetDependency__('Locale');
     });
 
-    it('allows a user to edit the raw value of a phone', () => {
+    it('allows a user to edit the value of a phone number', () => {
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         domComponent = ReactDOM.findDOMNode(component);
         Simulate.change(domComponent.childNodes[0], {
             target: {value: phoneNumber}
         });
         expect(component.state.value).toEqual(phoneNumber);
+    });
+
+    it('allows a user to edit extra digits beyond the phone number', () => {
+        component = TestUtils.renderIntoDocument(<PhoneFieldValueEditor display={{display: '8675309', extraDigits: '1234'}} />);
+        let phoneInput = TestUtils.findRenderedDOMComponentWithClass(component, 'textField');
+
+        expect(phoneInput.value).toEqual('8675309 1234');
     });
 
     it('allows a user to only enter digits and the following special characters "( ) . - + "', () => {
@@ -143,6 +150,32 @@ describe('PhoneFieldValueEditor', () => {
         // can enter spaces as needed until the value is formatted
         expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt + ' ');
         expect(domComponent.childNodes[2].value).toEqual(ext);
+    });
+
+    it('allows a user to edit the phone number without clearing the extension', () => {
+        let updatedPhoneNumber = '8675309';
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
+        component.setState({value: phoneNumberWithExt, display: {display: phoneNumberWithoutExt, extension: ext}});
+        domComponent = ReactDOM.findDOMNode(component);
+        let input = domComponent.childNodes[0];
+
+        Simulate.change(input, {target: {value: updatedPhoneNumber}});
+
+        expect(domComponent.childNodes[0].value).toEqual(updatedPhoneNumber);
+        expect(domComponent.childNodes[2].value).toEqual(ext);
+    });
+
+    it('allows a user to edit the extension first without clearing the main phone number', () => {
+        let updatedExtension = '5678';
+        component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
+        component.setState({value: phoneNumberWithExt, display: {display: phoneNumberWithoutExt, extension: ext}});
+        domComponent = ReactDOM.findDOMNode(component);
+        let input = domComponent.childNodes[2];
+
+        Simulate.change(input, {target: {value: updatedExtension}});
+
+        expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt);
+        expect(domComponent.childNodes[2].value).toEqual(updatedExtension);
     });
 
     it('renders a single phone input field when all props are null', () => {

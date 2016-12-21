@@ -16,11 +16,34 @@
         width: 28%;
     }
 
-    .extraDigits, .extension {
+    .noLink {
         color: $text-color;
     }
 
     .extraDigits::before, .extension::before {
         content: "\00a0";
     }
+
+    a span.phoneData {
+        overflow: visible;
+    }
+
+    a span.phoneData.extraDigits {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .telLink {
+        flex-direction: column;
+    }
+}
+
+// Don't show phone field icons on a report
+.cellData .urlField .phoneIcon {
+    display: none;
+}
+
+// Keep everything inline in a report
+.phoneFormat .cellData .telLink {
+    flex-direction: row;
 }
