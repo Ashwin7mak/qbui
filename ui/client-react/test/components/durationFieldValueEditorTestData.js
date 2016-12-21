@@ -469,43 +469,43 @@
             },
             {
                 scale: CONSTS.SCALES.SMART_UNITS,
-                placeholder: CONSTS.PLACEHOLDER.DAYS
+                placeholder: CONSTS.ACCEPTED_TYPE.DAYS
             },
             {
                 scale: CONSTS.SCALES.HHMMSS,
-                placeholder: CONSTS.PLACEHOLDER.HHMMSS
+                placeholder: CONSTS.SCALES.HHMMSS
             },
             {
                 scale: CONSTS.SCALES.HHMM,
-                placeholder: CONSTS.PLACEHOLDER.HHMM
+                placeholder: CONSTS.SCALES.HHMM
             },
             {
                 scale: CONSTS.SCALES.MM,
-                placeholder: CONSTS.PLACEHOLDER.MM
+                placeholder: CONSTS.SCALES.MM
             },
             {
                 scale: CONSTS.SCALES.MMSS,
-                placeholder: CONSTS.PLACEHOLDER.MMSS
+                placeholder: CONSTS.SCALES.MMSS
 
             },
             {
                 scale: CONSTS.SCALES.SECONDS,
-                placeholder: CONSTS.PLACEHOLDER.SECONDS
+                placeholder: CONSTS.ACCEPTED_TYPE.SECONDS
 
             },
             {
                 scale: CONSTS.SCALES.HOURS,
-                placeholder: CONSTS.PLACEHOLDER.HOURS
+                placeholder: CONSTS.ACCEPTED_TYPE.HOURS
 
             },
             {
                 scale: CONSTS.SCALES.DAYS,
-                placeholder: CONSTS.PLACEHOLDER.DAYS
+                placeholder: CONSTS.ACCEPTED_TYPE.DAYS
 
             },
             {
                 scale: CONSTS.SCALES.WEEKS,
-                placeholder: CONSTS.PLACEHOLDER.WEEKS
+                placeholder: CONSTS.ACCEPTED_TYPE.WEEKS
 
             }
         ],
