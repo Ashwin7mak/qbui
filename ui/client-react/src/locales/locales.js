@@ -91,7 +91,7 @@ class Locale {
      * @returns {*}
      */
     static getMessage(msgPath, tokens) {
-        var messages =  Locale.getI18nBundle().messages;
+        var messages =  Locale.getI18nBundle().default.messages;
 
         let message = msgPath.split('.').reduce((obj, pathPart) => {
             return obj[pathPart];

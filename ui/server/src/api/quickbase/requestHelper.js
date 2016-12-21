@@ -313,7 +313,8 @@
                     return null;
                 }
                 let query = url.parse(req.url, true).query;
-                return (query && query.hasOwnProperty(parameterName)) ? query[parameterName] : null;
+                let duder = Object.prototype.hasOwnProperty.call(query, parameterName);
+                return (query && duder) ? query[parameterName] : null;
             },
 
             /**
