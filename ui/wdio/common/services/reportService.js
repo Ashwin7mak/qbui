@@ -205,7 +205,7 @@
              * @param query
              * @returns {*|promise}
              */
-            createDefaultReport: function(appId, tableId, name, fids, sortList, facetFids, query) {
+            createCustomReport: function(appId, tableId, name, fids, sortList, facetFids, query) {
                 var deferred = promise.pending();
                 var printableSortList = [];
 

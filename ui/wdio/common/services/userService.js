@@ -14,7 +14,7 @@
                 let user = userGenerator.generatePopulatedUser(options);
                 return user;
             },
-            generateDefaultUserList: function(appId) {
+            addDefaultUserListToApp: function(appId) {
                 let userIdList = [];
                 let users = userGenerator.generateDefaultAdminUsers();
 

@@ -12,6 +12,64 @@
     module.exports = function(recordBase) {
         var recordService = {
             /**
+             * Add the specified number of records to the table in an existing application
+             * @param createdApp - App JSON object returned from the create app API call
+             * @param tableIndex - Table index number in the created app object
+             * @param numRecords - Total numbers of records to add
+             * @param addDupeRecord - Boolean whether or not to add a duplicate record in the record set
+             * @param addEmptyRecord - Boolean whether or not to add an empty record in the record set
+             * @returns Promise result from the add records API call
+             */
+            addRecordsToTable: function(createdApp, tableIndex, numRecords, addDupeRecord, addEmptyRecord) {
+                // Variable to determine whether or not we use regular or bulk add record APIs below
+                var MIN_RECORDSCOUNT = 11;
+                var totalNumRecords;
+
+                // Include a duplicate or blank record if specified in the method call
+                if (addDupeRecord) {
+                    totalNumRecords = numRecords - 1;
+                }
+                if (addEmptyRecord) {
+                    totalNumRecords = numRecords - 1;
+                }
+
+                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                var tableNonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[tableIndex]);
+                // Generate the record JSON objects with data
+                var generatedRecords = e2eBase.recordService.generateRecords(tableNonBuiltInFields, totalNumRecords);
+
+                // Add 1 duplicate record
+                if (addDupeRecord) {
+                    var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
+                    var dupRecord = clonedArray[0];
+                    // Edit the numeric field so we can check the second level sort (ex: 6.7)
+                    dupRecord.forEach(function(field) {
+                        if (field.id === 7) {
+                            field.value = 1.90;
+                        }
+                        if (field.id === 11) {
+                            field.value = '1977-12-12';
+                        }
+                    });
+                    // Add the new dupe record back in to create
+                    generatedRecords.push(dupRecord);
+                }
+
+                // Add 1 empty record
+                if (addEmptyRecord) {
+                    var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(tableNonBuiltInFields, 1);
+                    generatedRecords.push(generatedEmptyRecords[0]);
+                }
+
+                if (numRecords < MIN_RECORDSCOUNT) {
+                    // Via the API create the records, a new report, then run the report.
+                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
+                } else {
+                    // Via the API create the bulk records
+                    return e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
+                }
+            },
+            /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
              * and fetches the created records
              * Returns a promise.
@@ -22,6 +80,8 @@
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 var fetchRecordPromises = [];
+                //TODO: This function does not add records in order of the genRecords due to looping over promises
+                //TODO: Investigate fix or just use bulk for add any more than 1 record
                 genRecords.forEach(function(currentRecord) {
                     fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
                 });
@@ -49,7 +109,7 @@
              */
             generateRecords: function(fields, numRecords) {
                 var generatedRecords = [];
-                for (var i = 0; i < numRecords; i++) {
+                for (var i = 1; i < numRecords; i++) {
                     var generatedRecord = recordGenerator.generateRecord(fields);
                     generatedRecords.push(generatedRecord);
                 }

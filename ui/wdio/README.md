@@ -65,11 +65,12 @@ You’ll see the Chrome browser launch and run a few tests. If you get errors ch
 
 
 ###Via the command-line (local):
-* The wdio config file is set to be run via IntelliJ by default. You'll need to update the **specs** parameter in **wdio.conf.js** first before proceeding. Change it to: 
+* The wdio config file is set to be run via IntelliJ by default. You'll need to update the **specs** and **screenshotPath** parameters in **wdio.conf.js** first before proceeding. Change them to: 
 ``` javascript
 specs: [
         './tests/reportAddRecord.e2e.spec.js'
     ]
+screenshotPath: './screenshots/'
 ```
 
 * In the Mac OS X terminal `cd` to your checked out repository into the `qbui/ui/wdio` directory.

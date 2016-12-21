@@ -90,9 +90,8 @@
              * Setup method that generates an application, table, report and a specified number of records
              * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
              */
-            defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
+            basicAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
-                var MIN_RECORDSCOUNT = 11;
 
                 // Use map of tables passed in or create default
                 if (!tableToFieldToFieldTypeMap) {
@@ -107,58 +106,34 @@
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
-                return e2eBase.appService.createApp(generatedApp).then(function(app) {
-                    createdApp = app;
-                    e2eBase.userService.generateDefaultUserList(createdApp.id);
-
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    // Generate the record JSON objects
-                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                    // Add 1 duplicate record
-                    var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
-                    var dupRecord = clonedArray[0];
-                    // Edit the numeric field so we can check the second level sort (ex: 6.7)
-                    dupRecord.forEach(function(field) {
-                        if (field.id === 7) {
-                            field.value = 1.90;
-                        }
-                        if (field.id === 11) {
-                            field.value = '1977-12-12';
-                        }
-                    });
-                    // Add the new record back in to create
-                    table1GeneratedRecords.push(dupRecord);
-                    if (numberOfRecords < MIN_RECORDSCOUNT) {
-                        // Via the API create the records, a new report, then run the report.
-                        return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    } else {
-                        // Via the API create the bulk records
-                        return e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    }
+                return e2eBase.appService.createApp(generatedApp).then(function(appResponse) {
+                    // Set the global app object for use below
+                    createdApp = appResponse;
+                }).then(function() {
+                    // Generate and add the default set of Users to the app
+                    return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
+                }).then(function() {
+                    // Generate and add records to Table 1 (include a dupe and an empty record)
+                    return e2eBase.recordService.addRecordsToTable(createdApp, 0, numberOfRecords, true, true);
                 }).then(function() {
                     // Create a List all report for the first table
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
+                    return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
                 }).then(function() {
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    // Generate 1 empty record for Table 1
-                    var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(table1NonBuiltInFields, 1);
-                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedEmptyRecords);
-                }).then(function() {
-                    // Create the above for table 2
+                    // Create records and a List all report for table 2
+                    //TODO: Need to do this better. We had inconsistencies when creating test data with promises hence why Table 2 is hardcoded
                     if (createdApp.tables[1]) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                         var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
                         // Generate the record JSON objects
                         var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
                         // Via the API create the records, a new report, then run the report.
+                        //TODO: The looping issue is probably caused by this addRecords function. Investigate.
                         return e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords).then(function() {
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null);
                         });
                     }
                 }).then(function() {
-                    //Create forms for both tables
+                    // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
                 }).then(function() {
                     // Set default table homepage for Table 1
@@ -182,7 +157,7 @@
             fullReportsSetup: function(numRecords) {
                 var createdApp;
 
-                return this.defaultAppSetup(null, numRecords).then(function(createdAppResponse) {
+                return this.basicAppSetup(null, numRecords).then(function(createdAppResponse) {
                     createdApp = createdAppResponse;
 
                     var TEXT_FID = 6;
@@ -213,19 +188,19 @@
 
                     //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
                     // Create report with fids
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
+                    return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
                         .then(function(rid1) {
                             reportIds.push(rid1);
                             // Create report with sortList
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
                         }).then(function(rid2) {
                             reportIds.push(rid2);
                             // Create report with facetFids
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
                         }).then(function(rid3) {
                             reportIds.push(rid3);
                             // Create report with all params defined
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
                         }).then(function(rid4) {
                             reportIds.push(rid4);
                             return reportIds;
