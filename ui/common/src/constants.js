@@ -134,12 +134,6 @@
                 SECONDS: 'Seconds',
                 MILLISECONDS: 'Milliseconds',
             },
-            //The below constants will be moved to the locale file in an upcoming story
-            // HHMM: ':HH:MM',
-            // HHMMSS: ':HH:MM:SS',
-            // MM: ':MM',
-            // MMSS: ':MM:SS',
-            // SMART_UNITS:'Smart Units',
             ACCEPTED_TYPE: {
                 ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
                 WEEKS: 'Weeks',
