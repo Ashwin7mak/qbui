@@ -8,7 +8,7 @@ import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import bigDecimal from 'bigdecimal';
 
-describe('DurationFieldValueEditor', () => {
+fdescribe('DurationFieldValueEditor', () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
@@ -40,7 +40,7 @@ describe('DurationFieldValueEditor', () => {
     });
 
     TestData.dataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+        fit('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.numValue + ' ' + test.type;
             if (test.type === undefined) {
