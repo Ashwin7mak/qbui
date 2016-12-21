@@ -270,7 +270,7 @@
                 return reportServicePage.waitForElement(self.formsSaveChangesDialog).then(function() {
                     expect(self.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
                     //close the dialogue by clicking on dont save
-                    return self.clickButtonOnSaveChangesDialog("Don't Save");
+                    return self.clickButtonOnSaveChangesDialog("Don't save");
                 });
             });
         };
