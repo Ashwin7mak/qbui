@@ -42,6 +42,7 @@
      * For example if a user entered "2 hours" it will be converted into a total of 2 hours worth of milliseconds
      * */
     function getMilliseconds(num, type) {
+        type = type.toLowerCase();
         var returnValue;
         switch (type) {
         /**
@@ -49,41 +50,46 @@
          * HHMM && HHMMSS will default to converting the value to milliseconds by hours
          * MM && MMSS will default to converting the value to milliseconds by minutes
          * */
-
-        case DURATION_CONSTS.SCALES.HHMM:
-        case DURATION_CONSTS.SCALES.HHMMSS:
+        case DURATION_CONSTS.SCALES.HHMM.toLowerCase():
+        case DURATION_CONSTS.SCALES.HHMMSS.toLowerCase():
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
-        case DURATION_CONSTS.SCALES.MM:
-        case DURATION_CONSTS.MMSS:
+        case DURATION_CONSTS.SCALES.MM.toLowerCase():
+        case DURATION_CONSTS.SCALES.MMSS.toLowerCase():
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEKS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.W):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_WEEK);
             break;
         // /**
         //  * XD Specs state that smart units default to days when a user does not input a type
         //  * */
-        case DURATION_CONSTS.SCALES.SMART_UNITS:
+        case DURATION_CONSTS.SCALES.SMART_UNITS.toLowerCase():
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAYS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAY):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.D):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_DAY);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOURS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOUR):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.H):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTES):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTE):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.M):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECONDS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECOND):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECS):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.S):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_SECOND);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS):
+        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MSECS):
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MS):
             returnValue = num;
@@ -221,7 +227,6 @@
             /**
              * If a user inserted a colon, it will be validated based off of time formats validation requirements
              * */
-            // console.log('value: ', value);
             value = value.toLowerCase();
             type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
             if (value.indexOf(':') !== -1) {
@@ -234,7 +239,7 @@
              * If there are only accepted types return true
              * */
             localizedTypes = ALLOWED_DURATION_TYPE.map(function(currentType) {
-                return Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + currentType).toLowerCase();
+                return Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + currentType);
             });
             type.forEach(function(val) {
                 if (localizedTypes.indexOf(val) === -1 && val !== '') {
@@ -271,8 +276,7 @@
              * ::00
              **/
             var total = 0;
-            var listOfTypes = [];
-            var type;
+            var types;
             var num;
             /**
              * Checks to see if the value is a valid input
@@ -292,31 +296,9 @@
                  * */
                 value = value.toLowerCase();
                 num = value.match(regexNumsDecimalsColons);
-                type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-                type.forEach(function(val) {
-                    /**
-                     * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
-                     * */
-                    if (val.length <= 2 && val !== '') {
-                        val = val.toUpperCase();
-                        listOfTypes.push(val);
-                    } else if (val !== '') {
-                        /**
-                         * Removes first letter and sets it toUpperCase
-                         * Sets type to a string and concatenates the upperCaseLetter back on
-                         * If type is not plural, then it concatenates an 's'
-                         * This formats it to make it easier to check it against constants later
-                         */
-                        val = val.toLowerCase();
-                        var firstLetter = val[0].toUpperCase();
-                        val = val.slice(1);
-                        val = firstLetter + val;
-                        if (val[val.length - 1] !== 's') {
-                            val = val + 's';
-                        }
-                        listOfTypes.push(val);
-                    }
-                });
+                types = value.replace(regexNumsDecimalsColons, ' ')
+                                    .split(' ')
+                                    .filter(function(val) {return val !== '';});
                 /**
                  * If a user only inputs one num and one type, then this function will only be called once
                  * However if the user inserted more than one num and more than one type then this function calls each num with its type
@@ -326,12 +308,14 @@
                  * listOfTypes = [week, days]
                  * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
                  * */
-                if (num !== null && num.length === listOfTypes.length && listOfTypes[0] !== '') {
+                if (num !== null && num.length === types.length) {
                     num.forEach(function(val, i) {
-                        if (num.length === 1 && listOfTypes[i] === DURATION_CONSTS.SCALES.MILLISECONDS || listOfTypes[i] === DURATION_CONSTS.ACCEPTED_TYPE.MS || listOfTypes[i] === DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND) {
-                            total = Number(getMilliseconds(num[i], listOfTypes[i]));
+                        if (num.length === 1 && types[i] === DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS ||
+                                                types[i] === DURATION_CONSTS.ACCEPTED_TYPE.MS ||
+                                                types[i] === DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND) {
+                            total = Number(getMilliseconds(num[i], types[i]));
                         } else {
-                            total += getMilliseconds(num[i], listOfTypes[i]);
+                            total += getMilliseconds(num[i], types[i]);
                         }
                     });
                     return {value: total, valid: true};
