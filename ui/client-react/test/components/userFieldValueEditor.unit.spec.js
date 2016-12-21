@@ -122,7 +122,7 @@ describe('UserFieldValueEditor', () => {
         expect(options.length).toEqual(5);
     });
 
-    it(`displays 'No users found' when the search does not match a user`, () => {
+    it(`displays 'Nobody matches "<search-string>"' when the search does not match a user`, () => {
         component = TestUtils.renderIntoDocument(<UserFieldValueEditor appUsers={appUsers} fieldDef={fieldDef} />);
 
         // open dropdown
@@ -136,6 +136,6 @@ describe('UserFieldValueEditor', () => {
         TestUtils.Simulate.change(selectInput);
 
         let results = ReactDOM.findDOMNode(select).querySelector('.Select-noresults');
-        expect(results.innerText).toEqual(`No users found for "thing"`);
+        expect(results.innerText).toEqual(`Nobody matches "thing"`);
     });
 });
