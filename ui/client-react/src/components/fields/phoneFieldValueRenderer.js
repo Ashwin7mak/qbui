@@ -62,11 +62,11 @@ const PhoneFieldValueRenderer = React.createClass({
                                  </span>);
         const displayWithIcons = (<div className="phoneQBIconWrapper phoneWrapper">
                                         <a href={telPhoneNumberLink} tabIndex="-1" className="telLink">
-                                            <span tabIndex="0" className="phoneData">
+                                            <span tabIndex="0" className="phoneData mainNumber">
                                                 {displayValue}
                                             </span>
-                                            {extraDigits && (<span className="phoneData extraDigits" tabIndex="0">{extraDigits}</span>)}
-                                            {extension && <span className="phoneData extension" tabIndex="0">{extension}</span>}
+                                            {extraDigits && (<span className="phoneData noLink extraDigits" tabIndex="0">{extraDigits}</span>)}
+                                            {extension && <span className="phoneData noLink extension" tabIndex="0">{extension}</span>}
                                         </a>
                                         <div className="urlIcon phoneIcon">
                                             <a href={smsPhoneNumberLink} tabIndex="0" className="smsIconLink">
