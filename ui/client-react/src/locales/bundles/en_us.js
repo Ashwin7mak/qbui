@@ -179,13 +179,6 @@ export default {
             Seconds: "{value, plural, \n =0 {0 seconds}\n =1 {1 second}\n other {{value}  seconds}\n} ",
             Milliseconds: "{value, plural, \n =0 {0 milliseconds}\n =1 {1 millisecond}\n other {{value}  milliseconds}\n} "
         },
-        formEditDurationWithUnits: {
-            Weeks: "weeks",
-            Days: 'days',
-            Hours: 'hours',
-            Minutes: 'minutes',
-            Seconds: 'seconds',
-        },
         acceptedDurationType: {
             weeks: 'weeks',
             week: 'week',

@@ -346,16 +346,16 @@
 
             switch (scale) {
             case DURATION_CONSTS.SCALES.HHMM:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;
+                placeholder = DURATION_CONSTS.SCALES.HHMM;
                 break;
             case DURATION_CONSTS.SCALES.HHMMSS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.HHMMSS;
+                placeholder = DURATION_CONSTS.SCALES.HHMMSS;
                 break;
             case DURATION_CONSTS.SCALES.MM:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.MM;
+                placeholder = DURATION_CONSTS.SCALES.MM;
                 break;
             case DURATION_CONSTS.SCALES.MMSS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.MMSS;
+                placeholder = DURATION_CONSTS.SCALES.MMSS;
                 break;
             case DURATION_CONSTS.SCALES.WEEKS:
                 placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK) :
