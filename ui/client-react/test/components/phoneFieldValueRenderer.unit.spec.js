@@ -135,7 +135,7 @@ describe('PhoneFieldValueRenderer functions', () => {
         expect(domComponent.textContent).toEqual(alternateDisplayText);
     });
 
-    fit('displays any extra digits after a phone number as text (not a link)', () => {
+    it('displays any extra digits after a phone number as text (not a link)', () => {
         let testExtraDigits = '123456789';
 
         component = TestUtils.renderIntoDocument(
@@ -161,7 +161,7 @@ describe('PhoneFieldValueRenderer functions', () => {
         expect(telLink.textContent).toEqual(`${rawPhoneNumberVal}${testExtraDigits}`);
     });
 
-    fit('displays the extension after a phone number as text (not a link)', () => {
+    it('displays the extension after a phone number as text (not a link)', () => {
         component = TestUtils.renderIntoDocument(
             <PhoneFieldValueRenderer
                 value={rawPhoneNumberVal}
