@@ -59,8 +59,12 @@
         addElement(obj, 'browser', agent.source);
         addElement(obj, 'platform', agent.platform);
         addElement(obj, 'ip', ip);
-        addElement(obj, 'body', req.body);
         addElement(obj, 'userId', req.userId);
+
+        // only include body in debug mode..could contain customer info that we don't want exposed in the logs
+        if (getConfig('level') === 'debug') {
+            addElement(obj, 'body', req.body);
+        }
 
         return obj;
     }
@@ -73,8 +77,11 @@
         addElement(obj, 'statusCode', res.statusCode);
         addElement(obj, 'statusMessage', res.statusMessage);
         addElement(obj, 'message', res.message);
-        addElement(obj, 'body', res.body);
 
+        // only include body in debug mode..could contain customer info that we don't want exposed in the logs
+        if (getConfig('level') === 'debug') {
+            addElement(obj, 'body', res.body);
+        }
         return obj;
     }
 
