@@ -62,7 +62,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.multiInputData.forEach(function(test) {
-        fit('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
+        it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let input = ReactDOM.findDOMNode(component);
             let userInput = '';
@@ -86,7 +86,6 @@ fdescribe('DurationFieldValueEditor', () => {
                 userInput += ' ' + test.numValue + ' ' + test.multiInput.thirdInput;
                 thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
             }
-            //component.setState({value: userInput, display: ''});
             Simulate.change(input, {
                 target: {value: userInput}
             });
@@ -100,7 +99,7 @@ fdescribe('DurationFieldValueEditor', () => {
     });
 
     TestData.placeholderData.forEach(function(test) {
-        it('displays the correct placeholder for ' + test.scale, () => {
+        fit('displays the correct placeholder for ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             domComponent = ReactDOM.findDOMNode(component);
             expect(domComponent.placeholder).toEqual(test.placeholder);

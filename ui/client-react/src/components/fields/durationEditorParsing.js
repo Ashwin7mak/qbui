@@ -351,35 +351,35 @@
                 return placeholder;
             }
             switch (scale) {
-            case DURATION_CONSTS.HHMM:
+            case DURATION_CONSTS.SCALES.HHMM:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;
                 break;
-            case DURATION_CONSTS.HHMMSS:
+            case DURATION_CONSTS.SCALES.HHMMSS:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.HHMMSS;
                 break;
-            case DURATION_CONSTS.MM:
+            case DURATION_CONSTS.SCALES.MM:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.MM;
                 break;
-            case DURATION_CONSTS.MMSS:
+            case DURATION_CONSTS.SCALES.MMSS:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.MMSS;
                 break;
-            case DURATION_CONSTS.WEEKS:
+            case DURATION_CONSTS.SCALES.WEEKS:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.WEEKS;
                 break;
             /**
              * XD Specs state that smart units default to days
              * */
-            case DURATION_CONSTS.SMART_UNITS:
-            case DURATION_CONSTS.DAYS:
+            case DURATION_CONSTS.SCALES.SMART_UNITS:
+            case DURATION_CONSTS.SCALES.DAYS:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.DAYS;
                 break;
-            case DURATION_CONSTS.HOURS:
+            case DURATION_CONSTS.SCALES.HOURS:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.HOURS;
                 break;
-            case DURATION_CONSTS.MINUTES:
+            case DURATION_CONSTS.SCALES.MINUTES:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.MINUTES;
                 break;
-            case DURATION_CONSTS.SECONDS:
+            case DURATION_CONSTS.SCALES.SECONDS:
                 placeholder = DURATION_CONSTS.PLACEHOLDER.SECONDS;
                 break;
             default:
