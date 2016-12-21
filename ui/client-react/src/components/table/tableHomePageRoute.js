@@ -2,20 +2,20 @@ import React from 'react';
 import Stage from '../stage/stage';
 import ReportStage from '../report/reportStage';
 import ReportHeader from '../report/reportHeader';
-import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
-import NumberUtils from '../../utils/numberUtils';
 import Constants from '../../../../common/src/constants';
+import {connect} from 'react-redux';
+import {editNewRecord} from '../../actions/formActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
 
-let TableHomePageRoute = React.createClass({
+export const TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",
 
@@ -60,8 +60,10 @@ let TableHomePageRoute = React.createClass({
      * Add a new record in trowser
      */
     editNewRecord() {
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
+        // const flux = this.getFlux();
+        // flux.actions.editNewRecord();
+
+        this.props.dispatch(editNewRecord());
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -111,4 +113,5 @@ let TableHomePageRoute = React.createClass({
     }
 });
 
-export default TableHomePageRoute;
+// injects dispatch()
+export default connect()(TableHomePageRoute);

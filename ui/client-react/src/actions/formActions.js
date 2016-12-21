@@ -13,6 +13,84 @@ import * as CompConsts from '../constants/componentConstants';
 
 let logger = new Logger();
 
+export const loadingForm = () => {
+    return {
+        type: 'LOADING_FORM',
+    };
+};
+export const loadingFormError = (error) => {
+    return {
+        type: 'LOAD_FORM_ERROR',
+        error
+    };
+};
+export const loadedForm = (formData) => {
+    return {
+        type: 'LOAD_FORM_SUCCESS',
+        formData
+    };
+};
+
+export function editNewRecord(navigateAfterSave = false) {
+
+    // add editRec=new query param and let the router take action
+    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+
+    return {
+        type: 'EDIT_REPORT_RECORD',
+        recId: UrlConsts.NEW_RECORD_VALUE,
+        navigateAfterSave
+    };
+}
+
+export function loadEditForm(appId, tblId, rptId) {
+
+    return function (dispatch) {
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId) {
+                dispatch(loadingForm());
+
+                let formService = new FormService();
+                formService.getForm(appId, tblId, rptId, "edit").then(
+                    (response) => {
+                        resolve();
+
+                        response.data.record = null;
+                        debugger;
+                        dispatch(loadedForm(response.data));
+                    },
+                    (error) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        }
+
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        } else {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        }
+
+                        // remove the editRec query string since we are not successfully editing the form
+                        WindowLocationUtils.pushWithoutQuery();
+                        dispatch(loadingFormError(error.response.status));
+
+                        reject();
+                    }
+                );
+            } else {
+                logger.error('formService.loadFormAndRecord: Missing required input parameters.');
+                reject();
+            }
+        })
+    }
+
+}
 
 let formActions = {
 

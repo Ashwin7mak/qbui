@@ -28,6 +28,7 @@ import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
 import * as ShellActions from '../../actions/shellActions';
+import * as FormActions from '../../actions/formActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -151,16 +152,15 @@ export let Nav = React.createClass({
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
-
-
-            const flux = this.getFlux();
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.props.qbui.editForm.loading && !this.state.form.editFormLoading && (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
-                flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
+
+                this.props.dispatch(FormActions.loadEditForm(appId, tblId, rptId)).then(() => {
                     this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
                 });
             } else {
+                const flux = this.getFlux();
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
                 });
@@ -223,6 +223,7 @@ export let Nav = React.createClass({
                 <RecordTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
                                form={this.state.form}
+                               editForm={this.props.qbui.editForm}
                                appId={this.props.params.appId}
                                tblId={this.props.params.tblId}
                                recId={editRecordId}

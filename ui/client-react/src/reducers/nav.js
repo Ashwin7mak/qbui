@@ -1,4 +1,6 @@
-const nav = (state = { trowserOpen: false, trowserContent: null }, action) => {
+const nav = (state = {trowserOpen: false, trowserContent: null}, action) => {
+
+    // reducer - no mutations!
     switch (action.type) {
     case 'SHOW_TROWSER':
         return {
@@ -11,6 +13,7 @@ const nav = (state = { trowserOpen: false, trowserContent: null }, action) => {
         };
 
     default:
+        // return existing state by default in redux
         return state;
     }
 };

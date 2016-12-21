@@ -56,17 +56,17 @@ let RecordTrowser = React.createClass({
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
             errorMessage = this.props.pendEdits.editErrors.errors;
         }
-
+                                            console.log(this.props);
         return (this.props.visible &&
-            <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)}
+            <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
                 <Record appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
-                    errorStatus={this.props.form && this.props.form.editFormErrorStatus ? this.props.form.editFormErrorStatus : null}
+                    errorStatus={this.props.editForm ? this.props.editForm.errorStatus : null}
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
-                    formData={this.props.form ? this.props.form.editFormData : null}
+                    formData={this.props.editForm ? this.props.editForm.formData : null}
                     edit={true} />
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);

@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import TableHomePageRoute  from '../../src/components/table/tableHomePageRoute';
+import {TableHomePageRoute} from '../../src/components/table/tableHomePageRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import Constants from '../../../common/src/constants';
 
