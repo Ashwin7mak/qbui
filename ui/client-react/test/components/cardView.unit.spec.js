@@ -24,11 +24,9 @@ const fakeReportData_valid = {
             col_num: 1,
             col_text: "abc",
             col_date: "01-01-2015",
-            col_4: 2/*,
-             col_5: 3,
-             col_6: 4*/
+            col_4: 2
         },
-        columnMetadata: ["col_num", "col_text", "col_date", "col_4"/*, "col_5", "col_6"*/]
+        columnMetadata: ["col_num", "col_text", "col_date", "col_4"]
     }
 };
 
