@@ -445,7 +445,7 @@
                     secondInput:  CONSTS.MILLIS_PER_HOUR,
                     thirdInput: CONSTS.MILLIS_PER_MIN
                 },
-                description: numValue + ' ' + CONSTS.WEEKS + ' ' + numValue + ' ' + CONSTS.HOURS + ' ' + numValue + ' ' + CONSTS.MINUTES
+                description: numValue + ' ' + CONSTS.SCALES.WEEKS + ' ' + numValue + ' ' + CONSTS.SCALES.HOURS + ' ' + numValue + ' ' + CONSTS.SCALES.MINUTES
             },
             {
                 scale: CONSTS.SCALES.MINUTES,
@@ -459,7 +459,7 @@
                     firstInput:  CONSTS.MILLIS_PER_SECOND,
                     secondInput:  CONSTS.MILLIS_PER_HOUR
                 },
-                description: numValue + ' ' + CONSTS.SECONDS + ' ' + numValue + ' ' + CONSTS.HOURS
+                description: numValue + ' ' + CONSTS.SCALES.SECONDS + ' ' + numValue + ' ' + CONSTS.SCALES.HOURS
             }
         ],
         placeholderData: [
