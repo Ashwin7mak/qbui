@@ -169,7 +169,7 @@ describe('Validate Logger', function() {
 
     });
 
-    describe('validate the log message serializers are called', function() {
+    describe('validate the log message serializers', function() {
 
         it('validate a log request serializer is defined and will not error out if no request information is supplied', function(done) {
             //  clear out any logger configuration
@@ -188,7 +188,6 @@ describe('Validate Logger', function() {
             assert.equal(undefined, reqSerializer.platform);
             assert.equal(undefined, reqSerializer.ip);
             assert.equal(undefined, reqSerializer.referer);
-
             assert.deepEqual(undefined, reqSerializer.body);
 
             done();
@@ -282,11 +281,11 @@ describe('Validate Logger', function() {
             done();
         });
 
-        it('validate a log request serializer is defined with socket connection in debug mode', function(done) {
+        it('explicitly state to show body object in log', function(done) {
             //  clear out any logger configuration
             var logConfig = {
                 name: 'unittest',
-                level: 'debug'
+                showBody: true
             };
             var logger = initLoggerWithConfig(logConfig);
 
@@ -303,6 +302,31 @@ describe('Validate Logger', function() {
             assert.equal(req.connection.socket.remoteAddress, reqSerializer.ip);
             assert.equal(req.headers.referer, reqSerializer.referer);
             assert.deepEqual(req.body, reqSerializer.body);
+
+            done();
+        });
+
+        it('explicitly state to not show body object in log', function(done) {
+            //  clear out any logger configuration
+            var logConfig = {
+                name: 'unittest',
+                showBody: false
+            };
+            var logger = initLoggerWithConfig(logConfig);
+
+            var req = generateRequestWithSocketConnection();
+            var reqSerializer = logger.serializers.req(req);
+
+            assert.equal(req.method, reqSerializer.method);
+            assert.equal(req.url, reqSerializer.url);
+            assert.equal(req.headers.host, reqSerializer.host);
+            assert.equal(req.headers.tid, reqSerializer.tid);
+            assert.equal(req.headers.sid, reqSerializer.sid);
+            assert.equal(req.useragent.source, reqSerializer.browser);
+            assert.equal(req.useragent.platform, reqSerializer.platform);
+            assert.equal(req.connection.socket.remoteAddress, reqSerializer.ip);
+            assert.equal(req.headers.referer, reqSerializer.referer);
+            assert.equal(undefined, reqSerializer.body);
 
             done();
         });
@@ -330,7 +354,7 @@ describe('Validate Logger', function() {
         return res;
     }
 
-    function baseRequest() {
+    function baseRequest(showBody) {
         var req = {
             path     : 'some/path',
             url      : 'somedomain.com/some/path?param1=value1',
@@ -345,27 +369,27 @@ describe('Validate Logger', function() {
                 source: 'chrome',
                 platform: 'OS/X 11.0.2'
             },
-            body: {fld1:'fld1', fld2:'fld2'}
+            body: showBody === true ? {fld1:'fld1', fld2:'fld2'} : undefined
         };
         return req;
     }
 
-    function generateRequestWithForward() {
-        var req = baseRequest();
+    function generateRequestWithForward(showBody) {
+        var req = baseRequest(showBody);
         req.headers['x-forwarded-for'] = '1.2.3.4';
         return req;
     }
 
-    function generateRequestWithConnection() {
-        var req = baseRequest();
+    function generateRequestWithConnection(showBody) {
+        var req = baseRequest(showBody);
         req.connection = {
             remoteAddress: '1.2.3.4'
         };
         return req;
     }
 
-    function generateRequestWithSocketConnection() {
-        var req = baseRequest();
+    function generateRequestWithSocketConnection(showBody) {
+        var req = baseRequest(showBody);
         req.connection = {
             socket: {
                 remoteAddress: '1.2.3.4'
@@ -374,8 +398,8 @@ describe('Validate Logger', function() {
         return req;
     }
 
-    function generateRequestWithSocket() {
-        var req = baseRequest();
+    function generateRequestWithSocket(showBody) {
+        var req = baseRequest(showBody);
         req.socket = {
             remoteAddress: '1.2.3.4'
         };
