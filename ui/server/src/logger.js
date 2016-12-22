@@ -19,6 +19,7 @@
 
     //  one logger per node instance
     var appLogger;
+    var showBody = false;
 
     //  custom request serializer to include on all messages.  For example, log.info({req:req}, 'some message') will
     //  trigger the serializer and include the custom output on the message.
@@ -61,8 +62,8 @@
         addElement(obj, 'ip', ip);
         addElement(obj, 'userId', req.userId);
 
-        // only include body in debug mode..could contain customer info that we don't want exposed in the logs
-        if (getConfig('level') === 'debug') {
+        // displaying body content in log output is dictated by log configuration setting
+        if (showBody === true) {
             addElement(obj, 'body', req.body);
         }
 
@@ -78,8 +79,8 @@
         addElement(obj, 'statusMessage', res.statusMessage);
         addElement(obj, 'message', res.message);
 
-        // only include body in debug mode..could contain customer info that we don't want exposed in the logs
-        if (getConfig('level') === 'debug') {
+        // displaying body content in log output is dictated by log configuration setting
+        if (showBody === true) {
             addElement(obj, 'body', res.body);
         }
         return obj;
@@ -136,6 +137,8 @@
                     // custom logger attributes go here..
                     type: 'NODE'
                 });
+
+                showBody = getConfig('showBody', false);
 
             }
 
