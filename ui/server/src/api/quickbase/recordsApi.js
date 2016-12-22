@@ -371,17 +371,18 @@
     /**
      * Log information about a log message when adding or editing a record
      *
-     * @param reqCopy
+     * @param req
      * @param error
      * @param msgPrefix
      */
-    function logRecordError(reqCopy, error, msgPrefix) {
-
+    function logRecordError(req, error, msgPrefix) {
         // make a copy of the error object and then remove the
         // def property as it could contain customer sensitive
         // information in the fieldDef array.
-        let errorObj = _.clone(error);
-        delete errorObj.def;
-        log.warn({req:reqCopy}, msgPrefix + JSON.stringify(errorObj).replace(/"/g, "'"));
+        if (error) {
+            let errorObj = _.clone(error);
+            delete errorObj.def;
+            log.warn({req: req}, msgPrefix + JSON.stringify(errorObj).replace(/"/g, "'"));
+        }
     }
 }());
