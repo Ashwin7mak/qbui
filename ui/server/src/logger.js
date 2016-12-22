@@ -13,13 +13,13 @@
 
     'use strict';
 
-    var bunyan = require('bunyan');
-    var config = require('./config/environment');
-    var fs = require('fs');
+    let bunyan = require('bunyan');
+    let config = require('./config/environment');
+    let fs = require('fs');
 
     //  one logger per node instance
-    var appLogger;
-    var showBody = false;
+    let appLogger;
+    let showBody = false;
 
     //  custom request serializer to include on all messages.  For example, log.info({req:req}, 'some message') will
     //  trigger the serializer and include the custom output on the message.
@@ -28,9 +28,9 @@
             return {};
         }
 
-        var headers = req.headers || {};
-        var agent = req.useragent || {};
-        var ip;
+        let headers = req.headers || {};
+        let agent = req.useragent || {};
+        let ip;
 
         //  try to get the ip address
         if (req.headers) {
@@ -48,7 +48,7 @@
             }
         }
 
-        var obj = {};
+        let obj = {};
 
         //  only include in log message if defined
         addElement(obj, 'method', req.method);
@@ -73,7 +73,7 @@
     //  custom response serializer to include on all messages.  For example, log.info({res:res}, 'some message') will
     //  trigger the serializer and include the custom output on the message.
     function resSerializer(res) {
-        var obj = {};
+        let obj = {};
 
         addElement(obj, 'statusCode', res.statusCode);
         addElement(obj, 'statusMessage', res.statusMessage);
@@ -117,12 +117,12 @@
             //  Return the configured Bunyan logger.  A new logger will be configured if one is not
             //  found, otherwise the existing configured logger is returned.
             if (!appLogger) {
-                var name = getConfig('name', 'qbse-node');
-                var level = getConfig('level', 'info');
-                var src = getConfig('src', false);
-                var stream = getStream();
+                let name = getConfig('name', 'qbse-node');
+                let level = getConfig('level', 'info');
+                let src = getConfig('src', false);
+                let stream = getStream();
 
-                var logger = bunyan.createLogger({
+                let logger = bunyan.createLogger({
                     name       : name,
                     streams    : [stream],
                     level      : level,
@@ -157,7 +157,7 @@
      * @returns {*}
      */
     function getConfig(logkey, defaultValue) {
-        var value = defaultValue;
+        let value = defaultValue;
         if (config && config.LOG) {
             if (typeof config.LOG[logkey] !== 'undefined') {
                 value = config.LOG[logkey];
@@ -171,11 +171,11 @@
      * @returns {*}
      */
     function getStream() {
-        var stream = getConfig('stream');
+        let stream = getConfig('stream');
         if (stream) {
             //  if of type file, setup to stream the output to a file
             if (stream.type === 'file' && stream.file) {
-                var s = {};
+                let s = {};
                 s.path = stream.file.dir ? stream.file.dir + '/' + stream.file.name : stream.file.name;
                 if (stream.file.rotating) {
                     s.type = 'rotating-file';
