@@ -5,8 +5,9 @@ import formStack from './formStack';
 
 // combine individual reducers into a single root reducer (qbui)
 
+// maps state keys to reducers
 export default combineReducers({
-    nav: nav,
+    nav,
     editForm: form,
     viewForms: formStack
 });

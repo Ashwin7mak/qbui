@@ -13,11 +13,12 @@ import Logger from '../../utils/logger';
 import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
+import {connect} from 'react-redux';
+import {syncingForm} from '../../actions/formActions';
 import './record.scss';
 
 let logger = new Logger();
@@ -28,7 +29,7 @@ export let RecordRoute = React.createClass({
 
     loadRecord(appId, tblId, recordId, rptId, formType) {
         const flux = this.getFlux();
-        flux.actions.syncingForm();
+        this.props.dispatch(syncingForm());
         flux.actions.selectTableId(tblId);
         flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, formType);
     },
@@ -276,4 +277,4 @@ export let RecordRoute = React.createClass({
 });
 
 export let RecordRouteWithRouter = withRouter(RecordRoute);
-export default RecordRouteWithRouter;
+export default connect()(RecordRouteWithRouter);

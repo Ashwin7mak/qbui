@@ -56,7 +56,7 @@ let RecordTrowser = React.createClass({
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
             errorMessage = this.props.pendEdits.editErrors.errors;
         }
-                                            console.log(this.props);
+
         return (this.props.visible &&
             <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>

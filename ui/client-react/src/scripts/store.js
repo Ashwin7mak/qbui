@@ -3,12 +3,10 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer from '../reducers/root';
 
 export default function createAppStore() {
-    //const store = createStore(rootReducer);
-    let defaultState = {};
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    const defaultState = {};
     return createStore(rootReducer,
         defaultState,
-        compose(
-            applyMiddleware(thunk),
-            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+        composeEnhancers(applyMiddleware(thunk))
      );
 }

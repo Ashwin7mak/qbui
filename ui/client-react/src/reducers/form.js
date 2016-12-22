@@ -9,7 +9,7 @@ const form = (
     // reducer - no mutations!
     switch (action.type) {
 
-    case 'LOADING_FORM': {
+    case 'LOAD_FORM': {
         return {
             formData: {},
             loading: true
@@ -26,6 +26,28 @@ const form = (
             formData: {},
             errorStatus: action.error,
             loading: false
+        };
+    }
+    case 'SAVE_FORM': {
+        return {
+            saving: true
+        };
+    }
+    case 'SAVE_FORM_SUCCESS': {
+        return {
+            saving: false,
+            syncLoadedForm: true
+        };
+    }
+    case 'SAVE_FORM_FAILED': {
+        return {
+            errorStatus: action.error,
+            saving: false
+        };
+    }
+    case 'SYNC_FORM': {
+        return {
+            syncLoadedForm: false
         };
     }
     default:

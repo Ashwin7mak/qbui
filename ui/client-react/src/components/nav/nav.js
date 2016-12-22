@@ -154,17 +154,10 @@ export let Nav = React.createClass({
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.props.qbui.editForm.loading && !this.state.form.editFormLoading && (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
 
-            if (editRec === UrlConsts.NEW_RECORD_VALUE) {
+            this.props.dispatch(FormActions.loadForm(appId, tblId, rptId, "edit", editRec)).then(() => {
+                this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
+            });
 
-                this.props.dispatch(FormActions.loadEditForm(appId, tblId, rptId)).then(() => {
-                    this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
-                });
-            } else {
-                const flux = this.getFlux();
-                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
-                    this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
-                });
-            }
         }
     },
 
