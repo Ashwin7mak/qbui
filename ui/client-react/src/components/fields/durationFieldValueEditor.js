@@ -77,7 +77,7 @@ const DurationFieldValueEditor = React.createClass({
         let theVals = {};
         if (parseResult.valid === false) {
             //Clientside validator needs the value, in order to throw an error
-            theVals.value = parseResult.value;
+            theVals.value = 'Invalid Input';
             theVals.display = parseResult.value;
         } else {
             theVals.value = parseResult.value;
