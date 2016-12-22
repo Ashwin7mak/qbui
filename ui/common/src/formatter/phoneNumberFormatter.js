@@ -16,8 +16,8 @@
     var US_TEN_DIGIT_FORMAT = OPEN_PAREN + "$1" + CLOSE_PAREN + " $2" + DASH + "$3";
     var BASIC_INTERNATIONAL_FORMAT = INTERNATIONAL_SYMBOL + "$1 $2 $3 $4 $5 $6 $7";
 
-    var ALLOWED_CHARACTERS_ONCHANGE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x', '(', ')', '+', '-', '.', ' '];
-    var ALLOWED_CHARACTERS_ONBLUR = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'x', '+'];
+    var ALLOWED_CHARACTERS_ONCHANGE = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', EXTENSION_DELIM, OPEN_PAREN, CLOSE_PAREN, INTERNATIONAL_SYMBOL, DASH, '.', ' '];
+    var ALLOWED_CHARACTERS_ONBLUR = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', EXTENSION_DELIM, INTERNATIONAL_SYMBOL];
 
     // Basic phone number formatting for client side. More complex formatting occurs on the server side in
     // server/src/api/quickbase/formatter/phoneNumberFormatter
@@ -48,11 +48,30 @@
             };
         },
 
+        /**
+         * Get an extension from a phone number string or a phone number display object
+         * @param phoneNumber
+         * @returns {*}
+         */
         getExtension: function(phoneNumber) {
             if (!phoneNumber) {
                 return '';
             }
-            return this.splitPhoneNumberAndExtension(phoneNumber).getExtension;
+
+            if (_.isString(phoneNumber)) {
+                return this.splitPhoneNumberAndExtension(phoneNumber).getExtension;
+            }
+
+            // prefer the extension in the display string as it is likely the most up to date
+            if (_.isString(phoneNumber.display) && phoneNumber.display.indexOf(EXTENSION_DELIM) >= 0) {
+                return this.splitPhoneNumberAndExtension(phoneNumber.display).getExtension;
+            }
+
+            if (_.has(phoneNumber, 'extension') && phoneNumber.extension !== null) {
+                return phoneNumber.extension;
+            }
+
+            return '';
         },
 
         getPhoneNumber: function(phoneNumber) {
@@ -64,9 +83,9 @@
 
         getUpdatedPhoneNumberWithExt: function(phoneNum, extNum) {
             if (!extNum) {
-                return phoneNum.trim();
+                return phoneNum;
             }
-            return phoneNum.trim() + EXTENSION_DELIM + extNum.trim();
+            return phoneNum + EXTENSION_DELIM + extNum.trim();
         },
 
         onChangeMasking: function(nums) {
@@ -103,6 +122,21 @@
             return phoneNumber.replace(/[^0-9]/g, '');
         },
 
+        stripSpecialCharactersExceptExtension: function(phoneNumber) {
+            if (!phoneNumber || phoneNumber.length === 0) {
+                return '';
+            }
+
+            var splitNumber = this.splitPhoneNumberAndExtension(phoneNumber);
+
+            var phoneWithoutSpecialCharacters = this.stripSpecialCharacters(splitNumber.getPhoneNumber);
+            if (splitNumber.getExtension && splitNumber.getExtension.length > 0) {
+                phoneWithoutSpecialCharacters = phoneWithoutSpecialCharacters + EXTENSION_DELIM + this.stripSpecialCharacters(splitNumber.getExtension);
+            }
+
+            return phoneWithoutSpecialCharacters;
+        },
+
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
@@ -126,6 +160,7 @@
 
             // get the phone number and extension
             var phoneWithOutExtension = this.splitPhoneNumberAndExtension(fieldValue.value).getPhoneNumber.trim();
+            phoneWithOutExtension = this.stripSpecialCharacters(phoneWithOutExtension);
             var extension = this.splitPhoneNumberAndExtension(fieldValue.value).getExtension.trim();
 
             var formattedPhoneVal = "";

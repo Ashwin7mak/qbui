@@ -65,9 +65,9 @@ let CardView = React.createClass({
         let fieldObject = this.props.data[curKey];
 
         let fieldValue = "";
-        if (fieldObject && typeof fieldObject.display !== 'object') {
+        if (fieldObject && fieldObject.display && typeof fieldObject.display !== 'object') {
             fieldValue = fieldObject.display;
-        } else if (fieldObject && typeof fieldObject.display === 'object') {
+        } else if (fieldObject && fieldObject.display && typeof fieldObject.display === 'object') {
             fieldValue = fieldObject.display.display;
         } else {
             fieldValue = '';
