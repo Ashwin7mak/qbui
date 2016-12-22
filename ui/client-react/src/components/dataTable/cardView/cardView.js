@@ -10,7 +10,8 @@ const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 
 let CardView = React.createClass({
     statics: {
-        MAX_FIELDS: 9
+        MAX_FIELDS: 9,
+        MIN_EXPANDABLE_FIELDS: 4
     },
 
     propTypes: {
@@ -88,13 +89,18 @@ let CardView = React.createClass({
         }
     },
     createTopField(firstFieldValue) {
-
+        // If there are less than <MIN_EXPANDABLE_FIELDS> fields, there's no need to expand the card
+        // since all fields are already visible in the collapsed state.
+        let cardExpander = null;
+        if (Object.keys(this.props.data).length >= CardView.MIN_EXPANDABLE_FIELDS) {
+            cardExpander = (<div className="card-expander" onClick={this.handleMoreCard}>
+                                <QBicon icon="caret-right" className={"qbPanelHeaderIcon " + (this.state.showMoreCards ? "rotateDown" : "rotateUp")}/>
+                            </div>);
+        }
         return (
             <div className="top-card-row field">
                 <div className="topFieldValue">{firstFieldValue}</div>
-                <div className="card-expander" onClick={this.handleMoreCard}>
-                    <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
-                </div>
+                {cardExpander}
             </div>
         );
     },
