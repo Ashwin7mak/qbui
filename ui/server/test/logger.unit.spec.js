@@ -193,6 +193,28 @@ describe('Validate Logger', function() {
             done();
         });
 
+        it('validate a log request serializer is defined and will not error out if request information is undefined', function(done) {
+            //  clear out any logger configuration
+            var logConfig = {};
+            var logger = initLoggerWithConfig(logConfig);
+
+            var req = generateRequestWithForward();
+            var reqSerializer = logger.serializers.req();
+
+            assert.equal(undefined, reqSerializer.method);
+            assert.equal(undefined, reqSerializer.url);
+            assert.equal(undefined, reqSerializer.host);
+            assert.equal(undefined, reqSerializer.sid);
+            assert.equal(undefined, reqSerializer.tid);
+            assert.equal(undefined, reqSerializer.browser);
+            assert.equal(undefined, reqSerializer.platform);
+            assert.equal(undefined, reqSerializer.ip);
+            assert.equal(undefined, reqSerializer.referer);
+            assert.deepEqual(undefined, reqSerializer.body);
+
+            done();
+        });
+
         it('validate a log request serializer is defined with forwarded-for', function(done) {
             //  clear out any logger configuration
             var logConfig = {};
