@@ -97,6 +97,12 @@ consts = require('../../common/src/constants.js');
             defaultDomain: "quickbase.dev",
             clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)
         };
+        let urlButton = {
+            clientSideAttributes: Object.assign({show_as_button: true}, baseTextClientRequiredProps)
+        };
+        let urlOpenInSameWindow = {
+            clientSideAttributes: Object.assign({open_in_new_window: false}, baseTextClientRequiredProps)
+        };
 
         var emptyChoice = {
             coercedValue: {value: ''},
@@ -144,6 +150,10 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email with Default Domain",
             {dataAttr: emailDefaultDomain});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL, "URL Button",
+            {dataAttr: urlButton});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL, "URL Same Window",
+            {dataAttr: urlOpenInSameWindow});
 
         tableToFieldToFieldTypeMap[table2Name] = {};
         var textChoices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
