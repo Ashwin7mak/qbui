@@ -103,16 +103,14 @@ const DurationFieldValueRenderer = React.createClass({
                 display = <I18nMessage message={"durationWithUnits." + formattedObj.units}
                                        value={numberValue}/>;
             }
-        } else if (this.props.value) {
-            if (durationFormatter.hasUnitsText(opts.scale)) {
-                if (this.props.includeUnits) {
-                    let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
-                    display = <I18nMessage message={"durationWithUnits." + opts.scale}
-                                           value={numberValue}/>;
-                } else {
-                    display = <I18nNumber value={display}
-                                          maximumFractionDigits={opts.decimalPlaces}/>;
-                }
+        } else if (durationFormatter.hasUnitsText(opts.scale)) {
+            if (this.props.includeUnits) {
+                let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
+                display = <I18nMessage message={"durationWithUnits." + opts.scale}
+                                       value={numberValue}/>;
+            } else {
+                display = <I18nNumber value={display}
+                                      maximumFractionDigits={opts.decimalPlaces}/>;
             }
         }
         return <div className={classes}>{display}</div>;

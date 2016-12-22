@@ -32,7 +32,7 @@ describe('DurationFieldValueRenderer', () => {
 
     it('test render of component smart units', () => {
         let millisecs = 23456;
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         let expected = moment.duration(millisecs).asSeconds();
