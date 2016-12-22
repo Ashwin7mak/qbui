@@ -313,7 +313,6 @@
                 fieldValue.value === '') {
                 return '';
             }
-            console.log('fieldInfo: ', fieldInfo);
             var opts = fieldInfo.jsFormat;
             if (!opts) {
                 opts = this.generateFormat(fieldInfo);
