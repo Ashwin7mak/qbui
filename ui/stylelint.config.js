@@ -11,6 +11,7 @@ module.exports = {
         "scss/dollar-variable-pattern": ["^[a-z-0-9]+$", {"severity": "warning"}],
         "scale-unlimited/declaration-strict-value": [
             [
+                // regex matches all property names containing the word color but do not start with a $ because that would be a variable name
                 "/(^[^$].*(color).*|^color)/"
                 /* "z-index",
                 "font-size",
@@ -35,7 +36,7 @@ module.exports = {
         "block-opening-brace-space-before": ["always"],
         "color-hex-case": ["lower"],
         "color-hex-length": null,
-        "color-named": ["never", {"severity": "warning"}],
+        "color-named": ["never"],
         "color-no-invalid-hex": [true],
         "comment-empty-line-before": ["always", {
             "except": ["first-nested"],
@@ -56,6 +57,11 @@ module.exports = {
         "declaration-colon-newline-after": ["always-multi-line"],
         "declaration-colon-space-after": ["always-single-line"],
         "declaration-colon-space-before": ["never"],
+        "declaration-property-value-blacklist": {
+            // 1st regex matches all property names that do not begin with a $ (because those are variables)
+            // 2nd regex matches all values that contain something that looks like a color number in either 3-digit or 6-digit format
+            "/^[^$].*/": "/#[0-9a-f]{3,6}/"
+        },
         "font-family-name-quotes": ["always-where-recommended", {"severity": "warning"}],
         "font-weight-notation": ["named-where-possible", {"severity": "warning"}],
         "function-calc-no-unspaced-operator": true,
