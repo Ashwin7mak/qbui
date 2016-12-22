@@ -1,5 +1,7 @@
 (function() {
     var dataErrorCodes = require('../dataEntryErrorCodes');
+    var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
+
     /**
      * ******IMPORTANT****
      * Currently the isValid and isTimeFormatValid methods are both in this file and the durationEditorParsing file
@@ -12,7 +14,7 @@
          * @returns {boolean}
          */
         isValid: function(value) {
-            if (value === 'Invalid Input') {
+            if (value === DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_IPUT) {
                 return false;
             }
             return true;

@@ -135,6 +135,7 @@
                 MILLISECONDS: 'Milliseconds',
             },
             ACCEPTED_TYPE: {
+                DURATION_TYPE_INVALID_IPUT: 'Invalid Input',
                 ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
                 WEEKS: 'weeks',
                 WEEK: 'week',

@@ -4,6 +4,7 @@
 (function() {
     'use strict';
     var DURATION_CONSTS = require('../../../../common/src/constants').DURATION_CONSTS;
+    var durationFormatter = require('../../../../common/src/formatter/durationFormatter');
     var Locale = require('../../locales/locales');
     var regexNumsDecimalsColons = /[0-9.:]+/g;
     var removeCommas = /[,]+/g;
@@ -177,7 +178,7 @@
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
          * */
-        if (type.length > 1 || type.length === 1) {
+        if (type.length >= 1) {
             return false;
         }
         colons = value.match(/:/g);
@@ -260,7 +261,7 @@
             }
             return valid;
         },
-        onBlurParsing: function(value, fieldInfo) {
+        onBlurParsing: function(value, fieldInfo, includeUnits) {
             value = value.replace(removeCommas, '').split(' ').join(' ');
             /**
              * Accepted Types:
@@ -279,6 +280,10 @@
             var total = 0;
             var types;
             var num;
+            var results = {
+                value: DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_IPUT,
+                display: value
+            };
             /**
              * Checks to see if the value is a valid input
              * */
@@ -288,7 +293,9 @@
                  * the HHMMSS, HHMM, MMSS requirements
                  * */
                 if (value && value.indexOf(':') !== -1) {
-                    return {value: convertHourMinutesSeconds(value), valid: true};
+                    results.value = convertHourMinutesSeconds(value);
+                    results.display = durationFormatter.format({value: results.value}, fieldInfo);
+                    return results;
                 }
                 /**
                  * If the user passes in a string containing a number and a type, we split the string here
@@ -319,16 +326,28 @@
                             total += getMilliseconds(num[i], types[i]);
                         }
                     });
-                    return {value: total, valid: true};
                 }
-                if (num !== null) {
-                    return {value: getMilliseconds(num[0], fieldInfo.scale), valid: true};
+                if (num !== null && types.length === 0) {
+                    total = getMilliseconds(num[0], fieldInfo.scale);
+                }
+                results.value = total;
+                results.display = durationFormatter.format({value: results.value}, fieldInfo);
+                if (includeUnits) {
+                    results.display = this.includeUnitsInInput(results.display, fieldInfo);
                 }
             }
-            return {
-                value: value,
-                valid: false
-            };
+            return results;
+        },
+        includeUnitsInInput(display, fieldInfo) {
+            /**
+             * includeUnitsInInput checks to see if includeUnits is true
+             * It then checks to see if display is only a number
+             * If it is only a number it will concatenate the scale type of the field to the input
+             * */
+            if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
+                display = display + ' ' + this.getPlaceholder(fieldInfo.scale, display);
+            }
+            return display;
         },
         getPlaceholder: function(scale, value) {
             var placeholder = '';

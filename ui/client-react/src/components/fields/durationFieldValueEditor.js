@@ -3,9 +3,6 @@ import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
 import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import * as durationEditorParsing from './durationEditorParsing';
-import Locale from '../../locales/locales';
-import {I18nMessage, I18nNumber, IntlNumberOnly} from '../../utils/i18nMessage';
-
 
 /**
  * # DurationFieldValueEditor
@@ -55,38 +52,17 @@ const DurationFieldValueEditor = React.createClass({
             this.props.onChange(ev);
         }
     },
-    includeUnitsInInput(display, fieldInfo) {
-        /**
-         * includeUnitsInInput checks to see if includeUnits is true
-         * It then checks to see if display is only a number
-         * If it is only a number it will concatenate the scale type of the field to the input
-         * */
-        if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
-            this.display = display + ' ' + durationEditorParsing.getPlaceholder(fieldInfo.scale, display);
-        } else {
-            this.display = display;
-        }
-    },
     componentDidMount() {
         if (this.props.attributes && this.props.includeUnits) {
-            this.includeUnitsInInput(this.props.display, this.props.attributes);
+            this.display = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
         }
     },
     onBlur(ev) {
-        let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes);
-        let theVals = {};
-        if (parseResult.valid === false) {
-            //Clientside validator needs the value, in order to throw an error
-            theVals.value = 'Invalid Input';
-            theVals.display = parseResult.value;
-        } else {
-            theVals.value = parseResult.value;
-            theVals.display = durationFormatter.format(theVals, this.props.attributes);
-            if (this.props.includeUnits) {
-                this.includeUnitsInInput(theVals.display, this.props.attributes);
-                theVals.display = this.display;
-            }
-        }
+        let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes, this.props.includeUnits);
+        let theVals = {
+            value: parseResult.value,
+            display: parseResult.display
+        };
         this.display = theVals.display;
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
