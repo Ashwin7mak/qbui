@@ -651,7 +651,7 @@ let AGGrid = React.createClass({
 
         // edit row on doubleclick
         if (params.event.detail === 2) {
-            const userNativeModel = (Breakpoints.isSmallOrMediumBreakpoint() && this.context.touch);
+            const userNativeModel = (Breakpoints.isSmallBreakpoint() || this.context.touch);
             if (userNativeModel) {
                 //disable double click on small and medium devices.
                 return;
