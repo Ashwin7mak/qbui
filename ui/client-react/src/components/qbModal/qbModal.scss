@@ -113,11 +113,11 @@
     }
 
     .modalIcon--alert {
-        color: $modal-icon-color;
+        color: $modal-icon-color;   // should be changed to $alert-color?
     }
 
     .modalIcon--success {
-        color: $color-green-600;
+        color: $success-color;
     }
 
     .buttons {
