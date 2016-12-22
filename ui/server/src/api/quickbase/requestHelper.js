@@ -297,7 +297,7 @@
                     return false;
                 }
                 let query = url.parse(req.url, true).query;
-                return (query && query.hasOwnProperty(parameterName));
+                return (query && Object.prototype.hasOwnProperty.call(query, parameterName));
             },
 
             /**
@@ -313,8 +313,7 @@
                     return null;
                 }
                 let query = url.parse(req.url, true).query;
-                let duder = Object.prototype.hasOwnProperty.call(query, parameterName);
-                return (query && duder) ? query[parameterName] : null;
+                return (query && Object.prototype.hasOwnProperty.call(query, parameterName)) ? query[parameterName] : null;
             },
 
             /**

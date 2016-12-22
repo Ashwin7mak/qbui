@@ -60,7 +60,7 @@ class Locale {
             bundle = require('../locales/bundles/en_us');
         }
 
-        return bundle;
+        return bundle.default;
     }
 
     /**
@@ -91,7 +91,7 @@ class Locale {
      * @returns {*}
      */
     static getMessage(msgPath, tokens) {
-        var messages =  Locale.getI18nBundle().default.messages;
+        var messages =  Locale.getI18nBundle().messages;
 
         let message = msgPath.split('.').reduce((obj, pathPart) => {
             return obj[pathPart];
