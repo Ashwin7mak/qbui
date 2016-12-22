@@ -8,9 +8,9 @@
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
-    -webkit-box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
-    -moz-box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
-    box-shadow: 0 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -webkit-box-shadow: 0 0px 2px 2px $panel-shadow;
+    -moz-box-shadow: 0 0px 2px 2px $panel-shadow;
+    box-shadow: 0 0px 2px 2px $panel-shadow;
 
     &.closed {
         overflow: hidden;

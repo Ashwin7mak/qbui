@@ -58,9 +58,19 @@ module.exports = {
         "declaration-colon-space-after": ["always-single-line"],
         "declaration-colon-space-before": ["never"],
         "declaration-property-value-blacklist": {
-            // 1st regex matches all property names that do not begin with a $ (because those are variables)
-            // 2nd regex matches all values that contain something that looks like a color number in either 3-digit or 6-digit format
-            "/^[^$].*/": "/#[0-9a-f]{3,6}/"
+            // 1st regex matches all property names that do not begin with a $ (because those are variables).
+            // 2nd regex matches all values that contain something that looks like a color number.
+            // Currently prohibited values are:
+            // - any hex color numbers in either 3-digit or 6-digit format such as: #fff or #ffffff
+            // - any rgb/hsl/hsla value such as: rgb(0,0,255) or hsl(360, 100%, 0) or hsla(190, 10%, 10%, 0.5)
+            // - any rgba value that doesn't have a variable followed by an alpha value.
+            //   The values we want to allow aren't valid CSS values, but ARE valid parameters to an SCSS function we want to support.
+            //   So we want to prohibit rgba(0, 0, 255, 0.5) yet allow rgba($colorvariable, 0.5)
+            //   This particular regular expression is not perfect because it only requires the
+            //   first parameter to be a variable. So rgba($variable, 255, 255, 0.5) would pass even though it shouldn't.
+            //   We can only make this regular expression so complicated.
+            // NOTE: backslash escape characters must be doubled because of how this string constant is processed
+            "/^[^$].*/": "/(#[0-9a-f]{3,6})|((rgb|hsl|hsla)\\(.*\\))|(rgba\\([^$].*\\))/"
         },
         "font-family-name-quotes": ["always-where-recommended", {"severity": "warning"}],
         "font-weight-notation": ["named-where-possible", {"severity": "warning"}],
