@@ -150,13 +150,15 @@ describe('PhoneFieldValueRenderer functions', () => {
             />
         );
 
-        const telLink = TestUtils.findRenderedDOMComponentWithClass(component, 'telLink');
-        expect(telLink.href).toEqual(telHref);
-        expect(telLink.textContent).toEqual(rawPhoneNumberVal);
+        const mainNumber = TestUtils.findRenderedDOMComponentWithClass(component, 'mainNumber');
+        expect(mainNumber.classList.contains('noLink')).toEqual(false);
 
         const extraDigits = TestUtils.findRenderedDOMComponentWithClass(component, 'extraDigits');
-        expect(extraDigits.textContent).toEqual(testExtraDigits);
-        expect(extraDigits.href).toEqual(undefined);
+        expect(extraDigits.classList.contains('noLink')).toEqual(true);
+
+        const telLink = TestUtils.findRenderedDOMComponentWithClass(component, 'telLink');
+        expect(telLink.href).toEqual(telHref);
+        expect(telLink.textContent).toEqual(`${rawPhoneNumberVal}${testExtraDigits}`);
     });
 
     it('displays the extension after a phone number as text (not a link)', () => {
@@ -172,12 +174,14 @@ describe('PhoneFieldValueRenderer functions', () => {
             />
         );
 
-        const telLink = TestUtils.findRenderedDOMComponentWithClass(component, 'telLink');
-        expect(telLink.href).toEqual(telHref);
-        expect(telLink.textContent).toEqual(rawPhoneNumberVal);
+        const mainNumber = TestUtils.findRenderedDOMComponentWithClass(component, 'mainNumber');
+        expect(mainNumber.classList.contains('noLink')).toEqual(false);
 
         const extraDigits = TestUtils.findRenderedDOMComponentWithClass(component, 'extension');
-        expect(extraDigits.textContent).toEqual(`${PhoneFormatter.EXTENSION_DELIM}${testExtension}`);
-        expect(extraDigits.href).toEqual(undefined);
+        expect(extraDigits.classList.contains('noLink')).toEqual(true);
+
+        const telLink = TestUtils.findRenderedDOMComponentWithClass(component, 'telLink');
+        expect(telLink.href).toEqual(telHref);
+        expect(telLink.textContent).toEqual(`${rawPhoneNumberVal}${PhoneFormatter.EXTENSION_DELIM}${testExtension}`);
     });
 });

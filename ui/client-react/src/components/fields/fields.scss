@@ -52,6 +52,10 @@ $data-font-size: $font-size-p;
         padding: 0 0 0 2px;
         width: inherit;
         height: 30px;
+        &.rightAlignInlineEditNumberFields {
+            text-align: right;
+            padding-right: 2px;
+        }
     }
 
     &:focus.input {

@@ -30,9 +30,14 @@ var SaveRecordFormatter =  {
     formatFieldForSaving: function(change) {
         if (_.has(change, 'fieldDef.datatypeAttributes.type')) {
             switch (change.fieldDef.datatypeAttributes.type) {
+            case constants.DURATION :
+                //valid values are converted to millisecond numbers save the number
+                // invalid values leave as strings
+                change.value = /^\d+$/g.test(change.value) ? Number(change.value) : change.value;
+                break;
             case constants.PHONE_NUMBER :
                 // removes special characters from phone
-                change.value = phoneFormatter.stripSpecialCharacters(change.value);
+                change.value = phoneFormatter.stripSpecialCharactersExceptExtension(change.value);
                 break;
             case constants.USER :
                 // replace user objects in value property with user IDs

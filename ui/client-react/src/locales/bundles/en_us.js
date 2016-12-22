@@ -400,6 +400,7 @@ export default {
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
             phone: "Format the {fieldName} like (xxx) xxx-xxxx",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
+            duration: "Format the {fieldName} in {scale}"
         },
         createInQuickBaseClassicMessage: {
         },

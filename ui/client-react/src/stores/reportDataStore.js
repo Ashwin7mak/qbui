@@ -16,10 +16,10 @@ import * as userFormatter from '../../../common/src/formatter/userFormatter';
 import * as urlFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import * as emailFormatter from '../../../common/src/formatter/emailFormatter';
 import * as passThroughFormatter from '../../../common/src/formatter/passthroughFormatter';
+import * as durationFormatter from '../../../common/src/formatter/durationFormatter';
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
-let durationFormatter = require('../../../common/src/formatter/durationFormatter');
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -250,7 +250,7 @@ let reportModel = {
             });
         }
         this.model.fieldsMap = map;
-        this.model.keyField = _.find(this.model.fields, field => field.keyField);
+        this.model.keyField = _.find(this.model.fields, field => field.id === SchemaConsts.DEFAULT_RECORD_KEY_ID);
 
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
@@ -466,7 +466,7 @@ let reportModel = {
         case FieldFormats.USER_FORMAT:
             answer = userFormatter;
             break;
-        case FieldFormats.DURATION:
+        case FieldFormats.DURATION_FORMAT:
             answer = durationFormatter;
             break;
         case FieldFormats.NUMBER_FORMAT:

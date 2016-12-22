@@ -500,6 +500,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             {msg: Locale.getMessage('selection.copy')   + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate', tooltipMsg: 'unimplemented.copy', disabled:true},
             {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete', onClick: this.onClickDelete}
         ];
+        let recId = this.props.params.data[FieldUtils.getPrimaryKeyFieldName(this.props.params.data)].value;
 
         return (<div>
             <RowEditActions flux={this.props.params.context.flux}
@@ -508,6 +509,8 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
                             saving={_.has(this.props, 'params.context.saving') ? this.props.params.context.saving : false}
                             rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
+                            key={"rea-" + this.props.params.rowIndex + "-fidrowAct-recId" + recId}
+                            idKey={"rea-" + this.props.params.rowIndex + "-fidrowAct-recId" + recId}
             />
             <IconActions flux={this.props.params.context.flux} dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);
