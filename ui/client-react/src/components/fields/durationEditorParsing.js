@@ -220,9 +220,6 @@
         isValid: function(value, scale) {
             var ALLOWED_DURATION_TYPE = allowedDurationType();
             var regexHasNums = /[0-9]+/g;
-            var tempNum;
-            var normalizedTypes;
-            var tempType = [];
             var type;
             var isValidResults = {
                 normalizedTypes: '',
@@ -230,9 +227,12 @@
                 valid: true
             };
             /**
-             * Don't validate empty strings or if the input is only a number, return true
+             * Don't validate empty strings
+             * If the input is only a number, normalizedType defaults to field scale
              * */
             if (!value || Number(value)) {
+                isValidResults.normalizedTypes = [ALLOWED_DURATION_TYPE[scale]];
+                isValidResults.num = [value];
                 return isValidResults;
             }
             /**
@@ -258,7 +258,7 @@
              * If there are no types, return true
              * If there are only accepted types return true
              * */
-            normalizedTypes = type.map(function(val) {
+            isValidResults.normalizedTypes = type.map(function(val) {
                 if (ALLOWED_DURATION_TYPE[val]) {
                     return ALLOWED_DURATION_TYPE[val];
                 } else {
@@ -270,16 +270,10 @@
              * 1 week day invalid format
              * 1 week 2 days valid format
              * */
-            tempNum = value.match(regexNumsDecimalsColons);
-            if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
+            isValidResults.num = value.match(regexNumsDecimalsColons);
+            if (!(isValidResults.normalizedTypes.length === 0) && isValidResults.num.length !== isValidResults.normalizedTypes.length) {
                 return false;
             }
-            isValidResults.normalizedTypes = normalizedTypes;
-            console.log('isValidResult.normalizedTYpes: ', isValidResults.normalizedTypes.length);
-            if (isValidResults.normalizedTypes.length === 0) {
-                isValidResults.NormalizedTypes = [ALLOWED_DURATION_TYPE[scale]];
-            }
-            isValidResults.num = value.match(regexNumsDecimalsColons);
             return isValidResults;
         },
         onBlurParsing: function(value, fieldInfo, includeUnits) {
