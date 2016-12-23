@@ -182,7 +182,7 @@ export default {
             days: 'tage',
             day: 'tag',
             d: 't',
-            hours: 'std',
+            hours: 'stunden',
             hour: 'stunde',
             h: 's',
             minutes: 'minuten',
