@@ -241,7 +241,7 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
                 border: solid 1px $color-indigo-800;
                 border-color: $color-indigo-800;
                 border-radius: 2px;
-                box-shadow: 0 0 2px 1.5px rgba(54, 94, 191, 0.25);
+                box-shadow: 0 0 2px 1.5px $field-input-shadow-color;
 
                 & + .clearIcon {
                     opacity: 1;
