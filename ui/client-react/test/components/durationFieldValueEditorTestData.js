@@ -473,19 +473,19 @@
             },
             {
                 scale: CONSTS.SCALES.HHMMSS,
-                placeholder: CONSTS.SCALES.HHMMSS
+                placeholder: CONSTS.ACCEPTED_TYPE.HHMMSS
             },
             {
                 scale: CONSTS.SCALES.HHMM,
-                placeholder: CONSTS.SCALES.HHMM
+                placeholder: CONSTS.ACCEPTED_TYPE.HHMM
             },
             {
                 scale: CONSTS.SCALES.MM,
-                placeholder: CONSTS.SCALES.MM
+                placeholder: CONSTS.ACCEPTED_TYPE.MM
             },
             {
                 scale: CONSTS.SCALES.MMSS,
-                placeholder: CONSTS.SCALES.MMSS
+                placeholder: CONSTS.ACCEPTED_TYPE.MMSS
 
             },
             {

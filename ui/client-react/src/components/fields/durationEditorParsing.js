@@ -280,6 +280,7 @@
             var total = 0;
             var types;
             var num;
+            var scale = fieldInfo.scale;
             var results = {
                 value: DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_IPUT,
                 display: value
@@ -318,9 +319,9 @@
                  * */
                 if (num !== null && num.length === types.length) {
                     num.forEach(function(val, i) {
-                        if (num.length === 1 && types[i] === DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS ||
-                                                types[i] === DURATION_CONSTS.ACCEPTED_TYPE.MS ||
-                                                types[i] === DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND) {
+                        if (num.length === 1 && types[i] ===  Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS) ||
+                                                types[i] ===  Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MS) ||
+                                                types[i] ===  Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND)) {
                             total = Number(getMilliseconds(num[i], types[i]));
                         } else {
                             total += getMilliseconds(num[i], types[i]);
@@ -328,7 +329,16 @@
                     });
                 }
                 if (num !== null && types.length === 0) {
-                    total = getMilliseconds(num[0], fieldInfo.scale);
+                    /**
+                     * If a user does not insert a type, then it defaults they type to the field scale the user is typing in
+                     * */
+                    if (scale !== DURATION_CONSTS.SCALES.HHMMSS &&
+                        scale !== DURATION_CONSTS.SCALES.HHMM &&
+                        scale !== DURATION_CONSTS.SCALES.MMSS &&
+                        scale !== DURATION_CONSTS.SCALES.MM) {
+                        scale = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + fieldInfo.scale.toLowerCase());
+                    }
+                    total = getMilliseconds(num[0], scale);
                 }
                 results.value = total;
                 results.display = durationFormatter.format({value: results.value}, fieldInfo);
@@ -358,16 +368,16 @@
 
             switch (scale) {
             case DURATION_CONSTS.SCALES.HHMM:
-                placeholder = DURATION_CONSTS.SCALES.HHMM;
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.HHMM;
                 break;
             case DURATION_CONSTS.SCALES.HHMMSS:
-                placeholder = DURATION_CONSTS.SCALES.HHMMSS;
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.HHMMSS;
                 break;
             case DURATION_CONSTS.SCALES.MM:
-                placeholder = DURATION_CONSTS.SCALES.MM;
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.MM;
                 break;
             case DURATION_CONSTS.SCALES.MMSS:
-                placeholder = DURATION_CONSTS.SCALES.MMSS;
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.MMSS;
                 break;
             case DURATION_CONSTS.SCALES.WEEKS:
                 placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK) :
