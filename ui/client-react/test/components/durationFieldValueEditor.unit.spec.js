@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
-import TestData from './durationFieldValueEditorTestData';
 import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import bigDecimal from 'bigdecimal';
 
-describe('DurationFieldValueEditor', () => {
+// gen a repeatable seed for random values, so it can be reproduced
+var Chance = require('chance');
+var seed = new Chance().integer({min: 1, max: 1000000000});
+var chance = new Chance(seed);
+var TestData = require('./durationFieldValueEditorTestData')(chance);
+
+describe('DurationFieldValueEditor seed:' + (seed), () => {
     let component;
     let domComponent;
     let divideBigDecimal = function(numerator, millis) {
