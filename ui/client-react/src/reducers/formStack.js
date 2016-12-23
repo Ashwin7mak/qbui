@@ -1,4 +1,3 @@
-import form from './form';
 
 const formStack = (state = [], action) => {
 
@@ -13,7 +12,7 @@ const formStack = (state = [], action) => {
     case 'POP_FORM':
         return state.slice(0, -1);
 
-    case 'SET_FORM':
+    case 'ADD_FORM':
         return [ form(undefined, action) ];
 
     default:

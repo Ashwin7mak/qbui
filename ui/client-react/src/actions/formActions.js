@@ -13,20 +13,23 @@ import * as CompConsts from '../constants/componentConstants';
 
 let logger = new Logger();
 
-export const loadingForm = () => {
+export const loadingForm = (id) => {
     return {
-        type: 'LOADING__FORM',
+        type: 'LOADING_FORM',
+        id,
     };
 };
-export const loadFormError = (error) => {
+export const loadFormError = (id,error) => {
     return {
         type: 'LOAD_FORM_ERROR',
+        id,
         error
     };
 };
-export const loadFormSuccess = (formData) => {
+export const loadFormSuccess = (id, formData) => {
     return {
         type: 'LOAD_FORM_SUCCESS',
+        id,
         formData
     };
 };
@@ -85,7 +88,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
-                dispatch(loadingForm());
+                dispatch(loadingForm(formType));
 
                 let formService = new FormService();
 
@@ -105,7 +108,8 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         } else {
                             response.data.recordId = recordId;
                         }
-                        dispatch(loadFormSuccess(response.data));
+
+                        dispatch(loadFormSuccess(formType, response.data));
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -125,7 +129,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
                         // remove the editRec query string since we are not successfully editing the form
                         WindowLocationUtils.pushWithoutQuery();
-                        dispatch(loadFormError(error.response.status));
+                        dispatch(loadFormError(formType, error.response.status));
 
                         reject();
                     }

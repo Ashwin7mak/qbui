@@ -37,8 +37,8 @@ const AppQbModal = React.createClass({
     },
     componentWillUnmount() {
         if (this.refs[appModalId]) {
-            this.refs[appModalId].removeEventListener(SHOW_APP_MODAL_EVENT);
-            this.refs[appModalId].removeEventListener(HIDE_APP_MODAL_EVENT);
+            this.refs[appModalId].removeEventListener(SHOW_APP_MODAL_EVENT, this.showModal);
+            this.refs[appModalId].removeEventListener(HIDE_APP_MODAL_EVENT, this.hideModal);
         }
     },
     showModal(evt) {

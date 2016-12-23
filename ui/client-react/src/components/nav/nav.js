@@ -34,7 +34,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore', 'FormStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -49,7 +49,6 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            form: flux.store('FormStore').getState(),
             reportSearchData: flux.store('ReportDataSearchStore').getState(),
         };
     },
@@ -152,9 +151,12 @@ export let Nav = React.createClass({
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.props.qbui.editForm.loading && !this.state.form.editFormLoading && (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
+            (!this.props.qbui.forms.editForm || !this.props.qbui.forms.editForm.loading) &&
+            (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
 
             this.props.dispatch(FormActions.loadForm(appId, tblId, rptId, "edit", editRec)).then(() => {
+
                 this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
             });
 
@@ -165,8 +167,8 @@ export let Nav = React.createClass({
 
         // component updated, update the record trowser content if necessary
         // temporary solution to prevent UI getting in an endless loop state (MB-1369)
-        const {editFormErrorStatus, editFormLoading, errorStatus} = this.state.form;
-        if (!editFormLoading) {
+
+        if (!_.has(this.props, "qbui.forms.edit") || !this.props.qbui.forms.edit.loading) {
             this.updateRecordTrowser(prevProps.location.query.editRec);
         }
     },
@@ -215,8 +217,7 @@ export let Nav = React.createClass({
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
-                               form={this.state.form}
-                               editForm={this.props.qbui.editForm}
+                               editForm={this.props.qbui.forms.edit}
                                appId={this.props.params.appId}
                                tblId={this.props.params.tblId}
                                recId={editRecordId}
@@ -272,7 +273,7 @@ export let Nav = React.createClass({
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
-                            form: this.state.form,
+                            forms: this.props.qbui.forms,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),

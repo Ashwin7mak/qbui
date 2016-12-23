@@ -20,8 +20,6 @@ import PerfStore from "../stores/perfStore";
 import perfActions from "../actions/perfActions";
 import recordActions from "../actions/recordActions";
 import tableActions from '../actions/tableActions';
-import FormStore from '../stores/formStore';
-import formActions from '../actions/formActions';
 
 export default function getFlux() {
     let stores = {
@@ -33,7 +31,6 @@ export default function getFlux() {
         ReportDataSearchStore: new ReportDataSearchStore(),
         RecordPendingEditsStore: new RecordPendingEditsStore(),
         FieldsStore: new FieldsStore(),
-        FormStore: new FormStore(),
         PerfStore: new PerfStore()
     };
     let flux = new Fluxxor.Flux(stores);
@@ -44,7 +41,6 @@ export default function getFlux() {
     flux.addActions(navActions);
     flux.addActions(facetMenuActions);
     flux.addActions(fieldsActions);
-    flux.addActions(formActions);
     flux.addActions(tableActions);
     flux.addActions(perfActions);
     flux.addActions(recordActions);

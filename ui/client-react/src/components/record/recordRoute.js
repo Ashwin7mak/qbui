@@ -18,7 +18,7 @@ import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {syncingForm} from '../../actions/formActions';
+import {syncingForm,loadForm,editNewRecord,openRecordForEdit} from '../../actions/formActions';
 import './record.scss';
 
 let logger = new Logger();
@@ -27,11 +27,12 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 export let RecordRoute = React.createClass({
     mixins: [FluxMixin],
 
-    loadRecord(appId, tblId, recordId, rptId, formType) {
+    loadRecord(appId, tblId, recordId, rptId, formType = "view") {
         const flux = this.getFlux();
         this.props.dispatch(syncingForm());
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, formType);
+
+        this.props.dispatch(loadForm(appId, tblId, rptId, formType, recordId));
     },
     loadRecordFromParams(params) {
         const {appId, tblId, recordId, rptId} = params;
@@ -55,7 +56,7 @@ export let RecordRoute = React.createClass({
         if (this.props.params.appId !== prev.params.appId ||
             this.props.params.tblId !== prev.params.tblId ||
             this.props.params.recordId !== prev.params.recordId ||
-            (this.props.form && this.props.form.syncLoadedForm)) {
+            (this.props.forms.view && this.props.forms.syncLoadedForm)) {
 
             this.loadRecordFromParams(this.props.params);
         }
@@ -185,10 +186,7 @@ export let RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-
-        const flux = this.getFlux();
-
-        flux.actions.openRecordForEdit(parseInt(this.props.params.recordId), true);
+        this.props.dispatch(openRecordForEdit(parseInt(this.props.params.recordId)));
     },
     /**
      * edit the selected record in the trowser
@@ -196,9 +194,7 @@ export let RecordRoute = React.createClass({
      */
     editNewRecord() {
 
-        const flux = this.getFlux();
-
-        flux.actions.editNewRecord(true);
+        this.props.dispatch(editNewRecord());
     },
     getPageActions() {
 
@@ -215,10 +211,10 @@ export let RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return this.props.form.syncLoadedForm ||
-            !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+        return this.props.forms.syncLoadedForm || !this.props.forms.view ||
+            !_.isEqual(this.props.forms.view.formData, nextProps.forms.view.formData) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
-            !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
+            !_.isEqual(this.props.forms.view.loading, nextProps.forms.view.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
             !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
@@ -238,7 +234,7 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const formLoadingeErrorStatus = (_.isUndefined(this.props.form) || _.isUndefined(this.props.form.errorStatus)) ? false : this.props.form.errorStatus;
+            const formLoadingeErrorStatus = (_.isUndefined(this.props.forms.view) || _.isUndefined(this.props.forms.view.errorStatus)) ? false : this.props.forms.view.errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
 
@@ -258,15 +254,15 @@ export let RecordRoute = React.createClass({
                     </div>
 
                     {!formLoadingeErrorStatus ?
-                        <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
-                                            loaded={(!this.props.form || !this.props.form.formLoading)}
+                        <Loader key={_.has(this.props, "forms.view.formData.recordId") ? this.props.forms.view.formData.recordId : null }
+                                            loaded={(!this.props.forms.view || !this.props.forms.view.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
-                        <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                        <Record key={_.has(this.props, "forms.view.formData.recordId") ? this.props.forms.view.formData.recordId : null }
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={formLoadingeErrorStatus ? this.props.form.errorStatus : null}
-                                formData={this.props.form ? this.props.form.formData : null}
+                                errorStatus={formLoadingeErrorStatus ? this.props.forms.view.errorStatus : null}
+                                formData={this.props.forms.view ? this.props.forms.view.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}

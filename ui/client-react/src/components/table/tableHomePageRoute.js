@@ -60,9 +60,6 @@ export const TableHomePageRoute = React.createClass({
      * Add a new record in trowser
      */
     editNewRecord() {
-        // const flux = this.getFlux();
-        // flux.actions.editNewRecord();
-
         this.props.dispatch(editNewRecord());
     },
 

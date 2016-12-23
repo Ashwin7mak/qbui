@@ -13,6 +13,8 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import {openRecordForEdit} from '../../../actions/formActions';
+import {connect} from 'react-redux';
 
 import {
     CheckBoxCellRenderer,
@@ -385,9 +387,10 @@ let AGGrid = React.createClass({
 
         const recordId = data[this.props.primaryKeyName].value;
 
-        const flux = this.getFlux();
-
-        flux.actions.openRecordForEdit(recordId);
+        // const flux = this.getFlux();
+        //
+        // flux.actions.openRecordForEdit(recordId);
+        this.props.dispatch(openRecordForEdit(recordId));
     },
 
     /**
@@ -1098,4 +1101,4 @@ let AGGrid = React.createClass({
     }
 });
 
-export default AGGrid;
+export default connect()(AGGrid);

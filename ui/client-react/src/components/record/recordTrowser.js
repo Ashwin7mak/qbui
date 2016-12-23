@@ -32,7 +32,7 @@ let RecordTrowser = React.createClass({
         tblId: React.PropTypes.string,
         recId: React.PropTypes.string,
         visible: React.PropTypes.bool,
-        form: React.PropTypes.object,
+        editForm: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
         errorPopupHidden: React.PropTypes.bool
@@ -64,7 +64,7 @@ let RecordTrowser = React.createClass({
                     tblId={this.props.tblId}
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
-                    errorStatus={this.props.editForm ? this.props.editForm.errorStatus : null}
+                    errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                     formData={this.props.editForm ? this.props.editForm.formData : null}
                     edit={true} />
@@ -72,7 +72,7 @@ let RecordTrowser = React.createClass({
             </Loader>);
     },
     /**
-     *  get actions element for bottome center of trowser (placeholders for now)
+     *  get actions element for bottom center of trowser (placeholders for now)
      */
     getTrowserActions() {
         return (
@@ -188,7 +188,7 @@ let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields, colList);
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.fields, colList);
     },
 
     /**
@@ -206,7 +206,7 @@ let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields, colList);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList);
     },
 
     /**
