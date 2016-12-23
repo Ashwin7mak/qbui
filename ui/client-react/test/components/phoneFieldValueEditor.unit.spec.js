@@ -153,26 +153,26 @@ describe('PhoneFieldValueEditor', () => {
         let updatedPhoneNumber = '8675309';
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         component.setState({value: phoneNumberWithExt, display: {display: phoneNumberWithoutExt, extension: ext}});
-        domComponent = ReactDOM.findDOMNode(component);
-        let input = domComponent.childNodes[0];
+        phoneNumberNode = TestUtils.findRenderedDOMComponentWithTag(component.refs.phoneField.refs.phoneNumber, 'input');
+        extentionNode = TestUtils.findRenderedDOMComponentWithTag(component.refs.phoneField.refs.extention, 'input');
 
-        Simulate.change(input, {target: {value: updatedPhoneNumber}});
+        Simulate.change(phoneNumberNode, {target: {value: updatedPhoneNumber}});
 
-        expect(domComponent.childNodes[0].value).toEqual(updatedPhoneNumber);
-        expect(domComponent.childNodes[2].value).toEqual(ext);
+        expect(phoneNumberNode.value).toEqual(updatedPhoneNumber);
+        expect(extentionNode.value).toEqual(ext);
     });
 
     it('allows a user to edit the extension first without clearing the main phone number', () => {
         let updatedExtension = '5678';
         component = TestUtils.renderIntoDocument(<MockParent attributes={{includeExtension: true}} />);
         component.setState({value: phoneNumberWithExt, display: {display: phoneNumberWithoutExt, extension: ext}});
-        domComponent = ReactDOM.findDOMNode(component);
-        let input = domComponent.childNodes[2];
+        phoneNumberNode = TestUtils.findRenderedDOMComponentWithTag(component.refs.phoneField.refs.phoneNumber, 'input');
+        extentionNode = TestUtils.findRenderedDOMComponentWithTag(component.refs.phoneField.refs.extention, 'input');
 
-        Simulate.change(input, {target: {value: updatedExtension}});
+        Simulate.change(extentionNode, {target: {value: updatedExtension}});
 
-        expect(domComponent.childNodes[0].value).toEqual(phoneNumberWithoutExt);
-        expect(domComponent.childNodes[2].value).toEqual(updatedExtension);
+        expect(phoneNumberNode.value).toEqual(phoneNumberWithoutExt);
+        expect(extentionNode.value).toEqual(updatedExtension);
     });
 
     it('renders a single phone input field when all props are null', () => {
