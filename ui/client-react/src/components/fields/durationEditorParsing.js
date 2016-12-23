@@ -8,26 +8,52 @@
     var Locale = require('../../locales/locales');
     var regexNumsDecimalsColons = /-?[0-9.:]+/g;
     var removeCommas = /[,]+/g;
-    var ALLOWED_DURATION_TYPE = [DURATION_CONSTS.ACCEPTED_TYPE.S,
-                                DURATION_CONSTS.ACCEPTED_TYPE.SECS,
-                                DURATION_CONSTS.ACCEPTED_TYPE.SECOND,
-                                DURATION_CONSTS.ACCEPTED_TYPE.SECONDS,
-                                DURATION_CONSTS.ACCEPTED_TYPE.MS,
-                                DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND,
-                                DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS,
-                                DURATION_CONSTS.ACCEPTED_TYPE.M,
-                                DURATION_CONSTS.ACCEPTED_TYPE.MINUTE,
-                                DURATION_CONSTS.ACCEPTED_TYPE.MINUTES,
-                                DURATION_CONSTS.ACCEPTED_TYPE.H,
-                                DURATION_CONSTS.ACCEPTED_TYPE.HOUR,
-                                DURATION_CONSTS.ACCEPTED_TYPE.HOURS,
-                                DURATION_CONSTS.ACCEPTED_TYPE.D,
-                                DURATION_CONSTS.ACCEPTED_TYPE.DAY,
-                                DURATION_CONSTS.ACCEPTED_TYPE.DAYS,
-                                DURATION_CONSTS.ACCEPTED_TYPE.W,
-                                DURATION_CONSTS.ACCEPTED_TYPE.WEEK,
-                                DURATION_CONSTS.ACCEPTED_TYPE.WEEKS];
-
+    /**
+     * Accepted Types:
+     * millisecond || milliseconds || ms
+     * second || seconds || s
+     * minute || minutes || m
+     * hour || hours || h
+     * week || weeks || w
+     * Accepted Format For Seconds, Minutes, Hours:
+     * 00:00:00
+     * 00:00
+     * :00
+     * :00:00
+     * ::00
+     **/
+    function allowedDurationType() {
+        var ALLOWED_DURATION_TYPE = {};
+        //Default to field scales if user does not enter a type
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.SECONDS] = DURATION_CONSTS.ACCEPTED_TYPE.SECONDS;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.MINUTES] = DURATION_CONSTS.ACCEPTED_TYPE.MINUTES;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.HOURS] = DURATION_CONSTS.ACCEPTED_TYPE.HOURS;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.DAYS] = DURATION_CONSTS.ACCEPTED_TYPE.DAYS;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.WEEKS] = DURATION_CONSTS.ACCEPTED_TYPE.WEEKS;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.HHMMSS] = DURATION_CONSTS.ACCEPTED_TYPE.HOURS;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.HHMM] = DURATION_CONSTS.ACCEPTED_TYPE.HOURS;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.MMSS] = DURATION_CONSTS.ACCEPTED_TYPE.MINUTES;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.MM] = DURATION_CONSTS.ACCEPTED_TYPE.MINUTES;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.S)] = DURATION_CONSTS.ACCEPTED_TYPE.SECONDS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECONDS)] = DURATION_CONSTS.ACCEPTED_TYPE.SECONDS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MS)] = DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECOND)] = DURATION_CONSTS.ACCEPTED_TYPE.SECONDS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND)] = DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS)] = DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.M)] = DURATION_CONSTS.ACCEPTED_TYPE.MINUTES;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTE)] = DURATION_CONSTS.ACCEPTED_TYPE.MINUTES;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTES)] = DURATION_CONSTS.ACCEPTED_TYPE.MINUTES;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.H)] = DURATION_CONSTS.ACCEPTED_TYPE.HOURS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOUR)] = DURATION_CONSTS.ACCEPTED_TYPE.HOURS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOURS)] = DURATION_CONSTS.ACCEPTED_TYPE.HOURS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.D)] = DURATION_CONSTS.ACCEPTED_TYPE.DAYS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAY)] = DURATION_CONSTS.ACCEPTED_TYPE.DAYS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAYS)] = DURATION_CONSTS.ACCEPTED_TYPE.DAYS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.W)] = DURATION_CONSTS.ACCEPTED_TYPE.WEEKS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK)] = DURATION_CONSTS.ACCEPTED_TYPE.WEEKS;
+        ALLOWED_DURATION_TYPE[Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEKS)] = DURATION_CONSTS.ACCEPTED_TYPE.WEEKS;
+        return ALLOWED_DURATION_TYPE;
+    }
     function convertToMilliseconds(num, millis) {
         var result = num * millis;
         /**
@@ -60,8 +86,6 @@
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEKS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.W):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_WEEK);
             break;
         // /**
@@ -69,30 +93,18 @@
         //  * */
         case DURATION_CONSTS.SCALES.SMART_UNITS.toLowerCase():
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAYS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAY):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.D):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_DAY);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOURS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOUR):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.H):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTES):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTE):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.M):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECONDS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECOND):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.S):
             returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_SECOND);
             break;
         case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MSECS):
-        case Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MS):
             returnValue = num;
             break;
         default:
@@ -205,30 +217,30 @@
     }
 
     module.exports = {
-        isValid: function(value) {
+        isValid: function(value, scale) {
+            var ALLOWED_DURATION_TYPE = allowedDurationType();
             var regexHasNums = /[0-9]+/g;
             var tempNum;
-            var localizedTypes;
+            var normalizedTypes;
             var tempType = [];
-            var valid = true;
             var type;
+            var isValidResults = {
+                normalizedTypes: '',
+                num: value,
+                valid: true
+            };
             /**
-             * Don't validate empty strings
+             * Don't validate empty strings or if the input is only a number, return true
              * */
-            if (!value) {
-                return true;
+            if (!value || Number(value)) {
+                return isValidResults;
             }
             /**
              * If a user does not input a number, return invalid
              * */
             if (!regexHasNums.test(value)) {
-                return false;
-            }
-            /**
-             * If the input is only a number, return true
-             * */
-            if (typeof value === 'number' || !value) {
-                return true;
+                isValidResults.valid = false;
+                return isValidResults;
             }
             /**
              * If a user inserted a colon, it will be validated based off of time formats validation requirements
@@ -246,14 +258,11 @@
              * If there are no types, return true
              * If there are only accepted types return true
              * */
-            localizedTypes = ALLOWED_DURATION_TYPE.map(function(currentType) {
-                return Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + currentType);
-            });
-            type.forEach(function(val) {
-                if (localizedTypes.indexOf(val) === -1) {
-                    valid = false;
+            normalizedTypes = type.map(function(val) {
+                if (ALLOWED_DURATION_TYPE[val]) {
+                    return ALLOWED_DURATION_TYPE[val];
                 } else {
-                    tempType.push(val);
+                    isValidResults.valid = false;
                 }
             });
             /**
@@ -265,29 +274,20 @@
             if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
                 return false;
             }
-            return valid;
+            isValidResults.normalizedTypes = normalizedTypes;
+            console.log('isValidResult.normalizedTYpes: ', isValidResults.normalizedTypes.length);
+            if (isValidResults.normalizedTypes.length === 0) {
+                isValidResults.NormalizedTypes = [ALLOWED_DURATION_TYPE[scale]];
+            }
+            isValidResults.num = value.match(regexNumsDecimalsColons);
+            return isValidResults;
         },
         onBlurParsing: function(value, fieldInfo, includeUnits) {
             value = value.replace(removeCommas, '').split(' ').join(' ');
             value = value.trim();
-            /**
-             * Accepted Types:
-             * millisecond || milliseconds || ms
-             * second || seconds || s
-             * minute || minutes || m
-             * hour || hours || h
-             * week || weeks || w
-             * Accepted Format For Seconds, Minutes, Hours:
-             * 00:00:00
-             * 00:00
-             * :00
-             * :00:00
-             * ::00
-             **/
             var total = 0;
-            var types;
-            var num;
             var scale = fieldInfo.scale;
+            var isValidResults;
             var results = {
                 value: DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_IPUT,
                 display: value
@@ -295,7 +295,8 @@
             /**
              * Checks to see if the value is a valid input
              * */
-            if (this.isValid(value)) {
+            isValidResults = this.isValid(value, scale);
+            if (isValidResults.valid) {
                 /**
                  * If the user inserted a semicolon, then the string needs to be parsed based off of
                  * the HHMMSS, HHMM, MMSS requirements
@@ -306,16 +307,6 @@
                     return results;
                 }
                 /**
-                 * If the user passes in a string containing a number and a type, we split the string here
-                 * and separate the number and type from each other
-                 * Strips out all commas
-                 * */
-                value = value.toLowerCase();
-                num = value.match(regexNumsDecimalsColons);
-                types = value.replace(regexNumsDecimalsColons, ' ')
-                                    .split(' ')
-                                    .filter(function(val) {return val !== '';});
-                /**
                  * If a user only inputs one num and one type, then this function will only be called once
                  * However if the user inserted more than one num and more than one type then this function calls each num with its type
                  * The isValid function above, checks to be sure each num has a type, if it did not an error will be thrown
@@ -324,28 +315,15 @@
                  * listOfTypes = [week, days]
                  * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
                  * */
-                if (num !== null && num.length === types.length) {
-                    num.forEach(function(val, i) {
-                        if (num.length === 1 && types[i] ===  Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS) ||
-                                                types[i] ===  Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MS) ||
-                                                types[i] ===  Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND)) {
-                            total = Number(getMilliseconds(num[i], types[i]));
+                console.log('isValidResults: ', isValidResults);
+                if (isValidResults.num !== null) {
+                    isValidResults.normalizedTypes.forEach(function(val, i) {
+                        if (isValidResults.num.length === 1 && isValidResults.normalizedTypes[i] === DURATION_CONSTS.SCALES.MILLISECONDS) {
+                            total = Number(getMilliseconds(isValidResults.num[i], isValidResults.normalizedTypes[i]));
                         } else {
-                            total += getMilliseconds(num[i], types[i]);
+                            total += getMilliseconds(isValidResults.num[i], isValidResults.normalizedTypes[i]);
                         }
                     });
-                }
-                if (num !== null && types.length === 0) {
-                    /**
-                     * If a user does not insert a type, then it defaults they type to the field scale the user is typing in
-                     * */
-                    if (scale !== DURATION_CONSTS.SCALES.HHMMSS &&
-                        scale !== DURATION_CONSTS.SCALES.HHMM &&
-                        scale !== DURATION_CONSTS.SCALES.MMSS &&
-                        scale !== DURATION_CONSTS.SCALES.MM) {
-                        scale = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + fieldInfo.scale.toLowerCase());
-                    }
-                    total = getMilliseconds(num[0], scale);
                 }
                 results.value = total;
                 results.display = durationFormatter.format({value: results.value}, fieldInfo);
@@ -353,6 +331,7 @@
                     results.display = this.includeUnitsInInput(results.display, fieldInfo);
                 }
             }
+            console.log('results: ', results);
             return results;
         },
         includeUnitsInInput(display, fieldInfo) {
