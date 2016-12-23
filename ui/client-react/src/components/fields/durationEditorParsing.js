@@ -6,7 +6,7 @@
     var DURATION_CONSTS = require('../../../../common/src/constants').DURATION_CONSTS;
     var durationFormatter = require('../../../../common/src/formatter/durationFormatter');
     var Locale = require('../../locales/locales');
-    var regexNumsDecimalsColons = /[0-9.:]+/g;
+    var regexNumsDecimalsColons = /-?[0-9.:]+/g;
     var removeCommas = /[,]+/g;
     var ALLOWED_DURATION_TYPE = [DURATION_CONSTS.ACCEPTED_TYPE.S,
                                 DURATION_CONSTS.ACCEPTED_TYPE.SECS,
@@ -115,60 +115,66 @@
         var hours = 0;
         var minutes = 0;
         var seconds = 0;
-        var numArray = num.match(/[^:]+/g, '');
+        var numArray = num.match(/[^:-]+/g);
+        var isNegative = (/-/g).test(num);
+        var answer;
         /**
-         * ::SS => num[0] === ':' && num[1] === ':'
-         * H::S =>  num[1] === ':' && num[2] === ':'
-         * HH::SS => num[2] === ':' && num[3] === ':'
+         * match on num(optional)::num
+         * ::SS
+         * H::SS
+         * HH::SS
          * */
-        if (num[0] === ':' && num[1] === ':' ||
-            num[1] === ':' && num[2] === ':' ||
-            num[2] === ':' && num[3] === ':') {
+        if (/^[^:]*::[^:]+$/g.test(num)) {
             if (numArray.length === 2) {
-                hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
-                seconds = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_SECOND);
-                return hours + seconds;
+                hours = convertToMilliseconds(Math.abs(numArray[0]), DURATION_CONSTS.MILLIS_PER_HOUR);
+                seconds = convertToMilliseconds(Math.abs(numArray[1]), DURATION_CONSTS.MILLIS_PER_SECOND);
+                answer = hours + seconds;
+            } else {
+                answer = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_SECOND);
             }
-            return convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_SECOND);
-        }
-        /**
-         * :MM:SS
-         * */
-        if (num[0] === ':') {
+        } else if (/^:[^:]+/.test(num)) {
+            /**
+             * :MM:SS
+             * */
             if (numArray.length === 2) {
                 minutes = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_MIN);
                 seconds = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_SECOND);
-                return minutes + seconds;
+                answer = minutes + seconds;
+            } else {
+                /**
+                 * :MM
+                 * */
+                answer =  convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_MIN);
             }
+        } else if (numArray.length === 1) {
             /**
-             * :MM
+             * HH:
              * */
-            return convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_MIN);
-        }
-        /**
-         * HH:
-         * */
-        if (numArray.length === 1) {
-            return convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
-        }
-        /**
-         * HH:MM
-         * */
-        if (numArray.length === 2) {
+            answer =  convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
+        } else if (numArray.length === 2) {
+            /**
+             * HH:MM
+             * */
             hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
             minutes = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_MIN);
-            return hours + minutes;
-        }
-        /**
-         * HH:MM:SS
-         * */
-        if (numArray.length === 3) {
+            answer =  hours + minutes;
+        } else if (numArray.length === 3) {
+            /**
+             * HH:MM:SS
+             * */
+
             hours = convertToMilliseconds(numArray[0], DURATION_CONSTS.MILLIS_PER_HOUR);
             minutes = convertToMilliseconds(numArray[1], DURATION_CONSTS.MILLIS_PER_MIN);
             seconds = convertToMilliseconds(numArray[2], DURATION_CONSTS.MILLIS_PER_SECOND);
-            return  hours + minutes + seconds;
+            answer =  hours + minutes + seconds;
+        } else {
+            answer = num;
         }
-        return num;
+
+        if (isNegative) {
+            answer *= -1;
+        }
+        return answer;
     }
     function isTimeFormatValid(value, type) {
         var colons;
@@ -182,10 +188,10 @@
             return false;
         }
         colons = value.match(/:/g);
-        if (colons.length > 3) {
+        if (colons.length > 2) {
             return false;
         }
-        let numArray = value.match(/[^:]+/g, '');
+        let numArray = value.match(/[^:]+/g);
         if (numArray.length > 3 || numArray.length === 0) {
             return false;
         }
@@ -263,6 +269,7 @@
         },
         onBlurParsing: function(value, fieldInfo, includeUnits) {
             value = value.replace(removeCommas, '').split(' ').join(' ');
+            value = value.trim();
             /**
              * Accepted Types:
              * millisecond || milliseconds || ms

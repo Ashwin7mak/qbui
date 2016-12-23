@@ -1,16 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import DurationFieldValueEditor from '../../src/components/fields/durationFieldValueEditor';
 import DurationEditorParsing from '../../src/components/fields/durationEditorParsing';
-import TestData from './durationFieldValueEditorTestData';
 import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import bigDecimal from 'bigdecimal';
 
-describe('DurationFieldValueEditor', () => {
+// gen a repeatable seed for random values, so it can be reproduced
+var Chance = require('chance');
+var seed = new Chance().integer({min: 1, max: 1000000000});
+var chance = new Chance(seed);
+var TestData = require('./durationFieldValueEditorTestData')(chance);
+
+describe('DurationFieldValueEditor seed:' + (seed), () => {
     let component;
-    let domComponent;
     let divideBigDecimal = function(numerator, millis) {
         return numerator.divide(millis, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
     };
@@ -42,11 +45,8 @@ describe('DurationFieldValueEditor', () => {
     TestData.dataProvider.forEach(function(test) {
         it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = test.numValue + ' ' + test.type;
-            if (test.type === undefined) {
-                userInput = test.numValue;
-            }
-            let input = ReactDOM.findDOMNode(component);
+            let userInput = test.numValue + (test.type || '');
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             Simulate.change(input, {
                 target: {value: userInput}
             });
@@ -64,7 +64,7 @@ describe('DurationFieldValueEditor', () => {
     TestData.multiInputData.forEach(function(test) {
         it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = ReactDOM.findDOMNode(component);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             let userInput = '';
             let totalMilliSeconds = 0;
             let firstInputTotalMilliSeconds = 0;
@@ -101,15 +101,15 @@ describe('DurationFieldValueEditor', () => {
     TestData.placeholderData.forEach(function(test) {
         it('displays the correct placeholder for ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            domComponent = ReactDOM.findDOMNode(component);
-            expect(domComponent.placeholder).toEqual(test.placeholder);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            expect(input.placeholder).toEqual(test.placeholder);
         });
     });
 
     TestData.timeFormatData.forEach(function(test) {
         it('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = ReactDOM.findDOMNode(component);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             let seconds = 0;
             let minutes = 0;
             let hours = 0;
@@ -140,7 +140,7 @@ describe('DurationFieldValueEditor', () => {
             if (test.type === undefined) {
                 userInput = test.numValue;
             }
-            let input = ReactDOM.findDOMNode(component);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             Simulate.change(input, {
                 target: {value: userInput}
             });
@@ -158,8 +158,7 @@ describe('DurationFieldValueEditor', () => {
         it('throws a validation error with an invalid input of ' + test.invalidInput, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
             let userInput = test.invalidInput;
-            domComponent = ReactDOM.findDOMNode(component);
-            let input = ReactDOM.findDOMNode(domComponent);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             Simulate.change(input, {
                 target: {value: userInput}
             });
@@ -172,11 +171,8 @@ describe('DurationFieldValueEditor', () => {
     TestData.dataProvider.forEach(function(test) {
         it('displays value and scale on form edit', () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
-            let userInput = test.numValue + ' ' + test.type;
-            if (test.type === undefined) {
-                userInput = test.numValue;
-            }
-            let input = ReactDOM.findDOMNode(component);
+            let userInput = test.numValue + (test.type || '');
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             Simulate.change(input, {
                 target: {value: userInput}
             });

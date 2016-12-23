@@ -216,7 +216,7 @@
         }
 
         .glyphicon-time {
-            color: $text-color;
+            color: $default-text-onlight-color;
             padding-top: 3px;
             padding-left: 5px;
         }
@@ -251,7 +251,7 @@
     }
 
     .glyphicon-calendar {
-        color: $text-color;
+        color: $default-text-onlight-color;
     }
 
     .date.is-focused {
@@ -280,7 +280,7 @@
             height: 20px;
             padding: 0;
             border: 0;
-            color: $icon-color;
+            color: $iconfont-on-light-normal-color;
         }
 
         .bootstrap-datetimepicker-widget {
