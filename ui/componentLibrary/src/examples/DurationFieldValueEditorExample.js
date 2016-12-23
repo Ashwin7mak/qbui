@@ -41,6 +41,7 @@ var DurationFieldValueEditorExample = React.createClass({
         let returnObj = {};
         returnObj[key] = this.state[key];
         returnObj[key].emptyDisplay = newValue;
+        returnObj[key].blankVal = undefined;
         this.setState(returnObj);
     },
     onBlurEmpty(values, key) {
