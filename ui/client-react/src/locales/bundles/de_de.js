@@ -168,20 +168,21 @@ export default {
             }
         },
         durationWithUnits: {
-            Weeks:"{value, plural, \n =0 {0 wochen}\n =1 {1 woche}\n other {{value} wochen}\n} ",
-            Days:"{value, plural, \n =0 {0 tage}\n =1 {1 tag}\n other {{value}  tage}\n} ",
-            Hours:"{value, plural, \n =0 {0 stunden}\n =1 {1 stunde}\n other {{value}  stunden}\n} ",
-            Minutes: "{value, plural, \n =0 {0 minuten}\n =1 {1 minute}\n other {{value}  minuten}\n} ",
-            Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {{value}  sekunden}\n} ",
-            Milliseconds: "{value, plural, \n =0 {0 millisekunden}\n =1 {1 millisekunde}\n other {{value}  millisekunden}\n} "
+            Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
+            Days:"{value, plural, \n =0 {0 Tage}\n =1 {1 Tag}\n other {{value} Tage}\n} ",
+            Hours:"{value, plural, \n =0 {0 Stunden}\n =1 {1 Stunde}\n other {{value} Stunden}\n} ",
+            Minutes: "{value, plural, \n =0 {0 Minuten}\n =1 {1 Minute}\n other {{value} Minuten}\n} ",
+            Seconds: "{value, plural, \n =0 {0 Sekunden}\n =1 {1 Sekunde}\n other {{value} Sekunden}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 Millisekunden}\n =1 {1 Millisekunde}\n other {{value} Millisekunden}\n} "
         },
         durationTableHeader: {
-            Weeks:"wochen",
-            Days:"tage",
-            Hours:"stunden",
-            Minutes: "minuten",
-            Seconds: "sekunden"
-        },        report : {
+            Weeks: "Wochen",
+            Days: "Tage",
+            Hours: "Stunden",
+            Minutes: "Minuten",
+            Seconds: "Sekunden"
+        },
+        report : {
             blank : "leer",
             facets :{
                 noFacets :"Nein werte",

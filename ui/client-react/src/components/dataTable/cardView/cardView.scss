@@ -3,7 +3,6 @@ $report-background-color: $color-blue-200;
 $card-expanded-background-color: $color-black-100;
 $fieldLabel-font-size: $font-size-small;
 $fieldValue-font-size: $font-size-base;
-$fieldLabel-color: $color-blue-600;
 $card-border-color: $color-black-300;
 
 /* TODO: move to qbVariables after figuring out relative urls */
@@ -94,7 +93,7 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
             width: 50%;
 
             .fieldLabel {
-                color: $fieldLabel-color;
+                color: $field-label-normal-color;
                 padding-bottom: 2px;
                 display: block;
             }

@@ -59,7 +59,7 @@
         });
 
         it('Add a record from the form', function(done) {
-            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
+            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox', 'emailField'];
             //click on add record button
             reportCardViewPage.clickAddRecord().then(function() {
                 //get the fields from the table and generate a record
@@ -132,6 +132,21 @@
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[j]);
                 }
+            }).then(function() {
+                done();
+            });
+        });
+
+        it('Form field inputs should be clearable', function(done) {
+            //Select record 1
+            reportCardViewPage.clickRecord(1).then(function() {
+                //Click edit record
+                return reportCardViewPage.clickEditRecord();
+            }).then(function() {
+                //get the fields from the table and generate a record
+                return ['textField', 'numericField'].forEach(function(fieldType) {
+                    reportCardViewPage.clearFormValues(fieldType);
+                });
             }).then(function() {
                 done();
             });

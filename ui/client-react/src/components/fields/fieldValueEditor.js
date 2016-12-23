@@ -249,6 +249,7 @@ const FieldValueEditor = React.createClass({
                                             onChange={this.props.onChange ? this.props.onChange : ()=>{}}
                                             key={'tfve-' + this.props.idKey}
                                             classes="cellEdit"
+                                            showClearButton={true}
                     />;
                     //Drew's change per Andrew if users want text box that
                     // grows in height use a multiline not single line text

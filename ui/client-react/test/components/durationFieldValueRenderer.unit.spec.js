@@ -5,22 +5,50 @@ import moment from 'moment';
 import consts from '../../../common/src/constants';
 import DurationFieldValueRenderer  from '../../src/components/fields/durationFieldValueRenderer';
 
+
+var LocalesMock = {
+    getLocale: function() {
+        return 'a testing locale';
+    },
+    getMessage: function(message) {
+        return message;
+    }
+};
+
 var I18nMessageMock = React.createClass({
     render: function() {
         return <span>{" " + this.props.value + " " + this.props.message}</span>;
     }
 });
 
+var I18nNumberMock = React.createClass({
+    render: function() {
+        return <span>{" " + this.props.value + " " }</span>;
+    }
+});
+
+var IntlNumberOnlyMock = function(locale, intlOps, number) {
+    let opts = JSON.stringify(intlOps);
+    return `${locale} formatted number ${number} opts:${opts}`;
+};
+
 describe('DurationFieldValueRenderer', () => {
     'use strict';
     var matchers = require('../reactJasmine');
     beforeEach(function() {
         jasmine.addMatchers(matchers(TestUtils));
+        DurationFieldValueRenderer.__Rewire__('Locale', LocalesMock);
         DurationFieldValueRenderer.__Rewire__('I18nMessage', I18nMessageMock);
+        DurationFieldValueRenderer.__Rewire__('I18nNumber', I18nNumberMock);
+        DurationFieldValueRenderer.__Rewire__('IntlNumberOnly', IntlNumberOnlyMock);
+
 
     });
     afterEach(() => {
+        DurationFieldValueRenderer.__ResetDependency__('Locale');
         DurationFieldValueRenderer.__ResetDependency__('I18nMessage');
+        DurationFieldValueRenderer.__ResetDependency__('I18nNumber');
+        DurationFieldValueRenderer.__ResetDependency__('IntlNumberOnly');
     });
 
     let component;
@@ -110,10 +138,20 @@ describe('DurationFieldValueRenderer', () => {
         expect(durationFieldValueRenderer.classList.contains('testclass')).toBeTruthy();
     });
 
-    it('test render of component with display does not get reformatted', () => {
+    it('test render of component with display get reformatted for locale', () => {
         let millisecs = 23456;
         let displayProp = '123 pre calculated value';
         component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.WEEKS}} display={displayProp}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
+        expect(componentDiv).toBeTruthy();
+        expect(componentDiv).toHaveText(displayProp);
+    });
+
+    it('test render of component with display of timebase units get reformatted for locale', () => {
+        let millisecs = 23456;
+        let displayProp = '123 pre calculated value';
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.HHMMSS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(componentDiv).toBeTruthy();
