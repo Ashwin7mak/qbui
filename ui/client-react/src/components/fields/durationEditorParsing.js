@@ -191,29 +191,38 @@
     function isTimeFormatValid(value, type) {
         var colons;
         var regexValidNum = /^((-?\d+)|(-?\d+\.\d*)|(-?\d*\.\d+))$/;
+        var isValidFormat = {
+            normalizedTypes: '',
+            num: value,
+            isTimeFormat: true,
+            valid: true
+        }
 
         /**
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
          * */
         if (type.length >= 1) {
-            return false;
+            isValidFormat.valid = false;
+            return isValidFormat;
         }
         colons = value.match(/:/g);
         if (colons.length > 2) {
-            return false;
+            isValidFormat.valid = false;
+            return isValidFormat;
         }
         let numArray = value.match(/[^:]+/g);
         if (numArray.length > 3 || numArray.length === 0) {
-            return false;
+            isValidFormat.valid = false;
+            return isValidFormat;
         }
-        let numbersValid = true;
         numArray.forEach((numval) => {
             if (!regexValidNum.test(numval)) {
-                numbersValid  = false;
+                isValidFormat.valid = false;
+                return isValidFormat;
             }
         });
-        return numbersValid;
+        return isValidFormat;
     }
 
     module.exports = {
@@ -295,8 +304,8 @@
                  * If the user inserted a semicolon, then the string needs to be parsed based off of
                  * the HHMMSS, HHMM, MMSS requirements
                  * */
-                if (value && value.indexOf(':') !== -1) {
-                    results.value = convertHourMinutesSeconds(value);
+                if (isValidResults.isTimeFormat) {
+                    results.value = convertHourMinutesSeconds(isValidResults.num);
                     results.display = durationFormatter.format({value: results.value}, fieldInfo);
                     return results;
                 }
