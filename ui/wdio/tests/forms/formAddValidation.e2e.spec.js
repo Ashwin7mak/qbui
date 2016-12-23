@@ -1,19 +1,20 @@
+/**
+ * E2E tests for error and invalid field validation when adding a new record via a Form.
+ */
 (function() {
     'use strict';
-
     //Load the page Objects
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
-    var ReportInLineEditPO = requirePO('reportInLineEdit');
 
+    describe('Add Form Validation Tests: ', function() {
 
-    describe('Add a record Via Form Tests : ', function() {
         var realmName;
         var realmId;
         var testApp;
-        var successMessage = 'Record added';
+        var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
         /**
          * Setup method. Creates test app then authenticates into the new stack
@@ -45,11 +46,7 @@
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
-        /**
-         * Test to add a record via form.
-         * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
-         */
-        it('Add a record via form', function() {
+        it('Validate for all required fields and correct the errors and Save the record by clicking Save and add another Button', function(done) {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 
@@ -59,25 +56,49 @@
             //Step 2 - Click on Add Record Button on the report Stage
             formsPO.clickAddRecordBtnOnStage();
 
-            //Step 3 - enter form values
+            //Step 4 - Click Save on the form
+            formsPO.clickFormSaveBtn();
+
+            //Step 5 - Verify all required fields throw error in the container
+            formsPO.verifyErrorMessages(expectedErrorMessages);
+
+            //Step 6 - Correct the errors
             for (var i = 0; i < fieldTypes.length; i++) {
                 formsPO.enterFormValues(fieldTypes[i]);
             }
 
-            //Step 4 - Click Save on the form
-            formsPO.clickFormSaveBtn();
-            //wait until report rows in table are loaded
-            reportContentPO.agGridRecordElList.waitForVisible();
+            //Step 7 - Click Save & Add Another button on the form
+            formsPO.clickFormSaveAndAddAnotherBtn();
+            //Verify edit container is loaded
+            formsPO.editFormContainerEl.waitForVisible();
 
-            //Step 5 - Verify new record got added on the top of the table and verify the expected field values
-            var recordValues = reportContentPO.getRecordValues(0);
-            formsPO.verifyFieldValuesInReportTable(recordValues);
 
-            // Step 6 - Reload the report after saving row as the row is added at the last page
+            // Step 8 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            // Step 7 - Verify the records count got increased by 1
+            // Step 9 - Verify the records count got increased by 1
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount + 1);
+        });
+
+        it('Verify error alert button functionality on form Footer', function() {
+
+            //Step 1 - Click on Add Record Button on the report Stage
+            formsPO.clickAddRecordBtnOnStage();
+
+            //Step 2 - Click on Save Button on the form without entering any values
+            formsPO.clickFormSaveBtn();
+
+            //Step 3 - Verify the required fields that the form complains
+            formsPO.verifyErrorMessages(expectedErrorMessages);
+            //TODO figure out how to verify the error container closed. Because clicking on alert complains the errorWindow would receive the click
+
+            //Step 4 - Verify clicking on alert button on footer brings up the error container
+            formsPO.clickAlertBtnOnFormFooter();
+            //formsPO.formErrorMessageContainerEl.waitForVisible();
+            //
+            ////Step 5 - Verify clicking on alert button again on footer hides the error container
+            //formsPO.clickAlertBtnOnFormFooter();
+            //expect(browser.isVisible(formsPO.formErrorMessageContainerEl).toBe('false'));
         });
 
     });

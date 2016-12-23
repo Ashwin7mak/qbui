@@ -62,7 +62,8 @@
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
         browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        return browser.waitForVisible('.ag-body-container');
+        browser.waitForVisible('.ag-body-container');
+        return browser.waitForVisible('.ag-row');
     };
 
     //TODO: Refactor these if needed
