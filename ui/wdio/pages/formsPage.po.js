@@ -24,7 +24,7 @@
 
     var FormsPage = Object.create(e2ePageBase, {
         //view form
-        viewFormContainerEl : {get: function() {return browser.element('.viewForm');}},
+        viewFormContainerEl : {get: function() {return browser.element('.viewForm .formTable');}},
 
         //edit Form
         editFormContainerEl : {get: function() {return browser.element('.editForm .formTable');}},
@@ -196,6 +196,54 @@
             browser.element('.iconTableUISturdy-add').click();
             return this.editFormContainerEl.waitForVisible();
         }},
+        /**
+         * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
+            var getAllEdits = browser.elements('.recordActions .iconTableUISturdy-edit');
+            for (var i = 0; i < getAllEdits.value.length;i++) {
+                if (i === recordRowIndex) {
+                    //Click on the edit pencil of a recordRowIndex row
+                    getAllEdits.value[i].click();
+                }
+            }
+            return this.editFormContainerEl.waitForVisible();
+        }},
+        /**
+         * Given a record element in agGrid, click on the checkbox to select that record and then click on edit pencil from the table actions
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
+            var getAllCheckBoxs = browser.elements('.ag-selection-checkbox');
+            for (var i = 0; i < getAllCheckBoxs.value.length;i++) {
+                if (i === recordRowIndex) {
+                    //Click on the checkbox of a recordRowIndex row to select that row
+                    getAllCheckBoxs.value[i].click();
+                }
+            }
+            //click on the edit pencil in table actions
+            browser.element('.reportActions .actionIcons .iconTableUISturdy-edit').click();
+            //wait until edit form is visible
+            return this.editFormContainerEl.waitForVisible();
+        }},
+        /**
+         * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInViewForm : {value: function(recordRowIndex) {
+            var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
+            // Hardcoded to click on the first cell of the record
+            var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[0];
+            //Click on the first cell of recordRowIndex row
+            recordCellEl.click();
+            //wait until view form is visible
+            this.viewFormContainerEl.waitForVisible();
+            //click on the edit pencil in view form actions
+            browser.element('.stageRight .pageActions .iconTableUISturdy-edit').click();
+            //wait until edit form is visible
+            return this.editFormContainerEl.waitForVisible();
+        }},
 
         /**
          * Method to click Save button with name on the form.
@@ -255,6 +303,7 @@
             self.formErrorMsgAlertBtn.waitForVisible();
             return self.formErrorMsgAlertBtn.click();
         }},
+
         //
         //clickFormCloseBtn : {value: function() {
         //    var self = this;
