@@ -71,6 +71,16 @@
         }},
 
         /**
+         * Returns all field labels on the form
+         * @parm elementFormName - is it view form or edit form
+         * @returns Array of field Labels
+         */
+        getAllFieldLabelsOnForm: {value: function(elementFormName) {
+            elementFormName.elements('.fieldLabel').waitForVisible();
+            return elementFormName.elements('.fieldLabel');
+        }},
+
+        /**
          * Returns all text input fields on the form
          * @returns Array of text input fields
          */
@@ -181,6 +191,19 @@
             browser.element('.iconTableUISturdy-add').click();
             this.editFormContainerEl.waitForVisible();
             return this.editFormSaveBtns.waitForVisible();
+        }},
+        /**
+         * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
+         * @param recordRowIndex
+         */
+        openRecordInViewMode : {value: function(recordRowIndex) {
+            var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
+            // Hardcoded to click on the third cell of the record
+            var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[3];
+            //Click on the first cell of recordRowIndex row
+            recordCellEl.click();
+            //wait until view form is visible
+            return this.viewFormContainerEl.waitForVisible();
         }},
         /**
          * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
@@ -499,32 +522,29 @@
                 }
             }
         }},
-        //
-        ///**
-        // * Function that gets user authentication
-        // */
-        //getUserAuthentication : {value: function() {
-        //    // Get a session ticket for that subdomain and realmId (stores it in the browser)
-        //    var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-        //    var realmId = e2eBase.recordBase.apiBase.realm.id;
-        //    //get the user authentication
-        //    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-        //}},
-        //
-        //verifyFieldsNotPresentOnForm : {value: function(formTableElement, expectedFieldsNotPresentOnForm) {
-        //    var self = this;
-        //    return formTableElement.all(by.className('fieldLabel')).filter(function(elm) {
-        //        return elm;
-        //    }).map(function(elm) {
-        //        return elm.getText();
-        //    }).then(function(fieldsPresentOnForm) {
-        //        return expectedFieldsNotPresentOnForm.filter(function(field) {
-        //            //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
-        //            expect(fieldsPresentOnForm.indexOf(field)).toBe(-1);
-        //        });
-        //    });
-        //
-        //}}
+
+        /**
+         * Function that gets user authentication
+         */
+        getUserAuthentication : {value: function(realmName, realmId, userId) {
+            //get the user authentication
+            return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+        }},
+
+        verifyFieldsNotPresentOnForm : {value: function(elementFormName, expectedFieldsNotPresentOnForm) {
+            var self = this;
+            var fieldsOnForm = [];
+
+            //get all field Labels from the form
+            var fieldLabelsOnForm = self.getAllFieldLabelsOnForm(elementFormName);
+            //For each field Label on push get the text and push into actual array for comparision
+            for (var i = 0; i < fieldLabelsOnForm.value.length;i++) {
+                var fieldLabel = fieldLabelsOnForm.value[i].getText();
+                fieldsOnForm.push(fieldLabel);
+            }
+            //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
+            expect(expectedFieldsNotPresentOnForm.indexOf(fieldsOnForm)).toBe(-1);
+        }}
 
     });
 
