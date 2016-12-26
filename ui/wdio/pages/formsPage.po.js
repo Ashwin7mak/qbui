@@ -25,35 +25,20 @@
     var FormsPage = Object.create(e2ePageBase, {
         //view form
         viewFormContainerEl : {get: function() {return browser.element('.viewForm .formTable');}},
-
         //edit Form
         editFormContainerEl : {get: function() {return browser.element('.editForm .formTable');}},
-
-        //form save buttons
+        //form footer save buttons
         editFormSaveBtns : {get: function() {return browser.elements('.trowserFooter .rightIcons .saveButtons button');}},
-
-        //alert button
-        formErrorMsgAlertBtn : {get: function() {return browser.element('.iconTableUISturdy-alert');}},
-
-
-        ////form table field values
-        //formTableFieldValueElList : {get: function() {return this.formEditContainerEl.elements('.qbPanelBody.formTable.input');}},
-        //
-        ////form title
-        //formTitle : {get: function() {return this.formContainerEl.elements('.qbPanelHeaderTitleText');}},
+        //form footer alert button
+        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.trowserFooter .rightIcons .saveButtons .iconTableUISturdy-alert');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.elements('.loadedContent .qbErrorMessageVisible');}},
-
         //header on error message container
         formErrorMessageHeader : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageHeader');}},
-
         //close btn on error container
         formErrorMessageContainerCloseBtn : {get: function() {return this.formErrorMessageContainerEl.element('.iconTableUISturdy-x-secondary');}},
-
-        formErrorMessageHeaderAlertBtn : {get: function() {return this.formErrorMessageHeader.elements('.leftIcons.iconTableUISturdy-alert');}},
-
-        formErrorMessageContent : {get: function() {return this.formErrorMessageVisisble.element('.qbErrorMessageContent');}},
+        formErrorMessageContent : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageContent');}},
 
         //Save changes before leaving dialogue
         formsSaveChangesDialog : {get: function() {return browser.element('.modal-dialog');}},
@@ -72,8 +57,8 @@
          * Method to click on alert button on form footer.
          */
         clickAlertBtnOnFormFooter: {value: function() {
-            this.formErrorMsgAlertBtn.waitForVisible();
-            return this.formErrorMsgAlertBtn.click();
+            this.editFormFooterErrorAlertBtn.waitForVisible();
+            return this.editFormFooterErrorAlertBtn.click();
         }},
 
         /**
@@ -194,7 +179,8 @@
         clickAddRecordBtnOnStage: {value: function() {
             browser.elements('.layout-stage .pageActions .iconTableUISturdy-add').waitForVisible();
             browser.element('.iconTableUISturdy-add').click();
-            return this.editFormContainerEl.waitForVisible();
+            this.editFormContainerEl.waitForVisible();
+            return this.editFormSaveBtns.waitForVisible();
         }},
         /**
          * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
@@ -378,7 +364,7 @@
                 var timeFields = this.getAllTimeInputFields();
                 for (i = 0; i < timeFields.value.length; i++) {
                     timeFields.value[i].click();
-                    browser.keys([sTime, 'Enter']);
+                    timeFields.value[i].keys([sTime, 'Enter']);
                 }
             } else if (fieldType === 'allCheckboxFields') {
                 //TODO not working Need to verify with Ken
