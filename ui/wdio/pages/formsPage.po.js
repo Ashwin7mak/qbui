@@ -32,6 +32,13 @@
         //form footer alert button
         editFormFooterErrorAlertBtn : {get: function() {return browser.element('.trowserFooter .rightIcons .saveButtons .iconTableUISturdy-alert');}},
 
+        //edit pencil in view form
+        editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
+        //edit pencil in report actions tool bar
+        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
+        //edit pencil in record actions
+        editPencilBtnInRecordActions : {get: function() {return browser.element('.recordActions .iconTableUISturdy-edit');}},
+
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.elements('.loadedContent .qbErrorMessageVisible');}},
         //header on error message container
@@ -210,7 +217,7 @@
          * @param recordRowIndex
          */
         clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
-            var getAllEdits = browser.elements('.recordActions .iconTableUISturdy-edit');
+            var getAllEdits = this.editPencilBtnInRecordActions;
             for (var i = 0; i < getAllEdits.value.length;i++) {
                 if (i === recordRowIndex) {
                     //Click on the edit pencil of a recordRowIndex row
@@ -232,7 +239,7 @@
                 }
             }
             //click on the edit pencil in table actions
-            browser.element('.reportActions .actionIcons .iconTableUISturdy-edit').click();
+            this.editPencilBtnOnReportActions.click();
             //wait until edit form is visible
             return this.editFormContainerEl.waitForVisible();
         }},
@@ -249,7 +256,7 @@
             //wait until view form is visible
             this.viewFormContainerEl.waitForVisible();
             //click on the edit pencil in view form actions
-            browser.element('.stageRight .pageActions .iconTableUISturdy-edit').click();
+            this.editPencilBtnOnStageInViewForm.click();
             //wait until edit form is visible
             return this.editFormContainerEl.waitForVisible();
         }},
@@ -390,12 +397,11 @@
                     timeFields.value[i].keys([sTime, 'Enter']);
                 }
             } else if (fieldType === 'allCheckboxFields') {
-                //TODO not working Need to verify with Ken
                 var checkboxFields = this.getAllCheckboxFields();
                 for (i = 0; i < checkboxFields.value.length; i++) {
-                    console.log("the attribute is: " + checkboxFields.value[i].element('input').getAttribute('checked'));
-                    if (checkboxFields.value[i].element('input').getAttribute('checked') === 'false') {
-                        checkboxFields.value[i].element('.label').click();
+                    //if checkbox not selected then check it.
+                    if (!checkboxFields.value[i].element('input').isSelected()) {
+                        checkboxFields.value[i].click();
                     }
                 }
             }else if (fieldType === 'allUserField'  && browserName !== 'safari') {
@@ -508,8 +514,7 @@
                 //numeric duration field
                 //expect(expectedRecordValues[9]).toBe('9.92063E-9 weeks');
                 //checkbox field
-                //TODO clicking on checkbox not working
-                //expect(expectedRecordValues[10]).toBe('true');
+                expect(expectedRecordValues[10]).toBe('true');
                 //email field
                 //expect(expectedRecordValues[11]).toBe(sPhone);
                 //phone field

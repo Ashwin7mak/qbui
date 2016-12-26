@@ -136,8 +136,7 @@
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //verify You land in view form since you edited a record from View form after saving
-            formsPO.viewFormContainerEl.waitForVisible();
-            browser.element('.iconTableUISturdy-add').waitForVisible();
+            formsPO.editPencilBtnOnStageInViewForm.waitForVisible();
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
