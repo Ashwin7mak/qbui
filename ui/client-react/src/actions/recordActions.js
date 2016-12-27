@@ -29,6 +29,19 @@ function _withDisplayFormat(options = {}) {
     return Object.assign(displayOptions, options);
 }
 
+function _logValidationErrors(errors, msgPrefix) {
+    if (errors && Array.isArray(errors)) {
+        errors.forEach((err) => {
+            // make a copy of the error object and then remove the
+            // def property as it could contain customer sensitive
+            // information in the fieldDef array.
+            let errorObj = _.clone(err);
+            delete errorObj.def;
+            logger.parseAndLogError(LogLevel.ERROR, {data:errorObj}, msgPrefix);
+        });
+    }
+}
+
 let recordActions = {
     /**
      * Action to save a new record. On successful save get a copy of the newly created record from server.
@@ -72,9 +85,7 @@ let recordActions = {
             let record = formatRecordChanges(recordChanges);
 
             if (appId && tblId && record) {
-
                 this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
-
                 let recordService = new RecordService();
 
                 // save the changes to the record
@@ -146,8 +157,14 @@ let recordActions = {
                         }
                     },
                     error => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
+                        //  if a validation error, print each one individually..
+                        if (error && error.data && error.data.response && error.data.response.errors) {
+                            let errors = error.data.response.errors;
+                            _logValidationErrors(errors, 'recordService.createRecord');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord');
+                        }
+
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
                         if (error.response.status === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
@@ -421,8 +438,14 @@ let recordActions = {
                         );
                     },
                     error => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
+                        //  if a validation error, print each one individually..
+                        if (error && error.data && error.data.response && error.data.response.errors) {
+                            let errors = error.data.response.errors;
+                            _logValidationErrors(errors, 'recordService.saveRecord');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord');
+                        }
+
                         this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
