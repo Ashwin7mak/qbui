@@ -80,7 +80,7 @@ let recordActions = {
                 // save the changes to the record
                 recordService.createRecord(appId, tblId, record).then(
                     response => {
-                        logger.debug('RecordService createRecord success:' + JSON.stringify(response));
+                        logger.debug('RecordService createRecord success');
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
                             if (resJson.id) {
@@ -95,7 +95,7 @@ let recordActions = {
                                 this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
                                 recordService.getRecord(appId, tblId, resJson.id, clist, _withDisplayFormat()).then(
                                     getResponse => {
-                                        logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                        logger.debug('RecordService getRecord success');
                                         this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
 
                                         if (!showNotificationOnSuccess) {
@@ -193,7 +193,7 @@ let recordActions = {
                 //delete the record
                 recordService.deleteRecord(appId, tblId, recId).then(
                     response => {
-                        logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
+                        logger.debug('RecordService deleteRecord success');
                         this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
                         NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -251,7 +251,7 @@ let recordActions = {
                 //delete the records
                 recordService.deleteRecordBulk(appId, tblId, recIds).then(
                     response => {
-                        logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
+                        logger.debug('RecordService deleteRecordBulk success');
                         this.dispatch(actions.DELETE_RECORD_BULK_SUCCESS, recIds);
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
                         NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -383,7 +383,7 @@ let recordActions = {
                 //  save the changes to the record
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
-                        logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
+                        logger.debug('RecordService saveRecord success');
                         let clist = colList ? colList : [];
                         if (!clist.length && fields) {
                             fields.forEach((field) => {
@@ -394,7 +394,7 @@ let recordActions = {
                         this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
                         recordService.getRecord(appId, tblId, recId, clist, _withDisplayFormat()).then(
                             getResponse => {
-                                logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                logger.debug('RecordService getRecord success');
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
