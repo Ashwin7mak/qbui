@@ -10,10 +10,13 @@
     var errorCodes = require('../../src/api/errorCodes');
     var testUtils = require('./api.test.Utils');
     var formGenerator = require('../../../test_generators/form.generator.js');
+    var promise = require('bluebird');
 
     describe('API - Validate forms API endpoint execution', function() {
+        const formTypeList = ['ADD', 'EDIT', 'VIEW'];
         let app;
         let forms;
+        let targetFormBuildList;
 
         // App variable with different data fields
         const appWithNoFlags = {
@@ -63,37 +66,125 @@
             return app;
         });
 
-        function createForms(formIdList, done) {
-            app.tables.forEach((table, index) => {
-                const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(app.id, table.id);
-                // Create form
-                recordBase.apiBase.executeRequest(formEndpoint, 'POST', forms[index]).then(function(result) {
-                    let formID =  JSON.parse(result.body);
-                    console.log(result.body);
-                    formIdList.push(formID.id);
-                    done();
-                }).catch(function(error) {
-                    log.error(JSON.stringify(error));
-                    done();
-                });
+        function createForm(appId, tableId, form) {
+            let createFormDeferred = promise.pending();
+
+            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+            recordBase.apiBase.executeRequest(formEndpoint, 'POST', form).then(function(result) {
+                let formID =  JSON.parse(result.body).id;
+                createFormDeferred.resolve({appId, tableId, formID});
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
             });
+
+            return createFormDeferred.promise;
+        }
+
+        function retriveFormByID(appId, tableId, formId) {
+            let retriveFormByIDDeferred = promise.pending();
+
+            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, formId);
+            recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
+                const responseBody =  JSON.parse(result.body);
+                let resultFormID = responseBody.formId;
+                let resultAppID = responseBody.appId;
+                let resultTableID = responseBody.tableId;
+                retriveFormByIDDeferred.resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID});
+            }).catch(function(error) {
+                console.log(JSON.stringify(error));
+                retriveFormByIDDeferred.reject(error);
+            });
+
+            return retriveFormByIDDeferred.promise;
+        }
+
+        function retriveFormByType(appId, tableId, formType) {
+            let retriveFormByTypeDeferred = promise.pending();
+            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+            recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, '?formType=' + formType).then(function(result) {
+                const responseBody =  JSON.parse(result.body);
+                let resultFormID = responseBody.formId;
+                let resultAppID = responseBody.appId;
+                let resultTableID = responseBody.tableId;
+                retriveFormByTypeDeferred.resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID, formType});
+            }).catch(function(error) {
+                console.log(JSON.stringify(error));
+                retriveFormByTypeDeferred.reject(error);
+            });
+
+            return retriveFormByTypeDeferred.promise;
         }
 
         /**
          * Form creation test
          */
-        it('Create a form', function(done) {
-            this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-            let createdFormIds = [];
+        describe("Form creation test cases", function() {
+            it('Form creation normal case', function(done) {
+                this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+                let createFormsPromises = [];
+                app.tables.map((table, index) => {
+                    createFormsPromises.push(createForm(app.id, table.id, forms[index]));
+                });
 
-            createForms(createdFormIds, function() {
-                console.log("---------------");
-                console.log(app.tables.length);
-                console.log(createdFormIds);
-                console.log("--------s------");
+                promise.all(createFormsPromises).then(formIdList => {
+                    console.log(formIdList);
+                    targetFormBuildList = formIdList;
+                    assert(formIdList.length === app.tables.length, "Form creation test case is failed");
+                    done();
+                });
             });
+        });
 
-            done();
+        /**
+         * Form fetch by ID test
+         */
+        describe("Form request by form ID test cases", function() {
+            it('Get form by ID normal case', function(done) {
+
+                if (!targetFormBuildList) {
+                    assert(false, "Form creation test case is failed");
+                    done();
+                }
+                this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+                let getFormsPromises = [];
+
+                targetFormBuildList.forEach(form => {
+                    getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formID));
+                })
+
+                promise.all(getFormsPromises).then(formIdList => {
+                    assert.deepEqual(formIdList, targetFormBuildList);
+                    done();
+                });
+            });
+        });
+
+
+        /**
+         * Form fetch by type
+         */
+        describe("Form request by form type test cases", function() {
+            it('Get form by form type normal case', function(done) {
+
+                if (!targetFormBuildList) {
+                    assert(false, "Form creation test case is failed");
+                    done();
+                }
+                this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+                let getFormsPromises = [];
+
+                targetFormBuildList.forEach(form => {
+                    formTypeList.forEach(formType => {
+                        getFormsPromises.push(retriveFormByType(form.appId, form.tableId, formType));
+                    });
+                })
+
+                promise.all(getFormsPromises).then(formIdList => {
+                    //console.log(formIdList);
+                    assert(formIdList.length === app.tables.length * formTypeList.length, "Get form by type test case is failed");
+                    done();
+                });
+            });
         });
 
         // Cleanup the test realm after all tests in the block
