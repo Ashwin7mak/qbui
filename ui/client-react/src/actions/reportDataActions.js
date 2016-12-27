@@ -60,10 +60,11 @@ let reportDataActions = {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
+                logger.debug('Loading report for appId:' + appId + '; tableId:' + tblId + '; rptId:' + rptId);
+
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
                 let reportService = new ReportService();
 
-                //format, offset, rows, sortList
                 let params = {};
                 params[query.OFFSET_PARAM] = offset;
                 params[query.NUMROWS_PARAM] = rows;
@@ -83,7 +84,6 @@ let reportDataActions = {
                         resolve();
                     },
                     (reportResponseError) => {
-                        //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
                         this.dispatch(actions.LOAD_REPORT_FAILED, reportResponseError);
                         reject();
@@ -125,6 +125,7 @@ let reportDataActions = {
 
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
+                logger.debug('Loading dynamic report for appId:' + appId + '; tableId:' + tblId + '; rptId:' + rptId);
 
                 if (!queryParams) {
                     queryParams = {};
