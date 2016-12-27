@@ -60,7 +60,7 @@ let reportDataActions = {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
-                logger.debug('Loading report for appId:' + appId + '; tableId:' + tblId + '; rptId:' + rptId);
+                logger.debug('Loading report for appId:' + appId + ', tableId:' + tblId + ', rptId:' + rptId);
 
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
                 let reportService = new ReportService();
@@ -125,7 +125,7 @@ let reportDataActions = {
 
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
-                logger.debug('Loading dynamic report for appId:' + appId + '; tableId:' + tblId + '; rptId:' + rptId);
+                logger.debug('Loading dynamic report for appId:' + appId + ', tableId:' + tblId + ', rptId:' + rptId);
 
                 if (!queryParams) {
                     queryParams = {};
@@ -158,6 +158,12 @@ let reportDataActions = {
                         if (filterQueries.length > 0) {
                             queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                         }
+
+                        logger.debug('Dynamic report query params: offset:' +
+                            queryParams[query.OFFSET_PARAM] + ', numRows:' +
+                            queryParams[query.NUMROWS_PARAM] + ', sortList:' +
+                            queryParams[query.SORT_LIST_PARAM] + ', query:' +
+                            queryParams[query.QUERY_PARAM]);
 
                         //  Fetch a report with custom attributes.  The response will include:
                         //    - report data/grouping data
