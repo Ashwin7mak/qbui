@@ -411,7 +411,7 @@ let recordActions = {
                         this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
                         recordService.getRecord(appId, tblId, recId, clist, _withDisplayFormat()).then(
                             getResponse => {
-                                logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                logger.debug('RecordService getRecord success');
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
