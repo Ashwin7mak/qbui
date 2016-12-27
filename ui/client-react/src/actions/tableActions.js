@@ -24,6 +24,8 @@ let tableActions = {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
+                logger.debug('Loading table homepage for appId:' + appId + '; tableId:' + tblId);
+
                 let tableService = new TableService();
 
                 //  even though we don't yet know the home page report id, want a spinner to display,
