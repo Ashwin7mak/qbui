@@ -24,25 +24,20 @@
             return !this.isValid(value);
         },
         validateAndReturnResults: function(value, fieldName, results) {
-            var fieldScale = results.def.fieldDef.datatypeAttributes.scale;
-            var scale = {};
+            /**
+             * The scales for HHMMSS, HHMM, MM, MMSS and Smart Units are not formatted properly when it comes back from
+             * the database. By using an object, the proper format is set to each scale.
+             * Note: Smart Units always default to days, for placeholders or error messsages according to XD specs
+             * */
+            var scale = results.def.fieldDef.datatypeAttributes.scale;
             var scaleTimeFormat = {};
-            scale[DURATION_CONSTS.SCALES.SECONDS] = DURATION_CONSTS.SCALES.SECONDS;
-            scale[DURATION_CONSTS.SCALES.MINUTES] = DURATION_CONSTS.SCALES.MINUTES;
-            scale[DURATION_CONSTS.SCALES.HOURS] = DURATION_CONSTS.SCALES.HOURS;
-            scale[DURATION_CONSTS.SCALES.DAYS] = DURATION_CONSTS.SCALES.DAYS;
-            scale[DURATION_CONSTS.SCALES.SMART_UNITS] = DURATION_CONSTS.SCALES.DAYS;
-            scale[DURATION_CONSTS.SCALES.WEEKS] = DURATION_CONSTS.SCALES.WEEKS;
-
+            scaleTimeFormat[DURATION_CONSTS.SCALES.SMART_UNITS] = DURATION_CONSTS.SCALES.DAYS;
             scaleTimeFormat[DURATION_CONSTS.SCALES.HHMMSS] = DURATION_CONSTS.ACCEPTED_TYPE.HHMMSS;
             scaleTimeFormat[DURATION_CONSTS.SCALES.HHMM] = DURATION_CONSTS.ACCEPTED_TYPE.HHMM;
             scaleTimeFormat[DURATION_CONSTS.SCALES.MMSS] = DURATION_CONSTS.ACCEPTED_TYPE.MMSS;
             scaleTimeFormat[DURATION_CONSTS.SCALES.MM] = DURATION_CONSTS.ACCEPTED_TYPE.MM;
 
-            results.error.code = dataErrorCodes.INVALID_ENTRY;
-            results.error.messageId = 'invalidMsg.duration';
-            results.error.data = {fieldName: fieldName};
-            results.isInvalid = true;
+
 
             if (this.isInvalid(value)) {
                 if (!results) {
@@ -50,15 +45,18 @@
                         error: {}
                     };
                 }
-            }
+                results.error.code = dataErrorCodes.INVALID_ENTRY;
+                results.error.messageId = 'invalidMsg.duration';
+                results.error.data = {fieldName: fieldName};
+                results.isInvalid = true;
 
-            if (scale[fieldScale]) {
-                results.error.messageId = 'invalidMsg.duration.' + scale[fieldScale];
-            } else if (scaleTimeFormat[fieldScale]) {
-                results.error.messageId = 'invalidMsg.duration.timeFormat';
-                results.error.data = {fieldName: fieldName, value: scaleTimeFormat[fieldScale]};
+                if (scaleTimeFormat[scale]) {
+                    results.error.messageId = 'invalidMsg.duration.timeFormat';
+                    results.error.data = {fieldName: fieldName, value: scaleTimeFormat[scale]};
+                } else {
+                    results.error.messageId = 'invalidMsg.duration.' + scale;
+                }
             }
-            console.log('RESULTS: ', results);
             return results;
         }
     };

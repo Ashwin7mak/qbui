@@ -179,67 +179,66 @@
         });
         return isValidFormat;
     }
-
-    module.exports = {
-        isValid: function(value, scale) {
-            var ALLOWED_DURATION_TYPE = allowedDurationType();
-            var regexHasNums = /[0-9]+/g;
-            var type;
-            var isValidResults = {
-                normalizedTypes: '',
-                num: value,
-                valid: true
-            };
-            /**
-             * Don't validate empty strings
-             * If the input is only a number, normalizedType defaults to field scale
-             * */
-            if (!value || Number(value)) {
-                isValidResults.normalizedTypes = [ALLOWED_DURATION_TYPE[scale]];
-                isValidResults.num = [value];
-                return isValidResults;
-            }
-            /**
-             * If a user does not input a number, return invalid
-             * */
-            if (!regexHasNums.test(value)) {
-                isValidResults.valid = false;
-                return isValidResults;
-            }
-            /**
-             * If a user inserted a colon, it will be validated based off of time formats validation requirements
-             * */
-            value = value.toLowerCase();
-            type = value.replace(regexNumsDecimalsColons, ' ')
-                                .split(' ')
-                                .filter(function(val) {return val !== '';});
-            if (value.indexOf(':') !== -1) {
-                return isTimeFormatValid(value, type);
-            }
-            /**
-             * Strips out all numbers
-             * If there is an invalid type return false
-             * If there are no types, return true
-             * If there are only accepted types return true
-             * */
-            isValidResults.normalizedTypes = type.map(function(val) {
-                if (ALLOWED_DURATION_TYPE[val]) {
-                    return ALLOWED_DURATION_TYPE[val];
-                } else {
-                    isValidResults.valid = false;
-                }
-            });
-            /**
-             * If a user inserts more types than nums return false
-             * 1 week day invalid format
-             * 1 week 2 days valid format
-             * */
-            isValidResults.num = value.match(regexNumsDecimalsColons);
-            if (!(isValidResults.normalizedTypes.length === 0) && isValidResults.num.length !== isValidResults.normalizedTypes.length) {
-                return false;
-            }
+    function isValid(value, scale) {
+        var ALLOWED_DURATION_TYPE = allowedDurationType();
+        var regexHasNums = /[0-9]+/g;
+        var type;
+        var isValidResults = {
+            normalizedTypes: '',
+            num: value,
+            valid: true
+        };
+        /**
+         * Don't validate empty strings
+         * If the input is only a number, normalizedType defaults to field scale
+         * */
+        if (!value || Number(value)) {
+            isValidResults.normalizedTypes = [ALLOWED_DURATION_TYPE[scale]];
+            isValidResults.num = [value];
             return isValidResults;
-        },
+        }
+        /**
+         * If a user does not input a number, return invalid
+         * */
+        if (!regexHasNums.test(value)) {
+            isValidResults.valid = false;
+            return isValidResults;
+        }
+        /**
+         * If a user inserted a colon, it will be validated based off of time formats validation requirements
+         * */
+        value = value.toLowerCase();
+        type = value.replace(regexNumsDecimalsColons, ' ')
+            .split(' ')
+            .filter(function(val) {return val !== '';});
+        if (value.indexOf(':') !== -1) {
+            return isTimeFormatValid(value, type);
+        }
+        /**
+         * Strips out all numbers
+         * If there is an invalid type return false
+         * If there are no types, return true
+         * If there are only accepted types return true
+         * */
+        isValidResults.normalizedTypes = type.map(function(val) {
+            if (ALLOWED_DURATION_TYPE[val]) {
+                return ALLOWED_DURATION_TYPE[val];
+            } else {
+                isValidResults.valid = false;
+            }
+        });
+        /**
+         * If a user inserts more types than nums return false
+         * 1 week day invalid format
+         * 1 week 2 days valid format
+         * */
+        isValidResults.num = value.match(regexNumsDecimalsColons);
+        if (!(isValidResults.normalizedTypes.length === 0) && isValidResults.num.length !== isValidResults.normalizedTypes.length) {
+            return false;
+        }
+        return isValidResults;
+    }
+    module.exports = {
         onBlurParsing: function(value, fieldInfo, includeUnits) {
             value = value.replace(removeCommas, '').split(' ').join(' ');
             value = value.trim();
@@ -253,7 +252,7 @@
             /**
              * Checks to see if the value is a valid input
              * */
-            isValidResults = this.isValid(value, scale);
+            isValidResults = isValid(value, scale);
             if (isValidResults.valid) {
                 /**
                  * If the user inserted a semicolon, then the string needs to be parsed based off of

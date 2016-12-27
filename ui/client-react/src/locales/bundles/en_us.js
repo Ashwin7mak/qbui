@@ -424,12 +424,12 @@ export default {
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
             duration: {
                 timeFormat: "Format the {fieldName} in {value}",
-                Weeks: 'Format the {fieldName} in Weeks',
-                Days: 'Format the {fieldName} in Days',
-                Hours: 'Format the {fieldName} in Hours',
-                Minutes: 'Format the {fieldName} in Minutes',
-                Seconds: 'Format the {fieldName} in Seconds',
-                Milliseconds: 'Format the {fieldName} in Milliseconds',
+                Weeks: 'Format the {fieldName} in weeks',
+                Days: 'Format the {fieldName} in days',
+                Hours: 'Format the {fieldName} in hours',
+                Minutes: 'Format the {fieldName} in minutes',
+                Seconds: 'Format the {fieldName} in seconds',
+                Milliseconds: 'Format the {fieldName} in milliseconds',
             }
         },
         createInQuickBaseClassicMessage: {

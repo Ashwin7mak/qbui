@@ -417,7 +417,15 @@ export default {
             choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
             phone: "Formater le {fieldName} comme +x x xx xx xx xx",
             phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
-            duration: "Formater le  {fieldName} dans "
+            duration: {
+                timeFormat: "Formater le {fieldName} dans {value}",
+                Weeks: 'Formater le {fieldName} dans semaines',
+                Days: 'Formater le {fieldName} dans journées',
+                Hours: 'Formater le {fieldName} dans heures',
+                Minutes: 'Formater le {fieldName} dans minutes',
+                Seconds: 'Formater le {fieldName} dans secondes',
+                Milliseconds: 'Formater le {fieldName} dans millisecondes',
+            }
         },
         noneOption: "\<Aucun\>",
         unimplemented: {
