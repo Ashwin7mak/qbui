@@ -43,6 +43,20 @@
         agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.ag-row');}},
 
         /**
+         * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
+         * @returns A promise that will resolve after waiting for the report records to be displayed
+         */
+        waitForReportContent: {value: function() {
+            var self = this;
+            // First wait for the containers
+            e2ePageBase.waitForElementToBePresent('.reportContainer');
+            e2ePageBase.waitForElementToBePresent('.reportContent');
+            e2ePageBase.waitForElementToBePresent('.ag-body-container');
+            // Then wait for records to be shown in the grid
+            return e2ePageBase.waitForElementToBeDisplayed('.ag-row');
+        }},
+
+        /**
          * Helper function that will get all of the field column headers from the report. Returns an array of strings.
          */
         getReportColumnHeaders: {value: function() {

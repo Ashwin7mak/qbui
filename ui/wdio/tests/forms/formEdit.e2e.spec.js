@@ -60,7 +60,7 @@
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
-            reportContentPO.agGridRecordElList.waitForVisible();
+            reportContentPO.waitForReportContent();
 
             //Step 6 - Verify new record got added on the top of the table and verify the expected field values
             var recordValues = reportContentPO.getRecordValues(1);
@@ -98,7 +98,7 @@
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //Verify you land in table view since you edited from table view page
-            reportContentPO.agGridRecordElList.waitForVisible();
+            reportContentPO.waitForReportContent();
 
             //Step 6 - Verify new record got added on the top of the table and verify the expected field values
             var recordValues = reportContentPO.getRecordValues(2);
@@ -136,7 +136,7 @@
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //verify You land in view form since you edited a record from View form after saving
-            formsPO.editPencilBtnOnStageInViewForm.waitForVisible();
+            formsPO.waitForViewFormsTableLoad();
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);

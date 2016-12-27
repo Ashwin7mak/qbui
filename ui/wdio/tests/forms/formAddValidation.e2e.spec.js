@@ -70,7 +70,7 @@
             //Step 7 - Click Save & Add Another button on the form
             formsPO.clickFormSaveAndAddAnotherBtn();
             //Verify edit container is loaded
-            formsPO.editFormContainerEl.waitForVisible();
+            formsPO.waitForEditFormsTableLoad();
 
 
             // Step 8 - Reload the report after saving row as the row is added at the last page

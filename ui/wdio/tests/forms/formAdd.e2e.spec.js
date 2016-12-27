@@ -67,7 +67,7 @@
             //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //wait until report rows in table are loaded
-            reportContentPO.agGridRecordElList.waitForVisible();
+            reportContentPO.waitForReportContent();
 
             //Step 5 - Verify new record got added on the top of the table and verify the expected field values
             var recordValues = reportContentPO.getRecordValues(0);
