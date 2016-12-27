@@ -417,7 +417,7 @@ export default {
             choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
             phone: "Formater le {fieldName} comme +x x xx xx xx xx",
             phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
-            duration: "Formater le  {fieldName} dans {scale}"
+            duration: "Formater le  {fieldName} dans "
         },
         noneOption: "\<Aucun\>",
         unimplemented: {

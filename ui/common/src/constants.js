@@ -139,10 +139,10 @@
                 ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
                 //The scales coming back from core is not formatted correctly according to XD specs for placeholders for HHMMSS, HHMM, MM, MMS
                 //Below is the correct format for placeholders
-                HHMMSS: 'hh:mm:ss',
-                HHMM: 'hh:mm',
-                MM: ':mm',
-                MMSS: ':mm:ss',
+                HHMMSS: 'HH:MM:SS',
+                HHMM: 'HH:MM',
+                MM: ':MM',
+                MMSS: ':MM:SS',
                 WEEKS: 'weeks',
                 WEEK: 'week',
                 W: 'w',

@@ -422,7 +422,15 @@ export default {
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
             phone: "Format the {fieldName} like (xxx) xxx-xxxx",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
-            duration: "Format the {fieldName} in {scale}"
+            duration: {
+                timeFormat: "Format the {fieldName} in {value}",
+                Weeks: 'Format the {fieldName} in Weeks',
+                Days: 'Format the {fieldName} in Days',
+                Hours: 'Format the {fieldName} in Hours',
+                Minutes: 'Format the {fieldName} in Minutes',
+                Seconds: 'Format the {fieldName} in Seconds',
+                Milliseconds: 'Format the {fieldName} in Milliseconds',
+            }
         },
         createInQuickBaseClassicMessage: {
         },

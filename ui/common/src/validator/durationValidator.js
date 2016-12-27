@@ -24,19 +24,41 @@
             return !this.isValid(value);
         },
         validateAndReturnResults: function(value, fieldName, results) {
-            var scale;
+            var fieldScale = results.def.fieldDef.datatypeAttributes.scale;
+            var scale = {};
+            var scaleTimeFormat = {};
+            scale[DURATION_CONSTS.SCALES.SECONDS] = DURATION_CONSTS.SCALES.SECONDS;
+            scale[DURATION_CONSTS.SCALES.MINUTES] = DURATION_CONSTS.SCALES.MINUTES;
+            scale[DURATION_CONSTS.SCALES.HOURS] = DURATION_CONSTS.SCALES.HOURS;
+            scale[DURATION_CONSTS.SCALES.DAYS] = DURATION_CONSTS.SCALES.DAYS;
+            scale[DURATION_CONSTS.SCALES.SMART_UNITS] = DURATION_CONSTS.SCALES.DAYS;
+            scale[DURATION_CONSTS.SCALES.WEEKS] = DURATION_CONSTS.SCALES.WEEKS;
+
+            scaleTimeFormat[DURATION_CONSTS.SCALES.HHMMSS] = DURATION_CONSTS.ACCEPTED_TYPE.HHMMSS;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.HHMM] = DURATION_CONSTS.ACCEPTED_TYPE.HHMM;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.MMSS] = DURATION_CONSTS.ACCEPTED_TYPE.MMSS;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.MM] = DURATION_CONSTS.ACCEPTED_TYPE.MM;
+
+            results.error.code = dataErrorCodes.INVALID_ENTRY;
+            results.error.messageId = 'invalidMsg.duration';
+            results.error.data = {fieldName: fieldName};
+            results.isInvalid = true;
+
             if (this.isInvalid(value)) {
                 if (!results) {
                     results = {
                         error: {}
                     };
                 }
-                scale = results.def.fieldDef.datatypeAttributes.scale;
-                results.error.code = dataErrorCodes.INVALID_ENTRY;
-                results.error.messageId = 'invalidMsg.duration';
-                results.error.data = {fieldName: fieldName, scale: scale};
-                results.isInvalid = true;
             }
+
+            if (scale[fieldScale]) {
+                results.error.messageId = 'invalidMsg.duration.' + scale[fieldScale];
+            } else if (scaleTimeFormat[fieldScale]) {
+                results.error.messageId = 'invalidMsg.duration.timeFormat';
+                results.error.data = {fieldName: fieldName, value: scaleTimeFormat[fieldScale]};
+            }
+            console.log('RESULTS: ', results);
             return results;
         }
     };
