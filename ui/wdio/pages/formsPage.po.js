@@ -17,10 +17,10 @@
     var sEmail = 'test@gmail.com';
     var sPhone = '15084811015';
     var sNumeric = '33.33';
-    var sTime = '12:00 am';
+    var sTime = '12:30 am';
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
-    var sUser = 'administrator';
+    var sUser = 'administrator User for default SQL Installation';
 
     var FormsPage = Object.create(e2ePageBase, {
         //Record add button on stage
@@ -214,8 +214,8 @@
          */
         getAllTimeInputFields: {value: function() {
             var self = this;
-            self.editFormContainerEl.elements('.cellEdit.timeCell .Select-input input').waitForVisible();
-            return self.editFormContainerEl.elements('.cellEdit.timeCell .Select-input input');
+            self.editFormContainerEl.elements('.cellEdit.timeCell').waitForVisible();
+            return self.editFormContainerEl.elements('.cellEdit.timeCell');
         }},
 
         /**
@@ -234,8 +234,62 @@
          */
         getAllUserFields: {value: function() {
             var self = this;
-            self.editFormContainerEl.elements('.cellEdit.userFormat input').waitForVisible();
-            return self.editFormContainerEl.elements('.cellEdit.userFormat input');
+            self.editFormContainerEl.elements('.cellEdit.userFormat').waitForVisible();
+            return self.editFormContainerEl.elements('.cellEdit.userFormat');
+        }},
+
+        /**
+         * Select the time option from the time list combo
+         *
+         */
+        clickOnTimeIcon: {value: function(timeFieldElement) {
+            return timeFieldElement.element('.Select-arrow-zone .glyphicon-time').click();
+        }},
+
+        /**
+         * Select the list option from the list combo
+         *
+         */
+        selectListOption: {value: function(listElement, listOption) {
+            var self = this;
+            var i;
+            listElement.element('.Select-menu-outer').waitForVisible();
+            var allOptions = browser.elements('.Select-option');
+            for (i = 0; i < allOptions.value.length; i++) {
+                if (allOptions.value[i].element(' div div').getText() === listOption) {
+                    return allOptions.value[i].element(' div div').click();
+                }
+            }
+        }},
+
+        /**
+         * Select the time option from the time list combo
+         *
+         */
+        selectTimeOfDay: {value: function(timeToSelect) {
+            var self = this;
+            var i;
+            //get all time field input validators
+            var timeFields = self.getAllTimeInputFields();
+            for (i = 0; i < timeFields.value.length; i++) {
+                self.clickOnTimeIcon(timeFields.value[i]);
+                self.selectListOption(timeFields.value[i], timeToSelect);
+            }
+        }},
+
+        /**
+         * Select the user option from the user list combo
+         *
+         */
+        selectUser: {value: function(userToSelect) {
+            var self = this;
+            var i;
+            //get all time field input validators
+            var userFields = self.getAllUserFields();
+            for (i = 0; i < userFields.value.length; i++) {
+                userFields.value[i].element('.Select-arrow').click();
+                self.selectListOption(userFields.value[i], userToSelect);
+            }
         }},
 
         /**
@@ -417,12 +471,10 @@
                         dateFields.value[i].setValue(sDate);
                     }
                 }
-            } else if (fieldType === 'allTimeFields' && browserName !== 'firefox') {
+            } else if (fieldType === 'allTimeFields') {
                 //get all time field input validators
-                var timeFields = self.getAllTimeInputFields();
-                for (i = 0; i < timeFields.value.length; i++) {
-                    timeFields.value[i].setValue(sTime);
-                }
+                //TODO firefox not clicking on time icon
+                self.selectTimeOfDay(sTime);
 
             } else if (fieldType === 'allCheckboxFields') {
                 var checkboxFields = self.getAllCheckboxFields();
@@ -434,10 +486,7 @@
                 }
             }else if (fieldType === 'allUserField') {
                 //get all user field input validators
-                var userFields = self.getAllUserFields();
-                for (i = 0; i < userFields.value.length; i++) {
-                    userFields.value[i].keys([sUser, 'Down', 'Enter']);
-                }
+                self.selectUser(sUser);
             }
         }},
 
@@ -551,7 +600,9 @@
                 //date time field
                 expect(expectedRecordValues[7]).toBe(sDate + ' ' + sTime);
                 //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
-                expect(expectedRecordValues[8]).toBe(sTime);
+                if (browserName !== 'firefox') {
+                    expect(expectedRecordValues[8]).toBe(sTime);
+                }
                 //numeric duration field
                 //expect(expectedRecordValues[9]).toBe('9.92063E-9 weeks');
                 //checkbox field
@@ -563,7 +614,7 @@
                 //url field
                 expect(expectedRecordValues[13]).toBe(sUrl);
                 //user Field
-                // expect(expectedRecordValues[14]).toBe('administrator User for default SQL Installation');
+                expect(expectedRecordValues[14]).toBe('administrator User for default SQL Installation');
             }
         }},
 
