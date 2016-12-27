@@ -71,6 +71,13 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         let defaultPlaceholder = '';
+        let self = this;
+        function formatSmartUnit(dis) {
+            if (self.props.attributes && self.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+                dis = durationEditorParsing.includeUnitsInInput(self.props.display, self.props.attributes);
+            }
+            return dis;
+        }
         if (this.props.attributes) {
             defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
         }
@@ -81,7 +88,7 @@ const DurationFieldValueEditor = React.createClass({
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={this.display || display}
+                                      value={formatSmartUnit(this.display) || display}
                                       invalidMessage={this.props.invalidMessage || ''}
                                       showClearButton={true}
                                       {...otherProps}/>;

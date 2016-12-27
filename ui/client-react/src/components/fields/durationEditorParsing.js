@@ -317,7 +317,7 @@
             return display;
         },
         getPlaceholder: function(scale, value) {
-            var placeholder = '';
+            var placeholder = scale;
             value = Number(value);
             if (!scale) {
                 return placeholder;
