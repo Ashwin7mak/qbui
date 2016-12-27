@@ -245,7 +245,7 @@ $cell-edit-background-edit: $color-blue-200;
                         padding: 4px;
 
                         &.disabled {
-                            color: $icon-disabled-color;
+                            color: $iconfont-on-light-disabled-color;
                         }
                     }
 
@@ -255,19 +255,19 @@ $cell-edit-background-edit: $color-blue-200;
                         }
 
                         .qbIcon.print {
-                            background-color: $icon-print-color;
+                            background-color: $print-icon-normal-color;
                         }
 
                         .qbIcon.email {
-                            background-color: $icon-mail-color;
+                            background-color: $mail-icon-normal-color;
                         }
 
                         .qbIcon.duplicate {
-                            background-color: $icon-duplicate-color;
+                            background-color: $copy-icon-normal-color;
                         }
 
                         .qbIcon.delete {
-                            background-color: $icon-delete-color;
+                            background-color: $delete-icon-normal-color;
                         }
                     }
                 }
@@ -288,19 +288,19 @@ $cell-edit-background-edit: $color-blue-200;
                 }
 
                 .qbIcon.print {
-                    color: $icon-print-color;
+                    color: $print-icon-normal-color;
                 }
 
                 .qbIcon.email {
-                    color: $icon-mail-color;
+                    color: $mail-icon-normal-color;
                 }
 
                 .qbIcon.duplicate {
-                    color: $icon-duplicate-color;
+                    color: $copy-icon-normal-color;
                 }
 
                 .qbIcon.delete {
-                    color: $icon-delete-color;
+                    color: $delete-icon-normal-color;
                 }
             }
         }
@@ -416,9 +416,9 @@ $cell-edit-background-edit: $color-blue-200;
 
     .ag-menu {
         top: 24px !important;
-        -webkit-box-shadow: 0 4px 15px 0px rgba(70, 66, 66, 0.15);
-        -moz-box-shadow: 0 4px 15px 0px rgba(70, 66, 66, 0.15);
-        box-shadow: 0 4px 15px 0px rgba(70, 66, 66, 0.15);
+        -webkit-box-shadow: 0 4px 15px 0px $popover-shadow-color;
+        -moz-box-shadow: 0 4px 15px 0px $popover-shadow-color;
+        box-shadow: 0 4px 15px 0px $popover-shadow-color;
     }
 
     .ag-tab-selected {
@@ -760,7 +760,7 @@ $cell-edit-background-edit: $color-blue-200;
                 }
 
                 .qbIcon.cancelSelection {
-                    color: $icon-color;
+                    color: $iconfont-on-light-normal-color;
                 }
 
                 .qbIcon.deleteRecord {
@@ -768,11 +768,11 @@ $cell-edit-background-edit: $color-blue-200;
                 }
 
                 .qbIcon.addRecord {
-                    color: $icon-color;
+                    color: $iconfont-on-light-normal-color;
                 }
 
                 .qbIcon.disabled.addRecord {
-                    color: $icon-disabled-color;
+                    color: $iconfont-on-light-disabled-color;
                 }
             }
         }
