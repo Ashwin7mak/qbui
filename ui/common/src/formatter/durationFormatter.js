@@ -239,41 +239,41 @@
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
             }
-            smartUnits += ' weeks';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.WEEKS.toLowerCase();
         } else if (days.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.DAYS;
             }
-            smartUnits += ' days';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.DAYS.toLowerCase();
         } else if (hours.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.HOURS;
             }
-            smartUnits += ' hours';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.HOURS.toLowerCase();
         } else if (minutes.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.MINUTES;
             }
-            smartUnits += ' mins';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.MINUTES.toLowerCase();
         } else if (seconds.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.SECONDS;
             }
-            smartUnits += ' ' + DURATION_CONSTS.SECONDS;
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.SECONDS.toLowerCase();
         } else {
             if (opts.formattedObj) {
                 opts.formattedObj.string = millis.toString();
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.MILLISECONDS;
             }
-            smartUnits += millis.toString() + ' ' + DURATION_CONSTS.MILLISECONDS;
+            smartUnits += millis.toString() + ' ' + DURATION_CONSTS.MILLISECONDS.toLowerCase();
         }
         return smartUnits;
     }
