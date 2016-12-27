@@ -61,6 +61,25 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
         });
     });
 
+    TestData.negativeDataProvider.forEach(function(test) {
+        it('converts a user input of negative ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let userInput = test.numValue + (test.type || '');
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
+            Simulate.blur(input, {
+                value: userInput
+            });
+            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
+            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            expect(component.state.value).toEqual(totalMilliSeconds);
+            expect(component.state.display).toEqual(expectedResult);
+        });
+    });
+
     TestData.multiInputData.forEach(function(test) {
         it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
