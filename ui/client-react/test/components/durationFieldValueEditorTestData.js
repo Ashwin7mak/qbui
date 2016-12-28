@@ -854,7 +854,7 @@
                 },
                 {
                     scale: CONSTS.SCALES.SMART_UNITS,
-                    placeholder: CONSTS.ACCEPTED_TYPE.DAYS.toLowerCase()
+                    placeholder: CONSTS.ACCEPTED_TYPE.DAYS
                 },
                 {
                     scale: CONSTS.SCALES.HHMMSS,
@@ -875,22 +875,22 @@
                 },
                 {
                     scale: CONSTS.SCALES.SECONDS,
-                    placeholder: CONSTS.ACCEPTED_TYPE.SECONDS.toLowerCase()
+                    placeholder: CONSTS.ACCEPTED_TYPE.SECONDS
 
                 },
                 {
                     scale: CONSTS.SCALES.HOURS,
-                    placeholder: CONSTS.ACCEPTED_TYPE.HOURS.toLowerCase()
+                    placeholder: CONSTS.ACCEPTED_TYPE.HOURS
 
                 },
                 {
                     scale: CONSTS.SCALES.DAYS,
-                    placeholder: CONSTS.ACCEPTED_TYPE.DAYS.toLowerCase()
+                    placeholder: CONSTS.ACCEPTED_TYPE.DAYS
 
                 },
                 {
                     scale: CONSTS.SCALES.WEEKS,
-                    placeholder: CONSTS.ACCEPTED_TYPE.WEEKS.toLowerCase()
+                    placeholder: CONSTS.ACCEPTED_TYPE.WEEKS
 
                 }
             ],

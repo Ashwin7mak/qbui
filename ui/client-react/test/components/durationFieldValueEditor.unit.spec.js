@@ -92,6 +92,28 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
             expect(input.placeholder).toEqual(test.placeholder);
         });
+        it('displays the correct placeholder for ' + test.scale + ' in French', () => {
+            Locale.changeLocale('fr-fr');
+            Locale.getI18nBundle();
+            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
+            if (localeType === undefined) {
+                localeType = test.placeholder || '';
+            }
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            expect(input.placeholder).toEqual(localeType);
+        });
+        it('displays the correct placeholder for ' + test.scale + ' in German', () => {
+            Locale.changeLocale('de-de');
+            Locale.getI18nBundle();
+            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
+            if (localeType === undefined) {
+                localeType = test.placeholder || '';
+            }
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            expect(input.placeholder).toEqual(localeType);
+        });
     });
 
     TestData.timeFormatData.forEach(function(test) {
