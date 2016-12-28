@@ -204,8 +204,8 @@
          */
         getAllDateInputFields: {value: function() {
             var self = this;
-            self.editFormContainerEl.elements('.cellEdit.dateCell input').waitForVisible();
-            return self.editFormContainerEl.elements('.cellEdit.dateCell input');
+            self.editFormContainerEl.elements('.cellEdit.dateCell').waitForVisible();
+            return self.editFormContainerEl.elements('.cellEdit.dateCell');
         }},
 
         /**
@@ -239,56 +239,27 @@
         }},
 
         /**
-         * Select the time option from the time list combo
+         * Select active date from the date Picker
          *
          */
-        clickOnTimeIcon: {value: function(timeFieldElement) {
-            return timeFieldElement.element('.Select-arrow-zone .glyphicon-time').click();
+        selectTodaysDateFromDatePicker : {value: function(fieldDateIconElement) {
+            fieldDateIconElement.element('.glyphicon-calendar').click();
+            //wait for datePicker to be visible
+            fieldDateIconElement.element('.datepicker .active').waitForVisible();
+            return fieldDateIconElement.element('.datepicker .active').click();
         }},
 
         /**
-         * Select the list option from the list combo
+         * Select List option from the List combo
          *
          */
-        selectListOption: {value: function(listElement, listOption) {
-            var self = this;
-            var i;
-            listElement.element('.Select-menu-outer').waitForVisible();
+        selectFromList : {value: function(fieldElement, listOption) {
+            fieldElement.element('.Select-menu-outer').waitForVisible();
             var allOptions = browser.elements('.Select-option');
-            for (i = 0; i < allOptions.value.length; i++) {
+            for (var i = 0; i < allOptions.value.length; i++) {
                 if (allOptions.value[i].element(' div div').getText() === listOption) {
                     return allOptions.value[i].element(' div div').click();
                 }
-            }
-        }},
-
-        /**
-         * Select the time option from the time list combo
-         *
-         */
-        selectTimeOfDay: {value: function(timeToSelect) {
-            var self = this;
-            var i;
-            //get all time field input validators
-            var timeFields = self.getAllTimeInputFields();
-            for (i = 0; i < timeFields.value.length; i++) {
-                self.clickOnTimeIcon(timeFields.value[i]);
-                self.selectListOption(timeFields.value[i], timeToSelect);
-            }
-        }},
-
-        /**
-         * Select the user option from the user list combo
-         *
-         */
-        selectUser: {value: function(userToSelect) {
-            var self = this;
-            var i;
-            //get all time field input validators
-            var userFields = self.getAllUserFields();
-            for (i = 0; i < userFields.value.length; i++) {
-                userFields.value[i].element('.Select-arrow').click();
-                self.selectListOption(userFields.value[i], userToSelect);
             }
         }},
 
@@ -387,7 +358,7 @@
          */
         clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
             var self = this;
-            var getAllCheckBoxs = browser.elements('.ag-selection-checkbox');
+            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox');
             for (var i = 0; i < getAllCheckBoxs.value.length;i++) {
                 if (i === recordRowIndex) {
                     //Click on the checkbox of a recordRowIndex row to select that row
@@ -465,18 +436,25 @@
                 //get all date field input validators
                 var dateFields = self.getAllDateInputFields();
                 for (i = 0; i < dateFields.value.length; i++) {
-                    if (browserName === 'safari' && browserName === 'firefox') {
-                        dateFields.value[i].setValue(sDate.replace(/-/g, "/"));
+                    if (browserName === 'firefox') {
+                        //select date from date picker
+                        this.selectTodaysDateFromDatePicker(dateFields.value[i]);
+                    } else if (browserName === 'safari') {
+                        dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
                     } else {
-                        dateFields.value[i].setValue(sDate);
+                        dateFields.value[i].element('input').setValue(sDate);
                     }
                 }
             } else if (fieldType === 'allTimeFields') {
-                //get all time field input validators
-                //TODO firefox not clicking on time icon
-                self.selectTimeOfDay(sTime);
+                //get all time fields on form
+                var timeFields = self.getAllTimeInputFields();
+                for (i = 0; i < timeFields.value.length; i++) {
+                    timeFields.value[i].element('.Select-control').click();
+                    this.selectFromList(timeFields.value[i], sTime);
+                }
 
             } else if (fieldType === 'allCheckboxFields') {
+                //get all checkbox fields on form
                 var checkboxFields = self.getAllCheckboxFields();
                 for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
@@ -486,7 +464,11 @@
                 }
             }else if (fieldType === 'allUserField') {
                 //get all user field input validators
-                self.selectUser(sUser);
+                var userFields = self.getAllUserFields();
+                for (i = 0; i < userFields.value.length; i++) {
+                    userFields.value[i].element('.Select-control').click();
+                    this.selectFromList(userFields.value[i], sUser);
+                }
             }
         }},
 
@@ -614,7 +596,9 @@
                 //url field
                 expect(expectedRecordValues[13]).toBe(sUrl);
                 //user Field
-                expect(expectedRecordValues[14]).toBe('administrator User for default SQL Installation');
+                if (browserName !== 'firefox') {
+                    expect(expectedRecordValues[14]).toBe('administrator User for default SQL Installation');
+                }
             }
         }},
 
