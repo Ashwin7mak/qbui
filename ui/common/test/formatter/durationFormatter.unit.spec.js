@@ -117,7 +117,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                     itemSeconds.description = 'returns a smart units fieldvalue.value is ' + _secs + ' secs ';
                     itemSeconds.fieldValue = {value: (_secs * DURATION_CONSTS.MILLIS_PER_SECOND).toFixed(4)};
                     itemSeconds.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
-                    itemSeconds.expectation = '' + _secs + ' ' + DURATION_CONSTS.SECONDS;
+                    itemSeconds.expectation = '' + _secs + ' ' + DURATION_CONSTS.SCALES.SECONDS.toLowerCase();
                     itemSeconds.expectRaw = '' + _secs;
                     itemSeconds.expectUnits = DURATION_SCALES.SECONDS;
                     array.push(itemSeconds);

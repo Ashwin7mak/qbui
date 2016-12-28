@@ -154,6 +154,7 @@
                 H: 'H',
                 MINUTES: 'Minutes',
                 MINUTE: 'Minute',
+                MINS: 'Mins',
                 M: 'M',
                 SECONDS: 'Seconds',
                 SECOND: 'Second',
