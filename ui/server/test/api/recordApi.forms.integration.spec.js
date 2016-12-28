@@ -17,13 +17,15 @@
         let app;
         let forms;
         let targetFormBuildList;
+        let reportId;
+        let reportId2;
 
         // App variable with different data fields
         const appWithNoFlags = {
             name: 'Form Integration App',
             tables: [
                 {
-                    name: 'table1', fields: [
+                    name: 'Table with all support fields', fields: [
                         {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                         {name: 'Numeric Field', datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'},
                         {name: 'Currency Field', datatypeAttributes: {type: 'CURRENCY'}, type: 'SCALAR'},
@@ -37,8 +39,7 @@
                         {name: 'Phone Number Field', datatypeAttributes: {type: 'PHONE_NUMBER'}, type: 'SCALAR'},
                         {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
                         {name: 'Url Field', datatypeAttributes: {type: 'URL'}, type: 'SCALAR'},
-                        {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                        {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'}
+                        {name: 'User Field', datatypeAttributes: {type: 'USER'}, type: 'SCALAR', "indexed": true}
                     ]
                 },
                 {
@@ -57,13 +58,55 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
+
+                // Build forms using the info from created app
                 forms = formGenerator.generateSingleTabAndSecFormWithAddAndEdit(app);
-                done();
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
-                done();
+                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                var nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
+                // Generate some record JSON objects to add to the app
+                var generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
+
+                console.log("generatedRecords");
+                console.log(JSON.stringify(generatedRecords));
+
+                //Add records to the table
+                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
+                    //create report
+                    var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                    var reportToCreate = {
+                        name: 'testReport',
+                        type: 'TABLE',
+                        tableId: app.tables[0].id,
+                        query: null,
+                    };
+                    //Create a report
+                    console.log("reportToCreate");
+                    console.log(JSON.stringify(reportToCreate));
+                    recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
+                        reportId = JSON.parse(reportResults.body).id;
+                    }).then(function() {
+                        //create report 2
+                        var reportEndpoint2 = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                        var reportToCreate2 = {
+                            name: 'testReport2',
+                            type: 'TABLE',
+                            tableId: app.tables[0].id,
+                            query: null,
+                        };
+                        //Create a report
+                        console.log("reportToCreate2");
+                        console.log(JSON.stringify(reportToCreate2));
+                        recordBase.apiBase.executeRequest(reportEndpoint2, consts.POST, reportToCreate2).then(function(reportResults) {
+                            reportId2 = JSON.parse(reportResults.body).id;
+                            done();
+                        });
+                    });
+                }).catch(function(error) {
+                    log.error(JSON.stringify(error));
+                    done();
+                });
+                return app;
             });
-            return app;
         });
 
         function createForm(appId, tableId, form) {
