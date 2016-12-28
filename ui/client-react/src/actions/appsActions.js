@@ -31,12 +31,12 @@ let appsActions = {
         let logger = new Logger();
         return new Promise((resolve, reject) => {
             if (appId) {
-                //TODO dispatch event
+                logger.debug('Get application stack preference for appId ' + appId);
                 let appService = new AppService();
 
                 appService.getApplicationStack(appId).then(
                     (response) => {
-                        logger.debug('ApplicationService getApplicationStack success:' + JSON.stringify(response));
+                        logger.debug('ApplicationService getApplicationStack success');
                         //TODO dispatch success event
                         resolve();
                     },
@@ -71,16 +71,14 @@ let appsActions = {
             if (appId && _.isBoolean(openInV3)) {
                 logger.debug('Setting application stack preference. AppId:' + appId + '; openInV3:' + openInV3);
 
-                //TODO dispatch event
                 let appService = new AppService();
-
                 let params = {};
                 params[constants.REQUEST_PARAMETER.OPEN_IN_V3] = openInV3;
 
                 this.dispatch(actions.SET_APP_STACK);
                 appService.setApplicationStack(appId, params).then(
                     (response) => {
-                        logger.debug('ApplicationService setApplicationStack success:' + JSON.stringify(response));
+                        logger.debug('ApplicationService setApplicationStack success');
                         this.dispatch(actions.SET_APP_STACK_SUCCESS, {appId, openInV3});
                         resolve();
                     },
@@ -120,13 +118,12 @@ let appsActions = {
             //  hydrate !== true, then just a list of table ids is returned.
             appService.getApps(hydrate).then(
                 response => {
-                    logger.debug('AppService getApps success:' + JSON.stringify(response));
+                    logger.debug('AppService getApps success');
                     let model = appsModel.set(response.data);
                     this.dispatch(actions.LOAD_APPS_SUCCESS, model);
                     resolve();
                 },
                 error => {
-                    //  axios upgraded to error.response object in 0.13.x
                     logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApps:');
                     this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
                     reject();
