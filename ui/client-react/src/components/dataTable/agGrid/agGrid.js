@@ -391,10 +391,13 @@ let AGGrid = React.createClass({
 
         const recordId = data[this.props.primaryKeyName].value;
 
-        // const flux = this.getFlux();
-        //
-        // flux.actions.openRecordForEdit(recordId);
         this.props.dispatch(openRecordForEdit(recordId));
+
+        // needed until report store is migrated to redux
+
+        const flux = this.getFlux();
+
+        flux.actions.editingReportRow(recordId);
     },
 
     /**

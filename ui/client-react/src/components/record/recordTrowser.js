@@ -14,8 +14,9 @@ import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-
 import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
+import {connect} from 'react-redux';
+import {openRecordForEdit} from '../../actions/formActions';
 
 import './recordTrowser.scss';
 
@@ -219,7 +220,7 @@ let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
 
-        flux.actions.openRecordForEdit(previousEditRecordId);
+        this.props.dispatch(openRecordForEdit(previousEditRecordId));
     },
 
     /**
@@ -232,7 +233,7 @@ let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editNextRecord(nextEditRecordId);
 
-        flux.actions.openRecordForEdit(nextEditRecordId);
+        this.props.dispatch(openRecordForEdit(nextEditRecordId));
     },
     /**
      *  get breadcrumb element for top of trowser
@@ -345,4 +346,4 @@ let RecordTrowser = React.createClass({
     }
 });
 
-export default RecordTrowser;
+export default connect()(RecordTrowser);
