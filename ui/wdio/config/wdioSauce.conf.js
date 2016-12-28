@@ -53,7 +53,11 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './ui/wdio/tests/forms/*.e2e.spec.js',
+        './ui/wdio/tests/forms/formAdd.e2e.spec.js',
+        './ui/wdio/tests/forms/formEdit.e2e.spec.js',
+        './ui/wdio/tests/forms/formAddValidation.e2e.spec.js',
+        './ui/wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js',
+        './ui/wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js',
         //'./ui/wdio/tests/reportAddRecord.e2e.spec.js'
     ],
     // Patterns to exclude.
