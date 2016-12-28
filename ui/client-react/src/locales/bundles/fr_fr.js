@@ -178,7 +178,7 @@ export default {
             Weeks: 'semaines',
             Week: 'semaine',
             W: 's',
-            Days: 'journee',
+            Days: 'journees',
             Day: 'journee',
             D: 'j',
             Hours: 'heures',
