@@ -144,6 +144,7 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email with Default Domain",
             {dataAttr: emailDefaultDomain});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.USER);
 
         tableToFieldToFieldTypeMap[table2Name] = {};
         var textChoices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {

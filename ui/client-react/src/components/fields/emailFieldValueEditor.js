@@ -60,20 +60,22 @@ const EmailFieldValueEditor = React.createClass({
     render() {
         // Remove some properties before passing to TextFieldValueEditor
         // TextFieldValueEditor uses the display value by default, so it cannot be passed in for Email and URL
-        let {onChange, onBlur, display, placeholder, disabled, readOnly, ...otherProps} = this.props;
+        let {onChange, onBlur, display, placeholder, disabled, readOnly, classes, ...otherProps} = this.props;
 
         if (disabled || readOnly) {
             // Return a read only email
             return <EmailFieldValueRenderer display={display} {...otherProps} />;
         }
 
-        return <TextFieldValueEditor onBlur={this.onBlur}
+        return <TextFieldValueEditor classes={(classes || '') + ' emailField'}
+                                     onBlur={this.onBlur}
                                      onChange={this.onChange}
                                      placeholder={(this.props.placeholder || Locales.getMessage('placeholder.email'))}
                                      inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
                                      showClearButton={Breakpoints.isSmallBreakpoint()}
-                                     {...otherProps} />;
+                                     {...otherProps}
+                                     />;
     }
 });
 

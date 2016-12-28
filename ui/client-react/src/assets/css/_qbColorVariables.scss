@@ -443,6 +443,7 @@ $panel-border-color: $color-black-300;
 $panel-background-color: $color-black-100;
 $panel-header-icon-color: $color-black-700;
 $panel-header-icon-hover-color: $icon-color-hover;
+$panel-shadow-color: rgba(72, 108, 143, 0.2);
 
 //Error message popup
 $errorMessage-border-color: $color-black-400;
@@ -454,3 +455,12 @@ $errorMessage-header-text-color: $color-black-100;
 // Formula field colors
 $formula-background-empty-color: $color-blue-300;
 $formula-spinner-color: $color-black-700;
+
+// Card view shadow
+$card-view-shadow-color: rgba(72, 108, 143, 0.2);
+
+// checkbox shadow
+$checkbox-shadow-color: rgba(54, 93, 191, 0.25);
+
+// field input shadow
+$field-input-shadow-color: rgba(54, 94, 191, 0.25);
