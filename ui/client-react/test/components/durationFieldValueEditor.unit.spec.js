@@ -5,6 +5,7 @@ import DurationEditorParsing from '../../src/components/fields/durationEditorPar
 import {DURATION_CONSTS} from '../../../common/src/constants';
 import durationFormatter from '../../../common/src/formatter/durationFormatter';
 import bigDecimal from 'bigdecimal';
+import Locale from '../../src/locales/locales';
 
 // gen a repeatable seed for random values, so it can be reproduced
 var Chance = require('chance');
@@ -13,6 +14,12 @@ var chance = new Chance(seed);
 var TestData = require('./durationFieldValueEditorTestData')(chance);
 
 describe('DurationFieldValueEditor seed:' + (seed), () => {
+    beforeEach(function() {
+        Locale.changeLocale('en-us');
+    });
+    afterEach(function() {
+        Locale.changeLocale('en-us');
+    });
     let component;
     let divideBigDecimal = function(numerator, millis) {
         return numerator.divide(millis, DURATION_CONSTS.DEFAULT_DECIMAL_PLACES,  bigDecimal.RoundingMode.HALF_UP()).stripTrailingZeros().toPlainString();
@@ -201,6 +208,48 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             let result = component.state.display.replace(/[0-9.:]+/g, '').trim();
             let expectedResult = DurationEditorParsing.getPlaceholder(test.scale);
             expect(result).toEqual(expectedResult);
+        });
+    });
+    TestData.dataProvider.forEach(function(test) {
+        it('allows a user to change locales to French and  allows a user to input ' + test.type + ' in French', () => {
+            Locale.changeLocale('fr-fr');
+            Locale.getI18nBundle();
+            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let userInput = test.numValue + ' ' + (localeType || '');
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
+            Simulate.blur(input, {
+                value: userInput
+            });
+            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
+            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            expect(component.state.value).toEqual(totalMilliSeconds);
+            expect(component.state.display).toEqual(expectedResult);
+        });
+    });
+    TestData.dataProvider.forEach(function(test) {
+        it('allows a user to change locales to German and  allows a user to input ' + test.type + ' in German', () => {
+            Locale.changeLocale('de-de');
+            Locale.getI18nBundle();
+            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let userInput = test.numValue + ' ' + (localeType || '');
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
+            Simulate.blur(input, {
+                value: userInput
+            });
+            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
+            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+            expect(component.state.value).toEqual(totalMilliSeconds);
+            expect(component.state.display).toEqual(expectedResult);
         });
     });
 });

@@ -141,7 +141,7 @@ describe('DurationFieldValueRenderer', () => {
     it('test render of component with display get reformatted for locale', () => {
         let millisecs = 23456;
         let displayProp = '123 pre calculated value';
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.WEEKS}} display={displayProp}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SCALES.WEEKS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(componentDiv).toBeTruthy();
@@ -151,7 +151,7 @@ describe('DurationFieldValueRenderer', () => {
     it('test render of component with display of timebase units get reformatted for locale', () => {
         let millisecs = 23456;
         let displayProp = '123 pre calculated value';
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.HHMMSS}} display={displayProp}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SCALES.HHMMSS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(componentDiv).toBeTruthy();

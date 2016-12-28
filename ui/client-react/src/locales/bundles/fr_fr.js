@@ -177,7 +177,7 @@ export default {
         acceptedDurationType: {
             Weeks: 'semaines',
             Week: 'semaine',
-            W: 's',
+            W: 'se',
             Days: 'journees',
             Day: 'journee',
             D: 'j',
