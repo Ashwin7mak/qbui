@@ -52,8 +52,10 @@ const DurationFieldValueEditor = React.createClass({
             this.props.onChange(ev);
         }
     },
-    componentDidMount() {
-        if (this.props.attributes && this.props.includeUnits) {
+    componentWillMount() {
+        if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+            this.display = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
+        } else if (this.props.attributes && this.props.includeUnits) {
             this.display = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
         }
     },
@@ -71,13 +73,6 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         let defaultPlaceholder = '';
-        let self = this;
-        function formatSmartUnit(dis) {
-            if (self.props.attributes && self.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
-                dis = durationEditorParsing.includeUnitsInInput(self.props.display, self.props.attributes);
-            }
-            return dis;
-        }
         if (this.props.attributes) {
             defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
         }
@@ -88,7 +83,7 @@ const DurationFieldValueEditor = React.createClass({
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={formatSmartUnit(this.display) || display}
+                                      value={this.display || display}
                                       invalidMessage={this.props.invalidMessage || ''}
                                       showClearButton={true}
                                       {...otherProps}/>;

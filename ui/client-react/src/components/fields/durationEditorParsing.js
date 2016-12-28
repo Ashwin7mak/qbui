@@ -303,7 +303,7 @@
              * It then checks to see if display is only a number
              * If it is only a number it will concatenate the field scale to the input
              * */
-            if (fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+            if (display !== null && fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
                 var scale = display.replace(/-?[0-9.:]+/g, '').trim();
                 var num = display.match(/-?[0-9.:]+/g);
                 display = num;
