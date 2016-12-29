@@ -254,7 +254,7 @@
             var scale = fieldInfo.scale;
             var isValidResults;
             var results = {
-                value: DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_IPUT,
+                value: DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_INPUT,
                 display: value
             };
             /**

@@ -14,7 +14,7 @@
          * @returns {boolean}
          */
         isValid: function(value) {
-            if (value === DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_IPUT) {
+            if (value === DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_INPUT) {
                 return false;
             }
             return true;
