@@ -93,7 +93,7 @@
         function attemptToCreateDuplicateRecordAndAssertFailure(payload) {
             return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId)).then(() => {
                 assert(false, 'Duplicate record was accepted and it should have failed.');
-            }, createDuplicateRecordError => {
+            }).catch(createDuplicateRecordError => {
                 var errorCode = createDuplicateRecordError.response.body.code;
                 assert.equal(errorCode, apiResponseErrors.NOT_UNIQUE_VALUE, 'Error code ' + errorCode + ' does not match expected NotUniqueKeyFieldValue error code');
             });
@@ -103,7 +103,7 @@
             return recordBase.editRecord(payload.endpoint, payload.recordId, makeTestRecord(payload.fieldId))
                 .then(() => {
                     assert(false, 'Record edits were accepted but should have failed the referential integrity constraint');
-                }, editRecordError => {
+                }).catch(editRecordError => {
                     var responseBody = editRecordError.response.body;
                     assert.equal(responseBody.code, apiResponseErrors.INVALID_RECORD);
                     assert.equal(responseBody.message,  apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE);
