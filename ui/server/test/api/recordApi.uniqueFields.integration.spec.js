@@ -27,6 +27,10 @@
                 .then(attemptToEditRecordAndAssertFailure);
         });
 
+        var uniqueTextFieldName = 'uniqueText';
+        var initialTextValue = 'Planche';
+        var differentTextValue = 'Layout';
+
         var appWithUniqueFields = {
             name: 'Unique Fields App',
             tables: [
@@ -34,7 +38,7 @@
                     name: 'table1',
                     fields: [
                         {
-                            name: 'uniqueText',
+                            name: uniqueTextFieldName,
                             unique: true,
                             datatypeAttributes: {type: 'TEXT'},
                             type: 'SCALAR',
@@ -45,16 +49,15 @@
             ]
         };
 
-        var testRecord = function(fieldId, value) {
+        var makeTestRecord = function(fieldId, value) {
             if (!value) {
-                value = 'test';
+                value = initialTextValue;
             }
-            return [{record: [
-                {
-                    id: fieldId,
-                    value: value
-                }
-            ]}];
+
+            return [{
+                id: fieldId,
+                value: value
+            }];
         };
 
         function createTestAppWithUniqueField() {
@@ -62,7 +65,7 @@
                 .then(appCreatedResponse => {
                     let app = JSON.parse(appCreatedResponse.body);
                     let table = app.tables[0];
-                    let uniqueTextField = _.find(table.fields, {name: 'uniqueText'});
+                    let uniqueTextField = _.find(table.fields, {name: uniqueTextFieldName});
                     let recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                     return {
                         endpoint: recordsEndpoint,
@@ -72,13 +75,13 @@
         }
 
         function createInitialRecord(payload) {
-            return recordBase.createRecords(payload.endpoint, testRecord(payload.fieldId)).then(() => {
+            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId)).then(() => {
                 return payload;
             });
         }
 
         function createSecondRecordWhichWillBeEdited(payload) {
-            return recordBase.createAndFetchRecord(payload.endpoint, testRecord(payload.fieldId, 'testB')[0].record).then((response) => {
+            return recordBase.createAndFetchRecord(payload.endpoint, makeTestRecord(payload.fieldId, differentTextValue)).then(response => {
                 return {
                     endpoint: payload.endpoint,
                     fieldId: payload.fieldId,
@@ -88,31 +91,28 @@
         }
 
         function attemptToCreateDuplicateRecordAndAssertFailure(payload) {
-            return recordBase.createRecords(payload.endpoint, testRecord(payload.fieldId, 'test')).then(createDuplicateRecordResponse => {
+            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId)).then(() => {
                 assert(false, 'Duplicate record was accepted and it should have failed.');
-            }, createDuplicateRecordResponsesError => {
-                var responseBody = JSON.parse(createDuplicateRecordResponsesError.response.body)[0];
-                assert.equal(responseBody.code, apiResponseErrors.NOT_UNIQUE_VALUE, 'Error code ' + responseBody.code + ' does not match expected NotUniqueKeyFieldValue error code');
+            }, createDuplicateRecordError => {
+                var errorCode = createDuplicateRecordError.response.body.code;
+                assert.equal(errorCode, apiResponseErrors.NOT_UNIQUE_VALUE, 'Error code ' + errorCode + ' does not match expected NotUniqueKeyFieldValue error code');
             });
         }
 
         function attemptToEditRecordAndAssertFailure(payload) {
-            return recordBase.editRecord(payload.endpoint, payload.recordId, testRecord(payload.fieldId)[0].record)
-                .then(function(response) {
+            return recordBase.editRecord(payload.endpoint, payload.recordId, makeTestRecord(payload.fieldId))
+                .then(() => {
                     assert(false, 'Record edits were accepted but should have failed the referential integrity constraint');
-                }, function(errResponse) {
-                    assert.equal(JSON.parse(errResponse.response.body)[0].code, apiResponseErrors.INVALID_RECORD);
-                    assert.equal(JSON.parse(errResponse.response.body)[0].message,  apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE);
+                }, editRecordError => {
+                    var responseBody = editRecordError.response.body;
+                    assert.equal(responseBody.code, apiResponseErrors.INVALID_RECORD);
+                    assert.equal(responseBody.message,  apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE);
                 });
         }
 
         //Cleanup the test realm after all tests in the block
-        after(function(done) {
-            //Realm deletion takes time, bump the timeout
-            this.timeout(testConsts.INTEGRATION_TIMEOUT);
-            recordBase.apiBase.cleanup().then(function() {
-                done();
-            });
+        after(() => {
+            return recordBase.apiBase.cleanup();
         });
     });
 }());

@@ -5,6 +5,7 @@
     var assert = require('assert');
     var consts = require('../../../common/src/constants');
     var log = require('../../src/logger').getLogger();
+    var _ = require('lodash');
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
 
@@ -286,7 +287,7 @@
                         } else {
                             log.error('Network request failed, no retries left or an unsupported error for retry found');
                             log.info('Unknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
-                            deferred.reject({error: error, response: response});
+                            deferred.reject({error: error, response: transformResponseBodyToJsonObject(response)});
                         }
                     } else {
                         deferred.resolve(response);
@@ -497,4 +498,22 @@
 
         return apiBase;
     };
+
+    function transformResponseBodyToJsonObject(response) {
+        var transformedResponse = _.assign({}, response);
+        try {
+            transformedResponse.body = JSON.parse(response.body);
+            if (_.isArray(transformedResponse.body)) {
+                transformedResponse.body = transformedResponse.body[0];
+            }
+
+            if (_.has(transformedResponse.body, 'body')) {
+                transformedResponse.body = JSON.parse(transformedResponse.body.body)[0];
+            }
+        } catch (err) {
+            log.debug('Could not transform response body to JSON. ' + err);
+        }
+
+        return transformedResponse;
+    }
 }());

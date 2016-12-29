@@ -129,19 +129,17 @@
             // Creates a record, returning a promise that is resolved or rejected on successful
             //TODO: Fix promise anti-pattern QBSE-20581
             createRecord: function(recordsEndpoint, record, params) {
-                var fetchRecordDeferred = promise.pending();
+                var createRecordDeferred = promise.pending();
                 init.then(function() {
                     apiBase.executeRequest(recordsEndpoint, consts.POST, record)
                         .then(function(recordIdResponse) {
-                            var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
-                            if (params) {
-                                getEndpoint += params;
-                            }
+                            createRecordDeferred.resolve(JSON.parse(JSON.parse(recordIdResponse.body).body).id);
                         }).catch(function(err) {
                             log.error(JSON.stringify(err));
+                            createRecordDeferred.reject(err);
                         });
-                    return fetchRecordDeferred.promise;
                 });
+                return createRecordDeferred.promise;
             },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function(recordsEndpoint, records) {
