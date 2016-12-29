@@ -136,18 +136,6 @@ let recordActions = {
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            if (error.response.status === 403) {
-                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                            }
-                            if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
-                                const {status} = error.response.data.response;
-                                if (status !== 422) {
-                                    // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
-                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                                }
-                            }
                             // this delay allows for saving modal to trap inputs otherwise
                             // clicks get invoked after create
                             Promise.delay(PRE_REQ_DELAY_MS).then(() => {
