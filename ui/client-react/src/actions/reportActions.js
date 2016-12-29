@@ -23,17 +23,18 @@ let reportActions = {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
+                logger.debug('Loading report list for appId:' + appId + '; tableId:' + tblId);
+
                 this.dispatch(actions.LOAD_REPORTS);
                 let reportService = new ReportService();
 
                 reportService.getReports(appId, tblId).then(
                     (response) => {
-                        logger.debug('ReportService getReports success:' + JSON.stringify(response));
+                        logger.debug('ReportService getReports success');
                         this.dispatch(actions.LOAD_REPORTS_SUCCESS, {appId, tblId, data: response.data});
                         resolve();
                     },
                     (error) => {
-                        //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
                         this.dispatch(actions.LOAD_REPORTS_FAILED, error.response.status);
                         reject();
