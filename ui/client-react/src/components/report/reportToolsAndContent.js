@@ -19,7 +19,8 @@ import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
-
+import {connect} from 'react-redux';
+import {editNewRecord} from '../../actions/formActions';
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -35,7 +36,7 @@ let AddRecordButton = React.createClass({
 });
 
 /* The container for report and its toolbar */
-const ReportToolsAndContent = React.createClass({
+export const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     facetFields : {},
     debounceInputMillis: 700, // a key send delay
@@ -303,8 +304,7 @@ const ReportToolsAndContent = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
+        this.props.dispatch(editNewRecord(false));
     },
 
     render() {
@@ -411,4 +411,4 @@ const ReportToolsAndContent = React.createClass({
     }
 });
 
-export default ReportToolsAndContent;
+export default connect()(ReportToolsAndContent);

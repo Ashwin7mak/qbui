@@ -14,6 +14,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
+import {editNewRecord} from '../../actions/formActions';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -63,9 +64,7 @@ const ReportRoute = React.createClass({
      */
     editNewRecord() {
 
-        const flux = this.getFlux();
-
-        flux.actions.editNewRecord();
+        this.props.dispatch(editNewRecord());
     },
 
     getPageActions(maxButtonsBeforeMenu) {
