@@ -119,6 +119,7 @@
                                               });
                             }).catch(function(currError) {
                                 log.error(JSON.stringify(currError));
+                                fetchRecordDeferred.reject(currError);
                             });
                 }).catch(function(err) {
                     log.error(JSON.stringify(err));
@@ -154,7 +155,7 @@
                     records.forEach(function(object) {
                         recordObjects.push(object.record);
                     });
-                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
+                    return apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
                             .then(function(recordBulkResponse) {
                                 var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 
@@ -164,7 +165,13 @@
                                 });
 
                                 fetchRecordDeferred.resolve(recordIdList);
-                            }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                            }, function(recordBulkResponseError) {
+                                fetchRecordDeferred.reject(recordBulkResponseError);
+                            })
+                        .catch(function(currError) {
+                            log.error(JSON.stringify(currError));
+                            fetchRecordDeferred.reject(currError);
+                        });
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
@@ -188,6 +195,21 @@
                         }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
+            },
+            editRecord: function(recordsEndpoint, recordId, record) {
+                var editRecordDeferred = promise.pending();
+                init.then(function() {
+                    return apiBase.executeRequest(recordsEndpoint + recordId, consts.PUT, record)
+                        .then(function(recordIdResponse) {
+                            editRecordDeferred.resolve(recordIdResponse);
+                        }, function(problemEditingRecord) {
+                            editRecordDeferred.reject(problemEditingRecord);
+                        }).catch(function(err) {
+                            log.error(JSON.stringify(err));
+                            editRecordDeferred.reject(err);
+                        });
+                });
+                return editRecordDeferred.promise;
             },
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function(recordsEndpoint, recordId, params) {
