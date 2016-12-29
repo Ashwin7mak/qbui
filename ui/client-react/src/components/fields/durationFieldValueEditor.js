@@ -52,6 +52,10 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     componentWillMount() {
+        this.display = this.props.display;
+        if (this.props.value === 0) {
+            this.display = this.props.value;
+        }
         if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             this.display = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
         } else if (this.props.attributes && this.props.includeUnits) {
