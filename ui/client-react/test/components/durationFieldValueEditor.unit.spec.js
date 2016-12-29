@@ -37,7 +37,7 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             };
         },
         onChange(newValue) {
-            this.setState({value: newValue});
+            this.setState({value: newValue, display: newValue});
         },
         onBlur(updatedValueObject) {
             this.setState(updatedValueObject);
