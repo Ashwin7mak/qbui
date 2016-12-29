@@ -134,6 +134,10 @@
                 SECONDS: 'Seconds',
                 MILLISECONDS: 'Milliseconds',
             },
+            /**
+             * Accepted_Types are the scales that a user is allowed to enter in the input box, a user's input is compared and checked
+             * against the accepted types below.
+             * */
             ACCEPTED_TYPE: {
                 DURATION_TYPE_INVALID_IPUT: 'Invalid Input',
                 ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
