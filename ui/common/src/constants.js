@@ -140,6 +140,11 @@
              * */
             ACCEPTED_TYPE: {
                 DURATION_TYPE_INVALID_INPUT: 'Invalid Input',
+                /**
+                 * Do not change ACCEPTED_DURATION_TYPE
+                 * This is used to localize accepted types, it allows a user
+                 * to type in a German or France and have it compared to scales that are accepted.
+                 * */
                 ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
                 //The scales coming back from core is not formatted correctly according to XD specs for placeholders for HHMMSS, HHMM, MM, MMS
                 //Below is the correct format for placeholders
