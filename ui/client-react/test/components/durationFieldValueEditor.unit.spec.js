@@ -107,9 +107,12 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             });
         });
         TestData.dataProvider.forEach(function(test) {
-            it('converts a user input of negative ' + -test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+            it('(' + language + ') converts a user input of ' + -test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+                Locale.changeLocale(language);
+                Locale.getI18nBundle();
+                let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
                 component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-                let userInput = -test.numValue + (test.type || '');
+                let userInput = -test.numValue + ' ' + (localeType || '');
                 let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
                 Simulate.change(input, {
                     target: {value: userInput}
