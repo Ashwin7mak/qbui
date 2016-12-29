@@ -44,25 +44,9 @@ const DurationFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func,
 
     },
-    getInitialState() {
-        return {
-            display: this.props.display
-        };
-    },
     onChange(ev) {
-        this.setState({display: ev});
         if (this.props.onChange) {
             this.props.onChange(ev);
-        }
-    },
-    componentWillMount() {
-        if (this.props.value === 0) {
-            this.setState({display: this.props.value});
-        }
-        if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
-            this.setState({display: durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes)});
-        } else if (this.props.attributes && this.props.includeUnits) {
-            this.setState({display: durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes)});
         }
     },
     onBlur(ev) {
@@ -71,7 +55,6 @@ const DurationFieldValueEditor = React.createClass({
             value: parseResult.value,
             display: parseResult.display
         };
-        this.setState({display: theVals.display});
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
@@ -79,17 +62,26 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         let defaultPlaceholder = '';
+        let formatDisplay = display;
         if (this.props.attributes) {
             defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
         }
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SCALES.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
+        if (this.props.value === 0) {
+            formatDisplay = this.props.value;
+        }
+        if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+            formatDisplay = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
+        } else if (this.props.attributes && this.props.includeUnits) {
+            formatDisplay = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
+        }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={this.state.display || display}
+                                      value={formatDisplay || display}
                                       invalidMessage={this.props.invalidMessage || ''}
                                       showClearButton={true}
                                       {...otherProps}/>;
