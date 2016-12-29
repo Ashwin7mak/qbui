@@ -154,6 +154,7 @@ consts = require('../../common/src/constants.js');
             {dataAttr: urlButton});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL, "URL Same Window",
             {dataAttr: urlOpenInSameWindow});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.USER);
 
         tableToFieldToFieldTypeMap[table2Name] = {};
         var textChoices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {

@@ -43,6 +43,7 @@ const UrlFieldValueEditor = React.createClass({
                                      value={value}
                                      placeholder={(this.props.placeholder || Locales.getMessage('placeholder.url'))}
                                      onBlur={this.onBlur}
+                                     showClearButton={true}
                                      {...otherProps} />;
     }
 });
