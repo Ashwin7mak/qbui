@@ -1,12 +1,6 @@
 (function() {
     var dataErrorCodes = require('../dataEntryErrorCodes');
     var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
-
-    /**
-     * ******IMPORTANT****
-     * Currently the isValid and isTimeFormatValid methods are both in this file and the durationEditorParsing file
-     * a common location for this method will be updated and addressed in an upcoming story which is now in the backlog
-     * */
     module.exports = {
         /**
          * Validate a duration field
