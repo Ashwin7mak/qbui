@@ -12,6 +12,11 @@ var Chance = require('chance');
 var seed = new Chance().integer({min: 1, max: 1000000000});
 var chance = new Chance(seed);
 var TestData = require('./durationFieldValueEditorTestData')(chance);
+let languages = [
+    'en-us',
+    'fr-fr',
+    'de-de'
+]
 
 describe('DurationFieldValueEditor seed:' + (seed), () => {
     beforeEach(function() {
@@ -48,116 +53,46 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             );
         }
     });
+    languages.forEach(function(language) {
+        TestData.multiInputData.forEach(function(test) {
+            it('(' + language + ') converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
+                Locale.changeLocale(language);
+                Locale.getI18nBundle();
+                component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+                let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+                let userInput = '';
+                let totalMilliSeconds = 0;
+                let firstInputTotalMilliSeconds = 0;
+                let secondInputTotalMilliSeconds = 0;
+                let thirdInputMilliSeconds = 0;
+                let convertedMilliSeconds;
+                let convertedResult;
+                if (test.multiInput.firstInput) {
+                    userInput += test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.firstInput);
+                    firstInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.firstInput;
+                }
 
-    TestData.multiInputData.forEach(function(test) {
-        it('converts a multi input of ' + test.description + ' to  ' + test.scale, () => {
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            let userInput = '';
-            let totalMilliSeconds = 0;
-            let firstInputTotalMilliSeconds = 0;
-            let secondInputTotalMilliSeconds = 0;
-            let thirdInputMilliSeconds = 0;
-            let convertedMilliSeconds;
-            let convertedResult;
-            if (test.multiInput.firstInput) {
-                userInput += test.numValue + ' ' + test.multiInput.firstInput;
-                firstInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.firstInput;
-            }
+                if (test.multiInput.secondInput) {
+                    userInput += ' ' + test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.secondInput);
+                    secondInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.secondInput;
+                }
 
-            if (test.multiInput.secondInput) {
-                userInput += ' ' + test.numValue + ' ' + test.multiInput.secondInput;
-                secondInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.secondInput;
-            }
-
-            if (test.multiInput.thirdInput) {
-                userInput += ' ' + test.numValue + ' ' + test.multiInput.thirdInput;
-                thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
-            }
-            Simulate.change(input, {
-                target: {value: userInput}
+                if (test.multiInput.thirdInput) {
+                    userInput += ' ' + test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.thirdInput);
+                    thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
+                }
+                Simulate.change(input, {
+                    target: {value: userInput}
+                });
+                Simulate.blur(input);
+                totalMilliSeconds += firstInputTotalMilliSeconds + secondInputTotalMilliSeconds + thirdInputMilliSeconds;
+                convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+                convertedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+                expect(component.state.value).toEqual(totalMilliSeconds);
+                expect(component.state.display).toEqual(convertedResult);
             });
-            Simulate.blur(input);
-            totalMilliSeconds += firstInputTotalMilliSeconds + secondInputTotalMilliSeconds + thirdInputMilliSeconds;
-            convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            convertedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(convertedResult);
-        });
-        it('converts a multi input of ' + test.description + ' to  ' + test.scale + '(French)', () => {
-            Locale.changeLocale('fr-fr');
-            Locale.getI18nBundle();
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            let userInput = '';
-            let totalMilliSeconds = 0;
-            let firstInputTotalMilliSeconds = 0;
-            let secondInputTotalMilliSeconds = 0;
-            let thirdInputMilliSeconds = 0;
-            let convertedMilliSeconds;
-            let convertedResult;
-            if (test.multiInput.firstInput) {
-                userInput += test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.firstInput);
-                firstInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.firstInput;
-            }
-
-            if (test.multiInput.secondInput) {
-                userInput += ' ' + test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.secondInput);
-                secondInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.secondInput;
-            }
-
-            if (test.multiInput.thirdInput) {
-                userInput += ' ' + test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.thirdInput);
-                thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
-            }
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input);
-            totalMilliSeconds += firstInputTotalMilliSeconds + secondInputTotalMilliSeconds + thirdInputMilliSeconds;
-            convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            convertedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(convertedResult);
-        });
-        it('converts a  multi input of ' + test.description + ' to  ' + test.scale + '(German)', () => {
-            Locale.changeLocale('de-de');
-            Locale.getI18nBundle();
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            let userInput = '';
-            let totalMilliSeconds = 0;
-            let firstInputTotalMilliSeconds = 0;
-            let secondInputTotalMilliSeconds = 0;
-            let thirdInputMilliSeconds = 0;
-            let convertedMilliSeconds;
-            let convertedResult;
-            if (test.multiInput.firstInput) {
-                userInput += test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.firstInput);
-                firstInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.firstInput;
-            }
-
-            if (test.multiInput.secondInput) {
-                userInput += ' ' + test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.secondInput);
-                secondInputTotalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.secondInput;
-            }
-
-            if (test.multiInput.thirdInput) {
-                userInput += ' ' + test.numValue + ' ' + Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.multiInput.thirdInput);
-                thirdInputMilliSeconds = test.numValue * test.MILLIS_PER_TYPE.thirdInput;
-            }
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input);
-            totalMilliSeconds += firstInputTotalMilliSeconds + secondInputTotalMilliSeconds + thirdInputMilliSeconds;
-            convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            convertedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(convertedResult);
         });
     });
-
     TestData.placeholderData.forEach(function(test) {
         it('displays the correct placeholder for ' + test.scale, () => {
             Locale.changeLocale('en-us');
