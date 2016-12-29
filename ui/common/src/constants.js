@@ -173,7 +173,7 @@
                 MS: 'MS',
                 SECS: 'Secs',
                 MSECS: 'Msecs'
-            },
+            }
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
