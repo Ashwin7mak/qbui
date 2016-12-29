@@ -39,21 +39,29 @@ function formatFieldAsValidationError(field, i18nErrorKey, data) {
     return resultsCopy;
 }
 
-function hasValidResponseBody(responseBody) {
-    return _.isArray(responseBody) && _.isObject(responseBody[0]);
+function transformResponseBodyToObject(responseBody) {
+    if (_.isArray(responseBody) && _.isObject(responseBody[0])) {
+        return responseBody[0];
+    }
+
+    return null;
 }
 
 function getErrorCode(responseBody) {
-    if (hasValidResponseBody(responseBody)) {
-        return responseBody[0].code;
+    var transformedResponseBody = transformResponseBodyToObject(responseBody);
+
+    if (transformedResponseBody) {
+        return transformedResponseBody.code;
     }
 
     return null;
 }
 
 function getErrorMessage(responseBody) {
-    if (hasValidResponseBody(responseBody)) {
-        return responseBody[0].message;
+    var transformedResponseBody = transformResponseBodyToObject(responseBody);
+
+    if (transformedResponseBody) {
+        return transformedResponseBody.message;
     }
 
     return null;
@@ -115,7 +123,7 @@ var ApiResponseFormatter = {
             return Promise.reject({response:{message:'validation error', status: 422, errors: formattedErrors}});
         }
 
-        return Promise.reject(returnPayload(payload));
+        return returnPayload(payload);
     }
 };
 

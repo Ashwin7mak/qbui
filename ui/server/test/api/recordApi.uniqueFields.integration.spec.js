@@ -6,6 +6,8 @@
     var recordBase = require('./recordApi.base')(config);
     var testConsts = require('./api.test.constants');
     var apiResponseErrors = require('../../src/constants/apiResponseErrors');
+    var apiResponseFormatter = require('../../src/api/quickbase/formatter/apiResponseFormatter');
+    var httpStatusCodeConstants = require('../../src/constants/httpStatusCodes');
     var _ = require('lodash');
 
     /**
@@ -56,7 +58,8 @@
 
             return [{
                 id: fieldId,
-                value: value
+                value: value,
+                fieldDef: {unique: true}
             }];
         };
 
@@ -90,13 +93,23 @@
             });
         }
 
+        function assertUniqueValidationErrorsAreFormattedCorrectly(payload) {
+            assert.equal(payload.response.statusCode, 500);
+            var nodeLayerResponse = payload.response.body.response;
+            assert.equal(nodeLayerResponse.status, httpStatusCodeConstants.UNPROCESSABLE_ENTITY, 'The wrong http status code was returned for an invalid record');
+            assert.equal(nodeLayerResponse.errors.length, 1, 'An incorrect number of invalid fields was returned');
+            assert.equal(nodeLayerResponse.errors[0].error.messageId, 'invalidMsg.api.notUniqueSingleField', 'The wrong internationalized error message was returned');
+            assert(nodeLayerResponse.errors[0].isInvalid);
+        }
+
         function attemptToCreateDuplicateRecordAndAssertFailure(payload) {
-            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId)).then(() => {
-                assert(false, 'Duplicate record was accepted and it should have failed.');
-            }).catch(createDuplicateRecordError => {
-                var errorCode = createDuplicateRecordError.response.body.code;
-                assert.equal(errorCode, apiResponseErrors.NOT_UNIQUE_VALUE, 'Error code ' + errorCode + ' does not match expected NotUniqueKeyFieldValue error code');
-            });
+            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId))
+                .then(() => {
+                    assert(false, 'Duplicate record was accepted and it should have failed.');
+                }).catch(createDuplicateRecordError => {
+                    assertUniqueValidationErrorsAreFormattedCorrectly(createDuplicateRecordError);
+                    return createDuplicateRecordError;
+                });
         }
 
         function attemptToEditRecordAndAssertFailure(payload) {
@@ -104,9 +117,8 @@
                 .then(() => {
                     assert(false, 'Record edits were accepted but should have failed the referential integrity constraint');
                 }).catch(editRecordError => {
-                    var responseBody = editRecordError.response.body;
-                    assert.equal(responseBody.code, apiResponseErrors.INVALID_RECORD);
-                    assert.equal(responseBody.message,  apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE);
+                    assertUniqueValidationErrorsAreFormattedCorrectly(editRecordError);
+                    return editRecordError;
                 });
         }
 

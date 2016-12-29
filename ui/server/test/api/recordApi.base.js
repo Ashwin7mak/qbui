@@ -204,7 +204,7 @@
             editRecord: function(recordsEndpoint, recordId, record) {
                 var editRecordDeferred = promise.pending();
                 init.then(function() {
-                    return apiBase.executeRequest(recordsEndpoint + recordId, consts.PUT, record)
+                    return apiBase.executeRequest(recordsEndpoint + recordId, consts.PATCH, record)
                         .then(function(recordIdResponse) {
                             editRecordDeferred.resolve(recordIdResponse);
                         }, function(problemEditingRecord) {
