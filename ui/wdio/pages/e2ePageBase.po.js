@@ -62,8 +62,9 @@
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
         browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        browser.waitForVisible('.ag-body-container');
-        return browser.waitForVisible('.ag-row');
+        // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
+        browser.waitForVisible('.ag-body-container', browser.waitforTimeout, false);
+        return browser.waitForVisible('.ag-row', browser.waitforTimeout, false);
     };
 
     //TODO: Refactor these if needed
