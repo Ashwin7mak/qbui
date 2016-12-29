@@ -11,6 +11,7 @@
     var sText = '9782341234';
     var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
+    var sEmail = 'test@faketestdomain.com';
 
     var sDate = date[1] + '-' + date[2] + '-' + date[0];
 
@@ -204,7 +205,10 @@
                 } else if (fieldLabel === 'textField') {
                     //enter text fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                        return elm;
+                        // email fields also have 'textField' in its classnames, don't include email fields
+                        return elm.getAttribute('class').then(function(classes) {
+                            return classes.indexOf('emailField') === -1;
+                        });
                     }).map(function(elm) {
                         return elm.clear().sendKeys(sText);
                     });
@@ -233,7 +237,41 @@
                             browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
                         });
                     });
+                } else if (fieldLabel === 'emailField') {
+                    return self.formTable.all(by.className('emailField'))
+                        .map(function(elm) {
+                            return elm.clear().sendKeys(sEmail);
+                        });
                 }
+            });
+        };
+
+        /**
+         * Clear field values on small breakpoint form
+         */
+        this.clearFormValues = function(fieldLabel) {
+            var self = this;
+            //fieldValueEditor
+            return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                //filter all field Validators on form
+                return self.formTable.all(by.className('fieldValueEditor')).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.all(by.className(fieldLabel)).map(function(elminput) {
+                        return elminput.click().then(function() {
+                            var clearIcon = elm.element(by.className('clearIconButton')).getWebElement();
+                            if (browserName === 'safari') {
+                                return browser.executeScript('arguments[0].click()', clearIcon);
+                            } else {
+                                return clearIcon.click();
+                            }
+                        }).then(function() {
+                            return elm.element(by.className(fieldLabel)).getAttribute('value');
+                        }).then(function(value) {
+                            return expect(value).toEqual('');
+                        });
+                    });
+                });
             });
         };
 

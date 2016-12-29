@@ -13,6 +13,7 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import Breakpoints from "../../../utils/breakpoints";
 
 import {
     CheckBoxCellRenderer,
@@ -650,6 +651,11 @@ let AGGrid = React.createClass({
 
         // edit row on doubleclick
         if (params.event.detail === 2) {
+            const userNativeModel = (Breakpoints.isSmallBreakpoint() || this.context.touch);
+            if (userNativeModel) {
+                //disable double click on small and medium devices.
+                return;
+            }
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
             //edit a row if not already editing a row or
