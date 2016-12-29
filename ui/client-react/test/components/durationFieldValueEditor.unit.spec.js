@@ -16,7 +16,7 @@ let languages = [
     'en-us',
     'fr-fr',
     'de-de'
-]
+];
 
 describe('DurationFieldValueEditor seed:' + (seed), () => {
     beforeEach(function() {
@@ -92,43 +92,92 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
                 expect(component.state.display).toEqual(convertedResult);
             });
         });
-    });
-    TestData.placeholderData.forEach(function(test) {
-        it('displays the correct placeholder for ' + test.scale, () => {
-            Locale.changeLocale('en-us');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
-            if (localeType === undefined) {
-                localeType = test.placeholder || '';
-            }
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            expect(input.placeholder).toEqual(localeType);
-        });
-        it('displays the correct placeholder for ' + test.scale + ' in French', () => {
-            Locale.changeLocale('fr-fr');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
-            if (localeType === undefined) {
-                localeType = test.placeholder || '';
-            }
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            expect(input.placeholder).toEqual(localeType);
-        });
-        it('displays the correct placeholder for ' + test.scale + ' in German', () => {
-            Locale.changeLocale('de-de');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
-            if (localeType === undefined) {
-                localeType = test.placeholder || '';
-            }
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            expect(input.placeholder).toEqual(localeType);
-        });
-    });
 
+        TestData.placeholderData.forEach(function(test) {
+            it('(' + language + ') displays the correct placeholder for ' + test.scale + ' in French', () => {
+                Locale.changeLocale(language);
+                Locale.getI18nBundle();
+                let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.placeholder);
+                if (localeType === undefined) {
+                    localeType = test.placeholder || '';
+                }
+                component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+                let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+                expect(input.placeholder).toEqual(localeType);
+            });
+        });
+        TestData.dataProvider.forEach(function(test) {
+            it('converts a user input of negative ' + -test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+                component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+                let userInput = -test.numValue + (test.type || '');
+                let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+                Simulate.change(input, {
+                    target: {value: userInput}
+                });
+                Simulate.blur(input, {
+                    value: userInput
+                });
+                let totalMilliSeconds = -test.numValue * test.MILLIS_PER_TYPE;
+                let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+                let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+                expect(component.state.value).toEqual(totalMilliSeconds);
+                expect(component.state.display).toEqual(expectedResult);
+            });
+            it('(' + language + ') converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+                Locale.changeLocale(language);
+                Locale.getI18nBundle();
+                let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
+                component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+                let userInput = test.numValue + ' ' + (localeType || '');
+                let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+                Simulate.change(input, {
+                    target: {value: userInput}
+                });
+                Simulate.blur(input, {
+                    value: userInput
+                });
+                let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
+                let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+                let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
+                expect(component.state.value).toEqual(totalMilliSeconds);
+                expect(component.state.display).toEqual(expectedResult);
+            });
+            it('(' + language + ') displays value and scale on form edit', () => {
+                Locale.changeLocale(language);
+                Locale.getI18nBundle();
+                let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
+                component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
+                let userInput = test.numValue + (localeType || '');
+                let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+                Simulate.change(input, {
+                    target: {value: userInput}
+                });
+                Simulate.blur(input, {
+                    value: userInput
+                });
+                let result = component.state.display.replace(/[0-9.:]+/g, '').trim();
+                let expectedResult = DurationEditorParsing.getPlaceholder(test.scale);
+                expect(result).toEqual(expectedResult);
+            });
+        });
+    });
+    /**
+     * If a user enters an invalid input, it returns the value to the user without any conversion
+     * */
+    TestData.invalidInput.forEach(function(test) {
+        it('throws a validation error with an invalid input of ' + test.invalidInput, () => {
+            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+            let userInput = test.invalidInput;
+            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+            Simulate.change(input, {
+                target: {value: userInput}
+            });
+            Simulate.blur(input, {
+                target:{value: test.invalidInput}
+            });
+            expect(component.state.display).toEqual(test.invalidInput);
+        });
+    });
     TestData.timeFormatData.forEach(function(test) {
         it('converts ' + test.timeFormatVal + ' to ' + test.scale, () => {
             component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
@@ -172,143 +221,6 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
             let expectedTimeFormat = durationFormatter.format({value:convertedMilliSeconds}, test);
             expect(component.state.display).toEqual(expectedTimeFormat);
-        });
-    });
-    /**
-     * If a user enters an invalid input, it returns the value to the user without any conversion
-     * */
-    TestData.invalidInput.forEach(function(test) {
-        it('throws a validation error with an invalid input of ' + test.invalidInput, () => {
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = test.invalidInput;
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                target:{value: test.invalidInput}
-            });
-            expect(component.state.display).toEqual(test.invalidInput);
-        });
-    });
-    TestData.dataProvider.forEach(function(test) {
-        it('converts a user input of negative ' + -test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = -test.numValue + (test.type || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let totalMilliSeconds = -test.numValue * test.MILLIS_PER_TYPE;
-            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(expectedResult);
-        });
-        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = test.numValue + (test.type || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
-            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(expectedResult);
-        });
-        it('allows a user to change locales to German and  allows a user to input ' + test.type + ' in German', () => {
-            Locale.changeLocale('de-de');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = test.numValue + ' ' + (localeType || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
-            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(expectedResult);
-        });
-        it('allows a user to change locales to French and  allows a user to input ' + test.type + ' in French', () => {
-            Locale.changeLocale('fr-fr');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = test.numValue + ' ' + (localeType || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
-            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
-            expect(component.state.value).toEqual(totalMilliSeconds);
-            expect(component.state.display).toEqual(expectedResult);
-        });
-        it('displays value and scale on form edit', () => {
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
-            let userInput = test.numValue + (test.type || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let result = component.state.display.replace(/[0-9.:]+/g, '').trim();
-            let expectedResult = DurationEditorParsing.getPlaceholder(test.scale);
-            expect(result).toEqual(expectedResult);
-        });
-        it('displays value and scale on form edit in French', () => {
-            Locale.changeLocale('fr-fr');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
-            let userInput = test.numValue + (localeType || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let result = component.state.display.replace(/[0-9.:]+/g, '').trim();
-            let expectedResult = DurationEditorParsing.getPlaceholder(test.scale);
-            expect(result).toEqual(expectedResult);
-        });
-        it('displays value and scale on form edit in German', () => {
-            Locale.changeLocale('de-de');
-            Locale.getI18nBundle();
-            let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} includeUnits={true}/>);
-            let userInput = test.numValue + (localeType || '');
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input, {
-                value: userInput
-            });
-            let result = component.state.display.replace(/[0-9.:]+/g, '').trim();
-            let expectedResult = DurationEditorParsing.getPlaceholder(test.scale);
-            expect(result).toEqual(expectedResult);
         });
     });
 });
