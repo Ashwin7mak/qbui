@@ -88,6 +88,47 @@ $color-pink-600: #c72f79;
 
 
 //-------------------------------------------------------------------
+// BEGIN COLOR VARIABLES TO BE ELIMINATED
+// These variables are deprecated. Do not use them anymore.
+//-------------------------------------------------------------------
+
+// These colors are not part of the official color palette.
+// They all need to be changed or added to the palette.
+// Name is: badcolor<n>-<variable>
+// These are isolated here so we can easily find all the colors
+// outside the palette in one place.
+// Do not change the values of these variables. Change the code
+// using them and then delete the variable.
+$badcolor1-color6:          #d2dce7;
+$badcolor2-color13:         #f6f8fb;
+$badcolor3-color14:         #f9fafb;
+$badcolor4-color15:         #f0f3f9;
+$badcolor5-color18:         #cccccc;
+$badcolor6-color24:         #002b48;
+$badcolor7-color25:         #555555;
+$badcolor8-color28:         #264a6d;
+$badcolor9-color29:         #bfcfe3;
+$badcolor10-nav-hover-bg:                   #0097cd;
+//$badcolor11-icon-badge-color:               #2d6c92;
+//$badcolor12-icon-mail-color:                #f7a21a;
+//$badcolor13-icon-duplicate-color:           #c75ac2;
+$badcolor14-top-nav-title-icon-color:       #009aae;
+$badcolor15-secondary-bar-page-actions-bg:  #476b90;
+$badcolor16:                #dddddd;
+$badcolor17:                #333333;
+$badcolor18:                #f3f3f3;
+$badcolor19:                #a52363;
+$badcolor20:                #5f8ba7;
+$badcolor21:                #6e8ba8;
+$badcolor22:                #f2f9fe;
+$badcolor23:                #464242;
+
+//-------------------------------------------------------------------
+// END COLOR VARIABLES TO BE ELIMINATED
+//-------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------
 // BEGIN NEW SEMANTIC NAMES
 // These are the new semantic names. We are not using them yet.
 // They are defined here so that if the names happen to conflict
@@ -207,10 +248,16 @@ $link-normal-color: $color-indigo-700;
 $link-hover-color:  $color-cyan-600;
 $link-press-color:  $color-cyan-600;
 
+// user field
+$user-picker-deactivated-label-fg:      $color-black-600;   // not in XD spreadsheet
+$user-picker-user-label-fg:             $color-black-700;   // not in XD spreadsheet
+$user-picker-email-label-fg:            $color-black-600;   // not in XD spreadsheet
+
 // URL button
 $urlbutton-background-normal-colorstop1-color:          $color-black-200;
 $urlbutton-background-normal-colorstop2-color:          $color-black-100;
 $urlbutton-border-color:                                $color-black-300;
+$urlbutton-border-focus-color:                          $color-indigo-800;  // not in XD spreadsheet
 $urlbutton-background-hover-color:                      $color-black-100;
 $urlbutton-background-press-color:                      $color-black-200;
 $urlbutton-background-disable-base-color:               $color-black-200;
@@ -221,6 +268,21 @@ $urlbutton-background-changed-colorstop1-base-color:    $color-orange-200;
 $urlbutton-background-changed-colorstop2-color:         $color-black-100;
 $urlbutton-background-changed-pressed-base-color:       $color-orange-200;
 $urlbutton-background-changed-hover-color:              $color-black-100;
+$urlbutton-background-focus-colorstop1-color:           $color-black-800;   // not in XD spreadsheet
+$urlbutton-background-focus-colorstop2-color:           $color-black-100;   // not in XD spreadsheet
+
+// Do we really want mixins like this here? These should be replaced with generic button mixins... yes?
+@mixin urlButtonBackgroundGradient() {
+    background: linear-gradient(to top, $urlbutton-background-normal-colorstop1-color, $urlbutton-background-normal-colorstop2-color);
+}
+
+@mixin urlButtonDisabled() {
+    opacity: 0.4;
+}
+
+@mixin urlButtonBackgroundFocusGradient() {
+    background: linear-gradient(to top, rgba($urlbutton-background-focus-colorstop1-color, 0.05), rgba($urlbutton-background-focus-colorstop2-color, 0.05));
+}
 
 // Formula Field
 $formula-background-empty-color:            $color-black-300;
@@ -250,52 +312,21 @@ $menu-item-disabled-color:  $color-black-400;   // not in XD spreadsheet
 $popover-text-color: $color-black-700;          // not in XD spreadsheet
 $popover-title-color: $popover-text-color;      // not in XD spreadsheet
 $popover-background-color: $color-black-100;    // not in XD spreadsheet
-$popover-shadow-color: rgba(70, 66, 66, 0.15);  // not in XD spreadsheet
+$popover-shadow-color: rgba($badcolor23, 0.15); // not in XD spreadsheet
+
+//Error message popup
+$error-message-border-color: $color-black-400;       // not in XD spreadsheet
+$error-message-header-background: $error-color;      // not in XD spreadsheet
+$error-message-content-background: $color-black-100; // not in XD spreadsheet
+$error-message-content-text-color: $color-blue-600;  // not in XD spreadsheet
+$error-message-header-text-color: $color-black-100;  // not in XD spreadsheet
+
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES
 //-------------------------------------------------------------------
 
 
-
-//-------------------------------------------------------------------
-// BEGIN COLOR VARIABLES TO BE ELIMINATED
-// These variables are deprecated. Do not use them anymore.
-//-------------------------------------------------------------------
-
-// These colors are not part of the official color palette.
-// They all need to be changed or added to the palette.
-// Name is: badcolor<n>-<variable>
-// These are isolated here so we can easily find all the colors
-// outside the palette in one place.
-// Do not change the values of these variables. Change the code
-// using them and then delete the variable.
-$badcolor1-color6:          #d2dce7;
-$badcolor2-color13:         #f6f8fb;
-$badcolor3-color14:         #f9fafb;
-$badcolor4-color15:         #f0f3f9;
-$badcolor5-color18:         #cccccc;
-$badcolor6-color24:         #002b48;
-$badcolor7-color25:         #555555;
-$badcolor8-color28:         #264a6d;
-$badcolor9-color29:         #bfcfe3;
-$badcolor10-nav-hover-bg:                   #0097cd;
-//$badcolor11-icon-badge-color:               #2d6c92;
-//$badcolor12-icon-mail-color:                #f7a21a;
-//$badcolor13-icon-duplicate-color:           #c75ac2;
-$badcolor14-top-nav-title-icon-color:       #009aae;
-$badcolor15-secondary-bar-page-actions-bg:  #476b90;
-$badcolor16:                #dddddd;
-$badcolor17:                #333333;
-$badcolor18:                #f3f3f3;
-$badcolor19:                #a52363;
-$badcolor20:                #5f8ba7;
-$badcolor21:                #6e8ba8;
-$badcolor22:                #f2f9fe;
-
-//-------------------------------------------------------------------
-// END COLOR VARIABLES TO BE ELIMINATED
-//-------------------------------------------------------------------
 
 
 //----- semantic color usage
@@ -412,55 +443,22 @@ $datepicker-select-active: $color-cyan-500;
 $datepicker-bg: $color-black-100;
 $datepicker-bg-today: $color-orange-500;
 
-// UrlField
-$urlButton-background-normal-colorstop1-color: $color-black-200;
-$urlButton-background-normal-colorstop2-color: $color-black-100;
-
-@mixin urlButtonBackgroundGradient() {
-    background: linear-gradient(to top, $urlButton-background-normal-colorstop1-color, $urlButton-background-normal-colorstop2-color);
-}
-
-@mixin urlButtonDisabled() {
-    opacity: 0.4;
-}
-$urlButton-background-focus-colorstop1-color: $color-black-800;
-$urlButton-background-focus-colorstop2-color: $color-black-100;
-
-@mixin urlButtonBackgroundFocusGradient() {
-    background: linear-gradient(to top, rgba($urlButton-background-focus-colorstop1-color, 0.05), rgba($urlButton-background-focus-colorstop2-color, 0.05));
-}
-$urlButton-border-focus-color: $color-indigo-800;
-$urlButton-border-color: $color-black-300;
-$urlButton-background-hover-color: $color-black-100;
-$urlButton-background-focus-colorstop1-color: $color-black-800;
-$urlButton-background-focus-colorstop2-color: $color-black-100;
-$user-picker-deactivated-label-fg: $color-black-600;
-$user-picker-user-label-fg: $color-black-700;
-$user-picker-email-label-fg: $color-black-600;
-
 //== QBPanel
 $panel-border-color: $color-black-300;
 $panel-background-color: $color-black-100;
 $panel-header-icon-color: $color-black-700;
 $panel-header-icon-hover-color: $icon-color-hover;
-$panel-shadow-color: rgba(72, 108, 143, 0.2);
-
-//Error message popup
-$errorMessage-border-color: $color-black-400;
-$errorMessage-header-background: $error-color;
-$errorMessage-content-background: $color-black-100;
-$errorMessage-content-text-color: $color-blue-600;
-$errorMessage-header-text-color: $color-black-100;
+$panel-shadow-color: rgba($color-blue-600, 0.2);
 
 // Formula field colors
 $formula-background-empty-color: $color-blue-300;
 $formula-spinner-color: $color-black-700;
 
 // Card view shadow
-$card-view-shadow-color: rgba(72, 108, 143, 0.2);
+$card-view-shadow-color: rgba($color-blue-600, 0.2);
 
 // checkbox shadow
-$checkbox-shadow-color: rgba(54, 93, 191, 0.25);
+$checkbox-shadow-color: rgba($color-indigo-700, 0.25);
 
 // field input shadow
-$field-input-shadow-color: rgba(54, 94, 191, 0.25);
+$field-input-shadow-color: rgba($color-indigo-700, 0.25);

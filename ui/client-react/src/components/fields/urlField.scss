@@ -115,11 +115,11 @@ $urlIcon-margin-left: 10px;
             @include focus-shadow();
             @include urlButtonBackgroundFocusGradient();
             color: $link-normal-color;
-            border: 1px solid $urlButton-border-focus-color;
+            border: 1px solid $urlbutton-border-focus-color;
         }
 
         &.btn-default:hover {
-            background: $urlButton-background-hover-color;
+            background: $urlbutton-background-hover-color;
             color: $link-normal-color;
             text-decoration: none;
         }
