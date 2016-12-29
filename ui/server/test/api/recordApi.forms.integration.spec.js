@@ -17,8 +17,6 @@
         let app;
         let forms;
         let targetFormBuildList;
-        let reportId;
-        let reportId2;
 
         // App variable with different data fields
         const appWithNoFlags = {
@@ -61,54 +59,87 @@
 
                 // Build forms using the info from created app
                 forms = formGenerator.generateSingleTabAndSecFormWithAddAndEdit(app);
-                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                var nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
-                // Generate some record JSON objects to add to the app
-                var generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
 
-                console.log("generatedRecords");
-                console.log(JSON.stringify(generatedRecords));
-
-                //Add records to the table
-                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
-                    //create report
-                    var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                    var reportToCreate = {
-                        name: 'testReport',
-                        type: 'TABLE',
-                        tableId: app.tables[0].id,
-                        query: null,
-                    };
-                    //Create a report
-                    console.log("reportToCreate");
-                    console.log(JSON.stringify(reportToCreate));
-                    recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
-                        reportId = JSON.parse(reportResults.body).id;
-                    }).then(function() {
-                        //create report 2
-                        var reportEndpoint2 = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                        var reportToCreate2 = {
-                            name: 'testReport2',
-                            type: 'TABLE',
-                            tableId: app.tables[0].id,
-                            query: null,
-                        };
-                        //Create a report
-                        console.log("reportToCreate2");
-                        console.log(JSON.stringify(reportToCreate2));
-                        recordBase.apiBase.executeRequest(reportEndpoint2, consts.POST, reportToCreate2).then(function(reportResults) {
-                            reportId2 = JSON.parse(reportResults.body).id;
-                            done();
-                        });
+                let createRecordPromises = [];
+                app.tables.map((table, index) => {
+                    createRecordPromises.push(createRecordforAppTable(app, table));
+                });
+                promise.all(createRecordPromises).then(returnedRecords => {
+                    let createReportPromises = [];
+                    app.tables.map((table, index) => {
+                        createReportPromises.push(createReportforTable(app, table));
                     });
-                }).catch(function(error) {
-                    log.error(JSON.stringify(error));
-                    done();
+                    promise.all(createReportPromises).then(reportResults => {
+                        done();
+                    });
                 });
                 return app;
             });
         });
 
+        /**
+         * Add records to each individual table under the provided app
+         *
+         * @param targetApp   the application to which the form being created belongs to
+         * @param targetTable the application to which the form being created belongs to
+         * @returns A promise to make node call
+         */
+        function createRecordforAppTable(targetApp, targetTable) {
+            let createRecordDeferred = promise.pending();
+
+            // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+            let nonBuiltInFields = recordBase.getNonBuiltInFields(targetTable);
+            // Generate some record JSON objects to add to the app
+            let generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
+
+            recordBase.addRecords(targetApp, targetTable, generatedRecords).then(function(returnedRecords) {
+                createRecordDeferred.resolve(returnedRecords);
+            }).catch(function(error) {
+                console.log(JSON.stringify(error));
+                createRecordDeferred.reject(error);
+            });
+
+            return createRecordDeferred.promise;
+        }
+
+        /**
+         * Build a test report for each individual table under the provided app
+         *
+         * @param targetApp   the application to which the form being created belongs to
+         * @param targetTable the application to which the form being created belongs to
+         * @returns A promise to make node call
+         */
+        function createReportforTable(targetApp, targetTable) {
+            let createReportDeferred = promise.pending();
+            const reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(targetApp.id, targetTable.id);
+
+            var reportToCreate = {
+                name: 'testReportForTable' + targetTable.id,
+                type: 'TABLE',
+                tableId: targetTable.id,
+                query: null,
+            };
+
+            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
+                let reportId = JSON.parse(reportResults.body).id;
+                createReportDeferred.resolve(reportId);
+            }).catch(function(error) {
+                console.log(JSON.stringify(error));
+                createReportDeferred.reject(error);
+            });
+
+            return createReportDeferred.promise;
+        }
+
+        /**
+         * Create a form on the specified table
+         *
+         * @param appId     the application to which the form being created belongs to
+         * @param tableId   the application to which the form being created belongs to
+         * @param form      the form is about to build
+         * @return A promise to make node call
+         *
+         */
         function createForm(appId, tableId, form) {
             let createFormDeferred = promise.pending();
 
@@ -117,12 +148,22 @@
                 let formID =  JSON.parse(result.body).id;
                 createFormDeferred.resolve({appId, tableId, formID});
             }).catch(function(error) {
-                log.error(JSON.stringify(error));
+                console.log(JSON.stringify(error));
+                createFormDeferred.reject(error);
             });
 
             return createFormDeferred.promise;
         }
 
+        /**
+         * get a form by using form id
+         *
+         * appId     the application to which the form being created belongs to
+         * tableId   the table to which the form that is being created belongs to
+         * formId    the form id
+         * @return A promise to make node call
+         *
+         */
         function retriveFormByID(appId, tableId, formId) {
             let retriveFormByIDDeferred = promise.pending();
 
@@ -141,6 +182,15 @@
             return retriveFormByIDDeferred.promise;
         }
 
+        /**
+         * get a form on the specified table by form type
+         *
+         * appId     the application to which the form being created belongs to
+         * tableId   the table to which the form that is being created belongs to
+         * formType  the form type
+         * @return A promise to make node call
+         *
+         */
         function retriveFormByType(appId, tableId, formType) {
             let retriveFormByTypeDeferred = promise.pending();
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
@@ -170,7 +220,7 @@
                 });
 
                 promise.all(createFormsPromises).then(formIdList => {
-                    console.log(formIdList);
+                    //console.log(formIdList);
                     targetFormBuildList = formIdList;
                     assert(formIdList.length === app.tables.length, "Form creation test case is failed");
                     done();
@@ -179,10 +229,10 @@
         });
 
         /**
-         * Form fetch by ID test
+         * Get form information by form Id for a given table in the app
          */
         describe("Form request by form ID test cases", function() {
-            it('Get form by ID normal case', function(done) {
+            it('Get form by ID', function(done) {
 
                 if (!targetFormBuildList) {
                     assert(false, "Form creation test case is failed");
@@ -204,7 +254,7 @@
 
 
         /**
-         * Form fetch by type
+         * Get form information by using provided form type.
          */
         describe("Form request by form type test cases", function() {
             it('Get form by form type normal case', function(done) {
