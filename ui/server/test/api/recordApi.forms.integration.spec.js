@@ -243,7 +243,7 @@
 
                 targetFormBuildList.forEach(form => {
                     getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formID));
-                })
+                });
 
                 promise.all(getFormsPromises).then(formIdList => {
                     assert.deepEqual(formIdList, targetFormBuildList);
@@ -270,7 +270,7 @@
                     formTypeList.forEach(formType => {
                         getFormsPromises.push(retriveFormByType(form.appId, form.tableId, formType));
                     });
-                })
+                });
 
                 promise.all(getFormsPromises).then(formIdList => {
                     //console.log(formIdList);
