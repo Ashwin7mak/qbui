@@ -502,13 +502,13 @@
     function transformResponseBodyToJsonObject(response) {
         var transformedResponse = _.assign({}, response);
         try {
-            transformedResponse.body = JSON.parse(response.body);
+            transformedResponse.body = jsonBigNum.parse(response.body);
             if (_.isArray(transformedResponse.body)) {
                 transformedResponse.body = transformedResponse.body[0];
             }
 
             if (_.has(transformedResponse.body, 'body')) {
-                transformedResponse.body = JSON.parse(transformedResponse.body.body)[0];
+                transformedResponse.body = jsonBigNum.parse(transformedResponse.body.body)[0];
             }
         } catch (err) {
             log.debug('Could not transform response body to JSON. ' + err);
