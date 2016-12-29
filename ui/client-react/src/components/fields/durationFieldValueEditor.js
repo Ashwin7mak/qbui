@@ -78,10 +78,9 @@ const DurationFieldValueEditor = React.createClass({
                                       placeholder={placeholder || defaultPlaceholder}
                                       value={display || value}
                                       invalidMessage={this.props.invalidMessage || 'Error'}
+                                      showClearButton={true}
                                       {...otherProps}/>;
     }
 });
 
 export default DurationFieldValueEditor;
-
-

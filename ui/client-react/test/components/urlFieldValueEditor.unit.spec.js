@@ -37,9 +37,9 @@ describe('UrlFieldValueEditor', () => {
 
     it('allows a user to edit the raw value of a url', () => {
         component = TestUtils.renderIntoDocument(<MockParent />);
-        let domComponent = ReactDOM.findDOMNode(component);
+        const input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-        Simulate.change(domComponent, {
+        Simulate.change(input, {
             target: {value: testUrl}
         });
 
@@ -49,16 +49,16 @@ describe('UrlFieldValueEditor', () => {
 
     it('has placeholder text', () => {
         component = TestUtils.renderIntoDocument(<MockParent />);
-        let domComponent = ReactDOM.findDOMNode(component);
+        const input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
-        expect(domComponent.placeholder).toEqual(placeholderText);
+        expect(input.placeholder).toEqual(placeholderText);
     });
 
     it('formats the url for display onBlur', () => {
         component = TestUtils.renderIntoDocument(<MockParent />);
         component.setState({value: testUrl, display: ''});
 
-        let input = ReactDOM.findDOMNode(component);
+        const input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
 
         Simulate.blur(input, {
             value: testUrlWithProtocol

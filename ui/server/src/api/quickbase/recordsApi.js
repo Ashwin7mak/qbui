@@ -280,8 +280,12 @@
                         .then(function(payload) {return payload;})
                         .catch(apiResponseFormatter.formatResponseError);
                 } else {
-                    //log & return error
-                    log.warn('Invalid input saving record:' + JSON.stringify(answer));
+                    //log each error message
+                    answer.forEach((error) => {
+                        logRecordError(req, error, 'Invalid input saving record:');
+                    });
+
+                    //  return the error information
                     let errCode = httpStatusCodes.INVALID_INPUT;
                     return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}});
                 }
@@ -301,8 +305,12 @@
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts).then(function(payload) {return payload;}, apiResponseFormatter.formatResponseError);
                 } else {
-                    //log & return error
-                    log.warn('Invalid input saving record:' + JSON.stringify(answer));
+                    //log each error message individually
+                    answer.forEach((error) => {
+                        logRecordError(req, error, 'Invalid input creating record:');
+                    });
+
+                    //  return the error information
                     let errCode = httpStatusCodes.INVALID_INPUT;
                     return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}});
                 }
@@ -359,5 +367,23 @@
             });
         }
         return errors;
+    }
+
+    /**
+     * Log information about a log message when adding or editing a record
+     *
+     * @param req
+     * @param error
+     * @param msgPrefix
+     */
+    function logRecordError(req, error, msgPrefix) {
+        // make a copy of the error object and then remove the
+        // def property as it could contain customer sensitive
+        // information in the fieldDef array.
+        if (error) {
+            let errorObj = _.clone(error);
+            delete errorObj.def;
+            log.warn({req: req}, msgPrefix + JSON.stringify(errorObj).replace(/"/g, "'"));
+        }
     }
 }());
