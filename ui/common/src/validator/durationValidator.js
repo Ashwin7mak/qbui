@@ -8,10 +8,7 @@
          * @returns {boolean}
          */
         isValid: function(value) {
-            if (value === DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_INPUT) {
-                return false;
-            }
-            return true;
+            return !(value === DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_INPUT);
         },
         // Helper method for React property isInvalid on many components. Returns opposite value of validate
         isInvalid: function(value) {
