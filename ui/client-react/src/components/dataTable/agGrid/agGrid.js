@@ -76,7 +76,7 @@ let consts = {
     HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accommodate date pickers etc.
 };
 
-let AGGrid = React.createClass({
+export let AGGrid = React.createClass({
     mixins: [FluxMixin],
     rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 

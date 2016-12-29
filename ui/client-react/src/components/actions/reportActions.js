@@ -12,7 +12,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * report-level actions
  */
-let ReportActions = React.createClass({
+export let ReportActions = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {

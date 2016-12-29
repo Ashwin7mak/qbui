@@ -19,7 +19,7 @@ export const loadingForm = (id) => {
         id,
     };
 };
-export const loadFormError = (id,error) => {
+export const loadFormError = (id, error) => {
     return {
         type: 'LOAD_FORM_ERROR',
         id,
@@ -66,7 +66,7 @@ export const openRecordForEdit = (recId) => {
     return {
         type: 'EDIT_REPORT_RECORD',
         recId: recId,
-    }
+    };
 };
 
 export const editNewRecord = (navigateAfterSave = false) => {
@@ -95,9 +95,9 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 let promise;
 
                 if (recordId !== "new") {
-                    promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType)
+                    promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
                 } else {
-                    promise = formService.getForm(appId, tblId, rptId, formType)
+                    promise = formService.getForm(appId, tblId, rptId, formType);
                 }
                 promise.then(
                     (response) => {
@@ -138,8 +138,8 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 logger.error('formService.loadFormAndRecord: Missing required input parameters.');
                 reject();
             }
-        })
-    }
+        });
+    };
 };
 
 

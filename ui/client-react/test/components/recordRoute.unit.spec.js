@@ -1,9 +1,14 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
-import Fluxxor from 'fluxxor';
 import QBForm from  '../../src/components/QBForm/qbform';
-import {RecordRoute} from '../../src/components/record/recordRoute';
+import {RecordRoute, ConnectedRecordRoute} from '../../src/components/record/recordRoute';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+import {syncingForm, loadingForm} from '../../src/actions/formActions';
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('RecordRoute functions', () => {
     'use strict';
@@ -16,16 +21,13 @@ describe('RecordRoute functions', () => {
         hideTopNav() {return;},
         setTopTitle() {return;},
         selectTableId() {return;},
-        loadFormAndRecord() {return;},
         openingReportRow() {return;},
         showPreviousRecord() {return;},
         showNextRecord() {return;},
-        syncingForm() {return;}
     };
 
     beforeEach(() => {
         spyOn(flux.actions, 'selectTableId');
-        spyOn(flux.actions, 'loadFormAndRecord');
         spyOn(flux.actions, 'openingReportRow');
         spyOn(flux.actions, 'showPreviousRecord');
         spyOn(flux.actions, 'showNextRecord');
@@ -33,7 +35,6 @@ describe('RecordRoute functions', () => {
 
     afterEach(() => {
         flux.actions.selectTableId.calls.reset();
-        flux.actions.loadFormAndRecord.calls.reset();
         flux.actions.openingReportRow.calls.reset();
         flux.actions.showPreviousRecord.calls.reset();
         flux.actions.showNextRecord.calls.reset();
@@ -51,13 +52,24 @@ describe('RecordRoute functions', () => {
     });
 
     it('test render of component without report param', () => {
+
+        const initialState = {};
+        const store = mockStore(initialState);
+
         let routeParams = {appId:1, tblId:2, recordId: 4};
 
-        component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordRoute params={routeParams} flux={flux}/>
+            </Provider>);
+
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
-        expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId, routeParams.rptId, routeParams.formType);
+
+        // test Redux actions
+        expect(store.getActions()[0]).toEqual(syncingForm());
+        expect(store.getActions()[1]).toEqual(loadingForm("view"));
 
         let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
         expect(qbForm.length).toBe(1);
@@ -73,12 +85,20 @@ describe('RecordRoute functions', () => {
     });
 
     it('test render of component with report param', () => {
+
+        const initialState = {};
+        const store = mockStore(initialState);
+
         let routeParams = {appId:1, tblId:2, recordId: 3, rptId: 4};
 
-        component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordRoute params={routeParams} flux={flux}/>
+            </Provider>);
+
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId, routeParams.rptId, routeParams.formType);
+        //expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId, routeParams.rptId, routeParams.formType);
 
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
         let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
@@ -93,6 +113,9 @@ describe('RecordRoute functions', () => {
     });
 
     it('test correct state is pushed to history', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
+
         let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
 
         let reportData = {
@@ -124,7 +147,11 @@ describe('RecordRoute functions', () => {
         let router = [];
         let expectedRouter = [];
 
-        component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
+            </Provider>);
+
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
@@ -149,6 +176,6 @@ describe('RecordRoute functions', () => {
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
         expectedRouter.push('/qbase/app/1/table/2/report/3');
-        expect(component.props.router).toEqual(expectedRouter);
+        expect(router).toEqual(expectedRouter);
     });
 });

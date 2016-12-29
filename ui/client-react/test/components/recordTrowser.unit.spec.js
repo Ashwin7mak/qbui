@@ -1,8 +1,10 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import RecordTrowser from '../../src/components/record/recordTrowser';
+import ConnectedRecordTrowser, {RecordTrowser, __RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
 import Promise from 'bluebird';
+import {Provider} from "react-redux";
+import configureMockStore from 'redux-mock-store';
 
 const RecordMock = React.createClass({
     render: function() {
@@ -11,6 +13,8 @@ const RecordMock = React.createClass({
         );
     }
 });
+
+const mockStore = configureMockStore();
 
 describe('RecordTrowser functions', () => {
     'use strict';
@@ -21,8 +25,6 @@ describe('RecordTrowser functions', () => {
             recordPendingEditsCancel() {},
             saveRecord() {return Promise.resolve({});},
             saveNewRecord() {return Promise.resolve({});},
-            savingForm() {},
-            hideTrowser() {},
             hideErrorMsgDialog() {},
         }
     };
@@ -30,7 +32,7 @@ describe('RecordTrowser functions', () => {
     let component;
 
     beforeEach(() => {
-        RecordTrowser.__Rewire__('Record', RecordMock);
+        RecordTrowserRewireAPI.__Rewire__('Record', RecordMock);
 
         spyOn(flux.actions, 'recordPendingEditsCommit');
         spyOn(flux.actions, 'recordPendingEditsCancel');
@@ -40,7 +42,7 @@ describe('RecordTrowser functions', () => {
     });
 
     afterEach(() => {
-        RecordTrowser.__ResetDependency__('Record');
+        RecordTrowserRewireAPI.__ResetDependency__('Record');
 
         flux.actions.recordPendingEditsCommit.calls.reset();
         flux.actions.recordPendingEditsCancel.calls.reset();
@@ -80,9 +82,13 @@ describe('RecordTrowser functions', () => {
 
     it('test saving new record in the trowser', () => {
 
-        const form = {editFormData: {}};
+        const initialState = {};
+        const store = mockStore(initialState);
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={null} visible={true}/>);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={null} visible={true}/>
+            </Provider>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -96,9 +102,13 @@ describe('RecordTrowser functions', () => {
 
     it('test saving existing record in the trowser', () => {
 
-        const form = {editFormData: {}};
+        const initialState = {};
+        const store = mockStore(initialState);
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>
+            </Provider>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -112,9 +122,7 @@ describe('RecordTrowser functions', () => {
 
     it('test saving new record which has server side error in the trowser', () => {
 
-        const form = {editFormData: {}};
-
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -124,9 +132,7 @@ describe('RecordTrowser functions', () => {
 
     it('test saving existing record which has server side error in the trowser', () => {
 
-        const form = {editFormData: {}};
-
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -135,9 +141,7 @@ describe('RecordTrowser functions', () => {
     });
 
     it('test saving record which has server side errors, and error state icon displayed in footer section', () => {
-        const form = {editFormData: {}};
-
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, hasAttemptedSave: true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, hasAttemptedSave: true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -146,9 +150,7 @@ describe('RecordTrowser functions', () => {
     });
 
     it('does not display the error icon if there is a client-side validation error, but the user has not attempted to save the record', () => {
-        const form = {editFormData: {}};
-
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, hasAttemptedSave: false, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser editForm={{formData: {}}} pendEdits={{isPendingEdit:true, hasAttemptedSave: false, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 

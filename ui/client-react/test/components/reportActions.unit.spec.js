@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import ReportActions  from '../../src/components/actions/reportActions';
+import {ReportActions}  from '../../src/components/actions/reportActions';
 import ActionIcon from '../../src/components/actions/actionIcon';
 
 describe('ReportActions functions', () => {

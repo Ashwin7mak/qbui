@@ -18,7 +18,7 @@ import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {syncingForm,loadForm,editNewRecord,openRecordForEdit} from '../../actions/formActions';
+import {syncingForm, loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
 import './record.scss';
 
 let logger = new Logger();
@@ -234,7 +234,7 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const formLoadingeErrorStatus = (_.isUndefined(this.props.forms.view) || _.isUndefined(this.props.forms.view.errorStatus)) ? false : this.props.forms.view.errorStatus;
+            const formLoadingeErrorStatus = _.has(this.props, "forms.view.errorStatus") && this.props.forms.view.errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
 
@@ -255,14 +255,14 @@ export let RecordRoute = React.createClass({
 
                     {!formLoadingeErrorStatus ?
                         <Loader key={_.has(this.props, "forms.view.formData.recordId") ? this.props.forms.view.formData.recordId : null }
-                                            loaded={(!this.props.forms.view || !this.props.forms.view.loading)}
+                                            loaded={(!this.props.forms || !this.props.forms.view || !this.props.forms.view.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={_.has(this.props, "forms.view.formData.recordId") ? this.props.forms.view.formData.recordId : null }
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={formLoadingeErrorStatus ? this.props.forms.view.errorStatus : null}
-                                formData={this.props.forms.view ? this.props.forms.view.formData : null}
+                                formData={this.props.forms && this.props.forms.view ? this.props.forms.view.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
@@ -273,4 +273,6 @@ export let RecordRoute = React.createClass({
 });
 
 export let RecordRouteWithRouter = withRouter(RecordRoute);
+export let ConnectedRecordRoute = connect()(RecordRoute);
+
 export default connect()(RecordRouteWithRouter);

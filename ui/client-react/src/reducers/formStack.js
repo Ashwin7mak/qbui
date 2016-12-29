@@ -13,7 +13,7 @@ const formStack = (state = [], action) => {
         return state.slice(0, -1);
 
     case 'ADD_FORM':
-        return [ form(undefined, action) ];
+        return [form(undefined, action)];
 
     default:
         // return existing state by default in Redux

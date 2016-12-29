@@ -1,8 +1,5 @@
 import React from 'react';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
-import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
@@ -16,6 +13,7 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
+import {connect} from 'react-redux';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -135,4 +133,4 @@ const ReportRoute = React.createClass({
     }
 });
 
-export default ReportRoute;
+export default connect()(ReportRoute);
