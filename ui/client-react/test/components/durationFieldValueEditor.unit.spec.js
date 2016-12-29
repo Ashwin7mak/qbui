@@ -163,6 +163,27 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
                 expect(result).toEqual(expectedResult);
             });
         });
+        TestData.timeFormatDataProvider.forEach(function(test) {
+            it('(' + language + ') converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
+                Locale.changeLocale(language);
+                Locale.getI18nBundle();
+                let localeType = Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + test.type);
+                component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
+                let userInput = test.numValue + ' ' + localeType;
+                if (test.type === undefined) {
+                    userInput = test.numValue;
+                }
+                let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+                Simulate.change(input, {
+                    target: {value: userInput}
+                });
+                Simulate.blur(input);
+                let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
+                let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
+                let expectedTimeFormat = durationFormatter.format({value:convertedMilliSeconds}, test);
+                expect(component.state.display).toEqual(expectedTimeFormat);
+            });
+        });
     });
     /**
      * If a user enters an invalid input, it returns the value to the user without any conversion
@@ -206,24 +227,6 @@ describe('DurationFieldValueEditor seed:' + (seed), () => {
             let expectedResult = divideBigDecimal(convertedMilliSeconds, test.MILLIS_PER_SCALE);
             expect(component.state.value).toEqual(totalMilliSeconds);
             expect(component.state.display).toEqual(expectedResult);
-        });
-    });
-    TestData.timeFormatDataProvider.forEach(function(test) {
-        it('converts a user input of ' + test.numValue + ' ' + test.type + ' to  ' + test.scale, () => {
-            component = TestUtils.renderIntoDocument(<MockParent attributes={{scale: test.scale}} />);
-            let userInput = test.numValue + ' ' + test.type;
-            if (test.type === undefined) {
-                userInput = test.numValue;
-            }
-            let input = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
-            Simulate.change(input, {
-                target: {value: userInput}
-            });
-            Simulate.blur(input);
-            let totalMilliSeconds = test.numValue * test.MILLIS_PER_TYPE;
-            let convertedMilliSeconds = new bigDecimal.BigDecimal(totalMilliSeconds.toString());
-            let expectedTimeFormat = durationFormatter.format({value:convertedMilliSeconds}, test);
-            expect(component.state.display).toEqual(expectedTimeFormat);
         });
     });
 });
