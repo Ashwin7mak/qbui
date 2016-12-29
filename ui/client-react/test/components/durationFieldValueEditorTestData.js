@@ -51,6 +51,13 @@
                     scale: CONSTS.SCALES.SECONDS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                    type: CONSTS.ACCEPTED_TYPE.MSECS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.SECONDS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                     type: CONSTS.SCALES.SECONDS,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
                 },
@@ -59,6 +66,20 @@
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                     type: CONSTS.ACCEPTED_TYPE.SECOND,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.SECONDS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                    type: CONSTS.ACCEPTED_TYPE.SECS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.SECONDS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                    type: CONSTS.ACCEPTED_TYPE.S,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
                 },
                 {
@@ -114,6 +135,13 @@
                     scale: CONSTS.SCALES.SECONDS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                    type: CONSTS.ACCEPTED_TYPE.DAY,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
+                },
+                {
+                    scale: CONSTS.SCALES.SECONDS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                     type: CONSTS.ACCEPTED_TYPE.D,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
                 },
@@ -122,6 +150,13 @@
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
                     type: CONSTS.SCALES.WEEKS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
+                },
+                {
+                    scale: CONSTS.SCALES.SECONDS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_SECOND,
+                    type: CONSTS.ACCEPTED_TYPE.WEEK,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
                 },
                 {
@@ -159,7 +194,28 @@
                     scale: CONSTS.SCALES.MINUTES,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                    type: CONSTS.ACCEPTED_TYPE.MSECS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.MINUTES,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
                     type: CONSTS.SCALES.SECONDS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.MINUTES,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                    type: CONSTS.ACCEPTED_TYPE.SECOND,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.MINUTES,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                    type: CONSTS.ACCEPTED_TYPE.SECS,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
                 },
                 {
@@ -194,6 +250,13 @@
                     scale: CONSTS.SCALES.MINUTES,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                    type: CONSTS.ACCEPTED_TYPE.HOUR,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
+                },
+                {
+                    scale: CONSTS.SCALES.MINUTES,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
                     type: CONSTS.ACCEPTED_TYPE.H,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
                 },
@@ -208,6 +271,13 @@
                     scale: CONSTS.SCALES.MINUTES,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                    type: CONSTS.ACCEPTED_TYPE.DAY,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
+                },
+                {
+                    scale: CONSTS.SCALES.MINUTES,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
                     type: CONSTS.ACCEPTED_TYPE.D,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY
                 },
@@ -217,6 +287,13 @@
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
                     type: CONSTS.SCALES.WEEKS,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK
+                },
+                {
+                    scale: CONSTS.SCALES.MINUTES,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_MIN,
+                    type: CONSTS.ACCEPTED_TYPE.WEEK,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
                 },
                 {
                     scale: CONSTS.SCALES.MINUTES,
@@ -253,7 +330,28 @@
                     scale: CONSTS.SCALES.HOURS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.MSECS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
                     type: CONSTS.SCALES.SECONDS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.SECOND,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.SECS,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
                 },
                 {
@@ -274,6 +372,13 @@
                     scale: CONSTS.SCALES.HOURS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.MINUTE,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
                     type: CONSTS.ACCEPTED_TYPE.M,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
                 },
@@ -282,6 +387,13 @@
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
                     type: CONSTS.SCALES.HOURS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.HOUR,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
                 },
                 {
@@ -303,6 +415,13 @@
                     scale: CONSTS.SCALES.HOURS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.DAY,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
                     type: CONSTS.ACCEPTED_TYPE.D,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY
                 },
@@ -317,8 +436,158 @@
                     scale: CONSTS.SCALES.HOURS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
+                    type: CONSTS.ACCEPTED_TYPE.WEEK,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
+                },
+                {
+                    scale: CONSTS.SCALES.HOURS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_HOUR,
                     type: CONSTS.ACCEPTED_TYPE.W,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK
+                },
+                /**
+                 * Converts all values to Days
+                 * */
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: undefined,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.SCALES.MILLISECONDS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.MS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.MSECS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.SCALES.SECONDS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.SECOND,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.SECS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.S,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.SCALES.MINUTES,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.MINUTE,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.M,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.SCALES.HOURS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.HOUR,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.H,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.SCALES.DAYS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.DAY,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.D,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY,
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.SCALES.WEEKS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.WEEK,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
+                },
+                {
+                    scale: CONSTS.SCALES.DAYS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_DAY,
+                    type: CONSTS.ACCEPTED_TYPE.W,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK,
                 },
                 /**
                  * Converts all values to weeks
@@ -334,14 +603,14 @@
                     scale: CONSTS.SCALES.WEEKS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                    type: CONSTS.SCALES.SECONDS,
-                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                    type: CONSTS.ACCEPTED_TYPE.MILLISECONDS,
+                    MILLIS_PER_TYPE: 1
                 },
                 {
                     scale: CONSTS.SCALES.WEEKS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
-                    type: CONSTS.ACCEPTED_TYPE.MILLISECONDS,
+                    type: CONSTS.ACCEPTED_TYPE.MILLISECOND,
                     MILLIS_PER_TYPE: 1
                 },
                 {
@@ -355,6 +624,34 @@
                     scale: CONSTS.SCALES.WEEKS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.MSECS,
+                    MILLIS_PER_TYPE: 1
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.SCALES.SECONDS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.SECOND,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.SECS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                     type: CONSTS.ACCEPTED_TYPE.S,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_SECOND
                 },
@@ -363,6 +660,13 @@
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                     type: CONSTS.SCALES.MINUTES,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.MINUTE,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_MIN
                 },
                 {
@@ -383,6 +687,13 @@
                     scale: CONSTS.SCALES.WEEKS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.HOUR,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                     type: CONSTS.ACCEPTED_TYPE.H,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_HOUR
                 },
@@ -397,6 +708,13 @@
                     scale: CONSTS.SCALES.WEEKS,
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.DAY,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                     type: CONSTS.ACCEPTED_TYPE.D,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_DAY
                 },
@@ -405,6 +723,13 @@
                     numValue: numValue,
                     MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
                     type: CONSTS.SCALES.WEEKS,
+                    MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK
+                },
+                {
+                    scale: CONSTS.SCALES.WEEKS,
+                    numValue: numValue,
+                    MILLIS_PER_SCALE: CONSTS.MILLIS_PER_WEEK,
+                    type: CONSTS.ACCEPTED_TYPE.WEEK,
                     MILLIS_PER_TYPE: CONSTS.MILLIS_PER_WEEK
                 },
                 {
