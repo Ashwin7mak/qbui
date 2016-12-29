@@ -46,7 +46,7 @@
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
         });
 
-        it('Validate for all required fields and correct the errors and Save the record by clicking Save and add another Button', function(done) {
+        it('Validate for all required fields and correct the errors and Save the record by clicking Save and add another Button', function() {
             var origRecordCount;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 

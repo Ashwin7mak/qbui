@@ -475,7 +475,7 @@
         /**
          * Method to enter field values in the form.
          */
-        enterInvalidFormValues : {value: function(fieldType) {
+        enterInvalidFormValues : {value: function(fieldType, invalidValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             var i;
             var self = this;
@@ -483,36 +483,36 @@
             if (fieldType === 'allTextFields') {
                 var textFields = self.getAllTextInputFields();
                 for (i = 0; i < textFields.value.length; i++) {
-                    textFields.value[i].setValue('');
+                    textFields.value[i].setValue(invalidValue);
                 }
             } else if (fieldType === 'allEmailFields') {
                 var emailFields = self.getAllEmailInputFields();
                 for (i = 0; i < emailFields.value.length; i++) {
-                    emailFields.value[i].setValue('!@#$%^');
+                    emailFields.value[i].setValue(invalidValue);
                 }
 
             }else if (fieldType === 'allPhoneFields') {
                 var phoneFields = self.getAllPhoneInputFields();
                 for (i = 0; i < phoneFields.value.length; i++) {
-                    phoneFields.value[i].setValue('!@#$%^');
+                    phoneFields.value[i].setValue(invalidValue);
                 }
 
             }else if (fieldType === 'allUrlFields') {
                 var urlFields = self.getAllUrlInputFields();
                 for (i = 0; i < urlFields.value.length; i++) {
-                    urlFields.value[i].setValue('!@#$%^');
+                    urlFields.value[i].setValue(invalidValue);
                 }
 
             }else if (fieldType === 'allDurationFields') {
                 var durationFields = self.getAllDurationInputFields();
                 for (i = 0; i < durationFields.value.length; i++) {
-                    durationFields.value[i].setValue('&*^^%%%');
+                    durationFields.value[i].setValue(invalidValue);
                 }
             } else if (fieldType === 'allNumericFields') {
                 //get all numeric input field validators on the form
                 var numericFields = self.getAllNumericInputFields();
                 for (i = 0; i < numericFields.value.length; i++) {
-                    numericFields.value[i].setValue('!@#$%^');
+                    numericFields.value[i].setValue(invalidValue);
                 }
             }
         }},
@@ -525,7 +525,11 @@
 
             self.formErrorMessageContainerEl.waitForVisible();
             // verify the heading of the error message container
-            expect(self.formErrorMessageHeader.getText()).toBe('Please fix these ' + expectedErrorMessages.length + ' fields.');
+            if (expectedErrorMessages.length > 1) {
+                expect(self.formErrorMessageHeader.getText()).toBe('Please fix these ' + expectedErrorMessages.length + ' fields.');
+            } else {
+                expect(self.formErrorMessageHeader.getText()).toBe('Please fix this field');
+            }
             //Get all error messages from error container
             var actualErrorMessages = self.getErrorMessagesFromContainer();
             //Verify the errors from the container are expected errors
