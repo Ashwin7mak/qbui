@@ -276,7 +276,9 @@
                     var opts = requestHelper.setOptions(req);
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
-                    return requestHelper.executeRequest(req, opts).then(function(payload) {return payload;}, apiResponseFormatter.formatResponseError);
+                    return requestHelper.executeRequest(req, opts)
+                        .then(function(payload) {return payload;})
+                        .catch(apiResponseFormatter.formatResponseError);
                 } else {
                     //log & return error
                     log.warn('Invalid input saving record:' + JSON.stringify(answer));

@@ -274,7 +274,6 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when saveSingleRecord is called", function() {
-
         it('success return results ', function(done) {
             req.url = '/records/2';
             req.body = [];
@@ -293,24 +292,18 @@ describe("Validate recordsApi", function() {
 
         });
 
-        it('fail return results ', function(done) {
+        it('fail return results ', function() {
             req.url = '/records/2';
             let error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));
             let promise = recordsApi.saveSingleRecord(req);
 
-            promise.then(
-                function(error) {
-                },
-                function(error) {
-                    assert.equal(error, "Error: fail unit test case execution");
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            return promise.then(function(error) {
+                assert(false, 'Request should have failed, but it succeeded');
+            }).catch(function(error) {
+                assert.equal(error, "Error: fail unit test case execution");
             });
-
         });
     });
     describe("when saveSingleRecord with body to validate is called", function() {

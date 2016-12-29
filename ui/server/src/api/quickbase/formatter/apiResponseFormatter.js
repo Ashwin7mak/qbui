@@ -115,7 +115,7 @@ var ApiResponseFormatter = {
             return Promise.reject({response:{message:'validation error', status: 422, errors: formattedErrors}});
         }
 
-        return returnPayload(payload);
+        return Promise.reject(returnPayload(payload));
     }
 };
 

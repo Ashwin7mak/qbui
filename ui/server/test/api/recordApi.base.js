@@ -123,6 +123,7 @@
                             });
                 }).catch(function(err) {
                     log.error(JSON.stringify(err));
+                    fetchRecordDeferred.reject(err);
                 });
                 return fetchRecordDeferred.promise;
             },
@@ -190,8 +191,14 @@
                             });
 
                             fetchRecordDeferred.resolve(recordIdList);
-                        }).catch(function(currError) {log.error(JSON.stringify(currError));});
-                }).catch(function(err) {log.error(JSON.stringify(err));});
+                        }).catch(function(currError) {
+                            log.error(JSON.stringify(currError));
+                            fetchRecordDeferred.reject(currError);
+                        });
+                }).catch(function(err) {
+                    log.error(JSON.stringify(err));
+                    fetchRecordDeferred.reject(err);
+                });
                 return fetchRecordDeferred.promise;
             },
             editRecord: function(recordsEndpoint, recordId, record) {
@@ -206,6 +213,9 @@
                             log.error(JSON.stringify(err));
                             editRecordDeferred.reject(err);
                         });
+                }).catch(function(err) {
+                    log.error(JSON.stringify(err));
+                    editRecordDeferred.reject(err);
                 });
                 return editRecordDeferred.promise;
             },
@@ -226,7 +236,10 @@
                                 log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
                                 fetchRecordDeferred.reject(error);
                             });
-                }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                }).catch(function(currError) {
+                    log.error(JSON.stringify(currError));
+                    fetchRecordDeferred.reject(currError);
+                });
                 return fetchRecordDeferred.promise;
             },
             /**
