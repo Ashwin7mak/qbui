@@ -72,7 +72,7 @@
             formsPO.clickFormSaveAndNextBtn();
 
             //Step 8 - Verify record has no permission message shows up.
-            formsPO.assertNotificationMessage("Record saved");
+            //formsPO.assertNotificationMessage("Record saved");
 
             //Step 9 - Verify edit container is loaded after hitting
             formsPO.waitForEditFormsTableLoad();
