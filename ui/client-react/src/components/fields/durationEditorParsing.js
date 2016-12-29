@@ -294,6 +294,13 @@
                 if (includeUnits || fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
                     results.display = this.includeUnitsInInput(results.display, fieldInfo);
                 }
+                if (value === '') {
+                    /**
+                     * If a user does not input a value, then we want to set display and value to an empty string
+                     * */
+                    results.value = '';
+                    results.display = '';
+                }
             }
             return results;
         },
