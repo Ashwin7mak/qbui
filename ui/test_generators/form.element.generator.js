@@ -60,7 +60,7 @@
             var elementIndex = 0;
 
             //Excluding builtin fields
-            for (var i = 5; i < fields.length; i++) {
+            for (var i = 0; i < fields.length; i++) {
                 var builderInstance = formElementBuilder.builder();
 
                 //Make some fields required on the form.

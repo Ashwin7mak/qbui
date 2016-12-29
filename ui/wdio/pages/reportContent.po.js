@@ -49,7 +49,8 @@
         waitForReportContent: {value: function() {
             var self = this;
             // First wait for the containers
-            e2ePageBase.waitForElementToBePresent('.reportContainer');
+            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
+            browser.waitForExist('.reportContainer', browser.waitforTimeout, false);
             e2ePageBase.waitForElementToBePresent('.reportContent');
             e2ePageBase.waitForElementToBePresent('.ag-body-container');
             // Then wait for records to be shown in the grid

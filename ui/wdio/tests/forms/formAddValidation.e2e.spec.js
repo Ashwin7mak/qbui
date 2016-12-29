@@ -72,6 +72,12 @@
             //Verify edit container is loaded
             formsPO.waitForEditFormsTableLoad();
 
+            //Step 10 - Verify Record ID field is empty. Clicking on 'Save and Add Another' button takes to new record
+            expect(browser.element('div.numericField.viewElement').getText()).toBe('');
+            //verify text field is empty
+            expect(browser.element('input.input.textField.borderOnError.cellEdit').getText()).toBe('');
+            //verify numeric field is empty
+            expect(browser.element('input.input.numericField.borderOnError.cellEdit').getText()).toBe('');
 
             // Step 8 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -88,17 +94,10 @@
             //Step 2 - Click on Save Button on the form without entering any values
             formsPO.clickFormSaveBtn();
 
-            //Step 3 - Verify the required fields that the form complains
-            formsPO.verifyErrorMessages(expectedErrorMessages);
-            //TODO figure out how to verify the error container closed. Because clicking on alert complains the errorWindow would receive the click
-
-            //Step 4 - Verify clicking on alert button on footer brings up the error container
+            //Step 4 - Verify clicking on alert button on footer hides the error container
             formsPO.clickAlertBtnOnFormFooter();
-            //formsPO.formErrorMessageContainerEl.waitForVisible();
-            //
-            ////Step 5 - Verify clicking on alert button again on footer hides the error container
-            //formsPO.clickAlertBtnOnFormFooter();
-            //expect(browser.isVisible(formsPO.formErrorMessageContainerEl).toBe('false'));
+            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
+            browser.waitForExist('.qbErrorMessageVisible', browser.waitforTimeout, true);
         });
 
     });

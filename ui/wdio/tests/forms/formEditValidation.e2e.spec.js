@@ -71,13 +71,11 @@
             //Step 7 - Click Save & Add Another button on the form
             formsPO.clickFormSaveAndNextBtn();
 
-            //Step 8 - Verify record has no permission message shows up.
-            //formsPO.assertNotificationMessage("Record saved");
-
             //Step 9 - Verify edit container is loaded after hitting
             formsPO.waitForEditFormsTableLoad();
 
-            //TODO verify next record is loaded.
+            //Step 10 - Verify Record ID field has record 6 since we edited record 5. Clicking on 'Save and Next' button takes to next record
+            expect(browser.element('div.numericField.viewElement').getText()).toBe('6');
         });
 
     });
