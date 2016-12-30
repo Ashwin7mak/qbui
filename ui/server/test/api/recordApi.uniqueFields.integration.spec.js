@@ -16,22 +16,11 @@
     describe('API - Unique Fields', function() {
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
-        it('correctly rejects a duplicate value in a unique field', () => {
-            return createTestAppWithUniqueField()
-                .then(createInitialRecord)
-                .then(attemptToCreateDuplicateRecordAndAssertFailure);
-        });
-
-        it('correctly rejects a record edit that duplicates a value in a unique field', () => {
-            return createTestAppWithUniqueField()
-                .then(createInitialRecord)
-                .then(createSecondRecordWhichWillBeEdited)
-                .then(attemptToEditRecordAndAssertFailure);
-        });
-
         var uniqueTextFieldName = 'uniqueText';
+        var uniqueNumericFieldName = 'uniqueNumeric';
         var initialTextValue = 'Planche';
         var differentTextValue = 'Layout';
+        var numericValue = 1234;
 
         var appWithUniqueFields = {
             name: 'Unique Fields App',
@@ -51,6 +40,43 @@
             ]
         };
 
+        var appWithUniqueNumericField = {
+            name: 'Unique Fields App with Numeric Field',
+            tables: [
+                {
+                    name: 'table1',
+                    fields: [
+                        {
+                            name: uniqueNumericFieldName,
+                            unique: true,
+                            datatypeAttributes: {type: 'NUMERIC'},
+                            type: 'SCALAR',
+                            required: false
+                        }
+                    ]
+                }
+            ]
+        };
+
+        it('correctly rejects a duplicate value in a unique field', () => {
+            return createTestAppWithUniqueField(appWithUniqueFields, uniqueTextFieldName)
+                .then(createInitialRecord)
+                .then(attemptToCreateDuplicateRecordAndAssertFailure);
+        });
+
+        it('correctly rejects a record edit that duplicates a value in a unique field', () => {
+            return createTestAppWithUniqueField(appWithUniqueFields, uniqueTextFieldName)
+                .then(createInitialRecord)
+                .then(createSecondRecordWhichWillBeEdited)
+                .then(attemptToEditRecordAndAssertFailure);
+        });
+
+        it('correctly rejects a numeric field that duplicates a value in a unique field', () => {
+            return createTestAppWithUniqueField(appWithUniqueNumericField, uniqueNumericFieldName)
+                .then(createInitialRecord)
+                .then(attemptToCreateDuplicateRecordAndAssertFailure);
+        });
+
         var makeTestRecord = function(fieldId, value) {
             if (!value) {
                 value = initialTextValue;
@@ -63,22 +89,28 @@
             }];
         };
 
-        function createTestAppWithUniqueField() {
-            return recordBase.createApp(appWithUniqueFields)
+        function createTestAppWithUniqueField(app, testFieldName) {
+            return recordBase.createApp(app)
                 .then(appCreatedResponse => {
-                    let app = JSON.parse(appCreatedResponse.body);
-                    let table = app.tables[0];
-                    let uniqueTextField = _.find(table.fields, {name: uniqueTextFieldName});
-                    let recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
+                    var appObject = JSON.parse(appCreatedResponse.body);
+                    var table = appObject.tables[0];
+                    var uniqueTextField = _.find(table.fields, {name: testFieldName});
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(appObject.id, table.id);
                     return {
                         endpoint: recordsEndpoint,
-                        fieldId: uniqueTextField.id
+                        fieldId: uniqueTextField.id,
+                        fieldType: uniqueTextField.datatypeAttributes.type
                     };
                 });
         }
 
         function createInitialRecord(payload) {
-            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId)).then(() => {
+            var value = null;
+            if (payload.fieldType === 'NUMERIC') {
+                value = numericValue;
+            }
+
+            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId, value)).then(() => {
                 return payload;
             });
         }
@@ -103,7 +135,7 @@
         }
 
         function attemptToCreateDuplicateRecordAndAssertFailure(payload) {
-            return recordBase.createRecord(payload.endpoint, makeTestRecord(payload.fieldId))
+            return createInitialRecord(payload)
                 .then(() => {
                     assert(false, 'Duplicate record was accepted and it should have failed.');
                 }).catch(createDuplicateRecordError => {
