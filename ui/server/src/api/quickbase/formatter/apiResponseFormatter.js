@@ -5,6 +5,7 @@ var apiResponseErrors = require('../../../constants/apiResponseErrors');
 var httpStatusCodes = require('../../../constants/httpStatusCodes');
 
 const i18NUniqueValidationErrorKey = 'invalidMsg.api.notUniqueSingleField';
+const i18NUniqueValidationErrorKeyMultiChoice = 'invalidMsg.api.notUniqueMultiChoice';
 
 function parseRequestBodyAsJson(payload) {
     if (_.has(payload, 'request.body')) {
@@ -30,16 +31,24 @@ function parseResponseBodyAsJson(payload) {
     return [];
 }
 
-function formatFieldAsValidationError(field, i18nErrorKey, data) {
+function formatFieldAsValidationError(field, data) {
     var resultsCopy = {error: {}};
     resultsCopy.id = field.id;
     resultsCopy.value = field.value;
     resultsCopy.def = field;
     resultsCopy.error.code = errorCodes.INVALID_ENTRY;
-    resultsCopy.error.messageId = i18nErrorKey;
+    resultsCopy.error.messageId = getI18NValidationErrorMessageKey(field);
     resultsCopy.error.data = _.assign({}, {fieldName: field.fieldName}, data);
     resultsCopy.isInvalid = true;
     return resultsCopy;
+}
+
+function getI18NValidationErrorMessageKey(field) {
+    if (_.has(field, 'fieldDef.multipleChoice.choices')) {
+        return i18NUniqueValidationErrorKeyMultiChoice;
+    }
+
+    return i18NUniqueValidationErrorKey;
 }
 
 function transformResponseBodyToObject(responseBody) {
@@ -75,7 +84,8 @@ function responseHasUniqueValidationErrors(responseBody) {
     // but returns a 404 and a NOT_UNIQUE_VALUE_MESSAGE when editing a record
     // if the there is a unique validation error.
     // The 404 status code becomes a more accurate 422 if unique validation errors are found.
-    return getErrorCode(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE || getErrorMessage(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
+    return getErrorCode(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE ||
+        getErrorMessage(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
 }
 
 function formatUniqueValidationErrors(requestBody) {
@@ -85,7 +95,7 @@ function formatUniqueValidationErrors(requestBody) {
         // The Core API does not currently specify which fields failed the unique test, so this function
         // only applies the validation error to fields that are set as unique.
         if (_.has(field, 'fieldDef.unique') && field.fieldDef.unique) {
-            uniqueValidationErrors.push(formatFieldAsValidationError(field, i18NUniqueValidationErrorKey, {recordName: 'record'}));
+            uniqueValidationErrors.push(formatFieldAsValidationError(field, {recordName: 'record'}));
         }
     });
 

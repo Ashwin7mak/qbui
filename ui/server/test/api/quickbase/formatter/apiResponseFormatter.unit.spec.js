@@ -6,6 +6,7 @@ var ErrorCodes = require('../../../../../common/src/dataEntryErrorCodes');
 var HttpStatusCodes = require('../../../../src/constants/httpStatusCodes');
 
 const i18NUniqueValidationErrorKey = 'invalidMsg.api.notUniqueSingleField';
+const i18NUniqueValidationErrorKeyMulitChoice = 'invalidMsg.api.notUniqueMultiChoice';
 
 describe('ApiResponseFormatter', () => {
     describe('formatResponseError', () => {
@@ -108,6 +109,31 @@ describe('ApiResponseFormatter', () => {
                                 id: 4, value: '4',
                                 def: {fieldDef: {unique: true}, id: 4, fieldName: 'another unique field', value: '4'},
                                 error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'another unique field', recordName: 'record'}, messageId: i18NUniqueValidationErrorKey},
+                                isInvalid: true
+                            },
+                        ],
+                        message: 'validation error',
+                        status: HttpStatusCodes.UNPROCESSABLE_ENTITY
+                    }
+                }
+            },
+            {
+                description: 'has a different error message for multichoice fields that fail unique validation',
+                payload: {
+                    body: [{message: ApiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE}],
+                    statusCode: HttpStatusCodes.NOT_FOUND,
+                    request: {body: [
+                        {id: 4, fieldName: 'multichoice field', value: '4', fieldDef: {unique: true, multipleChoice: {choices: ['a', 'b']}}}
+                    ]}
+                },
+                reject: true,
+                expectedResult: {
+                    response: {
+                        errors: [
+                            {
+                                id: 4, value: '4',
+                                def: {fieldDef: {unique: true, multipleChoice: {choices: ['a', 'b']}}, id: 4, fieldName: 'multichoice field', value: '4'},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'multichoice field', recordName: 'record'}, messageId: i18NUniqueValidationErrorKeyMulitChoice},
                                 isInvalid: true
                             },
                         ],
