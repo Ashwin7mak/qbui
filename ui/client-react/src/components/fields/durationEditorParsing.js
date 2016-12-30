@@ -273,14 +273,14 @@
                 }
                 /**
                  * If a user only inputs one num and one type, then this function will only be called once
-                 * However if the user inserted more than one num and more than one type then this function calls each num with its type
+                 * However if the user inserted more than one num and more than one type then this function calls each num with millisPerType
                  * The isValid function above, checks to be sure each num has a type, if it did not an error will be thrown
                  * Example 1 week 2 days becomes
                  * num = [1,2]
-                 * listOfTypes = [week, days]
-                 * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
+                 * normalizedTypes = [DURATION_CONSTS.MILLIS_PER_WEEK, DURATION_CONSTS.MILLIS_PER_DAY]
+                 * During the first loop, the function invokes like so convertToMilliseconds(1, DURATION_CONSTS.MILLIS_PER_WEEK) and then the result is accumulated to total;
                  * */
-                if (isValidResults.num !== null) {
+                if (Array.isArray(isValidResults.num)) {
                     isValidResults.normalizedTypes.forEach(function(val, i) {
                         if (isValidResults.num.length === 1 && isValidResults.normalizedTypes[i] === DURATION_CONSTS.SCALES.MILLISECONDS) {
                             total = Number(convertToMilliseconds(isValidResults.num[i], isValidResults.normalizedTypes[i]));
