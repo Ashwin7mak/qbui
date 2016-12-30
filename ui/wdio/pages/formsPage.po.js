@@ -277,10 +277,8 @@
          *
          */
         waitForEditFormsTableLoad: {value: function() {
-            // First wait for the containers
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.editForm', browser.waitforTimeout, false);
-            e2ePageBase.waitForElementToBeDisplayed('.formTable');
+            e2ePageBase.waitForDOMReady();
+            browser.element('.formTable').waitForVisible();
             // Then wait for records to be shown in the grid
             return e2ePageBase.waitForElementToBeDisplayed('.fieldRow');
         }},
@@ -291,9 +289,8 @@
          */
         waitForViewFormsTableLoad: {value: function() {
             // First wait for the containers
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.viewForm', browser.waitforTimeout, false);
-            e2ePageBase.waitForElementToBeDisplayed('.formTable');
+            e2ePageBase.waitForDOMReady();
+            browser.element('.formTable').waitForVisible();
             // Then wait for records to be shown in the grid
             return e2ePageBase.waitForElementToBeDisplayed('.fieldRow');
         }},

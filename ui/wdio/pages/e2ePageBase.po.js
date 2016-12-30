@@ -62,11 +62,30 @@
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
         browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-        browser.waitForVisible('.ag-body-container', browser.waitforTimeout, false);
-        return browser.waitForVisible('.ag-row', browser.waitforTimeout, false);
+        this.waitForDOMReady();
+        browser.element('.ag-body-container').waitForVisible();
+        return this.waitForElementToBeDisplayed('.ag-row');
     };
 
+    PageBase.prototype.isDOMReady = function() {
+        var status = browser.execute("return document.readyState");
+        return status.value;
+    };
+
+    PageBase.prototype.waitForDOMReady = function() {
+        //This loop will rotate for 10 times to check If page Is ready after every 1 second.
+        //You can replace your value with 10 If you wants to Increase or decrease wait time.
+        for (var i = 0; i < 10; i++) {
+            try {
+                //document.readyState === 'complete' to detect when the DOM is ready.
+                if (this.isDOMReady() === "complete") {
+                    return;
+                }
+            }catch (e) {
+                console.error('Page load timed out: ' + e.message);
+            }
+        }
+    };
     //TODO: Refactor these if needed
     //// Verify the element is located on top of the other
     //this.isElementOnTop = function(element1, element2) {
