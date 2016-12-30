@@ -127,37 +127,37 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
     }
 
     var dataProvider = [
-        //manual non random tests
-        // {
-        //     description: 'returns a blank for null value',
-        //     fieldValue: null,
-        //     fieldInfo: {},
-        //     expectation: ''
-        // },
-        // {
-        //     description: 'returns a blank string if fieldvalue.value is null',
-        //     fieldValue: {value: null},
-        //     fieldInfo: {},
-        //     expectation: ''
-        // },
-        // {
-        //     description: 'returns a blank string if fieldvalue.value and fieldInfo is undefined',
-        //     fieldValue: undefined,
-        //     fieldInfo: undefined,
-        //     expectation: ''
-        // },
-        // {
-        //     description: 'returns a blank string if fieldvalue.value and fieldInfo is null',
-        //     fieldValue: null,
-        //     fieldInfo: null,
-        //     expectation: ''
-        // },
-        // {
-        //     description: 'returns a blank string if fieldInfo is null',
-        //     fieldValue: {value: null},
-        //     fieldInfo: null,
-        //     expectation: ''
-        // },
+        // manual non random tests
+        {
+            description: 'returns a blank for null value',
+            fieldValue: null,
+            fieldInfo: {},
+            expectation: ''
+        },
+        {
+            description: 'returns a blank string if fieldvalue.value is null',
+            fieldValue: {value: null},
+            fieldInfo: {},
+            expectation: ''
+        },
+        {
+            description: 'returns a blank string if fieldvalue.value and fieldInfo is undefined',
+            fieldValue: undefined,
+            fieldInfo: undefined,
+            expectation: ''
+        },
+        {
+            description: 'returns a blank string if fieldvalue.value and fieldInfo is null',
+            fieldValue: null,
+            fieldInfo: null,
+            expectation: ''
+        },
+        {
+            description: 'returns a blank string if fieldInfo is null',
+            fieldValue: {value: null},
+            fieldInfo: null,
+            expectation: ''
+        },
         {
             description: 'returns 0 weeks if fieldvalue.value is 0',
             fieldValue: {value: 0},
