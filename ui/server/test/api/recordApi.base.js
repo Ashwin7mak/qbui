@@ -137,7 +137,7 @@
                             method: consts.POST,
                             body: record,
                             params: params
-                        }
+                        };
                     })
                     .then(apiBase.executeRequest)
                     .then(function(recordIdResponse) {
