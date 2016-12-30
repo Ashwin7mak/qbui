@@ -116,7 +116,8 @@
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
         it('Edit a record via View Form edit pencil', function() {
-            var origRecordCount;
+            var actualNumbersArray = ['4', '33.33', '$33.33', '33.33'];
+            var expectedNumbersArray;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 
             //Step 1 - Go to report without any settings (LIST all report)
@@ -135,15 +136,11 @@
             //verify You land in view form since you edited a record from View form after saving
             formsPO.waitForViewFormsTableLoad();
             //Verify the record Id is 4 in view form since we edited 4th record
-            expect(browser.element('div.numericField.viewElement').getText()).toBe('4');
-
-            // Step 5 - Reload the report after saving row as the row is added at the last page
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
-            //Step 6 - Verify new record got added on the top of the table and verify the expected field values
-            var recordValues = reportContentPO.getRecordValues(3);
-            formsPO.verifyFieldValuesInReportTable(recordValues);
-
+            expectedNumbersArray = browser.elements('div.numericField.viewElement').getText();
+            //compare 2 arrays
+            expect(actualNumbersArray).toEqual(expectedNumbersArray);
         });
+
+        //TODO add a test to edit null fields and save
     });
 }());
