@@ -228,11 +228,11 @@
         //Entered as days
         var smartUnits = '';
         if (millis.compareTo(DURATION_CONSTS.ZERO) === 0) {
+            smartUnits += 0;
             if (opts.formattedObj) {
-                opts.formattedObj.string = 0;
+                opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
             }
-            smartUnits += DURATION_CONSTS.SCALES.WEEKS.toLowerCase();
         } else if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
             if (opts.formattedObj) {
@@ -275,6 +275,7 @@
             }
             smartUnits += millis.toString() + ' ' + DURATION_CONSTS.SCALES.MILLISECONDS.toLowerCase();
         }
+        console.log('smartUnits: ', smartUnits);
         return smartUnits;
     }
     module.exports = {
