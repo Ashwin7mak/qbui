@@ -333,7 +333,16 @@
             var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
             // Hardcoded to click on the third cell of the record
             var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[3];
-            //Click on the first cell of recordRowIndex row
+
+            //scroll to third cell of recordRowIndex row
+            if (browserName === 'chrome') {
+                recordCellEl.moveToObject();
+            } else {
+                browser.execute(function(elelemt) {
+                    elelemt.scrollIntoView(false);
+                }, recordCellEl);
+            }
+            //Click on the third cell of recordRowIndex row
             recordCellEl.click();
             //wait until view form is visible
             return self.viewFormContainerEl.waitForVisible();
