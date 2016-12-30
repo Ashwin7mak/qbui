@@ -69,19 +69,20 @@ const DurationFieldValueEditor = React.createClass({
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SCALES.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
-        if (this.props.value === 0) {
-            formatDisplay = this.props.value;
-        }
+
         if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             formatDisplay = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
         } else if (this.props.attributes && this.props.includeUnits) {
             formatDisplay = durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes);
         }
+        if (this.props.value === 0) {
+            formatDisplay = this.props.value;
+        }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={formatDisplay || display}
+                                      value={formatDisplay}
                                       invalidMessage={this.props.invalidMessage || ''}
                                       showClearButton={true}
                                       {...otherProps}/>;
