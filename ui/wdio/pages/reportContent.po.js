@@ -48,7 +48,7 @@
          */
         waitForReportContent: {value: function() {
             // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            return browser.waitForExist('.ag-body', browser.waitforTimeout, false);
+            return browser.waitForExist('.ag-body-viewport', browser.waitforTimeout, false);
         }},
 
         /**
