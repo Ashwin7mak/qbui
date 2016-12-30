@@ -275,7 +275,6 @@
             }
             smartUnits += millis.toString() + ' ' + DURATION_CONSTS.SCALES.MILLISECONDS.toLowerCase();
         }
-        console.log('smartUnits: ', smartUnits);
         return smartUnits;
     }
     module.exports = {
