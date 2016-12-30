@@ -47,14 +47,8 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            var self = this;
-            // First wait for the containers
             // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.reportContainer', browser.waitforTimeout, false);
-            e2ePageBase.waitForElementToBePresent('.reportContent');
-            e2ePageBase.waitForElementToBePresent('.ag-body-container');
-            // Then wait for records to be shown in the grid
-            return e2ePageBase.waitForElementToBeDisplayed('.ag-row');
+            return browser.waitForExist('.ag-body', browser.waitforTimeout, false);
         }},
 
         /**

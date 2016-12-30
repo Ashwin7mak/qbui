@@ -84,7 +84,9 @@
             for (var i = 0; i < saveButtons.value.length; i++) {
                 if (saveButtons.value[i].getText() === btnName) {
                     //Click if button name filtered is same as parameter button name
-                    return saveButtons.value[i].click();
+                    saveButtons.value[i].click();
+                    //wait until loading screen disappear
+                    browser.waitForExist('.invisibleBackdropModal-open', browser.waitforTimeout, true);
                 }
             }
         }},
@@ -277,12 +279,8 @@
          *
          */
         waitForEditFormsTableLoad: {value: function() {
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.editForm', browser.waitforTimeout, false);
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.formTable', browser.waitforTimeout, false);
-            // Then wait for records to be shown in the grid
-            return e2ePageBase.waitForElementToBeDisplayed('.fieldRow');
+            // wait for edit form
+            return browser.waitForExist('.editForm', browser.waitforTimeout, false);
         }},
 
         /**
@@ -290,12 +288,8 @@
          *
          */
         waitForViewFormsTableLoad: {value: function() {
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.viewForm', browser.waitforTimeout, false);
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.formTable', browser.waitforTimeout, false);
-            // Then wait for records to be shown in the grid
-            return e2ePageBase.waitForElementToBeDisplayed('.fieldRow');
+            // wait for view form
+            return browser.waitForExist('.viewForm', browser.waitforTimeout, false);
         }},
 
         /**

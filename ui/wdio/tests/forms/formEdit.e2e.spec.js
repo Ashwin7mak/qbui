@@ -122,33 +122,28 @@
             //Step 1 - Go to report without any settings (LIST all report)
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            //Step 2 - Get the original records count in a report
-            origRecordCount = formsPO.getRecordsCountInATable();
-
-            //Step 3 - Click on 4th(the records count start from 0) record edit pencil
+            //Step 2 - Click on 4th(the records count start from 0) record edit pencil
             formsPO.clickRecordEditPencilInViewForm(3);
 
-            //Step 4 - Edit values
+            //Step 3 - Edit values
             for (var i = 0; i < fieldTypes.length; i++) {
                 formsPO.enterFormValues(fieldTypes[i]);
             }
 
-            //Step 5 - Click Save on the form
+            //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();
             //verify You land in view form since you edited a record from View form after saving
             formsPO.waitForViewFormsTableLoad();
             //Verify the record Id is 4 in view form since we edited 4th record
             expect(browser.element('div.numericField.viewElement').getText()).toBe('4');
 
-            // Step 6 - Reload the report after saving row as the row is added at the last page
+            // Step 5 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            //Step 7 - Verify new record got added on the top of the table and verify the expected field values
+            //Step 6 - Verify new record got added on the top of the table and verify the expected field values
             var recordValues = reportContentPO.getRecordValues(3);
             formsPO.verifyFieldValuesInReportTable(recordValues);
 
-            // Step 8 - Verify the records count not increased
-            expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
         });
     });
 }());

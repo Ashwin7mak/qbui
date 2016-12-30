@@ -4,6 +4,7 @@
  */
 (function() {
     'use strict';
+    var reportContentPO = requirePO('reportContent');
 
     function PageBase() {
         // Define common locators that all pages share here
@@ -62,10 +63,8 @@
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
         browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-        // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-        browser.waitForExist('.ag-body-container', browser.waitforTimeout, false);
-        // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-        browser.waitForExist('.ag-row', browser.waitforTimeout, false);
+        //wait until report rows in table are loaded
+        return reportContentPO.waitForReportContent();
     };
 
     //TODO: Refactor these if needed
