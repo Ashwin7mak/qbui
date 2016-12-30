@@ -310,7 +310,7 @@
              * It then checks to see if display is only a number
              * If it is only a number it will concatenate the field scale to the input
              * */
-            if (display === '' || display === null) {
+            if (display === '' || display === null ||  display === undefined) {
                 return display;
             }
             if (fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
