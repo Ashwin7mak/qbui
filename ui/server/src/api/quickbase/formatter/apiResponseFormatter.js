@@ -2,6 +2,9 @@ var Promise = require('bluebird');
 var _ = require('lodash');
 var errorCodes = require('../../../../../common/src/dataEntryErrorCodes');
 var apiResponseErrors = require('../../../constants/apiResponseErrors');
+var httpStatusCodes = require('../../../constants/httpStatusCodes');
+
+const i18NUniqueValidationErrorKey = 'invalidMsg.api.notUniqueSingleField';
 
 function parseRequestBodyAsJson(payload) {
     if (_.has(payload, 'request.body')) {
@@ -70,7 +73,8 @@ function getErrorMessage(responseBody) {
 function responseHasUniqueValidationErrors(responseBody) {
     // Core API returns a NOT_UNIQUE_VALUE error when creating a new record,
     // but returns a 404 and a NOT_UNIQUE_VALUE_MESSAGE when editing a record
-    // if the there is a unique validation error
+    // if the there is a unique validation error.
+    // The 404 status code becomes a more accurate 422 if unique validation errors are found.
     return getErrorCode(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE || getErrorMessage(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
 }
 
@@ -81,7 +85,7 @@ function formatUniqueValidationErrors(requestBody) {
         // The Core API does not currently specify which fields failed the unique test, so this function
         // only applies the validation error to fields that are set as unique.
         if (_.has(field, 'fieldDef.unique') && field.fieldDef.unique) {
-            uniqueValidationErrors.push(formatFieldAsValidationError(field, 'invalidMsg.api.notUniqueSingleField', {recordName: 'record'}));
+            uniqueValidationErrors.push(formatFieldAsValidationError(field, i18NUniqueValidationErrorKey, {recordName: 'record'}));
         }
     });
 
@@ -120,7 +124,7 @@ var ApiResponseFormatter = {
         }
 
         if (formattedErrors.length > 0) {
-            return Promise.reject({response:{message:'validation error', status: 422, errors: formattedErrors}});
+            return Promise.reject({response:{message:'validation error', status: httpStatusCodes.UNPROCESSABLE_ENTITY, errors: formattedErrors}});
         }
 
         return returnPayload(payload);
