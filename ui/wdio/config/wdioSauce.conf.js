@@ -135,7 +135,7 @@ exports.config = {
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'medium',
+            breakpointSize: 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
         }
