@@ -128,19 +128,25 @@
                 return fetchRecordDeferred.promise;
             },
             // Creates a record, returning a promise that is resolved or rejected on successful
-            //TODO: Fix promise anti-pattern QBSE-20581
+            //TODO: Fix promise anti-pattern QBSE-20581 - fixed createRecord and editRecord (nv, 12/29/16)
             createRecord: function(recordsEndpoint, record, params) {
-                var createRecordDeferred = promise.pending();
-                init.then(function() {
-                    apiBase.executeRequest(recordsEndpoint, consts.POST, record)
-                        .then(function(recordIdResponse) {
-                            createRecordDeferred.resolve(JSON.parse(JSON.parse(recordIdResponse.body).body).id);
-                        }).catch(function(err) {
-                            log.error(JSON.stringify(err));
-                            createRecordDeferred.reject(err);
-                        });
-                });
-                return createRecordDeferred.promise;
+                return init
+                    .then(function() {
+                        return {
+                            stringPath: recordsEndpoint,
+                            method: consts.POST,
+                            body: record,
+                            params: params
+                        }
+                    })
+                    .then(apiBase.executeRequest)
+                    .then(function(recordIdResponse) {
+                        return JSON.parse(JSON.parse(recordIdResponse.body).body).id;
+                    })
+                    .catch(function(err) {
+                        log.error(JSON.stringify(err));
+                        return promise.reject(err);
+                    });
             },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function(recordsEndpoint, records) {
@@ -202,22 +208,21 @@
                 return fetchRecordDeferred.promise;
             },
             editRecord: function(recordsEndpoint, recordId, record) {
-                var editRecordDeferred = promise.pending();
-                init.then(function() {
-                    return apiBase.executeRequest(recordsEndpoint + recordId, consts.PATCH, record)
-                        .then(function(recordIdResponse) {
-                            editRecordDeferred.resolve(recordIdResponse);
-                        }, function(problemEditingRecord) {
-                            editRecordDeferred.reject(problemEditingRecord);
-                        }).catch(function(err) {
-                            log.error(JSON.stringify(err));
-                            editRecordDeferred.reject(err);
-                        });
-                }).catch(function(err) {
-                    log.error(JSON.stringify(err));
-                    editRecordDeferred.reject(err);
-                });
-                return editRecordDeferred.promise;
+                return init
+                    .then(function(payload) {
+                        return {
+                            stringPath: recordsEndpoint + recordId,
+                            method: consts.PATCH,
+                            body: record
+                        };
+                    })
+                    .then(apiBase.executeRequest)
+                    .then(function(recordIdResponse) {
+                        return recordIdResponse;
+                    }).catch(function(err) {
+                        log.error(JSON.stringify(err));
+                        return promise.reject(err);
+                    });
             },
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function(recordsEndpoint, recordId, params) {

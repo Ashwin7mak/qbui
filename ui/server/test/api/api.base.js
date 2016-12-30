@@ -231,6 +231,15 @@
             defaultHeaders              : DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
             executeRequest              : function(stringPath, method, body, headers, params) {
+                if (_.isObject(stringPath)) {
+                    var temp = _.assign({}, stringPath);
+                    stringPath = temp.stringPath;
+                    method = temp.method;
+                    body = temp.body;
+                    headers = temp.headers;
+                    params = temp.params;
+                }
+
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {
@@ -496,6 +505,9 @@
             }
         };
 
+        // Need to bind some functions before exporting so that the context of `this` is consistent when used inside of other promises
+        apiBase.executeRequest = apiBase.executeRequest.bind(apiBase);
+        apiBase.executeRequestRetryable = apiBase.executeRequestRetryable.bind(apiBase);
         return apiBase;
     };
 
