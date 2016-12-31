@@ -44,7 +44,6 @@
         });
 
         it('Get into Error Form State, Validate Errors, Correct the errors and Verify Saving the record successfully', function() {
-            var origRecordCount;
             var fieldTypes = ['allNumericFields', 'allDurationFields', 'allPhoneFields', 'allEmailFields'];
             var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field'];
             //TODO verify why URL field is not throwing error when given special characters

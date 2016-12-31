@@ -16,7 +16,7 @@
     var sUrl = 'http://www.yahoo.com';
     var sEmail = 'test@gmail.com';
     var sPhone = '15084811015';
-    var sNumeric = '33.33';
+    var sNumeric = 33.33;
     var sTime = '12:30 am';
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
@@ -160,7 +160,7 @@
         getAllTextInputFields: {value: function() {
             var self = this;
             self.editFormContainerEl.elements('input[type="text"].textField').waitForVisible();
-            return self.editFormContainerEl.elements('input[type="text"].textField');
+            return self.editFormContainerEl.elements('.fieldRow');
         }},
 
         /**
@@ -436,8 +436,9 @@
             if (fieldType === 'allTextFields') {
                 var textFields = self.getAllTextInputFields();
                 for (i = 0; i < textFields.value.length; i++) {
-                    textFields.value[i].click();
-                    textFields.value[i].setValue(sText);
+                    if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
+                        textFields.value[i].element('input[type="text"].textField').setValue(sText);
+                    }
                 }
             } else if (fieldType === 'allEmailFields') {
                 var emailFields = self.getAllEmailInputFields();
@@ -460,14 +461,12 @@
             }else if (fieldType === 'allDurationFields') {
                 var durationFields = self.getAllDurationInputFields();
                 for (i = 0; i < durationFields.value.length; i++) {
-                    durationFields.value[i].click();
                     durationFields.value[i].setValue(sNumeric);
                 }
             } else if (fieldType === 'allNumericFields') {
                 //get all numeric input field validators on the form
                 var numericFields = self.getAllNumericInputFields();
                 for (i = 0; i < numericFields.value.length; i++) {
-                    numericFields.value[i].click();
                     numericFields.value[i].setValue(sNumeric);
                 }
             } else if (fieldType === 'allDateFields') {
@@ -521,7 +520,9 @@
             if (fieldType === 'allTextFields') {
                 var textFields = self.getAllTextInputFields();
                 for (i = 0; i < textFields.value.length; i++) {
-                    textFields.value[i].setValue(invalidValue);
+                    if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
+                        textFields.value[i].element('input[type="text"].textField').setValue(invalidValue);
+                    }
                 }
             } else if (fieldType === 'allEmailFields') {
                 var emailFields = self.getAllEmailInputFields();
@@ -628,14 +629,9 @@
                     expect(expectedRecordValues[8]).toBe(sTime);
                 }
                 //numeric duration field
-                //expect(expectedRecordValues[9]).toBe('9.92063E-9 weeks');
+                expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
                 //checkbox field
-                //TODO this gives stale element error sometimes as below
-                //*** Element info: {Using=css selector, value=.checkbox}
-                //at elements(".checkbox") - isExisting.js:46:17
-                //isExisting(".checkbox") - at PageBase.Object.create.getRecordCellValue.value (ui/wdio/pages/reportContent.po.js:95:35)
-
-                //expect(expectedRecordValues[10]).toBe('true');
+                expect(expectedRecordValues[10]).toBe('true');
                 //email field
                 expect(expectedRecordValues[11]).toBe('(508) 481-1015');
                 //phone field
