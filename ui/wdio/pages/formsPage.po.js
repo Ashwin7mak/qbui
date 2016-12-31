@@ -32,7 +32,7 @@
         //form footer save buttons(there will be 2 buttons)
         editFormSaveBtns : {get: function() {return browser.elements('.trowserFooter .rightIcons .saveButtons button');}},
         //form footer alert button
-        editFormFooterErrorAlertBtn : {get: function() {return browser.element('span.qbIcon.iconTableUISturdy-alert');}},
+        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.trowserFooter .iconTableUISturdy-alert');}},
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
@@ -57,8 +57,9 @@
         formsSaveChangesDialogHeader : {get: function() {return this.formsSaveChangesDialog.element('.modal-body');}},
         formsSaveChangesDialogFooter : {get: function() {return this.formsSaveChangesDialog.element('.modal-footer');}},
 
-        //notification window
-        notificationWindow : {get: function() {return browser.element('.notification-message');}},
+        // Notification Container for form actions
+        notificationContainerEl: {get: function() {return browser.element('.notification-container');}},
+        notificationWindow: {get: function() {return this.notificationContainerEl.element('.notification-message');}},
 
 
         /**
