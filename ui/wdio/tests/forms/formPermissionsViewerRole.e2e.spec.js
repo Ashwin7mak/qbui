@@ -112,7 +112,6 @@
         it('Verify cannot add a record into table as tableRights canadd set to false', function() {
             //all required fields on form
             var fieldTypes = ['allNumericFields', 'allDurationFields'];
-            var origRecordCount;
 
             //Step 1 - get user authentication
             formsPO.getUserAuthentication(realmName, realmId, userId);
@@ -120,32 +119,22 @@
             //Step 2 - Open the report
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
 
-            //Step 3 - Get the original records count in a report
-            origRecordCount = formsPO.getRecordsCountInATable();
-
-            //Step 4 - Click on Add Record Button on the report Stage
+            //Step 3 - Click on Add Record Button on the report Stage
             formsPO.clickAddRecordBtnOnStage();
 
-            //Step 5 - enter form values
+            //Step 4 - enter form values
             for (var i = 0; i < fieldTypes.length; i++) {
                 formsPO.enterFormValues(fieldTypes[i]);
             }
 
-            //Step 6 - Click Save on the form
+            //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
 
             //Step 6 - Verify record has no permission message shows up.
-            //TODO notification containers not working
-            //formsPO.assertNotificationMessage("You are not authorized to create or access this record");
+            formsPO.assertNotificationMessage("You are not authorized to create or access this record");
 
             //Step 7 - close the dirty form without saving
             formsPO.closeSaveChangesDialogue();
-
-            // Step 8 - Reload the report after saving row as the row is added at the last page
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
-            //Step 9 - Verify record not added since you are not authorized to create record
-            expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
 
         });
 
