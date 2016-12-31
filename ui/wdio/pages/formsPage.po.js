@@ -24,15 +24,15 @@
 
     var FormsPage = Object.create(e2ePageBase, {
         //Record add button on stage
-        addRecordBtnOnStage : {get: function() {return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');}},
+        addRecordBtnOnStage : {get: function() {return browser.element('span.qbIcon.iconTableUISturdy-add');}},
         //view form
-        viewFormContainerEl : {get: function() {return browser.element('.viewForm .formTable');}},
+        viewFormContainerEl : {get: function() {return browser.element('form.viewForm');}},
         //edit Form
-        editFormContainerEl : {get: function() {return browser.element('.editForm .formTable');}},
+        editFormContainerEl : {get: function() {return browser.element('form.editForm');}},
         //form footer save buttons(there will be 2 buttons)
         editFormSaveBtns : {get: function() {return browser.elements('.trowserFooter .rightIcons .saveButtons button');}},
         //form footer alert button
-        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.trowserFooter .rightIcons .saveButtons .iconTableUISturdy-alert');}},
+        editFormFooterErrorAlertBtn : {get: function() {return browser.element('span.qbIcon.iconTableUISturdy-alert');}},
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
@@ -42,10 +42,10 @@
         editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //form close button
-        formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconTableUISturdy-close');}},
+        formCloseBtn : {get: function() {return browser.element('span.qbIcon.iconTableUISturdy-close');}},
 
         //form error message container
-        formErrorMessageContainerEl : {get: function() {return browser.element('.loadedContent .qbErrorMessageVisible');}},
+        formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
         //header on error message container
         formErrorMessageHeader : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageHeader');}},
         //close btn on error container
@@ -58,7 +58,7 @@
         formsSaveChangesDialogFooter : {get: function() {return this.formsSaveChangesDialog.element('.modal-footer');}},
 
         //notification window
-        notificationWindow : {get: function() {return browser.element('.notification .notification-message .message');}},
+        notificationWindow : {get: function() {return browser.element('.notification-message');}},
 
 
         /**
@@ -81,7 +81,7 @@
             try {
                 for (var i = 0; i < 5; i++) {
                     //wait until loading screen disappear
-                    browser.waitForExist('.invisibleBackdropModal-open', browser.waitforTimeout, true);
+                    browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
                 }
             }catch (e) {
                 console.error("The report content still not loaded after hitting save" + e.message);
