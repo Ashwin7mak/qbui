@@ -24,7 +24,7 @@
 
     var FormsPage = Object.create(e2ePageBase, {
         //Record add button on stage
-        addRecordBtnOnStage : {get: function() {return browser.element('span.qbIcon.iconTableUISturdy-add');}},
+        addRecordBtnOnStage : {get: function() {return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');}},
         //view form
         viewFormContainerEl : {get: function() {return browser.element('form.viewForm');}},
         //edit Form
@@ -42,7 +42,7 @@
         editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //form close button
-        formCloseBtn : {get: function() {return browser.element('span.qbIcon.iconTableUISturdy-close');}},
+        formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconTableUISturdy-close');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
