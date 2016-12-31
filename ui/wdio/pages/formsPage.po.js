@@ -59,7 +59,7 @@
 
         // Notification Container for form actions
         notificationContainerEl: {get: function() {return browser.element('.notification-container');}},
-        notificationWindow: {get: function() {return this.notificationContainerEl.element('.notification-message');}},
+        notificationWindow: {get: function() {return this.notificationContainerEl.element('.notification-message .message');}},
 
 
         /**
@@ -79,14 +79,8 @@
          * Method for spinner to dissaper after hitting on any save buttons on edit forms
          */
         waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
-            try {
-                for (var i = 0; i < 5; i++) {
-                    //wait until loading screen disappear
-                    browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
-                }
-            }catch (e) {
-                console.error("The report content still not loaded after hitting save" + e.message);
-            }
+            //wait until loading screen disappear
+            return browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
         }},
 
         /**
@@ -596,6 +590,8 @@
          */
         closeSaveChangesDialogue : {value: function() {
             var self = this;
+            //Need this for notifications to slide away
+            browser.pause(5000);
             //click on form close button
             self.clickFormCloseBtn();
             //wait until save changes dialogue popups
@@ -651,11 +647,12 @@
          */
         assertNotificationMessage: {value: function(expectedMessage) {
             var self = this;
-            self.notificationWindow.waitForVisible();
+            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
+            browser.waitForExist('.notification-container-empty', browser.waitforTimeout, true);
             var messageText = self.notificationWindow.getText();
             expect(messageText).toContain(expectedMessage.toString());
-            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-            browser.waitForExist('.notification-message', browser.waitforTimeout, true);
+            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
+            browser.waitForExist('.notification-container-empty', browser.waitforTimeout, false);
         }},
 
         /**
