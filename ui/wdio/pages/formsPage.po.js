@@ -75,6 +75,20 @@
         }},
 
         /**
+         * Method for spinner to dissaper after hitting on any save buttons on edit forms
+         */
+        waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
+            try {
+                for (var i = 0; i < 5; i++) {
+                    //wait until loading screen disappear
+                    browser.waitForExist('.invisibleBackdropModal-open', browser.waitforTimeout, true);
+                }
+            }catch (e) {
+                console.error("The report content still not loaded after hitting save" + e.message);
+            }
+        }},
+
+        /**
          * Method to click Save button with name on the form.
          */
         clickBtnOnForm : {value: function(btnName) {
@@ -85,8 +99,7 @@
                 if (saveButtons.value[i].getText() === btnName) {
                     //Click if button name filtered is same as parameter button name
                     saveButtons.value[i].click();
-                    //wait until loading screen disappear
-                    browser.waitForExist('.invisibleBackdropModal-open', browser.waitforTimeout, true);
+                    return self.waitUntilSpinnerGoesAwayAfterSave();
                 }
             }
         }},
@@ -377,6 +390,8 @@
                     getAllCheckBoxs.value[i].click();
                 }
             }
+            //wait foe edit pencil to be visible
+            self.editPencilBtnOnReportActions.waitForVisible();
             //click on the edit pencil in table actions
             self.editPencilBtnOnReportActions.click();
             //wait until edit form is visible
@@ -392,6 +407,14 @@
             var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
             // Hardcoded to click on the first cell of the record
             var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[0];
+            //scroll to third cell of recordRowIndex row
+            if (browserName === 'chrome') {
+                recordCellEl.moveToObject();
+            } else {
+                browser.execute(function(elelemt) {
+                    elelemt.scrollIntoView(false);
+                }, recordCellEl);
+            }
             //Click on the first cell of recordRowIndex row
             recordCellEl.click();
             //wait until view form is visible
