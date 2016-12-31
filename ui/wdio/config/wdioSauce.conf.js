@@ -92,7 +92,7 @@ exports.config = {
             idleTimeout: '120',
             screenResolution : '1600x1200',
             maxDuration: 10800,
-            breakpointSize: 'medium',
+            breakpointSize: 'large',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 2
