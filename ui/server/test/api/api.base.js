@@ -229,8 +229,25 @@
                 return endpoint;
             },
             defaultHeaders              : DEFAULT_HEADERS,
-            //Executes a REST request against the instance's realm using the configured javaHost
-            executeRequest              : function(stringPath, method, body, headers, params) {
+
+            /**
+             * Executes a REST request against the instance's realm using the configured javaHost
+             * If an object is passed in as the first argument, it will be used to fill in the other argumnents (e.g., when
+             * passing this function in a promise chain.
+             * @param {string|object} optsOrStringPath The path or an object that contains information for request
+             * @param {string} optsOrStringPath.stringPath
+             * @param {string} optsOrStringPath.method The type of request
+             * @param optsOrStringPath.body
+             * @param optsOrStringPath.body
+             * @param optsOrStringPath.headers
+             * @param optsOrStringPath.params
+             * @param {string} method The type of request (GET, POST, PATCH, etc.)
+             * @param body
+             * @param headers
+             * @param params
+             */
+            executeRequest              : function(optsOrStringPath, method, body, headers, params) {
+                var stringPath = optsOrStringPath;
                 if (_.isObject(stringPath)) {
                     var temp = _.assign({}, stringPath);
                     stringPath = temp.stringPath;

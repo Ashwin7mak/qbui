@@ -50,7 +50,7 @@ describe('ApiResponseFormatter', () => {
                 }
             },
             {
-                description: 'catches a NotUniqueKeyFieldValue (saving new reocrd error) and returns validation errors for each unique field in the payload',
+                description: 'catches a NotUniqueKeyFieldValue (saving new record error) and returns validation errors for each unique field in the payload',
                 payload: {
                     body: [{code: ApiResponseErrors.NOT_UNIQUE_VALUE}],
                     statusCode: HttpStatusCodes.UNPROCESSABLE_ENTITY,
