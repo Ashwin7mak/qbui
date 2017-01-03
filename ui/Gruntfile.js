@@ -445,6 +445,16 @@ module.exports = function(grunt) {
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
                 }
+            },
+            integration_coverage: {
+                src    : ['server/test/api'],
+                options: {
+                    mask          : '**/*.integration.spec.js',
+                    root          : '.',
+                    noColors      : !useColors,
+                    reportFormats : ['lcov'],
+                    coverageFolder: 'build/reports/integration/coverage'
+                }
             }
         },
 
