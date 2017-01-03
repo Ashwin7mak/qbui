@@ -56,9 +56,6 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     componentWillMount() {
-        if (this.props.value === 0) {
-            this.setState({display: this.props.value});
-        }
         if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             this.setState({display: durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes)});
         } else if (this.props.attributes && this.props.includeUnits) {
@@ -79,17 +76,23 @@ const DurationFieldValueEditor = React.createClass({
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
         let defaultPlaceholder = '';
+        let displayZero;
         if (this.props.attributes) {
             defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
         }
         if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SCALES.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
         }
+        if (this.props.value === 0 && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+            displayZero = durationEditorParsing.includeUnitsInInput(this.props.value, this.props.attributes);
+        } else {
+            displayZero = this.props.value;
+        }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={this.state.display || display}
+                                      value={this.state.display || displayZero}
                                       invalidMessage={this.props.invalidMessage || ''}
                                       showClearButton={true}
                                       {...otherProps}/>;
