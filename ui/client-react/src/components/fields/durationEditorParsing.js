@@ -298,7 +298,7 @@
                     /**
                      * If a user does not input a value, then we want to set display and value to an empty string
                      * */
-                    results.value = '';
+                    results.value = null;
                     results.display = '';
                 }
             }
