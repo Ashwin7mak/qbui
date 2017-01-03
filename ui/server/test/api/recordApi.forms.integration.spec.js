@@ -85,21 +85,19 @@
          * @returns A promise to make node call
          */
         function createRecordforAppTable(targetApp, targetTable) {
-            let createRecordDeferred = promise.pending();
-
             // Get the appropriate fields out of the Create App response (specifically the created field Ids)
             let nonBuiltInFields = recordBase.getNonBuiltInFields(targetTable);
             // Generate some record JSON objects to add to the app
             let generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
 
-            recordBase.addRecords(targetApp, targetTable, generatedRecords).then(function(returnedRecords) {
-                createRecordDeferred.resolve(returnedRecords);
-            }).catch(function(error) {
-                console.log(JSON.stringify(error));
-                createRecordDeferred.reject(error);
+            return new promise(function(resolve, reject) {
+                recordBase.addRecords(targetApp, targetTable, generatedRecords).then(function(returnedRecords) {
+                    resolve(returnedRecords);
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    reject(error);
+                });
             });
-
-            return createRecordDeferred.promise;
         }
 
         /**
@@ -110,25 +108,24 @@
          * @returns A promise to make node call
          */
         function createReportforTable(targetApp, targetTable) {
-            let createReportDeferred = promise.pending();
             const reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(targetApp.id, targetTable.id);
 
-            var reportToCreate = {
+            let reportToCreate = {
                 name: 'testReportForTable' + targetTable.id,
                 type: 'TABLE',
                 tableId: targetTable.id,
                 query: null,
             };
 
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
-                let reportId = JSON.parse(reportResults.body).id;
-                createReportDeferred.resolve(reportId);
-            }).catch(function(error) {
-                console.log(JSON.stringify(error));
-                createReportDeferred.reject(error);
+            return new promise(function(resolve, reject) {
+                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
+                    let reportId = JSON.parse(reportResults.body).id;
+                    resolve(reportId);
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    reject(error);
+                });
             });
-
-            return createReportDeferred.promise;
         }
 
         /**
@@ -141,18 +138,16 @@
          *
          */
         function createForm(appId, tableId, form) {
-            let createFormDeferred = promise.pending();
-
-            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-            recordBase.apiBase.executeRequest(formEndpoint, 'POST', form).then(function(result) {
-                let formID =  JSON.parse(result.body).id;
-                createFormDeferred.resolve({appId, tableId, formID});
-            }).catch(function(error) {
-                console.log(JSON.stringify(error));
-                createFormDeferred.reject(error);
+            return new promise(function(resolve, reject) {
+                const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+                recordBase.apiBase.executeRequest(formEndpoint, 'POST', form).then(function(result) {
+                    let formID =  JSON.parse(result.body).id;
+                    resolve({appId, tableId, formID});
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    reject(error);
+                });
             });
-
-            return createFormDeferred.promise;
         }
 
         /**
@@ -165,21 +160,20 @@
          *
          */
         function retriveFormByID(appId, tableId, formId) {
-            let retriveFormByIDDeferred = promise.pending();
-
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, formId);
-            recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
-                const responseBody =  JSON.parse(result.body);
-                let resultFormID = responseBody.formId;
-                let resultAppID = responseBody.appId;
-                let resultTableID = responseBody.tableId;
-                retriveFormByIDDeferred.resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID});
-            }).catch(function(error) {
-                console.log(JSON.stringify(error));
-                retriveFormByIDDeferred.reject(error);
-            });
 
-            return retriveFormByIDDeferred.promise;
+            return new promise(function(resolve, reject) {
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
+                    const responseBody =  JSON.parse(result.body);
+                    let resultFormID = responseBody.formId;
+                    let resultAppID = responseBody.appId;
+                    let resultTableID = responseBody.tableId;
+                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID});
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    reject(error);
+                });
+            });
         }
 
         /**
@@ -192,20 +186,20 @@
          *
          */
         function retriveFormByType(appId, tableId, formType) {
-            let retriveFormByTypeDeferred = promise.pending();
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-            recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, '?formType=' + formType).then(function(result) {
-                const responseBody =  JSON.parse(result.body);
-                let resultFormID = responseBody.formId;
-                let resultAppID = responseBody.appId;
-                let resultTableID = responseBody.tableId;
-                retriveFormByTypeDeferred.resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID, formType});
-            }).catch(function(error) {
-                console.log(JSON.stringify(error));
-                retriveFormByTypeDeferred.reject(error);
-            });
 
-            return retriveFormByTypeDeferred.promise;
+            return new promise(function(resolve, reject) {
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, '?formType=' + formType).then(function(result) {
+                    const responseBody =  JSON.parse(result.body);
+                    let resultFormID = responseBody.formId;
+                    let resultAppID = responseBody.appId;
+                    let resultTableID = responseBody.tableId;
+                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID, formType});
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    reject(error);
+                });
+            });
         }
 
         /**
