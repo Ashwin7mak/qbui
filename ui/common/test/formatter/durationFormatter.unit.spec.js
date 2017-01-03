@@ -117,7 +117,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
                     itemSeconds.description = 'returns a smart units fieldvalue.value is ' + _secs + ' secs ';
                     itemSeconds.fieldValue = {value: (_secs * DURATION_CONSTS.MILLIS_PER_SECOND).toFixed(4)};
                     itemSeconds.fieldInfo = {scale: DURATION_SCALES.SMART_UNITS, decimalPlaces:4};
-                    itemSeconds.expectation = '' + _secs + ' ' + DURATION_CONSTS.SECONDS;
+                    itemSeconds.expectation = '' + _secs + ' ' + DURATION_CONSTS.SCALES.SECONDS.toLowerCase();
                     itemSeconds.expectRaw = '' + _secs;
                     itemSeconds.expectUnits = DURATION_SCALES.SECONDS;
                     array.push(itemSeconds);
@@ -127,7 +127,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
     }
 
     var dataProvider = [
-        //manual non random tests
+        // manual non random tests
         {
             description: 'returns a blank for null value',
             fieldValue: null,
@@ -162,14 +162,14 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
             description: 'returns 0 weeks if fieldvalue.value is 0',
             fieldValue: {value: 0},
             fieldInfo: {},
-            expectation: '0 weeks'
+            expectation: '0'
         },
         {
             description: 'returns a blank string if fieldvalue.value is 0 for smartunits',
             fieldValue: {value: 0},
             fieldInfo: {scale: DURATION_SCALES.SMART_UNITS},
-            expectation: '0 weeks',
-            expectUnits : DURATION_SCALES.WEEKS
+            expectation: '0',
+            expectUnits : DURATION_SCALES.DAYS
         }
     ];
 
