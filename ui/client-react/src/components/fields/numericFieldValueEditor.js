@@ -4,6 +4,7 @@ import './fields.scss';
 import clearableInput from '../hoc/clearableInput';
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 
 /**
  * # NumericFieldValueEditor
@@ -146,9 +147,11 @@ const NumericFieldValueEditor = React.createClass({
             placeholder = this.props.fieldDef.datatypeAttributes.clientSideAttributes.symbol;
         }
 
-        let classes = ['input', 'numericField', 'borderOnError'];
+        let classes = ['input', 'numericField'];
         // error state css class
-        classes.push(this.props.invalid ? 'error' : '');
+        if (this.props.invalid) {
+            classes = [...classes, ...ERROR_CSS_CLASSES];
+        }
         classes.push(this.props.classes || '');
 
         let width = _.get(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width', null);
