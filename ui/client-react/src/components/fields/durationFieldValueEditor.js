@@ -63,7 +63,13 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     onBlur(ev) {
-        let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes, this.props.includeUnits);
+        let parseResult = {
+            value: ev.value,
+            display: ev.value
+        };
+        if (ev.value !== '') {
+            parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes, this.props.includeUnits);
+        }
         let theVals = {
             value: parseResult.value,
             display: parseResult.display
