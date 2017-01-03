@@ -845,6 +845,15 @@ module.exports = function(grunt) {
             ]);
         }
 
+        if (target === 'integration_coverage') {
+            //server integration tests
+            return grunt.task.run([
+                'codeStandards',
+                'clean:server',
+                'mochaTest:integration_coverage'
+            ]);
+        }
+
         if (target === 'client-wip') {
             //client unit tests
             return grunt.task.run([
@@ -956,6 +965,11 @@ module.exports = function(grunt) {
     grunt.registerTask('ciIntegration', [
         'env:test',
         'test:integration'
+    ]);
+
+    grunt.registerTask('ciIntegrationCoverage', [
+        'env:test',
+        'test:integration_coverage'
     ]);
 
     grunt.registerTask('logGitState', 'output Git branch state to file', function() {
