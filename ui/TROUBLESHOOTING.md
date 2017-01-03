@@ -124,7 +124,7 @@ Integration and E2E tests are going to be slower than Unit tests. A single integ
 increase the number of processors available to your VM that runs Oracle/Sql (persistence layer for Core) if
 running a single integration test is taking a lot more than that or consistently failing due to timeout errors.
 
-**Note:** VM = Virtual Machine (Typically on VMWare Fusion) running the Oracle/Sql database for the Core layer.
+**Note:** VM = Virtual Machine (typically on VMWare Fusion) running the Oracle/Sql database for the Core layer.
 
 
 #### To fix:
