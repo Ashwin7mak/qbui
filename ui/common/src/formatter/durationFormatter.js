@@ -231,7 +231,7 @@
             smartUnits += 0;
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.DAYS;
             }
         } else if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);

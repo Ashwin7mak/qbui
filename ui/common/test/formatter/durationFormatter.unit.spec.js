@@ -169,7 +169,7 @@ describe('DurationFormatter (seed ' + seed + ')', () => {
             fieldValue: {value: 0},
             fieldInfo: {scale: DURATION_SCALES.SMART_UNITS},
             expectation: '0',
-            expectUnits : DURATION_SCALES.WEEKS
+            expectUnits : DURATION_SCALES.DAYS
         }
     ];
 
