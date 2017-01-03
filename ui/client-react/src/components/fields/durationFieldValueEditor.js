@@ -56,6 +56,10 @@ const DurationFieldValueEditor = React.createClass({
         }
     },
     componentWillMount() {
+        /**
+         * componentWillMount is used for forms. Forms are required to have scales listed in the input box with the numeric value
+         * this is also used for Smart Units, all smart units are required to have scales listed in the input box with the numeric value
+         * */
         if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             this.setState({display: durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes)});
         } else if (this.props.attributes && this.props.includeUnits) {
