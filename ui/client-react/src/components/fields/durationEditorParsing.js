@@ -314,12 +314,16 @@
                 return display;
             }
             if (fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
-                var scale = display.replace(/-?[0-9.:]+/g, '').trim();
-                var num = display.match(/-?[0-9.:]+/g);
-                display = num;
-                if (scale) {
-                    scale = scale[0].toUpperCase() + scale.slice(1);
-                    display = num + ' ' + this.getPlaceholder(scale, num[0]);
+                if (Number(display) === 0) {
+                    display = display + ' ' + this.getPlaceholder(DURATION_CONSTS.SCALES.DAYS, 0);
+                } else {
+                    var scale = display.replace(/-?[0-9.:]+/g, '').trim();
+                    var num = display.match(/-?[0-9.:]+/g);
+                    display = num;
+                    if (scale) {
+                        scale = scale[0].toUpperCase() + scale.slice(1);
+                        display = num + ' ' + this.getPlaceholder(scale, num[0]);
+                    }
                 }
             } else if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
                 display = display + ' ' + this.getPlaceholder(fieldInfo.scale, display);
