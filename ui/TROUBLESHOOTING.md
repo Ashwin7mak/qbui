@@ -1,12 +1,12 @@
-#Troubleshooting Your Developer Environment
+# Troubleshooting Your Developer Environment
 Keeping your dev environment up to date (and working properly) with the latest code is a necessary task as an engineer on the re-arch project.
 
 Below are steps to help you try to diagnose and resolve issues during day to day use. This guide isn't meant as a fix all so if nothing works here please see another engineer for more help.
 
-##Guide Prerequisites
+## Guide Prerequisites
 1. You have gone through the dev setup guides **README.md** documents of both the **qbui** and **QuickBase** repos
 
-##Diagnosing your dev env
+## Diagnosing your dev env
 A good practice when diagnosing issues with your dev env is to divide it into two parts (qbui and quickbase core) diagnosing from the ground up. So you should always check core first.
 
 1. A good test that core is working properly is to run the Java API Integration tests found in the `Quickbase/allServices/src/test/java/com.quickbase.corews/api/controllers/` package.       
@@ -19,7 +19,7 @@ A good practice when diagnosing issues with your dev env is to divide it into tw
         
 3. The final test that everything is working properly is to either load a QuickBase application in the UI via your browser or run the Protractor E2E tests
 
-##Java Core Symptoms:
+## Java Core Symptoms:
 * Tomcat starts, I see Swagger but can't create realms / apps via swagger or run Java API Integration Tests (I'm getting Null or 500 errors back):
 
  See Core General Fixes section
@@ -42,7 +42,7 @@ A good practice when diagnosing issues with your dev env is to divide it into tw
         
  Make sure you have **dnsmasq** configured as specified in the QBUI **README.md** file.
 
-##Java Core General Fixes:
+## Java Core General Fixes:
 Make sure you stop your Tomcat server before attempting these. Note you might need some or a combination of the steps below in order to get everything working again.
 
 * Double check you didn't miss any steps in the QuickBase **README.md** setup (if you are setting up your env for the first time):
@@ -63,14 +63,14 @@ Make sure you stop your Tomcat server before attempting these. Note you might ne
         
 * Close all IntelliJ instances, open up the Mac OSX Activity Monitor and make sure all IntelliJ and Java processes have been terminated (might have to force quit them) - sometimes these hang around when you restart / stop Tomcat a bunch of times.
 
-####Still broken?
+#### Still broken?
 * Rebuild your **allServices** war file. Note that if you run this at the top QuickBase package level it will clean out and rebuild EVERY package in the project (and that will take a while). 
 Usually rebuilding allServices is enough but you have to be in that directory / package to run it's specific gradle commands: 
 
  In your OSX terminal cd to your checked out QuickBase project and then into the **allServices** package. 
  Run `gradle clean build -x test` which cleans out and rebuilds your artifacts. This will skip running the unit tests. 
         
-####Still broken?!
+#### Still broken?!
 * Make sure that QBFunctions have not updated / changed. Check your email for notifications on this from other scrum teams: 
 
  Run **QBFunctions.sql** on your Oracle VM via SQLDeveloper
@@ -79,11 +79,11 @@ Usually rebuilding allServices is enough but you have to be in that directory / 
         
  Run **db-reset.sql** (note you will lose any test data you have generated!)
         
-####You are still here?
+#### You are still here?
 * Restart your Mac - honestly this sometimes does work :)
 * See another engineer for some help in diagnosing :)
 
-##QBUI Symptoms:
+## QBUI Symptoms:
 * My Node server won't start up via `npm start` or `grunt serve`:
  
  Check your **local.js** config file in `qbui/ui/server/src/config/environment`. Something is usually misconfigured there.
@@ -105,7 +105,7 @@ Usually rebuilding allServices is enough but you have to be in that directory / 
 
  Reclone the repo into a new directory and run `npm install`
 
-##QBUI General Fixes:
+## QBUI General Fixes:
 * Double check you followed all the steps in the **QBUI README.md** file (if this is a first time setup).
 * Check your **local.js** config file! Make sure everything is configured properly. Especially check your javaHost and port settings.
 * Make sure Node version is at least **4.2.2** (please note that the project also hasn't been fully tested with versions of Node newer than version 4)
@@ -117,6 +117,24 @@ Usually rebuilding allServices is enough but you have to be in that directory / 
 * I've run into issues using the hotloader option when running Protractor tests or when trying to see new changes so try disabling it:
 
  Set `noHotLoad : true` in your **local.js** config
+
+## Slow Integration or E2E Tests
+
+Integration and E2E tests are going to be slower than Unit tests. A single integration test may take 1-2 minutes to run. You may need to
+increase the number of processors available to your VM that runs Oracle/Sql (persistence layer for Core) if
+running a single integration test is taking a lot more than that or consistently failing due to timeout errors.
+
+**Note:** VM = Virtual Machine (Typically on VMWare Fusion) running the Oracle/Sql database for the Core layer.
+
+
+#### To fix:
+
+1. Open your VM and shut it down from within the VM (e.g., from the login screen, click the power button icon and choose "Power Off").
+2. Click the Wrench icon (in the top toolbar) after the VM is shutdown.
+3. From the dialog, under the "System Settings" heading, choose "Processors & Memory".
+4. Under "Processors", increase the value from "1 processor core" to "2 processor cores".
+5. On this screen, you may also change the Memory allocated to your VM. The recommended minimum is 1024 MB.
+6. Restart the VM.
 
 ##Contributors
 + Ken LaBak (Creator)
