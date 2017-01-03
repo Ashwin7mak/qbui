@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Logger from '../../utils/logger';
-import QBToolTip from '../qbToolTip/qbToolTip';
 
 import Breakpoints from "../../utils/breakpoints";
 import './fields.scss';
 
 import DatePicker from '../../components/node/datetimePicker/lib/DateTimeField';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
+
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 
 import '../node/datetimePicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
@@ -156,11 +157,11 @@ const DateFieldValueEditor = React.createClass({
     render() {
         //  display native input only for smallbreakpoint touch devices
         let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch) ;
-        let classes = ['cellEdit', 'dateCell', 'borderOnError', 'place'];
+        let classes = ['cellEdit', 'dateCell', 'place'];
 
         // error state css class
         if (this.props.invalid) {
-            classes.push('error');
+            classes = [...ERROR_CSS_CLASSES, ...classes];
         }
         if (this.props.classes) {
             classes.push(this.props.classes);
