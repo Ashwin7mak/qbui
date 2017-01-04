@@ -13,23 +13,23 @@ import * as CompConsts from '../constants/componentConstants';
 
 let logger = new Logger();
 
-export const loadingForm = (id) => {
+export const loadingForm = (container) => {
     return {
         type: 'LOADING_FORM',
-        id,
+        container,
     };
 };
-export const loadFormError = (id, error) => {
+export const loadFormError = (container, error) => {
     return {
         type: 'LOAD_FORM_ERROR',
-        id,
+        container,
         error
     };
 };
-export const loadFormSuccess = (id, formData) => {
+export const loadFormSuccess = (container, formData) => {
     return {
         type: 'LOAD_FORM_SUCCESS',
-        id,
+        container,
         formData
     };
 };

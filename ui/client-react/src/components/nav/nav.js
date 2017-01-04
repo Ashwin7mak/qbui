@@ -152,7 +152,7 @@ export let Nav = React.createClass({
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
-            (!this.props.qbui.forms.editForm || !this.props.qbui.forms.editForm.loading) &&
+            (!this.props.qbui.forms.edit || !this.props.qbui.forms.edit[0] || !this.props.qbui.forms.edit[0].loading) &&
             (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
 
             this.props.dispatch(FormActions.loadForm(appId, tblId, rptId, "edit", editRec)).then(() => {
@@ -168,7 +168,7 @@ export let Nav = React.createClass({
         // component updated, update the record trowser content if necessary
         // temporary solution to prevent UI getting in an endless loop state (MB-1369)
 
-        if (!_.has(this.props, "qbui.forms.edit") || !this.props.qbui.forms.edit.loading) {
+        if (!_.has(this.props, "qbui.forms.edit") || !this.props.qbui.forms.edit[0] || !this.props.qbui.forms.edit[0].loading) {
             this.updateRecordTrowser(prevProps.location.query.editRec);
         }
     },
@@ -178,7 +178,6 @@ export let Nav = React.createClass({
     },
 
     render() {
-
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             return null;
@@ -217,7 +216,7 @@ export let Nav = React.createClass({
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
-                               editForm={this.props.qbui.forms.edit}
+                               editForm={this.props.qbui.forms.edit[0]}
                                appId={this.props.params.appId}
                                tblId={this.props.params.tblId}
                                recId={editRecordId}

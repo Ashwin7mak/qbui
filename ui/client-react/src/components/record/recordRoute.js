@@ -40,6 +40,7 @@ export let RecordRoute = React.createClass({
         if (appId && tblId && recordId) {
             //  report id is optional
             //  TODO: add form type as a parameter
+            debugger;
             this.loadRecord(appId, tblId, recordId, rptId);
         }
     },
@@ -211,10 +212,10 @@ export let RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return this.props.forms.syncLoadedForm || !this.props.forms.view ||
-            !_.isEqual(this.props.forms.view.formData, nextProps.forms.view.formData) ||
+        return this.props.forms.syncLoadedForm || !this.props.forms.view || !this.props.forms.view[0] ||
+            !_.isEqual(this.props.forms.view[0].formData, nextProps.forms.view[0].formData) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
-            !_.isEqual(this.props.forms.view.loading, nextProps.forms.view.loading) ||
+            !_.isEqual(this.props.forms.view[0].loading, nextProps.forms.view[0].loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
             !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
@@ -234,10 +235,11 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const formLoadingeErrorStatus = _.has(this.props, "forms.view.errorStatus") && this.props.forms.view.errorStatus;
+            const formLoadingeErrorStatus = _.has(this.props, "forms.view") && this.props.forms.view[0] && this.props.forms.view[0].errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
 
+            let key = _.has(this.props, "forms.view") && this.props.forms.view[0] ? this.props.forms.view[0].formData.recordId : null;
             return (
                 <div className="recordContainer">
                     <Stage stageHeadline={this.getStageHeadline()}
@@ -253,16 +255,17 @@ export let RecordRoute = React.createClass({
                         {this.getPageActions()}
                     </div>
 
+
                     {!formLoadingeErrorStatus ?
-                        <Loader key={_.has(this.props, "forms.view.formData.recordId") ? this.props.forms.view.formData.recordId : null }
-                                            loaded={(!this.props.forms || !this.props.forms.view || !this.props.forms.view.loading)}
+                        <Loader key={key}
+                                loaded={(!this.props.forms || !this.props.forms.view || !this.props.forms.view[0] || !this.props.forms.view[0].loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
-                        <Record key={_.has(this.props, "forms.view.formData.recordId") ? this.props.forms.view.formData.recordId : null }
+                        <Record key={key}
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={formLoadingeErrorStatus ? this.props.forms.view.errorStatus : null}
-                                formData={this.props.forms && this.props.forms.view ? this.props.forms.view.formData : null}
+                                errorStatus={formLoadingeErrorStatus ? this.props.forms.view[0].errorStatus : null}
+                                formData={this.props.forms && this.props.forms.view && this.props.forms.view[0] ? this.props.forms.view[0].formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}

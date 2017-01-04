@@ -197,7 +197,7 @@ export let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.fields, colList);
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.formData.fields, colList);
     },
 
     /**
