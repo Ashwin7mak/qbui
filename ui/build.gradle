@@ -398,15 +398,6 @@ task integrationTestsNoColor(type: GruntTask) {
     finalizedBy stopTomcat
 }
 
-task integrationTestsCoverageNoColor(type: GruntTask) {
-    doFirst {
-        tasks.invokeCheckForApiUp.execute()
-        args = ["ciIntegrationCoverage", "--no-color"]
-    }
-    dependsOn startTomcat
-    finalizedBy stopTomcat
-}
-
 //browser tests not yet supported on ci
 task gruntCiE2ETestsNoColor(type: GruntTask) {
     doFirst {
