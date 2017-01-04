@@ -450,7 +450,8 @@ module.exports = function(grunt) {
                 src    : ['server/test/api'],
                 options: {
                     mask          : '**/*.integration.spec.js',
-                    root          : '.',
+                    root          : 'server/src/api',
+                    includes      : ['server/src/api/**/.js'],
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/integration/coverage'
@@ -850,7 +851,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'codeStandards',
                 'clean:server',
-                'mochaTest:integration_coverage'
+                'mocha_istanbul:integration_coverage'
             ]);
         }
 
@@ -949,6 +950,10 @@ module.exports = function(grunt) {
         grunt.task.run(['test:integration']);
     });
 
+    grunt.registerTask('testIntegrationCoverage', function() {
+        grunt.task.run(['test:integration_coverage']);
+    });
+
     grunt.registerTask('testE2ELocal', function() {
         grunt.task.run(['test:e2eLocal']);
     });
@@ -965,11 +970,6 @@ module.exports = function(grunt) {
     grunt.registerTask('ciIntegration', [
         'env:test',
         'test:integration'
-    ]);
-
-    grunt.registerTask('ciIntegrationCoverage', [
-        'env:test',
-        'test:integration_coverage'
     ]);
 
     grunt.registerTask('logGitState', 'output Git branch state to file', function() {
