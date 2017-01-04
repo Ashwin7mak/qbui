@@ -972,6 +972,11 @@ module.exports = function(grunt) {
         'test:integration'
     ]);
 
+    grunt.registerTask('ciIntegrationCoverage', [
+        'env:test',
+        'test:integration_coverage'
+    ]);
+
     grunt.registerTask('logGitState', 'output Git branch state to file', function() {
         return grunt.task.run([
             'shell:gitState'
