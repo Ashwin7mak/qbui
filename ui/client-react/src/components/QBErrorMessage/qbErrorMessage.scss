@@ -4,7 +4,7 @@
     line-height: 140%;
     border-style: solid;
     border-width: 1px;
-    border-color: $errorMessage-border-color;
+    border-color: $error-message-border-color;
     position: absolute;
     bottom: -200px;
     right: 0;
@@ -25,8 +25,8 @@
         padding: 2px;
 
         &.qbErrorMessageHeader {
-            background-color: $errorMessage-header-background;
-            color: $errorMessage-header-text-color;
+            background-color: $error-message-header-background-color;
+            color: $error-message-header-text-color;
             display: flex;
             justify-content: space-between;
 
@@ -51,8 +51,8 @@
                 button {
                     height: 40px;
                     font-size: 16px;
-                    color: $errorMessage-header-text-color;
-                    background-color: $errorMessage-header-background;
+                    color: $error-message-header-text-color;
+                    background-color: $error-message-header-background-color;
                     border-radius: 0;
                     border: 0;
                 }
@@ -60,11 +60,11 @@
         }
 
         &.qbErrorMessageContent {
-            background-color: $errorMessage-content-background;
+            background-color: $error-message-content-background-color;
             padding-bottom: 15px;
             padding-top: 15px;
             text-align: left;
-            color: $errorMessage-content-text-color;
+            color: $error-message-content-text-color;
             flex-direction: column;
             display: flex;
             overflow: auto;

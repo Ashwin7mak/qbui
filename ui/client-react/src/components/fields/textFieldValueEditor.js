@@ -5,6 +5,7 @@ import QBicon from '../qbIcon/qbIcon';
 import clearableInput from '../hoc/clearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 
 /**
  * # TextFieldValueEditor
@@ -77,14 +78,19 @@ const TextFieldValueEditor = React.createClass({
 
         /**
         * Set the input type to either text, email, or url to allow better mobile keyboards */
-        inputType: React.PropTypes.oneOf(['text', 'email', 'url', 'tel'])
+        inputType: React.PropTypes.oneOf(['text', 'email', 'url', 'tel']),
+
+        /**
+         * Add classes to show invalid state when invalid is true. Important property for correctly displaying phone fields correctly */
+        showInvalidState: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             inputType: 'text',
             isInvalid: false,
-            showClearButton: false
+            showClearButton: false,
+            showInvalidState: true
         };
     },
 
@@ -118,9 +124,11 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classNames = ['input', 'textField', 'borderOnError'];
+        let classNames = ['input', 'textField'];
         // error state css class
-        classNames.push(this.props.invalid ? 'error' : '');
+        if (this.props.invalid && this.props.showInvalidState) {
+            classNames = [...classNames, ...ERROR_CSS_CLASSES];
+        }
         classNames.push(this.props.classes || '');
 
         let Input = this.props.showClearButton ? ClearableTextInput : TextInput;

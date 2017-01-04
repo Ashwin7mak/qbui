@@ -7,21 +7,21 @@
 
     /* the button that switches between views */
     .picker-switch {
-        color: $datepicker-select-button-fg;
-        background-color: $datepicker-bg;
+        color: $datepicker-select-button-color;
+        background-color: $datepicker-background-color;
         border-radius: 0;
 
         &:hover {
-            background-color: $datepicker-date-hover-bg;
+            background-color: $datepicker-date-hover-background-color;
         }
     }
 
     /* the time picker view */
     .timepicker {
-        background-color: $datepicker-bg;
+        background-color: $datepicker-background-color;
 
         .glyphicon {
-            color: $datepicker-select-button-fg;
+            color: $datepicker-select-button-color;
         }
     }
 
@@ -31,23 +31,23 @@
         border-radius: 0;
 
         &:hover {
-            background-color: $datepicker-date-hover-bg;
+            background-color: $datepicker-date-hover-background-color;
         }
     }
 
     .btn .glyphicon:hover {
-        background: $datepicker-date-hover-bg;
+        background: $datepicker-date-hover-background-color;
     }
 
     .btn-primary, .active {
-        background-color: $datepicker-select-active;
+        background-color: $datepicker-select-active-color;
         font-weight: bold;
     }
 
     //  show a circle for today's date
     .today {
         border-radius: 16px;
-        background-color: $datepicker-bg-today;
+        background-color: $datepicker-today-background-color;
         color: $color-black-700;
         font-weight: normal;
     }
@@ -74,7 +74,7 @@
         /* the title bar with prev/next/date etc */
         thead {
             font-size: 14px;
-            background-color: $datepicker-bg;
+            background-color: $datepicker-background-color;
 
             tr:first-child {
                 th.switch, th.prev, th.next {
@@ -85,8 +85,8 @@
             }
 
             tr:first-child th:hover {
-                background-color: $datepicker-date-hover-bg;
-                color: $datepicker-select-button-fg;
+                background-color: $datepicker-date-hover-background-color;
+                color: $datepicker-select-button-color;
             }
 
             .glyphicon-chevron-left:before {
@@ -116,7 +116,7 @@
         }
 
         tbody tr {
-            background-color: $datepicker-bg;
+            background-color: $datepicker-background-color;
             line-height: 20px;
 
             th {
@@ -144,7 +144,7 @@
         }
 
         th.next:hover:after, th.prev:hover:after {
-            color: $datepicker-select-button-fg;
+            color: $datepicker-select-button-color;
         }
 
         th.next {
@@ -208,11 +208,11 @@
     }
 
     .Select-arrow-zone {
-        background-color: $datepicker-bg;
+        background-color: $datepicker-background-color;
         padding-right: 0;
 
         .glyphicon {
-            color: $datepicker-select-button-fg;
+            color: $datepicker-select-button-color;
         }
 
         .glyphicon-time {

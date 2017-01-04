@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueEditor from './textFieldValueEditor';
 import {DURATION_CONSTS} from '../../../../common/src/constants';
-import * as durationFormatter from '../../../../common/src/formatter/durationFormatter';
 import * as durationEditorParsing from './durationEditorParsing';
 
 /**
@@ -45,39 +44,60 @@ const DurationFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func,
 
     },
+    getInitialState() {
+        return {
+            display: this.props.display
+        };
+    },
     onChange(ev) {
+        this.setState({display: ev});
         if (this.props.onChange) {
             this.props.onChange(ev);
         }
     },
-    onBlur(ev) {
-        let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes);
-        let theVals = {};
-        if (parseResult.valid === false) {
-            //Clientside validator needs the value, in order to throw an error
-            theVals.value = parseResult.value;
-            theVals.display = parseResult.value;
-        } else {
-            theVals.value = parseResult.value;
-            theVals.display = durationFormatter.format(theVals, this.props.attributes);
-
+    componentWillMount() {
+        /**
+         * componentWillMount is used for forms. Forms are required to have scales listed in the input box with the numeric value
+         * this is also used for Smart Units, all smart units are required to have scales listed in the input box with the numeric value
+         * */
+        if (this.props.attributes && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+            this.setState({display: durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes)});
+        } else if (this.props.attributes && this.props.includeUnits) {
+            this.setState({display: durationEditorParsing.includeUnitsInInput(this.props.display, this.props.attributes)});
         }
+    },
+    onBlur(ev) {
+        let parseResult = durationEditorParsing.onBlurParsing(ev.value, this.props.attributes, this.props.includeUnits);
+        let theVals = {
+            value: parseResult.value,
+            display: parseResult.display
+        };
+        this.setState({display: theVals.display});
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
     },
     render() {
         let {value, display, onBlur, onChange, classes, placeholder, ...otherProps} = this.props;
-        let defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes);
-        if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SMART_UNITS) {
+        let defaultPlaceholder = '';
+        let displayZero;
+        if (this.props.attributes) {
+            defaultPlaceholder = durationEditorParsing.getPlaceholder(this.props.attributes.scale);
+        }
+        if (this.props.attributes && this.props.attributes.scale !== DURATION_CONSTS.SCALES.SMART_UNITS) {
             classes = 'rightAlignInlineEditNumberFields ' + classes;
+        }
+        if (this.props.value === 0 && this.props.attributes.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+            displayZero = durationEditorParsing.includeUnitsInInput(this.props.value, this.props.attributes);
+        } else {
+            displayZero = this.props.value;
         }
         return  <TextFieldValueEditor classes={classes || ''}
                                       onChange={this.onChange}
                                       onBlur={this.onBlur}
                                       placeholder={placeholder || defaultPlaceholder}
-                                      value={display || value}
-                                      invalidMessage={this.props.invalidMessage || 'Error'}
+                                      value={this.state.display || displayZero}
+                                      invalidMessage={this.props.invalidMessage || ''}
                                       showClearButton={true}
                                       {...otherProps}/>;
     }

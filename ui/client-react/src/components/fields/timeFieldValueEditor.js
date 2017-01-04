@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import Logger from '../../utils/logger';
 
-import QBToolTip from '../qbToolTip/qbToolTip';
 import QbIcon from '../qbIcon/qbIcon';
 
 import Select from '../select/reactSelectWrapper';
@@ -17,6 +16,8 @@ import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatte
 import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
 import '../node/datetimePicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
+
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 
 import moment from 'moment';
 import momentTz from 'moment-timezone';
@@ -325,11 +326,11 @@ const TimeFieldValueEditor = React.createClass({
     render() {
         //  display native input only for smallbreakpoint touch devices
         let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch);
-        let classes = ['cellEdit', 'timeCell', 'borderOnError'];
+        let classes = ['cellEdit', 'timeCell'];
 
         //  error state css class
         if (this.props.invalid) {
-            classes.push('error');
+            classes = [...ERROR_CSS_CLASSES, ...classes];
         }
         if (this.props.classes) {
             classes.push(this.props.classes);
