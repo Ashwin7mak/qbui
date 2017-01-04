@@ -1,22 +1,8 @@
 @import '../../../../src/assets/css/qbVariables';
-$header-cell-border: $color-blue-400;
-$header-cell-border-bottom: $badcolor1-color6;
-$header-cell-background-color: $color-blue-300;
-$header-cell-color: $color-blue-600;
-$row-background-color-hover: $color-blue-200;
-$row-cell-border-color: $color-black-300;
 $grid-font-size: $font-size-p;
-$grid-group-row-header-bkgrd-color: $color-blue-200;
-$grid-group-row-header-border-top: $color-blue-300;
-$grid-group-row-header-divider: $color-black-500;
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
-$row-bg-color: $color-black-100;
-$row-non-editable-bg-color: $color-black-200;
-$row-border-color: $badcolor16;
-$row-box-shadow-color: $color-black-300;
-$cell-edit-background-edit: $color-blue-200;
 
 // override default font style
 .ag-font-style {
@@ -70,12 +56,12 @@ $cell-edit-background-edit: $color-blue-200;
     }
 
     .gridHeaderCell {
-        color: $header-cell-color;
+        color: $aggrid-header-cell-color;
         font-size: $grid-font-size;
         font-weight: bold;
         -webkit-font-smoothing: antialiased;
-        border-color: $header-cell-border;
-        background-color: $header-cell-background-color;
+        border-color: $aggrid-header-cell-border-color;
+        background-color: $aggrid-header-cell-background-color;
         text-align: left;
 
         .dropdownToggle {
@@ -172,13 +158,13 @@ $cell-edit-background-edit: $color-blue-200;
     }
 
     .ag-header-row .gridHeaderCell {
-        border-right: 1px solid $header-cell-border;
-        border-bottom: 2px solid $header-cell-border-bottom;
+        border-right: 1px solid $aggrid-header-cell-border-color;
+        border-bottom: 2px solid $aggrid-header-cell-border-bottom-color;
     }
 
     .ag-row .gridCell {
-        border-right: 1px solid $row-cell-border-color;
-        border-bottom: 1px solid $row-cell-border-color;
+        border-right: 1px solid $aggrid-row-cell-border-color;
+        border-bottom: 1px solid $aggrid-row-cell-border-color;
     }
 
     .ag-row-group .gridCell {
@@ -186,7 +172,7 @@ $cell-edit-background-edit: $color-blue-200;
     }
 
     .ag-row:hover {
-        background-color: $row-background-color-hover;
+        background-color: $aggrid-row-background-hover-color;
         cursor: pointer;
     }
 
@@ -318,12 +304,12 @@ $cell-edit-background-edit: $color-blue-200;
 
     //styling for grouped row headers
     .ag-group-cell-entire-row {
-        background-color: $grid-group-row-header-bkgrd-color;
+        background-color: $aggrid-grid-group-row-header-background-color;
         padding: 2px $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding + 18;
     }
 
     .ag-row-level-0 .ag-group-cell-entire-row {
-        border-top: 4px solid $grid-group-row-header-border-top;
+        border-top: 4px solid $aggrid-grid-group-row-header-border-top-color;
         padding-top: 0;
     }
 
@@ -337,7 +323,7 @@ $cell-edit-background-edit: $color-blue-200;
     }
 
     .ag-group-cell-entire-row::before {
-        border-top: 1px solid $grid-group-row-header-divider;
+        border-top: 1px solid $aggrid-grid-group-row-header-divider-color;
         position: absolute;
         top: -1px;
         bottom: 0;
@@ -546,7 +532,7 @@ $cell-edit-background-edit: $color-blue-200;
 }
 
 .reportToolsAndContentContainer .ag-row.editing {
-    box-shadow: 0 0px 14px $row-box-shadow-color;
+    box-shadow: 0 0px 14px $aggrid-row-box-shadow-color;
     height: 58px !important;
     margin-top: -13px;
     z-index: 999;
@@ -560,7 +546,7 @@ $cell-edit-background-edit: $color-blue-200;
         overflow: visible;
         padding: 0;
         margin: 0;
-        border-right: 1px solid $row-border-color;
+        border-right: 1px solid $aggrid-row-border-color;
 
         > .cellWrapper.textFormat {
             align-items: center;
@@ -579,7 +565,7 @@ $cell-edit-background-edit: $color-blue-200;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: $cell-edit-background-edit;
+            background-color: $aggrid-cell-edit-background-color;
             display: flex;
 
             .cellData:not(.nonEditable) {
@@ -697,7 +683,7 @@ $cell-edit-background-edit: $color-blue-200;
         }
 
         > .ag-cell-wrapper:first-child {
-            border-left: 1px solid $row-border-color;
+            border-left: 1px solid $aggrid-row-border-color;
             left: 0;
         }
     }
@@ -708,13 +694,13 @@ $cell-edit-background-edit: $color-blue-200;
             display: flex;
             flex-direction: column;
             flex: 0 0 auto;
-            background-color: $cell-edit-background-edit;
-            box-shadow: -6px 0px 14px $row-box-shadow-color;
+            background-color: $aggrid-cell-edit-background-color;
+            box-shadow: -6px 0px 14px $aggrid-row-box-shadow-color;
             position: absolute;
             top: -21px;
             left: -29px;
             padding: 0 24px;
-            border: 1px solid $row-border-color;
+            border: 1px solid $aggrid-row-border-color;
 
             .loadedContent {
                 padding: 0;
@@ -733,7 +719,7 @@ $cell-edit-background-edit: $color-blue-200;
             button {
                 flex: 0 0 auto;
                 border: 0;
-                background-color: $cell-edit-background-edit;
+                background-color: $aggrid-cell-edit-background-color;
                 margin-right: 2px;
                 padding: 6px 4px;
 

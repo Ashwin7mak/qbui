@@ -1,9 +1,4 @@
 @import '../../assets/css/qbVariables';
-$trowser-fg: $color-black-800;
-$trowser-icons-color: $color-black-100;
-$trowser-header-bg: $color-blue-600;
-$trowser-footer-bg: $color-blue-700;
-$action-separator-color: $color-blue-600;
 
 #alertIconTooltip {
     z-index: 99999;
@@ -15,7 +10,7 @@ $action-separator-color: $color-blue-600;
     left: 0;
     right: 0;
     height: 100%;
-    color: $trowser-fg;
+    color: $trowser-color;
     max-height: 100%;
     overflow: hidden;
     transition: 0.5s;
@@ -35,7 +30,7 @@ $action-separator-color: $color-blue-600;
         flex: 0 0 auto;
         flex-basis: 40px;
         color: $color-black-100;
-        background-color: $trowser-header-bg;
+        background-color: $trowser-header-background-color;
         display: flex;
         align-items: center;
         padding: 0 10px 0 20px;
@@ -68,7 +63,7 @@ $action-separator-color: $color-blue-600;
             height: 40px;
             font-size: 18px;
             color: $color-black-100;
-            background-color: $trowser-header-bg;
+            background-color: $trowser-header-background-color;
             border-radius: 0;
             border: 0;
         }
@@ -94,7 +89,7 @@ $action-separator-color: $color-blue-600;
         flex: 0 0 auto;
         display: flex;
         flex-direction: row;
-        background-color: $trowser-footer-bg;
+        background-color: $trowser-footer-background-color;
         padding: 3px 0;
 
         .leftActions {
@@ -113,7 +108,7 @@ $action-separator-color: $color-blue-600;
                 line-height: 23px;
                 padding: 0 30px;
                 color: $color-black-100;
-                border-left: 1px solid $action-separator-color;
+                border-left: 1px solid $trowser-action-separator-color;
                 text-decoration: none;
                 align-items: center;
 
@@ -124,7 +119,7 @@ $action-separator-color: $color-blue-600;
             }
 
             a:last-child {
-                border-right: 1px solid $action-separator-color;
+                border-right: 1px solid $trowser-action-separator-color;
             }
         }
 

@@ -25,7 +25,7 @@
         padding: 2px;
 
         &.qbErrorMessageHeader {
-            background-color: $error-message-header-background;
+            background-color: $error-message-header-background-color;
             color: $error-message-header-text-color;
             display: flex;
             justify-content: space-between;
@@ -52,7 +52,7 @@
                     height: 40px;
                     font-size: 16px;
                     color: $error-message-header-text-color;
-                    background-color: $error-message-header-background;
+                    background-color: $error-message-header-background-color;
                     border-radius: 0;
                     border: 0;
                 }
@@ -60,7 +60,7 @@
         }
 
         &.qbErrorMessageContent {
-            background-color: $error-message-content-background;
+            background-color: $error-message-content-background-color;
             padding-bottom: 15px;
             padding-top: 15px;
             text-align: left;
