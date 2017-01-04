@@ -174,9 +174,9 @@ exports.config = {
         var e2eUtils = require('../common/e2eUtils')();
 
         // Initialize all Page Objects
-        //global.requirePO = function(relativePath) {
-        //    return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
-        //};
+        global.requirePO = function(relativePath) {
+           return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
+        };
 
         // Initialize all Common Files
         global.requireCommon = function(relativePath) {

@@ -34,7 +34,7 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                throw new Error('Error during test setup beforeAll: ' + error.message);
             });
         });
 
@@ -63,9 +63,9 @@
             formsPO.verifyErrorMessages(expectedErrorMessages);
 
             //Step 6 - Correct the errors
-            for (var i = 0; i < fieldTypes.length; i++) {
-                formsPO.enterFormValues(fieldTypes[i]);
-            }
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
             //Step 7 - Click Save & Add Another button on the form
             formsPO.clickFormSaveAndAddAnotherBtn();

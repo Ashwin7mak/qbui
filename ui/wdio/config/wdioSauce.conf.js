@@ -82,6 +82,7 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [
+        //TODO Chrome is not stable in sauce labs . So will deal this as seperate PR.
         //{
         //    platform : 'OS X 10.11',
         //    browserName     : 'chrome',
@@ -111,6 +112,7 @@ exports.config = {
             shardTestFiles: true,
             maxInstances: 2
         },
+        //TODO firefox setValue not triggering onChange or blur for muneric and duration fields. Will work as seperate PR
         //{
         //    platform: 'OS X 10.11',
         //    browserName: 'firefox',

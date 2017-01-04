@@ -59,7 +59,7 @@
             var elements = {};
             var elementIndex = 0;
 
-            //Excluding builtin fields
+            //Include builtin fields
             for (var i = 0; i < fields.length; i++) {
                 var builderInstance = formElementBuilder.builder();
 

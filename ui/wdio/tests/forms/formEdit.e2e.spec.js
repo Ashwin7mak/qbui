@@ -31,7 +31,7 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                throw new Error('Error during test setup beforeAll: ' + error.message);
             });
         });
 
@@ -53,9 +53,9 @@
             formsPO.clickRecordEditPencilInRecordActions(1);
 
             //Step 4 - Edit values
-            for (var i = 0; i < fieldTypes.length; i++) {
-                formsPO.enterFormValues(fieldTypes[i]);
-            }
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
@@ -91,9 +91,9 @@
             formsPO.clickRecordEditPencilInTableActions(2);
 
             //Step 4 - Edit values
-            for (var i = 0; i < fieldTypes.length; i++) {
-                formsPO.enterFormValues(fieldTypes[i]);
-            }
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
@@ -127,9 +127,9 @@
             formsPO.clickRecordEditPencilInViewForm(3);
 
             //Step 3 - Edit values
-            for (var i = 0; i < fieldTypes.length; i++) {
-                formsPO.enterFormValues(fieldTypes[i]);
-            }
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
             //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();

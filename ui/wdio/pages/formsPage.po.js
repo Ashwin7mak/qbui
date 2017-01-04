@@ -89,13 +89,16 @@
         clickBtnOnForm : {value: function(btnName) {
             var self = this;
             //get all save buttons on the form
-            var saveButtons = self.editFormSaveBtns;
-            for (var i = 0; i < saveButtons.value.length; i++) {
-                if (saveButtons.value[i].getText() === btnName) {
-                    //Click if button name filtered is same as parameter button name
-                    saveButtons.value[i].click();
-                    return self.waitUntilSpinnerGoesAwayAfterSave();
-                }
+            var saveButton = self.editFormSaveBtns.value.filter(function(button) {
+                return button.getAttribute('textContent') === btnName;
+            });
+
+            if (saveButton !== []) {
+                //Click on filtered save button
+                saveButton[0].click();
+                return self.waitUntilSpinnerGoesAwayAfterSave();
+            } else {
+                throw new Error('button with name ' + btnName + " not found on the form");
             }
         }},
 
@@ -265,11 +268,16 @@
          */
         selectFromList : {value: function(fieldElement, listOption) {
             fieldElement.element('.Select-menu-outer').waitForVisible();
-            var allOptions = browser.elements('.Select-option');
-            for (var i = 0; i < allOptions.value.length; i++) {
-                if (allOptions.value[i].element(' div div').getText() === listOption) {
-                    return allOptions.value[i].element(' div div').click();
-                }
+            //get all options from the list
+            var option = browser.elements('.Select-option').value.filter(function(optionText) {
+                return optionText.element(' div div').getText() === listOption;
+            });
+
+            if (option !== []) {
+                //Click on filtered option
+                return option[0].element(' div div').click();
+            } else {
+                throw new Error('Option with name ' + listOption + " not found in the list");
             }
         }},
 
@@ -279,7 +287,7 @@
          */
         getRecordsCountInATable: {value: function() {
             //Get the count (eg: 25 records). Get just numbers from string and convert into Integer
-            return parseInt(browser.element('.recordsCount').getText().replace(/[^0-9\.]/g, ''));
+            return parseFloat(browser.element('.recordsCount').getText().replace(/[^0-9\.]/g, ''));
         }},
 
         /**
@@ -307,10 +315,10 @@
         getErrorMessagesFromContainer: {value: function() {
             var self = this;
             var actualErrMsgs = [];
-            var errorMsgs = self.formErrorMessageContainerEl.elements('.qbErrorMessageItem');
-            for (var i = 0; i < errorMsgs.value.length; i++) {
-                actualErrMsgs.push(errorMsgs.value[i].getText());
-            }
+            //get all error messages on the form error container
+            self.formErrorMessageContainerEl.elements('.qbErrorMessageItem').value.map(function(errMsg) {
+                actualErrMsgs.push(errMsg.getText());
+            });
             return actualErrMsgs;
         }},
 
@@ -362,14 +370,18 @@
          */
         clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
             var self = this;
-            var getAllEdits = this.editPencilBtnInRecordActions;
-            for (var i = 0; i < getAllEdits.value.length;i++) {
-                if (i === recordRowIndex) {
-                    //Click on the edit pencil of a recordRowIndex row
-                    getAllEdits.value[i].click();
-                }
+            //get all edit buttons in the report table first column
+            var getAllEdits = self.editPencilBtnInRecordActions.value.filter(function(edit) {
+                return edit.index === recordRowIndex;
+            });
+
+            if (getAllEdits !== []) {
+                //Click on filtered save button
+                getAllEdits[0].click();
+                return self.editFormContainerEl.waitForVisible();
+            } else {
+                throw new Error('Edit button not found at row ' + recordRowIndex);
             }
-            return self.editFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -378,19 +390,23 @@
          */
         clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
             var self = this;
-            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox');
-            for (var i = 0; i < getAllCheckBoxs.value.length;i++) {
-                if (i === recordRowIndex) {
-                    //Click on the checkbox of a recordRowIndex row to select that row
-                    getAllCheckBoxs.value[i].click();
-                }
+            //get all checkboxes in the report table first column
+            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
+                return checkbox.index === recordRowIndex;
+            });
+
+            if (getAllCheckBoxs !== []) {
+                //Click on filtered save button
+                getAllCheckBoxs[0].click();
+                //wait for edit pencil to be visible
+                self.editPencilBtnOnReportActions.waitForVisible();
+                //click on the edit pencil in table actions
+                self.editPencilBtnOnReportActions.click();
+                //wait until edit form is visible
+                return self.editFormContainerEl.waitForVisible();
+            } else {
+                throw new Error('Checkbox not found at row ' + recordRowIndex);
             }
-            //wait foe edit pencil to be visible
-            self.editPencilBtnOnReportActions.waitForVisible();
-            //click on the edit pencil in table actions
-            self.editPencilBtnOnReportActions.click();
-            //wait until edit form is visible
-            return self.editFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -577,11 +593,16 @@
          */
         clickButtonOnSaveChangesDialog : {value: function(btnName) {
             var self = this;
-            var btns = self.formsSaveChangesDialogFooter.elements('button');
-            for (var i = 0; i < btns.value.length; i++) {
-                if (btns.value[i].getText() === btnName) {
-                    return btns.value[i].click();
-                }
+            //get all save buttons on the form
+            var btns = self.formsSaveChangesDialogFooter.elements('button').value.filter(function(button) {
+                return button.getAttribute('textContent') === btnName;
+            });
+
+            if (btns !== []) {
+                //Click on filtered save button
+                return btns[0].click();
+            } else {
+                throw new Error('button with name ' + btnName + " not found on the Save Changes Dialogue box");
             }
         }},
 

@@ -31,7 +31,7 @@
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                throw new Error('Error during test setup beforeAll: ' + error.message);
             });
         });
 
@@ -52,9 +52,9 @@
             formsPO.clickRecordEditPencilInRecordActions(4);
 
             //Step 2 - Enter invalid values to get the form to error state
-            for (var i = 0; i < fieldTypes.length; i++) {
-                formsPO.enterInvalidFormValues(fieldTypes[i], '!@#$%^');
-            }
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterInvalidFormValues(fieldType, '!@#$%^');
+            });
 
             //Step 3 - Click Save on the form
             formsPO.clickFormSaveBtn();
@@ -63,9 +63,9 @@
             formsPO.verifyErrorMessages(expectedErrorMessages);
 
             //Step 6 - Correct the errors
-            for (var j = 0; j < fieldTypes.length; j++) {
-                formsPO.enterFormValues(fieldTypes[j]);
-            }
+            fieldTypes.forEach(function(fieldType) {
+                formsPO.enterFormValues(fieldType);
+            });
 
             //Step 7 - Click Save & Add Another button on the form
             formsPO.clickFormSaveAndNextBtn();
