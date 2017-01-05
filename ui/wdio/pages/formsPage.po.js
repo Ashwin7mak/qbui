@@ -197,8 +197,8 @@
          */
         getAllDurationInputFields: {value: function() {
             var self = this;
-            self.editFormContainerEl.elements('input[placeholder="days"].textField').waitForVisible();
-            return self.editFormContainerEl.elements('input[placeholder="days"].textField');
+            self.editFormContainerEl.elements('input.durationField').waitForVisible();
+            return self.editFormContainerEl.elements('input.durationField');
         }},
 
         /**
@@ -454,31 +454,41 @@
             } else if (fieldType === 'allEmailFields') {
                 var emailFields = self.getAllEmailInputFields();
                 for (i = 0; i < emailFields.value.length; i++) {
+                    emailFields.value[i].click();
                     emailFields.value[i].setValue(sEmail);
+                    emailFields.value[i].element('..').click();
                 }
 
             }else if (fieldType === 'allPhoneFields') {
                 var phoneFields = self.getAllPhoneInputFields();
                 for (i = 0; i < phoneFields.value.length; i++) {
+                    phoneFields.value[i].click();
                     phoneFields.value[i].setValue(sPhone);
+                    phoneFields.value[i].element('..').click();
                 }
 
             }else if (fieldType === 'allUrlFields') {
                 var urlFields = self.getAllUrlInputFields();
                 for (i = 0; i < urlFields.value.length; i++) {
+                    urlFields.value[i].click();
                     urlFields.value[i].setValue(sUrl);
+                    urlFields.value[i].element('..').click();
                 }
 
             }else if (fieldType === 'allDurationFields') {
                 var durationFields = self.getAllDurationInputFields();
                 for (i = 0; i < durationFields.value.length; i++) {
+                    durationFields.value[i].click();
                     durationFields.value[i].setValue(sNumeric);
+                    durationFields.value[i].element('..').click();
                 }
             } else if (fieldType === 'allNumericFields') {
                 //get all numeric input field validators on the form
                 var numericFields = self.getAllNumericInputFields();
                 for (i = 0; i < numericFields.value.length; i++) {
+                    numericFields.value[i].click();
                     numericFields.value[i].setValue(sNumeric);
+                    numericFields.value[i].element('..').click();
                 }
             } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
@@ -538,31 +548,41 @@
             } else if (fieldType === 'allEmailFields') {
                 var emailFields = self.getAllEmailInputFields();
                 for (i = 0; i < emailFields.value.length; i++) {
+                    emailFields.value[i].click();
                     emailFields.value[i].setValue(invalidValue);
+                    emailFields.value[i].element('..').click();
                 }
 
             }else if (fieldType === 'allPhoneFields') {
                 var phoneFields = self.getAllPhoneInputFields();
                 for (i = 0; i < phoneFields.value.length; i++) {
+                    phoneFields.value[i].click();
                     phoneFields.value[i].setValue(invalidValue);
+                    phoneFields.value[i].element('..').click();
                 }
 
             }else if (fieldType === 'allUrlFields') {
                 var urlFields = self.getAllUrlInputFields();
                 for (i = 0; i < urlFields.value.length; i++) {
+                    urlFields.value[i].click();
                     urlFields.value[i].setValue(invalidValue);
+                    urlFields.value[i].element('..').click();
                 }
 
             }else if (fieldType === 'allDurationFields') {
                 var durationFields = self.getAllDurationInputFields();
                 for (i = 0; i < durationFields.value.length; i++) {
+                    durationFields.value[i].click();
                     durationFields.value[i].setValue(invalidValue);
+                    durationFields.value[i].element('..').click();
                 }
             } else if (fieldType === 'allNumericFields') {
                 //get all numeric input field validators on the form
                 var numericFields = self.getAllNumericInputFields();
                 for (i = 0; i < numericFields.value.length; i++) {
+                    numericFields.value[i].click();
                     numericFields.value[i].setValue(invalidValue);
+                    numericFields.value[i].element('..').click();
                 }
             }
         }},
