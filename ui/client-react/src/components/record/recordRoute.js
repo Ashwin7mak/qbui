@@ -40,7 +40,7 @@ export let RecordRoute = React.createClass({
         if (appId && tblId && recordId) {
             //  report id is optional
             //  TODO: add form type as a parameter
-            debugger;
+
             this.loadRecord(appId, tblId, recordId, rptId);
         }
     },
