@@ -127,13 +127,11 @@ export let RecordTrowser = React.createClass({
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then((recId) => {
-                //flux.actions.saveFormSuccess();
                 this.props.dispatch(saveFormSuccess());
                 if (saveAnother) {
                     this.props.dispatch(editNewRecord(false));
-                    //flux.actions.editNewRecord(false);
                 } else {
-                    this.props.onHideTrowser();
+                    this.hideTrowser();
                     this.navigateToNewRecord(recId);
                 }
 

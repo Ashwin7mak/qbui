@@ -1,4 +1,4 @@
-import Fluxxor from 'fluxxor';
+
 import formActions from '../../src/actions/formActions';
 import {syncingForm, loadForm, editNewRecord, openRecordForEdit} from '../../src/actions/formActions';
 import * as actions from '../../src/constants/actions';

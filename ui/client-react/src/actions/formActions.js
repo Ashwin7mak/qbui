@@ -10,25 +10,26 @@ import * as UrlConsts from "../constants/urlConstants";
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
+import * as types from '../constants/actions';
 
 let logger = new Logger();
 
 export const loadingForm = (container) => {
     return {
-        type: 'LOADING_FORM',
+        type: types.LOADING_FORM,
         container,
     };
 };
 export const loadFormError = (container, error) => {
     return {
-        type: 'LOAD_FORM_ERROR',
+        type: types.LOAD_FORM_ERROR,
         container,
         error
     };
 };
 export const loadFormSuccess = (container, formData) => {
     return {
-        type: 'LOAD_FORM_SUCCESS',
+        type: types.LOAD_FORM_SUCCESS,
         container,
         formData
     };
@@ -36,24 +37,24 @@ export const loadFormSuccess = (container, formData) => {
 
 export const savingForm = () => {
     return {
-        type: 'SAVING_FORM',
+        type: types.SAVE_FORM,
     };
 };
 export const saveFormError = (error) => {
     return {
-        type: 'SAVE_FORM_ERROR',
+        type: types.SAVE_FORM_FAILED,
         error
     };
 };
 export const saveFormSuccess = () => {
     return {
-        type: 'SAVE_FORM_SUCCESS'
+        type: types.SAVE_FORM_SUCCESS
     };
 };
 
 export const syncingForm = () => {
     return {
-        type: 'SYNCING_FORM'
+        type: types.SYNCING_FORM
     };
 };
 export const openRecordForEdit = (recId) => {
@@ -64,7 +65,7 @@ export const openRecordForEdit = (recId) => {
     // let flux know we're editing a record so we can navigate back and forth
 
     return {
-        type: 'EDIT_REPORT_RECORD',
+        type: types.EDIT_REPORT_RECORD,
         recId: recId,
     };
 };
@@ -75,7 +76,7 @@ export const editNewRecord = (navigateAfterSave = false) => {
     WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
 
     return {
-        type: 'EDIT_REPORT_RECORD',
+        type: types.EDIT_REPORT_RECORD,
         recId: UrlConsts.NEW_RECORD_VALUE,
         navigateAfterSave
     };

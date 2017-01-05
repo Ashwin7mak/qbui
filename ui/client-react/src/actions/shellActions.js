@@ -1,14 +1,16 @@
-// action creators (no dispatching in Redux)
+import * as types from '../constants/actions';
+
+// action creators (this should replace navActions.js, the Fluxxor version...)
 
 export const showTrowser = (content) => {
     return {
-        type: 'SHOW_TROWSER',
+        type: types.SHOW_TROWSER,
         content
     };
 };
 
 export const hideTrowser = () => {
     return {
-        type: 'HIDE_TROWSER'
+        type: types.HIDE_TROWSER
     };
 };

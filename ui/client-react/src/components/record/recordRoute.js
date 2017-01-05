@@ -235,11 +235,12 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const formLoadingeErrorStatus = _.has(this.props, "forms.view") && this.props.forms.view[0] && this.props.forms.view[0].errorStatus;
+            const viewData = _.has(this.props, "forms.view") && this.props.forms.view.length > 0 && this.props.forms.view[0];
+            const formLoadingeErrorStatus = viewData && viewData.errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
 
-            let key = _.has(this.props, "forms.view") && this.props.forms.view[0] ? this.props.forms.view[0].formData.recordId : null;
+            let key = _.has(viewData, "formData.recordId") ? viewData.formData.recordId : null;
             return (
                 <div className="recordContainer">
                     <Stage stageHeadline={this.getStageHeadline()}
@@ -258,14 +259,14 @@ export let RecordRoute = React.createClass({
 
                     {!formLoadingeErrorStatus ?
                         <Loader key={key}
-                                loaded={(!this.props.forms || !this.props.forms.view || !this.props.forms.view[0] || !this.props.forms.view[0].loading)}
+                                loaded={(!this.props.forms || !viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={key}
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={formLoadingeErrorStatus ? this.props.forms.view[0].errorStatus : null}
-                                formData={this.props.forms && this.props.forms.view && this.props.forms.view[0] ? this.props.forms.view[0].formData : null}
+                                formData={this.props.forms && viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
