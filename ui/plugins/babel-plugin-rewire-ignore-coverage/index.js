@@ -1,13 +1,11 @@
-module.exports = function(pluginArguments) {
-    var Plugin = pluginArguments.Plugin;
-    var t = pluginArguments.types;
+export default function({types: t}) {
 
     var commentToIgnoreCoverage = " istanbul ignore next ";
 
     function addIgnoreComment(context) {
         context.addComment("leading", commentToIgnoreCoverage, true);
     }
-    return new Plugin("rewire-ignore-coverage", {
+    return {
         visitor: {
             Function: {
                 exit(path) {
@@ -28,5 +26,5 @@ module.exports = function(pluginArguments) {
                 }
             }
         }
-    });
-};
+    };
+}
