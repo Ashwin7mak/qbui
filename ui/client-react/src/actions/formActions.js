@@ -35,20 +35,23 @@ export const loadFormSuccess = (container, formData) => {
     };
 };
 
-export const savingForm = () => {
+export const savingForm = (container) => {
     return {
         type: types.SAVE_FORM,
+        container
     };
 };
-export const saveFormError = (error) => {
+export const saveFormError = (container, error) => {
     return {
         type: types.SAVE_FORM_FAILED,
+        container,
         error
     };
 };
-export const saveFormSuccess = () => {
+export const saveFormSuccess = (container) => {
     return {
-        type: types.SAVE_FORM_SUCCESS
+        type: types.SAVE_FORM_SUCCESS,
+        container
     };
 };
 
