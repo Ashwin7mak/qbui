@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import FieldUtils from '../../../utils/fieldUtils';
 
 class Column {
     static transformColumnsForGrid(columns = []) {
@@ -15,7 +16,8 @@ class Column {
     static createFromApiColumn(data) {
         let fieldId = data.id;
         let headerLabel = data.headerName;
-        let headerClasses = data.headerClass;
+        let headerClasses = FieldUtils.getColumnHeaderClasses(data.fieldDef);
+
         return new Column(fieldId, headerLabel, headerClasses);
     }
 

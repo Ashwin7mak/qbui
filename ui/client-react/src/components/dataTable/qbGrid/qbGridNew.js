@@ -131,7 +131,6 @@ const QbGrid = React.createClass({
                         body: {
                             row: RowWrapper,
                             cell: CellWrapper,
-                            header: this.getHeader,
                         }
                     }}
                 >

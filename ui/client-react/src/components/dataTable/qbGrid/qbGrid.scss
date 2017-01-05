@@ -27,6 +27,10 @@ $grid-font-size: $font-size-p;
         text-align: right;
     }
 
+    .gridHeaderCell {
+        display: block;
+    }
+
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
