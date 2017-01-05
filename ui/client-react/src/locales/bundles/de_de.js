@@ -175,6 +175,28 @@ export default {
             Seconds: "{value, plural, \n =0 {0 Sekunden}\n =1 {1 Sekunde}\n other {{value} Sekunden}\n} ",
             Milliseconds: "{value, plural, \n =0 {0 Millisekunden}\n =1 {1 Millisekunde}\n other {{value} Millisekunden}\n} "
         },
+        acceptedDurationType: {
+            Weeks: 'Wochen',
+            Week: 'Woche',
+            W: 'W',
+            Days: 'Tage',
+            Day: 'Tag',
+            D: 'T',
+            Hours: 'Stunden',
+            Hour: 'Stunde',
+            H: 'S',
+            Minutes: 'Minuten',
+            Minute: 'Minute',
+            M: 'M',
+            Seconds: 'Sekunden',
+            Second: 'Zweite',
+            S: 'Z',
+            Milliseconds: 'Millisekunden',
+            Millisecond: 'Millisekunde',
+            MS: 'MS',
+            Secs: 'Seks',
+            Msecs: 'Mseks'
+        },
         durationTableHeader: {
             Weeks: "Wochen",
             Days: "Tage",
@@ -396,7 +418,15 @@ export default {
             choiceMaxLength : "Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger",
             phone: "Formatieren Sie die {fieldName} +x x xx xx xx xx",
             phoneInvalidCountryCode: "Formatieren Sie den Ländercode wie +x für internationale Nummern",
-            duration: "Formatieren Sie die {fieldName} im {scale}"
+            duration: {
+                timeFormat: "Formatieren Sie die {fieldName} im {value}",
+                Weeks: 'Formatieren Sie die {fieldName} im Wochen',
+                Days: 'Formatieren Sie die {fieldName} im Tage',
+                Hours: 'Formatieren Sie die {fieldName} im Stunden',
+                Minutes: 'Formatieren Sie die {fieldName} im Minuten',
+                Seconds: 'Formatieren Sie die {fieldName} im Sekunden',
+                Milliseconds: 'Formatieren Sie die {fieldName} im Millisekunden',
+            }
         },
         noneOption: "\<Keiner\>",
         unimplemented: {

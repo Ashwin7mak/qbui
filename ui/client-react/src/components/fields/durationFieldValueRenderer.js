@@ -58,7 +58,7 @@ const DurationFieldValueRenderer = React.createClass({
         return {
             classes: null,
             includeUnits : false,
-            attributes : {scale:DURATION_CONSTS.SMART_UNITS}
+            attributes : {scale:DURATION_CONSTS.SCALES.SMART_UNITS}
         };
     },
 
@@ -79,7 +79,7 @@ const DurationFieldValueRenderer = React.createClass({
 
         let fieldInfo = Object.assign({}, this.props.attributes);
         let formattedObj = {};
-        if (opts.scale === DURATION_CONSTS.SMART_UNITS) {
+        if (opts.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             // request the formatter fill in a deconstructed formatted value for localizing smartunits
             // by extending the field info with formattedObj
             fieldInfo = Object.assign({}, fieldInfo, {formattedObj});
@@ -89,7 +89,7 @@ const DurationFieldValueRenderer = React.createClass({
         //since the units are dynamic for smart units
         //it need to get formatted and destructured(string and units) for localizing
         //server side rendered display value is not localized
-        if (opts.scale === DURATION_CONSTS.SMART_UNITS || !display) {
+        if (opts.scale === DURATION_CONSTS.SCALES.SMART_UNITS || !display) {
             if (typeof this.props.value === 'number') {
                 display = durationFormatter.format({value: this.props.value}, fieldInfo);
             }
@@ -97,12 +97,14 @@ const DurationFieldValueRenderer = React.createClass({
 
         // for smart units localize the units
         let durationNumberIntl = {maximumFractionDigits:opts.decimalPlaces};
-        if (opts.scale === DURATION_CONSTS.SMART_UNITS) {
+        if (opts.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
             if (formattedObj.units) {
                 let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(formattedObj.string));
                 display = <I18nMessage message={"durationWithUnits." + formattedObj.units}
                                        value={numberValue}/>;
             }
+        } else if (this.props.display === null || this.props.display === '') {
+            display = this.props.display;
         } else if (durationFormatter.hasUnitsText(opts.scale)) {
             if (this.props.includeUnits) {
                 let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));

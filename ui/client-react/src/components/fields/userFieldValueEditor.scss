@@ -46,7 +46,7 @@
 
                 .deactivatedLabel {
                     font-size: 12px;
-                    color: $user-picker-deactivated-label-fg;
+                    color: $user-picker-deactivated-label-color;
                     font-style: italic;
                 }
 
@@ -60,12 +60,12 @@
 
                 .userLabel {
                     font-size: 14px;
-                    color: $user-picker-user-label-fg;
+                    color: $user-picker-user-label-color;
                 }
 
                 .email {
                     font-size: 12px;
-                    color: $user-picker-email-label-fg;
+                    color: $user-picker-email-label-color;
                 }
             }
         }
