@@ -73,9 +73,9 @@
             formsPO.waitForEditFormsTableLoad();
 
             //Step 8 - verify text field is empty
-            expect(browser.element('input.input.textField.borderOnError.cellEdit').getText()).toBe('');
+            expect(browser.element('input.input.textField.cellEdit').getText()).toBe('');
             //verify numeric field is empty
-            expect(browser.element('input.input.numericField.borderOnError.cellEdit').getText()).toBe('');
+            expect(browser.element('input.input.numericField.cellEdit').getText()).toBe('');
 
             // Step 9 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
