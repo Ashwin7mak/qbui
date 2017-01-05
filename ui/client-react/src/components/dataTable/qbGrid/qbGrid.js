@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Table} from 'reactabular';
+import * as Table from 'reactabular-table';
 import Fluxxor from 'fluxxor';
 import Locale from '../../../locales/locales';
 import {Button, Dropdown, MenuItem} from 'react-bootstrap';

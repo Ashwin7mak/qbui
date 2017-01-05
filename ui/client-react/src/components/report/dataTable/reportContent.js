@@ -4,6 +4,8 @@ import {NotificationManager} from 'react-notifications';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
+import ReportGrid from "../../../components/dataTable/reportGrid";
+import QbGridNew from '../../../components/dataTable/qbGrid/qbGridNew';
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
@@ -773,31 +775,37 @@ export let ReportContent = React.createClass({
                     <div className={addPadding}>
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
-                        <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                            <ReportGrid
+                                records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 primaryKeyName={this.props.primaryKeyName}
-                                selectedRows={this.props.selectedRows}
-                                onRowClick={this.openRow}
-                                onEditRecordStart={this.handleEditRecordStart}
-                                onEditRecordCancel={this.handleEditRecordCancel}
-                                onFieldChange={this.handleFieldChange}
-                                onRecordChange={this.handleRecordChange}
-                                appUsers={this.props.appUsers}
-                                appId={this.props.reportData.appId}
-                                tblId={this.props.reportData.tblId}
-                                rptId={this.props.reportData.rptId}
-                                isInlineEditOpen={isInlineEditOpen}
-                                pendEdits={this.props.pendEdits}
-                                editErrors={editErrors}
-                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordsCount={recordsCount}
-                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
-                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                filter={{selections: this.props.reportData.selections,
-                                    facet: this.props.reportData.facetExpression,
-                                    search: this.props.reportData.searchStringForFiltering}}
-                        />}
+                                loading={this.props.reportData.loading}
+                            />
+                        }
+                        {/*<QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}*/}
+                        {/*columns={this.props.reportData.data ? this.props.reportData.data.columns : []}*/}
+                        {/*primaryKeyName={this.props.primaryKeyName}*/}
+                        {/*selectedRows={this.props.selectedRows}*/}
+                        {/*onRowClick={this.openRow}*/}
+                        {/*onEditRecordStart={this.handleEditRecordStart}*/}
+                        {/*onEditRecordCancel={this.handleEditRecordCancel}*/}
+                        {/*onFieldChange={this.handleFieldChange}*/}
+                        {/*onRecordChange={this.handleRecordChange}*/}
+                        {/*appUsers={this.props.appUsers}*/}
+                        {/*appId={this.props.reportData.appId}*/}
+                        {/*tblId={this.props.reportData.tblId}*/}
+                        {/*rptId={this.props.reportData.rptId}*/}
+                        {/*isInlineEditOpen={isInlineEditOpen}*/}
+                        {/*pendEdits={this.props.pendEdits}*/}
+                        {/*editErrors={editErrors}*/}
+                        {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
+                        {/*recordsCount={recordsCount}*/}
+                        {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}
+                        {/*groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}*/}
+                        {/*sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}*/}
+                        {/*filter={{selections: this.props.reportData.selections,*/}
+                        {/*facet: this.props.reportData.facetExpression,*/}
+                        {/*search: this.props.reportData.searchStringForFiltering}}*/}
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}

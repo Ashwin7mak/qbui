@@ -9,6 +9,8 @@ $cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
 
 .qbGrid > thead, .qbGrid > tbody {
+    color: $default-text-onlight-color;
+    -webkit-font-smoothing: antialiased;
     table-layout: fixed;
 
     > td {
@@ -17,8 +19,33 @@ $grid-font-size: $font-size-p;
 }
 
 .qbGrid {
-    .dateFormat, .dateTimeFormat, .timeFormat, .durationFormat, .phoneFormat {
+    .dateCell, .durationCell, .phoneCell, .urlField {
         white-space: nowrap;
+    }
+
+    .AlignRight {
+        text-align: right;
+    }
+
+    .gridHeaderCell.AlignRight, .gridCell.AlignRight {
+        text-align: right;
+    }
+
+    .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
+        text-align: center;
+    }
+
+    .cellWrapper {
+        &.numberFormat,
+        &.currencyFormat,
+        &.percentFormat,
+        &.durationFormat.wUnitsText {
+            text-align: right;
+        }
+
+        &.checkboxFormat {
+            text-align: center;
+        }
     }
 }
 
@@ -83,7 +110,7 @@ $grid-font-size: $font-size-p;
 }
 
 .qbGrid > tbody > tr > td {
-    padding: 4px;
+    padding: 6px;
     font-size: $grid-font-size;
     border-right: 1px solid $color-black-300;
     border-bottom: 1px solid $color-black-300;
