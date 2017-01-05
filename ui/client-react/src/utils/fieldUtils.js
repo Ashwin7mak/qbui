@@ -134,6 +134,7 @@ class FieldUtils {
      * @returns {*}
      */
     static getFieldType(fieldDef, type, attributes) {
+        // TODO - Make sure multiline works
         let fieldType = type;
         if (fieldDef) {
             if (fieldDef.type === consts.FORMULA) {

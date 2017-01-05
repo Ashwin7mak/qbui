@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
-import Row from './row';
 import CellValueRenderer from '../agGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import RowWrapper from './rowWrapper';
+import FieldValueEditor from '../../fields/fieldValueEditor';
 
 
 import './qbGrid.scss';
@@ -14,6 +15,8 @@ const QbGrid = React.createClass({
     propTypes: {
         columns: PropTypes.array.isRequired,
         rows: PropTypes.array.isRequired,
+        startEditingRow: PropTypes.func.isRequired,
+        appUsers: PropTypes.array.isRequired,
         // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
         //     if (!(propValue instanceof Row)) {
         //         return new Error(
@@ -34,6 +37,21 @@ const QbGrid = React.createClass({
 
         let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(fieldDef)];
         let isEditable = FieldUtils.isFieldEditable(fieldDef);
+
+        if (colDef.editing) {
+            return (
+                <td className={classes.join(' ')}>
+                    <FieldValueEditor
+                        {...colDef}
+                        type={colDef.fieldDef.datatypeAttributes.type}
+                        fieldDef={fieldDef}
+                        fieldName={fieldDef.name}
+                        idKey={`fve-${colDef.key}`}
+                        appUsers={this.props.appUsers}
+                    />
+                </td>
+            );
+        }
 
         return (
             <td className={classes.join(' ')}>
@@ -96,15 +114,38 @@ const QbGrid = React.createClass({
     //     let className = 'row';
     //     return <tr className={className}>{rowProps.children}</tr>;
     // },
+    getRecordIdForRow(rowProps) {
+        let keys = Object.keys(rowProps);
+        if (keys.length === 0) {
+            return null;
+        }
 
-    getRow(rowProps) {
-        return <tr className="table-row" {...rowProps} />;
+        let firstField = rowProps[keys[0]];
+
+        if (!_.isObject(firstField)) {
+            return null;
+        }
+
+        return firstField.recordId;
     },
 
-    getColumnHeaders() {
-        return this.props.columns.map(column => {
-            return <th>Hello</th>;
-        });
+    startEditingRow(recordId) {
+        return (ev) => {
+            this.props.startEditingRow(recordId);
+        };
+    },
+
+    addRowDecorators(row, {rowIndex, rowKey}) {
+        let classes = ['table-row'];
+        let recordId = this.getRecordIdForRow(row);
+        if (row.editing) {
+            classes.push('editing');
+        }
+        return {
+            className: classes.join(' '),
+            onClick: this.startEditingRow(recordId),
+            editing: row.editing
+        };
     },
 
     render() {
@@ -116,7 +157,7 @@ const QbGrid = React.createClass({
                     columns={this.getColumns()}
                     components={{
                         body: {
-                            row: this.getRow,
+                            row: RowWrapper,
                             cell: this.getColumnDataCell,
                             header: this.getHeader,
                         }
@@ -124,7 +165,7 @@ const QbGrid = React.createClass({
                 >
                     <Table.Header />
 
-                    <Table.Body rows={this.props.rows} rowKey="id" />
+                    <Table.Body onRow={this.addRowDecorators} rows={this.props.rows} rowKey="id" />
                 </Table.Provider>
             </Loader>
         );
