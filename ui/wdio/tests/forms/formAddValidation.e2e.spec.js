@@ -72,17 +72,15 @@
             //Verify edit container is loaded
             formsPO.waitForEditFormsTableLoad();
 
-            //Step 10 - Verify Record ID field is empty. Clicking on 'Save and Add Another' button takes to new record
-            expect(browser.element('div.numericField.viewElement').getText()).toBe('');
-            //verify text field is empty
+            //Step 8 - verify text field is empty
             expect(browser.element('input.input.textField.borderOnError.cellEdit').getText()).toBe('');
             //verify numeric field is empty
             expect(browser.element('input.input.numericField.borderOnError.cellEdit').getText()).toBe('');
 
-            // Step 8 - Reload the report after saving row as the row is added at the last page
+            // Step 9 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            // Step 9 - Verify the records count got increased by 1
+            // Step 10 - Verify the records count got increased by 1
             expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount + 1);
         });
 

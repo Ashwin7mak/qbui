@@ -116,7 +116,7 @@
          * Fields Tested : text, url, phone, email, numeric, currency, duration, rating, date, dateTime, checkbox and userField.
          */
         it('Edit a record via View Form edit pencil', function() {
-            var actualNumbersArray = ['4', '33.33', '$33.33', '33.33'];
+            var actualNumbersArray = ['33.33', '$33.33', '33.33'];
             var expectedNumbersArray;
             var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
 
@@ -135,7 +135,7 @@
             formsPO.clickFormSaveBtn();
             //verify You land in view form since you edited a record from View form after saving
             formsPO.waitForViewFormsTableLoad();
-            //Verify the record Id is 4 in view form since we edited 4th record
+            //Verify the we landed in edited record after saving
             expectedNumbersArray = browser.elements('div.numericField.viewElement').getText();
             //compare 2 arrays
             expect(actualNumbersArray).toEqual(expectedNumbersArray);

@@ -5,6 +5,7 @@
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
+    var reportContentPO = requirePO('reportContent');
 
     describe('Edit Form Validation Tests :', function() {
 
@@ -47,7 +48,11 @@
             var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field'];
             //TODO verify why URL field is not throwing error when given special characters
 
-            //Step 1 - Click on 2nd record edit pencil
+            //Step 1 - Get the 6th record textField
+            var recordValues = reportContentPO.getRecordValues(5);
+            var expectedSixthRecordTextField = recordValues[1];
+
+            //Step 1 - Click on 5th record edit pencil.Record count starts from 0
             formsPO.clickRecordEditPencilInRecordActions(4);
 
             //Step 2 - Enter invalid values to get the form to error state
@@ -72,8 +77,8 @@
             //Step 9 - Verify edit container is loaded after hitting
             formsPO.waitForEditFormsTableLoad();
 
-            //Step 10 - Verify Record ID field has record 6 since we edited record 5. Clicking on 'Save and Next' button takes to next record
-            expect(browser.element('div.numericField.viewElement').getText()).toBe('6');
+            //Step 10 - Verify text field value of 6th record since Clicking on 'Save and Next' button takes to next record which is 6 in this case
+            expect(browser.element('input.input.textField.cellEdit').getAttribute('value')).toBe(expectedSixthRecordTextField);
         });
 
     });
