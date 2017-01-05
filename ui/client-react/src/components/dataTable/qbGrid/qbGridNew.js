@@ -26,16 +26,22 @@ const QbGrid = React.createClass({
         // }).isRequired
     },
 
-    editCell(colDef, editingRecordId, editingColumnId) {
+    editCell(colDef) {
         return (newValue) => {
-            this.props.onCellChange(newValue, colDef, editingRecordId, editingColumnId);
+            this.props.onCellChange(newValue, colDef);
+        };
+    },
+
+    blurCell(colDef) {
+        return (newValue) => {
+            this.props.onCellChange(newValue, colDef);
         };
     },
 
     addCellDecorators(cell) {
         let changeListeners = {
             editCell: this.editCell,
-            onCellBlur: this.props.onCellBlur,
+            onCellBlur: this.blurCell,
             appUsers: this.props.appUsers,
         };
 

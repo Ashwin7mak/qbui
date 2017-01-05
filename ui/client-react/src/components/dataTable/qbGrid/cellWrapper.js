@@ -36,8 +36,8 @@ const CellWrapper = React.createClass({
                         fieldName={fieldDef.name}
                         idKey={`fve-${colDef.key}`}
                         appUsers={colDef.appUsers}
-                        onChange={colDef.editCell(colDef, colDef.recordId, colDef.id)}
-                        onBlur={colDef.onCellBlur}
+                        onChange={colDef.editCell(colDef)}
+                        onBlur={colDef.onCellBlur(colDef)}
                     />
                 </td>
             );

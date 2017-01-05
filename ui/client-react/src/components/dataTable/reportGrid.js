@@ -25,6 +25,10 @@ const ReportGrid = React.createClass({
     getInitialState() {
         return {
             editingRecord: null,
+            pendEdits: {
+                currentEditingRecordId: null,
+                recordChanges: {}
+            }
         };
     },
 
@@ -34,11 +38,13 @@ const ReportGrid = React.createClass({
 
     transformRecords() {
         return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.props.pendEdits);
+        // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
     startEditingRow(recordId) {
         this.setState({editingRecord: recordId});
-        this.props.onEditRecordStart(recordId);
+        // this.props.onEditRecordStart(recordId);
+        this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
     },
 
     onCellChange(value, colDef) {
@@ -47,22 +53,16 @@ const ReportGrid = React.createClass({
             display: value
         };
 
-        let change = {
-            values: {
-                oldVal: {value: colDef.value, display: colDef.display},
-                newVal: updatedFieldValue
-            },
-            recId: colDef.recordId,
-            fid: colDef.id,
-            fieldName: colDef.fieldDef.name,
-            fieldDef: colDef.fieldDef
-        };
-
-        this.props.onFieldChange(change);
+        this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
+        // Comment out the line above, and uncomment out this line and the line in transformRecords to see performance when not using the pendEdits store and
+        // relying on props to work their way down the React tree.
+        // let localPendEdits = Object.assign({}, this.state.pendEdits);
+        // localPendEdits.recordChanges[colDef.id] = change.values;
+        // this.setState({pendEdits: localPendEdits});
     },
 
-    onCellBlur(value, recordId, fieldId) {
-        return;
+    onCellBlur(updatedFieldValue, colDef) {
+        this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
     },
 
     render() {
@@ -78,5 +78,18 @@ const ReportGrid = React.createClass({
         />;
     }
 });
+
+function formatChange(updatedValues, colDef) {
+    return {
+        values: {
+            oldVal: {value: colDef.value, display: colDef.display},
+            newVal: updatedValues
+        },
+        recId: colDef.recordId,
+        fid: colDef.id,
+        fieldName: colDef.fieldDef.name,
+        fieldDef: colDef.fieldDef
+    };
+}
 
 export default ReportGrid;
