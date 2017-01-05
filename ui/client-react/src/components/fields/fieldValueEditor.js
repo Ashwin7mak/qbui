@@ -120,6 +120,11 @@ const FieldValueEditor = React.createClass({
          * how to identify the field input
          */
         idKey : React.PropTypes.any,
+
+        /**
+         * List of users for the app which is required for the user picker to function
+         */
+        appUsers: React.PropTypes.array.isRequired
     },
 
     getDefaultProps() {

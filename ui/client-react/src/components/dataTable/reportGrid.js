@@ -8,7 +8,8 @@ const ReportGrid = React.createClass({
         records: PropTypes.array,
         columns: PropTypes.array,
         primaryKeyName: PropTypes.string.isRequired,
-        loading: PropTypes.bool
+        loading: PropTypes.bool,
+        appUsers: PropTypes.array.isRequired,
     },
 
     getDefaultProps() {
@@ -18,12 +19,23 @@ const ReportGrid = React.createClass({
         };
     },
 
+    getInitialState() {
+        return {
+            editingRecord: null,
+        };
+    },
+
     transformColumns() {
         return Column.transformColumnsForGrid(this.props.columns);
     },
 
     transformRecords() {
-        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName);
+        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord);
+    },
+
+    startEditingRow(recordId) {
+        console.log("eidting new row " + recordId);
+        this.setState({editingRecord: recordId});
     },
 
     render() {
@@ -31,6 +43,9 @@ const ReportGrid = React.createClass({
             columns={this.transformColumns()}
             rows={this.transformRecords()}
             loading={this.props.loading}
+            startEditingRow={this.startEditingRow}
+            editingRow={this.state.editingRecord}
+            appUsers={this.props.appUsers}
         />;
     }
 });

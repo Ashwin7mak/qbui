@@ -784,6 +784,7 @@ export let ReportContent = React.createClass({
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 primaryKeyName={this.props.primaryKeyName}
                                 loading={this.props.reportData.loading}
+                                appUsers={this.props.appUsers}
                             />
                         }
                         {/*<QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}*/}
