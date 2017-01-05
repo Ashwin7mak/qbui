@@ -739,7 +739,7 @@ export let ReportContent = React.createClass({
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
         let self = this;
-        letButtonText = this.state.showReactabular
+        let buttonText = this.state.showReactabular ? 'Switch to AGGrid' : 'Switch to Reactabular';
         function isReactabular() {
             self.setState({showReactabular: !self.state.showReactabular});
         };
@@ -774,7 +774,7 @@ export let ReportContent = React.createClass({
         } else {
             reportContent = (
                     <div className={addPadding}>
-                        <button onClick={isReactabular} style={{marginBottom:"25px", marginLeft: "10px", width: "150px", height: '25px', borderRadius:'20px', background:'pink'}}>Switch Grid </button>
+                        <button onClick={isReactabular} style={{marginBottom:"25px", marginLeft: "10px", width: "150px", height: '25px', borderRadius:'20px', background:'pink'}}> {buttonText} </button>
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.state.showReactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
