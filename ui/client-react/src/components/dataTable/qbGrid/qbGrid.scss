@@ -179,6 +179,9 @@ $grid-font-size: $font-size-p;
                 resize: none;
                 overflow: hidden;
                 box-sizing: border-box;
+                //NOTE:
+                //This is to set all textareas height to 32px, IF this ends up being hardcoded refer to your notes
+                height: 32px
             }
 
             .cellEdit {
