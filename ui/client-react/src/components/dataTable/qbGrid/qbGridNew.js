@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Row from './row';
-import FieldValueRenderer from '../../fields/fieldValueRenderer';
+import CellValueRenderer from '../agGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
 import Loader  from 'react-loader';
@@ -26,32 +26,29 @@ const QbGrid = React.createClass({
 
     getColumnDataCell(cellProps) {
         let colDef = _.cloneDeep(cellProps.children);
+        let fieldDef = colDef.fieldDef;
 
         if (_.has(colDef, 'fieldDef.datatypeAttributes.type')) {
-            colDef.fieldDef.datatypeAttributes.type = FieldFormats.getFormatType(colDef.fieldDef.datatypeAttributes);
+            fieldDef.datatypeAttributes.type = FieldFormats.getFormatType(fieldDef.datatypeAttributes);
         }
 
-        let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(colDef.fieldDef)];
+        let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(fieldDef)];
+        let isEditable = FieldUtils.isFieldEditable(fieldDef);
 
         return (
             <td className={classes.join(' ')}>
-                {/*let isEditable = FieldUtils.isFieldEditable(this.props.colDef.fieldDef);*/}
-                {/*Use cellValueRenderer*/}
-                {/*Some things missing from the the cell renderer version of FieldValueEditor*/}
-                {/*isEditable={this.props.isEditable}*/}
-                {/*key={"fvr-" + this.props.idKey}*/}
-                {/*idKey={"fvr-" + this.props.idKey}*/}
 
-                <FieldValueRenderer
+                <CellValueRenderer
                     type={colDef.fieldDef.datatypeAttributes.type}
                     classes={colDef.cellClass}
                     attributes={colDef.fieldDef.datatypeAttributes}
-
-
-
+                    isEditable={isEditable}
+                    idKey={`fvr-${colDef.key}`}
+                    key={`fvr-${colDef.key}`}
 
                     // Don't show duration units in the grid
                     includeUnits={false}
+
                     // Don't show unchecked checkboxes in the grid
                     hideUncheckedCheckbox={true}
 
@@ -101,7 +98,7 @@ const QbGrid = React.createClass({
     // },
 
     getRow(rowProps) {
-        return <tr className="table-cell" {...rowProps} />;
+        return <tr className="table-row" {...rowProps} />;
     },
 
     getColumnHeaders() {

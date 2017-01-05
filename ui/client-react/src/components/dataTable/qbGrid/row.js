@@ -6,9 +6,10 @@ class Row {
             return [];
         }
 
-        return records.map(record => {
+        return records.map((record, index) => {
             let id = record[primaryKeyFieldName].value;
-            return new Row(addRelatedFieldDefinitions(record, fields), id);
+            let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields);
+            return new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index, id), id);
         });
     }
 
@@ -35,6 +36,14 @@ function addRelatedFieldDefinitions(record = {}, fields = []) {
         transformedRecord[transformedField.id] = transformedField;
     });
     return transformedRecord;
+}
+
+function addUniqueKeyTo(recordWithFields, index, recordId) {
+    let recordWithFieldsAndUniqueKeys = _.cloneDeep(recordWithFields);
+    Object.keys(recordWithFieldsAndUniqueKeys).forEach(key => {
+        recordWithFieldsAndUniqueKeys[key].key = `${index}-fid-${recordWithFieldsAndUniqueKeys[key].id}-recId-${recordId}`;
+    });
+    return recordWithFieldsAndUniqueKeys;
 }
 
 export default Row;
