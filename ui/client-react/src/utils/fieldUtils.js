@@ -1,6 +1,8 @@
 import * as SchemaConsts from '../constants/schema';
 import consts from '../../../common/src/constants';
 import FieldFormats from '../utils/fieldFormats';
+import * as durationFormatter from "../../../common/src/formatter/durationFormatter";
+import _ from 'lodash';
 
 class FieldUtils {
     /**
@@ -152,11 +154,48 @@ class FieldUtils {
         }
         return fieldType;
     }
+
+    static getFieldSpecificCellClass(fieldDef) {
+        if (!_.has(fieldDef, 'datatypeAttributes.type')) {
+            return 'textFormat';
+        }
+
+        switch (fieldDef.datatypeAttributes.type) {
+        case FieldFormats.DATE_FORMAT:            return "dateFormat";
+        case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
+        case FieldFormats.TIME_FORMAT:            return "timeFormat";
+        case FieldFormats.NUMBER_FORMAT:          return "numberFormat";
+        case FieldFormats.RATING_FORMAT:          return "ratingFormat";
+        case FieldFormats.CURRENCY_FORMAT:        return "currencyFormat";
+        case FieldFormats.PERCENT_FORMAT:         return "percentFormat";
+        case FieldFormats.DURATION_FORMAT:        return getClassNameForDuration(fieldDef);
+        case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
+        case FieldFormats.TEXT_FORMAT:            return "textFormat";
+        case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
+        case FieldFormats.USER_FORMAT:            return "userFormat";
+        case FieldFormats.URL:                    return "urlFormat";
+        case FieldFormats.EMAIL_ADDRESS:          return "emailFormat";
+        case FieldFormats.TEXT_FORMULA_FORMAT:    return "formulaTextFormat";
+        case FieldFormats.NUMERIC_FORMULA_FORMAT: return "formulaNumericFormat";
+        case FieldFormats.URL_FORMULA_FORMAT:     return "formulaUrlFormat";
+        case FieldFormats.CHECKBOX_FORMAT:        return 'checkboxFormat';
+        default:                                  return "textFormat";
+        }
+    }
 }
 
 // PRIVATE METHODS
 function requiredFieldsArePresent(fields) {
     return fields && fields.fields && fields.fields.data && fields.fields.data.length;
+}
+
+function getClassNameForDuration(fieldDef) {
+    let answer = "durationFormat";
+    if (_.has(fieldDef, 'datatypeAttributes.scale') &&
+        durationFormatter.hasUnitsText(fieldDef.datatypeAttributes.scale)) {
+        answer += " wUnitsText";
+    }
+    return answer;
 }
 
 export default FieldUtils;
