@@ -47,8 +47,8 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            return browser.waitForExist('.ag-body-viewport', browser.waitforTimeout, false);
+            // wait until you see ag-body-viewport
+            return browser.waitForExist('.ag-body-viewport', browser.waitforTimeout);
         }},
 
         /**

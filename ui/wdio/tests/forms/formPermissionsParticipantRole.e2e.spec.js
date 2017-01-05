@@ -3,15 +3,11 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
-    var promise = require('bluebird');
 
     //Load the page Objects
-    var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
-    var ReportInLineEditPO = requirePO('reportInLineEdit');
 
     describe('Forms Participant User Permission Tests: ', function() {
 
@@ -21,7 +17,6 @@
         var userId;
         var reportId;
         var roleId = 11;
-        var ADMIN_USERID = 10000;
         var appId;
         var tableId;
 
@@ -88,7 +83,7 @@
             // Auth into the new stack
             realmName = e2eBase.recordBase.apiBase.realm.subdomain;
             realmId = e2eBase.recordBase.apiBase.realm.id;
-            return formsPO.getUserAuthentication(realmName, realmId, ADMIN_USERID);
+            return formsPO.getUserAuthentication(realmName, realmId, e2eConsts.ADMIN_USERID);
         });
 
         it('Verify fieldRights - View Form and Edit form dont have access to all numeric fields', function() {

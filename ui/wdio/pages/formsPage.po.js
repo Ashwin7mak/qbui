@@ -155,9 +155,9 @@
          * Returns all text input fields on the form
          * @returns Array of text input fields
          */
-        getAllTextInputFields: {value: function() {
+        getAllFieldRows: {value: function() {
             var self = this;
-            self.editFormContainerEl.elements('input[type="text"].textField').waitForVisible();
+            self.editFormContainerEl.elements('.fieldRow').waitForVisible();
             return self.editFormContainerEl.elements('.fieldRow');
         }},
 
@@ -177,8 +177,8 @@
          */
         getAllPhoneInputFields: {value: function() {
             var self = this;
-            self.editFormContainerEl.elements('input[type="tel"].phoneNumber').waitForVisible();
-            return self.editFormContainerEl.elements('input[type="tel"].phoneNumber');
+            self.editFormContainerEl.elements('input.phoneNumber').waitForVisible();
+            return self.editFormContainerEl.elements('input.phoneNumber');
         }},
 
         /**
@@ -296,7 +296,7 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            return browser.waitForExist('.editForm', browser.waitforTimeout, false);
+            return browser.waitForExist('.editForm', browser.waitforTimeout);
         }},
 
         /**
@@ -305,7 +305,7 @@
          */
         waitForViewFormsTableLoad: {value: function() {
             // wait for view form
-            return browser.waitForExist('.viewForm', browser.waitforTimeout, false);
+            return browser.waitForExist('.viewForm', browser.waitforTimeout);
         }},
 
         /**
@@ -445,7 +445,7 @@
             var i;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = self.getAllTextInputFields();
+                var textFields = self.getAllFieldRows();
                 for (i = 0; i < textFields.value.length; i++) {
                     if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
                         textFields.value[i].element('input[type="text"].textField').setValue(sText);
@@ -529,7 +529,7 @@
             var self = this;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = self.getAllTextInputFields();
+                var textFields = self.getAllFieldRows();
                 for (i = 0; i < textFields.value.length; i++) {
                     if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
                         textFields.value[i].element('input[type="text"].textField').setValue(invalidValue);

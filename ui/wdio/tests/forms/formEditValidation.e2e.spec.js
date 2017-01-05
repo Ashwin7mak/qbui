@@ -4,7 +4,6 @@
     //Load the page Objects
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
-    var reportContentPO = requirePO('reportContent');
     var formsPO = requirePO('formsPage');
 
     describe('Edit Form Validation Tests :', function() {

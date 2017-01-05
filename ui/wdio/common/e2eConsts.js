@@ -35,6 +35,8 @@
         DEFAULT_NUM_CHOICES_TO_CREATE : 12,
         DEFAULT_ADMIN_ROLE : 12,
 
+        ADMIN_USERID : 10000,
+
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
         fieldType : {
