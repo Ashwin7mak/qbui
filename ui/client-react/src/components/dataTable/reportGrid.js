@@ -10,6 +10,9 @@ const ReportGrid = React.createClass({
         primaryKeyName: PropTypes.string.isRequired,
         loading: PropTypes.bool,
         appUsers: PropTypes.array.isRequired,
+        onFieldChange: PropTypes.func.isRequired,
+        onEditRecordStart: PropTypes.func.isRequired,
+        pendEdits: PropTypes.object,
     },
 
     getDefaultProps() {
@@ -30,12 +33,36 @@ const ReportGrid = React.createClass({
     },
 
     transformRecords() {
-        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord);
+        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.props.pendEdits);
     },
 
     startEditingRow(recordId) {
-        console.log("eidting new row " + recordId);
         this.setState({editingRecord: recordId});
+        this.props.onEditRecordStart(recordId);
+    },
+
+    onCellChange(value, colDef) {
+        let updatedFieldValue = {
+            value: value,
+            display: value
+        };
+
+        let change = {
+            values: {
+                oldVal: {value: colDef.value, display: colDef.display},
+                newVal: updatedFieldValue
+            },
+            recId: colDef.recordId,
+            fid: colDef.id,
+            fieldName: colDef.fieldDef.name,
+            fieldDef: colDef.fieldDef
+        };
+
+        this.props.onFieldChange(change);
+    },
+
+    onCellBlur(value, recordId, fieldId) {
+        return;
     },
 
     render() {
@@ -46,6 +73,8 @@ const ReportGrid = React.createClass({
             startEditingRow={this.startEditingRow}
             editingRow={this.state.editingRecord}
             appUsers={this.props.appUsers}
+            onCellChange={this.onCellChange}
+            onCellBlur={this.onCellBlur}
         />;
     }
 });

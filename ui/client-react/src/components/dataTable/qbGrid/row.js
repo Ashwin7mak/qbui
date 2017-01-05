@@ -1,15 +1,26 @@
 import _ from 'lodash';
 
 class Row {
-    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId) {
+    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId, pendingEdits) {
         if (!records || !_.isArray(records)) {
             return [];
         }
 
         return records.map((record, index) => {
             let id = record[primaryKeyFieldName].value;
+
             let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields, id);
             let editing = (id === editingRecordId);
+
+            if (pendingEdits.currentEditingRecordId === id) {
+                Object.keys(pendingEdits.recordChanges).forEach(key => {
+                    let pendingEdit = pendingEdits.recordChanges[key];
+                    let editedField = recordWithRelatedFieldDef[key];
+                    editedField.display = pendingEdit.newVal.display;
+                    editedField.value = pendingEdit.newVal.value;
+                });
+            }
+
             return new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing);
         });
     }

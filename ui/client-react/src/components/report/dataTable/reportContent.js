@@ -781,6 +781,9 @@ export let ReportContent = React.createClass({
                                 primaryKeyName={this.props.primaryKeyName}
                                 loading={this.props.reportData.loading}
                                 appUsers={this.props.appUsers}
+                                onFieldChange={this.handleFieldChange}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                pendEdits={this.props.pendEdits}
                             />
                         }
                         {/*<QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}*/}
@@ -788,16 +791,12 @@ export let ReportContent = React.createClass({
                         {/*primaryKeyName={this.props.primaryKeyName}*/}
                         {/*selectedRows={this.props.selectedRows}*/}
                         {/*onRowClick={this.openRow}*/}
-                        {/*onEditRecordStart={this.handleEditRecordStart}*/}
                         {/*onEditRecordCancel={this.handleEditRecordCancel}*/}
-                        {/*onFieldChange={this.handleFieldChange}*/}
                         {/*onRecordChange={this.handleRecordChange}*/}
-                        {/*appUsers={this.props.appUsers}*/}
                         {/*appId={this.props.reportData.appId}*/}
                         {/*tblId={this.props.reportData.tblId}*/}
                         {/*rptId={this.props.reportData.rptId}*/}
                         {/*isInlineEditOpen={isInlineEditOpen}*/}
-                        {/*pendEdits={this.props.pendEdits}*/}
                         {/*editErrors={editErrors}*/}
                         {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
                         {/*recordsCount={recordsCount}*/}

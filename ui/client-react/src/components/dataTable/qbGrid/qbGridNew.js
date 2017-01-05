@@ -1,12 +1,9 @@
 import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
-import CellValueRenderer from '../agGrid/cellValueRenderer';
-import FieldUtils from '../../../utils/fieldUtils';
-import FieldFormats from '../../../utils/fieldFormats';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import RowWrapper from './rowWrapper';
-import FieldValueEditor from '../../fields/fieldValueEditor';
+import CellWrapper from './cellWrapper';
 
 
 import './qbGrid.scss';
@@ -17,6 +14,8 @@ const QbGrid = React.createClass({
         rows: PropTypes.array.isRequired,
         startEditingRow: PropTypes.func.isRequired,
         appUsers: PropTypes.array.isRequired,
+        onCellChange: PropTypes.func.isRequired,
+        onCellBlur: PropTypes.func.isRequired,
         // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
         //     if (!(propValue instanceof Row)) {
         //         return new Error(
@@ -27,58 +26,25 @@ const QbGrid = React.createClass({
         // }).isRequired
     },
 
-    getColumnDataCell(cellProps) {
-        let colDef = _.cloneDeep(cellProps.children);
-        let fieldDef = colDef.fieldDef;
+    editCell(colDef, editingRecordId, editingColumnId) {
+        return (newValue) => {
+            this.props.onCellChange(newValue, colDef, editingRecordId, editingColumnId);
+        };
+    },
 
-        if (_.has(colDef, 'fieldDef.datatypeAttributes.type')) {
-            fieldDef.datatypeAttributes.type = FieldFormats.getFormatType(fieldDef.datatypeAttributes);
-        }
+    addCellDecorators(cell) {
+        let changeListeners = {
+            editCell: this.editCell,
+            onCellBlur: this.props.onCellBlur,
+            appUsers: this.props.appUsers,
+        };
 
-        let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(fieldDef)];
-        let isEditable = FieldUtils.isFieldEditable(fieldDef);
-
-        if (colDef.editing) {
-            return (
-                <td className={classes.join(' ')}>
-                    <FieldValueEditor
-                        {...colDef}
-                        type={colDef.fieldDef.datatypeAttributes.type}
-                        fieldDef={fieldDef}
-                        fieldName={fieldDef.name}
-                        idKey={`fve-${colDef.key}`}
-                        appUsers={this.props.appUsers}
-                    />
-                </td>
-            );
-        }
-
-        return (
-            <td className={classes.join(' ')}>
-
-                <CellValueRenderer
-                    type={colDef.fieldDef.datatypeAttributes.type}
-                    classes={colDef.cellClass}
-                    attributes={colDef.fieldDef.datatypeAttributes}
-                    isEditable={isEditable}
-                    idKey={`fvr-${colDef.key}`}
-                    key={`fvr-${colDef.key}`}
-
-                    // Don't show duration units in the grid
-                    includeUnits={false}
-
-                    // Don't show unchecked checkboxes in the grid
-                    hideUncheckedCheckbox={true}
-
-                    {...colDef}
-                />
-            </td>
-        );
+        return Object.assign({}, cell, changeListeners);
     },
 
     getColumns() {
         return this.props.columns.map(column => {
-            return column.gridHeader();
+            return column.addFormatter(this.addCellDecorators).gridHeader();
         });
     },
 
@@ -135,7 +101,7 @@ const QbGrid = React.createClass({
         };
     },
 
-    addRowDecorators(row, {rowIndex, rowKey}) {
+    addRowDecorators(row) {
         let classes = ['table-row'];
         let recordId = this.getRecordIdForRow(row);
         if (row.editing) {
@@ -158,7 +124,7 @@ const QbGrid = React.createClass({
                     components={{
                         body: {
                             row: RowWrapper,
-                            cell: this.getColumnDataCell,
+                            cell: CellWrapper,
                             header: this.getHeader,
                         }
                     }}
