@@ -87,7 +87,9 @@
             HOME_PAGE_ID: 'homePageId',
             OPEN_IN_V3: 'openInV3',
             HYDRATE: 'hydrate',
-
+            META_DATA: {
+                WITH_REPORT_DEFAULTS: 'withReportDefaults'
+            },
             //  legacy stack request paameters
             LEGACY_STACK: {
                 ACTION: 'a',
