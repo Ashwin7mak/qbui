@@ -145,6 +145,14 @@ export let Nav = React.createClass({
     },
 
     /**
+     * get the edit form
+     * @returns the single edit form if we have one, false otherwise
+     */
+    getEditForm() {
+        return _.has(this.props, "qbui.forms.edit") && this.props.qbui.forms.edit.length > 0 && this.props.qbui.forms.edit[0];
+    },
+
+    /**
      * open existing or new record in trowser if editRec param exists
      */
     updateRecordTrowser(oldRecId) {
@@ -153,7 +161,8 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        const editData = _.has(this.props, "qbui.forms.edit") && this.props.qbui.forms.edit.length > 0 && this.props.forms.edit[0];
+        const editData = this.getEditForm();
+
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
             (!editData || !editData.loading) &&
@@ -172,7 +181,7 @@ export let Nav = React.createClass({
         // component updated, update the record trowser content if necessary
         // temporary solution to prevent UI getting in an endless loop state (MB-1369)
 
-        const editData = _.has(this.props, "qbui.forms.edit") && this.props.qbui.forms.edit.length > 0 && this.props.forms.edit[0];
+        const editData = this.getEditForm();
 
         if (!editData || !editData.loading) {
             this.updateRecordTrowser(prevProps.location.query.editRec);

@@ -210,9 +210,17 @@ export let RecordRoute = React.createClass({
     },
 
     /**
+     * get the view form
+     * @returns the single view form if we have one, false otherwise
+     */
+    getViewForm() {
+        return _.has(this.props, "forms.view") && this.props.forms.view.length > 0 && this.props.forms.view[0];
+    },
+
+    /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        const viewData = _.has(this.props, "forms.view") && this.props.forms.view.length > 0 && this.props.forms.view[0];
+        const viewData = this.getViewForm();
 
         return this.props.forms.syncLoadedForm || !viewData ||
             !_.isEqual(viewData.formData, nextProps.forms.view[0].formData) ||
@@ -237,7 +245,7 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const viewData = _.has(this.props, "forms.view") && this.props.forms.view.length > 0 && this.props.forms.view[0];
+            const viewData = this.getViewForm();
             const formLoadingeErrorStatus = viewData && viewData.errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
