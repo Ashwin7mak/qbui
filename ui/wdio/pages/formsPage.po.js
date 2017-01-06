@@ -690,7 +690,6 @@
             self.notificationWindow.waitForVisible();
             var messageText = self.notificationWindow.getText();
             expect(messageText).toContain(expectedMessage.toString());
-            browser.element('.notification-container-empty').waitForVisible();
         }},
 
         /**
