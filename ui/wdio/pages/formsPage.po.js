@@ -80,7 +80,9 @@
          */
         waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
             //wait until loading screen disappear
-            return browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
+            browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
+            //Need this to wait for container to slide away
+            return browser.pause(3000);
         }},
 
         /**

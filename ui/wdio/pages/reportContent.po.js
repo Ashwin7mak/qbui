@@ -48,7 +48,7 @@
          */
         waitForReportContent: {value: function() {
             // wait until you see ag-body-viewport
-            return browser.waitForExist('.ag-body-viewport', browser.waitforTimeout);
+            return this.agGridRecordElList.waitForVisible();
         }},
 
         /**
