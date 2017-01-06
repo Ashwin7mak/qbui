@@ -187,7 +187,8 @@
              * Fetch the meta data for a given report id
              *
              * @param req
-             * @param opts
+             * @param reportId
+             * @param withReportDefaults - include report defaults in the response
              * @returns {bluebird|exports|module.exports}
              */
             fetchReportMetaData(req, reportId, withReportDefaults) {
