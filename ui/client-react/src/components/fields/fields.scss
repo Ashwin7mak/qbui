@@ -158,7 +158,8 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 }
 
 .multiLineCellEditWrapper .cellEdit {
-    min-height: 28px;
+    min-height: 30px;
+    overflow: hidden;
 }
 
 .multiLineCellEditWrapper.error .tipChildWrapper, .multiLineCellEditWrapper.error .tipChildWrapper textarea {
