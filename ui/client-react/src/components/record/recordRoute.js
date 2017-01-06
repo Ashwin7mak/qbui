@@ -212,10 +212,12 @@ export let RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return this.props.forms.syncLoadedForm || !this.props.forms.view || !this.props.forms.view[0] ||
-            !_.isEqual(this.props.forms.view[0].formData, nextProps.forms.view[0].formData) ||
+        const viewData = _.has(this.props, "forms.view") && this.props.forms.view.length > 0 && this.props.forms.view[0];
+
+        return this.props.forms.syncLoadedForm || !viewData ||
+            !_.isEqual(viewData.formData, nextProps.forms.view[0].formData) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
-            !_.isEqual(this.props.forms.view[0].loading, nextProps.forms.view[0].loading) ||
+            !_.isEqual(viewData.loading, nextProps.forms.view[0].loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
             !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },

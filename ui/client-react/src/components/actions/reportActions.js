@@ -75,8 +75,6 @@ export let ReportActions = React.createClass({
     onEditClicked() {
 
         if (this.props.selection && this.props.selection.length === 1) {
-            const flux = this.getFlux();
-
             const recordId = this.props.selection[0];
             this.props.dispatch(openRecordForEdit(recordId));
         }
@@ -142,4 +140,5 @@ export let ReportActions = React.createClass({
     }
 });
 
+// export the react-redux connected wrapper (which injects the dispatch function as a prop)
 export default connect()(ReportActions);

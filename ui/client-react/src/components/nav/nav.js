@@ -87,6 +87,9 @@ export let Nav = React.createClass({
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
 
+    /**
+     * hide the trowser
+     */
     hideTrowser() {
         this.props.dispatch(ShellActions.hideTrowser());
     },
@@ -150,10 +153,11 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
+        const editData = _.has(this.props, "qbui.forms.edit") && this.props.qbui.forms.edit.length > 0 && this.props.forms.edit[0];
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
-            (!this.props.qbui.forms.edit || !this.props.qbui.forms.edit[0] || !this.props.qbui.forms.edit[0].loading) &&
-            (!this.props.qbui.nav.trowserOpen || oldRecId !== editRec)) {
+            (!editData || !editData.loading) &&
+            (!this.props.qbui.shell.trowserOpen || oldRecId !== editRec)) {
 
             this.props.dispatch(FormActions.loadForm(appId, tblId, rptId, "edit", editRec)).then(() => {
 
@@ -168,7 +172,9 @@ export let Nav = React.createClass({
         // component updated, update the record trowser content if necessary
         // temporary solution to prevent UI getting in an endless loop state (MB-1369)
 
-        if (!_.has(this.props, "qbui.forms.edit") || !this.props.qbui.forms.edit[0] || !this.props.qbui.forms.edit[0].loading) {
+        const editData = _.has(this.props, "qbui.forms.edit") && this.props.qbui.forms.edit.length > 0 && this.props.forms.edit[0];
+
+        if (!editData || !editData.loading) {
             this.updateRecordTrowser(prevProps.location.query.editRec);
         }
     },
@@ -214,7 +220,7 @@ export let Nav = React.createClass({
             <AppQbModal/>
 
             {this.props.params && this.props.params.appId &&
-                <RecordTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                <RecordTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
                                editForm={this.props.qbui.forms.edit[0]}
                                appId={this.props.params.appId}
@@ -229,7 +235,7 @@ export let Nav = React.createClass({
                                onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
-                <ReportManagerTrowser visible={this.props.qbui.nav.trowserOpen && this.props.qbui.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable()}
                                       filterReportsName={this.state.nav.filterReportsName}

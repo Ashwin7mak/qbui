@@ -1,6 +1,6 @@
 import * as types from '../constants/actions';
 
-const nav = (state = {trowserOpen: false, trowserContent: null}, action) => {
+const shell = (state = {trowserOpen: false, trowserContent: null}, action) => {
 
     // reducer - no mutations!
     switch (action.type) {
@@ -21,4 +21,4 @@ const nav = (state = {trowserOpen: false, trowserContent: null}, action) => {
     }
 };
 
-export default nav;
+export default shell;

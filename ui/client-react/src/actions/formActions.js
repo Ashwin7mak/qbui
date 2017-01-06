@@ -1,25 +1,36 @@
-// Redux action creators
+// Redux action creators for forms
 
 import FormService from '../services/formService';
 import Promise from 'bluebird';
-
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
-import * as UrlConsts from "../constants/urlConstants";
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as types from '../constants/actions';
+import * as UrlConsts from "../constants/urlConstants";
 
 let logger = new Logger();
 
+/**
+ * form load in progress
+ * @param container type of form (edit or view)
+ * @returns {{type, container: *}}
+ */
 export const loadingForm = (container) => {
     return {
         type: types.LOADING_FORM,
         container,
     };
 };
+
+/**
+ * form load failed
+ * @param container
+ * @param error error message from server
+ * @returns {{type, container: *, error: *}}
+ */
 export const loadFormError = (container, error) => {
     return {
         type: types.LOAD_FORM_ERROR,
@@ -27,6 +38,13 @@ export const loadFormError = (container, error) => {
         error
     };
 };
+
+/**
+ * form load succeeded
+ * @param container
+ * @param formData form data returned from server
+ * @returns {{type, container: *, formData: *}}
+ */
 export const loadFormSuccess = (container, formData) => {
     return {
         type: types.LOAD_FORM_SUCCESS,
@@ -35,12 +53,24 @@ export const loadFormSuccess = (container, formData) => {
     };
 };
 
+/**
+ * save form in progress
+ * @param container
+ * @returns {{type, container: *}}
+ */
 export const savingForm = (container) => {
     return {
         type: types.SAVE_FORM,
         container
     };
 };
+
+/**
+ * save form failed
+ * @param container
+ * @param error error message from server
+ * @returns {{type, container: *, error: *}}
+ */
 export const saveFormError = (container, error) => {
     return {
         type: types.SAVE_FORM_FAILED,
@@ -48,6 +78,12 @@ export const saveFormError = (container, error) => {
         error
     };
 };
+
+/**
+ * save form succeeded
+ * @param container
+ * @returns {{type, container: *}}
+ */
 export const saveFormSuccess = (container) => {
     return {
         type: types.SAVE_FORM_SUCCESS,
@@ -55,11 +91,21 @@ export const saveFormSuccess = (container) => {
     };
 };
 
+/**
+ * UI is syncing the view form to the saved version
+ * @returns {{type}}
+ */
 export const syncingForm = () => {
     return {
         type: types.SYNCING_FORM
     };
 };
+
+/**
+ * open an existing record for editing
+ * @param recId
+ * @returns {{type, recId: *}}
+ */
 export const openRecordForEdit = (recId) => {
 
     // add editRec query param and let the router take action
@@ -73,6 +119,11 @@ export const openRecordForEdit = (recId) => {
     };
 };
 
+/**
+ * open a new record for editing
+ * @param navigateAfterSave go to the new record after saving
+ * @returns {{type, recId, navigateAfterSave: boolean}}
+ */
 export const editNewRecord = (navigateAfterSave = false) => {
 
     // add editRec=new query param and let the router take action
@@ -85,9 +136,22 @@ export const editNewRecord = (navigateAfterSave = false) => {
     };
 };
 
+/**
+ * load a form, optionally with record data
+ * @param appId app
+ * @param tblId table
+ * @param rptId report
+ * @param formType "edit" or "view"
+ * @param recordId record ID or "new"
+ * @returns {function(*=)}
+ */
 export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
-    // redux-thunk allows us to return a function (returning a promise) instead of an action
+    const NEW_RECORD_ID = "new";
+
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invoke the real dispatch)
+
     return (dispatch) => {
 
         return new Promise((resolve, reject) => {
@@ -98,7 +162,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
                 let promise;
 
-                if (recordId !== "new") {
+                if (recordId !== NEW_RECORD_ID) {
                     promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
                 } else {
                     promise = formService.getForm(appId, tblId, rptId, formType);
@@ -107,7 +171,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     (response) => {
                         resolve();
 
-                        if (recordId === "new") {
+                        if (recordId === NEW_RECORD_ID) {
                             response.data.record = null;
                         } else {
                             response.data.recordId = recordId;

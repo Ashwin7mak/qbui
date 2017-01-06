@@ -1,4 +1,4 @@
-import reducer from '../../src/reducers/nav';
+import reducer from '../../src/reducers/shell';
 import * as types from '../../src/constants/actions';
 
 describe('Nav reducer functions', () => {

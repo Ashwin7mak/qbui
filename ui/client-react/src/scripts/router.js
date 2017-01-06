@@ -3,22 +3,18 @@ import React from "react";
 import {render} from "react-dom";
 import {Router, Route, IndexRoute} from "react-router";
 import AppHistory from '../globals/appHistory';
-
 import PerfLogUtils from "../utils/perf/perfLogUtils";
-
 import NavWrapper from "../components/nav/navWrapper";
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
-
 import Logger from "../utils/logger";
 
 import "react-fastclick";
 
 import {Provider, connect} from "react-redux";
-
 import createAppStore from './store';
 
 import getFlux from './fluxxor';
@@ -35,14 +31,13 @@ const mapStateToProps = (state) => {
         qbui: state
     };
 };
-
-const ConnectedNav = connect(mapStateToProps)(NavWrapper);
+const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 
 const store = createAppStore();
 
-
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 
+// render the UI, wrap the router in the react-redux Provider to make the Redux store available to connected components
 render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >

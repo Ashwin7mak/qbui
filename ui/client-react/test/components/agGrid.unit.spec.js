@@ -469,11 +469,6 @@ describe('AGGrid functions', () => {
         const editButtons = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell button.edit");
         expect(editButtons.length).toBe(fakeReportData_before.data.records.length);
 
-        // TODO: migrate test to redux
-        // click on edit icon
-        // TestUtils.Simulate.click(editButtons[0]);
-        // expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
-
         // find the dropdown buttons
         const dropdownButtons = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell button.dropdownToggle");
         expect(dropdownButtons.length).toBe(fakeReportData_before.data.records.length);

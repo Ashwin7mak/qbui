@@ -98,8 +98,6 @@ describe('RecordRoute functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        //expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId, routeParams.rptId, routeParams.formType);
-
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
         let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
         let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");

@@ -24,6 +24,7 @@ describe('Form Actions functions', () => {
     });
 
     describe('loading actions', () => {
+
         it('should create an action to indicate loading view form', () => {
 
             expect(formActions.loadingForm("view")).toEqual({type: types.LOADING_FORM, container: "view"});
@@ -49,6 +50,7 @@ describe('Form Actions functions', () => {
     });
 
     describe('saving actions', () => {
+
         it('should create an action to indicate saving a form', () => {
 
             expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, container: "edit"});
@@ -74,6 +76,7 @@ describe('Form Actions functions', () => {
 
 
     describe('edit record actions', () => {
+
         it('should create an action to open record for edit', () => {
 
             expect(openRecordForEdit(123)).toEqual({
@@ -102,6 +105,8 @@ describe('Form Actions functions', () => {
     });
 
     describe('load form data action', () => {
+
+        // we mock the Redux store when testing async action creators
 
         const middlewares = [thunk];
         const mockStore = configureMockStore(middlewares);
@@ -140,6 +145,9 @@ describe('Form Actions functions', () => {
         });
 
         it('load view record form', (done) => {
+
+            // the mock store makes the actions dispatched available via getActions()
+            // so we don't need to spy on the dispatcher etc.
 
             const expectedActions = [
                 {type: types.LOADING_FORM, container: 'view'},
