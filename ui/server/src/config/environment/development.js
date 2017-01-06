@@ -8,6 +8,7 @@
     var dateUtils = require('../../utility/dateUtils');
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
+    var clientConsts = require('./clientConsts');
 
     module.exports = {
 
@@ -46,8 +47,20 @@
         DOMAIN: '',
 
         env       : envConsts.TEST,
-        routeGroup: routeGroups.DEBUG
+        routeGroup: routeGroups.DEBUG,
 
+        //set notHotLoad true to disable hotloading
+        noHotLoad : true,
+
+        // the client to use
+        client: clientConsts.REACT,
+
+        /**
+         * Scripts for Wistia video popover
+         * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+         */
+        wistiaScriptPart1: '',
+        wistiaScriptPart2: '',
 
     };
 }());
