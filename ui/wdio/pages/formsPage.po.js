@@ -687,12 +687,10 @@
          */
         assertNotificationMessage: {value: function(expectedMessage) {
             var self = this;
-            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-            browser.waitForExist('.notification-container-empty', browser.waitforTimeout, true);
+            self.notificationWindow.waitForVisible();
             var messageText = self.notificationWindow.getText();
             expect(messageText).toContain(expectedMessage.toString());
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.notification-container-empty', browser.waitforTimeout, false);
+            browser.element('.notification-container-empty').waitForVisible();
         }},
 
         /**
