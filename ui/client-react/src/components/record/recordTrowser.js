@@ -157,23 +157,22 @@ export let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
-            const flux = this.getFlux();
-
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
+            const formType = "edit";
 
-            flux.actions.savingForm();
+            this.props.dispatch(savingForm(formType));
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
-                flux.actions.saveFormSuccess();
+                this.props.dispatch(saveFormSuccess(formType));
                 this.nextRecord();
             }, (errorStatus) => {
-                flux.actions.saveFormFailed(errorStatus);
+                this.props.dispatch(saveFormError(formType, errorStatus));
             });
         }
         return validationResult;
