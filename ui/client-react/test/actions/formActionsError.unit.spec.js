@@ -1,20 +1,31 @@
-import Fluxxor from 'fluxxor';
-import formActions from '../../src/actions/formActions';
-import * as actions from '../../src/constants/actions';
+import {loadForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
+import * as types from '../../src/constants/actions';
+import WindowLocationUtils from '../../src/utils/windowLocationUtils';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 import Promise from 'bluebird';
 
-describe('Form Actions loadFormAndRecord negative tests -- ', () => {
-    'use strict';
+class WindowLocationUtilsMock {
+    static pushWithoutQuery() { }
+}
 
-    let appId = 'appId';
-    let tblId = 'tblId';
-    let recordId = '2';
-    let errorStatus = 404;
-    let exStatus = 500;
+describe('Form Actions error functions', () => {
 
-    let stores = {};
-    let flux = new Fluxxor.Flux(stores);
-    flux.addActions(formActions);
+    beforeEach(() => {
+        FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+
+    });
+
+    afterEach(() => {
+        FormActionsRewireAPI.__ResetDependency__('WindowLocationUtils');
+    });
+
+    // we mock the Redux store when testing async action creators
+
+    const middlewares = [thunk];
+    const mockStore = configureMockStore(middlewares);
+
+    const errorStatus = 404;
 
     class mockFormService {
         constructor() { }
@@ -29,70 +40,70 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
             return p.promise;
         }
     }
+
     beforeEach(() => {
-        spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockFormService.prototype, 'getFormAndRecord').and.callThrough();
         spyOn(mockFormService.prototype, 'getForm').and.callThrough();
-        formActions.__Rewire__('FormService', mockFormService);
+        FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
     });
 
     afterEach(() => {
-        formActions.__ResetDependency__('FormService');
+        FormActionsRewireAPI.__ResetDependency__('FormService');
     });
 
-    // it('test missing params loadFormAndRecord', (done) => {
-    //     flux.actions.loadFormAndRecord().then(
-    //         () => {
-    //             expect(true).toBe(false);
-    //             done();
-    //         },
-    //         () => {
-    //             expect(mockFormService.prototype.getFormAndRecord).not.toHaveBeenCalled();
-    //             done();
-    //         }
-    //     );
-    // });
-    // it('test missing params loadForm', (done) => {
-    //     flux.actions.loadForm().then(
-    //         () => {
-    //             expect(true).toBe(false);
-    //             done();
-    //         },
-    //         () => {
-    //             expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
-    //             done();
-    //         }
-    //     );
-    // });
-    //
-    // it('test promise reject handling loadFormAndRecord', (done) => {
-    //     flux.actions.loadFormAndRecord(appId, tblId, recordId).then(
-    //         () => {
-    //             expect(true).toBe(false);
-    //             done();
-    //         },
-    //         () => {
-    //             expect(mockFormService.prototype.getFormAndRecord).toHaveBeenCalled();
-    //             expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-    //             expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM_AND_RECORD]);
-    //             expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FORM_AND_RECORD_FAILED, errorStatus]);
-    //             done();
-    //         }
-    //     );
-    // });
-    // it('test promise reject handling loadForm', (done) => {
-    //     flux.actions.loadForm(appId, tblId, recordId).then(
-    //         () => {
-    //             expect(true).toBe(false);
-    //             done();
-    //         },
-    //         () => {
-    //             expect(mockFormService.prototype.getForm).toHaveBeenCalled();
-    //             expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-    //             expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM]);
-    //             expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FORM_FAILED, errorStatus]);
-    //             done();
-    //         }
-    //     );
-    // });
+    it('test missing params to loadForm', (done) => {
+
+        const store = mockStore({});
+
+        return store.dispatch(loadForm()).then(
+            () => {
+                expect(false).toBe(true);
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
+                done();
+            });
+    });
+
+    it('test promise reject handling loadForm', (done) => {
+
+        const expectedActions = [
+            {type: types.LOADING_FORM, container: 'edit'},
+            {type: types.LOAD_FORM_ERROR, container: 'edit', error: 404}
+        ];
+        const store = mockStore({});
+
+        return store.dispatch(loadForm("appId", "tblId", "report", "edit", "new")).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(mockFormService.prototype.getForm).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
+
+    it('test promise reject handling loadForm with record ID', (done) => {
+
+        const expectedActions = [
+            {type: types.LOADING_FORM, container: 'edit'},
+            {type: types.LOAD_FORM_ERROR, container: 'edit', error: 404}
+        ];
+        const store = mockStore({});
+
+        return store.dispatch(loadForm("appId", "tblId", "report", "edit", "123")).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(mockFormService.prototype.getFormAndRecord).toHaveBeenCalled();
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
 });
