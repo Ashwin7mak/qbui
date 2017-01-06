@@ -203,7 +203,9 @@
                         withReportDefaults = (withReportDefaults.toLowerCase() === 'true');
                     }
                 }
-                if (withReportDefaults) {
+
+                //  the request parameter must be true/false or we'll get an exception thrown by the server
+                if (withReportDefaults && typeof withReportDefaults === 'boolean') {
                     requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS, withReportDefaults);
                 }
 

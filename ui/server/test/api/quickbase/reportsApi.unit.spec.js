@@ -81,7 +81,7 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('Test success report meta data with report defaults set as a query param', function(done) {
+        it('Test success report meta data with report defaults query param = true', function(done) {
             req.url += '?' + constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS + '=true';
             getExecuteRequestStub.returns(fetchMetaData);
             let promise = reportsApi.fetchReportMetaData(req, 1);
@@ -98,10 +98,27 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('Test success report meta data with invalid report defaults query param', function(done) {
+        it('Test success report meta data with report defaults query param = false', function(done) {
             req.url += '?' + constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS + '=false';
             getExecuteRequestStub.returns(fetchMetaData);
             let promise = reportsApi.fetchReportMetaData(req, 1);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, metaResponse);
+                    assert.equal(addQueryParamSpy.called, false);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaData success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test success report meta data with invalid report defaults query param', function(done) {
+            getExecuteRequestStub.returns(fetchMetaData);
+            let promise = reportsApi.fetchReportMetaData(req, 1, 'invalid');
             promise.then(
                 function(response) {
                     assert.deepEqual(response, metaResponse);
