@@ -112,21 +112,20 @@ exports.config = {
             shardTestFiles: true,
             maxInstances: 2
         },
-        //TODO firefox setValue not triggering onChange or blur for muneric and duration fields. Will work as seperate PR
-        //{
-        //    platform: 'OS X 10.11',
-        //    browserName: 'firefox',
-        //    version: '46.0',
-        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //    name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
-        //    screenResolution : '1600x1200',
-        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //    idleTimeout: '180',
-        //    maxDuration: 10800,
-        //    breakpointSize: 'large',
-        //    shardTestFiles: true,
-        //    maxInstances: 2
-        //},
+        {
+           platform: 'OS X 10.11',
+           browserName: 'firefox',
+           version: '46.0',
+           tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+           name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
+           screenResolution : '1600x1200',
+           //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+           idleTimeout: '180',
+           maxDuration: 10800,
+           breakpointSize: 'large',
+           shardTestFiles: true,
+           maxInstances: 2
+        },
         {
             platform: 'Windows 10',
             browserName: 'MicrosoftEdge',

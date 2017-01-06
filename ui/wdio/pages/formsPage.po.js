@@ -494,13 +494,12 @@
                 //get all date field input validators
                 var dateFields = self.getAllDateInputFields();
                 for (i = 0; i < dateFields.value.length; i++) {
-                    if (browserName === 'firefox') {
-                        //select date from date picker
-                        this.selectTodaysDateFromDatePicker(dateFields.value[i]);
-                    } else if (browserName === 'safari') {
+                    if (browserName === 'safari') {
                         dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
                     } else {
+                        dateFields.value[i].click();
                         dateFields.value[i].element('input').setValue(sDate);
+                        dateFields.value[i].element('..').click();
                     }
                 }
             } else if (fieldType === 'allTimeFields') {
