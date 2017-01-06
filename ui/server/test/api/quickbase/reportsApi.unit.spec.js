@@ -643,6 +643,8 @@ describe('Validate ReportsApi unit tests', function() {
             let promise = reportsApi.fetchReport(req, 1, false, true);
             promise.then(
                 function(response) {
+                    //  ensure fetchMetaData includes optional fetch table defaults
+                    assert.equal(getMetaStub.calledWith(sinon.match.any, 1, true), true);
                     done();
                 },
                 function(error) {
@@ -662,6 +664,8 @@ describe('Validate ReportsApi unit tests', function() {
             let promise = reportsApi.fetchReport(req, 1);
             promise.then(
                 function(response) {
+                    //  ensure fetchMetaData includes optional fetch table defaults
+                    assert.equal(getMetaStub.calledWith(sinon.match.any, 1, true), true);
                     done();
                 },
                 function(error) {
@@ -682,6 +686,8 @@ describe('Validate ReportsApi unit tests', function() {
             let promise = reportsApi.fetchReport(req, 1, true, true);
             promise.then(
                 function(response) {
+                    //  ensure fetchMetaData includes optional fetch table defaults
+                    assert.equal(getMetaStub.calledWith(sinon.match.any, 1, true), true);
                     done();
                 },
                 function(error) {
