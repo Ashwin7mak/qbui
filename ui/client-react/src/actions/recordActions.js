@@ -324,7 +324,6 @@ let recordActions = {
      * @param showNotificationOnSuccess - true to show success notification.
      */
     saveRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) {
-
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
