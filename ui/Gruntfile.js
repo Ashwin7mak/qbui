@@ -504,7 +504,7 @@ module.exports = function(grunt) {
             options: {
                 specs: [
                     './wdio/tests/forms/*.e2e.spec.js',
-                    './ui/wdio/tests/reportAddRecord.e2e.spec.js'
+                    './wdio/tests/reportAddRecord.e2e.spec.js'
                 ]
             },
             test: {
