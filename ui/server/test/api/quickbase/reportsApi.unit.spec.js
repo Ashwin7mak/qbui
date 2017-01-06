@@ -29,7 +29,7 @@ describe('Validate ReportsApi unit tests', function() {
                 'tid': 'tid'
             },
             'Content-Type': 'content-type',
-            'url': '/testurl.com',
+            'url': '',
             'method': 'get'
         };
 
@@ -37,12 +37,17 @@ describe('Validate ReportsApi unit tests', function() {
         let fetchMetaData = Promise.resolve(metaResponse);
 
         let getExecuteRequestStub;
+        let addQueryParamSpy;
         beforeEach(function() {
+            req.url = '/testurl.com';
             reportsApi.setRequestHelper(requestHelper);
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+            addQueryParamSpy = sinon.spy(requestHelper, "addQueryParameter");
         });
         afterEach(function() {
             getExecuteRequestStub.restore();
+            addQueryParamSpy.restore();
+            req.params = {};
         });
         it('Test success report meta data', function(done) {
             getExecuteRequestStub.returns(fetchMetaData);
@@ -50,6 +55,57 @@ describe('Validate ReportsApi unit tests', function() {
             promise.then(
                 function(response) {
                     assert.deepEqual(response, metaResponse);
+                    assert.equal(addQueryParamSpy.called, false);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaData success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test success report meta data with report defaults parameter set as method parameter', function(done) {
+            getExecuteRequestStub.returns(fetchMetaData);
+            let promise = reportsApi.fetchReportMetaData(req, 1, true);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, metaResponse);
+                    assert.equal(addQueryParamSpy.calledWith(sinon.match.any, constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS, true), true);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaData success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test success report meta data with report defaults set as a query param', function(done) {
+            req.url += '?' + constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS + '=true';
+            getExecuteRequestStub.returns(fetchMetaData);
+            let promise = reportsApi.fetchReportMetaData(req, 1);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, metaResponse);
+                    assert.equal(addQueryParamSpy.calledWith(sinon.match.any, constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS, true), true);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaData success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test success report meta data with invalid report defaults query param', function(done) {
+            req.url += '?' + constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS + '=false';
+            getExecuteRequestStub.returns(fetchMetaData);
+            let promise = reportsApi.fetchReportMetaData(req, 1);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, metaResponse);
+                    assert.equal(addQueryParamSpy.called, false);
                     done();
                 },
                 function(error) {
