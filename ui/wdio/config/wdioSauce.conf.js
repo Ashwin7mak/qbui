@@ -83,7 +83,7 @@ exports.config = {
     //
     capabilities: [
         //TODO Chrome is not stable in sauce labs . So will deal this as seperate PR.
-        //{
+        // {
         //    platform : 'OS X 10.11',
         //    browserName     : 'chrome',
         //    version: '54.0',
@@ -97,13 +97,27 @@ exports.config = {
         //    // These two values enable parallel testing which will run a spec file per instance
         //    shardTestFiles: true,
         //    maxInstances: 2
-        //},
+        // },
+        // {
+        //     platform: 'OS X 10.11',
+        //     browserName: 'safari',
+        //     version: '10.0',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+        //     screenResolution : '1600x1200',
+        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     idleTimeout: '180',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'large',
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // },
         {
             platform: 'OS X 10.11',
-            browserName: 'safari',
-            version: '10.0',
+            browserName: 'firefox',
+            version: '46.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+            name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
@@ -112,34 +126,20 @@ exports.config = {
             shardTestFiles: true,
             maxInstances: 2
         },
-        {
-           platform: 'OS X 10.11',
-           browserName: 'firefox',
-           version: '46.0',
-           tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-           name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
-           screenResolution : '1600x1200',
-           //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-           idleTimeout: '180',
-           maxDuration: 10800,
-           breakpointSize: 'large',
-           shardTestFiles: true,
-           maxInstances: 2
-        },
-        {
-            platform: 'Windows 10',
-            browserName: 'MicrosoftEdge',
-            version: '14.14393',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
-            screenResolution : '1600x1200',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'xlarge',
-            shardTestFiles: true,
-            maxInstances: 2
-        }
+        // {
+        //     platform: 'Windows 10',
+        //     browserName: 'MicrosoftEdge',
+        //     version: '14.14393',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
+        //     screenResolution : '1600x1200',
+        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     idleTimeout: '180',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'xlarge',
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // }
     ],
     //
     // ===================
@@ -197,7 +197,13 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['sauce'],
+    services: ['sauce', 'firefox-profile'],
+    // Firefox profile enabled by wdio-firefox-profile-service
+    // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
+    // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
+    firefoxProfile: {
+        'focusmanager.testmode': true
+    },
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
