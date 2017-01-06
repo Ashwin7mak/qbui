@@ -72,6 +72,35 @@ const ReportGrid = React.createClass({
         this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
     },
 
+    /**
+     * select all grid rows
+     */
+    selectAllRows() {
+        let selected = []; // array of record ids to select
+        this.props.records.forEach(record => {
+            selected.push(record[this.props.primaryKeyName].value);
+        });
+        this.selectRows(selected);
+    },
+
+    deselectAllRows() {
+        this.selectRows([]);
+    },
+
+    selectRows(selectedRowIds) {
+        this.getFlux().actions.selectedRows(selectedRowIds);
+    },
+
+    toggleSelectAllRows() {
+        const allSelected = this.props.selectedRows.length === this.props.records.length;
+
+        if (allSelected) {
+            this.deselectAllRows();
+        } else {
+            this.selectAllRows();
+        }
+    },
+
     toggleSelectedRow(id) {
         const flux = this.getFlux();
 
@@ -115,6 +144,7 @@ const ReportGrid = React.createClass({
             onClickToggleSelectedRow={this.toggleSelectedRow}
             onClickEditIcon={this.openRecordForEdit}
             onClickDeleteIcon={this.onClickDelete}
+            onClickToggleSelectAllRows={this.toggleSelectAllRows}
         />;
     }
 });

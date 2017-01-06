@@ -25,6 +25,7 @@ const QbGrid = React.createClass({
         onClickToggleSelectedRow: PropTypes.func,
         onClickEditIcon: PropTypes.func,
         onClickDeleteIcon: PropTypes.func,
+        onClickToggleSelectAllRows: PropTypes.func,
         // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
         //     if (!(propValue instanceof Row)) {
         //         return new Error(
@@ -102,10 +103,15 @@ const QbGrid = React.createClass({
      */
     getCheckboxHeader() {
 
-        // const allSelected = this.props.selectedRows.length === this.props.records.length;
+        const allSelected = this.props.selectedRows.length === this.props.rows.length;
 
         return (
-            <input type="checkbox" className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`} />
+            <input
+                type="checkbox"
+                className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
+                checked={allSelected}
+                onChange={this.props.onClickToggleSelectAllRows}
+            />
         );
     },
 
