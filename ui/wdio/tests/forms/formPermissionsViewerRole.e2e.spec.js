@@ -6,6 +6,7 @@
     //Load the page Objects
     var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
+    var reportContentPO = requirePO('reportContent');
 
     describe('Form Viewer Permission Tests: ', function() {
 
@@ -170,8 +171,12 @@
             // Step 8 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
-            // Step 9 - Verify the records count not increased i.e not authorized to edit a record
-            expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
+            //Step 9 - Get the record values
+            var recordValues = reportContentPO.getRecordValues(1);
+
+            //verify the array dosen't contain edited numeric field
+            expect(recordValues.indexOf("33.33")).toBe(-1);
+
         });
 
         //TODO verify cannot delete a record when no permission.
