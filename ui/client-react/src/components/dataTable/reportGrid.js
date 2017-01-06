@@ -2,8 +2,13 @@ import React, {PropTypes} from 'react';
 import QbGrid from './qbGrid/qbGridNew';
 import Column from './qbGrid/column';
 import Row from './qbGrid/row';
+import Fluxxor from 'fluxxor';
+import _ from 'lodash';
+
+const FluxMixin = Fluxxor.FluxMixin(React);
 
 const ReportGrid = React.createClass({
+    mixins: [FluxMixin],
     propTypes: {
         records: PropTypes.array,
         columns: PropTypes.array,
@@ -13,6 +18,8 @@ const ReportGrid = React.createClass({
         onFieldChange: PropTypes.func.isRequired,
         onEditRecordStart: PropTypes.func.isRequired,
         pendEdits: PropTypes.object,
+        selectedRows: PropTypes.array,
+        onRecordDelete: PropTypes.func,
     },
 
     getDefaultProps() {
@@ -37,7 +44,7 @@ const ReportGrid = React.createClass({
     },
 
     transformRecords() {
-        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.props.pendEdits);
+        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.props.pendEdits, this.props.selectedRows);
         // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
@@ -65,6 +72,35 @@ const ReportGrid = React.createClass({
         this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
     },
 
+    toggleSelectedRow(id) {
+        const flux = this.getFlux();
+
+        let selectedRows = this.props.selectedRows;
+
+        if (selectedRows.indexOf(id) === -1) {
+            // not already selected, add to selectedRows
+            selectedRows.push(id);
+        } else {
+            // already selected, remove from selectedRows
+            selectedRows = _.without(selectedRows, id);
+        }
+        flux.actions.selectedRows(selectedRows);
+    },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(recordId) {
+        this.getFlux().actions.openRecordForEdit(recordId);
+    },
+
+    onClickDelete(recordId) {
+        if (this.props.onRecordDelete) {
+            this.props.onRecordDelete(recordId);
+        }
+    },
+
     render() {
         return <QbGrid
             columns={this.transformColumns()}
@@ -75,6 +111,10 @@ const ReportGrid = React.createClass({
             appUsers={this.props.appUsers}
             onCellChange={this.onCellChange}
             onCellBlur={this.onCellBlur}
+            selectedRows={this.props.selectedRows}
+            onClickToggleSelectedRow={this.toggleSelectedRow}
+            onClickEditIcon={this.openRecordForEdit}
+            onClickDeleteIcon={this.onClickDelete}
         />;
     }
 });

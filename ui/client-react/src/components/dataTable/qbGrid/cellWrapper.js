@@ -11,13 +11,25 @@ const CellWrapper = React.createClass({
         let nextDisplay = nextProps.children.display;
         let currentValue = this.props.children.value;
         let currentDisplay = this.props.children.display;
-
-        return (currentValue !== nextValue || currentDisplay !== nextDisplay || this.props.children.editing !== nextProps.children.editing);
+        // TODO:: Can't use this optimization right now because of the checkboxes in the first column. Revisit later.
+        // return (currentValue !== nextValue || currentDisplay !== nextDisplay || this.props.children.editing !== nextProps.children.editing);
+        return true;
     },
 
     render() {
+        // Children is empty if a column doesn't have a definition so we can't build a field cell. Leave blank in this case.
+        // If other types of cells are created, we can create different wrappers and link those to that column type.
+        if (!this.props.children) {
+            return <td {...this.props} />;
+        }
+
         let colDef = _.cloneDeep(this.props.children);
         let fieldDef = colDef.fieldDef;
+
+        // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell.
+        if (!fieldDef) {
+            return <td {...this.props} />;
+        }
 
         if (_.has(colDef, 'fieldDef.datatypeAttributes.type')) {
             fieldDef.datatypeAttributes.type = FieldFormats.getFormatType(fieldDef.datatypeAttributes);
@@ -44,7 +56,7 @@ const CellWrapper = React.createClass({
         }
 
         return (
-            <td className={classes.join(' ')}>
+            <td className={classes.join(' ')}  onClick={colDef.onClick}>
 
                 <CellValueRenderer
                     type={colDef.fieldDef.datatypeAttributes.type}

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 class Row {
-    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId, pendingEdits) {
+    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId, pendingEdits, selectedRows) {
         if (!records || !_.isArray(records)) {
             return [];
         }
@@ -11,6 +11,11 @@ class Row {
 
             let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields, id);
             let editing = (id === editingRecordId);
+
+            let selected = false;
+            if (_.isArray(selectedRows)) {
+                selected = selectedRows.includes(id);
+            }
 
             if (pendingEdits.currentEditingRecordId === id) {
                 Object.keys(pendingEdits.recordChanges).forEach(key => {
@@ -30,13 +35,14 @@ class Row {
                 });
             }
 
-            return new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing);
+            return new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing, selected);
         });
     }
 
-    constructor(record, id, editing) {
+    constructor(record, id, editing, selected) {
         this.id = id;
         this.editing = editing;
+        this.selected = selected;
         let recordCopy = _.cloneDeep(record);
         Object.keys(recordCopy).forEach(key => {
             recordCopy[key].editing = editing;

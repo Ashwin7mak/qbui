@@ -2,7 +2,7 @@ import React from 'react';
 
 const RowWrapper = React.createClass({
     shouldComponentUpdate(nextProps) {
-        return (!nextProps || (this.props.editing !== nextProps.editing) || this.compareFieldValues(nextProps.children));
+        return (!nextProps || (this.props.editing !== nextProps.editing) || (this.props.selected !== nextProps.selected) || this.compareFieldValues(nextProps.children));
     },
 
     compareFieldValues(fields) {

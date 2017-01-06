@@ -291,7 +291,15 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
-        this.setState({selectedRecordId: record[this.props.primaryKeyName].value});
+        let recordId;
+        // TODO:: Simplify this once we can remove AgGrid. Once AgGrid is removed, we can assume the value coming back is a recordId or null.
+        if (_.isNumber(record)) {
+            recordId = record;
+        } else {
+            recordId = record[this.props.primaryKeyName].value;
+        }
+
+        this.setState({selectedRecordId: recordId});
         this.setState({confirmDeletesDialogOpen: true});
     },
 
@@ -784,6 +792,9 @@ export let ReportContent = React.createClass({
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 pendEdits={this.props.pendEdits}
+                                selectedRows={this.props.selectedRows}
+                                onRecordDelete={this.handleRecordDelete}
+
                             />
                         }
                         {/*<QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}*/}
