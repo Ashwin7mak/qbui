@@ -1,4 +1,4 @@
-// support for commenting out rwire code for istanbul coverage
+// support for commenting out rewire code for istanbul coverage
 module.exports = function({types: t}) {
     var commentToIgnoreCoverage = " istanbul ignore next ";
     var methodsToIgnoreRegEx =
@@ -15,12 +15,11 @@ module.exports = function({types: t}) {
                     if (methodsToIgnoreRegEx.exec(path.node.id.name) !== null) {
                         addIgnoreComment(path);
                     }
-                    //  add istanbul ignore for the functions assignments for $Getter, $Setter, $Resetter injections
                 }
             }
         }
 
     };
 };
-//To debug run `babel client-react/src/components/fields/fieldValueRenderers.js --out-file outfilename.js
+
 
