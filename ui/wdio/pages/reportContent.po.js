@@ -48,7 +48,7 @@
          */
         waitForReportContent: {value: function() {
             // wait until you see ag-body-viewport
-            browser.elements('.ag-body-viewport').waitForVisible();
+            browser.element('.ag-body-viewport').waitForVisible();
             return browser.elements('.ag-row').waitForVisible();
         }},
 
