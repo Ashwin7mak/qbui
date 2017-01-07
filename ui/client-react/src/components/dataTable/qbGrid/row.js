@@ -1,12 +1,28 @@
 import _ from 'lodash';
 
 class Row {
-    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId, pendingEdits, selectedRows) {
+    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId, pendingEdits, selectedRows, parentId = null, subHeaderLevel = 0) {
         if (!records || !_.isArray(records)) {
             return [];
         }
 
-        return records.map((record, index) => {
+        let transformedRecords = [];
+
+        records.forEach((record, index) => {
+            if (_.has(record, 'group')) {
+                let groupHeaderId = _.uniqueId('groupHeader_');
+                transformedRecords.push({
+                    subHeader: true,
+                    subHeaderLevel: subHeaderLevel,
+                    subHeaderLabel: record.group,
+                    localized: record.localized,
+                    id: groupHeaderId,
+                });
+
+                transformedRecords = [...transformedRecords, ...Row.transformRecordsForGrid(record.children, fields, primaryKeyFieldName, editingRecordId, pendingEdits, selectedRows, groupHeaderId, subHeaderLevel + 1)];
+                return transformedRecords;
+            }
+
             let id = record[primaryKeyFieldName].value;
 
             let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields, id);
@@ -35,21 +51,23 @@ class Row {
                 });
             }
 
-            return new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing, selected);
+            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing, selected, parentId));
         });
+
+        return transformedRecords;
     }
 
-    constructor(record, id, editing, selected) {
+    constructor(record, id, editing, selected, parentId) {
         this.id = id;
         this.editing = editing;
         this.selected = selected;
+        this.parentId = parentId;
         let recordCopy = _.cloneDeep(record);
         Object.keys(recordCopy).forEach(key => {
             recordCopy[key].editing = editing;
             this[key] = recordCopy[key];
         });
     }
-
 }
 
 function addRelatedFieldDefinitions(record = {}, fields = [], recordId) {

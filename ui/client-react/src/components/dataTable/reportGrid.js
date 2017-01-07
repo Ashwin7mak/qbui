@@ -49,9 +49,9 @@ const ReportGrid = React.createClass({
     },
 
     startEditingRow(recordId) {
+        this.props.onEditRecordStart(recordId);
         this.setState({editingRecord: recordId});
-        // this.props.onEditRecordStart(recordId);
-        this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
+        // this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
     },
 
     onCellChange(value, colDef) {
@@ -132,6 +132,7 @@ const ReportGrid = React.createClass({
 
     render() {
         return <QbGrid
+            numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
             rows={this.transformRecords()}
             loading={this.props.loading}
@@ -149,6 +150,7 @@ const ReportGrid = React.createClass({
     }
 });
 
+// Private methods
 function formatChange(updatedValues, colDef) {
     return {
         values: {

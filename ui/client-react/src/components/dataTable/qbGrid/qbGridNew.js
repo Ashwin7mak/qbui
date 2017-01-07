@@ -15,6 +15,7 @@ const SELECT_ROW_CHECKBOX = 'selectRowCheckbox';
 
 const QbGrid = React.createClass({
     propTypes: {
+        numberOfColumns: PropTypes.number.isRequired,
         columns: PropTypes.array.isRequired,
         rows: PropTypes.array.isRequired,
         startEditingRow: PropTypes.func.isRequired,
@@ -49,6 +50,12 @@ const QbGrid = React.createClass({
     },
 
     addCellDecorators(cell) {
+        // If there is no cell (e.g., in the case of a subheader row that doesn't have any cells) then don't try
+        // to add special props.
+        if (!cell) {
+            return;
+        }
+
         let changeListeners = {
             editCell: this.editCell,
             onCellBlur: this.blurCell,
@@ -91,9 +98,19 @@ const QbGrid = React.createClass({
         if (row.editing) {
             classes.push('editing');
         }
+
         return {
             className: classes.join(' '),
-            editing: row.editing
+            editing: row.editing,
+            // props that differentiate a subheader
+            subHeader: row.subHeader,
+            subHeaderLevel: row.subHeaderLevel,
+            subHeaderId: row.id,
+            subHeaderLabel: row.subHeaderLabel,
+            // Add one to account for the extra column at the start of the grid for the row actions.
+            // TODO:: Only add one if the prop for displaying those actions is set
+            numberOfColumns: this.props.numberOfColumns + 1,
+
         };
     },
 

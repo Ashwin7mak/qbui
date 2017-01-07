@@ -26,7 +26,8 @@ const CellWrapper = React.createClass({
         let colDef = _.cloneDeep(this.props.children);
         let fieldDef = colDef.fieldDef;
 
-        // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell.
+        // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell
+        // that can be altered by column specific formatters/transformers.
         if (!fieldDef) {
             return <td {...this.props} />;
         }

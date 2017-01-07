@@ -1,4 +1,5 @@
 import React from 'react';
+import QbIcon from '../../qbIcon/qbIcon';
 
 const RowWrapper = React.createClass({
     shouldComponentUpdate(nextProps) {
@@ -18,6 +19,17 @@ const RowWrapper = React.createClass({
     },
 
     render() {
+        if (this.props.subHeader) {
+            return (
+                <tr {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
+                    <td id={this.props.subHeaderId} className="subHeaderCell" colSpan={this.props.numberOfColumns}>
+                        <QbIcon icon="caret-filled-down"/>
+                        {this.props.subHeaderLabel}
+                    </td>
+                </tr>
+            );
+        }
+
         return <tr {...this.props} />;
     }
 });
