@@ -22,6 +22,20 @@ $grid-group-expand-icon-size: 20px;
 }
 
 .qbGrid {
+    margin: 10px;
+
+    .dateFormat, .timeFormat {
+        min-width: 120px;
+    }
+
+    .dateTimeFormat {
+        min-width: 210px;
+    }
+
+    .emptyRowActions {
+        width: 75px;
+    }
+
     .groupHeader {
         padding-left: $grid-default-group-padding + 3;
         vertical-align: top;
@@ -67,6 +81,77 @@ $grid-group-expand-icon-size: 20px;
 
         &.checkboxFormat {
             text-align: center;
+        }
+    }
+
+    .editTools {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        background-color: $cell-edit-background-edit;
+        box-shadow: -6px 0px 14px $row-box-shadow-color;
+        padding: 0 24px;
+        border: 1px solid $row-border-color;
+
+        .loadedContent {
+            padding: 0;
+        }
+
+        .loader {
+            padding: 10px 9px;
+
+            .spinner {
+                // Need important because the original styles are set directly on the element by react-loader
+                left: auto !important;
+                top: auto !important;
+            }
+        }
+
+        button {
+            flex: 0 0 auto;
+            border: 0;
+            background-color: $cell-edit-background-edit;
+            margin-right: 2px;
+            padding: 6px 4px;
+
+            .qbIcon:hover {
+                opacity: 1;
+            }
+
+            .qbIcon {
+                opacity: 0.7;
+                width: 20px;
+                font-size: 16px;
+                vertical-align: top;
+            }
+
+            .qbIcon.saveRecord {
+                color: $color-green-700;
+                font-size: 18px;
+            }
+
+            .qbIcon.invalidRecord {
+                color: $tootip-error-color;
+                font-size: 18px;
+                cursor: default;
+            }
+
+            .qbIcon.cancelSelection {
+                color: $iconfont-on-light-normal-color;
+            }
+
+            .qbIcon.deleteRecord {
+                color: $color-red-700;
+            }
+
+            .qbIcon.addRecord {
+                color: $iconfont-on-light-normal-color;
+            }
+
+            .qbIcon.disabled.addRecord {
+                color: $iconfont-on-light-disabled-color;
+            }
         }
     }
 }
@@ -152,31 +237,20 @@ $grid-group-expand-icon-size: 20px;
     display: none;
 }
 
-.qbGrid {
-    .cellEdit.dateTimeField {
-        min-width: 120px;
-    }
-}
+.qbGrid .editing {
+    box-shadow: 0 10px 0 0 $cell-edit-background-edit, 0 -10px 0 0 $cell-edit-background-edit, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+    background-color: $cell-edit-background-edit;
 
-/* hide row editing tools by default */
-.editTools {
-    display: none;
-}
-
-.qbGrid > tbody > tr.editing {
     > td:first-child {
         padding-left: 4px;
         border-left: 1px solid $row-border-color;
-        position: relative;
     }
 
     > td {
-        box-shadow: 4px -4px 8px $color-black-300;
-        background-color: $cell-edit-background-edit;
+
+        border: none;
         overflow: visible;
-        padding: 0;
         margin: 0;
-        border-right: 1px solid $row-border-color;
         vertical-align: middle;
         padding-bottom: 14px;
 
@@ -273,57 +347,6 @@ $grid-group-expand-icon-size: 20px;
                         }
                     }
                 }
-            }
-        }
-    }
-
-    .editTools {
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        flex: 0 0 auto;
-        background-color: $cell-edit-background-edit;
-        box-shadow: -2px 2px 8px $row-box-shadow-color;
-        position: absolute;
-        top: -26px;
-        left: -1px;
-        width: 80px;
-        border-left: 1px solid $row-border-color;
-        border-bottom: 1px solid $row-border-color;
-
-        button {
-            flex: 0 0 auto;
-            border: 0;
-            background-color: $cell-edit-background-edit;
-            margin-right: 2px;
-            padding: 6px 4px;
-
-            .qbIcon:hover {
-                opacity: 1;
-            }
-
-            .qbIcon {
-                opacity: 0.7;
-                width: 20px;
-                font-size: 16px;
-                vertical-align: top;
-            }
-
-            .qbIcon.saveRecord {
-                color: $color-green-700;
-                font-size: 18px;
-            }
-
-            .qbIcon.cancelSelection {
-                color: $iconfont-on-light-normal-color;
-            }
-
-            .qbIcon.deleteRecord {
-                color: $color-red-700;
-            }
-
-            .qbIcon.addRecord {
-                color: $iconfont-on-light-normal-color;
             }
         }
     }

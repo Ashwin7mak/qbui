@@ -20,7 +20,12 @@ const ReportGrid = React.createClass({
         pendEdits: PropTypes.object,
         selectedRows: PropTypes.array,
         onRecordDelete: PropTypes.func,
-    },
+        onEditRecordCancel: PropTypes.func,
+        editErrors: PropTypes.object,
+        onRecordNewBlank: PropTypes.func,
+        onClickRecordSave: PropTypes.func,
+        isInlineEditOpen: PropTypes.bool
+},
 
     getDefaultProps() {
         return {
@@ -39,6 +44,12 @@ const ReportGrid = React.createClass({
         };
     },
 
+    componentWillReceiveProps(nextProps) {
+        if (!nextProps.isInlineEditOpen) {
+            this.setState({editingRecord: null});
+        }
+    },
+
     transformColumns() {
         return Column.transformColumnsForGrid(this.props.columns);
     },
@@ -50,6 +61,7 @@ const ReportGrid = React.createClass({
 
     startEditingRow(recordId) {
         this.props.onEditRecordStart(recordId);
+        // TODO:: Refactor out this state and use a passed in prop (perhaps something from pendEdits?)
         this.setState({editingRecord: recordId});
         // this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
     },
@@ -131,13 +143,18 @@ const ReportGrid = React.createClass({
     },
 
     render() {
+        let isRecordValid = true;
+        if (_.has(this.props, 'editErrors.ok')) {
+            isRecordValid = this.props.editErrors.ok;
+        }
+
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
             rows={this.transformRecords()}
             loading={this.props.loading}
-            startEditingRow={this.startEditingRow}
-            editingRow={this.state.editingRecord}
+            onStartEditingRow={this.startEditingRow}
+            editingRowId={this.state.editingRecord}
             appUsers={this.props.appUsers}
             onCellChange={this.onCellChange}
             onCellBlur={this.onCellBlur}
@@ -146,6 +163,12 @@ const ReportGrid = React.createClass({
             onClickEditIcon={this.openRecordForEdit}
             onClickDeleteIcon={this.onClickDelete}
             onClickToggleSelectAllRows={this.toggleSelectAllRows}
+            onCancelEditingRow={this.props.onEditRecordCancel}
+            editingRowErrors={this.props.editErrors}
+            isEditingRowValid={isRecordValid}
+            onClickAddNewRow={this.props.onRecordNewBlank}
+            onClickSaveRow={this.props.onClickRecordSave}
+            isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
         />;
     }
 });

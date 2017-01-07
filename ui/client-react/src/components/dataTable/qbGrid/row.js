@@ -26,14 +26,15 @@ class Row {
             let id = record[primaryKeyFieldName].value;
 
             let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields, id);
-            let editing = (id === editingRecordId);
 
             let selected = false;
             if (_.isArray(selectedRows)) {
                 selected = selectedRows.includes(id);
             }
 
+            let saving = false;
             if (pendingEdits.currentEditingRecordId === id) {
+                saving = pendingEdits.saving;
                 Object.keys(pendingEdits.recordChanges).forEach(key => {
                     let pendingEdit = pendingEdits.recordChanges[key];
                     let editedField = recordWithRelatedFieldDef[key];
@@ -51,20 +52,23 @@ class Row {
                 });
             }
 
-            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing, selected, parentId));
+            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editingRecordId, selected, parentId, saving));
         });
 
         return transformedRecords;
     }
 
-    constructor(record, id, editing, selected, parentId) {
+    constructor(record, id, editingRecordId, selected, parentId, saving) {
+        let isEditing = (id === editingRecordId);
         this.id = id;
-        this.editing = editing;
+        this.isEditing = isEditing;
+        this.editingRecord = editingRecordId;
         this.selected = selected;
         this.parentId = parentId;
+        this.saving = saving;
         let recordCopy = _.cloneDeep(record);
         Object.keys(recordCopy).forEach(key => {
-            recordCopy[key].editing = editing;
+            recordCopy[key].isEditing = isEditing;
             this[key] = recordCopy[key];
         });
     }

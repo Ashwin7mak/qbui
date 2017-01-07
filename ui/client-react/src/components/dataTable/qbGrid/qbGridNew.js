@@ -9,6 +9,7 @@ import IconActions from '../../actions/iconActions';
 
 
 import './qbGrid.scss';
+import {PositionedRowEditActions} from './rowEditActions';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 const SELECT_ROW_CHECKBOX = 'selectRowCheckbox';
@@ -18,7 +19,7 @@ const QbGrid = React.createClass({
         numberOfColumns: PropTypes.number.isRequired,
         columns: PropTypes.array.isRequired,
         rows: PropTypes.array.isRequired,
-        startEditingRow: PropTypes.func.isRequired,
+        editingRowId: PropTypes.number,
         appUsers: PropTypes.array.isRequired,
         onCellChange: PropTypes.func.isRequired,
         onCellBlur: PropTypes.func.isRequired,
@@ -27,6 +28,13 @@ const QbGrid = React.createClass({
         onClickEditIcon: PropTypes.func,
         onClickDeleteIcon: PropTypes.func,
         onClickToggleSelectAllRows: PropTypes.func,
+        isEditingRowValid: PropTypes.bool,
+        isEditingRowSaving: PropTypes.bool,
+        editingRowErrors: PropTypes.object,
+        onStartEditingRow: PropTypes.func,
+        onCancelEditingRow: PropTypes.func,
+        onClickAddNewRow: PropTypes.func,
+        onClickSaveRow: PropTypes.func,
         // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
         //     if (!(propValue instanceof Row)) {
         //         return new Error(
@@ -35,6 +43,46 @@ const QbGrid = React.createClass({
         //         );
         //     }
         // }).isRequired
+    },
+
+    getActionsCell() {
+        return (cellDataRow, rowProps) => {
+            // Turn the row actions into edit actions when in inline edit mode
+            if (rowProps.rowData.isEditing) {
+                return <PositionedRowEditActions
+                    idKey={rowProps.rowData.id ? rowProps.rowData.id.toString() : 'noRowId'}
+                    recordId={this.props.editingRowId}
+                    isValid={this.props.isEditingRowValid}
+                    isSaving={this.props.isEditingRowSaving}
+                    rowEditErrors={this.props.editingRowErrors}
+                    onClose={this.props.onCancelEditingRow}
+                    onClickCancel={this.props.onCancelEditingRow}
+                    onClickAdd={this.props.onClickAddNewRow}
+                    onClickSave={this.props.onClickSaveRow}
+                />;
+            }
+
+            // Display an empty div instead of row actions when another row is being edited
+            // TODO:: Replace this with CSS. Add a 'inlineEditing' class to the table when there is a props.editingRow and then set display:none for .actionsCol in the qbGrid.scss file
+            if (this.props.editingRowId) {
+                return <div className="emptyRowActions"></div>;
+            }
+
+            let id = this.getRecordIdForRow(rowProps.rowData);
+            let selected = rowProps.rowData.selected;
+
+            return (
+                <span className="actionsCol">
+                    <input
+                        className={SELECT_ROW_CHECKBOX}
+                        type="checkbox"
+                        checked={selected}
+                        onChange={this.onClickToggleSelectedRow(id)}
+                    />
+                    {this.getViewRowActionComponent(id)}
+                </span>
+            );
+        };
     },
 
     editCell(colDef) {
@@ -60,7 +108,7 @@ const QbGrid = React.createClass({
             editCell: this.editCell,
             onCellBlur: this.blurCell,
             appUsers: this.props.appUsers,
-            onClick: this.startEditingRow(cell.recordId),
+            onClick: this.onStartEditingRow(cell.recordId),
         };
 
         return Object.assign({}, cell, changeListeners);
@@ -87,21 +135,23 @@ const QbGrid = React.createClass({
         return firstField.recordId;
     },
 
-    startEditingRow(recordId) {
+    onStartEditingRow(recordId) {
         return (ev) => {
-            this.props.startEditingRow(recordId);
+            if (this.props.onStartEditingRow) {
+                this.props.onStartEditingRow(recordId);
+            }
         };
     },
 
     addRowDecorators(row) {
         let classes = ['table-row'];
-        if (row.editing) {
+        if (row.isEditing) {
             classes.push('editing');
         }
 
         return {
             className: classes.join(' '),
-            editing: row.editing,
+            editing: row.isEditing,
             // props that differentiate a subheader
             subHeader: row.subHeader,
             subHeaderLevel: row.subHeaderLevel,
@@ -167,25 +217,6 @@ const QbGrid = React.createClass({
         ];
 
         return <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />;
-    },
-
-    getActionsCell() {
-        return (cellDataRow, rowProps) => {
-            let id = this.getRecordIdForRow(rowProps.rowData);
-            let selected = rowProps.rowData.selected;
-
-            return (
-                <span className="actionsCol">
-                    <input
-                        className={SELECT_ROW_CHECKBOX}
-                        type="checkbox"
-                        checked={selected}
-                        onChange={this.onClickToggleSelectedRow(id)}
-                    />
-                    {this.getViewRowActionComponent(id)}
-                </span>
-            );
-        };
     },
 
     render() {

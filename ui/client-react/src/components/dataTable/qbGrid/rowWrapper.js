@@ -3,7 +3,7 @@ import QbIcon from '../../qbIcon/qbIcon';
 
 const RowWrapper = React.createClass({
     shouldComponentUpdate(nextProps) {
-        return (!nextProps || (this.props.editing !== nextProps.editing) || (this.props.selected !== nextProps.selected) || this.compareFieldValues(nextProps.children));
+        return (!nextProps || (this.props.isEditing !== nextProps.isEditing) || (this.props.selected !== nextProps.selected) || this.compareFieldValues(nextProps.children));
     },
 
     compareFieldValues(fields) {

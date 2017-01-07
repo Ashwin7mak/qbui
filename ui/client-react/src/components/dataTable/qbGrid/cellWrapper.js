@@ -12,7 +12,7 @@ const CellWrapper = React.createClass({
         let currentValue = this.props.children.value;
         let currentDisplay = this.props.children.display;
         // TODO:: Can't use this optimization right now because of the checkboxes in the first column. Revisit later.
-        // return (currentValue !== nextValue || currentDisplay !== nextDisplay || this.props.children.editing !== nextProps.children.editing);
+        // return (currentValue !== nextValue || currentDisplay !== nextDisplay || this.props.children.isEditing !== nextProps.children.isEditing);
         return true;
     },
 
@@ -39,7 +39,7 @@ const CellWrapper = React.createClass({
         let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(fieldDef)];
         let isEditable = FieldUtils.isFieldEditable(fieldDef);
 
-        if (colDef.editing && isEditable) {
+        if (colDef.isEditing && isEditable) {
             return (
                 <td className={classes.join(' ')}>
                     <FieldValueEditor
