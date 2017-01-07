@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import moment from 'moment';
 import consts from '../../../common/src/constants';
-import DurationFieldValueRenderer  from '../../src/components/fields/durationFieldValueRenderer';
+import DurationFieldValueRenderer, {__RewireAPI__ as DurationFieldValueRendererRewireAPI}  from '../../src/components/fields/durationFieldValueRenderer';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -16,11 +16,11 @@ describe('DurationFieldValueRenderer', () => {
     var matchers = require('../reactJasmine');
     beforeEach(function() {
         jasmine.addMatchers(matchers(TestUtils));
-        DurationFieldValueRenderer.__Rewire__('I18nMessage', I18nMessageMock);
+        DurationFieldValueRendererRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
 
     });
     afterEach(() => {
-        DurationFieldValueRenderer.__ResetDependency__('I18nMessage');
+        DurationFieldValueRendererRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     let component;

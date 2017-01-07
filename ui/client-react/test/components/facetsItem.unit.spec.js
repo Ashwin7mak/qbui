@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetsAspect  from '../../src/components/facet/facetsAspect';
-import FacetsItem  from '../../src/components/facet/facetsItem';
+import {__RewireAPI__ as FacetsAspectRewireAPI}  from '../../src/components/facet/facetsAspect';
+import FacetsItem, {__RewireAPI__ as FacetsItemRewireAPI}  from '../../src/components/facet/facetsItem';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import {ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 
@@ -19,13 +19,13 @@ describe('FacetsItem functions', () => {
     });
 
     beforeEach(() => {
-        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsAspectRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        FacetsItem.__ResetDependency__('I18nMessage');
-        FacetsAspect.__ResetDependency__('I18nMessage');
+        FacetsItemRewireAPI.__ResetDependency__('I18nMessage');
+        FacetsAspectRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     let component;

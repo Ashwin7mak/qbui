@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import * as phoneNumberFormatter from '../../../common/src/formatter/phoneNumberFormatter';
-import PhoneFieldValueEditor from '../../src/components/fields/phoneFieldValueEditor';
+import PhoneFieldValueEditor, {__RewireAPI__ as PhoneFieldValueEditorRewireAPI} from '../../src/components/fields/phoneFieldValueEditor';
 
 describe('PhoneFieldValueEditor', () => {
     const phoneNumber = "5555555555";
@@ -47,11 +47,11 @@ describe('PhoneFieldValueEditor', () => {
     };
 
     beforeAll(() => {
-        PhoneFieldValueEditor.__Rewire__('Locale', mockLocale);
+        PhoneFieldValueEditorRewireAPI.__Rewire__('Locale', mockLocale);
     });
 
     afterAll(() => {
-        PhoneFieldValueEditor.__ResetDependency__('Locale');
+        PhoneFieldValueEditorRewireAPI.__ResetDependency__('Locale');
     });
 
     it('allows a user to edit the raw value of a phone', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import QBForm from '../../src/components/QBForm/qbform';
+import QBForm, {__RewireAPI__ as QBFormRewireAPI} from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
 import Breakpoints from '../../src/utils/breakpoints';
@@ -190,11 +190,11 @@ describe('QBForm functions', () => {
     let component;
 
     beforeEach(() => {
-        QBForm.__Rewire__('FieldElement', FieldElementMock);
+        QBFormRewireAPI.__Rewire__('FieldElement', FieldElementMock);
     });
 
     afterEach(() => {
-        QBForm.__ResetDependency__('FieldElement');
+        QBFormRewireAPI.__ResetDependency__('FieldElement');
     });
 
     it('test render of component', () => {
@@ -227,7 +227,7 @@ describe('QBForm functions', () => {
 
     it('test render of formElements with single column due to small breakpoint', () => {
 
-        QBForm.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        QBFormRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
 
         component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
@@ -236,7 +236,7 @@ describe('QBForm functions', () => {
         const fieldLabelElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement fieldLabel");
         expect(fieldLabelElements.length).toEqual(0); // labels will be rendered as a part of FieldElement so none should show up for this case
 
-        QBForm.__ResetDependency__('Breakpoints');
+        QBFormRewireAPI.__ResetDependency__('Breakpoints');
     });
 
     it('test render of text form elements', () => {

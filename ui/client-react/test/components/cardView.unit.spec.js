@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import CardView from '../../src/components/dataTable/cardView/cardView';
+import CardView, {__RewireAPI__ as CardViewRewireAPI} from '../../src/components/dataTable/cardView/cardView';
 import RecordActions from '../../src/components/actions/recordActions';
 
 var RecordActionsMock = React.createClass({
@@ -40,11 +40,11 @@ describe('Report Mobile View functions', () => {
     var component;
 
     beforeEach(() => {
-        CardView.__Rewire__('RecordActions', RecordActionsMock);
+        CardViewRewireAPI.__Rewire__('RecordActions', RecordActionsMock);
     });
 
     afterEach(() => {
-        CardView.__ResetDependency__('RecordActions');
+        CardViewRewireAPI.__ResetDependency__('RecordActions');
     });
 
     it('test render of component', () => {

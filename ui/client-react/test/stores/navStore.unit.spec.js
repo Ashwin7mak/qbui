@@ -1,6 +1,6 @@
 import * as actions from '../../src/constants/actions';
 
-import Store from '../../src/stores/navStore';
+import Store, {__RewireAPI__ as StoreRewireAPI} from '../../src/stores/navStore';
 import Fluxxor from 'fluxxor';
 
 describe('Test Nav Store', () => {
@@ -24,7 +24,7 @@ describe('Test Nav Store', () => {
     };
 
     beforeEach(() => {
-        Store.__Rewire__('Locale', mockLocale);
+        StoreRewireAPI.__Rewire__('Locale', mockLocale);
         store = new Store();
         stores = {NavStore: store};
         flux = new Fluxxor.Flux(stores);
@@ -36,7 +36,7 @@ describe('Test Nav Store', () => {
         flux.store(STORE_NAME).emit.calls.reset();
 
         store = null;
-        Store.__ResetDependency__('Locale');
+        StoreRewireAPI.__ResetDependency__('Locale');
     });
 
     it('test default nav store state', () => {

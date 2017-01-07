@@ -69,11 +69,11 @@ describe('Lookup record formatter unit test', function() {
             value: smallText
         }]];
         var expectedTextRecord =
-                [[{
-                    id     : 7,
-                    value  : smallText,
-                    display: smallText
-                }]];
+            [[{
+                id     : 7,
+                value  : smallText,
+                display: smallText
+            }]];
 
         // DATE
         var dateTimeFieldInfo = [{
@@ -87,11 +87,11 @@ describe('Lookup record formatter unit test', function() {
             value: '2015-04-12T18:51:19z'
         }]];
         var expectedDateTime =
-                [[{
-                    id     : 7,
-                    value  : '2015-04-12T18:51:19z',
-                    display: '04-12-2015'
-                }]];
+            [[{
+                id     : 7,
+                value  : '2015-04-12T18:51:19z',
+                display: '04-12-2015'
+            }]];
 
         var cases = [
             {message: 'Lookup -> CURRENCY', records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags},

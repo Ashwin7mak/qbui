@@ -225,4 +225,6 @@ const ReactPlayground = React.createClass({
     }
 });
 
-export default ReactPlayground;
+
+exports.default = ReactPlayground;
+module.exports = exports.default;

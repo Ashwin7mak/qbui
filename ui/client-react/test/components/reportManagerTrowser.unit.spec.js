@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import ReportManagerTrowser from '../../src/components/report/reportManagerTrowser';
+import ReportManagerTrowser, {__RewireAPI__ as ReportManagerTrowserRewireAPI} from '../../src/components/report/reportManagerTrowser';
 
 const ReportManagerMock = React.createClass({
     render: function() {
@@ -24,14 +24,14 @@ describe('ReportManagerTrowser functions', () => {
     let component;
 
     beforeEach(() => {
-        ReportManagerTrowser.__Rewire__('ReportManager', ReportManagerMock);
+        ReportManagerTrowserRewireAPI.__Rewire__('ReportManager', ReportManagerMock);
 
         spyOn(flux.actions, 'filterReportsByName');
         spyOn(flux.actions, 'hideTrowser');
     });
 
     afterEach(() => {
-        ReportManagerTrowser.__ResetDependency__('ReportManager');
+        ReportManagerTrowserRewireAPI.__ResetDependency__('ReportManager');
 
         flux.actions.filterReportsByName.calls.reset();
         flux.actions.hideTrowser.calls.reset();

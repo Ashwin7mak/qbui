@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import Report from '../../src/components/report/reportRoute';
+import Report, {__RewireAPI__ as ReportRewireAPI} from '../../src/components/report/reportRoute';
 import ReportToolbar from '../../src/components/report/reportToolbar';
 import Stage from '../../src/components/stage/stage';
 import ReportDataSearchStore from '../../src/stores/reportDataSearchStore';
@@ -57,15 +57,15 @@ describe('Report functions', () => {
         }
     });
     beforeEach(() => {
-        Report.__Rewire__('ReportStage', ReportStageMock);
-        Report.__Rewire__('ReportHeader', ReportHeaderMock);
+        ReportRewireAPI.__Rewire__('ReportStage', ReportStageMock);
+        ReportRewireAPI.__Rewire__('ReportHeader', ReportHeaderMock);
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'getFilteredRecords');
     });
 
     afterEach(() => {
-        Report.__ResetDependency__('ReportStage');
-        Report.__ResetDependency__('ReportHeader');
+        ReportRewireAPI.__ResetDependency__('ReportStage');
+        ReportRewireAPI.__ResetDependency__('ReportHeader');
         flux.actions.loadReport.calls.reset();
         flux.actions.getFilteredRecords.calls.reset();
     });

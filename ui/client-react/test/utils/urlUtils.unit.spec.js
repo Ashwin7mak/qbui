@@ -1,5 +1,5 @@
 import React from 'react';
-import UrlUtils from '../../src/utils/urlUtils';
+import UrlUtils, {__RewireAPI__ as UrlUtilsRewireAPI} from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
 import {SUPPORT_LINK_PATH} from '../../src/constants/urlConstants';
 
@@ -98,22 +98,22 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                UrlUtils.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
+                UrlUtilsRewireAPI.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
-                UrlUtils.__ResetDependency__('WindowLocationUtils');
+                UrlUtilsRewireAPI.__ResetDependency__('WindowLocationUtils');
             });
         });
     });
 
     describe('getSupportLink', () => {
         it('returns a link to the support app that includes the current realm', () => {
-            UrlUtils.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
+            UrlUtilsRewireAPI.__Rewire__('WindowLocationUtils', mockWindowLocationUtils);
 
             expect(UrlUtils.getSupportLink()).toEqual(`https://${testRealmId}.${testDomainId}${SUPPORT_LINK_PATH}`);
 
-            UrlUtils.__ResetDependency__('WindowLocationUtils');
+            UrlUtilsRewireAPI.__ResetDependency__('WindowLocationUtils');
         });
     });
 });

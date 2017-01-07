@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import RecordTrowser from '../../src/components/record/recordTrowser';
+import RecordTrowser, {__RewireAPI__ as RecordTrowserRewireAPI} from '../../src/components/record/recordTrowser';
 import Promise from 'bluebird';
 
 const RecordMock = React.createClass({
@@ -30,7 +30,7 @@ describe('RecordTrowser functions', () => {
     let component;
 
     beforeEach(() => {
-        RecordTrowser.__Rewire__('Record', RecordMock);
+        RecordTrowserRewireAPI.__Rewire__('Record', RecordMock);
 
         spyOn(flux.actions, 'recordPendingEditsCommit');
         spyOn(flux.actions, 'recordPendingEditsCancel');
@@ -41,7 +41,7 @@ describe('RecordTrowser functions', () => {
     });
 
     afterEach(() => {
-        RecordTrowser.__ResetDependency__('Record');
+        RecordTrowserRewireAPI.__ResetDependency__('Record');
 
         flux.actions.recordPendingEditsCommit.calls.reset();
         flux.actions.recordPendingEditsCancel.calls.reset();

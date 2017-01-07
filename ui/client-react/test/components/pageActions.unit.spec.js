@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import IconActions  from '../../src/components/actions/iconActions';
+import IconActions, {__RewireAPI__ as IconActionsRewireAPI}  from '../../src/components/actions/iconActions';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -22,11 +22,11 @@ describe('IconActions functions', () => {
     ];
 
     beforeEach(() => {
-        IconActions.__Rewire__('I18nMessage', I18nMessageMock);
+        IconActionsRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        IconActions.__ResetDependency__('I18nMessage');
+        IconActionsRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     it('test render of empty component', () => {

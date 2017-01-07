@@ -209,10 +209,10 @@ describe('ReportUtils - test findGroupedRecord', () => {
     let groupedReportData = [
             {recId: {value:1}, data: 1},
             {recId: {value:2}, data: 2},
-            {children: [
+        {children: [
                 {recId: {value:3}, data: 3},
                 {recId: {value:4}, data: 4}
-            ]}
+        ]}
     ];
 
     // expected use

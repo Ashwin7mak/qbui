@@ -1,6 +1,6 @@
 import * as actions from '../../src/constants/actions';
 
-import PerfStore from '../../src/stores/perfStore';
+import PerfStore, {__RewireAPI__ as PerfStoreRewireAPI} from '../../src/stores/perfStore';
 import Fluxxor from 'fluxxor';
 
 describe('Test PerfStore Store', () => {
@@ -47,9 +47,9 @@ describe('Test PerfStore Store', () => {
 
         spyOn(mockReactPerfUtils, 'devPerfInit').and.callThrough();
         spyOn(mockReactPerfUtils, 'devPerfPrint').and.callThrough();
-        PerfStore.__Rewire__('PerfLogUtils', mockPerfLogUtils);
-        PerfStore.__Rewire__('ReactPerfUtils', mockReactPerfUtils);
-        PerfStore.__Rewire__('WindowLocationUtils', mockMethod);
+        PerfStoreRewireAPI.__Rewire__('PerfLogUtils', mockPerfLogUtils);
+        PerfStoreRewireAPI.__Rewire__('ReactPerfUtils', mockReactPerfUtils);
+        PerfStoreRewireAPI.__Rewire__('WindowLocationUtils', mockMethod);
 
         spyOn(flux.store(STORE_NAME), 'emit');
 
@@ -65,9 +65,9 @@ describe('Test PerfStore Store', () => {
         flux.store(STORE_NAME).emit.calls.reset();
         store = null;
         afterEach(() => {
-            PerfStore.__ResetDependency__('PerfLogUtils');
-            PerfStore.__ResetDependency__('ReactPerfUtils');
-            PerfStore.__ResetDependency__('WindowLocationUtils');
+            PerfStoreRewireAPI.__ResetDependency__('PerfLogUtils');
+            PerfStoreRewireAPI.__ResetDependency__('ReactPerfUtils');
+            PerfStoreRewireAPI.__ResetDependency__('WindowLocationUtils');
         });
 
     });

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
+import {__RewireAPI__ as CellRenderersRewireAPI} from '../../src/components/dataTable/agGrid/cellRenderers';
 
 import {
     DateCellRenderer,
@@ -47,8 +47,8 @@ describe('AGGrid cell editor functions', () => {
 
     beforeEach(() => {
 
-        CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
-        CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        CellRenderersRewireAPI.__Rewire__('I18nDate', I18nMessageMock);
+        CellRenderersRewireAPI.__Rewire__('I18nNumber', I18nMessageMock);
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
         DurationFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
         DurationFieldValueRendererRewire.__Rewire__('I18nMessage', I18nMessageMock);
@@ -58,8 +58,8 @@ describe('AGGrid cell editor functions', () => {
 
     afterEach(() => {
 
-        CellRenderers.__ResetDependency__('I18nDate');
-        CellRenderers.__ResetDependency__('I18nNumber');
+        CellRenderersRewireAPI.__ResetDependency__('I18nDate');
+        CellRenderersRewireAPI.__ResetDependency__('I18nNumber');
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
         DurationFieldValueRendererRewire.__ResetDependency__('I18nNumber');
         DurationFieldValueRendererRewire.__ResetDependency__('I18nMessage');

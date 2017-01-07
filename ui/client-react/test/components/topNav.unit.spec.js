@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import TopNav from '../../src/components/header/topNav';
+import TopNav, {__RewireAPI__ as TopNavRewireAPI} from '../../src/components/header/topNav';
 import GlobalActions from '../../src/components/actions/globalActions';
 
 import {MenuItem, OverlayTrigger} from 'react-bootstrap';
@@ -56,14 +56,14 @@ describe('TopNav functions', () => {
     });
 
     beforeEach(() => {
-        TopNav.__Rewire__('I18nMessage', I18nMessageMock);
+        TopNavRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         component = TestUtils.renderIntoDocument(<TopNav flux={flux} globalActions={globalActions}/>);
         spyOn(flux.actions, 'searchFor');
         spyOn(flux.actions, 'changeLocale');
     });
 
     afterEach(() => {
-        TopNav.__ResetDependency__('I18nMessage');
+        TopNavRewireAPI.__ResetDependency__('I18nMessage');
 
     });
 
@@ -85,11 +85,11 @@ describe('TopNav functions', () => {
                 return "";
             }
         };
-        TopNav.__Rewire__('Locale', LocaleMock);
+        TopNavRewireAPI.__Rewire__('Locale', LocaleMock);
         var noLocaleComponent = TestUtils.renderIntoDocument(<TopNav flux={flux}/>);
         menuItems = TestUtils.scryRenderedDOMComponentsWithClass(noLocaleComponent, "localeLink");
         expect(menuItems.length).toBe(0);
-        TopNav.__ResetDependency__('Locale');
+        TopNavRewireAPI.__ResetDependency__('Locale');
     });
 
     it('test changes locale on selecting menu item', () => {

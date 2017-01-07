@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import formActions from '../../src/actions/formActions';
+import formActions, {__RewireAPI__ as formActionsRewireAPI} from '../../src/actions/formActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
@@ -33,11 +33,11 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockFormService.prototype, 'getFormAndRecord').and.callThrough();
         spyOn(mockFormService.prototype, 'getForm').and.callThrough();
-        formActions.__Rewire__('FormService', mockFormService);
+        formActionsRewireAPI.__Rewire__('FormService', mockFormService);
     });
 
     afterEach(() => {
-        formActions.__ResetDependency__('FormService');
+        formActionsRewireAPI.__ResetDependency__('FormService');
     });
 
     it('test missing params loadFormAndRecord', (done) => {

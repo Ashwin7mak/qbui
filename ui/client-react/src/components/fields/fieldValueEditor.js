@@ -243,7 +243,7 @@ const FieldValueEditor = React.createClass({
                 return (
                         <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
                                              {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
-                    );
+                );
             } else {
                 return <TextFieldValueEditor {...commonProps}
                                             onChange={this.props.onChange ? this.props.onChange : ()=>{}}

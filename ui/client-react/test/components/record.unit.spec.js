@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import Record from '../../src/components/record/record';
+import Record, {__RewireAPI__ as RecordRewireAPI} from '../../src/components/record/record';
 
 var QBFormMock = React.createClass({
     render: function() {
@@ -27,7 +27,7 @@ describe('Record functions', () => {
     let component;
 
     beforeEach(() => {
-        Record.__Rewire__('QBForm', QBFormMock);
+        RecordRewireAPI.__Rewire__('QBForm', QBFormMock);
         spyOn(flux.actions, 'recordPendingEditsCommit');
         spyOn(flux.actions, 'recordPendingEditsChangeField');
         spyOn(flux.actions, 'recordPendingEditsCancel');
@@ -36,7 +36,7 @@ describe('Record functions', () => {
     });
 
     afterEach(() => {
-        Record.__ResetDependency__('QBForm');
+        RecordRewireAPI.__ResetDependency__('QBForm');
         flux.actions.recordPendingEditsCommit.calls.reset();
         flux.actions.recordPendingEditsChangeField.calls.reset();
         flux.actions.recordPendingEditsCancel.calls.reset();

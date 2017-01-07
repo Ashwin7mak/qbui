@@ -81,14 +81,14 @@ describe('TableHomePageRoute functions', () => {
                         field: "col_num",
                         headerName: "col_num"
                     },
-                        {
-                            field: "col_text",
-                            headerName: "col_text"
-                        },
-                        {
-                            field: "col_date",
-                            headerName: "col_date"
-                        }]
+                    {
+                        field: "col_text",
+                        headerName: "col_text"
+                    },
+                    {
+                        field: "col_date",
+                        headerName: "col_date"
+                    }]
                 }
             }
         };
@@ -120,14 +120,14 @@ describe('TableHomePageRoute functions', () => {
                             field: "col_num",
                             headerName: "col_num"
                         },
-                            {
-                                field: "col_text",
-                                headerName: "col_text"
-                            },
-                            {
-                                field: "col_date",
-                                headerName: "col_date"
-                            }]
+                        {
+                            field: "col_text",
+                            headerName: "col_text"
+                        },
+                        {
+                            field: "col_date",
+                            headerName: "col_date"
+                        }]
                     }
                 };
                 return {params, reportData};

@@ -1,4 +1,4 @@
-import React,  {Component}from 'react';
+import React,  {Component} from 'react';
 import {Dropdown, MenuItem, ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
 import QBPanel from '../QBPanel/qbpanel.js';
 

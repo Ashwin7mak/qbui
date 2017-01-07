@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import ComponentLibraryWrapper from '../src/components/componentLibrary';
 import PropTable from '../src/components/PropTable';
-import ReactPlayground from '../src/components/ReactPlayground';
+var ReactPlayground  = require('../src/components/ReactPlayground');
 
 import QBIconDoc from '../src/docs/qbicon';
 
@@ -109,7 +109,7 @@ const fakeMetadata = {
     }
 };
 
-const exampleCodeText = "const basicIcon = (<QBicon icon='hamburger' />);ReactDOM.render(basicIcon, mountNode);";
+const exampleCodeText = "const basicIcon = (<QBicon.default icon='hamburger' />);ReactDOM.render(basicIcon, mountNode);";
 
 describe('Component Library functions', () => {
     'use strict';
@@ -128,7 +128,6 @@ describe('Component Library functions', () => {
     it('code editor should show', () => {
         let component = TestUtils.renderIntoDocument(<ReactPlayground codeText={exampleCodeText} showCode={false} />);
 
-        // const codeToggler = TestUtils.findRenderedDOMComponentWithClass(component, 'code-toggle');
         const codeToggler = ReactDOM.findDOMNode(component).querySelector(".code-toggle");
         TestUtils.Simulate.click(codeToggler);
 

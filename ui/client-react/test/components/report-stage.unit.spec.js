@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportStage  from '../../src/components/report/reportStage';
+import ReportStage, {__RewireAPI__ as ReportStageRewireAPI}  from '../../src/components/report/reportStage';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -16,11 +16,11 @@ describe('Report stage functions', () => {
     'use strict';
 
     beforeEach(() => {
-        ReportStage.__Rewire__('I18nMessage', I18nMessageMock);
+        ReportStageRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        ReportStage.__ResetDependency__('I18nMessage');
+        ReportStageRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     it('test render of component', () => {

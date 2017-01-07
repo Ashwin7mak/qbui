@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
+import AGGrid, {__RewireAPI__ as AGGridRewireAPI} from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
@@ -165,7 +165,7 @@ describe('AGGrid functions', () => {
     };
 
     beforeEach(() => {
-        AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
+        AGGridRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
@@ -174,7 +174,7 @@ describe('AGGrid functions', () => {
     });
 
     afterEach(() => {
-        AGGrid.__ResetDependency__('I18nMessage');
+        AGGridRewireAPI.__ResetDependency__('I18nMessage');
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
@@ -239,7 +239,7 @@ describe('AGGrid functions', () => {
         expect(parent.refs.regGrid.props.showGrouping).toEqual(true);
     });
     it('test expand all of grouped data', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -253,7 +253,7 @@ describe('AGGrid functions', () => {
         expect(expandAllIcon[0].getAttribute("state")).toEqual("open");
     });
     it('test collapse all of grouped data', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -268,7 +268,7 @@ describe('AGGrid functions', () => {
         expect(expandAllIcon[0].getAttribute("state")).toEqual("open");
     });
     it('test selectAll checkbox rendered', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -282,7 +282,7 @@ describe('AGGrid functions', () => {
 
     it('test props.onGridReady is called when AGGrid is ready', () => {
         const onGridReady = jasmine.createSpy();
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns}
@@ -296,7 +296,7 @@ describe('AGGrid functions', () => {
     });
 
     it('test selects all rows', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -320,7 +320,7 @@ describe('AGGrid functions', () => {
     });
 
     it('renders column menu', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -343,7 +343,7 @@ describe('AGGrid functions', () => {
     });
 
     it('menu options numeric field', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -370,7 +370,7 @@ describe('AGGrid functions', () => {
     });
 
     it('menu options text field', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -395,7 +395,7 @@ describe('AGGrid functions', () => {
     });
 
     it('menu options date field', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -420,7 +420,7 @@ describe('AGGrid functions', () => {
     });
 
     it('menu options checkbox field', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
@@ -445,7 +445,7 @@ describe('AGGrid functions', () => {
     });
 
     it('test row actions ', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
 
         const TestParent = React.createFactory(React.createClass({
 
@@ -488,7 +488,7 @@ describe('AGGrid functions', () => {
     });
 
     it('test edit cells by double clicking ', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         let callBacks = {
             onEditRecordStart: function() {
             },
@@ -632,7 +632,7 @@ describe('AGGrid functions', () => {
     });
 
     it('allows editing of a cell even if the Record ID column name has been changed', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
+        AGGridRewireAPI.__ResetDependency__('AgGridReact');
         let callBacks = {
             onEditRecordStart: function() {
             },

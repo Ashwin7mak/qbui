@@ -1,5 +1,5 @@
 
-import BaseService from '../../src/services/baseService';
+import BaseService, {__RewireAPI__ as BaseServiceRewireAPI} from '../../src/services/baseService';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
 
 describe('BaseService rewire tests', () => {
@@ -51,15 +51,15 @@ describe('BaseService rewire tests', () => {
         spyOn(mockWindowUtils, 'update');
         spyOn(mockWindowUtils, 'replace');
 
-        BaseService.__Rewire__('cookie', mockCookie);
-        BaseService.__Rewire__('axios', mockAxios);
-        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        BaseServiceRewireAPI.__Rewire__('cookie', mockCookie);
+        BaseServiceRewireAPI.__Rewire__('axios', mockAxios);
+        BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
     });
 
     afterEach(() => {
-        BaseService.__ResetDependency__('cookie');
-        BaseService.__ResetDependency__('axios');
-        BaseService.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
+        BaseServiceRewireAPI.__ResetDependency__('cookie');
+        BaseServiceRewireAPI.__ResetDependency__('axios');
+        BaseServiceRewireAPI.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
     });
 
     it('test constructor', () => {
@@ -132,7 +132,7 @@ describe('BaseService rewire tests', () => {
     it('test constructRedirectUrl method with complex subdomain', () => {
         mockWindowUtils.getHref = function() {return complexSubdomain.href;};
         mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
-        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        BaseServiceRewireAPI.__Rewire__('WindowLocationUtils', mockWindowUtils);
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();

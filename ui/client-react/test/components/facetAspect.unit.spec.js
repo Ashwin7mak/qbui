@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetsAspect  from '../../src/components/facet/facetsAspect';
+import FacetsAspect, {__RewireAPI__ as FacetsAspectRewireAPI}  from '../../src/components/facet/facetsAspect';
 
 
 describe('FacetsAspect functions', () => {
@@ -16,11 +16,11 @@ describe('FacetsAspect functions', () => {
     });
 
     beforeEach(() => {
-        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsAspectRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        FacetsAspect.__ResetDependency__('I18nMessage');
+        FacetsAspectRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     let component;
