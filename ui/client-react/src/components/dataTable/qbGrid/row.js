@@ -39,16 +39,8 @@ class Row {
                     let pendingEdit = pendingEdits.recordChanges[key];
                     let editedField = recordWithRelatedFieldDef[key];
 
-                    // Because after a blur, newVal.display and newVal.value are objects instead of values
-                    // I'm not sure why that happens, but it does, and I'm dealing with it this way because
-                    // I don't want to break the current AgGrid
-                    if (_.has(pendingEdit, 'newVal.display.display')) {
-                        editedField.display = pendingEdit.newVal.display.display;
-                        editedField.value = pendingEdit.newVal.value.value;
-                    } else {
-                        editedField.display = pendingEdit.newVal.display;
-                        editedField.value = pendingEdit.newVal.value;
-                    }
+                    editedField.display = pendingEdit.newVal.display;
+                    editedField.value = pendingEdit.newVal.value;
                 });
             }
 

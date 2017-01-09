@@ -99,7 +99,7 @@ const QbGrid = React.createClass({
 
     blurCell(colDef) {
         return (newValue) => {
-            this.props.onCellChange(newValue, colDef);
+            this.props.onCellBlur(newValue, colDef);
         };
     },
 
