@@ -221,7 +221,9 @@ $grid-group-expand-icon-size: 20px;
     font-size: $grid-font-size;
     border-right: 1px solid $color-black-300;
     border-bottom: 1px solid $color-black-300;
-    vertical-align: top;
+    //This is commented out because the texts below an inline edit was overlapping, this pushes it down a little bit
+    //no more overlap
+    //vertical-align: top;
 }
 
 .qbGrid > tbody > tr > td:first-of-type {
@@ -251,7 +253,8 @@ $grid-group-expand-icon-size: 20px;
         border: none;
         overflow: visible;
         margin: 0;
-        vertical-align: middle;
+        //vertical-align: middle;
+        border-right: 1px solid #dcdcdc;
         padding-bottom: 14px;
 
         .cellWrapper {
