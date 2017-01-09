@@ -503,8 +503,8 @@ module.exports = function(grunt) {
         webdriver: {
             options: {
                 specs: [
-                    './wdio/tests/forms/*.e2e.spec.js',
-                    './ui/wdio/tests/reportAddRecord.e2e.spec.js'
+                    //'./wdio/tests/forms/*.e2e.spec.js',
+                    './wdio/tests/reports/*.e2e.spec.js'
                 ]
             },
             test: {
