@@ -74,7 +74,6 @@
                 recordCellEl.doubleClick();
             } else {
 
-                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
                 browser.execute(function(recordCellElement) {
                     var event = new MouseEvent('click', {
                         'view': window,
