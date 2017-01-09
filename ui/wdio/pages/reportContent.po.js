@@ -92,8 +92,8 @@
                 // Check for a specific element in the DOM which only shows if the checkbox field is selected
                 return recordCellElement.isExisting('.checkbox .checked');
             } else {
-                // Otherwise just grab the innerText value
-                return recordCellElement.getAttribute('innerText');
+                // Otherwise just grab the textContent value
+                return recordCellElement.getAttribute('textContent');
             }
         }},
 
