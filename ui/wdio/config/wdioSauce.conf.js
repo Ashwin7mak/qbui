@@ -135,8 +135,8 @@ exports.config = {
             name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
+            idleTimeout: '280',
+            maxDuration: 20800,
             breakpointSize: 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
@@ -167,14 +167,14 @@ exports.config = {
     baseUrl: process.env.SAUCE_DOMAIN,
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 30000,
+    waitforTimeout: 60000,
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
-    connectionRetryTimeout: 90000,
+    connectionRetryTimeout: 130000,
     //
     // Default request retries count
-    connectionRetryCount: 3,
+    connectionRetryCount: 6,
     //
     // Initialize the browser instance with a WebdriverIO plugin. The object should have the
     // plugin name as key and the desired plugin options as properties. Make sure you have
@@ -211,13 +211,18 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
-    reporters: ['spec'],
+    reporters: ['spec','junit'],
+    reporterOptions: {
+        junit: {
+            outputDir: './ui/wdio/junitOutput'
+        }
+    },
     //
     // Options to be passed to Jasmine.
     jasmineNodeOpts: {
         //
         // Jasmine default timeout
-        defaultTimeoutInterval: 600000,
+        defaultTimeoutInterval: 1200000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time

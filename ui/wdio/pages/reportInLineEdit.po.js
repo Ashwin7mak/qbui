@@ -6,12 +6,12 @@
 (function() {
     'use strict';
     var reportContent = require('./reportContent.po');
+    var e2ePageBase = require('./e2ePageBase.po');
     var assert = require('assert');
 
     var saveRecordInlineEdit  = '.ag-row.editing .saveRecord';
     var cancelRecordInlineEdit = '.ag-row.editing .cancelSelection';
     var addRecordInlineEdit = '.ag-row.editing .addRecord';
-    var waitForTimeOut = 10000;
 
     var ReportInLineEditPage = Object.create(reportContent, {
 
@@ -73,6 +73,8 @@
             if (browserName === 'chrome') {
                 recordCellEl.doubleClick();
             } else {
+
+                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
                 browser.execute(function(recordCellElement) {
                     var event = new MouseEvent('click', {
                         'view': window,
@@ -113,10 +115,10 @@
                 saveRecordButtonEl.click();
 
                 //step 3 - After save button click wait for inline edit menu to disappear as to confirm that click event worked
-                browser.waitForVisible(cancelRecordInlineEdit, 120000, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMilliseonds, true);
             } catch (err) {
 
-                console.log("Hello  Hello Hello " + err.toString());
+                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
                 // Catch an error from above and then retry
                 // Single click via raw javascript
                 browser.execute(function() {
@@ -128,7 +130,7 @@
                     });
                     document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
                 });
-                browser.waitForVisible(cancelRecordInlineEdit, 120000, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMilliseonds, true);
             }
         }},
 
@@ -147,12 +149,13 @@
             var cancelRecordButtonEl = this.getCancelRecordButton();
 
             cancelRecordButtonEl.waitForVisible();
-            //TODO: Might need raw JS click here too
             try {
                 cancelRecordButtonEl.click();
                 // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-                browser.waitForVisible(cancelRecordInlineEdit, waitForTimeOut, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             } catch (err) {
+
+                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
                 // Catch an error from above and then retry
                 // Single click via raw javascript
                 browser.execute(function() {

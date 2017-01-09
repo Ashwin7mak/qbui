@@ -63,9 +63,6 @@
 
             //Step 2 -  Check that the three buttons are visible
             ReportInLineEditPO.assertInlineEditMenuButtonsTobeTrue();
-            // expect(browser.isVisible('.ag-row.editing .saveRecord')).toBeTruthy();
-            // expect(browser.isVisible('.ag-row.editing .cancelSelection')).toBeTruthy();
-            // expect(browser.isVisible('.ag-row.editing .addRecord')).toBeTruthy();
 
             //step 3 - Close the edit menu
             ReportInLineEditPO.clickCancelButton();
@@ -164,10 +161,9 @@
                 var fieldValues = ReportContentPO.getRecordValues(1);
                 var originalText = fieldValues[1];
                 var elemForText = 'div=' + originalText;
-                var saveRecordString =
 
-                    //Step 2 - Open the in-line edit menu for the second record
-                    ReportInLineEditPO.openRecordEditMenu(1);
+                //Step 2 - Open the in-line edit menu for the second record
+                ReportInLineEditPO.openRecordEditMenu(1);
 
                 // Step 3 - Edit the Text Field
                 ReportInLineEditPO.editTextField(0, textToEnter);
