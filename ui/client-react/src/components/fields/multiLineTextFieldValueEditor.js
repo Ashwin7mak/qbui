@@ -136,7 +136,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     getScrollHeight() {
-        return ReactDOM.findDOMNode(this.refs.textarea).scrollHeight;
+        return ReactDOM.findDOMNode(this.refs.textarea).firstChild.scrollHeight;
     },
 
     render() {

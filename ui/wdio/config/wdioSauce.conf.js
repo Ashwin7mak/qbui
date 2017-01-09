@@ -53,7 +53,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './ui/wdio/tests/reportAddRecord.e2e.spec.js'
+        // specs to run are overwritten by the wdio grunt plugin. See Gruntfile.js 'webdriver' task
     ],
     // Patterns to exclude.
     exclude: [
@@ -81,59 +81,67 @@ exports.config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
-    capabilities: [{
-        platform : 'OS X 10.11',
-        browserName     : 'chrome',
-        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
-        //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        idleTimeout: '120',
-        screenResolution : '1600x1200',
-        maxDuration: 10800,
-        breakpointSize: 'xlarge',
-        // These two values enable parallel testing which will run a spec file per instance
-        shardTestFiles: true,
-        maxInstances: 2
-    }, {
-        platform: 'OS X 10.11',
-        browserName: 'safari',
-        version: '10.0',
-        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
-        screenResolution : '1600x1200',
-        //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        idleTimeout: '180',
-        maxDuration: 10800,
-        breakpointSize: 'xlarge',
-        shardTestFiles: true,
-        maxInstances: 2
-    }, {
-        platform: 'OS X 10.11',
-        browserName: 'firefox',
-        version: '46.0',
-        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
-        screenResolution : '1600x1200',
-        //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        idleTimeout: '180',
-        maxDuration: 10800,
-        breakpointSize: 'large',
-        shardTestFiles: true,
-        maxInstances: 2
-    }, {
-        platform: 'Windows 10',
-        browserName: 'MicrosoftEdge',
-        version: '14.14393',
-        tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
-        screenResolution : '1600x1200',
-        //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        idleTimeout: '180',
-        maxDuration: 10800,
-        breakpointSize: 'large',
-        shardTestFiles: true,
-        maxInstances: 2
-    }],
+    capabilities: [
+        //TODO Chrome is not stable in sauce labs . So will deal this as seperate PR.
+        //{
+        //    platform : 'OS X 10.11',
+        //    browserName     : 'chrome',
+        //    version: '54.0',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
+        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '120',
+        //    screenResolution : '1600x1200',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'xlarge',
+        //    // These two values enable parallel testing which will run a spec file per instance
+        //    shardTestFiles: true,
+        //    maxInstances: 2
+        //},
+        {
+            platform: 'OS X 10.11',
+            browserName: 'safari',
+            version: '10.0',
+            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+            name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+            screenResolution : '1600x1200',
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '180',
+            maxDuration: 10800,
+            breakpointSize: 'large',
+            shardTestFiles: true,
+            maxInstances: 2
+        },
+        //TODO firefox setValue not triggering onChange or blur for muneric and duration fields. Will work as seperate PR
+        //{
+        //    platform: 'OS X 10.11',
+        //    browserName: 'firefox',
+        //    version: '46.0',
+        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //    name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
+        //    screenResolution : '1600x1200',
+        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //    idleTimeout: '180',
+        //    maxDuration: 10800,
+        //    breakpointSize: 'large',
+        //    shardTestFiles: true,
+        //    maxInstances: 2
+        //},
+        {
+            platform: 'Windows 10',
+            browserName: 'MicrosoftEdge',
+            version: '14.14393',
+            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+            name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
+            screenResolution : '1600x1200',
+            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+            idleTimeout: '180',
+            maxDuration: 10800,
+            breakpointSize: 'xlarge',
+            shardTestFiles: true,
+            maxInstances: 2
+        }
+    ],
     //
     // ===================
     // Test Configurations
@@ -248,9 +256,9 @@ exports.config = {
         var e2eUtils = require('../common/e2eUtils')();
 
         // Initialize all Page Objects
-        //global.requirePO = function(relativePath) {
-        //    return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
-        //};
+        global.requirePO = function(relativePath) {
+            return require(baseE2EPath + 'pages/' + relativePath + '.po.js');
+        };
 
         // Initialize all Common Files
         global.requireCommon = function(relativePath) {
