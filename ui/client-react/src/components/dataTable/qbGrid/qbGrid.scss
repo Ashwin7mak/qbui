@@ -1,5 +1,8 @@
 @import '../../../../src/assets/css/qbVariables';
 $grid-font-size: $font-size-p;
+$grid-default-group-padding: 20px;
+$grid-default-cell-padding: 4px;
+$grid-group-expand-icon-size: 20px;
 
 .qbGrid > thead, .qbGrid > tbody {
     color: $default-text-onlight-color;
@@ -12,12 +15,45 @@ $grid-font-size: $font-size-p;
 }
 
 .qbGrid {
+    margin: 10px;
+
+    .dateFormat, .timeFormat {
+        min-width: 120px;
+    }
+
+    .dateTimeFormat {
+        min-width: 210px;
+    }
+
+    .emptyRowActions {
+        width: 75px;
+    }
+
+    .groupHeader {
+        padding-left: $grid-default-group-padding + 3;
+        vertical-align: top;
+        font-weight: bold;
+    }
+
+    //assuming that we can have up to 6 group levels
+    @for $i from 1 through 6 {
+        .subHeaderLevel-#{$i} {
+            .subHeaderCell {
+                padding-left: $i * $grid-default-group-padding;
+            }
+        }
+    }
+
     .dateCell, .durationCell, .phoneCell, .urlField {
         white-space: nowrap;
     }
 
     .AlignRight {
         text-align: right;
+    }
+
+    .gridHeaderCell {
+        display: block;
     }
 
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
@@ -40,13 +76,84 @@ $grid-font-size: $font-size-p;
             text-align: center;
         }
     }
+
+    .editTools {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        background-color: $cell-edit-background-edit;
+        box-shadow: -6px 0px 14px $row-box-shadow-color;
+        padding: 0 24px;
+        border: 1px solid $row-border-color;
+
+        .loadedContent {
+            padding: 0;
+        }
+
+        .loader {
+            padding: 10px 9px;
+
+            .spinner {
+                // Need important because the original styles are set directly on the element by react-loader
+                left: auto !important;
+                top: auto !important;
+            }
+        }
+
+        button {
+            flex: 0 0 auto;
+            border: 0;
+            background-color: $cell-edit-background-edit;
+            margin-right: 2px;
+            padding: 6px 4px;
+
+            .qbIcon:hover {
+                opacity: 1;
+            }
+
+            .qbIcon {
+                opacity: 0.7;
+                width: 20px;
+                font-size: 16px;
+                vertical-align: top;
+            }
+
+            .qbIcon.saveRecord {
+                color: $color-green-700;
+                font-size: 18px;
+            }
+
+            .qbIcon.invalidRecord {
+                color: $tootip-error-color;
+                font-size: 18px;
+                cursor: default;
+            }
+
+            .qbIcon.cancelSelection {
+                color: $iconfont-on-light-normal-color;
+            }
+
+            .qbIcon.deleteRecord {
+                color: $color-red-700;
+            }
+
+            .qbIcon.addRecord {
+                color: $iconfont-on-light-normal-color;
+            }
+
+            .qbIcon.disabled.addRecord {
+                color: $iconfont-on-light-disabled-color;
+            }
+        }
+    }
 }
 
 .qbGrid > thead > tr > th {
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
-    padding: 4px;
+    padding: $grid-default-cell-padding;
     color: $color-blue-600;
     font-size: 12px;
     font-weight: bold;
@@ -123,25 +230,19 @@ $grid-font-size: $font-size-p;
     display: none;
 }
 
-.qbGrid {
-    .cellEdit.dateTimeField {
-        min-width: 120px;
-    }
-}
+.qbGrid .editing {
+    box-shadow: 0 10px 0 0 $cell-edit-background-edit, 0 -10px 0 0 $cell-edit-background-edit, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+    background-color: $cell-edit-background-edit;
 
-/* hide row editing tools by default */
-.editTools {
-    display: none;
-}
-
-.qbGrid > tbody > tr.editing {
     > td:first-child {
         padding-left: 4px;
+<<<<<<< HEAD
         border-left: 1px solid $qbgrid-row-border-color;
         position: relative;
     }
 
     > td {
+        border: none;
         box-shadow: 4px -4px 8px $color-black-300;
         background-color: $qbgrid-cell-edit-background-color;
         overflow: visible;
@@ -151,6 +252,9 @@ $grid-font-size: $font-size-p;
         //NOTE:
         //I removed vertical align, this makes the input boxes align to the top of the inline edit box
         //vertical-align: middle;
+        border-left: 1px solid $row-border-color;
+    }
+
         padding-bottom: 14px;
 
         .cellWrapper {
@@ -302,7 +406,6 @@ $grid-font-size: $font-size-p;
             }
         }
     }
-}
 
 .actionsCol .iconActions {
     line-height: inherit;

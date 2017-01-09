@@ -183,6 +183,32 @@ class FieldUtils {
         default:                                  return "textFormat";
         }
     }
+
+    static getColumnHeaderClasses(fieldDef) {
+        let classes = ['gridHeaderCell'];
+
+        switch (fieldDef.datatypeAttributes.type) {
+        case consts.NUMERIC:
+        case consts.CURRENCY:
+        case consts.RATING:
+        case consts.PERCENT:
+            classes.push('AlignRight');
+            break;
+        case consts.CHECKBOX:
+            classes.push('AlignCenter');
+            break;
+        case FieldFormats.DURATION_FORMAT:
+            if (durationFormatter.hasUnitsText(fieldDef.datatypeAttributes.scale)) {
+                classes.push('AlignRight');
+            }
+            break;
+        default:
+            classes.push('AlignLeft');
+            break;
+        }
+
+        return classes.join(' ');
+    }
 }
 
 // PRIVATE METHODS

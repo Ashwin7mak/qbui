@@ -231,6 +231,12 @@ export let ReportContent = React.createClass({
      * @param afterRecId
      */
     handleRecordNewBlank(afterRecId) {
+        let recordId = afterRecId;
+        // To maintain compatibility with AgGrid
+        if (_.isObject(afterRecId)) {
+            recordId = afterRecId.value;
+        }
+
         const flux = this.getFlux();
 
         // Don't allow a user to add multiple records in rapid succession (i.e., clicking "Save and add new" multiple times rapidly)
@@ -240,8 +246,8 @@ export let ReportContent = React.createClass({
 
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
-        if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId, true);
+        if (this.props.pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+            let saveRecordPromise = this.handleRecordSaveClicked(recordId, true);
 
             // After saving the record successfully, then add the new row
             // Don't do anything if the record wasn't saved successfully or a promise was not returned
@@ -249,7 +255,7 @@ export let ReportContent = React.createClass({
                 return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
             }
         } else {
-            return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+            return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
         }
         return null;
     },
@@ -273,16 +279,21 @@ export let ReportContent = React.createClass({
      * @param id
      */
     handleRecordSaveClicked(id, addNewRecord = false) {
+        let recordId = id;
+        // To maintain compatibility with AgGrid
+        if (_.isObject(id)) {
+            recordId = id.value;
+        }
         //signal record save action, server will validate and if ok update an existing records with changed values
         // or add a new record
-        if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+        if (recordId === SchemaConsts.UNSAVED_RECORD_ID) {
             let recordChanges = {};
             if (this.props.pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
             }
             return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
-            return this.handleRecordChange(id, addNewRecord);
+            return this.handleRecordChange(recordId, addNewRecord);
         }
     },
 
@@ -292,7 +303,15 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
-        this.setState({selectedRecordId: record[this.props.primaryKeyName].value});
+        let recordId;
+        // TODO:: Simplify this once we can remove AgGrid. Once AgGrid is removed, we can assume the value coming back is a recordId or null.
+        if (_.isNumber(record)) {
+            recordId = record;
+        } else {
+            recordId = record[this.props.primaryKeyName].value;
+        }
+
+        this.setState({selectedRecordId: recordId});
         this.setState({confirmDeletesDialogOpen: true});
     },
 
@@ -354,15 +373,21 @@ export let ReportContent = React.createClass({
      * @param recId
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(recId, addNewRecordAfterSave = false) {
+    handleRecordChange(id, addNewRecordAfterSave = false) {
+        let recordId = id;
+        // To maintain compatibility with AgGrid
+        if (_.isObject(id)) {
+            recordId = recordId.value;
+        }
+
         const flux = this.getFlux();
         let colList = [];
         if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
-            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
         }
     },
 
@@ -780,14 +805,51 @@ export let ReportContent = React.createClass({
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.state.showReactabular &&
                             <ReportGrid
-                                records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 primaryKeyName={this.props.primaryKeyName}
                                 loading={this.props.reportData.loading}
                                 appUsers={this.props.appUsers}
+                                onFieldChange={this.handleFieldChange}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                pendEdits={this.props.pendEdits}
+                                selectedRows={this.props.selectedRows}
+                                onRecordDelete={this.handleRecordDelete}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                editErrors={editErrors}
+                                onRecordNewBlank={this.handleRecordNewBlank}
+                                onClickRecordSave={this.handleRecordSaveClicked}
+                                isInlineEditOpen={isInlineEditOpen}
                             />
                         }
-                        {!isSmall && !this.state.showReactabular &&
+
+                        {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
+                        {/*editingIndex={this.props.reportData.editingIndex} Always undefined?? */}
+                        {/*editingId={this.props.reportData.editingId} Always undefined?? */}
+                        {/*appId={this.props.reportData.appId}*/}
+                        {/*onGridReady={this.props.onGridReady}*/}
+                        {/*onRecordChange={this.handleRecordChange}*/}
+                        {/*onRecordAdd={this.handleRecordAdd}*/}
+                        {/*validateRecord={this.validateRecord}*/}
+                        {/*validateFieldValue={this.handleValidateFieldValue}*/}
+                        {/*getOrigRec={this.getOrigRec}*/}
+                        {/*tblId={this.props.reportData.tblId}*/}
+                        {/*rptId={this.props.reportData.rptId}*/}
+                        {/*reportHeader={this.props.reportHeader}*/}
+                        {/*reportFooter={this.props.reportFooter}*/}
+                        {/*pageActions={this.props.pageActions}*/}
+                        {/*selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}*/}
+                        {/*onScroll={this.onScrollRecords}*/}
+                        {/*onRowClick={this.openRow}*/}
+                        {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
+                        {/*recordsCount={recordsCount}*/}
+                        {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}
+                        {/*groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}*/}
+                        {/*sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}*/}
+                        {/*filter={{selections: this.props.reportData.selections,*/}
+                        {/*facet: this.props.reportData.facetExpression,*/}
+                        {/*search: this.props.reportData.searchStringForFiltering}}*/}
+                        {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}

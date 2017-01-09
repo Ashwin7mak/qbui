@@ -1,29 +1,77 @@
 import _ from 'lodash';
 
 class Row {
-    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId) {
+    static transformRecordsForGrid(records = [], fields = [], primaryKeyFieldName = 'Record ID#', editingRecordId, pendingEdits, selectedRows, parentId = null, subHeaderLevel = 0) {
         if (!records || !_.isArray(records)) {
             return [];
         }
 
-        return records.map((record, index) => {
+        let transformedRecords = [];
+
+        records.forEach((record, index) => {
+            if (_.has(record, 'group')) {
+                let groupHeaderId = _.uniqueId('groupHeader_');
+                transformedRecords.push({
+                    subHeader: true,
+                    subHeaderLevel: subHeaderLevel,
+                    subHeaderLabel: record.group,
+                    localized: record.localized,
+                    id: groupHeaderId,
+                });
+
+                transformedRecords = [...transformedRecords, ...Row.transformRecordsForGrid(record.children, fields, primaryKeyFieldName, editingRecordId, pendingEdits, selectedRows, groupHeaderId, subHeaderLevel + 1)];
+                return transformedRecords;
+            }
+
             let id = record[primaryKeyFieldName].value;
+
             let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields, id);
-            let editing = (id === editingRecordId);
-            return new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editing);
+
+            let selected = false;
+            if (_.isArray(selectedRows)) {
+                selected = selectedRows.includes(id);
+            }
+
+            let saving = false;
+            if (pendingEdits.currentEditingRecordId === id) {
+                saving = pendingEdits.saving;
+                Object.keys(pendingEdits.recordChanges).forEach(key => {
+                    let pendingEdit = pendingEdits.recordChanges[key];
+                    let editedField = recordWithRelatedFieldDef[key];
+
+                    // Because after a blur, newVal.display and newVal.value are objects instead of values
+                    // I'm not sure why that happens, but it does, and I'm dealing with it this way because
+                    // I don't want to break the current AgGrid
+                    if (_.has(pendingEdit, 'newVal.display.display')) {
+                        editedField.display = pendingEdit.newVal.display.display;
+                        editedField.value = pendingEdit.newVal.value.value;
+                    } else {
+                        editedField.display = pendingEdit.newVal.display;
+                        editedField.value = pendingEdit.newVal.value;
+                    }
+                });
+            }
+
+            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editingRecordId, selected, parentId, saving));
         });
+
+        return transformedRecords;
     }
 
-    constructor(record, id, editing) {
+    constructor(record, id, editingRecordId, selected, parentId, saving) {
+        let isEditing = (id === editingRecordId);
         this.id = id;
-        this.editing = editing;
+        this.isEditing = isEditing;
+        this.editingRecord = editingRecordId;
+        this.selected = selected;
+        this.parentId = parentId;
+        this.saving = saving;
         let recordCopy = _.cloneDeep(record);
         Object.keys(recordCopy).forEach(key => {
-            recordCopy[key].editing = editing;
+            recordCopy[key].isEditing = isEditing;
             this[key] = recordCopy[key];
         });
     }
-
 }
 
 function addRelatedFieldDefinitions(record = {}, fields = [], recordId) {
