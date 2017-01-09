@@ -298,7 +298,7 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            return browser.waitForExist('.editForm', browser.waitforTimeout);
+            return browser.waitForVisible('.editForm', browser.waitforTimeout);
         }},
 
         /**
@@ -307,7 +307,7 @@
          */
         waitForViewFormsTableLoad: {value: function() {
             // wait for view form
-            return browser.waitForExist('.viewForm', browser.waitforTimeout);
+            return browser.waitForVisible('.viewForm', browser.waitforTimeout);
         }},
 
         /**
