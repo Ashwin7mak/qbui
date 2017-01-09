@@ -136,7 +136,7 @@ exports.config = {
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '280',
-            maxDuration: 20800,
+            maxDuration: 10800,
             breakpointSize: 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
