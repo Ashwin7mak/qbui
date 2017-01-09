@@ -243,24 +243,15 @@ $grid-group-expand-icon-size: 20px;
 
     > td:first-child {
         padding-left: 4px;
-        border-left: 1px solid $qbgrid-row-border-color;
-        position: relative;
-    }
-
-    > td {
-        border: none;
-        box-shadow: 4px -4px 8px $color-black-300;
-        background-color: $qbgrid-cell-edit-background-color;
-        overflow: visible;
-        padding: 4px 2px 0 2px;
-        margin: 0;
-        border-right: 1px solid $qbgrid-row-border-color;
-        //NOTE:
-        //I removed vertical align, this makes the input boxes align to the top of the inline edit box
-        //vertical-align: middle;
         border-left: 1px solid $row-border-color;
     }
 
+    > td {
+
+        border: none;
+        overflow: visible;
+        margin: 0;
+        vertical-align: middle;
         padding-bottom: 14px;
 
         .cellWrapper {
@@ -289,21 +280,18 @@ $grid-group-expand-icon-size: 20px;
                 resize: none;
                 overflow: hidden;
                 box-sizing: border-box;
-                //NOTE:
-                //This is to set all textareas height to 32px, IF this ends up being hardcoded refer to your notes
-                height: 32px
             }
 
             .cellEdit {
                 display: inline-block;
-                border: 1px solid $qbgrid-row-border-color;
-                background: $qbgrid-row-bg-color;
+                border: 1px solid $row-border-color;
+                background: $row-bg-color;
                 flex: 1 1 auto;
                 padding: 0 0 0 2px;
                 margin-right: 2px;
 
                 &.nonEditable {
-                    background-color: $qbgrid-row-noneditable-background-color;
+                    background-color: $row-non-editable-bg-color;
                     cursor: not-allowed;
                     padding-right: 4px;
                 }
@@ -362,56 +350,7 @@ $grid-group-expand-icon-size: 20px;
             }
         }
     }
-
-    .editTools {
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        flex: 0 0 auto;
-        background-color: #f3f8fe;
-        box-shadow: -6px 0px 14px #dcdcdc;
-        position: absolute;
-        top: -21px;
-        left: -29px;
-        padding: 0 24px;
-        border: 1px solid #dddddd;
-
-        button {
-            flex: 0 0 auto;
-            border: 0;
-            background-color: $qbgrid-cell-edit-background-color;
-            margin-right: 2px;
-            padding: 6px 4px;
-
-            .qbIcon:hover {
-                opacity: 1;
-            }
-
-            .qbIcon {
-                opacity: 0.7;
-                width: 20px;
-                font-size: 16px;
-                vertical-align: top;
-            }
-
-            .qbIcon.saveRecord {
-                color: $color-green-700;
-                font-size: 18px;
-            }
-
-            .qbIcon.cancelSelection {
-                color: $iconfont-on-light-normal-color;
-            }
-
-            .qbIcon.deleteRecord {
-                color: $color-red-700;
-            }
-
-            .qbIcon.addRecord {
-                color: $iconfont-on-light-normal-color;
-            }
-        }
-    }
+}
 
 .actionsCol .iconActions {
     line-height: inherit;
