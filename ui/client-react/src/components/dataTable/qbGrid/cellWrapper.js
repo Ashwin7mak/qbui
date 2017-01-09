@@ -1,83 +1,32 @@
 import React from 'react';
-import FieldValueEditor from '../../fields/fieldValueEditor';
-import CellValueRenderer from '../agGrid/cellValueRenderer';
-import FieldUtils from '../../../utils/fieldUtils';
-import FieldFormats from '../../../utils/fieldFormats';
 import _ from 'lodash';
+export const ACTION_COLUMN_CLASSNAME = 'actionsCol';
+export const EMPTY_ACTION_COLUMN_CLASSNAME = 'emptyRowActions';
+export const ROW_EDIT_ACTIONS_CLASSNAME = 'editTools';
+const ELEMENT_CLASSES = [ACTION_COLUMN_CLASSNAME, EMPTY_ACTION_COLUMN_CLASSNAME, ROW_EDIT_ACTIONS_CLASSNAME];
 
-const CellWrapper = React.createClass({
-    shouldComponentUpdate(nextProps) {
-        let nextValue = nextProps.children.value;
-        let nextDisplay = nextProps.children.display;
-        let currentValue = this.props.children.value;
-        let currentDisplay = this.props.children.display;
-        // TODO:: Can't use this optimization right now because of the checkboxes in the first column. Revisit later.
-        // return (currentValue !== nextValue || currentDisplay !== nextDisplay || this.props.children.isEditing !== nextProps.children.isEditing);
-        return true;
-    },
+/**
+ * The purpose of this wrapper is to pass the props of the cell renderer to the element. In Reactabular, the props for a cell come in
+ * as this.props.children, which might be a confusing API to developers used to passing in things to this.props. Therefore, if the
+ * component is one we are using only on Reactabular, we can render it as normal for Reactabular (currently only the first row actions column)
+ * otherwise, we will pass this.props.children down to the cell renderer as normal props.
+ * TODO:: Perhaps my implementation is somewhat off. There may be a way to get around doing this. If so, we should switch to that.
+ * @param CellComponent
+ * @returns {*}
+ * @constructor
+ */
+const CellWrapper = (CellComponent) => {
+    return React.createClass({
+        render() {
+            let childClassName = (_.has(this.props, 'children.props.className') ? this.props.children.props.className : null);
+            let isGridComponent = (_.has(this.props, 'children.props.gridComponent') ? this.props.children.props.gridComponent : false);
+            if (isGridComponent || ELEMENT_CLASSES.includes(childClassName)) {
+                return <td {...this.props}/>;
+            }
 
-    render() {
-        // Children is empty if a column doesn't have a definition so we can't build a field cell. Leave blank in this case.
-        // If other types of cells are created, we can create different wrappers and link those to that column type.
-        if (!this.props.children) {
-            return <td {...this.props} />;
+            return <CellComponent {...this.props.children} />;
         }
-
-        let colDef = _.cloneDeep(this.props.children);
-        let fieldDef = colDef.fieldDef;
-
-        // If the column doesn't have a field definition, a field value cell cannot be created. Return a blank cell
-        // that can be altered by column specific formatters/transformers.
-        if (!fieldDef) {
-            return <td {...this.props} />;
-        }
-
-        if (_.has(colDef, 'fieldDef.datatypeAttributes.type')) {
-            fieldDef.datatypeAttributes.type = FieldFormats.getFormatType(fieldDef.datatypeAttributes);
-        }
-
-        let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(fieldDef)];
-        let isEditable = FieldUtils.isFieldEditable(fieldDef);
-
-        if (colDef.isEditing && isEditable) {
-            return (
-                <td className={classes.join(' ')}>
-                    <FieldValueEditor
-                        {...colDef}
-                        type={colDef.fieldDef.datatypeAttributes.type}
-                        fieldDef={fieldDef}
-                        fieldName={fieldDef.name}
-                        idKey={`fve-${colDef.key}`}
-                        appUsers={colDef.appUsers}
-                        onChange={colDef.editCell(colDef)}
-                        onBlur={colDef.onCellBlur(colDef)}
-                    />
-                </td>
-            );
-        }
-
-        return (
-            <td className={classes.join(' ')}  onClick={colDef.onClick}>
-
-                <CellValueRenderer
-                    type={colDef.fieldDef.datatypeAttributes.type}
-                    classes={colDef.cellClass}
-                    attributes={colDef.fieldDef.datatypeAttributes}
-                    isEditable={isEditable}
-                    idKey={`fvr-${colDef.key}`}
-                    key={`fvr-${colDef.key}`}
-
-                    // Don't show duration units in the grid
-                    includeUnits={false}
-
-                    // Don't show unchecked checkboxes in the grid
-                    hideUncheckedCheckbox={true}
-
-                    {...colDef}
-                />
-            </td>
-        );
-    }
-});
+    });
+};
 
 export default CellWrapper;

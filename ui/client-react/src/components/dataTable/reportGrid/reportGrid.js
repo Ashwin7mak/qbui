@@ -1,9 +1,11 @@
 import React, {PropTypes} from 'react';
-import QbGrid from './qbGrid/qbGridNew';
-import Column from './qbGrid/column';
-import Row from './qbGrid/row';
+import QbGrid from '../qbGrid/qbGridNew';
+import Column from '../qbGrid/column';
+import Row from '../qbGrid/row';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
+
+import ReportCell from './reportCell';
 
 const FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -140,6 +142,14 @@ const ReportGrid = React.createClass({
         flux.actions.selectedRows(selectedRows);
     },
 
+    onStartEditingRow(recordId) {
+        return () => {
+            if (this.props.onEditRecordStart) {
+                this.props.onEditRecordStart(recordId);
+            }
+        };
+    },
+
     /**
      * edit the selected record in the trowser
      * @param data row record data
@@ -168,8 +178,6 @@ const ReportGrid = React.createClass({
             onStartEditingRow={this.startEditingRow}
             editingRowId={this.state.editingRecord}
             appUsers={this.props.appUsers}
-            onCellChange={this.onCellChange}
-            onCellBlur={this.onCellBlur}
             selectedRows={this.props.selectedRows}
             onClickToggleSelectedRow={this.toggleSelectedRow}
             onClickEditIcon={this.openRecordForEdit}
@@ -181,6 +189,13 @@ const ReportGrid = React.createClass({
             onClickAddNewRow={this.props.onRecordNewBlank}
             onClickSaveRow={this.props.onClickRecordSave}
             isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
+            cellRenderer={ReportCell}
+            commonCellProps={{
+                appUsers: this.props.appUsers,
+                onCellChange: this.onCellChange,
+                onCellBlur: this.onCellBlur,
+                onCellClick: this.startEditingRow,
+            }}
         />;
     }
 });

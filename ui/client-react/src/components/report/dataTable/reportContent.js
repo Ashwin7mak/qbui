@@ -4,8 +4,7 @@ import {NotificationManager} from 'react-notifications';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
-import ReportGrid from "../../../components/dataTable/reportGrid";
-import QbGridNew from '../../../components/dataTable/qbGrid/qbGridNew';
+import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
@@ -15,15 +14,12 @@ import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
-import ValidationUtils from "../../../../../common/src/validationUtils";
-import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
-import FieldUtils from '../../../utils/fieldUtils';
 import * as CompConsts from '../../../constants/componentConstants';
 
 let logger = new Logger();
@@ -195,6 +191,7 @@ export let ReportContent = React.createClass({
                     });
                 }
             }
+
             flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
         }
     },

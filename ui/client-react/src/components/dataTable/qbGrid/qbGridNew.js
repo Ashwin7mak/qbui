@@ -3,10 +3,9 @@ import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import RowWrapper from './rowWrapper';
-import CellWrapper from './cellWrapper';
 import Locale from '../../../locales/locales';
 import IconActions from '../../actions/iconActions';
-
+import CellWrapper, {ACTION_COLUMN_CLASSNAME} from './cellWrapper';
 
 import './qbGrid.scss';
 import {PositionedRowEditActions} from './rowEditActions';
@@ -20,9 +19,6 @@ const QbGrid = React.createClass({
         columns: PropTypes.array.isRequired,
         rows: PropTypes.array.isRequired,
         editingRowId: PropTypes.number,
-        appUsers: PropTypes.array.isRequired,
-        onCellChange: PropTypes.func.isRequired,
-        onCellBlur: PropTypes.func.isRequired,
         selectedRows: PropTypes.array,
         onClickToggleSelectedRow: PropTypes.func,
         onClickEditIcon: PropTypes.func,
@@ -31,10 +27,11 @@ const QbGrid = React.createClass({
         isEditingRowValid: PropTypes.bool,
         isEditingRowSaving: PropTypes.bool,
         editingRowErrors: PropTypes.object,
-        onStartEditingRow: PropTypes.func,
         onCancelEditingRow: PropTypes.func,
         onClickAddNewRow: PropTypes.func,
         onClickSaveRow: PropTypes.func,
+        cellRenderer: PropTypes.func,
+        commonCellProps: PropTypes.object,
         // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
         //     if (!(propValue instanceof Row)) {
         //         return new Error(
@@ -65,6 +62,7 @@ const QbGrid = React.createClass({
                     onClickCancel={this.props.onCancelEditingRow}
                     onClickAdd={this.onClickAddNewRow}
                     onClickSave={this.props.onClickSaveRow}
+                    gridComponent={true}
                 />;
             }
 
@@ -78,7 +76,7 @@ const QbGrid = React.createClass({
             let selected = rowProps.rowData.selected;
 
             return (
-                <span className="actionsCol">
+                <span className={ACTION_COLUMN_CLASSNAME}>
                     <input
                         className={SELECT_ROW_CHECKBOX}
                         type="checkbox"
@@ -91,38 +89,20 @@ const QbGrid = React.createClass({
         };
     },
 
-    editCell(colDef) {
-        return (newValue) => {
-            this.props.onCellChange(newValue, colDef);
-        };
-    },
-
-    blurCell(colDef) {
-        return (newValue) => {
-            this.props.onCellBlur(newValue, colDef);
-        };
-    },
-
-    addCellDecorators(cell) {
+    addCellProps(cell) {
         // If there is no cell (e.g., in the case of a subheader row that doesn't have any cells) then don't try
         // to add special props.
-        if (!cell) {
-            return;
+        if (!cell || !this.props.commonCellProps) {
+            return cell;
         }
 
-        let changeListeners = {
-            editCell: this.editCell,
-            onCellBlur: this.blurCell,
-            appUsers: this.props.appUsers,
-            onClick: this.onStartEditingRow(cell.recordId),
-        };
-
-        return Object.assign({}, cell, changeListeners);
+        let props = Object.assign({}, cell, this.props.commonCellProps);
+        return props;
     },
 
     getColumns() {
         return this.props.columns.map(column => {
-            return column.addFormatter(this.addCellDecorators).gridHeader();
+            return column.addFormatter(this.addCellProps).gridHeader();
         });
     },
 
@@ -139,14 +119,6 @@ const QbGrid = React.createClass({
         }
 
         return firstField.recordId;
-    },
-
-    onStartEditingRow(recordId) {
-        return (ev) => {
-            if (this.props.onStartEditingRow) {
-                this.props.onStartEditingRow(recordId);
-            }
-        };
     },
 
     addRowDecorators(row) {
@@ -166,7 +138,6 @@ const QbGrid = React.createClass({
             // Add one to account for the extra column at the start of the grid for the row actions.
             // TODO:: Only add one if the prop for displaying those actions is set
             numberOfColumns: this.props.numberOfColumns + 1,
-
         };
     },
 
@@ -252,7 +223,7 @@ const QbGrid = React.createClass({
                     components={{
                         body: {
                             row: RowWrapper,
-                            cell: CellWrapper,
+                            cell: CellWrapper(this.props.cellRenderer),
                         }
                     }}
                 >

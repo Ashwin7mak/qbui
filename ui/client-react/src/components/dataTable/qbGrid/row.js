@@ -87,7 +87,7 @@ function addRelatedFieldDefinitions(record = {}, fields = [], recordId) {
 function addUniqueKeyTo(recordWithFields, index) {
     let recordWithFieldsAndUniqueKeys = _.cloneDeep(recordWithFields);
     Object.keys(recordWithFieldsAndUniqueKeys).forEach(key => {
-        recordWithFieldsAndUniqueKeys[key].key = `${index}-fid-${recordWithFieldsAndUniqueKeys[key].id}-recId-${recordWithFieldsAndUniqueKeys[key].recordId}`;
+        recordWithFieldsAndUniqueKeys[key].uniqueElementKey = `${index}-fid-${recordWithFieldsAndUniqueKeys[key].id}-recId-${recordWithFieldsAndUniqueKeys[key].recordId}`;
     });
     return recordWithFieldsAndUniqueKeys;
 }

@@ -3,7 +3,9 @@ import QbIcon from '../../qbIcon/qbIcon';
 
 const RowWrapper = React.createClass({
     shouldComponentUpdate(nextProps) {
-        return (!nextProps || (this.props.isEditing !== nextProps.isEditing) || (this.props.selected !== nextProps.selected) || this.compareFieldValues(nextProps.children));
+        // TODO:: Turned off for now because of issues with blank rows displaying their edit mode when switching to editing.
+        // return (!nextProps || (this.props.isEditing !== nextProps.isEditing) || (this.props.selected !== nextProps.selected) || this.compareFieldValues(nextProps.children));
+        return true;
     },
 
     compareFieldValues(fields) {
