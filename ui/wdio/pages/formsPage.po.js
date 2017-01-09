@@ -80,7 +80,7 @@
          */
         waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
             //wait until loading screen disappear
-            browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
+            browser.waitForVisible('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
             //Need this to wait for container to slide away
             return browser.pause(3000);
         }},
@@ -380,7 +380,9 @@
             if (getAllEdits !== []) {
                 //Click on filtered save button
                 getAllEdits[0].click();
-                return self.editFormContainerEl.waitForVisible();
+                self.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(3000);
             } else {
                 throw new Error('Edit button not found at row ' + recordRowIndex);
             }
