@@ -18,9 +18,7 @@
         }
         },
 
-        reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');
-        }
-        },
+        reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
 
         loadedContentEl : {get: function() {
             this.reportToolsAndContentEl.elements('.loadedContent').waitForVisible();
