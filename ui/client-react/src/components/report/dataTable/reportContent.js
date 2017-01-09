@@ -822,34 +822,7 @@ export let ReportContent = React.createClass({
                                 isInlineEditOpen={isInlineEditOpen}
                             />
                         }
-
-                        {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
-                        {/*editingIndex={this.props.reportData.editingIndex} Always undefined?? */}
-                        {/*editingId={this.props.reportData.editingId} Always undefined?? */}
-                        {/*appId={this.props.reportData.appId}*/}
-                        {/*onGridReady={this.props.onGridReady}*/}
-                        {/*onRecordChange={this.handleRecordChange}*/}
-                        {/*onRecordAdd={this.handleRecordAdd}*/}
-                        {/*validateRecord={this.validateRecord}*/}
-                        {/*validateFieldValue={this.handleValidateFieldValue}*/}
-                        {/*getOrigRec={this.getOrigRec}*/}
-                        {/*tblId={this.props.reportData.tblId}*/}
-                        {/*rptId={this.props.reportData.rptId}*/}
-                        {/*reportHeader={this.props.reportHeader}*/}
-                        {/*reportFooter={this.props.reportFooter}*/}
-                        {/*pageActions={this.props.pageActions}*/}
-                        {/*selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}*/}
-                        {/*onScroll={this.onScrollRecords}*/}
-                        {/*onRowClick={this.openRow}*/}
-                        {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
-                        {/*recordsCount={recordsCount}*/}
-                        {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}
-                        {/*groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}*/}
-                        {/*sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}*/}
-                        {/*filter={{selections: this.props.reportData.selections,*/}
-                        {/*facet: this.props.reportData.facetExpression,*/}
-                        {/*search: this.props.reportData.searchStringForFiltering}}*/}
-                        {!isSmall && !this.props.reactabular &&
+                        {!isSmall && !this.state.showReactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
