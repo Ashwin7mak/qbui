@@ -816,11 +816,11 @@ export let ReportContent = React.createClass({
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onClickRecordSave={this.handleRecordSaveClicked}
                                 isInlineEditOpen={isInlineEditOpen}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
                             />
                         }
                         {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
-                        {/*editingIndex={this.props.reportData.editingIndex} Always undefined?? */}
-                        {/*editingId={this.props.reportData.editingId} Always undefined?? */}
                         {/*appId={this.props.reportData.appId}*/}
                         {/*onGridReady={this.props.onGridReady}*/}
                         {/*onRecordChange={this.handleRecordChange}*/}

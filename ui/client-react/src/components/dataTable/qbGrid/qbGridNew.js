@@ -45,6 +45,12 @@ const QbGrid = React.createClass({
         // }).isRequired
     },
 
+    onClickAddNewRow() {
+        if (this.props.onClickAddNewRow) {
+            this.props.onClickAddNewRow(this.props.editingRowId);
+        }
+    },
+
     getActionsCell() {
         return (cellDataRow, rowProps) => {
             // Turn the row actions into edit actions when in inline edit mode
@@ -57,7 +63,7 @@ const QbGrid = React.createClass({
                     rowEditErrors={this.props.editingRowErrors}
                     onClose={this.props.onCancelEditingRow}
                     onClickCancel={this.props.onCancelEditingRow}
-                    onClickAdd={this.props.onClickAddNewRow}
+                    onClickAdd={this.onClickAddNewRow}
                     onClickSave={this.props.onClickSaveRow}
                 />;
             }

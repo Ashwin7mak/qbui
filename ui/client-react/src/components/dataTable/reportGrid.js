@@ -24,8 +24,10 @@ const ReportGrid = React.createClass({
         editErrors: PropTypes.object,
         onRecordNewBlank: PropTypes.func,
         onClickRecordSave: PropTypes.func,
-        isInlineEditOpen: PropTypes.bool
-},
+        isInlineEditOpen: PropTypes.bool,
+        editingIndex: PropTypes.number,
+        editingId: PropTypes.number,
+    },
 
     getDefaultProps() {
         return {
@@ -55,7 +57,17 @@ const ReportGrid = React.createClass({
     },
 
     transformRecords() {
-        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.props.pendEdits, this.props.selectedRows);
+        // Editing Id trumps editingRowId when editingIndex is set
+        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
+        // When saveAndAddAnewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
+        // and editingId (id of newly created row).
+        // TODO:: This process can be refactored once AgGrid is removed.
+        let editingRowId = this.state.editingRecord;
+        if (this.props.editingIndex && this.props.editingId !== editingRowId) {
+            editingRowId = this.props.editingId;
+        }
+
+        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, editingRowId, this.props.pendEdits, this.props.selectedRows);
         // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
