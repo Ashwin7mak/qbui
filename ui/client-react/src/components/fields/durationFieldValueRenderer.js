@@ -106,7 +106,7 @@ const DurationFieldValueRenderer = React.createClass({
         } else if (this.props.value === 0) {
             display = this.props.value;
         } else if (this.props.display === null || this.props.display === '') {
-            display = this.props.value;
+            display = this.props.display;
         } else if (durationFormatter.hasUnitsText(opts.scale)) {
             if (this.props.includeUnits) {
                 let numberValue = IntlNumberOnly(Locale.getLocale(), durationNumberIntl, Number(display));
