@@ -55,7 +55,7 @@
          * Negative Test Method. Reload page test for in-line editing.
          */
         it('Reloading the page while editing should not save updates to a record', function(done) {
-            if (browserName !== 'safari') {
+            if (browserName === 'chrome' || browserName === 'firefox' ) {
                 var textToEnter = 'My new text 3';
 
                 // Get the original value of the text field on the second record
