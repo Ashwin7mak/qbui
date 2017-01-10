@@ -599,15 +599,15 @@
 
             self.formErrorMessageContainerEl.waitForVisible();
             // verify the heading of the error message container
+            let errorHeader = 'Please fix this field';
             if (expectedErrorMessages.length > 1) {
-                expect(self.formErrorMessageHeader.getText()).toBe('Please fix these ' + expectedErrorMessages.length + ' fields.');
-            } else {
-                expect(self.formErrorMessageHeader.getText()).toBe('Please fix this field');
+                errorHeader = 'Please fix these ' + expectedErrorMessages.length + ' fields.';
             }
             //Get all error messages from error container
             var actualErrorMessages = self.getErrorMessagesFromContainer();
             //Verify the errors from the container are expected errors
             expect(actualErrorMessages).toEqual(expectedErrorMessages);
+            expect(self.formErrorMessageHeader.getText()).toBe(errorHeader);
             //Close the error container
             self.clickCloseBtnOnErrorContainer();
         }},
