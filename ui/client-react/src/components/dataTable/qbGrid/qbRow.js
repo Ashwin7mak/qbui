@@ -41,7 +41,7 @@ const QbRow = React.createClass({
 
     render() {
         if (this.props.subHeader) {
-            return renderSubHeader();
+            return this.renderSubHeader();
         }
 
         return <tr {...this.props} />;
