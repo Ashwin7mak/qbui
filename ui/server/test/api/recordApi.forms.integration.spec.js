@@ -53,7 +53,9 @@
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
         before(function(done) {
-            this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+            // Adding timeout() at top of each promises block enables Mocha resolves issues realted to network timeout,
+            // and invoke done() method without further application code.
+            this.timeout(testConsts.INTEGRATION_TIMEOUT);
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
 
@@ -114,7 +116,7 @@
                 name: 'testReportForTable' + targetTable.id,
                 type: 'TABLE',
                 tableId: targetTable.id,
-                query: null,
+                query: null
             };
 
             return new promise(function(resolve, reject) {
@@ -207,7 +209,7 @@
          */
         describe("Form creation test cases", function() {
             it('Form creation normal case', function(done) {
-                this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+                this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 let createFormsPromises = [];
                 app.tables.map((table, index) => {
                     createFormsPromises.push(createForm(app.id, table.id, forms[index]));
@@ -232,7 +234,7 @@
                     assert(false, "Form creation test case is failed");
                     done();
                 }
-                this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+                this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 let getFormsPromises = [];
 
                 targetFormBuildList.forEach(form => {
@@ -257,7 +259,7 @@
                     assert(false, "Form creation test case is failed");
                     done();
                 }
-                this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+                this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 let getFormsPromises = [];
 
                 targetFormBuildList.forEach(form => {
