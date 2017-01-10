@@ -11,7 +11,6 @@ $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
 $edit-icon-font-size: 18px;
-
 .qbGrid > thead, .qbGrid > tbody {
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
@@ -275,10 +274,10 @@ $edit-icon-font-size: 18px;
 
 .qbGrid .editing {
     box-shadow: 0 0px 14px #dcdcdc;
-    height: 58px !important;
-    margin-top: -13px;
+    margin-top: -15px;
     z-index: 999;
     background-color: $cell-edit-background-edit;
+    border-top: $cell-edit-background-edit;
 
     > td:first-child {
         padding-left: 4px;
@@ -292,12 +291,12 @@ $edit-icon-font-size: 18px;
         margin: 0;
         //vertical-align: middle;
         border-right: 1px solid #dcdcdc;
-        //in-line edit row is too big, this makes the height smaller
+        //Commented out because in-line edit row is too big, this makes the height smaller
         //padding-bottom: 14px;
 
         .cellWrapper {
             display: flex;
-            //Removed to make the rows smaller in height
+            //Commented out to make the rows smaller in height
             //padding: 2px;
             top: 0;
             left: 0;
@@ -314,6 +313,9 @@ $edit-icon-font-size: 18px;
             &.editingCell {
                 display: inline-block;
                 border: none;
+                //This aligns input boxes to the top for inline edit and it adds padding to the bottom
+                padding-bottom: 20px;
+                margin-top: -6px;
 
                 .nonEditable {
                     cursor: not-allowed;
@@ -449,7 +451,7 @@ $edit-icon-font-size: 18px;
     border: 0;
     //margin: 0;
     height: 32px;
-    margin-bottom: -90px;
+    //margin-bottom: -90px;
     font-family: $font-family;
     font-size: $grid-font-size;
     border-radius: 0;
