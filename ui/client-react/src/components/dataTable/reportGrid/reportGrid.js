@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import QbGrid from '../qbGrid/qbGridNew';
+import QbGrid from '../qbGrid/qbGrid';
 import ColumnTransformer from '../qbGrid/columnTransformer';
 import RowTransformer from '../qbGrid/rowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
