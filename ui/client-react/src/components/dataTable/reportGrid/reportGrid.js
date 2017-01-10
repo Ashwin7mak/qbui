@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGridNew';
-import Column from '../qbGrid/column';
+import ColumnTransformer from '../qbGrid/columnTransformer';
 import Row from '../qbGrid/row';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
@@ -49,7 +49,7 @@ const ReportGrid = React.createClass({
     },
 
     transformColumns() {
-        return Column.transformColumnsForGrid(this.props.columns);
+        return ColumnTransformer.transformColumnsForGrid(this.props.columns);
     },
 
     transformRecords(editingRecordId) {
