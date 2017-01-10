@@ -105,7 +105,7 @@ describe('Validate ReportsApi unit tests', function() {
             promise.then(
                 function(response) {
                     assert.deepEqual(response, metaResponse);
-                    assert.equal(addQueryParamSpy.called, false);
+                    assert.equal(addQueryParamSpy.called, true);
                     done();
                 },
                 function(error) {
