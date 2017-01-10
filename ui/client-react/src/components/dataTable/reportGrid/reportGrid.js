@@ -2,33 +2,102 @@ import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGridNew';
 import ColumnTransformer from '../qbGrid/columnTransformer';
 import RowTransformer from '../qbGrid/rowTransformer';
+import FieldUtils from '../../../utils/fieldUtils';
+
 import _ from 'lodash';
 
 import ReportCell from './reportCell';
 
 const ReportGrid = React.createClass({
     propTypes: {
+        /**
+         * The records to be displayed on the grid */
         records: PropTypes.array,
+
+        /**
+         * The columns displayed on the grid */
         columns: PropTypes.array,
+
+        /**
+         * The name of the primary key field (usually Record ID#) */
         primaryKeyName: PropTypes.string.isRequired,
+
+        /**
+         * Whether the data for the grid is still loading. Dispalys the loader when true. */
         loading: PropTypes.bool,
+
+        /**
+         * A list of users in the app for the user picker field type */
         appUsers: PropTypes.array.isRequired,
-        onFieldChange: PropTypes.func.isRequired,
-        onEditRecordStart: PropTypes.func.isRequired,
+
+        /**
+         * Any currently pending edits to a record that have not been saved. The pending values will be displayed
+         * instead of the current record values if they exist and the isInlineEditOpen property is true on pending edits.
+         */
         pendEdits: PropTypes.object,
-        selectedRows: PropTypes.array,
-        onRecordDelete: PropTypes.func,
-        onEditRecordCancel: PropTypes.func,
+
+        /**
+         * Any validation errors for a record that is being edited */
         editErrors: PropTypes.object,
-        onRecordNewBlank: PropTypes.func,
+
+        /**
+         * Action that starts inline editing */
+        onEditRecordStart: PropTypes.func.isRequired,
+
+        /**
+         * Action to save a record that is currently being edited */
         onClickRecordSave: PropTypes.func,
-        isInlineEditOpen: PropTypes.bool,
-        editingIndex: PropTypes.number,
-        editingId: PropTypes.number,
-        selectRows: PropTypes.func,
-        toggleSelectedRow: PropTypes.func,
-        openRecordForEdit: PropTypes.func,
+
+        /**
+         * The action that will cancel any pending edits and close inline editing */
+        onEditRecordCancel: PropTypes.func,
+
+        /**
+         * The action that will delete a record */
+        onRecordDelete: PropTypes.func,
+
+        /**
+         * Action for when a field value is changed (e.g., user types in an input box when inline editing) */
+        onFieldChange: PropTypes.func.isRequired,
+
+        /**
+         * An action that is called when a field should be validated */
         handleValidateFieldValue: PropTypes.func,
+
+        /**
+         * Action to add a new blank record to the grid and open it for editing */
+        onRecordNewBlank: PropTypes.func,
+
+        /**
+         * A property that indicates whether inline edit should be open */
+        isInlineEditOpen: PropTypes.bool,
+
+        /**
+         * When adding a new blank row, there is now record ID yet. Instead the reportDataStore sets the index of the
+         * record in the grid along with an editingId. This property may be depracted once AgGrid is removed. See more information
+         * in the getCurrentlyEditingRecordId method
+         */
+        editingIndex: PropTypes.number,
+
+        /**
+         * Related to editingIndex */
+        editingId: PropTypes.number,
+
+        /**
+         * The currently selected rows. Indicated by the checkboxes in the first column of the grid.*/
+        selectedRows: PropTypes.array,
+
+        /**
+         * The action to select a row or rows on the grid */
+        selectRows: PropTypes.func,
+
+        /**
+         * The action to toggle the selection of a row on the grid */
+        toggleSelectedRow: PropTypes.func,
+
+        /**
+         * The action to take a user to the form view for editing */
+        openRecordForEdit: PropTypes.func,
     },
 
     getDefaultProps() {
@@ -147,22 +216,6 @@ const ReportGrid = React.createClass({
         return editingRowId;
     },
 
-    compareFieldValues(currentCellValues, nextCellValues) {
-        let isDifferent = false;
-        nextCellValues.some((currentCellValue, index) => {
-            if (!_.has(currentCellValue, 'props.children.props.value' || !_.has(currentCellValues[index], 'props.children.props.value'))) {
-                return false;
-            }
-
-            if (currentCellValue.props.children.props.value !== currentCellValues[index].props.children.props.value) {
-                isDifferent = true;
-                return true;
-            }
-        });
-
-        return isDifferent;
-    },
-
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
@@ -202,7 +255,7 @@ const ReportGrid = React.createClass({
                 onCellClick: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
             }}
-            compareCellChanges={this.compareFieldValues}
+            compareCellChanges={FieldUtils.compareFieldValues}
         />;
     }
 });

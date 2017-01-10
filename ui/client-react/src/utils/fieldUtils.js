@@ -220,6 +220,22 @@ class FieldUtils {
 
         return classes.join(' ');
     }
+
+    static compareFieldValues(currentCellValues, nextCellValues) {
+        let isDifferent = false;
+        nextCellValues.some((currentCellValue, index) => {
+            if (!_.has(currentCellValue, 'props.children.props.value' || !_.has(currentCellValues[index], 'props.children.props.value'))) {
+                return false;
+            }
+
+            if (currentCellValue.props.children.props.value !== currentCellValues[index].props.children.props.value) {
+                isDifferent = true;
+                return true;
+            }
+        });
+
+        return isDifferent;
+    }
 }
 
 // PRIVATE METHODS
