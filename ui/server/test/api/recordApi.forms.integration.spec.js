@@ -211,14 +211,21 @@
             it('Form creation normal case', function(done) {
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 let createFormsPromises = [];
+                let tableIDList = [];
                 app.tables.map((table, index) => {
                     createFormsPromises.push(createForm(app.id, table.id, forms[index]));
+                    tableIDList.push(table.id);
                 });
 
                 promise.all(createFormsPromises).then(formIdList => {
-                    //console.log(formIdList);
                     targetFormBuildList = formIdList;
                     assert(formIdList.length === app.tables.length, "Form creation test case is failed");
+
+                    formIdList.forEach(newCreateForm => {
+                        assert.equal(newCreateForm.appId, app.id, "Form creation test case is failed due to wrong app id");
+                        assert(tableIDList.indexOf(newCreateForm.tableId) > -1, "Form creation test case is failed due to wrong table id");
+                    });
+
                     done();
                 });
             });
