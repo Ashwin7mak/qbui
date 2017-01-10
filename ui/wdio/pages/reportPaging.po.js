@@ -12,11 +12,19 @@
         reportToolbarEl: {get: function() {return browser.element('.reportToolbar');}},
 
         // Report Toolbar Pagination Container
-        pagingToolbarContainer: {get: function() {return this.reportToolbarEl.element('.reportNavigation');}},
+        pagingToolbarContainer: {get: function() {
+            this.reportToolbarEl.element('.reportNavigation').waitForVisible();
+            return this.reportToolbarEl.element('.reportNavigation');
+        }
+        },
 
         // Paging navigation buttons
         pagingToolbarPrevButton: {get: function() {return this.pagingToolbarContainer.elements('.navigationButton').value[0];}},
-        pagingToolbarNextButton: {get: function() {return this.pagingToolbarContainer.elements('.navigationButton').value[1];}},
+        pagingToolbarNextButton: {get: function() {
+            this.pagingToolbarContainer.elements('.navigationButton').value[1].waitForVisible();
+            return this.pagingToolbarContainer.elements('.navigationButton').value[1];
+        }
+        },
         // Page numbers
         pagingToolbarPageNumbers: {get: function() {return this.pagingToolbarContainer.element('.pageNumbers');}},
 
