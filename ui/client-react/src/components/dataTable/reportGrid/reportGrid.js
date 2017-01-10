@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGridNew';
 import ColumnTransformer from '../qbGrid/columnTransformer';
-import Row from '../qbGrid/row';
+import RowTransformer from '../qbGrid/rowTransformer';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 
@@ -53,7 +53,16 @@ const ReportGrid = React.createClass({
     },
 
     transformRecords(editingRecordId) {
-        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, editingRecordId, this.props.pendEdits, this.props.selectedRows);
+        return RowTransformer.transformRecordsForGrid(
+            this.props.records,
+            this.props.columns,
+            {
+                primaryKeyFieldName: this.props.primaryKeyName,
+                editingRecordId: editingRecordId,
+                pendEdits: this.props.pendEdits,
+                selectedRows: this.props.selectedRows
+            }
+        );
         // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
