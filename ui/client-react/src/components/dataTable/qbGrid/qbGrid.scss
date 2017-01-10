@@ -23,7 +23,7 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid {
-    margin: 10px;
+    //margin: 2px;
 
     .cellEditIcon {
         display: none;
@@ -116,10 +116,13 @@ $edit-icon-font-size: 18px;
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        background-color: $cell-edit-background-edit;
-        box-shadow: -6px 0px 14px $row-box-shadow-color;
+        background-color: #f3f8fe;
+        box-shadow: -6px 0px 14px #dcdcdc;
+        position: absolute;
+        top: -41px;
+        left: -79px;
         padding: 0 24px;
-        border: 1px solid $row-border-color;
+        border: 1px solid #dddddd;
 
         .loadedContent {
             padding: 0;
@@ -244,7 +247,10 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > tbody > tr > td {
-    padding: 6px;
+    //Added padding-left and padding-right to match the AGGrid view layout
+    padding-left: 6px;
+    padding-right: 6px;
+    vertical-align: top;
     font-size: $grid-font-size;
     border-right: 1px solid $color-black-300;
     border-bottom: 1px solid $color-black-300;
@@ -259,11 +265,14 @@ $edit-icon-font-size: 18px;
     max-width: 80px;
     position: relative;
     background: $color-black-100;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .qbGrid .editing {
-    box-shadow: 0 10px 0 0 $cell-edit-background-edit, 0 -10px 0 0 $cell-edit-background-edit, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+    box-shadow: 0 0px 14px #dcdcdc;
+    height: 58px !important;
+    margin-top: -13px;
+    z-index: 999;
     background-color: $cell-edit-background-edit;
 
     > td:first-child {
@@ -272,17 +281,19 @@ $edit-icon-font-size: 18px;
     }
 
     > td {
-
-        border: none;
+        //This adds border back to the bottom of inline edit
+        //border: none;
         overflow: visible;
         margin: 0;
         //vertical-align: middle;
         border-right: 1px solid #dcdcdc;
-        padding-bottom: 14px;
+        //in-line edit row is too big, this makes the height smaller
+        //padding-bottom: 14px;
 
         .cellWrapper {
             display: flex;
-            padding: 2px;
+            //Removed to make the rows smaller in height
+            //padding: 2px;
             top: 0;
             left: 0;
             right: 0;
@@ -432,7 +443,7 @@ $edit-icon-font-size: 18px;
 .multiLineTextCell {
     border: 0;
     margin: 0;
-    padding: 0;
+    height: 32px;
     font-family: $font-family;
     font-size: $grid-font-size;
     border-radius: 0;
