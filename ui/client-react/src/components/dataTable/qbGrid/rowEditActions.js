@@ -13,12 +13,11 @@ const RowEditActions = React.createClass({
 
     propTypes: {
         idKey: PropTypes.string,
-        onClose: PropTypes.func,
         onClickAdd: PropTypes.func,
         onClickSave: PropTypes.func,
         onClickCancel: PropTypes.func,
-        rowEditErrors: PropTypes.object,
-        recordId: PropTypes.number.isRequired,
+        rowEditErrors: PropTypes.array,
+        recordId: PropTypes.number,
         isSaving: PropTypes.bool,
         isValid: PropTypes.bool
     },
@@ -37,29 +36,12 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         // Don't allow a user to move on and add another row if the record is currently invalid
-        if (this.props.onClickAdd && this.propTypes.isValid) {
+        if (this.props.onClickAdd && this.props.isValid) {
             this.props.onClickAdd(this.props.recordId);
         }
     },
 
-    /**
-     * If a user hovers over the save button before clicking it, and there are validation errors, and the user continues to
-     * hover over the new invalid icon, then two tooltips will appear.
-     * We need to remove the stale saveTooltip manually, because the button changes and no longer throws a mouseOut event for the
-     * old tooltip to to go away until the user clicks somewhere else on the screen.
-     */
-    removeStaleSaveTooltip() {
-        let staleTooltips = document.querySelectorAll(".qbtooltip");
-        if (staleTooltips && _.isArrayLike(staleTooltips)) {
-            for (var i = 0; i < staleTooltips.length; i++) {
-                staleTooltips[i].remove();
-            }
-        }
-    },
-
     renderSaveRecordButton() {
-        this.removeStaleSaveTooltip();
-
         let {idKey, isSaving, rowEditErrors} = this.props;
 
         let errorMessage = "editErrors";
@@ -96,7 +78,7 @@ const RowEditActions = React.createClass({
     },
 
     render() {
-        let {isValid, saving, idKey, onClose, onClickAdd} = this.props;
+        let {isValid, saving, idKey} = this.props;
 
         let addRecordClasses = ['addRecord'];
         if (!isValid || saving) {
@@ -106,13 +88,13 @@ const RowEditActions = React.createClass({
         return (
             <div className="editTools" key={"crea-" + idKey}>
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button className="rowEditActionsCancel" onClick={onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
+                    <Button className="rowEditActionsCancel" onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
 
                 {this.renderSaveRecordButton()}
 
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button className="rowEditActionsSaveAndAdd" onClick={onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
+                    <Button className="rowEditActionsSaveAndAdd" onClick={this.onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
                 </QBToolTip>
             </div>
         );

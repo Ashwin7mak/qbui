@@ -4,8 +4,7 @@ import {NotificationManager} from 'react-notifications';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
-import ReportGrid from "../../../components/dataTable/reportGrid";
-import QbGridNew from '../../../components/dataTable/qbGrid/qbGridNew';
+import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
@@ -15,15 +14,12 @@ import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
-import ValidationUtils from "../../../../../common/src/validationUtils";
-import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
-import FieldUtils from '../../../utils/fieldUtils';
 import * as CompConsts from '../../../constants/componentConstants';
 
 let logger = new Logger();
@@ -196,6 +192,7 @@ export let ReportContent = React.createClass({
                     });
                 }
             }
+
             flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
         }
     },
@@ -399,6 +396,38 @@ export let ReportContent = React.createClass({
         } else {
             logger.warn('Field Def not provided for field validation in reportContent');
         }
+    },
+
+    selectRows(selectedRowIds) {
+        this.getFlux().actions.selectedRows(selectedRowIds);
+    },
+
+    toggleSelectedRow(id) {
+        const flux = this.getFlux();
+
+        let selectedRows = this.props.selectedRows;
+
+        if (selectedRows.indexOf(id) === -1) {
+            // not already selected, add to selectedRows
+            selectedRows.push(id);
+        } else {
+            // already selected, remove from selectedRows
+            selectedRows = _.without(selectedRows, id);
+        }
+        flux.actions.selectedRows(selectedRows);
+    },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(recordId) {
+        this.getFlux().actions.openRecordForEdit(recordId);
+    },
+
+    handleValidateFieldValue(def, name, value, checkRequired) {
+        let flux = this.getFlux();
+        flux.actions.recordPendingValidateField(def, name, value, checkRequired);
     },
 
     /**
@@ -820,8 +849,38 @@ export let ReportContent = React.createClass({
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onClickRecordSave={this.handleRecordSaveClicked}
                                 isInlineEditOpen={isInlineEditOpen}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
+                                selectRows={this.selectRows}
+                                toggleSelectedRow={this.toggleSelectedRow}
+                                openRecordForEdit={this.openRecordForEdit}
+                                handleValidateFieldValue={this.handleValidateFieldValue}
                             />
                         }
+                        {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
+                        {/*appId={this.props.reportData.appId}*/}
+                        {/*onGridReady={this.props.onGridReady}*/}
+                        {/*onRecordChange={this.handleRecordChange}*/}
+                        {/*onRecordAdd={this.handleRecordAdd}*/}
+                        {/*validateRecord={this.validateRecord}*/}
+                        {/*validateFieldValue={this.handleValidateFieldValue}*/}
+                        {/*getOrigRec={this.getOrigRec}*/}
+                        {/*tblId={this.props.reportData.tblId}*/}
+                        {/*rptId={this.props.reportData.rptId}*/}
+                        {/*reportHeader={this.props.reportHeader}*/}
+                        {/*reportFooter={this.props.reportFooter}*/}
+                        {/*pageActions={this.props.pageActions}*/}
+                        {/*selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}*/}
+                        {/*onScroll={this.onScrollRecords}*/}
+                        {/*onRowClick={this.openRow}*/}
+                        {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
+                        {/*recordsCount={recordsCount}*/}
+                        {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}
+                        {/*groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}*/}
+                        {/*sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}*/}
+                        {/*filter={{selections: this.props.reportData.selections,*/}
+                        {/*facet: this.props.reportData.facetExpression,*/}
+                        {/*search: this.props.reportData.searchStringForFiltering}}*/}
                         {!isSmall && !this.state.showReactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}

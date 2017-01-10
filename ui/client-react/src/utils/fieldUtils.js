@@ -156,12 +156,23 @@ class FieldUtils {
         return fieldType;
     }
 
-    static getFieldSpecificCellClass(fieldDef) {
-        if (!_.has(fieldDef, 'datatypeAttributes.type')) {
+    static getDefaultValueForFieldType(type) {
+        switch (type) {
+        case SchemaConsts.CHECKBOX :
+            return false;
+        case SchemaConsts.DURATION :
+            return 0;
+        default:
+            return '';
+        }
+    }
+
+    static getFieldSpecificCellClass(type, fieldDef) {
+        if (!type) {
             return 'textFormat';
         }
 
-        switch (fieldDef.datatypeAttributes.type) {
+        switch (type) {
         case FieldFormats.DATE_FORMAT:            return "dateFormat";
         case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
         case FieldFormats.TIME_FORMAT:            return "timeFormat";
@@ -208,6 +219,22 @@ class FieldUtils {
         }
 
         return classes.join(' ');
+    }
+
+    static compareFieldValues(currentCellValues, nextCellValues) {
+        let isDifferent = false;
+        nextCellValues.some((currentCellValue, index) => {
+            if (!_.has(currentCellValue, 'props.children.props.value' || !_.has(currentCellValues[index], 'props.children.props.value'))) {
+                return false;
+            }
+
+            if (currentCellValue.props.children.props.value !== currentCellValues[index].props.children.props.value) {
+                isDifferent = true;
+                return true;
+            }
+        });
+
+        return isDifferent;
     }
 }
 

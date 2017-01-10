@@ -10,6 +10,7 @@ $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
+$edit-icon-font-size: 18px;
 
 .qbGrid > thead, .qbGrid > tbody {
     color: $default-text-onlight-color;
@@ -24,12 +25,25 @@ $grid-group-expand-icon-size: 20px;
 .qbGrid {
     margin: 10px;
 
-    .dateFormat, .timeFormat {
-        min-width: 120px;
+    .cellEditIcon {
+        display: none;
+        color: $ghost-text-color;
+        font-size: $edit-icon-font-size;
+        position: absolute;
+        top: 0;
+        right: 5px;
+
+        &:hover {
+            color: $default-hover-color;
+        }
     }
 
-    .dateTimeFormat {
-        min-width: 210px;
+    .qbCell:hover .cellEditIcon {
+        display: inline;
+    }
+
+    .qbCell .editingCell .cellEditIcon {
+        display: none;
     }
 
     .emptyRowActions {
@@ -72,6 +86,11 @@ $grid-group-expand-icon-size: 20px;
     }
 
     .cellWrapper {
+        width: 100%;
+        min-width: 60px;
+        min-height: 20px;
+        position: relative;
+
         &.numberFormat,
         &.currencyFormat,
         &.percentFormat,
@@ -81,6 +100,14 @@ $grid-group-expand-icon-size: 20px;
 
         &.checkboxFormat {
             text-align: center;
+        }
+
+        &.dateFormat, &.timeFormat {
+            min-width: 120px;
+        }
+
+        &.dateTimeFormat {
+            min-width: 210px;
         }
     }
 
@@ -235,10 +262,6 @@ $grid-group-expand-icon-size: 20px;
     vertical-align: middle;
 }
 
-.qbGrid td .cellWrapper > :not(.cellData) {
-    display: none;
-}
-
 .qbGrid .editing {
     box-shadow: 0 10px 0 0 $cell-edit-background-edit, 0 -10px 0 0 $cell-edit-background-edit, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
     background-color: $cell-edit-background-edit;
@@ -266,37 +289,18 @@ $grid-group-expand-icon-size: 20px;
             bottom: 0;
             z-index: 1;
 
-            > :not(.cellData) {
-                display: inline-block;
-                flex: 1 1 auto;
-            }
-
-            .cellData:not(.nonEditable) {
-                display: none;
-            }
-
-            .cellData.nonEditable {
-                flex: 1 1 auto;
-            }
-
             textarea.cellEdit {
                 resize: none;
                 overflow: hidden;
                 box-sizing: border-box;
             }
 
-            .cellEdit {
+            &.editingCell {
                 display: inline-block;
-                border: 1px solid $row-border-color;
-                background: $row-bg-color;
-                flex: 1 1 auto;
-                padding: 0 0 0 2px;
-                margin-right: 2px;
+                border: none;
 
-                &.nonEditable {
-                    background-color: $row-non-editable-bg-color;
+                .nonEditable {
                     cursor: not-allowed;
-                    padding-right: 4px;
                 }
 
                 &.dateTimeField > * {

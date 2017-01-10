@@ -828,8 +828,7 @@ let ReportDataStore = Fluxxor.createStore({
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                     valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
                 } else {
-                    //TBD : type specific values
-                    valueAnswer = {value: null, id: obj.id};
+                    valueAnswer = {value: FieldUtils.getDefaultValueForFieldType(theCorrespondingField.datatypeAttributes.type), id: obj.id};
                 }
                 return valueAnswer;
             });
