@@ -3,10 +3,9 @@ import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import QbRow from './qbRow';
-import Locale from '../../../locales/locales';
-import IconActions from '../../actions/iconActions';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
+import RowViewActions from './rowViewActions';
 
 import './qbGrid.scss';
 import {PositionedRowEditActions} from './rowEditActions';
@@ -20,7 +19,7 @@ const QbGrid = React.createClass({
         columns: PropTypes.array.isRequired,
         rows: PropTypes.array.isRequired,
         editingRowId: PropTypes.number,
-        // TODO:: Refactor out once agGrid is removed. See more detail in reportGrid.js
+        // TODO:: Refactor out isInlineEditOpen once agGrid is removed. See more detail in reportGrid.js
         isInlineEditOpen: PropTypes.bool,
         selectedRows: PropTypes.array,
         onClickToggleSelectedRow: PropTypes.func,
@@ -36,14 +35,6 @@ const QbGrid = React.createClass({
         cellRenderer: PropTypes.func,
         commonCellProps: PropTypes.object,
         compareCellChanges: PropTypes.func,
-        // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
-        //     if (!(propValue instanceof Row)) {
-        //         return new Error(
-        //             'Invalid prop `' + propFullName + '` supplied to' +
-        //             ' `' + componentName + '`. Validation failed.'
-        //         );
-        //     }
-        // }).isRequired
     },
 
     onClickAddNewRow() {
@@ -148,7 +139,6 @@ const QbGrid = React.createClass({
      * @returns {React}
      */
     getCheckboxHeader() {
-
         const allSelected = this.props.selectedRows.length === this.props.rows.length;
 
         return (
@@ -169,33 +159,8 @@ const QbGrid = React.createClass({
         };
     },
 
-    onClickEditRowIcon(recordId) {
-        return () => {
-            if (this.props.onClickEditIcon) {
-                return this.props.onClickEditIcon(recordId);
-            }
-        };
-    },
-
-    onClickDeleteRowIcon(recordId) {
-        return () => {
-            if (this.props.onClickDeleteIcon) {
-                return this.props.onClickDeleteIcon(recordId);
-            }
-        };
-    },
-
     getViewRowActionComponent(recordId) {
-        const record = Locale.getMessage('records.singular');
-        const actions = [
-            {msg: Locale.getMessage('selection.edit')   + " " + record, rawMsg: true, className:'edit', icon:'edit', onClick: this.onClickEditRowIcon(recordId)},
-            {msg: Locale.getMessage('selection.print')  + " " + record, rawMsg: true, className:'print', icon:'print', tooltipMsg: 'unimplemented.print', disabled:true},
-            {msg: Locale.getMessage('selection.email')  + " " + record, rawMsg: true, className:'email', icon:'mail', tooltipMsg: 'unimplemented.email', disabled:true},
-            {msg: Locale.getMessage('selection.copy')   + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate', tooltipMsg: 'unimplemented.copy', disabled:true},
-            {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete', onClick: this.onClickDeleteRowIcon(recordId)}
-        ];
-
-        return <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />;
+        return <RowViewActions recordId={recordId} onClickDeleteRowIcon={this.props.onClickDeleteIcon} onClickEditRowIcon={this.props.onClickEditIcon} />;
     },
 
     getUniqueRowKey({rowData, rowIndex}) {
@@ -242,7 +207,6 @@ const QbGrid = React.createClass({
                 </Table.Provider>
             </Loader>
         );
-
     }
 });
 

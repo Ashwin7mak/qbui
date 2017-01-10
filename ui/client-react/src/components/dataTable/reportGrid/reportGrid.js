@@ -11,6 +11,7 @@ const FluxMixin = Fluxxor.FluxMixin(React);
 
 const ReportGrid = React.createClass({
     mixins: [FluxMixin],
+
     propTypes: {
         records: PropTypes.array,
         columns: PropTypes.array,
