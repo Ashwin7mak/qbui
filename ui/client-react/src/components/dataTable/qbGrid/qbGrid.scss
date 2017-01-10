@@ -102,11 +102,11 @@ $edit-icon-font-size: 18px;
             text-align: center;
         }
 
-        .dateFormat, .timeFormat {
+        &.dateFormat, &.timeFormat {
             min-width: 120px;
         }
 
-        .dateTimeFormat {
+        &.dateTimeFormat {
             min-width: 210px;
         }
     }
