@@ -48,35 +48,17 @@ const ReportGrid = React.createClass({
         };
     },
 
-    componentWillReceiveProps(nextProps) {
-        if (!nextProps.isInlineEditOpen) {
-            this.setState({editingRecord: null});
-        }
-    },
-
     transformColumns() {
         return Column.transformColumnsForGrid(this.props.columns);
     },
 
-    transformRecords() {
-        // Editing Id trumps editingRowId when editingIndex is set
-        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
-        // When saveAndAddAnewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
-        // and editingId (id of newly created row).
-        // TODO:: This process can be refactored once AgGrid is removed.
-        let editingRowId = this.state.editingRecord;
-        if (this.props.editingIndex && this.props.editingId !== editingRowId) {
-            editingRowId = this.props.editingId;
-        }
-
-        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, editingRowId, this.props.pendEdits, this.props.selectedRows);
+    transformRecords(editingRecordId) {
+        return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, editingRecordId, this.props.pendEdits, this.props.selectedRows);
         // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
     startEditingRow(recordId) {
         this.props.onEditRecordStart(recordId);
-        // TODO:: Refactor out this state and use a passed in prop (perhaps something from pendEdits?)
-        this.setState({editingRecord: recordId});
         // this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
     },
 
@@ -164,19 +146,40 @@ const ReportGrid = React.createClass({
         }
     },
 
+    getCurrentlyEditingRecordId() {
+        // Editing Id trumps editingRowId when editingIndex is set
+        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
+        // When saveAndAddAnewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
+        // and editingId (id of newly created row).
+        // TODO:: This process can be refactored once AgGrid is removed.
+        let editingRowId = null;
+
+        if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
+            editingRowId = this.props.pendEdits.currentEditingRecordId;
+        }
+
+        if (this.props.editingIndex && this.props.editingId !== editingRowId) {
+            editingRowId = this.props.editingId;
+        }
+
+        return editingRowId;
+    },
+
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
             isRecordValid = this.props.editErrors.ok;
         }
 
+        let editingRecordId = this.getCurrentlyEditingRecordId();
+
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
-            rows={this.transformRecords()}
+            rows={this.transformRecords(editingRecordId)}
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
-            editingRowId={this.state.editingRecord}
+            editingRowId={editingRecordId}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
             onClickToggleSelectedRow={this.toggleSelectedRow}

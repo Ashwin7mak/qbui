@@ -6,6 +6,7 @@ import RowWrapper from './rowWrapper';
 import Locale from '../../../locales/locales';
 import IconActions from '../../actions/iconActions';
 import CellWrapper from './cellWrapper';
+import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 
 import './qbGrid.scss';
 import {PositionedRowEditActions} from './rowEditActions';
@@ -187,6 +188,13 @@ const QbGrid = React.createClass({
         return <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />;
     },
 
+    getUniqueRowKey({rowData, rowIndex}) {
+        if (rowData.id === UNSAVED_RECORD_ID) {
+            return `newRow-${rowIndex}`;
+        }
+        return `row-${rowData.id}`;
+    },
+
     render() {
         let columns = [
             ...[{
@@ -220,7 +228,7 @@ const QbGrid = React.createClass({
                 >
                     <Table.Header />
 
-                    <Table.Body onRow={this.addRowDecorators} rows={this.props.rows} rowKey="id" />
+                    <Table.Body onRow={this.addRowDecorators} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
                 </Table.Provider>
             </Loader>
         );
