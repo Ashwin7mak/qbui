@@ -16,7 +16,7 @@ const RowEditActions = React.createClass({
         onClickAdd: PropTypes.func,
         onClickSave: PropTypes.func,
         onClickCancel: PropTypes.func,
-        rowEditErrors: PropTypes.object,
+        rowEditErrors: PropTypes.array,
         recordId: PropTypes.number,
         isSaving: PropTypes.bool,
         isValid: PropTypes.bool
@@ -41,24 +41,7 @@ const RowEditActions = React.createClass({
         }
     },
 
-    /**
-     * If a user hovers over the save button before clicking it, and there are validation errors, and the user continues to
-     * hover over the new invalid icon, then two tooltips will appear.
-     * We need to remove the stale saveTooltip manually, because the button changes and no longer throws a mouseOut event for the
-     * old tooltip to to go away until the user clicks somewhere else on the screen.
-     */
-    removeStaleSaveTooltip() {
-        let staleTooltips = document.querySelectorAll(".qbtooltip");
-        if (staleTooltips && _.isArrayLike(staleTooltips)) {
-            for (var i = 0; i < staleTooltips.length; i++) {
-                staleTooltips[i].remove();
-            }
-        }
-    },
-
     renderSaveRecordButton() {
-        this.removeStaleSaveTooltip();
-
         let {idKey, isSaving, rowEditErrors} = this.props;
 
         let errorMessage = "editErrors";

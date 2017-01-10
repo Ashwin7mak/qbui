@@ -7,19 +7,21 @@ const RowWrapper = React.createClass({
      * @param nextProps
      * @returns {boolean|*}
      */
-    shouldComponentUpdate(nextProps) {
-        let shouldUpdate =
-            (!nextProps || (this.props.isEditing !== nextProps.isEditing) ||
-            (this.props.selected !== nextProps.selected) ||
-            (this.props.editingRowId !== nextProps.editingRowId)) ||
-            (this.props.isInlineEditOpen !== nextProps.isInlineEditOpen);
-
-        if (this.props.compareCellChanges) {
-            return (shouldUpdate || this.props.compareCellChanges(this.props.children, nextProps.children));
-        }
-
-        return shouldUpdate;
-    },
+    // shouldComponentUpdate(nextProps) {
+    //     let shouldUpdate =
+    //         (!nextProps || (this.props.isEditing !== nextProps.isEditing) ||
+    //         (this.props.selected !== nextProps.selected) ||
+    //         (this.props.editingRowId !== nextProps.editingRowId)) ||
+    //         (this.props.isInlineEditOpen !== nextProps.isInlineEditOpen) ||
+    //         (this.props.isValid !== nextProps.isValid) ||
+    //         (this.props.isSaving !== nextProps.isSaving);
+    //
+    //     if (this.props.compareCellChanges) {
+    //         return (shouldUpdate || this.props.compareCellChanges(this.props.children, nextProps.children));
+    //     }
+    //
+    //     return shouldUpdate;
+    // },
 
     render() {
         if (this.props.subHeader) {

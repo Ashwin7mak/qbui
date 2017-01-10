@@ -181,6 +181,11 @@ const ReportGrid = React.createClass({
         return isDifferent;
     },
 
+    handleValidateFieldValue(def, name, value, checkRequired) {
+        let flux = this.getFlux();
+        flux.actions.recordPendingValidateField(def, name, value, checkRequired);
+    },
+
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
@@ -207,7 +212,7 @@ const ReportGrid = React.createClass({
             onClickDeleteIcon={this.onClickDelete}
             onClickToggleSelectAllRows={this.toggleSelectAllRows}
             onCancelEditingRow={this.props.onEditRecordCancel}
-            editingRowErrors={this.props.editErrors}
+            editingRowErrors={this.props.editErrors ? this.props.editErrors.errors : []}
             isEditingRowValid={isRecordValid}
             onClickAddNewRow={this.props.onRecordNewBlank}
             onClickSaveRow={this.props.onClickRecordSave}
@@ -218,6 +223,7 @@ const ReportGrid = React.createClass({
                 onCellChange: this.onCellChange,
                 onCellBlur: this.onCellBlur,
                 onCellClick: this.startEditingRow,
+                validateFieldValue: this.handleValidateFieldValue,
             }}
             compareCellChanges={this.compareFieldValues}
         />;

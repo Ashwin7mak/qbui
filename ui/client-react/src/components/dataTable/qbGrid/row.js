@@ -40,8 +40,11 @@ class Row {
                 return;
             }
 
+            let editErrors = null;
             if (pendingEdits.currentEditingRecordId === id && pendingEdits.isInlineEditOpen) {
                 saving = pendingEdits.saving;
+                editErrors = pendingEdits.editErrors;
+
                 Object.keys(pendingEdits.recordChanges).forEach(key => {
                     let pendingEdit = pendingEdits.recordChanges[key];
                     let editedField = recordWithRelatedFieldDef[key];
@@ -51,13 +54,13 @@ class Row {
                 });
             }
 
-            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editingRecordId, isSelected, parentId, saving));
+            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editingRecordId, isSelected, parentId, saving, editErrors));
         });
 
         return transformedRecords;
     }
 
-    constructor(record, id, editingRecordId, isSelected, parentId, saving) {
+    constructor(record, id, editingRecordId, isSelected, parentId, saving, editErrors) {
         let isEditing = (id === editingRecordId);
         this.id = id;
         this.isEditing = isEditing;
@@ -65,10 +68,28 @@ class Row {
         this.isSelected = isSelected;
         this.parentId = parentId;
         this.saving = saving;
+        this.isValid = true;
+
+        if (editErrors) {
+            this.isValid = editErrors.ok;
+        }
+
         let recordCopy = _.cloneDeep(record);
         Object.keys(recordCopy).forEach(key => {
-            recordCopy[key].isEditing = isEditing;
-            this[key] = recordCopy[key];
+            let currentField = recordCopy[key];
+            currentField.isEditing = isEditing;
+            currentField.isInvalid = false;
+            currentField.invalidMessage = null;
+            currentField.invalidResultData = null;
+
+            let editError = (editErrors ? _.find(editErrors.errors, {id: currentField.id}) : null);
+            if (editError) {
+                currentField.isInvalid = editError.isInvalid;
+                currentField.invalidMessage = editError.invalidMessage;
+                currentField.invalidResultData = editError.invalidResultData;
+            }
+
+            this[key] = currentField;
         });
     }
 }

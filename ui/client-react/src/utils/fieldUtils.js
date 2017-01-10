@@ -156,12 +156,12 @@ class FieldUtils {
         return fieldType;
     }
 
-    static getFieldSpecificCellClass(fieldDef) {
-        if (!_.has(fieldDef, 'datatypeAttributes.type')) {
+    static getFieldSpecificCellClass(type, fieldDef) {
+        if (!type) {
             return 'textFormat';
         }
 
-        switch (fieldDef.datatypeAttributes.type) {
+        switch (type) {
         case FieldFormats.DATE_FORMAT:            return "dateFormat";
         case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
         case FieldFormats.TIME_FORMAT:            return "timeFormat";

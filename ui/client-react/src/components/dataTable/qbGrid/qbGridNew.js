@@ -29,7 +29,7 @@ const QbGrid = React.createClass({
         onClickToggleSelectAllRows: PropTypes.func,
         isEditingRowValid: PropTypes.bool,
         isEditingRowSaving: PropTypes.bool,
-        editingRowErrors: PropTypes.object,
+        editingRowErrors: PropTypes.array,
         onCancelEditingRow: PropTypes.func,
         onClickAddNewRow: PropTypes.func,
         onClickSaveRow: PropTypes.func,
@@ -128,6 +128,8 @@ const QbGrid = React.createClass({
             isEditing: row.isEditing,
             editingRowId: this.props.editingRowId,
             isInlineEditOpen: this.props.isInlineEditOpen,
+            isValid: this.props.isEditingRowValid,
+            isSaving: this.props.isEditingRowSaving,
             isSelected: row.isSelected,
             // props that differentiate a subheader
             subHeader: row.subHeader,
