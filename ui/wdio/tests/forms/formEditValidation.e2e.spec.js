@@ -44,7 +44,7 @@
         });
 
         it('Get into Error Form State, Validate Errors, Correct the errors and Verify Saving the record successfully', function() {
-            var fieldTypes = ['allNumericFields', 'allDurationFields', 'allPhoneFields', 'allEmailFields'];
+            var fieldTypes = ['allPhoneFields', 'allEmailFields', 'allNumericFields', 'allDurationFields'];
             var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field'];
 
             //Step 1 - Get the 6th record textField
