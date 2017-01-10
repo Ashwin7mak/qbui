@@ -12,33 +12,69 @@
 
         //TODO: Will need to extend these locators when we show multiple reports on a page
         // Report Container (encapsulates both the report toolbar and the report itself)
-        reportContainerEl: {get: function() {return browser.element('.reportContainer');}},
+        reportContainerEl: {get: function() {
+            browser.element('.reportContainer').waitForVisible();
+            return browser.element('.reportContainer');
+        }
+        },
+
+        reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
+
+        loadedContentEl : {get: function() {
+            this.reportToolsAndContentEl.elements('.loadedContent').waitForVisible();
+            var elems = this.reportToolsAndContentEl.elements('.loadedContent');
+            return elems.value[0];
+        }
+        },
 
         // Report content div containing column headers and the report content in agGrid
-        reportContentEl: {get: function() {return this.reportContainerEl.element('.reportContent');}},
+        reportContentEl: {get: function() {
+            this.reportContainerEl.element('.reportContent').waitForVisible();
+            return this.reportContainerEl.element('.reportContent');
+        }
+        },
 
         // agGrid contains both the column headers and the record content in agGrid
-        agGridContainerEl: {get: function() {return this.reportContentEl.element('.agGrid');}},
+        agGridContainerEl: {get: function() {
+            this.reportContentEl.element('.agGrid').waitForVisible();
+            return this.reportContentEl.element('.agGrid');
+        }
+        },
 
         // Contains the entire set of column headers for the grid (the select all column and the field column headers)
         agGridHeaderEl: {get: function() {return this.agGridContainerEl.element('.ag-header');}},
+
         // Container for just the field column headers
         agGridHeaderContainerEl: {get: function() {return this.agGridHeaderEl.element('.ag-header-container');}},
+
         // List of all field column headers from agGrid
         agGridColHeaderElList: {get: function() {return this.agGridHeaderContainerEl.elements('.ag-header-cell.gridHeaderCell');}},
 
         // agGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
-        agGridBodyEl: {get: function() {return this.agGridContainerEl.element('.ag-body');}},
+        agGridBodyEl: {get: function() {
+            this.agGridContainerEl.element('.ag-body').waitForVisible();
+            return this.agGridContainerEl.element('.ag-body');
+        }
+        },
+
+        agGridBodyViewportEl : {get: function() {return browser.element('.ag-body-viewport');}},
 
         // Container for each records action column
         agGridLeftColsContainerEl: {get: function() {return this.agGridBodyEl.element('.ag-pinned-left-cols-container');}},
+
         // this will get you every row of the actions column
         agGridRowActionsElList: {get: function() {return this.agGridLeftColsContainerEl.elements('.ag-row');}},
+
         // This is shorthand for the above (works in chrome dev console): $$('.ag-pinned-left-cols-container .ag-row')
         // Use the space to specify a sub element, join the two if it is a subclass
 
         // agGrid body-container which contains the actual record rows
-        agGridBodyContainer: {get: function() {return this.agGridBodyEl.element('.ag-body-container');}},
+        agGridBodyContainer: {get: function() {
+            this.agGridBodyEl.element('.ag-body-container').waitForVisible();
+            return this.agGridBodyEl.element('.ag-body-container');
+        }
+        },
+
         // this will get you every record element on the grid
         agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.ag-row');}},
 
@@ -95,6 +131,7 @@
                 // Otherwise just grab the innerHtml value
                 return recordCellElement.getAttribute('innerHTML');
             } else {
+                // Otherwise just grab the innerText value
                 return recordCellElement.getAttribute('innerText');
             }
         }},
@@ -152,7 +189,17 @@
         reportDisplayedRecordCount: {value: function() {
             this.agGridRecordElList.waitForVisible();
             return this.agGridRecordElList.value.length;
-        }}
+        }},
+
+
+        waitForReportContent: {value:function() {
+            // First wait for the containers
+            this.reportContainerEl.waitForVisible();
+            this.reportContentEl.waitForVisible();
+            this.loadedContentEl.waitForVisible();
+            // Then wait for records to be shown in the grid
+            return this.agGridBodyViewportEl.waitForVisible();
+        }},
 
         //TODO: Will have to see if we actually need this going forward
         ///**

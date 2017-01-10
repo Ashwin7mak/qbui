@@ -181,7 +181,7 @@ exports.config = {
 
         // Initialize all Page Objects
         global.requirePO = function(relativePath) {
-           return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
+           return require(baseE2EPath + 'pages/' + relativePath + '.po.js');
         };
 
         // Initialize all Common Files

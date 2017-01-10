@@ -20,6 +20,12 @@
         SMALL_BP_WIDTH : 500,
         DEFAULT_HEIGHT : 1440,
 
+        //Wait time Objects
+        shortWaitTimeMilliseonds : 5000,
+        mediumWaitTimeMilliseonds : 10000,
+        longWaitTimeMilliseonds : 30000,
+        extraLongWaitTimeMilliseonds : 120000,
+
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
             'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
             'Email Address Field', 'URL Field', 'User Field'],
