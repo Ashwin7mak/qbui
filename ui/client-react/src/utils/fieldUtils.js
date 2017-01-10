@@ -156,6 +156,17 @@ class FieldUtils {
         return fieldType;
     }
 
+    static getDefaultValueForFieldType(type) {
+        switch (type) {
+        case SchemaConsts.CHECKBOX :
+            return false;
+        case SchemaConsts.DURATION :
+            return 0;
+        default:
+            return '';
+        }
+    }
+
     static getFieldSpecificCellClass(type, fieldDef) {
         if (!type) {
             return 'textFormat';

@@ -91,6 +91,7 @@ const ReportCell = React.createClass({
                         invalidMessage={this.props.invalidMessage}
                         invalidResultData={this.props.invalidResultsData}
                         validateFieldValue={this.props.validateFieldValue}
+                        indicateRequired={true}
                     />
                 </div>
             );

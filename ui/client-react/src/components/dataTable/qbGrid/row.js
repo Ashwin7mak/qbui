@@ -49,8 +49,10 @@ class Row {
                     let pendingEdit = pendingEdits.recordChanges[key];
                     let editedField = recordWithRelatedFieldDef[key];
 
-                    editedField.display = pendingEdit.newVal.display;
-                    editedField.value = pendingEdit.newVal.value;
+                    if (pendingEdit.newVal) {
+                        editedField.display = pendingEdit.newVal.display;
+                        editedField.value = pendingEdit.newVal.value;
+                    }
                 });
             }
 
