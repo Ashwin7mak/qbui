@@ -2,16 +2,11 @@ import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGridNew';
 import ColumnTransformer from '../qbGrid/columnTransformer';
 import RowTransformer from '../qbGrid/rowTransformer';
-import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 
 import ReportCell from './reportCell';
 
-const FluxMixin = Fluxxor.FluxMixin(React);
-
 const ReportGrid = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         records: PropTypes.array,
         columns: PropTypes.array,
@@ -30,6 +25,10 @@ const ReportGrid = React.createClass({
         isInlineEditOpen: PropTypes.bool,
         editingIndex: PropTypes.number,
         editingId: PropTypes.number,
+        selectRows: PropTypes.func,
+        toggleSelectedRow: PropTypes.func,
+        openRecordForEdit: PropTypes.func,
+        handleValidateFieldValue: PropTypes.func,
     },
 
     getDefaultProps() {
@@ -98,15 +97,11 @@ const ReportGrid = React.createClass({
         this.props.records.forEach(record => {
             selected.push(record[this.props.primaryKeyName].value);
         });
-        this.selectRows(selected);
+        this.props.selectRows(selected);
     },
 
     deselectAllRows() {
-        this.selectRows([]);
-    },
-
-    selectRows(selectedRowIds) {
-        this.getFlux().actions.selectedRows(selectedRowIds);
+        this.props.selectRows([]);
     },
 
     toggleSelectAllRows() {
@@ -119,35 +114,12 @@ const ReportGrid = React.createClass({
         }
     },
 
-    toggleSelectedRow(id) {
-        const flux = this.getFlux();
-
-        let selectedRows = this.props.selectedRows;
-
-        if (selectedRows.indexOf(id) === -1) {
-            // not already selected, add to selectedRows
-            selectedRows.push(id);
-        } else {
-            // already selected, remove from selectedRows
-            selectedRows = _.without(selectedRows, id);
-        }
-        flux.actions.selectedRows(selectedRows);
-    },
-
     onStartEditingRow(recordId) {
         return () => {
             if (this.props.onEditRecordStart) {
                 this.props.onEditRecordStart(recordId);
             }
         };
-    },
-
-    /**
-     * edit the selected record in the trowser
-     * @param data row record data
-     */
-    openRecordForEdit(recordId) {
-        this.getFlux().actions.openRecordForEdit(recordId);
     },
 
     onClickDelete(recordId) {
@@ -191,11 +163,6 @@ const ReportGrid = React.createClass({
         return isDifferent;
     },
 
-    handleValidateFieldValue(def, name, value, checkRequired) {
-        let flux = this.getFlux();
-        flux.actions.recordPendingValidateField(def, name, value, checkRequired);
-    },
-
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
@@ -217,8 +184,8 @@ const ReportGrid = React.createClass({
             isInlineEditOpen={this.props.isInlineEditOpen}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
-            onClickToggleSelectedRow={this.toggleSelectedRow}
-            onClickEditIcon={this.openRecordForEdit}
+            onClickToggleSelectedRow={this.props.toggleSelectedRow}
+            onClickEditIcon={this.props.openRecordForEdit}
             onClickDeleteIcon={this.onClickDelete}
             onClickToggleSelectAllRows={this.toggleSelectAllRows}
             onCancelEditingRow={this.props.onEditRecordCancel}
@@ -233,7 +200,7 @@ const ReportGrid = React.createClass({
                 onCellChange: this.onCellChange,
                 onCellBlur: this.onCellBlur,
                 onCellClick: this.startEditingRow,
-                validateFieldValue: this.handleValidateFieldValue,
+                validateFieldValue: this.props.handleValidateFieldValue,
             }}
             compareCellChanges={this.compareFieldValues}
         />;

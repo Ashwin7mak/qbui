@@ -397,6 +397,38 @@ export let ReportContent = React.createClass({
         }
     },
 
+    selectRows(selectedRowIds) {
+        this.getFlux().actions.selectedRows(selectedRowIds);
+    },
+
+    toggleSelectedRow(id) {
+        const flux = this.getFlux();
+
+        let selectedRows = this.props.selectedRows;
+
+        if (selectedRows.indexOf(id) === -1) {
+            // not already selected, add to selectedRows
+            selectedRows.push(id);
+        } else {
+            // already selected, remove from selectedRows
+            selectedRows = _.without(selectedRows, id);
+        }
+        flux.actions.selectedRows(selectedRows);
+    },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(recordId) {
+        this.getFlux().actions.openRecordForEdit(recordId);
+    },
+
+    handleValidateFieldValue(def, name, value, checkRequired) {
+        let flux = this.getFlux();
+        flux.actions.recordPendingValidateField(def, name, value, checkRequired);
+    },
+
     /**
      * when we scroll the grid wrapper, hide the add record
      * icon for a bit
@@ -815,6 +847,10 @@ export let ReportContent = React.createClass({
                                 isInlineEditOpen={isInlineEditOpen}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
+                                selectRows={this.selectRows}
+                                toggleSelectedRow={this.toggleSelectedRow}
+                                openRecordForEdit={this.openRecordForEdit}
+                                handleValidateFieldValue={this.handleValidateFieldValue}
                             />
                         }
                         {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
