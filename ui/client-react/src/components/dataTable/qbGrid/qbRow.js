@@ -30,7 +30,7 @@ const QbRow = React.createClass({
 
     renderSubHeader() {
         return (
-            <tr {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
+            <tr key={`qbRowHeader-${this.props.subHeaderId}`} {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
                 <td id={this.props.subHeaderId} className="subHeaderCell" colSpan={this.props.numberOfColumns}>
                     <QbIcon icon="caret-filled-down"/>
                     {this.props.subHeaderLabel}
@@ -44,7 +44,7 @@ const QbRow = React.createClass({
             return this.renderSubHeader();
         }
 
-        return <tr {...this.props} />;
+        return <tr key={`qbRow-${this.props.recordId}`} {...this.props} />;
     }
 });
 
