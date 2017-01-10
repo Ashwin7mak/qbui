@@ -20,13 +20,7 @@ const ReportCell = React.createClass({
     },
 
     shouldComponentUpdate(nextProps) {
-        // let nextValue = nextProps.children.value;
-        // let nextDisplay = nextProps.children.display;
-        // let currentValue = this.props.children.value;
-        // let currentDisplay = this.props.children.display;
-        // TODO:: Can't use this optimization right now because of the checkboxes in the first column. Revisit later.
-        // return (currentValue !== nextValue || currentDisplay !== nextDisplay || this.props.children.isEditing !== nextProps.children.isEditing);
-        return true;
+        return (this.props.value !== nextProps.value || this.props.display !== nextProps.display || this.props.isEditing !== nextProps.isEditing);
     },
 
     onCellChange(colDef) {

@@ -27,13 +27,20 @@ class Row {
 
             let recordWithRelatedFieldDef = addRelatedFieldDefinitions(record, fields, id);
 
-            let selected = false;
+            let isSelected = false;
             if (_.isArray(selectedRows)) {
-                selected = selectedRows.includes(id);
+                isSelected = selectedRows.includes(id);
             }
 
             let saving = false;
-            if (pendingEdits.currentEditingRecordId === id) {
+
+            // We don't want to add any blank rows unless we are currently adding a new row
+            // TODO:: This could cause performance problems if it happens a lot (we could be adding a lot of blank rows). Refactor once AgGrid is removed.
+            if (id === null && !pendingEdits.isInlineEditOpen) {
+                return;
+            }
+
+            if (pendingEdits.currentEditingRecordId === id && pendingEdits.isInlineEditOpen) {
                 saving = pendingEdits.saving;
                 Object.keys(pendingEdits.recordChanges).forEach(key => {
                     let pendingEdit = pendingEdits.recordChanges[key];
@@ -44,18 +51,18 @@ class Row {
                 });
             }
 
-            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editingRecordId, selected, parentId, saving));
+            transformedRecords.push(new Row(addUniqueKeyTo(recordWithRelatedFieldDef, index), id, editingRecordId, isSelected, parentId, saving));
         });
 
         return transformedRecords;
     }
 
-    constructor(record, id, editingRecordId, selected, parentId, saving) {
+    constructor(record, id, editingRecordId, isSelected, parentId, saving) {
         let isEditing = (id === editingRecordId);
         this.id = id;
         this.isEditing = isEditing;
         this.editingRecord = editingRecordId;
-        this.selected = selected;
+        this.isSelected = isSelected;
         this.parentId = parentId;
         this.saving = saving;
         let recordCopy = _.cloneDeep(record);

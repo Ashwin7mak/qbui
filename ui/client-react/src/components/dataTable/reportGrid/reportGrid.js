@@ -165,6 +165,22 @@ const ReportGrid = React.createClass({
         return editingRowId;
     },
 
+    compareFieldValues(currentCellValues, nextCellValues) {
+        let isDifferent = false;
+        nextCellValues.some((currentCellValue, index) => {
+            if (!_.has(currentCellValue, 'props.children.props.value' || !_.has(currentCellValues[index], 'props.children.props.value'))) {
+                return false;
+            }
+
+            if (currentCellValue.props.children.props.value !== currentCellValues[index].props.children.props.value) {
+                isDifferent = true;
+                return true;
+            }
+        });
+
+        return isDifferent;
+    },
+
     render() {
         let isRecordValid = true;
         if (_.has(this.props, 'editErrors.ok')) {
@@ -199,6 +215,7 @@ const ReportGrid = React.createClass({
                 onCellBlur: this.onCellBlur,
                 onCellClick: this.startEditingRow,
             }}
+            compareCellChanges={this.compareFieldValues}
         />;
     }
 });

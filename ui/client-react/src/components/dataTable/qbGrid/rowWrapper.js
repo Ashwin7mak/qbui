@@ -2,22 +2,19 @@ import React from 'react';
 import QbIcon from '../../qbIcon/qbIcon';
 
 const RowWrapper = React.createClass({
+    /**
+     * Use for a performance boost. Row will only re-render if there is a change.
+     * @param nextProps
+     * @returns {boolean|*}
+     */
     shouldComponentUpdate(nextProps) {
-        // TODO:: Turned off for now because of issues with blank rows displaying their edit mode when switching to editing.
-        // return (!nextProps || (this.props.isEditing !== nextProps.isEditing) || (this.props.selected !== nextProps.selected) || this.compareFieldValues(nextProps.children));
-        return true;
-    },
+        let shouldUpdate = (!nextProps || (this.props.isEditing !== nextProps.isEditing) || (this.props.selected !== nextProps.selected) || (this.props.editingRowId !== nextProps.editingRowId));
 
-    compareFieldValues(fields) {
-        let isDifferent = false;
-        fields.some((field, index) => {
-            if (field.props.children.value !== this.props.children[index].props.children.value) {
-                isDifferent = true;
-                return true;
-            }
-        });
+        if (this.props.compareCellChanges) {
+            return (shouldUpdate || this.props.compareCellChanges(this.props.children, nextProps.children));
+        }
 
-        return isDifferent;
+        return shouldUpdate;
     },
 
     render() {

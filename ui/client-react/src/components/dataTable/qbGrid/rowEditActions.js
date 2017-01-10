@@ -13,12 +13,11 @@ const RowEditActions = React.createClass({
 
     propTypes: {
         idKey: PropTypes.string,
-        onClose: PropTypes.func,
         onClickAdd: PropTypes.func,
         onClickSave: PropTypes.func,
         onClickCancel: PropTypes.func,
         rowEditErrors: PropTypes.object,
-        recordId: PropTypes.number.isRequired,
+        recordId: PropTypes.number,
         isSaving: PropTypes.bool,
         isValid: PropTypes.bool
     },
@@ -37,7 +36,7 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         // Don't allow a user to move on and add another row if the record is currently invalid
-        if (this.props.onClickAdd && this.propTypes.isValid) {
+        if (this.props.onClickAdd && this.props.isValid) {
             this.props.onClickAdd(this.props.recordId);
         }
     },
@@ -96,7 +95,7 @@ const RowEditActions = React.createClass({
     },
 
     render() {
-        let {isValid, saving, idKey, onClose, onClickAdd} = this.props;
+        let {isValid, saving, idKey} = this.props;
 
         let addRecordClasses = ['addRecord'];
         if (!isValid || saving) {
@@ -106,13 +105,13 @@ const RowEditActions = React.createClass({
         return (
             <div className="editTools" key={"crea-" + idKey}>
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button className="rowEditActionsCancel" onClick={onClose}><QBIcon icon="close" className="cancelSelection"/></Button>
+                    <Button className="rowEditActionsCancel" onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
 
                 {this.renderSaveRecordButton()}
 
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button className="rowEditActionsSaveAndAdd" onClick={onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
+                    <Button className="rowEditActionsSaveAndAdd" onClick={this.onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
                 </QBToolTip>
             </div>
         );

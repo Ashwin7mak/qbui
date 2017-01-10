@@ -33,6 +33,7 @@ const QbGrid = React.createClass({
         onClickSaveRow: PropTypes.func,
         cellRenderer: PropTypes.func,
         commonCellProps: PropTypes.object,
+        compareCellChanges: PropTypes.func,
         // columns: PropTypes.arrayOf((propValue, key, componentName, location, propFullName) => {
         //     if (!(propValue instanceof Row)) {
         //         return new Error(
@@ -66,13 +67,13 @@ const QbGrid = React.createClass({
             />;
         }
 
+        let id = this.getRecordIdForRow(rowProps.rowData);
+
         // Display an empty div instead of row actions when another row is being edited
-        // TODO:: Replace this with CSS. Add a 'inlineEditing' class to the table when there is a props.editingRow and then set display:none for .actionsCol in the qbGrid.scss file
-        if (this.props.editingRowId) {
+        if (this.props.editingRowId || !id) {
             return <div className="emptyRowActions"></div>;
         }
 
-        let id = this.getRecordIdForRow(rowProps.rowData);
         let selected = rowProps.rowData.selected;
 
         return (
@@ -121,7 +122,9 @@ const QbGrid = React.createClass({
 
         return {
             className: classes.join(' '),
-            editing: row.isEditing,
+            isEditing: row.isEditing,
+            editingRowId: this.props.editingRowId,
+            isSelected: row.isSelected,
             // props that differentiate a subheader
             subHeader: row.subHeader,
             subHeaderLevel: row.subHeaderLevel,
@@ -130,6 +133,7 @@ const QbGrid = React.createClass({
             // Add one to account for the extra column at the start of the grid for the row actions.
             // TODO:: Only add one if the prop for displaying those actions is set
             numberOfColumns: this.props.numberOfColumns + 1,
+            compareCellChanges: this.props.compareCellChanges,
         };
     },
 
