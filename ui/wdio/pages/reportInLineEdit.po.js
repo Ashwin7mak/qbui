@@ -166,7 +166,7 @@
                     });
                     document.querySelector('.ag-row.editing .cancelSelection').dispatchEvent(event);
                 });
-                browser.waitForVisible('.ag-row.editing .saveRecord', waitForTimeOut, true);
+                browser.waitForVisible('.ag-row.editing .saveRecord', browser.waitforTimeout, true);
             }
         }},
 

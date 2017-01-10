@@ -191,15 +191,16 @@
             return this.agGridRecordElList.value.length;
         }},
 
-
-        waitForReportContent: {value:function() {
-            // First wait for the containers
-            this.reportContainerEl.waitForVisible();
-            this.reportContentEl.waitForVisible();
-            this.loadedContentEl.waitForVisible();
-            // Then wait for records to be shown in the grid
-            return this.agGridBodyViewportEl.waitForVisible();
-        }},
+        //TODO Anshu put this. This is duplicate method which already exists in this file.
+        //
+        //waitForReportContent: {value:function() {
+        //    // First wait for the containers
+        //    this.reportContainerEl.waitForVisible();
+        //    this.reportContentEl.waitForVisible();
+        //    this.loadedContentEl.waitForVisible();
+        //    // Then wait for records to be shown in the grid
+        //    return this.agGridBodyViewportEl.waitForVisible();
+        //}},
 
         //TODO: Will have to see if we actually need this going forward
         ///**
