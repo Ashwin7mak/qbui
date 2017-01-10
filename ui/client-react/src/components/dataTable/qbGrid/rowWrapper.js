@@ -8,7 +8,11 @@ const RowWrapper = React.createClass({
      * @returns {boolean|*}
      */
     shouldComponentUpdate(nextProps) {
-        let shouldUpdate = (!nextProps || (this.props.isEditing !== nextProps.isEditing) || (this.props.selected !== nextProps.selected) || (this.props.editingRowId !== nextProps.editingRowId));
+        let shouldUpdate =
+            (!nextProps || (this.props.isEditing !== nextProps.isEditing) ||
+            (this.props.selected !== nextProps.selected) ||
+            (this.props.editingRowId !== nextProps.editingRowId)) ||
+            (this.props.isInlineEditOpen !== nextProps.isInlineEditOpen);
 
         if (this.props.compareCellChanges) {
             return (shouldUpdate || this.props.compareCellChanges(this.props.children, nextProps.children));

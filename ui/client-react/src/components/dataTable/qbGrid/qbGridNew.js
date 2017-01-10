@@ -20,6 +20,8 @@ const QbGrid = React.createClass({
         columns: PropTypes.array.isRequired,
         rows: PropTypes.array.isRequired,
         editingRowId: PropTypes.number,
+        // TODO:: Refactor out once agGrid is removed. See more detail in reportGrid.js
+        isInlineEditOpen: PropTypes.bool,
         selectedRows: PropTypes.array,
         onClickToggleSelectedRow: PropTypes.func,
         onClickEditIcon: PropTypes.func,
@@ -69,8 +71,9 @@ const QbGrid = React.createClass({
 
         let id = this.getRecordIdForRow(rowProps.rowData);
 
-        // Display an empty div instead of row actions when another row is being edited
-        if (this.props.editingRowId || !id) {
+        // Display an empty div instead of row actions when inline edit is open
+        // or the current row is new and does not yet have an id
+        if (this.props.isInlineEditOpen || !id) {
             return <div className="emptyRowActions"></div>;
         }
 
@@ -124,6 +127,7 @@ const QbGrid = React.createClass({
             className: classes.join(' '),
             isEditing: row.isEditing,
             editingRowId: this.props.editingRowId,
+            isInlineEditOpen: this.props.isInlineEditOpen,
             isSelected: row.isSelected,
             // props that differentiate a subheader
             subHeader: row.subHeader,

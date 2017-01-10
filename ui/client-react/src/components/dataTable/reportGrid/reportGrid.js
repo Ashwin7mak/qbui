@@ -196,6 +196,10 @@ const ReportGrid = React.createClass({
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
+            // TODO:: Refactor out need for this prop once AgGrid is removed.
+            // Currently required because editingRowId could be null for a new record so it is difficult to check if
+            // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
+            isInlineEditOpen={this.props.isInlineEditOpen}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
             onClickToggleSelectedRow={this.toggleSelectedRow}
