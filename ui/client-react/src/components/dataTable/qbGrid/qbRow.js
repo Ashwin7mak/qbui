@@ -1,7 +1,12 @@
 import React from 'react';
 import QbIcon from '../../qbIcon/qbIcon';
 
-const RowWrapper = React.createClass({
+/**
+ * The basic row component used by QbGrid. The component will detect subHeader rows (i.e., headers below the top row of column headers)
+ * and output those. Otherwise, it will return a basic <tr> with the props passed through.
+ * @type {__React.ClassicComponentClass<P>}
+ */
+const QbRow = React.createClass({
     /**
      * Use for a performance boost. Row will only re-render if there is a change.
      * @param nextProps
@@ -23,20 +28,24 @@ const RowWrapper = React.createClass({
     //     return shouldUpdate;
     // },
 
+    renderSubHeader() {
+        return (
+            <tr {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
+                <td id={this.props.subHeaderId} className="subHeaderCell" colSpan={this.props.numberOfColumns}>
+                    <QbIcon icon="caret-filled-down"/>
+                    {this.props.subHeaderLabel}
+                </td>
+            </tr>
+        );
+    },
+
     render() {
         if (this.props.subHeader) {
-            return (
-                <tr {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
-                    <td id={this.props.subHeaderId} className="subHeaderCell" colSpan={this.props.numberOfColumns}>
-                        <QbIcon icon="caret-filled-down"/>
-                        {this.props.subHeaderLabel}
-                    </td>
-                </tr>
-            );
+            return renderSubHeader();
         }
 
         return <tr {...this.props} />;
     }
 });
 
-export default RowWrapper;
+export default QbRow;

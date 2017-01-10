@@ -2,10 +2,10 @@ import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
-import RowWrapper from './rowWrapper';
+import QbRow from './qbRow';
 import Locale from '../../../locales/locales';
 import IconActions from '../../actions/iconActions';
-import CellWrapper from './cellWrapper';
+import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 
 import './qbGrid.scss';
@@ -231,8 +231,8 @@ const QbGrid = React.createClass({
                     columns={columns}
                     components={{
                         body: {
-                            row: RowWrapper,
-                            cell: CellWrapper
+                            row: QbRow,
+                            cell: QbCell
                         }
                     }}
                 >
