@@ -154,7 +154,7 @@
          */
         it('Cancel button should not save edit updates to a record', function(done) {
             //Note this is not working on safari
-            if (browserName !== 'safari') {
+            if (browserName === 'chrome' || browserName === 'firefox') {
                 var textToEnter = 'My new text 2';
 
                 //Step 1 - Get the original value of the text field on the second record
