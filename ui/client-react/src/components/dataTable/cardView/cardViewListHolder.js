@@ -341,6 +341,12 @@ export let CardViewListHolder = React.createClass({
     openRecordForEdit(recordId) {
 
         this.props.dispatch(openRecordForEdit(recordId));
+
+        // needed until report store is migrated to redux
+
+        const flux = this.getFlux();
+
+        flux.actions.editingReportRow(recordId);
     },
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
