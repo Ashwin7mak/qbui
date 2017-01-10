@@ -91,9 +91,11 @@
             if (recordCellElement.isExisting('.checkbox') === true) {
                 // Check for a specific element in the DOM which only shows if the checkbox field is selected
                 return recordCellElement.isExisting('.checkbox .checked');
+            } else if (browser === 'firefox') {
+                // Otherwise just grab the innerHtml value
+                return recordCellElement.getAttribute('innerHTML');
             } else {
-                // Otherwise just grab the textContent value
-                return recordCellElement.getAttribute('textContent');
+                return recordCellElement.getAttribute('innerText');
             }
         }},
 

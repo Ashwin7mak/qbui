@@ -166,7 +166,7 @@ exports.config = {
     baseUrl: process.env.SAUCE_DOMAIN,
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 30000,
+    waitforTimeout: 50000,
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
