@@ -13,4 +13,4 @@ export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_SUCCESS = 'SAVE_FORM_SUCCESS';
 export const SAVE_FORM_FAILED = 'SAVE_FORM_FAILED';
 
-export const SYNCING_FORM = 'SYNCING_FORM';
+export const SYNC_FORM = 'SYNC_FORM';

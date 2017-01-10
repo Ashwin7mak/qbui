@@ -144,8 +144,8 @@ export let Nav = React.createClass({
         }
     },
 
-    getEditFormFromProps(props = this.props) {
-        return this.props.qbui.forms && props.qbui.forms.edit && (props.qbui.forms.edit.length > 0) && props.qbui.forms.edit[0];
+    getEditFormFromProps() {
+        return _.has(this.props, "qbui.forms") && _.find(this.props.qbui.forms, form => form.id === "edit");
     },
 
     /**
@@ -157,7 +157,7 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        const editData = this.getEditFormFromProps(this.props, "edit");
+        const editData = this.getEditFormFromProps();
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
@@ -176,7 +176,7 @@ export let Nav = React.createClass({
         // component updated, update the record trowser content if necessary
         // temporary solution to prevent UI getting in an endless loop state (MB-1369)
 
-        const editData = this.getEditFormFromProps(this.props, "edit");
+        const editData = this.getEditFormFromProps();
 
         if (!editData || !editData.loading) {
             this.updateRecordTrowser(prevProps.location.query.editRec);
@@ -226,10 +226,11 @@ export let Nav = React.createClass({
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
-                               editForm={this.props.qbui.forms.edit[0]}
+                               editForm={this.getEditFormFromProps()}
                                appId={this.props.params.appId}
                                tblId={this.props.params.tblId}
                                recId={editRecordId}
+                               viewingRecordId={viewingRecordId}
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}

@@ -22,18 +22,26 @@ describe('Form Actions functions', () => {
         FormActionsRewireAPI.__ResetDependency__('WindowLocationUtils');
     });
 
+    describe('syncing actions', () => {
+
+        it('should create an action to indicate the view form needs to be reloaded', () => {
+
+            expect(formActions.syncForm("view")).toEqual({type: types.SYNC_FORM, id: "view"});
+        });
+    });
+
     describe('loading actions', () => {
 
         it('should create an action to indicate loading view form', () => {
 
-            expect(formActions.loadingForm("view")).toEqual({type: types.LOADING_FORM, container: "view"});
+            expect(formActions.loadingForm("view")).toEqual({type: types.LOADING_FORM, id: "view"});
         });
 
         it('should create an action to indicate load view form error', () => {
 
             expect(formActions.loadFormError("view", "oops")).toEqual({
                 type: types.LOAD_FORM_ERROR,
-                container: "view",
+                id: "view",
                 error: "oops"
             });
         });
@@ -42,7 +50,7 @@ describe('Form Actions functions', () => {
 
             expect(formActions.loadFormSuccess("view", "someData")).toEqual({
                 type: types.LOAD_FORM_SUCCESS,
-                container: "view",
+                id: "view",
                 formData: "someData"
             });
         });
@@ -52,14 +60,14 @@ describe('Form Actions functions', () => {
 
         it('should create an action to indicate saving a form', () => {
 
-            expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, container: "edit"});
+            expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
 
         it('should create an action to indicate save form error', () => {
 
             expect(formActions.saveFormError("edit", "oops")).toEqual({
                 type: types.SAVE_FORM_FAILED,
-                container: "edit",
+                id: "edit",
                 error: "oops"
             });
         });
@@ -68,7 +76,7 @@ describe('Form Actions functions', () => {
 
             expect(formActions.saveFormSuccess("edit", "someData")).toEqual({
                 type: types.SAVE_FORM_SUCCESS,
-                container: "edit"
+                id: "edit"
             });
         });
     });
@@ -149,9 +157,10 @@ describe('Form Actions functions', () => {
             // so we don't need to spy on the dispatcher etc.
 
             const expectedActions = [
-                {type: types.LOADING_FORM, container: 'view'},
-                {type: types.LOAD_FORM_SUCCESS, container: 'view',
+                {type: types.LOADING_FORM, id: 'view'},
+                {type: types.LOAD_FORM_SUCCESS, id: 'view',
                     formData: {
+                        formType: 'view',
                         formId: formAndRecordResponseData.formId,
                         tableId: formAndRecordResponseData.tableId,
                         appId: formAndRecordResponseData.appId,
@@ -175,9 +184,10 @@ describe('Form Actions functions', () => {
         it('load new record form', (done) => {
 
             const expectedActions = [
-                {type: types.LOADING_FORM, container: 'edit'},
-                {type: types.LOAD_FORM_SUCCESS, container: 'edit',
+                {type: types.LOADING_FORM, id: 'edit'},
+                {type: types.LOAD_FORM_SUCCESS, id: 'edit',
                     formData: {
+                        formType: 'edit',
                         formId: formResponseData.formId,
                         tableId: formResponseData.tableId,
                         appId: formResponseData.appId,

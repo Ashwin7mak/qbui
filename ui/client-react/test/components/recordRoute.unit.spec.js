@@ -6,7 +6,7 @@ import {ConnectedRecordRoute, RecordRoute} from '../../src/components/record/rec
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
-import {syncingForm, loadingForm} from '../../src/actions/formActions';
+import {loadingForm} from '../../src/actions/formActions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -69,8 +69,7 @@ describe('RecordRoute functions', () => {
         expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
 
         // test Redux actions
-        expect(store.getActions()[0]).toEqual(syncingForm());
-        expect(store.getActions()[1]).toEqual(loadingForm("view"));
+        expect(store.getActions()[0]).toEqual(loadingForm("view"));
 
         let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
         expect(qbForm.length).toBe(1);

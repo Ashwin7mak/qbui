@@ -18,10 +18,10 @@ let logger = new Logger();
  * @param container type of form (edit or view)
  * @returns {{type, container: *}}
  */
-export const loadingForm = (container) => {
+export const loadingForm = (id) => {
     return {
-        type: types.LOADING_FORM,
-        container,
+        id,
+        type: types.LOADING_FORM
     };
 };
 
@@ -31,10 +31,10 @@ export const loadingForm = (container) => {
  * @param error error message from server
  * @returns {{type, container: *, error: *}}
  */
-export const loadFormError = (container, error) => {
+export const loadFormError = (id, error) => {
     return {
+        id,
         type: types.LOAD_FORM_ERROR,
-        container,
         error
     };
 };
@@ -45,11 +45,22 @@ export const loadFormError = (container, error) => {
  * @param formData form data returned from server
  * @returns {{type, container: *, formData: *}}
  */
-export const loadFormSuccess = (container, formData) => {
+export const loadFormSuccess = (id, formData) => {
     return {
+        id,
         type: types.LOAD_FORM_SUCCESS,
-        container,
         formData
+    };
+};
+
+/**
+ * UI is syncing the view form to the saved version
+ * @returns {{type}}
+ */
+export const syncForm = (id) => {
+    return {
+        id,
+        type: types.SYNC_FORM
     };
 };
 
@@ -58,10 +69,10 @@ export const loadFormSuccess = (container, formData) => {
  * @param container
  * @returns {{type, container: *}}
  */
-export const savingForm = (container) => {
+export const savingForm = (id) => {
     return {
-        type: types.SAVE_FORM,
-        container
+        id,
+        type: types.SAVE_FORM
     };
 };
 
@@ -71,10 +82,10 @@ export const savingForm = (container) => {
  * @param error error message from server
  * @returns {{type, container: *, error: *}}
  */
-export const saveFormError = (container, error) => {
+export const saveFormError = (id, error) => {
     return {
+        id,
         type: types.SAVE_FORM_FAILED,
-        container,
         error
     };
 };
@@ -84,22 +95,13 @@ export const saveFormError = (container, error) => {
  * @param container
  * @returns {{type, container: *}}
  */
-export const saveFormSuccess = (container) => {
+export const saveFormSuccess = (id) => {
     return {
-        type: types.SAVE_FORM_SUCCESS,
-        container
+        id,
+        type: types.SAVE_FORM_SUCCESS
     };
 };
 
-/**
- * UI is syncing the view form to the saved version
- * @returns {{type}}
- */
-export const syncingForm = () => {
-    return {
-        type: types.SYNCING_FORM
-    };
-};
 
 /**
  * open an existing record for editing
@@ -163,46 +165,54 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
             let formService = new FormService();
 
+            let promise;
+
             if (recordId === NEW_RECORD_ID) {
-                resolve(formService.getForm(appId, tblId, rptId, formType));
+                promise = formService.getForm(appId, tblId, rptId, formType);
 
             } else {
-                resolve(formService.getFormAndRecord(appId, tblId, recordId, rptId, formType));
-            }
-        }).then(response => {
-            if (recordId === NEW_RECORD_ID) {
-                response.data.record = null;
-            } else {
-                response.data.recordId = recordId;
+                promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
             }
 
-            dispatch(loadFormSuccess(formType, response.data));
-        }).catch(error => {
+            promise.then(response => {
+                response.data.formType = formType;
 
-            if (!error) {
-                reject(logger.error('formService.loadFormAndRecord: Missing required input parameters.'));
-            }
+                if (recordId === NEW_RECORD_ID) {
+                    response.data.record = null;
+                } else {
+                    response.data.recordId = recordId;
+                }
 
-            if (error.response.status === 403) {
-                logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
-            } else {
-                logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
-            }
+                dispatch(loadFormSuccess(formType, response.data));
 
-            if (error.response.status === 403) {
-                NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-            } else {
-                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-            }
+                resolve();
+            }).catch(error => {
 
-            // remove the editRec query string since we are not successfully editing the form
-            WindowLocationUtils.pushWithoutQuery();
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                    } else {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                    }
+                }
 
-            dispatch(loadFormError(formType, error.response.status));
+                if (error.response && error.response.status === 403) {
+                    NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                } else {
+                    NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                }
 
-            reject(error);
+                // remove the editRec query string since we are not successfully editing the form
+                WindowLocationUtils.pushWithoutQuery();
+
+                if (error.response) {
+                    dispatch(loadFormError(formType, error.response.status));
+                }
+
+                reject(error);
+            });
         });
     };
 };

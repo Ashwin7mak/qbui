@@ -1,93 +1,93 @@
 import * as types from '../actions/types';
+import _ from 'lodash';
 
 const forms = (
 
-    // for now we maintain single element arrays of edit and view forms
-    // but we could easily have a stack of each when the UI requires that...
+    state = [], action) => {
 
-    state = {
-        syncLoadedForm: false, // set true after save,
-        edit: [],
-        view: []
-    }, action) => {
+    const id = action.id;
 
-    const container = action.container; // "edit" or "view"
-
-    let newState = {...state};
+    const newState = _.reject(state, form => form.id === id);
+    const currentForm = _.find(state, form => form.id === id);
 
     // reducer - no mutations!
     switch (action.type) {
 
     case types.LOADING_FORM: {
 
-        // replace either the edit or view forms array with a new single element array  (loading status)
-
-        newState[container] = [{
+        newState.push({
+            id,
             loading: true,
-            errorStatus: null
-        }];
+            errorStatus: null,
+            syncLoadedForm: false
+        });
 
         return newState;
     }
 
     case types.LOAD_FORM_SUCCESS: {
 
-        // replace either the edit or view forms array with a new single element array (with form data)
-
-        newState[container] = [{
+        newState.push({
+            id,
             formData: action.formData,
             loading: false,
             errorStatus: null
-        }];
+        });
+
         return newState;
     }
 
     case types.LOAD_FORM_ERROR: {
 
-        // replace either the edit or view forms array with a new single element array (error status)
-
-        newState[container] = [{
+        newState.push({
+            id,
             loading: false,
             errorStatus: action.error
-        }];
+        });
         return newState;
     }
 
     case types.SAVE_FORM: {
 
-        newState[container] = [{
+        newState.push({
+            ...currentForm,
+            id,
             saving: true,
             errorStatus: null
-        }];
+        });
 
         return newState;
     }
 
     case types.SAVE_FORM_SUCCESS: {
 
-        newState[container] = [{
+        newState.push({
+            ...currentForm,
+            id,
             saving: false,
             errorStatus: null
-        }];
-        newState.syncLoadedForm = true; // let the UI know it may need to sync the read-only view with the changes
+        });
 
         return newState;
     }
 
     case types.SAVE_FORM_FAILED: {
 
-        newState[container] = [{
+        newState.push({
+            ...currentForm,
+            id,
             saving: false,
             errorStatus: action.error
-        }];
+        });
         return newState;
     }
 
-    case types.SYNCING_FORM: {
-        return {
-            ...state,
-            syncLoadedForm: false,
-        };
+    case types.SYNC_FORM: {
+        newState.push({
+            ...currentForm,
+            syncLoadedForm: true
+        });
+        return newState;
     }
 
     default:

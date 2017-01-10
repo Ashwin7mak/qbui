@@ -18,11 +18,7 @@ describe('Forms reducer functions', () => {
         });
     });
 
-    let initialState = {
-        syncLoadedForm: false, // set true after save,
-        edit: [],
-        view: []
-    };
+    let initialState = [];
 
     it('returns correct initial state', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
@@ -30,120 +26,97 @@ describe('Forms reducer functions', () => {
 
 
     describe('Sync form changes functions', () => {
-        let syncFormState = {
-            syncLoadedForm: true, // set true after save,
-            edit: [],
-            view: []
-        };
-        it('returns correct syncLoadedForm state', () => {
-            expect(reducer(syncFormState, {type: types.SYNCING_FORM})).toEqual({
-                syncLoadedForm: false,
-                edit: [],
-                view: []
-            });
-        });
+        let syncFormState = [{
+            id:'view',
+            syncLoadedForm: false,
+            formData: 'someData'
+        }];
 
+        it('returns correct syncLoadedForm state', () => {
+            expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM})).toEqual([{
+                id:'view',
+                syncLoadedForm: true,
+                formData:'someData',
+            }]);
+        });
     });
 
     describe('Loading form functions', () => {
         it('returns correct state when loading view form', () => {
-            expect(reducer(initialState, {type: types.LOADING_FORM, container: "view"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [],
-                    view: [{loading: true, errorStatus: null}]
-                });
-        });
-
-        it('returns correct state when loading edit form', () => {
-            expect(reducer(initialState, {type: types.LOADING_FORM, container: "edit"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [{loading: true, errorStatus: null}],
-                    view: []
-                });
-        });
-
-        it('returns correct state when container is not edit/view', () => {
-            expect(reducer(initialState, {type: types.LOADING_FORM, container: "notViewOrEdit"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [],
-                    view: [],
-                    "notViewOrEdit": [{loading: true, errorStatus: null}]
-                });
+            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual([{
+                id: 'view',
+                syncLoadedForm: false,
+                loading: true,
+                errorStatus: null
+            }]);
         });
 
         it('returns correct state when load error occurs', () => {
-            let loadingFormState = {
-                syncLoadedForm: false, // set true after save,
-                edit: [],
-                view: [{loading: true, errorStatus: null}]
-            };
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, container: "view", error: "oops"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [],
-                    view: [{loading: false, errorStatus: "oops"}]
-                });
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                errorStatus: "oops"
+            }]);
         });
 
         it('returns correct state when load succeeds', () => {
-            let loadingFormState = {
-                syncLoadedForm: false, // set true after save,
-                edit: [],
-                view: [{loading: true, errorStatus: null}]
-            };
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, container: "view", formData: "someData"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [],
-                    view: [{loading: false, formData: "someData", errorStatus:null}]
-                });
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: "someData"})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                formData: "someData",
+                errorStatus:null
+            }]);
         });
 
     });
 
     describe('Saving form functions', () => {
         it('returns correct state when saving form', () => {
-            expect(reducer(initialState, {type: types.SAVE_FORM, container: "edit"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [{saving: true, errorStatus: null}],
-                    view: []
-                });
+            expect(reducer(initialState, {type: types.SAVE_FORM, id: 'edit'})).toDeepEqual([{
+                id: 'edit',
+                saving: true,
+                errorStatus: null
+            }]);
         });
 
         it('returns correct state when save error occurs', () => {
-            let savingFormState = {
-                syncLoadedForm: false, // set true after save,
-                edit: [{saving: true, errorStatus: null}],
-                view: []
-            };
+            let savingFormState = [{
+                id: 'edit',
+                saving: true,
+                errorStatus: null
+            }];
 
-            expect(reducer(savingFormState, {type: types.SAVE_FORM_FAILED, container: "edit", error: "oops"})).toDeepEqual(
-                {
-                    syncLoadedForm: false,
-                    edit: [{saving: false, errorStatus: "oops"}],
-                    view: []
-                });
+            expect(reducer(savingFormState, {type: types.SAVE_FORM_FAILED, id: "edit", error: "oops"})).toDeepEqual([{
+                id: 'edit',
+                saving: false,
+                errorStatus: "oops"
+            }]);
         });
 
         it('returns correct state when save succeeds', () => {
-            let savingFormState = {
-                syncLoadedForm: false, // set true after save,
-                edit: [{saving: true, errorStatus: null}],
-                view: []
-            };
+            let savingFormState = [{
+                id: 'edit',
+                saving: true,
+                errorStatus: null
+            }];
 
-            expect(reducer(savingFormState, {type: types.SAVE_FORM_SUCCESS, container: "edit"})).toDeepEqual(
-                {
-                    syncLoadedForm: true,
-                    edit: [{saving: false, errorStatus:null}],
-                    view: []
-                });
+            expect(reducer(savingFormState, {type: types.SAVE_FORM_SUCCESS, id: "edit"})).toDeepEqual([{
+                id: 'edit',
+                saving: false,
+                errorStatus:null
+            }]);
         });
     });
 });

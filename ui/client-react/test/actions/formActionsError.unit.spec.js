@@ -58,7 +58,6 @@ describe('Form Actions error functions', () => {
         return store.dispatch(loadForm()).then(
             () => {
                 expect(false).toBe(true);
-                expect(store.getActions()).toEqual(expectedActions);
                 done();
             }).catch(error => {
                 expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
@@ -69,8 +68,8 @@ describe('Form Actions error functions', () => {
     it('test promise reject handling loadForm', (done) => {
 
         const expectedActions = [
-            {type: types.LOADING_FORM, container: 'edit'},
-            {type: types.LOAD_FORM_ERROR, container: 'edit', error: 404}
+            {type: types.LOADING_FORM, id: 'edit'},
+            {type: types.LOAD_FORM_ERROR, id: 'edit', error: 404}
         ];
         const store = mockStore({});
 
@@ -89,8 +88,8 @@ describe('Form Actions error functions', () => {
     it('test promise reject handling loadForm with record ID', (done) => {
 
         const expectedActions = [
-            {type: types.LOADING_FORM, container: 'edit'},
-            {type: types.LOAD_FORM_ERROR, container: 'edit', error: 404}
+            {type: types.LOADING_FORM, id: 'edit'},
+            {type: types.LOAD_FORM_ERROR, id: 'edit', error: 404}
         ];
         const store = mockStore({});
 

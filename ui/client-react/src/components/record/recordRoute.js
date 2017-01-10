@@ -18,7 +18,7 @@ import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {syncingForm, loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
 
 import './record.scss';
 
@@ -35,7 +35,7 @@ export const RecordRoute = React.createClass({
 
     loadRecord(appId, tblId, recordId, rptId, formType = "view") {
         const flux = this.getFlux();
-        this.props.dispatch(syncingForm());
+
         flux.actions.selectTableId(tblId);
 
         this.props.dispatch(loadForm(appId, tblId, rptId, formType, recordId));
@@ -60,10 +60,12 @@ export const RecordRoute = React.createClass({
 
     componentDidUpdate(prev) {
 
+        const viewData = this.getViewFormFromProps();
+
         if (this.props.params.appId !== prev.params.appId ||
             this.props.params.tblId !== prev.params.tblId ||
             this.props.params.recordId !== prev.params.recordId ||
-            (this.props.forms.view && this.props.forms.syncLoadedForm)) {
+            (viewData && viewData.syncLoadedForm)) {
 
             this.loadRecordFromParams(this.props.params);
         }
@@ -225,18 +227,20 @@ export const RecordRoute = React.createClass({
      * @param formType
      * @returns {boolean|*|HTMLCollection}
      */
-    getViewFormFromProps(props = this.props, formType = "view") {
-        return props.forms && props.forms.view && (props.forms.view.length > 0) && props.forms.view[0];
+    getViewFormFromProps(props = this.props) {
+        return props.forms && _.find(props.forms, form => form.id === "view");
     },
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
 
+
         const viewData = this.getViewFormFromProps();
         const nextData = this.getViewFormFromProps(nextProps);
 
-        return this.props.forms.syncLoadedForm || !viewData ||
+        return !viewData ||
             !_.isEqual(viewData.formData, nextData.formData) ||
+            !_.isEqual(viewData.syncLoadedForm, nextData.syncLoadedForm) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
             !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||

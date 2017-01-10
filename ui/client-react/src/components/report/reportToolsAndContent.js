@@ -16,7 +16,6 @@ import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
 import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
-import * as SchemaConsts from "../../constants/schema";
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';

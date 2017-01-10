@@ -33,6 +33,7 @@ export const RecordTrowser = React.createClass({
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         recId: React.PropTypes.string,
+        viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
@@ -123,6 +124,11 @@ export const RecordTrowser = React.createClass({
             }
             promise.then((recId) => {
                 this.props.dispatch(formActions.saveFormSuccess(formType));
+
+                if (this.props.viewingRecordId === recId) {
+                    this.props.dispatch(formActions.syncForm("view"));
+                }
+
                 if (saveAnother) {
                     this.props.dispatch(formActions.editNewRecord(false));
                 } else {
@@ -166,6 +172,10 @@ export const RecordTrowser = React.createClass({
             }
             promise.then(() => {
                 this.props.dispatch(formActions.saveFormSuccess(formType));
+                if (this.props.viewingRecordId === this.props.recId) {
+                    this.props.dispatch(formActions.syncForm("view"));
+                }
+
                 this.nextRecord();
             }, (errorStatus) => {
                 this.props.dispatch(formActions.saveFormError(formType, errorStatus));
