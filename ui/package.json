@@ -176,6 +176,7 @@
     "unique-random-array": "^1.0.0",
     "url-loader": "^0.5.6",
     "wdio-jasmine-framework": "^0.2.15",
+    "wdio-junit-reporter": "^0.2.0",
     "wdio-sauce-service": "^0.2.5",
     "wdio-selenium-standalone-service": "0.0.7",
     "wdio-spec-reporter": "0.0.3",
