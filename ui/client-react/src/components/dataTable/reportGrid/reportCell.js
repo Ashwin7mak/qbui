@@ -3,6 +3,7 @@ import FieldValueEditor from '../../fields/fieldValueEditor';
 import CellValueRenderer from '../agGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
+import QbIcon from '../../qbIcon/qbIcon';
 import _ from 'lodash';
 
 const ReportCell = React.createClass({
@@ -47,11 +48,7 @@ const ReportCell = React.createClass({
     onCellClick(recordId) {
         return () => {
             if (this.props.onCellClick) {
-                console.log('start editing record ' + recordId);
-
                 this.props.onCellClick(recordId);
-            } else {
-                console.log('could not find on cell click function');
             }
         };
     },
@@ -70,6 +67,13 @@ const ReportCell = React.createClass({
         }
 
         let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(fieldDef)];
+
+        // We set this here so that cells that are not editable (e.g., Record Id) can still get some visual treatment
+        // when the row is in editing mode
+        if (this.props.isEditing) {
+            classes.push('editingCell');
+        }
+
         let isEditable = FieldUtils.isFieldEditable(fieldDef);
 
         if (this.props.isEditing && isEditable) {
@@ -90,8 +94,7 @@ const ReportCell = React.createClass({
         }
 
         return (
-            <div className={classes.join(' ')}  onClick={this.onCellClick(this.props.recordId)}>
-
+            <div className={classes.join(' ')}>
                 <CellValueRenderer
                     {...this.props}
                     type={fieldDef.datatypeAttributes.type}
@@ -107,6 +110,7 @@ const ReportCell = React.createClass({
                     // Don't show unchecked checkboxes in the grid
                     hideUncheckedCheckbox={true}
                 />
+                <QbIcon className="cellEditIcon" icon="edit" onClick={this.onCellClick(this.props.recordId)} />
             </div>
         );
     }
