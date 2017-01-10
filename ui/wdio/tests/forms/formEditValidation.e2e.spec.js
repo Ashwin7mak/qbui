@@ -57,7 +57,7 @@
             //Step 2 - Enter invalid values to get the form to error state
             fieldTypes.forEach(function(fieldType) {
                 //TODO change the empty string to special characters once MB-1970 is fixed.
-                formsPO.enterInvalidFormValues(fieldType, '');
+                formsPO.enterInvalidFormValues(fieldType, ' ');
             });
 
             //Step 3 - Click Save on the form

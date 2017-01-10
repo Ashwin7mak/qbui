@@ -494,6 +494,7 @@
                     numericFields.value[i].click();
                     numericFields.value[i].setValue(sNumeric);
                     numericFields.value[i].element('..').click();
+                    browser.pause(1000);
                 }
             } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
@@ -561,7 +562,9 @@
                 var phoneFields = self.getAllPhoneInputFields();
                 for (i = 0; i < phoneFields.value.length; i++) {
                     phoneFields.value[i].click();
+                    browser.pause(100);
                     phoneFields.value[i].setValue(invalidValue);
+                    browser.pause(100);
                     phoneFields.value[i].element('..').click();
                 }
 
@@ -587,6 +590,7 @@
                     numericFields.value[i].click();
                     numericFields.value[i].setValue(invalidValue);
                     numericFields.value[i].element('..').click();
+                    browser.pause(1000);
                 }
             }
         }},
@@ -599,7 +603,7 @@
 
             self.formErrorMessageContainerEl.waitForVisible();
             // verify the heading of the error message container
-            let errorHeader = 'Please fix this field';
+            var errorHeader = 'Please fix this field';
             if (expectedErrorMessages.length > 1) {
                 errorHeader = 'Please fix these ' + expectedErrorMessages.length + ' fields.';
             }
