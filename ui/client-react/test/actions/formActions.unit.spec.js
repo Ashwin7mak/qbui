@@ -1,12 +1,11 @@
 import * as formActions from '../../src/actions/formActions';
 import {editNewRecord, openRecordForEdit, loadForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as UrlConsts from "../../src/constants/urlConstants";
-import * as types from '../../src/constants/actions';
+import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Promise from 'bluebird';
-
 
 class WindowLocationUtilsMock {
     static pushWithQuery(url) { }
@@ -193,8 +192,7 @@ describe('Form Actions functions', () => {
                 () => {
                     expect(store.getActions()).toEqual(expectedActions);
                     done();
-                },
-                () => {
+                }).catch(error => {
                     expect(false).toBe(true);
                     done();
                 });

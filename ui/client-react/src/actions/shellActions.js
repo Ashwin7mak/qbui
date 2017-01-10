@@ -1,4 +1,4 @@
-import * as types from '../constants/actions';
+import * as types from '../actions/types';
 
 // action creators (the Fluxxor navActions.js should be migrated over)
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -19,12 +19,18 @@ import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {syncingForm, loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+
 import './record.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-export let RecordRoute = React.createClass({
+/**
+ * record route component
+ *
+ * Note: this component has been partially migrated to Redux
+ */
+export const RecordRoute = React.createClass({
     mixins: [FluxMixin],
 
     loadRecord(appId, tblId, recordId, rptId, formType = "view") {
@@ -195,6 +201,10 @@ export let RecordRoute = React.createClass({
      */
     editNewRecord() {
 
+        // need to dispatch to Fluxxor since report store handles this too...
+        const flux = this.getFlux();
+        flux.actions.editNewRecord();
+
         this.props.dispatch(editNewRecord());
     },
     getPageActions() {
@@ -210,22 +220,25 @@ export let RecordRoute = React.createClass({
     },
 
     /**
-     * get the view form
-     * @returns the single view form if we have one, false otherwise
+     * get the
+     * @param props
+     * @param formType
+     * @returns {boolean|*|HTMLCollection}
      */
-    getViewForm() {
-        return _.has(this.props, "forms.view") && this.props.forms.view.length > 0 && this.props.forms.view[0];
+    getViewFormFromProps(props = this.props, formType = "view") {
+        return props.forms && props.forms.view && (props.forms.view.length > 0) && props.forms.view[0];
     },
-
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        const viewData = this.getViewForm();
+
+        const viewData = this.getViewFormFromProps();
+        const nextData = this.getViewFormFromProps(nextProps);
 
         return this.props.forms.syncLoadedForm || !viewData ||
-            !_.isEqual(viewData.formData, nextProps.forms.view[0].formData) ||
+            !_.isEqual(viewData.formData, nextData.formData) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
-            !_.isEqual(viewData.loading, nextProps.forms.view[0].loading) ||
+            !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
             !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
@@ -245,7 +258,8 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const viewData = this.getViewForm();
+            const viewData = this.getViewFormFromProps();
+
             const formLoadingeErrorStatus = viewData && viewData.errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
@@ -275,7 +289,7 @@ export let RecordRoute = React.createClass({
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={formLoadingeErrorStatus ? this.props.forms.view[0].errorStatus : null}
+                                errorStatus={formLoadingeErrorStatus ? viewData.errorStatus : null}
                                 formData={this.props.forms && viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
@@ -286,7 +300,8 @@ export let RecordRoute = React.createClass({
     }
 });
 
-export let RecordRouteWithRouter = withRouter(RecordRoute);
-export let ConnectedRecordRoute = connect()(RecordRoute);
+// named exports for unit testing router functions and redux actions
+export const RecordRouteWithRouter = withRouter(RecordRoute);
+export const ConnectedRecordRoute = connect()(RecordRoute);
 
 export default connect()(RecordRouteWithRouter);

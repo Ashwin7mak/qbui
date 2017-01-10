@@ -19,6 +19,11 @@ import {editNewRecord} from '../../actions/formActions';
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * report route
+ *
+ * Note: this component has been partially migrated to Redux
+ */
 const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
@@ -63,6 +68,10 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
+
+        // need to dispatch to Fluxxor since report store handles this too...
+        const flux = this.getFlux();
+        flux.actions.editNewRecord();
 
         this.props.dispatch(editNewRecord());
     },

@@ -1,5 +1,5 @@
 import reducer from '../../src/reducers/forms';
-import * as types from '../../src/constants/actions';
+import * as types from '../../src/actions/types';
 import _ from 'lodash';
 
 describe('Forms reducer functions', () => {

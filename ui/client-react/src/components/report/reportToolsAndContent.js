@@ -27,7 +27,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 let AddRecordButton = React.createClass({
 
-
     render() {
         return (
             <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add" /></a>
@@ -35,7 +34,11 @@ let AddRecordButton = React.createClass({
     }
 });
 
-/* The container for report and its toolbar */
+/**
+ * The container for report and its toolbar
+ *
+ * Note: this component has been partially migrated to Redux
+ */
 export const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     facetFields : {},
@@ -304,6 +307,10 @@ export const ReportToolsAndContent = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
+        // need to dispatch to Fluxxor since report store handles this too...
+        const flux = this.getFlux();
+        flux.actions.editNewRecord();
+
         this.props.dispatch(editNewRecord(false));
     },
 

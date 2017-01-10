@@ -15,6 +15,11 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
 
+/**
+ * table homepage route
+ *
+ * Note: this component has been partially migrated to Redux
+ */
 export const TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",
@@ -60,6 +65,10 @@ export const TableHomePageRoute = React.createClass({
      * Add a new record in trowser
      */
     editNewRecord() {
+        // need to dispatch to Fluxxor since report store handles this too...
+        const flux = this.getFlux();
+        flux.actions.editNewRecord();
+
         this.props.dispatch(editNewRecord());
     },
 

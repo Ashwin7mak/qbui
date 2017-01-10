@@ -1,5 +1,5 @@
 import {loadForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
-import * as types from '../../src/constants/actions';
+import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -60,8 +60,7 @@ describe('Form Actions error functions', () => {
                 expect(false).toBe(true);
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
-            },
-            () => {
+            }).catch(error => {
                 expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
                 done();
             });

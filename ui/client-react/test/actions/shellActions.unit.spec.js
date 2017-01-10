@@ -1,5 +1,5 @@
 import * as shellActions from '../../src/actions/shellActions';
-import * as types from '../../src/constants/actions';
+import * as types from '../../src/actions/types';
 
 describe('Shell actions', () => {
 

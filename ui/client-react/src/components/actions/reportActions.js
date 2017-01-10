@@ -11,6 +11,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * report-level actions
+ *
+ * Note: this component has been partially migrated to Redux
  */
 export let ReportActions = React.createClass({
     mixins: [FluxMixin],
@@ -75,6 +77,7 @@ export let ReportActions = React.createClass({
     onEditClicked() {
 
         if (this.props.selection && this.props.selection.length === 1) {
+
             const recordId = this.props.selection[0];
             this.props.dispatch(openRecordForEdit(recordId));
         }

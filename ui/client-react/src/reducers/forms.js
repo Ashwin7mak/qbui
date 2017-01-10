@@ -1,4 +1,4 @@
-import * as types from '../constants/actions';
+import * as types from '../actions/types';
 
 const forms = (
 
@@ -13,75 +13,62 @@ const forms = (
 
     const container = action.container; // "edit" or "view"
 
+    let newState = {...state};
+
     // reducer - no mutations!
     switch (action.type) {
 
     case types.LOADING_FORM: {
 
-        let newState = {...state};
-
         // replace either the edit or view forms array with a new single element array  (loading status)
 
-        newState[container] = [
-            {
-                loading: true,
-                errorStatus: null
-            }];
+        newState[container] = [{
+            loading: true,
+            errorStatus: null
+        }];
 
         return newState;
     }
 
     case types.LOAD_FORM_SUCCESS: {
 
-        let newState = {...state};
-
         // replace either the edit or view forms array with a new single element array (with form data)
 
-        newState[container] = [
-            {
-                formData: action.formData,
-                loading: false,
-                errorStatus: null
-            }];
+        newState[container] = [{
+            formData: action.formData,
+            loading: false,
+            errorStatus: null
+        }];
         return newState;
     }
 
     case types.LOAD_FORM_ERROR: {
 
-        let newState = {...state};
-
         // replace either the edit or view forms array with a new single element array (error status)
 
-        newState[container] = [
-            {
-                loading: false,
-                errorStatus: action.error
-            }];
+        newState[container] = [{
+            loading: false,
+            errorStatus: action.error
+        }];
         return newState;
     }
 
     case types.SAVE_FORM: {
 
-        let newState = {...state};
-
-        newState[container] = [
-            {
-                saving: true,
-                errorStatus: null
-            }];
+        newState[container] = [{
+            saving: true,
+            errorStatus: null
+        }];
 
         return newState;
     }
 
     case types.SAVE_FORM_SUCCESS: {
 
-        let newState = {...state};
-
-        newState[container] = [
-            {
-                saving: false,
-                errorStatus: null
-            }];
+        newState[container] = [{
+            saving: false,
+            errorStatus: null
+        }];
         newState.syncLoadedForm = true; // let the UI know it may need to sync the read-only view with the changes
 
         return newState;
@@ -89,13 +76,10 @@ const forms = (
 
     case types.SAVE_FORM_FAILED: {
 
-        let newState = {...state};
-
-        newState[container] = [
-            {
-                saving: false,
-                errorStatus: action.error
-            }];
+        newState[container] = [{
+            saving: false,
+            errorStatus: action.error
+        }];
         return newState;
     }
 

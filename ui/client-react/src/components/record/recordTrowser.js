@@ -15,7 +15,7 @@ import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
-import {savingForm, saveFormSuccess, saveFormError, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+import * as formActions from '../../actions/formActions';
 
 import './recordTrowser.scss';
 
@@ -23,8 +23,10 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * trowser containing a record component
+ *
+ * Note: this component has been partially migrated to Redux
  */
-export let RecordTrowser = React.createClass({
+export const RecordTrowser = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
@@ -36,13 +38,7 @@ export let RecordTrowser = React.createClass({
         pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
         errorPopupHidden: React.PropTypes.bool,
-        onHideTrowser: React.PropTypes.func
-    },
-
-    getDefaultProps() {
-        return {
-            onHideTrowser: () => {}
-        };
+        onHideTrowser: React.PropTypes.func.isRequired
     },
 
     _hasErrorsAndAttemptedSave() {
@@ -119,23 +115,23 @@ export let RecordTrowser = React.createClass({
 
             const formType = "edit";
 
-            this.props.dispatch(savingForm(formType));
+            this.props.dispatch(formActions.savingForm(formType));
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then((recId) => {
-                this.props.dispatch(saveFormSuccess(formType));
+                this.props.dispatch(formActions.saveFormSuccess(formType));
                 if (saveAnother) {
-                    this.props.dispatch(editNewRecord(false));
+                    this.props.dispatch(formActions.editNewRecord(false));
                 } else {
                     this.hideTrowser();
                     this.navigateToNewRecord(recId);
                 }
 
             }, (errorStatus) => {
-                this.props.dispatch(saveFormError(formType, errorStatus));
+                this.props.dispatch(formActions.saveFormError(formType, errorStatus));
             });
         }
         return validationResult;
@@ -162,17 +158,17 @@ export let RecordTrowser = React.createClass({
             let promise;
             const formType = "edit";
 
-            this.props.dispatch(savingForm(formType));
+            this.props.dispatch(formActions.savingForm(formType));
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
-                this.props.dispatch(saveFormSuccess(formType));
+                this.props.dispatch(formActions.saveFormSuccess(formType));
                 this.nextRecord();
             }, (errorStatus) => {
-                this.props.dispatch(saveFormError(formType, errorStatus));
+                this.props.dispatch(formActions.saveFormError(formType, errorStatus));
             });
         }
         return validationResult;
@@ -224,7 +220,7 @@ export let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
 
-        this.props.dispatch(openRecordForEdit(previousEditRecordId));
+        this.props.dispatch(formActions.openRecordForEdit(previousEditRecordId));
     },
 
     /**
@@ -237,7 +233,7 @@ export let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editNextRecord(nextEditRecordId);
 
-        this.props.dispatch(openRecordForEdit(nextEditRecordId));
+        this.props.dispatch(formActions.openRecordForEdit(nextEditRecordId));
     },
     /**
      *  get breadcrumb element for top of trowser

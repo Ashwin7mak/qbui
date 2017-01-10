@@ -1,7 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import QBForm from  '../../src/components/QBForm/qbform';
-import {RecordRoute, ConnectedRecordRoute} from '../../src/components/record/recordRoute';
+import {ConnectedRecordRoute, RecordRoute} from '../../src/components/record/recordRoute';
+
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";

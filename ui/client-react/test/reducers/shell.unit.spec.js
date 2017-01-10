@@ -1,5 +1,5 @@
 import reducer from '../../src/reducers/shell';
-import * as types from '../../src/constants/actions';
+import * as types from '../../src/actions/types';
 
 describe('Nav reducer functions', () => {
 
