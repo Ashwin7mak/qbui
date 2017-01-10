@@ -64,7 +64,9 @@ describe('FieldValueEditor functions', () => {
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required: true}} type={data.type} appUsers={users}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required: true}}
+                                                                           type={data.type}
+                                                                           appUsers={users} />);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });

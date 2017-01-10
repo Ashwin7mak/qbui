@@ -534,7 +534,7 @@ describe('AGGrid cell editor functions', () => {
             column: {
                 colDef: {
                     fieldDef: {
-                        datatypeAttributes: {scale:consts.DURATION_CONSTS.WEEKS},
+                        datatypeAttributes: {scale:consts.DURATION_CONSTS.SCALES.WEEKS},
                         type: consts.SCALAR
                     }
                 }

@@ -4,9 +4,67 @@
 (function() {
     'use strict';
     var DURATION_CONSTS = require('../../../../common/src/constants').DURATION_CONSTS;
-    var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
+    var durationFormatter = require('../../../../common/src/formatter/durationFormatter');
+    var Locale = require('../../locales/locales');
     var regexNumsDecimalsColons = /-?[0-9.:]+/g;
     var removeCommas = /[,]+/g;
+    /**
+     * Accepted Types:
+     * millisecond || milliseconds || msecs || ms
+     * second || seconds || secs || s
+     * minute || minutes || m
+     * hour || hours || h
+     * week || weeks || w
+     * Accepted Format For Seconds, Minutes, Hours:
+     * 00:00:00 HHMMSS
+     * 00:00 HHMM
+     * :00 MM
+     * :00:00 MMSS
+     * ::00 SS
+     **/
+    function localize(acceptedType) {
+        return Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + acceptedType).toLowerCase();
+    }
+    function allowedDurationType() {
+        var ALLOWED_DURATION_TYPE = {};
+        /**
+         * This creates a localized object of all accepted scale a user can input, if the scale the user entered
+         * is valid, then it will be set to the MILLIS_PER_SCALE value. This allows for a constant time look up and reduces
+         * the use of loops.
+         * If a user does not enter a scale, then the scale defaults to the field scale that the user is typing in.
+         * */
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.SECONDS] = DURATION_CONSTS.MILLIS_PER_SECOND;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.MINUTES] = DURATION_CONSTS.MILLIS_PER_MIN;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.HOURS] = DURATION_CONSTS.MILLIS_PER_HOUR;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.DAYS] = DURATION_CONSTS.MILLIS_PER_DAY;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.SMART_UNITS] = DURATION_CONSTS.MILLIS_PER_DAY;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.WEEKS] = DURATION_CONSTS.MILLIS_PER_WEEK;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.HHMMSS] = DURATION_CONSTS.MILLIS_PER_HOUR;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.HHMM] = DURATION_CONSTS.MILLIS_PER_HOUR;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.MMSS] = DURATION_CONSTS.MILLIS_PER_MIN;
+        ALLOWED_DURATION_TYPE[DURATION_CONSTS.SCALES.MM] = DURATION_CONSTS.MILLIS_PER_MIN;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.MS)] = 1;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.MSECS)] = 1;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.MILLISECOND)] = 1;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.MILLISECONDS)] = 1;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.S)] = DURATION_CONSTS.MILLIS_PER_SECOND;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.SECS)] = DURATION_CONSTS.MILLIS_PER_SECOND;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.SECONDS)] = DURATION_CONSTS.MILLIS_PER_SECOND;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.SECOND)] = DURATION_CONSTS.MILLIS_PER_SECOND;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.M)] = DURATION_CONSTS.MILLIS_PER_MIN;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.MINUTE)] = DURATION_CONSTS.MILLIS_PER_MIN;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.MINUTES)] = DURATION_CONSTS.MILLIS_PER_MIN;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.H)] = DURATION_CONSTS.MILLIS_PER_HOUR;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.HOUR)] = DURATION_CONSTS.MILLIS_PER_HOUR;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.HOURS)] = DURATION_CONSTS.MILLIS_PER_HOUR;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.D)] = DURATION_CONSTS.MILLIS_PER_DAY;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.DAY)] = DURATION_CONSTS.MILLIS_PER_DAY;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.DAYS)] = DURATION_CONSTS.MILLIS_PER_DAY;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.W)] = DURATION_CONSTS.MILLIS_PER_WEEK;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.WEEK)] = DURATION_CONSTS.MILLIS_PER_WEEK;
+        ALLOWED_DURATION_TYPE[localize(DURATION_CONSTS.ACCEPTED_TYPE.WEEKS)] = DURATION_CONSTS.MILLIS_PER_WEEK;
+        return ALLOWED_DURATION_TYPE;
+    }
     function convertToMilliseconds(num, millis) {
         var result = num * millis;
         /**
@@ -16,59 +74,6 @@
             return num;
         }
         return result;
-    }
-    /**
-     * This functions will convert the number the user entered into milliseconds based off of the type the user entered
-     * For example if a user entered "2 hours" it will be converted into a total of 2 hours worth of milliseconds
-     * */
-    function getMilliseconds(num, type) {
-        var returnValue;
-        switch (type) {
-        /**
-         * If a user enters a number without entering a type, then the default for .scale is to convert milliseconds by days
-         * HHMM && HHMMSS will default to converting the value to milliseconds by hours
-         * MM && MMSS will default to converting the value to milliseconds by minutes
-         * */
-        case DURATION_CONSTS.SCALES.HHMM:
-        case DURATION_CONSTS.SCALES.HHMMSS:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
-            break;
-        case DURATION_CONSTS.SCALES.MM:
-        case DURATION_CONSTS.MMSS:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
-            break;
-        case DURATION_CONSTS.SCALES.WEEKS:
-        case DURATION_CONSTS.W:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_WEEK);
-            break;
-        /**
-         * XD Specs state that smart units default to days when a user does not input a type
-         * */
-        case DURATION_CONSTS.SCALES.SMART_UNITS:
-        case DURATION_CONSTS.SCALES.DAYS:
-        case DURATION_CONSTS.D:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_DAY);
-            break;
-        case DURATION_CONSTS.SCALES.HOURS:
-        case DURATION_CONSTS.H:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_HOUR);
-            break;
-        case DURATION_CONSTS.SCALES.MINUTES:
-        case DURATION_CONSTS.M:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_MIN);
-            break;
-        case DURATION_CONSTS.SCALES.SECONDS:
-        case DURATION_CONSTS.S:
-            returnValue = convertToMilliseconds(num, DURATION_CONSTS.MILLIS_PER_SECOND);
-            break;
-        case DURATION_CONSTS.SCALES.MILLISECONDS:
-        case DURATION_CONSTS.MS:
-            returnValue = num;
-            break;
-        default:
-            break;
-        }
-        return returnValue;
     }
     /**
      * This function is used to convert the following formats into milliseconds
@@ -149,217 +154,226 @@
     function isTimeFormatValid(value, type) {
         var colons;
         var regexValidNum = /^((-?\d+)|(-?\d+\.\d*)|(-?\d*\.\d+))$/;
+        var isValidFormat = {
+            normalizedTypes: '',
+            num: value,
+            isTimeFormat: true,
+            valid: true
+        };
 
         /**
          * If a type is inserted with time format, it is not valid
          * HH:MM:SS minutes is not a valid format
          * */
-        type = type.join('').trim().split(' ');
-        if (type.length > 1 || type.length === 1 && type[0] !== '') {
-            return false;
+        if (type.length >= 1) {
+            isValidFormat.valid = false;
+            return isValidFormat;
         }
         colons = value.match(/:/g);
-        if (colons.length > 3) {
-            return false;
+        if (colons.length > 2) {
+            isValidFormat.valid = false;
+            return isValidFormat;
         }
         let numArray = value.match(/[^:]+/g);
         if (numArray.length > 3 || numArray.length === 0) {
-            return false;
+            isValidFormat.valid = false;
+            return isValidFormat;
         }
-        let numbersValid = true;
         numArray.forEach((numval) => {
             if (!regexValidNum.test(numval)) {
-                numbersValid  = false;
+                isValidFormat.valid = false;
+                return isValidFormat;
             }
         });
-        return numbersValid;
+        return isValidFormat;
     }
-
+    function isValid(value, scale) {
+        var ALLOWED_DURATION_TYPE = allowedDurationType();
+        var regexHasNums = /[0-9]+/g;
+        var type;
+        var isValidResults = {
+            normalizedTypes: '',
+            num: value,
+            valid: true
+        };
+        /**
+         * Don't validate empty strings
+         * If the input is only a number, normalizedType defaults to field scale
+         * */
+        if (!value || Number(value)) {
+            isValidResults.normalizedTypes = [ALLOWED_DURATION_TYPE[scale]];
+            isValidResults.num = [value];
+            return isValidResults;
+        }
+        /**
+         * If a user does not input a number, return invalid
+         * */
+        if (!regexHasNums.test(value)) {
+            isValidResults.valid = false;
+            return isValidResults;
+        }
+        /**
+         * If a user inserted a colon, it will be validated based off of time formats validation requirements
+         * */
+        value = value.toLowerCase();
+        type = value.replace(regexNumsDecimalsColons, ' ')
+            .split(' ')
+            .filter(function(val) {return val !== '';});
+        if (value.indexOf(':') !== -1) {
+            return isTimeFormatValid(value, type);
+        }
+        /**
+         * Strips out all numbers
+         * If there is an invalid type return false
+         * If there are no types, return true
+         * If there are only accepted types return true
+         * */
+        isValidResults.normalizedTypes = type.map(function(val) {
+            if (ALLOWED_DURATION_TYPE[val]) {
+                return ALLOWED_DURATION_TYPE[val];
+            } else {
+                isValidResults.valid = false;
+            }
+        });
+        /**
+         * If a user inserts more types than nums return false
+         * 1 week day invalid format
+         * 1 week 2 days valid format
+         * */
+        isValidResults.num = value.match(regexNumsDecimalsColons);
+        if (!(isValidResults.normalizedTypes.length === 0) && isValidResults.num.length !== isValidResults.normalizedTypes.length) {
+            return false;
+        }
+        return isValidResults;
+    }
     module.exports = {
-        isValid: function(value) {
-            var regexHasNums = /[0-9]+/g;
-            var tempNum;
-            var tempType = [];
-            var valid = true;
-            var type;
-            /**
-             * Don't validate empty strings
-             * */
-            if (!value) {
-                return true;
-            }
-            /**
-             * If a user does not input a number, return invalid
-             * */
-            if (!regexHasNums.test(value)) {
-                return false;
-            }
-            /**
-             * If the input is only a number, return true
-             * */
-            if (typeof value === 'number' || !value) {
-                return true;
-            }
-            /**
-             * If a user inserted a colon, it will be validated based off of time formats validation requirements
-             * */
-            value = value.toLowerCase();
-            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-            if (value.indexOf(':') !== -1) {
-                return isTimeFormatValid(value, type);
-            }
-            /**
-             * Strips out all numbers
-             * If there is an invalid type return false
-             * If there are no types, return true
-             * If there are only accepted types return true
-             * */
-            type.forEach(function(val) {
-                if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
-                    valid = false;
-                } else if (val !== '') {
-                    tempType.push(val);
-                }
-            });
-            /**
-             * If a user inserts more types than nums return false
-             * 1 week day invalid format
-             * 1 week 2 days valid format
-             * */
-            tempNum = value.match(regexNumsDecimalsColons);
-            if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
-                return false;
-            }
-            return valid;
-        },
-        onBlurParsing: function(value, fieldInfo) {
+        onBlurParsing: function(value, fieldInfo, includeUnits) {
             value = value.replace(removeCommas, '').split(' ').join(' ');
             value = value.trim();
-            /**
-             * Accepted Types:
-             * millisecond || milliseconds || ms
-             * second || seconds || s
-             * minute || minutes || m
-             * hour || hours || h
-             * week || weeks || w
-             * Accepted Format For Seconds, Minutes, Hours:
-             * 00:00:00
-             * 00:00
-             * :00
-             * :00:00
-             * ::00
-             **/
             var total = 0;
-            var listOfTypes = [];
-            var type;
-            var num;
+            var scale = fieldInfo.scale;
+            var isValidResults;
+            var results = {
+                value: DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_INPUT,
+                display: value
+            };
             /**
              * Checks to see if the value is a valid input
              * */
-            if (this.isValid(value)) {
+            isValidResults = isValid(value, scale);
+            if (isValidResults.valid) {
                 /**
                  * If the user inserted a semicolon, then the string needs to be parsed based off of
                  * the HHMMSS, HHMM, MMSS requirements
                  * */
-                if (value && value.indexOf(':') !== -1) {
-                    return {value: convertHourMinutesSeconds(value), valid: true};
+                if (isValidResults.isTimeFormat) {
+                    results.value = convertHourMinutesSeconds(isValidResults.num);
+                    results.display = durationFormatter.format({value: results.value}, fieldInfo);
+                    return results;
                 }
                 /**
-                 * If the user passes in a string containing a number and a type, we split the string here
-                 * and separate the number and type from each other
-                 * Strips out all commas
-                 * */
-                value = value.toLowerCase();
-                num = value.match(regexNumsDecimalsColons);
-                type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-                type.forEach(function(val) {
-                    /**
-                     * Checks to see if the user inserted a shortcut key such as 'ms', 'm' and etc...
-                     * */
-                    if (val.length <= 2 && val !== '') {
-                        val = val.toUpperCase();
-                        listOfTypes.push(val);
-                    } else if (val !== '') {
-                        /**
-                         * Removes first letter and sets it toUpperCase
-                         * Sets type to a string and concatenates the upperCaseLetter back on
-                         * If type is not plural, then it concatenates an 's'
-                         * This formats it to make it easier to check it against constants later
-                         */
-                        val = val.toLowerCase();
-                        var firstLetter = val[0].toUpperCase();
-                        val = val.slice(1);
-                        val = firstLetter + val;
-                        if (val[val.length - 1] !== 's') {
-                            val = val + 's';
-                        }
-                        listOfTypes.push(val);
-                    }
-                });
-                /**
                  * If a user only inputs one num and one type, then this function will only be called once
-                 * However if the user inserted more than one num and more than one type then this function calls each num with its type
+                 * However if the user inserted more than one num and more than one type then this function calls each num with millisPerType
                  * The isValid function above, checks to be sure each num has a type, if it did not an error will be thrown
                  * Example 1 week 2 days becomes
                  * num = [1,2]
-                 * listOfTypes = [week, days]
-                 * During the first loop, the function invokes like so getMilliseconds(1, week) and then the result is accumulated to total;
+                 * normalizedTypes = [DURATION_CONSTS.MILLIS_PER_WEEK, DURATION_CONSTS.MILLIS_PER_DAY]
+                 * During the first loop, the function invokes like so convertToMilliseconds(1, DURATION_CONSTS.MILLIS_PER_WEEK) and then the result is accumulated to total;
                  * */
-                if (num !== null && num.length === listOfTypes.length && listOfTypes[0] !== '') {
-                    num.forEach(function(val, i) {
-                        if (num.length === 1 && listOfTypes[i] === DURATION_CONSTS.MILLISECONDS || listOfTypes[i] === DURATION_CONSTS.MS) {
-                            total = Number(getMilliseconds(num[i], listOfTypes[i]));
+                if (Array.isArray(isValidResults.num)) {
+                    isValidResults.normalizedTypes.forEach(function(val, i) {
+                        if (isValidResults.num.length === 1 && isValidResults.normalizedTypes[i] === DURATION_CONSTS.SCALES.MILLISECONDS) {
+                            total = Number(convertToMilliseconds(isValidResults.num[i], isValidResults.normalizedTypes[i]));
                         } else {
-                            total += getMilliseconds(num[i], listOfTypes[i]);
+                            total += convertToMilliseconds(isValidResults.num[i], isValidResults.normalizedTypes[i]);
                         }
                     });
-                    return {value: total, valid: true};
                 }
-                if (num !== null) {
-                    return {value: getMilliseconds(num[0], fieldInfo.scale), valid: true};
+                results.value = total;
+                results.display = durationFormatter.format({value: results.value}, fieldInfo);
+                if (includeUnits || fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+                    results.display = this.includeUnitsInInput(results.display, fieldInfo);
+                }
+                if (value === '') {
+                    /**
+                     * If a user does not input a value, then we want to set display and value to an empty string
+                     * */
+                    results.value = null;
+                    results.display = '';
                 }
             }
-            return {
-                value: value,
-                valid: false
-            };
+            return results;
         },
-        getPlaceholder: function(fieldInfo) {
-            var placeholder = '';
-            if (!fieldInfo) {
+        includeUnitsInInput(display, fieldInfo) {
+            /**
+             * includeUnitsInInput checks to see if includeUnits is true
+             * It then checks to see if display is only a number
+             * If it is only a number it will concatenate the field scale to the input
+             * */
+            if (display === '' || display === null ||  display === undefined) {
+                return display;
+            }
+            if (fieldInfo.scale === DURATION_CONSTS.SCALES.SMART_UNITS) {
+                if (Number(display) === 0) {
+                    display = display + ' ' + this.getPlaceholder(DURATION_CONSTS.SCALES.DAYS, 0);
+                } else {
+                    var scale = display.replace(/-?[0-9.:]+/g, '').trim();
+                    var num = display.match(/-?[0-9.:]+/g);
+                    display = num;
+                    if (scale) {
+                        scale = scale[0].toUpperCase() + scale.slice(1);
+                        display = num + ' ' + this.getPlaceholder(scale, num[0]);
+                    }
+                }
+            } else if (durationFormatter.hasUnitsText(fieldInfo.scale) && !isNaN(Number(display))) {
+                display = display + ' ' + this.getPlaceholder(fieldInfo.scale, display);
+            }
+            return display;
+        },
+        getPlaceholder: function(scale, value) {
+            var placeholder = scale;
+            value = Number(value);
+            if (!scale) {
                 return placeholder;
             }
-            switch (fieldInfo.scale) {
-            case DURATION_CONSTS.HHMM:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.HHMM;
+
+            switch (scale) {
+            case DURATION_CONSTS.SCALES.HHMM:
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.HHMM;
                 break;
-            case DURATION_CONSTS.HHMMSS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.HHMMSS;
+            case DURATION_CONSTS.SCALES.HHMMSS:
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.HHMMSS;
                 break;
-            case DURATION_CONSTS.MM:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.MM;
+            case DURATION_CONSTS.SCALES.MM:
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.MM;
                 break;
-            case DURATION_CONSTS.MMSS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.MMSS;
+            case DURATION_CONSTS.SCALES.MMSS:
+                placeholder = DURATION_CONSTS.ACCEPTED_TYPE.MMSS;
                 break;
-            case DURATION_CONSTS.WEEKS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.WEEKS;
+            case DURATION_CONSTS.SCALES.WEEKS:
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEK) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.WEEKS);
+
                 break;
             /**
              * XD Specs state that smart units default to days
              * */
-            case DURATION_CONSTS.SMART_UNITS:
-            case DURATION_CONSTS.DAYS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.DAYS;
+            case DURATION_CONSTS.SCALES.SMART_UNITS:
+            case DURATION_CONSTS.SCALES.DAYS:
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAY) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.DAYS);
                 break;
-            case DURATION_CONSTS.HOURS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.HOURS;
+            case DURATION_CONSTS.SCALES.HOURS:
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOUR) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.HOURS);
                 break;
-            case DURATION_CONSTS.MINUTES:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.MINUTES;
+            case DURATION_CONSTS.SCALES.MINUTES:
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTE) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.MINUTES);
                 break;
-            case DURATION_CONSTS.SECONDS:
-                placeholder = DURATION_CONSTS.PLACEHOLDER.SECONDS;
+            case DURATION_CONSTS.SCALES.SECONDS:
+                placeholder = value === 1 ? Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECOND) :
+                                            Locale.getMessage(DURATION_CONSTS.ACCEPTED_TYPE.ACCEPTED_DURATION_TYPE + DURATION_CONSTS.ACCEPTED_TYPE.SECONDS);
                 break;
             default:
                 break;
