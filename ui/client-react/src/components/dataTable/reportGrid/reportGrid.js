@@ -3,6 +3,7 @@ import QbGrid from '../qbGrid/qbGrid';
 import ColumnTransformer from '../qbGrid/columnTransformer';
 import RowTransformer from '../qbGrid/rowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
+import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
 
 import _ from 'lodash';
 
@@ -98,6 +99,10 @@ const ReportGrid = React.createClass({
         /**
          * The action to take a user to the form view for editing */
         openRecordForEdit: PropTypes.func,
+
+        /**
+         * A list of ids by which the report has been sorted (used for displaying the report header menu) */
+        sortFids: PropTypes.array
     },
 
     getDefaultProps() {
@@ -256,11 +261,15 @@ const ReportGrid = React.createClass({
                 validateFieldValue: this.props.handleValidateFieldValue,
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
+            menuComponent={ReportColumnHeaderMenu}
+            menuProps={{
+                sortFids: this.props.sortFids,
+            }}
         />;
     }
 });
 
-// Private methods
+// --- PRIVATE METHODS ---
 function formatChange(updatedValues, colDef) {
     return {
         values: {
