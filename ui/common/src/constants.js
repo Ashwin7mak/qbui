@@ -80,7 +80,6 @@
             SORT_LIST: 'sortList',
             LIST_DELIMITER: '.',
             GROUP_DELIMITER: ':',
-
             QUERY: 'query',
             COLUMNS: 'columns',
             OFFSET: 'offset',
