@@ -191,34 +191,6 @@
             return this.agGridRecordElList.value.length;
         }},
 
-        //TODO Anshu put this. This is duplicate method which already exists in this file.
-        //
-        //waitForReportContent: {value:function() {
-        //    // First wait for the containers
-        //    this.reportContainerEl.waitForVisible();
-        //    this.reportContentEl.waitForVisible();
-        //    this.loadedContentEl.waitForVisible();
-        //    // Then wait for records to be shown in the grid
-        //    return this.agGridBodyViewportEl.waitForVisible();
-        //}},
-
-        //TODO: Will have to see if we actually need this going forward
-        ///**
-        // * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
-        // * @returns A promise that will resolve after waiting for the report records to be displayed
-        // */
-        //this.waitForReportContent = function() {
-        //    var self = this;
-        //    // First wait for the containers
-        //    return e2ePageBase.waitForElements(self.reportContainerEl, self.reportContentEl).then(function() {
-        //        // Then wait for records to be shown in the grid
-        //        return e2ePageBase.waitForElement(self.agGridBodyViewportEl);
-        //    }).catch(function(e) {
-        //        // If we had issues send and error up the chain
-        //        return Promise.reject(new Error('Error waiting for reportContent (are there records showing on the report?): ' + e.message));
-        //    });
-        //};
-
         //TODO: Refactor these once we port over the delete record tests
         /// Checking for the deleted record on the first page
         //this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord) {
