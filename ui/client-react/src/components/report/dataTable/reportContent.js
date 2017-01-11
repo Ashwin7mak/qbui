@@ -393,7 +393,9 @@ export let ReportContent = React.createClass({
             const flux = this.getFlux();
             return flux.actions.recordPendingValidateField(fieldDef, fieldName, value, checkRequired);
         } else {
-            logger.warn('Field Def not provided for field validation in reportContent');
+            let error = 'Field Def not provided for field validation in reportContent';
+            logger.warn(error);
+            return Promise.reject(error);
         }
     },
 
@@ -422,11 +424,6 @@ export let ReportContent = React.createClass({
      */
     openRecordForEdit(recordId) {
         this.getFlux().actions.openRecordForEdit(recordId);
-    },
-
-    handleValidateFieldValue(def, name, value, checkRequired) {
-        let flux = this.getFlux();
-        flux.actions.recordPendingValidateField(def, name, value, checkRequired);
     },
 
     /**

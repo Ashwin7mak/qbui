@@ -198,6 +198,10 @@ class FieldUtils {
     static getColumnHeaderClasses(fieldDef) {
         let classes = ['gridHeaderCell'];
 
+        if (!_.has(fieldDef, 'datatypeAttributes.type')) {
+            return classes.join(' ');
+        }
+
         switch (fieldDef.datatypeAttributes.type) {
         case consts.NUMERIC:
         case consts.CURRENCY:
