@@ -119,10 +119,8 @@ const QbGrid = React.createClass({
     },
 
     getActionsCell(cellDataRow, rowProps) {
-        let id = this.getRecordIdForRow(rowProps.rowData);
-
         return <RowActions
-            recordId={id}
+            rowId={rowProps.rowData.id}
             onClickDeleteRowIcon={this.props.onClickDeleteIcon}
             onClickEditRowIcon={this.props.onClickEditIcon}
             isEditing={rowProps.rowData.isEditing}
@@ -149,21 +147,6 @@ const QbGrid = React.createClass({
         });
     },
 
-    getRecordIdForRow(rowProps) {
-        let keys = Object.keys(rowProps);
-        if (keys.length === 0) {
-            return null;
-        }
-
-        let firstField = rowProps[keys[0]];
-
-        if (!_.isObject(firstField)) {
-            return null;
-        }
-
-        return firstField.recordId;
-    },
-
     addRowDecorators(row) {
         let classes = ['table-row'];
         if (row.isEditing) {
@@ -171,6 +154,7 @@ const QbGrid = React.createClass({
         }
 
         return {
+            rowId: row.id,
             className: classes.join(' '),
             isEditing: row.isEditing,
             editingRowId: this.props.editingRowId,
