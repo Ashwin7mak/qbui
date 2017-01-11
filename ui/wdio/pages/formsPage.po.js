@@ -444,19 +444,16 @@
          * Method to set input value for a field on the form.
          */
         setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
-            var i;
             var fieldTypes = getAllUniqueFieldTypes;
-            if (browser === 'firefox') {
-                for (i = 0; i < fieldTypes.value.length; i++) {
+            for (var i = 0; i < fieldTypes.value.length; i++) {
+                if (browser === 'firefox') {
                     fieldTypes.value[i].click();
                     browser.pause(100);
                     fieldTypes.value[i].setValue(fieldValue);
                     browser.pause(100);
                     fieldTypes.value[i].element('..').click();
                     browser.pause(100);
-                }
-            } else {
-                for (i = 0; i < fieldTypes.value.length; i++) {
+                } else {
                     fieldTypes.value[i].setValue(fieldValue);
                 }
             }
@@ -467,29 +464,28 @@
          */
         enterFormValues : {value: function(fieldType) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            var self = this;
             var i;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = self.getAllFieldRows();
+                var textFields = this.getAllFieldRows();
                 for (i = 0; i < textFields.value.length; i++) {
                     if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
                         textFields.value[i].element('input[type="text"].textField').setValue(sText);
                     }
                 }
             } else if (fieldType === 'allEmailFields') {
-                this.setFormInputValue(self.getAllEmailInputFields, sEmail);
+                this.setFormInputValue(this.getAllEmailInputFields, sEmail);
             }else if (fieldType === 'allPhoneFields') {
-                this.setFormInputValue(self.getAllPhoneInputFields, sPhone);
+                this.setFormInputValue(this.getAllPhoneInputFields, sPhone);
             }else if (fieldType === 'allUrlFields') {
-                this.setFormInputValue(self.getAllUrlInputFields, sUrl);
+                this.setFormInputValue(this.getAllUrlInputFields, sUrl);
             }else if (fieldType === 'allDurationFields') {
-                this.setFormInputValue(self.getAllDurationInputFields, sNumeric);
+                this.setFormInputValue(this.getAllDurationInputFields, sNumeric);
             } else if (fieldType === 'allNumericFields') {
-                this.setFormInputValue(self.getAllNumericInputFields, sNumeric);
+                this.setFormInputValue(this.getAllNumericInputFields, sNumeric);
             } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
-                var dateFields = self.getAllDateInputFields();
+                var dateFields = this.getAllDateInputFields();
                 for (i = 0; i < dateFields.value.length; i++) {
                     if (browserName === 'safari') {
                         dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
@@ -499,7 +495,7 @@
                 }
             } else if (fieldType === 'allTimeFields') {
                 //get all time fields on form
-                var timeFields = self.getAllTimeInputFields();
+                var timeFields = this.getAllTimeInputFields();
                 for (i = 0; i < timeFields.value.length; i++) {
                     timeFields.value[i].element('.Select-control').click();
                     this.selectFromList(timeFields.value[i], sTime);
@@ -507,7 +503,7 @@
 
             } else if (fieldType === 'allCheckboxFields') {
                 //get all checkbox fields on form
-                var checkboxFields = self.getAllCheckboxFields();
+                var checkboxFields = this.getAllCheckboxFields();
                 for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
                     if (!checkboxFields.value[i].element('input').isSelected()) {
@@ -516,7 +512,7 @@
                 }
             }else if (fieldType === 'allUserField') {
                 //get all user field input validators
-                var userFields = self.getAllUserFields();
+                var userFields = this.getAllUserFields();
                 for (i = 0; i < userFields.value.length; i++) {
                     userFields.value[i].element('.Select-control').click();
                     this.selectFromList(userFields.value[i], sUser);
@@ -530,25 +526,24 @@
         enterInvalidFormValues : {value: function(fieldType, invalidValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             var i;
-            var self = this;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = self.getAllFieldRows();
+                var textFields = this.getAllFieldRows();
                 for (i = 0; i < textFields.value.length; i++) {
                     if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
                         textFields.value[i].element('input[type="text"].textField').setValue(invalidValue);
                     }
                 }
             } else if (fieldType === 'allEmailFields') {
-                this.setFormInputValue(self.getAllEmailInputFields, invalidValue);
+                this.setFormInputValue(this.getAllEmailInputFields, invalidValue);
             }else if (fieldType === 'allPhoneFields') {
-                this.setFormInputValue(self.getAllPhoneInputFields, invalidValue);
+                this.setFormInputValue(this.getAllPhoneInputFields, invalidValue);
             }else if (fieldType === 'allUrlFields') {
-                this.setFormInputValue(self.getAllUrlInputFields, invalidValue);
+                this.setFormInputValue(this.getAllUrlInputFields, invalidValue);
             }else if (fieldType === 'allDurationFields') {
-                this.setFormInputValue(self.getAllDurationInputFields, invalidValue);
+                this.setFormInputValue(this.getAllDurationInputFields, invalidValue);
             } else if (fieldType === 'allNumericFields') {
-                this.setFormInputValue(self.getAllNumericInputFields, invalidValue);
+                this.setFormInputValue(this.getAllNumericInputFields, invalidValue);
             }
         }},
 
