@@ -10,6 +10,13 @@ import {
     TimeCellRenderer,
     NumericCellRenderer,
     TextCellRenderer,
+    EmailCellRenderer,
+    PhoneCellRenderer,
+    CurrencyCellRenderer,
+    PercentCellRenderer,
+    RatingCellRenderer,
+    UserCellRenderer,
+    UrlCellRenderer,
     CheckBoxCellRenderer,
     DurationCellRenderer
 } from '../../src/components/dataTable/agGrid/cellRenderers';
@@ -221,6 +228,241 @@ describe('AGGrid cell editor functions', () => {
         edit.value = 456;
         TestUtils.Simulate.change(edit);
         expect(valueElements[0].innerHTML).toEqual("456");
+    });
+
+    it('test EmailCellRenderer', () => {
+        const params = {
+            value: {
+                value: 'c@qb.com',
+                display: 'c@qb.com'
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "EMAIL"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<EmailCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll("div.urlField");
+        expect(valueElements.length).toBe(2);
+
+        const valueElementsLink = ReactDOM.findDOMNode(component).querySelectorAll("span.link");
+        expect(valueElementsLink.length).toBe(2);
+
+        expect(valueElementsLink[0].innerHTML).toEqual(params.value.display);
+
+    });
+
+    it('test PhoneCellRenderer', () => {
+        const params = {
+            value: {
+                value: '5558675309',
+                display: '(555)867-5309',
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "PHONE"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<PhoneCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll("div.phoneWrapper input");
+        expect(valueElements.length).toBe(1);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("tel");
+
+        const valueElementsPH = ReactDOM.findDOMNode(component).querySelectorAll("span.disabledPhoneFieldValueRenderer");
+        expect(valueElementsPH.length).toBe(1);
+
+        expect(valueElementsPH[0].innerHTML.indexOf(params.value.display)).not.toEqual(-1);
+
+    });
+
+    it('test CurrencyCellRenderer', () => {
+        const params = {
+            value: {
+                value: '500',
+                display: '$500',
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "CURRENCY"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<CurrencyCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll("div.numericField");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerHTML).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("text");
+
+        edit.value = "900";
+        TestUtils.Simulate.change(edit);
+        expect(valueElements[0].innerHTML).toEqual("900");
+    });
+
+    it('test PercentCellRenderer', () => {
+        const params = {
+            value: {
+                value: '.10',
+                display: '%10',
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "PERCENT"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<PercentCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll("div.textField.viewElement");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerHTML).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("text");
+
+        edit.value = ".70";
+        TestUtils.Simulate.change(edit);
+        expect(valueElements[0].innerHTML).toEqual(".70");
+    });
+
+    it('test RatingCellRenderer', () => {
+        const params = {
+            value: {
+                value: '2',
+                display: '2',
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "RATING"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<RatingCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll("div.numericField");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerHTML).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("text");
+
+        edit.value = "5";
+        TestUtils.Simulate.change(edit);
+        expect(valueElements[0].innerHTML).toEqual("5");
+    });
+
+    it('test UserCellRenderer', () => {
+        const params = {
+            value: {
+                value: {screenName: "test", email:"test@example.com"},
+                display: 'Username',
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "USER"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<UserCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".userDisplayValue");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerHTML).toEqual(params.value.display);
+
+        const edit = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit.userFormat");
+        expect(edit.length).toBe(1);
+
+        const input = TestUtils.scryRenderedDOMComponentsWithClass(component, "Select-input");
+        expect(input.length).toBe(2);
+    });
+
+    it('test UrlCellRenderer', () => {
+        const params = {
+            value: {
+                value: "http://www.google.com",
+                display: "http://www.google.com",
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "URL"
+                        }
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<UrlCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".cellData div.urlField");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerText).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("url");
+
+        edit.value = "www.quickbase.com";
+        TestUtils.Simulate.change(edit);
+        expect(valueElements[0].innerText).toEqual("www.quickbase.com");
     });
 
     it('test CheckBoxCellRenderer', () => {

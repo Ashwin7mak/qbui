@@ -24,8 +24,12 @@ describe('RecordTrowser functions', () => {
             savingForm() {},
             hideTrowser() {},
             hideErrorMsgDialog() {},
+            editNextRecord() {},
+            editPreviousRecord() {},
+            openRecordForEdit() {}
         }
     };
+
 
     let component;
 
@@ -38,6 +42,9 @@ describe('RecordTrowser functions', () => {
         spyOn(flux.actions, 'saveNewRecord').and.callThrough();
         spyOn(flux.actions, 'hideTrowser');
         spyOn(flux.actions, 'hideErrorMsgDialog');
+        spyOn(flux.actions, 'editNextRecord');
+        spyOn(flux.actions, 'editPreviousRecord');
+        spyOn(flux.actions, 'openRecordForEdit');
     });
 
     afterEach(() => {
@@ -49,6 +56,9 @@ describe('RecordTrowser functions', () => {
         flux.actions.saveNewRecord.calls.reset();
         flux.actions.hideTrowser.calls.reset();
         flux.actions.hideErrorMsgDialog.calls.reset();
+        flux.actions.editNextRecord.calls.reset();
+        flux.actions.editPreviousRecord.calls.reset();
+        flux.actions.openRecordForEdit.calls.reset();
     });
 
     it('test render of loading component', () => {
@@ -176,4 +186,77 @@ describe('RecordTrowser functions', () => {
 
         expect(flux.actions.hideErrorMsgDialog).toHaveBeenCalled();
     });
+
+    it('test navigateToNewRecord in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        let reportData = {
+            navigateAfterSave: true,
+            appId:1,
+            tblId:2,
+            rptId:3
+        };
+        let routerList = [];
+        let newRecId  = "abracadabra";
+        component = TestUtils.renderIntoDocument(<RecordTrowser
+            flux={flux}
+            router={routerList} recId={"1"} reportData={reportData} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        component.navigateToNewRecord(newRecId);
+
+        expect(routerList.length).toEqual(1);
+        expect(routerList[0].indexOf(newRecId)).not.toEqual(-1);
+    });
+
+    it('test nextRecord in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        let reportData = {
+            appId:1,
+            tblId:2,
+            rptId:3,
+            nextEditRecordId : 4
+        };
+        let routerList = [];
+        let newRecId  = "abracadabra";
+        component = TestUtils.renderIntoDocument(<RecordTrowser
+            flux={flux}
+            router={routerList} recId={"1"} reportData={reportData} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        component.nextRecord();
+
+        expect(flux.actions.editNextRecord).toHaveBeenCalled();
+        expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
+    });
+
+    it('test previousRecord in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        let reportData = {
+            appId:1,
+            tblId:2,
+            rptId:3,
+            nextEditRecordId : 4
+        };
+        let routerList = [];
+        let newRecId  = "abracadabra";
+        component = TestUtils.renderIntoDocument(<RecordTrowser
+            flux={flux}
+            router={routerList} recId={"1"} reportData={reportData} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        component.previousRecord();
+
+        expect(flux.actions.editPreviousRecord).toHaveBeenCalled();
+        expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
+    });
+
 });
