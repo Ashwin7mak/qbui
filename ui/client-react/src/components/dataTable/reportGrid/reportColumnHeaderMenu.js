@@ -3,13 +3,20 @@ import {Button, Dropdown, MenuItem} from 'react-bootstrap';
 import * as FieldConsts from '../../../constants/schema';
 import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import QbIcon from '../../qbIcon/qbIcon';
+
+import ReportColumnHeaderMenuContainer from './reportColumnHeaderMenuContainer';
 
 const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
 
-const ReportColumnHeaderMenu = React.createClass({
+/**
+ * A presentational component that displays the column header menu for grouping and sorting on a report
+ * @type {__React.ClassicComponentClass<P>}
+ */
+export const ReportColumnHeaderMenu = React.createClass({
     propTypes: {
-        colDef: PropTypes.object,
+        fieldDef: PropTypes.object,
         sortFids: PropTypes.array,
         sortReport: PropTypes.func,
         groupReport: PropTypes.func,
@@ -23,7 +30,12 @@ const ReportColumnHeaderMenu = React.createClass({
      */
     getSortAscText(prependText) {
         let message = ' ';
-        switch (this.props.colDef.fieldDef.datatypeAttributes.type) {
+
+        if (!_.has(this.props.fieldDef, 'datatypeAttributes.type')) {
+            return message;
+        }
+
+        switch (this.props.fieldDef.datatypeAttributes.type) {
         case FieldConsts.CHECKBOX:
             message =  'uncheckedToChecked';
             break;
@@ -50,7 +62,12 @@ const ReportColumnHeaderMenu = React.createClass({
 
     getSortDescText(prependText) {
         let message = ' ';
-        switch (this.props.colDef.fieldDef.datatypeAttributes.type) {
+
+        if (!_.has(this.props.fieldDef, 'datatypeAttributes.type')) {
+            return message;
+        }
+
+        switch (this.props.fieldDef.datatypeAttributes.type) {
         case FieldConsts.CHECKBOX:
             message =  "checkedToUnchecked";
             break;
@@ -80,7 +97,7 @@ const ReportColumnHeaderMenu = React.createClass({
 
         // TODO:: Clean up this duplicated function
         _.find(this.props.sortFids, fid => {
-            if (Math.abs(fid) === this.props.colDef.id) {
+            if (Math.abs(fid) === this.props.fieldDef.id) {
                 isSortedAsc = fid > 0;
             }
         });
@@ -90,7 +107,7 @@ const ReportColumnHeaderMenu = React.createClass({
 
     isFieldSorted() {
         return _.find(this.props.sortFids, fid => {
-            if (Math.abs(fid) === this.props.colDef.id) {
+            if (Math.abs(fid) === this.props.fieldDef.id) {
                 return true;
             }
         });
@@ -106,7 +123,7 @@ const ReportColumnHeaderMenu = React.createClass({
 
     sortReport(asc, alreadySorted) {
         if (this.props.sortReport) {
-            this.props.sortReport(this.props.colDef, asc, alreadySorted);
+            this.props.sortReport(this.props.fieldDef, asc, alreadySorted);
         }
     },
 
@@ -120,7 +137,7 @@ const ReportColumnHeaderMenu = React.createClass({
 
     groupReport(asc) {
         if (this.props.groupReport) {
-            this.props.groupReport(this.props.colDef, asc);
+            this.props.groupReport(this.props.fieldDef, asc);
         }
     },
 
@@ -136,16 +153,16 @@ const ReportColumnHeaderMenu = React.createClass({
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
                 <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
-                    <QBicon icon="caret-filled-down"/>
+                    <QbIcon icon="caret-filled-down"/>
                 </Button>
 
                 <Dropdown.Menu>
                     <MenuItem onSelect={this.sortReportAscending}>
-                        {this.isFieldSortedAscending() && <QBicon icon="check"/>} {this.getSortAscText(SORTING_MESSAGE)}
+                        {this.isFieldSortedAscending() && <QbIcon icon="check"/>} {this.getSortAscText(SORTING_MESSAGE)}
                     </MenuItem>
 
                     <MenuItem onSelect={this.sortReportDescending}>
-                        {this.isFieldSortedDescending() && <QBicon icon="check"/>} {this.getSortDescText(SORTING_MESSAGE)}
+                        {this.isFieldSortedDescending() && <QbIcon icon="check"/>} {this.getSortDescText(SORTING_MESSAGE)}
                     </MenuItem>
 
                     <MenuItem divider/>
@@ -170,4 +187,4 @@ function convertSortingMessageToI18nMessage(prependText, message) {
     return Locale.getMessage(`report.menu.${prependText}.${message}`);
 }
 
-export default ReportColumnHeaderMenu;
+export default ReportColumnHeaderMenuContainer(ReportColumnHeaderMenu);

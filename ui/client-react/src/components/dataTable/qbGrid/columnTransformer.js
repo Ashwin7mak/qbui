@@ -35,12 +35,14 @@ class ColumnTransformer {
         return new ColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses);
     }
 
-    constructor(fieldId, colDef, headerLabel, headerClasses) {
+    constructor(fieldId, fieldDef, headerLabel, headerClasses) {
         this.fieldId = fieldId;
-        this.colDef = colDef;
+        this.fieldDef = fieldDef;
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
         this.formatter = null;
+        this.headerMenuComponent = null;
+        this.headerMenuProps = null;
     }
 
     /**
@@ -57,25 +59,39 @@ class ColumnTransformer {
     }
 
     /**
+     * Add an additional component next to the column title. The component will receive any props that are available
+     * for the column, but additional props (e.g., functions) that are the same across all columns can optionally be passed in.
+     * @param component
+     * @param props
+     */
+    addHeaderMenu(component, props) {
+        this.headerMenuComponent = component;
+        this.headerMenuProps = props;
+        return this;
+    }
+
+    /**
      * Builds the object that is used by Reactabular to define the header row and
      * also is important for formatting cells in that column.
      * @params MenuComponent An optional React Element (e.g., menu dropdown) to display next to the header text
      * @returns {{property: *, header: {label: XML}}}
      */
-    gridHeader(MenuComponent, menuComponentProps) {
+    getGridHeader() {
         let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
 
-        if (MenuComponent) {
+        if (this.headerMenuComponent) {
+            // Need to do this transformation so that the variable can be recognized in JSX as a component
+            let MenuComponent = this.headerMenuComponent;
+
             headerComponent = (
                 <span className={this.headerClasses}>
                     {this.headerLabel}
                     <div className="headerMenu">
-                        <MenuComponent colDef={this.colDef} {...menuComponentProps} />
+                        <MenuComponent fieldDef={this.fieldDef} {...this.headerMenuProps} />
                     </div>
                 </span>
             );
         }
-
 
         let transformedColumn = {
             property: this.fieldId,
