@@ -40,7 +40,7 @@ const QbRow = React.createClass({
     },
 
     render() {
-        if (this.props.subHeader) {
+        if (this.props.isSubHeader) {
             return this.renderSubHeader();
         }
 

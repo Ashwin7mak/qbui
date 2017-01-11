@@ -152,26 +152,24 @@ const QbGrid = React.createClass({
         if (row.isEditing) {
             classes.push('editing');
         }
+        if (row.classes) {
+            classes = [...classes, ...row.classes];
+        }
 
-        return {
-            rowId: row.id,
+        let rowProps = Object.assign({
+            subHeaderId: row.id,
             className: classes.join(' '),
-            isEditing: row.isEditing,
             editingRowId: this.props.editingRowId,
             isInlineEditOpen: this.props.isInlineEditOpen,
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
-            isSelected: row.isSelected,
-            // props that differentiate a subheader
-            subHeader: row.subHeader,
-            subHeaderLevel: row.subHeaderLevel,
-            subHeaderId: row.id,
-            subHeaderLabel: row.subHeaderLabel,
             // Add one to account for the extra column at the start of the grid for the row actions.
             // TODO:: Only add one if the prop for displaying those actions is set
             numberOfColumns: this.props.numberOfColumns + 1,
             compareCellChanges: this.props.compareCellChanges,
-        };
+        }, row);
+
+        return rowProps;
     },
 
     /**
