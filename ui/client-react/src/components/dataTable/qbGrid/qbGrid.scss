@@ -319,6 +319,8 @@ $edit-icon-font-size: 18px;
                 margin-top: -6px;
 
                 .nonEditable {
+                    //This aligns record ID up with input boxes
+                    margin: 1px;
                     cursor: not-allowed;
                 }
 
