@@ -15,7 +15,7 @@
     var sText = 'testTextValue';
     var sUrl = 'http://www.yahoo.com';
     var sEmail = 'test@gmail.com';
-    var sPhone = '15084811015';
+    var sPhone = '508-481-1015';
     var sNumeric = 33.33;
     var sTime = '12:30 am';
     var date = new Date();
