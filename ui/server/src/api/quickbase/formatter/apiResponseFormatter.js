@@ -109,7 +109,7 @@ function formatUniqueValidationErrors(requestBody) {
  * @returns {*}
  */
 function returnPayload(payload) {
-    if (payload.statusCode >= 300) {
+    if (payload.statusCode >= 400) {
         return Promise.reject(payload);
     }
 
