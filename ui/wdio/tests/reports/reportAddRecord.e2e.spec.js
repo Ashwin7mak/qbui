@@ -12,12 +12,12 @@
     var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
     var ReportPagingPO = require('../../pages/reportPaging.po');
 
-    //TODO currently Anshu mentioned this works only on edge. Adding this so it wont break the build which has forms tests that work on 3 different browsers
-    if (browser === 'MicrosoftEdge') {
-        describe('Reports Page - Add Record Tests', function() {
-            var realmName;
-            var realmId;
-            var testApp;
+    describe('Reports Page - Add Record Tests', function() {
+        var realmName;
+        var realmId;
+        var testApp;
+        //TODO currently Anshu mentioned this works only on edge. Adding this so it wont break the build which has forms tests that work on 3 different browsers
+        if (browser === 'MicrosoftEdge') {
 
             /**
              * Setup method. Creates test app then authenticates into the new stack
@@ -98,8 +98,8 @@
                 }
 
             });
+        }
 
-            //TODO: Editing a row after pressing 'Save and Add new row' button
-        });
-    }
+        //TODO: Editing a row after pressing 'Save and Add new row' button
+    });
 }());

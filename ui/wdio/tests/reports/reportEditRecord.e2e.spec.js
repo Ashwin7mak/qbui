@@ -12,13 +12,12 @@
     var ReportPagingPO = require('../../pages/reportPaging.po');
 
 
-//TODO currently Anshu mentioned this works only on edge. Adding this so it wont break the build which has forms tests that work on 3 different browsers
-    if (browser === 'MicrosoftEdge') {
-        describe('Report Page Edit Record Tests', function() {
-            var realmName;
-            var realmId;
-            var testApp;
-
+    describe('Report Page Edit Record Tests', function() {
+        var realmName;
+        var realmId;
+        var testApp;
+        //TODO currently Anshu mentioned this works only on edge. Adding this so it wont break the build which has forms tests that work on 3 different browsers
+        if (browser === 'MicrosoftEdge') {
 
             beforeAll(function() {
                 browser.logger.info('beforeAll spec function - Generating test data and logging in');
@@ -188,6 +187,6 @@
             //TODO: Invalid input value tests (text in a date field)
 
             //TODO: Check that record ID isn't editable
-        });
-    }
+        }
+    });
 }());
