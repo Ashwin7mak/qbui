@@ -441,6 +441,28 @@
         }},
 
         /**
+         * Method to set input value for a field on the form.
+         */
+        setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
+            var i;
+            var fieldTypes = getAllUniqueFieldTypes;
+            if (browser === 'firefox') {
+                for (i = 0; i < fieldTypes.value.length; i++) {
+                    fieldTypes.value[i].click();
+                    browser.pause(100);
+                    fieldTypes.value[i].setValue(fieldValue);
+                    browser.pause(100);
+                    fieldTypes.value[i].element('..').click();
+                    browser.pause(100);
+                }
+            } else {
+                for (i = 0; i < fieldTypes.value.length; i++) {
+                    fieldTypes.value[i].setValue(fieldValue);
+                }
+            }
+        }},
+
+        /**
          * Method to enter field values in the form.
          */
         enterFormValues : {value: function(fieldType) {
@@ -456,45 +478,15 @@
                     }
                 }
             } else if (fieldType === 'allEmailFields') {
-                var emailFields = self.getAllEmailInputFields();
-                for (i = 0; i < emailFields.value.length; i++) {
-                    emailFields.value[i].click();
-                    emailFields.value[i].setValue(sEmail);
-                    emailFields.value[i].element('..').click();
-                }
-
+                this.setFormInputValue(self.getAllEmailInputFields, sEmail);
             }else if (fieldType === 'allPhoneFields') {
-                var phoneFields = self.getAllPhoneInputFields();
-                for (i = 0; i < phoneFields.value.length; i++) {
-                    phoneFields.value[i].click();
-                    phoneFields.value[i].setValue(sPhone);
-                    phoneFields.value[i].element('..').click();
-                }
-
+                this.setFormInputValue(self.getAllPhoneInputFields, sPhone);
             }else if (fieldType === 'allUrlFields') {
-                var urlFields = self.getAllUrlInputFields();
-                for (i = 0; i < urlFields.value.length; i++) {
-                    urlFields.value[i].click();
-                    urlFields.value[i].setValue(sUrl);
-                    urlFields.value[i].element('..').click();
-                }
-
+                this.setFormInputValue(self.getAllUrlInputFields, sUrl);
             }else if (fieldType === 'allDurationFields') {
-                var durationFields = self.getAllDurationInputFields();
-                for (i = 0; i < durationFields.value.length; i++) {
-                    durationFields.value[i].click();
-                    durationFields.value[i].setValue(sNumeric);
-                    durationFields.value[i].element('..').click();
-                }
+                this.setFormInputValue(self.getAllDurationInputFields, sNumeric);
             } else if (fieldType === 'allNumericFields') {
-                //get all numeric input field validators on the form
-                var numericFields = self.getAllNumericInputFields();
-                for (i = 0; i < numericFields.value.length; i++) {
-                    numericFields.value[i].click();
-                    numericFields.value[i].setValue(sNumeric);
-                    numericFields.value[i].element('..').click();
-                    browser.pause(1000);
-                }
+                this.setFormInputValue(self.getAllNumericInputFields, sNumeric);
             } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
                 var dateFields = self.getAllDateInputFields();
@@ -502,9 +494,7 @@
                     if (browserName === 'safari') {
                         dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
                     } else {
-                        dateFields.value[i].click();
                         dateFields.value[i].element('input').setValue(sDate);
-                        dateFields.value[i].element('..').click();
                     }
                 }
             } else if (fieldType === 'allTimeFields') {
@@ -550,47 +540,15 @@
                     }
                 }
             } else if (fieldType === 'allEmailFields') {
-                var emailFields = self.getAllEmailInputFields();
-                for (i = 0; i < emailFields.value.length; i++) {
-                    emailFields.value[i].click();
-                    emailFields.value[i].setValue(invalidValue);
-                    emailFields.value[i].element('..').click();
-                }
-
+                this.setFormInputValue(self.getAllEmailInputFields, invalidValue);
             }else if (fieldType === 'allPhoneFields') {
-                var phoneFields = self.getAllPhoneInputFields();
-                for (i = 0; i < phoneFields.value.length; i++) {
-                    phoneFields.value[i].click();
-                    browser.pause(100);
-                    phoneFields.value[i].setValue(invalidValue);
-                    browser.pause(100);
-                    phoneFields.value[i].element('..').click();
-                }
-
+                this.setFormInputValue(self.getAllPhoneInputFields, invalidValue);
             }else if (fieldType === 'allUrlFields') {
-                var urlFields = self.getAllUrlInputFields();
-                for (i = 0; i < urlFields.value.length; i++) {
-                    urlFields.value[i].click();
-                    urlFields.value[i].setValue(invalidValue);
-                    urlFields.value[i].element('..').click();
-                }
-
+                this.setFormInputValue(self.getAllUrlInputFields, invalidValue);
             }else if (fieldType === 'allDurationFields') {
-                var durationFields = self.getAllDurationInputFields();
-                for (i = 0; i < durationFields.value.length; i++) {
-                    durationFields.value[i].click();
-                    durationFields.value[i].setValue(invalidValue);
-                    durationFields.value[i].element('..').click();
-                }
+                this.setFormInputValue(self.getAllDurationInputFields, invalidValue);
             } else if (fieldType === 'allNumericFields') {
-                //get all numeric input field validators on the form
-                var numericFields = self.getAllNumericInputFields();
-                for (i = 0; i < numericFields.value.length; i++) {
-                    numericFields.value[i].click();
-                    numericFields.value[i].setValue(invalidValue);
-                    numericFields.value[i].element('..').click();
-                    browser.pause(1000);
-                }
+                this.setFormInputValue(self.getAllNumericInputFields, invalidValue);
             }
         }},
 
