@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import QbGrid from '../qbGrid/qbGrid';
-import ColumnTransformer from '../qbGrid/columnTransformer';
+import ReportColumnTransformer from './reportColumnTransformer';
 import RowTransformer from '../qbGrid/rowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
@@ -127,7 +127,7 @@ const ReportGrid = React.createClass({
     },
 
     transformColumns() {
-        return ColumnTransformer.transformColumnsForGrid(this.props.columns);
+        return ReportColumnTransformer.transformColumnsForGrid(this.props.columns);
     },
 
     transformRecords(editingRecordId) {

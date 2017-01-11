@@ -3,43 +3,20 @@ import _ from 'lodash';
 import FieldUtils from '../../../utils/fieldUtils';
 
 /**
- * A helper to transform reportData into a format that can be used by qbGrid
- * TODO:: Once AgGrid is removed, we can reduce these transformations and improve performance by doing these transformations only once in the reportDataStore
+ * A helper class to build columns for the QbGrid
  */
 class ColumnTransformer {
     /**
-     * Transforms columns from api data to a class that has helpers used by the QbGrid
-     * @param columns
-     * @returns {Array}
+     * Creates the column instances that can be converted to a column used by QbGrid by calling getGridHeader()
+     * @param headerLabel The text that appears in the header column (could also be a react component/Jsx)
+     * @param headerClasses Any css classes to add to the column header element
+     * @param cellIdentifierValue The value that identifies which cells belong to this column
+     * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the volumn. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      */
-    static transformColumnsForGrid(columns = []) {
-        if (!columns || !_.isArray(columns)) {
-            return [];
-        }
-
-        return columns.map(column => {
-            return ColumnTransformer.createFromApiColumn(column);
-        });
-    }
-
-    /**
-     * Transform a single column from data returned by the api to data that can be used by the QbGrid
-     * @param data
-     * @returns {ColumnTransformer}
-     */
-    static createFromApiColumn(data) {
-        let fieldId = data.id;
-        let headerLabel = data.headerName;
-        let headerClasses = FieldUtils.getColumnHeaderClasses(data.fieldDef);
-
-        return new ColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses);
-    }
-
-    constructor(fieldId, fieldDef, headerLabel, headerClasses) {
-        this.fieldId = fieldId;
-        this.fieldDef = fieldDef;
+    constructor(headerLabel, headerClasses, cellIdentifierValue) {
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
+        this.cellIdentifierValue = cellIdentifierValue;
         this.formatter = null;
         this.headerMenuComponent = null;
         this.headerMenuProps = null;
@@ -87,14 +64,14 @@ class ColumnTransformer {
                 <span className={this.headerClasses}>
                     {this.headerLabel}
                     <div className="headerMenu">
-                        <MenuComponent fieldDef={this.fieldDef} {...this.headerMenuProps} />
+                        <MenuComponent {...this.headerMenuProps} />
                     </div>
                 </span>
             );
         }
 
         let transformedColumn = {
-            property: this.fieldId,
+            property: this.cellIdentifierValue,
             header: {
                 label: headerComponent,
             }
