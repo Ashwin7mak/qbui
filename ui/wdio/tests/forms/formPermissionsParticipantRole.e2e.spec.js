@@ -113,8 +113,9 @@
             var origRecordCount;
             //all required fields on form
             var fieldTypes = ['allPhoneFields', 'allEmailFields', 'allUrlFields'];
-            //TODO need to investigate why this test fails only sometimes on firefox on sauceLabs. Save is just spinning and not returning back.
-            if (browser !== 'firefox') {
+            if (browser === 'firefox') {
+                //TODO need to investigate why this test fails only sometimes on firefox on sauceLabs. Save is just spinning and not returning back.
+            } else {
                 //Step 1 - get user authentication
                 formsPO.getUserAuthentication(realmName, realmId, userId);
 
