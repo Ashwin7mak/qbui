@@ -84,6 +84,8 @@ function responseHasUniqueValidationErrors(responseBody) {
     // but returns a 404 and a NOT_UNIQUE_VALUE_MESSAGE when editing a record
     // if the there is a unique validation error.
     // The 404 status code becomes a more accurate 422 if unique validation errors are found.
+    // TODO:: Improve and return specific fields once core is updated.
+    // Core story: https://quickbase.atlassian.net/browse/CORE-1052
     return getErrorCode(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE ||
         getErrorMessage(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
 }
