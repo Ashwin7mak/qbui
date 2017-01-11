@@ -113,7 +113,7 @@
             var origRecordCount;
             //all required fields on form
             var fieldTypes = ['allPhoneFields', 'allEmailFields', 'allUrlFields'];
-            if (browser === 'firefox') {
+            if (browserName === 'firefox') {
                 //TODO need to investigate why this test fails only sometimes on firefox on sauceLabs. Save is just spinning and not returning back.
             } else {
                 //Step 1 - get user authentication
