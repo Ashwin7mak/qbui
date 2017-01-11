@@ -112,7 +112,7 @@
         it('Verify can add a record since table rights canAdd set to true and no fieldRights to Numeric fields', function() {
             var origRecordCount;
             //all required fields on form
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields'];
+            var fieldTypes = ['allPhoneFields', 'allEmailFields', 'allUrlFields'];
 
             //Step 1 - get user authentication
             formsPO.getUserAuthentication(realmName, realmId, userId);
