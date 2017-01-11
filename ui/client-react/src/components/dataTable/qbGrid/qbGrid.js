@@ -105,7 +105,11 @@ const QbGrid = React.createClass({
 
         /**
          * A menu that can be displayed next to the text in the header row. */
-        menuComponent: PropTypes.element,
+        menuComponent: PropTypes.func,
+
+        /**
+         * Additional props that can be passed to the menu in addition to the column properties from the grid data */
+        menuProps: PropTypes.object,
     },
 
     onClickAddNewRow() {
@@ -141,7 +145,7 @@ const QbGrid = React.createClass({
 
     getColumns() {
         return this.props.columns.map(column => {
-            return column.addFormatter(this.renderCell).gridHeader(this.props.menuComponent);
+            return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
         });
     },
 

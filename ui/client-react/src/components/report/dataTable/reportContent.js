@@ -834,6 +834,10 @@ export let ReportContent = React.createClass({
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.state.showReactabular &&
                             <ReportGrid
+                                appId={this.props.reportData.appId}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
+
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 primaryKeyName={this.props.primaryKeyName}
@@ -859,15 +863,12 @@ export let ReportContent = React.createClass({
                             />
                         }
                         {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
-                        {/*appId={this.props.reportData.appId}*/}
                         {/*onGridReady={this.props.onGridReady}*/}
                         {/*onRecordChange={this.handleRecordChange}*/}
                         {/*onRecordAdd={this.handleRecordAdd}*/}
                         {/*validateRecord={this.validateRecord}*/}
                         {/*validateFieldValue={this.handleValidateFieldValue}*/}
                         {/*getOrigRec={this.getOrigRec}*/}
-                        {/*tblId={this.props.reportData.tblId}*/}
-                        {/*rptId={this.props.reportData.rptId}*/}
                         {/*reportHeader={this.props.reportHeader}*/}
                         {/*reportFooter={this.props.reportFooter}*/}
                         {/*pageActions={this.props.pageActions}*/}

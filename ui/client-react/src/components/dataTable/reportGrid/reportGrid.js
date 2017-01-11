@@ -11,6 +11,10 @@ import ReportCell from './reportCell';
 
 const ReportGrid = React.createClass({
     propTypes: {
+        appId: PropTypes.string,
+        tblId: PropTypes.string,
+        rptId: PropTypes.string,
+
         /**
          * The records to be displayed on the grid */
         records: PropTypes.array,
@@ -263,6 +267,9 @@ const ReportGrid = React.createClass({
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}
             menuProps={{
+                appId: this.props.appId,
+                tblId: this.props.tblId,
+                rptId: this.props.rptId,
                 sortFids: this.props.sortFids,
             }}
         />;
