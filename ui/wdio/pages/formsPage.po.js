@@ -425,9 +425,9 @@
             for (var i = 0; i < fieldTypes.value.length; i++) {
                 if (browser === 'firefox') {
                     fieldTypes.value[i].click();
+                    fieldTypes.value[i].clear();
                     browser.pause(100);
-                    fieldTypes.value[i].setValue(fieldValue);
-                    browser.pause(100);
+                    fieldTypes.value[i].keys(fieldValue);
                     fieldTypes.value[i].element('..').click();
                     browser.pause(100);
                 } else {
