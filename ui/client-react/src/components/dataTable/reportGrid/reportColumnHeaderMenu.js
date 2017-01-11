@@ -3,6 +3,7 @@ import {Button, Dropdown, MenuItem} from 'react-bootstrap';
 import * as FieldConsts from '../../../constants/schema';
 import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import QBicon from '../../qbIcon/qbIcon';
 
 const SORTING_MESSAGE = 'sort';
 const GROUPING_MESSAGE = 'group';
@@ -23,53 +24,56 @@ const ReportColumnHeaderMenu = React.createClass({
      */
     getSortAscText(prependText) {
         let message = ' ';
-        switch (this.props.colDef.fieldDef.datatypeAttributes.type) {
-        case FieldConsts.CHECKBOX:
-            message =  'uncheckedToChecked';
-            break;
-        case FieldConsts.TEXT:
-        case FieldConsts.URL:
-        case FieldConsts.USER:
-        case FieldConsts.EMAIL_ADDRESS:
-            message =  'aToZ';
-            break;
-        case FieldConsts.DATE:
-        case FieldConsts.DATE_TIME:
-        case FieldConsts.TIME_OF_DAY:
-            message =  'oldToNew';
-            break;
-        case FieldConsts.NUMERIC:
-        case FieldConsts.RATING:
-        default:
-            message = 'lowToHigh';
-            break;
+        if (this.props.colDef.fieldDef) {
+            switch (this.props.colDef.fieldDef.datatypeAttributes.type) {
+                case FieldConsts.CHECKBOX:
+                    message = 'uncheckedToChecked';
+                    break;
+                case FieldConsts.TEXT:
+                case FieldConsts.URL:
+                case FieldConsts.USER:
+                case FieldConsts.EMAIL_ADDRESS:
+                    message = 'aToZ';
+                    break;
+                case FieldConsts.DATE:
+                case FieldConsts.DATE_TIME:
+                case FieldConsts.TIME_OF_DAY:
+                    message = 'oldToNew';
+                    break;
+                case FieldConsts.NUMERIC:
+                case FieldConsts.RATING:
+                default:
+                    message = 'lowToHigh';
+                    break;
+            }
         }
-
         return convertSortingMessageToI18nMessage(prependText, message);
     },
 
     getSortDescText(prependText) {
         let message = ' ';
-        switch (this.props.colDef.fieldDef.datatypeAttributes.type) {
-        case FieldConsts.CHECKBOX:
-            message =  "checkedToUnchecked";
-            break;
-        case FieldConsts.TEXT:
-        case FieldConsts.URL:
-        case FieldConsts.USER:
-        case FieldConsts.EMAIL_ADDRESS:
-            message =  "zToA";
-            break;
-        case FieldConsts.DATE:
-        case FieldConsts.DATE_TIME:
-        case FieldConsts.TIME_OF_DAY:
-            message =  "newToOld";
-            break;
-        case FieldConsts.NUMERIC:
-        case FieldConsts.RATING:
-        default:
-            message =  "highToLow";
-            break;
+        if (this.props.colDef.fieldDef) {
+            switch (this.props.colDef.fieldDef.datatypeAttributes.type) {
+                case FieldConsts.CHECKBOX:
+                    message = "checkedToUnchecked";
+                    break;
+                case FieldConsts.TEXT:
+                case FieldConsts.URL:
+                case FieldConsts.USER:
+                case FieldConsts.EMAIL_ADDRESS:
+                    message = "zToA";
+                    break;
+                case FieldConsts.DATE:
+                case FieldConsts.DATE_TIME:
+                case FieldConsts.TIME_OF_DAY:
+                    message = "newToOld";
+                    break;
+                case FieldConsts.NUMERIC:
+                case FieldConsts.RATING:
+                default:
+                    message = "highToLow";
+                    break;
+            }
         }
 
         return convertSortingMessageToI18nMessage(prependText, message);
