@@ -138,6 +138,8 @@ export const RecordTrowser = React.createClass({
 
             }, (errorStatus) => {
                 this.props.dispatch(formActions.saveFormError(formType, errorStatus));
+                const flux = this.getFlux();
+                flux.actions.showErrorMsgDialog();
             });
         }
         return validationResult;
@@ -179,6 +181,8 @@ export const RecordTrowser = React.createClass({
                 this.nextRecord();
             }, (errorStatus) => {
                 this.props.dispatch(formActions.saveFormError(formType, errorStatus));
+                const flux = this.getFlux();
+                flux.actions.showErrorMsgDialog();
             });
         }
         return validationResult;
