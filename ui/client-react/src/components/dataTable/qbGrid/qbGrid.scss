@@ -90,9 +90,10 @@ $edit-icon-font-size: 18px;
         margin-bottom: -8px;
         //this adjusts the height for rendered rows
         padding-top: 6px;
+        //Turns out it works better without a min width
         //Min width of 200px sets the rendered rows to 200 px minimum
-        min-width: 200px;
-        min-height: 32px;
+        //min-width: 200px;
+        //min-height: 32px;
         position: relative;
 
         &.numberFormat,
@@ -305,6 +306,7 @@ $edit-icon-font-size: 18px;
             z-index: 1;
 
             textarea.cellEdit {
+
                 overflow: hidden;
                 box-sizing: border-box;
             }
