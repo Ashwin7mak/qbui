@@ -32,11 +32,12 @@ class ColumnTransformer {
         let headerLabel = data.headerName;
         let headerClasses = FieldUtils.getColumnHeaderClasses(data.fieldDef);
 
-        return new ColumnTransformer(fieldId, headerLabel, headerClasses);
+        return new ColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses);
     }
 
-    constructor(fieldId, headerLabel, headerClasses) {
+    constructor(fieldId, colDef, headerLabel, headerClasses) {
         this.fieldId = fieldId;
+        this.colDef = colDef;
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
         this.formatter = null;
@@ -58,13 +59,28 @@ class ColumnTransformer {
     /**
      * Builds the object that is used by Reactabular to define the header row and
      * also is important for formatting cells in that column.
+     * @params MenuComponent An optional React Element (e.g., menu dropdown) to display next to the header text
      * @returns {{property: *, header: {label: XML}}}
      */
-    gridHeader() {
+    gridHeader(MenuComponent, menuComponentProps) {
+        let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
+
+        if (MenuComponent) {
+            headerComponent = (
+                <span className={this.headerClasses}>
+                    {this.headerLabel}
+                    <div className="headerMenu">
+                        <MenuComponent colDef={this.colDef} {...menuComponentProps} />
+                    </div>
+                </span>
+            );
+        }
+
+
         let transformedColumn = {
             property: this.fieldId,
             header: {
-                label: <span className={this.headerClasses}>{this.headerLabel}</span>,
+                label: headerComponent,
             }
         };
 

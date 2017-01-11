@@ -102,6 +102,10 @@ const QbGrid = React.createClass({
          * A function used to compare changes to a cell. This function is used to improve the performance of the grid. A cell will
          * only re-render if there are differences. */
         compareCellChanges: PropTypes.func,
+
+        /**
+         * A menu that can be displayed next to the text in the header row. */
+        menuComponent: PropTypes.element,
     },
 
     onClickAddNewRow() {
@@ -137,7 +141,7 @@ const QbGrid = React.createClass({
 
     getColumns() {
         return this.props.columns.map(column => {
-            return column.addFormatter(this.renderCell).gridHeader();
+            return column.addFormatter(this.renderCell).gridHeader(this.props.menuComponent);
         });
     },
 

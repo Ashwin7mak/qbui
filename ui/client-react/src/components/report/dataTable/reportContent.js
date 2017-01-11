@@ -855,6 +855,7 @@ export let ReportContent = React.createClass({
                                 toggleSelectedRow={this.toggleSelectedRow}
                                 openRecordForEdit={this.openRecordForEdit}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                             />
                         }
                         {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
