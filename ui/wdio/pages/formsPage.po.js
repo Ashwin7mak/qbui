@@ -79,7 +79,7 @@
          */
         waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
             //wait until loading screen disappear
-            browser.waitForVisible('.trowserChildren .loader .spinner', browser.waitforTimeout, true);
+            browser.waitForVisible('.trowserChildren .loader .spinner', e2eConsts.extraLongWaitTimeMilliseonds, true);
             //Need this to wait for container to slide away
             return browser.pause(3000);
         }},
