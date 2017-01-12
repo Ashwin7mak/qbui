@@ -6,6 +6,7 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import ReactDOM from 'react-dom';
 
 import './qbGrid.scss';
 
@@ -204,7 +205,21 @@ const QbGrid = React.createClass({
         }
         return `row-${rowData.id}`;
     },
-
+    handleScroll(ev) {
+        // let stickyColumn = document.querySelector("#actionsCol");
+        console.log("Scroll Left!",  document.getElementsByClassName('reportContent')[0].scrollLeft);
+        console.log("qbCell",  document.getElementsByClassName('qbCell')[0]);
+        let stickyColumn = document.getElementsByClassName('qbCell')[0];
+        let leftScroll = document.getElementsByClassName('reportContent')[0].scrollLeft;
+        stickyColumn.style.left = leftScroll + 'px';
+        console.log("stickyColumn",  stickyColumn);
+    },
+    componentDidMount() {
+        const reportContent = document.getElementsByClassName('reportContent')[0];
+        if (reportContent) {
+            reportContent.addEventListener('scroll', this.handleScroll);
+        }
+    },
     render() {
         let columns = [
             ...[{
@@ -222,8 +237,8 @@ const QbGrid = React.createClass({
             }],
             ...this.getColumns()
         ];
-
         return (
+
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
                 <Table.Provider
                     ref="qbGridTable"

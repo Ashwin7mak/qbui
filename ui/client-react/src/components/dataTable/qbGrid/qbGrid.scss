@@ -11,6 +11,7 @@ $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
 $cell-edit-background-edit: $color-blue-200;
+$edit-icon-font-size: 18px;
 
 .qbGrid > thead, .qbGrid > tbody {
     color: $default-text-onlight-color;
@@ -199,6 +200,7 @@ $cell-edit-background-edit: $color-blue-200;
 }
 
 .qbGrid > thead > tr > th {
+    min-width: 80px;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
@@ -260,6 +262,7 @@ $cell-edit-background-edit: $color-blue-200;
 
 .qbGrid > tbody > tr > td {
     //Added padding-left and padding-right to match the AGGrid view layout
+    height: $form-view-box-height;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;
@@ -333,11 +336,7 @@ $cell-edit-background-edit: $color-blue-200;
                 margin-top: -6px;
 
                 .nonEditable {
-<<<<<<< HEAD
-                    //This aligns record ID up with input boxes
                     margin: 1px;
-=======
->>>>>>> MB1905-Create_base_reactabular_component
                     cursor: not-allowed;
                 }
 
@@ -476,4 +475,12 @@ $cell-edit-background-edit: $color-blue-200;
     font-size: $grid-font-size;
     border-radius: 0;
     color: $font-color;
+}
+
+.qbGrid > tbody > tr > td:first-of-type {
+    height: 32px;
+    background: white;
+    //position: fixed;
+    //left: 0;
+    z-index: 9999;
 }
