@@ -3,46 +3,24 @@ import _ from 'lodash';
 import FieldUtils from '../../../utils/fieldUtils';
 
 /**
- * A helper to transform reportData into a format that can be used by qbGrid
- * TODO:: Once AgGrid is removed, we can reduce these transformations and improve performance by doing these transformations only once in the reportDataStore
+ * A helper class to build columns for the QbGrid
  */
 class ColumnTransformer {
     /**
-     * Transforms columns from api data to a class that has helpers used by the QbGrid
-     * @param columns
-     * @returns {Array}
+     * Creates the column instances that can be converted to a column used by QbGrid by calling getGridHeader()
+     * @param headerLabel The text that appears in the header column (could also be a react component/Jsx) (required)
+     * @param cellIdentifierValue The value that identifies which cells belong to this column (required)
+     * @param headerClasses Optionally any css classes to add to the column header element
+     * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the volumn. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      */
-    static transformColumnsForGrid(columns = []) {
-        if (!columns || !_.isArray(columns)) {
-            return [];
-        }
-
-        return columns.map(column => {
-            return ColumnTransformer.createFromApiColumn(column);
-        });
-    }
-
-    /**
-     * Transform a single column from data returned by the api to data that can be used by the QbGrid
-     * @param data
-     * @returns {ColumnTransformer}
-     */
-    static createFromApiColumn(data) {
-        let fieldId = data.id;
-        let headerLabel = data.headerName;
-        let headerClasses = FieldUtils.getColumnHeaderClasses(data.fieldDef);
-
-        return new ColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses);
-    }
-
-    constructor(fieldId, fieldDef, headerLabel, headerClasses) {
-        this.fieldId = fieldId;
-        this.fieldDef = fieldDef;
+    constructor(headerLabel, cellIdentifierValue, headerClasses = '') {
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
+        this.cellIdentifierValue = cellIdentifierValue;
         this.formatter = null;
         this.headerMenuComponent = null;
-        this.headerMenuProps = null;
+        this.headerMenuProps = {};
+        this.classes = headerClasses;
     }
 
     /**
@@ -64,7 +42,7 @@ class ColumnTransformer {
      * @param component
      * @param props
      */
-    addHeaderMenu(component, props) {
+    addHeaderMenu(component, props = {}) {
         this.headerMenuComponent = component;
         this.headerMenuProps = props;
         return this;
@@ -77,26 +55,10 @@ class ColumnTransformer {
      * @returns {{property: *, header: {label: XML}}}
      */
     getGridHeader() {
-        let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
-
-        if (this.headerMenuComponent) {
-            // Need to do this transformation so that the variable can be recognized in JSX as a component
-            let MenuComponent = this.headerMenuComponent;
-
-            headerComponent = (
-                <span className={this.headerClasses}>
-                    {this.headerLabel}
-                    <div className="headerMenu">
-                        <MenuComponent fieldDef={this.fieldDef} {...this.headerMenuProps} />
-                    </div>
-                </span>
-            );
-        }
-
         let transformedColumn = {
-            property: this.fieldId,
+            property: this.cellIdentifierValue,
             header: {
-                label: headerComponent,
+                label: this._buildHeaderComponent(),
             }
         };
 
@@ -107,6 +69,31 @@ class ColumnTransformer {
         }
 
         return transformedColumn;
+    }
+
+    /**
+     * Private function to build up the header component based on current properties and existence of a custom header menu.
+     * @returns {XML}
+     * @private
+     */
+    _buildHeaderComponent() {
+        let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
+
+        if (this.headerMenuComponent) {
+            // Need to do this transformation so that the variable can be recognized in JSX as a component
+            let MenuComponent = this.headerMenuComponent;
+
+            headerComponent = (
+                <span className={this.headerClasses}>
+                    {this.headerLabel}
+                    <div className="headerMenu">
+                        <MenuComponent {...this.headerMenuProps} />
+                    </div>
+                </span>
+            );
+        }
+
+        return headerComponent;
     }
 }
 

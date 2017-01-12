@@ -83,50 +83,50 @@ exports.config = {
     //
     capabilities: [
         //TODO Chrome is not stable in sauce labs . So will deal this as seperate PR.
-        //{
-        //    platform : 'OS X 10.11',
-        //    browserName     : 'chrome',
-        //    version: '54.0',
-        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //    name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
+        // {
+        //     platform : 'OS X 10.11',
+        //     browserName     : 'chrome',
+        //     version: '54.0',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
         //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //    idleTimeout: '120',
-        //    screenResolution : '1600x1200',
-        //    maxDuration: 10800,
-        //    breakpointSize: 'xlarge',
+        //     idleTimeout: '120',
+        //     screenResolution : '1600x1200',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'xlarge',
         //    // These two values enable parallel testing which will run a spec file per instance
-        //    shardTestFiles: true,
-        //    maxInstances: 2
-        //},
-        {
-            platform: 'OS X 10.11',
-            browserName: 'safari',
-            version: '10.0',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
-            screenResolution : '1600x1200',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'large',
-            shardTestFiles: true,
-            maxInstances: 2
-        },
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // },
+        // {
+        //     platform: 'OS X 10.11',
+        //     browserName: 'safari',
+        //     version: '10.0',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+        //     screenResolution : '1600x1200',
+        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     idleTimeout: '180',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'large',
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // },
         //TODO firefox setValue not triggering onChange or blur for muneric and duration fields. Will work as seperate PR
-        //{
-        //    platform: 'OS X 10.11',
-        //    browserName: 'firefox',
-        //    version: '46.0',
-        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //    name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
-        //    screenResolution : '1600x1200',
+        // {
+        //     platform: 'OS X 10.11',
+        //     browserName: 'firefox',
+        //     version: '46.0',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
+        //     screenResolution : '1600x1200',
         //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //    idleTimeout: '180',
-        //    maxDuration: 10800,
-        //    breakpointSize: 'large',
-        //    shardTestFiles: true,
-        //    maxInstances: 2
-        //},
+        //     idleTimeout: '180',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'large',
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // },
         {
             platform: 'Windows 10',
             browserName: 'MicrosoftEdge',
@@ -135,7 +135,7 @@ exports.config = {
             name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
+            idleTimeout: '280',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
             shardTestFiles: true,
@@ -167,14 +167,14 @@ exports.config = {
     baseUrl: process.env.SAUCE_DOMAIN,
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 30000,
+    waitforTimeout: 60000,
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
-    connectionRetryTimeout: 90000,
+    connectionRetryTimeout: 130000,
     //
     // Default request retries count
-    connectionRetryCount: 3,
+    connectionRetryCount: 6,
     //
     // Initialize the browser instance with a WebdriverIO plugin. The object should have the
     // plugin name as key and the desired plugin options as properties. Make sure you have
@@ -211,13 +211,18 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
-    reporters: ['spec'],
+    reporters: ['spec', 'junit'],
+    reporterOptions: {
+        junit: {
+            outputDir: './ui/wdio/junitOutput'
+        }
+    },
     //
     // Options to be passed to Jasmine.
     jasmineNodeOpts: {
         //
         // Jasmine default timeout
-        defaultTimeoutInterval: 600000,
+        defaultTimeoutInterval: 1200000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time

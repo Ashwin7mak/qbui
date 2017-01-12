@@ -119,10 +119,8 @@ const QbGrid = React.createClass({
     },
 
     getActionsCell(cellDataRow, rowProps) {
-        let id = this.getRecordIdForRow(rowProps.rowData);
-
         return <RowActions
-            recordId={id}
+            rowId={rowProps.rowData.id}
             onClickDeleteRowIcon={this.props.onClickDeleteIcon}
             onClickEditRowIcon={this.props.onClickEditIcon}
             isEditing={rowProps.rowData.isEditing}
@@ -149,45 +147,29 @@ const QbGrid = React.createClass({
         });
     },
 
-    getRecordIdForRow(rowProps) {
-        let keys = Object.keys(rowProps);
-        if (keys.length === 0) {
-            return null;
-        }
-
-        let firstField = rowProps[keys[0]];
-
-        if (!_.isObject(firstField)) {
-            return null;
-        }
-
-        return firstField.recordId;
-    },
-
     addRowDecorators(row) {
         let classes = ['table-row'];
         if (row.isEditing) {
             classes.push('editing');
         }
+        if (row.classes) {
+            classes = [...classes, ...row.classes];
+        }
 
-        return {
+        let rowProps = Object.assign({
+            subHeaderId: row.id,
             className: classes.join(' '),
-            isEditing: row.isEditing,
             editingRowId: this.props.editingRowId,
             isInlineEditOpen: this.props.isInlineEditOpen,
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
-            isSelected: row.isSelected,
-            // props that differentiate a subheader
-            subHeader: row.subHeader,
-            subHeaderLevel: row.subHeaderLevel,
-            subHeaderId: row.id,
-            subHeaderLabel: row.subHeaderLabel,
             // Add one to account for the extra column at the start of the grid for the row actions.
             // TODO:: Only add one if the prop for displaying those actions is set
             numberOfColumns: this.props.numberOfColumns + 1,
             compareCellChanges: this.props.compareCellChanges,
-        };
+        }, row);
+
+        return rowProps;
     },
 
     /**
@@ -195,7 +177,8 @@ const QbGrid = React.createClass({
      * @returns {React}
      */
     getCheckboxHeader() {
-        const allSelected = this.props.selectedRows.length === this.props.rows.length;
+        let {selectedRows, rows} = this.props;
+        const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
 
         return (
             <input

@@ -167,6 +167,14 @@ class FieldUtils {
         }
     }
 
+    /**
+     * Gets the css class for a specific field type
+     * TODO:: Once AgGrid is removed, consider using the server field formats and get both the type specific class
+     * and alignment class
+     * @param type
+     * @param fieldDef
+     * @returns {*}
+     */
     static getFieldSpecificCellClass(type, fieldDef) {
         if (!type) {
             return 'textFormat';
@@ -195,8 +203,28 @@ class FieldUtils {
         }
     }
 
+    /**
+     * Gets the classes for a gridHeaderCell including alignment based on field type
+     * @param fieldDef
+     * @returns {string}
+     */
     static getColumnHeaderClasses(fieldDef) {
         let classes = ['gridHeaderCell'];
+        classes = [...classes, ...FieldUtils.getCellAlignmentClassesForFieldType(fieldDef)];
+        return classes.join(' ');
+    }
+
+    /**
+     * Get the alignment classes for a specific field type (e.g., numeric fields are aligned right in a grid)
+     * @param fieldDef
+     * @returns {Array}
+     */
+    static getCellAlignmentClassesForFieldType(fieldDef) {
+        let classes = [];
+
+        if (!_.has(fieldDef, 'datatypeAttributes.type')) {
+            return classes;
+        }
 
         switch (fieldDef.datatypeAttributes.type) {
         case consts.NUMERIC:
@@ -218,7 +246,7 @@ class FieldUtils {
             break;
         }
 
-        return classes.join(' ');
+        return classes;
     }
 
     static compareFieldValues(currentCellValues, nextCellValues) {

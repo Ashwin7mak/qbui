@@ -1,278 +1,37 @@
-import _ from 'lodash';
-import {DEFAULT_RECORD_KEY} from '../../../constants/schema';
+const defaultOptions = {
+    isSubHeader: false, // If set to true, row will appear as a subheader row instead of a regular row
+    subHeaderLabel: null, // The label for a subheader row
+    subHeaderLevel: null, // The level (i.e., indentation for a subheader, 1-6 is currently supported via styling)
+    isEditing: false, // Whether the row is in an editing mode. (Adds an 'editing' class when true)
+    isSelected: false, // Denotes when a particular row has been selected
+    classes: [] // Any additional css classes to add to the row
+};
 
 /**
- * A helper class to transform report API data into rows that can be displayed the Reactabular grid
- * TODO:: Once AgGrid is removed, we may be able to improve performance by only doing these transformations once in the reportDataStore.
+ * A class that holds information about properties that you may want to set for a row to be used
+ * in the QbGrid. The rowId is required and a unique identifier for the row. The options are options,
+ * but are useful to know about to create subHeaders or other specific row states.
+ *
+ * No transformation is needed here (as in the ColumnTransformer) because the props for a row are passed through to React components;
+ * however, specific grid implementations may want to extend this class to transform data into props. (See ReportRowTransformer as an example)
  */
 class RowTransformer {
     /**
-     * Transforms records from the report API into rows that can be displayed in the Reactabular grid.
-     * @param records
-     * @param fields
-     * @param info
-     * @returns {Array}
+     * Builds a row instance
+     * @param rowId Required. Unique identifier for row.
+     * @param options Other options that are passed as props to the row.
      */
-    static transformRecordsForGrid(
-        records = [],
-        fields = [],
-        info = {
-            primaryKeyFieldName: DEFAULT_RECORD_KEY,
-            editingRecordId: null,
-            pendEdits: {},
-            selectedRows: [],
-            parentId: null,
-            subHeaderLevel: 0,
-        }) {
-        if (!records || !_.isArray(records)) {
-            return [];
-        }
+    constructor(
+        rowId, // Required unique identifier for a row.
+        options = defaultOptions) {
 
-        let transformedRecords = [];
+        this.id = rowId;
+        this.isSubHeader = options.isSubHeader;
+        this.isEditing = options.isEditing;
+        this.isSelected = options.isSelected;
 
-        records.forEach((record, index) => {
-            if (isAGroupOfRecords(record)) {
-                transformedRecords = flattenRecordGroup(record, transformedRecords, fields, info);
-                return;
-            }
-
-            let transformedRecord = RowTransformer.transformRecordForGrid(record, index, fields, info);
-            if (transformedRecord) {
-                transformedRecords.push(transformedRecord);
-            }
-        });
-
-        return transformedRecords;
+        Object.assign(this, defaultOptions, options);
     }
-
-    /**
-     * Transform a single record from the report API to a row object that can be used by the Reactabular Grid
-     * @param record
-     * @param index
-     * @param fields
-     * @param info
-     * @returns {*}
-     */
-    static transformRecordForGrid(record, index, fields, info) {
-        let id = record[info.primaryKeyFieldName].value;
-
-        // We don't want to add any blank rows unless we are currently adding a new row
-        // TODO:: This could cause performance problems if it happens a lot (we could be adding a lot of blank rows). Refactor once AgGrid is removed.
-        if (id === null && !info.pendEdits.isInlineEditOpen) {
-            return;
-        }
-
-        let recordWithRelatedFieldDef = addUniqueKeyTo(addCurrentValues(id, addRelatedFieldDefinitions(record, fields, id), info.pendEdits), index);
-        let editErrors = addEditErrorsIfExistForRow(id, info.pendEdits);
-
-        return new RowTransformer({
-            record: recordWithRelatedFieldDef,
-            id: id,
-            editingRecordId: info.editingRecordId,
-            isSelected: isRowSelected(id, info.selectedRows),
-            parentId: info.parentId,
-            isSaving: isRowSaving(id, info.pendEdits),
-            editErrors
-        });
-    }
-
-    constructor({record, id, editingRecordId, isSelected, parentId, isSaving, editErrors}) {
-        let isEditing = (id === editingRecordId);
-        this.id = id;
-        this.isEditing = isEditing;
-        this.editingRecord = editingRecordId;
-        this.isSelected = isSelected;
-        this.parentId = parentId;
-        this.isSaving = isSaving;
-        this.isValid = true;
-
-        if (editErrors) {
-            this.isValid = editErrors.ok;
-        }
-
-        let recordCopy = _.cloneDeep(record);
-        Object.keys(recordCopy).forEach(key => {
-            this[key] = addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing);
-        });
-    }
-}
-
-
-// --- PRIVATE FUNCTION ---
-/**
- * Use the values for the record. However, if there are pendingEdits that match this record ID, use the most
- * recently updated values for the row so the user can see the changes they are making. The original record values
- * are not modified.
- * @param id
- * @param record
- * @param pendEdits
- * @returns {*}
- */
-function addCurrentValues(id = null, record = {}, pendEdits = {}) {
-    let recordCopy = _.cloneDeep(record);
-
-    if (hasPendingEditsForRow(id, pendEdits)) {
-        Object.keys(pendEdits.recordChanges).forEach(key => {
-            let pendingEdit = pendEdits.recordChanges[key];
-            if (pendingEdit.newVal) {
-                recordCopy[key].display = pendingEdit.newVal.display;
-                recordCopy[key].value = pendingEdit.newVal.value;
-            }
-        });
-    }
-
-    return recordCopy;
-}
-
-/**
- * We add the field definitions to each cell/field in a record to make it easier to display fields in the Reactabular grid
- * @param record
- * @param fields
- * @param recordId
- * @returns {{}}
- */
-function addRelatedFieldDefinitions(record = {}, fields = [], recordId) {
-    let transformedRecord = {};
-
-    Object.keys(record).forEach(key => {
-        let transformedField = Object.assign({}, record[key]);
-        let fieldDef = fields.find(field => {
-            return field.id === record[key].id;
-        });
-
-        if (fieldDef) {
-            transformedField = Object.assign({}, fieldDef, transformedField);
-        }
-
-        transformedField.recordId = recordId;
-        transformedRecord[transformedField.id] = transformedField;
-    });
-
-    return transformedRecord;
-}
-
-/**
- * Create the unique key that React can use to keep track of each element in the grid. This has 2 benefits:
- *   1) Performance improvements - React won't try to recreate every element on every render
- *   2) Keeps focus on the cell you are editing. When an input field is re-rendered, focus is lost.
- * @param recordWithFields
- * @param index
- * @returns {*}
- */
-function addUniqueKeyTo(recordWithFields, index) {
-    let recordWithFieldsAndUniqueKeys = _.cloneDeep(recordWithFields);
-    Object.keys(recordWithFieldsAndUniqueKeys).forEach(key => {
-        recordWithFieldsAndUniqueKeys[key].uniqueElementKey = `${index}-fid-${recordWithFieldsAndUniqueKeys[key].id}-recId-${recordWithFieldsAndUniqueKeys[key].recordId}`;
-    });
-    return recordWithFieldsAndUniqueKeys;
-}
-
-/**
- * Determines if the current record is actually a group of records that needs to be flattened
- * @param record
- */
-function isAGroupOfRecords(record) {
-    return _.has(record, 'group');
-}
-
-/**
- * Take a record group (nested object of records) and convert it to a flattened array of row objects for use in Reactabular.
- * Uses recursion to get deeply nested groups and keep track of the level of the subheadings.
- * @param record
- * @param transformedRecords
- * @param fields
- * @param subHeaderLevel
- * @param info
- * @returns {Array|[*,*]}
- */
-function flattenRecordGroup(record, transformedRecords, fields, info) {
-    let groupHeaderId = `groupHeader_${record.group}`;
-
-    let currentSubHeaderLevel = (_.isNumber(info.subHeaderLevel) ? info.subHeaderLevel : 0);
-
-    transformedRecords.push({
-        subHeader: true,
-        subHeaderLevel: currentSubHeaderLevel,
-        subHeaderLabel: record.group,
-        localized: record.localized,
-        id: groupHeaderId,
-    });
-
-    let newInfo = {
-        ...info,
-        subHeaderLevel: currentSubHeaderLevel + 1,
-        parentId: groupHeaderId
-    };
-
-    return [...transformedRecords, ...RowTransformer.transformRecordsForGrid(record.children, fields, newInfo)];
-}
-
-/**
- * Determine if the current row is selected
- * @param id
- * @param selectedRows
- * @returns {boolean}
- */
-function isRowSelected(id, selectedRows) {
-    let isSelected = false;
-    if (_.isArray(selectedRows)) {
-        isSelected = selectedRows.includes(id);
-    }
-    return isSelected;
-}
-
-
-/**
- * Determine if there are pending edits for the current record
- * @param id
- * @param pendEdits
- * @returns {*}
- */
-function hasPendingEditsForRow(id, pendEdits) {
-    return (pendEdits ? pendEdits.currentEditingRecordId === id && pendEdits.isInlineEditOpen : false);
-}
-
-/**
- * Determine if the record is in a saving state
- * @param id
- * @param pendEdits
- * @returns {*}
- */
-function isRowSaving(id, pendEdits) {
-    return (hasPendingEditsForRow(id, pendEdits) ? pendEdits.saving : false);
-}
-
-/**
- * Add any validation errors for a record if they exist
- * @param id
- * @param pendEdits
- * @returns {*}
- */
-function addEditErrorsIfExistForRow(id, pendEdits) {
-    return (hasPendingEditsForRow(id, pendEdits) ? pendEdits.editErrors : null);
-}
-
-/**
- * For each cell (i.e., field) in the row, add the properties for displaying it correctly in the Reactabular grid.
- * @param field
- * @param editErrors
- * @param isEditing
- * @returns {*}
- */
-function addPropertiesToIndividualField(field, editErrors, isEditing) {
-    field.isEditing = isEditing;
-    field.isInvalid = false;
-    field.invalidMessage = null;
-    field.invalidResultData = null;
-
-    let editError = (editErrors ? _.find(editErrors.errors, {id: field.id}) : null);
-    if (editError) {
-        field.isInvalid = editError.isInvalid;
-        field.invalidMessage = editError.invalidMessage;
-        field.invalidResultData = editError.invalidResultData;
-    }
-
-    return field;
 }
 
 export default RowTransformer;

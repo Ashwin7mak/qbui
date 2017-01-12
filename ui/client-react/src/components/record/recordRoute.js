@@ -1,7 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -13,24 +13,32 @@ import Logger from '../../utils/logger';
 import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
+import {connect} from 'react-redux';
+import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+
 import './record.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-export let RecordRoute = React.createClass({
+/**
+ * record route component
+ *
+ * Note: this component has been partially migrated to Redux
+ */
+export const RecordRoute = React.createClass({
     mixins: [FluxMixin],
 
-    loadRecord(appId, tblId, recordId, rptId, formType) {
+    loadRecord(appId, tblId, recordId, rptId, formType = "view") {
         const flux = this.getFlux();
-        flux.actions.syncingForm();
+
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, formType);
+
+        this.props.dispatch(loadForm(appId, tblId, rptId, formType, recordId));
     },
     loadRecordFromParams(params) {
         const {appId, tblId, recordId, rptId} = params;
@@ -38,6 +46,7 @@ export let RecordRoute = React.createClass({
         if (appId && tblId && recordId) {
             //  report id is optional
             //  TODO: add form type as a parameter
+
             this.loadRecord(appId, tblId, recordId, rptId);
         }
     },
@@ -51,10 +60,12 @@ export let RecordRoute = React.createClass({
 
     componentDidUpdate(prev) {
 
+        const viewData = this.getViewFormFromProps();
+
         if (this.props.params.appId !== prev.params.appId ||
             this.props.params.tblId !== prev.params.tblId ||
             this.props.params.recordId !== prev.params.recordId ||
-            (this.props.form && this.props.form.syncLoadedForm)) {
+            (viewData && viewData.syncLoadedForm)) {
 
             this.loadRecordFromParams(this.props.params);
         }
@@ -184,10 +195,7 @@ export let RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-
-        const flux = this.getFlux();
-
-        flux.actions.openRecordForEdit(parseInt(this.props.params.recordId), true);
+        this.props.dispatch(openRecordForEdit(parseInt(this.props.params.recordId)));
     },
     /**
      * edit the selected record in the trowser
@@ -195,9 +203,11 @@ export let RecordRoute = React.createClass({
      */
     editNewRecord() {
 
+        // need to dispatch to Fluxxor since report store handles this too...
         const flux = this.getFlux();
+        flux.actions.editNewRecord();
 
-        flux.actions.editNewRecord(true);
+        this.props.dispatch(editNewRecord());
     },
     getPageActions() {
 
@@ -212,12 +222,27 @@ export let RecordRoute = React.createClass({
     },
 
     /**
+     * get the
+     * @param props
+     * @param formType
+     * @returns {boolean|*|HTMLCollection}
+     */
+    getViewFormFromProps(props = this.props) {
+        return props.forms && _.find(props.forms, form => form.id === "view");
+    },
+    /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return this.props.form.syncLoadedForm ||
-            !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+
+
+        const viewData = this.getViewFormFromProps();
+        const nextData = this.getViewFormFromProps(nextProps);
+
+        return !viewData ||
+            !_.isEqual(viewData.formData, nextData.formData) ||
+            !_.isEqual(viewData.syncLoadedForm, nextData.syncLoadedForm) ||
             !_.isEqual(this.props.locale, nextProps.locale) ||
-            !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
+            !_.isEqual(viewData.loading, nextData.loading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
             !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
@@ -237,10 +262,13 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            const formLoadingeErrorStatus = (_.isUndefined(this.props.form) || _.isUndefined(this.props.form.errorStatus)) ? false : this.props.form.errorStatus;
+            const viewData = this.getViewFormFromProps();
+
+            const formLoadingeErrorStatus = viewData && viewData.errorStatus;
             const formInternalError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 500);
             const formAccessRightError = !formLoadingeErrorStatus ? false : (formLoadingeErrorStatus === 403);
 
+            let key = _.has(viewData, "formData.recordId") ? viewData.formData.recordId : null;
             return (
                 <div className="recordContainer">
                     <Stage stageHeadline={this.getStageHeadline()}
@@ -256,16 +284,17 @@ export let RecordRoute = React.createClass({
                         {this.getPageActions()}
                     </div>
 
+
                     {!formLoadingeErrorStatus ?
-                        <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
-                                            loaded={(!this.props.form || !this.props.form.formLoading)}
+                        <Loader key={key}
+                                loaded={(!this.props.forms || !viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
-                        <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                        <Record key={key}
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
-                                errorStatus={formLoadingeErrorStatus ? this.props.form.errorStatus : null}
-                                formData={this.props.form ? this.props.form.formData : null}
+                                errorStatus={formLoadingeErrorStatus ? viewData.errorStatus : null}
+                                formData={this.props.forms && viewData ? viewData.formData : null}
                                 appUsers={this.props.appUsers} />
                         </Loader> : null }
                     {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
@@ -275,5 +304,8 @@ export let RecordRoute = React.createClass({
     }
 });
 
-export let RecordRouteWithRouter = withRouter(RecordRoute);
-export default RecordRouteWithRouter;
+// named exports for unit testing router functions and redux actions
+export const RecordRouteWithRouter = withRouter(RecordRoute);
+export const ConnectedRecordRoute = connect()(RecordRoute);
+
+export default connect()(RecordRouteWithRouter);

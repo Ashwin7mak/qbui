@@ -2,17 +2,19 @@ import React from 'react';
 import Locale from '../../locales/locales';
 import Fluxxor from "fluxxor";
 import ActionIcon from './actionIcon';
-import EmailReportLink from './emailReportLink';
 import QBModal from '../qbModal/qbModal';
-
+import {connect} from 'react-redux';
+import {openRecordForEdit} from '../../actions/formActions';
 import './reportActions.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * report-level actions
+ *
+ * Note: this component has been partially migrated to Redux
  */
-let ReportActions = React.createClass({
+export let ReportActions = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
@@ -75,10 +77,9 @@ let ReportActions = React.createClass({
     onEditClicked() {
 
         if (this.props.selection && this.props.selection.length === 1) {
-            const flux = this.getFlux();
 
             const recordId = this.props.selection[0];
-            flux.actions.openRecordForEdit(recordId);
+            this.props.dispatch(openRecordForEdit(recordId));
         }
     },
 
@@ -142,4 +143,5 @@ let ReportActions = React.createClass({
     }
 });
 
-export default ReportActions;
+// export the react-redux connected wrapper (which injects the dispatch function as a prop)
+export default connect()(ReportActions);

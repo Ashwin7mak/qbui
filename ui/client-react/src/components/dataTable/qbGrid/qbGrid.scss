@@ -10,7 +10,8 @@ $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
-$edit-icon-font-size: 18px;
+$cell-edit-background-edit: $color-blue-200;
+
 .qbGrid > thead, .qbGrid > tbody {
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
@@ -300,6 +301,13 @@ $edit-icon-font-size: 18px;
         border-right: 1px solid #dcdcdc;
         //Commented out because in-line edit row is too big, this makes the height smaller
         //padding-bottom: 14px;
+        //Nick's Changes I need to relook at this===================================================
+        border: none;
+        overflow: visible;
+        margin: 0;
+        vertical-align: middle;
+        padding-bottom: 14px;
+        //Nick's Changes I need to relook at this===================================================
 
         .cellWrapper {
             display: flex;
@@ -325,8 +333,11 @@ $edit-icon-font-size: 18px;
                 margin-top: -6px;
 
                 .nonEditable {
+<<<<<<< HEAD
                     //This aligns record ID up with input boxes
                     margin: 1px;
+=======
+>>>>>>> MB1905-Create_base_reactabular_component
                     cursor: not-allowed;
                 }
 

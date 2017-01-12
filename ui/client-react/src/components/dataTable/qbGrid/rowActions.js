@@ -13,7 +13,7 @@ const RowActions = React.createClass({
     propTypes: {
         onClickEditRowIcon: PropTypes.func,
         onClickDeleteRowIcon: PropTypes.func,
-        recordId: PropTypes.number,
+        rowId: PropTypes.number,
         isEditing: PropTypes.bool,
         editingRowId: PropTypes.number,
         isEditingRowValid: PropTypes.bool.isRequired,
@@ -29,13 +29,13 @@ const RowActions = React.createClass({
 
     onClickEditRowIcon() {
         if (this.props.onClickEditRowIcon) {
-            return this.props.onClickEditRowIcon(this.props.recordId);
+            return this.props.onClickEditRowIcon(this.props.rowId);
         }
     },
 
     onClickDeleteRowIcon() {
         if (this.props.onClickDeleteRowIcon) {
-            this.props.onClickDeleteRowIcon(this.props.recordId);
+            this.props.onClickDeleteRowIcon(this.props.rowId);
         }
     },
 
@@ -56,8 +56,8 @@ const RowActions = React.createClass({
         // Turn the row actions into edit actions when in inline edit mode
         if (this.props.isEditing) {
             return <PositionedRowEditActions
-                idKey={this.props.recordId ? this.props.recordId.toString() : 'noRowId'}
-                recordId={this.props.editingRowId}
+                idKey={this.props.rowId ? this.props.rowId.toString() : 'noRowId'}
+                rowId={this.props.editingRowId}
                 isValid={this.props.isEditingRowValid}
                 isSaving={this.props.isEditingRowSaving}
                 rowEditErrors={this.props.editingRowErrors}
@@ -71,7 +71,7 @@ const RowActions = React.createClass({
 
         // Display an empty div instead of row actions when inline edit is open
         // or the current row is new and does not yet have an id
-        if (this.props.isInlineEditOpen || !this.props.recordId) {
+        if (this.props.isInlineEditOpen || !this.props.rowId) {
             return <div className="emptyRowActions"></div>;
         }
 
@@ -81,7 +81,7 @@ const RowActions = React.createClass({
                     className={SELECT_ROW_CHECKBOX}
                     type="checkbox"
                     checked={this.props.isSelected}
-                    onChange={this.props.onClickToggleSelectedRow(this.props.recordId)}
+                    onChange={this.props.onClickToggleSelectedRow(this.props.rowId)}
                 />
                 {this.getViewRowActionComponent()}
             </span>
