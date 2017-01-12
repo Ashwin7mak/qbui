@@ -123,13 +123,13 @@ $edit-icon-font-size: 18px;
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        background-color: #f3f8fe;
-        box-shadow: -6px 0px 14px #dcdcdc;
+        background-color: $qbgrid-cell-edit-background-color;
+        box-shadow: -6px 0px 14px $qbgrid-row-box-shadow-color;
         position: absolute;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid #dddddd;
+        border: 1px solid $qbgrid-row-border-color;
 
         .loadedContent {
             padding: 0;
@@ -148,7 +148,7 @@ $edit-icon-font-size: 18px;
         button {
             flex: 0 0 auto;
             border: 0;
-            background-color: $cell-edit-background-edit;
+            background-color: $qbgrid-cell-edit-background-color;
             margin-right: 2px;
             padding: 6px 4px;
 
@@ -284,15 +284,15 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid .editing {
-    box-shadow: 0 0px 14px #dcdcdc;
+    box-shadow: 0 10px 0 0 $qbgrid-cell-edit-background-color, 0 -10px 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
     margin-top: -15px;
     z-index: 999;
-    background-color: $cell-edit-background-edit;
+    background-color: $qbgrid-cell-edit-background-color;
     border-top: $cell-edit-background-edit;
 
     > td:first-child {
         padding-left: 4px;
-        border-left: 1px solid $row-border-color;
+        border-left: 1px solid $qbgrid-row-border-color;
     }
 
     > td {
