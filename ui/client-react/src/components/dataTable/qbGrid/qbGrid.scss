@@ -476,11 +476,9 @@ $edit-icon-font-size: 18px;
     border-radius: 0;
     color: $font-color;
 }
-
+//The style here is for sticky column
 .qbGrid > tbody > tr > td:first-of-type {
     height: 32px;
-    background: white;
-    //position: fixed;
-    //left: 0;
+    background: $row-bg-color;
     z-index: 9999;
 }

@@ -217,6 +217,7 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
     handleScroll(ev) {
+        console.log('querySelectorAll: ', document.querySelectorAll('#stickyCell'));
         let stickyCell = document.getElementsByClassName('stickyCell');
         let currentLeftScroll = document.getElementsByClassName('reportContent')[0].scrollLeft;
         for(var i = 0; i < stickyCell.length; i++) {
