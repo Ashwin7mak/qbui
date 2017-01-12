@@ -24,6 +24,11 @@ $edit-icon-font-size: 18px;
 .qbGrid {
     //margin: 2px;
 
+    .qbIcon {
+        font-size: $grid-group-expand-icon-size;
+        width: $grid-group-expand-icon-size;
+    }
+
     .cellEditIcon {
         display: none;
         color: $ghost-text-color;
@@ -72,16 +77,35 @@ $edit-icon-font-size: 18px;
         text-align: right;
     }
 
-    .gridHeaderCell {
-        display: block;
-    }
-
-    .gridHeaderCell.AlignRight, .gridCell.AlignRight {
-        text-align: right;
-    }
-
-    .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
+    .AlignCenter {
         text-align: center;
+    }
+
+    .gridHeaderCell {
+        display: flex;
+
+        .gridHeaderLabel {
+            flex-grow: 1;
+            padding-right: 4px;
+        }
+
+        .headerMenu {
+            flex-grow: 0;
+
+            button {
+                padding: 0;
+                margin: 0;
+                border: 0;
+                background: inherit;
+                width: $grid-group-expand-icon-size;
+                height: $grid-group-expand-icon-size;
+                opacity: 0.2;
+            }
+        }
+
+        &:hover .headerMenu .dropdownToggle {
+            opacity: 1;
+        }
     }
 
     .cellWrapper {
@@ -203,35 +227,9 @@ $edit-icon-font-size: 18px;
     border-bottom: 2px solid $badcolor1-color6;
     padding: $grid-default-cell-padding;
     color: $color-blue-600;
-    font-size: 12px;
-    font-weight: bold;
     -webkit-font-smoothing: antialiased;
     border-color: $color-blue-400;
     background-color: $color-blue-300;
-
-    .headerCell {
-        display: flex;
-        justify-content: space-between;
-
-        .dropdown-menu {
-            font-size: 12px;
-        }
-
-        .qbIcon.iconTableUISturdy-check {
-            color: $color-green-600;
-        }
-
-        .dropdownToggle {
-            opacity: 0.2;
-            padding: 0;
-            border: 0;
-            background-color: inherit;
-        }
-
-        &:hover .dropdownToggle {
-            opacity: 1;
-        }
-    }
 }
 
 .qbGrid .actionsCol {

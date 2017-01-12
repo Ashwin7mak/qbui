@@ -31,15 +31,17 @@ class ColumnTransformer {
         let fieldId = data.id;
         let headerLabel = data.headerName;
         let headerClasses = FieldUtils.getColumnHeaderClasses(data.fieldDef);
+        let headerLabelClasses = FieldUtils.getColumnHeaderLabelClasses();
 
-        return new ColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses);
+        return new ColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses, headerLabelClasses);
     }
 
-    constructor(fieldId, fieldDef, headerLabel, headerClasses) {
+    constructor(fieldId, fieldDef, headerLabel, headerClasses, headerLabelClasses) {
         this.fieldId = fieldId;
         this.fieldDef = fieldDef;
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
+        this.headerLabelClasses = headerLabelClasses;
         this.formatter = null;
         this.headerMenuComponent = null;
         this.headerMenuProps = null;
@@ -77,7 +79,7 @@ class ColumnTransformer {
      * @returns {{property: *, header: {label: XML}}}
      */
     getGridHeader() {
-        let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
+        let headerComponent = <span className={this.headerClasses}><span className={this.headerLabelClasses}>{this.headerLabel}</span></span>;
 
         if (this.headerMenuComponent) {
             // Need to do this transformation so that the variable can be recognized in JSX as a component
@@ -85,7 +87,9 @@ class ColumnTransformer {
 
             headerComponent = (
                 <span className={this.headerClasses}>
-                    {this.headerLabel}
+                    <span className={this.headerLabelClasses}>
+                        {this.headerLabel}
+                    </span>
                     <div className="headerMenu">
                         <MenuComponent fieldDef={this.fieldDef} {...this.headerMenuProps} />
                     </div>
