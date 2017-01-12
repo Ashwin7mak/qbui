@@ -65,7 +65,7 @@ const ReportCell = React.createClass({
             return <td {...this.props} />;
         }
 
-        let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(uiFieldType, fieldDef)];
+        let classes = ['cellWrapper', FieldUtils.getFieldSpecificCellClass(uiFieldType, fieldDef), ...FieldUtils.getCellAlignmentClassesForFieldType(fieldDef)];
 
         // We set this here so that cells that are not editable (e.g., Record Id) can still get some visual treatment
         // when the row is in editing mode
