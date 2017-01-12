@@ -27,11 +27,14 @@ import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
+import * as ShellActions from '../../actions/shellActions';
+import * as FormActions from '../../actions/formActions';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore', 'FormStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -46,7 +49,6 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            form: flux.store('FormStore').getState(),
             reportSearchData: flux.store('ReportDataSearchStore').getState(),
         };
     },
@@ -80,8 +82,16 @@ export let Nav = React.createClass({
                 flux.actions.toggleLeftNav(false);
             }, 0);
         }
-        flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
+
+        this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+    },
+
+    /**
+     * hide the trowser
+     */
+    hideTrowser() {
+        this.props.dispatch(ShellActions.hideTrowser());
     },
 
     getSelectedApp() {
@@ -134,6 +144,10 @@ export let Nav = React.createClass({
         }
     },
 
+    getEditFormFromProps() {
+        return _.has(this.props, "qbui.forms") && _.find(this.props.qbui.forms, form => form.id === "edit");
+    },
+
     /**
      * open existing or new record in trowser if editRec param exists
      */
@@ -143,21 +157,17 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
+        const editData = this.getEditFormFromProps();
+
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
+            (!editData || !editData.loading) &&
+            (!this.props.qbui.shell.trowserOpen || oldRecId !== editRec)) {
 
+            this.props.dispatch(FormActions.loadForm(appId, tblId, rptId, "edit", editRec)).then(() => {
+                this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
+            });
 
-            const flux = this.getFlux();
-
-            if (editRec === UrlConsts.NEW_RECORD_VALUE) {
-                flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
-                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
-                });
-            } else {
-                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
-                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
-                });
-            }
         }
     },
 
@@ -165,8 +175,10 @@ export let Nav = React.createClass({
 
         // component updated, update the record trowser content if necessary
         // temporary solution to prevent UI getting in an endless loop state (MB-1369)
-        const {editFormErrorStatus, editFormLoading, errorStatus} = this.state.form;
-        if (!editFormLoading) {
+
+        const editData = this.getEditFormFromProps();
+
+        if (!editData || !editData.loading) {
             this.updateRecordTrowser(prevProps.location.query.editRec);
         }
     },
@@ -176,7 +188,6 @@ export let Nav = React.createClass({
     },
 
     render() {
-
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             return null;
@@ -213,25 +224,28 @@ export let Nav = React.createClass({
             <AppQbModal/>
 
             {this.props.params && this.props.params.appId &&
-                <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                <RecordTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
-                               form={this.state.form}
+                               editForm={this.getEditFormFromProps()}
                                appId={this.props.params.appId}
                                tblId={this.props.params.tblId}
                                recId={editRecordId}
+                               viewingRecordId={viewingRecordId}
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable()}
                                reportData={this.state.reportData}
-                               errorPopupHidden={this.state.nav.errorPopupHidden}/>
+                               errorPopupHidden={this.state.nav.errorPopupHidden}
+                               onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
-                <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable()}
                                       filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={this.state.reportsData}/>
+                                      reportsData={this.state.reportsData}
+                                      onHideTrowser={this.hideTrowser}/>
             }
 
             <LeftNav
@@ -269,7 +283,7 @@ export let Nav = React.createClass({
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
-                            form: this.state.form,
+                            forms: this.props.qbui.forms,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),

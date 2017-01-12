@@ -27,14 +27,12 @@ describe('ReportManagerTrowser functions', () => {
         ReportManagerTrowser.__Rewire__('ReportManager', ReportManagerMock);
 
         spyOn(flux.actions, 'filterReportsByName');
-        spyOn(flux.actions, 'hideTrowser');
     });
 
     afterEach(() => {
         ReportManagerTrowser.__ResetDependency__('ReportManager');
 
         flux.actions.filterReportsByName.calls.reset();
-        flux.actions.hideTrowser.calls.reset();
     });
 
     it('test render of loading component', () => {
@@ -51,14 +49,13 @@ describe('ReportManagerTrowser functions', () => {
 
     it('test cancelling the report manager trowser', () => {
 
-        component = TestUtils.renderIntoDocument(<ReportManagerTrowser flux={flux} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<ReportManagerTrowser flux={flux} visible={true} onHideTrowser={()=>{}}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const closeIcon = TestUtils.findRenderedDOMComponentWithClass(component, "iconTableUISturdy-close");
         TestUtils.Simulate.click(closeIcon);
 
-        expect(flux.actions.hideTrowser).toHaveBeenCalled();
         expect(flux.actions.filterReportsByName).toHaveBeenCalledWith("");
     });
 });

@@ -16,6 +16,13 @@ let Record = React.createClass({
             this.handleEditRecordStart(this.props.recId);
         }
     },
+
+    componentDidMount() {
+        if (_.has(this.props, 'pendEdits.recordEditOpen') && _.isEmpty(this.props.pendEdits.recordChanges) && this.props.pendEdits.recordEditOpen !== false) {
+            this.handleEditRecordStart(this.props.recId);
+        }
+    },
+
     /**
      * Get the record as {fids, names}
      * fids is a fid lookup hash looks like {6: {id:6, value: <val>, display: <display>}}
