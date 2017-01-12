@@ -56,7 +56,7 @@ $urlIcon-margin-left: 10px;
     }
 
     a .link:focus:not(:active), a .urlIcon:focus:not(:active) {
-        background-color: $stage-backgroundColor;
+        background-color: $stage-background-color;
         outline: none;
         padding: 1px 3px;
 
@@ -115,11 +115,11 @@ $urlIcon-margin-left: 10px;
             @include focus-shadow();
             @include urlButtonBackgroundFocusGradient();
             color: $link-normal-color;
-            border: 1px solid $urlButton-border-focus-color;
+            border: 1px solid $urlbutton-border-focus-color;
         }
 
         &.btn-default:hover {
-            background: $urlButton-background-hover-color;
+            background: $urlbutton-background-hover-color;
             color: $link-normal-color;
             text-decoration: none;
         }
@@ -131,7 +131,7 @@ $urlIcon-margin-left: 10px;
     }
 
     .disabled {
-        color: $text-color;
+        color: $default-text-onlight-color;
     }
 
     .urlIcon {

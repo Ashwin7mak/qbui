@@ -3,6 +3,7 @@ import Select from '../select/reactSelectWrapper';
 import QbIcon from '../qbIcon/qbIcon';
 import Locale from '../../locales/locales';
 import * as userFormatter from '../../../../common/src/formatter/userFormatter';
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 import _ from 'lodash';
 import 'react-select/dist/react-select.min.css';
 import './userFieldValueEditor.scss';
@@ -50,8 +51,10 @@ const UserFieldValueEditor = React.createClass({
      * @returns {{selectedUserId: null}}
      */
     getInitialState() {
-
-        return {selectedUserId: this.props.value ? this.props.value.userId : null};
+        return {
+            selectedUserId: this.props.value ? this.props.value.userId : null,
+            inputValue: '',
+        };
     },
 
     /**
@@ -159,19 +162,29 @@ const UserFieldValueEditor = React.createClass({
     },
 
     /**
+     * Called when the user types text into the react-select input.
+     * @param {String} newInputValue value of the react-select input
+     */
+    onInputChange(newInputValue) {
+        this.setState({inputValue: newInputValue});
+    },
+
+    /**
      * user picker wrapper on react-select component
      */
     render() {
-        let classes = "cellEdit userFormat borderOnError";
+        let classes = "cellEdit userFormat";
 
         // error state css class
         if (this.props.invalid) {
-            classes += ' error';
+            classes += ' ' + ERROR_CSS_CLASSES;
         }
 
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        // this text is displayed in the dropdown when there are no users that matches a search
+        const noResultsText = `${Locale.getMessage("field.searchNoMatch")} "${this.state.inputValue}"`;
         return (
             <Select
                 className={classes}
@@ -181,8 +194,9 @@ const UserFieldValueEditor = React.createClass({
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
                 onChange={this.selectUser}
+                onInputChange={this.onInputChange}
                 placeholder={Locale.getMessage("field.search")}
-                noResultsText={Locale.getMessage("field.searchNoMatch")}
+                noResultsText={noResultsText}
                 autosize={false}
                 clearable={false}
                 onBlur={this.onBlur} />

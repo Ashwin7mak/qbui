@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 import TextFieldValueEditor  from '../../src/components/fields/textFieldValueEditor';
+import {ERROR_CSS_CLASSES} from '../../src/constants/componentConstants';
 
 describe('TextFieldValueEditor functions', () => {
     'use strict';
 
     let component;
-
 
     it('test render of TextFieldValueEditor component', () => {
         component = TestUtils.renderIntoDocument(<TextFieldValueEditor/>);
@@ -147,6 +147,24 @@ describe('TextFieldValueEditor', () => {
 
         // Expect the onChange to be sent with a new value of blank string
         expect(mockParent.onChange).toHaveBeenCalledWith('');
+    });
+
+    it('adds classes for displaying an invalid state when invalid is true', () => {
+        let component = TestUtils.renderIntoDocument(<TextFieldValueEditor invalid={true} />);
+        let inputBox = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+
+        ERROR_CSS_CLASSES.forEach(errorClass => {
+            expect(inputBox.classList.contains(errorClass)).toEqual(true);
+        });
+    });
+
+    it('disables validation error classes when showInvalidState is set to false', () => {
+        let component = TestUtils.renderIntoDocument(<TextFieldValueEditor invalid={true} showInvalidState={false} />);
+        let inputBox = TestUtils.findRenderedDOMComponentWithTag(component, 'input');
+
+        ERROR_CSS_CLASSES.forEach(errorClass => {
+            expect(inputBox.classList.contains(errorClass)).toEqual(false);
+        });
     });
 
     let inputValueTestCases = [

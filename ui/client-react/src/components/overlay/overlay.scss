@@ -5,7 +5,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    color: $icon-color;
+    color: $iconfont-on-light-normal-color;
 
     .btn.btn-default.action {
         cursor: pointer;
@@ -30,7 +30,7 @@
     .btn.btn-default {
         border: none;
         padding: 0;
-        color: $icon-color;
+        color: $iconfont-on-light-normal-color;
     }
 
     .btn.btn-default:hover {

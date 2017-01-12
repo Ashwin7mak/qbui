@@ -93,7 +93,7 @@ export default {
         },
         field: {
             search: "Search",
-            searchNoMatch: "No users found"
+            searchNoMatch: "Nobody matches"
         },
         grid: {
             no_data: "There is no data to display."
@@ -178,6 +178,28 @@ export default {
             Minutes: "{value, plural, \n =0 {0 minutes}\n =1 {1 minute}\n other {{value}  minutes}\n} ",
             Seconds: "{value, plural, \n =0 {0 seconds}\n =1 {1 second}\n other {{value}  seconds}\n} ",
             Milliseconds: "{value, plural, \n =0 {0 milliseconds}\n =1 {1 millisecond}\n other {{value}  milliseconds}\n} "
+        },
+        acceptedDurationType: {
+            Weeks: 'weeks',
+            Week: 'week',
+            W: 'w',
+            Days: 'days',
+            Day: 'day',
+            D: 'd',
+            Hours: 'hours',
+            Hour: 'hour',
+            H: 'h',
+            Minutes: 'minutes',
+            Minute: 'minute',
+            M: 'm',
+            Seconds: 'seconds',
+            Second: 'second',
+            S: 's',
+            Milliseconds: 'milliseconds',
+            Millisecond: 'millisecond',
+            MS: 'ms',
+            Secs: 'secs',
+            Msecs: 'msecs'
         },
         durationTableHeader: {
             Weeks:"weeks",
@@ -400,7 +422,15 @@ export default {
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
             phone: "Format the {fieldName} like (xxx) xxx-xxxx",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
-            duration: "Format the {fieldName} in {scale}"
+            duration: {
+                timeFormat: "Format the {fieldName} in {value}",
+                Weeks: 'Format the {fieldName} in weeks',
+                Days: 'Format the {fieldName} in days',
+                Hours: 'Format the {fieldName} in hours',
+                Minutes: 'Format the {fieldName} in minutes',
+                Seconds: 'Format the {fieldName} in seconds',
+                Milliseconds: 'Format the {fieldName} in milliseconds',
+            }
         },
         createInQuickBaseClassicMessage: {
         },

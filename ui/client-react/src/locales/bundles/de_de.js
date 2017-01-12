@@ -90,7 +90,7 @@ export default {
         },
         field: {
             search: "Suche",
-            searchNoMatch: "Keine Benutzer gefunden"
+            searchNoMatch: "Keiner stimmt mit"
         },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."
@@ -168,20 +168,43 @@ export default {
             }
         },
         durationWithUnits: {
-            Weeks:"{value, plural, \n =0 {0 wochen}\n =1 {1 woche}\n other {{value} wochen}\n} ",
-            Days:"{value, plural, \n =0 {0 tage}\n =1 {1 tag}\n other {{value}  tage}\n} ",
-            Hours:"{value, plural, \n =0 {0 stunden}\n =1 {1 stunde}\n other {{value}  stunden}\n} ",
-            Minutes: "{value, plural, \n =0 {0 minuten}\n =1 {1 minute}\n other {{value}  minuten}\n} ",
-            Seconds: "{value, plural, \n =0 {0 sekunden}\n =1 {1 sekunde}\n other {{value}  sekunden}\n} ",
-            Milliseconds: "{value, plural, \n =0 {0 millisekunden}\n =1 {1 millisekunde}\n other {{value}  millisekunden}\n} "
+            Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
+            Days:"{value, plural, \n =0 {0 Tage}\n =1 {1 Tag}\n other {{value} Tage}\n} ",
+            Hours:"{value, plural, \n =0 {0 Stunden}\n =1 {1 Stunde}\n other {{value} Stunden}\n} ",
+            Minutes: "{value, plural, \n =0 {0 Minuten}\n =1 {1 Minute}\n other {{value} Minuten}\n} ",
+            Seconds: "{value, plural, \n =0 {0 Sekunden}\n =1 {1 Sekunde}\n other {{value} Sekunden}\n} ",
+            Milliseconds: "{value, plural, \n =0 {0 Millisekunden}\n =1 {1 Millisekunde}\n other {{value} Millisekunden}\n} "
+        },
+        acceptedDurationType: {
+            Weeks: 'Wochen',
+            Week: 'Woche',
+            W: 'W',
+            Days: 'Tage',
+            Day: 'Tag',
+            D: 'T',
+            Hours: 'Stunden',
+            Hour: 'Stunde',
+            H: 'S',
+            Minutes: 'Minuten',
+            Minute: 'Minute',
+            M: 'M',
+            Seconds: 'Sekunden',
+            Second: 'Zweite',
+            S: 'Z',
+            Milliseconds: 'Millisekunden',
+            Millisecond: 'Millisekunde',
+            MS: 'MS',
+            Secs: 'Seks',
+            Msecs: 'Mseks'
         },
         durationTableHeader: {
-            Weeks:"wochen",
-            Days:"tage",
-            Hours:"stunden",
-            Minutes: "minuten",
-            Seconds: "sekunden"
-        },        report : {
+            Weeks: "Wochen",
+            Days: "Tage",
+            Hours: "Stunden",
+            Minutes: "Minuten",
+            Seconds: "Sekunden"
+        },
+        report : {
             blank : "leer",
             facets :{
                 noFacets :"Nein werte",
@@ -395,7 +418,15 @@ export default {
             choiceMaxLength : "Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger",
             phone: "Formatieren Sie die {fieldName} +x x xx xx xx xx",
             phoneInvalidCountryCode: "Formatieren Sie den Ländercode wie +x für internationale Nummern",
-            duration: "Formatieren Sie die {fieldName} im {scale}"
+            duration: {
+                timeFormat: "Formatieren Sie die {fieldName} im {value}",
+                Weeks: 'Formatieren Sie die {fieldName} im Wochen',
+                Days: 'Formatieren Sie die {fieldName} im Tage',
+                Hours: 'Formatieren Sie die {fieldName} im Stunden',
+                Minutes: 'Formatieren Sie die {fieldName} im Minuten',
+                Seconds: 'Formatieren Sie die {fieldName} im Sekunden',
+                Milliseconds: 'Formatieren Sie die {fieldName} im Millisekunden',
+            }
         },
         noneOption: "\<Keiner\>",
         unimplemented: {

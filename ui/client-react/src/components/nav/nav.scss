@@ -60,7 +60,7 @@ html body {
             display: flex;
             order: 1;
             flex-direction: column;
-            background-color: $header-bg;
+            background-color: $topnav-header-background-color;
 
             > .top {
                 display: flex;
@@ -157,8 +157,8 @@ html body {
 }
 
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
-    color: $color-black-100;
-    background: $nav-hover-bg;
+    color: $topnav-hover-color;
+    background: $topnav-hover-background-color;
 }
 
 @include small-breakpoint {

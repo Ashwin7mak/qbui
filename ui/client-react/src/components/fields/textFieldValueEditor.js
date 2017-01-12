@@ -2,8 +2,10 @@ import React from 'react';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QBicon from '../qbIcon/qbIcon';
+import clearableInput from '../hoc/clearableInput';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
+import {ERROR_CSS_CLASSES} from '../../constants/componentConstants';
 
 /**
  * # TextFieldValueEditor
@@ -11,6 +13,26 @@ import FieldUtils from '../../utils/fieldUtils';
  * An editable rendering of a single line text field as an input box. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
+const TextInput = React.createClass({
+    render() {
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
+        let value = '';
+        if (this.props.value || this.props.value === 0) {
+            value = this.props.value;
+        }
+        return (<input
+                       className={this.props.classes}
+                       value={value}
+                       maxLength={maxLength}
+                       type={this.props.inputType}
+                       key={'inp' + this.props.idKey}
+                       placeholder={this.props.placeholder}
+                       onChange={this.props.onChange}
+                       onBlur={this.props.onBlur}
+                 />);
+    }
+});
+const ClearableTextInput = clearableInput(TextInput);
 
 const TextFieldValueEditor = React.createClass({
     displayName: 'TextFieldValueEditor',
@@ -56,14 +78,25 @@ const TextFieldValueEditor = React.createClass({
 
         /**
         * Set the input type to either text, email, or url to allow better mobile keyboards */
-        inputType: React.PropTypes.oneOf(['text', 'email', 'url', 'tel'])
+        inputType: React.PropTypes.oneOf(['text', 'email', 'url', 'tel']),
+
+        /**
+         * Add classes to show invalid state when invalid is true. Important property for correctly displaying phone fields correctly */
+        showInvalidState: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             inputType: 'text',
             isInvalid: false,
-            showClearButton: false
+            showClearButton: false,
+            showInvalidState: true
+        };
+    },
+
+    getInitialState() {
+        return {
+            isFocused: false,
         };
     },
 
@@ -71,41 +104,6 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
         }
-    },
-
-    clearInput(ev) {
-        if (this.props.onChange) {
-            this.props.onChange('');
-            this.refs.textInput.focus();
-        }
-    },
-
-    renderInputBox(classes) {
-        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
-
-        // use the raw value as the input value, not the formatted display value that may include escaped content
-        return <input ref="textInput"
-                      className={classes}
-                      value={this.props.value}
-                      maxLength={maxLength}
-                      type={this.props.inputType}
-                      key={'inp' + this.props.idKey}
-                      placeholder={this.props.placeholder}
-                      onChange={this.onChange}
-                      onBlur={this.onBlur} />;
-    },
-
-    addClearButtonTo(inputBox) {
-        return (
-            <span className="inputDeleteIcon">
-                {inputBox}
-                <div className="clearIcon">
-                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
-                        <QBicon onClick={this.clearInput} icon="clear-mini" />
-                    </QBToolTip>
-                </div>
-            </span>
-        );
     },
 
     //send up the chain an object with value and formatted display value
@@ -126,21 +124,21 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField borderOnError';
+        let classNames = ['input', 'textField'];
         // error state css class
-        if (this.props.invalid) {
-            classes += ' error';
+        if (this.props.invalid && this.props.showInvalidState) {
+            classNames = [...classNames, ...ERROR_CSS_CLASSES];
         }
-        if (this.props.classes) {
-            classes += ' ' + this.props.classes;
-        }
-        let inputBox = this.renderInputBox(classes);
+        classNames.push(this.props.classes || '');
 
-        if (this.props.showClearButton) {
-            return this.addClearButtonTo(inputBox);
-        } else {
-            return inputBox;
-        }
+        let Input = this.props.showClearButton ? ClearableTextInput : TextInput;
+        // use the raw value as the input value, not the formatted display value that may include escaped content
+        return (<Input
+                    {...this.props}
+                    classes={classNames.join(' ')}
+                    onChange={this.onChange}
+                    onBlur={this.onBlur}
+                />);
     }
 });
 

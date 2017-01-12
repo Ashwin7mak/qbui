@@ -3,7 +3,6 @@ $margin-spacer: 10px;
 $grid-default-cell-padding: 10px;
 $grid-group-expand-icon-size: 18px;
 $grid-default-group-padding: 0px;
-$table-actions-container-bg: $color-black-100;
 
 // this is the space on the left that is saved for the checkbox
 // the whole container translates on X axis by this many pixels on swipe left
@@ -40,7 +39,7 @@ $checkbox-width: $card-view-checkbox-width;
         line-height: 30px;
         font-weight: 600;
         font-size: 14px;
-        background-color: $grid-group-row-header-bkgrd-color;
+        background-color: $grid-group-row-header-background-color;
 
         > span {
             display: inline-block;
@@ -159,10 +158,10 @@ $checkbox-width: $card-view-checkbox-width;
     position: relative;
 
     @include small-breakpoint {
-        background-color: $table-actions-container-bg;
+        background-color: $card-view-table-actions-container-background-color;
 
         &:not(.selectionActionsOpen) {
-            background-color: $secondary-bar-bg;
+            background-color: $secondary-bar-background-color;
         }
     }
 }

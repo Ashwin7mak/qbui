@@ -499,13 +499,28 @@ module.exports = function(grunt) {
             }
         },
 
+        //TODO: Figure out how to define multiple webdriver tasks
+        webdriver: {
+            options: {
+                specs: [
+                    './wdio/tests/forms/*.e2e.spec.js',
+                    './wdio/tests/reports/*.e2e.spec.js'
+                ]
+            },
+            test: {
+                configFile: './wdio/config/wdioSauce.conf.js'
+            }
+        },
+
+
         env: {
             test : {
                 NODE_ENV                    : 'test',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey
+                SAUCE_KEY                   : sauceKey,
+                SAUCE_DOMAIN                : testJsConfig.DOMAIN
             },
             e2e  : {
                 NODE_ENV                    : 'e2e',
@@ -893,6 +908,15 @@ module.exports = function(grunt) {
             ]);
         }
 
+        // Run your webdriverIO tests via Sauce Labs against a local stack in the CI env
+        // Currently used for e2e-webdriverIO try job
+        if (target === 'e2eWebdriver') {
+            return grunt.task.run([
+                'env:test',
+                'webdriver'
+            ]);
+        }
+
         //  default task if no target specified
         return grunt.task.run([
             // run lint and coding standards tests
@@ -955,4 +979,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-sauce-connect-launcher');
+    grunt.loadNpmTasks('grunt-webdriver');
 };

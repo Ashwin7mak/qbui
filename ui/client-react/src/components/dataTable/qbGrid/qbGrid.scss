@@ -1,11 +1,4 @@
 @import '../../../../src/assets/css/qbVariables';
-$row-background-color-hover: $color-blue-200;
-$row-cell-border-color: $color-black-300;
-$row-bg-color: $color-black-100;
-$row-non-editable-bg-color: $color-black-200;
-$row-border-color: $color-black-300;
-$row-box-shadow-color: $color-black-300;
-$cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
 
 .qbGrid > thead, .qbGrid > tbody {
@@ -117,17 +110,17 @@ $grid-font-size: $font-size-p;
 .qbGrid > tbody > tr.editing {
     > td:first-child {
         padding-left: 4px;
-        border-left: 1px solid $row-border-color;
+        border-left: 1px solid $qbgrid-row-border-color;
         position: relative;
     }
 
     > td {
         box-shadow: 4px -4px 8px $color-black-300;
-        background-color: $cell-edit-background-edit;
+        background-color: $qbgrid-cell-edit-background-color;
         overflow: visible;
         padding: 0;
         margin: 0;
-        border-right: 1px solid $row-border-color;
+        border-right: 1px solid $qbgrid-row-border-color;
         vertical-align: middle;
         padding-bottom: 14px;
 
@@ -161,14 +154,14 @@ $grid-font-size: $font-size-p;
 
             .cellEdit {
                 display: inline-block;
-                border: 1px solid $row-border-color;
-                background: $row-bg-color;
+                border: 1px solid $qbgrid-row-border-color;
+                background: $qbgrid-row-bg-color;
                 flex: 1 1 auto;
                 padding: 0 0 0 2px;
                 margin-right: 2px;
 
                 &.nonEditable {
-                    background-color: $row-non-editable-bg-color;
+                    background-color: $qbgrid-row-noneditable-background-color;
                     cursor: not-allowed;
                     padding-right: 4px;
                 }
@@ -189,7 +182,7 @@ $grid-font-size: $font-size-p;
                         height: 21px;
                         padding: 0;
                         border: 0;
-                        color: $icon-color;
+                        color: $iconfont-on-light-normal-color;
                     }
                 }
 
@@ -233,19 +226,19 @@ $grid-font-size: $font-size-p;
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        background-color: $cell-edit-background-edit;
-        box-shadow: -2px 2px 8px $row-box-shadow-color;
+        background-color: $qbgrid-cell-edit-background-color;
+        box-shadow: -2px 2px 8px $qbgrid-row-box-shadow-color;
         position: absolute;
         top: -26px;
         left: -1px;
         width: 80px;
-        border-left: 1px solid $row-border-color;
-        border-bottom: 1px solid $row-border-color;
+        border-left: 1px solid $qbgrid-row-border-color;
+        border-bottom: 1px solid $qbgrid-row-border-color;
 
         button {
             flex: 0 0 auto;
             border: 0;
-            background-color: $cell-edit-background-edit;
+            background-color: $qbgrid-cell-edit-background-color;
             margin-right: 2px;
             padding: 6px 4px;
 
@@ -266,7 +259,7 @@ $grid-font-size: $font-size-p;
             }
 
             .qbIcon.cancelSelection {
-                color: $icon-color;
+                color: $iconfont-on-light-normal-color;
             }
 
             .qbIcon.deleteRecord {
@@ -274,7 +267,7 @@ $grid-font-size: $font-size-p;
             }
 
             .qbIcon.addRecord {
-                color: $icon-color;
+                color: $iconfont-on-light-normal-color;
             }
         }
     }
@@ -299,19 +292,19 @@ $grid-font-size: $font-size-p;
             }
 
             .qbIcon.print {
-                background-color: $icon-print-color;
+                background-color: $print-icon-normal-color;
             }
 
             .qbIcon.email {
-                background-color: $icon-mail-color;
+                background-color: $mail-icon-normal-color;
             }
 
             .qbIcon.duplicate {
-                background-color: $icon-duplicate-color;
+                background-color: $copy-icon-normal-color;
             }
 
             .qbIcon.delete {
-                background-color: $icon-delete-color;
+                background-color: $delete-icon-normal-color;
             }
         }
     }
@@ -329,19 +322,19 @@ $grid-font-size: $font-size-p;
     }
 
     .qbIcon.print {
-        color: $icon-print-color;
+        color: $print-icon-normal-color;
     }
 
     .qbIcon.email {
-        color: $icon-mail-color;
+        color: $mail-icon-normal-color;
     }
 
     .qbIcon.duplicate {
-        color: $icon-duplicate-color;
+        color: $copy-icon-normal-color;
     }
 
     .qbIcon.delete {
-        color: $icon-delete-color;
+        color: $delete-icon-normal-color;
     }
 }
 

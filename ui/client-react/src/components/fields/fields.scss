@@ -17,7 +17,7 @@ $data-font-size: $font-size-p;
 
 // plain user data
 .data {
-    color: $data-color;
+    color: $field-user-data-color;
     font-family: $font-family;
     font-size: $data-font-size;
     -webkit-font-smoothing: antialiased;
@@ -158,7 +158,8 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 }
 
 .multiLineCellEditWrapper .cellEdit {
-    min-height: 28px;
+    min-height: 30px;
+    overflow: hidden;
 }
 
 .multiLineCellEditWrapper.error .tipChildWrapper, .multiLineCellEditWrapper.error .tipChildWrapper textarea {
@@ -187,25 +188,37 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 .inputDeleteIcon {
     position: relative;
     width: inherit;
+    display: flex;
 
     input {
-        transition: padding 0.3s ease-in-out;
+        height: 30px;
+    }
+    input, textarea {
+        width: 100%;
+        transition: padding 0.3s;
+        // need to remove the browser default styling on focused inputs
+        outline: none;
+        border: 1px solid $color-black-400;
+        border-radius: 2px;
     }
 
     .clearIcon {
+        display: none;
+        position: absolute;
         background-color: transparent;
-        color: $clearmini-normal-color;
+        color: $field-clearmini-icon-normal-color;
         max-height: 16px;
         max-width: 16px;
         opacity: 0;
-        position: absolute;
-        right: -3px;
-        top: 50%;
-        transform: translateY(-50%) rotate(130deg);
-        transition: opacity 0.2s linear, transform 0.3s ease-in-out, right 0.3s ease-in-out;
+        visibility: hidden;
+        right: -7px;
+        top: 7px;
+        margin-right: 4px;
+        transform: rotate(130deg);
+        transition: opacity 0.2s linear, transform 0.3s ease-in-out, right 0.3s ease-in-out, visibility 0.3s;
 
         &:hover {
-            color: $clearmini-hover-color;
+            color: $field-clearmini-icon-hover-color;
         }
 
         .qbIcon {
@@ -219,13 +232,24 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
     }
 
     @include small-breakpoint {
-        input:focus {
-            padding-right: 22px;
+        .editForm & {
+            .clearIcon {
+                display: inline;
+            }
 
-            & + .clearIcon {
-                opacity: 1;
-                right: 4px;
-                transform: translateY(-50%) rotate(0deg);
+            input:focus, textarea:focus {
+                padding-right: 22px;
+                border: solid 1px $color-indigo-800;
+                border-color: $color-indigo-800;
+                border-radius: 2px;
+                box-shadow: 0 0 2px 1.5px $field-input-shadow-color;
+
+                & + .clearIcon {
+                    opacity: 1;
+                    right: 0;
+                    transform: rotate(0deg);
+                    visibility: visible;
+                }
             }
         }
     }

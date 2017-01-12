@@ -86,11 +86,7 @@ describe('Nav functions', () => {
             return [];
         }
     });
-    let formStore = Fluxxor.createStore({
-        getState: function() {
-            return [];
-        }
-    });
+
     let reportDataSearchStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -103,7 +99,6 @@ describe('Nav functions', () => {
         ReportDataStore: new reportDataStore(),
         RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
-        FormStore : new formStore(),
         ReportDataSearchStore: new reportDataSearchStore()
     };
     let flux = new Fluxxor.Flux(stores);
@@ -183,7 +178,6 @@ describe('Nav functions', () => {
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithAdminApp = new Fluxxor.Flux(storesWithAdminApp);
@@ -200,7 +194,6 @@ describe('Nav functions', () => {
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithV3App = new Fluxxor.Flux(storesWithV3App);
@@ -217,7 +210,6 @@ describe('Nav functions', () => {
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithoutV3App = new Fluxxor.Flux(storesWithoutV3App);

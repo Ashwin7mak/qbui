@@ -17,7 +17,6 @@ let NavStore = Fluxxor.createStore({
             searchBarOpen: false,
             showTopNav: true,
             searching:false,
-            trowserOpen: false,
             isRowPopUpMenuOpen: false,
             trowserContent: TrowserConsts.TROWSER_EDIT_RECORD,
             topTitle: null,
@@ -31,8 +30,6 @@ let NavStore = Fluxxor.createStore({
         this.setLocaleBundle();
 
         this.bindActions(
-            actions.SHOW_TROWSER, this.onShowTrowser,
-            actions.HIDE_TROWSER, this.onHideTrowser,
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
             actions.TOGGLE_LEFT_NAV_VISIBLE, this.onToggleLeftNavVisible,
             actions.TOGGLE_LEFT_NAV_EXPANDED, this.onToggleLeftNavExpanded,
@@ -55,11 +52,6 @@ let NavStore = Fluxxor.createStore({
         this.setLocaleBundle();
         this.emit('change');
     },
-    onShowTrowser(content) {
-        this.state.trowserOpen = true;
-        this.state.trowserContent = content;
-        this.emit('change');
-    },
     onToggleRowPopUpMenu(isOpen) {
         //Originally if a user opens up one menu then opened up a second menu, the padding would be removed from the page, and the row menu pop up would be clipped
             //by keeping track of the count, makes sure padding remains at the bottom of the page, even if a user clicks on one menu and then clicks on a separate menu
@@ -73,10 +65,6 @@ let NavStore = Fluxxor.createStore({
     },
     resetRowMenu() {
         this.state.openCount = 0;
-    },
-    onHideTrowser() {
-        this.state.trowserOpen = false;
-        this.emit('change');
     },
     onSetTopTitle(title) {
         this.state.topTitle = title;
