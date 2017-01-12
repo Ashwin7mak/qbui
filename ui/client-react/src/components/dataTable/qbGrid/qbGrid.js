@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
@@ -226,6 +227,7 @@ const QbGrid = React.createClass({
                         scope: 'col'
                     },
                     label: this.getCheckboxHeader(),
+                    transforms: [this.getActionCellProps],
                 },
                 cell: {
                     formatters: [this.getActionsCell],
@@ -242,6 +244,9 @@ const QbGrid = React.createClass({
                     className="qbGrid"
                     columns={columns}
                     components={{
+                        header: {
+                            cell: QbHeaderCell
+                        },
                         body: {
                             row: QbRow,
                             cell: QbCell
