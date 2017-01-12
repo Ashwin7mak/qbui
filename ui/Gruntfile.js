@@ -499,10 +499,13 @@ module.exports = function(grunt) {
             }
         },
 
-       //TODO: Figure out how to define multiple webdriver tasks
+        //TODO: Figure out how to define multiple webdriver tasks
         webdriver: {
             options: {
-                specs: './wdio/tests/reportAddRecord.e2e.spec.js'
+                specs: [
+                    './wdio/tests/forms/*.e2e.spec.js',
+                    './wdio/tests/reports/*.e2e.spec.js'
+                ]
             },
             test: {
                 configFile: './wdio/config/wdioSauce.conf.js'

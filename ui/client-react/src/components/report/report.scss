@@ -17,7 +17,7 @@
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
-    background-color: $report-backgroundColor;
+    background-color: $report-background-color;
 
     .reportLinks {
         margin: 0 10px;
@@ -56,7 +56,7 @@
         @include small-breakpoint {
             padding-top: 0; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
-                background-color: $secondary-bar-bg;
+                background-color: $secondary-bar-background-color;
             }
         }
     }
@@ -259,7 +259,7 @@
     color: $iconfont-on-light-normal-color;
 
     @include small-breakpoint {
-        color: $secondary-bar-fg;
+        color: $secondary-bar-color;
     }
 
     .sortButton {
@@ -346,7 +346,7 @@ $add-record-radius: 20px;
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        color: $secondary-bar-fg;
+        color: $secondary-bar-color;
         justify-content: space-between;
 
         .popover-content {

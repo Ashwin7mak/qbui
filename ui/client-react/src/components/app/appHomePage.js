@@ -3,6 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {NotificationManager} from 'react-notifications';
 import UrlUtils from '../../utils/urlUtils';
+import {WALKME_ID_FOR_LARGE} from '../../constants/urlConstants';
 import * as CompConsts from '../../constants/componentConstants';
 
 import LaunchTourImg from './Launch-tour.png';
@@ -23,19 +24,6 @@ const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickB
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
 /**
- * Scripts for Wistia video popover
- * These script tags are only relevant to this homepage
- * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
- */
-const wistiaScriptPart1 = document.createElement("script");
-wistiaScriptPart1.src = "//fast.wistia.com/embed/medias/zl4za7cf5e.jsonp";
-wistiaScriptPart1.async = true;
-
-const wistiaScriptPart2 = document.createElement("script");
-wistiaScriptPart2.src = "//fast.wistia.com/assets/external/E-v1.js";
-wistiaScriptPart2.async = true;
-
-/**
  * App Home page (displays when no app or table is selected)
  */
 const AppHomePage = React.createClass({
@@ -45,24 +33,12 @@ const AppHomePage = React.createClass({
 
     launchGuideMe() {
         try {
-            WalkMeAPI.startWalkthruById(228348);
+            WalkMeAPI.startWalkthruById(WALKME_ID_FOR_LARGE);
         } catch (err) {
             NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
     },
-    componentWillMount() {
 
-        if (!this.context.touch) {
-            document.body.appendChild(wistiaScriptPart1);
-            document.body.appendChild(wistiaScriptPart2);
-        }
-    },
-    componentWillUnmount() {
-        if (!this.context.touch) {
-            document.body.removeChild(wistiaScriptPart1);
-            document.body.removeChild(wistiaScriptPart2);
-        }
-    },
     render() {
         return (
             <div className="appHomePage">

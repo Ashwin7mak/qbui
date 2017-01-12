@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportToolsAndContent  from '../../src/components/report/reportToolsAndContent';
+import {ReportToolsAndContent, __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 
 describe('ReportToolsAndContent functions', () => {
@@ -56,7 +56,7 @@ describe('ReportToolsAndContent functions', () => {
     });
 
     beforeEach(() => {
-        ReportToolsAndContent.__Rewire__('ReportContent', ReportContentMock);
+        ReportToolsAndContentRewireAPI.__Rewire__('ReportContent', ReportContentMock);
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadReport');
         spyOn(flux.actions, 'loadFields');
@@ -69,7 +69,7 @@ describe('ReportToolsAndContent functions', () => {
     });
 
     afterEach(() => {
-        ReportToolsAndContent.__ResetDependency__('ReportContent');
+        ReportToolsAndContentRewireAPI.__ResetDependency__('ReportContent');
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadReport.calls.reset();
         flux.actions.loadFields.calls.reset();

@@ -20,6 +20,12 @@
         SMALL_BP_WIDTH : 500,
         DEFAULT_HEIGHT : 1440,
 
+        //Wait time Objects
+        shortWaitTimeMilliseonds : 5000,
+        mediumWaitTimeMilliseonds : 10000,
+        longWaitTimeMilliseonds : 30000,
+        extraLongWaitTimeMilliseonds : 120000,
+
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
             'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
             'Email Address Field', 'URL Field', 'User Field'],
@@ -34,6 +40,8 @@
         DEFAULT_NUM_RECORDS_TO_CREATE : 10,
         DEFAULT_NUM_CHOICES_TO_CREATE : 12,
         DEFAULT_ADMIN_ROLE : 12,
+
+        ADMIN_USERID : 10000,
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 

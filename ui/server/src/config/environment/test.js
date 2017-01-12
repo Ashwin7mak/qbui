@@ -78,6 +78,13 @@
         noHotLoad : true,
 
         // the client to use
-        client: client
+        client: client,
+
+        /**
+         * Scripts for Wistia video popover
+         * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+         */
+        wistiaScriptPart1: '',
+        wistiaScriptPart2: '',
     };
 }());

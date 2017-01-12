@@ -8,7 +8,6 @@
 /* see http://quickbase.design/colors/ */
 
 
-
 //== Blacks and Greys - for General UI & Backgrounds
 $color-black-800: #000000; // Semi-transparent overlays behind modals
 $color-black-700: #404040; // Text on light backgrounds
@@ -88,6 +87,47 @@ $color-pink-600: #c72f79;
 
 
 //-------------------------------------------------------------------
+// BEGIN COLOR VARIABLES TO BE ELIMINATED
+// These variables are deprecated. Do not use them anymore.
+//-------------------------------------------------------------------
+
+// These colors are not part of the official color palette.
+// They all need to be changed or added to the palette.
+// Name is: badcolor<n>-<variable>
+// These are isolated here so we can easily find all the colors
+// outside the palette in one place.
+// Do not change the values of these variables. Change the code
+// using them and then delete the variable.
+$badcolor1-color6:          #d2dce7;
+$badcolor2-color13:         #f6f8fb;
+$badcolor3-color14:         #f9fafb;
+$badcolor4-color15:         #f0f3f9;
+$badcolor5-color18:         #cccccc;
+//$badcolor6-color24:         #002b48;
+$badcolor7-color25:         #555555;
+//$badcolor8-color28:         #264a6d;
+$badcolor9-color29:         #bfcfe3;
+$badcolor10-nav-hover-bg:                   #0097cd;
+//$badcolor11-icon-badge-color:               #2d6c92;
+//$badcolor12-icon-mail-color:                #f7a21a;
+//$badcolor13-icon-duplicate-color:           #c75ac2;
+$badcolor14-top-nav-title-icon-color:       #009aae;
+//$badcolor15-secondary-bar-page-actions-bg:  #476b90;
+$badcolor16:                #dddddd;
+//$badcolor17:                #333333;
+$badcolor18:                #f3f3f3;
+$badcolor19:                #a52363;
+$badcolor20:                #5f8ba7;
+$badcolor21:                #6e8ba8;
+$badcolor22:                #f2f9fe;
+$badcolor23:                #464242;
+
+//-------------------------------------------------------------------
+// END COLOR VARIABLES TO BE ELIMINATED
+//-------------------------------------------------------------------
+
+
+//-------------------------------------------------------------------
 // BEGIN NEW SEMANTIC NAMES
 // These are the new semantic names. We are not using them yet.
 // They are defined here so that if the names happen to conflict
@@ -118,6 +158,7 @@ $required-asterisk-color:       $color-blue-500;
 $dropdown-hover-color:          $color-blue-300;
 $selected-color:                $color-cyan-500;
 $error-color:                   $color-red-700;
+$error-background-color:        $color-black-100;   // not in XD spreadsheet
 $alert-color:                   $color-orange-500;  // not in XD spreadsheet
 $success-color:                 $color-green-600;   // not in XD spreadsheet
 $modal-icon-color:              $color-orange-500;  // new spec has this set to $color-orange-200 (to be updated later) // should be set to $alert-color
@@ -133,6 +174,9 @@ $iconfont-on-dark-disabled-color:       $color-black-300;
 $iconfont-on-light-normal-color:        $color-blue-500;    // new spec has this set to $color-cyan-700 (to be updated later)
 $iconfont-on-light-alternate-color:     $color-black-700;
 $iconfont-on-light-disabled-color:      $color-black-400;   // not in XD spreadsheet
+
+// this old color needs to be merged with one of the iconfont colors above???
+$icon-color-hover:                      $color-cyan-600;    // not in XD spreadsheet
 
 $report-columnheaderarrow-normal-color: $color-cyan-800;
 $mail-icon-normal-color:                $color-orange-600;
@@ -170,19 +214,80 @@ $secondary-on-dark-hover-color:         $color-black-400;
 $secondary-on-dark-stroke-color:        $color-black-300;
 
 // calendar
-$selected-choice-color:                 $color-cyan-500;    // comment in spreadsheet that this needs to be replaced by $selected-color
+$selected-choice-color:                     $color-cyan-500;    // comment in spreadsheet that this needs to be replaced by $selected-color
+$datepicker-today-background-color:         $color-orange-500;
 
-$datepicker-today-background-color:     $color-orange-500;
+$datepicker-date-hover-background-color:    $color-blue-300;    // not in XD spreadsheet
+$datepicker-select-button-color:            $color-blue-600;    // not in XD spreadsheet
+$datepicker-select-active-color:            $color-cyan-500;    // not in XD spreadsheet
+$datepicker-background-color:               $color-black-100;   // not in XD spreadsheet
+$datepicker-today-background-color:         $color-orange-500;  // not in XD spreadsheet
 
-$today-link-background-color:           $color-black-250;
+$today-link-background-color:               $color-black-250;
+
+// used by multi-choice field editor... not sure why it's here... or why it's got such a generic name for that component.
 $hover-color:                           $color-blue-200;    // new spec has this set to $color-blue-300; (to be updated later)   // comment in spreadsheet that this needs to be replaced by $dropdown-hover-color
 
 // elements
 $microtext-link-color:                  $color-indigo-700;
 $microtext-normal-color:                $color-black-600;
 
+// top navigation
+$topnav-title-icon-color:               $badcolor14-top-nav-title-icon-color;   // not in XD spreadsheet
+$topnav-icon-color:                     $iconfont-on-light-normal-color;        // not in XD spreadsheet
+$topnav-hover-color:                    $color-black-100;                       // not in XD spreadsheet
+$topnav-hover-background-color:         $badcolor10-nav-hover-bg;               // not in XD spreadsheet
+$topnav-header-background-color:        $color-blue-300;                        // not in XD spreadsheet
+
+// left navigation
+$leftnav-background-color:              $color-black-250;
+$leftnav-background-stroke-color:       $color-black-500;
+$app-background-color:                  $color-cyan-500;
+$leftnav-brandarea-background-color:    $color-black-100;
+$leftnav-brandarea-stroke-color:        $color-black-500;
+$leftnav-app-icon-color:                $color-black-100;
+$leftnav-table-selected-color:          $color-cyan-500;
+$leftnav-table-default-color:           $color-black-800;
+$leftnav-tablenames-color:              $color-black-800;
+$leftnav-table-selected-color:          $color-cyan-500;
+$leftnav-selected-nub-color:            $color-cyan-500;
+
+// current left navigation variables to be merged with the new ones above
+$left-nav-color: $color-black-100;                              // not in XD spreadsheet
+$left-nav-link-color: $color-blue-500;                          // not in XD spreadsheet
+$left-nav-link-hover-color: $color-black-100;                   // not in XD spreadsheet
+$left-nav-hover-background-color: $color-cyan-800;              // not in XD spreadsheet
+$left-nav-selected-background-color: $color-teal-600;           // not in XD spreadsheet
+$left-nav-heading-color: $badcolor9-color29;                    // not in XD spreadsheet
+$left-nav-background-color: $color-blue-700;                    // not in XD spreadsheet
+$left-nav-selected-table-color: $color-black-100;               // not in XD spreadsheet
+$left-nav-right-icon-separator-color: $color-blue-600;          // not in XD spreadsheet
+$left-nav-right-icon-separator-hover-color: $color-teal-400;    // not in XD spreadsheet
+$left-nav-horizontal-icon-border-color: $color-blue-800;        // not in XD spreadsheet
+
+// Stage - This is the area below the top nav and above the page contents that the user cares about.
+$stage-background-color:                $color-black-100;       // not in XD spreadsheet
+$stage-headline-icon-color:             $color-cyan-500;        // not in XD spreadsheet
+$stage-headline-color:                  $color-black-700;       // not in XD spreadsheet
+$stage-breadcrumb-separator-color:      $color-black-400;       // not in XD spreadsheet
+
+// these are on the stage
+$page-actions-icon-color:               $color-cyan-700;        // not in XD spreadsheet
+
+// secondary bar
+$secondary-bar-color:                           $color-black-100;                       // not in XD spreadsheet
+$secondary-bar-background-color:                $badcolor14-top-nav-title-icon-color;   // not in XD spreadsheet
+$secondary-bar-icon-action-icon-color:          $color-black-100;                       // not in XD spreadsheet
+$secondary-bar-page-actions-background-color:   $color-blue-600;                        // not in XD spreadsheet
+
+// Card view
+$card-view-table-actions-container-background-color:    $color-black-100;               // not in XD spreadsheet
+$card-view-shadow-color:                                rgba($color-blue-600, 0.2);     // not in XD spreadsheet
 
 //== COMPONENTS
+
+// search boxes
+$search-input-color:                    $badcolor7-color25;     // not in XD spreadsheet
 
 //breadcrumbs
 $breadcrumbs-mouse-normal-color:        $color-cyan-500;
@@ -194,6 +299,15 @@ $booleansymbol-inside-on-normal-color:  $color-black-700;
 $booleansymbol-inside-on-hover-color:   $color-cyan-600;
 $booleansymbol-inside-off-hover-color:  $color-black-400;
 $booleansymbol-background-color:        $color-black-100;
+
+// old checkbox colors that need to be merged with the ones directly above
+$checkbox-background-checked-color:     $color-cyan-500;    // not in XD spreadsheet
+$checkbox-background-unchecked-color:   $color-black-100;   // not in XD spreadsheet
+$checkbox-border-color:                 $color-black-500;   // not in XD spreadsheet
+$checkbox-checkmark-editable-color:     $color-black-100;   // not in XD spreadsheet
+$checkbox-checkmark-readonly-color:     $color-cyan-500;    // not in XD spreadsheet
+$checkbox-shadow-color:                 rgba($color-indigo-700, 0.25);  // not in XD spreadsheet
+
 
 // general colors for changed areas
 $field-background-changed-base-color:   $color-orange-200;
@@ -207,10 +321,22 @@ $link-normal-color: $color-indigo-700;
 $link-hover-color:  $color-cyan-600;
 $link-press-color:  $color-cyan-600;
 
+// user field
+$user-picker-deactivated-label-color:      $color-black-600;   // not in XD spreadsheet
+$user-picker-user-label-color:             $color-black-700;   // not in XD spreadsheet
+$user-picker-email-label-color:            $color-black-600;   // not in XD spreadsheet
+
+$field-user-data-color:                     $color-black-700;   // not in XD spreadsheet
+
+// clear icon in a field (usually a circled x symbol)
+$field-clearmini-icon-normal-color:                $color-black-500;   // not in XD spreadsheet
+$field-clearmini-icon-hover-color:                 $color-cyan-600;    // not in XD spreadsheet
+
 // URL button
 $urlbutton-background-normal-colorstop1-color:          $color-black-200;
 $urlbutton-background-normal-colorstop2-color:          $color-black-100;
 $urlbutton-border-color:                                $color-black-300;
+$urlbutton-border-focus-color:                          $color-indigo-800;  // not in XD spreadsheet
 $urlbutton-background-hover-color:                      $color-black-100;
 $urlbutton-background-press-color:                      $color-black-200;
 $urlbutton-background-disable-base-color:               $color-black-200;
@@ -221,10 +347,50 @@ $urlbutton-background-changed-colorstop1-base-color:    $color-orange-200;
 $urlbutton-background-changed-colorstop2-color:         $color-black-100;
 $urlbutton-background-changed-pressed-base-color:       $color-orange-200;
 $urlbutton-background-changed-hover-color:              $color-black-100;
+$urlbutton-background-focus-colorstop1-color:           $color-black-800;   // not in XD spreadsheet
+$urlbutton-background-focus-colorstop2-color:           $color-black-100;   // not in XD spreadsheet
+
+// Do we really want mixins like this here just for URL fields/buttons? Shouldn't these be replaced with generic button mixins for any and all buttons?
+@mixin urlButtonBackgroundGradient() {
+    background: linear-gradient(to top, $urlbutton-background-normal-colorstop1-color, $urlbutton-background-normal-colorstop2-color);
+}
+
+@mixin urlButtonDisabled() {
+    opacity: 0.4;
+}
+
+@mixin urlButtonBackgroundFocusGradient() {
+    background: linear-gradient(to top, rgba($urlbutton-background-focus-colorstop1-color, 0.05), rgba($urlbutton-background-focus-colorstop2-color, 0.05));
+}
 
 // Formula Field
-$formula-background-empty-color:            $color-black-300;
+$formula-background-empty-color:            $color-blue-300;    // spreadsheet has this set to: $color-black-300; (to be updated later)
 $formula-spinner-color:                     $color-black-700;
+
+// agGrid
+// These colors are prefixed with aggrid so that they do not conflict with others while the agGrid is ripped out and replaced.
+$aggrid-header-cell-border-color:                   $color-blue-400;    // not in XD spreadsheet
+$aggrid-header-cell-border-bottom-color:            $badcolor1-color6;  // not in XD spreadsheet
+$aggrid-header-cell-background-color:               $color-blue-300;    // not in XD spreadsheet
+$aggrid-header-cell-color:                          $color-blue-600;    // not in XD spreadsheet
+$aggrid-row-background-hover-color:                 $color-blue-200;    // not in XD spreadsheet
+$aggrid-row-cell-border-color:                      $color-black-300;   // not in XD spreadsheet
+$aggrid-grid-group-row-header-background-color:     $color-blue-200;    // not in XD spreadsheet
+$aggrid-grid-group-row-header-border-top-color:     $color-blue-300;    // not in XD spreadsheet
+$aggrid-grid-group-row-header-divider-color:        $color-black-500;   // not in XD spreadsheet
+$aggrid-row-border-color:                           $badcolor16;        // not in XD spreadsheet
+$aggrid-row-box-shadow-color:                       $color-black-300;   // not in XD spreadsheet
+$aggrid-cell-edit-background-color:                 $color-blue-200;    // not in XD spreadsheet
+
+// qbGrid
+// These colors are prefixed with qbgrid so that they do not conflict with others while the qbGrid is updated.
+//$row-background-color-hover: $color-blue-200;
+//$row-cell-border-color: $color-black-300;
+$qbgrid-row-bg-color: $color-black-100;
+$qbgrid-row-noneditable-background-color: $color-black-200;
+$qbgrid-row-border-color: $color-black-300;
+$qbgrid-row-box-shadow-color: $color-black-300;
+$qbgrid-cell-edit-background-color: $color-blue-200;
 
 // pagination
 $arrow-normal-color:                        $color-black-700;
@@ -237,230 +403,109 @@ $pagination-mobile-panel-border-color:      $color-black-400;
 $pagination-mobile-panel-text-color:        $color-blue-500;
 $pagination-mobile-topbar-text-color:       $color-black-100;
 
+// report
+// We need to resolve the pagination color conflicts with the colors in the prior section
+$report-background-color:                   $badcolor2-color13; // not in XD spreadsheet
+$pagination-iconfont-normal-color:          $color-cyan-700;    // not in XD spreadsheet
+$pagination-iconfont-disabled-color:        $color-black-400;   // not in XD spreadsheet
+$pagination-iconfont-hover-color:           $color-cyan-300;    // not in XD spreadsheet
+
+// Report grouped headers
+$grid-group-row-header-background-color:    $color-blue-200;    // not in XD spreadsheet
+
+// report icon colors - should these move up with all the other iconfont colors???
+$report-icon-table-color:               $color-red-500;     // not in XD spreadsheet
+$report-icon-summary-color:             $color-blue-600;    // not in XD spreadsheet
+$report-icon-pie-color:                 $color-orange-500;  // not in XD spreadsheet
+$report-icon-calendar-color:            $color-green-600;   // not in XD spreadsheet
+$report-icon-grid-edit-color:           $color-pink-600;    // not in XD spreadsheet
+$report-icon-timeline-color:            $color-orange-700;  // not in XD spreadsheet
+$report-icon-map-color:                 $color-teal-500;    // not in XD spreadsheet
+
+$report-search-bar-background-color:    $badcolor20;        // not in XD spreadsheet
+$report-group-background-color:         $color-black-100;   // not in XD spreadsheet
+$report-link-color:                     $color-black-700;   // not in XD spreadsheet
+$report-container-bg:                   $color-black-100;   // not in XD spreadsheet
+
 // rating
 $rating-selected-color:     $color-orange-500;
 $rating-unselected-color:   $color-black-400;
 $rating-hover-color:        $color-orange-200;
 
-// menu
+// menus
 $menu-header-color:         $color-black-800;   // not in XD spreadsheet
 $menu-item-disabled-color:  $color-black-400;   // not in XD spreadsheet
 
+// Facet list
+// Why is the facet list any different than any other menu? Don't we need a combined menu spec for all these menus?
+$facetmenu-background-color:                $color-black-100;               // not in XD spreadsheet
+$facetmenu-border-color:                    $color-black-400;               // not in XD spreadsheet
+$facetmenu-nooptions-color:                 $color-black-400;               // not in XD spreadsheet
+$facetmenu-clear-button-color:              $color-black-600;               // not in XD spreadsheet
+$facetmenu-show-more-color:                 $color-blue-600;                // not in XD spreadsheet
+$facetmenu-facet-token-color:               $color-blue-600;                // not in XD spreadsheet
+$facetmenu-facet-token-background-color:    $color-blue-300;                // not in XD spreadsheet
+$facetmenu-item-hover-background-color:     rgba($color-black-300, 0.5);    // not in XD spreadsheet
+
 // popover dialogs (sort and group)
-$popover-text-color: $color-black-700;          // not in XD spreadsheet
-$popover-title-color: $popover-text-color;      // not in XD spreadsheet
-$popover-background-color: $color-black-100;    // not in XD spreadsheet
-$popover-shadow-color: rgba(70, 66, 66, 0.15);  // not in XD spreadsheet
+$popover-text-color:                        $color-black-700;           // not in XD spreadsheet
+$popover-title-color:                       $popover-text-color;        // not in XD spreadsheet
+$popover-background-color:                  $color-black-100;           // not in XD spreadsheet
+$popover-shadow-color:                      rgba($badcolor23, 0.15);    // not in XD spreadsheet
+
+// Error message popup
+$error-message-border-color:                $color-black-400;   // not in XD spreadsheet
+$error-message-header-background-color:     $error-color;       // not in XD spreadsheet
+$error-message-content-background-color:    $color-black-100;   // not in XD spreadsheet
+$error-message-content-text-color:          $color-blue-600;    // not in XD spreadsheet
+$error-message-header-text-color:           $color-black-100;   // not in XD spreadsheet
+
+// trowsers
+$trowser-color: $color-black-800;                                   // not in XD spreadsheet
+$trowser-icons-color: $color-black-100;                             // not in XD spreadsheet
+$trowser-header-background-color: $color-blue-600;                  // not in XD spreadsheet
+$trowser-footer-background-color: $color-blue-700;                  // not in XD spreadsheet
+$trowser-action-separator-color: $color-blue-600;                   // not in XD spreadsheet
+$trowser-header-nav-icon-hover-background-color: $color-cyan-800;   // not in XD spreadsheet
+
+// QBPanel - an expandable/collapsable panel
+$panel-background-color:        $color-black-100;           // not in XD spreadsheet
+$panel-header-icon-color:       $color-black-700;           // not in XD spreadsheet
+$panel-header-icon-hover-color: $icon-color-hover;          // not in XD spreadsheet
+$panel-shadow-color:            rgba($color-blue-600, 0.2); // not in XD spreadsheet
+
+// tabs on QBForms
+$tabs-underline-background-color:   $color-indigo-700;  // not in XD spreadsheet
+$tabs-disabled-color:               $badcolor5-color18; // not in XD spreadsheet
+$tabs-active-color:                 $color-black-600;   // not in XD spreadsheet
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES
 //-------------------------------------------------------------------
 
 
-
 //-------------------------------------------------------------------
-// BEGIN COLOR VARIABLES TO BE ELIMINATED
-// These variables are deprecated. Do not use them anymore.
-//-------------------------------------------------------------------
-
-// These colors are not part of the official color palette.
-// They all need to be changed or added to the palette.
-// Name is: badcolor<n>-<variable>
-// These are isolated here so we can easily find all the colors
-// outside the palette in one place.
-// Do not change the values of these variables. Change the code
-// using them and then delete the variable.
-$badcolor1-color6:          #d2dce7;
-$badcolor2-color13:         #f6f8fb;
-$badcolor3-color14:         #f9fafb;
-$badcolor4-color15:         #f0f3f9;
-$badcolor5-color18:         #cccccc;
-$badcolor6-color24:         #002b48;
-$badcolor7-color25:         #555555;
-$badcolor8-color28:         #264a6d;
-$badcolor9-color29:         #bfcfe3;
-$badcolor10-nav-hover-bg:                   #0097cd;
-//$badcolor11-icon-badge-color:               #2d6c92;
-//$badcolor12-icon-mail-color:                #f7a21a;
-//$badcolor13-icon-duplicate-color:           #c75ac2;
-$badcolor14-top-nav-title-icon-color:       #009aae;
-$badcolor15-secondary-bar-page-actions-bg:  #476b90;
-$badcolor16:                #dddddd;
-$badcolor17:                #333333;
-$badcolor18:                #f3f3f3;
-$badcolor19:                #a52363;
-$badcolor20:                #5f8ba7;
-$badcolor21:                #6e8ba8;
-$badcolor22:                #f2f9fe;
-
-//-------------------------------------------------------------------
-// END COLOR VARIABLES TO BE ELIMINATED
+// BEGIN SEMANTIC NAMES TO CLEANUP
+// Below are semantic names that are inconsistently used or have
+// not been reviewed for what to do with them.
 //-------------------------------------------------------------------
 
-
-//----- semantic color usage
-$data-color: $color-black-700;
 $input-bg-color: $color-black-100;
 $input-text-focus-border-color: $color-indigo-800;
-$input-border-focus-color: $color-indigo-700;
 $input-text-normal-border-color: $color-black-400;
 $input-text-error-border-color: $error-color;
 $tootip-error-color: $error-color;
-$input-email-normal-text-color: $color-cyan-500;
+$field-input-shadow-color: rgba($color-indigo-700, 0.25);
 
-
-//================
-$left-nav-bg: $color-blue-700;
-$icon-color-hover: $color-cyan-600;
-$topnav-icon-color: $iconfont-on-light-normal-color;
-$page-actions-icon-color: $color-cyan-700;
-$header-bg: $color-blue-300;
-$nav-hover-bg: $badcolor10-nav-hover-bg;
-$nav-hover-fg: $color-black-100;
-$nav-link-fg: $color-black-100;
-$nav-border: $badcolor5-color18;
-$small-header-bg: $color-black-100;
-$report-container-bg: $color-black-100;
-//tabs underline color
-$tabsUnderLine: $color-indigo-700;
 $selection-badge-color: $color-blue-600;
-$link-normal-color: $color-indigo-700;
-$link-hover-color: $color-cyan-600;
-$link-press-color: $color-cyan-600;
 $selected-check-color: $color-green-700;
 
-//== Stage
-$stage-backgroundColor: $color-black-100;
-$stage-headline-icon-color: $color-cyan-500;
-$stage-headline-color: $color-black-700;
-
-//== Report
-$report-backgroundColor: $badcolor2-color13;
-$pagination-iconfont-normal-color: $color-cyan-700;
-$pagination-iconfont-disabled-color: $color-black-400;
-$pagination-iconfont-hover-color: $color-cyan-300;
-$pagination-text-normal-color: $color-black-700;
-
-//== Report grouped headers
-$grid-group-row-header-bkgrd-color: $color-blue-200;
-$grid-group-row-header-border-top: $color-blue-300;
-$grid-group-row-header-divider: $color-black-500;
-
-//== Report Toolbar
-$toolBar-borderColor: $color-blue-300;
-$toolBar-backgroundColor: $badcolor4-color15;
-$toolBar-input-borderColor: $color-black-300;
-
-//==CardView
-$pagination-mobile-panel-background-color: $color-black-200;
-$pagination-mobile-panel-border-color: $color-black-400;
-$pagination-mobile-panel-text-color: $color-blue-500;
-$pagination-mobile-topbar-text-color: $color-black-100;
-
-//==Facet list
-$facetMenu-backgroundColor: $color-black-100;
-$facetSelected-color: $selected-check-color;
-$facetMenu-BorderColor: $color-black-400;
-$facetMenu-NoOptionsColor: $color-black-400;
-$facetMenu-clearButtonColor: $color-black-600;
-$facetMenu-showMoreColor: $color-blue-600;
-$facetMenu-facetTokenTextColor: $color-blue-600;
-$facetMenu-facetTokenBackgroundColor: $color-blue-300;
-$facetMenu-itemHoverColor: rgba($color-black-300, 0.5);
-
-//==report icon colors
-$report-icon-table-color: $color-red-500;
-$report-icon-summary-color: $color-blue-600;
-$report-icon-pie-color: $color-orange-500;
-$report-icon-calendar-color: $color-green-600;
-$report-icon-grid-edit-color: $color-pink-600;
-$report-icon-timeline-color: $color-orange-700;
-$report-icon-map-color: $color-teal-500;
-$search-input-fg: $badcolor7-color25;
-$top-nav-title-icon-color: $badcolor14-top-nav-title-icon-color;
-$secondary-bar-fg: $color-black-100;
-$secondary-bar-bg: $badcolor14-top-nav-title-icon-color;
-$secondary-bar-page-actions-bg: $badcolor15-secondary-bar-page-actions-bg;
-
-$report-search-bar-bg: $badcolor20;
-$report-group-bg: $color-black-100;
-$report-link-color: $color-black-700;
-
-
-//==recordtrowser
-$nav-icon-hover-bg: $color-cyan-800;
-
+$input-border-focus-color: $color-indigo-700;
 @mixin focus-shadow($color: $input-border-focus-color) {
     box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
     outline: none;
 }
 
-//== Fields
-$clearmini-normal-color: $color-black-500;
-$clearmini-hover-color: $color-cyan-600;
-$checkbox-background-checked-color: $color-cyan-500;
-$checkbox-background-unchecked-color: $color-black-100;
-$checkbox-border-color: $color-black-500;
-$checkbox-checkmark-editable-color: $color-black-100;
-$checkbox-checkmark-readonly-color: $color-cyan-500;
-$datepicker-header-bg: $color-teal-600;
-$datepicker-header-fg: $color-black-100;
-$datepicker-date-hover-bg: $color-blue-300;
-$datepicker-select-button-fg: $color-blue-600;
-$datepicker-select-button-bg: $color-blue-300;
-$datepicker-select-active: $color-cyan-500;
-$datepicker-bg: $color-black-100;
-$datepicker-bg-today: $color-orange-500;
-
-// UrlField
-$urlButton-background-normal-colorstop1-color: $color-black-200;
-$urlButton-background-normal-colorstop2-color: $color-black-100;
-
-@mixin urlButtonBackgroundGradient() {
-    background: linear-gradient(to top, $urlButton-background-normal-colorstop1-color, $urlButton-background-normal-colorstop2-color);
-}
-
-@mixin urlButtonDisabled() {
-    opacity: 0.4;
-}
-$urlButton-background-focus-colorstop1-color: $color-black-800;
-$urlButton-background-focus-colorstop2-color: $color-black-100;
-
-@mixin urlButtonBackgroundFocusGradient() {
-    background: linear-gradient(to top, rgba($urlButton-background-focus-colorstop1-color, 0.05), rgba($urlButton-background-focus-colorstop2-color, 0.05));
-}
-$urlButton-border-focus-color: $color-indigo-800;
-$urlButton-border-color: $color-black-300;
-$urlButton-background-hover-color: $color-black-100;
-$urlButton-background-focus-colorstop1-color: $color-black-800;
-$urlButton-background-focus-colorstop2-color: $color-black-100;
-$user-picker-deactivated-label-fg: $color-black-600;
-$user-picker-user-label-fg: $color-black-700;
-$user-picker-email-label-fg: $color-black-600;
-
-//== QBPanel
-$panel-border-color: $color-black-300;
-$panel-background-color: $color-black-100;
-$panel-header-icon-color: $color-black-700;
-$panel-header-icon-hover-color: $icon-color-hover;
-$panel-shadow-color: rgba(72, 108, 143, 0.2);
-
-//Error message popup
-$errorMessage-border-color: $color-black-400;
-$errorMessage-header-background: $error-color;
-$errorMessage-content-background: $color-black-100;
-$errorMessage-content-text-color: $color-blue-600;
-$errorMessage-header-text-color: $color-black-100;
-
-// Formula field colors
-$formula-background-empty-color: $color-blue-300;
-$formula-spinner-color: $color-black-700;
-
-// Card view shadow
-$card-view-shadow-color: rgba(72, 108, 143, 0.2);
-
-// checkbox shadow
-$checkbox-shadow-color: rgba(54, 93, 191, 0.25);
-
-// field input shadow
-$field-input-shadow-color: rgba(54, 94, 191, 0.25);
+//-------------------------------------------------------------------
+// END SEMANTIC NAMES TO CLEANUP
+//-------------------------------------------------------------------
