@@ -330,7 +330,7 @@ $edit-icon-font-size: 18px;
 
             &.editingCell {
                 display: inline-block;
-                border: none;
+                //border: none;
                 //This aligns input boxes to the top for inline edit and it adds padding to the bottom
                 padding-bottom: 20px;
                 margin-top: -6px;
@@ -480,11 +480,11 @@ $edit-icon-font-size: 18px;
 .qbGrid > tbody > tr > td:first-of-type {
     height: 32px;
     background: $row-bg-color;
-    z-index: 9999;
+    z-index: 1;
     outline: $row-cell-border-color
 }
 
-.qbHeaderCell .stickyCell {
+.qbHeaderCell.stickyCell {
     position: relative;
-    z-index: 9999;
+    z-index: 1;
 }

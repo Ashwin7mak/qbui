@@ -225,8 +225,6 @@ const QbGrid = React.createClass({
             if (i === 0) {
                 stickyCell[i].style.outline = '1px solid #c0d0e4'
                 stickyCell[i].style.left = currentLeftScroll + 'px';
-                stickyCell[i].style.position = "relative";
-                stickyCell[i].style.zIndex = 99999;
             } else {
                 stickyCell[i].style.outline = "1px solid #dcdcdc";
                 stickyCell[i].style.left = currentLeftScroll + 'px';
