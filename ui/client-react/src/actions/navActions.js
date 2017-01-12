@@ -6,16 +6,6 @@ import Breakpoints from '../utils/breakpoints';
 let navActions = {
 
     /**
-     * show trowser
-     * @param content "reports", "editRecord" etc. - see trowserConstants.js
-     */
-    showTrowser(content) {
-        this.dispatch(actions.SHOW_TROWSER, content);
-    },
-    hideTrowser() {
-        this.dispatch(actions.HIDE_TROWSER);
-    },
-    /**
      * checks to see if row pop up menu is open
      * */
     onToggleRowPopUpMenu(isOpen) {
