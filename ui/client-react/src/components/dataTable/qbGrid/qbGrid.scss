@@ -482,3 +482,8 @@ $edit-icon-font-size: 18px;
     background: $row-bg-color;
     z-index: 9999;
 }
+
+.qbHeaderCell .stickyCell {
+    position: relative;
+    z-index: 9999;
+}

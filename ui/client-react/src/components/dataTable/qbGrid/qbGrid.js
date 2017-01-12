@@ -218,10 +218,15 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
     handleScroll(ev) {
-        console.log('querySelectorAll: ', document.querySelectorAll('#stickyCell'));
+        console.log('querySelectorAll: ', document.getElementsByClassName('stickyCell')[0]);
         let stickyCell = document.getElementsByClassName('stickyCell');
         let currentLeftScroll = document.getElementsByClassName('reportContent')[0].scrollLeft;
         for(var i = 0; i < stickyCell.length; i++) {
+            if (i === 0) {
+                stickyCell[i].style.left = currentLeftScroll + 'px';
+                stickyCell[i].style.position = "relative";
+                stickyCell[i].style.zIndex = 99999;
+            }
             stickyCell[i].style.left = currentLeftScroll + 'px';
         };
     },
