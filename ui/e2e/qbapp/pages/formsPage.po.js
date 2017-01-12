@@ -195,6 +195,13 @@
                     }).map(function(elm) {
                         return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
                     });
+                } else if (fieldLabel === 'durationField') {
+                    //enter duration fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                        return elm;
+                    }).map(function(elm) {
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
+                    });
                 } else if (fieldLabel === 'checkbox') {
                     //select checkbox field
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
