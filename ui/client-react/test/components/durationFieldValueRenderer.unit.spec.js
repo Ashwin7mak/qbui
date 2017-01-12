@@ -60,7 +60,7 @@ describe('DurationFieldValueRenderer', () => {
 
     it('test render of component smart units', () => {
         let millisecs = 23456;
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         let expected = moment.duration(millisecs).asSeconds();
@@ -73,7 +73,7 @@ describe('DurationFieldValueRenderer', () => {
         let millisecs = 23456;
         component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs}
                                                                              includeUnits={true}
-                                                                             attributes={{scale: consts.DURATION_CONSTS.SECONDS}}/>);
+                                                                             attributes={{scale: consts.DURATION_CONSTS.SCALES.SECONDS}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const durationFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
@@ -89,31 +89,31 @@ describe('DurationFieldValueRenderer', () => {
                 description: 'as Weeks',
                 milli: moment.duration(value, 'weeks').asMilliseconds(),
                 units: 'weeks',
-                scale: consts.DURATION_CONSTS.WEEKS
+                scale: consts.DURATION_CONSTS.SCALES.WEEKS
             },
             {
                 description: 'as Days',
                 milli: moment.duration(value, 'days').asMilliseconds(),
                 units: 'days',
-                scale: consts.DURATION_CONSTS.DAYS
+                scale: consts.DURATION_CONSTS.SCALES.DAYS
             },
             {
                 description: 'as Hours',
                 milli: moment.duration(value, 'hours').asMilliseconds(),
                 units: 'hours',
-                scale: consts.DURATION_CONSTS.HOURS
+                scale: consts.DURATION_CONSTS.SCALES.HOURS
             },
             {
                 description: 'as Minutes',
                 milli: moment.duration(value, 'hours').asMilliseconds(),
                 units: 'minutes',
-                scale: consts.DURATION_CONSTS.MINUTES
+                scale: consts.DURATION_CONSTS.SCALES.MINUTES
             },
             {
                 description: 'as Seconds',
                 milli: moment.duration(value, 'hours').asMilliseconds(),
                 units: 'seconds',
-                scale: consts.DURATION_CONSTS.SECONDS
+                scale: consts.DURATION_CONSTS.SCALES.SECONDS
             }
         ];
         dataProvider.forEach((test) => {
@@ -141,7 +141,7 @@ describe('DurationFieldValueRenderer', () => {
     it('test render of component with display get reformatted for locale', () => {
         let millisecs = 23456;
         let displayProp = '123 pre calculated value';
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.WEEKS}} display={displayProp}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SCALES.WEEKS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(componentDiv).toBeTruthy();
@@ -151,7 +151,7 @@ describe('DurationFieldValueRenderer', () => {
     it('test render of component with display of timebase units get reformatted for locale', () => {
         let millisecs = 23456;
         let displayProp = '123 pre calculated value';
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.HHMMSS}} display={displayProp}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SCALES.HHMMSS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(componentDiv).toBeTruthy();
@@ -161,7 +161,7 @@ describe('DurationFieldValueRenderer', () => {
     it('test render of component with display and smart units gets formatted', () => {
         let millisecs = 23456;
         let displayProp = '123 pre calculated value';
-        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SMART_UNITS}} display={displayProp}/>);
+        component = TestUtils.renderIntoDocument(<DurationFieldValueRenderer value={millisecs} attributes={{scale:consts.DURATION_CONSTS.SCALES.SMART_UNITS}} display={displayProp}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let componentDiv = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
         expect(componentDiv).toBeTruthy();

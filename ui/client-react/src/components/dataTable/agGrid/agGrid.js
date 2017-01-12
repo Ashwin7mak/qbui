@@ -13,7 +13,12 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+
+import {openRecordForEdit} from '../../../actions/formActions';
+import {connect} from 'react-redux';
+
 import Breakpoints from "../../../utils/breakpoints";
+
 
 import {
     CheckBoxCellRenderer,
@@ -71,7 +76,10 @@ let consts = {
     HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accommodate date pickers etc.
 };
 
-let AGGrid = React.createClass({
+/**
+ * Note: this component has been partially migrated to Redux
+ */
+export const AGGrid = React.createClass({
     mixins: [FluxMixin],
     rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 
@@ -386,9 +394,13 @@ let AGGrid = React.createClass({
 
         const recordId = data[this.props.primaryKeyName].value;
 
+        this.props.dispatch(openRecordForEdit(recordId));
+
+        // needed until report store is migrated to redux
+
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(recordId);
+        flux.actions.editingReportRow(recordId);
     },
 
     /**
@@ -1104,4 +1116,4 @@ let AGGrid = React.createClass({
     }
 });
 
-export default AGGrid;
+export default connect()(AGGrid);

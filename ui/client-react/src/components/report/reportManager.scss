@@ -12,7 +12,7 @@
     flex: 1 1 auto;
 
     .reportsTop {
-        background-color: $report-search-bar-bg;
+        background-color: $report-search-bar-background-color;
         padding: 15px 16px;
         flex: 0 0 auto;
     }
@@ -30,7 +30,7 @@
 
     .reportGroup {
         margin-bottom: 16px;
-        background-color: $report-group-bg;
+        background-color: $report-group-background-color;
 
         .reportItems {
             display: flex;

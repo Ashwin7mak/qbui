@@ -3,9 +3,8 @@ import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
-import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
-import QBToolTip from '../qbToolTip/qbToolTip';
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
@@ -14,8 +13,9 @@ import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-
-import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import {connect} from 'react-redux';
+import * as formActions from '../../actions/formActions';
 
 import './recordTrowser.scss';
 
@@ -23,19 +23,23 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * trowser containing a record component
+ *
+ * Note: this component has been partially migrated to Redux
  */
-let RecordTrowser = React.createClass({
+export const RecordTrowser = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         recId: React.PropTypes.string,
+        viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
-        form: React.PropTypes.object,
+        editForm: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
-        errorPopupHidden: React.PropTypes.bool
+        errorPopupHidden: React.PropTypes.bool,
+        onHideTrowser: React.PropTypes.func.isRequired
     },
 
     _hasErrorsAndAttemptedSave() {
@@ -58,21 +62,21 @@ let RecordTrowser = React.createClass({
         }
 
         return (this.props.visible &&
-            <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)}
+            <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
                 <Record appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
-                    errorStatus={this.props.form && this.props.form.editFormErrorStatus ? this.props.form.editFormErrorStatus : null}
+                    errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
-                    formData={this.props.form ? this.props.form.editFormData : null}
+                    formData={this.props.editForm ? this.props.editForm.formData : null}
                     edit={true} />
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
-     *  get actions element for bottome center of trowser (placeholders for now)
+     *  get actions element for bottom center of trowser (placeholders for now)
      */
     getTrowserActions() {
         return (
@@ -106,30 +110,36 @@ let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
-            const flux = this.getFlux();
-
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
 
-            flux.actions.savingForm();
+            const formType = "edit";
+
+            this.props.dispatch(formActions.savingForm(formType));
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then((recId) => {
-                flux.actions.saveFormSuccess();
+                this.props.dispatch(formActions.saveFormSuccess(formType));
+
+                if (this.props.viewingRecordId === recId) {
+                    this.props.dispatch(formActions.syncForm("view"));
+                }
 
                 if (saveAnother) {
-                    flux.actions.editNewRecord(false);
+                    this.props.dispatch(formActions.editNewRecord(false));
                 } else {
                     this.hideTrowser();
                     this.navigateToNewRecord(recId);
                 }
 
             }, (errorStatus) => {
-                flux.actions.saveFormFailed(errorStatus);
+                this.props.dispatch(formActions.saveFormError(formType, errorStatus));
+                const flux = this.getFlux();
+                flux.actions.showErrorMsgDialog();
             });
         }
         return validationResult;
@@ -151,23 +161,28 @@ let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
-            const flux = this.getFlux();
-
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
+            const formType = "edit";
 
-            flux.actions.savingForm();
+            this.props.dispatch(formActions.savingForm(formType));
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
-                flux.actions.saveFormSuccess();
+                this.props.dispatch(formActions.saveFormSuccess(formType));
+                if (this.props.viewingRecordId === this.props.recId) {
+                    this.props.dispatch(formActions.syncForm("view"));
+                }
+
                 this.nextRecord();
             }, (errorStatus) => {
-                flux.actions.saveFormFailed(errorStatus);
+                this.props.dispatch(formActions.saveFormError(formType, errorStatus));
+                const flux = this.getFlux();
+                flux.actions.showErrorMsgDialog();
             });
         }
         return validationResult;
@@ -188,7 +203,7 @@ let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields, colList);
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.formData.fields, colList);
     },
 
     /**
@@ -206,7 +221,7 @@ let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields, colList);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList);
     },
 
     /**
@@ -219,7 +234,7 @@ let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
 
-        flux.actions.openRecordForEdit(previousEditRecordId);
+        this.props.dispatch(formActions.openRecordForEdit(previousEditRecordId));
     },
 
     /**
@@ -232,7 +247,7 @@ let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editNextRecord(nextEditRecordId);
 
-        flux.actions.openRecordForEdit(nextEditRecordId);
+        this.props.dispatch(formActions.openRecordForEdit(nextEditRecordId));
     },
     /**
      *  get breadcrumb element for top of trowser
@@ -288,8 +303,7 @@ let RecordTrowser = React.createClass({
     hideTrowser() {
         WindowLocationUtils.pushWithoutQuery();
 
-        let flux = this.getFlux();
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
 
     saveAndClose() {
@@ -303,12 +317,10 @@ let RecordTrowser = React.createClass({
         HideAppModal();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
 
     cancelEditing() {
-        const flux = this.getFlux();
-
         if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
@@ -348,4 +360,4 @@ let RecordTrowser = React.createClass({
     }
 });
 
-export default RecordTrowser;
+export default connect()(RecordTrowser);
