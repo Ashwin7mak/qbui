@@ -8,18 +8,19 @@ import FieldUtils from '../../../utils/fieldUtils';
 class ColumnTransformer {
     /**
      * Creates the column instances that can be converted to a column used by QbGrid by calling getGridHeader()
-     * @param headerLabel The text that appears in the header column (could also be a react component/Jsx)
-     * @param headerClasses Any css classes to add to the column header element
-     * @param cellIdentifierValue The value that identifies which cells belong to this column
+     * @param headerLabel The text that appears in the header column (could also be a react component/Jsx) (required)
+     * @param cellIdentifierValue The value that identifies which cells belong to this column (required)
+     * @param headerClasses Optionally any css classes to add to the column header element
      * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the volumn. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      */
-    constructor(headerLabel, headerClasses, cellIdentifierValue) {
+    constructor(headerLabel, cellIdentifierValue, headerClasses = '') {
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
         this.cellIdentifierValue = cellIdentifierValue;
         this.formatter = null;
         this.headerMenuComponent = null;
-        this.headerMenuProps = null;
+        this.headerMenuProps = {};
+        this.classes = headerClasses;
     }
 
     /**
@@ -41,7 +42,7 @@ class ColumnTransformer {
      * @param component
      * @param props
      */
-    addHeaderMenu(component, props) {
+    addHeaderMenu(component, props = {}) {
         this.headerMenuComponent = component;
         this.headerMenuProps = props;
         return this;
@@ -54,6 +55,28 @@ class ColumnTransformer {
      * @returns {{property: *, header: {label: XML}}}
      */
     getGridHeader() {
+        let transformedColumn = {
+            property: this.cellIdentifierValue,
+            header: {
+                label: this._buildHeaderComponent(),
+            }
+        };
+
+        if (this.formatter) {
+            transformedColumn.cell = {
+                formatters: [this.formatter]
+            };
+        }
+
+        return transformedColumn;
+    }
+
+    /**
+     * Private function to build up the header component based on current properties and existence of a custom header menu.
+     * @returns {XML}
+     * @private
+     */
+    _buildHeaderComponent() {
         let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
 
         if (this.headerMenuComponent) {
@@ -70,20 +93,7 @@ class ColumnTransformer {
             );
         }
 
-        let transformedColumn = {
-            property: this.cellIdentifierValue,
-            header: {
-                label: headerComponent,
-            }
-        };
-
-        if (this.formatter) {
-            transformedColumn.cell = {
-                formatters: [this.formatter]
-            };
-        }
-
-        return transformedColumn;
+        return headerComponent;
     }
 }
 

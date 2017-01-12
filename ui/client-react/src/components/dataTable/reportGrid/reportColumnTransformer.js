@@ -37,7 +37,7 @@ class ReportColumnTransformer extends ColumnTransformer {
     }
 
     constructor(fieldId, fieldDef, headerLabel, headerClasses) {
-        super(headerLabel, headerClasses, fieldId);
+        super(headerLabel, fieldId, headerClasses);
 
         this.fieldId = fieldId;
         this.fieldDef = fieldDef;
