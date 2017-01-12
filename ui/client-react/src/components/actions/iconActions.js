@@ -53,6 +53,7 @@ let IconActions = React.createClass({
             pullRight: true,
             menuIcons: false,
             dropdownTooltip: false,
+            className: '',
             flux: {} // Makes tests cleaner. Can avoid passing in empty object for every unit test.
         };
     },
