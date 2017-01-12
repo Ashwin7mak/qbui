@@ -16,7 +16,12 @@ const QbCell = React.createClass({
     },
 
     render() {
-        return <td className="qbCell" {...this.props} />;
+        let classes = ['qbCell'];
+        if (this.props.isStickyCell) {
+            classes.push(['stickyCell']);
+        }
+
+        return <td className={classes.join(' ')} {...this.props} />;
     }
 });
 

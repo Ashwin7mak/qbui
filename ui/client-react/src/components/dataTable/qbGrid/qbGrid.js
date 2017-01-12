@@ -137,6 +137,17 @@ const QbGrid = React.createClass({
         />;
     },
 
+    /**
+     * The row actions in the first column should be sticky as the user scrolls left and right on the grid
+     * This function adds the isStickyCell:true prop to qbCell
+     * @returns {{isStickyCell: boolean}}
+     */
+    getActionCellProps() {
+        return {
+            isStickyCell: true
+        };
+    },
+
     renderCell(cellData) {
         return React.createElement(this.props.cellRenderer, Object.assign({}, cellData, this.props.commonCellProps));
     },
@@ -217,7 +228,8 @@ const QbGrid = React.createClass({
                     label: this.getCheckboxHeader(),
                 },
                 cell: {
-                    formatters: [this.getActionsCell]
+                    formatters: [this.getActionsCell],
+                    transforms: [this.getActionCellProps],
                 }
             }],
             ...this.getColumns()
