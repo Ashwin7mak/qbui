@@ -454,7 +454,12 @@ module.exports = function(grunt) {
                     includes      : ['server/src/api/**/.js'],
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
-                    coverageFolder: 'build/reports/integration/coverage'
+                    coverageFolder: 'build/reports/integration/coverage',
+                    reporter: (function() {
+                        process.env.MOCHA_COLORS = useColors;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/integration/server_report.xml';
+                        return 'mocha-jenkins-reporter';
+                    }())
                 }
             }
         },
