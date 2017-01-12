@@ -481,6 +481,7 @@ $edit-icon-font-size: 18px;
     height: 32px;
     background: $row-bg-color;
     z-index: 9999;
+    outline: $row-cell-border-color
 }
 
 .qbHeaderCell .stickyCell {
