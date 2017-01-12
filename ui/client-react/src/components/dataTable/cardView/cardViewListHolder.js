@@ -8,6 +8,9 @@ import './cardViewList.scss';
 import CardViewFooter from './cardViewFooter';
 import CardViewNavigation from './cardViewNavigation';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import _ from 'lodash';
+import {connect} from 'react-redux';
+import {openRecordForEdit} from '../../../actions/formActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -17,7 +20,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
 const MAX_SWIPE_DISTANCE = 150; // Drag distance when swiping up or down. Applies to report pagination.
 
-let CardViewListHolder = React.createClass({
+export let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
@@ -337,9 +340,13 @@ let CardViewListHolder = React.createClass({
      */
     openRecordForEdit(recordId) {
 
+        this.props.dispatch(openRecordForEdit(recordId));
+
+        // needed until report store is migrated to redux
+
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(recordId);
+        flux.actions.editingReportRow(recordId);
     },
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
@@ -363,4 +370,4 @@ let CardViewListHolder = React.createClass({
     }
 });
 
-export default CardViewListHolder;
+export default connect()(CardViewListHolder);
