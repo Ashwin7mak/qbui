@@ -23,7 +23,7 @@
             name: 'Form Integration App',
             tables: [
                 {
-                    name: 'Table with all support fields', fields: [
+                    name: 'Table with all supported fields', fields: [
                         {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                         {name: 'Numeric Field', datatypeAttributes: {type: 'NUMERIC'}, type: 'SCALAR'},
                         {name: 'Currency Field', datatypeAttributes: {type: 'CURRENCY'}, type: 'SCALAR'},
@@ -71,10 +71,10 @@
                     app.tables.map((table, index) => {
                         createReportPromises.push(createReportforTable(app, table));
                     });
-                    promise.all(createReportPromises).then(reportResults => {
-                        done();
-                    });
-                });
+                    return promise.all(createReportPromises);
+                }).then(reportResults => {
+                    done();
+                }).catch(done);
                 return app;
             });
         });
@@ -96,7 +96,7 @@
                 recordBase.addRecords(targetApp, targetTable, generatedRecords).then(function(returnedRecords) {
                     resolve(returnedRecords);
                 }).catch(function(error) {
-                    console.log(JSON.stringify(error));
+                    log.debug(JSON.stringify(error));
                     reject(error);
                 });
             });
@@ -124,7 +124,7 @@
                     let reportId = JSON.parse(reportResults.body).id;
                     resolve(reportId);
                 }).catch(function(error) {
-                    console.log(JSON.stringify(error));
+                    log.debug(JSON.stringify(error));
                     reject(error);
                 });
             });
@@ -143,10 +143,10 @@
             return new promise(function(resolve, reject) {
                 const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
                 recordBase.apiBase.executeRequest(formEndpoint, 'POST', form).then(function(result) {
-                    let formID =  JSON.parse(result.body).id;
-                    resolve({appId, tableId, formID});
+                    let formId =  JSON.parse(result.body).id;
+                    resolve({appId, tableId, formId});
                 }).catch(function(error) {
-                    console.log(JSON.stringify(error));
+                    log.debug(JSON.stringify(error));
                     reject(error);
                 });
             });
@@ -161,8 +161,8 @@
          * @return A promise to make node call
          *
          */
-        function retriveFormByID(appId, tableId, formId) {
-            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, formId);
+        function retriveFormByID(inputAppId, inputTableId, inputFormId) {
+            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(inputAppId, inputTableId, inputFormId);
 
             return new promise(function(resolve, reject) {
                 recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
@@ -170,9 +170,9 @@
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
-                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID});
+                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formId' : resultFormID});
                 }).catch(function(error) {
-                    console.log(JSON.stringify(error));
+                    log.debug(JSON.stringify(error));
                     reject(error);
                 });
             });
@@ -196,9 +196,9 @@
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
-                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formID' : resultFormID, formType});
+                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formId' : resultFormID, formType});
                 }).catch(function(error) {
-                    console.log(JSON.stringify(error));
+                    log.debug(JSON.stringify(error));
                     reject(error);
                 });
             });
@@ -211,10 +211,10 @@
             it('Form creation normal case', function(done) {
                 this.timeout(testConsts.INTEGRATION_TIMEOUT);
                 let createFormsPromises = [];
-                let tableIDList = [];
+                let tableIdList = [];
                 app.tables.map((table, index) => {
                     createFormsPromises.push(createForm(app.id, table.id, forms[index]));
-                    tableIDList.push(table.id);
+                    tableIdList.push(table.id);
                 });
 
                 promise.all(createFormsPromises).then(formIdList => {
@@ -223,11 +223,11 @@
 
                     formIdList.forEach(newCreateForm => {
                         assert.equal(newCreateForm.appId, app.id, "Form creation test case is failed due to wrong app id");
-                        assert(tableIDList.indexOf(newCreateForm.tableId) > -1, "Form creation test case is failed due to wrong table id");
+                        assert(tableIdList.indexOf(newCreateForm.tableId) > -1, "Form creation test case is failed due to wrong table id");
                     });
 
                     done();
-                });
+                }).catch(done);
             });
         });
 
@@ -245,13 +245,13 @@
                 let getFormsPromises = [];
 
                 targetFormBuildList.forEach(form => {
-                    getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formID));
+                    getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formId));
                 });
 
                 promise.all(getFormsPromises).then(formIdList => {
                     assert.deepEqual(formIdList, targetFormBuildList);
                     done();
-                });
+                }).catch(done);
             });
         });
 
@@ -276,10 +276,9 @@
                 });
 
                 promise.all(getFormsPromises).then(formIdList => {
-                    //console.log(formIdList);
                     assert(formIdList.length === app.tables.length * formTypeList.length, "Get form by type test case is failed");
                     done();
-                });
+                }).catch(done);
             });
         });
 
@@ -289,7 +288,7 @@
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
             recordBase.apiBase.cleanup().then(function() {
                 done();
-            });
+            }).catch(done);
         });
     });
 }());
