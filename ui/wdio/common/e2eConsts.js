@@ -22,7 +22,7 @@
 
         //Wait time Objects
         shortWaitTimeMilliseonds : 5000,
-        mediumWaitTimeMilliseonds : 10000,
+        mediumWaitTimeMilliseonds : 15000,
         longWaitTimeMilliseonds : 30000,
         extraLongWaitTimeMilliseonds : 120000,
 
