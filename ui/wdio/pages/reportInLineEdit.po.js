@@ -6,6 +6,12 @@
 (function() {
     'use strict';
     var reportContent = require('./reportContent.po');
+    var e2ePageBase = require('./e2ePageBase.po');
+    var assert = require('assert');
+
+    var saveRecordInlineEdit  = '.ag-row.editing .saveRecord';
+    var cancelRecordInlineEdit = '.ag-row.editing .cancelSelection';
+    var addRecordInlineEdit = '.ag-row.editing .addRecord';
 
     var ReportInLineEditPage = Object.create(reportContent, {
 
@@ -39,15 +45,15 @@
 
         // Returns the save record button for the record being edited
         getSaveRecordButton: {value: function() {
-            return browser.element('.ag-row.editing .saveRecord');
+            return browser.element(saveRecordInlineEdit);
         }},
         // Returns the cancel button
         getCancelRecordButton: {value: function() {
-            return browser.element('.ag-row.editing .cancelSelection');
+            return browser.element(cancelRecordInlineEdit);
         }},
         // Returns the Save and Add New record butotn
         getSaveAddNewRecordButton: {value: function() {
-            return browser.element('.ag-row.editing .addRecord');
+            return browser.element(addRecordInlineEdit);
         }},
 
         // Notification Container for In-line edit actions
@@ -67,6 +73,7 @@
             if (browserName === 'chrome') {
                 recordCellEl.doubleClick();
             } else {
+
                 browser.execute(function(recordCellElement) {
                     var event = new MouseEvent('click', {
                         'view': window,
@@ -80,33 +87,37 @@
             this.getInlineEditRecord().waitForVisible();
         }},
 
+        //Assert three buttons not to be present
+        assertInlineEditMenuButtonsTobeTrue:{value: function() {
+            expect(browser.isVisible(saveRecordInlineEdit)).toBeTruthy();
+            expect(browser.isVisible(cancelRecordInlineEdit)).toBeTruthy();
+            expect(browser.isVisible(addRecordInlineEdit)).toBeTruthy();
+        }},
+
+        //Assert three buttons to be present
+        assertInlineEditMenuButtonsTobeFalse:{value: function() {
+            expect(browser.isVisible(saveRecordInlineEdit)).toBeFalse();
+            expect(browser.isVisible(cancelRecordInlineEdit)).toBeFalse();
+            expect(browser.isVisible(addRecordInlineEdit)).toBeFalse();
+        }},
+
         /**
          * Find and click the save button for the record being edited
          */
         clickSaveChangesButton: {value: function() {
             var saveRecordButtonEl = this.getSaveRecordButton();
 
+            //step 1-  Wait for the button to be visible
             saveRecordButtonEl.waitForVisible();
-            // Needed to do this as click in selenium webdriver is a blocking function so the modal never closes in the UI
-            // Have to click with raw JS
-            // See http://stackoverflow.com/questions/10486192/selenium-click-on-element-hangs
-            // https://github.com/SeleniumHQ/selenium/issues/709
-            //browser.execute(function() {
-            //    var event = new MouseEvent('click', {
-            //        'view': window,
-            //        'bubbles': true,
-            //        'cancelable': true,
-            //        'detail': 1
-            //    });
-            //    document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
-            //});
-
-            //TODO: Figure out why the framework sometimes doesn't click on the Save button properly
             try {
+                //step 2 - Click on save button
                 saveRecordButtonEl.click();
-                // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-                browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
+
+                //step 3 - After save button click wait for inline edit menu to disappear as to confirm that click event worked
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             } catch (err) {
+
+                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
                 // Catch an error from above and then retry
                 // Single click via raw javascript
                 browser.execute(function() {
@@ -118,7 +129,7 @@
                     });
                     document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
                 });
-                browser.waitForExist('.ag-row.editing', browser.waitforTimeout, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             }
         }},
 
@@ -134,9 +145,29 @@
          * Find and click the cancel button for the record being edited
          */
         clickCancelButton: {value: function() {
-            this.getCancelRecordButton().waitForVisible();
-            //TODO: Might need raw JS click here too
-            this.getCancelRecordButton().click();
+            var cancelRecordButtonEl = this.getCancelRecordButton();
+
+            cancelRecordButtonEl.waitForVisible();
+            try {
+                cancelRecordButtonEl.click();
+                // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
+            } catch (err) {
+
+                console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
+                // Catch an error from above and then retry
+                // Single click via raw javascript
+                browser.execute(function() {
+                    var event = new MouseEvent('click', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true,
+                        'detail': 1
+                    });
+                    document.querySelector('.ag-row.editing .cancelSelection').dispatchEvent(event);
+                });
+                browser.waitForVisible('.ag-row.editing .saveRecord', e2eConsts.mediumWaitTimeMilliseonds, true);
+            }
         }},
 
         /**
@@ -144,10 +175,11 @@
          * @param Text to assert is the notification element
          */
         assertSuccessMessage: {value: function(successMessage) {
-            this.notificationSuccessPopupEl.waitForVisible();
-            var messageText = this.notificationSuccessPopupEl.getText();
-            //expect(messageText).toContain(successMessage.toString());
-        }},
+            if (browserName !== 'safari') {
+                this.notificationSuccessPopupEl.waitForVisible();
+                var messageText = this.notificationSuccessPopupEl.getText();
+                expect(messageText).toContain(successMessage.toString(), 'Expected Message not found');
+            }}},
 
         /**
          * Loop through the records being displayed and return the one being edited
@@ -207,6 +239,8 @@
                 }, textInputCell);
             }
             textInputCell.setValue(textToEnter);
+            // expect(textInputCell.getText()).toBe(textToEnter);
+            // browser.pause(500);
         }},
 
         /**
@@ -366,6 +400,7 @@
             //TODO: Will need to handle a date at the end of the calendar row
             var nextDate = datesInRow.value[currentDateIndex + 1];
 
+            //nextDate.moveToObject();
             if (browserName === 'chrome') {
                 nextDate.moveToObject();
             } else {
@@ -373,6 +408,7 @@
                     dateElement.scrollIntoView(false);
                 }, nextDate);
             }
+            //Todo: Not working for Safari
             nextDate.click();
         }}
 
