@@ -56,10 +56,11 @@ const testCellRenderer = (props) => {
     return <div>{props.text}</div>;
 };
 
-const requireProps = {
+const requiredProps = {
     editingRowErrors: [],
     onCancelEditingRow: actions.onClickCancel,
     onClickSaveRow: actions.onClickSave,
+    cellRenderer: testCellRenderer,
 };
 
 let component;
@@ -88,6 +89,7 @@ describe('QbGrid', () => {
     describe('addRowProps', () => {
         it('adds props to each row so the row component can have access to relevant properties set on QbGrid', () => {
             component = shallow(<QbGrid
+                {...requiredProps}
                 numberOfColumns={testColumns.length}
                 columns={testColumns}
                 rows={testRows}
@@ -125,6 +127,7 @@ describe('QbGrid', () => {
 
         it('adds an editing class when the row is in editing mode', () => {
             component = shallow(<QbGrid
+                {...requiredProps}
                 numberOfColumns={testColumns.length}
                 columns={testColumns}
                 rows={testRows}
@@ -140,7 +143,11 @@ describe('QbGrid', () => {
     describe('onClickAddNewRow', () => {
         it('calls the onClickAddNewRow prop function with the editingRowId passed in', () => {
             spyOn(actions, 'onClickAdd');
-            component = shallow(<QbGrid editingRowId={firstRow.id} onClickAddNewRow={actions.onClickAdd}/>);
+            component = shallow(<QbGrid
+                {...requiredProps}
+                editingRowId={firstRow.id}
+                onClickAddNewRow={actions.onClickAdd}
+            />);
             instance = component.instance();
 
             instance.onClickAddNewRow();
@@ -152,6 +159,7 @@ describe('QbGrid', () => {
     describe('getActionsCell', () => {
         it('gets a row actions cell', () => {
             component = shallow(<QbGrid
+                {...requiredProps}
                 onClickDeleteIcon={actions.onClickDelete}
                 onClickEditIcon={actions.onClickEdit}
                 isEditing={true}
@@ -189,7 +197,7 @@ describe('QbGrid', () => {
 
     describe('getActionCellProps', () => {
         it('adds the isStickyCell prop to action cells so the component can add the appropriate class', () => {
-            component = shallow(<QbGrid/>);
+            component = shallow(<QbGrid {...requiredProps}/>);
             instance = component.instance();
 
             expect(instance.getActionCellProps()).toEqual({
@@ -201,7 +209,10 @@ describe('QbGrid', () => {
     describe('onClickToggleSelectedRow', () => {
         it('creates a function that can be used an event listener that includes the row id', () => {
             spyOn(actions, 'onClickToggle');
-            component = shallow(<QbGrid onClickToggleSelectedRow={actions.onClickToggle}/>);
+            component = shallow(<QbGrid
+                {...requiredProps}
+                onClickToggleSelectedRow={actions.onClickToggle}
+            />);
             instance = component.instance();
 
             // Create the function from the method and immediately invoke the returned function
@@ -213,7 +224,7 @@ describe('QbGrid', () => {
 
     describe('getUniqueRowKey', () => {
         it('returns a unique key for the row if the row has an id', () => {
-            component = shallow(<QbGrid/>);
+            component = shallow(<QbGrid {...requiredProps}/>);
             instance = component.instance();
 
             let actualValue = instance.getUniqueRowKey({rowData: firstRow, rowIndex: 4});
@@ -221,7 +232,7 @@ describe('QbGrid', () => {
         });
 
         it('returns a unique key based on the index of the row in the array for new records (records without an id)', () => {
-            component = shallow(<QbGrid/>);
+            component = shallow(<QbGrid {...requiredProps}/>);
             instance = component.instance();
 
             let actualValue = instance.getUniqueRowKey({rowData: newRow, rowIndex: 4});
@@ -229,12 +240,13 @@ describe('QbGrid', () => {
         });
     });
 
+    //TODO:: Refactor this test to improve readability.
     it('displays a grid based on passed in rows and columns', () => {
         let rowsWithHeader = [...testRows, subHeaderRow];
 
         // Using test utils in this class because we want to check the rendered DOM for the whole grid and not unit test shallow component
         component = TestUtils.renderIntoDocument(<QbGrid
-            {...requireProps}
+            {...requiredProps}
             numberOfColumns={testColumns.length}
             columns={testColumns}
             rows={rowsWithHeader}

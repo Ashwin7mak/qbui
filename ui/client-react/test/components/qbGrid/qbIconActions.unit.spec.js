@@ -12,7 +12,7 @@ const props = {
 
 const mockLocale = {
     getMessage(messageId) {
-        switch(messageId) {
+        switch (messageId) {
         case 'records.singular': return 'record';
         case 'selection.edit': return 'edit';
         case 'selection.print': return 'print';
