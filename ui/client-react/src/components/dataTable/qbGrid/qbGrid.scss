@@ -34,14 +34,21 @@ $edit-icon-font-size: 18px;
     .cellEditIcon {
         display: none;
         color: $ghost-text-color;
-        font-size: $edit-icon-font-size;
+        opacity: 0.6;
         position: absolute;
-        top: 0;
-        right: 5px;
+        top: 4px;
+        right: 0;
 
         &:hover {
             color: $default-hover-color;
+            opacity: 1;
+            background-color: rgba($color-black-100, 0.6);
         }
+    }
+
+    .AlignRight .cellEditIcon {
+        right: auto;
+        left: 0;
     }
 
     .qbCell:hover .cellEditIcon {
