@@ -170,7 +170,8 @@
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
-                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formId' : resultFormID});
+
+                    resolve({'appId': resultAppID, 'tableId': resultTableID, 'formId' : resultFormID, 'retrivedForm' : responseBody});
                 }).catch(function(error) {
                     log.debug(JSON.stringify(error));
                     reject(error);
@@ -248,8 +249,21 @@
                     getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formId));
                 });
 
-                promise.all(getFormsPromises).then(formIdList => {
-                    assert.deepEqual(formIdList, targetFormBuildList);
+                promise.all(getFormsPromises).then(returnForm => {
+                    let resultFormBuildList = [];
+                    forms.forEach(createdForm => {
+                        if (createdForm.appId === returnForm[0].appId && createdForm.tableId === returnForm[0].tableId) {
+                            resultFormBuildList.push({'appId': returnForm[0].appId, 'tableId': returnForm[0].tableId, 'formId' : returnForm[0].formId});
+                            assert.deepEqual(returnForm[0].retrivedForm.description, createdForm.description);
+                            assert.deepEqual(returnForm[0].retrivedForm.includeBuiltIns, createdForm.includeBuiltIns);
+                            assert.deepEqual(returnForm[0].retrivedForm.newFieldAction, createdForm.newFieldAction);
+                            assert.deepEqual(returnForm[0].retrivedForm.name, createdForm.name);
+                            assert.deepEqual(returnForm[0].retrivedForm.wrapElements, createdForm.wrapElements);
+                            assert.deepEqual(returnForm[0].retrivedForm.wrapLabel, createdForm.wrapLabel);
+                        }
+                    })
+                    // Make sure the created testing form has been returned.
+                    assert.equal(resultFormBuildList.length, 1);
                     done();
                 }).catch(done);
             });
