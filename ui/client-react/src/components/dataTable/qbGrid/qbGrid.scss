@@ -283,7 +283,7 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid .editing {
-    box-shadow: 0 10px 0 0 $qbgrid-cell-edit-background-color, 0 -10px 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+    box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
     margin-top: -15px;
     z-index: 999;
     background-color: $qbgrid-cell-edit-background-color;
@@ -297,19 +297,13 @@ $edit-icon-font-size: 18px;
     > td {
         //This adds border back to the bottom of inline edit
         //border: none;
+        border-top: 2px solid $cell-edit-background-edit;
         overflow: visible;
         margin: 0;
         //vertical-align: middle;
         border-right: 1px solid #dcdcdc;
         //Commented out because in-line edit row is too big, this makes the height smaller
         //padding-bottom: 14px;
-        //Nick's Changes I need to relook at this===================================================
-        border: none;
-        overflow: visible;
-        margin: 0;
-        vertical-align: middle;
-        padding-bottom: 14px;
-        //Nick's Changes I need to relook at this===================================================
 
         .cellWrapper {
             display: flex;
@@ -479,7 +473,7 @@ $edit-icon-font-size: 18px;
 .qbGrid > tbody > tr > td:first-of-type {
     height: 32px;
     background: $row-bg-color;
-    z-index: 1;
+    z-index: 1000;
     outline: $row-cell-border-color
 }
 
