@@ -44,7 +44,7 @@ const QbRow = React.createClass({
             return this.renderSubHeader();
         }
 
-        return <tr key={`qbRow-${this.props.rowId}`} {...this.props} />;
+        return <tr className={this.props.className} key={`qbRow-${this.props.rowId}`} {...this.props} />;
     }
 });
 

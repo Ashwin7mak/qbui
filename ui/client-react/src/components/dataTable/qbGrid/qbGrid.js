@@ -35,7 +35,6 @@ const QbGrid = React.createClass({
          * The id of the editing row. QbGrid assumes each row has a unique id property. */
         editingRowId: PropTypes.number,
 
-
         // TODO:: Refactor out isInlineEditOpen once agGrid is removed. See more detail in reportGrid.js
         /**
          * A boolean value indicating if inline editing is currently open*/
@@ -113,13 +112,32 @@ const QbGrid = React.createClass({
         menuProps: PropTypes.object,
     },
 
+    getDefaultProps() {
+        return {
+            numberOfColumns: 0,
+            columns: [],
+            rows: [],
+            editingRowId: null,
+            isInlineEditOpen: false,
+            isEditingRowValid: true,
+            isEditingRowSaving: false,
+        };
+    },
+
     onClickAddNewRow() {
         if (this.props.onClickAddNewRow) {
             this.props.onClickAddNewRow(this.props.editingRowId);
         }
     },
 
-    getActionsCell(cellDataRow, rowProps) {
+    /**
+     * Renders the action cells. These are the cells that appear in the first column of the grid and have actions like
+     * "edit" and "delete"
+     * @param _cellDataRow
+     * @param rowProps
+     * @returns {XML}
+     */
+    getActionsCell(_cellDataRow, rowProps) {
         return <RowActions
             rowId={rowProps.rowData.id}
             onClickDeleteRowIcon={this.props.onClickDeleteIcon}
@@ -149,18 +167,32 @@ const QbGrid = React.createClass({
         };
     },
 
+    /**
+     * Render a single cell
+     * @param cellData
+     * @returns {ReactElement<P>|ClassicElement<P>|DOMElement<P>}
+     */
     renderCell(cellData) {
+        // The createElement function is used here instead of the shorthand JSX to build a component from a component class or function
         return React.createElement(this.props.cellRenderer, Object.assign({}, cellData, this.props.commonCellProps));
     },
 
+    /**
+     * Render a single column
+     */
     getColumns() {
         return this.props.columns.map(column => {
             return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
         });
     },
 
-    addRowDecorators(row) {
-        let classes = ['table-row'];
+    /**
+     * Adds properties to the row so that the row component can access information set on the QbGrid component.
+     * @param row
+     * @returns {*}
+     */
+    addRowProps(row) {
+        let classes = ['qbRow'];
         if (row.isEditing) {
             classes.push('editing');
         }
@@ -202,6 +234,11 @@ const QbGrid = React.createClass({
         );
     },
 
+    /**
+     * Action that is fired when the selection checkbox in the first column for an individual row is clicked
+     * @param id
+     * @returns {function()}
+     */
     onClickToggleSelectedRow(id) {
         return () => {
             if (this.props.onClickToggleSelectedRow) {
@@ -210,6 +247,13 @@ const QbGrid = React.createClass({
         };
     },
 
+    /**
+     * Returns a unique key that can be used for the row
+     * For rows without an id, uses the index of the row in the array as the id
+     * @param rowData
+     * @param rowIndex
+     * @returns {string}
+     */
     getUniqueRowKey({rowData, rowIndex}) {
         if (rowData.id === UNSAVED_RECORD_ID) {
             return `newRow-${rowIndex}`;
@@ -255,7 +299,7 @@ const QbGrid = React.createClass({
                 >
                     <Table.Header />
 
-                    <Table.Body onRow={this.addRowDecorators} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
+                    <Table.Body onRow={this.addRowProps} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
                 </Table.Provider>
             </Loader>
         );
