@@ -40,11 +40,11 @@ const QbRow = React.createClass({
     },
 
     render() {
-        if (this.props.subHeader) {
+        if (this.props.isSubHeader) {
             return this.renderSubHeader();
         }
 
-        return <tr key={`qbRow-${this.props.recordId}`} {...this.props} />;
+        return <tr key={`qbRow-${this.props.rowId}`} {...this.props} />;
     }
 });
 

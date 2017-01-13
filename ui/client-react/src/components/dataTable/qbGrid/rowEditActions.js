@@ -17,27 +17,27 @@ const RowEditActions = React.createClass({
         onClickSave: PropTypes.func,
         onClickCancel: PropTypes.func,
         rowEditErrors: PropTypes.array,
-        recordId: PropTypes.number,
+        rowId: PropTypes.number,
         isSaving: PropTypes.bool,
         isValid: PropTypes.bool
     },
 
     onClickSave() {
         if (this.props.onClickSave) {
-            this.props.onClickSave(this.props.recordId);
+            this.props.onClickSave(this.props.rowId);
         }
     },
 
     onClickCancel() {
         if (this.props.onClickCancel) {
-            this.props.onClickCancel(this.props.recordId);
+            this.props.onClickCancel(this.props.rowId);
         }
     },
 
     onClickAdd() {
         // Don't allow a user to move on and add another row if the record is currently invalid
         if (this.props.onClickAdd && this.props.isValid) {
-            this.props.onClickAdd(this.props.recordId);
+            this.props.onClickAdd(this.props.rowId);
         }
     },
 

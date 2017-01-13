@@ -2,10 +2,12 @@ import React, {PropTypes} from 'react';
 import * as Table from 'reactabular-table';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import QbHeaderCell from './qbHeaderCell';
 import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import ReactDOM from 'react-dom';
 
 import './qbGrid.scss';
 
@@ -119,10 +121,8 @@ const QbGrid = React.createClass({
     },
 
     getActionsCell(cellDataRow, rowProps) {
-        let id = this.getRecordIdForRow(rowProps.rowData);
-
         return <RowActions
-            recordId={id}
+            rowId={rowProps.rowData.id}
             onClickDeleteRowIcon={this.props.onClickDeleteIcon}
             onClickEditRowIcon={this.props.onClickEditIcon}
             isEditing={rowProps.rowData.isEditing}
@@ -139,6 +139,17 @@ const QbGrid = React.createClass({
         />;
     },
 
+    /**
+     * The row actions in the first column should be sticky as the user scrolls left and right on the grid
+     * This function adds the isStickyCell:true prop to qbCell
+     * @returns {{isStickyCell: boolean}}
+     */
+    getActionCellProps() {
+        return {
+            isStickyCell: true
+        };
+    },
+
     renderCell(cellData) {
         return React.createElement(this.props.cellRenderer, Object.assign({}, cellData, this.props.commonCellProps));
     },
@@ -149,45 +160,29 @@ const QbGrid = React.createClass({
         });
     },
 
-    getRecordIdForRow(rowProps) {
-        let keys = Object.keys(rowProps);
-        if (keys.length === 0) {
-            return null;
-        }
-
-        let firstField = rowProps[keys[0]];
-
-        if (!_.isObject(firstField)) {
-            return null;
-        }
-
-        return firstField.recordId;
-    },
-
     addRowDecorators(row) {
         let classes = ['table-row'];
         if (row.isEditing) {
             classes.push('editing');
         }
+        if (row.classes) {
+            classes = [...classes, ...row.classes];
+        }
 
-        return {
+        let rowProps = Object.assign({
+            subHeaderId: row.id,
             className: classes.join(' '),
-            isEditing: row.isEditing,
             editingRowId: this.props.editingRowId,
             isInlineEditOpen: this.props.isInlineEditOpen,
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
-            isSelected: row.isSelected,
-            // props that differentiate a subheader
-            subHeader: row.subHeader,
-            subHeaderLevel: row.subHeaderLevel,
-            subHeaderId: row.id,
-            subHeaderLabel: row.subHeaderLabel,
             // Add one to account for the extra column at the start of the grid for the row actions.
             // TODO:: Only add one if the prop for displaying those actions is set
             numberOfColumns: this.props.numberOfColumns + 1,
             compareCellChanges: this.props.compareCellChanges,
-        };
+        }, row);
+
+        return rowProps;
     },
 
     /**
@@ -195,7 +190,8 @@ const QbGrid = React.createClass({
      * @returns {React}
      */
     getCheckboxHeader() {
-        const allSelected = this.props.selectedRows.length === this.props.rows.length;
+        let {selectedRows, rows} = this.props;
+        const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
 
         return (
             <input
@@ -221,7 +217,26 @@ const QbGrid = React.createClass({
         }
         return `row-${rowData.id}`;
     },
-
+    handleScroll(ev) {
+        console.log('querySelectorAll: ', document.getElementsByClassName('stickyCell')[0]);
+        let stickyCell = document.getElementsByClassName('stickyCell');
+        let currentLeftScroll = document.getElementsByClassName('reportContent')[0].scrollLeft;
+        for(var i = 0; i < stickyCell.length; i++) {
+            if (i === 0) {
+                stickyCell[i].style.outline = '1px solid #c0d0e4'
+                stickyCell[i].style.left = currentLeftScroll + 'px';
+            } else {
+                stickyCell[i].style.outline = "1px solid #dcdcdc";
+                stickyCell[i].style.left = currentLeftScroll + 'px';
+            }
+        };
+    },
+    componentDidMount() {
+        const reportContent = document.getElementsByClassName('reportContent')[0];
+        if (reportContent) {
+            reportContent.addEventListener('scroll', this.handleScroll);
+        }
+    },
     render() {
         let columns = [
             ...[{
@@ -232,21 +247,26 @@ const QbGrid = React.createClass({
                         scope: 'col'
                     },
                     label: this.getCheckboxHeader(),
+                    transforms: [this.getActionCellProps],
                 },
                 cell: {
-                    formatters: [this.getActionsCell]
+                    formatters: [this.getActionsCell],
+                    transforms: [this.getActionCellProps],
                 }
             }],
             ...this.getColumns()
         ];
-
         return (
+
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
                 <Table.Provider
                     ref="qbGridTable"
                     className="qbGrid"
                     columns={columns}
                     components={{
+                        header: {
+                            cell: QbHeaderCell
+                        },
                         body: {
                             row: QbRow,
                             cell: QbCell

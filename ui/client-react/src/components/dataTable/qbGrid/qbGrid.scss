@@ -10,7 +10,9 @@ $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
+$cell-edit-background-edit: $color-blue-200;
 $edit-icon-font-size: 18px;
+
 .qbGrid > thead, .qbGrid > tbody {
     color: $default-text-onlight-color;
     -webkit-font-smoothing: antialiased;
@@ -83,6 +85,7 @@ $edit-icon-font-size: 18px;
 
     .gridHeaderCell {
         display: flex;
+        align-items: center;
 
         .gridHeaderLabel {
             flex-grow: 1;
@@ -145,13 +148,13 @@ $edit-icon-font-size: 18px;
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        background-color: #f3f8fe;
-        box-shadow: -6px 0px 14px #dcdcdc;
+        background-color: $qbgrid-cell-edit-background-color;
+        box-shadow: -6px 0px 14px $qbgrid-row-box-shadow-color;
         position: absolute;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid #dddddd;
+        border: 1px solid $qbgrid-row-border-color;
 
         .loadedContent {
             padding: 0;
@@ -170,7 +173,7 @@ $edit-icon-font-size: 18px;
         button {
             flex: 0 0 auto;
             border: 0;
-            background-color: $cell-edit-background-edit;
+            background-color: $qbgrid-cell-edit-background-color;
             margin-right: 2px;
             padding: 6px 4px;
 
@@ -222,6 +225,7 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > thead > tr > th {
+    min-width: 80px;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
@@ -257,6 +261,7 @@ $edit-icon-font-size: 18px;
 
 .qbGrid > tbody > tr > td {
     //Added padding-left and padding-right to match the AGGrid view layout
+    height: $form-view-box-height;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;
@@ -278,15 +283,15 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid .editing {
-    box-shadow: 0 0px 14px #dcdcdc;
+    box-shadow: 0 10px 0 0 $qbgrid-cell-edit-background-color, 0 -10px 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
     margin-top: -15px;
     z-index: 999;
-    background-color: $cell-edit-background-edit;
+    background-color: $qbgrid-cell-edit-background-color;
     border-top: $cell-edit-background-edit;
 
     > td:first-child {
         padding-left: 4px;
-        border-left: 1px solid $row-border-color;
+        border-left: 1px solid $qbgrid-row-border-color;
     }
 
     > td {
@@ -298,6 +303,13 @@ $edit-icon-font-size: 18px;
         border-right: 1px solid #dcdcdc;
         //Commented out because in-line edit row is too big, this makes the height smaller
         //padding-bottom: 14px;
+        //Nick's Changes I need to relook at this===================================================
+        border: none;
+        overflow: visible;
+        margin: 0;
+        vertical-align: middle;
+        padding-bottom: 14px;
+        //Nick's Changes I need to relook at this===================================================
 
         .cellWrapper {
             display: flex;
@@ -317,13 +329,12 @@ $edit-icon-font-size: 18px;
 
             &.editingCell {
                 display: inline-block;
-                border: none;
+                //border: none;
                 //This aligns input boxes to the top for inline edit and it adds padding to the bottom
                 padding-bottom: 20px;
                 margin-top: -6px;
 
                 .nonEditable {
-                    //This aligns record ID up with input boxes
                     margin: 1px;
                     cursor: not-allowed;
                 }
@@ -463,4 +474,16 @@ $edit-icon-font-size: 18px;
     font-size: $grid-font-size;
     border-radius: 0;
     color: $font-color;
+}
+//The style here is for sticky column
+.qbGrid > tbody > tr > td:first-of-type {
+    height: 32px;
+    background: $row-bg-color;
+    z-index: 1;
+    outline: $row-cell-border-color
+}
+
+.qbHeaderCell.stickyCell {
+    position: relative;
+    z-index: 1;
 }
