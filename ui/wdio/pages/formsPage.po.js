@@ -423,7 +423,7 @@
         setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
             var fieldTypes = getAllUniqueFieldTypes;
             for (var i = 0; i < fieldTypes.value.length; i++) {
-                if (browser === 'firefox') {
+                if (browserName === 'firefox') {
                     fieldTypes.value[i].click();
                     fieldTypes.value[i].clear();
                     browser.pause(100);
