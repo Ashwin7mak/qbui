@@ -25,7 +25,7 @@ const props = {
     onClickSaveRow: function() {}
 };
 
-describe('RowActions', () => {
+describe('RowActions (QbGrid)', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
