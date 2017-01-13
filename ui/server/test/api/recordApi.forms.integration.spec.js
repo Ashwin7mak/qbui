@@ -261,7 +261,7 @@
                             assert.deepEqual(returnForm[0].retrivedForm.wrapElements, createdForm.wrapElements);
                             assert.deepEqual(returnForm[0].retrivedForm.wrapLabel, createdForm.wrapLabel);
                         }
-                    })
+                    });
                     // Make sure the created testing form has been returned.
                     assert.equal(resultFormBuildList.length, 1);
                     done();
