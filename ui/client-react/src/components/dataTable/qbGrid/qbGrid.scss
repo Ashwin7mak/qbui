@@ -474,10 +474,16 @@ $edit-icon-font-size: 18px;
     height: 32px;
     background: $row-bg-color;
     z-index: 1000;
-    outline: $row-cell-border-color
+    outline: $row-cell-border-color;
 }
 
 .qbHeaderCell.stickyCell {
     position: relative;
     z-index: 1;
+}
+
+//Makes row edit action menu pop over the table instead of over stickyColumn
+.dropdown-menu {
+    top: 0;
+    left: 27px;
 }
