@@ -1,6 +1,7 @@
 import RowTransformer from '../qbGrid/rowTransformer';
 import _ from 'lodash';
 import {DEFAULT_RECORD_KEY} from '../../../constants/schema';
+import Locale from '../../../locales/locales';
 
 /**
  * A helper class to transform report API data into rows that can be displayed the Reactabular grid
@@ -190,6 +191,9 @@ function isAGroupOfRecords(record) {
  */
 function flattenRecordGroup(record, transformedRecords, fields, info) {
     let groupHeaderId = `groupHeader_${record.group}`;
+    if (record.group === Locale.getMessage('groupHeader.empty')) {
+        groupHeaderId = _.uniqueId(groupHeaderId);
+    }
 
     let currentSubHeaderLevel = (_.isNumber(info.subHeaderLevel) ? info.subHeaderLevel : 0);
 

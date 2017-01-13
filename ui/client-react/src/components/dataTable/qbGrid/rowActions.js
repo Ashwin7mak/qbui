@@ -10,7 +10,7 @@ export const SELECT_ROW_CHECKBOX = 'selectRowCheckbox';
  */
 const RowActions = React.createClass({
     propTypes: {
-        rowId: PropTypes.number,
+        rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         isEditing: PropTypes.bool,
         isSelected: PropTypes.bool,
         editingRowId: PropTypes.number,
