@@ -23,17 +23,17 @@ export const ReportColumnHeaderMenu = React.createClass({
     },
 
     /**
-     * Build the menu items for sort/group
+     * Build the menu items for sort/group (ascending)
      * @param column
      * @param prependText
      * @returns {*}
      */
     getSortAscText(prependText) {
-        let message = ' ';
-
         if (!_.has(this.props.fieldDef, 'datatypeAttributes.type')) {
-            return message;
+            return '';
         }
+
+        let message = ' ';
 
         switch (this.props.fieldDef.datatypeAttributes.type) {
         case FieldConsts.CHECKBOX:
@@ -60,12 +60,17 @@ export const ReportColumnHeaderMenu = React.createClass({
         return convertSortingMessageToI18nMessage(prependText, message);
     },
 
+    /**
+     * Build the menu items for sort group (descending)
+     * @param prependText
+     * @returns {*}
+     */
     getSortDescText(prependText) {
-        let message = ' ';
-
         if (!_.has(this.props.fieldDef, 'datatypeAttributes.type')) {
-            return message;
+            return '';
         }
+
+        let message = ' ';
 
         switch (this.props.fieldDef.datatypeAttributes.type) {
         case FieldConsts.CHECKBOX:
@@ -92,24 +97,29 @@ export const ReportColumnHeaderMenu = React.createClass({
         return convertSortingMessageToI18nMessage(prependText, message);
     },
 
+    /**
+     * Checks if a particular field has been sorted in ascending order
+     * @returns {boolean}
+     */
     isSortedAsc() {
-        let isSortedAsc = true;
+        if (!this.props.sortFids) {return false;}
 
-        // TODO:: Clean up this duplicated function
-        _.find(this.props.sortFids, fid => {
-            if (Math.abs(fid) === this.props.fieldDef.id) {
-                isSortedAsc = fid > 0;
-            }
+        return this.props.sortFids.some(fid => {
+            // When a field is sorted in descending order, the field is returned as a negative value
+            return ((Math.abs(fid) === this.props.fieldDef.id) && fid > 0);
         });
-
-        return isSortedAsc;
     },
 
+    /**
+     * Checks if a particular field has been sorted
+     * @returns {boolean}
+     */
     isFieldSorted() {
+        if (!this.props.sortFids) {return false;}
+
         return _.find(this.props.sortFids, fid => {
-            if (Math.abs(fid) === this.props.fieldDef.id) {
-                return true;
-            }
+            // Math.abs is needed because when a field is sorted in descending order, the field id is a negative value
+            return Math.abs(fid) === this.props.fieldDef.id;
         });
     },
 
@@ -158,17 +168,23 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                 <Dropdown.Menu>
                     <MenuItem onSelect={this.sortReportAscending}>
-                        {this.isFieldSortedAscending() && <QbIcon icon="check"/>} {this.getSortAscText(SORTING_MESSAGE)}
+                        {this.isFieldSortedAscending() && <QbIcon icon="check"/>}
+                        <span className="sortAscendMenuText">{this.getSortAscText(SORTING_MESSAGE)}</span>
                     </MenuItem>
 
                     <MenuItem onSelect={this.sortReportDescending}>
-                        {this.isFieldSortedDescending() && <QbIcon icon="check"/>} {this.getSortDescText(SORTING_MESSAGE)}
+                        {this.isFieldSortedDescending() && <QbIcon icon="check"/>}
+                        <span className="sortDescendMenuText">{this.getSortDescText(SORTING_MESSAGE)}</span>
                     </MenuItem>
 
                     <MenuItem divider/>
 
-                    <MenuItem onSelect={this.groupReportAscending}> {this.getSortAscText(GROUPING_MESSAGE)}</MenuItem>
-                    <MenuItem onSelect={this.groupReportDescending}> {this.getSortDescText(GROUPING_MESSAGE)}</MenuItem>
+                    <MenuItem onSelect={this.groupReportAscending}>
+                        <span className="groupAscendMenuText">{this.getSortAscText(GROUPING_MESSAGE)}</span>
+                    </MenuItem>
+                    <MenuItem onSelect={this.groupReportDescending}>
+                        <span className="groupDescendMenuText">{this.getSortDescText(GROUPING_MESSAGE)}</span>
+                    </MenuItem>
 
                     <MenuItem divider/>
 
