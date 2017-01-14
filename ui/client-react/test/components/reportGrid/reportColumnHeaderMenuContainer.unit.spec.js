@@ -62,9 +62,11 @@ describe('ReportColumnHeaderMenuContainer', () => {
     });
 
     describe('groupReport', () => {
-        it('calls the flux action to group a report', () => {
+        beforeEach(() => {
             spyOn(mockFlux.actions, 'loadDynamicReport');
+        });
 
+        it('calls the flux action to group a report', () => {
             component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {flux: mockFlux, ...mockProps}));
             instance = component.instance();
 
@@ -77,12 +79,23 @@ describe('ReportColumnHeaderMenuContainer', () => {
 
             expect(mockFlux.actions.loadDynamicReport).toHaveBeenCalledWith(mockProps.appId, mockProps.tblId, mockProps.rptId, true, mockProps.filter, expectedQueryParams);
         });
+
+        it('does not call the group action if the required props are not passed in', () => {
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {flux: mockFlux}));
+            instance = component.instance();
+
+            instance.groupReport(mockFieldDef, true);
+
+            expect(mockFlux.actions.loadDynamicReport).not.toHaveBeenCalled();
+        });
     });
 
     describe('sortReport', () => {
-        it('calls the flux action to sort a report', () => {
+        beforeEach(() => {
             spyOn(mockFlux.actions, 'loadDynamicReport');
+        });
 
+        it('calls the flux action to sort a report', () => {
             component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {flux: mockFlux, ...mockProps}));
             instance = component.instance();
 
@@ -94,6 +107,24 @@ describe('ReportColumnHeaderMenuContainer', () => {
             expectedQueryParams[query.NUMROWS_PARAM] = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
             expect(mockFlux.actions.loadDynamicReport).toHaveBeenCalledWith(mockProps.appId, mockProps.tblId, mockProps.rptId, true, mockProps.filter, expectedQueryParams);
+        });
+
+        it('does not call the action to sort a report if the required props are not passed in', () => {
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {flux: mockFlux}));
+            instance = component.instance();
+
+            instance.sortReport(mockFieldDef, true, false);
+
+            expect(mockFlux.actions.loadDynamicReport).not.toHaveBeenCalled();
+        });
+
+        it('does not call the action to sort a report if it is already sorted', () => {
+            component = shallow(React.createElement(ReportColumnHeaderMenuContainer(MockMenu), {flux: mockFlux, ...mockProps}));
+            instance = component.instance();
+
+            instance.sortReport(mockFieldDef, true, true);
+
+            expect(mockFlux.actions.loadDynamicReport).not.toHaveBeenCalled();
         });
     });
 });
