@@ -101,7 +101,7 @@ describe('ReportColumnHeaderMenu', () => {
             });
         });
 
-        it ('returns a blank string if no type is provided', () => {
+        it('returns a blank string if no type is provided', () => {
             component = shallow(<ReportColumnHeaderMenu fieldDef={{datatypeAttributes: null}}/>);
             instance = component.instance();
 

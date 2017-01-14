@@ -7,6 +7,13 @@ import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
 const FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * A wrapper for ReportColumnMenuContainer that has a link to the flux stores. Separates presentational from business
+ * logic for the ReportColumnHeaderMenu and makes that menu component more reusable in other contexts.
+ * @param ReportColumnHeaderMenu
+ * @returns {*}
+ * @constructor
+ */
 const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
     return React.createClass({
         mixins: [FluxMixin],
