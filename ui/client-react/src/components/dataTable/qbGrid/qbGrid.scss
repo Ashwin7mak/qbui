@@ -40,14 +40,21 @@ $edit-icon-font-size: 18px;
     .cellEditIcon {
         display: none;
         color: $ghost-text-color;
-        font-size: $edit-icon-font-size;
+        opacity: 0.6;
         position: absolute;
-        top: 0;
-        right: 5px;
+        top: 4px;
+        right: 0;
 
         &:hover {
             color: $default-hover-color;
+            opacity: 1;
+            background-color: rgba($color-black-100, 0.6);
         }
+    }
+
+    .AlignRight .cellEditIcon {
+        right: auto;
+        left: 0;
     }
 
     .qbCell:hover .cellEditIcon {
@@ -488,3 +495,10 @@ $edit-icon-font-size: 18px;
 th.qbHeaderCell.stickyCell {
     z-index: 1001;
 }
+
+//Makes row edit action menu pop over the table instead of over stickyColumn
+.dropdown-menu {
+    top: 0;
+    left: 27px;
+}
+

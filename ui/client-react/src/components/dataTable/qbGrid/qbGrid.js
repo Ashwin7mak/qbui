@@ -234,8 +234,11 @@ const QbGrid = React.createClass({
 
         // move the stick cells (1st col) right to their originial positions
         let stickyCells = scrolled.getElementsByClassName('stickyCell');
+
         stickyCells[0].style.borderRight = '1px solid #c0d0e4'; // header cell
         stickyCells[0].style.left = currentLeftScroll + 'px';
+        stickyCells[0].style.right = 0;
+        stickyCells[0].style.bottom = 0;
         for (let i = 1; i < stickyCells.length; i++) {
             stickyCells[i].style.borderRight = '1px solid #dcdcdc'
             stickyCells[i].style.left = currentLeftScroll + 'px';
