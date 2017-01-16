@@ -217,26 +217,31 @@ const QbGrid = React.createClass({
         }
         return `row-${rowData.id}`;
     },
-    handleScroll(ev) {
-        console.log('querySelectorAll: ', document.getElementsByClassName('stickyCell')[0]);
-        let stickyCell = document.getElementsByClassName('stickyCell');
-        let currentLeftScroll = document.getElementsByClassName('reportContent')[0].scrollLeft;
-        for(var i = 0; i < stickyCell.length; i++) {
-            if (i === 0) {
-                stickyCell[i].style.outline = '1px solid #c0d0e4'
-                stickyCell[i].style.left = currentLeftScroll + 'px';
-            } else {
-                stickyCell[i].style.outline = "1px solid #dcdcdc";
-                stickyCell[i].style.left = currentLeftScroll + 'px';
-            }
+
+    /**
+     * stick the header and sticky first column when the grid scrolls
+     */
+    handleScroll() {
+        let scrolled = document.getElementsByClassName('qbGrid')[0];
+        let currentLeftScroll = scrolled.scrollLeft;
+        let currentTopScroll = scrolled.scrollTop;
+
+        // move the headers down to their original positions
+        let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+        for (let i = 0; i < stickyHeaders.length; i++) {
+            stickyHeaders[i].style.top = currentTopScroll + 'px';
+        };
+
+        // move the stick cells (1st col) right to their originial positions
+        let stickyCells = scrolled.getElementsByClassName('stickyCell');
+        stickyCells[0].style.borderRight = '1px solid #c0d0e4'; // header cell
+        stickyCells[0].style.left = currentLeftScroll + 'px';
+        for (let i = 1; i < stickyCells.length; i++) {
+            stickyCells[i].style.borderRight = '1px solid #dcdcdc'
+            stickyCells[i].style.left = currentLeftScroll + 'px';
         };
     },
-    componentDidMount() {
-        const reportContent = document.getElementsByClassName('reportContent')[0];
-        if (reportContent) {
-            reportContent.addEventListener('scroll', this.handleScroll);
-        }
-    },
+
     render() {
         let columns = [
             ...[{
@@ -263,6 +268,7 @@ const QbGrid = React.createClass({
                     ref="qbGridTable"
                     className="qbGrid"
                     columns={columns}
+                    onScroll={this.handleScroll}
                     components={{
                         header: {
                             cell: QbHeaderCell
@@ -271,11 +277,11 @@ const QbGrid = React.createClass({
                             row: QbRow,
                             cell: QbCell
                         }
-                    }}
-                >
+                    }}>
                     <Table.Header />
 
                     <Table.Body onRow={this.addRowDecorators} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
+
                 </Table.Provider>
             </Loader>
         );
