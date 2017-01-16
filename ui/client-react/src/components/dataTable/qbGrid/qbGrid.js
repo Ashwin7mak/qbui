@@ -230,9 +230,9 @@ const QbGrid = React.createClass({
         let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
         for (let i = 0; i < stickyHeaders.length; i++) {
             stickyHeaders[i].style.top = currentTopScroll + 'px';
-        };
+        }
 
-        // move the stick cells (1st col) right to their originial positions
+        // move the stick cells (1st col) right to their original positions
         let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
         stickyCells[0].style.borderRight = '1px solid #c0d0e4'; // header cell
@@ -240,9 +240,9 @@ const QbGrid = React.createClass({
         stickyCells[0].style.right = 0;
         stickyCells[0].style.bottom = 0;
         for (let i = 1; i < stickyCells.length; i++) {
-            stickyCells[i].style.borderRight = '1px solid #dcdcdc'
+            stickyCells[i].style.borderRight = '1px solid #dcdcdc';
             stickyCells[i].style.left = currentLeftScroll + 'px';
-        };
+        }
     },
 
     render() {

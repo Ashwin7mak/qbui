@@ -27,9 +27,9 @@ $edit-icon-font-size: 18px;
     //margin: 2px;
 
     flex: 1 1 auto;
-    overflow:auto;
-    display:block;
-    width:100%;
+    overflow: auto;
+    display: block;
+    width: 100%;
     border-collapse: initial; // needed for sticky column
 
     .qbIcon {
@@ -237,8 +237,8 @@ $edit-icon-font-size: 18px;
 
 .qbGrid > thead > tr > th {
     min-width: 80px;
-    position:relative;
-    z-index:1;
+    position: relative;
+    z-index: 1;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
@@ -313,7 +313,7 @@ $edit-icon-font-size: 18px;
         overflow: visible;
         margin: 0;
         //vertical-align: middle;
-        border-right: 1px solid #dcdcdc;
+        border-right: 1px solid $row-border-color;
         //Commented out because in-line edit row is too big, this makes the height smaller
         //padding-bottom: 14px;
 
