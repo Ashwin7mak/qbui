@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('NODE_ENV: ' + process.env.NODE_ENV);
 
-    var configFileTest = grunt.option('configFileTest');
+    var configFileTest = grunt.option('configFileTest') || 'wdioSauce.conf.js';
 
     var sauceDns = grunt.option('sauceDns') || '127.0.0.1';
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
