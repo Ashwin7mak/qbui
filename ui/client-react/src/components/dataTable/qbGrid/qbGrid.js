@@ -113,7 +113,6 @@ const QbGrid = React.createClass({
          * Additional props that can be passed to the menu in addition to the column properties from the grid data */
         menuProps: PropTypes.object,
     },
-
     onClickAddNewRow() {
         if (this.props.onClickAddNewRow) {
             this.props.onClickAddNewRow(this.props.editingRowId);
@@ -244,6 +243,8 @@ const QbGrid = React.createClass({
     componentWillUnmount() {
         const reportContent = document.getElementsByClassName('reportContent')[0];
         reportContent.removeEventListener("scroll", this.props.handleScroll);
+    },
+    componentWillUpdate() {
         if (this.props.editingRowId) {
             this.resetZIndex();
         }
@@ -251,8 +252,9 @@ const QbGrid = React.createClass({
     resetZIndex() {
         /**This resets the zIndex for the sticky cell back to the same z-index as the other sticky cells
          * this prevents future pop up clippingslet stickyCell = document.getElementsByClassName('stickyCell');
-         * stickyCell[this.props.editingRowId].style.zIndex = 2;
          */
+        let stickyCell = document.getElementsByClassName('stickyCell');
+        stickyCell[this.props.editingRowId].style.zIndex = 2;
     },
     preventPopUpClipping() {
         let stickyCell = document.getElementsByClassName('stickyCell');
@@ -261,7 +263,7 @@ const QbGrid = React.createClass({
     render() {
         console.log('this.props: ', this.props);
         /**
-         * If a user is currenly inline editing, then the zIndex needs to be set higher for the sticky cell
+         * If a user is currently inline editing, then the zIndex needs to be set higher for the sticky cell
          * this prevents pop up clippings
          * */
         if (this.props.editingRowId) {
