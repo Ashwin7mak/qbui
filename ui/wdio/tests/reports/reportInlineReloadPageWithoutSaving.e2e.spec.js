@@ -54,7 +54,7 @@
 
                 // Get the original value of the text field on the second record
                 var fieldValues = ReportContentPO.getRecordValues(2);
-                var originalText = fieldValues[1];
+                var originalText = fieldValues[0];
 
                 // Step 1 - Open the in-line edit menu for the third record on that page
                 ReportInLineEditPO.openRecordEditMenu(2);
