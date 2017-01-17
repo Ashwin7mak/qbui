@@ -238,7 +238,7 @@ $edit-icon-font-size: 18px;
 .qbGrid > thead > tr > th {
     min-width: 80px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
@@ -489,12 +489,12 @@ $edit-icon-font-size: 18px;
 
 .stickyCell {
     position: relative;
-    z-index: 2;
+    z-index: 3;
 }
 
 // first column td z-index is 1000
 th.qbHeaderCell.stickyCell {
-    z-index: 1001;
+    z-index: 3;
 }
 
 .dropdown-menu {
