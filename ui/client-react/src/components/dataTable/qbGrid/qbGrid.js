@@ -218,17 +218,18 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
     handleScroll(ev) {
-        console.log('querySelectorAll: ', document.getElementsByClassName('stickyCell')[0]);
+        /**
+         * This creates a sticky column by repositioning the stickyCell to the current left scroll position
+         * */
         let stickyCell = document.getElementsByClassName('stickyCell');
         let currentLeftScroll = document.getElementsByClassName('reportContent')[0].scrollLeft;
         for(var i = 0; i < stickyCell.length; i++) {
             if (i === 0) {
+                stickyCell[i].style.display = 'in-line-block';
                 stickyCell[i].style.outline = '1px solid #c0d0e4'
                 stickyCell[i].style.left = currentLeftScroll + 'px';
-                stickyCell[i].style.right = 0;
-                stickyCell[i].style.top = 0;
-                stickyCell[i].style.bottom = 0;
             } else {
+                stickyCell[i].style.display = 'in-line-block';
                 stickyCell[i].style.outline = "1px solid #dcdcdc";
                 stickyCell[i].style.left = currentLeftScroll + 'px';
             }
@@ -240,7 +241,32 @@ const QbGrid = React.createClass({
             reportContent.addEventListener('scroll', this.handleScroll);
         }
     },
+    componentWillUnmount() {
+        const reportContent = document.getElementsByClassName('reportContent')[0];
+        reportContent.removeEventListener("scroll", this.props.handleScroll);
+        if (this.props.editingRowId) {
+            this.resetZIndex();
+        }
+    },
+    resetZIndex() {
+        /**This resets the zIndex for the sticky cell back to the same z-index as the other sticky cells
+         * this prevents future pop up clippingslet stickyCell = document.getElementsByClassName('stickyCell');
+         * stickyCell[this.props.editingRowId].style.zIndex = 2;
+         */
+    },
+    preventPopUpClipping() {
+        let stickyCell = document.getElementsByClassName('stickyCell');
+        stickyCell[this.props.editingRowId].style.zIndex = 9000;
+    },
     render() {
+        console.log('this.props: ', this.props);
+        /**
+         * If a user is currenly inline editing, then the zIndex needs to be set higher for the sticky cell
+         * this prevents pop up clippings
+         * */
+        if (this.props.editingRowId) {
+            this.preventPopUpClipping();
+        }
         let columns = [
             ...[{
                 property: ICON_ACTIONS_COLUMN_ID,
