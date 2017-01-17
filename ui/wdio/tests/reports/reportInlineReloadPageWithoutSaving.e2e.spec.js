@@ -77,7 +77,7 @@
 
                 //Step 5 - Check that the edit was not persisted on report
                 var expectedValues = ReportContentPO.getRecordValues(2);
-                expect(expectedValues[1]).toBe(originalText);
+                expect(expectedValues[0]).toBe(originalText);
             }
         });
 

@@ -98,13 +98,13 @@
 
             // Step 6 - Check for the edited value at the edited row
             var recordValues = ReportContentPO.getRecordValues(0);
-            expect(recordValues[1]).toBe(textToEnter, 'Expected Text is not present');
+            expect(recordValues[0]).toBe(textToEnter, 'Expected Text is not present');
 
             //If browser is safari then we are not advancing the present date by 1 day
             if (browserName !== 'safari') {
-                expect(recordValues[6]).toBe(dateToExpect, 'Expected date is not present');
+                expect(recordValues[5]).toBe(dateToExpect, 'Expected date is not present');
             } else {
-                expect(recordValues[6]).toBe(dateToEnter, 'Expected date is not present');
+                expect(recordValues[5]).toBe(dateToEnter, 'Expected date is not present');
             }
 
         });
@@ -138,7 +138,7 @@
 
             // Step 6 - Check that the edit persisted on the report
             var recordValues = ReportContentPO.getRecordValues(0);
-            expect(recordValues[1]).toBe(textToEnter);
+            expect(recordValues[0]).toBe(textToEnter);
 
             // Step 7 - Go back to the first page of records
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarPrevButton);
@@ -174,7 +174,7 @@
 
                 // Check that the edit was not persisted on report
                 var fieldValues2 = ReportContentPO.getRecordValues(1);
-                expect(fieldValues2[1]).toBe(originalText);
+                expect(fieldValues2[0]).toBe(originalText);
             }
         });
 
