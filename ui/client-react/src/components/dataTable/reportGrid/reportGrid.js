@@ -116,16 +116,6 @@ const ReportGrid = React.createClass({
         };
     },
 
-    getInitialState() {
-        return {
-            editingRecord: null,
-            pendEdits: {
-                currentEditingRecordId: null,
-                recordChanges: {}
-            }
-        };
-    },
-
     transformColumns() {
         return ReportColumnTransformer.transformColumnsForGrid(this.props.columns);
     },
@@ -141,12 +131,10 @@ const ReportGrid = React.createClass({
                 selectedRows: this.props.selectedRows
             }
         );
-        // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
     startEditingRow(recordId) {
         this.props.onEditRecordStart(recordId);
-        // this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
     },
 
     onCellChange(value, colDef) {
@@ -156,11 +144,6 @@ const ReportGrid = React.createClass({
         };
 
         this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
-        // Comment out the line above, and uncomment out this line and the line in transformRecords to see performance when not using the pendEdits store and
-        // relying on props to work their way down the React tree.
-        // let localPendEdits = Object.assign({}, this.state.pendEdits);
-        // localPendEdits.recordChanges[colDef.id] = change.values;
-        // this.setState({pendEdits: localPendEdits});
     },
 
     onCellBlur(updatedFieldValue, colDef) {
