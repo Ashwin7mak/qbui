@@ -84,7 +84,7 @@ class ReportRowTransformer extends RowTransformer {
 
         let isEditing = (id === editingRecordId);
         this.isEditing = isEditing;
-        this.editingRecord = editingRecordId;
+        this.editingRecordId = editingRecordId;
         this.isSelected = isSelected;
         this.parentId = parentId;
         this.isSaving = isSaving;
