@@ -510,7 +510,7 @@ module.exports = function(grunt) {
                 ]
             },
             test: {
-                configFile: configFileTest
+                configFile: './wdio/config/' + configFileTest
             }
         },
 
