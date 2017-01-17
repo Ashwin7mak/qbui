@@ -114,7 +114,7 @@
          * @returns a list of record cell elements
          */
         getRecordRowCells: {value: function(recordRowElement) {
-            return recordRowElement.elements('.ag-cell-no-focus');
+            return recordRowElement.elements('.ag-cell-no-focus .cellData');
         }},
 
         /**
@@ -127,12 +127,9 @@
             if (recordCellElement.isExisting('.checkbox') === true) {
                 // Check for a specific element in the DOM which only shows if the checkbox field is selected
                 return recordCellElement.isExisting('.checkbox .checked');
-            } else if (browserName === 'firefox') {
-                // Otherwise just grab the innerHtml value
-                return recordCellElement.getAttribute('innerHTML');
             } else {
-                // Otherwise just grab the innerText value
-                return recordCellElement.getAttribute('innerText');
+                // Otherwise just grab the textContent value
+                return recordCellElement.getAttribute('textContent');
             }
         }},
 

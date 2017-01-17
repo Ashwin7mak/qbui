@@ -49,7 +49,7 @@
 
             //Step 1 - Get the 6th record textField
             var recordValues = reportContentPO.getRecordValues(5);
-            var expectedSixthRecordTextField = recordValues[1];
+            var expectedSixthRecordTextField = recordValues[0];
 
             //Step 1 - Click on 5th record edit pencil.Record count starts from 0
             formsPO.clickRecordEditPencilInRecordActions(4);

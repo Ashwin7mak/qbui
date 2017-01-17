@@ -86,12 +86,12 @@
             // Step 8 - Check the record values
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
             var recordValues = ReportContentPO.getRecordValues(numOfRows - 1);
-            expect(recordValues[1]).toBe(textToEnter);
+            expect(recordValues[0]).toBe(textToEnter);
 
             if (browserName !== 'safari') {
-                expect(recordValues[6]).toBe(dateToExpect);
+                expect(recordValues[5]).toBe(dateToExpect);
             } else {
-                expect(recordValues[6]).toBe(dateToEnter);
+                expect(recordValues[5]).toBe(dateToEnter);
             }
 
         });

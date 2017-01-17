@@ -583,33 +583,33 @@
             for (var i = 0; i < expectedRecordValues.length; i++) {
                 console.log("The expected values are: " + JSON.stringify(expectedRecordValues));
                 //text field
-                expect(expectedRecordValues[0]).toBe(sText);
+                expect(expectedRecordValues[0]).toBe(sText.toString());
                 //numeric field
                 expect(expectedRecordValues[1]).toBe(sNumeric.toString());
                 //numeric currency field
-                expect(expectedRecordValues[2]).toBe('$' + sNumeric);
+                expect(expectedRecordValues[2]).toBe('$' + sNumeric.toString());
                 //numeric percent field
-                expect(expectedRecordValues[3]).toBe(sNumeric + '%');
+                expect(expectedRecordValues[3]).toBe(sNumeric.toString() + '%');
                 //numeric rating field
                 expect(expectedRecordValues[4]).toBe(sNumeric.toString());
                 //date field
-                expect(expectedRecordValues[5]).toBe(sDate);
+                expect(expectedRecordValues[5]).toBe(sDate.toString());
                 //date time field
-                expect(expectedRecordValues[6]).toBe(sDate + ' ' + sTime);
+                expect(expectedRecordValues[6]).toBe(sDate.toString() + ' ' + sTime.toString());
                 //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
                 if (browserName !== 'firefox') {
-                    expect(expectedRecordValues[7]).toBe(sTime);
+                    expect(expectedRecordValues[7]).toBe(sTime.toString());
                 }
                 //numeric duration field
-                expect(expectedRecordValues[8]).toBe('4.76142857142857 weeks');
+                expect(expectedRecordValues[8]).toBe('4.76142857142857  weeks');
                 //checkbox field
                 expect(expectedRecordValues[9]).toBe('true');
                 //email field
                 expect(expectedRecordValues[10]).toBe('(508) 481-1015');
                 //phone field
-                expect(expectedRecordValues[11]).toBe(sEmail);
+                expect(expectedRecordValues[11]).toBe(sEmail.toString());
                 //url field
-                expect(expectedRecordValues[12]).toBe(sUrl);
+                expect(expectedRecordValues[12]).toBe(sUrl.toString());
                 //user Field
                 if (browserName !== 'firefox') {
                     expect(expectedRecordValues[13]).toBe('administrator User for default SQL Installation');
