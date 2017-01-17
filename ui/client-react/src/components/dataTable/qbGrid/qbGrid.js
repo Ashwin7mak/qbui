@@ -282,11 +282,15 @@ const QbGrid = React.createClass({
          * this prevents future pop up clippingslet stickyCell = document.getElementsByClassName('stickyCell');
          */
         let stickyCell = document.getElementsByClassName('stickyCell');
-        stickyCell[this.props.editingRowId].style.zIndex = 2;
+        if (this.props.editingRowId) {
+            stickyCell[this.props.editingRowId - 1].style.zIndex = 2;
+        }
     },
     preventPopUpClipping() {
         let stickyCell = document.getElementsByClassName('stickyCell');
-        stickyCell[this.props.editingRowId].style.zIndex = 9000;
+        console.log('stickyCell: ', stickyCell[this.props.editingRowId]);
+        let currentStickyCell = stickyCell[this.props.editingRowId - 1];
+        currentStickyCell.style.zIndex = 9000;
     },
 
     /**

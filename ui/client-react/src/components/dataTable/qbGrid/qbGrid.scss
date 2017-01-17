@@ -484,7 +484,7 @@ $edit-icon-font-size: 18px;
 .qbGrid > tbody > tr > td:first-of-type {
     background: $row-bg-color;
     outline: $row-cell-border-color;
-    z-index: 1000;
+    z-index: 2;
 }
 
 .stickyCell {
