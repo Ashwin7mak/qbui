@@ -114,7 +114,7 @@ const ReportCell = React.createClass({
                     // Don't show unchecked checkboxes in the grid
                     hideUncheckedCheckbox={true}
                 />
-                <QbIcon className="cellEditIcon" icon="edit" onClick={this.onCellClick(this.props.recordId)} />
+                {isEditable && <QbIcon className="cellEditIcon" icon="edit" onClick={this.onCellClick(this.props.recordId)} />}
             </div>
         );
     }

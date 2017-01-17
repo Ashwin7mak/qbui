@@ -1,5 +1,17 @@
 import React from 'react';
 
+export const calculatePosition = (parentHeight, parentWidth, componentHeight, componentWidth, styles) => {
+    let middleOfComponent = componentHeight / 2;
+    let middleOfParentComponent = parentHeight / 2;
+
+    let stylesWithPosition = Object.assign({}, styles);
+    stylesWithPosition.top = (middleOfComponent - middleOfParentComponent) * -1;
+    stylesWithPosition.left = parentWidth - componentWidth;
+
+    return Object.assign({}, styles, stylesWithPosition);
+};
+
+
 /**
  * This HOC is used within QbGrid to absolutely position the RowEditActions component next to the currently editing row.
  * It is split from the standard presentational logic of displaying some RowEditAction buttons so that component could be reused elsewhere if needed without the positioning for the grid.
@@ -25,14 +37,13 @@ function positionRowEditActions(RowEditActionsComponent) {
             // So we need to move the center of this element to the center of the cell to get the T shape relative to the row.
             // To align the centers of this element and the containing cell, we get difference between the centers of both elements
             // so we can move this element up by that amount to align the vertical centers.
-            let middleOfComponent = component.offsetHeight / 2;
-            let middleOfParentComponent = component.parentElement.offsetHeight / 2;
-
-            let stylesWithPosition = Object.assign({}, this.state.styles);
-            stylesWithPosition.top = (middleOfComponent - middleOfParentComponent) * -1;
-            stylesWithPosition.left = component.parentElement.offsetWidth - component.offsetWidth;
-
-            this.setState({styles: stylesWithPosition});
+            this.setState({styles: calculatePosition(
+                component.parentElement.offsetHeight,
+                component.parentElement.offsetWidth,
+                component.offsetHeight,
+                component.offsetWidth,
+                this.state.styles
+            )});
         },
 
         render() {
@@ -44,6 +55,5 @@ function positionRowEditActions(RowEditActionsComponent) {
         }
     });
 }
-
 
 export default positionRowEditActions;

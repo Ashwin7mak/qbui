@@ -8,7 +8,7 @@ import closeOnEscape from '../../hoc/catchEscapeKey';
 import positionRowEditActions from './rowEditActionsPositionHoc';
 
 // wrap this component with catchEscapeKey HOC to allow cancelling inline edit by hitting Escape
-const RowEditActions = React.createClass({
+export const RowEditActions = React.createClass({
     displayName: 'RowEditActions',
 
     propTypes: {

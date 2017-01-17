@@ -21,13 +21,15 @@ import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
+import {openRecordForEdit} from '../../../actions/formActions';
+import {connect} from 'react-redux';
 
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-export let ReportContent = React.createClass({
+export const ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
 
     getInitialState() {
@@ -424,7 +426,13 @@ export let ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEdit(recordId) {
-        this.getFlux().actions.openRecordForEdit(recordId);
+        this.props.dispatch(openRecordForEdit(recordId));
+
+        // needed until report store is migrated to redux
+
+        const flux = this.getFlux();
+
+        flux.actions.editingReportRow(recordId);
     },
 
     /**
@@ -959,5 +967,5 @@ ReportContent.propTypes = {
     onGridReady: React.PropTypes.func
 };
 
-export let ReportContentWithRouter = withRouter(ReportContent);
-export default ReportContentWithRouter;
+export const ReportContentWithRouter = withRouter(ReportContent);
+export default connect()(ReportContentWithRouter);
