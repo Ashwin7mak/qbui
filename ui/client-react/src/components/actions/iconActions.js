@@ -45,7 +45,6 @@ let IconActions = React.createClass({
         pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
         dropdownTooltip: React.PropTypes.bool,
         menuIcons: React.PropTypes.bool,
-        flux: React.PropTypes.object // passed in with the FluxMixin
     },
     getDefaultProps() {
         return {
@@ -54,7 +53,6 @@ let IconActions = React.createClass({
             menuIcons: false,
             dropdownTooltip: false,
             className: '',
-            flux: {} // Makes tests cleaner. Can avoid passing in empty object for every unit test.
         };
     },
     getInitialState() {

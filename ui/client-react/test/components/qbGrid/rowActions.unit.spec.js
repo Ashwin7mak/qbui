@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
@@ -28,6 +28,13 @@ const props = {
 describe('RowActions (QbGrid)', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
+        // TODO:: Refactor once redux stores are implemented
+        QbIconActions.__Rewire__('IconActions', () => {return <div></div>;});
+    });
+
+    afterEach(() => {
+        QbIconActions.__ResetDependency__('IconActions');
     });
 
     it('Renders the row actions', () => {

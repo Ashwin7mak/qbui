@@ -3,7 +3,6 @@ import ReactIntl from "react-intl";
 import {NotificationManager} from 'react-notifications';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
-import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
