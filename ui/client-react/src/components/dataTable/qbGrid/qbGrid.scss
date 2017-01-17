@@ -26,6 +26,12 @@ $edit-icon-font-size: 18px;
 .qbGrid {
     //margin: 2px;
 
+    flex: 1 1 auto;
+    overflow: auto;
+    display: block;
+    width: 100%;
+    border-collapse: initial; // needed for sticky column
+
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
         width: $grid-group-expand-icon-size;
@@ -120,8 +126,6 @@ $edit-icon-font-size: 18px;
 
     .cellWrapper {
         width: 100%;
-        //this adjusts the height for rendered rows
-        margin-bottom: -8px;
         //this adjusts the height for rendered rows
         padding-top: 6px;
         //Turns out it works better without a min width
@@ -233,6 +237,8 @@ $edit-icon-font-size: 18px;
 
 .qbGrid > thead > tr > th {
     min-width: 80px;
+    position: relative;
+    z-index: 1;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
@@ -268,7 +274,6 @@ $edit-icon-font-size: 18px;
 
 .qbGrid > tbody > tr > td {
     //Added padding-left and padding-right to match the AGGrid view layout
-    height: $form-view-box-height;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;
@@ -308,7 +313,7 @@ $edit-icon-font-size: 18px;
         overflow: visible;
         margin: 0;
         //vertical-align: middle;
-        border-right: 1px solid #dcdcdc;
+        border-right: 1px solid $row-border-color;
         //Commented out because in-line edit row is too big, this makes the height smaller
         //padding-bottom: 14px;
 
@@ -469,7 +474,6 @@ $edit-icon-font-size: 18px;
 .multiLineTextCell {
     border: 0;
     //margin: 0;
-    height: 32px;
     //margin-bottom: -90px;
     font-family: $font-family;
     font-size: $grid-font-size;
@@ -478,10 +482,9 @@ $edit-icon-font-size: 18px;
 }
 //The style here is for sticky column
 .qbGrid > tbody > tr > td:first-of-type {
-    height: 32px;
     background: $row-bg-color;
-    //z-index: 1000;
     outline: $row-cell-border-color;
+    z-index: 1000;
 }
 
 .stickyCell {
@@ -489,8 +492,13 @@ $edit-icon-font-size: 18px;
     z-index: 2;
 }
 
-//Makes row edit action menu pop over the table instead of over stickyColumn
-//.dropdown-menu {
-//    top: 0;
-//    left: 27px;
-//}
+// first column td z-index is 1000
+th.qbHeaderCell.stickyCell {
+    z-index: 1001;
+}
+
+.dropdown-menu {
+    top: 0;
+    left: 27px;
+}
+
