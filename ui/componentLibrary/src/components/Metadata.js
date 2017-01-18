@@ -34,6 +34,7 @@ import PhoneFieldValueEditorMetadata from 'component-metadata!../../../client-re
 import PhoneFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/phoneFieldValueRenderer.js';
 import DurationFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueRenderer.js';
 import DurationFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueEditor.js';
+import QbGridMetadata from 'component-metadata!../../../client-react/src/components/dataTable/qbGrid/qbGrid.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -69,7 +70,8 @@ var Metadata = _.merge(
     PhoneFieldValueEditorMetadata,
     PhoneFieldValueRendererMetadata,
     DurationFieldValueRendererMetadata,
-    DurationFieldValueEditorMetadata
+    DurationFieldValueEditorMetadata,
+    QbGridMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );
