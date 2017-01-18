@@ -401,6 +401,8 @@ const flux = {
         },
         selectedRows: ()=> {
         },
+        editingReportRow: ()=> {
+        },
         logMeasurements : ()=> {
         },
         deleteRecord: ()=> {
@@ -998,6 +1000,114 @@ describe('ReportContent functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.selectRows();
         expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test toggleSelectedRow with valid id', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                selectedRows={selectedRowIds}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.toggleSelectedRow(1);
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test toggleSelectedRow with invalid id', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                selectedRows={selectedRowIds}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.toggleSelectedRow(3);
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test openRecordForEdit', () => {
+        spyOn(flux.actions, 'editingReportRow');
+        let dispatchMethod = () => { };
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                dispatch={dispatchMethod}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.openRecordForEdit(1);
+        expect(flux.actions.editingReportRow).toHaveBeenCalled();
+    });
+
+    it('test onScrollRecords', () => {
+        spyOn(flux.actions, 'scrollingReport');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.onScrollRecords();
+        expect(flux.actions.scrollingReport).toHaveBeenCalled();
+    });
+
+    it('test isNumericDataType returns true', () => {
+        let isNumericValue = true;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isNumericDataType(SchemaConsts.NUMERIC);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.CURRENCY);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.PERCENT);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.RATING);
+        expect(result).toEqual(isNumericValue);
+    });
+
+    it('test isDateDataType returns true', () => {
+        let isDateValue = true;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isDateDataType(SchemaConsts.DATE);
+        expect(result).toEqual(isDateValue);
+        result = component.isDateDataType(SchemaConsts.DATE_TIME);
+        expect(result).toEqual(isDateValue);
+    });
+
+    it('test isNumericDataType returns false', () => {
+        let isNumericValue = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isNumericDataType(SchemaConsts.DATE);
+        expect(result).toEqual(isNumericValue);
+    });
+
+    it('test isDateDataType returns false', () => {
+        let isDateValue = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isDateDataType(SchemaConsts.NUMERIC);
+        expect(result).toEqual(isDateValue);
     });
 
     it('test handleEditRecordStart existing record', () => {
