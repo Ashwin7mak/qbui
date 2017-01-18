@@ -330,7 +330,7 @@
          * replace them with experience engine URL path.
          *
          * Example:  url: /api/api/apps/123/tables/456/formComponents/rest/of/url
-         *           return: /ee/apps/123/tables/456/forms/<formId>
+         *           return: /ee/apps/123/tables/456/formComponents/rest/of/url
          *
          * @param url
          * @returns {*}
