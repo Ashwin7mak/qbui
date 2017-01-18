@@ -1,20 +1,17 @@
 import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
-import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import SearchBox from '../search/searchBox';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './smallHeader.scss';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
+import * as ShellActions from '../../actions/shellActions';
 
 /**
  * Skeleton for small-breakpoint header.
  */
 var SmallHeader = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         /* additional classes for header */
         headerClasses: React.PropTypes.string,
@@ -43,8 +40,7 @@ var SmallHeader = React.createClass({
     },
     // no top nav present so the hamburger exists here
     onNavClick() {
-        let flux = this.getFlux();
-        flux.actions.toggleLeftNav();
+        this.props.dispatch(ShellActions.toggleLeftNav());
     },
     // show the search elements
     startSearching() {

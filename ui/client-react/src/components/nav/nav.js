@@ -79,7 +79,7 @@ export let Nav = React.createClass({
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
-                flux.actions.toggleLeftNav(false);
+                this.props.dispatch(ShellActions.toggleLeftNav(false));
             }, 0);
         }
 
@@ -136,16 +136,20 @@ export let Nav = React.createClass({
     toggleAppsList(open) {
         const flux = this.getFlux();
 
-        if (this.state.nav.leftNavExpanded) {
+        if (this.getShellProp('leftNavExpanded')) {
             flux.actions.toggleAppsList(open);
         } else {
             flux.actions.toggleAppsList(true);
-            flux.actions.toggleLeftNav(true);
+            this.props.dispatch(ShellActions.toggleLeftNav(true));
         }
     },
 
     getEditFormFromProps() {
         return _.has(this.props, "qbui.forms") && _.find(this.props.qbui.forms, form => form.id === "edit");
+    },
+
+    getShellProp(prop) {
+        return _.has(this.props, "qbui.shell") ? this.props.qbui.shell[prop] : null;
     },
 
     /**
@@ -196,7 +200,7 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         let classes = "navShell";
-        if (this.state.nav.leftNavVisible) {
+        if (this.getShellProp('leftNavVisible')) {
             classes += " leftNavOpen";
         }
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
@@ -249,8 +253,8 @@ export let Nav = React.createClass({
             }
 
             <LeftNav
-                visible={this.state.nav.leftNavVisible}
-                expanded={this.state.nav.leftNavExpanded}
+                visible={this.getShellProp('leftNavVisible')}
+                expanded={this.getShellProp('leftNavExpanded')}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
@@ -329,22 +333,21 @@ export let Nav = React.createClass({
         }
         return null;
     },
+
     onSelectOpenInV3(openInV3) {
         const flux = this.getFlux();
-
         flux.actions.setApplicationStack(this.state.apps.selectedAppId, openInV3);
     },
+
     onSelectItem() {
-
+        // hide left nav after selecting items on small breakpoint
         if (Breakpoints.isSmallBreakpoint()) {
-            const flux = this.getFlux();
-
-            flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+            this.props.dispatch(ShellActions.toggleLeftNav(false));
         }
     },
+
     toggleNav() {
-        let flux = this.getFlux();
-        flux.actions.toggleLeftNav();
+        this.props.dispatch(ShellActions.toggleLeftNav());
     }
 });
 

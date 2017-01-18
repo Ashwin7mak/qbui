@@ -97,12 +97,6 @@ describe('Nav functions', () => {
         ReportDataSearchStore: new reportDataSearchStore()
     };
     let flux = new Fluxxor.Flux(stores);
-    flux.addActions({
-        toggleLeftNav() {
-            return;
-        }
-    });
-
 
     beforeEach(() => {
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);

@@ -1,6 +1,5 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import Fluxxor from 'fluxxor';
 import SmallHeader from '../../src/components/header/smallHeader';
 import SearchBox from '../../src/components/search/searchBox';
 
@@ -8,51 +7,47 @@ describe('SmallHeader functions', () => {
     'use strict';
 
     let component;
-    let navStore = Fluxxor.createStore({
-        getState() {
-            return {};
-        }
-    });
-    let stores = {
-        NavStore: new navStore()
-    };
-
-    let flux = new Fluxxor.Flux(stores);
-    flux.actions = {
-        toggleLeftNav() {
-            return;
-        }
+    let mockCallbacks = {};
+    let mockShellActions = {
+        toggleLeftNav: function() {}
     };
 
     beforeEach(() => {
-        spyOn(flux.actions, 'toggleLeftNav');
+        mockCallbacks = {
+            dispatch: function(action) {}
+        };
+        spyOn(mockCallbacks, 'dispatch');
+        spyOn(mockShellActions, 'toggleLeftNav');
+
+        SmallHeader.__Rewire__('ShellActions', mockShellActions);
+        component = TestUtils.renderIntoDocument(<SmallHeader dispatch={mockCallbacks.dispatch} title="test"/>);
     });
 
     afterEach(() => {
-        flux.actions.toggleLeftNav.calls.reset();
+        mockCallbacks.dispatch.calls.reset();
+        mockShellActions.toggleLeftNav.calls.reset();
+        SmallHeader.__ResetDependency__('ShellActions');
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<SmallHeader flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test toggle nav', () => {
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
-        expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
+        expect(mockCallbacks.dispatch).toHaveBeenCalled();
+        expect(mockShellActions.toggleLeftNav).toHaveBeenCalled();
     });
 
     it('test title prop', () => {
-        component = TestUtils.renderIntoDocument(<SmallHeader flux={flux} title="test"/>);
-
         let title = TestUtils.scryRenderedDOMComponentsWithClass(component, "title");
         expect(title[0].innerHTML).toEqual("test");
     });
     it('test search renders', () => {
         let TestParent = React.createFactory(React.createClass({
             render() {
-                return <SmallHeader ref="header" flux={flux} />;
+                return <SmallHeader ref="header"/>;
             }
         }));
         let parent = TestUtils.renderIntoDocument(TestParent());
@@ -74,7 +69,7 @@ describe('SmallHeader functions', () => {
                 this.setState({counter: 3});
             },
             render() {
-                return <SmallHeader ref="header" flux={flux}
+                return <SmallHeader ref="header"
                                     enableSearch={true}
                                     onSearchChange={this.handleSearchChange}
                                     onClearSearch={this.clearSearchString}

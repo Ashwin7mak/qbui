@@ -12,6 +12,8 @@ import constants from '../../../../common/src/constants';
 import Header from '../header/smallHeader';
 import './reportHeader.scss';
 
+import * as ShellActions from '../../actions/shellActions';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -47,8 +49,7 @@ var ReportHeader = React.createClass({
 
     // no top nav present so the hamburger exists here
     onNavClick() {
-        let flux = this.getFlux();
-        flux.actions.toggleLeftNav();
+        this.props.dispatch(ShellActions.toggleLeftNav());
     },
 
     searchTheString(searchTxt) {

@@ -20,10 +20,10 @@ let navActions = {
     /**
      * either toggle the visibility of the left nav or toggle the expanded/collapsed state depending on the breakpoint
      */
-    toggleLeftNav(open) {
-        const toggleLeftNavAction = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
-        this.dispatch(toggleLeftNavAction, open);
-    },
+    //toggleLeftNav(open) {
+    //    const toggleLeftNavAction = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
+    //    this.dispatch(toggleLeftNavAction, open);
+    //},
     toggleAppsList(open) {
         this.dispatch(actions.TOGGLE_APPS_LIST, open);
     },
