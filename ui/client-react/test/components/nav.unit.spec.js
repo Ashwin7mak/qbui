@@ -229,7 +229,6 @@ describe('Nav functions', () => {
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
 
@@ -253,7 +252,6 @@ describe('Nav functions', () => {
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
 
