@@ -24,11 +24,13 @@ const shell = (
             trowserOpen: false
         };
     case types.TOGGLE_LEFT_NAV_EXPANDED:
+        //  set leftNavExpanded state to navState action if defined and a boolean; otherwise toggle the current state.
         return {
             ...state,
             leftNavExpanded: (typeof action.navState === "boolean" ? action.navState : !state.leftNavExpanded)
         };
     case types.TOGGLE_LEFT_NAV_VISIBLE:
+        //  set leftNavVisible state to navState action if defined and a boolean; otherwise toggle the current state.
         return {
             ...state,
             leftNavVisible: (typeof action.navState === "boolean" ? action.navState : !state.leftNavVisible)

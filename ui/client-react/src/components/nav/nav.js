@@ -33,6 +33,9 @@ import * as FormActions from '../../actions/formActions';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
+const OPEN_NAV = true;
+const CLOSE_NAV = false;
+
 export let Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
 
@@ -79,7 +82,7 @@ export let Nav = React.createClass({
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
-                this.props.dispatch(ShellActions.toggleLeftNav(false));
+                this.props.dispatch(ShellActions.toggleLeftNav(CLOSE_NAV));
             }, 0);
         }
 
@@ -132,7 +135,10 @@ export let Nav = React.createClass({
         return null;
     },
 
-    /* toggle apps list - if on collapsed nav, open left nav and display apps */
+    /**
+     *  if left nav is open, toggle apps list state based on open parameter;
+     *  if left nav is collapsed, open the apps list and dispatch event to open nav
+     */
     toggleAppsList(open) {
         const flux = this.getFlux();
 
@@ -140,7 +146,7 @@ export let Nav = React.createClass({
             flux.actions.toggleAppsList(open);
         } else {
             flux.actions.toggleAppsList(true);
-            this.props.dispatch(ShellActions.toggleLeftNav(true));
+            this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
         }
     },
 
@@ -338,10 +344,13 @@ export let Nav = React.createClass({
     onSelectItem() {
         // hide left nav after selecting items on small breakpoint
         if (Breakpoints.isSmallBreakpoint()) {
-            this.props.dispatch(ShellActions.toggleLeftNav(false));
+            this.props.dispatch(ShellActions.toggleLeftNav(CLOSE_NAV));
         }
     },
 
+    /**
+     * Toggle open/closed the left nav based on its current state
+     */
     toggleNav() {
         this.props.dispatch(ShellActions.toggleLeftNav());
     }
