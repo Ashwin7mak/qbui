@@ -882,22 +882,27 @@ let ReportDataStore = Fluxxor.createStore({
      * @param afterRecId
      */
     createNewGroupedRecord(afterRecId) {
+        let afterRecordIdValue = afterRecId;
+        if (!_.isNumber(afterRecId)) {
+            afterRecordIdValue = afterRecId.value;
+        }
+
         const model = this.reportModel.get();
 
         if (model.filteredRecords.length > 0) {
             //find record to add after
-            let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
-            if (afterRecId === -1) {
-                record = ReportUtils.findFirstGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
+            let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecordIdValue, this.reportModel.model.keyField.name);
+            if (afterRecordIdValue === -1) {
+                record = ReportUtils.findFirstGroupedRecord(model.filteredRecords, afterRecordIdValue, this.reportModel.model.keyField.name);
             }
 
             if (record === null) {
-                logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecId}`);
+                logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecordIdValue}`);
                 return;
             }
             let groupFids = [];
 
-            if (afterRecId !== -1) {
+            if (afterRecordIdValue !== -1) {
                 groupFids = model.groupFields.map(field => {
                     return field.field.id;
                 });
@@ -939,11 +944,11 @@ let ReportDataStore = Fluxxor.createStore({
             let filteredRecordAdded = false;
             let recordAdded = false;
 
-            if (afterRecId === -1) {
+            if (afterRecordIdValue === -1) {
                 filteredRecordAdded = newFilteredRecords.unshift(newRecord);
                 recordAdded = filteredRecordAdded;
             } else {
-                filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+                filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecordIdValue, this.reportModel.model.keyField.name, newRecord);
                 recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
             }
 
@@ -956,8 +961,13 @@ let ReportDataStore = Fluxxor.createStore({
                 model.recordsCount++; //for pagination
             }
 
+            let afterRecIndex = -1;
+            if (afterRecId) {
+                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId);
+            }
+
             //editing index for aggrid to open inline edit
-            this.editingIndex = SchemaConsts.UNSAVED_RECORD_ID;
+            this.editingIndex = afterRecIndex;
             this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
         }
     },
