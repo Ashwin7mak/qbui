@@ -25,7 +25,6 @@ $data-font-size: $font-size-p;
 
 // inline edit of a cell
 .cellEdit {
-    height: $inline-edit-input-box-height;
     border: solid 1px $input-text-normal-border-color;
     box-shadow: none;
     border-radius: 2px;

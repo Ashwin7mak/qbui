@@ -268,7 +268,8 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > tbody > tr > td {
-    height: 32px;
+    height: $inline-edit-input-box-height;
+    //height: 32px;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;

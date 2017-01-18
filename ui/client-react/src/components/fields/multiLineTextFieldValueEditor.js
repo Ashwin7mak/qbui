@@ -118,6 +118,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * in which case start using vertical scrolling
      */
     resize() {
+        console.log('hello!!');
         this.setState({style: {height: MultiLineTextFieldValueEditor.INITIAL_HEIGHT_TEXTAREA}}, () => {
             // now we can query the actual (auto) height
             let newHeight = this.getScrollHeight();
