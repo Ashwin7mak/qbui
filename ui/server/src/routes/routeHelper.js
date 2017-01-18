@@ -292,13 +292,12 @@
 
         /**
          * For the given req.url, extract the APPS and TABLES identifiers/ids and
-         * append the FORMS identifier and optional formId.
+         * append the FORMS identifier.
          *
-         * Example:  url: /apps/123/tables/456/rest/of/url
+         * Example:  url: /apps/123/tables/456/formComponents/rest/of/url
          *           return: /apps/123/tables/456/forms/<formId>
          *
          * @param url
-         * @param formId
          * @returns {*}
          */
         getEEFormsRoute: function(url) {
@@ -326,13 +325,25 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the '/api' in the path and
+         * replace them with experience engine URL path.
+         *
+         * Example:  url: /api/api/apps/123/tables/456/formComponents/rest/of/url
+         *           return: /ee/apps/123/tables/456/forms/<formId>
+         *
+         * @param url
+         * @returns {*}
+         */
         getEEReqURL: function(url) {
-            if (url.search('/api/api') !== -1) {
-                url = url.replace('/api/api', getEERoot());
-            }
+            if (url) {
+                if (url.search('/api/api') !== -1) {
+                    url = url.replace('/api/api', getEERoot());
+                }
 
-            if (url.search('/api') !== -1) {
-                url = url.replace('/api', getEERoot());
+                if (url.search('/api') !== -1) {
+                    url = url.replace('/api', getEERoot());
+                }
             }
             return url;
         },

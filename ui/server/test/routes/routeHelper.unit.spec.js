@@ -190,6 +190,27 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate getEEReqURL method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, id:null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
+            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
+            {name: 'test valid url with (/api/api) in table endpoint', url: '/api/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
+            {name: 'test valid url with (/api) in table endpoint', url: '/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getEEReqURL(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('validate getRecordsRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},
