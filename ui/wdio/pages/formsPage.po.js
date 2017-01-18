@@ -474,8 +474,14 @@
                 //get all time fields on form
                 var timeFields = this.getAllTimeInputFields();
                 for (i = 0; i < timeFields.value.length; i++) {
-                    timeFields.value[i].element('.Select-control').click();
-                    this.selectFromList(timeFields.value[i], sTime);
+                    if (browserName === 'chrome') {
+                        timeFields.value[i].element('.Select-multi-value-wrapper').click();
+                        timeFields.value[i].element('.Select-input').keys(sTime);
+                        timeFields.value[i].element('..').click();
+                    } else {
+                        timeFields.value[i].element('.Select-control').click();
+                        this.selectFromList(timeFields.value[i], sTime);
+                    }
                 }
 
             } else if (fieldType === 'allCheckboxFields') {
@@ -491,8 +497,14 @@
                 //get all user field input validators
                 var userFields = this.getAllUserFields();
                 for (i = 0; i < userFields.value.length; i++) {
-                    userFields.value[i].element('.Select-control').click();
-                    this.selectFromList(userFields.value[i], sUser);
+                    if (browserName === 'chrome') {
+                        timeFields.value[i].element('.Select-multi-value-wrapper').click();
+                        timeFields.value[i].element('.Select-input').keys(sTime);
+                        timeFields.value[i].element('..').click();
+                    } else {
+                        userFields.value[i].element('.Select-control').click();
+                        this.selectFromList(userFields.value[i], sUser);
+                    }
                 }
             }
         }},
