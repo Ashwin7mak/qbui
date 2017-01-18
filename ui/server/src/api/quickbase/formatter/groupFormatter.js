@@ -570,6 +570,7 @@
                                         // Mark the field as one that is grouped.  This is referenced when building the
                                         // groupBy.gridColumns as grouped fields are not displayed in the grid.
                                         field.grouped = true;
+                                        field.groupType = groupType;
                                         groupBy.fields.push({field: field, groupType: groupType});
                                     } else {
                                         log.warn("Unsupported group type.  FieldId: " + field.id + "; FieldName: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
@@ -601,9 +602,8 @@
 
                     if (groupBy.fields.length > 0) {
                         fields.forEach(function(field) {
-                            //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
-                            //  array the fields NOT designated to be grouped.
-                            if (!field.grouped) {
+                            //  Exclude grouped fields with a groupType of equals in the grid
+                            if (!field.grouped || (field.grouped && field.groupType !== groupTypes.COMMON.equals)) {
                                 groupBy.gridColumns.push(field);
                             }
                         });

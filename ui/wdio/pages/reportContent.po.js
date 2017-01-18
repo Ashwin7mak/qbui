@@ -79,6 +79,16 @@
         agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.ag-row');}},
 
         /**
+         * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
+         * @returns A promise that will resolve after waiting for the report records to be displayed
+         */
+        waitForReportContent: {value: function() {
+            // wait until you see ag-body-viewport
+            browser.element('.ag-body-viewport').waitForVisible();
+            return browser.elements('.ag-row').waitForVisible();
+        }},
+
+        /**
          * Helper function that will get all of the field column headers from the report. Returns an array of strings.
          */
         getReportColumnHeaders: {value: function() {
@@ -104,7 +114,7 @@
          * @returns a list of record cell elements
          */
         getRecordRowCells: {value: function(recordRowElement) {
-            return recordRowElement.elements('.ag-cell-no-focus');
+            return recordRowElement.elements('.ag-cell-no-focus .cellData');
         }},
 
         /**
@@ -118,8 +128,8 @@
                 // Check for a specific element in the DOM which only shows if the checkbox field is selected
                 return recordCellElement.isExisting('.checkbox .checked');
             } else {
-                // Otherwise just grab the innerText value
-                return recordCellElement.getAttribute('innerText');
+                // Otherwise just grab the textContent value
+                return recordCellElement.getAttribute('textContent');
             }
         }},
 
@@ -177,33 +187,6 @@
             this.agGridRecordElList.waitForVisible();
             return this.agGridRecordElList.value.length;
         }},
-
-
-        waitForReportContent: {value:function() {
-            // First wait for the containers
-            this.reportContainerEl.waitForVisible();
-            this.reportContentEl.waitForVisible();
-            this.loadedContentEl.waitForVisible();
-            // Then wait for records to be shown in the grid
-            return this.agGridBodyViewportEl.waitForVisible();
-        }},
-
-        //TODO: Will have to see if we actually need this going forward
-        ///**
-        // * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
-        // * @returns A promise that will resolve after waiting for the report records to be displayed
-        // */
-        //this.waitForReportContent = function() {
-        //    var self = this;
-        //    // First wait for the containers
-        //    return e2ePageBase.waitForElements(self.reportContainerEl, self.reportContentEl).then(function() {
-        //        // Then wait for records to be shown in the grid
-        //        return e2ePageBase.waitForElement(self.agGridBodyViewportEl);
-        //    }).catch(function(e) {
-        //        // If we had issues send and error up the chain
-        //        return Promise.reject(new Error('Error waiting for reportContent (are there records showing on the report?): ' + e.message));
-        //    });
-        //};
 
         //TODO: Refactor these once we port over the delete record tests
         /// Checking for the deleted record on the first page

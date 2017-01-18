@@ -187,13 +187,27 @@
              * Fetch the meta data for a given report id
              *
              * @param req
-             * @param opts
+             * @param reportId
+             * @param withReportDefaults - include report defaults in the response
              * @returns {bluebird|exports|module.exports}
              */
-            fetchReportMetaData(req, reportId) {
+            fetchReportMetaData(req, reportId, withReportDefaults) {
                 let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
+
+                //  are report defaults to be included in response -- default is no.
+                if (arguments && arguments.length < 3) {
+                    withReportDefaults = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS);
+                    if (withReportDefaults) {
+                        withReportDefaults = (withReportDefaults.toLowerCase() === 'true');
+                    }
+                }
+
+                //  the request parameter must be true/false or we'll get an exception thrown by the server
+                if (typeof withReportDefaults === 'boolean') {
+                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.META_DATA.WITH_REPORT_DEFAULTS, withReportDefaults);
+                }
 
                 //  promise to return report meta data
                 return new Promise((resolve, reject) => {
@@ -329,7 +343,7 @@
                 if (useReportMetaData === true) {
                     //  Call the the report results endpoint, which will generate a report using the saved report meta data.
                     return new Promise((resolve, reject) => {
-                        this.fetchReportMetaData(req, reportId).then(
+                        this.fetchReportMetaData(req, reportId, true).then(
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
 
@@ -371,7 +385,7 @@
                     //  NOTE: if no overrides, then the baseline report is generated, no different than if
                     //  loadReportWithDefaultMetaData == true.
                     return new Promise((resolve, reject) => {
-                        this.fetchReportMetaData(req, reportId).then(
+                        this.fetchReportMetaData(req, reportId, true).then(
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
 

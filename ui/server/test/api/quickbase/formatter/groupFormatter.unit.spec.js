@@ -290,6 +290,7 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'TEXT: first word grouping', numFields: 5, numRecords: 2, gList: groupByTextWord, dataType: constants.TEXT},
             {message: 'TEXT: first letter grouping', numFields: 5, numRecords: 2, gList: groupByTextFirstLetter, dataType: constants.TEXT},
             {message: 'TEXT: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: groupByTextWord + '.' + groupByEquals, dataType: constants.TEXT},
+            {message: 'TEXT: multiple grouping against diff fid', numFields: 5, numRecords: 2, gList: groupByTextWord + '.' + groupByEquals2, dataType: constants.TEXT},
             //  USER data type
             {message: 'USER: No input records', numFields: 5, numRecords: 0, gList: groupByEquals, dataType: constants.USER},
             {message: 'USER: one equals grouping', numFields: 5, numRecords: 1, gList: groupByEquals, dataType: constants.USER},
@@ -381,6 +382,7 @@ describe('Validate GroupFormatter unit tests', function() {
 
                 //  the order of the fids in the list must match the order in the groupData.fields array
                 var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                var groupByEqualsCount = 0;
                 for (var idx = 0; idx < groupList.length; idx++) {
                     var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
                     assert.equal(Math.abs(el[0]), groupData.fields[idx].field.id);
@@ -388,15 +390,20 @@ describe('Validate GroupFormatter unit tests', function() {
 
                     //  add the fid to the map.
                     map.set(el[0]);
+
+                    //  is this a groupByEquals
+                    if (el[1] === groupTypes.COMMON.equals) {
+                        groupByEqualsCount++;
+                    }
                 }
 
                 //  number of valid group list elements must match the number of elements in the groupData.fields array
                 assert.equal(groupList.length, groupData.fields.length);
                 assert.equal(groupList.length, coreGroupData.fields.length);
 
-                //  the gridColumns array should not include the fields being grouped
-                assert.equal(testCase.numFields - map.size, groupData.gridColumns.length);
-                assert.equal(testCase.numFields - map.size, coreGroupData.gridColumns.length);
+                //  the gridColumns array should not include the fields being grouped if using EQUALS
+                assert.equal(testCase.numFields - groupByEqualsCount, groupData.gridColumns.length);
+                assert.equal(testCase.numFields - groupByEqualsCount, coreGroupData.gridColumns.length);
                 done();
             });
         });

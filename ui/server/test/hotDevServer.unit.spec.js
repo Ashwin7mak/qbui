@@ -32,7 +32,7 @@ describe('HotDevServer Unit Test', function() {
         webpackDevServerStub.restore();
     });
 
-    it('validate hot reload is not available if noHotLoad is false and production is true', function() {
+    it('validate hot reload is not available if noHotLoad is false and production is true', function(done) {
 
         var mockConfig = {
             isProduction: true,
@@ -43,9 +43,11 @@ describe('HotDevServer Unit Test', function() {
 
         assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
+
+        done();
     });
 
-    it('validate hot reload is not available if noHotLoad is true and production is true', function() {
+    it('validate hot reload is not available if noHotLoad is true and production is true', function(done) {
 
         var mockConfig = {
             isProduction: true,
@@ -56,9 +58,11 @@ describe('HotDevServer Unit Test', function() {
 
         assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
+
+        done();
     });
 
-    it('validate hot reload is not available if noHotLoad is true and production is false', function() {
+    it('validate hot reload is not available if noHotLoad is true and production is false', function(done) {
 
         var mockConfig = {
             isProduction: false,
@@ -69,9 +73,11 @@ describe('HotDevServer Unit Test', function() {
 
         assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
+
+        done();
     });
 
-    it('validate hot reload is available if noHotLoad is false and production is false', function() {
+    it('validate hot reload is available if noHotLoad is false and production is false', function(done) {
 
         var mockConfig = {
             isProduction: false,
@@ -83,6 +89,8 @@ describe('HotDevServer Unit Test', function() {
 
         assert(hotServerMockStub.callCount === 1, true);
         assert(webpackDevServerStub.callCount === 0, true);
+
+        done();
     });
 
 });
