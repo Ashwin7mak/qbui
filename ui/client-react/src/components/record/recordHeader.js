@@ -4,7 +4,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import * as query from '../../constants/query';
 import Header from '../header/smallHeader';
-
+import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';
 
 /**
@@ -29,4 +29,5 @@ let RecordHeader = React.createClass({
     }
 });
 
-export default RecordHeader;
+// export the react-redux connected wrapper (which injects the dispatch function as a prop)
+export default connect()(RecordHeader);

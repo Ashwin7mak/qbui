@@ -5,7 +5,7 @@ import _ from 'lodash';
 import SearchBox from '../search/searchBox';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './smallHeader.scss';
-
+import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';
 
 /**
@@ -96,4 +96,5 @@ var SmallHeader = React.createClass({
     }
 });
 
-export default SmallHeader;
+// export the react-redux connected wrapper (which injects the dispatch function as a prop)
+export default connect()(smallHeader);
