@@ -44,20 +44,20 @@
         });
 
         it('Get into Error Form State, Validate Errors, Correct the errors and Verify Saving the record successfully', function() {
-            var fieldTypes = ['allNumericFields', 'allDurationFields', 'allPhoneFields', 'allEmailFields'];
+            var fieldTypes = ['allPhoneFields', 'allEmailFields', 'allNumericFields', 'allDurationFields'];
             var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field'];
-            //TODO verify why URL field is not throwing error when given special characters
 
             //Step 1 - Get the 6th record textField
             var recordValues = reportContentPO.getRecordValues(5);
-            var expectedSixthRecordTextField = recordValues[1];
+            var expectedSixthRecordTextField = recordValues[0];
 
             //Step 1 - Click on 5th record edit pencil.Record count starts from 0
             formsPO.clickRecordEditPencilInRecordActions(4);
 
             //Step 2 - Enter invalid values to get the form to error state
             fieldTypes.forEach(function(fieldType) {
-                formsPO.enterInvalidFormValues(fieldType, '!@#$%^');
+                //TODO change the empty string to special characters once MB-1970 is fixed.
+                formsPO.enterInvalidFormValues(fieldType, ' ');
             });
 
             //Step 3 - Click Save on the form

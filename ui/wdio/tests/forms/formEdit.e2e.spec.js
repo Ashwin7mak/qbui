@@ -62,7 +62,7 @@
             //wait until report rows in table are loaded
             reportContentPO.waitForReportContent();
 
-            //Step 6 - Verify new record got added on the top of the table and verify the expected field values
+            //Step 6 - Verify record got Edited
             var recordValues = reportContentPO.getRecordValues(1);
             formsPO.verifyFieldValuesInReportTable(recordValues);
 
@@ -100,7 +100,7 @@
             //Verify you land in table view since you edited from table view page
             reportContentPO.waitForReportContent();
 
-            //Step 6 - Verify new record got added on the top of the table and verify the expected field values
+            //Step 6 - Verify record got Edited
             var recordValues = reportContentPO.getRecordValues(2);
             formsPO.verifyFieldValuesInReportTable(recordValues);
 
