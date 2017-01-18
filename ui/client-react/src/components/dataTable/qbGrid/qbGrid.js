@@ -8,6 +8,9 @@ import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
 
+import Logger from '../../../utils/logger';
+const logger = new Logger();
+
 import './qbGrid.scss';
 
 const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
@@ -110,6 +113,10 @@ const QbGrid = React.createClass({
         /**
          * Additional props that can be passed to the menu in addition to the column properties from the grid data */
         menuProps: PropTypes.object,
+
+        /**
+         * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
+        showRowActionsColumn: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -121,6 +128,7 @@ const QbGrid = React.createClass({
             isInlineEditOpen: false,
             isEditingRowValid: true,
             isEditingRowSaving: false,
+            showRowActionsColumn: true
         };
     },
 
@@ -182,7 +190,14 @@ const QbGrid = React.createClass({
      */
     getColumns() {
         return this.props.columns.map(column => {
-            return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
+            try {
+                return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
+            } catch (err) {
+                // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
+                // but provide a warning in case using the ColumnTransformer class was forgotten.
+                logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
+                return column;
+            }
         });
     },
 
@@ -208,8 +223,7 @@ const QbGrid = React.createClass({
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
             // Add one to account for the extra column at the start of the grid for the row actions.
-            // TODO:: Only add one if the prop for displaying those actions is set
-            numberOfColumns: this.props.numberOfColumns + 1,
+            numberOfColumns: (this.props.showRowActionsColumn ? this.props.numberOfColumns + 1 : this.props.numberOfColumns),
             compareCellChanges: this.props.compareCellChanges,
         }, row);
 
@@ -262,24 +276,30 @@ const QbGrid = React.createClass({
     },
 
     render() {
-        let columns = [
-            ...[{
-                property: ICON_ACTIONS_COLUMN_ID,
-                headerClass: "gridHeaderCell",
-                header: {
-                    props: {
-                        scope: 'col'
+
+        let columns;
+        if (this.props.showRowActionsColumn) {
+            columns = [
+                ...[{
+                    property: ICON_ACTIONS_COLUMN_ID,
+                    headerClass: "gridHeaderCell",
+                    header: {
+                        props: {
+                            scope: 'col'
+                        },
+                        label: this.getCheckboxHeader(),
+                        transforms: [this.getActionCellProps],
                     },
-                    label: this.getCheckboxHeader(),
-                    transforms: [this.getActionCellProps],
-                },
-                cell: {
-                    formatters: [this.getActionsCell],
-                    transforms: [this.getActionCellProps],
-                }
-            }],
-            ...this.getColumns()
-        ];
+                    cell: {
+                        formatters: [this.getActionsCell],
+                        transforms: [this.getActionCellProps],
+                    }
+                }],
+                ...this.getColumns()
+            ];
+        } else {
+            columns = this.getColumns();
+        }
 
         return (
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>

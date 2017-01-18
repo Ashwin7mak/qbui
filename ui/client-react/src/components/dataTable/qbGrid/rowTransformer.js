@@ -19,18 +19,22 @@ class RowTransformer {
     /**
      * Builds a row instance
      * @param rowId Required. Unique identifier for row.
+     * @param cells Assumes each cell has an id property. QbGrid columns will match the column cellIdentifier property to a key on the row to put cells in the correct column.
      * @param options Other options that are passed as props to the row.
      */
     constructor(
         rowId, // Required unique identifier for a row.
-        options = defaultOptions) {
-
+        cells,
+        options = defaultOptions
+    ) {
         this.id = rowId;
-        this.isSubHeader = options.isSubHeader;
-        this.isEditing = options.isEditing;
-        this.isSelected = options.isSelected;
-
         Object.assign(this, defaultOptions, options);
+
+        if (Array.isArray(cells)) {
+            cells.forEach(cell => {
+                this[cell.id] = cell;
+            });
+        }
     }
 }
 

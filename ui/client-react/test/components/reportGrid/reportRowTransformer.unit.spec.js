@@ -6,8 +6,8 @@ import {DEFAULT_RECORD_KEY} from '../../../src/constants/schema';
 
 describe('ReportRowTransformer', () => {
     const testRecordId = 3;
-    const testFieldId = 4;
-    const testRecord = {fieldA: {id: testFieldId, name: 'some field'}};
+    const testFieldId = 'fieldA';
+    const testRecord = {1: {id: testFieldId, name: 'some field'}};
     const testIndex = 0;
     const testApiRecord = {'Record ID#': {id: 1, value: testRecordId, display: testRecordId}, 'Text': {id: 2, value: 'text', display: 'text'}};
     const testFields = [

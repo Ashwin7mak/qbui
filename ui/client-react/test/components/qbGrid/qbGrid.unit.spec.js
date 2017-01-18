@@ -18,25 +18,35 @@ const testColumns = [
     new ColumnTransformer('Header 3', 3, 'header3class')
 ];
 const testRows = [
-    new RowTransformer(1, {
-        text: 'Row 1',
-        1: {id: 1, text: 'row-1-cell-1'},
-        2: {id: 2, text: 'row-1-cell-2'},
-        3: {id: 3, text: 'row-1-cell-3'}
-    }),
-    new RowTransformer(2, {
-        text: 'Row 2',
-        isEditing: true,
-        isSelected: true,
-        1: {id: 1, text: 'row-2-cell-1'},
-        2: {id: 2, text: 'row-2-cell-2'},
-        3: {id: 3, text: 'row-2-cell-3'}
-    }),
+    new RowTransformer(
+        1,
+        [
+            {id: 1, text: 'row-1-cell-1'},
+            {id: 2, text: 'row-1-cell-2'},
+            {id: 3, text: 'row-1-cell-3'}
+        ],
+        {
+            text: 'Row 1',
+        }
+    ),
+    new RowTransformer(
+        2,
+        [
+            {id: 1, text: 'row-2-cell-1'},
+            {id: 2, text: 'row-2-cell-2'},
+            {id: 3, text: 'row-2-cell-3'}
+        ],
+        {
+            text: 'Row 2',
+            isEditing: true,
+            isSelected: true,
+        }
+    ),
 ];
 const firstRow = testRows[0];
 const editingRow = testRows[1];
 const newRow = new RowTransformer(UNSAVED_RECORD_ID, {test: 'new'});
-const subHeaderRow = new RowTransformer(3, {
+const subHeaderRow = new RowTransformer(3, [], {
     text: 'Subheader',
     isSubHeader: true,
     subHeaderLabel: 'SubHeader 1',
@@ -248,7 +258,6 @@ describe('QbGrid', () => {
         });
     });
 
-    //TODO:: Refactor this test to improve readability.
     it('displays a grid based on passed in rows and columns', () => {
         let rowsWithHeader = [...testRows, subHeaderRow];
 
