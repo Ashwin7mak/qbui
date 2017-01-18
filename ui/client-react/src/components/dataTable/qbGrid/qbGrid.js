@@ -132,6 +132,12 @@ const QbGrid = React.createClass({
         };
     },
 
+    getInitialState() {
+        return {
+            collapsedGroups: []
+        };
+    },
+
     onClickAddNewRow() {
         if (this.props.onClickAddNewRow) {
             this.props.onClickAddNewRow(this.props.editingRowId);
@@ -217,6 +223,8 @@ const QbGrid = React.createClass({
 
         let rowProps = Object.assign({
             subHeaderId: row.id,
+            toggleCollapseGroup: this.toggleCollapseGroup,
+            isCollapsed: row.isCollapsed,
             className: classes.join(' '),
             editingRowId: this.props.editingRowId,
             isInlineEditOpen: this.props.isInlineEditOpen,
@@ -275,6 +283,49 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
 
+    addSubGroups(currentSubHeaderId) {
+        let subHeaderIds = [currentSubHeaderId];
+
+        this.props.rows.forEach(row => {
+            if (subHeaderIds.includes(row.parentId) && row.isSubHeader) {
+                subHeaderIds.push(row.id);
+            }
+        });
+
+        return subHeaderIds;
+    },
+
+    toggleCollapseGroup(subHeaderId) {
+        if (this.state.collapsedGroups.includes(subHeaderId)) {
+            let updatedCollapsedGroups = this.state.collapsedGroups.filter((currentSubHeaderId) => {
+                return currentSubHeaderId !== subHeaderId;
+            });
+            this.setState({collapsedGroups: updatedCollapsedGroups});
+        } else {
+            this.setState({collapsedGroups: [...this.state.collapsedGroups, ...this.addSubGroups(subHeaderId)]});
+        }
+    },
+
+    filterOutCollapsedGroups(rows) {
+        if (!Array.isArray(rows)) {
+            return [];
+        }
+
+        let rowsCopy = _.cloneDeep(rows);
+
+        let collapsedSubHeaders = rowsCopy.filter(row => {
+            return row.isSubHeader && this.state.collapsedGroups.includes(row.id);
+        });
+
+        collapsedSubHeaders.forEach(row => {
+            row.isCollapsed = true;
+        });
+
+        return rowsCopy.filter(row => {
+            return !this.state.collapsedGroups.includes(row.parentId);
+        });
+    },
+
     render() {
 
         let columns;
@@ -319,7 +370,7 @@ const QbGrid = React.createClass({
                 >
                     <Table.Header />
 
-                    <Table.Body onRow={this.addRowProps} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
+                    <Table.Body onRow={this.addRowProps} rows={this.filterOutCollapsedGroups(this.props.rows)} rowKey={this.getUniqueRowKey} />
                 </Table.Provider>
             </Loader>
         );

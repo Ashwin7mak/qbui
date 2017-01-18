@@ -205,6 +205,7 @@ function flattenRecordGroup(record, transformedRecords, fields, info) {
         subHeaderLabel: record.group,
         localized: record.localized,
         id: groupHeaderId,
+        parentId: info.parentId
     });
 
     let newInfo = {

@@ -29,11 +29,23 @@ const QbRow = React.createClass({
     //     return shouldUpdate;
     // },
 
+    toggleCollapseGroup() {
+        if (this.props.toggleCollapseGroup) {
+            this.props.toggleCollapseGroup(this.props.subHeaderId);
+        }
+    },
+
     renderSubHeader() {
+        let subHeaderIcon = 'caret-filled-down';
+
+        if (this.props.isCollapsed) {
+            subHeaderIcon = 'caret-filled-right';
+        }
+
         return (
             <tr key={`qbRowHeader-${this.props.subHeaderId}`} {...this.props} className={`groupHeader subHeaderLevel-${this.props.subHeaderLevel}`}>
                 <td id={this.props.subHeaderId} className="subHeaderCell" colSpan={this.props.numberOfColumns}>
-                    <QbIcon icon="caret-filled-down"/>
+                    <QbIcon icon={subHeaderIcon} onClick={this.toggleCollapseGroup}/>
                     <span className="subHeaderLabel">{this.props.subHeaderLabel}</span>
                 </td>
             </tr>
