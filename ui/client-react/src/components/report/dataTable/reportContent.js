@@ -90,18 +90,20 @@ export const ReportContent = React.createClass({
      */
     getOrigGroupedRec(recId) {
         let orig = {names:{}, fids:{}};
-        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
-        orig.names = rec;
+        orig.names = rec ? rec : {};
         let fids = {};
 
-        let recKeys = Object.keys(rec);
-        // have fid lookup hash
-        recKeys.forEach((item) => {
-            fids[rec[item].id] = rec[item];
-        });
+        if (rec != null) {
+            let recKeys = Object.keys(rec);
+            // have fid lookup hash
+            recKeys.forEach((item) => {
+                fids[rec[item].id] = rec[item];
+            });
+        }
         orig.fids = fids;
         return _.cloneDeep(orig);
     },
