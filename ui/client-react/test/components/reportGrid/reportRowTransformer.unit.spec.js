@@ -148,6 +148,26 @@ describe('ReportRowTransformer', () => {
 
             expect(actualResult).toEqual(expectedResult);
         });
+
+        it('uses the values for pendEdits if inlineEdit is open and the pendEdits record id matches the current record Id', () => {
+            const pendEdits = {
+                currentEditingRecordId: testRecordId,
+                isInlineEditOpen: true,
+                recordChanges: {
+                    2: {newVal: {value: 'pendEditValue', display: 'pendingEditDisplay'}}
+                }
+            };
+
+            let actualResult = ReportRowTransformer.transformRecordForGrid(
+                testApiRecord,
+                testIndex,
+                testFields,
+                {primaryKeyFieldName: 'Record ID#', pendEdits: pendEdits}
+            );
+
+            actualResult[2].value = pendEdits.recordChanges[2].newVal.value;
+            actualResult[2].display = pendEdits.recordChanges[2].newVal.display;
+        });
     });
 
     // TODO:: Add additional stories for grouping once offically supported in MB-1917
