@@ -86,30 +86,7 @@ let NavStore = Fluxxor.createStore({
         this.state.filterReportsName = name;
         this.emit('change');
     },
-    /*
-     * toggle left nav visible (small breakpoint state)
-     * @param visible force visible/hidden
-     */
-    //onToggleLeftNavVisible(visible) {
-    //    if (visible === false || visible === true) {
-    //        this.state.leftNavVisible = visible;
-    //    } else {
-    //        this.state.leftNavVisible = !this.state.leftNavVisible;
-    //    }
-    //    this.emit('change');
-    //},
-    ///*
-    // * toggle left nav expanded/collapsed (non-small breakpoint state)
-    // * @param expanded force expanded/collapsed
-    // */
-    //onToggleLeftNavExpanded(expanded) {
-    //    if (expanded === false || expanded === true) {
-    //        this.state.leftNavExpanded = expanded;
-    //    } else {
-    //        this.state.leftNavExpanded = !this.state.leftNavExpanded;
-    //    }
-    //    this.emit('change');
-    //},
+
     /*
      * toggle apps list
      * @param show force shown/hidden
