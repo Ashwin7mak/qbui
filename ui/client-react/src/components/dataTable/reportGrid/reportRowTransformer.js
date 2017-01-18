@@ -223,7 +223,8 @@ function flattenRecordGroup(record, transformedRecords, fields, info) {
 function isRowSelected(id, selectedRows) {
     let isSelected = false;
     if (_.isArray(selectedRows)) {
-        isSelected = selectedRows.includes(id);
+        // Need to use lodash here because current PhantomJS browser does not support [].includes() and babel is not transpiling it
+        isSelected = _.includes(selectedRows, id);
     }
     return isSelected;
 }

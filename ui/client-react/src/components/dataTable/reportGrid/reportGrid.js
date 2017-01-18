@@ -134,7 +134,9 @@ const ReportGrid = React.createClass({
     },
 
     startEditingRow(recordId) {
-        this.props.onEditRecordStart(recordId);
+        if (this.props.onEditRecordStart) {
+            this.props.onEditRecordStart(recordId);
+        }
     },
 
     onCellChange(value, colDef) {
@@ -175,14 +177,6 @@ const ReportGrid = React.createClass({
         }
     },
 
-    onStartEditingRow(recordId) {
-        return () => {
-            if (this.props.onEditRecordStart) {
-                this.props.onEditRecordStart(recordId);
-            }
-        };
-    },
-
     onClickDelete(recordId) {
         if (this.props.onRecordDelete) {
             this.props.onRecordDelete(recordId);
@@ -192,7 +186,7 @@ const ReportGrid = React.createClass({
     getCurrentlyEditingRecordId() {
         // Editing Id trumps editingRowId when editingIndex is set
         // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
-        // When saveAndAddAnewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
+        // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
         // and editingId (id of newly created row).
         // TODO:: This process can be refactored once AgGrid is removed.
         let editingRowId = null;
