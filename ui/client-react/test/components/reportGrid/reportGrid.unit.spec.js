@@ -23,6 +23,7 @@ const actions = {
     onEditRecordCancel() {},
     onRecordNewBlank() {},
     onClickRecordSave() {},
+    onCellClick() {},
 };
 const testColDef = {value: 'oldValue', display: 'oldDisplay', recordId: testRecordId, id: 1, fieldDef: {name: 'testField'}};
 const newValues = {value: 'newValue', display: 'newValue'};
@@ -257,7 +258,8 @@ describe('ReportGrid', () => {
             appUsers: testAppUsers,
             onCellChange: instance.onCellChange,
             onCellBlur: instance.onCellBlur,
-            onCellClick: instance.startEditingRow,
+            onCellClick: actions.onCellClick,
+            onCellClickEditIcon: instance.startEditingRow,
             validateFieldValue: actions.handleValidateFieldValue
         });
         expect(qbGrid).toHaveProp('compareCellChanges', FieldUtils.compareFieldValues);
