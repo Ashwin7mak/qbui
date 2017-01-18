@@ -9,6 +9,7 @@
     let FACET_RESULTS = 'facets/results';
     let FIELDS = 'fields';
     let FORMS = 'forms';
+    let FORM_TYPE = 'action';
     let TABLES = 'tables';
     let RECORDS = 'records';
     let COUNT_QUERY = 'countQuery';
@@ -37,6 +38,13 @@
      */
     function getLegacyRoot() {
         return '/db';
+    }
+
+    /**
+     *
+     */
+    function getEERoot() {
+        return '/ee';
     }
 
     /**
@@ -272,13 +280,60 @@
          * @param formId
          * @returns {*}
          */
-        getFormsRoute: function(url, formId) {
+        getCoreFormsRoute: function(url, formId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + FORMS + (formId ? '/' + formId : '');
             }
 
             //  no url root for TABLES found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the FORMS identifier and optional formId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/forms/<formId>
+         *
+         * @param url
+         * @param formId
+         * @returns {*}
+         */
+        getEEFormsRoute: function(url) {
+            let root = getUrlRoot(url, TABLES);
+
+            if (root) {
+                if (url.search('formType') !== -1) {
+                    let formType;
+                    url.split("&").forEach(item => {
+                        let s = item.split("="),
+                            k = s[0],
+                            v = s[1];
+                        if (k.search('formType') !== -1) {
+                            formType = v;
+                        }
+                    });
+
+                    return root + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+                }
+
+                return root;
+            }
+
+            //  no url root for TABLES found; return original url unchanged
+            return url;
+        },
+
+        getEEReqURL: function(url) {
+            if (url.search('/api/api') !== -1) {
+                url = url.replace('/api/api', getEERoot());
+            }
+
+            if (url.search('/api') !== -1) {
+                url = url.replace('/api', getEERoot());
+            }
             return url;
         },
 

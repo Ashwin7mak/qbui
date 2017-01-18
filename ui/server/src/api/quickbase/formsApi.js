@@ -133,7 +133,14 @@
             fetchFormMetaData: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url);
+
+                console.log(req.url);
+                if (requestHelper.getRequestEeHostEnable()) {
+                    req.url = routeHelper.getEEReqURL(req.url);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getEEFormsRoute(req.url);
+                } else {
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getCoreFormsRoute(req.url);
+                }
 
                 //  ensure any request parameters are appended..
                 let search = url.parse(req.url).search;

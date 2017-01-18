@@ -66,12 +66,22 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
-    describe('validate the request url', function() {
+    describe('validate the core request url', function() {
         let req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
             let request = requestHelper.getRequestUrl(req);
             should(request).be.exactly(config.javaHost + req.url);
+            done();
+        });
+    });
+
+    describe('validate the ee request url', function() {
+        let req = {};
+        req.url = '/someurl.com';
+        it('Test request url method', function(done) {
+            let request = requestHelper.getRequestUrl(req);
+            should(request).be.exactly(config.eeHost + req.url);
             done();
         });
     });

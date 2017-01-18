@@ -51,6 +51,8 @@
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8080',
         javaHost: 'http://localhost:8080',
+        eeHost: 'http://localhost:8081',
+        eeHostEnable: false,
 
         //Express Server
         //DOMAIN  : 'http://localhost:9000',

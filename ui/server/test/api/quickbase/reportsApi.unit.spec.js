@@ -2,6 +2,7 @@
 
 let config = {
     javaHost: 'http://javaHost',
+    eeHost: 'http://eeHost',
     SSL_KEY : {
         private    : 'privateKey',
         cert       : 'cert',
