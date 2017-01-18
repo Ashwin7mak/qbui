@@ -41,7 +41,11 @@ export const ReportContent = React.createClass({
     openRow(data) {
         const {appId, tblId, rptId} = this.props;
 
-        var recId = data[this.props.primaryKeyName].value;
+        // TODO:: Refactor once AgGrid is removed. Can assume recordId is an number or null. https://quickbase.atlassian.net/browse/MB-1920
+        var recId = data
+        if (!_.isNumber(data)) {
+            recId = data[this.props.primaryKeyName].value;
+        }
 
         // let flux know we've drilled-down into a record so we can navigate back and forth
         let flux = this.getFlux();
@@ -846,6 +850,7 @@ export const ReportContent = React.createClass({
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
+                                onCellClick={this.openRow}
                                 pendEdits={this.props.pendEdits}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
@@ -876,7 +881,6 @@ export const ReportContent = React.createClass({
                         {/*pageActions={this.props.pageActions}*/}
                         {/*selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}*/}
                         {/*onScroll={this.onScrollRecords}*/}
-                        {/*onRowClick={this.openRow}*/}
                         {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
                         {/*recordsCount={recordsCount}*/}
                         {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}

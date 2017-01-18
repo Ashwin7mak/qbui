@@ -85,7 +85,7 @@ class ReportRowTransformer extends RowTransformer {
         let recordCopy = _.cloneDeep(record);
         let cells = [];
         Object.keys(recordCopy).forEach(key => {
-            cells.push(addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing));
+            cells.push(addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing, editingRecordId));
         });
 
         super(id, cells);
@@ -269,8 +269,9 @@ function addEditErrorsIfExistForRow(id, pendEdits) {
  * @param isEditing
  * @returns {*}
  */
-function addPropertiesToIndividualField(field, editErrors, isEditing) {
+function addPropertiesToIndividualField(field, editErrors, isEditing, editingRecordId) {
     field.isEditing = isEditing;
+    field.editingRecordId = editingRecordId;
     field.isInvalid = false;
     field.invalidMessage = null;
     field.invalidResultData = null;

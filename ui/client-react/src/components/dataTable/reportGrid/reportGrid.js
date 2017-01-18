@@ -62,6 +62,10 @@ const ReportGrid = React.createClass({
         onRecordDelete: PropTypes.func,
 
         /**
+         * Action that will occur when a cell is click (does not include area covered by edit icon) */
+        onCellClick: PropTypes.func.isRequired,
+
+        /**
          * Action for when a field value is changed (e.g., user types in an input box when inline editing) */
         onFieldChange: PropTypes.func.isRequired,
 
@@ -238,7 +242,8 @@ const ReportGrid = React.createClass({
                 appUsers: this.props.appUsers,
                 onCellChange: this.onCellChange,
                 onCellBlur: this.onCellBlur,
-                onCellClick: this.startEditingRow,
+                onCellClick: this.props.onCellClick,
+                onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
             }}
             compareCellChanges={FieldUtils.compareFieldValues}

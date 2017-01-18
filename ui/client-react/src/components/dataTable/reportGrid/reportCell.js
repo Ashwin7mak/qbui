@@ -9,9 +9,10 @@ import _ from 'lodash';
 const ReportCell = React.createClass({
     propTypes: {
         appUsers: PropTypes.array,
+        onCellClick: PropTypes.func.isRequired,
         onCellChange: PropTypes.func.isRequired,
         onCellBlur: PropTypes.func.isRequired,
-        onCellClick: PropTypes.func.isRequired,
+        onCellClickEditIcon: PropTypes.func.isRequired,
         fieldDef: PropTypes.object,
         uniqueElementKey: PropTypes.string,
         recordId: PropTypes.number,
@@ -26,6 +27,12 @@ const ReportCell = React.createClass({
     // shouldComponentUpdate(nextProps) {
     //     return (this.props.value !== nextProps.value || this.props.display !== nextProps.display || this.props.isEditing !== nextProps.isEditing);
     // },
+
+    onCellClick() {
+        if (this.props.onCellClick) {
+            this.props.onCellClick(this.props.recordId);
+        }
+    },
 
     onCellChange(colDef) {
         return (newValue) => {
@@ -43,12 +50,17 @@ const ReportCell = React.createClass({
         };
     },
 
-    onCellClick(recordId) {
-        return () => {
-            if (this.props.onCellClick) {
-                this.props.onCellClick(recordId);
-            }
-        };
+    onCellClickEditIcon(event) {
+        event.stopPropagation();
+        if (this.props.onCellClickEditIcon) {
+            this.props.onCellClickEditIcon(this.props.recordId);
+        }
+    },
+
+    shouldRenderEditIcon(isFieldEditable) {
+        // We don't want to render an edit icon if another row is currently being edited. That is why we check for the editingRecordId to be null.
+        return (!this.props.isEditing && !this.props.editingRecordId && isFieldEditable);
+
     },
 
     render() {
@@ -73,9 +85,9 @@ const ReportCell = React.createClass({
             classes.push('editingCell');
         }
 
-        let isEditable = FieldUtils.isFieldEditable(fieldDef);
+        let isFieldEditable = FieldUtils.isFieldEditable(fieldDef);
 
-        if (this.props.isEditing && isEditable) {
+        if (this.props.isEditing && isFieldEditable) {
             return (
                 <div className={classes.join(' ')}>
                     <FieldValueEditor
@@ -99,22 +111,24 @@ const ReportCell = React.createClass({
 
         return (
             <div className={classes.join(' ')}>
-                <CellValueRenderer
-                    {...this.props}
-                    type={uiFieldType}
-                    classes={this.props.cellClass}
-                    attributes={fieldDef.datatypeAttributes}
-                    isEditable={isEditable}
-                    idKey={`fvr-${this.props.uniqueElementKey}`}
-                    key={`fvr-${this.props.uniqueElementKey}`}
+                <div className="cellClickableArea" onClick={this.onCellClick}>
+                    <CellValueRenderer
+                        {...this.props}
+                        type={uiFieldType}
+                        classes={this.props.cellClass}
+                        attributes={fieldDef.datatypeAttributes}
+                        isEditable={isFieldEditable}
+                        idKey={`fvr-${this.props.uniqueElementKey}`}
+                        key={`fvr-${this.props.uniqueElementKey}`}
 
-                    // Don't show duration units in the grid
-                    includeUnits={false}
+                        // Don't show duration units in the grid
+                        includeUnits={false}
 
-                    // Don't show unchecked checkboxes in the grid
-                    hideUncheckedCheckbox={true}
-                />
-                {isEditable && <QbIcon className="cellEditIcon" icon="edit" onClick={this.onCellClick(this.props.recordId)} />}
+                        // Don't show unchecked checkboxes in the grid
+                        hideUncheckedCheckbox={true}
+                    />
+                </div>
+                {this.shouldRenderEditIcon(isFieldEditable) && <QbIcon className="cellEditIcon" icon="edit" onClick={this.onCellClickEditIcon} />}
             </div>
         );
     }
