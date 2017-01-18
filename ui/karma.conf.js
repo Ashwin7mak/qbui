@@ -117,6 +117,7 @@ module.exports = function(config) {
             ],
             watch: true,
             externals: {
+                // Settings used to support React unit tests that use Enzyme
                 'react/addons': true,
                 'react/lib/ExecutionEnvironment': true,
                 'react/lib/ReactContext': true

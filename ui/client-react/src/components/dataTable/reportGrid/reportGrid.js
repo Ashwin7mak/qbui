@@ -188,7 +188,7 @@ const ReportGrid = React.createClass({
         // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
         // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
         // and editingId (id of newly created row).
-        // TODO:: This process can be refactored once AgGrid is removed.
+        // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
         if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
@@ -217,7 +217,7 @@ const ReportGrid = React.createClass({
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
-            // TODO:: Refactor out need for this prop once AgGrid is removed.
+            // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
             // Currently required because editingRowId could be null for a new record so it is difficult to check if
             // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
             isInlineEditOpen={this.props.isInlineEditOpen}

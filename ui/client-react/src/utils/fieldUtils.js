@@ -134,7 +134,7 @@ class FieldUtils {
      * @returns {*}
      */
     static getFieldType(fieldDef, type, attributes) {
-        // TODO - Make sure multiline works
+        // TODO - Make sure multiline works. https://quickbase.atlassian.net/browse/MB-1908
         let fieldType = type;
         if (fieldDef) {
             if (fieldDef.type === consts.FORMULA) {
@@ -168,8 +168,10 @@ class FieldUtils {
     }
 
     /**
+     * * TODO:: Once AgGrid is removed, consider using the server field formats and get both the type specific class
+     * https://quickbase.atlassian.net/browse/MB-1920
+     *
      * Gets the css class for a specific field type
-     * TODO:: Once AgGrid is removed, consider using the server field formats and get both the type specific class
      * and alignment class
      * @param type
      * @param fieldDef

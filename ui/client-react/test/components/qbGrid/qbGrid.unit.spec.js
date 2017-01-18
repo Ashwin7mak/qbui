@@ -81,7 +81,7 @@ describe('QbGrid', () => {
     beforeEach(() => {
         jasmineEnzyme();
         // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
-        // TODO:: Refactor once redux stores are implemented
+        // TODO:: Refactor once redux stores are implemented. https://quickbase.atlassian.net/browse/MB-1920
         QbIconActions.__Rewire__('IconActions', () => {return <div></div>;});
     });
 

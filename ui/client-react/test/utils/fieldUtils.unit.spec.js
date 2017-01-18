@@ -471,6 +471,7 @@ describe('FieldUtils', () => {
     });
 
     // TODO:: Increase complexity of this test once we use this again for render performance improvements in QbGrid
+    // https://quickbase.atlassian.net/browse/MB-1976
     describe('compareFieldValues', () => {
         it('returns false if there are no values to compare', () => {
             expect(FieldUtils.compareFieldValues([], [])).toEqual(false);

@@ -24,6 +24,10 @@ const mockLocale = {
     }
 };
 
+// TODO:: We need to mock IconActions until the redux store is refactored because it is difficult to test the FluxMixin
+// https://quickbase.atlassian.net/browse/MB-1920
+const mockIconActions = (_props) => {return <div className="iconActions">Icon Actions Mock</div>;};
+
 const expectedActions = [
     {msg: 'edit record', rawMsg: true, className:'edit', icon:'edit', onClick: props.onClickEditRowIcon},
     {msg: 'print record', rawMsg: true, className:'print', icon:'print', tooltipMsg: 'unimplemented.print', disabled:true},
@@ -37,17 +41,19 @@ let component;
 describe('QbIconActions', () => {
     beforeEach(() => {
         jasmineEnzyme();
+        QbIconActions.__Rewire__('IconActions', mockIconActions);
         QbIconActions.__Rewire__('Locale', mockLocale);
     });
 
     afterEach(() => {
+        QbIconActions.__ResetDependency__('IconActions');
         QbIconActions.__ResetDependency__('Locale');
     });
 
     it('renders the icon actions', () => {
         component = shallow(<QbIconActions {...props} />);
 
-        let IconActionsComponent = component.find(IconActions);
+        let IconActionsComponent = component.find(mockIconActions);
         expect(IconActionsComponent).toBePresent();
         expect(IconActionsComponent).toHaveProp('actions', expectedActions);
         expect(IconActionsComponent).toHaveProp('dropdownTooltip', true);

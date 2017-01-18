@@ -9,11 +9,14 @@ const defaultOptions = {
 
 /**
  * A class that holds information about properties that you may want to set for a row to be used
- * in the QbGrid. The rowId is required and a unique identifier for the row. The options are options,
+ * in the QbGrid. The rowId is required and a unique identifier for the row.
+ *
+ * The cells should have an ID property which is used to set the keys that will match the cellIdentifier of each column.
+ *
+ * The options are optional,
  * but are useful to know about to create subHeaders or other specific row states.
  *
- * No transformation is needed here (as in the ColumnTransformer) because the props for a row are passed through to React components;
- * however, specific grid implementations may want to extend this class to transform data into props. (See ReportRowTransformer as an example)
+ * Specific grid implementations may want to extend this class to transform data into props. (See ReportRowTransformer as an example)
  */
 class RowTransformer {
     /**

@@ -12,6 +12,7 @@ const QbRow = React.createClass({
      * @param nextProps
      * @returns {boolean|*}
      */
+    // TODO:: Turn performance enhancements back on. https://quickbase.atlassian.net/browse/MB-1976
     // shouldComponentUpdate(nextProps) {
     //     let shouldUpdate =
     //         (!nextProps || (this.props.isEditing !== nextProps.isEditing) ||

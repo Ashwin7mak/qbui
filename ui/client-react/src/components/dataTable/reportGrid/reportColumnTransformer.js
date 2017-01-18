@@ -6,6 +6,7 @@ import ColumnTransformer from '../qbGrid/columnTransformer';
 /**
  * A helper to transform reportData into a format that can be used in the columns by qbGrid
  * TODO:: Once AgGrid is removed, we can reduce these transformations and improve performance by doing these transformations only once in the reportDataStore
+ * https://quickbase.atlassian.net/browse/MB-1920
  */
 class ReportColumnTransformer extends ColumnTransformer {
     /**
