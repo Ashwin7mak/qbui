@@ -150,7 +150,7 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
-    describe('validate getFormsRoute method', function() {
+    describe('validate getCoreFormsRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},
             {name: 'test null url', url: null, id:null, expectation: null},
@@ -164,7 +164,27 @@ describe('Validate RouteHelper unit tests', function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getFormsRoute(testCase.url, testCase.id), testCase.expectation);
+                assert.equal(routeHelper.getCoreFormsRoute(testCase.url, testCase.id), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate getEEFormsRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, id:null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
+            {name: 'test valid url - id=2', url: '/apps/123/tables/456/records/789?formType=view', expectation: '/apps/123/tables/456/forms/action/VIEW'},
+            {name: 'test valid url', url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/action/VIEW'},
+            {name: 'test valid url - id=1', url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/action/VIEW'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getEEFormsRoute(testCase.url), testCase.expectation);
                 done();
             });
         });

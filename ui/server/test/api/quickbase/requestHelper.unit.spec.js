@@ -3,6 +3,7 @@
 let config = {
     legacyHost: 'http://legacyHost',
     javaHost: 'http://javaHost',
+    eeHost: 'http://eeHost',
     SSL_KEY : {
         private    : 'privateKey',
         cert       : 'cert',
@@ -80,7 +81,7 @@ describe('Validate RequestHelper unit tests', function() {
         let req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
-            let request = requestHelper.getRequestUrl(req);
+            let request = requestHelper.getRequestEEUrl(req);
             should(request).be.exactly(config.eeHost + req.url);
             done();
         });
