@@ -136,7 +136,7 @@ export let Nav = React.createClass({
     toggleAppsList(open) {
         const flux = this.getFlux();
 
-        if (this.getShellProp('leftNavExpanded')) {
+        if (this.props.qbui.shell.leftNavExpanded) {
             flux.actions.toggleAppsList(open);
         } else {
             flux.actions.toggleAppsList(true);
@@ -146,10 +146,6 @@ export let Nav = React.createClass({
 
     getEditFormFromProps() {
         return _.has(this.props, "qbui.forms") && _.find(this.props.qbui.forms, form => form.id === "edit");
-    },
-
-    getShellProp(prop) {
-        return _.has(this.props, "qbui.shell") ? this.props.qbui.shell[prop] : null;
     },
 
     /**
@@ -200,7 +196,7 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         let classes = "navShell";
-        if (this.getShellProp('leftNavVisible')) {
+        if (this.props.qbui.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
@@ -253,8 +249,8 @@ export let Nav = React.createClass({
             }
 
             <LeftNav
-                visible={this.getShellProp('leftNavVisible')}
-                expanded={this.getShellProp('leftNavExpanded')}
+                visible={this.props.qbui.shell.leftNavVisible}
+                expanded={this.props.qbui.shell.leftNavExpanded}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
