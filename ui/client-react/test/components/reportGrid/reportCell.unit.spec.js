@@ -12,6 +12,7 @@ const actions = {
     onCellChange() {},
     onCellBlur() {},
     onCellClick() {},
+    onCellClickEditIcon() {}
 };
 
 const testRecordId = 13;
@@ -47,21 +48,43 @@ describe('ReportCell', () => {
     });
 
     it('has a clickable edit icon when the field is editable', () => {
-        spyOn(actions, 'onCellClick');
+        spyOn(actions, 'onCellClickEditIcon');
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
         let editButton = component.find('.cellEditIcon');
         expect(editButton).toBePresent();
 
-        editButton.simulate('click');
+        editButton.simulate('click', {stopPropagation() {}});
 
-        expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
+        expect(actions.onCellClickEditIcon).toHaveBeenCalledWith(testRecordId);
     });
 
     it('does not have a clickable edit icon when the field is not editable', () => {
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={uneditableField} recordId={testRecordId}/>);
 
         expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
+    it('does not have a clickable edit icon when the row is in editing mode', () => {
+        component = shallow(<ReportCell {...actions} isEditing={true} fieldDef={uneditableField} recordId={testRecordId}/>);
+
+        expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
+    it('does not have a clickable edit icon when another row is in editing mode', () => {
+        component = shallow(<ReportCell {...actions} isEditing={false} editingRecordId={99} fieldDef={uneditableField} recordId={testRecordId}/>);
+
+        expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
+    it('navigates to form view when a cell is clicked', () => {
+        spyOn(actions, 'onCellClick');
+        component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
+
+        let cellClickableArea = component.find('.cellClickableArea');
+        cellClickableArea.simulate('click');
+
+        expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
     });
 
     it('renders an editor when the cell is in editing mode', () => {
