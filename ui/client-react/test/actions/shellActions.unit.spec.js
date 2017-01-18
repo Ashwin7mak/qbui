@@ -8,12 +8,7 @@ class BreakpointsMock {
     }
 }
 
-beforeEach(() => {
-    smallBreakpoint = false;
-});
-
 describe('Shell actions', () => {
-
     it('should create an action to show trowser', () => {
         const content = "reportBrowser";
         expect(shellActions.showTrowser(content)).toEqual({type: types.SHOW_TROWSER, content});
@@ -33,10 +28,10 @@ describe('Shell actions', () => {
     });
 
     it('create an action to toggle left nav for non-small breakpoint', () => {
+        smallBreakpoint = false;
         shellActions.__Rewire__('Breakpoints', BreakpointsMock);
 
         const navState = true;
         expect(shellActions.toggleLeftNav(navState)).toEqual({type: types.TOGGLE_LEFT_NAV_EXPANDED, navState});
-        shellActions.__ResetDependency__('Breakpoints');
     });
 });

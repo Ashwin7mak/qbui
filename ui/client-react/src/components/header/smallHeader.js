@@ -96,5 +96,4 @@ var SmallHeader = React.createClass({
     }
 });
 
-// export the react-redux connected wrapper (which injects the dispatch function as a prop)
-export default connect()(smallHeader);
+export default connect()(SmallHeader);

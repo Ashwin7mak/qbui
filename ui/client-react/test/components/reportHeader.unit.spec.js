@@ -5,6 +5,15 @@ import FacetSelections  from '../../src/components/facet/facetSelections';
 import Fluxxor from 'fluxxor';
 import SearchBox from '../../src/components/search/searchBox';
 
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+import * as types from '../../src/actions/types';
+
 describe('ReportHeader functions', () => {
     'use strict';
 
@@ -46,43 +55,28 @@ describe('ReportHeader functions', () => {
         selections: selections
     };
 
-    let mockCallbacks = {};
-    let mockShellActions = {
-        toggleLeftNav: function() {}
-    };
+    const initialState = {};
+    let store;
     beforeEach(() => {
-        mockCallbacks = {
-            searchHappened: function(value) {},
-            dispatch: function(action) {}
-        };
-        spyOn(mockCallbacks, 'searchHappened').and.callThrough();
-        spyOn(mockCallbacks, 'dispatch');
-
-        spyOn(mockShellActions, 'toggleLeftNav');
-        ReportHeader.__Rewire__('ShellActions', mockShellActions);
-
-        component = TestUtils.renderIntoDocument(<ReportHeader dispatch={mockCallbacks.dispatch} flux={flux} reportData={reportData}
-                                                               searchTheString={mockCallbacks.searchHappened}
-        />);
-    });
-
-    afterEach(() => {
-        mockCallbacks.searchHappened.calls.reset();
-        mockCallbacks.dispatch.calls.reset();
-        mockShellActions.toggleLeftNav.calls.reset();
-        ReportHeader.__ResetDependency__('ShellActions');
+        store = mockStore(initialState);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ReportHeader flux={flux} reportData={reportData}/>
+            </Provider>
+        );
     });
 
     it('test render of component', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    //it('test toggle nav', () => {
-    //    let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
-    //    TestUtils.Simulate.click(toggleNav);
-    //    expect(mockCallbacks.dispatch).toHaveBeenCalled();
-    //    expect(mockShellActions.toggleLeftNav).toHaveBeenCalled();
-    //});
+    it('test toggle nav action is called', () => {
+        let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
+        TestUtils.Simulate.click(toggleNav);
+
+        const actions = store.getActions();
+        expect(actions[0].type).toEqual(types.TOGGLE_LEFT_NAV_EXPANDED);
+    });
 
     it('test perform search', () => {
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "smallHeaderSearchBox");
