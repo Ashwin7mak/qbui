@@ -283,7 +283,7 @@ const QbGrid = React.createClass({
          */
         let stickyCell = document.getElementById(this.props.editingRowId);
         if (stickyCell) {
-            stickyCell.style.zIndex = 2;
+            stickyCell.firstChild.style.zIndex = 2;
         }
     },
     preventPopUpClipping() {
@@ -325,7 +325,6 @@ const QbGrid = React.createClass({
         }
     },
     render() {
-        console.log('this.props: ', this.props);
         if (this.props.editingRowId) {
             this.preventPopUpClipping();
         }
