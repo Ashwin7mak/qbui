@@ -47,6 +47,9 @@
             getRequestUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
             },
+            getRequestEEUrl  : function(req) {
+                return config ? config.eeHost + req.url : '';
+            },
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';
             },
