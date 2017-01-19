@@ -8,7 +8,7 @@ const testFormatter = (cell) => 'Nightmare Before Christmas';
 const TestHeaderComponent = React.createClass({render() {return <h1>Sally</h1>;}});
 const testHeaderProps = {type: 'Rag Doll', stuffing: 'Fall Leaves'};
 
-fdescribe('ColumnTransformer', () => {
+describe('ColumnTransformer', () => {
     describe('new', () => {
         it('creates a new instance of a columnTransformer', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
@@ -96,7 +96,9 @@ fdescribe('ColumnTransformer', () => {
                 header: {
                     label: (
                         <span className="">
-                            {testHeaderLabel}
+                            <span className="">
+                                {testHeaderLabel}
+                            </span>
                             <div className="headerMenu">
                                 <TestHeaderComponent {...testHeaderProps} />
                             </div>
