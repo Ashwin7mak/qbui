@@ -283,16 +283,20 @@ $edit-icon-font-size: 18px;
 
 // add borders when the row has the willEdit class (from mouse entering pencil icons)
 .reportContent:not(.inlineEditing) {
-    .qbGrid > tbody > tr.willEdit > td,
-    .qbGrid > tbody > tr.willEdit + tr > td {
+    .qbGrid > tbody > tr.willEdit > td:not(.stickyCell),
+    .qbGrid > tbody > tr.willEdit + tr > td:not(.stickyCell) {
         border-top: 1px solid $qbgrid-onpencil-row-border-color;
     }
-    .qbGrid > tbody > tr.willEdit > td:first-of-type {
-        border-left: 1px solid $qbgrid-onpencil-row-border-color;
+    .qbGrid > tbody > tr.willEdit > td.stickyCell {
+        border-right: 1px solid $color-black-300;
     }
     .qbGrid > tbody > tr.willEdit > td:last-of-type {
         border-right: 1px solid $qbgrid-onpencil-row-border-color;
     }
+    .qbGrid > tbody > tr.willEdit:hover > td.stickyCell {
+        border-right: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+     // background hover
     .qbGrid > tbody > tr:hover > td {
         background: $qbgrid-row-hover-color;
     }
@@ -493,10 +497,6 @@ $edit-icon-font-size: 18px;
 
 .qbGrid > tbody > tr.editing > td:first-of-type {
     z-index: 3;
-}
-
-.qbGrid > tbody > tr:hover > td:first-of-type {
-    background: $qbgrid-row-hover-color;
 }
 
 .stickyCell {
