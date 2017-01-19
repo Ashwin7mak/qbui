@@ -273,7 +273,6 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > tbody > tr > td {
-    //min-height: $inline-edit-input-box-height;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;
@@ -281,9 +280,6 @@ $edit-icon-font-size: 18px;
     border-right: 1px solid $color-black-300;
     border-top: 1px solid $color-black-300;
     transition: border 100ms ease-out;
-    //This is commented out because the texts below an inline edit was overlapping, this pushes it down a little bit
-    //no more overlap
-    //vertical-align: top;
 }
 
 .qbGrid > tbody > tr:last-of-type > td {
