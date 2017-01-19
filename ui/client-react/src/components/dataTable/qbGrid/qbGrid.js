@@ -276,17 +276,6 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
 
-    componentDidMount() {
-        const reportContent = document.getElementsByClassName('reportContent')[0];
-        if (reportContent) {
-            reportContent.addEventListener('scroll', this.handleScroll);
-        }
-    },
-    componentWillUnmount() {
-        const reportContent = document.getElementsByClassName('reportContent')[0];
-        reportContent.removeEventListener("scroll", this.props.handleScroll);
-    },
-
     /**
      * stick the header and sticky first column when the grid scrolls
      */
