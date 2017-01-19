@@ -131,24 +131,23 @@
              * @returns {*}
              */
             fetchFormMetaData: function(req) {
-                let eeReq = Object.assign({}, req);
-                let opts = requestHelper.setOptions(eeReq);
+                let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                if (requestHelper.getRequestEeHostEnable()) {
-                    eeReq.url = routeHelper.getEEReqURL(eeReq.url);
-                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getEEFormsRoute(eeReq.url);
-                } else {
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getCoreFormsRoute(eeReq.url);
-                }
+                const formUrl = routeHelper.getFormsRoute(req.url, requestHelper.getRequestEeHostEnable());
 
+                if (requestHelper.getRequestEeHostEnable()) {
+                    opts.url = requestHelper.getRequestEeHost() + formUrl;
+                } else {
+                    opts.url = requestHelper.getRequestJavaHost() + formUrl;
+                }
                 //  ensure any request parameters are appended..
-                let search = url.parse(eeReq.url).search;
+                let search = url.parse(req.url).search;
                 if (search) {
                     opts.url += search;
                 }
 
-                return requestHelper.executeRequest(eeReq, opts);
+                return requestHelper.executeRequest(req, opts);
             },
 
             fetchTableFields: function(req) {

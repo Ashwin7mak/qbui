@@ -122,6 +122,87 @@
         return route;
     }
 
+    /**
+     * For the given req.url, extract the '/api' in the path and
+     * replace them with experience engine URL path.
+     *
+     * Example:  url: /api/api/apps/123/tables/456/formComponents/rest/of/url
+     *           return: /ee/apps/123/tables/456/formComponents/rest/of/url
+     *
+     * @param url
+     * @returns {*}
+     */
+    function getEEReqURL(url) {
+        if (url) {
+            if (url.search('/api/api') !== -1) {
+                url = url.replace('/api/api', getEERoot());
+            }
+
+            if (url.search('/api') !== -1) {
+                url = url.replace('/api', getEERoot());
+            }
+        }
+        return url;
+    }
+
+    /**
+     * For the given req.url, extract the APPS and TABLES identifiers/ids and
+     * append the FORMS identifier and optional formId.
+     *
+     * Example:  url: /apps/123/tables/456/rest/of/url
+     *           return: /apps/123/tables/456/forms/<formId>
+     *
+     * @param url
+     * @param isEeEnable
+     * @param formId
+     * @returns {*}
+     */
+    function getCoreFormsRoute(url, formId) {
+        let root = getUrlRoot(url, TABLES);
+        if (root) {
+            return root + '/' + FORMS + (formId ? '/' + formId : '');
+        }
+
+        //  no url root for TABLES found; return original url unchanged
+        return url;
+    }
+
+    /**
+     * For the given req.url, extract the APPS and TABLES identifiers/ids and
+     * append the FORMS identifier.
+     *
+     * Example:  url: /apps/123/tables/456/formComponents/rest/of/url
+     *           return: /apps/123/tables/456/forms
+     *
+     * @param url
+     * @returns {*}
+     */
+    function getEEFormsRoute(url) {
+        let root = getUrlRoot(url, TABLES);
+
+        if (root) {
+            root = getEEReqURL(root);
+            if (url.search('formType') !== -1) {
+                let formType;
+                url.split("&").forEach(item => {
+                    let s = item.split("="),
+                        k = s[0],
+                        v = s[1];
+                    if (k.search('formType') !== -1) {
+                        formType = v;
+                    }
+                });
+
+                return root + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+            }
+
+            return root;
+        }
+
+        //  no url root for TABLES found; return original url unchanged
+        return url;
+    }
+
     module.exports  = {
 
         /**
@@ -277,75 +358,16 @@
          *           return: /apps/123/tables/456/forms/<formId>
          *
          * @param url
+         * @param isEeEnable
          * @param formId
          * @returns {*}
          */
-        getCoreFormsRoute: function(url, formId) {
-            let root = getUrlRoot(url, TABLES);
-            if (root) {
-                return root + '/' + FORMS + (formId ? '/' + formId : '');
+        getFormsRoute: function(url, isEeEnable, formId) {
+            if (isEeEnable) {
+                return getEEFormsRoute(url);
+            } else {
+                return getCoreFormsRoute(url, formId);
             }
-
-            //  no url root for TABLES found; return original url unchanged
-            return url;
-        },
-
-        /**
-         * For the given req.url, extract the APPS and TABLES identifiers/ids and
-         * append the FORMS identifier.
-         *
-         * Example:  url: /apps/123/tables/456/formComponents/rest/of/url
-         *           return: /apps/123/tables/456/forms/<formId>
-         *
-         * @param url
-         * @returns {*}
-         */
-        getEEFormsRoute: function(url) {
-            let root = getUrlRoot(url, TABLES);
-
-            if (root) {
-                if (url.search('formType') !== -1) {
-                    let formType;
-                    url.split("&").forEach(item => {
-                        let s = item.split("="),
-                            k = s[0],
-                            v = s[1];
-                        if (k.search('formType') !== -1) {
-                            formType = v;
-                        }
-                    });
-
-                    return root + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
-                }
-
-                return root;
-            }
-
-            //  no url root for TABLES found; return original url unchanged
-            return url;
-        },
-
-        /**
-         * For the given req.url, extract the '/api' in the path and
-         * replace them with experience engine URL path.
-         *
-         * Example:  url: /api/api/apps/123/tables/456/formComponents/rest/of/url
-         *           return: /ee/apps/123/tables/456/formComponents/rest/of/url
-         *
-         * @param url
-         * @returns {*}
-         */
-        getEEReqURL: function(url) {
-            if (url) {
-                if (url.search('/api/api') !== -1) {
-                    url = url.replace('/api/api', getEERoot());
-                }
-
-                if (url.search('/api') !== -1) {
-                    url = url.replace('/api', getEERoot());
-                }
-            }
-            return url;
         },
 
         /**
