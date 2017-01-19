@@ -55,26 +55,30 @@ const QbRow = React.createClass({
     },
 
     componentDidMount() {
-
+        let editIcons;
         // handle the row styling when the nested edit icons get mouse enter/leave events
+        if (this.refs.tr) {
+            editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
-        const editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
-        for (let i = 0; i < editIcons.length; i++) {
-            editIcons[i].addEventListener("mouseenter", this.handleMouseEnterEditIcon);
-            editIcons[i].addEventListener("mouseleave", this.handleMouseLeaveEditIcon);
+            for (let i = 0; i < editIcons.length; i++) {
+                editIcons[i].addEventListener("mouseenter", this.handleMouseEnterEditIcon);
+                editIcons[i].addEventListener("mouseleave", this.handleMouseLeaveEditIcon);
+            }
         }
     },
 
     componentWillUnmount() {
-
+        let editIcons;
         // remove mouse listeners
+        if (this.refs.tr) {
+            editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
-        const editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
-        for (let i = 0; i < editIcons.length; i++) {
-            editIcons[i].removeEventListener("mouseenter", this.handleMouseEnterEditIcon);
-            editIcons[i].removeEventListener("mouseleave", this.handleMouseLeaveEditIcon);
+            for (let i = 0; i < editIcons.length; i++) {
+                editIcons[i].removeEventListener("mouseenter", this.handleMouseEnterEditIcon);
+                editIcons[i].removeEventListener("mouseleave", this.handleMouseLeaveEditIcon);
+            }
         }
     },
 
