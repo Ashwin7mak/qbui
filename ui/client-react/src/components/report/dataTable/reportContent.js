@@ -91,18 +91,20 @@ export const ReportContent = React.createClass({
      */
     getOrigGroupedRec(recId) {
         let orig = {names:{}, fids:{}};
-        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
-        orig.names = rec;
+        orig.names = rec || {};
         let fids = {};
 
-        let recKeys = Object.keys(rec);
-        // have fid lookup hash
-        recKeys.forEach((item) => {
-            fids[rec[item].id] = rec[item];
-        });
+        if (rec !== null) {
+            let recKeys = Object.keys(rec);
+            // have fid lookup hash
+            recKeys.forEach((item) => {
+                fids[rec[item].id] = rec[item];
+            });
+        }
         orig.fids = fids;
         return _.cloneDeep(orig);
     },
@@ -303,6 +305,7 @@ export const ReportContent = React.createClass({
     handleRecordDelete(record) {
         let recordId;
         // TODO:: Simplify this once we can remove AgGrid. Once AgGrid is removed, we can assume the value coming back is a recordId or null.
+        // https://quickbase.atlassian.net/browse/MB-1920
         if (_.isNumber(record)) {
             recordId = record;
         } else {
@@ -866,6 +869,7 @@ export const ReportContent = React.createClass({
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                             />
                         }
+                        {/*TODO:: Remove once API for ReportGrid is closer to finalized. https://quickbase.atlassian.net/browse/MB-2023 */}
                         {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
                         {/*onGridReady={this.props.onGridReady}*/}
                         {/*onRecordChange={this.handleRecordChange}*/}

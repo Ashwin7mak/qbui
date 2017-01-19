@@ -385,6 +385,8 @@ const flux = {
         },
         recordPendingEditsCommit: ()=> {
         },
+        recordPendingValidateField: ()=> {
+        },
         newBlankReportRecord: ()=> {
             return {
                 then: function(callback) {return callback(101);}
@@ -396,6 +398,10 @@ const flux = {
             };
         },
         saveNewRecord: ()=> {
+        },
+        selectedRows: ()=> {
+        },
+        editingReportRow: ()=> {
         },
         logMeasurements : ()=> {
         },
@@ -889,6 +895,219 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.getOrigRec(modifiedRec[keyField].value);
         expect(result).toEqual(origRecExpect);
+    });
+
+    it('test getOrigGroupedRec with reportData', () => {
+        let keyField = "id";
+        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        let modifiedRec = _.merge({}, origRec, {col_num: {value:44}});
+        let origGroupRecExpect = {
+            names: Object.assign({}, fakeReportData_simple.data.filteredRecords[0]),
+            fids: {
+                4: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 4);})],
+                5: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 5);})],
+                6: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 6);})],
+                7: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 7);})],
+                8: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 8);})]
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_simple}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                primaryKeyName={keyField} />);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        let result = component.getOrigGroupedRec(modifiedRec[keyField].value);
+        expect(result).toEqual(origGroupRecExpect);
+    });
+
+    it('test getOrigGroupedRec with no reportData', () => {
+        let keyField = "id";
+        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        let modifiedRec = _.merge({}, origRec, {col_num: {value:44}});
+        let origGroupRecNullExpect = {names: {}, fids: {}};
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={{}}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                primaryKeyName={keyField} />);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        let result = component.getOrigGroupedRec(modifiedRec[keyField].value);
+        expect(result).toEqual(origGroupRecNullExpect);
+    });
+
+    it('test validateRecord', () => {
+        let validatedRecord = {ok: true, errors: []};
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.validateRecord(null);
+        expect(result).toEqual(validatedRecord);
+    });
+
+    it('test cancelRecordDelete', () => {
+        let confirmDeletesDialogOpen = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.cancelRecordDelete();
+        let result = component.state.confirmDeletesDialogOpen;
+        expect(result).toEqual(confirmDeletesDialogOpen);
+    });
+
+    it('test handleValidateFieldValue with fieldDef', () => {
+        spyOn(flux.actions, 'recordPendingValidateField');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.handleValidateFieldValue("fieldDef", "fieldName", "value", false);
+        expect(flux.actions.recordPendingValidateField).toHaveBeenCalled();
+    });
+
+    it('test handleValidateFieldValue null fieldDef', () => {
+        let error = 'Field Def not provided for field validation in reportContent';
+        let handleValidateFieldValue = Promise.reject(error);
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.handleValidateFieldValue(null, "fieldName", "value", false);
+        expect(result).toEqual(handleValidateFieldValue);
+    });
+
+    it('test selectRows', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.selectRows();
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test toggleSelectedRow with valid id', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                selectedRows={selectedRowIds}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.toggleSelectedRow(1);
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test toggleSelectedRow with invalid id', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                selectedRows={selectedRowIds}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.toggleSelectedRow(3);
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test openRecordForEdit', () => {
+        spyOn(flux.actions, 'editingReportRow');
+        let dispatchMethod = () => { };
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                dispatch={dispatchMethod}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.openRecordForEdit(1);
+        expect(flux.actions.editingReportRow).toHaveBeenCalled();
+    });
+
+    it('test onScrollRecords', () => {
+        spyOn(flux.actions, 'scrollingReport');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.onScrollRecords();
+        expect(flux.actions.scrollingReport).toHaveBeenCalled();
+    });
+
+    it('test isNumericDataType returns true', () => {
+        let isNumericValue = true;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isNumericDataType(SchemaConsts.NUMERIC);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.CURRENCY);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.PERCENT);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.RATING);
+        expect(result).toEqual(isNumericValue);
+    });
+
+    it('test isDateDataType returns true', () => {
+        let isDateValue = true;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isDateDataType(SchemaConsts.DATE);
+        expect(result).toEqual(isDateValue);
+        result = component.isDateDataType(SchemaConsts.DATE_TIME);
+        expect(result).toEqual(isDateValue);
+    });
+
+    it('test isNumericDataType returns false', () => {
+        let isNumericValue = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isNumericDataType(SchemaConsts.DATE);
+        expect(result).toEqual(isNumericValue);
+    });
+
+    it('test isDateDataType returns false', () => {
+        let isDateValue = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isDateDataType(SchemaConsts.NUMERIC);
+        expect(result).toEqual(isDateValue);
     });
 
     it('test handleEditRecordStart existing record', () => {

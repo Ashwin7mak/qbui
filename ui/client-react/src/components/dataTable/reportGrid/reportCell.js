@@ -20,9 +20,9 @@ const ReportCell = React.createClass({
         isInvalid: PropTypes.bool,
         invalidMessage: PropTypes.string,
         invalidResultData: PropTypes.object,
-        validateFieldValue: PropTypes.func,
+        validateFieldValue: PropTypes.func
     },
-    //
+    // TODO:: Turn performance improvements back on. https://quickbase.atlassian.net/browse/MB-1976
     // shouldComponentUpdate(nextProps) {
     //     return (this.props.value !== nextProps.value || this.props.display !== nextProps.display || this.props.isEditing !== nextProps.isEditing);
     // },

@@ -9,28 +9,35 @@ const defaultOptions = {
 
 /**
  * A class that holds information about properties that you may want to set for a row to be used
- * in the QbGrid. The rowId is required and a unique identifier for the row. The options are options,
+ * in the QbGrid. The rowId is required and a unique identifier for the row.
+ *
+ * The cells should have an ID property which is used to set the keys that will match the cellIdentifier of each column.
+ *
+ * The options are optional,
  * but are useful to know about to create subHeaders or other specific row states.
  *
- * No transformation is needed here (as in the ColumnTransformer) because the props for a row are passed through to React components;
- * however, specific grid implementations may want to extend this class to transform data into props. (See ReportRowTransformer as an example)
+ * Specific grid implementations may want to extend this class to transform data into props. (See ReportRowTransformer as an example)
  */
 class RowTransformer {
     /**
      * Builds a row instance
      * @param rowId Required. Unique identifier for row.
+     * @param cells Assumes each cell has an id property. QbGrid columns will match the column cellIdentifier property to a key on the row to put cells in the correct column.
      * @param options Other options that are passed as props to the row.
      */
     constructor(
         rowId, // Required unique identifier for a row.
-        options = defaultOptions) {
-
+        cells,
+        options = defaultOptions
+    ) {
         this.id = rowId;
-        this.isSubHeader = options.isSubHeader;
-        this.isEditing = options.isEditing;
-        this.isSelected = options.isSelected;
-
         Object.assign(this, defaultOptions, options);
+
+        if (Array.isArray(cells)) {
+            cells.forEach(cell => {
+                this[cell.id] = cell;
+            });
+        }
     }
 }
 

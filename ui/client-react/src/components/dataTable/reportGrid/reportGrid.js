@@ -116,16 +116,6 @@ const ReportGrid = React.createClass({
         };
     },
 
-    getInitialState() {
-        return {
-            editingRecord: null,
-            pendEdits: {
-                currentEditingRecordId: null,
-                recordChanges: {}
-            }
-        };
-    },
-
     transformColumns() {
         return ReportColumnTransformer.transformColumnsForGrid(this.props.columns);
     },
@@ -141,12 +131,12 @@ const ReportGrid = React.createClass({
                 selectedRows: this.props.selectedRows
             }
         );
-        // return Row.transformRecordsForGrid(this.props.records, this.props.columns, this.props.primaryKeyName, this.state.editingRecord, this.state.pendEdits);
     },
 
     startEditingRow(recordId) {
-        this.props.onEditRecordStart(recordId);
-        // this.setState({pendEdits: {currentEditingRecordId: recordId, recordChanges: {}}});
+        if (this.props.onEditRecordStart) {
+            this.props.onEditRecordStart(recordId);
+        }
     },
 
     onCellChange(value, colDef) {
@@ -156,11 +146,6 @@ const ReportGrid = React.createClass({
         };
 
         this.props.onFieldChange(formatChange(updatedFieldValue, colDef));
-        // Comment out the line above, and uncomment out this line and the line in transformRecords to see performance when not using the pendEdits store and
-        // relying on props to work their way down the React tree.
-        // let localPendEdits = Object.assign({}, this.state.pendEdits);
-        // localPendEdits.recordChanges[colDef.id] = change.values;
-        // this.setState({pendEdits: localPendEdits});
     },
 
     onCellBlur(updatedFieldValue, colDef) {
@@ -192,14 +177,6 @@ const ReportGrid = React.createClass({
         }
     },
 
-    onStartEditingRow(recordId) {
-        return () => {
-            if (this.props.onEditRecordStart) {
-                this.props.onEditRecordStart(recordId);
-            }
-        };
-    },
-
     onClickDelete(recordId) {
         if (this.props.onRecordDelete) {
             this.props.onRecordDelete(recordId);
@@ -209,9 +186,9 @@ const ReportGrid = React.createClass({
     getCurrentlyEditingRecordId() {
         // Editing Id trumps editingRowId when editingIndex is set
         // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
-        // When saveAndAddAnewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
+        // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
         // and editingId (id of newly created row).
-        // TODO:: This process can be refactored once AgGrid is removed.
+        // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
         if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
@@ -240,7 +217,7 @@ const ReportGrid = React.createClass({
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
-            // TODO:: Refactor out need for this prop once AgGrid is removed.
+            // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
             // Currently required because editingRowId could be null for a new record so it is difficult to check if
             // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
             isInlineEditOpen={this.props.isInlineEditOpen}
