@@ -410,6 +410,10 @@ export default {
             }
         },
         invalidMsg : {
+            api: {
+                notUniqueSingleField: "Füllen Sie einen anderen Wert aus. Ein anderer {recordName} ist bereits mit diesem {fieldName}.",
+                notUniqueMultiChoice: "Wählen Sie einen anderen {fieldName}. Ein anderer {recordName} verwendet diesen bereits.",
+            },
             unknown: "Ungültige unbekannte Art. Befund: ",
             required: "Füllen Sie das {fieldName}",
             email: "Formatieren Sie die {fieldName} wie name@domaine.de",

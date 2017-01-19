@@ -97,12 +97,14 @@ describe('Nav functions', () => {
         ReportDataSearchStore: new reportDataSearchStore()
     };
     let flux = new Fluxxor.Flux(stores);
-    flux.addActions({
-        toggleLeftNav() {
-            return;
+    let props = {
+        qbui: {
+            shell: {
+                leftNavVisible: true,
+                leftNavExpanded: false
+            }
         }
-    });
-
+    };
 
     beforeEach(() => {
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
@@ -131,12 +133,12 @@ describe('Nav functions', () => {
             }
         });
 
-        component = TestUtils.renderIntoDocument(<Nav flux={flux}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test renders large by default', () => {
-        component = TestUtils.renderIntoDocument(<Nav flux={flux}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, TopNavMock).length).toEqual(1);
     });
@@ -151,7 +153,7 @@ describe('Nav functions', () => {
                 return {touch: true};
             },
             render() {
-                return <Nav ref="nav" flux={flux}></Nav>;
+                return <Nav {...props} ref="nav" flux={flux}></Nav>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -177,7 +179,7 @@ describe('Nav functions', () => {
         };
         let fluxWithAdminApp = new Fluxxor.Flux(storesWithAdminApp);
 
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithAdminApp}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithAdminApp}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(1);
     });
 
@@ -192,7 +194,7 @@ describe('Nav functions', () => {
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithV3App = new Fluxxor.Flux(storesWithV3App);
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithV3App}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithV3App}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(0);
     });
 
@@ -211,7 +213,7 @@ describe('Nav functions', () => {
 
         spyOn(WindowLocationUtilsMock, 'update');
 
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithoutV3App}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutV3App}></Nav>);
 
         expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable?appId=1");
     });

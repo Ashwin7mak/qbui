@@ -1,66 +1,79 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import Fluxxor from 'fluxxor';
 import SmallHeader from '../../src/components/header/smallHeader';
 import SearchBox from '../../src/components/search/searchBox';
+
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+import * as types from '../../src/actions/types';
 
 describe('SmallHeader functions', () => {
     'use strict';
 
-    let component;
-    let navStore = Fluxxor.createStore({
-        getState() {
-            return {};
-        }
-    });
-    let stores = {
-        NavStore: new navStore()
-    };
-
-    let flux = new Fluxxor.Flux(stores);
-    flux.actions = {
-        toggleLeftNav() {
-            return;
-        }
-    };
-
-    beforeEach(() => {
-        spyOn(flux.actions, 'toggleLeftNav');
-    });
-
-    afterEach(() => {
-        flux.actions.toggleLeftNav.calls.reset();
-    });
-
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<SmallHeader flux={flux}/>);
+        const initialState = {};
+        const store = mockStore(initialState);
+        let component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <SmallHeader title="test"/>
+            </Provider>
+        );
+
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test toggle nav', () => {
+    it('test toggle nav action is called', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
+        let component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <SmallHeader title="test"/>
+            </Provider>
+        );
+
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
-        expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
+
+        const actions = store.getActions();
+        expect(actions[0].type).toEqual(types.TOGGLE_LEFT_NAV_EXPANDED);
     });
 
     it('test title prop', () => {
-        component = TestUtils.renderIntoDocument(<SmallHeader flux={flux} title="test"/>);
+        const initialState = {};
+        const store = mockStore(initialState);
+        let component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <SmallHeader title="test"/>
+            </Provider>
+        );
 
         let title = TestUtils.scryRenderedDOMComponentsWithClass(component, "title");
         expect(title[0].innerHTML).toEqual("test");
     });
+
     it('test search renders', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
         let TestParent = React.createFactory(React.createClass({
             render() {
-                return <SmallHeader ref="header" flux={flux} />;
+                return <Provider store={store}><SmallHeader ref="header"/></Provider>;
             }
         }));
+
         let parent = TestUtils.renderIntoDocument(TestParent());
         let header = TestUtils.scryRenderedComponentsWithType(parent.refs.header, SmallHeader);
         let searchBox = TestUtils.scryRenderedComponentsWithType(header[0], SearchBox);
         expect(searchBox.length).toEqual(1);
     });
+
     it('test search props', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
         let TestParent = React.createFactory(React.createClass({
             getInitialState() {
                 return {
@@ -74,14 +87,17 @@ describe('SmallHeader functions', () => {
                 this.setState({counter: 3});
             },
             render() {
-                return <SmallHeader ref="header" flux={flux}
-                                    enableSearch={true}
-                                    onSearchChange={this.handleSearchChange}
-                                    onClearSearch={this.clearSearchString}
-                                    searchPlaceHolder="placeholderString"
-                                    searchValue="test"/>;
+                return <Provider store={store}>
+                        <SmallHeader ref="header"
+                                     enableSearch={true}
+                                     onSearchChange={this.handleSearchChange}
+                                     onClearSearch={this.clearSearchString}
+                                     searchPlaceHolder="placeholderString"
+                                     searchValue="test"/>
+                       </Provider>;
             }
         }));
+
         let parent = TestUtils.renderIntoDocument(TestParent());
         let header = TestUtils.scryRenderedComponentsWithType(parent.refs.header, SmallHeader);
         let searchBox = TestUtils.scryRenderedComponentsWithType(header[0], SearchBox);
