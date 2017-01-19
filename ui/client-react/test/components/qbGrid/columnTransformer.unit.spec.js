@@ -71,7 +71,6 @@ describe('ColumnTransformer', () => {
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-            // debugger;
             expect(_.isEqual(columnTransformer.getGridHeader(), expectedOutput)).toEqual(true);
         });
 
