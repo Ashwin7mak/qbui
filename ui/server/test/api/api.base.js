@@ -5,6 +5,7 @@
     var assert = require('assert');
     var consts = require('../../../common/src/constants');
     var log = require('../../src/logger').getLogger();
+    var _ = require('lodash');
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
 
@@ -228,8 +229,34 @@
                 return endpoint;
             },
             defaultHeaders              : DEFAULT_HEADERS,
-            //Executes a REST request against the instance's realm using the configured javaHost
-            executeRequest              : function(stringPath, method, body, headers, params) {
+
+            /**
+             * Executes a REST request against the instance's realm using the configured javaHost
+             * If an object is passed in as the first argument, it will be used to fill in the other argumnents (e.g., when
+             * passing this function in a promise chain.
+             * @param {string|object} optsOrStringPath The path or an object that contains information for request
+             * @param {string} optsOrStringPath.stringPath
+             * @param {string} optsOrStringPath.method The type of request
+             * @param optsOrStringPath.body
+             * @param optsOrStringPath.body
+             * @param optsOrStringPath.headers
+             * @param optsOrStringPath.params
+             * @param {string} method The type of request (GET, POST, PATCH, etc.)
+             * @param body
+             * @param headers
+             * @param params
+             */
+            executeRequest              : function(optsOrStringPath, method, body, headers, params) {
+                var stringPath = optsOrStringPath;
+                if (_.isObject(stringPath)) {
+                    var temp = _.assign({}, stringPath);
+                    stringPath = temp.stringPath;
+                    method = temp.method;
+                    body = temp.body;
+                    headers = temp.headers;
+                    params = temp.params;
+                }
+
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {
@@ -286,7 +313,7 @@
                         } else {
                             log.error('Network request failed, no retries left or an unsupported error for retry found');
                             log.info('Unknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
-                            deferred.reject(error);
+                            deferred.reject({error: error, response: transformResponseBodyToJsonObject(response)});
                         }
                     } else {
                         deferred.resolve(response);
@@ -495,6 +522,27 @@
             }
         };
 
+        // Need to bind some functions before exporting so that the context of `this` is consistent when used inside of other promises
+        apiBase.executeRequest = apiBase.executeRequest.bind(apiBase);
+        apiBase.executeRequestRetryable = apiBase.executeRequestRetryable.bind(apiBase);
         return apiBase;
     };
+
+    function transformResponseBodyToJsonObject(response) {
+        var transformedResponse = _.assign({}, response);
+        try {
+            transformedResponse.body = jsonBigNum.parse(response.body);
+            if (_.isArray(transformedResponse.body)) {
+                transformedResponse.body = transformedResponse.body[0];
+            }
+
+            if (_.has(transformedResponse.body, 'body')) {
+                transformedResponse.body = jsonBigNum.parse(transformedResponse.body.body)[0];
+            }
+        } catch (err) {
+            log.debug('Could not transform response body to JSON. ' + err);
+        }
+
+        return transformedResponse;
+    }
 }());

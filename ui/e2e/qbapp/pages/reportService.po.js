@@ -237,7 +237,7 @@
          */
         this.openRecordEditMenu = function(recordRowIndex) {
             //TODO: Doesn't work for Safari and Firefox, need to find workaround
-            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('cellData')).first();
             return rowElement.click().then(function() {
                 return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu).then(function() {
                     // Let the trowser animate
@@ -252,7 +252,7 @@
          */
         this.openRecord = function(recordRowIndex) {
             //TODO: Doesn't work for Safari and Firefox, need to find workaround
-            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('cellData')).first();
             return rowElement.click().then(function() {
                 return e2ePageBase.waitForElement(element(by.className('viewForm'))).then(function() {
                     // Let the trowser animate

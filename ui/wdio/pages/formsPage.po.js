@@ -15,7 +15,7 @@
     var sText = 'testTextValue';
     var sUrl = 'http://www.yahoo.com';
     var sEmail = 'test@gmail.com';
-    var sPhone = '15084811015';
+    var sPhone = '508-481-1015';
     var sNumeric = 33.33;
     var sTime = '12:30 am';
     var date = new Date();
@@ -66,12 +66,11 @@
          * Method to click Add Record button on Report Table
          */
         clickAddRecordBtnOnStage: {value: function() {
-            var self = this;
-            self.addRecordBtnOnStage.waitForVisible();
+            this.addRecordBtnOnStage.waitForVisible();
             //Click on add record button
-            self.addRecordBtnOnStage.click();
+            this.addRecordBtnOnStage.click();
             //wait until you see edit container and save buttons in footer
-            self.editFormContainerEl.waitForVisible();
+            this.editFormContainerEl.waitForVisible();
             return this.editFormSaveBtns.waitForVisible();
         }},
 
@@ -80,23 +79,24 @@
          */
         waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
             //wait until loading screen disappear
-            return browser.waitForExist('body.invisibleBackdropModal-open', browser.waitforTimeout, true);
+            browser.waitForVisible('.trowserChildren .loader .spinner', e2eConsts.extraLongWaitTimeMilliseonds, true);
+            //Need this to wait for container to slide away
+            return browser.pause(3000);
         }},
 
         /**
          * Method to click Save button with name on the form.
          */
         clickBtnOnForm : {value: function(btnName) {
-            var self = this;
             //get all save buttons on the form
-            var saveButton = self.editFormSaveBtns.value.filter(function(button) {
+            var saveButton = this.editFormSaveBtns.value.filter(function(button) {
                 return button.getAttribute('textContent') === btnName;
             });
 
             if (saveButton !== []) {
                 //Click on filtered save button
                 saveButton[0].click();
-                return self.waitUntilSpinnerGoesAwayAfterSave();
+                return this.waitUntilSpinnerGoesAwayAfterSave();
             } else {
                 throw new Error('button with name ' + btnName + " not found on the form");
             }
@@ -106,39 +106,35 @@
          * Method to click Save button on the form.
          */
         clickFormSaveBtn : {value: function() {
-            var self = this;
             //Click on form Save button
-            self.editFormSaveBtns.waitForVisible();
-            return self.clickBtnOnForm('Save');
+            this.editFormSaveBtns.waitForVisible();
+            return this.clickBtnOnForm('Save');
         }},
         /**
          * Method to click Save & Add Another button on the form Add.
          */
         clickFormSaveAndAddAnotherBtn : {value: function() {
-            var self = this;
             //Click on Save and add Another button
-            self.editFormSaveBtns.waitForVisible();
-            return self.clickBtnOnForm('Save & Add Another');
+            this.editFormSaveBtns.waitForVisible();
+            return this.clickBtnOnForm('Save & Add Another');
         }},
 
         /**
          * Method to click Save & Next button on the form Edit.
          */
         clickFormSaveAndNextBtn : {value: function() {
-            var self = this;
             //Click on Save and Next button on form
-            self.editFormSaveBtns.waitForVisible();
-            return self.clickBtnOnForm('Save & Next');
+            this.editFormSaveBtns.waitForVisible();
+            return this.clickBtnOnForm('Save & Next');
         }},
 
         /**
          * Method to click on close button to close the form.
          */
         clickFormCloseBtn : {value: function() {
-            var self = this;
             //Click on form close button
-            self.formCloseBtn.waitForVisible();
-            return self.formCloseBtn.click();
+            this.formCloseBtn.waitForVisible();
+            return this.formCloseBtn.click();
         }},
 
         /**
@@ -156,9 +152,8 @@
          * @returns Array of text input fields
          */
         getAllFieldRows: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('.fieldRow').waitForVisible();
-            return self.editFormContainerEl.elements('.fieldRow');
+            this.editFormContainerEl.elements('.fieldRow').waitForVisible();
+            return this.editFormContainerEl.elements('.fieldRow');
         }},
 
         /**
@@ -166,9 +161,8 @@
          * @returns Array of email input fields
          */
         getAllEmailInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('input[type="email"].textField').waitForVisible();
-            return self.editFormContainerEl.elements('input[type="email"].textField');
+            this.editFormContainerEl.elements('input[type="email"].textField').waitForVisible();
+            return this.editFormContainerEl.elements('input[type="email"].textField');
         }},
 
         /**
@@ -176,9 +170,8 @@
          * @returns Array of phone input fields
          */
         getAllPhoneInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('input.phoneNumber').waitForVisible();
-            return self.editFormContainerEl.elements('input.phoneNumber');
+            this.editFormContainerEl.elements('input.phoneNumber').waitForVisible();
+            return this.editFormContainerEl.elements('input.phoneNumber');
         }},
 
         /**
@@ -186,9 +179,8 @@
          * @returns Array of url input fields
          */
         getAllUrlInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('input[type="url"].textField').waitForVisible();
-            return self.editFormContainerEl.elements('input[type="url"].textField');
+            this.editFormContainerEl.elements('input[type="url"].textField').waitForVisible();
+            return this.editFormContainerEl.elements('input[type="url"].textField');
         }},
 
         /**
@@ -196,9 +188,8 @@
          * @returns Array of duration input fields
          */
         getAllDurationInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('input[placeholder="days"].textField').waitForVisible();
-            return self.editFormContainerEl.elements('input[placeholder="days"].textField');
+            this.editFormContainerEl.elements('input.durationField').waitForVisible();
+            return this.editFormContainerEl.elements('input.durationField');
         }},
 
         /**
@@ -206,9 +197,8 @@
          * @returns Array of numeric input fields
          */
         getAllNumericInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('input.numericField').waitForVisible();
-            return self.editFormContainerEl.elements('input.numericField');
+            this.editFormContainerEl.elements('input.numericField').waitForVisible();
+            return this.editFormContainerEl.elements('input.numericField');
         }},
 
         /**
@@ -216,9 +206,8 @@
          * @returns Array of date input fields
          */
         getAllDateInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('.cellEdit.dateCell').waitForVisible();
-            return self.editFormContainerEl.elements('.cellEdit.dateCell');
+            this.editFormContainerEl.elements('.cellEdit.dateCell').waitForVisible();
+            return this.editFormContainerEl.elements('.cellEdit.dateCell');
         }},
 
         /**
@@ -226,9 +215,8 @@
          * @returns Array of time input fields
          */
         getAllTimeInputFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('.cellEdit.timeCell').waitForVisible();
-            return self.editFormContainerEl.elements('.cellEdit.timeCell');
+            this.editFormContainerEl.elements('.cellEdit.timeCell').waitForVisible();
+            return this.editFormContainerEl.elements('.cellEdit.timeCell');
         }},
 
         /**
@@ -236,9 +224,8 @@
          * @returns Array of checkbox fields
          */
         getAllCheckboxFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('.checkbox').waitForVisible();
-            return self.editFormContainerEl.elements('.checkbox');
+            this.editFormContainerEl.elements('.checkbox').waitForVisible();
+            return this.editFormContainerEl.elements('.checkbox');
         }},
 
         /**
@@ -246,9 +233,8 @@
          * @returns Array of user fields
          */
         getAllUserFields: {value: function() {
-            var self = this;
-            self.editFormContainerEl.elements('.cellEdit.userFormat').waitForVisible();
-            return self.editFormContainerEl.elements('.cellEdit.userFormat');
+            this.editFormContainerEl.elements('.cellEdit.userFormat').waitForVisible();
+            return this.editFormContainerEl.elements('.cellEdit.userFormat');
         }},
 
         /**
@@ -296,7 +282,7 @@
          */
         waitForEditFormsTableLoad: {value: function() {
             // wait for edit form
-            return browser.waitForExist('.editForm', browser.waitforTimeout);
+            return browser.waitForVisible('.editForm', browser.waitforTimeout);
         }},
 
         /**
@@ -305,7 +291,7 @@
          */
         waitForViewFormsTableLoad: {value: function() {
             // wait for view form
-            return browser.waitForExist('.viewForm', browser.waitforTimeout);
+            return browser.waitForVisible('.viewForm', browser.waitforTimeout);
         }},
 
         /**
@@ -313,10 +299,9 @@
          * @returns Array of error messages
          */
         getErrorMessagesFromContainer: {value: function() {
-            var self = this;
             var actualErrMsgs = [];
             //get all error messages on the form error container
-            self.formErrorMessageContainerEl.elements('.qbErrorMessageItem').value.map(function(errMsg) {
+            this.formErrorMessageContainerEl.elements('.qbErrorMessageItem').value.map(function(errMsg) {
                 actualErrMsgs.push(errMsg.getText());
             });
             return actualErrMsgs;
@@ -326,18 +311,16 @@
          * Method to click on close button on error message container on the form.
          */
         clickCloseBtnOnErrorContainer: {value: function() {
-            var self = this;
-            self.formErrorMessageContainerCloseBtn.waitForVisible();
-            return self.formErrorMessageContainerCloseBtn.click();
+            this.formErrorMessageContainerCloseBtn.waitForVisible();
+            return this.formErrorMessageContainerCloseBtn.click();
         }},
 
         /**
          * Method to click on alert button on form footer.
          */
         clickAlertBtnOnFormFooter: {value: function() {
-            var self = this;
-            self.editFormFooterErrorAlertBtn.waitForVisible();
-            return self.editFormFooterErrorAlertBtn.click();
+            this.editFormFooterErrorAlertBtn.waitForVisible();
+            return this.editFormFooterErrorAlertBtn.click();
         }},
 
         /**
@@ -345,7 +328,6 @@
          * @param recordRowIndex
          */
         openRecordInViewMode : {value: function(recordRowIndex) {
-            var self = this;
             var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
             // Hardcoded to click on the third cell of the record
             var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[3];
@@ -361,7 +343,7 @@
             //Click on the third cell of recordRowIndex row
             recordCellEl.click();
             //wait until view form is visible
-            return self.viewFormContainerEl.waitForVisible();
+            return this.viewFormContainerEl.waitForVisible();
         }},
 
         /**
@@ -369,16 +351,17 @@
          * @param recordRowIndex
          */
         clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
-            var self = this;
             //get all edit buttons in the report table first column
-            var getAllEdits = self.editPencilBtnInRecordActions.value.filter(function(edit) {
+            var getAllEdits = this.editPencilBtnInRecordActions.value.filter(function(edit) {
                 return edit.index === recordRowIndex;
             });
 
             if (getAllEdits !== []) {
                 //Click on filtered save button
                 getAllEdits[0].click();
-                return self.editFormContainerEl.waitForVisible();
+                this.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(3000);
             } else {
                 throw new Error('Edit button not found at row ' + recordRowIndex);
             }
@@ -389,7 +372,6 @@
          * @param recordRowIndex
          */
         clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
-            var self = this;
             //get all checkboxes in the report table first column
             var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
@@ -399,11 +381,11 @@
                 //Click on filtered save button
                 getAllCheckBoxs[0].click();
                 //wait for edit pencil to be visible
-                self.editPencilBtnOnReportActions.waitForVisible();
+                this.editPencilBtnOnReportActions.waitForVisible();
                 //click on the edit pencil in table actions
-                self.editPencilBtnOnReportActions.click();
+                this.editPencilBtnOnReportActions.click();
                 //wait until edit form is visible
-                return self.editFormContainerEl.waitForVisible();
+                return this.editFormContainerEl.waitForVisible();
             } else {
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }
@@ -414,7 +396,6 @@
          * @param recordRowIndex
          */
         clickRecordEditPencilInViewForm : {value: function(recordRowIndex) {
-            var self = this;
             var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
             // Hardcoded to click on the first cell of the record
             var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[0];
@@ -429,11 +410,30 @@
             //Click on the first cell of recordRowIndex row
             recordCellEl.click();
             //wait until view form is visible
-            self.viewFormContainerEl.waitForVisible();
+            this.viewFormContainerEl.waitForVisible();
             //click on the edit pencil in view form actions
-            self.editPencilBtnOnStageInViewForm.click();
+            this.editPencilBtnOnStageInViewForm.click();
             //wait until edit form is visible
-            return self.editFormContainerEl.waitForVisible();
+            return this.editFormContainerEl.waitForVisible();
+        }},
+
+        /**
+         * Method to set input value for a field on the form.
+         */
+        setFormInputValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
+            var fieldTypes = getAllUniqueFieldTypes;
+            for (var i = 0; i < fieldTypes.value.length; i++) {
+                if (browserName === 'firefox') {
+                    fieldTypes.value[i].click();
+                    browser.pause(100);
+                    fieldTypes.value[i].setValue(fieldValue);
+                    browser.pause(100);
+                    fieldTypes.value[i].element('..').click();
+                    browser.pause(100);
+                } else {
+                    fieldTypes.value[i].setValue(fieldValue);
+                }
+            }
         }},
 
         /**
@@ -441,53 +441,30 @@
          */
         enterFormValues : {value: function(fieldType) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            var self = this;
             var i;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = self.getAllFieldRows();
+                var textFields = this.getAllFieldRows();
                 for (i = 0; i < textFields.value.length; i++) {
                     if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
                         textFields.value[i].element('input[type="text"].textField').setValue(sText);
                     }
                 }
             } else if (fieldType === 'allEmailFields') {
-                var emailFields = self.getAllEmailInputFields();
-                for (i = 0; i < emailFields.value.length; i++) {
-                    emailFields.value[i].setValue(sEmail);
-                }
-
+                this.setFormInputValue(this.getAllEmailInputFields(), sEmail);
             }else if (fieldType === 'allPhoneFields') {
-                var phoneFields = self.getAllPhoneInputFields();
-                for (i = 0; i < phoneFields.value.length; i++) {
-                    phoneFields.value[i].setValue(sPhone);
-                }
-
+                this.setFormInputValue(this.getAllPhoneInputFields(), sPhone);
             }else if (fieldType === 'allUrlFields') {
-                var urlFields = self.getAllUrlInputFields();
-                for (i = 0; i < urlFields.value.length; i++) {
-                    urlFields.value[i].setValue(sUrl);
-                }
-
+                this.setFormInputValue(this.getAllUrlInputFields(), sUrl);
             }else if (fieldType === 'allDurationFields') {
-                var durationFields = self.getAllDurationInputFields();
-                for (i = 0; i < durationFields.value.length; i++) {
-                    durationFields.value[i].setValue(sNumeric);
-                }
+                this.setFormInputValue(this.getAllDurationInputFields(), sNumeric);
             } else if (fieldType === 'allNumericFields') {
-                //get all numeric input field validators on the form
-                var numericFields = self.getAllNumericInputFields();
-                for (i = 0; i < numericFields.value.length; i++) {
-                    numericFields.value[i].setValue(sNumeric);
-                }
+                this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
             } else if (fieldType === 'allDateFields') {
                 //get all date field input validators
-                var dateFields = self.getAllDateInputFields();
+                var dateFields = this.getAllDateInputFields();
                 for (i = 0; i < dateFields.value.length; i++) {
-                    if (browserName === 'firefox') {
-                        //select date from date picker
-                        this.selectTodaysDateFromDatePicker(dateFields.value[i]);
-                    } else if (browserName === 'safari') {
+                    if (browserName === 'safari') {
                         dateFields.value[i].element('input').setValue(sDate.replace(/-/g, "/"));
                     } else {
                         dateFields.value[i].element('input').setValue(sDate);
@@ -495,7 +472,7 @@
                 }
             } else if (fieldType === 'allTimeFields') {
                 //get all time fields on form
-                var timeFields = self.getAllTimeInputFields();
+                var timeFields = this.getAllTimeInputFields();
                 for (i = 0; i < timeFields.value.length; i++) {
                     timeFields.value[i].element('.Select-control').click();
                     this.selectFromList(timeFields.value[i], sTime);
@@ -503,7 +480,7 @@
 
             } else if (fieldType === 'allCheckboxFields') {
                 //get all checkbox fields on form
-                var checkboxFields = self.getAllCheckboxFields();
+                var checkboxFields = this.getAllCheckboxFields();
                 for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
                     if (!checkboxFields.value[i].element('input').isSelected()) {
@@ -512,7 +489,7 @@
                 }
             }else if (fieldType === 'allUserField') {
                 //get all user field input validators
-                var userFields = self.getAllUserFields();
+                var userFields = this.getAllUserFields();
                 for (i = 0; i < userFields.value.length; i++) {
                     userFields.value[i].element('.Select-control').click();
                     this.selectFromList(userFields.value[i], sUser);
@@ -526,44 +503,24 @@
         enterInvalidFormValues : {value: function(fieldType, invalidValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             var i;
-            var self = this;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = self.getAllFieldRows();
+                var textFields = this.getAllFieldRows();
                 for (i = 0; i < textFields.value.length; i++) {
                     if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
                         textFields.value[i].element('input[type="text"].textField').setValue(invalidValue);
                     }
                 }
             } else if (fieldType === 'allEmailFields') {
-                var emailFields = self.getAllEmailInputFields();
-                for (i = 0; i < emailFields.value.length; i++) {
-                    emailFields.value[i].setValue(invalidValue);
-                }
-
+                this.setFormInputValue(this.getAllEmailInputFields(), invalidValue);
             }else if (fieldType === 'allPhoneFields') {
-                var phoneFields = self.getAllPhoneInputFields();
-                for (i = 0; i < phoneFields.value.length; i++) {
-                    phoneFields.value[i].setValue(invalidValue);
-                }
-
+                this.setFormInputValue(this.getAllPhoneInputFields(), invalidValue);
             }else if (fieldType === 'allUrlFields') {
-                var urlFields = self.getAllUrlInputFields();
-                for (i = 0; i < urlFields.value.length; i++) {
-                    urlFields.value[i].setValue(invalidValue);
-                }
-
+                this.setFormInputValue(this.getAllUrlInputFields(), invalidValue);
             }else if (fieldType === 'allDurationFields') {
-                var durationFields = self.getAllDurationInputFields();
-                for (i = 0; i < durationFields.value.length; i++) {
-                    durationFields.value[i].setValue(invalidValue);
-                }
+                this.setFormInputValue(this.getAllDurationInputFields(), invalidValue);
             } else if (fieldType === 'allNumericFields') {
-                //get all numeric input field validators on the form
-                var numericFields = self.getAllNumericInputFields();
-                for (i = 0; i < numericFields.value.length; i++) {
-                    numericFields.value[i].setValue(invalidValue);
-                }
+                this.setFormInputValue(this.getAllNumericInputFields(), invalidValue);
             }
         }},
 
@@ -571,30 +528,27 @@
          * Method to verify error messages on the form error container.
          */
         verifyErrorMessages : {value: function(expectedErrorMessages) {
-            var self = this;
-
-            self.formErrorMessageContainerEl.waitForVisible();
+            this.formErrorMessageContainerEl.waitForVisible();
             // verify the heading of the error message container
+            var errorHeader = 'Please fix this field';
             if (expectedErrorMessages.length > 1) {
-                expect(self.formErrorMessageHeader.getText()).toBe('Please fix these ' + expectedErrorMessages.length + ' fields.');
-            } else {
-                expect(self.formErrorMessageHeader.getText()).toBe('Please fix this field');
+                errorHeader = 'Please fix these ' + expectedErrorMessages.length + ' fields.';
             }
             //Get all error messages from error container
-            var actualErrorMessages = self.getErrorMessagesFromContainer();
+            var actualErrorMessages = this.getErrorMessagesFromContainer();
             //Verify the errors from the container are expected errors
             expect(actualErrorMessages).toEqual(expectedErrorMessages);
+            expect(this.formErrorMessageHeader.getText()).toBe(errorHeader);
             //Close the error container
-            self.clickCloseBtnOnErrorContainer();
+            this.clickCloseBtnOnErrorContainer();
         }},
 
         /**
          * Method to click a button on Save changes dialogue box
          */
         clickButtonOnSaveChangesDialog : {value: function(btnName) {
-            var self = this;
             //get all save buttons on the form
-            var btns = self.formsSaveChangesDialogFooter.elements('button').value.filter(function(button) {
+            var btns = this.formsSaveChangesDialogFooter.elements('button').value.filter(function(button) {
                 return button.getAttribute('textContent') === btnName;
             });
 
@@ -610,17 +564,16 @@
          * Method to close save changes dialogue box by clicking on 'Dont save' button
          */
         closeSaveChangesDialogue : {value: function() {
-            var self = this;
             //Need this for notifications to slide away
             browser.pause(5000);
             //click on form close button
-            self.clickFormCloseBtn();
+            this.clickFormCloseBtn();
             //wait until save changes dialogue popups
-            self.formsSaveChangesDialog.waitForVisible();
+            this.formsSaveChangesDialog.waitForVisible();
             //come out of dirty form state
-            expect(self.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
+            expect(this.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
             //close the dialogue by clicking on don't save
-            return self.clickButtonOnSaveChangesDialog("Don't save");
+            return this.clickButtonOnSaveChangesDialog("Don't save");
         }},
 
         /**
@@ -628,37 +581,38 @@
          */
         verifyFieldValuesInReportTable : {value: function(expectedRecordValues) {
             for (var i = 0; i < expectedRecordValues.length; i++) {
+                console.log("The expected values are: " + JSON.stringify(expectedRecordValues));
                 //text field
-                expect(expectedRecordValues[1]).toBe(sText);
+                expect(expectedRecordValues[0]).toBe(sText.toString());
                 //numeric field
-                expect(expectedRecordValues[2]).toBe(sNumeric.toString());
+                expect(expectedRecordValues[1]).toBe(sNumeric.toString());
                 //numeric currency field
-                expect(expectedRecordValues[3]).toBe('$' + sNumeric);
+                expect(expectedRecordValues[2]).toBe('$' + sNumeric.toString());
                 //numeric percent field
-                expect(expectedRecordValues[4]).toBe(sNumeric + '%');
+                expect(expectedRecordValues[3]).toBe(sNumeric.toString() + '%');
                 //numeric rating field
-                expect(expectedRecordValues[5]).toBe(sNumeric.toString());
+                expect(expectedRecordValues[4]).toBe(sNumeric.toString());
                 //date field
-                expect(expectedRecordValues[6]).toBe(sDate);
+                expect(expectedRecordValues[5]).toBe(sDate.toString());
                 //date time field
-                expect(expectedRecordValues[7]).toBe(sDate + ' ' + sTime);
+                expect(expectedRecordValues[6]).toBe(sDate.toString() + ' ' + sTime.toString());
                 //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
                 if (browserName !== 'firefox') {
-                    expect(expectedRecordValues[8]).toBe(sTime);
+                    expect(expectedRecordValues[7]).toBe(sTime.toString());
                 }
                 //numeric duration field
-                expect(expectedRecordValues[9]).toBe('4.76142857142857 weeks');
+                expect(expectedRecordValues[8]).toBe('4.76142857142857  weeks');
                 //checkbox field
-                expect(expectedRecordValues[10]).toBe('true');
+                expect(expectedRecordValues[9]).toBe('true');
                 //email field
-                expect(expectedRecordValues[11]).toBe('(508) 481-1015');
+                expect(expectedRecordValues[10]).toBe('(508) 481-1015');
                 //phone field
-                expect(expectedRecordValues[12]).toBe(sEmail);
+                expect(expectedRecordValues[11]).toBe(sEmail.toString());
                 //url field
-                expect(expectedRecordValues[13]).toBe(sUrl);
+                expect(expectedRecordValues[12]).toBe(sUrl.toString());
                 //user Field
                 if (browserName !== 'firefox') {
-                    expect(expectedRecordValues[14]).toBe('administrator User for default SQL Installation');
+                    expect(expectedRecordValues[13]).toBe('administrator User for default SQL Installation');
                 }
             }
         }},
@@ -667,13 +621,9 @@
          * Method to verify any messages on notification container
          */
         assertNotificationMessage: {value: function(expectedMessage) {
-            var self = this;
-            // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-            browser.waitForExist('.notification-container-empty', browser.waitforTimeout, true);
-            var messageText = self.notificationWindow.getText();
+            this.notificationWindow.waitForVisible();
+            var messageText = this.notificationWindow.getText();
             expect(messageText).toContain(expectedMessage.toString());
-            // By setting the false flag it will do the inverse of the function (in this case wait for it to be visible)
-            browser.waitForExist('.notification-container-empty', browser.waitforTimeout, false);
         }},
 
         /**
@@ -688,11 +638,10 @@
          * Method to verify fields to not present on the form
          */
         verifyFieldsNotPresentOnForm : {value: function(elementFormName, expectedFieldsNotPresentOnForm) {
-            var self = this;
             var fieldsOnForm = [];
 
             //get all field Labels from the form
-            var fieldLabelsOnForm = self.getAllFieldLabelsOnForm(elementFormName);
+            var fieldLabelsOnForm = this.getAllFieldLabelsOnForm(elementFormName);
             //For each field Label on push get the text and push into actual array for comparision
             for (var i = 0; i < fieldLabelsOnForm.value.length;i++) {
                 var fieldLabel = fieldLabelsOnForm.value[i].getText();
