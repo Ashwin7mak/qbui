@@ -1,4 +1,5 @@
 @import '../../../../src/assets/css/qbVariables';
+@import '../../../../src/assets/css/customVariables';
 $row-background-color-hover: $color-blue-200;
 $row-cell-border-color: $color-black-300;
 $row-bg-color: $color-black-100;
@@ -155,7 +156,7 @@ $edit-icon-font-size: 18px;
     }
 
     .editTools {
-        z-index: 1;
+        z-index: $zindex-editTools;
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
@@ -238,7 +239,7 @@ $edit-icon-font-size: 18px;
 .qbGrid > thead > tr > th {
     min-width: 80px;
     position: relative;
-    z-index: 3;
+    z-index: $zindex-qbGrid-th;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 1px solid $badcolor1-color6;
@@ -318,7 +319,7 @@ $edit-icon-font-size: 18px;
 .qbGrid .editing {
     box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
     margin-top: -15px;
-    z-index: 999;
+    z-index: $zindex-qbGrid-editing;
     background-color: $qbgrid-cell-edit-background-color;
     border-top: $cell-edit-background-edit;
 
@@ -339,7 +340,7 @@ $edit-icon-font-size: 18px;
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 1;
+            z-index: $zindex-qbGrid-cellWrapper;
 
             textarea.cellEdit {
 
@@ -493,20 +494,20 @@ $edit-icon-font-size: 18px;
 //The style here is for sticky column
 .qbGrid > tbody > tr > td:first-of-type {
     background: $row-bg-color;
-    z-index: 2;
+    z-index: $zindex-qbGrid-firstOfType-stickyColumn;
 }
 
 .qbGrid > tbody > tr.editing > td:first-of-type {
-    z-index: 4;
+    z-index: $zindex-qbGrid-editing-firstOfType;
 }
 
 .stickyCell {
     position: relative;
-    z-index: 3;
+    z-index: $zindex-qbGrid-stickyCell;
 }
 
 th.qbHeaderCell.stickyCell {
-    z-index: 4;
+    z-index: $zindex-qbGrid-header-stickyCell;
 }
 
 .stickyCell .dropdown-menu {

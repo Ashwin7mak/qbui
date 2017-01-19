@@ -277,7 +277,7 @@ describe('QbGrid', () => {
             // Add 1 to the index to count for the row added by QbGrid for the row actions in the first column
             expect(headers[index + 1].innerText).toEqual(column.headerLabel);
         });
-        
+
         // Displays rows
         let rows = TestUtils.scryRenderedDOMComponentsWithClass(component, 'qbRow');
         testRows.forEach((row, rowIndex) => {
@@ -287,6 +287,7 @@ describe('QbGrid', () => {
                 expect(rows[rowIndex].children[i].innerText).toEqual(row[i].text);
             }
         });
+
         // Displays subHeaders if there are any rows where isSubHeader is true
         let subHeader = TestUtils.findRenderedDOMComponentWithClass(component, 'groupHeader');
         expect(subHeader.innerText).toEqual(subHeaderRow.subHeaderLabel);
