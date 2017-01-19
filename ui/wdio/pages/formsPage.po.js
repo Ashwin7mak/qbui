@@ -475,7 +475,8 @@
                 var timeFields = this.getAllTimeInputFields();
                 for (i = 0; i < timeFields.value.length; i++) {
                     timeFields.value[i].element('.Select-multi-value-wrapper').click();
-                    timeFields.value[i].element('.Select-input').keys([sTime, 'Enter']);
+                    timeFields.value[i].element('.Select-input').keys(sTime);
+                    timeFields.value[i].element('.Select-input').keys(['Tab']);
                     timeFields.value[i].element('..').click();
                 }
 
@@ -493,7 +494,8 @@
                 var userFields = this.getAllUserFields();
                 for (i = 0; i < userFields.value.length; i++) {
                     userFields.value[i].element('.Select-multi-value-wrapper').click();
-                    userFields.value[i].element('.Select-input').keys([sUser, 'Enter']);
+                    userFields.value[i].element('.Select-input').keys(sUser);
+                    userFields.value[i].element('.Select-input').keys(['Tab']);
                     userFields.value[i].element('..').click();
                 }
             }
