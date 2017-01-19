@@ -293,6 +293,9 @@ $edit-icon-font-size: 18px;
     .qbGrid > tbody > tr.willEdit > td:last-of-type {
         border-right: 1px solid $qbgrid-onpencil-row-border-color;
     }
+    .qbGrid > tbody > tr:hover > td {
+        background: $qbgrid-row-hover-color;
+    }
 }
 
 .qbGrid > tbody > tr > td:first-of-type {
@@ -303,9 +306,7 @@ $edit-icon-font-size: 18px;
     vertical-align: top;
 }
 
-.qbGrid > tbody > tr:hover > td {
-    background: $qbgrid-row-hover-color;
-}
+
 
 
 
@@ -489,7 +490,9 @@ $edit-icon-font-size: 18px;
     background: $row-bg-color;
     z-index: 2;
 }
-
+.qbGrid > tbody > tr.editing > td:first-of-type {
+    z-index: 3;
+}
 .qbGrid > tbody > tr:hover > td:first-of-type {
     background: $qbgrid-row-hover-color;
 }
