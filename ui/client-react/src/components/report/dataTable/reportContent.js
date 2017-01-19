@@ -33,8 +33,7 @@ export const ReportContent = React.createClass({
 
     getInitialState() {
         return {
-            confirmDeletesDialogOpen: false,
-            showReactabular: true,
+            confirmDeletesDialogOpen: false
         };
     },
 
@@ -802,10 +801,7 @@ export const ReportContent = React.createClass({
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
         let self = this;
-        let buttonText = this.state.showReactabular ? 'Switch to AGGrid' : 'Switch to Reactabular';
-        function isReactabular() {
-            self.setState({showReactabular: !self.state.showReactabular});
-        }
+
         if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
             recordsCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
@@ -837,9 +833,8 @@ export const ReportContent = React.createClass({
         } else {
             reportContent = (
                     <div className={addPadding}>
-                        <button onClick={isReactabular} style={{marginBottom:"25px", marginLeft: "10px", width: "150px", height: '25px', borderRadius:'20px', background:'pink'}}> {buttonText} </button>
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
-                        {!isSmall && this.state.showReactabular &&
+                        {!isSmall && this.props.reactabular &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
@@ -891,7 +886,7 @@ export const ReportContent = React.createClass({
                         {/*filter={{selections: this.props.reportData.selections,*/}
                         {/*facet: this.props.reportData.facetExpression,*/}
                         {/*search: this.props.reportData.searchStringForFiltering}}*/}
-                        {!isSmall && !this.state.showReactabular &&
+                        {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
