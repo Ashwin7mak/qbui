@@ -734,7 +734,7 @@ describe('ReportContent grouping functions', () => {
 
 });
 
-xdescribe('ReportContent grouping functions exception handling', () => {
+describe('ReportContent grouping functions exception handling', () => {
     let component;
     let localizeNumberSpy;
     let localizeDateSpy;
@@ -743,8 +743,8 @@ xdescribe('ReportContent grouping functions exception handling', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.throwError();
-        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.throwError();
+        localizeNumberSpy = spyOn(ReportContent.prototype, 'formatNumber').and.throwError();
+        localizeDateSpy = spyOn(ReportContent.prototype, 'formatDate').and.throwError();
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
     });
 
@@ -757,8 +757,8 @@ xdescribe('ReportContent grouping functions exception handling', () => {
     });
 
     var groupTestExceptionCases = [
-        {name: 'exception handling formatting date', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '05-10-2016', localizeDateSpy: 1, localizeNumberSpy: 0, expected: '05-10-2016'},
-        {name: 'exception handling formatting number', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '1234', localizeDateSpy: 0, localizeNumberSpy: 1, expected: '1234'}
+        {name: 'exception handling formatting date', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.equals, group: '05-10-2016', localizeDateSpy: 0, localizeNumberSpy: 0, expected: '05-10-2016'},
+        {name: 'exception handling formatting number', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.DATE.equals, group: '1234', localizeDateSpy: 0, localizeNumberSpy: 0, expected: '1234'}
     ];
 
     groupTestExceptionCases.forEach(function(test) {
@@ -771,6 +771,7 @@ xdescribe('ReportContent grouping functions exception handling', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -780,7 +781,7 @@ xdescribe('ReportContent grouping functions exception handling', () => {
 
             expect(localizeDateSpy.calls.count()).toEqual(test.localizeDateSpy);
             expect(localizeNumberSpy.calls.count()).toEqual(test.localizeNumberSpy);
-            expect(localeGetMessageSpy.calls.count()).toEqual(0);
+            expect(localeGetMessageSpy.calls.count()).toEqual(3);
         });
     });
 });
