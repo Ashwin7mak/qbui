@@ -7,6 +7,7 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import QbIcon from '../../qbIcon/qbIcon';
 
 import Logger from '../../../utils/logger';
 const logger = new Logger();
@@ -246,13 +247,24 @@ const QbGrid = React.createClass({
         let {selectedRows, rows} = this.props;
         const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
 
+        let collapseAllIcon = null;
+        if (this.isGrouped()) {
+            let allCollapsed = this.props.rows.filter(row => {return row.isSubHeader;}).length === this.state.collapsedGroups.length;
+            let iconType = (allCollapsed ? 'caret-filled-right' : 'caret-filled-down');
+
+            collapseAllIcon = <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />;
+        }
+
         return (
-            <input
-                type="checkbox"
-                className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
-                checked={allSelected}
-                onChange={this.props.onClickToggleSelectAllRows}
-            />
+            <div className="actionHeader">
+                <input
+                    type="checkbox"
+                    className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
+                    checked={allSelected}
+                    onChange={this.props.onClickToggleSelectAllRows}
+                />
+                {collapseAllIcon}
+            </div>
         );
     },
 
@@ -295,6 +307,16 @@ const QbGrid = React.createClass({
         return subHeaderIds;
     },
 
+    toggleCollapseAllGroups() {
+        let subHeaderRows = this.props.rows.filter(row => {return row.isSubHeader;}).map(row => {return row.id;});
+
+        if (subHeaderRows.length > this.state.collapsedGroups.length) {
+            this.setState({collapsedGroups: subHeaderRows});
+        } else {
+            this.setState({collapsedGroups: []});
+        }
+    },
+
     toggleCollapseGroup(subHeaderId) {
         if (this.state.collapsedGroups.includes(subHeaderId)) {
             let updatedCollapsedGroups = this.state.collapsedGroups.filter((currentSubHeaderId) => {
@@ -324,6 +346,10 @@ const QbGrid = React.createClass({
         return rowsCopy.filter(row => {
             return !this.state.collapsedGroups.includes(row.parentId);
         });
+    },
+
+    isGrouped() {
+        return this.props.rows.some(row => {return row.isSubHeader;});
     },
 
     render() {
