@@ -8,7 +8,7 @@ const testFormatter = (cell) => 'Nightmare Before Christmas';
 const TestHeaderComponent = React.createClass({render() {return <h1>Sally</h1>;}});
 const testHeaderProps = {type: 'Rag Doll', stuffing: 'Fall Leaves'};
 
-describe('ColumnTransformer', () => {
+fdescribe('ColumnTransformer', () => {
     describe('new', () => {
         it('creates a new instance of a columnTransformer', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
@@ -65,13 +65,13 @@ describe('ColumnTransformer', () => {
         const expectedOutput = {
             property: testCellIdentifierValue,
             header: {
-                label: <span className="">{testHeaderLabel}</span>
+                label: <span className=""><span className="">{testHeaderLabel}</span></span>
             }
         };
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-
+            // debugger;
             expect(_.isEqual(columnTransformer.getGridHeader(), expectedOutput)).toEqual(true);
         });
 
