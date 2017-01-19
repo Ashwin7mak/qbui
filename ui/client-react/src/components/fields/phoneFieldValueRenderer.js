@@ -86,10 +86,11 @@ const PhoneFieldValueRenderer = React.createClass({
         }
     },
     render() {
-        let classes = (_.isObject(this.props.display) && this.props.display.isDialable ? 'urlField' : '');
+        let classes = 'phoneCell';
+        classes += (_.isObject(this.props.display) && this.props.display.isDialable ? ' urlField' : '');
         classes += (this.props.disabled ? ' disabled' : '');
         return (
-            <div className = {classes}>
+            <div className={classes}>
                 {this.renderLink()}
             </div>
         );

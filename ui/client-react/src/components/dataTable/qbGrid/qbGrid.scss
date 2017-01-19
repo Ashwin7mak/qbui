@@ -1,7 +1,13 @@
-@import '../../../../src/assets/css/qbVariables';
+@import "../../../../src/assets/css/qbVariables";
 $grid-font-size: $font-size-p;
+$grid-default-group-padding: 20px;
+$grid-default-cell-padding: 4px;
+$grid-group-expand-icon-size: 20px;
+$edit-icon-font-size: 18px;
 
 .qbGrid > thead, .qbGrid > tbody {
+    color: $default-text-onlight-color;
+    -webkit-font-smoothing: antialiased;
     table-layout: fixed;
 
     > td {
@@ -10,8 +16,163 @@ $grid-font-size: $font-size-p;
 }
 
 .qbGrid {
-    .dateFormat, .dateTimeFormat, .timeFormat, .durationFormat, .phoneFormat {
+    margin: 10px;
+
+    .cellEditIcon {
+        display: none;
+        color: $ghost-text-color;
+        font-size: $edit-icon-font-size;
+        position: absolute;
+        top: 0;
+        right: 5px;
+
+        &:hover {
+            color: $default-hover-color;
+        }
+    }
+
+    .qbCell:hover .cellEditIcon {
+        display: inline;
+    }
+
+    .qbCell .editingCell .cellEditIcon {
+        display: none;
+    }
+
+    .emptyRowActions {
+        width: 75px;
+    }
+
+    .groupHeader {
+        padding-left: $grid-default-group-padding + 3;
+        vertical-align: top;
+        font-weight: bold;
+    }
+
+    //assuming that we can have up to 6 group levels
+    @for $i from 1 through 6 {
+        .subHeaderLevel-#{$i} {
+            .subHeaderCell {
+                padding-left: $i * $grid-default-group-padding;
+            }
+        }
+    }
+
+    .dateCell, .durationCell, .phoneCell, .urlField {
         white-space: nowrap;
+    }
+
+    .AlignRight {
+        text-align: right;
+    }
+
+    .gridHeaderCell {
+        display: block;
+    }
+
+    .gridHeaderCell.AlignRight, .gridCell.AlignRight {
+        text-align: right;
+    }
+
+    .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
+        text-align: center;
+    }
+
+    .cellWrapper {
+        width: 100%;
+        min-width: 60px;
+        min-height: 20px;
+        position: relative;
+
+        &.numberFormat,
+        &.currencyFormat,
+        &.percentFormat,
+        &.durationFormat.wUnitsText {
+            text-align: right;
+        }
+
+        &.checkboxFormat {
+            text-align: center;
+        }
+
+        &.dateFormat, &.timeFormat {
+            min-width: 120px;
+        }
+
+        &.dateTimeFormat {
+            min-width: 210px;
+        }
+    }
+
+    .editTools {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        background-color: $qbgrid-cell-edit-background-color;
+        box-shadow: -6px 0px 14px $qbgrid-row-box-shadow-color;
+        padding: 0 24px;
+        border: 1px solid $qbgrid-row-border-color;
+
+        .loadedContent {
+            padding: 0;
+        }
+
+        .loader {
+            padding: 10px 9px;
+
+            .spinner {
+                // Need important because the original styles are set directly on the element by react-loader
+                left: auto !important;
+                top: auto !important;
+            }
+        }
+
+        button {
+            flex: 0 0 auto;
+            border: 0;
+            background-color: $qbgrid-cell-edit-background-color;
+            margin-right: 2px;
+            padding: 6px 4px;
+
+            .qbIcon:hover {
+                opacity: 1;
+            }
+
+            .qbIcon {
+                opacity: 0.7;
+                width: 20px;
+                font-size: 16px;
+                vertical-align: top;
+            }
+
+            .qbIcon.saveRecord {
+                color: $color-green-700;
+                font-size: 18px;
+            }
+
+            .qbIcon.invalidRecord {
+                color: $tootip-error-color;
+                font-size: 18px;
+                cursor: default;
+            }
+
+            .qbIcon.cancelSelection {
+                color: $iconfont-on-light-normal-color;
+            }
+
+            .qbIcon.deleteRecord {
+                color: $color-red-700;
+            }
+
+            .qbIcon.addRecord {
+                color: $iconfont-on-light-normal-color;
+            }
+
+            .qbIcon.disabled.addRecord {
+                color: $iconfont-on-light-disabled-color;
+            }
+        }
     }
 }
 
@@ -19,7 +180,7 @@ $grid-font-size: $font-size-p;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
     border-bottom: 2px solid $badcolor1-color6;
-    padding: 4px;
+    padding: $grid-default-cell-padding;
     color: $color-blue-600;
     font-size: 12px;
     font-weight: bold;
@@ -76,7 +237,7 @@ $grid-font-size: $font-size-p;
 }
 
 .qbGrid > tbody > tr > td {
-    padding: 4px;
+    padding: 6px;
     font-size: $grid-font-size;
     border-right: 1px solid $color-black-300;
     border-bottom: 1px solid $color-black-300;
@@ -92,35 +253,20 @@ $grid-font-size: $font-size-p;
     vertical-align: middle;
 }
 
-.qbGrid td .cellWrapper > :not(.cellData) {
-    display: none;
-}
+.qbGrid .editing {
+    box-shadow: 0 10px 0 0 $qbgrid-cell-edit-background-color, 0 -10px 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+    background-color: $qbgrid-cell-edit-background-color;
 
-.qbGrid {
-    .cellEdit.dateTimeField {
-        min-width: 120px;
-    }
-}
-
-/* hide row editing tools by default */
-.editTools {
-    display: none;
-}
-
-.qbGrid > tbody > tr.editing {
     > td:first-child {
         padding-left: 4px;
         border-left: 1px solid $qbgrid-row-border-color;
-        position: relative;
     }
 
     > td {
-        box-shadow: 4px -4px 8px $color-black-300;
-        background-color: $qbgrid-cell-edit-background-color;
+
+        border: none;
         overflow: visible;
-        padding: 0;
         margin: 0;
-        border-right: 1px solid $qbgrid-row-border-color;
         vertical-align: middle;
         padding-bottom: 14px;
 
@@ -133,37 +279,18 @@ $grid-font-size: $font-size-p;
             bottom: 0;
             z-index: 1;
 
-            > :not(.cellData) {
-                display: inline-block;
-                flex: 1 1 auto;
-            }
-
-            .cellData:not(.nonEditable) {
-                display: none;
-            }
-
-            .cellData.nonEditable {
-                flex: 1 1 auto;
-            }
-
             textarea.cellEdit {
                 resize: none;
                 overflow: hidden;
                 box-sizing: border-box;
             }
 
-            .cellEdit {
+            &.editingCell {
                 display: inline-block;
-                border: 1px solid $qbgrid-row-border-color;
-                background: $qbgrid-row-bg-color;
-                flex: 1 1 auto;
-                padding: 0 0 0 2px;
-                margin-right: 2px;
+                border: none;
 
-                &.nonEditable {
-                    background-color: $qbgrid-row-noneditable-background-color;
+                .nonEditable {
                     cursor: not-allowed;
-                    padding-right: 4px;
                 }
 
                 &.dateTimeField > * {
@@ -217,57 +344,6 @@ $grid-font-size: $font-size-p;
                         }
                     }
                 }
-            }
-        }
-    }
-
-    .editTools {
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        flex: 0 0 auto;
-        background-color: $qbgrid-cell-edit-background-color;
-        box-shadow: -2px 2px 8px $qbgrid-row-box-shadow-color;
-        position: absolute;
-        top: -26px;
-        left: -1px;
-        width: 80px;
-        border-left: 1px solid $qbgrid-row-border-color;
-        border-bottom: 1px solid $qbgrid-row-border-color;
-
-        button {
-            flex: 0 0 auto;
-            border: 0;
-            background-color: $qbgrid-cell-edit-background-color;
-            margin-right: 2px;
-            padding: 6px 4px;
-
-            .qbIcon:hover {
-                opacity: 1;
-            }
-
-            .qbIcon {
-                opacity: 0.7;
-                width: 20px;
-                font-size: 16px;
-                vertical-align: top;
-            }
-
-            .qbIcon.saveRecord {
-                color: $color-green-700;
-                font-size: 18px;
-            }
-
-            .qbIcon.cancelSelection {
-                color: $iconfont-on-light-normal-color;
-            }
-
-            .qbIcon.deleteRecord {
-                color: $color-red-700;
-            }
-
-            .qbIcon.addRecord {
-                color: $iconfont-on-light-normal-color;
             }
         }
     }

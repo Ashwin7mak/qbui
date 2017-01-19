@@ -16,7 +16,6 @@
         var realmName;
         var realmId;
         var testApp;
-
         /**
          * Setup method. Creates test app then authenticates into the new stack
          */
@@ -73,10 +72,13 @@
 
             // Step 4 - Save the new added row
             ReportInLineEditPO.clickSaveChangesButton();
+            expect(browser.isVisible('.ag-row.editing .saveRecord')).toBeFalsy();
+            expect(browser.isVisible('.ag-row.editing .cancelSelection')).toBeFalsy();
+            expect(browser.isVisible('.ag-row.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Check for the success message 'Record added'
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
-            ReportInLineEditPO.assertSuccessMessage(successMessage);
+            //ReportInLineEditPO.assertSuccessMessage(successMessage);
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -87,16 +89,14 @@
             // Step 8 - Check the record values
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
             var recordValues = ReportContentPO.getRecordValues(numOfRows - 1);
-            expect(recordValues[1]).toBe(textToEnter);
+            expect(recordValues[0]).toBe(textToEnter);
 
             if (browserName !== 'safari') {
-                expect(recordValues[6]).toBe(dateToExpect);
+                expect(recordValues[5]).toBe(dateToExpect);
             } else {
-                expect(recordValues[6]).toBe(dateToEnter);
+                expect(recordValues[5]).toBe(dateToEnter);
             }
 
         });
-
-        //TODO: Editing a row after pressing 'Save and Add new row' button
     });
 }());

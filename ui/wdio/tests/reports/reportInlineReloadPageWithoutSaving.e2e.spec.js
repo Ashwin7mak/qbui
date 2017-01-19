@@ -11,15 +11,10 @@
     var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
     var ReportPagingPO = require('../../pages/reportPaging.po');
 
-
-
     describe('Report Page Inline Edit Without Saving Record Tests', function() {
         var realmName;
         var realmId;
         var testApp;
-
-
-
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
@@ -38,7 +33,6 @@
                 Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
             });
         });
-
 
 
         /**
@@ -60,7 +54,7 @@
 
                 // Get the original value of the text field on the second record
                 var fieldValues = ReportContentPO.getRecordValues(2);
-                var originalText = fieldValues[1];
+                var originalText = fieldValues[0];
 
                 // Step 1 - Open the in-line edit menu for the third record on that page
                 ReportInLineEditPO.openRecordEditMenu(2);
@@ -83,7 +77,7 @@
 
                 //Step 5 - Check that the edit was not persisted on report
                 var expectedValues = ReportContentPO.getRecordValues(2);
-                expect(expectedValues[1]).toBe(originalText);
+                expect(expectedValues[0]).toBe(originalText);
             }
         });
 

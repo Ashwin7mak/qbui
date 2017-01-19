@@ -135,7 +135,7 @@ exports.config = {
             name: process.env.SAUCE_JOB_NAME + '_Win10_MicrosoftEdge',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '280',
+            idleTimeout: '180',
             maxDuration: 10800,
             breakpointSize: 'xlarge',
             shardTestFiles: true,
@@ -171,10 +171,10 @@ exports.config = {
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
-    connectionRetryTimeout: 130000,
+    connectionRetryTimeout: 90000,
     //
     // Default request retries count
-    connectionRetryCount: 6,
+    connectionRetryCount: 3,
     //
     // Initialize the browser instance with a WebdriverIO plugin. The object should have the
     // plugin name as key and the desired plugin options as properties. Make sure you have
@@ -198,7 +198,13 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['sauce'],
+    services: ['sauce', 'firefox-profile'],
+    // Firefox profile enabled by wdio-firefox-profile-service
+    // Firefox does not fire certain blur events when Firefox window does not have OS level focus. The following
+    // setting enable blur events to fire during e2e tests even when the window does not have OS level focus.
+    firefoxProfile: {
+        'focusmanager.testmode': true
+    },
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -222,7 +228,7 @@ exports.config = {
     jasmineNodeOpts: {
         //
         // Jasmine default timeout
-        defaultTimeoutInterval: 1200000,
+        defaultTimeoutInterval: 600000,
         //
         // The Jasmine framework allows interception of each assertion in order to log the state of the application
         // or website depending on the result. For example, it is pretty handy to take a screenshot every time

@@ -115,7 +115,13 @@ module.exports = function(config) {
                     __QB_LOCAL__: JSON.stringify(false)
                 })
             ],
-            watch: true
+            watch: true,
+            externals: {
+                // Settings used to support React unit tests that use Enzyme
+                'react/addons': true,
+                'react/lib/ExecutionEnvironment': true,
+                'react/lib/ReactContext': true
+            }
         },
         webpackServer: {
             noInfo: true
