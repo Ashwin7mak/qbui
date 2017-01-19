@@ -126,12 +126,7 @@ $edit-icon-font-size: 18px;
 
     .cellWrapper {
         width: 100%;
-        //this adjusts the height for rendered rows
         padding-top: 6px;
-        //Turns out it works better without a min width
-        //Min width of 200px sets the rendered rows to 200 px minimum
-        //min-width: 200px;
-        //min-height: 32px;
         position: relative;
 
         &.numberFormat,
@@ -241,7 +236,7 @@ $edit-icon-font-size: 18px;
     z-index: 2;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
-    border-bottom: 2px solid $badcolor1-color6;
+    border-bottom: 1px solid $badcolor1-color6;
     padding: $grid-default-cell-padding;
     color: $color-blue-600;
     -webkit-font-smoothing: antialiased;
@@ -273,7 +268,8 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > tbody > tr > td {
-    //Added padding-left and padding-right to match the AGGrid view layout
+    height: $inline-edit-input-box-height;
+    //height: 32px;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;
@@ -326,20 +322,13 @@ $edit-icon-font-size: 18px;
     }
 
     > td {
-        //This adds border back to the bottom of inline edit
-        //border: none;
         border-top: 2px solid $cell-edit-background-edit;
         overflow: visible;
         margin: 0;
-        //vertical-align: middle;
         border-right: 1px solid $row-border-color;
-        //Commented out because in-line edit row is too big, this makes the height smaller
-        //padding-bottom: 14px;
 
         .cellWrapper {
             display: flex;
-            //Commented out to make the rows smaller in height
-            //padding: 2px;
             top: 0;
             left: 0;
             right: 0;
@@ -354,8 +343,6 @@ $edit-icon-font-size: 18px;
 
             &.editingCell {
                 display: inline-block;
-                //border: none;
-                //This aligns input boxes to the top for inline edit and it adds padding to the bottom
                 padding-bottom: 20px;
                 margin-top: -6px;
 
@@ -492,8 +479,6 @@ $edit-icon-font-size: 18px;
 
 .multiLineTextCell {
     border: 0;
-    //margin: 0;
-    //margin-bottom: -90px;
     font-family: $font-family;
     font-size: $grid-font-size;
     border-radius: 0;
@@ -514,12 +499,11 @@ $edit-icon-font-size: 18px;
     z-index: 3;
 }
 
-// first column td z-index is 1000
 th.qbHeaderCell.stickyCell {
     z-index: 3;
 }
 
-.dropdown-menu {
+.stickyCell .dropdown-menu {
     top: 0;
     left: 27px;
 }

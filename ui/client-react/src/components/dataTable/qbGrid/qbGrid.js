@@ -281,16 +281,22 @@ const QbGrid = React.createClass({
         /**This resets the zIndex for the sticky cell back to the same z-index as the other sticky cells
          * this prevents future pop up clippingslet stickyCell = document.getElementsByClassName('stickyCell');
          */
-        let stickyCell = document.getElementsByClassName('stickyCell');
-        if (this.props.editingRowId) {
-            stickyCell[this.props.editingRowId - 1].style.zIndex = 2;
+        let stickyCell = document.getElementById(this.props.editingRowId);
+        if (stickyCell) {
+            stickyCell.firstChild.style.zIndex = 2;
         }
     },
     preventPopUpClipping() {
-        let stickyCell = document.getElementsByClassName('stickyCell');
-        //console.log('stickyCell: ', stickyCell[this.props.editingRowId]);
-        let currentStickyCell = stickyCell[this.props.editingRowId - 1];
-        currentStickyCell.style.zIndex = 9000;
+
+        /**
+         * The inline edit row action pop up is clipped by the sticky cell below it
+         * By setting the row action pop up 'parent' sticky cell's z index higher, it
+         * prevents it from being clipped
+         */
+        let stickyCell = document.getElementById(this.props.editingRowId);
+        if (stickyCell) {
+            stickyCell.firstChild.style.zIndex = 9000;
+        }
     },
 
     /**
@@ -319,15 +325,11 @@ const QbGrid = React.createClass({
             stickyCells[i].style.left = currentLeftScroll + 'px';
         }
     },
-
     render() {
         /**
          * If a user is currently inline editing, then the zIndex needs to be set higher for the sticky cell
          * this prevents pop up clippings
          * */
-        if (this.props.editingRowId) {
-            this.preventPopUpClipping();
-        }
         let columns = [
             ...[{
                 property: ICON_ACTIONS_COLUMN_ID,
