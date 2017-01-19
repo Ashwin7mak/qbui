@@ -281,11 +281,18 @@ $edit-icon-font-size: 18px;
     //vertical-align: top;
 }
 
+.qbGrid > tbody > tr:last-of-type > td {
+    border-bottom: 1px solid $color-black-300;
+}
+
 // add borders when the row has the willEdit class (from mouse entering pencil icons)
 .reportContent:not(.inlineEditing) {
     .qbGrid > tbody > tr.willEdit > td:not(.stickyCell),
     .qbGrid > tbody > tr.willEdit + tr > td:not(.stickyCell) {
         border-top: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+    .qbGrid > tbody > tr:last-of-type.willEdit > td:not(.stickyCell) {
+        border-bottom: 1px solid $qbgrid-onpencil-row-border-color;
     }
     .qbGrid > tbody > tr.willEdit > td.stickyCell {
         border-right: 1px solid $color-black-300;
