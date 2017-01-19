@@ -11,8 +11,6 @@ let NavStore = Fluxxor.createStore({
 
     initialize() {
         this.state = {
-            leftNavVisible: false,
-            leftNavExpanded: true,
             appsListOpen: false,
             searchBarOpen: false,
             showTopNav: true,
@@ -31,8 +29,6 @@ let NavStore = Fluxxor.createStore({
 
         this.bindActions(
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
-            actions.TOGGLE_LEFT_NAV_VISIBLE, this.onToggleLeftNavVisible,
-            actions.TOGGLE_LEFT_NAV_EXPANDED, this.onToggleLeftNavExpanded,
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
@@ -90,30 +86,7 @@ let NavStore = Fluxxor.createStore({
         this.state.filterReportsName = name;
         this.emit('change');
     },
-    /*
-     * toggle left nav visible (small breakpoint state)
-     * @param visible force visible/hidden
-     */
-    onToggleLeftNavVisible(visible) {
-        if (visible === false || visible === true) {
-            this.state.leftNavVisible = visible;
-        } else {
-            this.state.leftNavVisible = !this.state.leftNavVisible;
-        }
-        this.emit('change');
-    },
-    /*
-     * toggle left nav expanded/collapsed (non-small breakpoint state)
-     * @param expanded force expanded/collapsed
-     */
-    onToggleLeftNavExpanded(expanded) {
-        if (expanded === false || expanded === true) {
-            this.state.leftNavExpanded = expanded;
-        } else {
-            this.state.leftNavExpanded = !this.state.leftNavExpanded;
-        }
-        this.emit('change');
-    },
+
     /*
      * toggle apps list
      * @param show force shown/hidden
