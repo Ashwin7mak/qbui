@@ -800,7 +800,6 @@ export const ReportContent = React.createClass({
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
-        let self = this;
 
         if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;

@@ -280,7 +280,9 @@ const QbGrid = React.createClass({
      * stick the header and sticky first column when the grid scrolls
      */
     handleScroll() {
-        let scrolled = document.getElementsByClassName('qbGrid')[0];
+
+        let scrolled = this.tableRef;
+
         let currentLeftScroll = scrolled.scrollLeft;
         let currentTopScroll = scrolled.scrollTop;
 
@@ -345,7 +347,12 @@ const QbGrid = React.createClass({
                     }}>
                     <Table.Header />
 
-                    <Table.Body onRow={this.addRowProps} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
+                    <Table.Body onRow={this.addRowProps}
+                                rows={this.props.rows}
+                                rowKey={this.getUniqueRowKey}
+                                ref={body => {
+                                    this.tableRef = body && body.getRef().parentNode;
+                                }}/>
                 </Table.Provider>
             </Loader>
         );

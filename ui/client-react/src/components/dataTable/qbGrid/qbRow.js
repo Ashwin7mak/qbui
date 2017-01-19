@@ -55,11 +55,10 @@ const QbRow = React.createClass({
     },
 
     componentDidMount() {
-        let editIcons;
-        // handle the row styling when the nested edit icons get mouse enter/leave events
         if (this.refs.tr) {
-            editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
+            // handle the row styling when the nested edit icons get mouse enter/leave events
 
+            const editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
             for (let i = 0; i < editIcons.length; i++) {
                 editIcons[i].addEventListener("mouseenter", this.handleMouseEnterEditIcon);
@@ -69,11 +68,11 @@ const QbRow = React.createClass({
     },
 
     componentWillUnmount() {
-        let editIcons;
-        // remove mouse listeners
-        if (this.refs.tr) {
-            editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
+        if (this.refs.tr) {
+            // remove mouse listeners from non-subheader rows
+
+            const editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
 
             for (let i = 0; i < editIcons.length; i++) {
                 editIcons[i].removeEventListener("mouseenter", this.handleMouseEnterEditIcon);
