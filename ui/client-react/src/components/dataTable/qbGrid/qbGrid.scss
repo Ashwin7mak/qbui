@@ -501,7 +501,7 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > tbody > tr.editing > td:first-of-type {
-    z-index: 3;
+    z-index: 4;
 }
 
 .stickyCell {
@@ -510,7 +510,7 @@ $edit-icon-font-size: 18px;
 }
 
 th.qbHeaderCell.stickyCell {
-    z-index: 3;
+    z-index: 4;
 }
 
 .stickyCell .dropdown-menu {
