@@ -15,6 +15,7 @@
     var DATA_ATTR_CONST = 'dataAttr';
     var MULTICHOICE_CONST = 'multipleChoice';
     var REQUIRED_CONST = 'required';
+    var UNIQUE_CONST = 'unique';
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
@@ -306,6 +307,10 @@
             if (fieldNameToTypeMap[fieldName][REQUIRED_CONST]) {
                 requiredSetting = fieldNameToTypeMap[fieldName][REQUIRED_CONST];
             }
+            var uniqueSetting;
+            if (fieldNameToTypeMap[fieldName][UNIQUE_CONST]) {
+                uniqueSetting = fieldNameToTypeMap[fieldName][UNIQUE_CONST];
+            }
 
             if (fieldName.includes('User')) {
                 field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
@@ -325,6 +330,10 @@
             if (requiredSetting !== undefined) {
                 field.required = requiredSetting;
             }
+            if (uniqueSetting !== undefined) {
+                field.unique = uniqueSetting;
+            }
+
             builderInstance.withField(field);
         });
 

@@ -179,6 +179,7 @@
     "time-grunt": "~0.3.2",
     "unique-random-array": "^1.0.0",
     "url-loader": "^0.5.6",
+    "wdio-firefox-profile-service": "0.0.1",
     "wdio-jasmine-framework": "^0.2.15",
     "wdio-junit-reporter": "^0.2.0",
     "wdio-sauce-service": "^0.2.5",

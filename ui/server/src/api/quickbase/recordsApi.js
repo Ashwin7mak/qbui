@@ -46,6 +46,7 @@
     let perfLogger = require('../../perfLogger');
     var httpStatusCodes = require('../../constants/httpStatusCodes');
     var recordValidator = require('./validator/recordValidator');
+    var apiResponseFormatter = require('./formatter/apiResponseFormatter');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -275,7 +276,9 @@
                     var opts = requestHelper.setOptions(req);
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
-                    return requestHelper.executeRequest(req, opts);
+                    return requestHelper.executeRequest(req, opts)
+                        .then(function(payload) {return payload;})
+                        .catch(apiResponseFormatter.formatResponseError);
                 } else {
                     //log each error message
                     answer.forEach((error) => {
@@ -284,8 +287,7 @@
 
                     //  return the error information
                     let errCode = httpStatusCodes.INVALID_INPUT;
-                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}}
-                    );
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}});
                 }
             },
 
@@ -301,7 +303,11 @@
                     var opts = requestHelper.setOptions(req);
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
-                    return requestHelper.executeRequest(req, opts);
+                    return requestHelper.executeRequest(req, opts)
+                        .then(payload => {
+                            return payload;
+                        })
+                        .catch(apiResponseFormatter.formatResponseError);
                 } else {
                     //log each error message individually
                     answer.forEach((error) => {
@@ -310,8 +316,7 @@
 
                     //  return the error information
                     let errCode = httpStatusCodes.INVALID_INPUT;
-                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}}
-                    );
+                    return Promise.reject({response: {message: 'validation error', status: errCode, errors: answer}});
                 }
             },
 

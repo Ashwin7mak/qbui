@@ -94,7 +94,7 @@ export const ReportContent = React.createClass({
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
-        orig.names = rec ? rec : {};
+        orig.names = rec || {};
         let fids = {};
 
         if (rec !== null) {

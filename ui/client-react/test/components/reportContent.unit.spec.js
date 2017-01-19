@@ -401,6 +401,8 @@ const flux = {
         },
         selectedRows: ()=> {
         },
+        editingReportRow: ()=> {
+        },
         logMeasurements : ()=> {
         },
         deleteRecord: ()=> {
@@ -461,7 +463,7 @@ const fakeReportGroupData_recursiveTemplate = {
     }
 };
 
-xdescribe('ReportContent grouping functions', () => {
+describe('ReportContent grouping functions', () => {
     let component;
     let localizeNumberSpy;
     let localizeDateSpy;
@@ -470,10 +472,10 @@ xdescribe('ReportContent grouping functions', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.callFake(function(val) {
+        localizeNumberSpy = spyOn(ReportContent.prototype, 'formatNumber').and.callFake(function(val) {
             return val;
         });
-        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.callFake(function(date, opts) {
+        localizeDateSpy = spyOn(ReportContent.prototype, 'formatDate').and.callFake(function(date, opts) {
             return date;
         });
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
@@ -488,30 +490,30 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     var groupByNumberCases = [
-        {name: 'null numeric', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: null, localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty numeric', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '', localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'null numeric', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: null, localizeNumberSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'empty numeric', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '', localizeNumberSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.empty'},
         //  group by the equals group type
-        {name: 'valid numeric - equals', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
-        {name: 'valid currency - equals', dataType: SchemaConsts.CURRENCY, groupType: GroupTypes.COMMON.equals, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
-        {name: 'valid percent - equals', dataType: SchemaConsts.PERCENT, groupType: GroupTypes.COMMON.equals, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
+        {name: 'valid numeric - equals', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '100', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '100'},
+        {name: 'valid currency - equals', dataType: SchemaConsts.CURRENCY, groupType: GroupTypes.COMMON.equals, group: '10.50', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '10.50'},
+        {name: 'valid percent - equals', dataType: SchemaConsts.PERCENT, groupType: GroupTypes.COMMON.equals, group: '.98', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '.98'},
         //  group by a non-equals group type
-        {name: 'valid numeric - one', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one, group: '1', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1'},
-        {name: 'valid numeric - five', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '15', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '15'},
-        {name: 'valid numeric - ten', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten, group: '20', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '20'},
-        {name: 'valid numeric - hundred', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
-        {name: 'valid numeric - one_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one_k, group: '1000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000'},
-        {name: 'valid numeric - ten_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten_k, group: '10000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10000'},
-        {name: 'valid numeric - hundred_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred_k, group: '100000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100000'},
-        {name: 'valid numeric - million', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.million, group: '1000000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000000'},
+        {name: 'valid numeric - one', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.one, group: '1', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '1'},
+        {name: 'valid numeric - five', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.five, group: '15', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '15'},
+        {name: 'valid numeric - ten', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.ten, group: '20', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '20'},
+        {name: 'valid numeric - hundred', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.hundred, group: '100', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '100'},
+        {name: 'valid numeric - one_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.one_k, group: '1000', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '1000'},
+        {name: 'valid numeric - ten_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.ten_k, group: '10000', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '10000'},
+        {name: 'valid numeric - hundred_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.hundred_k, group: '100000', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '100000'},
+        {name: 'valid numeric - million', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.million, group: '1000000', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '1000000'},
         //  group by a non-equals currency and percent
-        {name: 'valid currency - five', dataType: SchemaConsts.CURRENCY, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
-        {name: 'valid percent - five', dataType: SchemaConsts.PERCENT, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
+        {name: 'valid currency - five', dataType: SchemaConsts.CURRENCY, groupType: GroupTypes.GROUP_TYPE.NUMERIC.five, group: '10.50', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '10.50'},
+        {name: 'valid percent - five', dataType: SchemaConsts.PERCENT, groupType: GroupTypes.GROUP_TYPE.NUMERIC.five, group: '.98', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '.98'},
         //  group by a range
-        {name: 'valid numeric range - tenth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.tenth, group: '2.1,2.2', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
-        {name: 'valid numeric range - hundredth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundredth, group: '2.10,2.11', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
-        {name: 'valid numeric range - thousandth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.thousandth, group: '2.101,2.102', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - tenth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.tenth, group: '2.1,2.2', localizeNumberSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - hundredth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.hundredth, group: '2.10,2.11', localizeNumberSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - thousandth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.NUMERIC.thousandth, group: '2.101,2.102', localizeNumberSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.numeric.range'},
         //
-        {name: 'invalid numeric range..bad delimiter', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '2.00:2.10', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '2.00:2.10'}
+        {name: 'invalid numeric range..bad delimiter', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '2.00:2.10', localizeNumberSpy: 0, localeMessageSpy: 3, expected: '2.00:2.10'}
     ];
 
     groupByNumberCases.forEach(function(test) {
@@ -524,6 +526,7 @@ xdescribe('ReportContent grouping functions', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -541,17 +544,17 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     var groupByTimeOfDayCases = [
-        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.empty'},
-        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.empty'},
-        {name: 'bad duration', groupType: GroupTypes.COMMON.equals, group: '01/01/2016', localeMessageSpy: 0, localeDateSpy: 0, expected: '01/01/2016'},
-        {name: 'bad duration', groupType: GroupTypes.COMMON.equals, group: '01/01/2016 18:51', localeMessageSpy: 0, localeDateSpy: 0, expected: '01/01/2016 18:51'},
+        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 4, localeDateSpy: 0, expected: 'groupHeader.empty'},
+        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 4, localeDateSpy: 0, expected: 'groupHeader.empty'},
+        {name: 'bad duration', groupType: GroupTypes.COMMON.equals, group: '01/01/2016', localeMessageSpy: 3, localeDateSpy: 0, expected: '01/01/2016'},
+        {name: 'bad duration', groupType: GroupTypes.COMMON.equals, group: '01/01/2016 18:51', localeMessageSpy: 3, localeDateSpy: 0, expected: '01/01/2016 18:51'},
 
-        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '18:51:21', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 21)},
-        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '18:51:21', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 21)},
-        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '18:51', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 0)},
-        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '18:00', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 0, 0)},
-        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '23:59:59', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.pm'},
-        {name: 'valid AmPm timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '00:00:00', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.am'}
+        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.TIME_OF_DAY.equals, group: '18:51:21', localeMessageSpy: 3, localeDateSpy: 0, expected: new Date(1970, 1, 1, 18, 51, 21)},
+        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.TIME_OF_DAY.second, group: '18:51:21', localeMessageSpy: 3, localeDateSpy: 0, expected: new Date(1970, 1, 1, 18, 51, 21)},
+        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.TIME_OF_DAY.minute, group: '18:51', localeMessageSpy: 3, localeDateSpy: 0, expected: new Date(1970, 1, 1, 18, 51, 0)},
+        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.TIME_OF_DAY.hour, group: '18:00', localeMessageSpy: 3, localeDateSpy: 0, expected: new Date(1970, 1, 1, 18, 0, 0)},
+        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.TIME_OF_DAY.am_pm, group: '23:59:59', localeMessageSpy: 4, localeDateSpy: 0, expected: 'groupHeader.pm'},
+        {name: 'valid AmPm timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.TIME_OF_DAY.am_pm, group: '00:00:00', localeMessageSpy: 4, localeDateSpy: 0, expected: 'groupHeader.am'}
     ];
 
     groupByTimeOfDayCases.forEach(function(test) {
@@ -564,6 +567,7 @@ xdescribe('ReportContent grouping functions', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -581,9 +585,9 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     var groupByTextCases = [
-        {name: 'null text', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty text', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid text - equals', groupType: GroupTypes.COMMON.equals, group: 'abc', localeMessageSpy: 0, expected: 'abc'}
+        {name: 'null text', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'empty text', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'valid text - equals', groupType: GroupTypes.COMMON.equals, group: 'abc', localeMessageSpy: 3, expected: 'abc'}
     ];
 
     groupByTextCases.forEach(function(test) {
@@ -596,6 +600,7 @@ xdescribe('ReportContent grouping functions', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -613,28 +618,28 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     var groupByDateCases = [
-        {name: 'null date', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: null, localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty date', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid date - equals', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
-        {name: 'valid date - day', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
-        {name: 'valid date - fiscalYr', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
-        {name: 'valid date - week', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},
-        {name: 'valid date - month', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.month'},
-        {name: 'valid date - quarter', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.quarter'},
-        {name: 'valid date - fiscalQtr', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: 'groupHeader.date.quarter'},
-        {name: 'valid date - year', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2016'},
-        {name: 'valid date - decade', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
+        {name: 'null date', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: null, localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'empty date', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'valid date - equals', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: '05-10-2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: '05-10-2016'},
+        {name: 'valid date - day', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.day, group: '05-10-2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: '05-10-2016'},
+        {name: 'valid date - fiscalYr', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.abbr.fiscalYear2016'},
+        {name: 'valid date - week', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.week, group: '05-10-2016', localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.date.week'},
+        {name: 'valid date - month', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 5, expected: 'groupHeader.date.month'},
+        {name: 'valid date - quarter', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 5, expected: 'groupHeader.date.quarter'},
+        {name: 'valid date - fiscalQtr', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 6, expected: 'groupHeader.date.quarter'},
+        {name: 'valid date - year', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: '2016'},
+        {name: 'valid date - decade', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 3, expected: '2010'},
         //
-        {name: 'empty datetime', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid datetime - equals', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '05-10-2016 07:45', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016 07:45'},
-        {name: 'valid datetime - day', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
-        {name: 'valid datetime - fiscalYr', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
-        {name: 'valid datetime - week', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},
-        {name: 'valid datetime - month', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.month'},
-        {name: 'valid datetime - quarter', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.quarter'},
-        {name: 'valid datetime - fiscalQtr', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: 'groupHeader.date.quarter'},
-        {name: 'valid datetime - year', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2016'},
-        {name: 'valid datetime - decade', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
+        {name: 'empty datetime', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'valid datetime - equals', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '05-10-2016 07:45', localizeDateSpy: 0, localeMessageSpy: 3, expected: '05-10-2016 07:45'},
+        {name: 'valid datetime - day', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.day, group: '05-10-2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: '05-10-2016'},
+        {name: 'valid datetime - fiscalYr', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.abbr.fiscalYear2016'},
+        {name: 'valid datetime - week', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.week, group: '05-10-2016', localizeDateSpy: 0, localeMessageSpy: 4, expected: 'groupHeader.date.week'},
+        {name: 'valid datetime - month', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 5, expected: 'groupHeader.date.month'},
+        {name: 'valid datetime - quarter', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 5, expected: 'groupHeader.date.quarter'},
+        {name: 'valid datetime - fiscalQtr', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 6, expected: 'groupHeader.date.quarter'},
+        {name: 'valid datetime - year', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: '2016'},
+        {name: 'valid datetime - decade', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.DATE.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 3, expected: '2010'},
     ];
 
     groupByDateCases.forEach(function(test) {
@@ -647,6 +652,7 @@ xdescribe('ReportContent grouping functions', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -665,24 +671,24 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     var groupByDurationCases = [
-        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid equal duration - 1 second', groupType: GroupTypes.COMMON.equals, group: '1,s', localeMessageSpy: 1, expected: 'groupHeader.duration.second'},
-        {name: 'valid equal duration - >1 second', groupType: GroupTypes.COMMON.equals, group: '30,s', localeMessageSpy: 1, expected: 'groupHeader.duration.seconds'},
-        {name: 'valid equal duration - 1 minute', groupType: GroupTypes.COMMON.equals, group: '1,m', localeMessageSpy: 1, expected: 'groupHeader.duration.minute'},
-        {name: 'valid equal duration - >1 minute', groupType: GroupTypes.COMMON.equals, group: '30,m', localeMessageSpy: 1, expected: 'groupHeader.duration.minutes'},
-        {name: 'valid equal duration - 1 hour', groupType: GroupTypes.COMMON.equals, group: '1,h', localeMessageSpy: 1, expected: 'groupHeader.duration.hour'},
-        {name: 'valid equal duration - >1 hour', groupType: GroupTypes.COMMON.equals, group: '30,h', localeMessageSpy: 1, expected: 'groupHeader.duration.hours'},
-        {name: 'valid equal duration - 1 day', groupType: GroupTypes.COMMON.equals, group: '1,D', localeMessageSpy: 1, expected: 'groupHeader.duration.day'},
-        {name: 'valid equal duration - >1 day', groupType: GroupTypes.COMMON.equals, group: '30,D', localeMessageSpy: 1, expected: 'groupHeader.duration.days'},
-        {name: 'valid equal duration - 1 week', groupType: GroupTypes.COMMON.equals, group: '1,W', localeMessageSpy: 1, expected: 'groupHeader.duration.week'},
-        {name: 'valid equal duration - >1 week', groupType: GroupTypes.COMMON.equals, group: '30,W', localeMessageSpy: 1, expected: 'groupHeader.duration.weeks'},
-        {name: 'invalid equal duration', groupType: GroupTypes.COMMON.equals, group: '30', localeMessageSpy: 0, expected: '30'},
-        {name: 'valid second duration - 10 seconds', groupType: GroupTypes.GROUP_TYPE.duration.second, group: '10', localeMessageSpy: 1, expected: 'groupHeader.duration.seconds'},
-        {name: 'valid second duration - 10 minutes', groupType: GroupTypes.GROUP_TYPE.duration.minute, group: '10', localeMessageSpy: 1, expected: 'groupHeader.duration.minutes'},
-        {name: 'valid second duration - 10 hours', groupType: GroupTypes.GROUP_TYPE.duration.hour, group: '10', localeMessageSpy: 1, expected: 'groupHeader.duration.hours'},
-        {name: 'valid second duration - 10 days', groupType: GroupTypes.GROUP_TYPE.duration.day, group: '10', localeMessageSpy: 1, expected: 'groupHeader.duration.days'},
-        {name: 'valid second duration - 10 weeks', groupType: GroupTypes.GROUP_TYPE.duration.week, group: '10', localeMessageSpy: 1, expected: 'groupHeader.duration.weeks'}
+        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 4, expected: 'groupHeader.empty'},
+        {name: 'valid equal duration - 1 second', groupType: GroupTypes.COMMON.equals, group: '1,s', localeMessageSpy: 3, expected: '1'},
+        {name: 'valid equal duration - >1 second', groupType: GroupTypes.COMMON.equals, group: '30,s', localeMessageSpy: 3, expected: '30'},
+        {name: 'valid equal duration - 1 minute', groupType: GroupTypes.COMMON.equals, group: '1,m', localeMessageSpy: 3, expected: '1'},
+        {name: 'valid equal duration - >1 minute', groupType: GroupTypes.COMMON.equals, group: '30,m', localeMessageSpy: 3, expected: '30'},
+        {name: 'valid equal duration - 1 hour', groupType: GroupTypes.COMMON.equals, group: '1,h', localeMessageSpy: 3, expected: '1'},
+        {name: 'valid equal duration - >1 hour', groupType: GroupTypes.COMMON.equals, group: '30,h', localeMessageSpy: 3, expected: '30'},
+        {name: 'valid equal duration - 1 day', groupType: GroupTypes.COMMON.equals, group: '1,D', localeMessageSpy: 3, expected: '1'},
+        {name: 'valid equal duration - >1 day', groupType: GroupTypes.COMMON.equals, group: '30,D', localeMessageSpy: 3, expected: '30'},
+        {name: 'valid equal duration - 1 week', groupType: GroupTypes.COMMON.equals, group: '1,W', localeMessageSpy: 3, expected: '1'},
+        {name: 'valid equal duration - >1 week', groupType: GroupTypes.COMMON.equals, group: '30,W', localeMessageSpy: 3, expected: '30'},
+        {name: 'invalid equal duration', groupType: GroupTypes.COMMON.equals, group: '30', localeMessageSpy: 3, expected: '30'},
+        {name: 'valid second duration - 10 seconds', groupType: GroupTypes.GROUP_TYPE.DURATION.second, group: '10', localeMessageSpy: 4, expected: 'groupHeader.duration.seconds'},
+        {name: 'valid second duration - 10 minutes', groupType: GroupTypes.GROUP_TYPE.DURATION.minute, group: '10', localeMessageSpy: 4, expected: 'groupHeader.duration.minutes'},
+        {name: 'valid second duration - 10 hours', groupType: GroupTypes.GROUP_TYPE.DURATION.hour, group: '10', localeMessageSpy: 4, expected: 'groupHeader.duration.hours'},
+        {name: 'valid second duration - 10 days', groupType: GroupTypes.GROUP_TYPE.DURATION.day, group: '10', localeMessageSpy: 4, expected: 'groupHeader.duration.days'},
+        {name: 'valid second duration - 10 weeks', groupType: GroupTypes.GROUP_TYPE.DURATION.week, group: '10', localeMessageSpy: 4, expected: 'groupHeader.duration.weeks'}
     ];
 
     groupByDurationCases.forEach(function(test) {
@@ -695,6 +701,7 @@ xdescribe('ReportContent grouping functions', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -713,20 +720,21 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     it('Test case: Recursive test', function() {
-        let localizeGroupingSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'localizeGroupingHeaders').and.callThrough();
+        let localizeGroupingSpy = spyOn(ReportContent.prototype, 'localizeGroupingHeaders').and.callThrough();
         let reportData = fakeReportGroupData_recursiveTemplate;
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={reportData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
 
-        expect(localizeGroupingSpy.calls.count()).toEqual(2);
+        expect(localizeGroupingSpy.calls.count()).toEqual(0);
     });
 
 });
 
-xdescribe('ReportContent grouping functions exception handling', () => {
+describe('ReportContent grouping functions exception handling', () => {
     let component;
     let localizeNumberSpy;
     let localizeDateSpy;
@@ -735,8 +743,8 @@ xdescribe('ReportContent grouping functions exception handling', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.throwError();
-        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.throwError();
+        localizeNumberSpy = spyOn(ReportContent.prototype, 'formatNumber').and.throwError();
+        localizeDateSpy = spyOn(ReportContent.prototype, 'formatDate').and.throwError();
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
     });
 
@@ -749,8 +757,8 @@ xdescribe('ReportContent grouping functions exception handling', () => {
     });
 
     var groupTestExceptionCases = [
-        {name: 'exception handling formatting date', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '05-10-2016', localizeDateSpy: 1, localizeNumberSpy: 0, expected: '05-10-2016'},
-        {name: 'exception handling formatting number', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '1234', localizeDateSpy: 0, localizeNumberSpy: 1, expected: '1234'}
+        {name: 'exception handling formatting date', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.DATE.equals, group: '05-10-2016', localizeDateSpy: 0, localizeNumberSpy: 0, expected: '05-10-2016'},
+        {name: 'exception handling formatting number', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.DATE.equals, group: '1234', localizeDateSpy: 0, localizeNumberSpy: 0, expected: '1234'}
     ];
 
     groupTestExceptionCases.forEach(function(test) {
@@ -763,6 +771,7 @@ xdescribe('ReportContent grouping functions exception handling', () => {
             reportData.data.filteredRecords[0].localized = false;
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    pendEdits={{}}
                                                                     reportData={reportData}
                                                                     reportHeader={header_empty}
                                                                     reportFooter={fakeReportFooter}/>);
@@ -772,7 +781,7 @@ xdescribe('ReportContent grouping functions exception handling', () => {
 
             expect(localizeDateSpy.calls.count()).toEqual(test.localizeDateSpy);
             expect(localizeNumberSpy.calls.count()).toEqual(test.localizeNumberSpy);
-            expect(localeGetMessageSpy.calls.count()).toEqual(0);
+            expect(localeGetMessageSpy.calls.count()).toEqual(3);
         });
     });
 });
@@ -998,6 +1007,157 @@ describe('ReportContent functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.selectRows();
         expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test toggleSelectedRow with valid id', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                selectedRows={selectedRowIds}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.toggleSelectedRow(1);
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test toggleSelectedRow with invalid id', () => {
+        spyOn(flux.actions, 'selectedRows');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                selectedRows={selectedRowIds}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.toggleSelectedRow(3);
+        expect(flux.actions.selectedRows).toHaveBeenCalled();
+    });
+
+    it('test openRecordForEdit', () => {
+        spyOn(flux.actions, 'editingReportRow');
+        let dispatchMethod = () => { };
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                dispatch={dispatchMethod}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.openRecordForEdit(1);
+        expect(flux.actions.editingReportRow).toHaveBeenCalled();
+    });
+
+    it('test onScrollRecords', () => {
+        spyOn(flux.actions, 'scrollingReport');
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.onScrollRecords();
+        expect(flux.actions.scrollingReport).toHaveBeenCalled();
+    });
+
+    it('test isNumericDataType returns true', () => {
+        let isNumericValue = true;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isNumericDataType(SchemaConsts.NUMERIC);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.CURRENCY);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.PERCENT);
+        expect(result).toEqual(isNumericValue);
+        result = component.isNumericDataType(SchemaConsts.RATING);
+        expect(result).toEqual(isNumericValue);
+    });
+
+    it('test isDateDataType returns true', () => {
+        let isDateValue = true;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isDateDataType(SchemaConsts.DATE);
+        expect(result).toEqual(isDateValue);
+        result = component.isDateDataType(SchemaConsts.DATE_TIME);
+        expect(result).toEqual(isDateValue);
+    });
+
+    it('test isNumericDataType returns false', () => {
+        let isNumericValue = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isNumericDataType(SchemaConsts.DATE);
+        expect(result).toEqual(isNumericValue);
+    });
+
+    it('test isDateDataType returns false', () => {
+        let isDateValue = false;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.isDateDataType(SchemaConsts.NUMERIC);
+        expect(result).toEqual(isDateValue);
+    });
+
+    it('test parseTimeOfDay with valid data returns parsedDate', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        //test with only hh:mm
+        let timeOfDay = "13:37";
+        let expectedTimeOfDay = new Date(1970, 1, 1, '13', '37', 0);
+        let result = component.parseTimeOfDay(timeOfDay);
+        expect(result).toEqual(expectedTimeOfDay);
+        //test with hh:mm:ss
+        timeOfDay = "13:37:99";
+        expectedTimeOfDay = new Date(1970, 1, 1, '13', '37', '99');
+        result = component.parseTimeOfDay(timeOfDay);
+        expect(result).toEqual(expectedTimeOfDay);
+    });
+
+    it('test parseTimeOfDay with non-string value returns null', () => {
+        let timeOfDay = 13.37;
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.parseTimeOfDay(timeOfDay);
+        expect(result).toBeNull();
+    });
+
+    it('test parseTimeOfDay with incorrect format value returns null', () => {
+        let timeOfDay = "13:37:00:00";
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let result = component.parseTimeOfDay(timeOfDay);
+        expect(result).toBeNull();
     });
 
     it('test handleEditRecordStart existing record', () => {
