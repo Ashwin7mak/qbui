@@ -161,8 +161,8 @@
          * @returns Array of email input fields
          */
         getAllEmailInputFields: {value: function() {
-            this.editFormContainerEl.elements('input[type="email"].textField').waitForVisible();
-            return this.editFormContainerEl.elements('input[type="email"].textField');
+            this.editFormContainerEl.elements('input.emailField').waitForVisible();
+            return this.editFormContainerEl.elements('input.emailField');
         }},
 
         /**
