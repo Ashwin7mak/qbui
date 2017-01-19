@@ -224,8 +224,8 @@
          * @returns Array of checkbox fields
          */
         getAllCheckboxFields: {value: function() {
-            this.editFormContainerEl.elements('.checkbox').waitForVisible();
-            return this.editFormContainerEl.elements('.checkbox');
+            this.editFormContainerEl.elements('input[type="checkbox"].checkbox').waitForVisible();
+            return this.editFormContainerEl.elements('input[type="checkbox"].checkbox');
         }},
 
         /**
@@ -485,7 +485,7 @@
                 for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
                     if (!checkboxFields.value[i].element('input').isSelected()) {
-                        checkboxFields.value[i].click();
+                        checkboxFields.value[i].element('label').click();
                     }
                 }
             }else if (fieldType === 'allUserField') {
