@@ -296,7 +296,6 @@ $edit-icon-font-size: 18px;
     .qbGrid > tbody > tr.willEdit:hover > td.stickyCell {
         border-right: 1px solid $qbgrid-onpencil-row-border-color;
     }
-     // background hover
     .qbGrid > tbody > tr:hover > td {
         background: $qbgrid-row-hover-color;
     }
@@ -309,10 +308,6 @@ $edit-icon-font-size: 18px;
     position: relative;
     vertical-align: top;
 }
-
-
-
-
 
 .qbGrid .editing {
     box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
