@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import positionRowEditActions from '../../../src/components/dataTable/qbGrid/rowEditActionsPositionHoc';
+import positionedRowEditActions from '../../../src/components/dataTable/qbGrid/positionedRowEditActionsHoc';
 
 const MockComponent = (props) => {return <div>mock</div>;};
 
@@ -49,7 +49,7 @@ describe('RowEditActionsPositionHoc (QbGrid)', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                let PositionedMockComponent = positionRowEditActions(MockComponent);
+                let PositionedMockComponent = positionedRowEditActions(MockComponent);
                 component = shallow(<PositionedMockComponent/>);
                 instance = component.instance();
 

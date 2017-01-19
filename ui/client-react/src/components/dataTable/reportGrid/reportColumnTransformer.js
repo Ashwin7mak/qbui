@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import FieldUtils from '../../../utils/fieldUtils';
 import ColumnTransformer from '../qbGrid/columnTransformer';
 
@@ -15,7 +14,7 @@ class ReportColumnTransformer extends ColumnTransformer {
      * @returns {Array}
      */
     static transformColumnsForGrid(columns = []) {
-        if (!columns || !_.isArray(columns)) {
+        if (!columns || !Array.isArray(columns)) {
             return [];
         }
 

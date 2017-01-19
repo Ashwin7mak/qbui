@@ -94,10 +94,10 @@ export const ReportContent = React.createClass({
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
-        orig.names = rec ? rec : {};
+        orig.names = rec || {};
         let fids = {};
 
-        if (rec != null) {
+        if (rec !== null) {
             let recKeys = Object.keys(rec);
             // have fid lookup hash
             recKeys.forEach((item) => {
