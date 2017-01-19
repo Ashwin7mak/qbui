@@ -118,6 +118,10 @@ $edit-icon-font-size: 18px;
                 height: $grid-group-expand-icon-size;
                 opacity: 0.2;
             }
+
+            .dropdown-menu {
+                top: 120%; // TODO: temporary fix until we get the z-index corrected
+            }
         }
 
         &:hover .headerMenu .dropdownToggle {
@@ -281,16 +285,26 @@ $edit-icon-font-size: 18px;
     //vertical-align: top;
 }
 
+.qbGrid > tbody > tr:last-of-type > td {
+    border-bottom: 1px solid $color-black-300;
+}
+
 // add borders when the row has the willEdit class (from mouse entering pencil icons)
 .reportContent:not(.inlineEditing) {
-    .qbGrid > tbody > tr.willEdit > td,
-    .qbGrid > tbody > tr.willEdit + tr > td {
+    .qbGrid > tbody > tr.willEdit > td:not(.stickyCell),
+    .qbGrid > tbody > tr.willEdit + tr > td:not(.stickyCell) {
         border-top: 1px solid $qbgrid-onpencil-row-border-color;
     }
-    .qbGrid > tbody > tr.willEdit > td:first-of-type {
-        border-left: 1px solid $qbgrid-onpencil-row-border-color;
+    .qbGrid > tbody > tr:last-of-type.willEdit > td:not(.stickyCell) {
+        border-bottom: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+    .qbGrid > tbody > tr.willEdit > td.stickyCell {
+        border-right: 1px solid $color-black-300;
     }
     .qbGrid > tbody > tr.willEdit > td:last-of-type {
+        border-right: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+    .qbGrid > tbody > tr.willEdit:hover > td.stickyCell {
         border-right: 1px solid $qbgrid-onpencil-row-border-color;
     }
     .qbGrid > tbody > tr:hover > td {
@@ -305,10 +319,6 @@ $edit-icon-font-size: 18px;
     position: relative;
     vertical-align: top;
 }
-
-
-
-
 
 .qbGrid .editing {
     box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
@@ -493,10 +503,6 @@ $edit-icon-font-size: 18px;
 
 .qbGrid > tbody > tr.editing > td:first-of-type {
     z-index: 3;
-}
-
-.qbGrid > tbody > tr:hover > td:first-of-type {
-    background: $qbgrid-row-hover-color;
 }
 
 .stickyCell {

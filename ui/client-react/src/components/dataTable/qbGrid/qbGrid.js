@@ -7,7 +7,7 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
-import ReactDOM from 'react-dom';
+import _ from 'lodash';
 
 import Logger from '../../../utils/logger';
 const logger = new Logger();
@@ -286,32 +286,6 @@ const QbGrid = React.createClass({
         const reportContent = document.getElementsByClassName('reportContent')[0];
         reportContent.removeEventListener("scroll", this.props.handleScroll);
     },
-    componentWillUpdate() {
-        if (this.props.editingRowId) {
-            this.resetZIndex();
-        }
-    },
-    resetZIndex() {
-        /**This resets the zIndex for the sticky cell back to the same z-index as the other sticky cells
-         * this prevents future pop up clippingslet stickyCell = document.getElementsByClassName('stickyCell');
-         */
-        let stickyCell = document.getElementById(this.props.editingRowId);
-        if (stickyCell) {
-            stickyCell.firstChild.style.zIndex = 2;
-        }
-    },
-    preventPopUpClipping() {
-
-        /**
-         * The inline edit row action pop up is clipped by the sticky cell below it
-         * By setting the row action pop up 'parent' sticky cell's z index higher, it
-         * prevents it from being clipped
-         */
-        let stickyCell = document.getElementById(this.props.editingRowId);
-        if (stickyCell) {
-            stickyCell.firstChild.style.zIndex = 9000;
-        }
-    },
 
     /**
      * stick the header and sticky first column when the grid scrolls
@@ -330,12 +304,11 @@ const QbGrid = React.createClass({
         // move the stick cells (1st col) right to their original positions
         let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-        stickyCells[0].style.borderRight = '1px solid #c0d0e4'; // header cell
         stickyCells[0].style.left = currentLeftScroll + 'px';
         stickyCells[0].style.right = 0;
         stickyCells[0].style.bottom = 0;
+
         for (let i = 1; i < stickyCells.length; i++) {
-            stickyCells[i].style.borderRight = '1px solid #dcdcdc';
             stickyCells[i].style.left = currentLeftScroll + 'px';
         }
     },
