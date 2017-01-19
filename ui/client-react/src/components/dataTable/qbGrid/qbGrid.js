@@ -288,7 +288,7 @@ const QbGrid = React.createClass({
     },
     preventPopUpClipping() {
         let stickyCell = document.getElementsByClassName('stickyCell');
-        console.log('stickyCell: ', stickyCell[this.props.editingRowId]);
+        //console.log('stickyCell: ', stickyCell[this.props.editingRowId]);
         let currentStickyCell = stickyCell[this.props.editingRowId - 1];
         currentStickyCell.style.zIndex = 9000;
     },
@@ -321,7 +321,6 @@ const QbGrid = React.createClass({
     },
 
     render() {
-        console.log('this.props: ', this.props);
         /**
          * If a user is currently inline editing, then the zIndex needs to be set higher for the sticky cell
          * this prevents pop up clippings
