@@ -490,9 +490,11 @@ $edit-icon-font-size: 18px;
     background: $row-bg-color;
     z-index: 2;
 }
+
 .qbGrid > tbody > tr.editing > td:first-of-type {
     z-index: 3;
 }
+
 .qbGrid > tbody > tr:hover > td:first-of-type {
     background: $qbgrid-row-hover-color;
 }
