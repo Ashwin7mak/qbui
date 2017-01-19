@@ -28,8 +28,8 @@ export const hideTrowser = () => {
 };
 
 /**
- *  Show/hide or expand/collapse the left nav.  The action type differs based on breakpoint size.  For
- *  small breakpoint, its show/hide; for all other breakpoints, it's expand/collapse.
+ *  Show/hide or expand/collapse the left nav.  For small breakpoint, the action type
+ *  is show/hide; for all other breakpoints, it's expand/collapse.
  *
  * @returns {{type, navState}}
  */
