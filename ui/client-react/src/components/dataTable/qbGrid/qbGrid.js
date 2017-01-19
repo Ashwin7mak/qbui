@@ -8,6 +8,7 @@ import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
+import CollapsedGroupsHelper from './collapsedGroupHelper';
 
 import Logger from '../../../utils/logger';
 const logger = new Logger();
@@ -139,6 +140,10 @@ const QbGrid = React.createClass({
         };
     },
 
+    componentWillMount() {
+        this.collapsedGroupHelper = new CollapsedGroupsHelper();
+    },
+
     onClickAddNewRow() {
         if (this.props.onClickAddNewRow) {
             this.props.onClickAddNewRow(this.props.editingRowId);
@@ -248,9 +253,8 @@ const QbGrid = React.createClass({
         const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
 
         let collapseAllIcon = null;
-        if (this.isGrouped()) {
-            let allCollapsed = this.props.rows.filter(row => {return row.isSubHeader;}).length === this.state.collapsedGroups.length;
-            let iconType = (allCollapsed ? 'caret-filled-right' : 'caret-filled-down');
+        if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
+            let iconType = (this.collapsedGroupHelper.areAllCollapsed() ? 'caret-filled-right' : 'caret-filled-down');
 
             collapseAllIcon = <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />;
         }
@@ -295,66 +299,12 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
 
-    addSubGroups(currentSubHeaderId) {
-        let subHeaderIds = [currentSubHeaderId];
-
-        this.props.rows.forEach(row => {
-            if (subHeaderIds.includes(row.parentId) && row.isSubHeader) {
-                subHeaderIds.push(row.id);
-            }
-        });
-
-        return subHeaderIds;
-    },
-
     toggleCollapseAllGroups() {
-        let subHeaderRows = this.props.rows.filter(row => {return row.isSubHeader;}).map(row => {return row.id;});
-
-        if (subHeaderRows.length > this.state.collapsedGroups.length) {
-            this.setState({collapsedGroups: subHeaderRows});
-        } else {
-            this.setState({collapsedGroups: []});
-        }
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups(this.props.rows)});
     },
 
     toggleCollapseGroup(subHeaderId) {
-        if (this.state.collapsedGroups.includes(subHeaderId)) {
-            let updatedCollapsedGroups = this.state.collapsedGroups.filter((currentSubHeaderId) => {
-                return currentSubHeaderId !== subHeaderId;
-            });
-            this.setState({collapsedGroups: updatedCollapsedGroups});
-        } else {
-            this.setState({collapsedGroups: [...this.state.collapsedGroups, ...this.addSubGroups(subHeaderId)]});
-        }
-    },
-
-    filterOutCollapsedGroups(rows) {
-        if (!Array.isArray(rows)) {
-            return [];
-        }
-
-        let rowsCopy = _.cloneDeep(rows);
-
-        let collapsedSubHeaders = rowsCopy.filter(row => {
-            return row.isSubHeader && this.state.collapsedGroups.includes(row.id);
-        });
-
-        let subHeadersNeedToBeAdded = [];
-        collapsedSubHeaders.forEach(row => {
-            if (!this.state.collapsedGroups.includes(row.id)) {
-                subHeadersNeedToBeAdded.push(row.id);
-            }
-            row.isCollapsed = true;
-        });
-
-        let allCollapsedGroups = [...this.state.collapsedGroups, ...subHeadersNeedToBeAdded];
-        return rowsCopy.filter(row => {
-            return !allCollapsedGroups.includes(row.parentId);
-        });
-    },
-
-    isGrouped() {
-        return this.props.rows.some(row => {return row.isSubHeader;});
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseGroup(subHeaderId)});
     },
 
     render() {
@@ -401,7 +351,7 @@ const QbGrid = React.createClass({
                 >
                     <Table.Header />
 
-                    <Table.Body onRow={this.addRowProps} rows={this.filterOutCollapsedGroups(this.props.rows)} rowKey={this.getUniqueRowKey} />
+                    <Table.Body onRow={this.addRowProps} rows={this.collapsedGroupHelper.filterRows(this.props.rows)} rowKey={this.getUniqueRowKey} />
                 </Table.Provider>
             </Loader>
         );
