@@ -52,7 +52,7 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            reportSearchData: flux.store('ReportDataSearchStore').getState(),
+            reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
 

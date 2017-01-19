@@ -1,7 +1,7 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
 
-// action creators (the Fluxxor navActions.js should be migrated over)
+// Shell action creators (the Fluxxor navActions.js should be migrated over)
 
 /**
  * Show the trowser
@@ -28,8 +28,8 @@ export const hideTrowser = () => {
 };
 
 /**
- * Based on breakpoint size, toggle either the visibility of the left nav or toggle
- * the expand/collapse state of the nav.
+ *  Show/hide or expand/collapse the left nav.  The action type differs based on breakpoint size.  For
+ *  small breakpoint, its show/hide; for all other breakpoints, it's expand/collapse.
  *
  * @returns {{type, navState}}
  */
@@ -38,5 +38,4 @@ export const toggleLeftNav = (navState) => {
         type: Breakpoints.isSmallBreakpoint() ? types.TOGGLE_LEFT_NAV_VISIBLE : types.TOGGLE_LEFT_NAV_EXPANDED,
         navState
     };
-
 };

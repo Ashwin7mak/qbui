@@ -24,13 +24,15 @@ const shell = (
             trowserOpen: false
         };
     case types.TOGGLE_LEFT_NAV_EXPANDED:
-        //  set leftNavExpanded state to navState action if defined and a boolean; otherwise toggle the current state.
+        //  Should the left nav window be expanded or collapsed.  Note that the leftNavExpanded state
+        //  property is toggled from its current state if action.navState is not a boolean.
         return {
             ...state,
             leftNavExpanded: (typeof action.navState === "boolean" ? action.navState : !state.leftNavExpanded)
         };
     case types.TOGGLE_LEFT_NAV_VISIBLE:
-        //  set leftNavVisible state to navState action if defined and a boolean; otherwise toggle the current state.
+        //  Should the left nav window be hidden or visible.  Note that the leftNavVisible state
+        //  property is toggled from its current state if action.navState is not a boolean.
         return {
             ...state,
             leftNavVisible: (typeof action.navState === "boolean" ? action.navState : !state.leftNavVisible)
