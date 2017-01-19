@@ -301,6 +301,7 @@ const QbGrid = React.createClass({
         }
     },
     preventPopUpClipping() {
+
         /**
          * The inline edit row action pop up is clipped by the sticky cell below it
          * By setting the row action pop up 'parent' sticky cell's z index higher, it

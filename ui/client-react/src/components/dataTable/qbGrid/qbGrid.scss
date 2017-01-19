@@ -236,7 +236,7 @@ $edit-icon-font-size: 18px;
     z-index: 2;
     white-space: nowrap;
     border-right: 1px solid $color-blue-400;
-    border-bottom: 2px solid $badcolor1-color6;
+    border-bottom: 1px solid $badcolor1-color6;
     padding: $grid-default-cell-padding;
     color: $color-blue-600;
     -webkit-font-smoothing: antialiased;
@@ -275,7 +275,27 @@ $edit-icon-font-size: 18px;
     vertical-align: top;
     font-size: $grid-font-size;
     border-right: 1px solid $color-black-300;
-    border-bottom: 1px solid $color-black-300;
+    border-top: 1px solid $color-black-300;
+    //This is commented out because the texts below an inline edit was overlapping, this pushes it down a little bit
+    //no more overlap
+    //vertical-align: top;
+}
+
+// add borders when the row has the willEdit class (from mouse entering pencil icons)
+.reportContent:not(.inlineEditing) {
+    .qbGrid > tbody > tr.willEdit > td,
+    .qbGrid > tbody > tr.willEdit + tr > td {
+        border-top: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+    .qbGrid > tbody > tr.willEdit > td:first-of-type {
+        border-left: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+    .qbGrid > tbody > tr.willEdit > td:last-of-type {
+        border-right: 1px solid $qbgrid-onpencil-row-border-color;
+    }
+    .qbGrid > tbody > tr:hover > td {
+        background: $qbgrid-row-hover-color;
+    }
 }
 
 .qbGrid > tbody > tr > td:first-of-type {
@@ -283,9 +303,12 @@ $edit-icon-font-size: 18px;
     width: 80px;
     max-width: 80px;
     position: relative;
-    background: $color-black-100;
     vertical-align: top;
 }
+
+
+
+
 
 .qbGrid .editing {
     box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
@@ -465,8 +488,15 @@ $edit-icon-font-size: 18px;
 //The style here is for sticky column
 .qbGrid > tbody > tr > td:first-of-type {
     background: $row-bg-color;
-    outline: $row-cell-border-color;
     z-index: 2;
+}
+
+.qbGrid > tbody > tr.editing > td:first-of-type {
+    z-index: 3;
+}
+
+.qbGrid > tbody > tr:hover > td:first-of-type {
+    background: $qbgrid-row-hover-color;
 }
 
 .stickyCell {
