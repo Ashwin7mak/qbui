@@ -97,7 +97,7 @@ export const ReportContent = React.createClass({
         orig.names = rec ? rec : {};
         let fids = {};
 
-        if (rec != null) {
+        if (rec !== null) {
             let recKeys = Object.keys(rec);
             // have fid lookup hash
             recKeys.forEach((item) => {

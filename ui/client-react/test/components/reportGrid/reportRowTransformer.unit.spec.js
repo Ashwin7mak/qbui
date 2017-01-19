@@ -195,7 +195,7 @@ describe('ReportRowTransformer', () => {
             expect(ReportRowTransformer.transformRecordForGrid).toHaveBeenCalledWith(testApiRecord, 0, testFields, defaultInfo);
         });
 
-        it('flattens a grouped records', () => {
+        it('flattens grouped records', () => {
             spyOn(ReportRowTransformer, 'transformRecordForGrid').and.returnValue('transformed');
 
             let groupName = 'test group';
@@ -210,7 +210,8 @@ describe('ReportRowTransformer', () => {
                     subHeaderLevel: 0,
                     subHeaderLabel: groupName,
                     localized: true,
-                    id: `groupHeader_${groupName}`
+                    id: `groupHeader_${groupName}`,
+                    parentId: null
                 },
 
                 // The record that belongs to that group
