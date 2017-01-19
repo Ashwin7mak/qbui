@@ -339,12 +339,17 @@ const QbGrid = React.createClass({
             return row.isSubHeader && this.state.collapsedGroups.includes(row.id);
         });
 
+        let subHeadersNeedToBeAdded = [];
         collapsedSubHeaders.forEach(row => {
+            if (!this.state.collapsedGroups.includes(row.id)) {
+                subHeadersNeedToBeAdded.push(row.id);
+            }
             row.isCollapsed = true;
         });
 
+        let allCollapsedGroups = [...this.state.collapsedGroups, ...subHeadersNeedToBeAdded];
         return rowsCopy.filter(row => {
-            return !this.state.collapsedGroups.includes(row.parentId);
+            return !allCollapsedGroups.includes(row.parentId);
         });
     },
 
