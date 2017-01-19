@@ -44,7 +44,7 @@ let IconActions = React.createClass({
         className: React.PropTypes.string,
         pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
         dropdownTooltip: React.PropTypes.bool,
-        menuIcons: React.PropTypes.bool,
+        menuIcons: React.PropTypes.bool
     },
     getDefaultProps() {
         return {
@@ -52,7 +52,7 @@ let IconActions = React.createClass({
             pullRight: true,
             menuIcons: false,
             dropdownTooltip: false,
-            className: '',
+            className: ''
         };
     },
     getInitialState() {

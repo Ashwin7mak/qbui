@@ -23,7 +23,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             tblId: PropTypes.string,
             rptId: PropTypes.string,
             fieldDef: PropTypes.object,
-            sortFids: PropTypes.array,
+            sortFids: PropTypes.array
         },
 
         /**

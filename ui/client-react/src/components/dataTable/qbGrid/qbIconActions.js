@@ -9,7 +9,7 @@ import Locale from '../../../locales/locales';
 const QbIconActions = React.createClass({
     propTypes: {
         onClickEditRowIcon: PropTypes.func,
-        onClickDeleteRowIcon: PropTypes.func,
+        onClickDeleteRowIcon: PropTypes.func
     },
 
     render() {

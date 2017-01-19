@@ -1,6 +1,19 @@
-import {calculatePosition} from '../../../src/components/dataTable/qbGrid/rowEditActionsPositionHoc';
+import React from 'react';
+import {shallow} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+
+import positionedRowEditActions from '../../../src/components/dataTable/qbGrid/positionedRowEditActionsHoc';
+
+const MockComponent = (props) => {return <div>mock</div>;};
+
+let component;
+let instance;
 
 describe('RowEditActionsPositionHoc (QbGrid)', () => {
+    beforeEach(() => {
+        jasmineEnzyme();
+    });
+
     /**
      * We can't directly test the position of the element in a fake DOM; however, we can test the function that
      * places the element and ensure it returns the correct styles.
@@ -36,6 +49,10 @@ describe('RowEditActionsPositionHoc (QbGrid)', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
+                let PositionedMockComponent = positionedRowEditActions(MockComponent);
+                component = shallow(<PositionedMockComponent/>);
+                instance = component.instance();
+
                 let expectedStyles = {
                     top: testCase.expectedTop,
                     left: testCase.expectedLeft,
@@ -43,7 +60,7 @@ describe('RowEditActionsPositionHoc (QbGrid)', () => {
                     zIndex: 1
                 };
 
-                let actualStyles = calculatePosition(
+                let actualStyles = instance.calculatePosition(
                     testCase.parentHeight,
                     testCase.parentWidth,
                     testCase.componentHeight,

@@ -80,11 +80,18 @@ class ReportRowTransformer extends RowTransformer {
     }
 
     constructor({record, id, editingRecordId, isSelected, parentId, isSaving, editErrors}) {
-        super(id);
-
         let isEditing = (id === editingRecordId);
+
+        let recordCopy = _.cloneDeep(record);
+        let cells = [];
+        Object.keys(recordCopy).forEach(key => {
+            cells.push(addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing));
+        });
+
+        super(id, cells);
+
         this.isEditing = isEditing;
-        this.editingRecord = editingRecordId;
+        this.editingRecordId = editingRecordId;
         this.isSelected = isSelected;
         this.parentId = parentId;
         this.isSaving = isSaving;
@@ -93,11 +100,6 @@ class ReportRowTransformer extends RowTransformer {
         if (editErrors) {
             this.isValid = editErrors.ok;
         }
-
-        let recordCopy = _.cloneDeep(record);
-        Object.keys(recordCopy).forEach(key => {
-            this[key] = addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing);
-        });
     }
 }
 
@@ -223,7 +225,8 @@ function flattenRecordGroup(record, transformedRecords, fields, info) {
 function isRowSelected(id, selectedRows) {
     let isSelected = false;
     if (_.isArray(selectedRows)) {
-        isSelected = selectedRows.includes(id);
+        // Need to use lodash here because current PhantomJS browser does not support [].includes() and babel is not transpiling it
+        isSelected = _.includes(selectedRows, id);
     }
     return isSelected;
 }
