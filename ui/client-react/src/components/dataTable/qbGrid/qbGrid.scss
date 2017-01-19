@@ -117,6 +117,10 @@ $edit-icon-font-size: 18px;
                 height: $grid-group-expand-icon-size;
                 opacity: 0.2;
             }
+
+            .dropdown-menu {
+                top: 120%; // TODO: temporary fix until we get the z-index corrected
+            }
         }
 
         &:hover .headerMenu .dropdownToggle {
