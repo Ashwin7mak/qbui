@@ -224,8 +224,8 @@
          * @returns Array of checkbox fields
          */
         getAllCheckboxFields: {value: function() {
-            this.editFormContainerEl.elements('input[type="checkbox"].checkbox').waitForVisible();
-            return this.editFormContainerEl.elements('input[type="checkbox"].checkbox');
+            this.editFormContainerEl.elements('.checkbox').waitForVisible();
+            return this.editFormContainerEl.elements('.checkbox');
         }},
 
         /**
