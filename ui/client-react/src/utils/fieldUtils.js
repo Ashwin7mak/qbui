@@ -258,11 +258,7 @@ class FieldUtils {
 
         return classes;
     }
-
-    static getColumnHeaderLabelClasses() {
-        return 'gridHeaderLabel';
-    }
-
+    
     static compareFieldValues(currentCellValues, nextCellValues) {
         let isDifferent = false;
         nextCellValues.some((currentCellValue, index) => {
