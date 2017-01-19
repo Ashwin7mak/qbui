@@ -280,6 +280,7 @@ $edit-icon-font-size: 18px;
     font-size: $grid-font-size;
     border-right: 1px solid $color-black-300;
     border-top: 1px solid $color-black-300;
+    transition: border 100ms ease-out;
     //This is commented out because the texts below an inline edit was overlapping, this pushes it down a little bit
     //no more overlap
     //vertical-align: top;
@@ -294,17 +295,15 @@ $edit-icon-font-size: 18px;
     .qbGrid > tbody > tr.willEdit > td:not(.stickyCell),
     .qbGrid > tbody > tr.willEdit + tr > td:not(.stickyCell) {
         border-top: 1px solid $qbgrid-onpencil-row-border-color;
+        transition: border 150ms ease-in;
     }
     .qbGrid > tbody > tr:last-of-type.willEdit > td:not(.stickyCell) {
         border-bottom: 1px solid $qbgrid-onpencil-row-border-color;
     }
-    .qbGrid > tbody > tr.willEdit > td.stickyCell {
-        border-right: 1px solid $color-black-300;
-    }
     .qbGrid > tbody > tr.willEdit > td:last-of-type {
         border-right: 1px solid $qbgrid-onpencil-row-border-color;
     }
-    .qbGrid > tbody > tr.willEdit:hover > td.stickyCell {
+    .qbGrid > tbody > tr.willEdit > td.stickyCell {
         border-right: 1px solid $qbgrid-onpencil-row-border-color;
     }
     .qbGrid > tbody > tr:hover > td {
