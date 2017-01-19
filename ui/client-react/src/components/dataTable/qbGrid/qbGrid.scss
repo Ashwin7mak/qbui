@@ -66,6 +66,7 @@ $edit-icon-font-size: 18px;
     }
 
     .emptyRowActions {
+        min-height: $inline-edit-input-box-height;
         width: 75px;
     }
 
@@ -268,8 +269,7 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid > tbody > tr > td {
-    height: $inline-edit-input-box-height;
-    //height: 32px;
+    //min-height: $inline-edit-input-box-height;
     padding-left: 6px;
     padding-right: 6px;
     vertical-align: top;
