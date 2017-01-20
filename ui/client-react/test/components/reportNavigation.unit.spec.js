@@ -122,7 +122,7 @@ describe('Report Navigation tests', () => {
         });
         expect(nextPage.length).toBe(0);
     });
-    
+
     it('test next link and previous link are generated', () => {
         component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
                                                                    pageStart={fakeReportNavigationData.valid.pageStart}
