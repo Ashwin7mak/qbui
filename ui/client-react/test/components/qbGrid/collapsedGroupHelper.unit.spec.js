@@ -1,7 +1,7 @@
 import CollapsedGroupHelper from '../../../src/components/dataTable/qbGrid/collapsedGroupHelper';
 
-fdescribe('CollapsedGroupHelper', () => {
-    describe('isGrouped (static)', () => {
+describe('CollapsedGroupHelper', () => {
+    describe('isGrouped', () => {
         let testCases = [
             {
                 description: 'returns false if there are rows that are subheaders',
@@ -166,12 +166,86 @@ fdescribe('CollapsedGroupHelper', () => {
 
     describe('addSubGroups', () => {
         let testCases = [
-
+            {
+                description: 'returns the current subHeaderId',
+                subHeaderId: 'a',
+                rows: [{id: 'a', isSubHeader: true}, {id: '1'}],
+                expectedValue: ['a']
+            },
+            {
+                description: 'returns any headers that are nested in the current subHeader (assumes flattened array is ordered with parent above child rows)',
+                subHeaderId: 'a',
+                rows: [{id: 'a', isSubHeader: true}, {id: 1, parentId: 'a'}, {id: 'b', isSubHeader: true, parentId: 'a'}, {id: 'c', isSubHeader: true, parentId: 'b'}, {id: 'd', isSubHeader: true, parentId: 'e'}],
+                expectedValue: ['a', 'b', 'c']
+            }
         ];
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                
+                let collapsedGroupHelper = new CollapsedGroupHelper([], testCase.rows);
+                expect(collapsedGroupHelper.addSubGroups(testCase.subHeaderId)).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
+    describe('toggleCollapseGroup', () => {
+        let testCases = [
+            {
+                description: 'adds the subHeaderId if collapsedGroups is empty',
+                subHeaderId: 'c',
+                collapsedGroups: [],
+                expectedValue: ['c']
+            },
+            {
+                description: 'adds the subHeaderId if it does not already exist in the collapsedGroups array',
+                subHeaderId: 'c',
+                collapsedGroups: ['a', 'b'],
+                expectedValue: ['a', 'b', 'c']
+            },
+            {
+                description: 'removes the subHeaderId if it already exists in the collapsedGroups array',
+                subHeaderId: 'c',
+                collapsedGroups: ['a', 'b', 'c'],
+                expectedValue: ['a', 'b']
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let collapsedGroupHelper = new CollapsedGroupHelper(testCase.collapsedGroups, []);
+                expect(collapsedGroupHelper.toggleCollapseGroup(testCase.subHeaderId)).toEqual(testCase.expectedValue);
+                expect(collapsedGroupHelper.collapsedGroups).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
+    describe('toggleCollapseAllGroups', () => {
+        let testCases = [
+            {
+                description: 'de-collapses all subHeader groups if all groups are currently collapsed',
+                collapsedGroups: ['a', 'b'],
+                rows: [{id: 'a', isSubHeader: true}, {id: 1}, {id: 'b', isSubHeader: true}, {id: 2}],
+                expectedValue: []
+            },
+            {
+                description: 'collapses all subHeaderGroups if no groups are collapsed',
+                collapseGroups: [],
+                rows: [{id: 'a', isSubHeader: true}, {id: 1}, {id: 'b', isSubHeader: true}, {id: 2}],
+                expectedValue: ['a', 'b']
+            },
+            {
+                description: 'collapses all subHeaderGroups if some, but not all, groups are collapsed',
+                collapseGroups: ['a'],
+                rows: [{id: 'a', isSubHeader: true}, {id: 1}, {id: 'b', isSubHeader: true}, {id: 2}],
+                expectedValue: ['a', 'b']
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let collapsedGroupHelper = new CollapsedGroupHelper(testCase.collapsedGroups, testCase.rows);
+                expect(collapsedGroupHelper.toggleCollapseAllGroups()).toEqual(testCase.expectedValue);
+                expect(collapsedGroupHelper.collapsedGroups).toEqual(testCase.expectedValue);
             });
         });
     });

@@ -5,12 +5,12 @@ class CollapsedGroupHelper {
         return rows.some(row => {return row.isSubHeader;});
     }
 
-    constructor(collapsedGroups = [], rows = []) {
-        this.collapsedGroups = collapsedGroups;
-        this.rows = rows;
+    constructor(collapsedGroups, rows) {
+        this.collapsedGroups = collapsedGroups || [];
+        this.rows = rows || [];
         this.subHeaderRows = [];
-        if (rows.length) {
-            this.getSubHeaderRows(rows);
+        if (this.rows.length) {
+            this.getSubHeaderRows(false);
         }
     }
 
@@ -18,11 +18,11 @@ class CollapsedGroupHelper {
         return this.collapsedGroups.length >= this.subHeaderRows.length;
     }
 
-    getSubHeaderRows() {
+    getSubHeaderRows(shouldResetCollapsedGroupsIfRowsDifferent = true) {
         let updatedSubHeaderRows = this.rows.filter(row => {return row.isSubHeader;});
 
         // For now, reset the grouping like AgGrid did when new groups are added
-        if (updatedSubHeaderRows.length !== this.subHeaderRows.length) {
+        if (shouldResetCollapsedGroupsIfRowsDifferent && updatedSubHeaderRows.length !== this.subHeaderRows.length) {
             this.collapsedGroups = [];
         }
 
@@ -39,12 +39,16 @@ class CollapsedGroupHelper {
         this.rows = _.cloneDeep(rows);
         this.getSubHeaderRows();
 
+        if (!this.collapsedGroups || this.collapsedGroups.length === 0) {
+            return this.rows;
+        }
+
         this.subHeaderRows.forEach(subHeaderRow => {
-            subHeaderRow.isCollapsed = this.collapsedGroups.includes(subHeaderRow.id);
+            subHeaderRow.isCollapsed = _.includes(this.collapsedGroups, subHeaderRow.id);
         });
 
         return this.rows.filter(row => {
-            return !this.collapsedGroups.includes(row.parentId);
+            return !_.includes(this.collapsedGroups, row.parentId);
         });
     }
 
@@ -52,7 +56,7 @@ class CollapsedGroupHelper {
         let subHeaderIds = [currentSubHeaderId];
 
         this.rows.forEach(row => {
-            if (subHeaderIds.includes(row.parentId) && row.isSubHeader) {
+            if (_.includes(subHeaderIds, row.parentId) && row.isSubHeader) {
                 subHeaderIds.push(row.id);
             }
         });
@@ -61,7 +65,7 @@ class CollapsedGroupHelper {
     }
 
     toggleCollapseGroup(subHeaderId) {
-        if (this.collapsedGroups.includes(subHeaderId)) {
+        if (_.includes(this.collapsedGroups, subHeaderId)) {
             this.collapsedGroups = this.collapsedGroups.filter(currentSubHeaderId => {
                 return currentSubHeaderId !== subHeaderId;
             });
@@ -72,8 +76,8 @@ class CollapsedGroupHelper {
         return this.collapsedGroups;
     }
 
-    toggleCollapseAllGroups(rows) {
-        let subHeaderRows = rows.filter(row => {return row.isSubHeader;}).map(row => {return row.id;});
+    toggleCollapseAllGroups() {
+        let subHeaderRows = this.rows.filter(row => {return row.isSubHeader;}).map(row => {return row.id;});
 
         if (subHeaderRows.length > this.collapsedGroups.length) {
             this.collapsedGroups = subHeaderRows;

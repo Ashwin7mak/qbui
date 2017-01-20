@@ -300,7 +300,7 @@ const QbGrid = React.createClass({
     },
 
     toggleCollapseAllGroups() {
-        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups(this.props.rows)});
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups()});
     },
 
     toggleCollapseGroup(subHeaderId) {
