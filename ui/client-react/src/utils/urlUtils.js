@@ -3,11 +3,9 @@ import QBicon from '../components/qbIcon/qbIcon.js';
 import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
-import {SUPPORT_LINK_PATH} from '../constants/urlConstants';
-import constants from '../services/constants';
 import StringUtils from '../utils/stringUtils';
 
-const reportLink =  `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`;
+import {SUPPORT_LINK_PATH, REPORT_LINK} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -55,7 +53,7 @@ const UrlUtils = {
     },
 
     /**
-     * Build url link to render a client report
+     * Build client url link to render a report
      *
      * @param appId
      * @param tblId
@@ -63,7 +61,7 @@ const UrlUtils = {
      * @returns {string}
      */
     getReportLink(appId, tblId, rptId) {
-        return StringUtils.format(reportLink, [appId, tblId, rptId]);
+        return StringUtils.format(REPORT_LINK, [appId, tblId, rptId]);
     }
 };
 

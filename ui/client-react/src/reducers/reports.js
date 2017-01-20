@@ -1,6 +1,13 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 
+/**
+ * Manage array of states for a list of reports.
+ *
+ * @param state - array of reportList states
+ * @param action - event type
+ * @returns {Array}
+ */
 const reports = (
     state = [], action) => {
 
@@ -30,9 +37,9 @@ const reports = (
             id,
             loading: false,
             error: false,
-            appId: action.appId,
-            tableId: action.tblId,
-            reports: action.reports
+            appId: action.content.appId,
+            tableId: action.content.tblId,
+            list: action.content.reportsList
         });
         return newState;
     }

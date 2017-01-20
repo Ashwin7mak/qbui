@@ -38,7 +38,7 @@ const OPEN_NAV = true;
 const CLOSE_NAV = false;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -49,7 +49,6 @@ export let Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
-            reportsData: flux.store('ReportsStore').getState(),
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
@@ -78,8 +77,6 @@ export let Nav = React.createClass({
     },
 
     onSelectTableReports(tableId) {
-        const flux = this.getFlux();
-
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
@@ -88,8 +85,6 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-
-        //flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
         this.props.dispatch(ReportActions.loadReports(this.state.apps.selectedAppId, tableId));
     },
 
@@ -113,9 +108,8 @@ export let Nav = React.createClass({
      */
     getSelectedTable() {
         const app = this.getSelectedApp();
-
-        if (app && this.state.reportsData.tableId) {
-            return _.find(app.tables, (t) => t.id === this.state.reportsData.tableId);
+        if (app && this.props.qbui.reports.tableId) {
+            return _.find(app.tables, (t) => t.id === this.props.qbui.reports.tableId);
         }
         return null;
     },
@@ -220,6 +214,9 @@ export let Nav = React.createClass({
             viewingRecordId = this.props.params.recordId;
         }
 
+        // should just be one report in the list
+        let reportsData = _.nth(this.props.qbui.reports, 0) || {};
+
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
@@ -253,7 +250,7 @@ export let Nav = React.createClass({
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable()}
                                       filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={this.state.reportsData}
+                                      reportsData={reportsData}
                                       onHideTrowser={this.hideTrowser}/>
             }
 

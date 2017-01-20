@@ -345,8 +345,8 @@ export const ReportToolsAndContent = React.createClass({
             _.isUndefined(this.props.params.tblId) ||
             (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
-            return <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
+            logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
+            return <ReportContentError errorDetails={this.props.reportData.errorDetails} />;reporr
         } else {
             let toolbar = <ReportToolbar appId={this.props.params.appId}
                                          tblId={this.props.params.tblId}

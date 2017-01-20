@@ -19,8 +19,7 @@ export default {
     BASE_URL: {
         QUICKBASE   : '/api/api/' + Configuration.api.qbVersion,
         NODE        : '/api/n/' + Configuration.api.nodeVersion,
-        LEGACY      : '/api/l/' + Configuration.api.legacyVersion,
-        CLIENT      : '/qbase'
+        LEGACY      : '/api/l/' + Configuration.api.legacyVersion
     },
 
     // Entities

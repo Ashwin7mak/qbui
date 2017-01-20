@@ -259,7 +259,7 @@ export const RecordRoute = React.createClass({
             _.isUndefined(this.props.params.tblId) ||
             (_.isUndefined(this.props.params.recordId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
             const viewData = this.getViewFormFromProps();

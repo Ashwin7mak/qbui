@@ -1,19 +1,23 @@
 import UrlUtils from '../utils/urlUtils';
 
 let reportsModel = {
-    set: function(reports) {
-        let reportList = [];
-        if (reports && reports.data) {
-            reports.data.forEach((rpt) => {
-                reportList.push({
+    set: function(appId, tblId, reports) {
+        let obj = {
+            appId: appId,
+            tblId: tblId,
+            reportsList: []
+        };
+        if (reports) {
+            reports.forEach((rpt) => {
+                obj.reportsList.push({
                     id: rpt.id,
                     name: rpt.name,
                     type: rpt.type,
-                    link: UrlUtils.getReportLink(reports.appId, reports.tblId, rpt.id)
+                    link: UrlUtils.getReportLink(appId, tblId, rpt.id)
                 });
             });
         }
-        return reportList;
+        return obj;
     }
 };
 export default reportsModel;
