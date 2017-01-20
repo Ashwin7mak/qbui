@@ -310,7 +310,7 @@ export const RecordRoute = React.createClass({
 const mapStateToProps = (state) => {
     return {
         forms: state.forms
-    }
+    };
 };
 
 // similarly, abstract out the Redux dispatcher from the presentational component
@@ -318,16 +318,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         openRecordForEdit: (recId) => {
-            dispatch(openRecordForEdit(recId))
+            dispatch(openRecordForEdit(recId));
         },
         editNewRecord: () => {
-            dispatch(editNewRecord())
+            dispatch(editNewRecord());
         },
         loadForm: (appId, tblId, rptId, formType, recordId) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId));
         }
-    }
-}
+    };
+};
 
 // named exports for unit testing router functions and redux actions
 
