@@ -83,8 +83,7 @@ class AppHistory {
                     this.showPendingEditsConfirmationModal();
                 } else {
                     // cancel any pending pending edits that don't require confirmation, i.e. started inline editing
-                    self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
-                    self._continueToDestination();
+                    self._discardChanges(false);
                 }
             } else {
                 return callback();
@@ -192,9 +191,11 @@ class AppHistory {
         self._haltRouteChange();
     }
 
-    _discardChanges() {
-        self._hideModal();
+    _discardChanges(hideModal = true) {
 
+        if (hideModal) {
+            self._hideModal();
+        }
         self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
         self._continueToDestination();
     }
