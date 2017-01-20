@@ -223,7 +223,6 @@ class FieldUtils {
     static getColumnHeaderLabelClasses() {
         return 'gridHeaderLabel';
     }
-
     /**
      * Get the alignment classes for a specific field type (e.g., numeric fields are aligned right in a grid)
      * @param fieldDef
@@ -258,7 +257,6 @@ class FieldUtils {
 
         return classes;
     }
-    
     static compareFieldValues(currentCellValues, nextCellValues) {
         let isDifferent = false;
         nextCellValues.some((currentCellValue, index) => {
