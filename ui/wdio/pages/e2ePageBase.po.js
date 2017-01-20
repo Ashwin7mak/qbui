@@ -62,17 +62,9 @@
      * @returns A promise that will resolve after loading the generated URL
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
-        try {
-            browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
-            //wait until report rows in table are loaded
-            reportContentPO.waitForReportContent();
-        }catch (e) {
-            //browser.url sometimes not loading the page in chrome.
-            //reload the page
-            browser.reload();
-            //wait until report rows in table are loaded
-            reportContentPO.waitForReportContent();
-        }
+        browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        //wait until report rows in table are loaded
+        return reportContentPO.waitForReportContent();
     };
 
     //TODO: Refactor these if needed
