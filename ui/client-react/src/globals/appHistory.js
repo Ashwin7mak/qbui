@@ -98,7 +98,7 @@ class AppHistory {
 
             // The following text does not need to be internationalized because
             // it will not actually appear in the modal on evergreen browsers.
-            if (this.hasPendingEdits()) {
+            if (this.confirmPendingEdits()) {
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';
                 }
