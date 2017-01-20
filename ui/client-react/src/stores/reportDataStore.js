@@ -663,7 +663,7 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onSelectedRows(selectedRows) {
-        this.selectedRows = selectedRows;
+        this.selectedRows = selectedRows.slice();
 
         this.emit('change');
     },
@@ -1013,6 +1013,8 @@ let ReportDataStore = Fluxxor.createStore({
     onDeleteReportRecordSuccess(recId) {
         this.reportModel.deleteRecordsFromLists(recId);
         this.isRecordDeleted = true;
+
+        this.selectedRows = _.without(this.selectedRows, recId);
         this.emit('change');
     },
 
