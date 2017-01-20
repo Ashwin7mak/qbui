@@ -4,6 +4,10 @@ import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import {SUPPORT_LINK_PATH} from '../constants/urlConstants';
+import constants from '../services/constants';
+import StringUtils from '../utils/stringUtils';
+
+const reportLink =  `${constants.BASE_URL.CLIENT}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`;
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -49,6 +53,18 @@ const UrlUtils = {
         let hostname = WindowLocationUtils.getHostname();
         return `https://${CommonUrlUtils.getSubdomain(hostname)}.${CommonUrlUtils.getDomain(hostname)}${SUPPORT_LINK_PATH}`;
     },
+
+    /**
+     * Build url link to render a client report
+     *
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @returns {string}
+     */
+    getReportLink(appId, tblId, rptId) {
+        return StringUtils.format(reportLink, [appId, tblId, rptId]);
+    }
 };
 
 export default UrlUtils;

@@ -29,6 +29,7 @@ import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
+import * as ReportActions from '../../actions/reportActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -87,7 +88,9 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+
+        //flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        this.props.dispatch(ReportActions.loadReports(this.state.apps.selectedAppId, tableId));
     },
 
     /**

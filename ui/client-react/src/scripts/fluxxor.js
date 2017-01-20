@@ -1,8 +1,8 @@
 import ReactDOM from "react-dom";
 
 import Fluxxor from "fluxxor";
-import ReportsStore from "../stores/reportsStore";
-import reportActions from "../actions/reportActions";
+//import ReportsStore from "../stores/reportsStore";
+//import reportActions from "../actions/reportActions";
 import ReportDataStore from "../stores/reportDataStore";
 import ReportDataSearchStore from "../stores/reportDataSearchStore";
 import RecordPendingEditsStore from "../stores/recordPendingEditsStore";
@@ -23,7 +23,7 @@ import tableActions from '../actions/tableActions';
 
 export default function getFlux() {
     let stores = {
-        ReportsStore: new ReportsStore(),
+        //ReportsStore: new ReportsStore(),
         ReportDataStore: new ReportDataStore(),
         AppsStore: new AppsStore(),
         NavStore: new NavStore(),
@@ -34,7 +34,7 @@ export default function getFlux() {
         PerfStore: new PerfStore()
     };
     let flux = new Fluxxor.Flux(stores);
-    flux.addActions(reportActions);
+    //flux.addActions(reportActions);
     flux.addActions(reportDataActions);
     flux.addActions(recordPendingEditsActions);
     flux.addActions(appsActions);
