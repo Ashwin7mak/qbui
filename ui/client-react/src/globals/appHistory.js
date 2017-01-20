@@ -79,9 +79,11 @@ class AppHistory {
                     self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
                 }
 
-                if (this.hasPendingEdits()) {
+                if (this.confirmPendingEdits()) {
                     this.showPendingEditsConfirmationModal();
                 } else {
+                    // cancel any pending pending edits that don't require confirmation, i.e. started inline editing
+                    self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
                     self._continueToDestination();
                 }
             } else {
@@ -106,7 +108,7 @@ class AppHistory {
         });
     }
 
-    hasPendingEdits() {
+    confirmPendingEdits() {
         return (self && self.pendEdits && self.pendEdits.isPendingEdit);
     }
 
