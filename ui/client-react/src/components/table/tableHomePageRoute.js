@@ -38,9 +38,16 @@ export const TableHomePageRoute = React.createClass({
         flux.actions.loadFields(appId, tblId);
         flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
     },
+    loadDynamicReportFromParams(appId, tblId, queryParams) {
+        const flux = this.getFlux();
+        flux.actions.selectTableId(tblId);
+        flux.actions.loadFields(appId, tblId);
+        // TODO: instead of using 0 for the rptID, we should to find the default reportId by hitting
+        //  api layer
+        flux.actions.loadDynamicReport(appId, tblId, /*rptId*/'0', true, /*filter*/{}, queryParams);
+    },
     loadHomePageForParams(params) {
-        let appId = params.appId;
-        let tblId = params.tblId;
+        let {appId, tblId, detailFieldId, masterRecordId} = params;
 
         //  Always fetch page 1 as this is called only when loading the home page for the first
         //  time.  Paging will always call report paging after initial load as the client will not
@@ -49,7 +56,17 @@ export const TableHomePageRoute = React.createClass({
         let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
 
         if (appId && tblId) {
-            this.loadTableHomePageReportFromParams(appId, tblId, offset, numRows);
+            // A link from a parent component (see qbform.createChildReportElementCell) was used
+            // to display a filtered child report.
+            if (detailFieldId && masterRecordId) {
+                const queryParams = {
+                    // TODO: possibly use a service to generate real query?
+                    query: `(({${detailFieldId}.EX.'${masterRecordId}'}))`
+                };
+                this.loadDynamicReportFromParams(appId, tblId, queryParams);
+            } else {
+                this.loadTableHomePageReportFromParams(appId, tblId, offset, numRows);
+            }
         }
     },
     componentDidMount() {
