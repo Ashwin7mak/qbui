@@ -235,7 +235,7 @@ describe('Nav functions', () => {
         };
 
         let fluxWithoutApps = new Fluxxor.Flux(storesWithoutApps);
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithoutApps} />);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutApps} />);
 
         let domComponent = ReactDOM.findDOMNode(component);
         let loadingScreen = domComponent.querySelector('.loadingScreen');
@@ -258,7 +258,7 @@ describe('Nav functions', () => {
         };
 
         let fluxWithApps = new Fluxxor.Flux(storesWithApps);
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithApps} />);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithApps} />);
 
         let domComponent = ReactDOM.findDOMNode(component);
         let loadingScreen = domComponent.querySelector('.loadingScreen');
