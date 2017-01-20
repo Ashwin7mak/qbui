@@ -42,12 +42,15 @@ export const loadReports = (appId, tblId) => {
             if (appId && tblId) {
                 logger.debug('Loading report list for appId:' + appId + '; tableId:' + tblId);
 
-                //  unique id in the store
+                // id for the store
+                // NOTE: this works fine when different app/table combo is loaded in multiple contexts
+                // on the page;  but not so if the same app/table is needed in different contexts on
+                // the same page.
                 const id = appId + '-' + tblId;
+
                 dispatch(event(id, types.LOAD_REPORTS));
 
                 let reportService = new ReportService();
-
                 reportService.getReports(appId, tblId).then(
                     (response) => {
                         logger.debug('ReportService getReports success');
