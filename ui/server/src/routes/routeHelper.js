@@ -153,7 +153,6 @@
      *           return: /apps/123/tables/456/forms/<formId>
      *
      * @param url
-     * @param isEeEnable
      * @param formId
      * @returns {*}
      */
@@ -172,16 +171,22 @@
      * append the FORMS identifier.
      *
      * Example:  url: /apps/123/tables/456/formComponents/rest/of/url
-     *           return: /apps/123/tables/456/forms
+     *           return: /apps/123/tables/456/forms/action/formtype
      *
      * @param url
+     * @param formId
      * @returns {*}
      */
-    function getEEFormsRoute(url) {
+    function getEEFormsRoute(url, formId) {
         let root = getUrlRoot(url, TABLES);
 
         if (root) {
             root = getEEReqURL(root);
+
+            if (formId) {
+                return root + '/' + FORMS + (formId ? '/' + formId : '');
+            }
+
             if (url.search('formType') !== -1) {
                 let formType;
                 url.split("&").forEach(item => {
@@ -364,7 +369,7 @@
          */
         getFormsRoute: function(url, isEeEnable, formId) {
             if (isEeEnable) {
-                return getEEFormsRoute(url);
+                return getEEFormsRoute(url, formId);
             } else {
                 return getCoreFormsRoute(url, formId);
             }
