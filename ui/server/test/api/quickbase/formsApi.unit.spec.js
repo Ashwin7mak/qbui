@@ -82,7 +82,6 @@ describe('Validate FormsApi unit tests', function() {
 
             let getRequestEeHostSpy = sinon.spy(requestHelper, "getRequestEeHost");
             let getRequestJavaHostSpy = sinon.spy(requestHelper, "getRequestJavaHost");
-            
             formsApi.setRequestHelperObject(requestHelper);
 
             let targetObject = "[{formMeta: [id:1]}]";
