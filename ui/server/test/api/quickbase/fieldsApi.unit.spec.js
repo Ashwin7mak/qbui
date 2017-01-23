@@ -1,6 +1,6 @@
 'use strict';
 
-let config = {javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
+let config = {javaHost: 'http://javaHost', eeHost: 'http://eeHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
 let sinon = require('sinon');
 let assert = require('assert');
 let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);

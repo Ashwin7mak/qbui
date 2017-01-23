@@ -1,11 +1,12 @@
 var log = require('../logger').getLogger();
 var reactViews = require('express-react-views');
 var lodash = require('lodash');
+var path = require('path');
 
 (function() {
     'use strict';
 
-    var viewPath = __dirname;
+    var viewPath = path.join(__dirname, '/viewComponents');
     var engineOptions = {
         beautify: true,
     };
@@ -49,7 +50,7 @@ var lodash = require('lodash');
      */
     function renderIndex(req, res, options) {
         var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase', req: req}, options);
-        renderJsx(req, res, './index.jsx', opts);
+        renderJsx(req, res, './viewComponents/index.jsx', opts);
     }
 
     module.exports = function(app, config) {

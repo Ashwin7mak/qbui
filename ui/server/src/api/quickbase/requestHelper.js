@@ -38,8 +38,17 @@
             getRequestJavaHost: function() {
                 return config ? config.javaHost : '';
             },
+            getRequestEeHost: function() {
+                return config ? config.eeHost : '';
+            },
+            getRequestEeHostEnable: function() {
+                return config ? config.eeHostEnable : '';
+            },
             getRequestUrl  : function(req) {
                 return config ? config.javaHost + req.url : '';
+            },
+            getRequestEEUrl  : function(req) {
+                return config ? config.eeHost + req.url : '';
             },
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';

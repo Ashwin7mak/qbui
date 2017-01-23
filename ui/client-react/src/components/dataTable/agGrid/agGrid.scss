@@ -4,6 +4,21 @@ $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
 
+// These colors came from _qbColorVariables.scss and are here to make it easier to remove agGrid sources
+$aggrid-header-cell-border-color:                   $color-blue-400;
+$aggrid-header-cell-border-bottom-color:            $badcolor1-color6;
+$aggrid-header-cell-background-color:               $color-blue-300;
+$aggrid-header-cell-color:                          $color-blue-600;
+$aggrid-row-background-hover-color:                 $color-blue-200;
+$aggrid-row-cell-border-color:                      $color-black-300;
+$aggrid-grid-group-row-header-background-color:     $color-blue-200;
+$aggrid-grid-group-row-header-border-top-color:     $color-blue-300;
+$aggrid-grid-group-row-header-divider-color:        $color-black-500;
+$aggrid-row-border-color:                           #dddddd; // went ahead and hardcoded this here to get rid of one more color variable that is not in the color palette
+$aggrid-row-box-shadow-color:                       $color-black-300;
+$aggrid-cell-edit-background-color:                 $color-blue-200;
+
+
 // override default font style
 .ag-font-style {
     font-size: $grid-font-size;
