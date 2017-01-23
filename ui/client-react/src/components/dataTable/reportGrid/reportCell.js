@@ -5,7 +5,7 @@ import CellValueRenderer from '../agGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
 import FieldFormats from '../../../utils/fieldFormats';
 import QbIcon from '../../qbIcon/qbIcon';
-import _ from 'lodash';
+import QbToolTip from '../../qbToolTip/qbToolTip';
 
 const ReportCell = React.createClass({
     propTypes: {
@@ -73,6 +73,18 @@ const ReportCell = React.createClass({
         // We don't want to render an edit icon if another row is currently being edited. That is why we check for the editingRecordId to be null.
         return (!this.props.isEditing && !this.props.editingRecordId && isFieldEditable);
 
+    },
+
+    renderEditIcon(isFieldEditable) {
+        if (this.shouldRenderEditIcon(isFieldEditable)) {
+            return (
+                <div className="cellEditIcon" onClick={this.onCellClickEditIcon}>
+                    <QbToolTip i18nMessageKey="report.inlineEdit">
+                        <QbIcon icon="edit"/>
+                    </QbToolTip>
+                </div>
+            );
+        }
     },
 
     /**
@@ -169,7 +181,7 @@ const ReportCell = React.createClass({
                         hideUncheckedCheckbox={true}
                     />
                 </div>
-                {this.shouldRenderEditIcon(isFieldEditable) && <QbIcon className="cellEditIcon" icon="edit" onClick={this.onCellClickEditIcon} />}
+                {this.renderEditIcon(isFieldEditable)}
             </div>
         );
     }

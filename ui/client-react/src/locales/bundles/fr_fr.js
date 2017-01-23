@@ -205,6 +205,7 @@ export default {
         },
         report : {
             blank : "blanc",
+            inlineEdit: "Modifier enregistrement en ligne",
             facets :{
                 noFacets : "Non valeurs",
                 seeMore : "plus...",

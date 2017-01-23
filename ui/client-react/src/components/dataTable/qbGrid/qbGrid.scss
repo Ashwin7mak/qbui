@@ -56,7 +56,8 @@ $edit-icon-font-size: 18px;
         left: 0;
     }
 
-    .qbRow:not(".editing") .qbCell {
+    .qbRow:not(.editing) .qbCell,
+    .qbCell .tipChildWrapper {
         cursor: pointer;
     }
 
