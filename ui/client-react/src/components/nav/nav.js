@@ -26,9 +26,13 @@ import AppQbModal from '../qbModal/appQbModal';
 import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
-
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
+
+// This shared view with the server layer must be loaded as raw HTML because
+// the current backend setup cannot handle a react component in a common directory. It is loaded
+// as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
+import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -196,7 +200,10 @@ export let Nav = React.createClass({
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
-            return null;
+            // The common loading screen html is shared across server and client as an HTML file and
+            // therefore must be loaded using the dnagerouslySetInnerHTML attribute
+            // see more information in common/src/views/Readme.md
+            return <div dangerouslySetInnerHTML={{__html: LoadingScreen}} />;
         }
 
         const flux = this.getFlux();

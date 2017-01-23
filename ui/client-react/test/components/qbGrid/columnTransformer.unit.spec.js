@@ -65,13 +65,12 @@ describe('ColumnTransformer', () => {
         const expectedOutput = {
             property: testCellIdentifierValue,
             header: {
-                label: <span className="">{testHeaderLabel}</span>
+                label: <span className=""><span className="">{testHeaderLabel}</span></span>
             }
         };
 
         it('converts the ColumnTransformer instance into a column object that can be consumed by QbGrid', () => {
             let columnTransformer = new ColumnTransformer(testHeaderLabel, testCellIdentifierValue);
-
             expect(_.isEqual(columnTransformer.getGridHeader(), expectedOutput)).toEqual(true);
         });
 
@@ -96,7 +95,9 @@ describe('ColumnTransformer', () => {
                 header: {
                     label: (
                         <span className="">
-                            {testHeaderLabel}
+                            <span className="">
+                                {testHeaderLabel}
+                            </span>
                             <div className="headerMenu">
                                 <TestHeaderComponent {...testHeaderProps} />
                             </div>

@@ -150,21 +150,62 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
-    describe('validate getFormsRoute method', function() {
+    describe('validate getFormsRoute method with core endpoint', function() {
         var testCases = [
-            {name: 'test empty url', url: '', expectation: ''},
-            {name: 'test null url', url: null, id:null, expectation: null},
-            {name: 'test invalid url', url: '/non/parsing/url', id: '1', expectation: '/non/parsing/url'},
-            {name: 'test invalid url - no table id', url: '/apps/123/tables', id: '1', expectation: '/apps/123/tables'},
-            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', id: '1', expectation: '/apps/123/tables/'},
-            {name: 'test valid url', url: '/apps/123/tables/456', id: null, expectation: '/apps/123/tables/456/forms'},
-            {name: 'test valid url - id=1', url: '/apps/123/tables/456', id: '1', expectation: '/apps/123/tables/456/forms/1'},
-            {name: 'test valid url - id=2', url: '/apps/123/tables/456/records/789', id: '2', expectation: '/apps/123/tables/456/forms/2'}
+            {name: 'test empty url', useEeEndpoint: false, url: '', expectation: ''},
+            {name: 'test null url', useEeEndpoint: false, url: null, id:null, expectation: null},
+            {name: 'test invalid url', useEeEndpoint: false, url: '/non/parsing/url', id: '1', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', useEeEndpoint: false, url: '/apps/123/tables', id: '1', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', useEeEndpoint: false, url: '/apps/123/tables/', id: '1', expectation: '/apps/123/tables/'},
+            {name: 'test valid url', useEeEndpoint: false, url: '/apps/123/tables/456', id: null, expectation: '/apps/123/tables/456/forms'},
+            {name: 'test valid url - id=1', useEeEndpoint: false, url: '/apps/123/tables/456', id: '1', expectation: '/apps/123/tables/456/forms/1'},
+            {name: 'test valid url - id=2', useEeEndpoint: false, url: '/apps/123/tables/456/records/789', id: '2', expectation: '/apps/123/tables/456/forms/2'}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getFormsRoute(testCase.url, testCase.id), testCase.expectation);
+                assert.equal(routeHelper.getFormsRoute(testCase.url, testCase.useEeEndpoint, testCase.id), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate getFormsRoute method with EE endpoint', function() {
+        var testCases = [
+            {name: 'test empty url', useEeEndpoint: true, url: '', expectation: ''},
+            {name: 'test null url', useEeEndpoint: true, url: null, id:null, expectation: null},
+            {name: 'test invalid url', useEeEndpoint: true, url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', useEeEndpoint: true, url: '/apps/123/tables', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', useEeEndpoint: true, url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
+            {name: 'test valid url - id=2', useEeEndpoint: true, url: '/apps/123/tables/456/records/789?formType=view', expectation: '/apps/123/tables/456/forms/action/VIEW'},
+            {name: 'test valid url', useEeEndpoint: true, url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/action/VIEW'},
+            {name: 'test valid url - id=1', useEeEndpoint: true, url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/action/VIEW'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getFormsRoute(testCase.url, testCase.useEeEndpoint), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate api ee replacement', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, id:null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
+            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api/api) in table endpoint', url: '/api/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api) in table endpoint', url: '/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getFormsRoute(testCase.url, true), testCase.expectation);
                 done();
             });
         });
