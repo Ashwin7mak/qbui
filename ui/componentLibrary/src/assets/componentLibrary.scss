@@ -2,6 +2,11 @@
 
 $font-path: '../../../client-react/src/assets/fonts/';
 
+// Colors only used by the component library.
+// These are not in the color palette because we are using code from
+// bootstrap that is not used in production and does not have production styling.
+$bs-table-border-color:                #dddddd;
+
 // We just let people scroll as they will on mobile
 @media (max-width: 767px) {
     html, body {
@@ -128,7 +133,7 @@ $font-path: '../../../client-react/src/assets/fonts/';
     float: right;
     display: inline-block;
     position: relative;
-    border: 1px solid $badcolor16;
+    border: 1px solid $bs-table-border-color;
     border-top: none;
     background: $color-black-100;
   }
@@ -214,7 +219,7 @@ $font-path: '../../../client-react/src/assets/fonts/';
       margin-right: 0;
       margin-left: 0;
       background-color: $color-black-100;
-      border-color: $badcolor16;
+      border-color: $bs-table-border-color;
       border-width: 1px;
       border-radius: 4px 4px 0 0;
       -webkit-box-shadow: none;

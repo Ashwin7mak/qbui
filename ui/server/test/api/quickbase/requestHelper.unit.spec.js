@@ -3,6 +3,7 @@
 let config = {
     legacyHost: 'http://legacyHost',
     javaHost: 'http://javaHost',
+    eeHost: 'http://eeHost',
     SSL_KEY : {
         private    : 'privateKey',
         cert       : 'cert',
@@ -66,12 +67,22 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
-    describe('validate the request url', function() {
+    describe('validate the core request url', function() {
         let req = {};
         req.url = '/someurl.com';
         it('Test request url method', function(done) {
             let request = requestHelper.getRequestUrl(req);
             should(request).be.exactly(config.javaHost + req.url);
+            done();
+        });
+    });
+
+    describe('validate the ee request url', function() {
+        let req = {};
+        req.url = '/someurl.com';
+        it('Test request url method', function(done) {
+            let request = requestHelper.getRequestEEUrl(req);
+            should(request).be.exactly(config.eeHost + req.url);
             done();
         });
     });
