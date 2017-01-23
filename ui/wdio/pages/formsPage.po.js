@@ -8,7 +8,6 @@
     // Import the base page object
 
     var e2ePageBase = requirePO('e2ePageBase');
-    var ReportInLineEditPO = requirePO('reportInLineEdit');
     var reportContentPO = requirePO('reportContent');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
 
@@ -20,7 +19,7 @@
     var sTime = '12:30 am';
     var date = new Date();
     var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
-    var sUser = 'administrator';
+    var sUser = 'administrator User for default SQL Installation';
 
     var FormsPage = Object.create(e2ePageBase, {
         //view form
@@ -34,10 +33,6 @@
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
-        //edit pencil in report actions tool bar
-        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
-        //edit pencil in record actions
-        editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconTableUISturdy-close');}},
@@ -235,25 +230,6 @@
         }},
 
         /**
-         * Select List option from the List combo
-         *
-         */
-        selectFromList : {value: function(fieldElement, listOption) {
-            fieldElement.element('.Select-menu-outer').waitForVisible();
-            //get all options from the list
-            var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element(' div div').getText() === listOption;
-            });
-
-            if (option !== []) {
-                //Click on filtered option
-                return option[0].element(' div div').click();
-            } else {
-                throw new Error('Option with name ' + listOption + " not found in the list");
-            }
-        }},
-
-        /**
          * Returns all text input fields on the form
          * @returns Array of text input fields
          */
@@ -313,94 +289,31 @@
          * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
          * @param recordRowIndex
          */
-        openRecordInViewMode : {value: function(recordRowIndex) {
-            var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
-            // Hardcoded to click on the third cell of the record
-            var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[3];
-
-            //scroll to third cell of recordRowIndex row
-            if (browserName === 'chrome') {
-                recordCellEl.moveToObject();
-            } else {
-                browser.execute(function(elelemt) {
-                    elelemt.scrollIntoView(false);
-                }, recordCellEl);
-            }
-            //Click on the third cell of recordRowIndex row
-            recordCellEl.click();
-            //wait until view form is visible
-            return this.viewFormContainerEl.waitForVisible();
-        }},
-
-        /**
-         * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
-         * @param recordRowIndex
-         */
-        clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
-            //get all edit buttons in the report table first column
-            var getAllEdits = this.editPencilBtnInRecordActions.value.filter(function(edit) {
-                return edit.index === recordRowIndex;
-            });
-
-            if (getAllEdits !== []) {
-                //Click on filtered save button
-                getAllEdits[0].click();
-                this.editFormContainerEl.waitForVisible();
-                //need these for trowser to drop down
-                return browser.pause(3000);
-            } else {
-                throw new Error('Edit button not found at row ' + recordRowIndex);
-            }
-        }},
-
-        /**
-         * Given a record element in agGrid, click on the checkbox to select that record and then click on edit pencil from the table actions
-         * @param recordRowIndex
-         */
-        clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
-            //get all checkboxes in the report table first column
-            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
-                return checkbox.index === recordRowIndex;
-            });
-
-            if (getAllCheckBoxs !== []) {
-                //Click on filtered save button
-                getAllCheckBoxs[0].click();
-                //wait for edit pencil to be visible
-                this.editPencilBtnOnReportActions.waitForVisible();
-                //click on the edit pencil in table actions
-                this.editPencilBtnOnReportActions.click();
-                //wait until edit form is visible
-                return this.editFormContainerEl.waitForVisible();
-            } else {
-                throw new Error('Checkbox not found at row ' + recordRowIndex);
-            }
-        }},
-
-        /**
-         * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
-         * @param recordRowIndex
-         */
         clickRecordEditPencilInViewForm : {value: function(recordRowIndex) {
-            var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
-            // Hardcoded to click on the first cell of the record
-            var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[0];
-            //scroll to third cell of recordRowIndex row
-            if (browserName === 'chrome') {
-                recordCellEl.moveToObject();
-            } else {
-                browser.execute(function(elelemt) {
-                    elelemt.scrollIntoView(false);
-                }, recordCellEl);
-            }
-            //Click on the first cell of recordRowIndex row
-            recordCellEl.click();
-            //wait until view form is visible
-            this.viewFormContainerEl.waitForVisible();
+            this.editPencilBtnOnStageInViewForm.waitForVisible();
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
             //wait until edit form is visible
             return this.editFormContainerEl.waitForVisible();
+        }},
+
+        /**
+         * Select List option from the List combo
+         *
+         */
+        selectFromList : {value: function(fieldElement, listOption) {
+            fieldElement.element('.Select-menu-outer').waitForVisible();
+            //get all options from the list
+            var option = browser.elements('.Select-option').value.filter(function(optionText) {
+                return optionText.element(' div div').getText() === listOption;
+            });
+
+            if (option !== []) {
+                //Click on filtered option
+                return option[0].element(' div div').click();
+            } else {
+                throw new Error('Option with name ' + listOption + " not found in the list");
+            }
         }},
 
         /**
@@ -418,6 +331,25 @@
                     browser.pause(100);
                 } else {
                     fieldTypes.value[i].setValue(fieldValue);
+                }
+            }
+        }},
+
+        /**
+         * Method to select value from a dropDown List.
+         */
+        setDropDownValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
+            var fieldTypes = getAllUniqueFieldTypes;
+            for (var i = 0; i < fieldTypes.value.length; i++) {
+                if (browserName === 'chrome') {
+                    fieldTypes.value[i].element('.Select-multi-value-wrapper').click();
+                    browser.pause(100);
+                    fieldTypes.value[i].element('.Select-input').keys(fieldValue);
+                    browser.pause(100);
+                    fieldTypes.value[i].element('..').click();
+                } else {
+                    fieldTypes.value[i].element('.Select-control').click();
+                    this.selectFromList(fieldTypes.value[i], fieldValue);
                 }
             }
         }},
@@ -457,14 +389,7 @@
                     }
                 }
             } else if (fieldType === 'allTimeFields') {
-                //get all time fields on form
-                var timeFields = this.getAllTimeInputFields();
-                for (i = 0; i < timeFields.value.length; i++) {
-                    timeFields.value[i].element('.Select-multi-value-wrapper').click();
-                    timeFields.value[i].element('.Select-input').keys(sTime);
-                    timeFields.value[i].element('..').click();
-                }
-
+                this.setDropDownValue(this.getAllTimeInputFields(), sTime);
             } else if (fieldType === 'allCheckboxFields') {
                 //get all checkbox fields on form
                 var checkboxFields = this.getAllCheckboxFields();
@@ -475,14 +400,7 @@
                     }
                 }
             }else if (fieldType === 'allUserField') {
-                //get all user field input validators
-                var userFields = this.getAllUserFields();
-                for (i = 0; i < userFields.value.length; i++) {
-                    userFields.value[i].element('.Select-multi-value-wrapper').click();
-                    userFields.value[i].element('.Select-input').keys(sUser);
-                    browser.keys(['Enter']);
-                    userFields.value[i].element('..').click();
-                }
+                this.setDropDownValue(this.getAllUserFields(), sUser);
             }
         }},
 

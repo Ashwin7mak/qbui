@@ -96,7 +96,7 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
 
             //Step 3 - Open a record
-            formsPO.openRecordInViewMode(2);
+            reportContentPO.openRecordInViewMode(2);
 
             //Step 4 - Verify cannot see any text fields on the form in view mode as readaccess set to false
             formsPO.verifyFieldsNotPresentOnForm(formsPO.viewFormContainerEl, expectedNumericFieldsWhichHasNoFieldRights);
@@ -161,7 +161,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 4 - Click on 5th record edit pencil
-            formsPO.clickRecordEditPencilInRecordActions(5);
+            reportContentPO.clickRecordEditPencilInRecordActions(5);
 
             //Step 5 - Edit values
             fieldTypes.forEach(function(fieldType) {
