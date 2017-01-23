@@ -90,8 +90,16 @@ const ReportCell = React.createClass({
      */
     focusFieldValueEditorFirstInput() {
         if (this.fieldValueEditorComponentRef) {
-            let domComponent = ReactDom.findDOMNode(this.fieldValueEditorComponentRef);
-            domComponent.querySelector('input').focus();
+            let renderedComponent = ReactDom.findDOMNode(this.fieldValueEditorComponentRef);
+            let input = renderedComponent.querySelector('input');
+            // If there is not an <input> element, try <textarea> (for multiline text)
+            if (!input) {
+                input = renderedComponent.querySelector('textarea');
+            }
+
+            if (input) {
+                input.focus();
+            }
         }
     },
 
