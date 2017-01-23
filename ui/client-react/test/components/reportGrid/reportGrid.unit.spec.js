@@ -129,9 +129,10 @@ describe('ReportGrid', () => {
             component = shallow(<ReportGrid {...requiredProps} onEditRecordStart={requiredProps.onEditRecordStart}/>);
             instance = component.instance();
 
-            instance.startEditingRow(testRecordId);
+            let mockField = {id: 1};
+            instance.startEditingRow(testRecordId, mockField);
 
-            expect(requiredProps.onEditRecordStart).toHaveBeenCalledWith(testRecordId);
+            expect(requiredProps.onEditRecordStart).toHaveBeenCalledWith(testRecordId, mockField);
         });
     });
 

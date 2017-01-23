@@ -42,7 +42,7 @@ export const ReportContent = React.createClass({
         const {appId, tblId, rptId} = this.props;
 
         // TODO:: Refactor once AgGrid is removed. Can assume recordId is an number or null. https://quickbase.atlassian.net/browse/MB-1920
-        var recId = data
+        var recId = data;
         if (!_.isNumber(data)) {
             recId = data[this.props.primaryKeyName].value;
         }
@@ -157,8 +157,9 @@ export const ReportContent = React.createClass({
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
      * @param recId
+     * @param fieldToStartEditing
      */
-    handleEditRecordStart(recId) {
+    handleEditRecordStart(recId, fieldToStartEditing = null) {
         if (_.has(this.props, 'reportData.data')) {
             const flux = this.getFlux();
             let origRec = null;
@@ -197,7 +198,7 @@ export const ReportContent = React.createClass({
                 }
             }
 
-            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
+            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
         }
     },
 

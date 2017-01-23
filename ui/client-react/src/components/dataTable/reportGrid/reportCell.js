@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import ReactDom from 'react-dom';
 import FieldValueEditor from '../../fields/fieldValueEditor';
 import CellValueRenderer from '../agGrid/cellValueRenderer';
 import FieldUtils from '../../../utils/fieldUtils';
@@ -21,12 +22,23 @@ const ReportCell = React.createClass({
         isInvalid: PropTypes.bool,
         invalidMessage: PropTypes.string,
         invalidResultData: PropTypes.object,
-        validateFieldValue: PropTypes.func
+        validateFieldValue: PropTypes.func,
+
+        /**
+         * A property that tells this component to set focus on the first input in the FieldValue editor when it is in editing mode.
+         * Note: The reportRowTransformer ensures this is only passed as true the first time the field is set to editing mode to avoid state in multiple places. */
+        hasFocusOnEditStart: PropTypes.bool
     },
     // TODO:: Turn performance improvements back on. https://quickbase.atlassian.net/browse/MB-1976
     // shouldComponentUpdate(nextProps) {
     //     return (this.props.value !== nextProps.value || this.props.display !== nextProps.display || this.props.isEditing !== nextProps.isEditing);
     // },
+
+    componentDidUpdate() {
+        if (this.props.hasFocusOnEditStart && this.props.isEditing) {
+            this.focusFieldValueEditorFirstInput();
+        }
+    },
 
     onCellClick() {
         if (this.props.onCellClick) {
@@ -53,7 +65,7 @@ const ReportCell = React.createClass({
     onCellClickEditIcon(event) {
         event.stopPropagation();
         if (this.props.onCellClickEditIcon) {
-            this.props.onCellClickEditIcon(this.props.recordId);
+            this.props.onCellClickEditIcon(this.props.recordId, this.props.fieldDef);
         }
     },
 
@@ -61,6 +73,26 @@ const ReportCell = React.createClass({
         // We don't want to render an edit icon if another row is currently being edited. That is why we check for the editingRecordId to be null.
         return (!this.props.isEditing && !this.props.editingRecordId && isFieldEditable);
 
+    },
+
+    /**
+     * Using a function to set a ref is the recommended approach for refs going forward.
+     * https://facebook.github.io/react/docs/refs-and-the-dom.html
+     * @param component
+     */
+    setFieldValueEditorComponentRef(component) {
+        this.fieldValueEditorComponentRef = component;
+    },
+
+    /**
+     * A ref is used to find the FieldValueEditor and the query for the first input. The logic for is here because this
+     * behavior is specific to a reportCell and not other instances of FieldValueEditor.
+     */
+    focusFieldValueEditorFirstInput() {
+        if (this.fieldValueEditorComponentRef) {
+            let domComponent = ReactDom.findDOMNode(this.fieldValueEditorComponentRef);
+            domComponent.querySelector('input').focus();
+        }
     },
 
     render() {
@@ -91,6 +123,7 @@ const ReportCell = React.createClass({
             return (
                 <div className={classes.join(' ')}>
                     <FieldValueEditor
+                        ref={this.setFieldValueEditorComponentRef}
                         {...this.props}
                         type={uiFieldType}
                         fieldDef={fieldDef}

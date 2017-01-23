@@ -137,9 +137,9 @@ const ReportGrid = React.createClass({
         );
     },
 
-    startEditingRow(recordId) {
+    startEditingRow(recordId, fieldDef) {
         if (this.props.onEditRecordStart) {
-            this.props.onEditRecordStart(recordId);
+            this.props.onEditRecordStart(recordId, fieldDef);
         }
     },
 

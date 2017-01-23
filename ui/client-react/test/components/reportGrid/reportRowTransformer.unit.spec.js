@@ -165,8 +165,31 @@ describe('ReportRowTransformer', () => {
                 {primaryKeyFieldName: 'Record ID#', pendEdits: pendEdits}
             );
 
-            actualResult[2].value = pendEdits.recordChanges[2].newVal.value;
-            actualResult[2].display = pendEdits.recordChanges[2].newVal.display;
+            expect(actualResult[2].value).toEqual(pendEdits.recordChanges[2].newVal.value);
+            expect(actualResult[2].display).toEqual(pendEdits.recordChanges[2].newVal.display);
+            expect(actualResult[2].hasFocusOnEditStart).toBeFalsy();
+        });
+
+        it('sets hasFocusOnEditStart for a field if the record has not been changed yet and it was the field that initiated the edit', () => {
+            const pendEdits = {
+                currentEditingRecordId: testRecordId,
+                isInlineEditOpen: true,
+                recordChanges: {
+                    1: {newVal: {value: 'anotherField', display: 'anotherField'}},
+                    2: {newVal: {value: 'pendEditValue', display: 'pendingEditDisplay'}}
+                },
+                fieldToStartEditing: {id: 2}
+            };
+
+            let actualResult = ReportRowTransformer.transformRecordForGrid(
+                testApiRecord,
+                testIndex,
+                testFields,
+                {primaryKeyFieldName: 'Record ID#', pendEdits: pendEdits}
+            );
+
+            expect(actualResult[2].hasFocusOnEditStart).toBeTruthy();
+            expect(actualResult[1].hasFocusOnEditStart).toBeFalsy();
         });
     });
 
