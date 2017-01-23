@@ -12,12 +12,13 @@ let logger = new Logger();
 /**
  * Construct Redux action
  *
- * @param id - unique id
+ * @param context - context
  * @param type - event type
  * @param content - optional content related to event type
  * @returns {{id: *, type: *, content: *}}
  */
-function event(id, type, content) {
+function event(context, type, content) {
+    let id = context;      //  reports list store id is the context
     return {
         id: id,
         type: type,
@@ -64,7 +65,7 @@ export const loadReports = (context, appId, tblId) => {
                 });
             } else {
                 logger.error('reportService.getReports: Missing required input parameters.');
-                dispatch(null, types.LOAD_REPORTS_FAILED, 500);
+                dispatch(event(null, types.LOAD_REPORTS_FAILED, 500));
                 reject();
             }
         });
