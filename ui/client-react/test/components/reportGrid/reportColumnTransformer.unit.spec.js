@@ -24,16 +24,15 @@ describe('ReportColumnTransformer', () => {
 
     describe('createFromApiColumn', () => {
         it('transforms data from the api call into a new ColumnTransformer', () => {
-            ReportColumnTransformer.__Rewire__('FieldUtils', {getColumnHeaderClasses(fieldDef) {return fieldDef.datatypeAttributes.type;}});
+            ReportColumnTransformer.__Rewire__('FieldUtils', {getColumnHeaderClasses(fieldDef) {return fieldDef.datatypeAttributes.type;}, getColumnHeaderLabelClasses() {return '';}});
 
             const testApiColumnData = {
                 id: 2,
                 headerName: 'test',
-                fieldDef: {datatypeAttributes: {type: SchemaConsts.TEXT}}
+                fieldDef: {datatypeAttributes: {type: SchemaConsts.TEXT}},
             };
 
             const expectedResult = new ReportColumnTransformer(testApiColumnData.id, testApiColumnData.fieldDef, testApiColumnData.headerName, SchemaConsts.TEXT);
-
             expect(ReportColumnTransformer.createFromApiColumn(testApiColumnData)).toEqual(expectedResult);
 
             ReportColumnTransformer.__ResetDependency__('FieldUtils');
