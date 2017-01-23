@@ -10,8 +10,8 @@ class ColumnTransformer {
      * Creates the column instances that can be converted to a column used by QbGrid by calling getGridHeader()
      * @param headerLabel The text that appears in the header column (could also be a react component/Jsx) (required)
      * @param cellIdentifierValue The value that identifies which cells belong to this column (required)
+     * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the column. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      * @param headerClasses Optionally any css classes to add to the column header element
-     * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the volumn. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      */
     constructor(headerLabel, cellIdentifierValue, headerClasses = '') {
         this.headerLabel = headerLabel;
