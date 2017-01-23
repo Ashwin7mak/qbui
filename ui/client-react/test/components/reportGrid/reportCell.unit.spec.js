@@ -124,6 +124,45 @@ describe('ReportCell', () => {
         expect(component.find(FieldValueEditor)).toBeEmpty();
     });
 
+    describe('findFocusableInput', () => {
+        beforeEach(() => {
+            component = shallow(<ReportCell {...actions} fieldDef={fieldDef}/>);
+            instance = component.instance();
+        });
+
+        it('returns the input element if one exists', () => {
+            const mockInput = 'input';
+            const mockRenderedComponent = {querySelector() {return mockInput;}};
+
+            expect(instance.findFocusableInput(mockRenderedComponent)).toEqual(mockInput);
+        });
+
+        it('returns the actionable part of a checkbox', () => {
+            const mockCheckbox = 'checkbox';
+            const mockRenderedComponent = {querySelector(query) {
+                if (query === 'input') {
+                    return {type: 'checkbox'};
+                }
+                return mockCheckbox;
+            }};
+
+            expect(instance.findFocusableInput(mockRenderedComponent)).toEqual(mockCheckbox);
+        });
+
+        it('returns the textarea element if it exists', () => {
+            const mockTextArea = 'textarea';
+            const mockRenderedComponent = {querySelector(query) {
+                if (query === 'textarea') {
+                    return mockTextArea;
+                }
+
+                return null;
+            }};
+
+            expect(instance.findFocusableInput(mockRenderedComponent)).toEqual(mockTextArea);
+        });
+    });
+
     describe('componentDidUpdate', () => {
         let testCases = [
             {

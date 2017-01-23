@@ -97,18 +97,35 @@ const ReportCell = React.createClass({
     },
 
     /**
+     * Some field types do not have an <input> so we need to find the correct place for focusing an edit for some fields.
+     * @param renderedComponent
+     * @returns {Element}
+     */
+    findFocusableInput(renderedComponent) {
+        let input = renderedComponent.querySelector('input');
+
+        // The input for checkbox is hidden and off to the side so focus on the actionable div for the checkbox instead
+        if (input && input.type === 'checkbox') {
+            input = renderedComponent.querySelector('.checkbox.editor');
+        }
+
+        // If there is not an <input> element, try <textarea> (for multiline text)
+        if (!input) {
+            input = renderedComponent.querySelector('textarea');
+        }
+
+        return input;
+    },
+
+    /**
      * A ref is used to find the FieldValueEditor and the query for the first input. The logic for is here because this
      * behavior is specific to a reportCell and not other instances of FieldValueEditor.
      */
     focusFieldValueEditorFirstInput() {
         if (this.fieldValueEditorComponentRef) {
             let renderedComponent = ReactDom.findDOMNode(this.fieldValueEditorComponentRef);
-            let input = renderedComponent.querySelector('input');
-            // If there is not an <input> element, try <textarea> (for multiline text)
-            if (!input) {
-                input = renderedComponent.querySelector('textarea');
-            }
 
+            let input = this.findFocusableInput(renderedComponent);
             if (input) {
                 input.focus();
             }
