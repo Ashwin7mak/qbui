@@ -2,7 +2,7 @@
 
 .phoneWrapper {
     display: flex;
-    width: 100%;
+    width: 180px;
     .ext {
         width: 5%;
         text-align: center;
@@ -10,7 +10,7 @@
     }
 
     .input.extension {
-        width: 28%;
+        width: 50px;
     }
 
     .noLink {

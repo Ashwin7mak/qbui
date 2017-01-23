@@ -51,6 +51,8 @@
         //javaHost: 'http://localhost.intuit.com:8080',
         javaHost: 'http://localhost:8080',
 
+        eeHost: 'http://localhost:8081',
+        eeHostEnable: false,
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443',

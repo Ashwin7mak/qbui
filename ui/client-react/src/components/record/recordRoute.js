@@ -38,7 +38,7 @@ export const RecordRoute = React.createClass({
 
         flux.actions.selectTableId(tblId);
 
-        this.props.dispatch(loadForm(appId, tblId, rptId, formType, recordId));
+        this.props.loadForm(appId, tblId, rptId, formType, recordId);
     },
     loadRecordFromParams(params) {
         const {appId, tblId, recordId, rptId} = params;
@@ -195,7 +195,7 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        this.props.dispatch(openRecordForEdit(parseInt(this.props.params.recordId)));
+        this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
     /**
      * edit the selected record in the trowser
@@ -207,7 +207,7 @@ export const RecordRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.editNewRecord();
 
-        this.props.dispatch(editNewRecord());
+        this.props.editNewRecord();
     },
     getPageActions() {
 
@@ -304,8 +304,40 @@ export const RecordRoute = React.createClass({
     }
 });
 
-// named exports for unit testing router functions and redux actions
-export const RecordRouteWithRouter = withRouter(RecordRoute);
-export const ConnectedRecordRoute = connect()(RecordRoute);
+// instead of relying on our parent route component to pass our props down,
+// the react-redux container will generate the required props for this route
+// from the Redux state (the presentational component has no code dependency on Redux!)
+const mapStateToProps = (state) => {
+    return {
+        forms: state.forms
+    };
+};
 
-export default connect()(RecordRouteWithRouter);
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        openRecordForEdit: (recId) => {
+            dispatch(openRecordForEdit(recId));
+        },
+        editNewRecord: () => {
+            dispatch(editNewRecord());
+        },
+        loadForm: (appId, tblId, rptId, formType, recordId) => {
+            dispatch(loadForm(appId, tblId, rptId, formType, recordId));
+        }
+    };
+};
+
+// named exports for unit testing router functions and redux actions
+
+export const RecordRouteWithRouter = withRouter(RecordRoute);
+export const ConnectedRecordRoute = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RecordRoute);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RecordRouteWithRouter);
