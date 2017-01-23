@@ -56,7 +56,6 @@ export const ReportColumnHeaderMenu = React.createClass({
             message = 'lowToHigh';
             break;
         }
-
         return convertSortingMessageToI18nMessage(prependText, message);
     },
 

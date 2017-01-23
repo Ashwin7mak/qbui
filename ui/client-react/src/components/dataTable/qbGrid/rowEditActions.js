@@ -5,7 +5,7 @@ import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 import closeOnEscape from '../../hoc/catchEscapeKey';
-import positionRowEditActions from './rowEditActionsPositionHoc';
+import positionedRowEditActions from './positionedRowEditActionsHoc';
 
 // wrap this component with catchEscapeKey HOC to allow cancelling inline edit by hitting Escape
 export const RowEditActions = React.createClass({
@@ -104,4 +104,4 @@ export const RowEditActions = React.createClass({
 const ClosableRowEditActions = closeOnEscape(RowEditActions);
 
 export default ClosableRowEditActions;
-export const PositionedRowEditActions = positionRowEditActions(ClosableRowEditActions);
+export const PositionedRowEditActions = positionedRowEditActions(ClosableRowEditActions);

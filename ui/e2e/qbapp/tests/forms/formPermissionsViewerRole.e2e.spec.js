@@ -119,7 +119,7 @@
         });
 
         it('Verify cannot add a record into table as tableRights canadd set to false', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['numericField', 'durationField'];
             //get user authentication
             formsPage.getUserAuthentication(userId).then(function() {
                 //Open the report

@@ -79,10 +79,11 @@ class AppHistory {
                     self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
                 }
 
-                if (this.hasPendingEdits()) {
+                if (this.confirmPendingEdits()) {
                     this.showPendingEditsConfirmationModal();
                 } else {
-                    self._continueToDestination();
+                    // cancel any pending pending edits that don't require confirmation, i.e. started inline editing
+                    self._discardChanges(false);
                 }
             } else {
                 return callback();
@@ -97,7 +98,7 @@ class AppHistory {
 
             // The following text does not need to be internationalized because
             // it will not actually appear in the modal on evergreen browsers.
-            if (this.hasPendingEdits()) {
+            if (this.confirmPendingEdits()) {
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';
                 }
@@ -106,7 +107,7 @@ class AppHistory {
         });
     }
 
-    hasPendingEdits() {
+    confirmPendingEdits() {
         return (self && self.pendEdits && self.pendEdits.isPendingEdit);
     }
 
@@ -190,9 +191,11 @@ class AppHistory {
         self._haltRouteChange();
     }
 
-    _discardChanges() {
-        self._hideModal();
+    _discardChanges(hideModal = true) {
 
+        if (hideModal) {
+            self._hideModal();
+        }
         self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
         self._continueToDestination();
     }

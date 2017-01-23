@@ -7,6 +7,7 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import _ from 'lodash';
 
 import Logger from '../../../utils/logger';
 const logger = new Logger();
@@ -275,8 +276,34 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
 
-    render() {
+    /**
+     * stick the header and sticky first column when the grid scrolls
+     */
+    handleScroll() {
 
+        let scrolled = this.tableRef;
+
+        let currentLeftScroll = scrolled.scrollLeft;
+        let currentTopScroll = scrolled.scrollTop;
+
+        // move the headers down to their original positions
+        let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+        for (let i = 0; i < stickyHeaders.length; i++) {
+            stickyHeaders[i].style.top = currentTopScroll + 'px';
+        }
+
+        // move the stick cells (1st col) right to their original positions
+        let stickyCells = scrolled.getElementsByClassName('stickyCell');
+
+        stickyCells[0].style.left = currentLeftScroll + 'px';
+        stickyCells[0].style.right = 0;
+        stickyCells[0].style.bottom = 0;
+
+        for (let i = 1; i < stickyCells.length; i++) {
+            stickyCells[i].style.left = currentLeftScroll + 'px';
+        }
+    },
+    render() {
         let columns;
         if (this.props.showRowActionsColumn) {
             columns = [
@@ -302,11 +329,13 @@ const QbGrid = React.createClass({
         }
 
         return (
+
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
                 <Table.Provider
                     ref="qbGridTable"
                     className="qbGrid"
                     columns={columns}
+                    onScroll={this.handleScroll}
                     components={{
                         header: {
                             cell: QbHeaderCell
@@ -315,11 +344,15 @@ const QbGrid = React.createClass({
                             row: QbRow,
                             cell: QbCell
                         }
-                    }}
-                >
+                    }}>
                     <Table.Header />
 
-                    <Table.Body onRow={this.addRowProps} rows={this.props.rows} rowKey={this.getUniqueRowKey} />
+                    <Table.Body onRow={this.addRowProps}
+                                rows={this.props.rows}
+                                rowKey={this.getUniqueRowKey}
+                                ref={body => {
+                                    this.tableRef = body && body.getRef().parentNode;
+                                }}/>
                 </Table.Provider>
             </Loader>
         );

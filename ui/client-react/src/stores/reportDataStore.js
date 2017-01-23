@@ -198,12 +198,29 @@ let reportModel = {
     setMetaData(reportMetaData) {
         this.model.name = reportMetaData.name;
         this.model.description = reportMetaData.description;
+
+        //  check to see if a fid list is defined
         this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
+        if (this.model.fids.length === 0) {
+            // if no fid list, then check the report defaults
+            if (reportMetaData.reportDefaults && reportMetaData.reportDefaults.fids) {
+                this.model.fids = reportMetaData.reportDefaults.fids;
+            }
+        }
+
+        //  check to see if a sort list is defined
+        let sortList = reportMetaData.sortList || [];
+        if (sortList.length === 0) {
+            // if no sort list, check the report defaults
+            if (reportMetaData.reportDefaults && reportMetaData.reportDefaults.sortList) {
+                sortList = reportMetaData.reportDefaults.sortList;
+            }
+        }
 
         // in report's meta data sortlist is returned as an array of sort elements
-        this.setSortList(ReportUtils.getSortListFromObject(reportMetaData.sortList));
-        this.setSortFids(reportMetaData.sortList);
-        this.setGroupElements(reportMetaData.sortList);
+        this.setSortList(ReportUtils.getSortListFromObject(sortList));
+        this.setSortFids(sortList);
+        this.setGroupElements(sortList);
     },
 
     /**
@@ -641,13 +658,12 @@ let ReportDataStore = Fluxxor.createStore({
             actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
             actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
 
-            actions.CHANGE_LOCALE, this.onChangeLocale,
-
+            actions.CHANGE_LOCALE, this.onChangeLocale
         );
     },
 
     onSelectedRows(selectedRows) {
-        this.selectedRows = selectedRows;
+        this.selectedRows = selectedRows.slice();
 
         this.emit('change');
     },
@@ -997,6 +1013,8 @@ let ReportDataStore = Fluxxor.createStore({
     onDeleteReportRecordSuccess(recId) {
         this.reportModel.deleteRecordsFromLists(recId);
         this.isRecordDeleted = true;
+
+        this.selectedRows = _.without(this.selectedRows, recId);
         this.emit('change');
     },
 

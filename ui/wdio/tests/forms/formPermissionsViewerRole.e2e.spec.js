@@ -6,6 +6,7 @@
     //Load the page Objects
     var e2ePageBase = requirePO('e2ePageBase');
     var formsPO = requirePO('formsPage');
+    var reportContentPO = requirePO('reportContent');
 
     describe('Form Viewer Permission Tests: ', function() {
 
@@ -103,6 +104,8 @@
         });
 
         it('Verify cannot add a record into table as tableRights canadd set to false', function() {
+            var origRecordCount;
+
             //all required fields on form
             var fieldTypes = ['allNumericFields', 'allDurationFields'];
 
@@ -112,34 +115,44 @@
             //Step 2 - Open the report
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
 
-            //Step 3 - Click on Add Record Button on the report Stage
+            //Step 3 - Get the original records count in a report
+            origRecordCount = formsPO.getRecordsCountInATable();
+
+            //Step 4 - Click on Add Record Button on the report Stage
             formsPO.clickAddRecordBtnOnStage();
 
-            //Step 4 - enter form values
+            //Step 5 - enter form values
             fieldTypes.forEach(function(fieldType) {
                 formsPO.enterFormValues(fieldType);
             });
 
-            //Step 5 - Click Save on the form
+            //Step 6 - Click Save on the form
             formsPO.clickFormSaveBtn();
 
-            //Step 6 - Verify record has no permission message shows up.
-            formsPO.assertNotificationMessage("You are not authorized to create or access this record");
-
-            //Step 7 - close the dirty form without saving
+            //Step 7 - close the dirty form
             formsPO.closeSaveChangesDialogue();
+
+            // Step 8 - Reload the report after saving row as the row is added at the last page
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+
+            // Step 9 - Verify the records count not increased i.e not authorized to add a record
+            expect(formsPO.getRecordsCountInATable()).toBe(origRecordCount);
 
         });
 
         it('Verify cannot edit a record since table rights canModify set to "NONE', function() {
             //all required fields on form
             var fieldTypes = ['allNumericFields', 'allDurationFields'];
+            var origRecordCount;
 
             //Step 1 - get user authentication
             formsPO.getUserAuthentication(realmName, realmId, userId);
 
             //Step 2 - Open the report
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
+
+            //Step 3 - Get the original records count in a report
+            origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 3 - Click on 2nd record edit pencil
             formsPO.clickRecordEditPencilInRecordActions(1);
@@ -152,13 +165,18 @@
             //Step 5 - Click Save on the form
             formsPO.clickFormSaveBtn();
 
-            //Step 6 - Verify record has no permission message shows up.
-            formsPO.assertNotificationMessage("Record not saved");
-            //TODO enable when MB-1488 is fixed enable below and remove above message
-            //formsPO.assertNotificationMessage("You are not authorized to create or access this record");
-
-            //Step 7 - close the dirty form without saving
+            //Step 7 - close the dirty form
             formsPO.closeSaveChangesDialogue();
+
+            // Step 8 - Reload the report after saving row as the row is added at the last page
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+
+            //Step 9 - Get the record values
+            var recordValues = reportContentPO.getRecordValues(1);
+
+            //verify the array dosen't contain edited numeric field
+            expect(recordValues.indexOf("33.33")).toBe(-1);
+
         });
 
         //TODO verify cannot delete a record when no permission.

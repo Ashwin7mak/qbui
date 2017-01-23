@@ -26,12 +26,19 @@ import AppQbModal from '../qbModal/appQbModal';
 import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
-
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 
+// This shared view with the server layer must be loaded as raw HTML because
+// the current backend setup cannot handle a react component in a common directory. It is loaded
+// as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
+import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+
+const OPEN_NAV = true;
+const CLOSE_NAV = false;
 
 export let Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
@@ -49,7 +56,7 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            reportSearchData: flux.store('ReportDataSearchStore').getState(),
+            reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
 
@@ -79,7 +86,7 @@ export let Nav = React.createClass({
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
-                flux.actions.toggleLeftNav(false);
+                this.props.dispatch(ShellActions.toggleLeftNav(CLOSE_NAV));
             }, 0);
         }
 
@@ -132,15 +139,18 @@ export let Nav = React.createClass({
         return null;
     },
 
-    /* toggle apps list - if on collapsed nav, open left nav and display apps */
+    /**
+     *  if left nav is open, toggle apps list state based on open parameter;
+     *  if left nav is collapsed, open the apps list and dispatch event to open nav
+     */
     toggleAppsList(open) {
         const flux = this.getFlux();
 
-        if (this.state.nav.leftNavExpanded) {
+        if (this.props.qbui.shell.leftNavExpanded) {
             flux.actions.toggleAppsList(open);
         } else {
             flux.actions.toggleAppsList(true);
-            flux.actions.toggleLeftNav(true);
+            this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
         }
     },
 
@@ -190,13 +200,16 @@ export let Nav = React.createClass({
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
-            return null;
+            // The common loading screen html is shared across server and client as an HTML file and
+            // therefore must be loaded using the dnagerouslySetInnerHTML attribute
+            // see more information in common/src/views/Readme.md
+            return <div dangerouslySetInnerHTML={{__html: LoadingScreen}} />;
         }
 
         const flux = this.getFlux();
 
         let classes = "navShell";
-        if (this.state.nav.leftNavVisible) {
+        if (this.props.qbui.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
@@ -249,8 +262,8 @@ export let Nav = React.createClass({
             }
 
             <LeftNav
-                visible={this.state.nav.leftNavVisible}
-                expanded={this.state.nav.leftNavExpanded}
+                visible={this.props.qbui.shell.leftNavVisible}
+                expanded={this.props.qbui.shell.leftNavExpanded}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
@@ -283,7 +296,6 @@ export let Nav = React.createClass({
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
-                            forms: this.props.qbui.forms,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
@@ -329,22 +341,24 @@ export let Nav = React.createClass({
         }
         return null;
     },
+
     onSelectOpenInV3(openInV3) {
         const flux = this.getFlux();
-
         flux.actions.setApplicationStack(this.state.apps.selectedAppId, openInV3);
     },
+
     onSelectItem() {
-
+        // hide left nav after selecting items on small breakpoint
         if (Breakpoints.isSmallBreakpoint()) {
-            const flux = this.getFlux();
-
-            flux.actions.toggleLeftNav(false); // hide left nav after selecting items on small breakpoint
+            this.props.dispatch(ShellActions.toggleLeftNav(CLOSE_NAV));
         }
     },
+
+    /**
+     * Toggle open/closed the left nav based on its current state
+     */
     toggleNav() {
-        let flux = this.getFlux();
-        flux.actions.toggleLeftNav();
+        this.props.dispatch(ShellActions.toggleLeftNav());
     }
 });
 

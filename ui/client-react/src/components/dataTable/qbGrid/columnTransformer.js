@@ -12,10 +12,12 @@ class ColumnTransformer {
      * @param cellIdentifierValue The value that identifies which cells belong to this column (required)
      * (e.g., in a report, the fieldId is part of each cell data and is matched to the fieldId of the column. It is an actual value (e.g., 3) and not a property name (e.g., fieldId)
      * @param headerClasses Optionally any css classes to add to the column header element
+     * @param headerLabelClasses Optionally any css classes to add to the column header label element
      */
-    constructor(headerLabel, cellIdentifierValue, headerClasses = '') {
+    constructor(headerLabel, cellIdentifierValue, headerClasses = '', headerLabelClasses = '') {
         this.headerLabel = headerLabel;
         this.headerClasses = headerClasses;
+        this.headerLabelClasses = headerLabelClasses;
         this.cellIdentifierValue = cellIdentifierValue;
         this.formatter = null;
         this.headerMenuComponent = null;
@@ -77,7 +79,7 @@ class ColumnTransformer {
      * @private
      */
     _buildHeaderComponent() {
-        let headerComponent = <span className={this.headerClasses}>{this.headerLabel}</span>;
+        let headerComponent = <span className={this.headerClasses}><span className={this.headerLabelClasses}>{this.headerLabel}</span></span>;
 
         if (this.headerMenuComponent) {
             // Need to do this transformation so that the variable can be recognized in JSX as a component
@@ -85,7 +87,9 @@ class ColumnTransformer {
 
             headerComponent = (
                 <span className={this.headerClasses}>
-                    {this.headerLabel}
+                    <span className={this.headerLabelClasses}>
+                        {this.headerLabel}
+                    </span>
                     <div className="headerMenu">
                         <MenuComponent {...this.headerMenuProps} />
                     </div>
