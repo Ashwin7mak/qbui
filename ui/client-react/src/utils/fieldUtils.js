@@ -161,7 +161,7 @@ class FieldUtils {
         case SchemaConsts.CHECKBOX :
             return false;
         case SchemaConsts.DURATION :
-            return 0;
+            return null;
         default:
             return '';
         }
