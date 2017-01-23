@@ -1,6 +1,8 @@
 import * as SchemaConsts from '../constants/schema';
 import consts from '../../../common/src/constants';
 import FieldFormats from '../utils/fieldFormats';
+import * as durationFormatter from "../../../common/src/formatter/durationFormatter";
+import _ from 'lodash';
 
 class FieldUtils {
     /**
@@ -132,6 +134,7 @@ class FieldUtils {
      * @returns {*}
      */
     static getFieldType(fieldDef, type, attributes) {
+        // TODO - Make sure multiline works. https://quickbase.atlassian.net/browse/MB-1908
         let fieldType = type;
         if (fieldDef) {
             if (fieldDef.type === consts.FORMULA) {
@@ -152,11 +155,137 @@ class FieldUtils {
         }
         return fieldType;
     }
+
+    static getDefaultValueForFieldType(type) {
+        switch (type) {
+        case SchemaConsts.CHECKBOX :
+            return false;
+        case SchemaConsts.DURATION :
+            return 0;
+        default:
+            return '';
+        }
+    }
+
+    /**
+     * * TODO:: Once AgGrid is removed, consider using the server field formats and get both the type specific class
+     * https://quickbase.atlassian.net/browse/MB-1920
+     *
+     * Gets the css class for a specific field type
+     * and alignment class
+     * @param type
+     * @param fieldDef
+     * @returns {*}
+     */
+    static getFieldSpecificCellClass(type, fieldDef) {
+        if (!type) {
+            return 'textFormat';
+        }
+
+        switch (type) {
+        case FieldFormats.DATE_FORMAT:            return "dateFormat";
+        case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
+        case FieldFormats.TIME_FORMAT:            return "timeFormat";
+        case FieldFormats.NUMBER_FORMAT:          return "numberFormat";
+        case FieldFormats.RATING_FORMAT:          return "ratingFormat";
+        case FieldFormats.CURRENCY_FORMAT:        return "currencyFormat";
+        case FieldFormats.PERCENT_FORMAT:         return "percentFormat";
+        case FieldFormats.DURATION_FORMAT:        return getClassNameForDuration(fieldDef);
+        case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
+        case FieldFormats.TEXT_FORMAT:            return "textFormat";
+        case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
+        case FieldFormats.USER_FORMAT:            return "userFormat";
+        case FieldFormats.URL:                    return "urlFormat";
+        case FieldFormats.EMAIL_ADDRESS:          return "emailFormat";
+        case FieldFormats.TEXT_FORMULA_FORMAT:    return "formulaTextFormat";
+        case FieldFormats.NUMERIC_FORMULA_FORMAT: return "formulaNumericFormat";
+        case FieldFormats.URL_FORMULA_FORMAT:     return "formulaUrlFormat";
+        case FieldFormats.CHECKBOX_FORMAT:        return 'checkboxFormat';
+        default:                                  return "textFormat";
+        }
+    }
+
+    /**
+     * Gets the classes for a gridHeaderCell including alignment based on field type
+     * @param fieldDef
+     * @returns {string}
+     */
+    static getColumnHeaderClasses(fieldDef) {
+        let classes = ['gridHeaderCell'];
+        classes = [...classes, ...FieldUtils.getCellAlignmentClassesForFieldType(fieldDef)];
+        return classes.join(' ');
+    }
+
+    /**
+     * Gets the classes for a gridHeaderCell's label
+     * @returns {string}
+     */
+    static getColumnHeaderLabelClasses() {
+        return 'gridHeaderLabel';
+    }
+    /**
+     * Get the alignment classes for a specific field type (e.g., numeric fields are aligned right in a grid)
+     * @param fieldDef
+     * @returns {Array}
+     */
+    static getCellAlignmentClassesForFieldType(fieldDef) {
+        let classes = [];
+
+        if (!_.has(fieldDef, 'datatypeAttributes.type')) {
+            return classes;
+        }
+
+        switch (fieldDef.datatypeAttributes.type) {
+        case consts.NUMERIC:
+        case consts.CURRENCY:
+        case consts.RATING:
+        case consts.PERCENT:
+            classes.push('AlignRight');
+            break;
+        case consts.CHECKBOX:
+            classes.push('AlignCenter');
+            break;
+        case FieldFormats.DURATION_FORMAT:
+            if (durationFormatter.hasUnitsText(fieldDef.datatypeAttributes.scale)) {
+                classes.push('AlignRight');
+            }
+            break;
+        default:
+            classes.push('AlignLeft');
+            break;
+        }
+
+        return classes;
+    }
+    static compareFieldValues(currentCellValues, nextCellValues) {
+        let isDifferent = false;
+        nextCellValues.some((currentCellValue, index) => {
+            if (!_.has(currentCellValue, 'props.children.props.value' || !_.has(currentCellValues[index], 'props.children.props.value'))) {
+                return false;
+            }
+
+            if (currentCellValue.props.children.props.value !== currentCellValues[index].props.children.props.value) {
+                isDifferent = true;
+                return true;
+            }
+        });
+
+        return isDifferent;
+    }
 }
 
 // PRIVATE METHODS
 function requiredFieldsArePresent(fields) {
     return fields && fields.fields && fields.fields.data && fields.fields.data.length;
+}
+
+function getClassNameForDuration(fieldDef) {
+    let answer = "durationFormat";
+    if (_.has(fieldDef, 'datatypeAttributes.scale') &&
+        durationFormatter.hasUnitsText(fieldDef.datatypeAttributes.scale)) {
+        answer += " wUnitsText";
+    }
+    return answer;
 }
 
 export default FieldUtils;

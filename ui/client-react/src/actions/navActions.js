@@ -6,16 +6,6 @@ import Breakpoints from '../utils/breakpoints';
 let navActions = {
 
     /**
-     * show trowser
-     * @param content "reports", "editRecord" etc. - see trowserConstants.js
-     */
-    showTrowser(content) {
-        this.dispatch(actions.SHOW_TROWSER, content);
-    },
-    hideTrowser() {
-        this.dispatch(actions.HIDE_TROWSER);
-    },
-    /**
      * checks to see if row pop up menu is open
      * */
     onToggleRowPopUpMenu(isOpen) {
@@ -27,13 +17,7 @@ let navActions = {
     resetRowMenu() {
         this.dispatch(actions.RESET_ROW_MENU);
     },
-    /**
-     * either toggle the visibility of the left nav or toggle the expanded/collapsed state depending on the breakpoint
-     */
-    toggleLeftNav(open) {
-        const toggleLeftNavAction = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
-        this.dispatch(toggleLeftNavAction, open);
-    },
+
     toggleAppsList(open) {
         this.dispatch(actions.TOGGLE_APPS_LIST, open);
     },

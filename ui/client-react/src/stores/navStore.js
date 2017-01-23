@@ -11,13 +11,10 @@ let NavStore = Fluxxor.createStore({
 
     initialize() {
         this.state = {
-            leftNavVisible: false,
-            leftNavExpanded: true,
             appsListOpen: false,
             searchBarOpen: false,
             showTopNav: true,
             searching:false,
-            trowserOpen: false,
             isRowPopUpMenuOpen: false,
             trowserContent: TrowserConsts.TROWSER_EDIT_RECORD,
             topTitle: null,
@@ -31,11 +28,7 @@ let NavStore = Fluxxor.createStore({
         this.setLocaleBundle();
 
         this.bindActions(
-            actions.SHOW_TROWSER, this.onShowTrowser,
-            actions.HIDE_TROWSER, this.onHideTrowser,
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
-            actions.TOGGLE_LEFT_NAV_VISIBLE, this.onToggleLeftNavVisible,
-            actions.TOGGLE_LEFT_NAV_EXPANDED, this.onToggleLeftNavExpanded,
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
@@ -55,11 +48,6 @@ let NavStore = Fluxxor.createStore({
         this.setLocaleBundle();
         this.emit('change');
     },
-    onShowTrowser(content) {
-        this.state.trowserOpen = true;
-        this.state.trowserContent = content;
-        this.emit('change');
-    },
     onToggleRowPopUpMenu(isOpen) {
         //Originally if a user opens up one menu then opened up a second menu, the padding would be removed from the page, and the row menu pop up would be clipped
             //by keeping track of the count, makes sure padding remains at the bottom of the page, even if a user clicks on one menu and then clicks on a separate menu
@@ -73,10 +61,6 @@ let NavStore = Fluxxor.createStore({
     },
     resetRowMenu() {
         this.state.openCount = 0;
-    },
-    onHideTrowser() {
-        this.state.trowserOpen = false;
-        this.emit('change');
     },
     onSetTopTitle(title) {
         this.state.topTitle = title;
@@ -102,30 +86,7 @@ let NavStore = Fluxxor.createStore({
         this.state.filterReportsName = name;
         this.emit('change');
     },
-    /*
-     * toggle left nav visible (small breakpoint state)
-     * @param visible force visible/hidden
-     */
-    onToggleLeftNavVisible(visible) {
-        if (visible === false || visible === true) {
-            this.state.leftNavVisible = visible;
-        } else {
-            this.state.leftNavVisible = !this.state.leftNavVisible;
-        }
-        this.emit('change');
-    },
-    /*
-     * toggle left nav expanded/collapsed (non-small breakpoint state)
-     * @param expanded force expanded/collapsed
-     */
-    onToggleLeftNavExpanded(expanded) {
-        if (expanded === false || expanded === true) {
-            this.state.leftNavExpanded = expanded;
-        } else {
-            this.state.leftNavExpanded = !this.state.leftNavExpanded;
-        }
-        this.emit('change');
-    },
+
     /*
      * toggle apps list
      * @param show force shown/hidden

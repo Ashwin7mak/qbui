@@ -22,32 +22,6 @@ describe('Nav Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
     });
 
-    it('test show trowser action', () => {
-        flux.actions.showTrowser("content");
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROWSER, "content");
-    });
-
-    it('test hide trouwser action', () => {
-        flux.actions.hideTrowser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.HIDE_TROWSER);
-    });
-
-    it('test toggle left nav action with state', () => {
-        flux.actions.toggleLeftNav(true);
-
-        let action = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
-
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(action, true);
-    });
-
-    it('test toggle left nav action', () => {
-        flux.actions.toggleLeftNav();
-
-        let action = Breakpoints.isSmallBreakpoint() ? actions.TOGGLE_LEFT_NAV_VISIBLE : actions.TOGGLE_LEFT_NAV_EXPANDED;
-
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(action, undefined);
-    });
-
     it('test searching action', () => {
         flux.actions.setSearching(true);
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SEARCHING, true);

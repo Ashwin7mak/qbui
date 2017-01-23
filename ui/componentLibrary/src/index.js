@@ -52,6 +52,7 @@ import PhoneFieldValueEditorDoc from './docs/phoneFieldValueEditor.js';
 import PhoneFieldValueRendererDoc from './docs/phoneFieldValueRenderer.js';
 import DurationFieldValueRendererDoc from './docs/durationFieldValueRenderer.js';
 import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
+import QbGridDoc from './docs/qbGrid.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -91,6 +92,7 @@ render((
             <Route path="phoneFieldValueEditor" component={PhoneFieldValueEditorDoc} />
             <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
             <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
+            <Route path="qbGrid" component={QbGridDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

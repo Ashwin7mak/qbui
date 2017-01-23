@@ -101,7 +101,7 @@ $color-pink-600: #c72f79;
 $badcolor1-color6:          #d2dce7;
 $badcolor2-color13:         #f6f8fb;
 $badcolor3-color14:         #f9fafb;
-$badcolor4-color15:         #f0f3f9;
+//$badcolor4-color15:         #f0f3f9;
 $badcolor5-color18:         #cccccc;
 //$badcolor6-color24:         #002b48;
 $badcolor7-color25:         #555555;
@@ -113,7 +113,7 @@ $badcolor10-nav-hover-bg:                   #0097cd;
 //$badcolor13-icon-duplicate-color:           #c75ac2;
 $badcolor14-top-nav-title-icon-color:       #009aae;
 //$badcolor15-secondary-bar-page-actions-bg:  #476b90;
-$badcolor16:                #dddddd;
+//$badcolor16:                #dddddd;
 //$badcolor17:                #333333;
 $badcolor18:                #f3f3f3;
 $badcolor19:                #a52363;
@@ -367,21 +367,6 @@ $urlbutton-background-focus-colorstop2-color:           $color-black-100;   // n
 $formula-background-empty-color:            $color-blue-300;    // spreadsheet has this set to: $color-black-300; (to be updated later)
 $formula-spinner-color:                     $color-black-700;
 
-// agGrid
-// These colors are prefixed with aggrid so that they do not conflict with others while the agGrid is ripped out and replaced.
-$aggrid-header-cell-border-color:                   $color-blue-400;    // not in XD spreadsheet
-$aggrid-header-cell-border-bottom-color:            $badcolor1-color6;  // not in XD spreadsheet
-$aggrid-header-cell-background-color:               $color-blue-300;    // not in XD spreadsheet
-$aggrid-header-cell-color:                          $color-blue-600;    // not in XD spreadsheet
-$aggrid-row-background-hover-color:                 $color-blue-200;    // not in XD spreadsheet
-$aggrid-row-cell-border-color:                      $color-black-300;   // not in XD spreadsheet
-$aggrid-grid-group-row-header-background-color:     $color-blue-200;    // not in XD spreadsheet
-$aggrid-grid-group-row-header-border-top-color:     $color-blue-300;    // not in XD spreadsheet
-$aggrid-grid-group-row-header-divider-color:        $color-black-500;   // not in XD spreadsheet
-$aggrid-row-border-color:                           $badcolor16;        // not in XD spreadsheet
-$aggrid-row-box-shadow-color:                       $color-black-300;   // not in XD spreadsheet
-$aggrid-cell-edit-background-color:                 $color-blue-200;    // not in XD spreadsheet
-
 // qbGrid
 // These colors are prefixed with qbgrid so that they do not conflict with others while the qbGrid is updated.
 //$row-background-color-hover: $color-blue-200;
@@ -391,6 +376,8 @@ $qbgrid-row-noneditable-background-color: $color-black-200;
 $qbgrid-row-border-color: $color-black-300;
 $qbgrid-row-box-shadow-color: $color-black-300;
 $qbgrid-cell-edit-background-color: $color-blue-200;
+$qbgrid-row-hover-color: $color-blue-200;
+$qbgrid-onpencil-row-border-color: $color-cyan-700;
 
 // pagination
 $arrow-normal-color:                        $color-black-700;

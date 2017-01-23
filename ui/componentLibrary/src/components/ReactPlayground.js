@@ -39,6 +39,7 @@ const PhoneFieldValueEditor = require('../../../client-react/src/components/fiel
 const PhoneFieldValueRenderer = require('../../../client-react/src/components/fields/phoneFieldValueRenderer.js');
 const DurationFieldValueRenderer = require('../../../client-react/src/components/fields/durationFieldValueRenderer.js');
 const DurationFieldValueEditor = require('../../../client-react/src/components/fields/durationFieldValueEditor.js');
+const QbGrid = require('../../../client-react/src/components/dataTable/qbGrid/qbGrid.js');
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

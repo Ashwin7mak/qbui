@@ -135,11 +135,18 @@ describe('Test ReportData Store', () => {
 
     it('test load reports success action with group data', () => {
 
+        let fidList = [1];
+        let sortList = '1:EQUALS';
         let payload = {
             metaData: {
                 name: 'report_name',
-                fids: [],
-                sortList: "1:EQUALS"
+                fids: fidList,
+                sortList: sortList,
+                //  these should not get referenced..
+                reportDefaults: {
+                    fids: [1, 2],
+                    sortList: '1:FIRSTLETTER'
+                }
             },
             recordData: {
                 fields: [],
@@ -179,6 +186,8 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.records).toBe(payload.recordData.groups.gridData);
         expect(flux.store(STORE_NAME).reportModel.model.hasGrouping).toBe(true);
         expect(flux.store(STORE_NAME).reportModel.model.groupLevel).toBe(1);
+        expect(flux.store(STORE_NAME).reportModel.model.fids).toBe(fidList);
+        expect(flux.store(STORE_NAME).reportModel.model.sortList).toBe(sortList);
 
         //  ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
@@ -232,6 +241,67 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.records).toBe(payload.recordData.groups.gridData);
         expect(flux.store(STORE_NAME).reportModel.model.hasGrouping).toBe(true);
         expect(flux.store(STORE_NAME).reportModel.model.groupLevel).toBe(1);
+
+        //  ensure the output of each report row includes an id, name and link
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load reports success action with sortlist data and default table settings', () => {
+
+        let fidList = [1];
+        let sortList = '1:BYFIRSTLETTER';
+        let payload = {
+            metaData: {
+                name: 'report_name',
+                fids: [],
+                sortList: "",
+                reportDefaults: {
+                    fids: fidList,
+                    sortList: sortList
+                }
+            },
+            recordData: {
+                fields: [],
+                records: [],
+                facets: [],
+                groups: {
+                    hasGrouping: true,
+                    fields: [{
+                        field: [{
+                            id: 1,
+                            name: 'group-field1'
+                        }],
+                        groupType: 'EQUALS'
+                    }],
+                    gridColumns: [{
+                        id: 2,
+                        name: 'grid-field2'
+                    }],
+                    gridData: [{
+                        id: 2,
+                        value: 'grid-data2'
+                    }]
+                }
+            },
+            recordCount: 1,
+            sortList: "1:EQUALS"
+        };
+
+        let action = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(action);
+
+        expect(flux.store(STORE_NAME).reportModel.model.name).toBe(payload.metaData.name);
+        expect(flux.store(STORE_NAME).reportModel.model.columns).toBeDefined();
+        expect(flux.store(STORE_NAME).reportModel.model.records).toBe(payload.recordData.groups.gridData);
+        expect(flux.store(STORE_NAME).reportModel.model.hasGrouping).toBe(true);
+        expect(flux.store(STORE_NAME).reportModel.model.groupLevel).toBe(1);
+        expect(flux.store(STORE_NAME).reportModel.model.fids).toBe(fidList);
+        expect(flux.store(STORE_NAME).reportModel.model.sortList).toBe(sortList);
 
         //  ensure the output of each report row includes an id, name and link
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');

@@ -5,6 +5,15 @@ import FacetSelections  from '../../src/components/facet/facetSelections';
 import Fluxxor from 'fluxxor';
 import SearchBox from '../../src/components/search/searchBox';
 
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import {Provider} from "react-redux";
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+import * as types from '../../src/actions/types';
+
 describe('ReportHeader functions', () => {
     'use strict';
 
@@ -26,9 +35,6 @@ describe('ReportHeader functions', () => {
 
     let flux = new Fluxxor.Flux(stores);
     flux.actions = {
-        toggleLeftNav() {
-            return;
-        },
         filterReport() {
             return;
         },
@@ -48,44 +54,31 @@ describe('ReportHeader functions', () => {
         },
         selections: selections
     };
-    let mockCallbacks = {};
 
+    const initialState = {};
+    let store;
     beforeEach(() => {
-
-        mockCallbacks = {
-            searchHappened : function(value) {
-            }
-        };
-        spyOn(mockCallbacks, 'searchHappened').and.callThrough();
-        spyOn(flux.actions, 'toggleLeftNav');
-
-        component = TestUtils.renderIntoDocument(<ReportHeader flux={flux} reportData={reportData}
-                                                               searchTheString={mockCallbacks.searchHappened}
-        />);
-    });
-
-    afterEach(() => {
-        flux.actions.toggleLeftNav.calls.reset();
-        mockCallbacks.searchHappened.calls.reset();
+        store = mockStore(initialState);
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ReportHeader flux={flux} reportData={reportData}/>
+            </Provider>
+        );
     });
 
     it('test render of component', () => {
-
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test toggle nav', () => {
-
+    it('test toggle nav action is called', () => {
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
 
-        expect(flux.actions.toggleLeftNav).toHaveBeenCalled();
+        const actions = store.getActions();
+        expect(actions[0].type).toEqual(types.TOGGLE_LEFT_NAV_EXPANDED);
     });
 
     it('test perform search', () => {
-        let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
-        TestUtils.Simulate.click(toggleNav);
-
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "smallHeaderSearchBox");
         expect(filterSearchBox.length).toEqual(1);
     });

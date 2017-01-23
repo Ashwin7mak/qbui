@@ -3,6 +3,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
+import _ from 'lodash';
 
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used

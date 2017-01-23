@@ -119,28 +119,34 @@
                                               });
                             }).catch(function(currError) {
                                 log.error(JSON.stringify(currError));
+                                fetchRecordDeferred.reject(currError);
                             });
                 }).catch(function(err) {
                     log.error(JSON.stringify(err));
+                    fetchRecordDeferred.reject(err);
                 });
                 return fetchRecordDeferred.promise;
             },
             // Creates a record, returning a promise that is resolved or rejected on successful
-            //TODO: Fix promise anti-pattern QBSE-20581
+            //TODO: Fix promise anti-pattern QBSE-20581 - fixed createRecord and editRecord (nv, 12/29/16)
             createRecord: function(recordsEndpoint, record, params) {
-                var fetchRecordDeferred = promise.pending();
-                init.then(function() {
-                    apiBase.executeRequest(recordsEndpoint, consts.POST, record)
-                        .then(function(recordIdResponse) {
-                            var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
-                            if (params) {
-                                getEndpoint += params;
-                            }
-                        }).catch(function(err) {
-                            log.error(JSON.stringify(err));
-                        });
-                    return fetchRecordDeferred.promise;
-                });
+                return init
+                    .then(function() {
+                        return {
+                            stringPath: recordsEndpoint,
+                            method: consts.POST,
+                            body: record,
+                            params: params
+                        };
+                    })
+                    .then(apiBase.executeRequest)
+                    .then(function(recordIdResponse) {
+                        return JSON.parse(JSON.parse(recordIdResponse.body).body).id;
+                    })
+                    .catch(function(err) {
+                        log.error(JSON.stringify(err));
+                        return promise.reject(err);
+                    });
             },
             // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
             createRecords: function(recordsEndpoint, records) {
@@ -154,7 +160,7 @@
                     records.forEach(function(object) {
                         recordObjects.push(object.record);
                     });
-                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
+                    return apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
                             .then(function(recordBulkResponse) {
                                 var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 
@@ -164,7 +170,13 @@
                                 });
 
                                 fetchRecordDeferred.resolve(recordIdList);
-                            }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                            }, function(recordBulkResponseError) {
+                                fetchRecordDeferred.reject(recordBulkResponseError);
+                            })
+                        .catch(function(currError) {
+                            log.error(JSON.stringify(currError));
+                            fetchRecordDeferred.reject(currError);
+                        });
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
@@ -185,9 +197,32 @@
                             });
 
                             fetchRecordDeferred.resolve(recordIdList);
-                        }).catch(function(currError) {log.error(JSON.stringify(currError));});
-                }).catch(function(err) {log.error(JSON.stringify(err));});
+                        }).catch(function(currError) {
+                            log.error(JSON.stringify(currError));
+                            fetchRecordDeferred.reject(currError);
+                        });
+                }).catch(function(err) {
+                    log.error(JSON.stringify(err));
+                    fetchRecordDeferred.reject(err);
+                });
                 return fetchRecordDeferred.promise;
+            },
+            editRecord: function(recordsEndpoint, recordId, record) {
+                return init
+                    .then(function(payload) {
+                        return {
+                            stringPath: recordsEndpoint + recordId,
+                            method: consts.PATCH,
+                            body: record
+                        };
+                    })
+                    .then(apiBase.executeRequest)
+                    .then(function(recordIdResponse) {
+                        return recordIdResponse;
+                    }).catch(function(err) {
+                        log.error(JSON.stringify(err));
+                        return promise.reject(err);
+                    });
             },
             // Gets a record given their record ID, returning a promise that is resolved or rejected on successful
             getRecord: function(recordsEndpoint, recordId, params) {
@@ -206,7 +241,10 @@
                                 log.debug('Error getting record: ' + JSON.stringify(error) + ' Endpoint that failed: ' + recordsEndpoint + recordId);
                                 fetchRecordDeferred.reject(error);
                             });
-                }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                }).catch(function(currError) {
+                    log.error(JSON.stringify(currError));
+                    fetchRecordDeferred.reject(currError);
+                });
                 return fetchRecordDeferred.promise;
             },
             /**

@@ -3,8 +3,11 @@ import ReactIntl from 'react-intl';
 import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {MenuItem, Button, Input, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
 import './iconActions.scss';
+
+const FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * a set of icon actions, of which maxButtonsBeforeMenu are displayed
@@ -25,6 +28,8 @@ import './iconActions.scss';
  */
 
 let IconActions = React.createClass({
+    mixins: [FluxMixin],
+
     // actions don't have any functionality yet...
     propTypes: {
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -35,20 +40,19 @@ let IconActions = React.createClass({
             className: React.PropTypes.string,
             disabled: React.PropTypes.bool
         })).isRequired,
-        flux: React.PropTypes.object,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
         className: React.PropTypes.string,
         pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
         dropdownTooltip: React.PropTypes.bool,
         menuIcons: React.PropTypes.bool
-
     },
     getDefaultProps() {
         return {
             maxButtonsBeforeMenu: Number.MAX_VALUE,
             pullRight: true,
             menuIcons: false,
-            dropdownTooltip: false
+            dropdownTooltip: false,
+            className: ''
         };
     },
     getInitialState() {
@@ -91,9 +95,7 @@ let IconActions = React.createClass({
         //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
             //It will remove the white space if the menu is close. The class is added in reportContent.js
         this.setState({dropdownOpen: open});
-        if (this.props.flux) {
-            this.props.flux.actions.onToggleRowPopUpMenu(open);
-        }
+        this.getFlux().actions.onToggleRowPopUpMenu(open);
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
