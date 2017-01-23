@@ -30,37 +30,32 @@ function event(id, type, content) {
  * populating the left hand navigation window with the list of reports and when displaying a
  * trowser window that displays all of the reports for a table.
  *
- * @param appId
- * @param tblId
+ * @param context - what context is requesting the report list (ie: nav)
+ * @param appId - app id
+ * @param tblId - table id
  */
-export const loadReports = (appId, tblId) => {
+export const loadReports = (context, appId, tblId) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId && tblId) {
+            if (context && appId && tblId) {
                 logger.debug('Loading report list for appId:' + appId + '; tableId:' + tblId);
 
-                // id for the store
-                // NOTE: this works fine when different app/table combo is loaded in multiple contexts
-                // on the page;  but not so if the same app/table is needed in different contexts on
-                // the same page.
-                const id = appId + '-' + tblId;
-
-                dispatch(event(id, types.LOAD_REPORTS));
+                dispatch(event(context, types.LOAD_REPORTS));
 
                 let reportService = new ReportService();
                 reportService.getReports(appId, tblId).then(
                     (response) => {
                         logger.debug('ReportService getReports success');
                         let model = reportsModel.set(appId, tblId, response.data);
-                        dispatch(event(id, types.LOAD_REPORTS_SUCCESS, model));
+                        dispatch(event(context, types.LOAD_REPORTS_SUCCESS, model));
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
-                        dispatch(event(id, types.LOAD_REPORTS_FAILED, error));
+                        dispatch(event(context, types.LOAD_REPORTS_FAILED, error));
                         reject();
                     }
                 ).catch((ex) => {
@@ -69,7 +64,7 @@ export const loadReports = (appId, tblId) => {
                 });
             } else {
                 logger.error('reportService.getReports: Missing required input parameters.');
-                dispatch(id, types.LOAD_REPORTS_FAILED, 500);
+                dispatch(null, types.LOAD_REPORTS_FAILED, 500);
                 reject();
             }
         });
