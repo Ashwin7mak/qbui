@@ -143,7 +143,7 @@
          * @returns Array of field Labels
          */
         getAllFieldLabelsOnForm: {value: function(elementFormName) {
-            elementFormName.elements('.fieldLabel').waitForVisible();
+            elementFormName.element('.fieldLabel').waitForVisible();
             return elementFormName.elements('.fieldLabel');
         }},
 
@@ -152,7 +152,7 @@
          * @returns Array of text input fields
          */
         getAllFieldRows: {value: function() {
-            this.editFormContainerEl.elements('.fieldRow').waitForVisible();
+            this.editFormContainerEl.element('.fieldRow').waitForVisible();
             return this.editFormContainerEl.elements('.fieldRow');
         }},
 
@@ -161,7 +161,7 @@
          * @returns Array of email input fields
          */
         getAllEmailInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.emailField').waitForVisible();
+            this.editFormContainerEl.element('input.emailField').waitForVisible();
             return this.editFormContainerEl.elements('input.emailField');
         }},
 
@@ -170,7 +170,7 @@
          * @returns Array of phone input fields
          */
         getAllPhoneInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.phoneNumber').waitForVisible();
+            this.editFormContainerEl.element('input.phoneNumber').waitForVisible();
             return this.editFormContainerEl.elements('input.phoneNumber');
         }},
 
@@ -179,7 +179,7 @@
          * @returns Array of url input fields
          */
         getAllUrlInputFields: {value: function() {
-            this.editFormContainerEl.elements('input[type="url"].textField').waitForVisible();
+            this.editFormContainerEl.element('input[type="url"].textField').waitForVisible();
             return this.editFormContainerEl.elements('input[type="url"].textField');
         }},
 
@@ -188,7 +188,7 @@
          * @returns Array of duration input fields
          */
         getAllDurationInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.durationField').waitForVisible();
+            this.editFormContainerEl.element('input.durationField').waitForVisible();
             return this.editFormContainerEl.elements('input.durationField');
         }},
 
@@ -197,7 +197,7 @@
          * @returns Array of numeric input fields
          */
         getAllNumericInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.numericField').waitForVisible();
+            this.editFormContainerEl.element('input.numericField').waitForVisible();
             return this.editFormContainerEl.elements('input.numericField');
         }},
 
@@ -206,7 +206,7 @@
          * @returns Array of date input fields
          */
         getAllDateInputFields: {value: function() {
-            this.editFormContainerEl.elements('.cellEdit.dateCell').waitForVisible();
+            this.editFormContainerEl.element('.cellEdit.dateCell').waitForVisible();
             return this.editFormContainerEl.elements('.cellEdit.dateCell');
         }},
 
@@ -215,7 +215,7 @@
          * @returns Array of time input fields
          */
         getAllTimeInputFields: {value: function() {
-            this.editFormContainerEl.elements('.cellEdit.timeCell').waitForVisible();
+            this.editFormContainerEl.element('.cellEdit.timeCell').waitForVisible();
             return this.editFormContainerEl.elements('.cellEdit.timeCell');
         }},
 
@@ -224,7 +224,7 @@
          * @returns Array of checkbox fields
          */
         getAllCheckboxFields: {value: function() {
-            this.editFormContainerEl.elements('.checkbox').waitForVisible();
+            this.editFormContainerEl.element('.checkbox').waitForVisible();
             return this.editFormContainerEl.elements('.checkbox');
         }},
 
@@ -233,7 +233,7 @@
          * @returns Array of user fields
          */
         getAllUserFields: {value: function() {
-            this.editFormContainerEl.elements('.cellEdit.userFormat').waitForVisible();
+            this.editFormContainerEl.element('.cellEdit.userFormat').waitForVisible();
             return this.editFormContainerEl.elements('.cellEdit.userFormat');
         }},
 
