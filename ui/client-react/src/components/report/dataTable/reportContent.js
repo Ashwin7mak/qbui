@@ -797,8 +797,6 @@ export const ReportContent = React.createClass({
     componentDidUpdate(prevProps) {
         this.capturePerfTiming(prevProps);
     },
-
-
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;

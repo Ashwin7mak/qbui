@@ -32,12 +32,13 @@ class ReportColumnTransformer extends ColumnTransformer {
         let fieldId = data.id;
         let headerLabel = data.headerName;
         let headerClasses = FieldUtils.getColumnHeaderClasses(data.fieldDef);
+        let headerLabelClasses = FieldUtils.getColumnHeaderLabelClasses();
 
-        return new ReportColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses);
+        return new ReportColumnTransformer(fieldId, data.fieldDef, headerLabel, headerClasses, headerLabelClasses);
     }
 
-    constructor(fieldId, fieldDef, headerLabel, headerClasses) {
-        super(headerLabel, fieldId, headerClasses);
+    constructor(fieldId, fieldDef, headerLabel, headerClasses, headerLabelClasses) {
+        super(headerLabel, fieldId, headerClasses, headerLabelClasses);
 
         this.fieldId = fieldId;
         this.fieldDef = fieldDef;

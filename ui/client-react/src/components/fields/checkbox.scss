@@ -36,6 +36,7 @@ $checkbox-font-size-mobile: 16px;
     label {
         min-height: 12px;
         min-width: 12px;
+        position: relative;
 
         @include small-breakpoint {
             width: 100%;
@@ -163,6 +164,7 @@ $checkbox-font-size-mobile: 16px;
             padding-top: 0;
             text-align: left;
             white-space: normal;
+            position: static;
 
             @include small-breakpoint {
                 font-size: $checkbox-font-size-mobile;
