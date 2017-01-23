@@ -9,7 +9,7 @@ describe('loading actions', () => {
 
     let appId = 1;
     let tblId = 2;
-    let storeId = appid + '-' + tblId;
+    let storeId = appId + '-' + tblId;
 
     // mock the Redux store when testing async action creators
     const middlewares = [thunk];
