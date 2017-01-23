@@ -25,8 +25,6 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid {
-    //margin: 2px;
-
     flex: 1 1 auto;
     overflow: auto;
     display: block;
@@ -56,6 +54,10 @@ $edit-icon-font-size: 18px;
     .AlignRight .cellEditIcon {
         right: auto;
         left: 0;
+    }
+
+    .qbRow:not(".editing") .qbCell {
+        cursor: pointer;
     }
 
     .qbCell:hover .cellEditIcon {
