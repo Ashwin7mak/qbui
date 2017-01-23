@@ -1,5 +1,8 @@
 import * as types from '../actions/types';
+import Logger from '../utils/logger';
 import _ from 'lodash';
+
+let logger = new Logger();
 
 /**
  * Manage array of states for a list of reports.
@@ -12,7 +15,6 @@ const reports = (
     state = [], action) => {
 
     const id = action.id;
-
     const newState = _.reject(state, report => report.id === id);
 
     // reducer - no mutations!
