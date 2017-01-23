@@ -146,7 +146,6 @@ var config = {
 
         // for prod we also de-dupe, obfuscate and minimize
         new webpack.optimize.DedupePlugin(),
-        /*
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             sourceMap: false,
@@ -154,7 +153,6 @@ var config = {
                 warnings: false
             }
         }),
-        */
 
         //  run-time environment for our application
         envPlugin
