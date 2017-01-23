@@ -23,8 +23,6 @@
     var sUser = 'administrator';
 
     var FormsPage = Object.create(e2ePageBase, {
-        //Record add button on stage
-        addRecordBtnOnStage : {get: function() {return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');}},
         //view form
         viewFormContainerEl : {get: function() {return browser.element('form.viewForm');}},
         //edit Form
@@ -61,18 +59,6 @@
         notificationContainerEl: {get: function() {return browser.element('.notification-container');}},
         notificationWindow: {get: function() {return this.notificationContainerEl.element('.notification-message .message');}},
 
-
-        /**
-         * Method to click Add Record button on Report Table
-         */
-        clickAddRecordBtnOnStage: {value: function() {
-            this.addRecordBtnOnStage.waitForVisible();
-            //Click on add record button
-            this.addRecordBtnOnStage.click();
-            //wait until you see edit container and save buttons in footer
-            this.editFormContainerEl.waitForVisible();
-            return this.editFormSaveBtns.waitForVisible();
-        }},
 
         /**
          * Method for spinner to dissaper after hitting on any save buttons on edit forms

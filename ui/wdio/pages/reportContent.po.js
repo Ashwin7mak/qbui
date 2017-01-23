@@ -7,8 +7,11 @@
     'use strict';
     // Import the base page object
     var e2ePageBase = require('./e2ePageBase.po');
+    var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
+        //Record add button on stage
+        addRecordBtnOnStage : {get: function() {return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');}},
 
         //TODO: Will need to extend these locators when we show multiple reports on a page
         // Report Container (encapsulates both the report toolbar and the report itself)
@@ -77,6 +80,18 @@
 
         // this will get you every record element on the grid
         agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.ag-row');}},
+
+        /**
+         * Method to click Add Record button on Report Table
+         */
+        clickAddRecordBtnOnStage: {value: function() {
+            this.addRecordBtnOnStage.waitForVisible();
+            //Click on add record button
+            this.addRecordBtnOnStage.click();
+            //wait until you see edit container and save buttons in footer
+            formsPO.editFormContainerEl.waitForVisible();
+            return formsPO.editFormSaveBtns.waitForVisible();
+        }},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.

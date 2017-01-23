@@ -102,7 +102,7 @@
             formsPO.verifyFieldsNotPresentOnForm(formsPO.viewFormContainerEl, expectedNumericFieldsWhichHasNoFieldRights);
 
             //Step 5 - go to edit mode by clicking on Add record button on stage
-            formsPO.clickAddRecordBtnOnStage();
+            reportContentPO.clickAddRecordBtnOnStage();
 
             //Step 6 - Verify cannot see any text fields on the form in edit mode as modify access set to false
             formsPO.verifyFieldsNotPresentOnForm(formsPO.editFormContainerEl, expectedNumericFieldsWhichHasNoFieldRights);
@@ -126,7 +126,7 @@
                 origRecordCount = formsPO.getRecordsCountInATable();
 
                 //Step 4 - Click on Add Record Button on the report Stage
-                formsPO.clickAddRecordBtnOnStage();
+                reportContentPO.clickAddRecordBtnOnStage();
 
                 //Step 5 - enter form values
                 fieldTypes.forEach(function(fieldType) {
