@@ -98,6 +98,16 @@ $edit-icon-font-size: 18px;
         text-align: center;
     }
 
+    .actionHeader {
+        display: flex;
+        align-items: center;
+
+        .selectRowCheckbox {
+            margin-top: 0;
+            flex: 1 1 auto;
+        }
+    }
+
     .gridHeaderCell {
         display: flex;
         align-items: center;
