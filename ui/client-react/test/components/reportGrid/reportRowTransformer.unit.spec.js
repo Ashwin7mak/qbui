@@ -171,6 +171,15 @@ describe('ReportRowTransformer', () => {
     });
 
     describe('transformRecordsForGrid', () => {
+        beforeEach(() => {
+            // Mock out Lodash's uniqueId function so it produces a predictable output for tests. Other functions remain the same.
+            ReportRowTransformer.__Rewire__('_', Object.assign({}, _, {uniqueId(name) {return name;}}));
+        });
+
+        afterEach(() => {
+            ReportRowTransformer.__ResetDependency__('_');
+        });
+
         const defaultInfo = {
             primaryKeyFieldName: DEFAULT_RECORD_KEY,
             editingRecordId: null,
