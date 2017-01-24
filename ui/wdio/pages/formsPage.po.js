@@ -305,12 +305,12 @@
             fieldElement.element('.Select-menu-outer').waitForVisible();
             //get all options from the list
             var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element(' div div').getText() === listOption;
+                return optionText.element('div div').getText() === listOption;
             });
 
             if (option !== []) {
                 //Click on filtered option
-                return option[0].element(' div div').click();
+                return option[0].element('div div').click();
             } else {
                 throw new Error('Option with name ' + listOption + " not found in the list");
             }
@@ -341,17 +341,8 @@
         setDropDownValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
             var fieldTypes = getAllUniqueFieldTypes;
             for (var i = 0; i < fieldTypes.value.length; i++) {
-                if (browserName === 'chrome') {
-                    fieldTypes.value[i].element('.Select-multi-value-wrapper').click();
-                    browser.pause(100);
-                    fieldTypes.value[i].element('.Select-input').keys(fieldValue);
-                    browser.keys(['Enter']);
-                    browser.pause(100);
-                    fieldTypes.value[i].element('..').click();
-                } else {
-                    fieldTypes.value[i].element('.Select-control').click();
-                    this.selectFromList(fieldTypes.value[i], fieldValue);
-                }
+                fieldTypes.value[i].element('.Select-multi-value-wrapper').click();
+                this.selectFromList(fieldTypes.value[i], fieldValue);
             }
         }},
 
