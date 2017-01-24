@@ -68,6 +68,28 @@
             },
 
             /**
+             * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
+             */
+            createEEDefaultForms: function(app) {
+                var generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
+                var appId = app.id;
+                var createdFormIds = [];
+
+                app.tables.forEach((createdTable, i) => {
+                    let tableId = createdTable.id;
+                    let formJSON = generatedForms[i];
+                    const formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+
+                    recordBase.apiBase.executeEERequest(formsEndpoint, 'POST', formJSON).then(function(result) {
+                        var id = JSON.parse(result.body);
+                        createdFormIds.push(id);
+                    });
+                });
+
+                return createdFormIds;
+            },
+
+            /**
              * Generates a form and creates it in a table via the API.
              */
             createForm: function(appId, tableId, formName) {
