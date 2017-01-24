@@ -502,12 +502,12 @@ $edit-icon-font-size: 18px;
     color: $font-color;
 }
 //The style here is for sticky column
-.qbGrid > tbody > tr > td:first-of-type {
+.qbGrid .qbRow .stickyCell {
     background: $row-bg-color;
     z-index: $zindex-qbGrid-firstOfType-stickyColumn;
 }
 
-.qbGrid > tbody > tr.editing > td:first-of-type {
+.qbGrid .editing .stickyCell {
     z-index: $zindex-qbGrid-editing-firstOfType;
 }
 
@@ -523,5 +523,10 @@ th.qbHeaderCell.stickyCell {
 .stickyCell .dropdown-menu {
     top: 0;
     left: 27px;
+    background-color: $row-bg-color;
+
+    li {
+        background-color: $row-bg-color;
+    }
 }
 
