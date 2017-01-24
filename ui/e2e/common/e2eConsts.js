@@ -159,8 +159,7 @@
          * Creates a mapping for two tables with all supported field types that can be passed into the test generators package
          */
         createDefaultTableMap() {
-            var table1Name = 'Table 1';
-            var table2Name = 'Table 2';
+            let table1Name = 'Table 1', table2Name = 'Table 2', table3Name = 'Parent Table A', table4Name = 'Child Table A';
 
             // Create the table schema (map object) to pass into the app generator
             var tableToFieldToFieldTypeMap = {};
@@ -274,6 +273,25 @@
                 fieldType: consts.SCALAR,
                 dataType: consts.URL
             };
+            tableToFieldToFieldTypeMap[table3Name] = {};
+            tableToFieldToFieldTypeMap[table3Name][e2eConsts.reportFieldNames[1]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TEXT
+            };
+            tableToFieldToFieldTypeMap[table3Name][e2eConsts.reportFieldNames[2]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.NUMERIC
+            };
+            tableToFieldToFieldTypeMap[table4Name] = {};
+            tableToFieldToFieldTypeMap[table4Name][e2eConsts.reportFieldNames[1]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TEXT
+            };
+            tableToFieldToFieldTypeMap[table4Name][e2eConsts.reportFieldNames[2]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.NUMERIC
+            };
+
             return tableToFieldToFieldTypeMap;
         }
     });
