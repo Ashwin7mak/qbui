@@ -34,4 +34,14 @@ describe('Shell actions', () => {
         const navState = true;
         expect(shellActions.toggleLeftNav(navState)).toEqual({type: types.TOGGLE_LEFT_NAV_EXPANDED, navState});
     });
+
+    it('should create an action to show row actions menu', () => {
+        const toggleState = true;
+        expect(shellActions.toggleRowActionsMenu(toggleState)).toEqual({type: types.TOGGLE_ROW_POP_UP_MENU, toggleState});
+    });
+
+    it('should create an action to toggle apps list', () => {
+        const toggleState = true;
+        expect(shellActions.toggleAppsList(toggleState)).toEqual({type: types.TOGGLE_APPS_LIST, toggleState});
+    });
 });

@@ -1,19 +1,17 @@
 import reducer from '../../src/reducers/shell';
 import * as types from '../../src/actions/types';
 
-let initialState = {
-    trowserOpen: false,
-    trowserContent: null,
-    leftNavExpanded: true,
-    leftNavVisible: false
-};
+let initialState = {};
 
 function initializeState() {
     initialState = {
         trowserOpen: false,
         trowserContent: null,
         leftNavExpanded: true,
-        leftNavVisible: false
+        leftNavVisible: false,
+        openCount: 0,
+        isRowPopUpMenuOpen: false,
+        appsListOpen: false
     };
 }
 
@@ -46,8 +44,8 @@ describe('Nav reducer functions for Toggle left nav expanded', () => {
     var testCases = [
         {name:'nav state is false', navState: false, expectation: false},
         {name:'nav state is true', navState: true, expectation: true},
-        {name:'nav state is not a boolean', navState: '1', expectation: !initialState.leftNavExpanded},
-        {name:'nav state is not set', navState: null, expectation: !initialState.leftNavExpanded}
+        {name:'nav state is not a boolean', navState: '1', expectation: false},
+        {name:'nav state is not set', navState: null, expectation: false}
     ];
 
     testCases.forEach(function(test) {
@@ -64,8 +62,8 @@ describe('Nav reducer functions for Toggle left nav visible', () => {
     var testCases = [
         {name:'nav state is false', navState: false, expectation: false},
         {name:'nav state is true', navState: true, expectation: true},
-        {name:'nav state is not a boolean', navState: '1', expectation: !initialState.leftNavVisible},
-        {name:'nav state is not set', navState: null, expectation: !initialState.leftNavVisible}
+        {name:'nav state is not a boolean', navState: '1', expectation: true},
+        {name:'nav state is not set', navState: null, expectation: true}
     ];
 
     testCases.forEach(function(test) {
@@ -77,3 +75,41 @@ describe('Nav reducer functions for Toggle left nav visible', () => {
         });
     });
 });
+
+describe('Nav reducer functions for Toggle row actions menu', () => {
+    var testCases = [
+        {name:'toggle state is false', toggleState: false, expectedRowPopupMenuState: false, openCount: 0},
+        {name:'toggle state is true', toggleState: true, expectedRowPopupMenuState: true, openCount: 1},
+        {name:'toggle state is not a boolean', toggleState: '1', expectedRowPopupMenuState: false, openCount: 0},
+        {name:'toggle state is not set', toggleState: null, expectedRowPopupMenuState: false, openCount: 0}
+    ];
+
+    testCases.forEach(function(test) {
+        it(test.name, (done) => {
+            initializeState();
+            const state = reducer(initialState, {type: types.TOGGLE_ROW_POP_UP_MENU, toggleState: test.toggleState});
+            expect(state.isRowPopUpMenuOpen).toEqual(test.expectedRowPopupMenuState);
+            expect(state.openCount).toEqual(test.openCount);
+            done();
+        });
+    });
+});
+
+describe('Nav reducer functions for Toggle apps list', () => {
+    var testCases = [
+        {name:'toggle state is false', toggleState: false, expectation: false},
+        {name:'toggle state is true', toggleState: true, expectation: true},
+        {name:'toggle state is not a boolean', toggleState: '1', expectation: true},
+        {name:'toggle state is not set', toggleState: null, expectation: true}
+    ];
+
+    testCases.forEach(function(test) {
+        it(test.name, (done) => {
+            initializeState();
+            const state = reducer(initialState, {type: types.TOGGLE_APPS_LIST, toggleState: test.toggleState});
+            expect(state.appsListOpen).toEqual(test.expectation);
+            done();
+        });
+    });
+});
+

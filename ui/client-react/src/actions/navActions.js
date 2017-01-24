@@ -17,10 +17,6 @@ let navActions = {
     resetRowMenu() {
         this.dispatch(actions.RESET_ROW_MENU);
     },
-
-    toggleAppsList(open) {
-        this.dispatch(actions.TOGGLE_APPS_LIST, open);
-    },
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },

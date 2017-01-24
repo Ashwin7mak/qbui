@@ -11,7 +11,6 @@ let NavStore = Fluxxor.createStore({
 
     initialize() {
         this.state = {
-            appsListOpen: false,
             searchBarOpen: false,
             showTopNav: true,
             searching:false,
@@ -29,7 +28,6 @@ let NavStore = Fluxxor.createStore({
 
         this.bindActions(
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
-            actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
             actions.CHANGE_LOCALE, this.onChangeLocale,
@@ -86,20 +84,6 @@ let NavStore = Fluxxor.createStore({
         this.state.filterReportsName = name;
         this.emit('change');
     },
-
-    /*
-     * toggle apps list
-     * @param show force shown/hidden
-     */
-    onToggleAppsList(show) {
-        if (show === false || show === true) {
-            this.state.appsListOpen = show;
-        } else {
-            this.state.appsListOpen = !this.state.appsListOpen;
-        }
-        this.emit('change');
-    },
-
     onScrollingReport(scrolling) {
         this.state.scrollingReport = scrolling;
         this.emit('change');

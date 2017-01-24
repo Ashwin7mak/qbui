@@ -39,3 +39,27 @@ export const toggleLeftNav = (navState) => {
         navState
     };
 };
+
+/**
+ * Show/Hide the row actions menu for report grid
+ *
+ * @returns {{toggleState}}
+ */
+export const toggleRowActionsMenu = (toggleState) => {
+    return {
+        type: types.TOGGLE_ROW_POP_UP_MENU,
+        toggleState
+    };
+};
+
+/**
+ * Toggle apps list show/hide state or force to show or hide apps list
+ *
+ * @returns {{toggleState}}
+ */
+export const toggleAppsList = (toggleState) => {
+    return {
+        type: types.TOGGLE_APPS_LIST,
+        toggleState
+    };
+};

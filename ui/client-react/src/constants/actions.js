@@ -3,7 +3,6 @@ export const TOGGLE_ROW_POP_UP_MENU = 'TOGGLE_ROW_POP_UP_MENU';
 export const RESET_ROW_MENU = 'RESET_ROW_MENU';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 export const SET_TOP_TITLE = 'SET_TOP_TITLE';
-export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_REPORTS = 'SHOW_REPORTS';
 export const HIDE_REPORTS = 'HIDE_REPORTS';
 export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';

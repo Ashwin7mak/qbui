@@ -144,12 +144,10 @@ export let Nav = React.createClass({
      *  if left nav is collapsed, open the apps list and dispatch event to open nav
      */
     toggleAppsList(open) {
-        const flux = this.getFlux();
-
         if (this.props.qbui.shell.leftNavExpanded) {
-            flux.actions.toggleAppsList(open);
+            this.props.dispatch(ShellActions.toggleAppsList(open));
         } else {
-            flux.actions.toggleAppsList(true);
+            this.props.dispatch(ShellActions.toggleAppsList(true));
             this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
         }
     },
@@ -264,7 +262,7 @@ export let Nav = React.createClass({
             <LeftNav
                 visible={this.props.qbui.shell.leftNavVisible}
                 expanded={this.props.qbui.shell.leftNavExpanded}
-                appsListOpen={this.state.nav.appsListOpen}
+                appsListOpen={this.props.qbui.shell.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
