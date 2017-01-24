@@ -125,7 +125,7 @@ var config = {
             // SASS - transformed to css,
             {
                 test: /\.scss$/,
-                loader: 'style!css!sass'
+                loader: LOCAL ? 'style?sourceMap!css?sourceMap!sass?sourceMap' : 'style!css!sass'
             },
 
             {
