@@ -30,6 +30,15 @@ describe('Report reducer report loading', () => {
         expect(state.length).toEqual(1);
         expect(state[0].loading).toEqual(true);
     });
+    it('test state id is not duplicated', () => {
+        actionObj.type = types.LOAD_REPORTS;
+        state = reducer(state, actionObj);
+        expect(state.length).toEqual(1);
+        //  call same state
+        actionObj.type = types.LOAD_REPORTS_FAILED;
+        state = reducer(state, actionObj);
+        expect(state.length).toEqual(1);
+    });
 });
 
 describe('Report reducer error report loading', () => {

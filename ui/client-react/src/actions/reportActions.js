@@ -18,7 +18,7 @@ let logger = new Logger();
  * @returns {{id: *, type: *, content: *}}
  */
 function event(context, type, content) {
-    let id = context;      //  reports list store id is the context
+    let id = context;      //  ..for now, the context is used as the reports list store id
     return {
         id: id,
         type: type,
