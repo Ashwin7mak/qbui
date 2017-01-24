@@ -106,15 +106,13 @@ const ReportCell = React.createClass({
 
         // The input for checkbox is hidden and off to the side so focus on the actionable div for the checkbox instead
         if (input && input.type === 'checkbox') {
-            input = renderedComponent.querySelector('.checkbox.editor');
+            return renderedComponent.querySelector('.checkbox.editor');
+        } else if (!input) {
+            // If there is not an <input> element, try <textarea> (for multiline text)
+            return renderedComponent.querySelector('textarea');
+        } else {
+            return input;
         }
-
-        // If there is not an <input> element, try <textarea> (for multiline text)
-        if (!input) {
-            input = renderedComponent.querySelector('textarea');
-        }
-
-        return input;
     },
 
     /**
