@@ -10,7 +10,7 @@ import * as types from '../actions/types';
 let logger = new Logger();
 
 /**
- * Construct Redux action
+ * Construct reports store payload
  *
  * @param context - context
  * @param type - event type
@@ -18,7 +18,7 @@ let logger = new Logger();
  * @returns {{id: *, type: *, content: *}}
  */
 function event(context, type, content) {
-    let id = context;      //  ..for now, the context is used as the reports list store id
+    let id = context;
     return {
         id: id,
         type: type,
@@ -38,7 +38,6 @@ function event(context, type, content) {
 export const loadReports = (context, appId, tblId) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (context && appId && tblId) {
@@ -64,7 +63,7 @@ export const loadReports = (context, appId, tblId) => {
                     reject();
                 });
             } else {
-                logger.error('reportService.getReports: Missing required input parameters.');
+                logger.error('reportActions.loadReports: Missing required input parameters.  context:' + context + '; appId:' + appId + '; tableId:' + tblId);
                 dispatch(event(null, types.LOAD_REPORTS_FAILED, 500));
                 reject();
             }
