@@ -18,6 +18,14 @@ class CollapsedGroupHelper {
         return this.collapsedGroups.length >= this.subHeaderRows.length;
     }
 
+    areNoneCollapsed() {
+        return this.collapsedGroups.length === 0;
+    }
+
+    areSomeCollapsed() {
+        return this.collapsedGroups.length > 0 && !this.areAllCollapsed();
+    }
+
     getSubHeaderRows(shouldResetCollapsedGroupsIfRowsDifferent = true) {
         let updatedSubHeaderRows = this.rows.filter(row => {return row.isSubHeader;});
 
@@ -77,9 +85,9 @@ class CollapsedGroupHelper {
     }
 
     toggleCollapseAllGroups() {
-        let subHeaderRows = this.rows.filter(row => {return row.isSubHeader;}).map(row => {return row.id;});
-
-        if (subHeaderRows.length > this.collapsedGroups.length) {
+        // Expand all groups when in a mixed state (some collapsed, some not), otherwise collapse all groups
+        if (this.areNoneCollapsed()) {
+            let subHeaderRows = this.rows.filter(row => {return row.isSubHeader;}).map(row => {return row.id;});
             this.collapsedGroups = subHeaderRows;
         } else {
             this.collapsedGroups = [];

@@ -254,9 +254,13 @@ const QbGrid = React.createClass({
 
         let collapseAllIcon = null;
         if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
-            let iconType = (this.collapsedGroupHelper.areAllCollapsed() ? 'caret-filled-right' : 'caret-filled-down');
+            let iconType = (this.collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
 
-            collapseAllIcon = <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />;
+            collapseAllIcon = (
+                <div className="collapseAllIcon">
+                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />
+                </div>
+            );
         }
 
         return (

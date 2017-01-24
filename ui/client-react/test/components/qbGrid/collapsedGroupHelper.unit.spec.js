@@ -79,6 +79,69 @@ describe('CollapsedGroupHelper', () => {
         });
     });
 
+    describe('areSomeCollapsed', () => {
+        let testCases = [
+            {
+                description: 'returns false if there are no collapsed grouped',
+                collapsedGroups: [],
+                rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
+                expectedValue: false
+            },
+            {
+                description: 'returns false if all groups are collapsed',
+                collapsedGroups: [1, 2, 3],
+                rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
+                expectedValue: false
+            },
+            {
+                description: 'returns true if any group is collapsed, but not all groups',
+                collapsedGroups: [1],
+                rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
+                expectedValue: true
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let collapsedGroupHelper = new CollapsedGroupHelper(testCase.collapsedGroups, testCase.rows);
+                expect(collapsedGroupHelper.areSomeCollapsed()).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
+    describe('areNoneCollapsed', () => {
+        let testCases = [
+            {
+                description: 'returns false if any group is collapsed',
+                collapsedGroups: [2],
+                rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
+                expectedValue: false
+            },
+            {
+                description: 'returns false if all groups are collapsed',
+                collapsedGroups: [1, 2, 3],
+                rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
+                expectedValue: false
+            },
+            {
+                description: 'returns true if ' +
+                '' +
+                '' +
+                'there are no collapsed groups',
+                collapsedGroups: [],
+                rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
+                expectedValue: true
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let collapsedGroupHelper = new CollapsedGroupHelper(testCase.collapsedGroups, testCase.rows);
+                expect(collapsedGroupHelper.areNoneCollapsed()).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
     describe('getSubHeaderRows', () => {
         let testCases = [
             {
@@ -229,15 +292,15 @@ describe('CollapsedGroupHelper', () => {
             },
             {
                 description: 'collapses all subHeaderGroups if no groups are collapsed',
-                collapseGroups: [],
+                collapsedGroups: [],
                 rows: [{id: 'a', isSubHeader: true}, {id: 1}, {id: 'b', isSubHeader: true}, {id: 2}],
                 expectedValue: ['a', 'b']
             },
             {
-                description: 'collapses all subHeaderGroups if some, but not all, groups are collapsed',
-                collapseGroups: ['a'],
+                description: 'expands all subHeaderGroups if some, but not all, groups are collapsed',
+                collapsedGroups: ['a'],
                 rows: [{id: 'a', isSubHeader: true}, {id: 1}, {id: 'b', isSubHeader: true}, {id: 2}],
-                expectedValue: ['a', 'b']
+                expectedValue: []
             }
         ];
 
