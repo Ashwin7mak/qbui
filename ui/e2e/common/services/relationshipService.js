@@ -37,10 +37,14 @@
 
                 const relationshipToCreate = {
                     appId        : createApp.id,
+                    masterAppId  : createApp.id,
                     masterTableId: masterTableId,
                     masterFieldId: masterTablePkField.id,
+                    detailAppId  : createApp.id,
                     detailTableId: detailTableId,
                     detailFieldId: detailTableFkField.id,
+                    referentialIntegrity: false,
+                    cascadeDelete: false,
                     description  : 'Referential integrity relationship between Master / Child Tables'
                 };
 
