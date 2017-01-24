@@ -56,21 +56,21 @@ const QbRow = React.createClass({
      * add class to TR when edit icon in cell gets mouse enter
      */
     handleMouseEnterEditIcon() {
-        this.refs.tr.classList.add("willEdit");
+        this.tr.classList.add("willEdit");
     },
 
     /**
      * remove class to TR when edit icon in cell gets mouse leave
      */
     handleMouseLeaveEditIcon() {
-        this.refs.tr.classList.remove("willEdit");
+        this.tr.classList.remove("willEdit");
     },
 
     componentDidMount() {
-        if (this.refs.tr) {
+        if (this.tr) {
             // handle the row styling when the nested edit icons get mouse enter/leave events
 
-            const editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
+            const editIcons = this.tr.getElementsByClassName("cellEditIcon");
 
             for (let i = 0; i < editIcons.length; i++) {
                 editIcons[i].addEventListener("mouseenter", this.handleMouseEnterEditIcon);
@@ -81,10 +81,10 @@ const QbRow = React.createClass({
 
     componentWillUnmount() {
 
-        if (this.refs.tr) {
+        if (this.tr) {
             // remove mouse listeners from non-subheader rows
 
-            const editIcons = this.refs.tr.getElementsByClassName("cellEditIcon");
+            const editIcons = this.tr.getElementsByClassName("cellEditIcon");
 
             for (let i = 0; i < editIcons.length; i++) {
                 editIcons[i].removeEventListener("mouseenter", this.handleMouseEnterEditIcon);
@@ -98,7 +98,7 @@ const QbRow = React.createClass({
             return this.renderSubHeader();
         }
 
-        return <tr ref="tr" className={this.props.className} key={`qbRow-${this.props.rowId}`} {...this.props} />;
+        return <tr ref={element => this.tr = element} className={this.props.className} key={`qbRow-${this.props.rowId}`} {...this.props} />;
     }
 });
 
