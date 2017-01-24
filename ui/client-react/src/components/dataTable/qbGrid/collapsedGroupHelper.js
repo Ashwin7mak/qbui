@@ -38,6 +38,14 @@ class CollapsedGroupHelper {
         return this.subHeaderRows;
     }
 
+    /**
+     * Data sent to the QbGrid is in a flattened array. The array is in order with group sub headers directly
+     * above their child records. Each record (and nested subheader) has a parentId with the id of the direct parent.
+     * Collapsed rows are filtered out of the displayed records by remove any records that have a parentId that matches
+     * the ids in collapsedGroups.
+     * @param rows
+     * @returns {*}
+     */
     filterRows(rows) {
         if (!Array.isArray(rows)) {
             this.rows = [];
