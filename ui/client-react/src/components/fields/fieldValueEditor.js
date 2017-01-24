@@ -230,7 +230,9 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldValueEditor {...commonProps} showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
+            return <MultiLineTextFieldValueEditor {...commonProps}
+                                                  isFormView={this.props.isFormView}
+                                                  showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
         }
 
         case FieldFormats.URL: {
