@@ -362,6 +362,11 @@
                 let rawDataValue = record[groupField.name].value;
                 //  if no display value in obj, then use the raw
                 let dataValue = record[groupField.name].display === undefined ? rawDataValue : record[groupField.name].display;
+                // If the dataValue is a complex display object (e.g., like phone numbers), make sure to use the display
+                // property on the object instead of stringifying the object itself
+                if (lodash.has(dataValue, 'display')) {
+                    dataValue = dataValue.display;
+                }
 
                 let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
                 //  Convert empty strings into null as both are treated the same by the client.
