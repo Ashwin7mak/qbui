@@ -111,10 +111,12 @@ export let Nav = React.createClass({
      * get table object for currently selected table (or null if no table selected)
      *
      */
-    getSelectedTable() {
-        const app = this.getSelectedApp();
-        if (app && this.props.qbui.reports.tableId) {
-            return _.find(app.tables, (t) => t.id === this.props.qbui.reports.tableId);
+    getSelectedTable(tableId) {
+        if (tableId) {
+            const app = this.getSelectedApp();
+            if (app) {
+                return _.find(app.tables, (t) => t.id === tableId);
+            }
         }
         return null;
     },
@@ -232,7 +234,7 @@ export let Nav = React.createClass({
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
-                table={this.getSelectedTable()}
+                table={this.getSelectedTable(reportsData.tableId)}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
                 selectedRecordId={viewingRecordId}
@@ -252,7 +254,7 @@ export let Nav = React.createClass({
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable()}
+                               selectedTable={this.getSelectedTable(reportsData.tableId)}
                                reportData={this.state.reportData}
                                errorPopupHidden={this.state.nav.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
@@ -260,7 +262,7 @@ export let Nav = React.createClass({
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
-                                      selectedTable={this.getSelectedTable()}
+                                      selectedTable={this.getSelectedTable(reportsData.tableId)}
                                       filterReportsName={this.state.nav.filterReportsName}
                                       reportsData={reportsData}
                                       onHideTrowser={this.hideTrowser}/>
@@ -303,7 +305,7 @@ export let Nav = React.createClass({
                             fields: this.state.fields,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
-                            selectedTable: this.getSelectedTable(),
+                            selectedTable: this.getSelectedTable(reportsData.tableId),
                             scrollingReport: this.state.nav.scrollingReport,
                             flux: flux}
                         )}
