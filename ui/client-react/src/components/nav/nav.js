@@ -90,7 +90,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        this.props.dispatch(ReportActions.loadReports(CONTEXT.LOAD_REPORTS.NAV, this.state.apps.selectedAppId, tableId));
+        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.state.apps.selectedAppId, tableId));
     },
 
     /**
@@ -222,8 +222,12 @@ export let Nav = React.createClass({
             viewingRecordId = this.props.params.recordId;
         }
 
-        // should just be one report in the list
-        let reportsData = _.nth(this.props.qbui.reports, 0) || {};
+        // pull the NAV context report from the list
+        let report = _.find(this.props.qbui.reports, function(rpt) {
+            return rpt.id === CONTEXT.REPORTS_LIST.NAV;
+        });
+        //  make sure reportsData is an object if NAV context is not found
+        let reportsData = report || {};
 
         return (<div className={classes}>
             <NavPageTitle
