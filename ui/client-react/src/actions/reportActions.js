@@ -41,7 +41,7 @@ export const loadReports = (context, appId, tblId) => {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (context && appId && tblId) {
-                logger.debug('Loading report list for appId:' + appId + '; tableId:' + tblId);
+                logger.debug(`Loading report list for appId: ${appId}, tableId: ${tblId}`);
 
                 dispatch(event(context, types.LOAD_REPORTS));
 
@@ -63,7 +63,7 @@ export const loadReports = (context, appId, tblId) => {
                     reject();
                 });
             } else {
-                logger.error('reportActions.loadReports: Missing required input parameters.  context:' + context + '; appId:' + appId + '; tableId:' + tblId);
+                logger.error(`reportActions.loadReports: Missing required input parameters.  context: ${context}, appId: ${appId}, tableId: ${tblId}`);
                 dispatch(event(null, types.LOAD_REPORTS_FAILED, 500));
                 reject();
             }

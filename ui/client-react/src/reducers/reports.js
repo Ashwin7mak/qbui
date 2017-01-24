@@ -1,8 +1,5 @@
 import * as types from '../actions/types';
-import Logger from '../utils/logger';
 import _ from 'lodash';
-
-let logger = new Logger();
 
 /**
  * Manage array of states for a list of reports.
