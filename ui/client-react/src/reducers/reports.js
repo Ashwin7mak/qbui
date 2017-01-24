@@ -8,8 +8,7 @@ import _ from 'lodash';
  * @param action - event type
  * @returns {Array}
  */
-const reports = (
-    state = [], action) => {
+const reports = (state = [], action) => {
 
     const id = action.id;
     const newState = _.reject(state, report => report.id === id);
