@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 import QBIcon from '../../qbIcon/qbIcon';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';

@@ -5,7 +5,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import {RowEditActions} from '../../../src/components/dataTable/qbGrid/rowEditActions';
 import QBToolTip from '../../../src/components/qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 
 const rowId = 1;
 const actions = {

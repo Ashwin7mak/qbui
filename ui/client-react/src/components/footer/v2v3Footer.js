@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Panel} from 'react-bootstrap';
+import Panel from 'react-bootstrap/lib/Panel';
 import QBicon from '../qbIcon/qbIcon';
 import {PropTypes} from 'react';
 import {I18nMessage} from '../../../src/utils/i18nMessage';

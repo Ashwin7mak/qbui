@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetsAspect  from '../../src/components/facet/facetsAspect';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import FacetsItem  from '../../src/components/facet/facetsItem';
 import FacetsList  from '../../src/components/facet/facetsList';
 import FacetsMenu  from '../../src/components/facet/facetsMenu';
 import facetMenuActions from '../../src/actions/facetMenuActions';
 import Store from '../../src/stores/facetMenuStore';
-import * as actions from '../../src/constants/actions';
 
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
@@ -48,16 +46,12 @@ describe('FacetsMenu functions', () => {
     beforeEach(() => {
         FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
         FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsMenu.__Rewire__('I18nMessage', I18nMessageMock);
         flux.store('FacetMenuStore').initMenu();
     });
 
     afterEach(() => {
         FacetsList.__ResetDependency__('I18nMessage');
         FacetsItem.__ResetDependency__('I18nMessage');
-        FacetsAspect.__ResetDependency__('I18nMessage');
-        FacetsMenu.__ResetDependency__('I18nMessage');
     });
 
     let reportParams = {appId:1, tblId:2, rptId:3};

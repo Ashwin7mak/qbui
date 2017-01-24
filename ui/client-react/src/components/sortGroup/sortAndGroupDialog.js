@@ -1,6 +1,6 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 import OverlayDialogHeader from '../overlay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';

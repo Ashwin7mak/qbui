@@ -1,9 +1,5 @@
 import React from 'react';
-import {I18nMessage} from '../../utils/i18nMessage';
-import {Button} from 'react-bootstrap';
 import Logger from '../../utils/logger';
-import Locale from '../../locales/locales';
-import StringUtils from '../../utils/stringUtils';
 let logger = new Logger();
 
 import './reportStage.scss';

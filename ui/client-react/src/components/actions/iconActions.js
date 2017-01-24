@@ -1,8 +1,10 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
-import {MenuItem, Button, Input, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {I18nMessage} from '../../utils/i18nMessage';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import Button from 'react-bootstrap/lib/Button';
+import Dropdown from 'react-bootstrap/lib/Dropdown';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
 import './iconActions.scss';
