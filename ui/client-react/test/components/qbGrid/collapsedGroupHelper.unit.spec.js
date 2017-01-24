@@ -38,7 +38,7 @@ describe('CollapsedGroupHelper', () => {
                 subHeaderRows: []
             },
             {
-                description: 'if passed in rows have subheaders, they are added as subheaders on the instance',
+                description: 'if rows have subheaders, they are added as subheaders on the instance',
                 rows: [{id: 1}, {id: 2, isSubHeader: true}, {id: 3}, {id: 4, isSubHeader: true}],
                 collapsedGroups: [2],
                 subHeaderRows: [{id: 2, isSubHeader: true}, {id:4, isSubHeader: true}]
@@ -124,10 +124,7 @@ describe('CollapsedGroupHelper', () => {
                 expectedValue: false
             },
             {
-                description: 'returns true if ' +
-                '' +
-                '' +
-                'there are no collapsed groups',
+                description: 'returns true if there are no collapsed groups',
                 collapsedGroups: [],
                 rows: [{id: 1, isSubHeader: true}, {id: 2, isSubHeader: true}, {id: 3, isSubHeader: true}, {id: 4}],
                 expectedValue: true
@@ -143,6 +140,7 @@ describe('CollapsedGroupHelper', () => {
     });
 
     describe('getSubHeaderRows', () => {
+        // Matches spec https://quickbase.atlassian.net/wiki/pages/viewpage.action?pageId=7188119#SortandGroup("Large")-Groupheaders
         let testCases = [
             {
                 description: 'gets all subheader rows',

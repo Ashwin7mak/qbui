@@ -3,7 +3,6 @@
  */
 
 var assert = require('assert');
-var lodash = require('lodash');
 var _ = require('lodash');
 var constants = require('../../../../../common/src/constants');
 var groupFormatter = require('../../../../src/api/quickbase/formatter/groupFormatter');
@@ -418,7 +417,7 @@ describe('Validate GroupFormatter unit tests', function() {
         var expectedGroupNames = setup.records.map(record => {
             var expectedGroupName = record.find(field => field.id === groupedFieldId).display;
             // For complex display objects, be sure to get the value of its display property
-            if (lodash.has(expectedGroupName, 'display')) {
+            if (_.has(expectedGroupName, 'display')) {
                 expectedGroupName = expectedGroupName.display;
             }
             return expectedGroupName;
