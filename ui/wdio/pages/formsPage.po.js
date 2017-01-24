@@ -345,6 +345,7 @@
                     fieldTypes.value[i].element('.Select-multi-value-wrapper').click();
                     browser.pause(100);
                     fieldTypes.value[i].element('.Select-input').keys(fieldValue);
+                    browser.keys(['Enter']);
                     browser.pause(100);
                     fieldTypes.value[i].element('..').click();
                 } else {
