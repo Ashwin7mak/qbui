@@ -68,6 +68,12 @@ class CollapsedGroupHelper {
         });
     }
 
+    /**
+     * If a subHeader has nested subHeaders, we need to collapse all of them, so this function
+     * adds the current subHeaderId, plus the ids of any subHeaders nested below that one.
+     * @param currentSubHeaderId
+     * @returns {[*]}
+     */
     addSubGroups(currentSubHeaderId) {
         let subHeaderIds = [currentSubHeaderId];
 
