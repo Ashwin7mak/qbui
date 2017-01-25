@@ -153,7 +153,6 @@
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
-
             // Return all record values if no cell number supplied
             if (typeof recordCellIndex === 'undefined') {
                 var cellValues = [];
@@ -195,7 +194,8 @@
          */
         reportDisplayedRecordCount: {value: function() {
             this.agGridRecordElList.waitForVisible();
-            return this.agGridRecordElList.value.length;
+            var rows = this.agGridRecordElList.elements('tr');
+            return rows.value.length;
         }},
 
         //TODO: Refactor these once we port over the delete record tests

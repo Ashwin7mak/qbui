@@ -75,8 +75,6 @@
             if (browserName !== 'safari') {
                 ReportInLineEditPO.openDateFieldCalWidget(0);
                 ReportInLineEditPO.advanceCurrentlySelectedDate(0);
-                console.log('advanceCurrentLySelectedDate is fine');
-                browser.debug();
             }
 
             // Step 4 - Save the new added row

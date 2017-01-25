@@ -319,20 +319,12 @@
             // var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
             var qbCells = recordBeingEdited.elements('.qbCell');
             var dateFieldCells = qbCells.elements('.cellEdit.dateCell.place');
-            // console.log('recordBeingEdited: ', recordBeingEdited);
-            // console.log('qbCells: ', qbCells);
-            // console.log('dateFieldCells: ', dateFieldCells);
-            // browser.debug();
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
             // var dateFieldCell = dateFieldCells;
             var dateFieldCalIcon = this.getDateFieldCalendarIconEl(dateFieldCell);
-            // console.log('dateFieldCalIcon: ', dateFieldCalIcon);
-            // browser.debug();
 
             var dateTimeFieldCells = qbCells.elements('.dateTimeFieldValueEditor');
             var dateTimeFieldCell = dateTimeFieldCells.value[0];
-            console.log('dateTimeFieldCell: ', dateTimeFieldCell);
-            browser.debug();
 
             if (browserName === 'chrome') {
                 browser.moveToObject(dateFieldCalIcon.selector);
@@ -344,10 +336,7 @@
 
             // Sauce Labs needs extra room so scroll past to the Date Time field next to it
             if (browserName === 'chrome') {
-                // dateTimeFieldCell.moveToObject();
                 browser.moveToObject(dateTimeFieldCell.selector);
-                // dateTimeFieldCell.moveToObject();
-                browser.debug();
             } else {
                 browser.execute(function(dateTimeElement) {
                     dateTimeElement.scrollIntoView(false);
