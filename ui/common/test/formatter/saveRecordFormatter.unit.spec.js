@@ -14,6 +14,46 @@ describe('saveRecordFormatter', () => {
                 expectedChange: '123'
             },
             {
+                description: 'converts empty strings to null for numeric fields',
+                change: buildNumericChange(constants.NUMERIC, ''),
+                expectedChange: buildNumericChange(constants.NUMERIC, null)
+            },
+            {
+                description: 'converts empty strings to null for percent fields',
+                change: buildNumericChange(constants.PERCENT, ''),
+                expectedChange: buildNumericChange(constants.PERCENT, null)
+            },
+            {
+                description: 'converts empty strings to null for currency fields',
+                change: buildNumericChange(constants.CURRENCY, ''),
+                expectedChange: buildNumericChange(constants.CURRENCY, null)
+            },
+            {
+                description: 'converts empty strings to null for rating fields',
+                change: buildNumericChange(constants.RATING, ''),
+                expectedChange: buildNumericChange(constants.RATING, null)
+            },
+            {
+                description: 'converts empty strings to null for duration fields',
+                change: buildNumericChange(constants.DURATION, ''),
+                expectedChange: buildNumericChange(constants.DURATION, null)
+            },
+            {
+                description: 'does not convert an invalid duration that is a string',
+                change: buildNumericChange(constants.DURATION, '1 wolf'),
+                expectedChange: buildNumericChange(constants.DURATION, '1 wolf')
+            },
+            {
+                description: 'does not convert numeric that is already null',
+                change: buildNumericChange(constants.NUMERIC, null),
+                expectedChange: buildNumericChange(constants.NUMERIC, null)
+            },
+            {
+                description: 'does not convert numeric that is already a number',
+                change: buildNumericChange(constants.NUMERIC, 13),
+                expectedChange: buildNumericChange(constants.NUMERIC, 13)
+            },
+            {
                 description: 'removes special characters from phone numbers',
                 change: {
                     value: '+33 9 68 68 68 68',
@@ -82,4 +122,12 @@ describe('saveRecordFormatter', () => {
             });
         });
     });
+
+    function buildNumericChange(type, value) {
+        return {
+            value: value,
+            display: '',
+            fieldDef: {datatypeAttributes: {type: type}}
+        };
+    }
 });
