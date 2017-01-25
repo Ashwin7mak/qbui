@@ -23,7 +23,6 @@ describe('Test ReportActions function success workflow', () => {
     };
 
     class mockReportService {
-        constructor() { }
         getReports() {
             return Promise.resolve(mockReportsResponse);
         }
@@ -68,7 +67,6 @@ describe('Test ReportActions function failure workflow', () => {
     };
 
     class mockReportService {
-        constructor() { }
         getReports() {
             return Promise.reject(mockReportsResponse);
         }

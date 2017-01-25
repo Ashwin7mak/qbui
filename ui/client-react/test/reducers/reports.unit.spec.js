@@ -10,6 +10,7 @@ let actionObj = {
 let state = undefined;
 beforeEach(() => {
     state = undefined;
+    actionObj.id = 1;
     actionObj.type = null;
     actionObj.content = null;
 });
@@ -30,14 +31,35 @@ describe('Report reducer report loading', () => {
         expect(state.length).toEqual(1);
         expect(state[0].loading).toEqual(true);
     });
-    it('test state id is not duplicated', () => {
+});
+
+describe('Report reducer multiple entries', () => {
+    it('test state entry', () => {
         actionObj.type = types.LOAD_REPORTS;
         state = reducer(state, actionObj);
         expect(state.length).toEqual(1);
-        //  call same state
+
+        //  call same state with different id
+        actionObj.id = 10;
+        actionObj.type = types.LOAD_REPORTS;
+        state = reducer(state, actionObj);
+        expect(state.length).toEqual(2);
+        expect(state[0].id).toEqual(1);
+        expect(state[0].loading).toEqual(true);
+        expect(state[1].id).toEqual(10);
+        expect(state[1].loading).toEqual(true);
+
+        //  call state with original id..should get
+        //  placed in same offset of the array..
+        actionObj.id = 1;
         actionObj.type = types.LOAD_REPORTS_FAILED;
         state = reducer(state, actionObj);
-        expect(state.length).toEqual(1);
+        expect(state.length).toEqual(2);
+        expect(state[0].id).toEqual(1);
+        expect(state[0].loading).toEqual(false);
+        expect(state[0].error).toEqual(true);
+        expect(state[1].id).toEqual(10);
+        expect(state[1].loading).toEqual(true);
     });
 });
 
