@@ -36,26 +36,30 @@ const reports = (state = [], action) => {
 
     //  what report list action is being requested
     switch (action.type) {
-    case types.OPEN_REPORT_RECORD: {
-        const obj = {id:action.id};
+    case types.LOAD_REPORTS: {
+        const obj = {id:action.id, loading: true};
         return newState(obj);
     }
-    case types.EDIT_REPORT_RECORD: {
-        const obj = {id:action.id};
+    case types.LOAD_REPORTS_FAILED: {
+        const obj = {id: action.id, loading: false, error: true};
         return newState(obj);
     }
-    case types.PREVIOUS_REPORT_RECORD: {
-        const obj = {id:action.id};
-        return newState(obj);
-    }
-    case types.NEXT_REPORT_RECORD: {
-        const obj = {id:action.id};
+    case types.LOAD_REPORTS_SUCCESS: {
+        const obj = {
+            id: action.id,
+            loading: false,
+            error: false,
+            appId: action.content.appId,
+            tableId: action.content.tblId,
+            list: action.content.reportsList
+        };
         return newState(obj);
     }
     default:
         // by default, return existing state
         return state;
     }
+
 };
 
 export default reports;
