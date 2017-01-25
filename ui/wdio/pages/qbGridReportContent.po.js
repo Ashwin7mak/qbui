@@ -151,8 +151,13 @@
          * @returns either an array of cell values (as strings) or one value of a cell
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
+            console.log('I fail here?');
+            browser.debug();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
+            console.log('recordRowElement: ', recordRowElement );
+            console.log('recordRowCells: ', recordRowCells);
+            browser.debug()
             // Return all record values if no cell number supplied
             if (typeof recordCellIndex === 'undefined') {
                 var cellValues = [];
