@@ -198,16 +198,11 @@
         getInlineEditRecord: {value: function() {
             var recordRowElements = reportContent.agGridRecordElList.elements('tr');
             var recordBeingEdited;
-            console.log('recordRowElements: ', recordRowElements);
-            browser.debug();
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {
                 var recordRowElement = recordRowElements.value[i];
                 // Check the class of each element for 'editing'
                 var elementClass = recordRowElement.getAttribute('class');
-                console.log('recordRowElement: ', recordRowElement);
-                console.log('elementClass: ', elementClass);
-                // browser.debug();
                 if (elementClass.indexOf('qbRow editing') !== -1) {
                     // Found our record element
                     recordBeingEdited = recordRowElements.value[i];
@@ -321,16 +316,26 @@
          */
         openDateFieldCalWidget: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
-            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
-
+            // var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
+            var qbCells = recordBeingEdited.elements('.qbCell');
+            var dateFieldCells = qbCells.elements('.cellEdit.dateCell.place');
+            // console.log('recordBeingEdited: ', recordBeingEdited);
+            // console.log('qbCells: ', qbCells);
+            // console.log('dateFieldCells: ', dateFieldCells);
+            // browser.debug();
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
+            // var dateFieldCell = dateFieldCells;
             var dateFieldCalIcon = this.getDateFieldCalendarIconEl(dateFieldCell);
+            // console.log('dateFieldCalIcon: ', dateFieldCalIcon);
+            // browser.debug();
 
-            var dateTimeFieldCells = recordBeingEdited.elements('div[colid="Date Time Field"]');
+            var dateTimeFieldCells = qbCells.elements('.dateTimeFieldValueEditor');
             var dateTimeFieldCell = dateTimeFieldCells.value[0];
+            console.log('dateTimeFieldCell: ', dateTimeFieldCell);
+            browser.debug();
 
             if (browserName === 'chrome') {
-                dateFieldCalIcon.moveToObject();
+                browser.moveToObject(dateFieldCalIcon.selector);
             } else {
                 browser.execute(function(dateCalIconElement) {
                     dateCalIconElement.scrollIntoView(false);
@@ -339,7 +344,10 @@
 
             // Sauce Labs needs extra room so scroll past to the Date Time field next to it
             if (browserName === 'chrome') {
-                dateTimeFieldCell.moveToObject();
+                // dateTimeFieldCell.moveToObject();
+                browser.moveToObject(dateTimeFieldCell.selector);
+                // dateTimeFieldCell.moveToObject();
+                browser.debug();
             } else {
                 browser.execute(function(dateTimeElement) {
                     dateTimeElement.scrollIntoView(false);

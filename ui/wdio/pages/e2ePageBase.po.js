@@ -63,7 +63,8 @@
      * @returns A promise that will resolve after loading the generated URL
      */
     PageBase.prototype.loadReportByIdInBrowser = function(realmName, appId, tableId, reportId) {
-        browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
+        browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/qbase/app/0mqctfaaaaab/table/0mqctfaaaaac/report/1');
+        // browser.url(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
         //wait until report rows in table are loaded
         return reportContentPO.waitForReportContent();
     };

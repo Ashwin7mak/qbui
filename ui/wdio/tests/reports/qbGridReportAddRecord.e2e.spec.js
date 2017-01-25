@@ -74,22 +74,25 @@
             // Step 3 - Open the calendar widget and Advance the date ahead 1 day
             if (browserName !== 'safari') {
                 ReportInLineEditPO.openDateFieldCalWidget(0);
+                console.log('openDateFieldCalWidget is fine');
+                browser.debug();
                 ReportInLineEditPO.advanceCurrentlySelectedDate(0);
+                console.log('advanceCurrentLySelectedDate is fine');
+                browser.debug();
             }
 
             // Step 4 - Save the new added row
             ReportInLineEditPO.clickSaveChangesButton();
-            expect(browser.isVisible('.ag-row.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('.ag-row.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('.ag-row.editing .addRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .saveRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .cancelSelection')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Check for the success message 'Record added'
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
             //ReportInLineEditPO.assertSuccessMessage(successMessage);
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
-            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
+            e2ePageBase.loadReportByIdInBrowser();
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
 
