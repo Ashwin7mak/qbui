@@ -3,13 +3,14 @@ import * as types from '../actions/types';
 const shell = (
     state = {
         //  default states
-        trowserOpen: false,
-        trowserContent: null,
+        appsListOpen: false,
+        errorPopupHidden: true,
+        isRowPopUpMenuOpen: false,
         leftNavExpanded: true,
         leftNavVisible: false,
-        openCount: 0,
-        isRowPopUpMenuOpen: false,
-        appsListOpen: false
+        trowserOpen: false,
+        trowserContent: null,
+        openCount: 0
     },
     action) => {
 
@@ -55,6 +56,16 @@ const shell = (
         return {
             ...state,
             appsListOpen: (typeof action.toggleState === "boolean" ? action.toggleState : !state.appsListOpen)
+        };
+    case types.SHOW_ERROR_MSG_DIALOG:
+        return {
+            ...state,
+            errorPopupHidden: false
+        };
+    case types.HIDE_ERROR_MSG_DIALOG:
+        return {
+            ...state,
+            errorPopupHidden: true
         };
     default:
         // return existing state by default in redux

@@ -5,6 +5,7 @@ import ConnectedRecordTrowser, {RecordTrowser, __RewireAPI__ as RecordTrowserRew
 import Promise from 'bluebird';
 import {Provider} from "react-redux";
 import configureMockStore from 'redux-mock-store';
+import * as ShellActions from '../../src/actions/shellActions';
 
 const RecordMock = React.createClass({
     render: function() {
@@ -15,7 +16,7 @@ const RecordMock = React.createClass({
 });
 
 const mockStore = configureMockStore();
-
+let dispatchMethod = () => { };
 describe('RecordTrowser functions', () => {
     'use strict';
 
@@ -24,8 +25,7 @@ describe('RecordTrowser functions', () => {
             recordPendingEditsCommit() {},
             recordPendingEditsCancel() {},
             saveRecord() {return Promise.resolve({});},
-            saveNewRecord() {return Promise.resolve({});},
-            hideErrorMsgDialog() {},
+            saveNewRecord() {return Promise.resolve({});}
         }
     };
 
@@ -38,7 +38,8 @@ describe('RecordTrowser functions', () => {
         spyOn(flux.actions, 'recordPendingEditsCancel');
         spyOn(flux.actions, 'saveRecord').and.callThrough();
         spyOn(flux.actions, 'saveNewRecord').and.callThrough();
-        spyOn(flux.actions, 'hideErrorMsgDialog');
+        spyOn(ShellActions, 'showErrorMsgDialog');
+        spyOn(ShellActions, 'hideErrorMsgDialog');
     });
 
     afterEach(() => {
@@ -48,7 +49,8 @@ describe('RecordTrowser functions', () => {
         flux.actions.recordPendingEditsCancel.calls.reset();
         flux.actions.saveRecord.calls.reset();
         flux.actions.saveNewRecord.calls.reset();
-        flux.actions.hideErrorMsgDialog.calls.reset();
+        ShellActions.showErrorMsgDialog.calls.reset();
+        ShellActions.hideErrorMsgDialog.calls.reset();
     });
 
     it('test render of loading component', () => {
@@ -161,8 +163,7 @@ describe('RecordTrowser functions', () => {
     it('test dismiss error message popup in trowser', () => {
 
         const form = {editFormData: {}};
-
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true} dispatch={dispatchMethod}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -174,6 +175,6 @@ describe('RecordTrowser functions', () => {
 
         TestUtils.Simulate.click(errorMessageCloseButton[0]);
 
-        expect(flux.actions.hideErrorMsgDialog).toHaveBeenCalled();
+        expect(ShellActions.hideErrorMsgDialog).toHaveBeenCalled();
     });
 });

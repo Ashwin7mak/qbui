@@ -5,13 +5,14 @@ let initialState = {};
 
 function initializeState() {
     initialState = {
-        trowserOpen: false,
-        trowserContent: null,
+        appsListOpen: false,
+        errorPopupHidden: true,
+        isRowPopUpMenuOpen: false,
         leftNavExpanded: true,
         leftNavVisible: false,
-        openCount: 0,
-        isRowPopUpMenuOpen: false,
-        appsListOpen: false
+        trowserOpen: false,
+        trowserContent: null,
+        openCount: 0
     };
 }
 
@@ -113,3 +114,15 @@ describe('Nav reducer functions for Toggle apps list', () => {
     });
 });
 
+describe('Nav reducer functions for show/hide error dialog', () => {
+    it('show error dialog', () => {
+        const state = reducer(initialState, {type: types.SHOW_ERROR_MSG_DIALOG});
+        expect(state.errorPopupHidden).toEqual(false);
+    });
+
+    let openState = {errorPopupHidden: false};
+    it('hide error dialog', () => {
+        const state = reducer(openState, {type: types.HIDE_ERROR_MSG_DIALOG});
+        expect(state.errorPopupHidden).toEqual(true);
+    });
+});

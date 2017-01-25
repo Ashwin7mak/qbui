@@ -16,6 +16,7 @@ import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import * as formActions from '../../actions/formActions';
+import * as ShellActions from '../../actions/shellActions';
 
 import './recordTrowser.scss';
 
@@ -138,8 +139,7 @@ export const RecordTrowser = React.createClass({
 
             }, (errorStatus) => {
                 this.props.dispatch(formActions.saveFormError(formType, errorStatus));
-                const flux = this.getFlux();
-                flux.actions.showErrorMsgDialog();
+                this.showErrorDialog();
             });
         }
         return validationResult;
@@ -181,8 +181,7 @@ export const RecordTrowser = React.createClass({
                 this.nextRecord();
             }, (errorStatus) => {
                 this.props.dispatch(formActions.saveFormError(formType, errorStatus));
-                const flux = this.getFlux();
-                flux.actions.showErrorMsgDialog();
+                this.showErrorDialog();
             });
         }
         return validationResult;
@@ -336,12 +335,10 @@ export const RecordTrowser = React.createClass({
         }
     },
     showErrorDialog() {
-        let flux = this.getFlux();
-        flux.actions.showErrorMsgDialog();
+        this.props.dispatch(ShellActions.showErrorMsgDialog());
     },
     dismissErrorDialog() {
-        let flux = this.getFlux();
-        flux.actions.hideErrorMsgDialog();
+        this.props.dispatch(ShellActions.hideErrorMsgDialog());
     },
     /**
      * trowser to wrap report manager

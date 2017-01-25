@@ -43,7 +43,7 @@ export const toggleLeftNav = (navState) => {
 /**
  * Show/Hide the row actions menu for report grid
  *
- * @returns {{toggleState}}
+ * @returns {{type, toggleState}}
  */
 export const toggleRowActionsMenu = (toggleState) => {
     return {
@@ -53,13 +53,23 @@ export const toggleRowActionsMenu = (toggleState) => {
 };
 
 /**
- * Toggle apps list show/hide state or force to show or hide apps list
+ * Show error message dialog
  *
- * @returns {{toggleState}}
+ * @returns {{type}}
  */
-export const toggleAppsList = (toggleState) => {
+export const showErrorMsgDialog = () => {
     return {
-        type: types.TOGGLE_APPS_LIST,
-        toggleState
+        type: types.SHOW_ERROR_MSG_DIALOG
+    };
+};
+
+/**
+ * Hide error message dialog
+ *
+ * @returns {{type}}
+ */
+export const hideErrorMsgDialog = () => {
+    return {
+        type: types.HIDE_ERROR_MSG_DIALOG
     };
 };
