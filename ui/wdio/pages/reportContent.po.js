@@ -212,7 +212,7 @@
          */
         clickOnRecordInReportTable : {value: function(recordRowIndex) {
             var recordRowEl = this.getRecordRowElement(recordRowIndex);
-            // Hardcoded to click on the third cell of the record
+            // Hardcoded to click on the third cell of the record since clicking on email, phone etc will bring up popups.
             var recordCellEl = this.getRecordRowCells(recordRowEl).value[3];
 
             //scroll to third cell of recordRowIndex row
@@ -252,7 +252,7 @@
                 getAllEdits[0].click();
                 formsPO.editFormContainerEl.waitForVisible();
                 //need these for trowser to drop down
-                return browser.pause(e2eConsts.shortWaitTimeMilliseonds);
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 throw new Error('Edit button not found at row ' + recordRowIndex);
             }

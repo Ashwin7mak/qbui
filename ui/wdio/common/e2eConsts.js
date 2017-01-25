@@ -21,10 +21,10 @@
         DEFAULT_HEIGHT : 1440,
 
         //Wait time Objects
-        shortWaitTimeMilliseonds : 5000,
-        mediumWaitTimeMilliseonds : 15000,
-        longWaitTimeMilliseonds : 30000,
-        extraLongWaitTimeMilliseonds : 150000,
+        shortWaitTimeMs : 5000,
+        mediumWaitTimeMs : 15000,
+        longWaitTimeMs : 30000,
+        extraLongWaitTimeMs : 150000,
 
         reportFieldNames : ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
             'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',

@@ -114,7 +114,7 @@
                 saveRecordButtonEl.click();
 
                 //step 3 - After save button click wait for inline edit menu to disappear as to confirm that click event worked
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.longWaitTimeMilliseonds, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMs, true);
             } catch (err) {
 
                 console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
@@ -129,7 +129,7 @@
                     });
                     document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
                 });
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.longWaitTimeMilliseonds, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMs, true);
             }
         }},
 
@@ -151,7 +151,7 @@
             try {
                 cancelRecordButtonEl.click();
                 // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMs, true);
             } catch (err) {
 
                 console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
@@ -166,7 +166,7 @@
                     });
                     document.querySelector('.ag-row.editing .cancelSelection').dispatchEvent(event);
                 });
-                browser.waitForVisible('.ag-row.editing .saveRecord', e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible('.ag-row.editing .saveRecord', e2eConsts.mediumWaitTimeMs, true);
             }
         }},
 
