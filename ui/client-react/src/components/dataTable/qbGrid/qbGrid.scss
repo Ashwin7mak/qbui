@@ -59,6 +59,7 @@ $edit-icon-font-size: 18px;
         -webkit-font-smoothing: antialiased;
         border-color: $color-blue-400;
         background-color: $color-blue-300;
+        cursor: default;
 
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
@@ -79,7 +80,13 @@ $edit-icon-font-size: 18px;
 
         .selectRowCheckbox {
             margin-top: 0;
-            flex: 0 0 auto;
+            margin-right: auto;
+        }
+
+        .collapseAllIcon {
+            width: $grid-group-expand-icon-size;
+            height: $grid-group-expand-icon-size;
+            cursor: pointer;
         }
     }
 
@@ -206,6 +213,7 @@ $edit-icon-font-size: 18px;
     }
 
     // cells get the pointer cursor when not in edit mode
+    // tooltips get the pointer cursor too
     .qbRow:not(.editing) .qbCell,
     .qbCell .tipChildWrapper {
         cursor: pointer;
