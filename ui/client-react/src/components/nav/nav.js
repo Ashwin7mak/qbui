@@ -28,7 +28,7 @@ import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
-import * as ReportActions from '../../actions/reportActions';
+import * as ReportsActions from '../../actions/reportsActions';
 import {CONTEXT} from '../../actions/context';
 
 // This shared view with the server layer must be loaded as raw HTML because
@@ -90,7 +90,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.state.apps.selectedAppId, tableId));
+        this.props.dispatch(ReportsActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.state.apps.selectedAppId, tableId));
     },
 
     /**

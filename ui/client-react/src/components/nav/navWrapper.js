@@ -1,6 +1,6 @@
 import React from 'react';
 import Nav from './nav';
-import * as ReportActions from '../../actions/reportActions';
+import * as ReportsActions from '../../actions/reportsActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
 
@@ -50,7 +50,7 @@ let NavWrapper = React.createClass({
 
             if (this.props.params.tblId) {
                 this.props.flux.actions.selectTableId(this.props.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.props.params.appId, this.props.params.tblId));
+                this.props.dispatch(ReportsActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.props.params.appId, this.props.params.tblId));
             } else {
                 this.props.flux.actions.selectTableId(null);
             }
@@ -84,7 +84,7 @@ let NavWrapper = React.createClass({
         if (props.params.tblId) {
             if (this.props.params.tblId !== props.params.tblId) {
                 this.props.flux.actions.selectTableId(props.params.tblId);
-                this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, props.params.appId, props.params.tblId));
+                this.props.dispatch(ReportsActions.loadReports(CONTEXT.REPORTS_LIST.NAV, props.params.appId, props.params.tblId));
             }
         } else {
             this.props.flux.actions.selectTableId(null);

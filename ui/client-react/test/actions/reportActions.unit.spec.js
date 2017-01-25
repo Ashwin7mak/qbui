@@ -1,4 +1,4 @@
-import {loadReports, __RewireAPI__ as ReportActionsRewireAPI} from '../../src/actions/reportActions';
+import {loadReports, __RewireAPI__ as ReportsActionsRewireAPI} from '../../src/actions/reportsActions';
 import * as types from '../../src/actions/types';
 import {CONTEXT} from '../../src/actions/context';
 import reportsModel from '../../src/models/reportsModel';
@@ -14,7 +14,7 @@ let context = CONTEXT.REPORTS_LIST.NAV;
 const middlewares = [thunk];
 const mockReportsStore = mockStore(middlewares);
 
-describe('Test ReportActions function success workflow', () => {
+describe('Test ReportsActions function success workflow', () => {
 
     let mockReportsResponse = {
         data: [
@@ -30,11 +30,11 @@ describe('Test ReportActions function success workflow', () => {
 
     beforeEach(() => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
-        ReportActionsRewireAPI.__Rewire__('ReportService', mockReportService);
+        ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
-        ReportActionsRewireAPI.__ResetDependency__('ReportService');
+        ReportsActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('verify loadReports action with resolve promise response', (done) => {
@@ -60,7 +60,7 @@ describe('Test ReportActions function success workflow', () => {
     });
 });
 
-describe('Test ReportActions function failure workflow', () => {
+describe('Test ReportsActions function failure workflow', () => {
 
     let mockReportsResponse = {
         response: 'error'
@@ -74,12 +74,12 @@ describe('Test ReportActions function failure workflow', () => {
 
     beforeEach(() => {
         spyOn(mockReportService.prototype, 'getReports').and.callThrough();
-        ReportActionsRewireAPI.__Rewire__('ReportService', mockReportService);
+        ReportsActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
         mockReportService.prototype.getReports.calls.reset();
-        ReportActionsRewireAPI.__ResetDependency__('ReportService');
+        ReportsActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('verify loadReports action with reject promise response', (done) => {
