@@ -183,7 +183,6 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
 
-
         tableToFieldToFieldTypeMap[table3Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.DATE);
@@ -439,6 +438,9 @@ consts = require('../../common/src/constants.js');
             var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
             var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
             return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedEmptyRecords);
+        }).then(function() {
+            // Create a report that includes fields that are not editable by the user
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [1, 2, 3, 4, 5, 6, 7, 8], null, 'Report with Uneditable Fields');
         }).then(function() {
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);

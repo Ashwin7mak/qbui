@@ -3,7 +3,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var exec = require('child_process').exec;
-var styleLintPlugin = require('stylelint-webpack-plugin');
 
 // node modules
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
@@ -126,7 +125,7 @@ var config = {
             // SASS - transformed to css,
             {
                 test: /\.scss$/,
-                loader: 'style!css!sass'
+                loader: LOCAL ? 'style?sourceMap!css?sourceMap!sass?sourceMap' : 'style!css!sass'
             },
 
             {
@@ -146,7 +145,6 @@ var config = {
 
         // for prod we also de-dupe, obfuscate and minimize
         new webpack.optimize.DedupePlugin(),
-        /*
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             sourceMap: false,
@@ -154,21 +152,10 @@ var config = {
                 warnings: false
             }
         }),
-        */
 
         //  run-time environment for our application
         envPlugin
     ] :  [
-        // The stylelint-webpack-plugin ends up outputting errors despite failOnError and the NoErrorsPlugin
-        // From what I can gather, NoErrors only ensures that no bad assets are emitted but will still emit
-        // errors.
-        // new styleLintPlugin({
-        //     configFile: 'stylelint.config.js',
-        //     files: 'client-react/src/**/*.scss',
-        //     failOnError: false,
-        //     syntax: 'scss',
-        //     quiet: false
-        // }),
         // When there are compilation errors, this plugin skips the emitting (and recording) phase.
         // This means there are no assets emitted that include errors.
         new webpack.NoErrorsPlugin(),

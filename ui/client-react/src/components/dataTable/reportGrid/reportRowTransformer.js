@@ -85,7 +85,7 @@ class ReportRowTransformer extends RowTransformer {
         let recordCopy = _.cloneDeep(record);
         let cells = [];
         Object.keys(recordCopy).forEach(key => {
-            cells.push(addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing));
+            cells.push(addPropertiesToIndividualField(recordCopy[key], editErrors, isEditing, editingRecordId));
         });
 
         super(id, cells);
@@ -118,6 +118,10 @@ function addCurrentValues(id = null, record = {}, pendEdits = {}) {
     let recordCopy = _.cloneDeep(record);
 
     if (hasPendingEditsForRow(id, pendEdits)) {
+        if (shouldFocusOnFieldWhenFirstOpenEditing(pendEdits, recordCopy)) {
+            recordCopy[pendEdits.fieldToStartEditing.id].hasFocusOnEditStart = true;
+        }
+
         Object.keys(pendEdits.recordChanges).forEach(key => {
             let pendingEdit = pendEdits.recordChanges[key];
             if (pendingEdit.newVal) {
@@ -192,10 +196,8 @@ function isAGroupOfRecords(record) {
  * @returns {Array|[*,*]}
  */
 function flattenRecordGroup(record, transformedRecords, fields, info) {
-    let groupHeaderId = `groupHeader_${record.group}`;
-    if (record.group === Locale.getMessage('groupHeader.empty')) {
-        groupHeaderId = _.uniqueId(groupHeaderId);
-    }
+    // Use a uniqueId to avoid identical keys when the same group name is repeated
+    let groupHeaderId = _.uniqueId(`groupHeader_${record.group}`);
 
     let currentSubHeaderLevel = (_.isNumber(info.subHeaderLevel) ? info.subHeaderLevel : 0);
 
@@ -205,6 +207,7 @@ function flattenRecordGroup(record, transformedRecords, fields, info) {
         subHeaderLabel: record.group,
         localized: record.localized,
         id: groupHeaderId,
+        parentId: info.parentId
     });
 
     let newInfo = {
@@ -267,10 +270,12 @@ function addEditErrorsIfExistForRow(id, pendEdits) {
  * @param field
  * @param editErrors
  * @param isEditing
+ * @param editingRecordId
  * @returns {*}
  */
-function addPropertiesToIndividualField(field, editErrors, isEditing) {
+function addPropertiesToIndividualField(field, editErrors, isEditing, editingRecordId) {
     field.isEditing = isEditing;
+    field.editingRecordId = editingRecordId;
     field.isInvalid = false;
     field.invalidMessage = null;
     field.invalidResultData = null;
@@ -283,6 +288,19 @@ function addPropertiesToIndividualField(field, editErrors, isEditing) {
     }
 
     return field;
+}
+
+/**
+ * Determines whether a field should be focused when the record first enters editing mode.
+ * To identify whether the field is first entering edit mode, we check the recordChanges. When a field first opens for
+ * editing, the recordChanges is an empty object. If this check is absent, then this field will keep getting focused after
+ * a user edits a different field.
+ * @param pendEdits
+ * @param record
+ * @returns {*|boolean}
+ */
+function shouldFocusOnFieldWhenFirstOpenEditing(pendEdits, record) {
+    return (_.has(pendEdits, 'fieldToStartEditing.id') && _.has(record, pendEdits.fieldToStartEditing.id) && (!record.recordChanges || Object.keys(record.recordChanges).length === 0));
 }
 
 export default ReportRowTransformer;
