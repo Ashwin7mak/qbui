@@ -67,32 +67,21 @@
          */
         openRecordEditMenu: {value: function(recordIndex) {
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
-            // browser.debug();
             // Hardcoded to click on the first cell of the record
             console.log('recordRowEl: ', recordRowEl);
-            // browser.debug();
             //Get a single qbCell from the row
             var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[5];
-            //I am getting the cellData from the row
+            //Focus on the cellData from qbCell
             var cellData = recordCellEl.element('.cellData');
-            //I am getting the pencil from the row
+            //Get the pencil from the qbCell
             var cellEditIcon = recordCellEl.element('.cellEditIcon');
             // See http://webdriver.io/api/protocol/execute.html
             //TODO: Make generic double click function in e2ePageBase
-            console.log('recordCelEl: ', recordCellEl)
-            console.log('cellData: ', cellData)
-            console.log('cellEditIcon: ', cellEditIcon)
-            // browser.debug();
             if (browserName === 'chrome') {
                 //Hover over the cell
                 browser.moveToObject(cellData.selector);
                 //Then once the pencil is visible hover over the pencil
                 browser.moveToObject(cellEditIcon.selector);
-                browser.waitForExist(cellEditIcon.selector);
-                browser.logger.info('right after move to object');
-                // browser.debug();
-                browser.pause(500);
-                // recordCellEl.element('.cellEditIcon').click();
                 browser.element('.cellEditIcon.qbIcon.iconTableUISturdy-edit').click();
             } else {
                 browser.execute(function(recordCellElement) {
@@ -105,7 +94,6 @@
                     recordCellElement.dispatchEvent(event);
                 }, recordCellEl);
             }
-            browser.debug();
             this.getInlineEditRecord().waitForVisible();
         }},
 
@@ -208,15 +196,19 @@
          * @returns The record element being edited
          */
         getInlineEditRecord: {value: function() {
-            var recordRowElements = reportContent.agGridRecordElList;
+            var recordRowElements = reportContent.agGridRecordElList.elements('tr');
             var recordBeingEdited;
-
+            console.log('recordRowElements: ', recordRowElements);
+            browser.debug();
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {
                 var recordRowElement = recordRowElements.value[i];
                 // Check the class of each element for 'editing'
                 var elementClass = recordRowElement.getAttribute('class');
-                if (elementClass.indexOf('editing') !== -1) {
+                console.log('recordRowElement: ', recordRowElement);
+                console.log('elementClass: ', elementClass);
+                // browser.debug();
+                if (elementClass.indexOf('qbRow editing') !== -1) {
                     // Found our record element
                     recordBeingEdited = recordRowElements.value[i];
                 }

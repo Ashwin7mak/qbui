@@ -114,7 +114,6 @@
         }},
         getRecordRowElement: {value: function(recordIndex) {
             browser.logger.info('getRecordRowElement: ', this.getAllRows.value[recordIndex])
-            // browser.debug();
             return this.getAllRows.value[recordIndex];
         }},
 
