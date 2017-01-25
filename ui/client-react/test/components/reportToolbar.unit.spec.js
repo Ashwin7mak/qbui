@@ -25,12 +25,6 @@ describe('ReportToolbar functions', () => {
             return [];
         }
     });
-    let reportsStore = Fluxxor.createStore({
-        getState() {
-            return [];
-        }
-    });
-
     let reportDataStore = Fluxxor.createStore({
         getState() {
             return [];
@@ -54,7 +48,6 @@ describe('ReportToolbar functions', () => {
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appStore(),
-        ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
         FacetMenuStore:  new facetMenuStore(),
         ReportDataSearchStore: new reportDataSearchStore()
@@ -64,9 +57,6 @@ describe('ReportToolbar functions', () => {
 
     flux.actions = {
         selectTableId() {
-            return;
-        },
-        loadReports() {
             return;
         },
         searchFor(text) {

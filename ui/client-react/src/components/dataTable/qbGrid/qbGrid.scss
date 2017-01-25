@@ -25,8 +25,6 @@ $edit-icon-font-size: 18px;
 }
 
 .qbGrid {
-    //margin: 2px;
-
     flex: 1 1 auto;
     overflow: auto;
     display: block;
@@ -56,6 +54,11 @@ $edit-icon-font-size: 18px;
     .AlignRight .cellEditIcon {
         right: auto;
         left: 0;
+    }
+
+    .qbRow:not(.editing) .qbCell,
+    .qbCell .tipChildWrapper {
+        cursor: pointer;
     }
 
     .qbCell:hover .cellEditIcon {
@@ -96,6 +99,16 @@ $edit-icon-font-size: 18px;
 
     .AlignCenter {
         text-align: center;
+    }
+
+    .actionHeader {
+        display: flex;
+        align-items: center;
+
+        .selectRowCheckbox {
+            margin-top: 0;
+            flex: 1 1 auto;
+        }
     }
 
     .gridHeaderCell {
@@ -492,12 +505,12 @@ $edit-icon-font-size: 18px;
     color: $font-color;
 }
 //The style here is for sticky column
-.qbGrid > tbody > tr > td:first-of-type {
+.qbGrid .qbRow .stickyCell {
     background: $row-bg-color;
     z-index: $zindex-qbGrid-firstOfType-stickyColumn;
 }
 
-.qbGrid > tbody > tr.editing > td:first-of-type {
+.qbGrid .editing .stickyCell {
     z-index: $zindex-qbGrid-editing-firstOfType;
 }
 

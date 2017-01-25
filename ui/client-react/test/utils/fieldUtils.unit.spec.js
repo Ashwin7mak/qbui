@@ -256,17 +256,17 @@ describe('FieldUtils', () => {
     describe('getDefaultValueForFieldType', () => {
         let testCases = [
             {
-                description: 'it gets the default value for a checkbox',
+                description: 'gets the default value for a checkbox',
                 fieldType: SchemaConsts.CHECKBOX,
                 expectedValue: false
             },
             {
-                description: 'it gets the default value for duration fields',
+                description: 'gets the default value for duration fields',
                 fieldType: SchemaConsts.DURATION,
-                expectedValue: 0
+                expectedValue: null
             },
             {
-                description: 'it gets the default value for other types not specifically checked',
+                description: 'gets the default value for other types not specifically checked',
                 fieldType: SchemaConsts.TEXT,
                 expectedValue: ''
             }

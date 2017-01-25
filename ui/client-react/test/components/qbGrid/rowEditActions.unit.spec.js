@@ -108,13 +108,13 @@ describe('RowEditActions (QbGrid)', () => {
             expect(actions.onClickCancel).not.toHaveBeenCalled();
         });
 
-        it('does not called the "add new record" method if the record is invalid', () => {
-            component = shallow(<RowEditActions onClickCancel={actions.onClickAdd} isValid={false} rowId={rowId}/>);
+        it('does not call the "add new record" method if the record is invalid', () => {
+            component = shallow(<RowEditActions {...actions} isValid={false} rowId={rowId}/>);
 
-            let saveButton = component.find(Button).find({className: 'rowEditActionsCancel'});
+            let saveButton = component.find(Button).find({className: 'rowEditActionsSaveAndAdd'});
             saveButton.simulate('click');
 
-            expect(actions.onClickAdd).not.toHaveBeenCalledWith();
+            expect(actions.onClickAdd).not.toHaveBeenCalled();
             expect(actions.onClickSave).not.toHaveBeenCalled();
             expect(actions.onClickCancel).not.toHaveBeenCalled();
         });
