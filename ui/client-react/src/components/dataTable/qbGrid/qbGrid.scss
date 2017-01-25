@@ -9,90 +9,35 @@ $row-box-shadow-color: $color-black-300;
 $cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
-$grid-default-cell-padding: 4px;
+$grid-default-cell-padding: 6px;
+$grid-header-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
 $cell-edit-background-edit: $color-blue-200;
 $edit-icon-font-size: 18px;
 
-.qbGrid > thead, .qbGrid > tbody {
-    color: $default-text-onlight-color;
-    -webkit-font-smoothing: antialiased;
-    table-layout: fixed;
-
-    > td {
-        vertical-align: top;
-    }
-}
-
+//-------------------------------------------------------------------
+// GRID COMPONENT
+// All styles in this file must be scoped to .qbGrid so they do not
+// conflict with other components on the page
+//-------------------------------------------------------------------
 .qbGrid {
     flex: 1 1 auto;
     overflow: auto;
     display: block;
     width: 100%;
     border-collapse: initial; // needed for sticky column
+    color: $default-text-onlight-color;
+    -webkit-font-smoothing: antialiased;
+    table-layout: fixed;
 
+
+    //== generic/default styles for some grid elements
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
         width: $grid-group-expand-icon-size;
     }
 
-    .cellEditIcon {
-        display: none;
-        color: $ghost-text-color;
-        opacity: 0.6;
-        position: absolute;
-        top: 4px;
-        right: 0;
-
-        &:hover {
-            color: $default-hover-color;
-            opacity: 1;
-            background-color: rgba($color-black-100, 0.6);
-        }
-    }
-
-    .AlignRight .cellEditIcon {
-        right: auto;
-        left: 0;
-    }
-
-    .qbRow:not(.editing) .qbCell,
-    .qbCell .tipChildWrapper {
-        cursor: pointer;
-    }
-
-    .qbCell:hover .cellEditIcon {
-        display: inline;
-    }
-
-    .qbCell .editingCell .cellEditIcon {
-        display: none;
-    }
-
-    .emptyRowActions {
-        min-height: $inline-edit-input-box-height;
-        width: 75px;
-    }
-
-    .groupHeader {
-        padding-left: $grid-default-group-padding + 3;
-        vertical-align: top;
-        font-weight: bold;
-    }
-
-    //assuming that we can have up to 6 group levels
-    @for $i from 1 through 6 {
-        .subHeaderLevel-#{$i} {
-            .subHeaderCell {
-                padding-left: $i * $grid-default-group-padding;
-            }
-        }
-    }
-
-    .dateCell, .durationCell, .phoneCell, .urlField {
-        white-space: nowrap;
-    }
-
+    // alignments for headers and data cells
     .AlignRight {
         text-align: right;
     }
@@ -101,25 +46,55 @@ $edit-icon-font-size: 18px;
         text-align: center;
     }
 
+
+    //== grid header row
+    .qbHeaderCell {
+        min-width: 80px;
+        position: relative;
+        white-space: nowrap;
+        border-right: 1px solid $color-blue-400;
+        border-bottom: 1px solid $badcolor1-color6;
+        padding: $grid-header-cell-padding;
+        color: $color-blue-600;
+        -webkit-font-smoothing: antialiased;
+        border-color: $color-blue-400;
+        background-color: $color-blue-300;
+
+        // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
+        z-index: $zindex-qbGrid-th;
+
+        // set the z-index of the header cell for the sticky column so the other column headers scroll underneath
+        &.stickyCell {
+            z-index: $zindex-qbGrid-header-stickyCell;
+            padding-left: $grid-default-cell-padding;
+            padding-right: $grid-default-cell-padding;
+        }
+    }
+
+    // leftmost cell of the table header that serves as the vertical header for the sticky row actions column
+    // contains the "select all" checkbox
     .actionHeader {
         display: flex;
         align-items: center;
 
         .selectRowCheckbox {
             margin-top: 0;
-            flex: 1 1 auto;
+            flex: 0 0 auto;
         }
     }
 
+    // this node goes inside the qbHeaderCell above
     .gridHeaderCell {
         display: flex;
         align-items: center;
 
+        // text label for the header cell
         .gridHeaderLabel {
             flex-grow: 1;
             padding-right: 4px;
         }
 
+        // menu to access sorting options
         .headerMenu {
             flex-grow: 0;
 
@@ -133,16 +108,133 @@ $edit-icon-font-size: 18px;
                 opacity: 0.2;
             }
 
+            // TODO: temporary fix until we get can dynamically increase/decrease the z-index
+            // of the gridHeaderCell above when the menu shows and hides.
+            // This temporary fix positions the menu below the entire header row so as not
+            // to be clipped by adjacent cells.
             .dropdown-menu {
-                top: 120%; // TODO: temporary fix until we get the z-index corrected
+                top: 120%; // ugly - do not do this... it is not safe long term. YUCK! WE NEED TO FIX THIS!
             }
         }
 
+        // hover effect on dropdown icon
         &:hover .headerMenu .dropdownToggle {
             opacity: 1;
         }
     }
 
+    //== styling for the sticky column cells
+    .qbRow .stickyCell {
+        left: 0;
+        width: 80px;
+        max-width: 80px;
+        position: relative;
+        vertical-align: top;
+        background: $row-bg-color;
+        z-index: $zindex-qbGrid-firstOfType-stickyColumn;
+
+        // TODO: Temporary fix until we can get the z-index incremented/decremented when the dropdown shows and hides.
+        // This prevents peer sticky cells from clipping the dropdown menu.
+        .dropdown-menu {
+            top: 0;
+            left: 27px;
+        }
+    }
+
+
+    //== header row above groups of rows
+    .groupHeader .subHeaderCell {
+        // padding-left: $grid-default-group-padding + 3;   // TODO: We need to see what the spec requires for this. It looks strange with it right now.
+        vertical-align: top;
+        font-weight: bold;
+        border-right: 1px solid $color-black-300;
+        border-top: 1px solid $color-black-300;
+    }
+
+    // indentations for nested group header rows - assuming that we can have up to 6 group levels
+    @for $i from 1 through 6 {
+        .subHeaderLevel-#{$i} {
+            .subHeaderCell {
+                padding-left: $i * $grid-default-group-padding;
+            }
+        }
+    }
+
+
+    //== Icon displayed on every editable cell - user clicks to activate inline edit mode
+    .cellEditIcon {
+        display: none;
+        color: $ghost-text-color;
+        opacity: 0.6;
+        position: absolute;
+        top: 4px;
+        right: 0;
+
+        // hover effect for edit icon
+        &:hover {
+            color: $default-hover-color;
+            opacity: 1;
+            background-color: rgba($qbgrid-row-hover-color, 0.7);
+        }
+    }
+
+    // move the cell edit icon out of the way of the text when we know it will cover it up
+    .AlignRight .cellEditIcon {
+        right: auto;
+        left: 0;
+    }
+
+    // turn off the cell edit icon when the cell is being edited
+    .qbCell .editingCell .cellEditIcon {
+        display: none;
+    }
+
+
+    //== average data cells that aren't the sticky headers or the sticky actions column or a group header
+    .qbCell {
+        padding-left: $grid-default-cell-padding;
+        padding-right: $grid-default-cell-padding;
+        vertical-align: top;
+        font-size: $grid-font-size;
+        border-right: 1px solid $color-black-300;
+        border-top: 1px solid $color-black-300;
+        transition: border 100ms ease-out;
+
+        &:hover .cellEditIcon {
+            display: inline;
+        }
+    }
+
+    // cells get the pointer cursor when not in edit mode
+    .qbRow:not(".editing") .qbCell,
+    .qbCell .tipChildWrapper{
+        cursor: pointer;
+    }
+
+    // styles for specific types of data cells
+    .dateCell,
+    .durationCell,
+    .phoneCell,
+    .urlField {
+        white-space: nowrap;
+
+        // url buttons need some spacing adjustment
+        .btn {
+            margin-top: -5px;
+            padding: 1px 10px;
+        }
+    }
+
+    // multiline data cell
+    .multiLineTextCell {
+        border: 0;
+        font-family: $font-family;
+        font-size: $grid-font-size;
+        border-radius: 0;
+        color: $font-color;
+    }
+
+    // div sitting inside the table cell wrapping the contents
     .cellWrapper {
         width: 100%;
         padding-top: 6px;
@@ -168,6 +260,7 @@ $edit-icon-font-size: 18px;
         }
     }
 
+    //== row actions when in inline edit mode (cancel, save, save and add)
     .editTools {
         z-index: $zindex-editTools;
         display: flex;
@@ -195,6 +288,7 @@ $edit-icon-font-size: 18px;
             }
         }
 
+        // actions indicating what to do with the data in the various edit cells of the row
         button {
             flex: 0 0 auto;
             border: 0;
@@ -202,329 +296,296 @@ $edit-icon-font-size: 18px;
             margin-right: 2px;
             padding: 6px 4px;
 
-            .qbIcon:hover {
-                opacity: 1;
-            }
-
             .qbIcon {
                 opacity: 0.7;
                 width: 20px;
                 font-size: 16px;
                 vertical-align: top;
+
+                &:hover {
+                    opacity: 1;
+                }
+
+                // colorize and tweak icon buttons
+                &.saveRecord {
+                    color: $color-green-700;
+                    font-size: 18px;
+                }
+
+                &.invalidRecord {
+                    color: $tootip-error-color;
+                    font-size: 18px;
+                    cursor: default;
+                }
+
+                &.cancelSelection {
+                    color: $iconfont-on-light-normal-color;
+                }
+
+                &.deleteRecord {
+                    color: $color-red-700;
+                }
+
+                &.addRecord {
+                    color: $iconfont-on-light-normal-color;
+
+                    &.disabled {
+                        color: $iconfont-on-light-disabled-color;
+                    }
+                }
+            }
+        }
+    } // end editTools
+
+
+    //== These are the contents of the first cell of every row and contain all the row actions in the sticky left column
+
+    // Used when row actions are not present because the current row is new and does not yet have an id
+    // Used in place of actionsCol below
+    .emptyRowActions {
+        min-height: $inline-edit-input-box-height;
+        width: 75px;
+    }
+
+    // contains all the row actions such as the checkbox to select the row, edit data, or access the dropdown menu
+    .actionsCol {
+        white-space: nowrap;
+
+        > * {
+            display: inline-block;
+        }
+
+        // Select row checkbox
+        input[type=checkbox] {
+            margin-right: 12px;
+        }
+        .iconActions {
+            line-height: inherit;
+        }
+
+        .iconActionButton {
+            opacity: 0.2;
+            transition: opacity 200ms ease-in-out;
+            height: 30px;
+            width: auto;
+            margin-right: 4px;
+            background: inherit;
+
+            &:hover {
+                color: $topnav-icon-color;
+            }
+        }
+
+        // menu to access additional row actions such as print, email, copy, and delete
+        .dropdown-menu {
+            a {
+                padding-left: 4px;
+
+                // dropdown menu icon colors and default properties
+                .qbIcon {
+                    margin-right: 6px;
+                    vertical-align: middle;
+                    width: 28px;
+                    padding: 4px;
+
+                    &.print {
+                        color: $print-icon-normal-color;
+                    }
+
+                    &.email {
+                        color: $mail-icon-normal-color;
+                    }
+
+                    &.duplicate {
+                        color: $copy-icon-normal-color;
+                    }
+
+                    &.delete {
+                        color: $delete-icon-normal-color;
+                    }
+
+                }
+
+                // dropdown menu hover icon colors
+                &:hover {
+                    .qbIcon {
+                        color: $color-black-100;
+
+                        &.print {
+                            background-color: $print-icon-normal-color;
+                        }
+
+                        &.email {
+                            background-color: $mail-icon-normal-color;
+                        }
+
+                        &.duplicate {
+                            background-color: $copy-icon-normal-color;
+                        }
+
+                        &.delete {
+                            background-color: $delete-icon-normal-color;
+                        }
+                    }
+                }
             }
 
-            .qbIcon.saveRecord {
-                color: $color-green-700;
-                font-size: 18px;
-            }
-
-            .qbIcon.invalidRecord {
-                color: $tootip-error-color;
-                font-size: 18px;
-                cursor: default;
-            }
-
-            .qbIcon.cancelSelection {
-                color: $iconfont-on-light-normal-color;
-            }
-
-            .qbIcon.deleteRecord {
-                color: $color-red-700;
-            }
-
-            .qbIcon.addRecord {
-                color: $iconfont-on-light-normal-color;
-            }
-
-            .qbIcon.disabled.addRecord {
+            // disabled icon colors
+            .disabled a .qbIcon {
                 color: $iconfont-on-light-disabled-color;
+                background-color: transparent;
             }
         }
     }
 
-    .urlField .btn {
-        margin-top: -5px;
-        padding: 1px 10px;
+    // hover effect for the buttons
+    .actionsCol:hover .iconActions .iconActionButton {
+        transition: opacity 200ms ease-in-out;
+        opacity: 1;
     }
 
-}
 
-.qbGrid > thead > tr > th {
-    min-width: 80px;
-    position: relative;
-    z-index: $zindex-qbGrid-th;
-    white-space: nowrap;
-    border-right: 1px solid $color-blue-400;
-    border-bottom: 1px solid $badcolor1-color6;
-    padding: $grid-default-cell-padding;
-    color: $color-blue-600;
-    -webkit-font-smoothing: antialiased;
-    border-color: $color-blue-400;
-    background-color: $color-blue-300;
-}
-
-.qbGrid .actionsCol {
-    white-space: nowrap;
-
-    > * {
-        display: inline-block;
+    // adjust colors of the last row of cells
+    .qbRow:last-of-type .qbCell {
+        border-bottom: 1px solid $color-black-300;
     }
 
-    input[type=checkbox] {
-        margin-right: 12px;
+
+    // row hover highlighting - only done while not inline editing
+    .reportContent:not(.inlineEditing) & {
+
+        // highlight the row when mouse is over the row
+        .qbRow:hover .qbCell {
+            background: $qbgrid-row-hover-color;
+        }
+
+        // Outline the data cells in the row when the use hovers over a pencil.
+        // This works by turning on the top border of cells in the hovered row and the row below it,
+        // and the right border of the sticky cell and the last cell in the hovered row.
+        .qbRow.willEdit .qbCell:not(.stickyCell),
+        .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell) {
+            border-top: 1px solid $qbgrid-onpencil-row-border-color;
+            transition: border 150ms ease-in;
+        }
+        .qbRow.willEdit .qbCell:last-of-type {
+            border-right: 1px solid $qbgrid-onpencil-row-border-color;
+        }
+        .qbRow.willEdit .qbCell.stickyCell {
+            border-right: 1px solid $qbgrid-onpencil-row-border-color;
+        }
+
+        // Special case for outlining data cells... the last row doesn't have a row below it so we have to use the bottom border on only that row.
+        // Doesn't look perfect, but still enables outlining the row.
+        .qbRow:last-of-type.willEdit .qbCell:not(.stickyCell) {
+            border-bottom: 1px solid $qbgrid-onpencil-row-border-color;
+        }
     }
 
-    .iconActionButton {
-        width: auto;
-        margin-right: 4px;
-        height: 30px;
-    }
 
-    .qbIcon {
-        font-size: 20px;
-        width: 20px;
-    }
-}
+    //== Editing a row of data
+    .editing {
+        box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+        margin-top: -15px;
+        z-index: $zindex-qbGrid-editing;
+        background-color: $qbgrid-cell-edit-background-color;
+        border-top: $cell-edit-background-edit;
 
-.qbGrid > tbody > tr > td {
-    padding-left: 6px;
-    padding-right: 6px;
-    vertical-align: top;
-    font-size: $grid-font-size;
-    border-right: 1px solid $color-black-300;
-    border-top: 1px solid $color-black-300;
-    transition: border 100ms ease-out;
-}
+        // row header (leftmost cell)
+        .qbCell.stickyCell {
+            padding-left: 4px;
+            border-left: 1px solid $qbgrid-row-border-color;
 
-.qbGrid > tbody > tr:last-of-type > td {
-    border-bottom: 1px solid $color-black-300;
-}
+            // need to increase the z-index for the cell being edited so it isn't clipped by peer cells
+            // stickyCells are each a different stacking context
+            z-index: $zindex-qbGrid-editing-firstOfType;
+        }
 
-// add borders when the row has the willEdit class (from mouse entering pencil icons)
-.reportContent:not(.inlineEditing) {
-    .qbGrid > tbody > tr.willEdit > td:not(.stickyCell),
-    .qbGrid > tbody > tr.willEdit + tr > td:not(.stickyCell) {
-        border-top: 1px solid $qbgrid-onpencil-row-border-color;
-        transition: border 150ms ease-in;
-    }
-    .qbGrid > tbody > tr:last-of-type.willEdit > td:not(.stickyCell) {
-        border-bottom: 1px solid $qbgrid-onpencil-row-border-color;
-    }
-    .qbGrid > tbody > tr.willEdit > td:last-of-type {
-        border-right: 1px solid $qbgrid-onpencil-row-border-color;
-    }
-    .qbGrid > tbody > tr.willEdit > td.stickyCell {
-        border-right: 1px solid $qbgrid-onpencil-row-border-color;
-    }
-    .qbGrid > tbody > tr:hover > td {
-        background: $qbgrid-row-hover-color;
-    }
-}
+        // standard cell
+        .qbCell {
+            border-top: 2px solid $cell-edit-background-edit;
+            overflow: visible;
+            margin: 0;
+            border-right: 1px solid $row-border-color;
 
-.qbGrid > tbody > tr > td:first-of-type {
-    left: 0;
-    width: 80px;
-    max-width: 80px;
-    position: relative;
-    vertical-align: top;
-}
+            .cellWrapper {
+                display: flex;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: $zindex-qbGrid-cellWrapper;
 
-.qbGrid .editing {
-    box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
-    margin-top: -15px;
-    z-index: $zindex-qbGrid-editing;
-    background-color: $qbgrid-cell-edit-background-color;
-    border-top: $cell-edit-background-edit;
+                textarea.cellEdit {
 
-    > td:first-child {
-        padding-left: 4px;
-        border-left: 1px solid $qbgrid-row-border-color;
-    }
-
-    > td {
-        border-top: 2px solid $cell-edit-background-edit;
-        overflow: visible;
-        margin: 0;
-        border-right: 1px solid $row-border-color;
-
-        .cellWrapper {
-            display: flex;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: $zindex-qbGrid-cellWrapper;
-
-            textarea.cellEdit {
-
-                overflow: hidden;
-                box-sizing: border-box;
-            }
-
-            &.editingCell {
-                display: inline-block;
-                padding-bottom: 20px;
-                margin-top: -6px;
-
-                .nonEditable {
-                    margin: 1px;
-                    cursor: not-allowed;
+                    overflow: hidden;
+                    box-sizing: border-box;
                 }
 
-                &.dateTimeField > * {
-                    border: 0;
+                &.editingCell {
+                    display: inline-block;
+                    padding-bottom: 20px;
+                    margin-top: -6px;
 
-                    .input-group.date input.form-control {
-                        border: 0;
-                        padding: 0;
-                        font-size: 12px;
-                        height: 25px;
-                        border-radius: 0;
+                    .nonEditable {
+                        margin: 1px;
+                        cursor: not-allowed;
                     }
 
-                    .input-group.date .input-group-addon {
-                        background: $color-black-100;
-                        height: 21px;
-                        padding: 0;
+                    &.dateTimeField > * {
                         border: 0;
-                        color: $iconfont-on-light-normal-color;
-                    }
-                }
 
-                &.input-group {
-                    flex: 1 1 auto;
-                    display: flex;
-                    flex-direction: row;
-                    margin-right: 0;
-                    padding-right: 0;
-                    border-right: 0;
-
-                    > input {
-                        flex: 1 1 auto;
-                        border-radius: 0;
-                        border: 0;
-                        height: 21px;
-                        margin-right: 1px;
-                        font-size: $grid-font-size;
-                        padding-left: 2px;
-                    }
-
-                    > span.dropdown {
-                        flex: 0 0 auto;
-                        width: 20px;
-
-                        button {
-                            padding-left: 4px;
-                            padding-top: 0;
-                            height: 21px;
-                            width: 20px;
+                        .input-group.date input.form-control {
+                            border: 0;
+                            padding: 0;
+                            font-size: 12px;
+                            height: 25px;
                             border-radius: 0;
+                        }
+
+                        .input-group.date .input-group-addon {
+                            background: $color-black-100;
+                            height: 21px;
+                            padding: 0;
+                            border: 0;
+                            color: $iconfont-on-light-normal-color;
+                        }
+                    }
+
+                    &.input-group {
+                        flex: 1 1 auto;
+                        display: flex;
+                        flex-direction: row;
+                        margin-right: 0;
+                        padding-right: 0;
+                        border-right: 0;
+
+                        > input {
+                            flex: 1 1 auto;
+                            border-radius: 0;
+                            border: 0;
+                            height: 21px;
+                            margin-right: 1px;
+                            font-size: $grid-font-size;
+                            padding-left: 2px;
+                        }
+
+                        > span.dropdown {
+                            flex: 0 0 auto;
+                            width: 20px;
+
+                            button {
+                                padding-left: 4px;
+                                padding-top: 0;
+                                height: 21px;
+                                width: 20px;
+                                border-radius: 0;
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+
 }
-
-.actionsCol .iconActions {
-    line-height: inherit;
-
-    .dropdown-menu a {
-        padding-left: 4px;
-
-        .qbIcon {
-            margin-right: 6px;
-            vertical-align: middle;
-            width: 28px;
-            padding: 4px;
-        }
-
-        &:hover {
-            .qbIcon {
-                color: $color-black-100;
-            }
-
-            .qbIcon.print {
-                background-color: $print-icon-normal-color;
-            }
-
-            .qbIcon.email {
-                background-color: $mail-icon-normal-color;
-            }
-
-            .qbIcon.duplicate {
-                background-color: $copy-icon-normal-color;
-            }
-
-            .qbIcon.delete {
-                background-color: $delete-icon-normal-color;
-            }
-        }
-    }
-
-    .iconActionButton {
-        opacity: 0.2;
-        transition: opacity 200ms ease-in-out;
-        height: 30px;
-        width: auto;
-        background: inherit;
-
-        &:hover {
-            color: $topnav-icon-color;
-        }
-    }
-
-    .qbIcon.print {
-        color: $print-icon-normal-color;
-    }
-
-    .qbIcon.email {
-        color: $mail-icon-normal-color;
-    }
-
-    .qbIcon.duplicate {
-        color: $copy-icon-normal-color;
-    }
-
-    .qbIcon.delete {
-        color: $delete-icon-normal-color;
-    }
-}
-
-.actionsCol:hover .iconActions .iconActionButton {
-    transition: opacity 200ms ease-in-out;
-    opacity: 1;
-}
-
-.multiLineTextCell {
-    border: 0;
-    font-family: $font-family;
-    font-size: $grid-font-size;
-    border-radius: 0;
-    color: $font-color;
-}
-//The style here is for sticky column
-.qbGrid .qbRow .stickyCell {
-    background: $row-bg-color;
-    z-index: $zindex-qbGrid-firstOfType-stickyColumn;
-}
-
-.qbGrid .editing .stickyCell {
-    z-index: $zindex-qbGrid-editing-firstOfType;
-}
-
-.stickyCell {
-    position: relative;
-    z-index: $zindex-qbGrid-stickyCell;
-}
-
-th.qbHeaderCell.stickyCell {
-    z-index: $zindex-qbGrid-header-stickyCell;
-}
-
-.stickyCell .dropdown-menu {
-    top: 0;
-    left: 27px;
-}
-
