@@ -4,7 +4,8 @@
  */
 (function() {
     'use strict';
-    var reportContentPO = requirePO('reportContent');
+    var reportContentPO = requirePO('qbGridReportContent');
+    // var reportContentPO = requirePO('reportContent');
 
     function PageBase() {
         // Define common locators that all pages share here

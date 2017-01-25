@@ -5,13 +5,14 @@
  */
 (function() {
     'use strict';
-    var reportContent = require('./reportContent.po');
+    // var reportContent = require('./reportContent.po');
+    var reportContent = require('./qbGRidReportContent.po');
     var e2ePageBase = require('./e2ePageBase.po');
     var assert = require('assert');
 
-    var saveRecordInlineEdit  = '.ag-row.editing .saveRecord';
-    var cancelRecordInlineEdit = '.ag-row.editing .cancelSelection';
-    var addRecordInlineEdit = '.ag-row.editing .addRecord';
+    var saveRecordInlineEdit  = '.qbGrid .saveRecord';
+    var cancelRecordInlineEdit = '.qbGrid .cancelSelection';
+    var addRecordInlineEdit = '.qbGrid .addRecord';
 
     var ReportInLineEditPage = Object.create(reportContent, {
 
@@ -40,7 +41,7 @@
         // We append the editing class to the row being edited
         // Return the row being edited
         getInLineEditRecordMenu: {value: function() {
-            return browser.element('.ag-row.editing');
+            return browser.element('.qbGrid.editing');
         }},
 
         // Returns the save record button for the record being edited
@@ -66,16 +67,34 @@
          */
         openRecordEditMenu: {value: function(recordIndex) {
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
+            // browser.debug();
             // Hardcoded to click on the first cell of the record
-            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
+            console.log('recordRowEl: ', recordRowEl);
+            // browser.debug();
+            //Get a single qbCell from the row
+            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[5];
+            //I am getting the cellData from the row
+            var cellData = recordCellEl.element('.cellData');
+            //I am getting the pencil from the row
+            var cellEditIcon = recordCellEl.element('.cellEditIcon');
             // See http://webdriver.io/api/protocol/execute.html
             //TODO: Make generic double click function in e2ePageBase
-            console.log('recordCellEl: ', recordCellEl);
-            browser.debug();
+            console.log('recordCelEl: ', recordCellEl)
+            console.log('cellData: ', cellData)
+            console.log('cellEditIcon: ', cellEditIcon)
+            // browser.debug();
             if (browserName === 'chrome') {
-                recordCellEl.doubleClick();
+                //Hover over the cell
+                browser.moveToObject(cellData.selector);
+                //Then once the pencil is visible hover over the pencil
+                browser.moveToObject(cellEditIcon.selector);
+                browser.waitForExist(cellEditIcon.selector);
+                browser.logger.info('right after move to object');
+                // browser.debug();
+                browser.pause(500);
+                // recordCellEl.element('.cellEditIcon').click();
+                browser.element('.cellEditIcon.qbIcon.iconTableUISturdy-edit').click();
             } else {
-
                 browser.execute(function(recordCellElement) {
                     var event = new MouseEvent('click', {
                         'view': window,
@@ -86,6 +105,7 @@
                     recordCellElement.dispatchEvent(event);
                 }, recordCellEl);
             }
+            browser.debug();
             this.getInlineEditRecord().waitForVisible();
         }},
 
