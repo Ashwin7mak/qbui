@@ -196,10 +196,8 @@ function isAGroupOfRecords(record) {
  * @returns {Array|[*,*]}
  */
 function flattenRecordGroup(record, transformedRecords, fields, info) {
-    let groupHeaderId = `groupHeader_${record.group}`;
-    if (record.group === Locale.getMessage('groupHeader.empty')) {
-        groupHeaderId = _.uniqueId(groupHeaderId);
-    }
+    // Use a uniqueId to avoid identical keys when the same group name is repeated
+    let groupHeaderId = _.uniqueId(`groupHeader_${record.group}`);
 
     let currentSubHeaderLevel = (_.isNumber(info.subHeaderLevel) ? info.subHeaderLevel : 0);
 
@@ -209,6 +207,7 @@ function flattenRecordGroup(record, transformedRecords, fields, info) {
         subHeaderLabel: record.group,
         localized: record.localized,
         id: groupHeaderId,
+        parentId: info.parentId
     });
 
     let newInfo = {

@@ -101,6 +101,16 @@ $edit-icon-font-size: 18px;
         text-align: center;
     }
 
+    .actionHeader {
+        display: flex;
+        align-items: center;
+
+        .selectRowCheckbox {
+            margin-top: 0;
+            flex: 1 1 auto;
+        }
+    }
+
     .gridHeaderCell {
         display: flex;
         align-items: center;
@@ -495,12 +505,12 @@ $edit-icon-font-size: 18px;
     color: $font-color;
 }
 //The style here is for sticky column
-.qbGrid > tbody > tr > td:first-of-type {
+.qbGrid .qbRow .stickyCell {
     background: $row-bg-color;
     z-index: $zindex-qbGrid-firstOfType-stickyColumn;
 }
 
-.qbGrid > tbody > tr.editing > td:first-of-type {
+.qbGrid .editing .stickyCell {
     z-index: $zindex-qbGrid-editing-firstOfType;
 }
 
