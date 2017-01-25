@@ -417,6 +417,7 @@ export default {
             api: {
                 notUniqueSingleField: "Fill in a different value. Another {recordName} is already using this {fieldName}.",
                 notUniqueMultiChoice: "Select a different {fieldName}. Another {recordName} is already using this one.",
+                invalidRecord: "Invalid data type. Fill in a different value."
             },
             unknown: "Invalid unknown type. Results: ",
             required: "Fill in the {fieldName}",

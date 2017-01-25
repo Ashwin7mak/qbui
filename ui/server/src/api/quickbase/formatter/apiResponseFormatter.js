@@ -6,6 +6,7 @@ var httpStatusCodes = require('../../../constants/httpStatusCodes');
 
 const i18NUniqueValidationErrorKey = 'invalidMsg.api.notUniqueSingleField';
 const i18NUniqueValidationErrorKeyMultiChoice = 'invalidMsg.api.notUniqueMultiChoice';
+const i18NInvalidRecordKey = 'invalidMsg.api.invalidRecord';
 
 function parseRequestBodyAsJson(payload) {
     if (_.has(payload, 'request.body')) {
@@ -31,19 +32,24 @@ function parseResponseBodyAsJson(payload) {
     return [];
 }
 
-function formatFieldAsValidationError(field, data) {
+function formatFieldAsValidationError(field, data, type) {
     var resultsCopy = {error: {}};
     resultsCopy.id = field.id;
     resultsCopy.value = field.value;
     resultsCopy.def = field;
     resultsCopy.error.code = errorCodes.INVALID_ENTRY;
-    resultsCopy.error.messageId = getI18NValidationErrorMessageKey(field);
+    resultsCopy.error.messageId = getI18NValidationErrorMessageKey(field, type);
     resultsCopy.error.data = _.assign({}, {fieldName: field.fieldName}, data);
     resultsCopy.isInvalid = true;
     return resultsCopy;
 }
 
-function getI18NValidationErrorMessageKey(field) {
+function getI18NValidationErrorMessageKey(field, type) {
+    if (type === apiResponseErrors.INVALID_RECORD) {
+        return i18NInvalidRecordKey;
+    }
+
+
     if (_.has(field, 'fieldDef.multipleChoice.choices')) {
         return i18NUniqueValidationErrorKeyMultiChoice;
     }
@@ -51,43 +57,31 @@ function getI18NValidationErrorMessageKey(field) {
     return i18NUniqueValidationErrorKey;
 }
 
-function transformResponseBodyToObject(responseBody) {
-    if (_.isArray(responseBody) && _.isObject(responseBody[0])) {
-        return responseBody[0];
+function getErrorCode(message) {
+    if (message && _.isObject(message)) {
+        return message.code;
     }
 
     return null;
 }
 
-function getErrorCode(responseBody) {
-    var transformedResponseBody = transformResponseBodyToObject(responseBody);
-
-    if (transformedResponseBody) {
-        return transformedResponseBody.code;
+function getErrorMessage(message) {
+    if (message && _.isObject(message)) {
+        return message.message;
     }
 
     return null;
 }
 
-function getErrorMessage(responseBody) {
-    var transformedResponseBody = transformResponseBodyToObject(responseBody);
-
-    if (transformedResponseBody) {
-        return transformedResponseBody.message;
-    }
-
-    return null;
-}
-
-function responseHasUniqueValidationErrors(responseBody) {
+function responseHasUniqueValidationErrors(message) {
     // Core API returns a NOT_UNIQUE_VALUE error when creating a new record,
     // but returns a 404 and a NOT_UNIQUE_VALUE_MESSAGE when editing a record
     // if the there is a unique validation error.
     // The 404 status code becomes a more accurate 422 if unique validation errors are found.
     // TODO:: Improve and return specific fields once core is updated.
     // Core story: https://quickbase.atlassian.net/browse/CORE-1052
-    return getErrorCode(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE ||
-        getErrorMessage(responseBody) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
+    return getErrorCode(message) === apiResponseErrors.NOT_UNIQUE_VALUE ||
+        getErrorMessage(message) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
 }
 
 function formatUniqueValidationErrors(requestBody) {
@@ -102,6 +96,28 @@ function formatUniqueValidationErrors(requestBody) {
     });
 
     return uniqueValidationErrors;
+}
+
+function responseHasInvalidRecord(message) {
+    return getErrorCode(message) === apiResponseErrors.INVALID_RECORD;
+}
+
+function formatInvalidRecordErrors(requestBody, message) {
+    var errorMessage = getErrorMessage(message);
+    var fieldId = null;
+    if (errorMessage && _.isString(errorMessage)) {
+        fieldId = /field\s\d+\s/.exec(errorMessage);
+        if (fieldId) {
+            fieldId = parseInt(fieldId[0].replace(/\D/g, ''));
+
+            var field = requestBody.find(currentField => currentField.id === fieldId);
+            if (field) {
+                return [formatFieldAsValidationError(field, {}, apiResponseErrors.INVALID_RECORD)];
+            }
+        }
+    }
+
+    return [];
 }
 
 /**
@@ -119,6 +135,9 @@ function returnPayload(payload) {
 }
 
 var ApiResponseFormatter = {
+    // Holds the value of the current error message being evaluated
+    currentErrorMessage: null,
+
     /**
      * Accepts an error response from the Core API and formats it for use in the UI layer.
      * Consider carefully before adding an error handler here. Could this be caught in a Node layer validator? If so, add it there.
@@ -131,8 +150,14 @@ var ApiResponseFormatter = {
         var requestBodyAsJson = parseRequestBodyAsJson(payload);
         var responseBodyAsJson = parseResponseBodyAsJson(payload);
 
-        if (responseHasUniqueValidationErrors(responseBodyAsJson)) {
-            formattedErrors = formattedErrors.concat(formatUniqueValidationErrors(requestBodyAsJson));
+        if (Array.isArray(responseBodyAsJson)) {
+            responseBodyAsJson.forEach(message => {
+                if (responseHasUniqueValidationErrors(message)) {
+                    formattedErrors = formattedErrors.concat(formatUniqueValidationErrors(requestBodyAsJson));
+                } else if (responseHasInvalidRecord(message)) {
+                    formattedErrors = formattedErrors.concat(formatInvalidRecordErrors(requestBodyAsJson, message));
+                }
+            });
         }
 
         if (formattedErrors.length > 0) {
