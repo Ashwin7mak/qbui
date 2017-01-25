@@ -73,6 +73,12 @@ function getErrorMessage(message) {
     return null;
 }
 
+function getFieldId(message) {
+    if (message && _.isObject(message)) {
+        return message.fieldId;
+    }
+}
+
 function responseHasUniqueValidationErrors(message) {
     // Core API returns a NOT_UNIQUE_VALUE error when creating a new record,
     // but returns a 404 and a NOT_UNIQUE_VALUE_MESSAGE when editing a record
@@ -103,18 +109,9 @@ function responseHasInvalidRecord(message) {
 }
 
 function formatInvalidRecordErrors(requestBody, message) {
-    var errorMessage = getErrorMessage(message);
-    var fieldId = null;
-    if (errorMessage && _.isString(errorMessage)) {
-        fieldId = /field\s\d+\s/.exec(errorMessage);
-        if (fieldId) {
-            fieldId = parseInt(fieldId[0].replace(/\D/g, ''));
-
-            var field = requestBody.find(currentField => currentField.id === fieldId);
-            if (field) {
-                return [formatFieldAsValidationError(field, {}, apiResponseErrors.INVALID_RECORD)];
-            }
-        }
+    var field = requestBody.find(currentField => currentField.id === getFieldId(message));
+    if (field) {
+        return [formatFieldAsValidationError(field, {}, apiResponseErrors.INVALID_RECORD)];
     }
 
     return [];
