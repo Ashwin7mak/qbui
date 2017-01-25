@@ -206,6 +206,7 @@ export default {
         },
         report : {
             blank : "leer",
+            inlineEdit: "Bearbeiten record inline",
             facets :{
                 noFacets :"Nein werte",
                 seeMore : "weitere...",

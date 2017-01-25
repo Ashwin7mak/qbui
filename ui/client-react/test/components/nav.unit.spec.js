@@ -75,11 +75,6 @@ describe('Nav functions', () => {
             return {apps: null};
         }
     });
-    let reportsStore = Fluxxor.createStore({
-        getState: function() {
-            return {list: []};
-        }
-    });
     let reportDataStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -104,7 +99,6 @@ describe('Nav functions', () => {
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appsStore(),
-        ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
         RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
@@ -116,7 +110,8 @@ describe('Nav functions', () => {
             shell: {
                 leftNavVisible: true,
                 leftNavExpanded: false
-            }
+            },
+            reports: []
         }
     };
 
@@ -186,7 +181,6 @@ describe('Nav functions', () => {
         let storesWithAdminApp = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithAdminApp(), // has an app with admin access (EDIT_SCHEMA)
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -202,7 +196,6 @@ describe('Nav functions', () => {
         let storesWithV3App = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App(),  // has an app with openInV3 = true
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -218,7 +211,6 @@ describe('Nav functions', () => {
         let storesWithoutV3App = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithoutV3App(),  // no admin rights and has no app with openInV3 = true
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -237,7 +229,6 @@ describe('Nav functions', () => {
         let storesWithoutApps = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithNoApps(),
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -260,7 +251,6 @@ describe('Nav functions', () => {
         let storesWithApps = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App(),
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
