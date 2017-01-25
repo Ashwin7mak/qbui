@@ -1,4 +1,5 @@
 import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
@@ -12,6 +13,7 @@ const actions = {
     onCellChange() {},
     onCellBlur() {},
     onCellClick() {},
+    onCellClickEditIcon() {}
 };
 
 const testRecordId = 13;
@@ -47,21 +49,43 @@ describe('ReportCell', () => {
     });
 
     it('has a clickable edit icon when the field is editable', () => {
-        spyOn(actions, 'onCellClick');
+        spyOn(actions, 'onCellClickEditIcon');
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
         let editButton = component.find('.cellEditIcon');
         expect(editButton).toBePresent();
 
-        editButton.simulate('click');
+        editButton.simulate('click', {stopPropagation() {}});
 
-        expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
+        expect(actions.onCellClickEditIcon).toHaveBeenCalledWith(testRecordId, fieldDef);
     });
 
     it('does not have a clickable edit icon when the field is not editable', () => {
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={uneditableField} recordId={testRecordId}/>);
 
         expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
+    it('does not have a clickable edit icon when the row is in editing mode', () => {
+        component = shallow(<ReportCell {...actions} isEditing={true} fieldDef={uneditableField} recordId={testRecordId}/>);
+
+        expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
+    it('does not have a clickable edit icon when another row is in editing mode', () => {
+        component = shallow(<ReportCell {...actions} isEditing={false} editingRecordId={99} fieldDef={uneditableField} recordId={testRecordId}/>);
+
+        expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
+    it('navigates to form view when a cell is clicked', () => {
+        spyOn(actions, 'onCellClick');
+        component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
+
+        let cellClickableArea = component.find('.cellClickableArea');
+        cellClickableArea.simulate('click');
+
+        expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
     });
 
     it('renders an editor when the cell is in editing mode', () => {
@@ -99,4 +123,84 @@ describe('ReportCell', () => {
         expect(component.find(CellValueRenderer)).toBePresent();
         expect(component.find(FieldValueEditor)).toBeEmpty();
     });
+
+    describe('findFocusableInput', () => {
+        beforeEach(() => {
+            component = shallow(<ReportCell {...actions} fieldDef={fieldDef}/>);
+            instance = component.instance();
+        });
+
+        it('returns the input element if one exists', () => {
+            const mockInput = 'input';
+            const mockRenderedComponent = {querySelector() {return mockInput;}};
+
+            expect(instance.findFocusableInput(mockRenderedComponent)).toEqual(mockInput);
+        });
+
+        it('returns the actionable part of a checkbox', () => {
+            const mockCheckbox = 'checkbox';
+            const mockRenderedComponent = {querySelector(query) {
+                if (query === 'input') {
+                    return {type: 'checkbox'};
+                }
+                return mockCheckbox;
+            }};
+
+            expect(instance.findFocusableInput(mockRenderedComponent)).toEqual(mockCheckbox);
+        });
+
+        it('returns the textarea element if it exists', () => {
+            const mockTextArea = 'textarea';
+            const mockRenderedComponent = {querySelector(query) {
+                if (query === 'textarea') {
+                    return mockTextArea;
+                }
+
+                return null;
+            }};
+
+            expect(instance.findFocusableInput(mockRenderedComponent)).toEqual(mockTextArea);
+        });
+    });
+
+    describe('componentDidUpdate', () => {
+        let testCases = [
+            {
+                description: 'focuses the first input of an edit cell when hasFocusOnEditStart is true',
+                isEditing: true,
+                focusShouldHaveBeenCalled: true
+            },
+            {
+                description: 'does not focus the first input if the cell is not in edit mode',
+                isEditing: false,
+                focusShouldHaveBeenCalled: false
+            }
+        ];
+
+        // Using TestUtils for this test so that the nested components can be rendered and checked
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                const StatefulParentWithReportCell = React.createClass({
+                    getInitialState() {return {hasFocusOnEditStart: false};},
+                    toggleHasFocusOnEditStart() {this.setState({hasFocusOnEditStart: !this.state.hasFocusOnEditStart});},
+                    render() {return <ReportCell {...actions} isEditing={testCase.isEditing} fieldDef={fieldDef} hasFocusOnEditStart={this.state.hasFocusOnEditStart}/>;}
+                });
+
+                component = TestUtils.renderIntoDocument(<StatefulParentWithReportCell/>);
+                instance = TestUtils.findRenderedComponentWithType(component, ReportCell);
+
+                spyOn(instance, 'focusFieldValueEditorFirstInput').and.callThrough();
+
+                component.toggleHasFocusOnEditStart();
+
+                if (testCase.focusShouldHaveBeenCalled) {
+                    expect(instance.focusFieldValueEditorFirstInput).toHaveBeenCalled();
+                } else {
+                    expect(instance.focusFieldValueEditorFirstInput).not.toHaveBeenCalled();
+                }
+            });
+        });
+    });
+
+
 });

@@ -210,6 +210,7 @@ export default {
         },
         report : {
             blank : "blank",
+            inlineEdit: "Edit record inline",
             facets : {
                 noFacets : "No values",
                 seeMore : "more...",
