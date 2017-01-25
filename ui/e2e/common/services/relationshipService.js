@@ -48,7 +48,7 @@
                     description  : 'Referential integrity relationship between Master / Child Tables'
                 };
 
-                e2eBase.recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
+                recordBase.createRelationship(relationshipToCreate).then(function(relResponse) {
                     var relationship = JSON.parse(relResponse.body);
                     console.log('Relationship Created with ID: ' + relationship.id);
                 });

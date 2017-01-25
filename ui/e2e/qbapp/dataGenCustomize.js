@@ -62,6 +62,8 @@ consts = require('../../common/src/constants.js');
         var table5Name = 'All Required';
         var table6Name = 'Durations';
         var table7Name = 'Unique Fields';
+        var table8Name = 'Relationship (Parent)';
+        var table9Name = 'Relationship (Child)';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -245,7 +247,7 @@ consts = require('../../common/src/constants.js');
                 dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
                 multipleChoice: {
                     choices: _.clone(textChoices),
-                    allowNew: false,
+                    allowNew: true,
                     sortAsGiven: true
                 }
             });
@@ -270,7 +272,7 @@ consts = require('../../common/src/constants.js');
                 }
             });
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CURRENCY, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required: false});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.RATING, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE_TIME, null, {required: true});
@@ -355,7 +357,7 @@ consts = require('../../common/src/constants.js');
                 dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
                 multipleChoice: {
                     choices: _.clone(textChoices),
-                    allowNew: false,
+                    allowNew: true,
                     sortAsGiven: true
                 }
             });
@@ -375,7 +377,7 @@ consts = require('../../common/src/constants.js');
                 unitsDescription: "",
                 multipleChoice: {
                     choices: _.clone(numericChoices),
-                    allowNew: false,
+                    allowNew: true,
                     sortAsGiven: false
                 }
             });
@@ -389,6 +391,16 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PHONE_NUMBER, 'Unique Phone', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
+
+
+        tableToFieldToFieldTypeMap[table8Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: true});
+
+        tableToFieldToFieldTypeMap[table9Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: true});
+
 
         return tableToFieldToFieldTypeMap;
     }
@@ -406,6 +418,10 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 5;
             var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
 
             createdResults.then(function(results) {
@@ -426,6 +442,9 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
+        }).then(function() {
+            //Create tables relationship
+            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)
