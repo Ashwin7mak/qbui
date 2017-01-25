@@ -62,7 +62,7 @@
             //wait until loading screen disappear
             browser.waitForVisible('.trowserChildren .loader .spinner', e2eConsts.extraLongWaitTimeMilliseonds, true);
             //Need this to wait for container to slide away
-            return browser.pause(3000);
+            return browser.pause(e2eConsts.shortWaitTimeMilliseonds);
         }},
 
         /**
@@ -391,7 +391,7 @@
                         checkboxFields.value[i].element('label').click();
                     }
                 }
-            }else if (fieldType === 'allUserField') {
+            } else if (fieldType === 'allUserField') {
                 this.setDropDownValue(this.getAllUserFields(), sUser);
             }
         }},

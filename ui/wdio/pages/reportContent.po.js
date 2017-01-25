@@ -14,8 +14,7 @@
         addRecordBtnOnStage : {get: function() {
             browser.element('.layout-stage .pageActions .iconTableUISturdy-add').waitForVisible();
             return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');
-        }
-        },
+        }},
 
         //edit pencil in report actions tool bar
         editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
@@ -28,8 +27,7 @@
         reportContainerEl: {get: function() {
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
-        }
-        },
+        }},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
 
@@ -37,22 +35,19 @@
             this.reportToolsAndContentEl.elements('.loadedContent').waitForVisible();
             var elems = this.reportToolsAndContentEl.elements('.loadedContent');
             return elems.value[0];
-        }
-        },
+        }},
 
         // Report content div containing column headers and the report content in agGrid
         reportContentEl: {get: function() {
             this.reportContainerEl.element('.reportContent').waitForVisible();
             return this.reportContainerEl.element('.reportContent');
-        }
-        },
+        }},
 
         // agGrid contains both the column headers and the record content in agGrid
         agGridContainerEl: {get: function() {
             this.reportContentEl.element('.agGrid').waitForVisible();
             return this.reportContentEl.element('.agGrid');
-        }
-        },
+        }},
 
         // Contains the entire set of column headers for the grid (the select all column and the field column headers)
         agGridHeaderEl: {get: function() {return this.agGridContainerEl.element('.ag-header');}},
@@ -67,8 +62,7 @@
         agGridBodyEl: {get: function() {
             this.agGridContainerEl.element('.ag-body').waitForVisible();
             return this.agGridContainerEl.element('.ag-body');
-        }
-        },
+        }},
 
         agGridBodyViewportEl : {get: function() {return browser.element('.ag-body-viewport');}},
 
@@ -85,8 +79,7 @@
         agGridBodyContainer: {get: function() {
             this.agGridBodyEl.element('.ag-body-container').waitForVisible();
             return this.agGridBodyEl.element('.ag-body-container');
-        }
-        },
+        }},
 
         // this will get you every record element on the grid
         agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.ag-row');}},
@@ -259,7 +252,7 @@
                 getAllEdits[0].click();
                 formsPO.editFormContainerEl.waitForVisible();
                 //need these for trowser to drop down
-                return browser.pause(3000);
+                return browser.pause(e2eConsts.shortWaitTimeMilliseonds);
             } else {
                 throw new Error('Edit button not found at row ' + recordRowIndex);
             }

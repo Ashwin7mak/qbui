@@ -82,7 +82,6 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [
-        //TODO Chrome is not stable in sauce labs . So will deal this as seperate PR.
         {
             platform : 'OS X 10.11',
             browserName     : 'chrome',
