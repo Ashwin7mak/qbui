@@ -74,8 +74,6 @@
             // Step 3 - Open the calendar widget and Advance the date ahead 1 day
             if (browserName !== 'safari') {
                 ReportInLineEditPO.openDateFieldCalWidget(0);
-                console.log('openDateFieldCalWidget is fine');
-                browser.debug();
                 ReportInLineEditPO.advanceCurrentlySelectedDate(0);
                 console.log('advanceCurrentLySelectedDate is fine');
                 browser.debug();

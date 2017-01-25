@@ -52,7 +52,7 @@
          */
         clickPagingNavButton: {value: function(pagingButtonElement) {
             pagingButtonElement.click();
-            browser.waitForVisible('.ag-body-container');
+            browser.waitForVisible('tbody');
         }}
     });
 

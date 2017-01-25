@@ -82,7 +82,7 @@
                 browser.moveToObject(cellData.selector);
                 //Then once the pencil is visible hover over the pencil
                 browser.moveToObject(cellEditIcon.selector);
-                browser.element('.cellEditIcon.qbIcon.iconTableUISturdy-edit').click();
+                browser.element('.cellEditIcon').click();
             } else {
                 browser.execute(function(recordCellElement) {
                     var event = new MouseEvent('click', {
@@ -400,9 +400,10 @@
          */
         advanceCurrentlySelectedDate: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
-            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
+            // var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
+            var qbCells = recordBeingEdited.elements('qbCell');
+            var dateFieldCells = qbCells.elements('.cellEdit.dateCell.place');
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
-
             var selectedRow = this.getDateRowForSelectedDate(this.getCurrentSelectedDate(this.getDateFieldCalendarWidgetEl(dateFieldCell)));
             var datesInRow = selectedRow.elements('td');
             var currentDateIndex;
