@@ -162,7 +162,6 @@ describe('Nav functions', () => {
                 return {touch: true};
             },
             render() {
-                let dispatchMethod = () => { };
                 return <Nav {...props} ref="nav" flux={flux} dispatch={dispatchMethod}></Nav>;
             }
         }));

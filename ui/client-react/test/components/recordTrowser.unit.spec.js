@@ -16,7 +16,7 @@ const RecordMock = React.createClass({
 });
 
 const mockStore = configureMockStore();
-let dispatchMethod = () => { };
+
 describe('RecordTrowser functions', () => {
     'use strict';
 
@@ -163,6 +163,7 @@ describe('RecordTrowser functions', () => {
     it('test dismiss error message popup in trowser', () => {
 
         const form = {editFormData: {}};
+        let dispatchMethod = () => { };
         component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true} dispatch={dispatchMethod}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
