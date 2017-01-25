@@ -8,6 +8,7 @@ import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import FieldUtils from '../../utils/fieldUtils';
+import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 
@@ -243,11 +244,14 @@ let QBForm = React.createClass({
         const relationship = window.relationships[element.relationshipId];
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
-        const link = '/qbase' +
-                     '/app/' + (relationship && relationship.appId) +
-                     '/table/' + (relationship && relationship.detailTableId) +
-                     '/detailFieldId/' + (relationship && relationship.detailFieldId) +
-                     '/masterRecordId/' + (fieldRecord && fieldRecord.value);
+        const appId = _.get(relationship, 'appId');
+        const childTableId = _.get(relationship, 'detailTableId');
+        // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now
+        const childReportId = _.get(relationship, 'childDefaultReportId', 0);
+        const fieldWithParentId = _.get(relationship, 'detailFieldId');
+        const parentRecordId = _.get(fieldRecord, 'value');
+
+        const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, fieldWithParentId, parentRecordId);
         return <td key={key}><Link to={link}>Child Table</Link></td>;
     },
 

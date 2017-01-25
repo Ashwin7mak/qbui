@@ -67,6 +67,40 @@ describe('QueryUtils - parseStringIntoContainsExpression test with valid search 
     });
 });
 
+describe('QueryUtils - parseStringIntoExactMatchExpression test with invalid search expressions', () => {
+    'use strict';
+
+    var fid = '10';
+    var dataProvider = [
+        {test:'undefined', input:undefined},
+        {test:'null', input:null},
+        {test:'Object', input:{}},
+        {test:'Array', input:[]}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(QueryUtils.parseStringIntoExactMatchExpression(fid, data.input)).toBe('');
+        });
+    });
+});
+
+describe('QueryUtils - parseStringIntoExactMatchExpression test with valid search expressions', () => {
+    'use strict';
+
+    var fid = '10';
+    var template = `{${fid}${Constants.OPERATOR_EXACTLY_MATCHES}'{0}'}`;
+    var dataProvider = [
+        {test:'falsy number', input:'0', expectation:StringUtils.format(template, ['0'])},
+        {test:'number', input:'13', expectation:StringUtils.format(template, ['13'])},
+        {test:'string', input:'something', expectation: StringUtils.format(template, ['something'])}
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(QueryUtils.parseStringIntoExactMatchExpression(fid, data.input)).toBe(data.expectation);
+        });
+    });
+});
+
 describe('QueryUtils - concatQueries tests with invalid query lists', () => {
     'use strict';
     var dataProvider = [
@@ -132,4 +166,3 @@ describe('QueryUtils - concatQueries test concatenating with OR parameter set to
         });
     });
 });
-

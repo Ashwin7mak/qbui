@@ -77,7 +77,7 @@ var path = require('path');
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId/detailFieldId/:detailFieldId/masterRecordId/:masterRecordId').get(function(req, res) {
+        app.route('/qbase/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId').get(function(req, res) {
             renderIndex(req, res);
         });
 

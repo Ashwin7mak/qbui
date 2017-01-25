@@ -49,8 +49,8 @@ render((
             <Route path="/qbase/app/:appId" component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
-                <Route path="table/:tblId/detailFieldId/:detailFieldId/masterRecordId/:masterRecordId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
+                <Route path="table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>

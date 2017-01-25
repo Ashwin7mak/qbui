@@ -43,6 +43,27 @@ class QueryUtils {
     }
 
     /**
+     * Output a Quickbase 'EXACTLY MATCHES' query expression searches the fid for the given value.
+     *
+     * parseStringIntoExactMatchExpression(10, 'professional')  ==> {10.EX.'Professional'}
+     *
+     * @param fid the fid to search
+     * @param value the value which should be in the field with fid
+     * @returns {string} query expression
+     */
+    static parseStringIntoExactMatchExpression(fid, value) {
+        let containsExpr = '';
+        let strValue = '';
+        if (typeof value === 'number' || typeof value === 'string') {
+            // convert to string if numeric
+            strValue = '' + value;
+            strValue = strValue.trim();
+            containsExpr = `{${fid}${Constants.OPERATOR_EXACTLY_MATCHES}'${strValue}'}`;
+        }
+        return containsExpr;
+    }
+
+    /**
      * Concatenate a list of query expressions.  Each query expression in the input list is 'AND'ed by default.
      * To 'OR' the query list, set the 'useOr' parameter to true.
      *

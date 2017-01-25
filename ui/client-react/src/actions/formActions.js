@@ -185,38 +185,43 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 }
 
                 // TODO: using mock data: should retrieve relationships data without the use of
-                // globals
-                if (window.relationships && window.relationships.length) {
-                    response.data.formMeta.relationships = window.relationships;
-                    const mockElement =  {
-                        ReferenceElement: {
-                            displayOptions: [
-                                "VIEW",
-                                "ADD",
-                                "EDIT"
-                            ],
-                            type: "EMBEDREPORT",
-                            orderIndex: 0,
-                            positionSameRow: false,
-                            relationshipId: 0
+                // globals.
+                if (_.get(window, 'relationships.length') > 0) {
+                    window.relationships.forEach((relation) => {
+                        // if a relathinship in which this form is a parent is defined, mock ReferenceElement
+                        if (relation.masterTableId === response.data.formMeta.tableId) {
+                            (response.data.formMeta.relationships || []).push(relation);
+                            const mockElement =  {
+                                ReferenceElement: {
+                                    displayOptions: [
+                                        "VIEW",
+                                        "ADD",
+                                        "EDIT"
+                                    ],
+                                    type: "EMBEDREPORT",
+                                    orderIndex: 0,
+                                    positionSameRow: false,
+                                    relationshipId: 0
+                                }
+                            };
+                            // add as many elements as we have relationships
+                            const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
+                                const element = _.cloneDeep(mockElement);
+                                _.set(element, 'ReferenceElement.relationshipId', idx);
+                                _.set(element, 'ReferenceElement.orderIndex', idx);
+                                return element;
+                            });
+                            const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
+                            // inject relationship elements in its own section
+                            let sections = response.data.formMeta.tabs[0].sections;
+                            sections[length] = Object.assign(_.cloneDeep(sections[0]), {
+                                elements: elements,
+                                fields: [],
+                                orderIndex: length
+                            });
+                            sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
                         }
-                    };
-                    // add as many elements as we have relationships
-                    const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
-                        const element = _.cloneDeep(mockElement);
-                        _.set(element, 'ReferenceElement.relationshipId', idx);
-                        _.set(element, 'ReferenceElement.orderIndex', idx);
-                        return element;
                     });
-                    const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
-                    // inject relationship elements in its own section
-                    let sections = response.data.formMeta.tabs[0].sections;
-                    sections[length] = Object.assign(_.cloneDeep(sections[0]), {
-                        elements: elements,
-                        fields: [],
-                        orderIndex: length
-                    });
-                    sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
                 }
 
                 dispatch(loadFormSuccess(formType, response.data));
