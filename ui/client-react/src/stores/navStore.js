@@ -19,7 +19,6 @@ let NavStore = Fluxxor.createStore({
             topTitle: null,
             scrollingReport: false,
             filterReportsName: '',
-            errorPopupHidden: true,
             locale: null,
             openCount: 0
         };

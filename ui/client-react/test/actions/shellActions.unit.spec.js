@@ -40,11 +40,10 @@ describe('Shell actions', () => {
         expect(shellActions.toggleRowActionsMenu(toggleState)).toEqual({type: types.TOGGLE_ROW_POP_UP_MENU, toggleState});
     });
 
+    //it('should create an action to hide error dialog', () => {
+    //    expect(shellActions.hideErrorMsgDialog()).toEqual({type: types.HIDE_ERROR_MSG_DIALOG});
+    //});
     it('should create an action to show error dialog', () => {
         expect(shellActions.showErrorMsgDialog()).toEqual({type: types.SHOW_ERROR_MSG_DIALOG});
-    });
-
-    it('should create an action to hide error dialog', () => {
-        expect(shellActions.hideErrorMsgDialog()).toEqual({type: types.HIDE_ERROR_MSG_DIALOG});
     });
 });
