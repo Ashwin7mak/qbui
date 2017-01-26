@@ -55,7 +55,7 @@ export const RecordTrowser = React.createClass({
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
-        let hideErrorMessage = this.props.shell ? this.props.shell.errorPopupHidden: true;
+        let hideErrorMessage = this.props.shell ? this.props.shell.errorPopupHidden : true;
         let errorMessage = [];
         if (_.has(this.props, 'pendEdits.editErrors.errors')) {
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();

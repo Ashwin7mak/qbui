@@ -255,7 +255,6 @@ export let Nav = React.createClass({
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable(reportsData.tableId)}
                                reportData={this.state.reportData}
-                               errorPopupHidden={this.props.qbui.shell.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
