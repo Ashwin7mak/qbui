@@ -1,12 +1,25 @@
 var Promise = require('bluebird');
 var _ = require('lodash');
-var errorCodes = require('../../../../../common/src/dataEntryErrorCodes');
 var apiResponseErrors = require('../../../constants/apiResponseErrors');
 var httpStatusCodes = require('../../../constants/httpStatusCodes');
+var uniqueFieldValidationError = require('./apiResponseFormatters/uniqueFieldValidationErrorFormatter');
+var invalidRecordError = require('./apiResponseFormatters/invalidRecordErrorFormatter');
 
-const i18NUniqueValidationErrorKey = 'invalidMsg.api.notUniqueSingleField';
-const i18NUniqueValidationErrorKeyMultiChoice = 'invalidMsg.api.notUniqueMultiChoice';
-const i18NInvalidRecordKey = 'invalidMsg.api.invalidRecord';
+
+
+/**
+ * The promise needs to be rejected if the response is not ok. If the promise is not rejected,
+ * the response will be incorrectly marked as 200.
+ * @param payload
+ * @returns {*}
+ */
+function returnPayload(payload) {
+    if (payload.statusCode >= 400) {
+        return Promise.reject(payload);
+    }
+
+    return payload;
+}
 
 function parseRequestBodyAsJson(payload) {
     if (_.has(payload, 'request.body')) {
@@ -32,105 +45,13 @@ function parseResponseBodyAsJson(payload) {
     return [];
 }
 
-function formatFieldAsValidationError(field, data, type) {
-    var resultsCopy = {error: {}};
-    resultsCopy.id = field.id;
-    resultsCopy.value = field.value;
-    resultsCopy.def = field;
-    resultsCopy.error.code = errorCodes.INVALID_ENTRY;
-    resultsCopy.error.messageId = getI18NValidationErrorMessageKey(field, type);
-    resultsCopy.error.data = _.assign({}, {fieldName: field.fieldName}, data);
-    resultsCopy.isInvalid = true;
-    return resultsCopy;
-}
-
-function getI18NValidationErrorMessageKey(field, type) {
-    if (type === apiResponseErrors.INVALID_RECORD) {
-        return i18NInvalidRecordKey;
-    }
-
-
-    if (_.has(field, 'fieldDef.multipleChoice.choices')) {
-        return i18NUniqueValidationErrorKeyMultiChoice;
-    }
-
-    return i18NUniqueValidationErrorKey;
-}
-
-function getErrorCode(message) {
-    if (message && _.isObject(message)) {
-        return message.code;
-    }
-
-    return null;
-}
-
-function getErrorMessage(message) {
-    if (message && _.isObject(message)) {
-        return message.message;
-    }
-
-    return null;
-}
-
-function getFieldId(message) {
-    if (message && _.isObject(message)) {
-        return message.fieldId;
-    }
-}
-
-function responseHasUniqueValidationErrors(message) {
-    // Core API returns a NOT_UNIQUE_VALUE error when creating a new record,
-    // but returns a 404 and a NOT_UNIQUE_VALUE_MESSAGE when editing a record
-    // if the there is a unique validation error.
-    // The 404 status code becomes a more accurate 422 if unique validation errors are found.
-    // TODO:: Improve and return specific fields once core is updated.
-    // Core story: https://quickbase.atlassian.net/browse/CORE-1052
-    return getErrorCode(message) === apiResponseErrors.NOT_UNIQUE_VALUE ||
-        getErrorMessage(message) === apiResponseErrors.NOT_UNIQUE_VALUE_MESSAGE;
-}
-
-function formatUniqueValidationErrors(requestBody) {
-    var uniqueValidationErrors = [];
-
-    requestBody.forEach(field => {
-        // The Core API does not currently specify which fields failed the unique test, so this function
-        // only applies the validation error to fields that are set as unique.
-        if (_.has(field, 'fieldDef.unique') && field.fieldDef.unique) {
-            uniqueValidationErrors.push(formatFieldAsValidationError(field, {recordName: 'record'}));
-        }
-    });
-
-    return uniqueValidationErrors;
-}
-
-function responseHasInvalidRecord(message) {
-    return getErrorCode(message) === apiResponseErrors.INVALID_RECORD;
-}
-
-function formatInvalidRecordErrors(requestBody, message) {
-    var field = requestBody.find(currentField => currentField.id === getFieldId(message));
-    if (field) {
-        return [formatFieldAsValidationError(field, {}, apiResponseErrors.INVALID_RECORD)];
-    }
-
-    return [];
-}
-
 /**
- * The promise needs to be rejected if the response is not ok. If the promise is not rejected,
- * the response will be incorrectly marked as 200.
- * @param payload
- * @returns {*}
+ * Helps format response errors from Core.
+ * Formatters for particular types of errors are in the /apiResponseFormatters directory.
+ * A response formatter should return an empty array if the error type does not match the one for the formatter or
+ * an array of formatted errors.
+ * @type {{currentErrorMessage: null, formatResponseError: ApiResponseFormatter.formatResponseError}}
  */
-function returnPayload(payload) {
-    if (payload.statusCode >= 400) {
-        return Promise.reject(payload);
-    }
-
-    return payload;
-}
-
 var ApiResponseFormatter = {
     // Holds the value of the current error message being evaluated
     currentErrorMessage: null,
@@ -149,11 +70,10 @@ var ApiResponseFormatter = {
 
         if (Array.isArray(responseBodyAsJson)) {
             responseBodyAsJson.forEach(message => {
-                if (responseHasUniqueValidationErrors(message)) {
-                    formattedErrors = formattedErrors.concat(formatUniqueValidationErrors(requestBodyAsJson));
-                } else if (responseHasInvalidRecord(message)) {
-                    formattedErrors = formattedErrors.concat(formatInvalidRecordErrors(requestBodyAsJson, message));
-                }
+                formattedErrors = formattedErrors.concat(
+                    uniqueFieldValidationError.formatUniqueFieldValidationErrorsIfExist(message, requestBodyAsJson),
+                    invalidRecordError.formatInvalidRecordErrorsIfExist(message, requestBodyAsJson)
+                );
             });
         }
 
@@ -164,5 +84,7 @@ var ApiResponseFormatter = {
         return returnPayload(payload);
     }
 };
+
+
 
 module.exports = ApiResponseFormatter;
