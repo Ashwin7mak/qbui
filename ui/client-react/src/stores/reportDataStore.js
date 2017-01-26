@@ -1120,11 +1120,11 @@ let ReportDataStore = Fluxxor.createStore({
     onRecordEditCancel(payload) {
         // Check for object can be removed once AgGrid is removed. QbGrid always sends up integer for recordId.
         var recordId = payload.recId;
-        if (_.isObject(payload.recId)) {
-            recordId = payload.recId.value;
+        if (_.isObject(recordId)) {
+            recordId = recordId.value;
         }
-        //remove record if its new unsaved
-        if (recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+        //remove record if its new and unsaved (but only if the user is on a table [see AppHistory - called on every route change])
+        if (payload.tblId && recordId === SchemaConsts.UNSAVED_RECORD_ID) {
             this.reportModel.deleteRecordsFromLists(recordId);
         }
         this.onClearEdit();
