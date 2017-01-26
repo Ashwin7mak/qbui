@@ -139,13 +139,6 @@ $edit-icon-font-size: 18px;
         vertical-align: top;
         background: $row-bg-color;
         z-index: $zindex-qbGrid-firstOfType-stickyColumn;
-
-        // TODO: Temporary fix until we can get the z-index incremented/decremented when the dropdown shows and hides.
-        // This prevents peer sticky cells from clipping the dropdown menu.
-        .dropdown-menu {
-            top: 0;
-            left: 27px;
-        }
     }
 
 
@@ -348,7 +341,8 @@ $edit-icon-font-size: 18px;
 
     //== These are the contents of the first cell of every row and contain all the row actions in the sticky left column
 
-    // Used when row actions are not present because the current row is new and does not yet have an id
+    // When a row is in inline edit mode, this class is used on an empty DOM
+    // node in all sticky cells (row headers) that are not on the row being edited.
     // Used in place of actionsCol below
     .emptyRowActions {
         min-height: $inline-edit-input-box-height;
@@ -386,6 +380,11 @@ $edit-icon-font-size: 18px;
 
         // menu to access additional row actions such as print, email, copy, and delete
         .dropdown-menu {
+
+            // position menu to the right of the sticky cells
+            top: 0;
+            left: 27px;
+
             a {
                 padding-left: 4px;
 
