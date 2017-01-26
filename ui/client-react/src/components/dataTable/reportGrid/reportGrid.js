@@ -199,10 +199,10 @@ const ReportGrid = React.createClass({
             editingRowId = this.props.pendEdits.currentEditingRecordId;
         }
 
-        if (this.props.editingIndex && this.props.editingId !== editingRowId) {
+        if (this.props.editingIndex !== null && this.props.editingIndex >= 0 && this.props.editingId !== editingRowId) {
             editingRowId = this.props.editingId;
         }
-
+        console.log(`Editing Index: ${this.props.editingIndex}; Editing Id: ${this.props.editingId}; CurrentlyEditingRecordId: ${this.props.pendEdits.currentEditingRecordId}`);
         return editingRowId;
     },
 

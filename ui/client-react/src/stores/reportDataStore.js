@@ -999,6 +999,7 @@ let ReportDataStore = Fluxxor.createStore({
         if (this.editingIndex !== undefined || this.editingId !== undefined) {
             this.onRecordEditCancel(payload);
         }
+
         if (this.reportModel.model.hasGrouping) {
             this.createNewGroupedRecord(payload.afterRecId);
         } else {
@@ -1117,9 +1118,14 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload
      */
     onRecordEditCancel(payload) {
+        // Check for object can be removed once AgGrid is removed. QbGrid always sends up integer for recordId.
+        var recordId = payload.recId;
+        if (_.isObject(payload.recId)) {
+            recordId = payload.recId.value;
+        }
         //remove record if its new unsaved
-        if (payload.recId && payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.reportModel.deleteRecordsFromLists(payload.recId.value);
+        if (recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+            this.reportModel.deleteRecordsFromLists(recordId);
         }
         this.onClearEdit();
     },
