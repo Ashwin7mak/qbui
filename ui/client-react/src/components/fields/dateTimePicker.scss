@@ -285,7 +285,7 @@
 
         .bootstrap-datetimepicker-widget {
             top: 34px !important;
-            right: 0px !important;
+            left: -2px !important; /* prevent overflow to the left */
         }
     }
 
@@ -330,5 +330,38 @@
 .timeCell.error {
     .Select-control {
         @include error-border;
+    }
+}
+
+.qbRow.editing  {
+
+    /* for all columns but the last, move the arrow datepicker arrow to point at icon */
+    >td:not(:last-child) {
+        .dateFormat .bootstrap-datetimepicker-widget {
+            &.bottom::before {
+                right: 130px;
+            }
+            &.bottom::after {
+                right: 131px;
+            }
+        }
+
+        .dateTimeFormat .bootstrap-datetimepicker-widget {
+            &.bottom::before {
+                right: 144px;
+            }
+            &.bottom::after {
+                right: 145px;
+            }
+        }
+    }
+
+    /* for last column, allow overflow with left cells to prevent clipping on right */
+    >td:last-child .dateCell.cellEdit {
+
+        * > .bootstrap-datetimepicker-widget {
+            right: -4px !important;
+            left: auto !important;
+        }
     }
 }
