@@ -345,6 +345,8 @@
                     //Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
                 }).then(function() {
+                    return e2eBase.formService.createEEDefaultForms(createdApp);
+                }).then(function() {
                     // Set default table homepage for Table 1
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
                 }).then(function() {
