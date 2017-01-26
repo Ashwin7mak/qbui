@@ -52,7 +52,7 @@
             var expectedSixthRecordTextField = recordValues[0];
 
             //Step 1 - Click on 5th record edit pencil.Record count starts from 0
-            formsPO.clickRecordEditPencilInRecordActions(4);
+            reportContentPO.clickRecordEditPencilInRecordActions(4);
 
             //Step 2 - Enter invalid values to get the form to error state
             fieldTypes.forEach(function(fieldType) {

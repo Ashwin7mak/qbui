@@ -300,7 +300,7 @@ function addPropertiesToIndividualField(field, editErrors, isEditing, editingRec
  * @returns {*|boolean}
  */
 function shouldFocusOnFieldWhenFirstOpenEditing(pendEdits, record) {
-    return (_.has(pendEdits, 'fieldToStartEditing.id') && _.has(record, pendEdits.fieldToStartEditing.id) && (!record.recordChanges || Object.keys(record.recordChanges).length === 0));
+    return (_.has(pendEdits, 'fieldToStartEditing.id') && _.has(record, pendEdits.fieldToStartEditing.id) && (!pendEdits.recordChanges || Object.keys(pendEdits.recordChanges).length === 0));
 }
 
 export default ReportRowTransformer;

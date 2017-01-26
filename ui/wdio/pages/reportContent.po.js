@@ -6,17 +6,28 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = require('./e2ePageBase.po');
+    var e2ePageBase = requirePO('e2ePageBase');
+    var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
+        //Record add button on stage
+        addRecordBtnOnStage : {get: function() {
+            browser.element('.layout-stage .pageActions .iconTableUISturdy-add').waitForVisible();
+            return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');
+        }},
+
+        //edit pencil in report actions tool bar
+        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
+
+        //edit pencil in record actions
+        editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //TODO: Will need to extend these locators when we show multiple reports on a page
         // Report Container (encapsulates both the report toolbar and the report itself)
         reportContainerEl: {get: function() {
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
-        }
-        },
+        }},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
 
@@ -24,22 +35,19 @@
             this.reportToolsAndContentEl.elements('.loadedContent').waitForVisible();
             var elems = this.reportToolsAndContentEl.elements('.loadedContent');
             return elems.value[0];
-        }
-        },
+        }},
 
         // Report content div containing column headers and the report content in agGrid
         reportContentEl: {get: function() {
             this.reportContainerEl.element('.reportContent').waitForVisible();
             return this.reportContainerEl.element('.reportContent');
-        }
-        },
+        }},
 
         // agGrid contains both the column headers and the record content in agGrid
         agGridContainerEl: {get: function() {
             this.reportContentEl.element('.agGrid').waitForVisible();
             return this.reportContentEl.element('.agGrid');
-        }
-        },
+        }},
 
         // Contains the entire set of column headers for the grid (the select all column and the field column headers)
         agGridHeaderEl: {get: function() {return this.agGridContainerEl.element('.ag-header');}},
@@ -54,8 +62,7 @@
         agGridBodyEl: {get: function() {
             this.agGridContainerEl.element('.ag-body').waitForVisible();
             return this.agGridContainerEl.element('.ag-body');
-        }
-        },
+        }},
 
         agGridBodyViewportEl : {get: function() {return browser.element('.ag-body-viewport');}},
 
@@ -72,8 +79,7 @@
         agGridBodyContainer: {get: function() {
             this.agGridBodyEl.element('.ag-body-container').waitForVisible();
             return this.agGridBodyEl.element('.ag-body-container');
-        }
-        },
+        }},
 
         // this will get you every record element on the grid
         agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.ag-row');}},
@@ -85,7 +91,7 @@
         waitForReportContent: {value: function() {
             // wait until you see ag-body-viewport
             browser.element('.ag-body-viewport').waitForVisible();
-            return browser.elements('.ag-row').waitForVisible();
+            return browser.element('.ag-row').waitForVisible();
         }},
 
         /**
@@ -186,6 +192,94 @@
         reportDisplayedRecordCount: {value: function() {
             this.agGridRecordElList.waitForVisible();
             return this.agGridRecordElList.value.length;
+        }},
+
+        /**
+         * Method to click Add Record button on Report Table
+         */
+        clickAddRecordBtnOnStage: {value: function() {
+            this.addRecordBtnOnStage.waitForVisible();
+            //Click on add record button
+            this.addRecordBtnOnStage.click();
+            //wait until you see edit container and save buttons in footer
+            formsPO.editFormContainerEl.waitForVisible();
+            return formsPO.editFormSaveBtns.waitForVisible();
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the record.
+         * @param recordRowIndex
+         */
+        clickOnRecordInReportTable : {value: function(recordRowIndex) {
+            var recordRowEl = this.getRecordRowElement(recordRowIndex);
+            // Hardcoded to click on the third cell of the record since clicking on email, phone etc will bring up popups.
+            var recordCellEl = this.getRecordRowCells(recordRowEl).value[3];
+
+            //scroll to third cell of recordRowIndex row
+            if (browserName === 'chrome') {
+                recordCellEl.moveToObject();
+            } else {
+                browser.execute(function(elelemt) {
+                    elelemt.scrollIntoView(false);
+                }, recordCellEl);
+            }
+            //Click on the third cell of recordRowIndex row
+            return recordCellEl.click();
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the record to open it in view form mode.
+         * @param recordRowIndex
+         */
+        openRecordInViewMode : {value: function(recordRowIndex) {
+            this.clickOnRecordInReportTable(recordRowIndex);
+            //wait until view form is visible
+            return formsPO.viewFormContainerEl.waitForVisible();
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
+            //get all edit buttons in the report table first column
+            var getAllEdits = this.editPencilBtnInRecordActions.value.filter(function(edit) {
+                return edit.index === recordRowIndex;
+            });
+
+            if (getAllEdits !== []) {
+                //Click on filtered save button
+                getAllEdits[0].click();
+                formsPO.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(e2eConsts.shortWaitTimeMs);
+            } else {
+                throw new Error('Edit button not found at row ' + recordRowIndex);
+            }
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the checkbox to select that record and then click on edit pencil from the table actions
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
+            //get all checkboxes in the report table first column
+            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
+                return checkbox.index === recordRowIndex;
+            });
+
+            if (getAllCheckBoxs !== []) {
+                //Click on filtered save button
+                getAllCheckBoxs[0].click();
+                //wait for edit pencil to be visible
+                this.editPencilBtnOnReportActions.waitForVisible();
+                //click on the edit pencil in table actions
+                this.editPencilBtnOnReportActions.click();
+                //wait until edit form is visible
+                return formsPO.editFormContainerEl.waitForVisible();
+            } else {
+                throw new Error('Checkbox not found at row ' + recordRowIndex);
+            }
         }},
 
         //TODO: Refactor these once we port over the delete record tests
