@@ -28,6 +28,8 @@ import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
+import * as ReportActions from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -41,7 +43,7 @@ const OPEN_NAV = true;
 const CLOSE_NAV = false;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -52,7 +54,6 @@ export let Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
-            reportsData: flux.store('ReportsStore').getState(),
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
@@ -81,8 +82,6 @@ export let Nav = React.createClass({
     },
 
     onSelectTableReports(tableId) {
-        const flux = this.getFlux();
-
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
@@ -91,7 +90,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.state.apps.selectedAppId, tableId));
     },
 
     /**
@@ -112,11 +111,12 @@ export let Nav = React.createClass({
      * get table object for currently selected table (or null if no table selected)
      *
      */
-    getSelectedTable() {
-        const app = this.getSelectedApp();
-
-        if (app && this.state.reportsData.tableId) {
-            return _.find(app.tables, (t) => t.id === this.state.reportsData.tableId);
+    getSelectedTable(tableId) {
+        if (tableId) {
+            const app = this.getSelectedApp();
+            if (app) {
+                return _.find(app.tables, (t) => t.id === tableId);
+            }
         }
         return null;
     },
@@ -224,10 +224,17 @@ export let Nav = React.createClass({
             viewingRecordId = this.props.params.recordId;
         }
 
+        // pull the NAV context report from the list
+        let report = _.find(this.props.qbui.reports, function(rpt) {
+            return rpt.id === CONTEXT.REPORTS_LIST.NAV;
+        });
+        //  make sure reportsData is an object if NAV context is not found
+        let reportsData = report || {};
+
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
-                table={this.getSelectedTable()}
+                table={this.getSelectedTable(reportsData.tableId)}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
                 selectedRecordId={viewingRecordId}
@@ -247,7 +254,7 @@ export let Nav = React.createClass({
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable()}
+                               selectedTable={this.getSelectedTable(reportsData.tableId)}
                                reportData={this.state.reportData}
                                errorPopupHidden={this.state.nav.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
@@ -255,9 +262,9 @@ export let Nav = React.createClass({
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
-                                      selectedTable={this.getSelectedTable()}
+                                      selectedTable={this.getSelectedTable(reportsData.tableId)}
                                       filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={this.state.reportsData}
+                                      reportsData={reportsData}
                                       onHideTrowser={this.hideTrowser}/>
             }
 
@@ -298,7 +305,7 @@ export let Nav = React.createClass({
                             fields: this.state.fields,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
-                            selectedTable: this.getSelectedTable(),
+                            selectedTable: this.getSelectedTable(reportsData.tableId),
                             scrollingReport: this.state.nav.scrollingReport,
                             flux: flux}
                         )}
