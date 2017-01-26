@@ -59,12 +59,6 @@ class ReportRowTransformer extends RowTransformer {
     static transformRecordForGrid(record, index, fields, info) {
         let id = record[info.primaryKeyFieldName].value;
 
-        // We don't want to add any blank rows unless we are currently adding a new row
-        // TODO:: This could cause performance problems if it happens a lot (we could be adding a lot of blank rows). Refactor once AgGrid is removed.
-        if (id === null && !info.pendEdits.isInlineEditOpen) {
-            return;
-        }
-
         let recordWithRelatedFieldDef = addUniqueKeyTo(addCurrentValues(id, addRelatedFieldDefinitions(record, fields, id), info.pendEdits), index);
         let editErrors = addEditErrorsIfExistForRow(id, info.pendEdits);
 
