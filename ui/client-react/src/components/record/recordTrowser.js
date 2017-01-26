@@ -15,8 +15,8 @@ import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
-import * as formActions from '../../actions/formActions';
-import * as ShellActions from '../../actions/shellActions';
+import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
+import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 
 import './recordTrowser.scss';
 
@@ -55,7 +55,7 @@ export const RecordTrowser = React.createClass({
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
-        let hideErrorMessage = this.props.errorPopupHidden;
+        let hideErrorMessage = this.props.shell ? this.props.shell.errorPopupHidden: true;
         let errorMessage = [];
         if (_.has(this.props, 'pendEdits.editErrors.errors')) {
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
@@ -117,28 +117,28 @@ export const RecordTrowser = React.createClass({
 
             const formType = "edit";
 
-            this.props.dispatch(formActions.savingForm(formType));
+            this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then((recId) => {
-                this.props.dispatch(formActions.saveFormSuccess(formType));
+                this.props.saveFormSuccess(formType);
 
                 if (this.props.viewingRecordId === recId) {
-                    this.props.dispatch(formActions.syncForm("view"));
+                    this.props.syncForm("view");
                 }
 
                 if (saveAnother) {
-                    this.props.dispatch(formActions.editNewRecord(false));
+                    this.props.editNewRecord(false);
                 } else {
                     this.hideTrowser();
                     this.navigateToNewRecord(recId);
                 }
 
             }, (errorStatus) => {
-                this.props.dispatch(formActions.saveFormError(formType, errorStatus));
+                this.props.saveFormError(formType, errorStatus);
                 this.showErrorDialog();
             });
         }
@@ -166,21 +166,21 @@ export const RecordTrowser = React.createClass({
             let promise;
             const formType = "edit";
 
-            this.props.dispatch(formActions.savingForm(formType));
+            this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
-                this.props.dispatch(formActions.saveFormSuccess(formType));
+                this.props.saveFormSuccess(formType);
                 if (this.props.viewingRecordId === this.props.recId) {
-                    this.props.dispatch(formActions.syncForm("view"));
+                    this.props.syncForm("view");
                 }
 
                 this.nextRecord();
             }, (errorStatus) => {
-                this.props.dispatch(formActions.saveFormError(formType, errorStatus));
+                this.props.saveFormError(formType, errorStatus);
                 this.showErrorDialog();
             });
         }
@@ -233,7 +233,7 @@ export const RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
 
-        this.props.dispatch(formActions.openRecordForEdit(previousEditRecordId));
+        this.props.openRecordForEdit(previousEditRecordId);
     },
 
     /**
@@ -246,7 +246,7 @@ export const RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editNextRecord(nextEditRecordId);
 
-        this.props.dispatch(formActions.openRecordForEdit(nextEditRecordId));
+        this.props.openRecordForEdit(nextEditRecordId);
     },
     /**
      *  get breadcrumb element for top of trowser
@@ -282,10 +282,11 @@ export const RecordTrowser = React.createClass({
 
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
+        const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
         return (
             <div className="saveButtons">
                 {errorFlg &&
-                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{this.props.errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
+                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
                         <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
                     </OverlayTrigger>
                 }
@@ -328,17 +329,18 @@ export const RecordTrowser = React.createClass({
         }
     },
     toggleErrorDialog() {
-        if (this.props.errorPopupHidden) {
+        const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
+        if (errorPopupHidden) {
             this.showErrorDialog();
         } else {
             this.dismissErrorDialog();
         }
     },
     showErrorDialog() {
-        this.props.dispatch(ShellActions.showErrorMsgDialog());
+        this.props.showErrorMsgDialog();
     },
     dismissErrorDialog() {
-        this.props.dispatch(ShellActions.hideErrorMsgDialog());
+        this.props.hideErrorMsgDialog();
     },
     /**
      * trowser to wrap report manager
@@ -357,4 +359,44 @@ export const RecordTrowser = React.createClass({
     }
 });
 
-export default connect()(RecordTrowser);
+
+const mapStateToProps = (state) => {
+    return {
+        forms: state.forms,
+        shell : state.shell
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        openRecordForEdit: (recId) => {
+            dispatch(openRecordForEdit(recId));
+        },
+        savingForm: (formType) => {
+            dispatch(savingForm(formType));
+        },
+        saveFormSuccess: (formType)=>{
+            dispatch(saveFormSuccess(formType));
+        },
+        editNewRecord: (navigateAfterSave) => {
+            dispatch(editNewRecord(navigateAfterSave));
+        },
+        saveFormError: (formType, errorStatus) => {
+            dispatch(saveFormError(formType, errorStatus));
+        },
+        syncForm: (formType) => {
+            dispatch(syncForm(formType));
+        },
+        hideErrorMsgDialog: () => {
+            dispatch(hideErrorMsgDialog());
+        },
+        showErrorMsgDialog: () => {
+            dispatch(showErrorMsgDialog());
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RecordTrowser);

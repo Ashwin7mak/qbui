@@ -41,6 +41,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
+const OPEN_APPSLIST = true;
 
 export let Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
@@ -147,7 +148,7 @@ export let Nav = React.createClass({
         if (this.props.qbui.shell.leftNavExpanded) {
             this.props.dispatch(ShellActions.toggleAppsList(open));
         } else {
-            this.props.dispatch(ShellActions.toggleAppsList(true));
+            this.props.dispatch(ShellActions.toggleAppsList(OPEN_APPSLIST));
             this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
         }
     },
