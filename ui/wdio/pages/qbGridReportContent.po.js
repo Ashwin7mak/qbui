@@ -48,39 +48,29 @@
         agGridHeaderContainerEl: {get: function() {return this.agGridHeaderEl.element('thead');}}, //UPDATE CLASSNAME <===========================================================================================!!!
 
         // List of all field column headers from agGrid
-        agGridColHeaderElList: {get: function() {return this.agGridHeaderContainerEl.elements('.qbHeaderCell.gridHeaderCell');}},
+        qbGridColHeaderElList: {get: function() {return this.agGridHeaderContainerEl.elements('.qbHeaderCell.gridHeaderCell');}},
 
         // agGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
         qbGridBodyEl: {get: function() {
-            this.qbGridContainer.element('tbody').waitForVisible();
-            return this.qbGridContainer.element('tbody');
+            this.qbGridContainer.element('.qbTbody').waitForVisible();
+            return this.qbGridContainer.element('.qbTbody');
         }
         },
 
-        agGridBodyViewportEl : {get: function() {return browser.element('tbody');}}, //UPDATE CLASSNAME <===========================================================================================!!!
+        agGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}}, //UPDATE CLASSNAME <===========================================================================================!!!
 
         // Container for each records action column
         agGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
 
         // this will get you every row of the actions column
-        agGridRowActionsElList: {get: function() {return this.agGridLeftColsContainerEl.elements('tr');}}, //UPDATE CLASSNAME <===========================================================================================!!!
+        agGridRowActionsElList: {get: function() {return this.agGridLeftColsContainerEl.elements('.qbRow');}}, //UPDATE CLASSNAME <===========================================================================================!!!
 
         // This is shorthand for the above (works in chrome dev console): $$('.ag-pinned-left-cols-container .ag-row')
         // Use the space to specify a sub element, join the two if it is a subclass
 
-        /**
-         * This is commented out, because qbGrid is not as nested as agGrid is
-         * */
-        // agGrid body-container which contains the actual record rows
-        // agGridBodyContainer: {get: function() {
-        //     this.qbGridBodyEl.element('tbody').waitForVisible();
-        //     return this.qbGridBodyEl.element('tbody');
-        // }
-        // },
-
         // this will get you every record element on the grid
-        // qbGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('tr');}},
-        qbGridRecordElList: {get: function() {return this.qbGridBodyEl.elements('tbody');}},
+        // qbGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.qbRow);}},
+        qbGridRecordElList: {get: function() {return this.qbGridBodyEl.elements('.qbTbody');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -88,8 +78,8 @@
          */
         waitForReportContent: {value: function() {
             // wait until you see ag-body-viewport
-            browser.element('tbody').waitForVisible();
-            return browser.elements('tr').waitForVisible();
+            browser.element('.qbTbody').waitForVisible();
+            return browser.elements('.qbRow').waitForVisible();
         }},
 
         /**
@@ -97,8 +87,8 @@
          */
         getReportColumnHeaders: {value: function() {
             var colHeaders = [];
-            for (var i = 0; i < this.agGridColHeaderElList.value.length; i++) {
-                colHeaders.push(this.agGridColHeaderElList.value[i].getAttribute('innerText'));
+            for (var i = 0; i < this.qbGridColHeaderElList.value.length; i++) {
+                colHeaders.push(this.qbGridColHeaderElList.value[i].getAttribute('innerText'));
             }
             return colHeaders;
         }},
@@ -113,9 +103,7 @@
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
-            console.log('recordIndex: ', recordIndex);
-            console.log('this.getallrows: ', this.getAllRows);
-            console.log('this.getallrows.value[recordIndex]: ', this.getAllRows.value[recordIndex]);
+            console.log('recordIndex: ', recordIndex, '\nthis.getallrows: ', this.getAllRows, '\nthis.getallrows.value[recordIndex]: ', this.getAllRows.value[recordIndex]);
             browser.debug()
             return this.getAllRows.value[recordIndex];
         }},
@@ -203,7 +191,7 @@
          */
         reportDisplayedRecordCount: {value: function() {
             this.qbGridRecordElList.waitForVisible();
-            var rows = this.qbGridRecordElList.elements('tr');
+            var rows = this.qbGridRecordElList.elements('.qbRow');
             return rows.value.length;
         }},
 
