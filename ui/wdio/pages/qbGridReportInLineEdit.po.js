@@ -68,7 +68,6 @@
         openRecordEditMenu: {value: function(recordIndex) {
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
             // Hardcoded to click on the first cell of the record
-            console.log('recordRowEl: ', recordRowEl);
             //Get a single qbCell from the row
             var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[5];
             //Focus on the cellData from qbCell

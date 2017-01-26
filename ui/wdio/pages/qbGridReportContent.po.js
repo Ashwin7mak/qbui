@@ -103,8 +103,6 @@
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
-            console.log('recordIndex: ', recordIndex, '\nthis.getallrows: ', this.getAllRows, '\nthis.getallrows.value[recordIndex]: ', this.getAllRows.value[recordIndex]);
-            browser.debug()
             return this.getAllRows.value[recordIndex];
         }},
 
@@ -141,15 +139,8 @@
          * @returns either an array of cell values (as strings) or one value of a cell
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
-            console.log('I fail here?');
-            console.log('recordIndex: ', recordIndex);
-            console.log('recordCellIndex: ', recordCellIndex);
-            browser.debug();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
-            console.log('recordRowElement: ', recordRowElement );
-            console.log('recordRowCells: ', recordRowCells);
-            browser.debug()
             // Return all record values if no cell number supplied
             if (typeof recordCellIndex === 'undefined') {
                 var cellValues = [];

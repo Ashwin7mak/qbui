@@ -96,12 +96,12 @@
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
             browser.logger.info('This will show up in the log output under an Info tag! ', numOfRows);
             var recordValues = ReportContentPO.getRecordValues(numOfRows - 1);
-            expect(recordValues[0]).toBe(textToEnter);
+            expect(recordValues[1]).toBe(textToEnter);
 
             if (browserName !== 'safari') {
-                expect(recordValues[5]).toBe(dateToExpect);
+                expect(recordValues[6]).toBe(dateToExpect);
             } else {
-                expect(recordValues[5]).toBe(dateToEnter);
+                expect(recordValues[6]).toBe(dateToEnter);
             }
 
         });
