@@ -1,5 +1,5 @@
 /**
- * This file uses the Page Object pattern to define locators for viewing report record content in agGrid
+ * This file uses the Page Object pattern to define locators for viewing report record content in qbGrid
  *
  * Created by klabak on 11/23/16
  */
@@ -27,14 +27,14 @@
         }
         },
 
-        // Report content div containing column headers and the report content in agGrid
+        // Report content div containing column headers and the report content in qbGrid
         reportContentEl: {get: function() {
             this.reportContainerEl.element('.reportContent').waitForVisible();
             return this.reportContainerEl.element('.reportContent');
         }
         },
 
-        // agGrid contains both the column headers and the record content in agGrid
+        // qbGrid contains both the column headers and the record content in qbGrid
         qbGridContainer: {get: function() {
             this.reportContentEl.element('.qbGrid').waitForVisible();
             return this.reportContentEl.element('.qbGrid');
@@ -42,34 +42,34 @@
         },
 
         // Contains the entire set of column headers for the grid (the select all column and the field column headers)
-        agGridHeaderEl: {get: function() {return this.qbGridContainer.element('.qbHeaderCell');}},
+        qbGridHeaderEl: {get: function() {return this.qbGridContainer.element('.qbHeaderCell');}},
 
         // Container for just the field column headers
-        agGridHeaderContainerEl: {get: function() {return this.agGridHeaderEl.element('thead');}}, //UPDATE CLASSNAME <===========================================================================================!!!
+        qbGridHeaderContainerEl: {get: function() {return this.qbGridHeaderEl.element('.qbHeader');}},
 
-        // List of all field column headers from agGrid
-        qbGridColHeaderElList: {get: function() {return this.agGridHeaderContainerEl.elements('.qbHeaderCell.gridHeaderCell');}},
+        // List of all field column headers from qbGrid
+        qbGridColHeaderElList: {get: function() {return this.qbGridHeaderContainerEl.elements('.qbHeaderCell.gridHeaderCell');}},
 
-        // agGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
+        // qbGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
         qbGridBodyEl: {get: function() {
             this.qbGridContainer.element('.qbTbody').waitForVisible();
             return this.qbGridContainer.element('.qbTbody');
         }
         },
 
-        agGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}}, //UPDATE CLASSNAME <===========================================================================================!!!
+        qbGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}},
 
         // Container for each records action column
-        agGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
+        qbGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
 
         // this will get you every row of the actions column
-        agGridRowActionsElList: {get: function() {return this.agGridLeftColsContainerEl.elements('.qbRow');}}, //UPDATE CLASSNAME <===========================================================================================!!!
+        qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
 
         // This is shorthand for the above (works in chrome dev console): $$('.ag-pinned-left-cols-container .ag-row')
         // Use the space to specify a sub element, join the two if it is a subclass
 
         // this will get you every record element on the grid
-        // qbGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('.qbRow);}},
+        // qbGridRecordElList: {get: function() {return this.qbGridBodyContainer.elements('.qbRow);}},
         qbGridRecordElList: {get: function() {return this.qbGridBodyEl.elements('.qbTbody');}},
 
         /**
@@ -77,7 +77,7 @@
          * @returns A promise that will resolve after waiting for the report records to be displayed
          */
         waitForReportContent: {value: function() {
-            // wait until you see ag-body-viewport
+            // wait until you see .qbTbody
             browser.element('.qbTbody').waitForVisible();
             return browser.elements('.qbRow').waitForVisible();
         }},
@@ -107,7 +107,7 @@
         }},
 
         /**
-         * Given a record element that is being viewed in agGrid, return the cell elements for that row
+         * Given a record element that is being viewed in qbGrid, return the cell elements for that row
          * @param recordRowElement
          * @returns a list of record cell elements
          */
@@ -116,7 +116,7 @@
         }},
 
         /**
-         * Given a record element that is being viewed in agGrid, return the value of that cell
+         * Given a record element that is being viewed in qbGrid, return the value of that cell
          * @param recordCellElement
          * @returns the value of a record cell element
          */
@@ -132,7 +132,7 @@
         }},
 
         /**
-         * Get a record row element that is being viewed in agGrid (based on recordIndex), return the value of the specified cell index
+         * Get a record row element that is being viewed in qbGrid (based on recordIndex), return the value of the specified cell index
          * If no cell index defined, function will return all values from all the cells
          * @param recordIndex
          * @param recordCellIndex
