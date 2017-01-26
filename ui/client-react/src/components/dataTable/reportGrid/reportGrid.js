@@ -132,7 +132,8 @@ const ReportGrid = React.createClass({
                 primaryKeyFieldName: this.props.primaryKeyName,
                 editingRecordId: editingRecordId,
                 pendEdits: this.props.pendEdits,
-                selectedRows: this.props.selectedRows
+                selectedRows: this.props.selectedRows,
+                isInlineEditOpen: this.props.isInlineEditOpen
             }
         );
     },
@@ -245,6 +246,7 @@ const ReportGrid = React.createClass({
                 onCellClick: this.props.onCellClick,
                 onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
+                isInlineEditOpen: this.props.isInlineEditOpen
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}
