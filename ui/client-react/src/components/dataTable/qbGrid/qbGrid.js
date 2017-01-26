@@ -384,7 +384,7 @@ const QbGrid = React.createClass({
                 >
                     <Table.Header />
 
-                    <Table.Body
+                    <Table.Body className="qbTbody"
                         onRow={this.addRowProps}
                         rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
                         rowKey={this.getUniqueRowKey}
