@@ -80,6 +80,4 @@ var ApiResponseFormatter = {
     }
 };
 
-
-
 module.exports = ApiResponseFormatter;
