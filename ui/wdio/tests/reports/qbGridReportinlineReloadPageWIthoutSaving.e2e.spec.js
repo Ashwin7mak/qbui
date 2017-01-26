@@ -9,7 +9,7 @@
     var NewStackAuthPO = require('../../pages/newStackAuth.po');
     var ReportContentPO = require('../../pages/qbGridreportContent.po');
     var ReportInLineEditPO = require('../../pages/qbGridreportInLineEdit.po');
-    var ReportPagingPO = require('../../pages/reportPaging.po');
+    var ReportPagingPO = require('../../pages/qbGridReportPaging.po');
 
     describe('Report Page Inline Edit Without Saving Record Tests', function() {
         var realmName;

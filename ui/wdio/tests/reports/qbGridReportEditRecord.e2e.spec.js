@@ -9,7 +9,7 @@
     var NewStackAuthPO = require('../../pages/newStackAuth.po');
     var ReportContentPO = require('../../pages/qbGridReportContent.po');
     var ReportInLineEditPO = require('../../pages/qbGridReportInLineEdit.po');
-    var ReportPagingPO = require('../../pages/reportPaging.po');
+    var ReportPagingPO = require('../../pages/qbGridReportPaging.po');
 
 
     describe('Report Page Edit Record Tests', function() {

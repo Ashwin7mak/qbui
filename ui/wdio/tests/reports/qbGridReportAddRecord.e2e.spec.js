@@ -8,11 +8,9 @@
     //Load the page Objects
     var e2ePageBase = require('../../pages/e2ePageBase.po');
     var NewStackAuthPO = require('../../pages/newStackAuth.po');
-    // var ReportContentPO = require('../../pages/reportContent.po');
     var ReportContentPO = require('../../pages/qbGridReportContent.po');
-    // var ReportInLineEditPO = require('../../pages/reportInLineEdit.po');
     var ReportInLineEditPO = require('../../pages/qbGridReportInLineEdit.po');
-    var ReportPagingPO = require('../../pages/reportPaging.po');
+    var ReportPagingPO = require('../../pages/qbGridReportPaging.po');
 
     describe('Reports Page - Add Record Tests', function() {
         var realmName;
