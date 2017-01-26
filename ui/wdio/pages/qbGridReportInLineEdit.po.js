@@ -62,7 +62,7 @@
         notificationSuccessPopupEl: {get: function() {return this.notificationContainerEl.element('.notification-success');}},
 
         /**
-         * Given a record element in agGrid, double click on the record to open the edit menu
+         * Given a record element in qbGrid, double click on the record to open the edit menu
          * @param recordRowIndex
          */
         openRecordEditMenu: {value: function(recordIndex) {
@@ -137,7 +137,7 @@
                         'cancelable': true,
                         'detail': 1
                     });
-                    document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
+                    document.querySelector('.qbRow.editing .saveRecord').dispatchEvent(event);
                 });
                 browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             }
@@ -174,9 +174,9 @@
                         'cancelable': true,
                         'detail': 1
                     });
-                    document.querySelector('.ag-row.editing .cancelSelection').dispatchEvent(event);
+                    document.querySelector('.qbRow.editing .cancelSelection').dispatchEvent(event);
                 });
-                browser.waitForVisible('.ag-row.editing .saveRecord', e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible('.qbRow.editing .saveRecord', e2eConsts.mediumWaitTimeMilliseonds, true);
             }
         }},
 
@@ -196,7 +196,7 @@
          * @returns The record element being edited
          */
         getInlineEditRecord: {value: function() {
-            var recordRowElements = reportContent.agGridRecordElList.elements('tr');
+            var recordRowElements = reportContent.qbGridRecordElList.elements('tr');
             var recordBeingEdited;
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {
@@ -425,11 +425,11 @@
         }}
 
         ///**
-        // * Function returns the date-time input cells for the record being edited in agGrid
+        // * Function returns the date-time input cells for the record being edited in qbGrid
         // * @returns An array of element locators
         // */
         //this.getTimeOfDayFieldInputCells = function() {
-        //    return this.agGridRecordElList.filter(function(elem) {
+        //    return this.qbGridRecordElList.filter(function(elem) {
         //        // Return only the row with 'editing' in the class
         //        return elem.getAttribute('class').then(function(elmClass) {
         //            return elmClass.indexOf('editing') !== -1;
@@ -443,11 +443,11 @@
         ////TODO: Functions to get Input and Time Widget Icon for TOD field
         //
         ///**
-        // * Function returns the date-time input cells for the record being edited in agGrid
+        // * Function returns the date-time input cells for the record being edited in qbGrid
         // * @returns An array of element locators
         // */
         //this.getDateTimeFieldInputCells = function() {
-        //    return this.agGridRecordElList.filter(function(elem) {
+        //    return this.qbGridRecordElList.filter(function(elem) {
         //        // Return only the row with 'editing' in the class
         //        return elem.getAttribute('class').then(function(elmClass) {
         //            return elmClass.indexOf('editing') !== -1;
@@ -461,11 +461,11 @@
         ////TODO: Functions to get the inputs and widgets for Date Time fields
         //
         ///**
-        // * Function returns the date-time input cells for the record being edited in agGrid
+        // * Function returns the date-time input cells for the record being edited in qbGrid
         // * @returns An array of element locators
         // */
         //this.getCheckboxFieldInputCells = function() {
-        //    return this.agGridRecordElList.filter(function(elem) {
+        //    return this.qbGridRecordElList.filter(function(elem) {
         //        // Return only the row with 'editing' in the class
         //        return elem.getAttribute('class').then(function(elmClass) {
         //            return elmClass.indexOf('editing') !== -1;

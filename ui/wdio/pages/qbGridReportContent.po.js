@@ -35,14 +35,14 @@
         },
 
         // agGrid contains both the column headers and the record content in agGrid
-        agGridContainer: {get: function() {
+        qbGridContainer: {get: function() {
             this.reportContentEl.element('.qbGrid').waitForVisible();
             return this.reportContentEl.element('.qbGrid');
         }
         },
 
         // Contains the entire set of column headers for the grid (the select all column and the field column headers)
-        agGridHeaderEl: {get: function() {return this.agGridContainer.element('.qbHeaderCell');}},
+        agGridHeaderEl: {get: function() {return this.qbGridContainer.element('.qbHeaderCell');}},
 
         // Container for just the field column headers
         agGridHeaderContainerEl: {get: function() {return this.agGridHeaderEl.element('thead');}}, //UPDATE CLASSNAME <===========================================================================================!!!
@@ -51,16 +51,16 @@
         agGridColHeaderElList: {get: function() {return this.agGridHeaderContainerEl.elements('.qbHeaderCell.gridHeaderCell');}},
 
         // agGrid is divided up into two columns: one is the actions column (pinned on the left) and the second is the record data
-        agGridBodyEl: {get: function() {
-            this.agGridContainer.element('tbody').waitForVisible();
-            return this.agGridContainer.element('tbody');
+        qbGridBodyEl: {get: function() {
+            this.qbGridContainer.element('tbody').waitForVisible();
+            return this.qbGridContainer.element('tbody');
         }
         },
 
         agGridBodyViewportEl : {get: function() {return browser.element('tbody');}}, //UPDATE CLASSNAME <===========================================================================================!!!
 
         // Container for each records action column
-        agGridLeftColsContainerEl: {get: function() {return this.agGridBodyEl.element('.qbCell.stickyCell');}},
+        agGridLeftColsContainerEl: {get: function() {return this.qbGridBodyEl.element('.qbCell.stickyCell');}},
 
         // this will get you every row of the actions column
         agGridRowActionsElList: {get: function() {return this.agGridLeftColsContainerEl.elements('tr');}}, //UPDATE CLASSNAME <===========================================================================================!!!
@@ -73,14 +73,14 @@
          * */
         // agGrid body-container which contains the actual record rows
         // agGridBodyContainer: {get: function() {
-        //     this.agGridBodyEl.element('tbody').waitForVisible();
-        //     return this.agGridBodyEl.element('tbody');
+        //     this.qbGridBodyEl.element('tbody').waitForVisible();
+        //     return this.qbGridBodyEl.element('tbody');
         // }
         // },
 
         // this will get you every record element on the grid
-        // agGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('tr');}},
-        agGridRecordElList: {get: function() {return this.agGridBodyEl.elements('tbody');}},
+        // qbGridRecordElList: {get: function() {return this.agGridBodyContainer.elements('tr');}},
+        qbGridRecordElList: {get: function() {return this.qbGridBodyEl.elements('tbody');}},
 
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
@@ -109,11 +109,10 @@
          * @returns Resolved record row element at specified index
          */
         getAllRows: {get: function() {
-            this.agGridBodyEl.elements('.qbRow').waitForVisible();
-            return this.agGridContainer.elements('.qbRow');
+            this.qbGridBodyEl.elements('.qbRow').waitForVisible();
+            return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
-            browser.logger.info('getRecordRowElement: ', this.getAllRows.value[recordIndex])
             return this.getAllRows.value[recordIndex];
         }},
 
@@ -123,7 +122,6 @@
          * @returns a list of record cell elements
          */
         getRecordRowCells: {value: function(recordRowElement) {
-            // return recordRowElement.elements('.ag-cell-no-focus .cellData');
             return recordRowElement.elements('.qbCell');
         }},
 
@@ -198,8 +196,8 @@
          * @returns the number of displayed records on the report
          */
         reportDisplayedRecordCount: {value: function() {
-            this.agGridRecordElList.waitForVisible();
-            var rows = this.agGridRecordElList.elements('tr');
+            this.qbGridRecordElList.waitForVisible();
+            var rows = this.qbGridRecordElList.elements('tr');
             return rows.value.length;
         }},
 
@@ -207,7 +205,7 @@
         /// Checking for the deleted record on the first page
         //this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord) {
         //    var self = this;
-        //    self.agGridRecordElList.then(function(recordsNo) {
+        //    self.qbGridRecordElList.then(function(recordsNo) {
         //
         //        for (var i = 0; i < recordsNo.length; i++) {
         //            self.getRecordValues(i).then(function(fieldValues) {
