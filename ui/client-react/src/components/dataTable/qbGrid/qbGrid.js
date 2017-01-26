@@ -382,7 +382,7 @@ const QbGrid = React.createClass({
                         }
                     }}
                 >
-                    <Table.Header />
+                    <Table.Header className="qbHeader"/>
 
                     <Table.Body className="qbTbody"
                         onRow={this.addRowProps}
