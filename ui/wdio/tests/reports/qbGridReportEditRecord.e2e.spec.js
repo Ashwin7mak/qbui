@@ -5,7 +5,7 @@
 (function() {
     'use strict';
     //Load the page Objects
-    var e2ePageBase = require('../../pages/e2ePageBase.po');
+    var e2ePageBase = require('../../pages/qbGride2ePageBase.po');
     var NewStackAuthPO = require('../../pages/newStackAuth.po');
     var ReportContentPO = require('../../pages/qbGridReportContent.po');
     var ReportInLineEditPO = require('../../pages/qbGridReportInLineEdit.po');
@@ -20,19 +20,19 @@
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // // No need to call done() anymore
-            // return e2eBase.basicAppSetup().then(function(createdApp) {
-            //     // Set your global objects to use in the test functions
-            //     testApp = createdApp;
-            //     realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-            //     realmId = e2eBase.recordBase.apiBase.realm.id;
-            // }).then(function() {
-            //     // Auth into the new stack
-            //     return NewStackAuthPO.realmLogin(realmName, realmId);
-            // }).catch(function(error) {
-            //     // Global catch that will grab any errors from chain above
-            //     // Will appropriately fail the beforeAll method so other tests won't run
-            //     Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
-            // });
+            return e2eBase.basicAppSetup().then(function(createdApp) {
+                // Set your global objects to use in the test functions
+                testApp = createdApp;
+                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                realmId = e2eBase.recordBase.apiBase.realm.id;
+            }).then(function() {
+                // Auth into the new stack
+                return NewStackAuthPO.realmLogin(realmName, realmId);
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                // Will appropriately fail the beforeAll method so other tests won't run
+                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+            });
         });
 
 
@@ -40,10 +40,10 @@
          * Before each test starts just make sure the report has loaded with records visible
          */
         beforeEach(function() {
-            // e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            // return ReportContentPO.waitForReportContent();
-            browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/api/api/v1/ticket?uid=10000&realmId=11995685');
-            return browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/qbase/app/0mqctfaaaaab/table/0mqctfaaaaac/report/1');
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            return ReportContentPO.waitForReportContent();
+            // browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/api/api/v1/ticket?uid=10000&realmId=11995685');
+            // return browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/qbase/app/0mqctfaaaaab/table/0mqctfaaaaac/report/1');
         });
 
         /**
@@ -99,8 +99,7 @@
             expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Reload the report after saving
-            // e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            e2ePageBase.loadReportByIdInBrowser();
+            e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
             // Step 6 - Check for the edited value at the edited row
             var recordValues = ReportContentPO.getRecordValues(0);
