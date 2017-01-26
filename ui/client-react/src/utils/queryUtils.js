@@ -54,7 +54,9 @@ class QueryUtils {
     static parseStringIntoExactMatchExpression(fid, value) {
         let containsExpr = '';
         let strValue = '';
-        if (typeof value === 'number' || typeof value === 'string') {
+        const isValidFid = typeof fid === 'number' || typeof fid === 'string';
+        const isValidValue = typeof value === 'number' || typeof value === 'string';
+        if (isValidFid && isValidValue) {
             // convert to string if numeric
             strValue = '' + value;
             strValue = strValue.trim();
