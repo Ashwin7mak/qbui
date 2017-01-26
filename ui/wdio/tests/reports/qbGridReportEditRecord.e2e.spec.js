@@ -94,9 +94,9 @@
             ReportInLineEditPO.clickSaveChangesButton();
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
             //ReportInLineEditPO.assertSuccessMessage(successMessage);
-            expect(browser.isVisible('qbRow.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('qbRow.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('qbRow.editing .addRecord')).toBeFalsy();
+            expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
+            expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
+            expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Reload the report after saving
             // e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -135,9 +135,9 @@
             // Step 4 - Save the edit
             ReportInLineEditPO.clickSaveChangesButton();
             // browser.waitForText(textToEnter);
-            expect(browser.isVisible('qbRow.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('qbRow.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('qbRow.editing .addRecord')).toBeFalsy();
+            expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
+            expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
+            expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Check for the success message 'Record added'
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
@@ -161,8 +161,7 @@
 
                 //Step 1 - Get the original value of the text field on the second record
                 var fieldValues = ReportContentPO.getRecordValues(1);
-                var originalText = fieldValues[0];
-                var elemForText = 'div=' + originalText;
+                var originalText = fieldValues[1];
 
                 //Step 2 - Open the in-line edit menu for the second record
                 ReportInLineEditPO.openRecordEditMenu(1);
@@ -174,14 +173,13 @@
                 ReportInLineEditPO.clickCancelButton();
 
                 //Step 5 - Extra Assertions for inline Edit to be invisible
-                browser.waitForText(elemForText);
-                expect(browser.isVisible('qbRow.editing .saveRecord')).toBeFalsy();
-                expect(browser.isVisible('qbRow.editing .cancelSelection')).toBeFalsy();
-                expect(browser.isVisible('qbRow.editing .addRecord')).toBeFalsy();
+                expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
+                expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
+                expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
 
                 // Check that the edit was not persisted on report
                 var fieldValues2 = ReportContentPO.getRecordValues(1);
-                expect(fieldValues2[0]).toBe(originalText);
+                expect(fieldValues2[1]).toBe(originalText);
             }
         });
 
