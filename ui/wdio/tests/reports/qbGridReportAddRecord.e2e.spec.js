@@ -88,9 +88,12 @@
             //ReportInLineEditPO.assertSuccessMessage(successMessage);
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
+            // e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             e2ePageBase.loadReportByIdInBrowser();
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
+            console.log('Did this fail? Why?');
+            browser.debug();
 
             // Step 8 - Check the record values
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
