@@ -45,21 +45,16 @@ function parseResponseBodyAsJson(payload) {
     return [];
 }
 
-/**
- * Helps format response errors from Core.
- * Formatters for particular types of errors are in the /apiResponseFormatters directory.
- * A response formatter should return an empty array if the error type does not match the one for the formatter or
- * an array of formatted errors.
- * @type {{currentErrorMessage: null, formatResponseError: ApiResponseFormatter.formatResponseError}}
- */
 var ApiResponseFormatter = {
-    // Holds the value of the current error message being evaluated
-    currentErrorMessage: null,
-
     /**
      * Accepts an error response from the Core API and formats it for use in the UI layer.
      * Consider carefully before adding an error handler here. Could this be caught in a Node layer validator? If so, add it there.
      * This only affects errors which cannot be evaluated by the Node server layer (e.g., unique values).
+     *
+     * Formatters for particular types of errors are in the /apiResponseFormatters directory.
+     * A response formatter should return an empty array if the error type does not match the one for the formatter or
+     * an array of formatted errors.
+     *
      * @param payload
      * @returns {*}
      */
