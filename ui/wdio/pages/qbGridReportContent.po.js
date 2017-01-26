@@ -113,6 +113,10 @@
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
+            console.log('recordIndex: ', recordIndex);
+            console.log('this.getallrows: ', this.getAllRows);
+            console.log('this.getallrows.value[recordIndex]: ', this.getAllRows.value[recordIndex]);
+            browser.debug()
             return this.getAllRows.value[recordIndex];
         }},
 
@@ -150,6 +154,8 @@
          */
         getRecordValues: {value: function(recordIndex, recordCellIndex) {
             console.log('I fail here?');
+            console.log('recordIndex: ', recordIndex);
+            console.log('recordCellIndex: ', recordCellIndex);
             browser.debug();
             var recordRowElement = this.getRecordRowElement(recordIndex);
             var recordRowCells = this.getRecordRowCells(recordRowElement);
