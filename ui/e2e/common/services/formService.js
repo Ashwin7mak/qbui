@@ -7,6 +7,9 @@
     //Bluebird Promise library
     var promise = require('bluebird');
     var formGenerator = require('../../../test_generators/form.generator.js');
+
+    //Move this const variable to config file load by either dataGenCustomize.js or newDataGen.e2e.spec.js
+    const eeEnableFlag = false;
     module.exports = function(recordBase) {
         var formService = {
             /**
@@ -47,7 +50,7 @@
             },
 
             /**
-             * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
+             * Given a created app object (returned via the API), create default forms for each table in the app based on it's appId and tableId
              */
             createDefaultForms: function(app) {
                 var generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
@@ -68,12 +71,16 @@
             },
 
             /**
-             * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
+             * Given a created app object (returned via the API), create default forms for each table in the app based on it's appId and tableId
              */
             createEEDefaultForms: function(app) {
-                var generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
-                var appId = app.id;
-                var createdFormIds = [];
+                let createdFormIds = [];
+
+                if (!eeEnableFlag) {
+                    return createdFormIds;
+                }
+                let appId = app.id;
+                let generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
 
                 app.tables.forEach((createdTable, i) => {
                     let tableId = createdTable.id;
