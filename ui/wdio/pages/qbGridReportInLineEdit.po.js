@@ -66,22 +66,33 @@
          * @param recordRowIndex
          */
         openRecordEditMenu: {value: function(recordIndex) {
+            //This will return a qbRow from the specified recordIndex
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
-            // Hardcoded to click on the first cell of the record
-            //Get a single qbCell from the row
-            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[5];
-            //Focus on the cellData from qbCell
-            var cellData = recordCellEl.element('.cellData');
+
+            //This will return a qbCell from the specified recordIndex, from qbRow at the specified recordIndex
+            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
+
+            //This focuses on the cellData from qbCell at the specified recordIndex
+            var cellData = recordCellEl.elements('.cellData.NoWrap');
+
             //Get the pencil from the qbCell
-            var cellEditIcon = recordCellEl.element('.cellEditIcon');
+            var cellEditIcon = recordCellEl.elements('.cellEditIcon');
             // See http://webdriver.io/api/protocol/execute.html
+            console.log('===================================================')
+            console.log('recordRowEl: ', recordRowEl);
+            console.log('recordCellEl: ', recordCellEl);
+            console.log('cellData: ', cellData);
+            console.log('cellEditIcon: ', cellEditIcon);
+            console.log('===================================================')
+            browser.debug();
+
             //TODO: Make generic double click function in e2ePageBase
             if (browserName === 'chrome') {
                 //Hover over the cell
-                browser.moveToObject(cellData.selector);
+                browser.moveToObject(cellData.hCode);
                 //Then once the pencil is visible hover over the pencil
-                browser.moveToObject(cellEditIcon.selector);
-                browser.element('.cellEditIcon').click();
+                browser.moveToObject(cellEditIcon.hCode);
+                browser(cellEditIcon.hCode).click();
             } else {
                 browser.execute(function(recordCellElement) {
                     var event = new MouseEvent('click', {
