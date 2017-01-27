@@ -196,8 +196,8 @@ describe('Logger', () => {
 
         let consoleDebugArg = console.debug.calls.argsFor(0)[0];
         expect(console.debug).toHaveBeenCalled();
-        expect(consoleDebugArg.indexOf(errorMessage) > -1);
-        expect(consoleDebugArg.indexOf(ex.stack) > -1);
+        expect(consoleDebugArg.indexOf(errorMessage) > -1).toBeTruthy();
+        expect(consoleDebugArg.indexOf(ex.stack) > -1).toBeTruthy();
 
         Logger.__ResetDependency__('Configuration');
     });
