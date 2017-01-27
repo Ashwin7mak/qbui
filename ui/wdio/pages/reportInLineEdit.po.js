@@ -116,7 +116,7 @@
                 saveRecordButtonEl.click();
 
                 //step 3 - After save button click wait for inline edit menu to disappear as to confirm that click event worked
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMs, true);
             } catch (err) {
 
                 console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
