@@ -940,8 +940,7 @@ let ReportDataStore = Fluxxor.createStore({
                     //set the default values in the answer for each field
                     valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
                 } else {
-                    //TBD : type specific values
-                    valueAnswer = {value: null, id: obj.id};
+                    valueAnswer = {value: FieldUtils.getDefaultValueForFieldType(theCorrespondingField.datatypeAttributes.type), id: obj.id};
                 }
                 return valueAnswer;
             });
