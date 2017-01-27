@@ -122,7 +122,7 @@ export const RecordRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showPreviousRecord(previousRecordId);
 
-        //this.navigateToRecord(appId, tblId, rptId, previousRecordId);
+        this.navigateToRecord(appId, tblId, rptId, previousRecordId);
     },
 
     /**
@@ -233,7 +233,6 @@ export const RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-
 
         const viewData = this.getViewFormFromProps();
         const nextData = this.getViewFormFromProps(nextProps);

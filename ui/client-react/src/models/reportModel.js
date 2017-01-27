@@ -249,9 +249,9 @@ class ReportModel {
             }
 
             if (this.model.hasGrouping === true) {
-                // NOTE the reference to this.model.fids, this.model.groupEls...you'll want to ensure setMetaData() has
+                // Note the reference to this.model.fids, this.model.groupEls...you'll want to ensure setMetaData() has
                 // already been called as that method sets those properties.
-                this.model.columns = reportModelHelper.getReportColumns(reportData.groups.gridColumns, this.model.fids, this.model.groupEls);
+                this.model.columns = reportModelHelper.getReportColumns(reportData.groups.gridColumns, this.model.fids = [], this.model.groupEls = []);
                 this.model.records = reportData.groups.gridData;
                 this.model.filteredRecords = this.model.records;
                 this.model.filteredRecordsCount = reportData.groups.totalRows;
