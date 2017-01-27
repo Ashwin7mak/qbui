@@ -25,7 +25,7 @@ exports.config = {
         './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
         './qbui/ui/wdio/tests/reports/reportAddRecord.e2e.spec.js',
         //TODO: All form tests need to be refactored to work for qbGrid
-        // '/Users/bstookey/Desktop/qbui/ui/wdio/tests/forms/*.e2e.spec.js'
+        // './ui/wdio/tests/forms/*.e2e.spec.js'
     ],
     // Patterns to exclude.
     exclude: [
