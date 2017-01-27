@@ -50,8 +50,8 @@ $edit-icon-font-size: 18px;
     //== grid header row
     .qbHeaderCell {
         min-width: 80px;
+
         position: relative;
-        white-space: nowrap;
         border-right: 1px solid $color-blue-400;
         border-bottom: 1px solid $badcolor1-color6;
         padding: $grid-header-cell-padding;
@@ -97,6 +97,8 @@ $edit-icon-font-size: 18px;
 
         // text label for the header cell
         .gridHeaderLabel {
+            max-height: 36px;
+            overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
         }
@@ -294,7 +296,7 @@ $edit-icon-font-size: 18px;
             flex: 0 0 auto;
             border: 0;
             background-color: $qbgrid-cell-edit-background-color;
-            margin-right: 2px;
+            margin: 1px;
             padding: 6px 4px;
 
             .qbIcon {

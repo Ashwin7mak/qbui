@@ -335,23 +335,18 @@
 
 .qbRow.editing  {
 
-    /* for all columns but the last, move the arrow datepicker arrow to point at icon */
+    /* for all columns but the last, move the arrow datepicker towards the left side */
     >td:not(:last-child) {
-        .dateFormat .bootstrap-datetimepicker-widget {
-            &.bottom::before {
-                right: 130px;
-            }
-            &.bottom::after {
-                right: 131px;
-            }
-        }
-
-        .dateTimeFormat .bootstrap-datetimepicker-widget {
-            &.bottom::before {
-                right: 144px;
-            }
-            &.bottom::after {
-                right: 145px;
+        .dateFormat, .dateTimeFormat {
+            .bootstrap-datetimepicker-widget {
+                &.bottom::before {
+                    left: 27px;
+                    right: auto;
+                }
+                &.bottom::after {
+                    left: 28px;
+                    right: auto;
+                }
             }
         }
     }
