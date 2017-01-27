@@ -13,7 +13,7 @@ import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
-import reportModel from '../models/reportModel';
+import ReportModel from '../models/reportModel';
 
 let reportDataActions = {
 
@@ -62,7 +62,7 @@ let reportDataActions = {
             if (appId && tblId && rptId) {
                 logger.debug('Loading report for appId:' + appId + ', tableId:' + tblId + ', rptId:' + rptId);
 
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
                 let reportService = new ReportService();
 
                 let params = {};
@@ -79,8 +79,8 @@ let reportDataActions = {
                 reportService.getReportResults(appId, tblId, rptId, params, format).then(
                     (reportResponse) => {
                         let metaData = reportResponse.data ? reportResponse.data.metaData : null;
-                        let model = reportModel.set(metaData, reportResponse.data);
-                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        let model = new ReportModel(appId, metaData, reportResponse.data, params);
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
                         resolve();
                     },
                     (reportResponseError) => {
@@ -125,17 +125,13 @@ let reportDataActions = {
 
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
-                logger.debug('Loading dynamic report for appId:' + appId + ', tableId:' + tblId + ', rptId:' + rptId);
+                logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
 
                 if (!queryParams) {
                     queryParams = {};
                 }
 
-                let offset = queryParams[query.OFFSET_PARAM];
-                let numRows = queryParams[query.NUMROWS_PARAM];
-                let sortList = queryParams[query.SORT_LIST_PARAM];
-
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset:offset, numRows:numRows, sortList:sortList});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
                 let reportService = new ReportService();
 
                 //  call node to parse the supplied facet expression into a query expression that
@@ -178,13 +174,20 @@ let reportDataActions = {
                         reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
                             (reportResponse) => {
                                 let metaData = reportResponse.data ? reportResponse.data.metaData : null;
-                                let model = reportModel.set(metaData, reportResponse.data);
-                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
+                                let model = new ReportModel(appId, metaData, reportResponse.data);
+
+                                let params = {};
+                                params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+                                params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
+                                params.filter = filter;
+                                model.setRunTimeParams(params);
+
+                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
                                 resolve();
                             },
                             (reportResultsError) => {
                                 logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, reportResultsError);
+                                this.dispatch(actions.LOAD_REPORT_FAILED, reportResultsError);
                                 reject();
                             }
                         ).catch((ex) => {
@@ -196,7 +199,7 @@ let reportDataActions = {
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, error);
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error);
                         reject();
                     }
                 ).catch((ex) => {
@@ -206,7 +209,7 @@ let reportDataActions = {
                 });
             } else {
                 logger.error('reportDataActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                 reject();
             }
         });

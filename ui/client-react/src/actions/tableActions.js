@@ -2,8 +2,8 @@
 import * as actions from '../constants/actions';
 import TableService from '../services/tableService';
 import Promise from 'bluebird';
-import reportModel from '../models/reportModel';
-
+import ReportModel from '../models/reportModel';
+import * as query from '../constants/query';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
@@ -28,9 +28,12 @@ let tableActions = {
 
                 let tableService = new TableService();
 
-                //  even though we don't yet know the home page report id, want a spinner to display,
-                //  so dispatch the LOAD_REPORT event.
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:null, offset, numRows});
+                //  dispatch the LOAD_REPORT event.
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:null});
+
+                let params = {};
+                params[query.OFFSET_PARAM] = offset;
+                params[query.NUMROWS_PARAM] = numRows;
 
                 //  Fetch the home page.  The response will include:
                 //    - report data/grouping data
@@ -41,8 +44,8 @@ let tableActions = {
                 tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
                         let metaData = response.data ? response.data.metaData : null;
-                        let model = reportModel.set(metaData, response.data);
-                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        let model = new ReportModel(appId, metaData, response.data, params);
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
                         resolve();
                     },
                     (error) => {

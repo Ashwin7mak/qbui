@@ -603,8 +603,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections = new FacetSelections();
         this.selectedRows = [];
-        this.pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
-        this.numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+        //this.pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        //this.numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
         this.countingTotalRecords = false;
 
         this.currentRecordId = null;
@@ -673,15 +673,19 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingIndex = undefined;
         this.editingId = undefined;
 
-        this.appId = report.appId;
-        this.tblId = report.tblId;
-        this.rptId = report.rptId;
+        this.reportModel.model.appId = report.appId;
+        this.reportModel.model.tblId = report.tblId;
+        this.reportModel.model.rptId = report.rptId;
 
-        this.pageOffset = NumberUtils.isInt(report.offset) && report.offset >= 0 ? report.offset : this.pageOffset;
-        this.numRows = NumberUtils.isInt(report.numRows) && report.numRows ? report.numRows : this.numRows;
+        //this.reportModel.model.selections = report.filter ? report.filter.selections : '';
+        //this.reportModel.model.facetExpression = report.filter ? report.filter.facet : '';
+        //this.reportModel.model.searchStringForFiltering = report.filter ? report.filter.search : '';
 
-        this.searchStringForFiltering = '' ;
-        this.selections  = new FacetSelections();
+        //this.pageOffset = NumberUtils.isInt(report.offset) && report.offset >= 0 ? report.offset : this.pageOffset;
+        //this.numRows = NumberUtils.isInt(report.numRows) && report.numRows ? report.numRows : this.numRows;
+
+        //this.searchStringForFiltering = '' ;
+        //this.selections  = new FacetSelections();
         this.selectedRows = [];
 
         this.emit('change');
@@ -716,11 +720,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.error = false;
 
         this.reportModel = reportModel;
-        reportModel.setOriginalMetaData(model.metaData);
-        reportModel.setMetaData(model.metaData);
-        reportModel.setRecordData(model.recordData);
-        reportModel.setFacetData(model.recordData);
-        reportModel.updateRecordsCount(model.recordCount);
+        this.reportModel.model = model;
+        //reportModel.setOriginalMetaData(model.metaData);
+        //reportModel.setMetaData(model.metaData);
+        //reportModel.setRecordData(model.recordData);
+        //reportModel.setFacetData(model.recordData);
+        //reportModel.updateRecordsCount(model.recordCount);
 
         this.emit('change');
     },
@@ -736,27 +741,28 @@ let ReportDataStore = Fluxxor.createStore({
 
 
     onLoadRecords(payload) {
-        this.isRecordDeleted = false;
-        this.loading = true;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
-
-        this.appId = payload.appId;
-        this.tblId = payload.tblId;
-        this.rptId = payload.rptId;
-
-        this.selections = payload.filter ? payload.filter.selections : '';
-        this.facetExpression = payload.filter ? payload.filter.facet : '';
-        this.searchStringForFiltering = payload.filter ? payload.filter.search : '';
-
-        this.reportModel.setSortList(payload.sortList);
-        this.reportModel.setSortFids(payload.sortList);
-        this.reportModel.setGroupElements(payload.sortList);
-
-        this.pageOffset = NumberUtils.isInt(payload.offset) && payload.offset >= 0 ? payload.offset : this.pageOffset;
-        this.numRows = NumberUtils.isInt(payload.numRows) && payload.numRows ? payload.numRows : this.numRows;
-
-        this.emit('change');
+        logger.debug('onLoadRecords called...');
+        //this.isRecordDeleted = false;
+        //this.loading = true;
+        //this.editingIndex = undefined;
+        //this.editingId = undefined;
+        //
+        //this.appId = payload.appId;
+        //this.tblId = payload.tblId;
+        //this.rptId = payload.rptId;
+        //
+        //this.selections = payload.filter ? payload.filter.selections : '';
+        //this.facetExpression = payload.filter ? payload.filter.facet : '';
+        //this.searchStringForFiltering = payload.filter ? payload.filter.search : '';
+        //
+        //this.reportModel.setSortList(payload.sortList);
+        //this.reportModel.setSortFids(payload.sortList);
+        //this.reportModel.setGroupElements(payload.sortList);
+        //
+        //this.pageOffset = NumberUtils.isInt(payload.offset) && payload.offset >= 0 ? payload.offset : this.pageOffset;
+        //this.numRows = NumberUtils.isInt(payload.numRows) && payload.numRows ? payload.numRows : this.numRows;
+        //
+        //this.emit('change');
     },
 
     onFilterSelectionsPending(payload) {
@@ -1239,22 +1245,25 @@ let ReportDataStore = Fluxxor.createStore({
      * @returns report state
      */
     getState() {
+        let selections = this.reportModel.model.selections || new FacetSelections();
         return {
             loading: this.loading,
             editingIndex: this.editingIndex,
             editingId: this.editingId,
             error: this.error,
             errorDetails: this.errorDetails,
-            data: this.reportModel.get(),
-            appId: this.appId,
-            tblId: this.tblId,
-            rptId: this.rptId,
-            pageOffset: this.pageOffset,
-            numRows: this.numRows,
             countingTotalRecords: this.countingTotalRecords,
-            searchStringForFiltering: this.searchStringForFiltering,
-            selections: this.selections,
-            facetExpression: this.facetExpression,
+            //  getting from model now..
+            data: this.reportModel.get(),
+            appId: this.reportModel.model.appId,
+            tblId: this.reportModel.model.tblId,
+            rptId: this.reportModel.model.rptId,
+            pageOffset: this.reportModel.model.pageOffset,
+            numRows: this.reportModel.model.numRows,
+            searchStringForFiltering: this.reportModel.model.searchStringForFiltering,
+            selections: selections,
+            facetExpression: this.reportModel.model.facetExpression || {},
+            // END
             nonFacetClicksEnabled : this.nonFacetClicksEnabled,
             selectedRows: this.selectedRows,
             currentRecordId: this.currentRecordId,

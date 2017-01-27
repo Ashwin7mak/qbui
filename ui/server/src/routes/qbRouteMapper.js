@@ -512,7 +512,7 @@
      * @returns {*}
      */
     function fetchReportInvokeResults(req, res) {
-        fetchReport(req, res, false, false);
+        fetchReport(req, res, true, false);
     }
 
     /**

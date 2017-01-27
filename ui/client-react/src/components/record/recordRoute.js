@@ -122,7 +122,7 @@ export const RecordRoute = React.createClass({
         let flux = this.getFlux();
         flux.actions.showPreviousRecord(previousRecordId);
 
-        this.navigateToRecord(appId, tblId, rptId, previousRecordId);
+        //this.navigateToRecord(appId, tblId, rptId, previousRecordId);
     },
 
     /**
