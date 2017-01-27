@@ -188,6 +188,25 @@ describe('ReportRowTransformer', () => {
                 {primaryKeyFieldName: 'Record ID#', pendEdits: pendEdits}
             );
 
+            expect(actualResult[2].hasFocusOnEditStart).toBeFalsy();
+            expect(actualResult[1].hasFocusOnEditStart).toBeFalsy();
+        });
+
+        it('does not set hasFocusOnEditStart if the user has started modifying the record (prevents focus from continually moving back to the first field)', () => {
+            const pendEdits = {
+                currentEditingRecordId: testRecordId,
+                isInlineEditOpen: true,
+                recordChanges: {},
+                fieldToStartEditing: {id: 2}
+            };
+
+            let actualResult = ReportRowTransformer.transformRecordForGrid(
+                testApiRecord,
+                testIndex,
+                testFields,
+                {primaryKeyFieldName: 'Record ID#', pendEdits: pendEdits}
+            );
+
             expect(actualResult[2].hasFocusOnEditStart).toBeTruthy();
             expect(actualResult[1].hasFocusOnEditStart).toBeFalsy();
         });
