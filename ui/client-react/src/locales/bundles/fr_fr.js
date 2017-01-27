@@ -105,6 +105,7 @@ export default {
             addRecord: "Ajouter un enregistrement",
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
+            saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
             cancelSelection: "Annuler les modifications",
             favorite: "Préféré",
             gridEdit: "Grille modifier",
