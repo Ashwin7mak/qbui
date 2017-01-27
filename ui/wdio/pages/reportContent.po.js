@@ -9,14 +9,24 @@
     var e2ePageBase = require('./e2ePageBase.po');
 
     var ReportContentPage = Object.create(e2ePageBase, {
+        //Record add button on stage
+        addRecordBtnOnStage : {get: function() {
+            browser.element('.layout-stage .pageActions .iconTableUISturdy-add').waitForVisible();
+            return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');
+        }},
+
+        //edit pencil in report actions tool bar
+            editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
+
+        //edit pencil in record actions
+            editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //TODO: Will need to extend these locators when we show multiple reports on a page
         // Report Container (encapsulates both the report toolbar and the report itself)
         reportContainerEl: {get: function() {
             browser.element('.reportContainer').waitForVisible();
             return browser.element('.reportContainer');
-        }
-        },
+        }},
 
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
 
@@ -38,8 +48,7 @@
         qbGridContainer: {get: function() {
             this.reportContentEl.element('.qbGrid').waitForVisible();
             return this.reportContentEl.element('.qbGrid');
-        }
-        },
+        }},
 
         // Contains the entire set of column headers for the grid (the select all column and the field column headers)
         qbGridHeaderEl: {get: function() {return this.qbGridContainer.element('.qbHeaderCell');}},
@@ -54,8 +63,7 @@
         qbGridBodyEl: {get: function() {
             this.qbGridContainer.element('.qbTbody').waitForVisible();
             return this.qbGridContainer.element('.qbTbody');
-        }
-        },
+        }},
 
         qbGridBodyViewportEl : {get: function() {return browser.element('.qbTbody');}},
 
@@ -65,8 +73,6 @@
         // this will get you every row of the actions column
         qbGridRowActionsElList: {get: function() {return this.qbGridLeftColsContainerEl.elements('.qbRow');}},
 
-        // This is shorthand for the above (works in chrome dev console): $$('.ag-pinned-left-cols-container .ag-row')
-        // Use the space to specify a sub element, join the two if it is a subclass
 
         // this will get you every record element on the grid
         // qbGridRecordElList: {get: function() {return this.qbGridBodyContainer.elements('.qbRow);}},
