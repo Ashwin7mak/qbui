@@ -448,8 +448,14 @@ consts = require('../../common/src/constants.js');
             //Create a report with ID field in table 7
             return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE7].id, [3, 6, 7], null, 'Report with ID field');
         }).then(function() {
+            //Reset default report for table 7
+            return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE7].id, 2);
+        }).then(function() {
             //Create a report with ID field in table 8
             return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE8].id, [3, 6, 7], null, 'Report with ID field');
+        }).then(function() {
+            //Reset default report for table 8
+            return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE8].id, 2);
         }).then(function() {
             //Create tables relationship
             return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
