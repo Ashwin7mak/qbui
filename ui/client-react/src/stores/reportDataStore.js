@@ -888,6 +888,7 @@ let ReportDataStore = Fluxxor.createStore({
                 newRecords.unshift(newRecord);
             }
 
+            // Always make sure to return an editing index so QbGrid can detect the new row
             this.editingIndex = (this.editingIndex === undefined ? -1 : this.editingIndex);
             model.records = newRecords;
             model.recordsCount++;
