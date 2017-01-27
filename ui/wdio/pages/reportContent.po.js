@@ -190,7 +190,6 @@
             return rows.value.length;
         }},
 
-
         /**
          * Method to click Add Record button on Report Table
          */
