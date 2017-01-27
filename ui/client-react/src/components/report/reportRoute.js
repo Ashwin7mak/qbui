@@ -6,6 +6,7 @@ import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
 import {Link} from 'react-router';
 import Logger from '../../utils/logger';
+import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
@@ -34,16 +35,38 @@ const ReportRoute = React.createClass({
         flux.actions.loadFields(appId, tblId);
         flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
     },
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
+        const flux = this.getFlux();
+        flux.actions.selectTableId(tblId);
+        flux.actions.loadFields(appId, tblId);
+        // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
+        // tables with relationships
+        flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+    },
     loadReportFromParams(params) {
-        let appId = params.appId;
-        let tblId = params.tblId;
+        let {appId, tblId, fieldWithParentId, masterRecordId} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
             //  loading a report..always render the 1st page on initial load
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
-            this.loadReport(appId, tblId, rptId, offset, numRows);
+
+            // A link from a parent component (see qbform.createChildReportElementCell) was used
+            // to display a filtered child report.
+            if (fieldWithParentId && masterRecordId) {
+                const queryParams = {
+                    query: QueryUtils.parseStringIntoExactMatchExpression(fieldWithParentId, masterRecordId),
+                    offset,
+                    numRows
+                };
+                this.loadDynamicReportFromParams(appId, tblId, rptId, queryParams);
+            } else {
+                this.loadReport(appId, tblId, rptId, offset, numRows);
+            }
         }
     },
     componentDidMount() {
