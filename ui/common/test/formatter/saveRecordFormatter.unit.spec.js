@@ -14,6 +14,11 @@ describe('saveRecordFormatter', () => {
                 expectedChange: '123'
             },
             {
+                description: 'passes through null values',
+                change: null,
+                expectedChange: null
+            },
+            {
                 description: 'converts empty strings to null for numeric fields',
                 change: buildNumericChange(constants.NUMERIC, ''),
                 expectedChange: buildNumericChange(constants.NUMERIC, null)
