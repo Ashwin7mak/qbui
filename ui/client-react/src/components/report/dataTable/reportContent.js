@@ -838,7 +838,7 @@ export const ReportContent = React.createClass({
             reportContent = (
                     <div className={addPadding}>
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
-                        {!isSmall && this.props.reactabular &&
+                        {!isSmall && !this.props.reactabular &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
@@ -890,7 +890,7 @@ export const ReportContent = React.createClass({
                         {/*filter={{selections: this.props.reportData.selections,*/}
                         {/*facet: this.props.reportData.facetExpression,*/}
                         {/*search: this.props.reportData.searchStringForFiltering}}*/}
-                        {!isSmall && !this.props.reactabular &&
+                        {!isSmall && this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
