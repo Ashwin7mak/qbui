@@ -47,7 +47,7 @@
 
         });
 
-        fit('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
+        it('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
             browser.logger.info('it spec function - Running the test');
             var textToEnter = 'SaveAndAddANewRow';
             var numToEnter = 20;
