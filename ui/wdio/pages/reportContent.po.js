@@ -16,10 +16,10 @@
         }},
 
         //edit pencil in report actions tool bar
-            editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
+        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
 
         //edit pencil in record actions
-            editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
+        editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //TODO: Will need to extend these locators when we show multiple reports on a page
         // Report Container (encapsulates both the report toolbar and the report itself)
@@ -34,15 +34,13 @@
             this.reportToolsAndContentEl.elements('.loadedContent').waitForVisible();
             var elems = this.reportToolsAndContentEl.elements('.loadedContent');
             return elems.value[0];
-        }
-        },
+        }},
 
         // Report content div containing column headers and the report content in qbGrid
         reportContentEl: {get: function() {
             this.reportContainerEl.element('.reportContent').waitForVisible();
             return this.reportContainerEl.element('.reportContent');
-        }
-        },
+        }},
 
         // qbGrid contains both the column headers and the record content in qbGrid
         qbGridContainer: {get: function() {
