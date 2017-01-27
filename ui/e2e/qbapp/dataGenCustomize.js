@@ -62,8 +62,8 @@ consts = require('../../common/src/constants.js');
         var table5Name = 'All Required';
         var table6Name = 'Durations';
         var table7Name = 'Unique Fields';
-        var table8Name = 'Relationship (Parent)';
-        var table9Name = 'Relationship (Child)';
+        var table8Name = 'REL by ID (Parent)';
+        var table9Name = 'REL by ID (Child)';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -444,6 +444,12 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
+        }).then(function() {
+            //Create a report with ID field in table 7
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE7].id, [3, 6, 7], null, 'Report with ID field');
+        }).then(function() {
+            //Create a report with ID field in table 8
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE8].id, [3, 6, 7], null, 'Report with ID field');
         }).then(function() {
             //Create tables relationship
             return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
