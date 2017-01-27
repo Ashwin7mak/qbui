@@ -5,7 +5,7 @@ import WindowLocationUtils from '../utils/windowLocationUtils';
 import CommonUrlUtils from '../../../common/src/commonUrlUtils';
 import StringUtils from '../utils/stringUtils';
 
-import {SUPPORT_LINK_PATH, REPORT_LINK} from '../constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK} from '../constants/urlConstants';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -62,6 +62,17 @@ const UrlUtils = {
      */
     getReportLink(appId, tblId, rptId) {
         return StringUtils.format(REPORT_LINK, [appId, tblId, rptId]);
+    },
+
+    /**
+     * Return URL of route for displaying a child report in the following form:
+     *
+     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}/fieldWithParentId/${fieldWithParentId}/masterRecordId/${masterRecordId}`
+     *
+     * @return {string} URL of route for displaying a child report
+     */
+    getRelatedChildReportLink(appId, tableId, reportId, fieldWithParentId, masterRecordId) {
+        return StringUtils.format(CHILD_REPORT_LINK, [...arguments]);
     }
 };
 
