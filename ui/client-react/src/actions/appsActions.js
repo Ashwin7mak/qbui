@@ -15,7 +15,6 @@ import appsModel from '../models/appsModel';
 Promise.onPossiblyUnhandledRejection(function(err) {
     let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
-    logger.debug(err && err.stack);
 });
 
 let appsActions = {
