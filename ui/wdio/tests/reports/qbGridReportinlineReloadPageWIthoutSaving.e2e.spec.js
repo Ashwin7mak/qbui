@@ -39,8 +39,6 @@
          * Before each test starts just make sure the report has loaded with records visible
          */
         beforeEach(function() {
-            // browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/api/api/v1/ticket?uid=10000&realmId=11995685');
-            // return browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/qbase/app/0mqctfaaaaab/table/0mqctfaaaaac/report/1');
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             return ReportContentPO.waitForReportContent();
 

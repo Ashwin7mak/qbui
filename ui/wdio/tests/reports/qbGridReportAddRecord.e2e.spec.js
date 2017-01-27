@@ -42,8 +42,6 @@
          * Before each it block reload the list all report (can be used as a way to reset state between tests)
          */
         beforeEach(function() {
-            // browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/api/api/v1/ticket?uid=10000&realmId=11995685');
-            // return browser.url('http://02oi0no2rlhrkbkp8qo3z8raygecxih3.localhost:9000/qbase/app/0mqctfaaaaab/table/0mqctfaaaaac/report/1');
             // Load the List All report on Table 1
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
@@ -87,7 +85,6 @@
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            // e2ePageBase.loadReportByIdInBrowser();
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
 
