@@ -69,41 +69,23 @@
             //This will return a qbRow from the specified recordIndex
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
 
-            //This will return a qbCell from the specified recordIndex, from qbRow at the specified recordIndex
             var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
-
             //This focuses on the cellData from qbCell at the specified recordIndex
             var cellData = recordCellEl.elements('.cellData.NoWrap');
-
             //Get the pencil from the qbCell
             var cellEditIcon = recordCellEl.elements('.cellEditIcon');
-            // See http://webdriver.io/api/protocol/execute.html
-            console.log('===================================================')
-            console.log('recordRowEl: ', recordRowEl);
-            console.log('recordCellEl: ', recordCellEl);
-            console.log('cellData: ', cellData);
-            console.log('cellEditIcon: ', cellEditIcon);
-            console.log('===================================================')
-            browser.debug();
-
-            //TODO: Make generic double click function in e2ePageBase
-            if (browserName === 'chrome') {
+            //TODO: moveToObject does not work on safari, a javascript workaround needs to be implemented
+            //TODO: moveToObject on Chrome and Firefox does not move to the exact qbCell that is returned from recordCellEl
+            //TODO: the challenge is all cell's have the same className of qbCell, so the browser will move the mouse to the first
+            //TODO: qbCell on the DOM. More research is required, in order to get moveToObject to move to the exact qbCell that is specified
+            if (browserName === 'chrome' || browserName === 'firefox') {
                 //Hover over the cell
-                browser.moveToObject(cellData.hCode);
+                browser.moveToObject(cellData.selector);
                 //Then once the pencil is visible hover over the pencil
-                browser.moveToObject(cellEditIcon.hCode);
-                browser(cellEditIcon.hCode).click();
-            } else {
-                browser.execute(function(recordCellElement) {
-                    var event = new MouseEvent('click', {
-                        'view': window,
-                        'bubbles': true,
-                        'cancelable': true,
-                        'detail': 2
-                    });
-                    recordCellElement.dispatchEvent(event);
-                }, recordCellEl);
+                browser.moveToObject(cellEditIcon.selector);
+                browser.element(cellEditIcon.selector).click();
             }
+
             this.getInlineEditRecord().waitForVisible();
         }},
 
