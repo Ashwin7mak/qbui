@@ -844,7 +844,7 @@ let ReportDataStore = Fluxxor.createStore({
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                     valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
                 } else {
-                    valueAnswer = {value: FieldUtils.getDefaultValueForFieldType(theCorrespondingField.datatypeAttributes.type), id: obj.id};
+                    return getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type);
                 }
                 return valueAnswer;
             });
@@ -887,6 +887,8 @@ let ReportDataStore = Fluxxor.createStore({
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
                 newRecords.unshift(newRecord);
             }
+
+            this.editingIndex = (this.editingIndex === undefined ? -1 : this.editingIndex);
             model.records = newRecords;
             model.recordsCount++;
         }
@@ -1286,5 +1288,14 @@ let ReportDataStore = Fluxxor.createStore({
         };
     }
 });
+
+function getDefaultValue(id, type) {
+    let defaultValue = FieldUtils.getDefaultValueForFieldType(type);
+    return {
+        id: id,
+        value: defaultValue,
+        display: defaultValue
+    };
+}
 
 export default ReportDataStore;
