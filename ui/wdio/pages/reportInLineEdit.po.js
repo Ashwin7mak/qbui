@@ -5,13 +5,14 @@
  */
 (function() {
     'use strict';
+    // var reportContent = require('./reportContent.po');
     var reportContent = require('./reportContent.po');
     var e2ePageBase = require('./e2ePageBase.po');
     var assert = require('assert');
 
-    var saveRecordInlineEdit  = '.ag-row.editing .saveRecord';
-    var cancelRecordInlineEdit = '.ag-row.editing .cancelSelection';
-    var addRecordInlineEdit = '.ag-row.editing .addRecord';
+    var saveRecordInlineEdit  = '.qbGrid .saveRecord';
+    var cancelRecordInlineEdit = '.qbGrid .cancelSelection';
+    var addRecordInlineEdit = '.qbGrid .addRecord';
 
     var ReportInLineEditPage = Object.create(reportContent, {
 
@@ -40,7 +41,7 @@
         // We append the editing class to the row being edited
         // Return the row being edited
         getInLineEditRecordMenu: {value: function() {
-            return browser.element('.ag-row.editing');
+            return browser.element('.qbGrid.editing');
         }},
 
         // Returns the save record button for the record being edited
@@ -61,31 +62,30 @@
         notificationSuccessPopupEl: {get: function() {return this.notificationContainerEl.element('.notification-success');}},
 
         /**
-         * Given a record element in agGrid, double click on the record to open the edit menu
+         * Given a record element in qbGrid, double click on the record to open the edit menu
          * @param recordRowIndex
          */
         openRecordEditMenu: {value: function(recordIndex) {
+            //This will return a qbRow from the specified recordIndex
             var recordRowEl = reportContent.getRecordRowElement(recordIndex);
-            // Hardcoded to click on the first cell of the record
-            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
-            // See http://webdriver.io/api/protocol/execute.html
-            //TODO: Make generic double click function in e2ePageBase
-            console.log('recordCellEl: ', recordCellEl);
-            browser.debug();
-            if (browserName === 'chrome') {
-                recordCellEl.doubleClick();
-            } else {
 
-                browser.execute(function(recordCellElement) {
-                    var event = new MouseEvent('click', {
-                        'view': window,
-                        'bubbles': true,
-                        'cancelable': true,
-                        'detail': 2
-                    });
-                    recordCellElement.dispatchEvent(event);
-                }, recordCellEl);
+            var recordCellEl = reportContent.getRecordRowCells(recordRowEl).value[0];
+            //This focuses on the cellData from qbCell at the specified recordIndex
+            var cellData = recordCellEl.elements('.cellData.NoWrap');
+            //Get the pencil from the qbCell
+            var cellEditIcon = recordCellEl.elements('.cellEditIcon');
+            //TODO: moveToObject does not work on safari, a javascript workaround needs to be implemented
+            //TODO: moveToObject on Chrome and Firefox does not move to the exact qbCell that is returned from recordCellEl
+            //TODO: the challenge is all cell's have the same className of qbCell, so the browser will move the mouse to the first
+            //TODO: qbCell on the DOM. More research is required, in order to get moveToObject to move to the exact qbCell that is specified
+            if (browserName === 'chrome' || browserName === 'firefox') {
+                //Hover over the cell
+                browser.moveToObject(cellData.selector);
+                //Then once the pencil is visible hover over the pencil
+                browser.moveToObject(cellEditIcon.selector);
+                browser.element(cellEditIcon.selector).click();
             }
+
             this.getInlineEditRecord().waitForVisible();
         }},
 
@@ -116,7 +116,7 @@
                 saveRecordButtonEl.click();
 
                 //step 3 - After save button click wait for inline edit menu to disappear as to confirm that click event worked
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMs, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             } catch (err) {
 
                 console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
@@ -129,9 +129,9 @@
                         'cancelable': true,
                         'detail': 1
                     });
-                    document.querySelector('.ag-row.editing .saveRecord').dispatchEvent(event);
+                    document.querySelector('.qbRow.editing .saveRecord').dispatchEvent(event);
                 });
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.extraLongWaitTimeMs, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             }
         }},
 
@@ -153,7 +153,7 @@
             try {
                 cancelRecordButtonEl.click();
                 // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
-                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMs, true);
+                browser.waitForVisible(cancelRecordInlineEdit, e2eConsts.mediumWaitTimeMilliseonds, true);
             } catch (err) {
 
                 console.log("Checking to see if WebdriverIO command throws an error - Trying again with JS. \n Error = " + err.toString());
@@ -166,9 +166,9 @@
                         'cancelable': true,
                         'detail': 1
                     });
-                    document.querySelector('.ag-row.editing .cancelSelection').dispatchEvent(event);
+                    document.querySelector('.qbRow.editing .cancelSelection').dispatchEvent(event);
                 });
-                browser.waitForVisible('.ag-row.editing .saveRecord', e2eConsts.mediumWaitTimeMs, true);
+                browser.waitForVisible('.qbRow.editing .saveRecord', e2eConsts.mediumWaitTimeMilliseonds, true);
             }
         }},
 
@@ -188,15 +188,14 @@
          * @returns The record element being edited
          */
         getInlineEditRecord: {value: function() {
-            var recordRowElements = reportContent.agGridRecordElList;
+            var recordRowElements = reportContent.qbGridRecordElList.elements('tr');
             var recordBeingEdited;
-
             // Loop through the records and find the one being edited
             for (var i = 0; i < recordRowElements.value.length; i++) {
                 var recordRowElement = recordRowElements.value[i];
                 // Check the class of each element for 'editing'
                 var elementClass = recordRowElement.getAttribute('class');
-                if (elementClass.indexOf('editing') !== -1) {
+                if (elementClass.indexOf('qbRow editing') !== -1) {
                     // Found our record element
                     recordBeingEdited = recordRowElements.value[i];
                 }
@@ -309,16 +308,18 @@
          */
         openDateFieldCalWidget: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
-            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
-
+            // var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
+            var qbCells = recordBeingEdited.elements('.qbCell');
+            var dateFieldCells = qbCells.elements('.cellEdit.dateCell.place');
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
+            // var dateFieldCell = dateFieldCells;
             var dateFieldCalIcon = this.getDateFieldCalendarIconEl(dateFieldCell);
 
-            var dateTimeFieldCells = recordBeingEdited.elements('div[colid="Date Time Field"]');
+            var dateTimeFieldCells = qbCells.elements('.dateTimeFieldValueEditor');
             var dateTimeFieldCell = dateTimeFieldCells.value[0];
 
             if (browserName === 'chrome') {
-                dateFieldCalIcon.moveToObject();
+                browser.moveToObject(dateFieldCalIcon.selector);
             } else {
                 browser.execute(function(dateCalIconElement) {
                     dateCalIconElement.scrollIntoView(false);
@@ -327,7 +328,7 @@
 
             // Sauce Labs needs extra room so scroll past to the Date Time field next to it
             if (browserName === 'chrome') {
-                dateTimeFieldCell.moveToObject();
+                browser.moveToObject(dateTimeFieldCell.selector);
             } else {
                 browser.execute(function(dateTimeElement) {
                     dateTimeElement.scrollIntoView(false);
@@ -380,9 +381,10 @@
          */
         advanceCurrentlySelectedDate: {value: function(dateFieldIndex) {
             var recordBeingEdited = this.getInlineEditRecord();
-            var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
+            // var dateFieldCells = recordBeingEdited.elements('div[colid="Date Field"]');
+            var qbCells = recordBeingEdited.elements('qbCell');
+            var dateFieldCells = qbCells.elements('.cellEdit.dateCell.place');
             var dateFieldCell = dateFieldCells.value[dateFieldIndex];
-
             var selectedRow = this.getDateRowForSelectedDate(this.getCurrentSelectedDate(this.getDateFieldCalendarWidgetEl(dateFieldCell)));
             var datesInRow = selectedRow.elements('td');
             var currentDateIndex;
@@ -415,11 +417,11 @@
         }}
 
         ///**
-        // * Function returns the date-time input cells for the record being edited in agGrid
+        // * Function returns the date-time input cells for the record being edited in qbGrid
         // * @returns An array of element locators
         // */
         //this.getTimeOfDayFieldInputCells = function() {
-        //    return this.agGridRecordElList.filter(function(elem) {
+        //    return this.qbGridRecordElList.filter(function(elem) {
         //        // Return only the row with 'editing' in the class
         //        return elem.getAttribute('class').then(function(elmClass) {
         //            return elmClass.indexOf('editing') !== -1;
@@ -433,11 +435,11 @@
         ////TODO: Functions to get Input and Time Widget Icon for TOD field
         //
         ///**
-        // * Function returns the date-time input cells for the record being edited in agGrid
+        // * Function returns the date-time input cells for the record being edited in qbGrid
         // * @returns An array of element locators
         // */
         //this.getDateTimeFieldInputCells = function() {
-        //    return this.agGridRecordElList.filter(function(elem) {
+        //    return this.qbGridRecordElList.filter(function(elem) {
         //        // Return only the row with 'editing' in the class
         //        return elem.getAttribute('class').then(function(elmClass) {
         //            return elmClass.indexOf('editing') !== -1;
@@ -451,11 +453,11 @@
         ////TODO: Functions to get the inputs and widgets for Date Time fields
         //
         ///**
-        // * Function returns the date-time input cells for the record being edited in agGrid
+        // * Function returns the date-time input cells for the record being edited in qbGrid
         // * @returns An array of element locators
         // */
         //this.getCheckboxFieldInputCells = function() {
-        //    return this.agGridRecordElList.filter(function(elem) {
+        //    return this.qbGridRecordElList.filter(function(elem) {
         //        // Return only the row with 'editing' in the class
         //        return elem.getAttribute('class').then(function(elmClass) {
         //            return elmClass.indexOf('editing') !== -1;

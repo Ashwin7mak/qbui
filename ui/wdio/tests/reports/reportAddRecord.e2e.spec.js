@@ -44,6 +44,7 @@
         beforeEach(function() {
             // Load the List All report on Table 1
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+
         });
 
         fit('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
@@ -74,9 +75,9 @@
 
             // Step 4 - Save the new added row
             ReportInLineEditPO.clickSaveChangesButton();
-            expect(browser.isVisible('.ag-row.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('.ag-row.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('.ag-row.editing .addRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .saveRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .cancelSelection')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Check for the success message 'Record added'
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
@@ -84,7 +85,6 @@
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
 
@@ -92,12 +92,12 @@
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
             browser.logger.info('This will show up in the log output under an Info tag! ', numOfRows);
             var recordValues = ReportContentPO.getRecordValues(numOfRows - 1);
-            expect(recordValues[0]).toBe(textToEnter);
+            expect(recordValues[1]).toBe(textToEnter);
 
             if (browserName !== 'safari') {
-                expect(recordValues[5]).toBe(dateToExpect);
+                expect(recordValues[6]).toBe(dateToExpect);
             } else {
-                expect(recordValues[5]).toBe(dateToEnter);
+                expect(recordValues[6]).toBe(dateToEnter);
             }
 
         });
