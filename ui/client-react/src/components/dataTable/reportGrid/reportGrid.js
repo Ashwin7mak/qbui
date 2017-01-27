@@ -203,7 +203,7 @@ const ReportGrid = React.createClass({
         if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
             editingRowId = this.props.editingId;
         }
-        console.log(`Editing Index: ${this.props.editingIndex}; Editing Id: ${this.props.editingId}; CurrentlyEditingRecordId: ${this.props.pendEdits.currentEditingRecordId}`);
+
         return editingRowId;
     },
 
