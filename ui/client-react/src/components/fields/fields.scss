@@ -25,6 +25,7 @@ $data-font-size: $font-size-p;
 
 // inline edit of a cell
 .cellEdit {
+    height: $inline-edit-input-box-height;
     border: solid 1px $input-text-normal-border-color;
     box-shadow: none;
     border-radius: 2px;
@@ -150,7 +151,6 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 
 .textFormat .cellData .textField {
     word-break: break-word;
-    white-space: nowrap;
 }
 
 .textFormat .cellData.NoWrap .textField {
@@ -169,7 +169,6 @@ textarea:focus, .is-focused:not(.is-open) > .Select-control {
 .userDisplayValue {
     overflow: hidden; /* stylelint-disable-line */
     text-overflow: ellipsis;
-    display: inline;
 }
 
 .cellData.NoWrap {

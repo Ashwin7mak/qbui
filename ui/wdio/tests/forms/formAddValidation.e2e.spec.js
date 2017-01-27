@@ -54,7 +54,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 2 - Click on Add Record Button on the report Stage
-            formsPO.clickAddRecordBtnOnStage();
+            reportContentPO.clickAddRecordBtnOnStage();
 
             //Step 4 - Click Save on the form
             formsPO.clickFormSaveBtn();
@@ -87,7 +87,7 @@
         it('Verify error alert button functionality on form Footer', function() {
 
             //Step 1 - Click on Add Record Button on the report Stage
-            formsPO.clickAddRecordBtnOnStage();
+            reportContentPO.clickAddRecordBtnOnStage();
 
             //Step 2 - Click on Save Button on the form without entering any values
             formsPO.clickFormSaveBtn();

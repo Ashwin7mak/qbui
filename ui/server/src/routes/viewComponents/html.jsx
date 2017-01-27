@@ -1,7 +1,7 @@
 import React, {PropTypes} from "react";
 import _ from "lodash";
 
-import favicons from '../constants/favicons';
+import favicons from '../../constants/favicons';
 
 var Html = React.createClass({
     propTypes: {

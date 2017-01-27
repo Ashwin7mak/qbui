@@ -50,7 +50,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 3 - Click on 3rd record edit pencil
-            formsPO.clickRecordEditPencilInRecordActions(1);
+            reportContentPO.clickRecordEditPencilInRecordActions(1);
 
             //Step 4 - Edit values
             fieldTypes.forEach(function(fieldType) {
@@ -88,7 +88,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 3 - Click on 3rd record edit pencil
-            formsPO.clickRecordEditPencilInTableActions(2);
+            reportContentPO.clickRecordEditPencilInTableActions(2);
 
             //Step 4 - Edit values
             fieldTypes.forEach(function(fieldType) {
@@ -124,6 +124,10 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
 
             //Step 2 - Click on 4th(the records count start from 0) record edit pencil
+            //click on the record to open in view form mode
+            reportContentPO.clickOnRecordInReportTable(3);
+            formsPO.viewFormContainerEl.waitForVisible();
+            //click on the edit pencil on the view form
             formsPO.clickRecordEditPencilInViewForm(3);
 
             //Step 3 - Edit values

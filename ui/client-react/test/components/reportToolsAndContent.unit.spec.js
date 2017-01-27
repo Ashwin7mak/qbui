@@ -2,6 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import {ReportToolsAndContent, __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
+import constants from '../../../common/src/constants';
 
 describe('ReportToolsAndContent functions', () => {
     'use strict';
@@ -25,7 +26,7 @@ describe('ReportToolsAndContent functions', () => {
     };
 
     const rptId = '3';
-    let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: 0, numRows: 20};
+    let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
     let reportDataParams = {reportData: {loading: true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
     const primaryKeyName = 'Employee Number';

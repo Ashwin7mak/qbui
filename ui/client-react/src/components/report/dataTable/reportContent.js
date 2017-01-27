@@ -3,7 +3,7 @@ import ReactIntl from "react-intl";
 import {NotificationManager} from 'react-notifications';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
-import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
+import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
@@ -13,23 +13,22 @@ import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
-import ValidationUtils from "../../../../../common/src/validationUtils";
-import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
-import FieldUtils from '../../../utils/fieldUtils';
 import * as CompConsts from '../../../constants/componentConstants';
+import {openRecordForEdit} from '../../../actions/formActions';
+import {connect} from 'react-redux';
 
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-export let ReportContent = React.createClass({
+export const ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
 
     getInitialState() {
@@ -42,7 +41,11 @@ export let ReportContent = React.createClass({
     openRow(data) {
         const {appId, tblId, rptId} = this.props;
 
-        var recId = data[this.props.primaryKeyName].value;
+        // TODO:: Refactor once AgGrid is removed. Can assume recordId is an number or null. https://quickbase.atlassian.net/browse/MB-1920
+        var recId = data;
+        if (!_.isNumber(data)) {
+            recId = data[this.props.primaryKeyName].value;
+        }
 
         // let flux know we've drilled-down into a record so we can navigate back and forth
         let flux = this.getFlux();
@@ -91,18 +94,20 @@ export let ReportContent = React.createClass({
      */
     getOrigGroupedRec(recId) {
         let orig = {names:{}, fids:{}};
-        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
-        orig.names = rec;
+        orig.names = rec || {};
         let fids = {};
 
-        let recKeys = Object.keys(rec);
-        // have fid lookup hash
-        recKeys.forEach((item) => {
-            fids[rec[item].id] = rec[item];
-        });
+        if (rec !== null) {
+            let recKeys = Object.keys(rec);
+            // have fid lookup hash
+            recKeys.forEach((item) => {
+                fids[rec[item].id] = rec[item];
+            });
+        }
         orig.fids = fids;
         return _.cloneDeep(orig);
     },
@@ -154,8 +159,9 @@ export let ReportContent = React.createClass({
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
      * @param recId
+     * @param fieldToStartEditing
      */
-    handleEditRecordStart(recId) {
+    handleEditRecordStart(recId, fieldToStartEditing = null) {
         if (_.has(this.props, 'reportData.data')) {
             const flux = this.getFlux();
             let origRec = null;
@@ -193,7 +199,8 @@ export let ReportContent = React.createClass({
                     });
                 }
             }
-            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
+
+            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
         }
     },
 
@@ -228,6 +235,12 @@ export let ReportContent = React.createClass({
      * @param afterRecId
      */
     handleRecordNewBlank(afterRecId) {
+        let recordId = afterRecId;
+        // To maintain compatibility with AgGrid
+        if (_.isObject(afterRecId)) {
+            recordId = afterRecId.value;
+        }
+
         const flux = this.getFlux();
 
         // Don't allow a user to add multiple records in rapid succession (i.e., clicking "Save and add new" multiple times rapidly)
@@ -237,8 +250,8 @@ export let ReportContent = React.createClass({
 
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
-        if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId, true);
+        if (this.props.pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+            let saveRecordPromise = this.handleRecordSaveClicked(recordId, true);
 
             // After saving the record successfully, then add the new row
             // Don't do anything if the record wasn't saved successfully or a promise was not returned
@@ -246,7 +259,7 @@ export let ReportContent = React.createClass({
                 return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
             }
         } else {
-            return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+            return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
         }
         return null;
     },
@@ -270,16 +283,21 @@ export let ReportContent = React.createClass({
      * @param id
      */
     handleRecordSaveClicked(id, addNewRecord = false) {
+        let recordId = id;
+        // To maintain compatibility with AgGrid
+        if (_.isObject(id)) {
+            recordId = id.value;
+        }
         //signal record save action, server will validate and if ok update an existing records with changed values
         // or add a new record
-        if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+        if (recordId === SchemaConsts.UNSAVED_RECORD_ID) {
             let recordChanges = {};
             if (this.props.pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
             }
             return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
-            return this.handleRecordChange(id, addNewRecord);
+            return this.handleRecordChange(recordId, addNewRecord);
         }
     },
 
@@ -289,7 +307,16 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
-        this.setState({selectedRecordId: record[this.props.primaryKeyName].value});
+        let recordId;
+        // TODO:: Simplify this once we can remove AgGrid. Once AgGrid is removed, we can assume the value coming back is a recordId or null.
+        // https://quickbase.atlassian.net/browse/MB-1920
+        if (_.isNumber(record)) {
+            recordId = record;
+        } else {
+            recordId = record[this.props.primaryKeyName].value;
+        }
+
+        this.setState({selectedRecordId: recordId});
         this.setState({confirmDeletesDialogOpen: true});
     },
 
@@ -351,15 +378,21 @@ export let ReportContent = React.createClass({
      * @param recId
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(recId, addNewRecordAfterSave = false) {
+    handleRecordChange(id, addNewRecordAfterSave = false) {
+        let recordId = id;
+        // To maintain compatibility with AgGrid
+        if (_.isObject(id)) {
+            recordId = recordId.value;
+        }
+
         const flux = this.getFlux();
         let colList = [];
         if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
-            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
         }
     },
 
@@ -369,8 +402,43 @@ export let ReportContent = React.createClass({
             const flux = this.getFlux();
             return flux.actions.recordPendingValidateField(fieldDef, fieldName, value, checkRequired);
         } else {
-            logger.warn('Field Def not provided for field validation in reportContent');
+            let error = 'Field Def not provided for field validation in reportContent';
+            logger.warn(error);
+            return Promise.reject(error);
         }
+    },
+
+    selectRows(selectedRowIds) {
+        this.getFlux().actions.selectedRows(selectedRowIds);
+    },
+
+    toggleSelectedRow(id) {
+        const flux = this.getFlux();
+
+        let selectedRows = this.props.selectedRows;
+
+        if (selectedRows.indexOf(id) === -1) {
+            // not already selected, add to selectedRows
+            selectedRows.push(id);
+        } else {
+            // already selected, remove from selectedRows
+            selectedRows = _.without(selectedRows, id);
+        }
+        flux.actions.selectedRows(selectedRows);
+    },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(recordId) {
+        this.props.dispatch(openRecordForEdit(recordId));
+
+        // needed until report store is migrated to redux
+
+        const flux = this.getFlux();
+
+        flux.actions.editingReportRow(recordId);
     },
 
     /**
@@ -734,8 +802,6 @@ export let ReportContent = React.createClass({
     componentDidUpdate(prevProps) {
         this.capturePerfTiming(prevProps);
     },
-
-
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
@@ -773,31 +839,57 @@ export let ReportContent = React.createClass({
                     <div className={addPadding}>
                         <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
-                        <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
-                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                primaryKeyName={this.props.primaryKeyName}
-                                selectedRows={this.props.selectedRows}
-                                onRowClick={this.openRow}
-                                onEditRecordStart={this.handleEditRecordStart}
-                                onEditRecordCancel={this.handleEditRecordCancel}
-                                onFieldChange={this.handleFieldChange}
-                                onRecordChange={this.handleRecordChange}
-                                appUsers={this.props.appUsers}
+                            <ReportGrid
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
-                                isInlineEditOpen={isInlineEditOpen}
+
+                                records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                primaryKeyName={this.props.primaryKeyName}
+                                loading={this.props.reportData.loading}
+                                appUsers={this.props.appUsers}
+                                onFieldChange={this.handleFieldChange}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onCellClick={this.openRow}
                                 pendEdits={this.props.pendEdits}
+                                selectedRows={this.props.selectedRows}
+                                onRecordDelete={this.handleRecordDelete}
+                                onEditRecordCancel={this.handleEditRecordCancel}
                                 editErrors={editErrors}
-                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordsCount={recordsCount}
-                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                onRecordNewBlank={this.handleRecordNewBlank}
+                                onClickRecordSave={this.handleRecordSaveClicked}
+                                isInlineEditOpen={isInlineEditOpen}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
+                                selectRows={this.selectRows}
+                                toggleSelectedRow={this.toggleSelectedRow}
+                                openRecordForEdit={this.openRecordForEdit}
+                                handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                filter={{selections: this.props.reportData.selections,
-                                    facet: this.props.reportData.facetExpression,
-                                    search: this.props.reportData.searchStringForFiltering}}
-                        />}
+                            />
+                        }
+                        {/*TODO:: Remove once API for ReportGrid is closer to finalized. https://quickbase.atlassian.net/browse/MB-2023 */}
+                        {/*Keeping track of which props sent to AgGrid have not been used yet in QbGrid. Indicator of missing features; however, leaner implementation may mean fewer props passed as well*/}
+                        {/*onGridReady={this.props.onGridReady}*/}
+                        {/*onRecordChange={this.handleRecordChange}*/}
+                        {/*onRecordAdd={this.handleRecordAdd}*/}
+                        {/*validateRecord={this.validateRecord}*/}
+                        {/*validateFieldValue={this.handleValidateFieldValue}*/}
+                        {/*getOrigRec={this.getOrigRec}*/}
+                        {/*reportHeader={this.props.reportHeader}*/}
+                        {/*reportFooter={this.props.reportFooter}*/}
+                        {/*pageActions={this.props.pageActions}*/}
+                        {/*selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}*/}
+                        {/*onScroll={this.onScrollRecords}*/}
+                        {/*showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}*/}
+                        {/*recordsCount={recordsCount}*/}
+                        {/*groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}*/}
+                        {/*groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}*/}
+                        {/*sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}*/}
+                        {/*filter={{selections: this.props.reportData.selections,*/}
+                        {/*facet: this.props.reportData.facetExpression,*/}
+                        {/*search: this.props.reportData.searchStringForFiltering}}*/}
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
@@ -877,5 +969,5 @@ ReportContent.propTypes = {
     onGridReady: React.PropTypes.func
 };
 
-export let ReportContentWithRouter = withRouter(ReportContent);
-export default ReportContentWithRouter;
+export const ReportContentWithRouter = withRouter(ReportContent);
+export default connect()(ReportContentWithRouter);

@@ -17,7 +17,8 @@ describe('Record Pending Edits Actions functions ', () => {
         recId: recId,
         origRec: origRec,
         changes:{},
-        isInlineEdit: true
+        isInlineEdit: true,
+        fieldToStartEditing: null
     };
     let changeRecInputs = {
         appId: appId,

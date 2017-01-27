@@ -205,6 +205,7 @@ export default {
         },
         report : {
             blank : "blanc",
+            inlineEdit: "Modifier enregistrement en ligne",
             facets :{
                 noFacets : "Non valeurs",
                 seeMore : "plus...",
@@ -409,6 +410,10 @@ export default {
             }
         },
         invalidMsg : {
+            api: {
+                notUniqueSingleField: "Remplissez une valeur différente. Un autre {recordName} utilise déjà ce {fieldName}.",
+                notUniqueMultiChoice: "Sélectionnez un autre {fieldName}. Un autre {recordName} utilise déjà celui-ci.",
+            },
             unknown: "Type inconnu non valide. Résultats: ",
             required: "Remplissez {fieldName}",
             email: "Formater la {fieldName} comme prénom@domaine.fr",
