@@ -190,6 +190,95 @@
             return rows.value.length;
         }},
 
+
+        /**
+         * Method to click Add Record button on Report Table
+         */
+        clickAddRecordBtnOnStage: {value: function() {
+            this.addRecordBtnOnStage.waitForVisible();
+            //Click on add record button
+            this.addRecordBtnOnStage.click();
+            //wait until you see edit container and save buttons in footer
+            formsPO.editFormContainerEl.waitForVisible();
+            return formsPO.editFormSaveBtns.waitForVisible();
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the record.
+         * @param recordRowIndex
+         */
+        clickOnRecordInReportTable : {value: function(recordRowIndex) {
+            var recordRowEl = this.getRecordRowElement(recordRowIndex);
+            // Hardcoded to click on the third cell of the record since clicking on email, phone etc will bring up popups.
+            var recordCellEl = this.getRecordRowCells(recordRowEl).value[3];
+
+            //scroll to third cell of recordRowIndex row
+            if (browserName === 'chrome') {
+                recordCellEl.moveToObject();
+            } else {
+                browser.execute(function(elelemt) {
+                    elelemt.scrollIntoView(false);
+                }, recordCellEl);
+            }
+            //Click on the third cell of recordRowIndex row
+            return recordCellEl.click();
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the record to open it in view form mode.
+         * @param recordRowIndex
+         */
+        openRecordInViewMode : {value: function(recordRowIndex) {
+            this.clickOnRecordInReportTable(recordRowIndex);
+            //wait until view form is visible
+            return formsPO.viewFormContainerEl.waitForVisible();
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
+            //get all edit buttons in the report table first column
+            var getAllEdits = this.editPencilBtnInRecordActions.value.filter(function(edit) {
+                return edit.index === recordRowIndex;
+            });
+
+            if (getAllEdits !== []) {
+                //Click on filtered save button
+                getAllEdits[0].click();
+                formsPO.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(e2eConsts.shortWaitTimeMs);
+            } else {
+                throw new Error('Edit button not found at row ' + recordRowIndex);
+            }
+        }},
+
+        /**
+         * Given a record element in agGrid, click on the checkbox to select that record and then click on edit pencil from the table actions
+         * @param recordRowIndex
+         */
+        clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
+            //get all checkboxes in the report table first column
+            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
+                return checkbox.index === recordRowIndex;
+            });
+
+            if (getAllCheckBoxs !== []) {
+                //Click on filtered save button
+                getAllCheckBoxs[0].click();
+                //wait for edit pencil to be visible
+                this.editPencilBtnOnReportActions.waitForVisible();
+                //click on the edit pencil in table actions
+                this.editPencilBtnOnReportActions.click();
+                //wait until edit form is visible
+                return formsPO.editFormContainerEl.waitForVisible();
+            } else {
+                throw new Error('Checkbox not found at row ' + recordRowIndex);
+            }
+        }},
+
         //TODO: Refactor these once we port over the delete record tests
         /// Checking for the deleted record on the first page
         //this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord) {
