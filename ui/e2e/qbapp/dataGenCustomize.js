@@ -394,11 +394,11 @@ consts = require('../../common/src/constants.js');
 
         tableToFieldToFieldTypeMap[table8Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
 
         tableToFieldToFieldTypeMap[table9Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
 
 
         return tableToFieldToFieldTypeMap;

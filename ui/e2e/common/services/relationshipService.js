@@ -16,7 +16,7 @@
              *
              */
             createOneToOneRelationship: function(createApp, parentTable, childTable) {
-                const FK_FIELD_NAME = 'Numeric Field';
+                const FK_FIELD_NAME = 'Record ID#';
                 let RECORD_ID_NAME = 'Record ID#';
                 let masterTableId = parentTable.id;
                 let detailTableId = childTable.id;
