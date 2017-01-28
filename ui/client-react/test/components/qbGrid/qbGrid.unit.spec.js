@@ -119,9 +119,7 @@ describe('QbGrid', () => {
             let TableBody = component.find(Table.Body);
             expect(TableBody).toHaveProp('onRow', instance.addRowProps);
 
-            // isMatch only checks that the keys specified here are each object, not all keys
-            // We don't need to check each individual cell for the purpose of this test
-            expect(_.isMatch(instance.addRowProps(firstRow), {
+            let expectedResult = {
                 id: firstRow.id,
                 subHeaderId: firstRow.id,
                 className: 'qbRow',
@@ -140,7 +138,17 @@ describe('QbGrid', () => {
 
                 // Passes through other properties of row object
                 text: firstRow.text,
-            })).toEqual(true);
+            };
+
+            let result = instance.addRowProps(firstRow);
+
+            // Only check some keys. We don't need to check each individual cell for the purpose of this test.
+            Object.keys(result).forEach(key => {
+                console.log('Key: ', key, 'value: ', result[key], 'expectedValue: ', expectedResult[key]);
+                if (expectedResult[key] !== undefined) {
+                    expect(result[key]).toEqual(expectedResult[key]);
+                }
+            });
         });
 
         it('adds an editing class when the row is in editing mode', () => {
