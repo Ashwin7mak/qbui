@@ -59,6 +59,14 @@ describe('RowEditActions (QbGrid)', () => {
         expect(component.find(Button).find({className: 'addRecord disabled'})).toBePresent();
     });
 
+    // Heads up: This should be removed once a user can add multiple records
+    it('disables the "Save and Add New Record" button when editing a new row (cannot add multiple rows consecutively)', () => {
+        component = shallow(<RowEditActions isValid={true} rowId={null} />);
+
+        expect(component.find(Button).find({className: 'addRecord disabled'})).toBePresent();
+        expect(component.find(QBToolTip).find({i18nMessageKey: 'pageActions.saveAndAddRecordDisabled'})).toBePresent();
+    });
+
     it('displays a loading icon if the record isSaving and disables the add button', () => {
         component = shallow(<RowEditActions isSaving={true}/>);
 

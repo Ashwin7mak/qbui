@@ -77,13 +77,34 @@ export const RowEditActions = React.createClass({
         return saveButton;
     },
 
-    render() {
-        let {isValid, saving, idKey} = this.props;
+    renderSaveAndAddButton() {
+        let {isValid, saving, rowId} = this.props;
 
         let addRecordClasses = ['addRecord'];
-        if (!isValid || saving) {
+
+        // Heads up: We currently disable the Save and add Button if the rowId is null (new record).
+        // This check should be removed once creating multiple records in the grid is working.
+        if (!isValid || saving || !rowId) {
             addRecordClasses.push('disabled');
+
+            let tooltipMessage = (rowId ? 'pageActions.saveAndAddRecord' : 'pageActions.saveAndAddRecordDisabled');
+
+            return (
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey={tooltipMessage}>
+                    <Button className="rowEditActionsSaveAndAdd"><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
+                </QBToolTip>
+            );
+        } else {
+            return (
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
+                    <Button className="rowEditActionsSaveAndAdd" onClick={this.onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
+                </QBToolTip>
+            );
         }
+    },
+
+    render() {
+        let {isValid, saving, idKey} = this.props;
 
         return (
             <div className="editTools" key={"crea-" + idKey}>
@@ -93,9 +114,7 @@ export const RowEditActions = React.createClass({
 
                 {this.renderSaveRecordButton()}
 
-                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button className="rowEditActionsSaveAndAdd" onClick={this.onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
-                </QBToolTip>
+                {this.renderSaveAndAddButton()}
             </div>
         );
     }
