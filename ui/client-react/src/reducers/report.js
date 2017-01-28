@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import FacetSelections from '../components/facet/facetSelections';
 
 /**
  * Manage array of report states
@@ -37,21 +38,41 @@ const report = (state = [], action) => {
     //  what report list action is being requested
     switch (action.type) {
     case types.LOAD_REPORT: {
-        const obj = {id: action.id, loading: true};
+        const obj = {
+            id: action.id,
+            loading: true,
+            appId: action.context.appId,
+            tblId: action.context.tblId,
+            rptId: action.context.rptId
+        };
         return newState(obj);
     }
     case types.LOAD_REPORT_FAILED: {
-        const obj = {id: action.id, loading: false};
+        const obj = {
+            id: action.id,
+            loading: false,
+            error: true,
+            errorDetails: action.context
+        };
         return newState(obj);
     }
     case types.LOAD_REPORT_SUCCESS: {
         const obj = {
             id: action.id,
             loading: false,
-            appId: action.appId,
-            tblId: action.tblId,
-            rptId: action.rptId,
-            originalMetaData: _.cloneDeep(action.metaData)
+            error: false,
+            data: action.context,
+            //  needed??..these are on the data property
+            appId: action.context.appId,
+            tblId: action.context.tblId,
+            rptId: action.context.rptId,
+            pageOffset: action.context.pageOffset,
+            numRows: action.context.numRows,
+            searchStringForFiltering: action.context.searchStringForFiltering,
+            selections: action.context.selections || new FacetSelections(),
+            facetExpression: action.context.facetExpressoin || {}
+            // end ???
+            // bah...lot of other stuff to figure out..
         };
         return newState(obj);
     }

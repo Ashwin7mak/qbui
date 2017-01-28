@@ -56,16 +56,16 @@ let reportModel = {
      * @param fieldDef
      * @returns null or string containing the localized units
      */
-    getReportColumnUnits(fieldDef) {
-        let answer = null;
-        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
-            let scale = fieldDef.datatypeAttributes.scale;
-            if (durationFormatter.hasUnitsText(scale)) {
-                answer = Locale.getMessage('durationTableHeader.' + scale);
-            }
-        }
-        return answer;
-    },
+    //getReportColumnUnits(fieldDef) {
+    //    let answer = null;
+    //    if (fieldDef && _.has(fieldDef, 'datatypeAttributes.type') && fieldDef.datatypeAttributes.type === serverTypeConsts.DURATION) {
+    //        let scale = fieldDef.datatypeAttributes.scale;
+    //        if (durationFormatter.hasUnitsText(scale)) {
+    //            answer = Locale.getMessage('durationTableHeader.' + scale);
+    //        }
+    //    }
+    //    return answer;
+    //},
 
     /**
      * Reload the report column information as locale change need refresh
@@ -161,27 +161,27 @@ let reportModel = {
      * @param records
      * @returns {*}
      */
-    getReportData(fields, records) {
-        let reportData = [];
-        let map = new Map();
-
-        if (fields && records) {
-            fields.forEach((field) => {
-                map.set(field.id, field);
-            });
-
-            records.forEach((record) => {
-                let columns = {};
-                record.forEach((column) => {
-                    let fld = map.get(column.id);
-                    columns[fld.name] = column;
-                });
-                reportData.push(columns);
-            });
-        }
-
-        return reportData;
-    },
+    //getReportData(fields, records) {
+    //    let reportData = [];
+    //    let map = new Map();
+    //
+    //    if (fields && records) {
+    //        fields.forEach((field) => {
+    //            map.set(field.id, field);
+    //        });
+    //
+    //        records.forEach((record) => {
+    //            let columns = {};
+    //            record.forEach((column) => {
+    //                let fld = map.get(column.id);
+    //                columns[fld.name] = column;
+    //            });
+    //            reportData.push(columns);
+    //        });
+    //    }
+    //
+    //    return reportData;
+    //},
 
     /**
      * Returns the model object
@@ -195,83 +195,83 @@ let reportModel = {
      * Set everything related to report's meta data that's needed by components in state
      * @param reportMetaData
      */
-    setMetaData(reportMetaData) {
-        this.model.name = reportMetaData.name;
-        this.model.description = reportMetaData.description;
-
-        //  check to see if a fid list is defined
-        this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
-        if (this.model.fids.length === 0) {
-            // if no fid list, then check the report defaults
-            if (reportMetaData.reportDefaults && reportMetaData.reportDefaults.fids) {
-                this.model.fids = reportMetaData.reportDefaults.fids;
-            }
-        }
-
-        //  check to see if a sort list is defined
-        let sortList = reportMetaData.sortList || [];
-        if (sortList.length === 0) {
-            // if no sort list, check the report defaults
-            if (reportMetaData.reportDefaults && reportMetaData.reportDefaults.sortList) {
-                sortList = reportMetaData.reportDefaults.sortList;
-            }
-        }
-
-        // in report's meta data sortlist is returned as an array of sort elements
-        this.setSortList(ReportUtils.getSortListFromObject(sortList));
-        this.setSortFids(sortList);
-        this.setGroupElements(sortList);
-    },
+    //setMetaData(reportMetaData) {
+    //    this.model.name = reportMetaData.name;
+    //    this.model.description = reportMetaData.description;
+    //
+    //    //  check to see if a fid list is defined
+    //    this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
+    //    if (this.model.fids.length === 0) {
+    //        // if no fid list, then check the report defaults
+    //        if (reportMetaData.reportDefaults && reportMetaData.reportDefaults.fids) {
+    //            this.model.fids = reportMetaData.reportDefaults.fids;
+    //        }
+    //    }
+    //
+    //    //  check to see if a sort list is defined
+    //    let sortList = reportMetaData.sortList || [];
+    //    if (sortList.length === 0) {
+    //        // if no sort list, check the report defaults
+    //        if (reportMetaData.reportDefaults && reportMetaData.reportDefaults.sortList) {
+    //            sortList = reportMetaData.reportDefaults.sortList;
+    //        }
+    //    }
+    //
+    //    // in report's meta data sortlist is returned as an array of sort elements
+    //    this.setSortList(ReportUtils.getSortListFromObject(sortList));
+    //    this.setSortFids(sortList);
+    //    this.setGroupElements(sortList);
+    //},
 
     /**
      * Set the reports original meta data
      * @param reportOriginalMetaData
      */
-    setOriginalMetaData(reportOriginalMetaData) {
-        // clones the meta data to allow for adhoc updates to sort/group or other
-        // report metadata values, and still be able to access the original
-        // report settings for resetting feature in sort group dialog and later
-        // for cancel adhoc edits to a report
-        this.model.originalMetaData = _.cloneDeep(reportOriginalMetaData);
-    },
+    //setOriginalMetaData(reportOriginalMetaData) {
+    //    // clones the meta data to allow for adhoc updates to sort/group or other
+    //    // report metadata values, and still be able to access the original
+    //    // report settings for resetting feature in sort group dialog and later
+    //    // for cancel adhoc edits to a report
+    //    this.model.originalMetaData = _.cloneDeep(reportOriginalMetaData);
+    //},
 
     /**
      * Set all records related state
      * @param recordData
      */
-    setRecordData(recordData) {
-        this.model.hasGrouping = false;
-        if (recordData.groups) {
-            this.model.hasGrouping = recordData.groups.hasGrouping;
-        }
-
-        if (this.model.hasGrouping === true) {
-            this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
-            this.model.records = recordData.groups.gridData;
-            this.model.groupFields = recordData.groups.fields;
-            this.model.gridColumns = recordData.groups.gridColumns;
-        } else {
-            this.model.columns = this.getReportColumns(recordData.fields);
-            this.model.records = this.getReportData(recordData.fields, recordData.records);
-            this.model.gridColumns = null;
-            this.model.groupFields = null;
-        }
-
-        this.model.fields = recordData.fields || [];
-        // map of fields by field id for fast lookup, any type for key,
-        // see http://stackoverflow.com/questions/18541940/map-vs-object-in-javascript
-        let map = new Map();
-        if (recordData.fields) {
-            recordData.fields.forEach((field) => {
-                map.set(field.id, field);
-            });
-        }
-        this.model.fieldsMap = map;
-        this.model.keyField = _.find(this.model.fields, field => field.id === SchemaConsts.DEFAULT_RECORD_KEY_ID);
-
-        this.model.filteredRecords = this.model.records;
-        this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
-    },
+    //setRecordData(recordData) {
+    //    this.model.hasGrouping = false;
+    //    if (recordData.groups) {
+    //        this.model.hasGrouping = recordData.groups.hasGrouping;
+    //    }
+    //
+    //    if (this.model.hasGrouping === true) {
+    //        this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
+    //        this.model.records = recordData.groups.gridData;
+    //        this.model.groupFields = recordData.groups.fields;
+    //        this.model.gridColumns = recordData.groups.gridColumns;
+    //    } else {
+    //        this.model.columns = this.getReportColumns(recordData.fields);
+    //        this.model.records = this.getReportData(recordData.fields, recordData.records);
+    //        this.model.gridColumns = null;
+    //        this.model.groupFields = null;
+    //    }
+    //
+    //    this.model.fields = recordData.fields || [];
+    //    // map of fields by field id for fast lookup, any type for key,
+    //    // see http://stackoverflow.com/questions/18541940/map-vs-object-in-javascript
+    //    let map = new Map();
+    //    if (recordData.fields) {
+    //        recordData.fields.forEach((field) => {
+    //            map.set(field.id, field);
+    //        });
+    //    }
+    //    this.model.fieldsMap = map;
+    //    this.model.keyField = _.find(this.model.fields, field => field.id === SchemaConsts.DEFAULT_RECORD_KEY_ID);
+    //
+    //    this.model.filteredRecords = this.model.records;
+    //    this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
+    //},
 
     /**
      * finds in model records the record with matching the recId
@@ -376,33 +376,33 @@ let reportModel = {
         });
     },
 
-    updateRecordsCount(recordsCountData) {
-        if (recordsCountData && !isNaN(recordsCountData)) {
-            this.model.recordsCount = parseInt(recordsCountData);
-        }
-    },
+    //updateRecordsCount(recordsCountData) {
+    //    if (recordsCountData && !isNaN(recordsCountData)) {
+    //        this.model.recordsCount = parseInt(recordsCountData);
+    //    }
+    //},
 
     /**
      * Update the filtered Records from response.
      * @param recordData
      */
-    updateFilteredRecords(recordData) {
-        if (recordData.groups && recordData.groups.hasGrouping) {
-            this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
-            this.model.filteredRecords = recordData.groups.gridData;
-            this.model.filteredRecordsCount = recordData.groups.totalRows;
-            this.model.groupFields = recordData.groups.fields;
-            this.model.gridColumns = recordData.groups.gridColumns;
-            this.model.hasGrouping = recordData.groups.hasGrouping;
-        } else {
-            this.model.columns = this.getReportColumns(recordData.fields);
-            this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
-            this.model.filteredRecordsCount = recordData.records.length;
-            this.model.groupFields = null;
-            this.model.gridColumns = null;
-            this.model.hasGrouping = false;
-        }
-    },
+    //updateFilteredRecords(recordData) {
+    //    if (recordData.groups && recordData.groups.hasGrouping) {
+    //        this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
+    //        this.model.filteredRecords = recordData.groups.gridData;
+    //        this.model.filteredRecordsCount = recordData.groups.totalRows;
+    //        this.model.groupFields = recordData.groups.fields;
+    //        this.model.gridColumns = recordData.groups.gridColumns;
+    //        this.model.hasGrouping = recordData.groups.hasGrouping;
+    //    } else {
+    //        this.model.columns = this.getReportColumns(recordData.fields);
+    //        this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
+    //        this.model.filteredRecordsCount = recordData.records.length;
+    //        this.model.groupFields = null;
+    //        this.model.gridColumns = null;
+    //        this.model.hasGrouping = false;
+    //    }
+    //},
 
     /**
      * Set facets data(if any) from response
@@ -625,9 +625,9 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
-            actions.LOAD_RECORDS, this.onLoadRecords,
-            actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
-            actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            //actions.LOAD_RECORDS, this.onLoadRecords,
+            //actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
+            //actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
@@ -646,9 +646,9 @@ let ReportDataStore = Fluxxor.createStore({
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onClearEdit,
 
-            actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
-            actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
-            actions.LOAD_REPORT_RECORDS_COUNT_FAILED, this.onLoadReportRecordsCountFailed,
+            //actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
+            //actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
+            //actions.LOAD_REPORT_RECORDS_COUNT_FAILED, this.onLoadReportRecordsCountFailed,
 
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
@@ -686,6 +686,8 @@ let ReportDataStore = Fluxxor.createStore({
 
         //this.searchStringForFiltering = '' ;
         //this.selections  = new FacetSelections();
+
+        //  TODO: NEED to figure this out..doesn't smell right..
         this.selectedRows = [];
 
         this.emit('change');
@@ -740,8 +742,8 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
 
-    onLoadRecords(payload) {
-        logger.debug('onLoadRecords called...');
+    //onLoadRecords(payload) {
+        //logger.debug('onLoadRecords called...');
         //this.isRecordDeleted = false;
         //this.loading = true;
         //this.editingIndex = undefined;
@@ -763,56 +765,56 @@ let ReportDataStore = Fluxxor.createStore({
         //this.numRows = NumberUtils.isInt(payload.numRows) && payload.numRows ? payload.numRows : this.numRows;
         //
         //this.emit('change');
-    },
+    //},
 
     onFilterSelectionsPending(payload) {
         this.selections = payload.selections;
         this.emit('change');
     },
 
-    onLoadRecordsSuccess(response) {
-        this.loading = false;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
+    //onLoadRecordsSuccess(response) {
+    //    this.loading = false;
+    //    this.editingIndex = undefined;
+    //    this.editingId = undefined;
+    //
+    //
+    //    this.reportModel.updateFilteredRecords(response.recordData);
+    //    this.reportModel.setMetaData(response.metaData);
+    //
+    //    //  Need to update record count cause may be filtering
+    //    this.reportModel.updateRecordsCount(response.recordCount);
+    //
+    //    this.error = false;
+    //
+    //    this.emit('change');
+    //},
 
+    //onLoadRecordsFailed(error) {
+    //    this.loading = false;
+    //    this.editingIndex = undefined;
+    //    this.editingId = undefined;
+    //
+    //    this.error = true;
+    //    this.emit('change');
+    //},
 
-        this.reportModel.updateFilteredRecords(response.recordData);
-        this.reportModel.setMetaData(response.metaData);
+    //onLoadReportRecordsCount() {
+    //    this.countingTotalRecords = true;
+    //    this.emit('change');
+    //},
 
-        //  Need to update record count cause may be filtering
-        this.reportModel.updateRecordsCount(response.recordCount);
+    //onLoadReportRecordsCountSuccess(response) {
+    //    this.countingTotalRecords = false;
+    //    this.reportModel.updateRecordsCount(response.recordCount);
+    //    this.emit('change');
+    //},
 
-        this.error = false;
-
-        this.emit('change');
-    },
-
-    onLoadRecordsFailed(error) {
-        this.loading = false;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
-
-        this.error = true;
-        this.emit('change');
-    },
-
-    onLoadReportRecordsCount() {
-        this.countingTotalRecords = true;
-        this.emit('change');
-    },
-
-    onLoadReportRecordsCountSuccess(response) {
-        this.countingTotalRecords = false;
-        this.reportModel.updateRecordsCount(response.recordCount);
-        this.emit('change');
-    },
-
-    onLoadReportRecordsCountFailed(error) {
-        this.countingTotalRecords = false;
-        this.error = true;
-        this.errorDetails = error;
-        this.emit('change');
-    },
+    //onLoadReportRecordsCountFailed(error) {
+    //    this.countingTotalRecords = false;
+    //    this.error = true;
+    //    this.errorDetails = error;
+    //    this.emit('change');
+    //},
 
     onShowFacetMenu() {
         this.nonFacetClicksEnabled = false;
