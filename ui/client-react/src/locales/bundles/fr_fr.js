@@ -414,6 +414,7 @@ export default {
             api: {
                 notUniqueSingleField: "Remplissez une valeur différente. Un autre {recordName} utilise déjà ce {fieldName}.",
                 notUniqueMultiChoice: "Sélectionnez un autre {fieldName}. Un autre {recordName} utilise déjà celui-ci.",
+                invalidRecord: "Type de données non valide. Remplissez une valeur différente."
             },
             unknown: "Type inconnu non valide. Résultats: ",
             required: "Remplissez {fieldName}",
