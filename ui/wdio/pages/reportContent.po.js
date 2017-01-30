@@ -7,6 +7,7 @@
     'use strict';
     // Import the base page object
     var e2ePageBase = require('./e2ePageBase.po');
+    var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
         //Record add button on stage
