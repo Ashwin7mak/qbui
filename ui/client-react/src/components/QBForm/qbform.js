@@ -8,10 +8,10 @@ import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import FieldUtils from '../../utils/fieldUtils';
-import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
+import RelatedChildReport from './RelatedChildReport';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -264,8 +264,19 @@ let QBForm = React.createClass({
         const fieldWithParentId = _.get(relationship, 'detailFieldId');
         const parentRecordId = _.get(fieldRecord, 'value');
 
-        const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, fieldWithParentId, parentRecordId);
-        return <td key={key}><Link to={link}>Child Table</Link></td>;
+        return <td key={key}>
+            <RelatedChildReport {...{
+                element,
+                appId,
+                childTableId,
+                childReportId,
+                fieldWithParentId,
+                parentRecordId,
+                relatedField,
+                fieldRecord,
+                relationship}}
+            />
+        </td>;
     },
 
     /**
