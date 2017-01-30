@@ -21,9 +21,9 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './ui/wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
-        './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
-        './qbui/ui/wdio/tests/reports/reportAddRecord.e2e.spec.js',
+        '/Users/bstookey/Desktop/ui/wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+        // '/Users/bstookey/Desktop/ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
+        // '/Users/bstookey/Desktop/qbui/ui/wdio/tests/reports/reportAddRecord.e2e.spec.js',
         //TODO: All form tests need to be refactored to work for qbGrid
         // './ui/wdio/tests/forms/*.e2e.spec.js'
     ],
@@ -59,7 +59,7 @@ exports.config = {
         // 5 instances get started at a time.
         maxInstances: 1,
         // what browser instance you want to launch
-        browserName: 'firefox',
+        browserName: ['chrome', 'firefox','microsoftedge'],
         // Custom variable we use to set the size of the browser
         breakpointSize: 'large'
     }],
