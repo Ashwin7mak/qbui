@@ -148,37 +148,37 @@
         //     ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarPrevButton);
         // });
         //
-        /**
-         * Test Method. Cancel button test for in-line editing.
-         */
-        it('Cancel button should not save edit updates to a record', function() {
-            //Note this is not working on safari
-            if (browserName !== 'safari') {
-                var textToEnter = 'My new text 2';
-
-                //Step 1 - Get the original value of the text field on the second record
-                var fieldValues = ReportContentPO.getRecordValues(1);
-                var originalText = fieldValues[1];
-
-                //Step 2 - Open the in-line edit menu for the second record
-                ReportInLineEditPO.openRecordEditMenu(1);
-
-                // Step 3 - Edit the Text Field
-                ReportInLineEditPO.editTextField(0, textToEnter);
-
-                // Step 4 - Click the cancel button
-                ReportInLineEditPO.clickCancelButton();
-
-                //Step 5 - Extra Assertions for inline Edit to be invisible
-                expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
-                expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
-                expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
-
-                // Check that the edit was not persisted on report
-                var fieldValues2 = ReportContentPO.getRecordValues(1);
-                expect(fieldValues2[1]).toBe(originalText);
-            }
-        });
+        // /**
+        //  * Test Method. Cancel button test for in-line editing.
+        //  */
+        // it('Cancel button should not save edit updates to a record', function() {
+        //     //Note this is not working on safari
+        //     if (browserName !== 'safari') {
+        //         var textToEnter = 'My new text 2';
+        //
+        //         //Step 1 - Get the original value of the text field on the second record
+        //         var fieldValues = ReportContentPO.getRecordValues(1);
+        //         var originalText = fieldValues[1];
+        //
+        //         //Step 2 - Open the in-line edit menu for the second record
+        //         ReportInLineEditPO.openRecordEditMenu(1);
+        //
+        //         // Step 3 - Edit the Text Field
+        //         ReportInLineEditPO.editTextField(0, textToEnter);
+        //
+        //         // Step 4 - Click the cancel button
+        //         ReportInLineEditPO.clickCancelButton();
+        //
+        //         //Step 5 - Extra Assertions for inline Edit to be invisible
+        //         expect(browser.isVisible('.qbRow.editing .saveRecord')).toBeFalsy();
+        //         expect(browser.isVisible('.qbRow.editing .cancelSelection')).toBeFalsy();
+        //         expect(browser.isVisible('.qbRow.editing .addRecord')).toBeFalsy();
+        //
+        //         // Check that the edit was not persisted on report
+        //         var fieldValues2 = ReportContentPO.getRecordValues(1);
+        //         expect(fieldValues2[1]).toBe(originalText);
+        //     }
+        // });
         //
         //
         // //TODO: Required field test, Need to extend setup data for this
