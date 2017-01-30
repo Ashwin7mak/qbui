@@ -59,7 +59,7 @@ exports.config = {
         // 5 instances get started at a time.
         maxInstances: 1,
         // what browser instance you want to launch
-        browserName: ['chrome', 'firefox','microsoftedge'],
+        browserName: ['chrome', 'firefox', 'microsoftedge'],
         // Custom variable we use to set the size of the browser
         breakpointSize: 'large'
     }],
