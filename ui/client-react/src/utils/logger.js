@@ -20,9 +20,9 @@ class Logger {
         this.logService = new LogService();
     }
 
-    debug(msg) {
+    debug(msg, exception) {
         if (LogLevel.DEBUG.id <= this.logLevel.id) {
-            this.logTheMessage(LogLevel.DEBUG, msg);
+            this.logTheMessage(LogLevel.DEBUG, msg, exception);
         }
     }
 
