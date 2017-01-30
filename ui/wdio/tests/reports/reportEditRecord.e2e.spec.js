@@ -48,7 +48,7 @@
          * Test Method - In-line edit menu should have three actions
          */
 
-        it('In-line edit menu should have three actions (save, save and add new, cancel)', function(done) {
+        it('In-line edit menu should have three actions (save, save and add new, cancel)', function() {
 
             browser.logger.info('it spec function - Running the test');
 
@@ -115,7 +115,7 @@
         /**
          * Test Method. Tests in-line editing with Pagination.
          */
-        it('Should allow you to in-line edit a record on the second page', function(done) {
+        it('Should allow you to in-line edit a record on the second page', function() {
             //Variable declarations
             var textToEnter = 'My new text on page 2';
             var successMessage = 'Record saved';
@@ -151,7 +151,7 @@
         /**
          * Test Method. Cancel button test for in-line editing.
          */
-        it('Cancel button should not save edit updates to a record', function(done) {
+        it('Cancel button should not save edit updates to a record', function() {
             //Note this is not working on safari
             if (browserName === 'chrome' || browserName === 'firefox') {
                 var textToEnter = 'My new text 2';

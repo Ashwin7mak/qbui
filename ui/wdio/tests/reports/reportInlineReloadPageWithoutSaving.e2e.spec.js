@@ -48,7 +48,7 @@
         /**
          * Negative Test Method. Reload page test for in-line editing.
          */
-        it('Reloading the page while editing should not save updates to a record', function(done) {
+        it('Reloading the page while editing should not save updates to a record', function() {
             if (browserName === 'chrome' || browserName === 'firefox') {
                 var textToEnter = 'My new text 3';
 
