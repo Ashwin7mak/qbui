@@ -842,10 +842,11 @@ let ReportDataStore = Fluxxor.createStore({
                 let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
                 //set the default values in the answer for each field
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
-                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
+                    valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
                 } else {
-                    return getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type);
+                    valueAnswer = (obj.id === SchemaConsts.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
                 }
+
                 return valueAnswer;
             });
 
@@ -938,14 +939,14 @@ let ReportDataStore = Fluxxor.createStore({
                 });
                 if (isGroupedFid !== -1) {
                     let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
-                    valueAnswer = {value: fieldValuesForRecord.value, id:obj.id};
+                    valueAnswer = {id: obj.id, value: fieldValuesForRecord.value};
                 } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                     //set the default values in the answer for each field
-                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
+                    valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
                 } else {
-                    //TBD : type specific values
-                    valueAnswer = {value: null, id: obj.id};
+                    valueAnswer = (obj.id === SchemaConsts.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
                 }
+
                 return valueAnswer;
             });
 
@@ -1294,8 +1295,7 @@ function getDefaultValue(id, type) {
     let defaultValue = FieldUtils.getDefaultValueForFieldType(type);
     return {
         id: id,
-        value: defaultValue,
-        display: defaultValue
+        value: defaultValue
     };
 }
 
