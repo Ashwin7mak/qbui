@@ -31,7 +31,7 @@
         reportToolsAndContentEl: {get: function() {return this.reportContainerEl.element('.reportToolsAndContentContainer');}},
 
         loadedContentEl : {get: function() {
-            this.reportToolsAndContentEl.elements('.loadedContent').waitForVisible();
+            this.reportToolsAndContentEl.element('.loadedContent').waitForVisible();
             var elems = this.reportToolsAndContentEl.elements('.loadedContent');
             return elems.value[0];
         }},
@@ -83,7 +83,7 @@
         waitForReportContent: {value: function() {
             // wait until you see .qbTbody
             browser.element('.qbTbody').waitForVisible();
-            return browser.elements('.qbRow').waitForVisible();
+            return browser.element('.qbRow').waitForVisible();
         }},
 
         /**
