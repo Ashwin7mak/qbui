@@ -1,7 +1,7 @@
 import React from 'react';
 import UrlUtils from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
-import {SUPPORT_LINK_PATH, REPORT_LINK} from '../../src/constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK} from '../../src/constants/urlConstants';
 import StringUtils from '../../src/utils/stringUtils';
 
 describe('UrlUtils', () => {
@@ -126,6 +126,19 @@ describe('UrlUtils', () => {
             let url = StringUtils.format(REPORT_LINK, [appId, tblId, rptId]);
 
             expect(UrlUtils.getReportLink(appId, tblId, rptId)).toEqual(url);
+        });
+    });
+
+    describe('getRelatedChildReportLink', () => {
+        it('returns a link to a child report', () => {
+            let appId = '1';
+            let tblId = '2';
+            let rptId = '3';
+            let fieldWithParentId = '4';
+            let masterRecordId = '5';
+            let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, fieldWithParentId, masterRecordId]);
+
+            expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, fieldWithParentId, masterRecordId)).toEqual(url);
         });
     });
 });

@@ -208,6 +208,12 @@ export let Nav = React.createClass({
 
         const flux = this.getFlux();
 
+        const selectedApp = this.getSelectedApp();
+        // TODO: don't use globals. Separate task exists to pass this info to components in a sane way.
+        if (_.get(selectedApp, 'relationships.length') > 0) {
+            window.relationships = selectedApp.relationships;
+        }
+
         let classes = "navShell";
         if (this.props.qbui.shell.leftNavVisible) {
             classes += " leftNavOpen";
@@ -372,4 +378,3 @@ export let Nav = React.createClass({
 
 export let NavWithRouter = withRouter(Nav);
 export default NavWithRouter;
-
