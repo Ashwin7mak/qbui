@@ -135,10 +135,10 @@ $urlIcon-margin-left: 10px;
     }
 
     .urlIcon {
-        display: inline;
         float: none;
         margin-left: $urlIcon-margin-left;
         opacity: 0;
+        display: inline;
         text-decoration: none;
         transition: opacity 0.2s ease-in-out;
 
@@ -208,4 +208,5 @@ $urlIcon-margin-left: 10px;
 // Never show the URL icon on Reports
 .cellData .urlField .urlIcon {
     opacity: 0;
+    display: none;
 }
