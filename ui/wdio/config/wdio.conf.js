@@ -21,9 +21,9 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        '/Users/bstookey/Desktop/ui/wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
-        // '/Users/bstookey/Desktop/ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
-        // '/Users/bstookey/Desktop/qbui/ui/wdio/tests/reports/reportAddRecord.e2e.spec.js',
+        './ui/wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+        './ui/wdio/tests/reports/reportEditRecord.e2e.spec.js',
+        './ui/wdio/tests/reports/reportAddRecord.e2e.spec.js',
         //TODO: All form tests need to be refactored to work for qbGrid
         // './ui/wdio/tests/forms/*.e2e.spec.js'
     ],
