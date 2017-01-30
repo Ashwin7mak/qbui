@@ -103,7 +103,7 @@
          * @returns Resolved record row element at specified index
          */
         getAllRows: {get: function() {
-            this.qbGridBodyEl.elements('.qbRow').waitForVisible();
+            this.qbGridBodyEl.element('.qbRow').waitForVisible();
             return this.qbGridContainer.elements('.qbRow');
         }},
         getRecordRowElement: {value: function(recordIndex) {
