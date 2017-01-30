@@ -78,7 +78,7 @@
             //TODO: moveToObject on Chrome and Firefox does not move to the exact qbCell that is returned from recordCellEl
             //TODO: the challenge is all cell's have the same className of qbCell, so the browser will move the mouse to the first
             //TODO: qbCell on the DOM. More research is required, in order to get moveToObject to move to the exact qbCell that is specified
-            if (browserName!== 'safari') {
+            if (browserName !== 'safari') {
                 //Hover over the cell
                 browser.moveToObject(cellData.selector);
                 //Then once the pencil is visible hover over the pencil
