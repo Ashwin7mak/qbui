@@ -129,7 +129,11 @@ Notes about the above configuration:
 
 * SSL support is commented out.  See the section at the bottom of this README for setup instruction.
 
-* Environment variable 'javaHost' points to a local instance rest endpoint.  Change to point to another server instance if not running Quickbase java backend locally.
+* Environment variable 'javaHost' points to a local core instance rest endpoint.  Change to point to another server instance if not running Quickbase java core backend locally.
+
+* Environment variable 'eeHost' points to a local experience engine instance rest endpoint.  Change to point to another server instance if not running Quickbase java EE backend locally.
+
+* Environment variable 'eeHostEnable' indicates if the experience engine instance is used by the node layer or not.  Set this flag to true to enable the experience engine support.
 
 * Hotloading is enabled. If you need to connect to your server from inside a VM (such as when testing with IE or Edge) or from any device other than your laptop, you will need to disable hotloading with our current configuration or Node will refuse the connection since it didn't originate from 127.0.0.1/localhost. (Hotloading a.k.a. Hot Module Replacement / HMR is a feature of webpack that watches for changes on your disk and updates the code in the browser without you needing to refresh the page.)
 
