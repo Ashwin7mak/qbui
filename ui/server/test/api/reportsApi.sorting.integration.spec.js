@@ -283,7 +283,7 @@
                 var result = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 400, 'Unexpected status code.');
                 assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                assert.strictEqual(result[0].message, 'The field id is not valid.',
+                assert.strictEqual(result[0].message, 'The field as specified 10 cannot be resolved by either name or field ID.',
                     'Unexpected error message returned');
                 done();
             });
@@ -320,9 +320,9 @@
         });
 
         /**
-         * Negative Test to validate 400 error when calling the Records API endpoint with invalid sortList param
+         * Test to validate OK when calling the Records API endpoint with invalid sortList param
          */
-        it('Records API - Should return 400 error when calling records API endpoint with an invalid sortList param', function(done) {
+        it('Records API - Should return OK when calling records API endpoint with an invalid sortList param', function(done) {
 
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
@@ -332,10 +332,10 @@
             // Query a records API endpoint with invalid sortList FID
             request(recordBase.apiBase.createRequestObject(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList), function(error, response) {
                 var requestResult = JSON.parse(response.body);
-                assert.strictEqual(response.statusCode, 400, 'Unexpected status code returned');
-                assert.strictEqual(JSON.parse(requestResult.body)[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                assert.strictEqual(JSON.parse(requestResult.body)[0].message.replace(/[0-9]/g, ''), 'The field as specified - cannot be resolved by either name or field ID',
-                    'Unexpected error message returned');
+                assert.strictEqual(response.statusCode, 200, 'Unexpected status code returned');
+                // assert.strictEqual(JSON.parse(requestResult.body)[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
+                // assert.strictEqual(JSON.parse(requestResult.body)[0].message.replace(/[0-9]/g, ''), 'The field as specified - cannot be resolved by either name or field ID',
+                //     'Unexpected error message returned');
                 done();
             });
         });
