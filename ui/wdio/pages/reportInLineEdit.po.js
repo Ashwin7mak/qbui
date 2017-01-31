@@ -5,7 +5,6 @@
  */
 (function() {
     'use strict';
-    // var reportContent = require('./reportContent.po');
     var reportContent = require('./reportContent.po');
     var e2ePageBase = require('./e2ePageBase.po');
     var assert = require('assert');
