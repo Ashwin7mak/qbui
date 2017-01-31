@@ -125,9 +125,7 @@ export let Nav = React.createClass({
 
     aReportIsSelected() {
         let app = this.getSelectedApp();
-        //let reportData = this.state.reportData;
         let reportData = this.getReportsData();
-
         return (app && reportData && reportData.rptId && reportData.data && reportData.data.name);
     },
 

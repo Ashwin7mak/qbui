@@ -19,7 +19,7 @@ import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
 import {connect} from 'react-redux';
-import {loadDynamicReport} from '../../actions/recordActions';
+import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
