@@ -393,7 +393,7 @@ class ReportUtils {
 
     static areAllRowsSelected(transformedRows, selectedRows = []) {
         if (transformedRows[0] && transformedRows[0].group) {
-            let errorMessage = 'Transform rows to a flat array before passing determining if all rows are selected.';
+            let errorMessage = 'Transform rows to a flat array before determining if all rows are selected.';
             logger.error(errorMessage);
             throw new Error(errorMessage);
         }

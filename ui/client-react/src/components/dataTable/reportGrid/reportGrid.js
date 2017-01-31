@@ -161,18 +161,10 @@ const ReportGrid = React.createClass({
      * select all grid rows
      */
     selectAllRows() {
-        let selected = []; // array of record ids to select
-        if (this.props.records[0] && this.props.records[0].group) {
-            this.transformRecords().forEach(record => {
-                if (!record.isSubHeader) {
-                    selected.push(record.id);
-                }
-            });
-        } else {
-            this.props.records.forEach(record => {
-                selected.push(record[this.props.primaryKeyName].value);
-            });
-        }
+        // Transform the records first so that subHeaders (grouped records) can be handled appropriately
+        let selected = this.transformRecords().filter(record => !record.isSubHeader).map(record => {
+            return record.id;
+        });
 
         this.props.selectRows(selected);
     },

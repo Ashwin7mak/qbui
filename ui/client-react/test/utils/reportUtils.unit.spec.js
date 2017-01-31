@@ -512,7 +512,7 @@ describe('ReportUtils', () => {
         it('throws an error if non-transformed (grouped) are passed in', () => {
             let testRows = [{id: 1, name: 'test group', group: ['row1', 'row2']}];
 
-            expect(() => {ReportUtils.areAllRowsSelected(testRows);}).toThrow(new Error('Transform rows to a flat array before passing determining if all rows are selected.'));
+            expect(() => {ReportUtils.areAllRowsSelected(testRows);}).toThrow(new Error('Transform rows to a flat array before determining if all rows are selected.'));
         });
 
         it('returns true if all rows are selected', () => {
