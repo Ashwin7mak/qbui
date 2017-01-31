@@ -11,7 +11,6 @@ let NavStore = Fluxxor.createStore({
 
     initialize() {
         this.state = {
-            appsListOpen: false,
             searchBarOpen: false,
             showTopNav: true,
             searching:false,
@@ -20,7 +19,6 @@ let NavStore = Fluxxor.createStore({
             topTitle: null,
             scrollingReport: false,
             filterReportsName: '',
-            errorPopupHidden: true,
             locale: null,
             openCount: 0
         };
@@ -29,7 +27,6 @@ let NavStore = Fluxxor.createStore({
 
         this.bindActions(
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
-            actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
             actions.CHANGE_LOCALE, this.onChangeLocale,
@@ -37,9 +34,7 @@ let NavStore = Fluxxor.createStore({
             actions.HIDE_TOP_NAV, this.onHideTopNav,
             actions.SET_TOP_TITLE, this.onSetTopTitle,
             actions.SCROLLING_REPORT, this.onScrollingReport,
-            actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName,
-            actions.SHOW_ERROR_MSG_DIALOG, this.onShowErrorMsgDialog,
-            actions.HIDE_ERROR_MSG_DIALOG, this.onHideErrorMsgDialog
+            actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName
         );
     },
 
@@ -86,20 +81,6 @@ let NavStore = Fluxxor.createStore({
         this.state.filterReportsName = name;
         this.emit('change');
     },
-
-    /*
-     * toggle apps list
-     * @param show force shown/hidden
-     */
-    onToggleAppsList(show) {
-        if (show === false || show === true) {
-            this.state.appsListOpen = show;
-        } else {
-            this.state.appsListOpen = !this.state.appsListOpen;
-        }
-        this.emit('change');
-    },
-
     onScrollingReport(scrolling) {
         this.state.scrollingReport = scrolling;
         this.emit('change');
@@ -112,15 +93,7 @@ let NavStore = Fluxxor.createStore({
     setLocaleBundle() {
         this.state.locale = Locale.getLocale();
         this.state.i18n = Locale.getI18nBundle();
-    },
-    onShowErrorMsgDialog() {
-        this.state.errorPopupHidden = false;
-        this.emit('change');
-    },
-    onHideErrorMsgDialog() {
-        this.state.errorPopupHidden = true;
-        this.emit('change');
-    },
+    }
 });
 
 export default NavStore;

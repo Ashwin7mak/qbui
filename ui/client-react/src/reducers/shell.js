@@ -3,10 +3,14 @@ import * as types from '../actions/types';
 const shell = (
     state = {
         //  default states
+        appsListOpen: false,
+        errorPopupHidden: true,
+        isRowPopUpMenuOpen: false,
+        leftNavExpanded: true,
+        leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
-        leftNavExpanded: true,
-        leftNavVisible: false
+        openCount: 0
     },
     action) => {
 
@@ -36,6 +40,32 @@ const shell = (
         return {
             ...state,
             leftNavVisible: (typeof action.navState === "boolean" ? action.navState : !state.leftNavVisible)
+        };
+    case types.TOGGLE_ROW_POP_UP_MENU:
+        let openCount = state.openCount;
+        if (typeof action.toggleState === "boolean") {
+            openCount = action.toggleState ? ++openCount : --openCount;
+        }
+        openCount = openCount < 0 ? 0 : openCount; //openCount shouldnt go below 0
+        return {
+            ...state,
+            openCount: openCount,
+            isRowPopUpMenuOpen: (openCount > 0)
+        };
+    case types.TOGGLE_APPS_LIST:
+        return {
+            ...state,
+            appsListOpen: (typeof action.toggleState === "boolean" ? action.toggleState : !state.appsListOpen)
+        };
+    case types.SHOW_ERROR_MSG_DIALOG:
+        return {
+            ...state,
+            errorPopupHidden: false
+        };
+    case types.HIDE_ERROR_MSG_DIALOG:
+        return {
+            ...state,
+            errorPopupHidden: true
         };
     default:
         // return existing state by default in redux
