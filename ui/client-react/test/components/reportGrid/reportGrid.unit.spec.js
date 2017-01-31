@@ -37,6 +37,13 @@ const expectedFieldChangeResult = {
 const testRecords = [
     {'Record ID#': {value: testRecordId}}
 ];
+const testGroupedRecords = [
+    {
+        id: 'groupId',
+        group: 'test group',
+        children: testRecords
+    }
+];
 
 
 let component;
@@ -83,6 +90,17 @@ describe('ReportGrid', () => {
 
             expect(actions.selectRows).toHaveBeenCalledWith([testRecordId]);
         });
+
+        it('ignores group headers when selecting rows', () => {
+            spyOn(actions, 'selectRows');
+            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testGroupedRecords}/>);
+            instance = component.instance();
+
+            instance.selectAllRows();
+
+            expect(actions.selectRows).toHaveBeenCalledWith([testRecordId]);
+            expect(actions.selectRows).not.toHaveBeenCalledWith([testGroupedRecords[0].id]);
+        });
     });
 
     describe('deselectAllRows', () => {
@@ -110,8 +128,33 @@ describe('ReportGrid', () => {
             expect(instance.deselectAllRows).not.toHaveBeenCalled();
         });
 
+        it('calls selectAllRows if not all grouped rows are selected', () => {
+            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testGroupedRecords} selectedRows={[]}/>);
+            instance = component.instance();
+            spyOn(instance, 'selectAllRows');
+            spyOn(instance, 'deselectAllRows');
+
+            instance.toggleSelectAllRows();
+
+            expect(instance.selectAllRows).toHaveBeenCalled();
+            expect(instance.deselectAllRows).not.toHaveBeenCalled();
+        });
+
         it('calls deselectAllRows if all rows are currently selected', () => {
             component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords} selectedRows={[testRecordId]}/>);
+            instance = component.instance();
+            spyOn(instance, 'selectAllRows');
+            spyOn(instance, 'deselectAllRows');
+
+            instance.toggleSelectAllRows();
+
+            expect(instance.deselectAllRows).toHaveBeenCalled();
+            expect(instance.selectAllRows).not.toHaveBeenCalled();
+        });
+
+
+        it('calls deselectAllRows if all grouped rows are currently selected', () => {
+            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testGroupedRecords} selectedRows={[testRecordId]}/>);
             instance = component.instance();
             spyOn(instance, 'selectAllRows');
             spyOn(instance, 'deselectAllRows');
