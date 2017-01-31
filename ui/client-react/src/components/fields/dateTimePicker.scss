@@ -333,10 +333,10 @@
     }
 }
 
-.qbRow.editing  {
+.qbRow.editing {
 
     /* for all columns but the last, move the arrow datepicker towards the left side */
-    >td:not(:last-child) {
+    > td:not(:last-child) {
         .dateFormat, .dateTimeFormat {
             .bootstrap-datetimepicker-widget {
                 &.bottom::before {
@@ -352,7 +352,7 @@
     }
 
     /* for last column, allow overflow with left cells to prevent clipping on right */
-    >td:last-child .dateCell.cellEdit {
+    > td:last-child .dateCell.cellEdit {
 
         * > .bootstrap-datetimepicker-widget {
             right: -4px !important;
