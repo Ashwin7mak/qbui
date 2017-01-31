@@ -181,7 +181,7 @@ describe('QbGrid', () => {
 
     describe('getCheckboxHeader', () => {
         it('has a checked checkbox when all rows are selected', () => {
-            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} />);
+            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} areAllRowsSelected={true} />);
             instance = component.instance();
 
             let headerComponent = instance.getCheckboxHeader();
@@ -190,25 +190,7 @@ describe('QbGrid', () => {
         });
 
         it('has an unchecked checkbox when there are unselected rows', () => {
-            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={[]} />);
-            instance = component.instance();
-
-            let headerComponent = instance.getCheckboxHeader();
-
-            expect(shallow(headerComponent).find('input')).not.toBeChecked();
-        });
-
-        it('has a checked checkbox when all grouped rows are selected', () => {
-            component = shallow(<QbGrid {...requiredProps} rows={testGroupedRows} selectedRows={rowIds} />);
-            instance = component.instance();
-
-            let headerComponent = instance.getCheckboxHeader();
-
-            expect(shallow(headerComponent).find('input')).toBeChecked();
-        });
-
-        it('has an unchecked checkbox when there are unselected group rows', () => {
-            component = shallow(<QbGrid {...requiredProps} rows={testGroupedRows} selectedRows={[]} />);
+            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={[]} areAllRowsSelected={false} />);
             instance = component.instance();
 
             let headerComponent = instance.getCheckboxHeader();

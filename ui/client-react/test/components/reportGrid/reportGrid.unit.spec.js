@@ -287,6 +287,7 @@ describe('ReportGrid', () => {
         expect(qbGrid).toHaveProp('isInlineEditOpen', isInlineEditOpen);
         expect(qbGrid).toHaveProp('appUsers', testAppUsers);
         expect(qbGrid).toHaveProp('selectedRows', selectedRows);
+        expect(qbGrid).toHaveProp('areAllRowsSelected', true);
         expect(qbGrid).toHaveProp('onClickToggleSelectedRow', actions.onClickToggle);
         expect(qbGrid).toHaveProp('onClickEditIcon', actions.openRecordForEdit);
         expect(qbGrid).toHaveProp('onClickDeleteIcon', instance.onClickDelete);

@@ -3,7 +3,10 @@
  */
 
 import constants from '../../../common/src/constants';
+import Logger from '../utils/logger';
 import _ from 'lodash';
+
+let logger = new Logger();
 
 const listDelimiter = constants.REQUEST_PARAMETER.LIST_DELIMITER;
 const groupDelimiter = constants.REQUEST_PARAMETER.GROUP_DELIMITER;
@@ -386,6 +389,18 @@ class ReportUtils {
             }
             return false;
         }
+    }
+
+    static areAllRowsSelected(transformedRows, selectedRows = []) {
+        if (transformedRows[0] && transformedRows[0].group) {
+            let errorMessage = 'Transform rows to a flat array before passing determining if all rows are selected.';
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        // Check if there is grouping so we can transform the rows. If there is not grouping, we can optimize by skipping
+        // the transformation step
+        return selectedRows.length === transformedRows.filter(row => !row.isSubHeader).length;
     }
 }
 

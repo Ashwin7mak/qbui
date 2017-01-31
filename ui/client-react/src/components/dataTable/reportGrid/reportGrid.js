@@ -3,6 +3,7 @@ import QbGrid from '../qbGrid/qbGrid';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
+import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
 
 import _ from 'lodash';
@@ -181,14 +182,7 @@ const ReportGrid = React.createClass({
     },
 
     toggleSelectAllRows() {
-        let allSelected;
-        if (this.props.records[0] && this.props.records[0].group) {
-            allSelected = this.props.selectedRows.length === this.transformRecords().filter(record => !record.isSubHeader).length;
-        } else {
-            allSelected = this.props.selectedRows.length === this.props.records.length;
-        }
-
-        if (allSelected) {
+        if (ReportUtils.areAllRowsSelected(this.transformRecords(), this.props.selectedRows)) {
             this.deselectAllRows();
         } else {
             this.selectAllRows();
@@ -227,11 +221,12 @@ const ReportGrid = React.createClass({
         }
 
         let editingRecordId = this.getCurrentlyEditingRecordId();
+        let transformedRecords = this.transformRecords(editingRecordId);
 
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
-            rows={this.transformRecords(editingRecordId)}
+            rows={transformedRecords}
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
@@ -241,6 +236,7 @@ const ReportGrid = React.createClass({
             isInlineEditOpen={this.props.isInlineEditOpen}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
+            areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
             onClickToggleSelectedRow={this.props.toggleSelectedRow}
             onClickEditIcon={this.props.openRecordForEdit}
             onClickDeleteIcon={this.onClickDelete}
