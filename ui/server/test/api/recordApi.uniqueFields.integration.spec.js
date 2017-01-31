@@ -9,6 +9,7 @@
     var apiResponseFormatter = require('../../src/api/quickbase/formatter/apiResponseFormatter');
     var httpStatusCodeConstants = require('../../src/constants/httpStatusCodes');
     var _ = require('lodash');
+    var constants = require('../../../common/src/constants');
 
     describe('API - Unique Fields', function() {
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
@@ -29,7 +30,7 @@
                         {
                             name: uniqueTextFieldName,
                             unique: true,
-                            datatypeAttributes: {type: 'TEXT'},
+                            datatypeAttributes: {type: constants.TEXT},
                             type: 'SCALAR',
                             required: false
                         }
@@ -47,7 +48,7 @@
                         {
                             name: nonUniqueTextFieldName,
                             unique: false,
-                            datatypeAttributes: {type: 'TEXT'},
+                            datatypeAttributes: {type: constants.TEXT},
                             type: 'SCALAR',
                             required: false
                         }
@@ -65,7 +66,7 @@
                         {
                             name: uniqueNumericFieldName,
                             unique: true,
-                            datatypeAttributes: {type: 'NUMERIC'},
+                            datatypeAttributes: {type: constants.NUMERIC},
                             type: 'SCALAR',
                             required: false
                         }
