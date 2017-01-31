@@ -50,6 +50,10 @@ const QbGrid = React.createClass({
         selectedRows: PropTypes.array,
 
         /**
+         * Indicates if all the rows currently displayed in the grid are selected */
+        areAllRowsSelected: PropTypes.bool,
+
+        /**
          * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
         onClickToggleSelectedRow: PropTypes.func,
 
@@ -249,9 +253,6 @@ const QbGrid = React.createClass({
      * @returns {React}
      */
     getCheckboxHeader() {
-        let {selectedRows, rows} = this.props;
-        const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
-
         let collapseAllIcon = null;
         if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
             let iconType = (this.collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
@@ -268,7 +269,7 @@ const QbGrid = React.createClass({
                 <input
                     type="checkbox"
                     className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
-                    checked={allSelected}
+                    checked={this.props.areAllRowsSelected}
                     onChange={this.props.onClickToggleSelectAllRows}
                 />
                 {collapseAllIcon}
