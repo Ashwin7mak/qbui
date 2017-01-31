@@ -206,6 +206,7 @@ export default {
         },
         report : {
             blank : "leer",
+            inlineEdit: "Bearbeiten record inline",
             facets :{
                 noFacets :"Nein werte",
                 seeMore : "weitere...",
@@ -413,6 +414,7 @@ export default {
             api: {
                 notUniqueSingleField: "Füllen Sie einen anderen Wert aus. Ein anderer {recordName} ist bereits mit diesem {fieldName}.",
                 notUniqueMultiChoice: "Wählen Sie einen anderen {fieldName}. Ein anderer {recordName} verwendet diesen bereits.",
+                invalidRecord: "Ungültiger Datentyp. Geben Sie einen anderen Wert ein."
             },
             unknown: "Ungültige unbekannte Art. Befund: ",
             required: "Füllen Sie das {fieldName}",

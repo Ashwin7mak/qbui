@@ -4,9 +4,7 @@ var ApiResponseFormatter = require('../../../../src/api/quickbase/formatter/apiR
 var ApiResponseErrors = require('../../../../src/constants/apiResponseErrors');
 var ErrorCodes = require('../../../../../common/src/dataEntryErrorCodes');
 var HttpStatusCodes = require('../../../../src/constants/httpStatusCodes');
-
-const i18NUniqueValidationErrorKey = 'invalidMsg.api.notUniqueSingleField';
-const i18NUniqueValidationErrorKeyMulitChoice = 'invalidMsg.api.notUniqueMultiChoice';
+var Helpers = require('../../../../src/api/quickbase/formatter/apiResponseFormatters/apiResponseFormatterHelpers');
 
 describe('ApiResponseFormatter', () => {
     describe('formatResponseError', () => {
@@ -18,7 +16,7 @@ describe('ApiResponseFormatter', () => {
                 expectedResult: {message: 'ok response', statusCode: HttpStatusCodes.OK}
             },
             {
-                description: 'returns and rejects the payload if the statusCode is 300 or above and there are no unique validation errors',
+                description: 'returns and rejects the payload if the statusCode is 400 or above and there are no unique validation errors',
                 payload: {error: 'some error', statusCode: HttpStatusCodes.INTERNAL_SERVER_ERROR},
                 reject: true,
                 expectedResult: {error: 'some error', statusCode: HttpStatusCodes.INTERNAL_SERVER_ERROR}
@@ -68,13 +66,13 @@ describe('ApiResponseFormatter', () => {
                             {
                                 id: 3, value: '3',
                                 def: {fieldDef: {unique: true}, id: 3, fieldName: 'unique', value: '3'},
-                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique', recordName: 'record'}, messageId: i18NUniqueValidationErrorKey},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKey},
                                 isInvalid: true
                             },
                             {
                                 id: 4, value: '4',
                                 def: {fieldDef: {unique: true}, id: 4, fieldName: 'another unique field', value: '4'},
-                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'another unique field', recordName: 'record'}, messageId: i18NUniqueValidationErrorKey},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'another unique field', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKey},
                                 isInvalid: true
                             },
                         ],
@@ -102,13 +100,13 @@ describe('ApiResponseFormatter', () => {
                             {
                                 id: 3, value: '3',
                                 def: {fieldDef: {unique: true}, id: 3, fieldName: 'unique', value: '3'},
-                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique', recordName: 'record'}, messageId: i18NUniqueValidationErrorKey},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKey},
                                 isInvalid: true
                             },
                             {
                                 id: 4, value: '4',
                                 def: {fieldDef: {unique: true}, id: 4, fieldName: 'another unique field', value: '4'},
-                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'another unique field', recordName: 'record'}, messageId: i18NUniqueValidationErrorKey},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'another unique field', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKey},
                                 isInvalid: true
                             },
                         ],
@@ -133,7 +131,7 @@ describe('ApiResponseFormatter', () => {
                             {
                                 id: 4, value: '4',
                                 def: {fieldDef: {unique: true, multipleChoice: {choices: ['a', 'b']}}, id: 4, fieldName: 'multichoice field', value: '4'},
-                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'multichoice field', recordName: 'record'}, messageId: i18NUniqueValidationErrorKeyMulitChoice},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'multichoice field', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKeyMultiChoice},
                                 isInvalid: true
                             },
                         ],
@@ -159,7 +157,69 @@ describe('ApiResponseFormatter', () => {
                             {
                                 id: 3, value: '3',
                                 def: {fieldDef: {unique: true}, id: 3, fieldName: 'unique', value: '3'},
-                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique', recordName: 'record'}, messageId: i18NUniqueValidationErrorKey},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKey},
+                                isInvalid: true
+                            }
+                        ],
+                        message: 'validation error',
+                        status: HttpStatusCodes.UNPROCESSABLE_ENTITY
+                    }
+                }
+            },
+            {
+                description: 'catches an InvalidRecord error but will not return any validation errors if there are no fields in the payload (passes through the payload)',
+                payload: {body: [{code: ApiResponseErrors.INVALID_RECORD}], statusCode: HttpStatusCodes.UNPROCESSABLE_ENTITY},
+                reject: true,
+                expectedResult: {body: [{code: ApiResponseErrors.INVALID_RECORD}], statusCode: HttpStatusCodes.UNPROCESSABLE_ENTITY}
+            },
+            {
+                description: 'catches an InvalidRecord error and returns the validation error for the invalid field',
+                payload: {
+                    body: [{code: ApiResponseErrors.INVALID_RECORD, fieldId: 1}],
+                    statusCode: HttpStatusCodes.INTERNAL_SERVER_ERROR,
+                    request: {body: [{id: 1, fieldName: 'invalid field', value: 3}, {id: 2, fieldName: 'valid field'}]}
+                },
+                reject: true,
+                expectedResult: {
+                    response: {
+                        errors: [
+                            {
+                                id: 1, value: 3,
+                                def: {id: 1, fieldName: 'invalid field', value: 3},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'invalid field'}, messageId: Helpers.i18NInvalidRecordKey},
+                                isInvalid: true
+                            },
+                        ],
+                        message: 'validation error',
+                        status: HttpStatusCodes.UNPROCESSABLE_ENTITY
+                    }
+                }
+            },
+            {
+                description: 'catches both NotUniqueKeyFieldValue and InvalidRecord errors if there are multiple problems',
+                payload: {
+                    body: [{code: ApiResponseErrors.NOT_UNIQUE_VALUE}, {code: ApiResponseErrors.INVALID_RECORD, fieldId: 2}],
+                    statusCode: HttpStatusCodes.UNPROCESSABLE_ENTITY,
+                    request: {body: [
+                        {id: 1, fieldName: 'valid', value: '1', fieldDef: {required: true}},
+                        {id: 2, fieldName: 'invalid record', value: '2', fieldDef: {unique: false}},
+                        {id: 3, fieldName: 'unique error', value: '3', fieldDef: {unique: true}},
+                    ]}
+                },
+                reject: true,
+                expectedResult: {
+                    response: {
+                        errors: [
+                            {
+                                id: 3, value: '3',
+                                def: {fieldDef: {unique: true}, id: 3, fieldName: 'unique error', value: '3'},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'unique error', recordName: 'record'}, messageId: Helpers.i18NUniqueValidationErrorKey},
+                                isInvalid: true
+                            },
+                            {
+                                id: 2, value: '2',
+                                def: {fieldDef: {unique: false}, id: 2, fieldName: 'invalid record', value: '2'},
+                                error: {code: ErrorCodes.INVALID_ENTRY, data: {fieldName: 'invalid record'}, messageId: Helpers.i18NInvalidRecordKey},
                                 isInvalid: true
                             }
                         ],

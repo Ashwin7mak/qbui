@@ -64,6 +64,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         };
         this.saving = false;
         this.hasAttemptedSave = false;
+        this.fieldToStartEditing = null;
     },
 
     /**
@@ -83,6 +84,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.currentEditingTableId = payload.tblId;
             this.recordChanges =  _.cloneDeep(payload.changes);
             this.originalRecord = _.cloneDeep(payload.origRec);
+            // fieldToStartEditing is an optional parameter that will set that field to have focus when the record goes into editing mode
+            this.fieldToStartEditing = payload.fieldToStartEditing;
         } else {
             this.currentEditingRecordId = undefined;
             this.currentEditingAppId = undefined;
@@ -532,6 +535,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             dtsErrorModalTID: this.dtsErrorModalTID,
             saving: this.saving,
             hasAttemptedSave: this.hasAttemptedSave,
+            fieldToStartEditing: this.fieldToStartEditing
         };
     },
 });

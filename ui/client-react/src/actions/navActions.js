@@ -17,10 +17,6 @@ let navActions = {
     resetRowMenu() {
         this.dispatch(actions.RESET_ROW_MENU);
     },
-
-    toggleAppsList(open) {
-        this.dispatch(actions.TOGGLE_APPS_LIST, open);
-    },
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },
@@ -52,16 +48,7 @@ let navActions = {
     },
     scrollingReport(isScrolling = true) {
         this.dispatch(actions.SCROLLING_REPORT, isScrolling);
-    },
-    /**
-     * show error message dialog
-     */
-    showErrorMsgDialog() {
-        this.dispatch(actions.SHOW_ERROR_MSG_DIALOG);
-    },
-    hideErrorMsgDialog() {
-        this.dispatch(actions.HIDE_ERROR_MSG_DIALOG);
-    },
+    }
 };
 
 export default navActions;

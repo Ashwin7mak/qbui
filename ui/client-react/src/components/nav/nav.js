@@ -41,6 +41,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
+const OPEN_APPSLIST = true;
 
 export let Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', /*'ReportDataStore',*/ 'RecordPendingEditsStore', 'FieldsStore')],
@@ -146,12 +147,10 @@ export let Nav = React.createClass({
      *  if left nav is collapsed, open the apps list and dispatch event to open nav
      */
     toggleAppsList(open) {
-        const flux = this.getFlux();
-
         if (this.props.qbui.shell.leftNavExpanded) {
-            flux.actions.toggleAppsList(open);
+            this.props.dispatch(ShellActions.toggleAppsList(open));
         } else {
-            flux.actions.toggleAppsList(true);
+            this.props.dispatch(ShellActions.toggleAppsList(OPEN_APPSLIST));
             this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
         }
     },
@@ -225,6 +224,12 @@ export let Nav = React.createClass({
 
         const flux = this.getFlux();
 
+        const selectedApp = this.getSelectedApp();
+        // TODO: don't use globals. Separate task exists to pass this info to components in a sane way.
+        if (_.get(selectedApp, 'relationships.length') > 0) {
+            window.relationships = selectedApp.relationships;
+        }
+
         let classes = "navShell";
         if (this.props.qbui.shell.leftNavVisible) {
             classes += " leftNavOpen";
@@ -284,7 +289,7 @@ export let Nav = React.createClass({
             <LeftNav
                 visible={this.props.qbui.shell.leftNavVisible}
                 expanded={this.props.qbui.shell.leftNavExpanded}
-                appsListOpen={this.state.nav.appsListOpen}
+                appsListOpen={this.props.qbui.shell.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
@@ -386,4 +391,3 @@ export let Nav = React.createClass({
 
 export let NavWithRouter = withRouter(Nav);
 export default NavWithRouter;
-
