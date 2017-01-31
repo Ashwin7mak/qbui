@@ -250,7 +250,7 @@ const QbGrid = React.createClass({
      */
     getCheckboxHeader() {
         let {selectedRows, rows} = this.props;
-        const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
+        const allSelected = (selectedRows && rows && selectedRows.length === rows.filter(row => !row.isSubHeader).length);
 
         let collapseAllIcon = null;
         if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {

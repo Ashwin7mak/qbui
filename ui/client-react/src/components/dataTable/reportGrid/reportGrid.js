@@ -161,9 +161,18 @@ const ReportGrid = React.createClass({
      */
     selectAllRows() {
         let selected = []; // array of record ids to select
-        this.props.records.forEach(record => {
-            selected.push(record[this.props.primaryKeyName].value);
-        });
+        if (this.props.records[0] && this.props.records[0].group) {
+            this.transformRecords().forEach(record => {
+                if (!record.isSubHeader) {
+                    selected.push(record.id);
+                }
+            });
+        } else {
+            this.props.records.forEach(record => {
+                selected.push(record[this.props.primaryKeyName].value);
+            });
+        }
+
         this.props.selectRows(selected);
     },
 
@@ -172,7 +181,12 @@ const ReportGrid = React.createClass({
     },
 
     toggleSelectAllRows() {
-        const allSelected = this.props.selectedRows.length === this.props.records.length;
+        let allSelected;
+        if (this.props.records[0] && this.props.records[0].group) {
+            allSelected = this.props.selectedRows.length === this.transformRecords().filter(record => !record.isSubHeader).length;
+        } else {
+            allSelected = this.props.selectedRows.length === this.props.records.length;
+        }
 
         if (allSelected) {
             this.deselectAllRows();
