@@ -1,4 +1,4 @@
-import reducer from '../../src/reducers/reports';
+import reducer from '../../src/reducers/report';
 import * as types from '../../src/actions/types';
 
 let actionObj = {

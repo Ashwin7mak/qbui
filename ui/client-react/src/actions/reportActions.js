@@ -67,7 +67,7 @@ export const loadReports = (context, appId, tblId) => {
                     reject();
                 });
             } else {
-                logger.error(`reportsActions.loadReports: Missing required input parameters.  context: ${context}, appId: ${appId}, tableId: ${tblId}`);
+                logger.error(`reportActions.loadReports: Missing required input parameters.  context: ${context}, appId: ${appId}, tableId: ${tblId}`);
                 dispatch(event(null, types.LOAD_REPORTS_FAILED, 500));
                 reject();
             }

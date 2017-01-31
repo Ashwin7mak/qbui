@@ -1,4 +1,4 @@
-import {loadReports, __RewireAPI__ as ReportsActionsRewireAPI} from '../../src/actions/reportsActions';
+import {loadReports, __RewireAPI__ as ReportsActionsRewireAPI} from '../../src/actions/reportActions';
 import * as types from '../../src/actions/types';
 import {CONTEXT} from '../../src/actions/context';
 import reportsModel from '../../src/models/reportsModel';
