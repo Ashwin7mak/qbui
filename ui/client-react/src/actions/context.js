@@ -4,10 +4,8 @@
  */
 
 export const CONTEXT = {
-    REPORTS_LIST: {
-        NAV: 'NAV'
-    },
     REPORT: {
+        NAV: 'NAV',
         GRID: 'GRID',
         EMBEDDED: 'EMBEDDED'
     }

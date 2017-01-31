@@ -71,11 +71,11 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
                         dispatch(event(context, types.LOAD_REPORT_FAILED, reportResponseError));
                         reject();
                     }
-                ).catch(ex => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                    logger.logException(ex);
-                    reject();
-                });
+                );//.catch(ex => {
+                //    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                //    logger.logException(ex);
+                //    reject();
+                //});
             } else {
                 logger.error(`ReportAction.loadReport: Missing one or more required input parameters.  Context:${context}, AppId:${appId}, tableId:${tblId}, rptId:${rptId}`);
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
@@ -170,7 +170,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                                 resolve();
                             },
                             (reportResultsError) => {
-                                logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
+                                logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportActions.loadDynamicReport');
                                 dispatch(event(context, types.LOAD_REPORT_FAILED, reportResultsError));
                                 reject();
                             }
@@ -182,7 +182,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportActions.parseFacetExpression');
                         dispatch(event(context, types.LOAD_REPORT_FAILED, error));
                         reject();
                     }
@@ -192,7 +192,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                     reject();
                 });
             } else {
-                logger.error('reportDataActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                logger.error('reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
                 reject();
             }

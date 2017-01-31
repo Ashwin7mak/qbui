@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 
 let appId = 1;
 let tblId = 2;
-let context = CONTEXT.REPORTS_LIST.NAV;
+let context = CONTEXT.REPORT.NAV;
 
 // mock the Redux store when testing async action creators
 const middlewares = [thunk];

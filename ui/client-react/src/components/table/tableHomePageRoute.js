@@ -10,6 +10,8 @@ import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import * as TableActions from '../../actions/tableActions';
+import {CONTEXT} from '../../actions/context';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -36,19 +38,19 @@ export const TableHomePageRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
+        //flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
+        this.props.dispatch(TableActions.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows));
     },
     loadHomePageForParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
 
-        //  Always fetch page 1 as this is called only when loading the home page for the first
-        //  time.  Paging will always call report paging after initial load as the client will not
-        //  (and shouldnt) know that the report is default table report and not a saved report.
-        let offset = Constants.PAGE.DEFAULT_OFFSET;
-        let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
-
         if (appId && tblId) {
+            //  Always fetch page 1 as this is called only when loading the home page for the first
+            //  time.  Paging will always call report paging after initial load as the client will not
+            //  (and shouldnt) know that the report is default table report and not a saved report.
+            let offset = Constants.PAGE.DEFAULT_OFFSET;
+            let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
             this.loadTableHomePageReportFromParams(appId, tblId, offset, numRows);
         }
     },

@@ -35,24 +35,26 @@ const report = (state = [], action) => {
         return stateList;
     }
 
-    //  what report list action is being requested
+    //  what report action is being requested
     switch (action.type) {
-    case types.LOAD_REPORT: {
+    case types.LOAD_REPORT:
+    case types.LOAD_REPORTS: {
         const obj = {
             id: action.id,
             loading: true,
-            appId: action.context.appId,
-            tblId: action.context.tblId,
-            rptId: action.context.rptId
+            appId: action.content.appId,
+            tblId: action.content.tblId,
+            rptId: action.content.rptId
         };
         return newState(obj);
     }
-    case types.LOAD_REPORT_FAILED: {
+    case types.LOAD_REPORT_FAILED:
+    case types.LOAD_REPORTS_FAILED: {
         const obj = {
             id: action.id,
             loading: false,
             error: true,
-            errorDetails: action.context
+            errorDetails: action.content
         };
         return newState(obj);
     }
@@ -61,18 +63,29 @@ const report = (state = [], action) => {
             id: action.id,
             loading: false,
             error: false,
-            data: action.context,
+            data: action.content,
             //  needed??..these are on the data property
-            appId: action.context.appId,
-            tblId: action.context.tblId,
-            rptId: action.context.rptId,
-            pageOffset: action.context.pageOffset,
-            numRows: action.context.numRows,
-            searchStringForFiltering: action.context.searchStringForFiltering,
-            selections: action.context.selections || new FacetSelections(),
-            facetExpression: action.context.facetExpressoin || {}
+            appId: action.content.appId,
+            tblId: action.content.tblId,
+            rptId: action.content.rptId,
+            pageOffset: action.content.pageOffset,
+            numRows: action.content.numRows,
+            searchStringForFiltering: action.content.searchStringForFiltering,
+            selections: action.content.selections || new FacetSelections(),
+            facetExpression: action.content.facetExpression || {}
             // end ???
             // bah...lot of other stuff to figure out..
+        };
+        return newState(obj);
+    }
+    case types.LOAD_REPORTS_SUCCESS: {
+        const obj = {
+            id: action.id,
+            loading: false,
+            error: false,
+            appId: action.content.appId,
+            tableId: action.content.tblId,
+            list: action.content.reportsList
         };
         return newState(obj);
     }

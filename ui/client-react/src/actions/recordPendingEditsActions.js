@@ -16,7 +16,7 @@ let recordPendingEditsActions = {
     },
     /* cancel editing a record */
     recordPendingEditsCancel(appId, tblId, recId) {
-        this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
+        //this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
     },
     /* committing changes from editing a record */
     recordPendingEditsCommit(appId, tblId, recId) {

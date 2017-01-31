@@ -43,7 +43,7 @@ const OPEN_NAV = true;
 const CLOSE_NAV = false;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', /*'ReportDataStore',*/ 'RecordPendingEditsStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -55,7 +55,7 @@ export let Nav = React.createClass({
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
-            reportData: flux.store('ReportDataStore').getState(),
+            //reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
             reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
@@ -90,7 +90,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        this.props.dispatch(ReportsActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.state.apps.selectedAppId, tableId));
+        this.props.dispatch(ReportsActions.loadReports(CONTEXT.REPORT.NAV, this.state.apps.selectedAppId, tableId));
     },
 
     /**
@@ -124,7 +124,8 @@ export let Nav = React.createClass({
 
     aReportIsSelected() {
         let app = this.getSelectedApp();
-        let reportData = this.state.reportData;
+        //let reportData = this.state.reportData;
+        let reportData = this.getReportsData();
 
         return (app && reportData && reportData.rptId && reportData.data && reportData.data.name);
     },
@@ -134,7 +135,8 @@ export let Nav = React.createClass({
      */
     getSelectedReport() {
         if (this.aReportIsSelected()) {
-            return this.state.reportData.data;
+            //return this.state.reportData.data;
+            return this.getReportsData();
         }
         return null;
     },
@@ -197,6 +199,16 @@ export let Nav = React.createClass({
         return <InvisibleBackdrop show={showIt}/>;
     },
 
+    getReportsData() {
+        // could be rendering a trowser that displays the list of table reports or
+        // opening a specific report..
+        let report = _.find(this.props.qbui.report, function(rpt) {
+            return rpt.id === CONTEXT.REPORT.NAV;
+        });
+        //  make sure reportsData is an object if NAV context is not found
+        return report || {};
+    },
+
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -224,12 +236,7 @@ export let Nav = React.createClass({
             viewingRecordId = this.props.params.recordId;
         }
 
-        // pull the NAV context report from the list
-        let report = _.find(this.props.qbui.reports, function(rpt) {
-            return rpt.id === CONTEXT.REPORTS_LIST.NAV;
-        });
-        //  make sure reportsData is an object if NAV context is not found
-        let reportsData = report || {};
+        let reportsData = this.getReportsData();
 
         return (<div className={classes}>
             <NavPageTitle
@@ -255,7 +262,8 @@ export let Nav = React.createClass({
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable(reportsData.tableId)}
-                               reportData={this.state.reportData}
+                               //reportData={this.state.reportData}
+                               reportData={reportsData}
                                errorPopupHidden={this.state.nav.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
@@ -286,7 +294,7 @@ export let Nav = React.createClass({
                 <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        flux={flux}
+                        //flux={flux}
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
@@ -297,7 +305,8 @@ export let Nav = React.createClass({
                             apps: this.state.apps.apps,
                             selectedAppId: this.state.apps.selectedAppId,
                             appsLoading: this.state.apps.loading,
-                            reportData: this.state.reportData,
+                            //reportData: this.state.reportData,
+                            reportData: reportsData,
                             appUsers: this.state.apps.appUsers,
                             locale: this.state.nav.locale,
                             pendEdits:this.state.pendEdits,

@@ -43,7 +43,7 @@ export const loadReports = (context, appId, tblId) => {
             if (context && appId && tblId) {
                 logger.debug(`ReportsAction.loadReports: loading report list for appId: ${appId}, tableId: ${tblId}`);
 
-                dispatch(event(context, types.LOAD_REPORTS));
+                dispatch(event(context, types.LOAD_REPORTS, {appId, tblId}));
 
                 let reportService = new ReportService();
                 reportService.getReports(appId, tblId).then(
