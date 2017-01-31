@@ -1,5 +1,6 @@
 import ReportService from '../services/reportService';
 import ReportModel from '../models/reportModel';
+import ReportsModel from '../models/reportsModel';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 
@@ -36,6 +37,54 @@ function event(context, type, content) {
  * @param context - what context is requesting the report list (ie: nav)
  * @param appId - app id
  * @param tblId - table id
+ */
+export const loadReports = (context, appId, tblId) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (context && appId && tblId) {
+                logger.debug(`ReportsAction.loadReports: loading report list for appId: ${appId}, tableId: ${tblId}`);
+
+                dispatch(event(context, types.LOAD_REPORTS, {appId, tblId}));
+
+                let reportService = new ReportService();
+                reportService.getReports(appId, tblId).then(
+                    (response) => {
+                        logger.debug('ReportService getReports success');
+                        //  TODO change to a class like reportModel
+                        let model = ReportsModel.set(appId, tblId, response.data);
+                        dispatch(event(context, types.LOAD_REPORTS_SUCCESS, model));
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
+                        dispatch(event(context, types.LOAD_REPORTS_FAILED, error));
+                        reject();
+                    }
+                ).catch((ex) => {
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error(`reportsActions.loadReports: Missing required input parameters.  context: ${context}, appId: ${appId}, tableId: ${tblId}`);
+                dispatch(event(null, types.LOAD_REPORTS_FAILED, 500));
+                reject();
+            }
+        });
+    };
+};
+
+/**
+ * Retrieve a report for the given app/table.
+ *
+ * @param context - what context is requesting the report list (ie: nav)
+ * @param appId - app id
+ * @param tblId - table id
+ * @param rptId - report id
+ * @param format
+ * @param offset - row offset
+ * @param rows - number of rows to return for the report
  */
 export const loadReport = (context, appId, tblId, rptId, format, offset, rows) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action

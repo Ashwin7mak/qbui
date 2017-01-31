@@ -20,6 +20,9 @@ import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import {loadDynamicReport} from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
+
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -156,10 +159,14 @@ export const ReportToolsAndContent = React.createClass({
             queryParams[query.OFFSET_PARAM] = Constants.PAGE.DEFAULT_OFFSET;
             queryParams[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
 
-            this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+            //this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+            //    this.props.routeParams.tblId,
+            //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+            //    true, filter, queryParams);
+            this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-                true, filter, queryParams);
+                true, filter, queryParams));
         }
     },
 
@@ -291,7 +298,8 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
         queryParams[query.NUMROWS_PARAM] = numRows;
 
-        this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
+        //this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams));
     },
 
     /**

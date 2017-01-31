@@ -28,7 +28,7 @@ import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
-import * as ReportsActions from '../../actions/reportsActions';
+import * as ReportActions from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
 // This shared view with the server layer must be loaded as raw HTML because
@@ -90,7 +90,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        this.props.dispatch(ReportsActions.loadReports(CONTEXT.REPORT.NAV, this.state.apps.selectedAppId, tableId));
+        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV, this.state.apps.selectedAppId, tableId));
     },
 
     /**
@@ -199,9 +199,14 @@ export let Nav = React.createClass({
         return <InvisibleBackdrop show={showIt}/>;
     },
 
+    /**
+     *  Fetch the report/report list content.
+     *  TODO: working, but this still doesn't seem right...
+     */
     getReportsData() {
-        // could be rendering a trowser that displays the list of table reports or
-        // opening a specific report..
+        // Depending on whether the 'list of reports' or 'specific report' link
+        // is clicked in the nav, the content of report will be either a list of
+        // table reports or a specific report.
         let report = _.find(this.props.qbui.report, function(rpt) {
             return rpt.id === CONTEXT.REPORT.NAV;
         });

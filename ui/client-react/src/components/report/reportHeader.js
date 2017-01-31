@@ -13,6 +13,8 @@ import Header from '../header/smallHeader';
 import './reportHeader.scss';
 import {connect} from 'react-redux';
 import * as ShellActions from '../../actions/shellActions';
+import * as ReportActions from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -83,10 +85,14 @@ var ReportHeader = React.createClass({
         queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
         queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
-        this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+        //this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+        //    this.props.routeParams.tblId,
+        //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+        //    true, filter, queryParams);
+        this.props.dispatch(ReportActions.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            true, filter, queryParams);
+            true, filter, queryParams));
 
     },
 

@@ -19,6 +19,8 @@ import {connect} from 'react-redux';
 
 import Breakpoints from "../../../utils/breakpoints";
 
+import * as ReportActions from '../../../actions/reportActions';
+import {CONTEXT} from '../../../actions/context';
 
 import {
     CheckBoxCellRenderer,
@@ -245,7 +247,7 @@ export const AGGrid = React.createClass({
         if (alreadySorted) {
             return;
         }
-        let flux = this.getFlux();
+        //let flux = this.getFlux();
 
         let queryParams = {};
         // for on-the-fly sort selection, this selection will result in removal of old sort order
@@ -257,7 +259,9 @@ export const AGGrid = React.createClass({
         queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
         queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        this.props.dispatch(ReportActions.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
+
     },
     /**
      * On selection of group option from menu fire off the action to group the data
@@ -265,7 +269,7 @@ export const AGGrid = React.createClass({
      * @param asc
      */
     groupReport(column, asc) {
-        let flux = this.getFlux();
+        //let flux = this.getFlux();
 
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         let sortFid = column.id.toString();
@@ -282,7 +286,8 @@ export const AGGrid = React.createClass({
         queryParams[query.NUMROWS_PARAM] = numRows;
         queryParams[query.SORT_LIST_PARAM] = sortListParam;
 
-        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        this.props.dispatch(ReportActions.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
     },
 
     /**

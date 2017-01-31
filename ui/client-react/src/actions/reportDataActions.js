@@ -53,53 +53,53 @@ let reportDataActions = {
      * @param offset
      * @param rows
      */
-    loadReport(appId, tblId, rptId, format, offset, rows) {
-
-        let logger = new Logger();
-
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                logger.debug('Loading report for appId:' + appId + ', tableId:' + tblId + ', rptId:' + rptId);
-
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
-                let reportService = new ReportService();
-
-                let params = {};
-                params[query.OFFSET_PARAM] = offset;
-                params[query.NUMROWS_PARAM] = rows;
-
-                //  Fetch a report.  The response will include:
-                //    - report data/grouping data
-                //    - report meta data
-                //    - report fields
-                //    - report facets
-                //    - report count
-                //
-                reportService.getReportResults(appId, tblId, rptId, params, format).then(
-                    (reportResponse) => {
-                        let metaData = reportResponse.data ? reportResponse.data.metaData : null;
-                        let model = new ReportModel(appId, metaData, reportResponse.data, params);
-                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
-                        resolve();
-                    },
-                    (reportResponseError) => {
-                        logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, reportResponseError);
-                        reject();
-                    }
-                ).catch(ex => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                    logger.logException(ex);
-                    reject();
-                });
-            } else {
-                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
-                reject();
-            }
-        });
-    },
+    //loadReport(appId, tblId, rptId, format, offset, rows) {
+    //
+    //    let logger = new Logger();
+    //
+    //    //  promise is returned in support of unit testing only
+    //    return new Promise((resolve, reject) => {
+    //        if (appId && tblId && rptId) {
+    //            logger.debug('Loading report for appId:' + appId + ', tableId:' + tblId + ', rptId:' + rptId);
+    //
+    //            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+    //            let reportService = new ReportService();
+    //
+    //            let params = {};
+    //            params[query.OFFSET_PARAM] = offset;
+    //            params[query.NUMROWS_PARAM] = rows;
+    //
+    //            //  Fetch a report.  The response will include:
+    //            //    - report data/grouping data
+    //            //    - report meta data
+    //            //    - report fields
+    //            //    - report facets
+    //            //    - report count
+    //            //
+    //            reportService.getReportResults(appId, tblId, rptId, params, format).then(
+    //                (reportResponse) => {
+    //                    let metaData = reportResponse.data ? reportResponse.data.metaData : null;
+    //                    let model = new ReportModel(appId, metaData, reportResponse.data, params);
+    //                    this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
+    //                    resolve();
+    //                },
+    //                (reportResponseError) => {
+    //                    logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
+    //                    this.dispatch(actions.LOAD_REPORT_FAILED, reportResponseError);
+    //                    reject();
+    //                }
+    //            ).catch(ex => {
+    //                // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+    //                logger.logException(ex);
+    //                reject();
+    //            });
+    //        } else {
+    //            logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+    //            this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+    //            reject();
+    //        }
+    //    });
+    //},
 
     /* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
      * sort/grouping, query and column list settings.
