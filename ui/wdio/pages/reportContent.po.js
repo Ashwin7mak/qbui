@@ -6,7 +6,7 @@
 (function() {
     'use strict';
     // Import the base page object
-    var e2ePageBase = require('./e2ePageBase.po');
+    var e2ePageBase = requirePO('./e2ePageBase');
     var formsPO = requirePO('formsPage');
 
     var ReportContentPage = Object.create(e2ePageBase, {
