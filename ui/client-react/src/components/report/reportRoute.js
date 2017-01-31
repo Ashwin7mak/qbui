@@ -16,6 +16,8 @@ import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import {loadReport, loadDynamicReport} from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -33,7 +35,8 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
+        //flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
+        this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
     },
     /**
      * Load a report with query parameters.
@@ -43,8 +46,9 @@ const ReportRoute = React.createClass({
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
         // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
-        // tables with relationships
-        flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+        // TODO: tables with relationships
+        //flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, /*filter*/{}, queryParams));
     },
     loadReportFromParams(params) {
         let {appId, tblId, fieldWithParentId, masterRecordId} = params;
