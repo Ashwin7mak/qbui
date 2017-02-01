@@ -19,6 +19,7 @@ import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+import {openRecord} from '../../actions/recordActions';
 
 import './record.scss';
 
@@ -72,8 +73,10 @@ export const RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
-        const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
-        const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
+        const record = this.getRecordFromProps(this.props);
+        const showBack = !!(record && record.previousRecordId !== null);
+        const showNext = !!(record && record.nextRecordId !== null);
+
         const rptId = this.props.params ? this.props.params.rptId : null;
 
         const actions = [];
@@ -104,38 +107,72 @@ export const RecordRoute = React.createClass({
     },
 
     /**
-     * navigate back/forth to a new record
-     * @param recId
+     * do a depth first search of the grouped records array, adding records
+     * to arr so we can determine next/prev records
+     * TODO: this is duplicated in reportContent..should be refactored out
+     * TODY: into shared function
+     * @param arr
+     * @param groups
      */
-    navigateToRecord(appId, tblId, rptId, recId) {
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.router.push(link);
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
+
+    getRecordsArray() {
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
+        }
+        return recordsArray;
+    },
+
+    navigateToRecord(recId) {
+        if (recId) {
+            const {appId, tblId, rptId, data} = this.props.reportData;
+            const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+            if (key) {
+                let recordsArray = this.getRecordsArray();
+
+                //  fetch the index of the row in the recordsArray that is being opened
+                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+
+                this.props.openRecord(recId, nextRecordId, previousRecordId);
+
+                const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+                this.props.router.push(link);
+            }
+        }
     },
 
     /**
      * go back to the previous report record
      */
     previousRecord() {
-        const {appId, tblId, rptId, previousRecordId} = this.props.reportData;
-
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.showPreviousRecord(previousRecordId);
-
-        this.navigateToRecord(appId, tblId, rptId, previousRecordId);
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.previousRecordId);
     },
 
     /**
      * go forward to the next report record
      */
     nextRecord() {
-        const {appId, tblId, rptId, nextRecordId} = this.props.reportData;
-
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.showNextRecord(nextRecordId);
-
-        this.navigateToRecord(appId, tblId, rptId, nextRecordId);
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.nextRecordId);
     },
 
     getTitle() {
@@ -150,12 +187,13 @@ export const RecordRoute = React.createClass({
     getStageHeadline() {
         if (this.props.params) {
             const {appId, tblId, rptId} = this.props.params;
+            const record = this.getRecordFromProps(this.props);
 
             const tableLink = `/qbase/app/${appId}/table/${tblId}`;
 
             const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
-            const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
-            const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
+            const showBack = !!(this.props.reportData && record.previousRecordId !== null);
+            const showNext = !!(this.props.reportData && record.nextRecordId !== null);
 
             return (<div className="recordStageHeadline">
 
@@ -230,6 +268,11 @@ export const RecordRoute = React.createClass({
     getViewFormFromProps(props = this.props) {
         return props.forms && _.find(props.forms, form => form.id === "view");
     },
+
+    getRecordFromProps(props = this.props) {
+        return _.nth(props.record, 0) || {};
+    },
+
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
@@ -308,7 +351,8 @@ export const RecordRoute = React.createClass({
 // from the Redux state (the presentational component has no code dependency on Redux!)
 const mapStateToProps = (state) => {
     return {
-        forms: state.forms
+        forms: state.forms,
+        record: state.record
     };
 };
 
@@ -324,6 +368,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadForm: (appId, tblId, rptId, formType, recordId) => {
             dispatch(loadForm(appId, tblId, rptId, formType, recordId));
+        },
+        openRecord: (recId, nextId, prevId) => {
+            dispatch(openRecord(recId, nextId, prevId));
         }
     };
 };

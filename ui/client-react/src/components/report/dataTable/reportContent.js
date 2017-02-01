@@ -22,6 +22,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
+import {openRecord} from '../../../actions/recordActions';
 
 let logger = new Logger();
 
@@ -37,19 +38,54 @@ export const ReportContent = React.createClass({
         };
     },
 
-    // row was clicked once, navigate to record
-    openRow(data) {
-        const {appId, tblId, rptId} = this.props;
+    /**
+     * do a depth first search of the grouped records array, adding records
+     * to arr so we can determine next/prev records
+     * @param arr
+     * @param groups
+     */
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
 
-        // TODO:: Refactor once AgGrid is removed. Can assume recordId is an number or null. https://quickbase.atlassian.net/browse/MB-1920
-        var recId = data;
-        if (!_.isNumber(data)) {
-            recId = data[this.props.primaryKeyName].value;
+    // row was clicked in the report; navigate to record
+    openRow(data) {
+        const {appId, tblId, rptId} = this.props.reportData;
+        const key = this.props.primaryKeyName;
+
+        //  data is the row object...get the record id
+        let recId = data[key].value;
+
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
         }
 
+        //  fetch the index of the row in the recordsArray that is being opened
+        const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+
+        //  get the previous and next records id...these are used for navigation when viewing the record detail on the form
+        let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+        let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+
+
         // let flux know we've drilled-down into a record so we can navigate back and forth
-        let flux = this.getFlux();
-        flux.actions.openingReportRow(recId);
+        //let flux = this.getFlux();
+        //flux.actions.openingReportRow(recId);
+        this.props.dispatch(openRecord(recId, nextRecordId, previousRecordId));
 
         //create the link we want to send the user to and then send them on their way
         const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;

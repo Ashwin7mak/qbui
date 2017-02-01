@@ -13,6 +13,8 @@ import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
 
+import * as types from '../actions/types';
+
 let logger = new Logger();
 
 let PRE_REQ_DELAY_MS = 1;
@@ -462,6 +464,17 @@ let recordActions = {
             }
         });
     }
+};
+
+export const openRecord = (recId, nextRecordId, previousRecordId) => {
+    return {
+        type: types.OPEN_RECORD,
+        content: {
+            recId,
+            nextRecordId,
+            previousRecordId
+        }
+    };
 };
 
 export default recordActions;

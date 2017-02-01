@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 import shell from './shell';
 import forms from './forms';
+import record from './record';
 import report from './report';
 
 // combine individual reducers into a single root reducer (qbui)
@@ -9,6 +10,7 @@ import report from './report';
 export default combineReducers({
     shell,
     forms,
+    record,
     report
 });
 

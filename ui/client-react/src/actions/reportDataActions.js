@@ -219,23 +219,23 @@ let reportDataActions = {
      * navigate to previous record after opening record from report
      * @param recId
      */
-    showPreviousRecord(recId) {
-        this.dispatch(actions.SHOW_PREVIOUS_RECORD, {recId});
-    },
+    //showPreviousRecord(recId) {
+    //    this.dispatch(actions.SHOW_PREVIOUS_RECORD, {recId});
+    //},
     /**
      * navigate to next record after opening record from report
      * @param recId
      */
-    showNextRecord(recId) {
-        this.dispatch(actions.SHOW_NEXT_RECORD, {recId});
-    },
+    //showNextRecord(recId) {
+    //    this.dispatch(actions.SHOW_NEXT_RECORD, {recId});
+    //},
     /**
      * open record from report (i.e. drill-down)
      * @param recId
      */
-    openingReportRow(recId) {
-        this.dispatch(actions.OPEN_REPORT_RECORD, {recId});
-    },
+    //openingReportRow(recId) {
+    //    this.dispatch(actions.OPEN_REPORT_RECORD, {recId});
+    //},
     /**
      * navigate to previous record after opening record from report
      * @param recId
