@@ -283,7 +283,7 @@
                 var result = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 400, 'Unexpected status code.');
                 assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                assert.strictEqual(result[0].message, 'The field as specified 10 cannot be resolved by either name or field ID.',
+                assert.strictEqual(result[0].message, 'The field as specified 10 cannot be resolved by either name or field ID',
                     'Unexpected error message returned');
                 done();
             });
@@ -331,11 +331,7 @@
 
             // Query a records API endpoint with invalid sortList FID
             request(recordBase.apiBase.createRequestObject(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList), function(error, response) {
-                var requestResult = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 200, 'Unexpected status code returned');
-                // assert.strictEqual(JSON.parse(requestResult.body)[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                // assert.strictEqual(JSON.parse(requestResult.body)[0].message.replace(/[0-9]/g, ''), 'The field as specified - cannot be resolved by either name or field ID',
-                //     'Unexpected error message returned');
                 done();
             });
         });
