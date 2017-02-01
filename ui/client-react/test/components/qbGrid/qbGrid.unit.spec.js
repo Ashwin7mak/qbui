@@ -17,9 +17,10 @@ const testColumns = [
     new ColumnTransformer('Header 2', 2, 'header2class'),
     new ColumnTransformer('Header 3', 3, 'header3class')
 ];
+const rowIds = [1, 2];
 const testRows = [
     new RowTransformer(
-        1,
+        rowIds[0],
         [
             {id: 1, text: 'row-1-cell-1'},
             {id: 2, text: 'row-1-cell-2'},
@@ -30,7 +31,7 @@ const testRows = [
         }
     ),
     new RowTransformer(
-        2,
+        rowIds[1],
         [
             {id: 1, text: 'row-2-cell-1'},
             {id: 2, text: 'row-2-cell-2'},
@@ -52,6 +53,10 @@ const subHeaderRow = new RowTransformer(3, [], {
     subHeaderLabel: 'SubHeader 1',
     group: {}
 });
+const testGroupedRows = [
+    subHeaderRow,
+    ...testRows
+];
 
 const actions = {
     compareCellChanges() {},
@@ -179,6 +184,26 @@ describe('QbGrid', () => {
             instance.onClickAddNewRow();
 
             expect(actions.onClickAdd).toHaveBeenCalledWith(firstRow.id);
+        });
+    });
+
+    describe('getCheckboxHeader', () => {
+        it('has a checked checkbox when all rows are selected', () => {
+            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={rowIds} areAllRowsSelected={true} />);
+            instance = component.instance();
+
+            let headerComponent = instance.getCheckboxHeader();
+
+            expect(shallow(headerComponent).find('input')).toBeChecked();
+        });
+
+        it('has an unchecked checkbox when there are unselected rows', () => {
+            component = shallow(<QbGrid {...requiredProps} rows={testRows} selectedRows={[]} areAllRowsSelected={false} />);
+            instance = component.instance();
+
+            let headerComponent = instance.getCheckboxHeader();
+
+            expect(shallow(headerComponent).find('input')).not.toBeChecked();
         });
     });
 

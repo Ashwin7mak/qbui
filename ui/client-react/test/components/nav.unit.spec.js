@@ -3,6 +3,15 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+import * as ShellActions from '../../src/actions/shellActions';
+
+let smallBreakpoint = false;
+class BreakpointsMock {
+    static isSmallBreakpoint() {
+        return smallBreakpoint;
+    }
+}
+let dispatchMethod = () => { };
 
 var LeftNavMock = React.createClass({
     render() {
@@ -153,7 +162,7 @@ describe('Nav functions', () => {
                 return {touch: true};
             },
             render() {
-                return <Nav {...props} ref="nav" flux={flux}></Nav>;
+                return <Nav {...props} ref="nav" flux={flux} dispatch={dispatchMethod}></Nav>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -257,5 +266,23 @@ describe('Nav functions', () => {
         expect(loadingScreen).toBeNull();
         // Left Menu is an element that is not on the loading screen, but is on the final nav screen
         expect(leftMenu).not.toBeNull();
+    });
+
+    it('test onSelectItem method', () => {
+        smallBreakpoint = true;
+        NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
+
+        spyOn(ShellActions, "toggleLeftNav");
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
+        component.onSelectItem();
+        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
+        ShellActions.__ResetDependency__('Breakpoints');
+    });
+
+    it('test toggleNav method', () => {
+        spyOn(ShellActions, "toggleLeftNav");
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
+        component.toggleNav();
+        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
     });
 });
