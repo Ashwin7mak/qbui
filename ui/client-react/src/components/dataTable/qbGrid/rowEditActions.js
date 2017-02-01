@@ -82,12 +82,13 @@ export const RowEditActions = React.createClass({
 
         let addRecordClasses = ['addRecord'];
 
-        // Heads up: We currently disable the Save and add Button if the rowId is null (new record).
+        // Heads up: We currently disable the Save and add Button hence the 'true' as the first parameter.
         // This check should be removed once creating multiple records in the grid is working.
-        if (!isValid || saving || !rowId) {
+        if (true || !isValid || saving) {
             addRecordClasses.push('disabled');
 
-            let tooltipMessage = (rowId ? 'pageActions.saveAndAddRecord' : 'pageActions.saveAndAddRecordDisabled');
+            let tooltipMessage = 'pageActions.saveAndAddRecordDisabled'; // This can be removed once save and add is working again
+            // let tooltipMessage = 'pageActions.saveAndAddRecord'; // Currently disabled
 
             return (
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey={tooltipMessage}>
@@ -104,7 +105,7 @@ export const RowEditActions = React.createClass({
     },
 
     render() {
-        let {isValid, saving, idKey} = this.props;
+        let {idKey} = this.props;
 
         return (
             <div className="editTools" key={"crea-" + idKey}>
