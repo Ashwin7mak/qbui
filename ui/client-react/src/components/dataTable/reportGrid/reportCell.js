@@ -172,6 +172,7 @@ const ReportCell = React.createClass({
                         invalidResultData={this.props.invalidResultsData}
                         validateFieldValue={this.props.validateFieldValue}
                         indicateRequired={true}
+                        showScrollForMultiLine={true}
                     />
                 </div>
             );

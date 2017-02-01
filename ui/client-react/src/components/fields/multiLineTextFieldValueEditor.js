@@ -145,7 +145,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let style = !this.props.showScrollForMultiLine ? this.state.style : {};
+        let style = this.props.showScrollForMultiLine ? this.state.style : {};
         return <ClearableTextArea
                     ref="textarea"
                     {...this.props}
