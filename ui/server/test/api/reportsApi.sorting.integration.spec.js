@@ -283,7 +283,7 @@
                 var result = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 400, 'Unexpected status code.');
                 assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                assert.strictEqual(result[0].message, 'The field as specified 10 cannot be resolved by either name or field ID',
+                assert.strictEqual(result[0].code, 'BadRequestInvalidFieldReference',
                     'Unexpected error message returned');
                 done();
             });
@@ -322,8 +322,9 @@
         /**
          * Test to validate that when calling the Records API endpoint with invalid sortList param
          * it will ignore invalid sort ids and return records with status OK
+         * this is a intermittent step for referential integrity please refer to JIRA CORE-1067
          */
-        it('Records API - Should return OK when calling records API endpoint with an invalid sortList param', function(done) {
+        it('Records API - when calling records API endpoint with an invalid sortList param, the invalid sort ids will be ignored (intermittent step for referential integrity please refer to JIRA CORE-1067)', function(done) {
 
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
