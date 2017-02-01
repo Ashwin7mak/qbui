@@ -3,6 +3,7 @@ import QbGrid from '../qbGrid/qbGrid';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
+import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
 
 import _ from 'lodash';
@@ -160,10 +161,11 @@ const ReportGrid = React.createClass({
      * select all grid rows
      */
     selectAllRows() {
-        let selected = []; // array of record ids to select
-        this.props.records.forEach(record => {
-            selected.push(record[this.props.primaryKeyName].value);
+        // Transform the records first so that subHeaders (grouped records) can be handled appropriately
+        let selected = this.transformRecords().filter(record => !record.isSubHeader).map(record => {
+            return record.id;
         });
+
         this.props.selectRows(selected);
     },
 
@@ -172,9 +174,7 @@ const ReportGrid = React.createClass({
     },
 
     toggleSelectAllRows() {
-        const allSelected = this.props.selectedRows.length === this.props.records.length;
-
-        if (allSelected) {
+        if (ReportUtils.areAllRowsSelected(this.transformRecords(), this.props.selectedRows)) {
             this.deselectAllRows();
         } else {
             this.selectAllRows();
@@ -213,11 +213,12 @@ const ReportGrid = React.createClass({
         }
 
         let editingRecordId = this.getCurrentlyEditingRecordId();
+        let transformedRecords = this.transformRecords(editingRecordId);
 
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
-            rows={this.transformRecords(editingRecordId)}
+            rows={transformedRecords}
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
@@ -227,6 +228,7 @@ const ReportGrid = React.createClass({
             isInlineEditOpen={this.props.isInlineEditOpen}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
+            areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
             onClickToggleSelectedRow={this.props.toggleSelectedRow}
             onClickEditIcon={this.props.openRecordForEdit}
             onClickDeleteIcon={this.onClickDelete}
