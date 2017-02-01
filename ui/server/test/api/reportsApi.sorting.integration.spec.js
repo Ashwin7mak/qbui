@@ -320,7 +320,8 @@
         });
 
         /**
-         * Test to validate OK when calling the Records API endpoint with invalid sortList param
+         * Test to validate that when calling the Records API endpoint with invalid sortList param
+         * it will ignore invalid sort ids and return records with status OK
          */
         it('Records API - Should return OK when calling records API endpoint with an invalid sortList param', function(done) {
 
