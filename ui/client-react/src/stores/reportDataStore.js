@@ -622,9 +622,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.columnsHaveLocalization = false;
 
         this.bindActions(
-            actions.LOAD_REPORT, this.onLoadReport,
-            actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
-            actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
+            //actions.LOAD_REPORT, this.onLoadReport,
+            //actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
+            //actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
             //actions.LOAD_RECORDS, this.onLoadRecords,
             //actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             //actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
@@ -650,9 +650,9 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
             //actions.LOAD_REPORT_RECORDS_COUNT_FAILED, this.onLoadReportRecordsCountFailed,
 
-            actions.OPEN_REPORT_RECORD, this.onOpenRecord,
-            actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
-            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
+            //actions.OPEN_REPORT_RECORD, this.onOpenRecord,
+            //actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
+            //actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
 
             actions.EDIT_REPORT_RECORD, this.onEditRecord,
             actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
@@ -669,13 +669,13 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadReport(report) {
-        this.loading = true;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
-
-        this.reportModel.model.appId = report.appId;
-        this.reportModel.model.tblId = report.tblId;
-        this.reportModel.model.rptId = report.rptId;
+        //this.loading = true;
+        //this.editingIndex = undefined;
+        //this.editingId = undefined;
+        //
+        //this.reportModel.model.appId = report.appId;
+        //this.reportModel.model.tblId = report.tblId;
+        //this.reportModel.model.rptId = report.rptId;
 
         //this.reportModel.model.selections = report.filter ? report.filter.selections : '';
         //this.reportModel.model.facetExpression = report.filter ? report.filter.facet : '';
@@ -687,27 +687,27 @@ let ReportDataStore = Fluxxor.createStore({
         //this.searchStringForFiltering = '' ;
         //this.selections  = new FacetSelections();
 
-        //  TODO: NEED to figure this out..doesn't smell right..
-        this.selectedRows = [];
-
-        this.emit('change');
+        //  TODO: NEED to figure this out..doesn't seem right..
+        //this.selectedRows = [];
+        //
+        //this.emit('change');
     },
 
     onLoadReportFailed(error) {
-        this.loading = false;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
-
-        this.error = true;
-        this.errorDetails = error;
-
-        this.emit('change');
+        //this.loading = false;
+        //this.editingIndex = undefined;
+        //this.editingId = undefined;
+        //
+        //this.error = true;
+        //this.errorDetails = error;
+        //
+        //this.emit('change');
     },
 
     onLoadReportSuccess(model) {
-        this.loading = false;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
+        //this.loading = false;
+        //this.editingIndex = undefined;
+        //this.editingId = undefined;
 
         //  If the report id is not set, we'll set it now.
         //
@@ -715,21 +715,21 @@ let ReportDataStore = Fluxxor.createStore({
         //  home page report is getting loaded.  In this scenario, we do not know the
         //  report id at the time of the request (see tableActions.loadTableHomePage),
         //  so we'll set the id once the report response is returned.
-        if (!this.rptId) {
-            this.rptId = model.rptId;
-        }
-
-        this.error = false;
-
-        this.reportModel = reportModel;
-        this.reportModel.model = model;
+        //if (!this.rptId) {
+        //    this.rptId = model.rptId;
+        //}
+        //
+        //this.error = false;
+        //
+        //this.reportModel = reportModel;
+        //this.reportModel.model = model;
         //reportModel.setOriginalMetaData(model.metaData);
         //reportModel.setMetaData(model.metaData);
         //reportModel.setRecordData(model.recordData);
         //reportModel.setFacetData(model.recordData);
         //reportModel.updateRecordsCount(model.recordCount);
 
-        this.emit('change');
+        //this.emit('change');
     },
 
     onChangeLocale() {
@@ -1215,21 +1215,21 @@ let ReportDataStore = Fluxxor.createStore({
      *
      * @param payload
      */
-    onOpenRecord(payload) {
-        this.updateRecordNavContext(payload.recId);
-    },
-    /**
-     * update prev/next props after displaying previous record
-     */
-    onShowPreviousRecord(payload) {
-        this.updateRecordNavContext(payload.recId, "previous");
-    },
-    /**
-     * update prev/next props after displaying next record
-     */
-    onShowNextRecord(payload) {
-        this.updateRecordNavContext(payload.recId, "next");
-    },
+    //onOpenRecord(payload) {
+    //    this.updateRecordNavContext(payload.recId);
+    //},
+    ///**
+    // * update prev/next props after displaying previous record
+    // */
+    //onShowPreviousRecord(payload) {
+    //    this.updateRecordNavContext(payload.recId, "previous");
+    //},
+    ///**
+    // * update prev/next props after displaying next record
+    // */
+    //onShowNextRecord(payload) {
+    //    this.updateRecordNavContext(payload.recId, "next");
+    //},
 
     /**
      * drilldown into record from report

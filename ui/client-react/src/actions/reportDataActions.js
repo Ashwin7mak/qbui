@@ -119,101 +119,101 @@ let reportDataActions = {
      * @param filter: {facet, search}
      * @param queryParams: {offset, numrows, cList, sList, query}
      */
-    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
-
-        let logger = new Logger();
-
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-
-                if (!queryParams) {
-                    queryParams = {};
-                }
-
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
-                let reportService = new ReportService();
-
-                //  call node to parse the supplied facet expression into a query expression that
-                //  can be included on the request.
-                reportService.parseFacetExpression(filter ? filter.facet : '').then(
-                    (facetResponse) => {
-                        let filterQueries = [];
-
-                        //  add the facet expression..if any
-                        if (facetResponse.data) {
-                            filterQueries.push(facetResponse.data);
-                        }
-
-                        //  any search filters
-                        if (filter && filter.search) {
-                            filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
-                        }
-
-                        //  override the report query expressions
-                        if (filterQueries.length > 0) {
-                            queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
-                        }
-
-                        logger.debug('Dynamic report query params: offset:' +
-                            queryParams[query.OFFSET_PARAM] + ', numRows:' +
-                            queryParams[query.NUMROWS_PARAM] + ', sortList:' +
-                            queryParams[query.SORT_LIST_PARAM] + ', query:' +
-                            queryParams[query.QUERY_PARAM]);
-
-                        //  Fetch a report with custom attributes.  The response will include:
-                        //    - report data/grouping data
-                        //    - report meta data (includes the override settings..if any)
-                        //    - report fields
-                        //    - report count
-                        //
-                        //  NOTE:
-                        //    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
-                        //    - no faceting data is returned..
-                        //
-                        reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
-                            (reportResponse) => {
-                                let metaData = reportResponse.data ? reportResponse.data.metaData : null;
-                                let model = new ReportModel(appId, metaData, reportResponse.data);
-
-                                let params = {};
-                                params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
-                                params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
-                                params.filter = filter;
-                                model.setRunTimeParams(params);
-
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
-                                resolve();
-                            },
-                            (reportResultsError) => {
-                                logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
-                                this.dispatch(actions.LOAD_REPORT_FAILED, reportResultsError);
-                                reject();
-                            }
-                        ).catch((ex) => {
-                            // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                            logger.logException(ex);
-                            reject();
-                        });
-                    },
-                    (error) => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, error);
-                        reject();
-                    }
-                ).catch((ex) => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                    logger.logException(ex);
-                    reject();
-                });
-            } else {
-                logger.error('reportDataActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
-                reject();
-            }
-        });
-    },
+    //loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+    //
+    //    let logger = new Logger();
+    //
+    //    return new Promise((resolve, reject) => {
+    //        if (appId && tblId && rptId) {
+    //            logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+    //
+    //            if (!queryParams) {
+    //                queryParams = {};
+    //            }
+    //
+    //            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+    //            let reportService = new ReportService();
+    //
+    //            //  call node to parse the supplied facet expression into a query expression that
+    //            //  can be included on the request.
+    //            reportService.parseFacetExpression(filter ? filter.facet : '').then(
+    //                (facetResponse) => {
+    //                    let filterQueries = [];
+    //
+    //                    //  add the facet expression..if any
+    //                    if (facetResponse.data) {
+    //                        filterQueries.push(facetResponse.data);
+    //                    }
+    //
+    //                    //  any search filters
+    //                    if (filter && filter.search) {
+    //                        filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
+    //                    }
+    //
+    //                    //  override the report query expressions
+    //                    if (filterQueries.length > 0) {
+    //                        queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
+    //                    }
+    //
+    //                    logger.debug('Dynamic report query params: offset:' +
+    //                        queryParams[query.OFFSET_PARAM] + ', numRows:' +
+    //                        queryParams[query.NUMROWS_PARAM] + ', sortList:' +
+    //                        queryParams[query.SORT_LIST_PARAM] + ', query:' +
+    //                        queryParams[query.QUERY_PARAM]);
+    //
+    //                    //  Fetch a report with custom attributes.  The response will include:
+    //                    //    - report data/grouping data
+    //                    //    - report meta data (includes the override settings..if any)
+    //                    //    - report fields
+    //                    //    - report count
+    //                    //
+    //                    //  NOTE:
+    //                    //    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
+    //                    //    - no faceting data is returned..
+    //                    //
+    //                    reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
+    //                        (reportResponse) => {
+    //                            let metaData = reportResponse.data ? reportResponse.data.metaData : null;
+    //                            let model = new ReportModel(appId, metaData, reportResponse.data);
+    //
+    //                            let params = {};
+    //                            params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+    //                            params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
+    //                            params.filter = filter;
+    //                            model.setRunTimeParams(params);
+    //
+    //                            this.dispatch(actions.LOAD_REPORT_SUCCESS, model.get());
+    //                            resolve();
+    //                        },
+    //                        (reportResultsError) => {
+    //                            logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
+    //                            this.dispatch(actions.LOAD_REPORT_FAILED, reportResultsError);
+    //                            reject();
+    //                        }
+    //                    ).catch((ex) => {
+    //                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+    //                        logger.logException(ex);
+    //                        reject();
+    //                    });
+    //                },
+    //                (error) => {
+    //                    //  axios upgraded to an error.response object in 0.13.x
+    //                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
+    //                    this.dispatch(actions.LOAD_REPORT_FAILED, error);
+    //                    reject();
+    //                }
+    //            ).catch((ex) => {
+    //                // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+    //                logger.logException(ex);
+    //                reject();
+    //            });
+    //        } else {
+    //            logger.error('reportDataActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+    //            this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+    //            reject();
+    //        }
+    //    });
+    //},
 
     /**
      * navigate to previous record after opening record from report

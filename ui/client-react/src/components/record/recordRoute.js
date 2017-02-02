@@ -191,7 +191,7 @@ export const RecordRoute = React.createClass({
 
             const tableLink = `/qbase/app/${appId}/table/${tblId}`;
 
-            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
+            const reportName = _.has(this.props.reportData, 'data.name') ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && record.previousRecordId !== null);
             const showNext = !!(this.props.reportData && record.nextRecordId !== null);
 
