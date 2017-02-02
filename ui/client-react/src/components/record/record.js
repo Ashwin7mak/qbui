@@ -112,12 +112,31 @@ let Record = React.createClass({
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
     },
 
+
+    /**
+     * Find the array containing relationship objects for this app. Add the childTables' names to
+     * the relationship object.
+     * @returns {array}
+     */
+    getRelationshipsFromProps() {
+        const app = _.get(this, 'props.selectedApp');
+        const thing = _.get(app, 'relationships', [])
+                .map(rel => {
+                    const childTable = _.find(app.tables, {id:rel.detailTableId}) || {};
+                    rel.name = childTable.name;
+                    return rel;
+                });
+        return thing;
+    },
+
     render() {
 
         return <QBForm {...this.props}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
-                    onFieldChange={this.handleFieldChange}/>;
+                    onFieldChange={this.handleFieldChange}
+                    relationships={this.getRelationshipsFromProps()}
+                />;
     }
 });
 

@@ -294,6 +294,7 @@ export const RecordRoute = React.createClass({
                                 loaded={(!this.props.forms || !viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={key}
+                                selectedApp={this.props.selectedApp}
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}

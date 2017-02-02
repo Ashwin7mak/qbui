@@ -48,7 +48,7 @@ const ReportRoute = React.createClass({
         flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
-        let {appId, tblId, fieldWithParentId, masterRecordId} = params;
+        let {appId, tblId, foreignKeyFid, foreignKeyValue} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
@@ -58,9 +58,9 @@ const ReportRoute = React.createClass({
 
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
-            if (fieldWithParentId && masterRecordId) {
+            if (foreignKeyFid && foreignKeyValue) {
                 const queryParams = {
-                    query: QueryUtils.parseStringIntoExactMatchExpression(fieldWithParentId, masterRecordId),
+                    query: QueryUtils.parseStringIntoExactMatchExpression(foreignKeyFid, foreignKeyValue),
                     offset,
                     numRows
                 };

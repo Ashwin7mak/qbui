@@ -35,7 +35,8 @@ let QBForm = React.createClass({
             record: React.PropTypes.array,
             fields: React.PropTypes.array,
             formMeta: React.PropTypes.object
-        })
+        }),
+        relationships: React.PropTypes.array
     },
 
     getDefaultProps() {
@@ -257,24 +258,17 @@ let QBForm = React.createClass({
         const relationship = window.relationships[element.relationshipId];
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
-        const appId = _.get(relationship, 'appId');
-        const childTableId = _.get(relationship, 'detailTableId');
         // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now
         const childReportId = _.get(relationship, 'childDefaultReportId', 0);
-        const fieldWithParentId = _.get(relationship, 'detailFieldId');
-        const parentRecordId = _.get(fieldRecord, 'value');
 
         return <td key={key}>
-            <RelatedChildReport {...{
-                element,
-                appId,
-                childTableId,
-                childReportId,
-                fieldWithParentId,
-                parentRecordId,
-                relatedField,
-                fieldRecord,
-                relationship}}
+            <RelatedChildReport
+                appId={_.get(relationship, "appId")}
+                childTableId={_.get(relationship, "detailTableId")}
+                childReportId={childReportId}
+                childTableName={relationship.name}
+                foreignKeyFid={_.get(relationship, "detailFieldId")}
+                foreignKeyValue={_.get(fieldRecord, "value")}
             />
         </td>;
     },
