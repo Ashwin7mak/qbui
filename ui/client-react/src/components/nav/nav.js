@@ -91,7 +91,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV, this.state.apps.selectedAppId, tableId));
+        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, this.state.apps.selectedAppId, tableId));
     },
 
     /**
@@ -197,18 +197,22 @@ export let Nav = React.createClass({
     },
 
     /**
-     *  Fetch the report/report list content.
-     *  TODO: working, but this still doesn't seem right...
+     *  Fetch the report data content.
      */
     getReportsData() {
-        // Depending on whether the 'list of reports' or 'specific report' link
-        // is clicked in the nav, the content of report will be either a list of
-        // table reports or a specific report.
-        let report = _.find(this.props.qbui.report, function(rpt) {
+        let report = _.find(this.props.qbui.report, function (rpt) {
             return rpt.id === CONTEXT.REPORT.NAV;
         });
-        //  make sure reportsData is an object if NAV context is not found
         return report || {};
+    },
+    /**
+     *  Fetch the report list content.
+     */
+    getReportsList() {
+        let reportList = _.find(this.props.qbui.report, function(rpt) {
+            return rpt.id === CONTEXT.REPORT.NAV_LIST;
+        });
+        return reportList || {};
     },
 
     render() {
@@ -245,11 +249,12 @@ export let Nav = React.createClass({
         }
 
         let reportsData = this.getReportsData();
+        let reportsList = this.getReportsList();
 
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
-                table={this.getSelectedTable(reportsData.tableId)}
+                table={this.getSelectedTable(reportsData.tblId)}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
                 selectedRecordId={viewingRecordId}
@@ -269,8 +274,7 @@ export let Nav = React.createClass({
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable(reportsData.tableId)}
-                               //reportData={this.state.reportData}
+                               selectedTable={this.getSelectedTable(reportsData.tblId)}
                                reportData={reportsData}
                                errorPopupHidden={this.state.nav.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
@@ -278,9 +282,9 @@ export let Nav = React.createClass({
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
-                                      selectedTable={this.getSelectedTable(reportsData.tableId)}
+                                      selectedTable={this.getSelectedTable(reportsList.tblId)}
                                       filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={reportsData}
+                                      reportsData={reportsList}
                                       onHideTrowser={this.hideTrowser}/>
             }
 
@@ -313,7 +317,6 @@ export let Nav = React.createClass({
                             apps: this.state.apps.apps,
                             selectedAppId: this.state.apps.selectedAppId,
                             appsLoading: this.state.apps.loading,
-                            //reportData: this.state.reportData,
                             reportData: reportsData,
                             appUsers: this.state.apps.appUsers,
                             locale: this.state.nav.locale,
@@ -322,7 +325,7 @@ export let Nav = React.createClass({
                             fields: this.state.fields,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
-                            selectedTable: this.getSelectedTable(reportsData.tableId),
+                            selectedTable: this.getSelectedTable(reportsData.tblId),
                             scrollingReport: this.state.nav.scrollingReport,
                             flux: flux}
                         )}

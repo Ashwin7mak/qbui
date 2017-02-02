@@ -64,7 +64,7 @@ const report = (state = [], action) => {
             loading: false,
             error: false,
             data: action.content,
-            //  needed??..these are on the data property
+            //  TODO: needed??..these are on the data property
             appId: action.content.appId,
             tblId: action.content.tblId,
             rptId: action.content.rptId,
@@ -84,7 +84,7 @@ const report = (state = [], action) => {
             loading: false,
             error: false,
             appId: action.content.appId,
-            tableId: action.content.tblId,
+            tblId: action.content.tblId,
             list: action.content.reportsList
         };
         return newState(obj);
