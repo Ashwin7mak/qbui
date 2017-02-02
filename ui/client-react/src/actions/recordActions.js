@@ -45,6 +45,8 @@ function _logValidationErrors(errors, msgPrefix) {
     }
 }
 
+//  FLUX Actions...to be migrated..
+
 let recordActions = {
     /**
      * start editing a new record
@@ -466,9 +468,22 @@ let recordActions = {
     }
 };
 
+//  NEW REDUX ACTIONS BELOW>>>
+
 export const openRecord = (recId, nextRecordId, previousRecordId) => {
     return {
         type: types.OPEN_RECORD,
+        content: {
+            recId,
+            nextRecordId,
+            previousRecordId
+        }
+    };
+};
+
+export const editRecord = (recId, nextRecordId, previousRecordId) => {
+    return {
+        type: types.EDIT_RECORD,
         content: {
             recId,
             nextRecordId,

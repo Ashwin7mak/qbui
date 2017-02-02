@@ -108,6 +108,8 @@ export const saveFormSuccess = (id) => {
  * open an existing record for editing
  * @param recId
  * @returns {{type, recId: *}}
+ *
+ * TODO: move to redux record
  */
 export const openRecordForEdit = (recId) => {
 
@@ -126,6 +128,9 @@ export const openRecordForEdit = (recId) => {
  * open a new record for editing
  * @param navigateAfterSave go to the new record after saving
  * @returns {{type, recId, navigateAfterSave: boolean}}
+ *
+ *
+ * * TODO: move to redux record
  */
 export const editNewRecord = (navigateAfterSave = false) => {
 

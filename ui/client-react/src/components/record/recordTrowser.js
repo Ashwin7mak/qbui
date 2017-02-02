@@ -17,6 +17,7 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
+import {editRecord} from '../../actions/recordActions';
 
 import './recordTrowser.scss';
 
@@ -229,6 +230,8 @@ export const RecordTrowser = React.createClass({
     previousRecord() {
         const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
 
+        // TODO: move to REDUX
+
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
@@ -241,6 +244,8 @@ export const RecordTrowser = React.createClass({
      */
     nextRecord() {
         const {appId, tblId, rptId, nextEditRecordId} = this.props.reportData;
+
+        // TODO: move to REDUX
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
@@ -363,7 +368,8 @@ export const RecordTrowser = React.createClass({
 const mapStateToProps = (state) => {
     return {
         forms: state.forms,
-        shell : state.shell
+        shell: state.shell,
+        record: state.record
     };
 };
 
@@ -392,6 +398,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         showErrorMsgDialog: () => {
             dispatch(showErrorMsgDialog());
+        },
+        editRecord: (recId) => {
+            dispatch(editRecord(recId));
         }
     };
 };

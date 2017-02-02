@@ -28,6 +28,7 @@ export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 
 //  **** Record actions ****
 export const OPEN_RECORD = 'OPEN_RECORD';
+export const EDIT_RECORD = 'EDIT_RECORD';
 
 export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 
@@ -36,7 +37,7 @@ export const LOAD_REPORT = 'LOAD_REPORT';
 export const LOAD_REPORT_SUCCESS = 'LOAD_REPORT_SUCCESS';
 export const LOAD_REPORT_FAILED = 'LOAD_REPORT_FAILED';
 
-//  **** table reports actions ****
+//  **** table report list actions ****
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
 export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';

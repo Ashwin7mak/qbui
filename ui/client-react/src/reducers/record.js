@@ -44,6 +44,14 @@ const record = (state = [], action) => {
         };
         return newState(obj);
     }
+    case types.EDIT_RECORD: {
+        const obj = {
+            recId: action.content.recId,
+            nextRecordId: action.content.nextRecordId,
+            previousRecordId: action.content.previousRecordId
+        };
+        return newState(obj);
+    }
     default:
         // by default, return existing state
         return state;

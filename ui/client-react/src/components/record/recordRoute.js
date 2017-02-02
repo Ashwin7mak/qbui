@@ -353,6 +353,7 @@ const mapStateToProps = (state) => {
     return {
         forms: state.forms,
         record: state.record
+        //Todo: get reports from state and remove as a passed prop
     };
 };
 
