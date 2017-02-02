@@ -25,6 +25,7 @@ class ReportRowTransformer extends RowTransformer {
             selectedRows: [],
             parentId: null,
             subHeaderLevel: 0,
+            isInlineEditOpen: false
         }) {
 
         if (!records || !_.isArray(records)) {
@@ -59,12 +60,6 @@ class ReportRowTransformer extends RowTransformer {
     static transformRecordForGrid(record, index, fields, info) {
         let id = record[info.primaryKeyFieldName].value;
 
-        // We don't want to add any blank rows unless we are currently adding a new row
-        // TODO:: This could cause performance problems if it happens a lot (we could be adding a lot of blank rows). Refactor once AgGrid is removed.
-        if (id === null && !info.pendEdits.isInlineEditOpen) {
-            return;
-        }
-
         let recordWithRelatedFieldDef = addUniqueKeyTo(addCurrentValues(id, addRelatedFieldDefinitions(record, fields, id), info.pendEdits), index);
         let editErrors = addEditErrorsIfExistForRow(id, info.pendEdits);
 
@@ -75,11 +70,14 @@ class ReportRowTransformer extends RowTransformer {
             isSelected: isRowSelected(id, info.selectedRows),
             parentId: info.parentId,
             isSaving: isRowSaving(id, info.pendEdits),
+            // Is inlineEditOpen has to be passed in to make sure the first column updates to show the row actions again
+            // when inlineEditOpen closes for a different row. Performance boosts in Reactabular won't allow a row/cell to be updated if the data doesn't change.
+            isInlineEditOpen: info.isInlineEditOpen,
             editErrors
         });
     }
 
-    constructor({record, id, editingRecordId, isSelected, parentId, isSaving, editErrors}) {
+    constructor({record, id, editingRecordId, isSelected, parentId, isSaving, isInlineEditOpen, editErrors}) {
         let isEditing = (id === editingRecordId);
 
         let recordCopy = _.cloneDeep(record);
@@ -91,10 +89,10 @@ class ReportRowTransformer extends RowTransformer {
         super(id, cells);
 
         this.isEditing = isEditing;
-        this.editingRecordId = editingRecordId;
         this.isSelected = isSelected;
         this.parentId = parentId;
         this.isSaving = isSaving;
+        this.isInlineEditOpen = isInlineEditOpen;
         this.isValid = true;
 
         if (editErrors) {

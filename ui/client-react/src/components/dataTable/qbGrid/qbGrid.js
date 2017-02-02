@@ -237,7 +237,6 @@ const QbGrid = React.createClass({
             isCollapsed: row.isCollapsed,
             className: classes.join(' '),
             editingRowId: this.props.editingRowId,
-            isInlineEditOpen: this.props.isInlineEditOpen,
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
             // Add one to account for the extra column at the start of the grid for the row actions.

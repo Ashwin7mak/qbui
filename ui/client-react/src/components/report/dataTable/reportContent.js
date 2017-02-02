@@ -261,7 +261,7 @@ export const ReportContent = React.createClass({
         } else {
             return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
         }
-        return null;
+        return Promise.resolve(null);
     },
 
     addNewRowAfterRecordSaveSuccess(afterRecId) {

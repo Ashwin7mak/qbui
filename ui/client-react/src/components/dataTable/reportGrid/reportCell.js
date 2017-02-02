@@ -71,8 +71,7 @@ const ReportCell = React.createClass({
 
     shouldRenderEditIcon(isFieldEditable) {
         // We don't want to render an edit icon if another row is currently being edited. That is why we check for the editingRecordId to be null.
-        return (!this.props.isEditing && !this.props.editingRecordId && isFieldEditable);
-
+        return (!this.props.isInlineEditOpen && isFieldEditable);
     },
 
     renderEditIcon(isFieldEditable) {
