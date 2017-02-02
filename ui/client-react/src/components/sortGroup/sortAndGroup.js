@@ -154,7 +154,7 @@ const SortAndGroup = React.createClass({
         queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
         //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-        this.props.dispatch(loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
     },
 
     applyChanges() {
