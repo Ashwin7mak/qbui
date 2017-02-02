@@ -1,5 +1,4 @@
 import React from 'react';
-import { browserHistory } from 'react-router'
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
