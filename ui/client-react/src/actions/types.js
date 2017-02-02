@@ -28,8 +28,6 @@ export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 
 //  **** Record actions ****
 export const OPEN_RECORD = 'OPEN_RECORD';
-export const OPEN_PREVIOUS_RECORD = 'OPEN_PREVIOUS_RECORD';
-export const OPEN_NEXT_RECORD = 'OPEN_PREVIOUS_RECORD';
 
 export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 
