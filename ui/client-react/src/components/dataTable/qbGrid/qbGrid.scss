@@ -1,10 +1,5 @@
 @import '../../../../src/assets/css/qbVariables';
 @import '../../../../src/assets/css/customVariables';
-$row-background-color-hover: $color-blue-200;
-$row-cell-border-color: $color-black-300;
-$row-bg-color: $color-black-100;
-$row-non-editable-bg-color: $color-black-200;
-$row-border-color: $color-black-300;
 $row-box-shadow-color: $color-black-300;
 $cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
@@ -14,6 +9,19 @@ $grid-header-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
 $cell-edit-background-edit: $color-blue-200;
 $edit-icon-font-size: 18px;
+
+// New semantic names
+$grid-row-hover-color:                          $color-blue-200;
+$grid-initiate-inline-edit-pencil-base-color:   rgba($color-black-700, 0.2);
+$grid-icon-hover-color:                         $color-cyan-700;
+$grid-onpencil-row-border-color:                $color-cyan-700;
+$grid-column-header-background-color:           $color-cyan-100;
+$grid-column-header-border-color:               $color-cyan-300;
+$grid-column-icon-normal-color:                 $color-blue-400;
+$grid-column-icon-hover-color:                  $color-cyan-700;
+$grid-lefticon-normal-color:                    $color-black-300;
+$grid-lefticon-hover-color:                     $color-cyan-700;
+$grid-line-color:                               $color-black-400;
 
 //-------------------------------------------------------------------
 // GRID COMPONENT
@@ -52,13 +60,13 @@ $edit-icon-font-size: 18px;
         min-width: 80px;
 
         position: relative;
-        border-right: 1px solid $color-blue-400;
-        border-bottom: 1px solid $badcolor1-color6;
+        border-top: 1px solid $grid-column-header-border-color;
+        border-right: 1px solid $grid-line-color;
+        border-bottom: 1px solid $grid-column-header-border-color;
         padding: $grid-header-cell-padding;
         color: $color-blue-600;
         -webkit-font-smoothing: antialiased;
-        border-color: $color-blue-400;
-        background-color: $color-blue-300;
+        background-color: $grid-column-header-background-color;
         cursor: default;
 
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
@@ -69,6 +77,11 @@ $edit-icon-font-size: 18px;
             z-index: $zindex-qbGrid-header-stickyCell;
             padding-left: $grid-default-cell-padding;
             padding-right: $grid-default-cell-padding;
+            border-left: 1px solid $grid-column-header-border-color;
+        }
+
+        &:last-of-type {
+            border-right: 1px solid $grid-column-header-border-color;
         }
     }
 
@@ -114,7 +127,7 @@ $edit-icon-font-size: 18px;
                 background: inherit;
                 width: $grid-group-expand-icon-size;
                 height: $grid-group-expand-icon-size;
-                opacity: 0.2;
+                color: $grid-column-icon-normal-color;
             }
 
             // TODO: temporary fix until we get can dynamically increase/decrease the z-index
@@ -129,6 +142,7 @@ $edit-icon-font-size: 18px;
         // hover effect on dropdown icon
         &:hover .headerMenu .dropdownToggle {
             opacity: 1;
+            color: $grid-column-icon-hover-color;
         }
     }
 
@@ -139,8 +153,8 @@ $edit-icon-font-size: 18px;
         max-width: 80px;
         position: relative;
         vertical-align: top;
-        background: $row-bg-color;
         z-index: $zindex-qbGrid-firstOfType-stickyColumn;
+        background-color: $color-black-100;
     }
 
 
@@ -149,8 +163,8 @@ $edit-icon-font-size: 18px;
         // padding-left: $grid-default-group-padding + 3;   // TODO: We need to see what the spec requires for this. It looks strange with it right now.
         vertical-align: top;
         font-weight: bold;
-        border-right: 1px solid $color-black-300;
-        border-top: 1px solid $color-black-300;
+        border-right: 1px solid $grid-line-color;
+        border-top: 1px solid $grid-line-color;
     }
 
     // indentations for nested group header rows - assuming that we can have up to 6 group levels
@@ -166,17 +180,15 @@ $edit-icon-font-size: 18px;
     //== Icon displayed on every editable cell - user clicks to activate inline edit mode
     .cellEditIcon {
         display: none;
-        color: $ghost-text-color;
-        opacity: 0.6;
+        color: $grid-initiate-inline-edit-pencil-base-color;
         position: absolute;
         top: 4px;
         right: 0;
 
         // hover effect for edit icon
         &:hover {
-            color: $default-hover-color;
-            opacity: 1;
-            background-color: rgba($qbgrid-row-hover-color, 0.7);
+            color: $grid-icon-hover-color;
+            background-color: rgba($grid-row-hover-color, 0.7);
         }
     }
 
@@ -198,12 +210,16 @@ $edit-icon-font-size: 18px;
         padding-right: $grid-default-cell-padding;
         vertical-align: top;
         font-size: $grid-font-size;
-        border-right: 1px solid $color-black-300;
-        border-top: 1px solid $color-black-300;
+        border-right: 1px solid $grid-line-color;
+        border-top: 1px solid $grid-line-color;
         transition: border 100ms ease-out;
 
         &:hover .cellEditIcon {
             display: inline;
+        }
+        
+        &:last-of-type {
+            border-right: 0;
         }
     }
 
@@ -368,8 +384,8 @@ $edit-icon-font-size: 18px;
         }
 
         .iconActionButton {
-            opacity: 0.2;
-            transition: opacity 200ms ease-in-out;
+            color: $grid-lefticon-normal-color;
+            transition: color 200ms ease-in-out;
             height: 30px;
             width: auto;
             margin-right: 4px;
@@ -449,14 +465,14 @@ $edit-icon-font-size: 18px;
 
     // hover effect for the buttons
     .actionsCol:hover .iconActions .iconActionButton {
-        transition: opacity 200ms ease-in-out;
-        opacity: 1;
+        transition: color 200ms ease-in-out;
+        color: $grid-lefticon-hover-color;
     }
 
 
     // adjust colors of the last row of cells
     .qbRow:last-of-type .qbCell {
-        border-bottom: 1px solid $color-black-300;
+        border-bottom: 1px solid $grid-line-color;
     }
 
 
@@ -465,7 +481,7 @@ $edit-icon-font-size: 18px;
 
         // highlight the row when mouse is over the row
         .qbRow:hover .qbCell {
-            background: $qbgrid-row-hover-color;
+            background: $grid-row-hover-color;
         }
 
         // Outline the data cells in the row when the use hovers over a pencil.
@@ -473,20 +489,20 @@ $edit-icon-font-size: 18px;
         // and the right border of the sticky cell and the last cell in the hovered row.
         .qbRow.willEdit .qbCell:not(.stickyCell),
         .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell) {
-            border-top: 1px solid $qbgrid-onpencil-row-border-color;
+            border-top: 1px solid $grid-onpencil-row-border-color;
             transition: border 150ms ease-in;
         }
         .qbRow.willEdit .qbCell:last-of-type {
-            border-right: 1px solid $qbgrid-onpencil-row-border-color;
+            border-right: 1px solid $grid-onpencil-row-border-color;
         }
         .qbRow.willEdit .qbCell.stickyCell {
-            border-right: 1px solid $qbgrid-onpencil-row-border-color;
+            border-right: 1px solid $grid-onpencil-row-border-color;
         }
 
         // Special case for outlining data cells... the last row doesn't have a row below it so we have to use the bottom border on only that row.
         // Doesn't look perfect, but still enables outlining the row.
         .qbRow:last-of-type.willEdit .qbCell:not(.stickyCell) {
-            border-bottom: 1px solid $qbgrid-onpencil-row-border-color;
+            border-bottom: 1px solid $grid-onpencil-row-border-color;
         }
     }
 
@@ -514,7 +530,7 @@ $edit-icon-font-size: 18px;
             border-top: 2px solid $cell-edit-background-edit;
             overflow: visible;
             margin: 0;
-            border-right: 1px solid $row-border-color;
+            border-right: 1px solid $grid-line-color;
 
             .cellWrapper {
                 display: flex;
