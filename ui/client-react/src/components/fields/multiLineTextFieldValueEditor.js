@@ -136,7 +136,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
      */
     onKeyUp(ev) {
         if (this.getScrollHeight() < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
-            this.resize();
+            if (!this.props.isFormView) {
+                this.resize();
+            }
         }
     },
 
@@ -145,7 +147,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let style = this.props.showScrollForMultiLine ? this.state.style : {};
+        let style = !this.props.showScrollForMultiLine ? this.state.style : {};
         return <ClearableTextArea
                     ref="textarea"
                     {...this.props}
