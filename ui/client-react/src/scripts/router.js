@@ -49,7 +49,7 @@ render((
 
             <Route path="/qbase/app/:appId" component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
-                <Route path="management" componet={AppManagementRoute} />
+                <Route path="management" component={AppManagementRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId" component={ReportRoute} />
