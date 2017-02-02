@@ -3,6 +3,7 @@ import QbGrid from '../qbGrid/qbGrid';
 import ReportColumnTransformer from './reportColumnTransformer';
 import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
+import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
 
 import _ from 'lodash';
@@ -132,7 +133,8 @@ const ReportGrid = React.createClass({
                 primaryKeyFieldName: this.props.primaryKeyName,
                 editingRecordId: editingRecordId,
                 pendEdits: this.props.pendEdits,
-                selectedRows: this.props.selectedRows
+                selectedRows: this.props.selectedRows,
+                isInlineEditOpen: this.props.isInlineEditOpen
             }
         );
     },
@@ -160,10 +162,11 @@ const ReportGrid = React.createClass({
      * select all grid rows
      */
     selectAllRows() {
-        let selected = []; // array of record ids to select
-        this.props.records.forEach(record => {
-            selected.push(record[this.props.primaryKeyName].value);
+        // Transform the records first so that subHeaders (grouped records) can be handled appropriately
+        let selected = this.transformRecords().filter(record => !record.isSubHeader).map(record => {
+            return record.id;
         });
+
         this.props.selectRows(selected);
     },
 
@@ -172,9 +175,7 @@ const ReportGrid = React.createClass({
     },
 
     toggleSelectAllRows() {
-        const allSelected = this.props.selectedRows.length === this.props.records.length;
-
-        if (allSelected) {
+        if (ReportUtils.areAllRowsSelected(this.transformRecords(), this.props.selectedRows)) {
             this.deselectAllRows();
         } else {
             this.selectAllRows();
@@ -191,7 +192,7 @@ const ReportGrid = React.createClass({
         // Editing Id trumps editingRowId when editingIndex is set
         // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
         // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
-        // and editingId (id of newly created row).
+        // and editingId (id of newly created row). The editingIndex could be any integer, but if it is not null, we can assume a new row is added.
         // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
@@ -199,7 +200,7 @@ const ReportGrid = React.createClass({
             editingRowId = this.props.pendEdits.currentEditingRecordId;
         }
 
-        if (this.props.editingIndex && this.props.editingId !== editingRowId) {
+        if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
             editingRowId = this.props.editingId;
         }
 
@@ -213,11 +214,12 @@ const ReportGrid = React.createClass({
         }
 
         let editingRecordId = this.getCurrentlyEditingRecordId();
+        let transformedRecords = this.transformRecords(editingRecordId);
 
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
-            rows={this.transformRecords(editingRecordId)}
+            rows={transformedRecords}
             loading={this.props.loading}
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
@@ -227,6 +229,7 @@ const ReportGrid = React.createClass({
             isInlineEditOpen={this.props.isInlineEditOpen}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
+            areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
             onClickToggleSelectedRow={this.props.toggleSelectedRow}
             onClickEditIcon={this.props.openRecordForEdit}
             onClickDeleteIcon={this.onClickDelete}
@@ -245,6 +248,7 @@ const ReportGrid = React.createClass({
                 onCellClick: this.props.onCellClick,
                 onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
+                isInlineEditOpen: this.props.isInlineEditOpen
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}

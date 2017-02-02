@@ -37,6 +37,13 @@ const expectedFieldChangeResult = {
 const testRecords = [
     {'Record ID#': {value: testRecordId}}
 ];
+const testGroupedRecords = [
+    {
+        id: 'groupId',
+        group: 'test group',
+        children: testRecords
+    }
+];
 
 
 let component;
@@ -83,6 +90,17 @@ describe('ReportGrid', () => {
 
             expect(actions.selectRows).toHaveBeenCalledWith([testRecordId]);
         });
+
+        it('ignores group headers when selecting rows', () => {
+            spyOn(actions, 'selectRows');
+            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testGroupedRecords}/>);
+            instance = component.instance();
+
+            instance.selectAllRows();
+
+            expect(actions.selectRows).toHaveBeenCalledWith([testRecordId]);
+            expect(actions.selectRows).not.toHaveBeenCalledWith([testGroupedRecords[0].id]);
+        });
     });
 
     describe('deselectAllRows', () => {
@@ -98,28 +116,56 @@ describe('ReportGrid', () => {
     });
 
     describe('toggleSelectAllRows', () => {
-        it('calls selectAllRows if not all rows are selected', () => {
-            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords} selectedRows={[]}/>);
-            instance = component.instance();
-            spyOn(instance, 'selectAllRows');
-            spyOn(instance, 'deselectAllRows');
+        let testCases = [
+            {
+                description: 'calls selectAllRows if not all rows are selected',
+                records: testRecords,
+                selectedRows: [],
+                expectSelectAllRowsToBeCalled: true
+            },
+            {
+                description: 'calls selectAllRows if not all grouped rows are selected',
+                records: testGroupedRecords,
+                selectedRows: [],
+                expectSelectAllRowsToBeCalled: true
+            },
+            {
+                description: 'calls deselectAllRows if all rows are currently selected',
+                records: testRecords,
+                selectedRows: [testRecordId],
+                expectSelectAllRowsToBeCalled: false
+            },
+            {
+                description: 'calls deselectAllRows if all grouped rows are currently selected',
+                records: testGroupedRecords,
+                selectedRows: [testRecordId],
+                expectSelectAllRowsToBeCalled: false
+            },
+        ];
 
-            instance.toggleSelectAllRows();
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                component = shallow(<ReportGrid
+                    {...requiredProps}
+                    selectRows={actions.selectRows}
+                    records={testCase.records}
+                    selectedRows={testCase.selectedRows}
+                />);
+                instance = component.instance();
+                spyOn(instance, 'selectAllRows');
+                spyOn(instance, 'deselectAllRows');
 
-            expect(instance.selectAllRows).toHaveBeenCalled();
-            expect(instance.deselectAllRows).not.toHaveBeenCalled();
-        });
+                instance.toggleSelectAllRows();
 
-        it('calls deselectAllRows if all rows are currently selected', () => {
-            component = shallow(<ReportGrid {...requiredProps} selectRows={actions.selectRows} records={testRecords} selectedRows={[testRecordId]}/>);
-            instance = component.instance();
-            spyOn(instance, 'selectAllRows');
-            spyOn(instance, 'deselectAllRows');
+                if (testCase.expectSelectAllRowsToBeCalled) {
+                    expect(instance.selectAllRows).toHaveBeenCalled();
+                    expect(instance.deselectAllRows).not.toHaveBeenCalled();
+                } else {
+                    expect(instance.deselectAllRows).toHaveBeenCalled();
+                    expect(instance.selectAllRows).not.toHaveBeenCalled();
+                }
 
-            instance.toggleSelectAllRows();
-
-            expect(instance.deselectAllRows).toHaveBeenCalled();
-            expect(instance.selectAllRows).not.toHaveBeenCalled();
+            });
         });
     });
 
@@ -244,6 +290,7 @@ describe('ReportGrid', () => {
         expect(qbGrid).toHaveProp('isInlineEditOpen', isInlineEditOpen);
         expect(qbGrid).toHaveProp('appUsers', testAppUsers);
         expect(qbGrid).toHaveProp('selectedRows', selectedRows);
+        expect(qbGrid).toHaveProp('areAllRowsSelected', true);
         expect(qbGrid).toHaveProp('onClickToggleSelectedRow', actions.onClickToggle);
         expect(qbGrid).toHaveProp('onClickEditIcon', actions.openRecordForEdit);
         expect(qbGrid).toHaveProp('onClickDeleteIcon', instance.onClickDelete);
@@ -257,6 +304,7 @@ describe('ReportGrid', () => {
         expect(qbGrid).toHaveProp('cellRenderer', ReportCell);
         expect(qbGrid).toHaveProp('commonCellProps', {
             appUsers: testAppUsers,
+            isInlineEditOpen: isInlineEditOpen,
             onCellChange: instance.onCellChange,
             onCellBlur: instance.onCellBlur,
             onCellClick: actions.onCellClick,

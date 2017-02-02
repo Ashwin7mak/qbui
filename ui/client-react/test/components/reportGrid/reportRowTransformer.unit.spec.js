@@ -108,7 +108,6 @@ describe('ReportRowTransformer', () => {
                 });
 
                 expect(reportRowTransformer.isEditing).toEqual(testCase.expectedIsEditing);
-                expect(reportRowTransformer.editingRecordId).toEqual(testCase.expectedEditingRecordId);
                 expect(reportRowTransformer.isSelected).toEqual(testCase.expectedIsSelected);
                 expect(reportRowTransformer.parentId).toEqual(testCase.expectedParentId);
                 expect(reportRowTransformer.isSaving).toEqual(testCase.expectedIsSaving);
@@ -229,6 +228,7 @@ describe('ReportRowTransformer', () => {
             selectedRows: [],
             parentId: null,
             subHeaderLevel: 0,
+            isInlineEditOpen: false
         };
 
         it('returns an empty array if no records are passed in', () => {
