@@ -1,0 +1,14 @@
+
+.featureSwitches {
+    margin: 20px;
+}
+.featureSwitchTable {
+    margin-top: 20px;
+    width: 100%;
+    tbody tr:nth-child(odd) {
+        background-color: #eee;
+    }
+    th,td {
+        padding: .5em;
+    }
+}

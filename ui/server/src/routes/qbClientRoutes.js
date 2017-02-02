@@ -89,6 +89,10 @@ var path = require('path');
             renderIndex(req, res);
         });
 
+        app.route('/qbase/admin/featureSwitches').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
         app.route('/qbase/components').get(function(req, res) {
             renderIndex(req, res, {bundleFileName: compBundleFileName});
         });
