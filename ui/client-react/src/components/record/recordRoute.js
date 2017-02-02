@@ -18,7 +18,8 @@ import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+import {loadForm, editNewRecord, openRecordForEdit, openFormBuilder} from '../../actions/formActions';
+// import {loadForm, editNewRecord} from '../../actions/formActions';
 
 import './record.scss';
 
@@ -198,6 +199,14 @@ export const RecordRoute = React.createClass({
         this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
     /**
+     * open the selected row in form builder
+     * @param data row record data
+     * */
+    openFormBuilder() {
+        console.log('onRecordRoute');
+        this.props.openFormBuilder(parseInt(this.props.params.recordId));
+    },
+    /**
      * edit the selected record in the trowser
      * @param data row record data
      */
@@ -213,6 +222,7 @@ export const RecordRoute = React.createClass({
 
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', onClick: this.openFormBuilder},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
@@ -319,6 +329,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         openRecordForEdit: (recId) => {
             dispatch(openRecordForEdit(recId));
+        },
+        openFormBuilder: (recId) => {
+            dispatch(openFormBuilder(recId));
         },
         editNewRecord: () => {
             dispatch(editNewRecord());

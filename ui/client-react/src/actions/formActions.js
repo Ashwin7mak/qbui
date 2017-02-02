@@ -110,12 +110,26 @@ export const saveFormSuccess = (id) => {
  * @returns {{type, recId: *}}
  */
 export const openRecordForEdit = (recId) => {
-
+    console.log('I got hit!');
     // add editRec query param and let the router take action
     WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
 
     // let store know we're editing a record so we can navigate back and forth
 
+    return {
+        type: types.EDIT_REPORT_RECORD,
+        recId: recId,
+    };
+};
+
+/**
+ * open an existing record for form builder
+ * @param recId
+ * @returns {{type, recId: *}}
+ * */
+
+export const openFormBuilder = (recId) => {
+    console.log('Boom Baby', recId);
     return {
         type: types.EDIT_REPORT_RECORD,
         recId: recId,

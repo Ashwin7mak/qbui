@@ -106,6 +106,7 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            formBuilder: 'Form Builder',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             cancelSelection: "Cancel changes",
