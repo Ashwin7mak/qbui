@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router'
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
@@ -18,7 +19,7 @@ import Breakpoints from '../../utils/breakpoints';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {loadForm, editNewRecord, openRecordForEdit, openFormBuilder} from '../../actions/formActions';
+import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
 
 import './record.scss';
 
@@ -210,11 +211,20 @@ export const RecordRoute = React.createClass({
 
         this.props.editNewRecord();
     },
-    getPageActions() {
 
+    getFormBuilderUrl() {
+        let appId = this.props.params.appId;
+        let tbldId = this.props.params.tblId;
+        let recordId = this.props.params.recordId;
+        let builderUrl = '/qbase/builder/app/' + appId + '/table/' + tbldId + '/record/' + recordId;
+        return builderUrl;
+    },
+
+    getPageActions() {
+        let formBuilderUrl = this.getFormBuilderUrl()
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', onClick: this.openFormBuilder},
+            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', link: formBuilderUrl},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
@@ -321,9 +331,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         openRecordForEdit: (recId) => {
             dispatch(openRecordForEdit(recId));
-        },
-        openFormBuilder: (recId) => {
-            dispatch(openFormBuilder(recId));
         },
         editNewRecord: () => {
             dispatch(editNewRecord());

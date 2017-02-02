@@ -9,6 +9,7 @@ import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
+import FormBuilder from '../components/builder/formBuilder';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import Logger from "../utils/logger";
 
@@ -56,7 +57,7 @@ render((
             </Route>
 
             <Route path="/qbase/builder/app/:appId" component={ConnectedNav}>
-                <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+                <Route path="table/:tblId/record/:recordId" component={FormBuilder} />
             </Route>
 
         </Router>
