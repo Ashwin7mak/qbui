@@ -55,6 +55,10 @@ render((
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>
 
+            <Route path="/qbase/builder/app/:appId" component={ConnectedNav}>
+                <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+            </Route>
+
         </Router>
     </Provider>
 ), document.getElementById('content'));

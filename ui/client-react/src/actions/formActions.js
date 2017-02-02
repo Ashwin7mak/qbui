@@ -123,20 +123,6 @@ export const openRecordForEdit = (recId) => {
 };
 
 /**
- * open an existing record for form builder
- * @param recId
- * @returns {{type, recId: *}}
- * */
-
-export const openFormBuilder = (recId) => {
-    console.log('Boom Baby', recId);
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: recId,
-    };
-};
-
-/**
  * open a new record for editing
  * @param navigateAfterSave go to the new record after saving
  * @returns {{type, recId, navigateAfterSave: boolean}}

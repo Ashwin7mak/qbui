@@ -19,7 +19,6 @@ import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord, openRecordForEdit, openFormBuilder} from '../../actions/formActions';
-// import {loadForm, editNewRecord} from '../../actions/formActions';
 
 import './record.scss';
 
@@ -198,14 +197,7 @@ export const RecordRoute = React.createClass({
     openRecordForEdit() {
         this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
-    /**
-     * open the selected row in form builder
-     * @param data row record data
-     * */
-    openFormBuilder() {
-        console.log('onRecordRoute');
-        this.props.openFormBuilder(parseInt(this.props.params.recordId));
-    },
+
     /**
      * edit the selected record in the trowser
      * @param data row record data

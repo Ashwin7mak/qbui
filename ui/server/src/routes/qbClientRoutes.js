@@ -97,6 +97,10 @@ var path = require('path');
             renderIndex(req, res, {title: 'QuickBase Component Library', bundleFileName: compBundleFileName});
         });
 
+        app.route('/qbase/builder/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
         //  default application dashboard
         app.route('/qbase/').get(function(req, res) {
             renderIndex(req, res);
