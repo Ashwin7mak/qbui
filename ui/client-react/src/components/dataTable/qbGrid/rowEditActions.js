@@ -84,6 +84,7 @@ export const RowEditActions = React.createClass({
 
         // Heads up: We currently disable the Save and add Button hence the 'true' as the first parameter.
         // This check should be removed once creating multiple records in the grid is working.
+        // https://quickbase.atlassian.net/browse/MB-2115
         if (true || !isValid || saving) {
             addRecordClasses.push('disabled');
 

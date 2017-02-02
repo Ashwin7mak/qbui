@@ -149,7 +149,6 @@ describe('QbGrid', () => {
 
             // Only check some keys. We don't need to check each individual cell for the purpose of this test.
             Object.keys(result).forEach(key => {
-                console.log('Key: ', key, 'value: ', result[key], 'expectedValue: ', expectedResult[key]);
                 if (expectedResult[key] !== undefined) {
                     expect(result[key]).toEqual(expectedResult[key]);
                 }
