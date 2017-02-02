@@ -1,4 +1,5 @@
 import React from 'react';
+import AppHistory from '../../globals/appHistory';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
@@ -216,14 +217,14 @@ export const RecordRoute = React.createClass({
         let tbldId = this.props.params.tblId;
         let recordId = this.props.params.recordId;
         let builderUrl = '/qbase/builder/app/' + appId + '/table/' + tbldId + '/record/' + recordId;
-        return builderUrl;
+        AppHistory.history.push(builderUrl);
     },
 
     getPageActions() {
-        let formBuilderUrl = this.getFormBuilderUrl()
+        // let formBuilderUrl = this.getFormBuilderUrl()
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', link: formBuilderUrl},
+            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', onClick: this.getFormBuilderUrl},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},

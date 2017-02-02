@@ -5,6 +5,7 @@ import {Router, Route, IndexRoute} from "react-router";
 import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
+import BuilderWrapper from '../components/builder/builderWrapper';
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
@@ -56,7 +57,7 @@ render((
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>
 
-            <Route path="/qbase/builder/app/:appId" component={ConnectedNav}>
+            <Route path="/qbase/builder/app/:appId" component={BuildeWrapper}>
                 <Route path="table/:tblId/record/:recordId" component={FormBuilder} />
             </Route>
 

@@ -80,18 +80,12 @@ let IconActions = React.createClass({
             className += action.className;
         }
 
-        if (action.link) {
-            qbIcon = <a href={action.link}><QBicon icon={action.icon}/></a>;
-        } else {
-            qbIcon = <QBicon icon={action.icon}/>;
-        }
-
         return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
                     <Button key={action.msg}
                        tabIndex="0"
                        className={className}
                        onClick={action.onClick}>
-                        {qbIcon}
+                        <QBicon icon={action.icon}/>
                     </Button>
                 </OverlayTrigger>);
     },
