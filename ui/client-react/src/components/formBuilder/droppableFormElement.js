@@ -16,6 +16,12 @@ const formTarget = {
             sectionIndex: props.sectionIndex,
             orderIndex: props.orderIndex
         };
+    },
+
+    canDrop(props, monitor) {
+        let draggableProps = monitor.getItem();
+        // TODO:: Update to include comparison of tab and section
+        return props.orderIndex !== draggableProps.orderIndex;
     }
 };
 
@@ -30,6 +36,7 @@ function collect(connect, monitor) {
     return {
         connectDropTarget: connect.dropTarget(),
         isOver: monitor.isOver(),
+        canDrop: monitor.canDrop()
     };
 }
 
@@ -41,10 +48,10 @@ function collect(connect, monitor) {
  */
 const DroppableElement = FieldComponent => {
     let component = (props) => {
-        const {connectDropTarget, isOver} = props;
+        const {connectDropTarget, isOver, canDrop} = props;
 
         let classNames = ['droppableField'];
-        classNames.push(isOver ? 'dropHovering' : 'notDropHovering');
+        classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
 
         return connectDropTarget(
             <div className={classNames.join(' ')}>
