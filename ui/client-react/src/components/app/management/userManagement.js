@@ -57,24 +57,9 @@ const UserManagement = React.createClass({
         return columns;
     },
 
-    restructureUserData() {
-        return this.props.appUsers.map(user => {
-            this.updateUserProperties(user);
-            return user;
-        });
-    },
-
-    updateUserProperties(user) {
-        Object.keys(user).forEach(function(key,index) {
-            user[key] = {content: user[key]};
-        });
-    },
-
     render() {
-        const CellRenderer = (props) => {return <div className="customCell">{props.content}</div>;};
         const cellFormatter = (cellData) => {return <span>{cellData}</span>};
         const columns = this.createUserColumns(cellFormatter);
-        //let users = this.restructureUserData();
         return (
             <div className="userManagementContainer">
                 <QBGrid
