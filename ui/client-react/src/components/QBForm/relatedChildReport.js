@@ -13,7 +13,7 @@ class ChildReport extends React.Component {
         // TODO: render embedded report for medium and large breakpoint
         if (Breakpoints.isSmallBreakpoint() || true) {
             const link = UrlUtils.getRelatedChildReportLink(this.props.appId, this.props.childTableId, this.props.childReportId, this.props.foreignKeyFid, this.props.foreignKeyValue);
-            return <Link to={link}>{this.props.childTableName || "Child Table"}</Link>;
+            return <Link to={link} className="relatedChildReport childReportLink">{this.props.childTableName || "Child Table"}</Link>;
         } else {
             return null;
         }

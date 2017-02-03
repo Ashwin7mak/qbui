@@ -11,7 +11,7 @@ import FieldUtils from '../../utils/fieldUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
-import RelatedChildReport from './RelatedChildReport';
+import RelatedChildReport from './relatedChildReport';
 
 import './qbform.scss';
 import './tabs.scss';

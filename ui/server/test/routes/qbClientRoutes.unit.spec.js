@@ -92,7 +92,7 @@ describe('Express Client Routes', function() {
 
     it('Validate get child report route', function(done) {
         request(app).
-        get('/app/1/table/2/report/3/fieldWithParentId/4/masterRecordId/5').
+        get('/app/1/table/2/report/3/foreignKeyFid/4/foreignKeyValue/5').
         expect(200);
         done();
     });
