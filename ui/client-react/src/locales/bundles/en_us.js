@@ -109,6 +109,7 @@ export default {
             formBuilder: 'Form Builder',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
+            saveAndAddRecordDisabled: "Adding records in the grid is not working right now",
             cancelSelection: "Cancel changes",
             favorite: "Favorite",
             gridEdit: "Grid Edit",

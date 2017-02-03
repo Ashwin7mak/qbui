@@ -77,13 +77,36 @@ export const RowEditActions = React.createClass({
         return saveButton;
     },
 
-    render() {
-        let {isValid, saving, idKey} = this.props;
+    renderSaveAndAddButton() {
+        let {isValid, saving, rowId} = this.props;
 
         let addRecordClasses = ['addRecord'];
-        if (!isValid || saving) {
+
+        // Heads up: We currently disable the Save and add Button hence the 'true' as the first parameter.
+        // This check should be removed once creating multiple records in the grid is working.
+        // https://quickbase.atlassian.net/browse/MB-2115
+        if (true || !isValid || saving) {
             addRecordClasses.push('disabled');
+
+            let tooltipMessage = 'pageActions.saveAndAddRecordDisabled'; // This can be removed once save and add is working again
+            // let tooltipMessage = 'pageActions.saveAndAddRecord'; // Currently disabled
+
+            return (
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey={tooltipMessage}>
+                    <Button className="rowEditActionsSaveAndAdd"><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
+                </QBToolTip>
+            );
+        } else {
+            return (
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
+                    <Button className="rowEditActionsSaveAndAdd" onClick={this.onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
+                </QBToolTip>
+            );
         }
+    },
+
+    render() {
+        let {idKey} = this.props;
 
         return (
             <div className="editTools" key={"crea-" + idKey}>
@@ -93,9 +116,7 @@ export const RowEditActions = React.createClass({
 
                 {this.renderSaveRecordButton()}
 
-                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button className="rowEditActionsSaveAndAdd" onClick={this.onClickAdd}><QBIcon icon="add" className={addRecordClasses.join(' ')}/></Button>
-                </QBToolTip>
+                {this.renderSaveAndAddButton()}
             </div>
         );
     }

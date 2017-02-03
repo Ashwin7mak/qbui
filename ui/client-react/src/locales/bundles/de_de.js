@@ -106,6 +106,7 @@ export default {
             formBuilder: "Bilden Erbauer",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
+            saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
             cancelSelection: "Abbrechen Änderungen",
             favorite: "Favorit",
             gridEdit: "Gitter bearbeiten",

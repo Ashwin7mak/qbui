@@ -519,8 +519,14 @@ module.exports = function(grunt) {
         webdriver: {
             options: {
                 specs: [
-                    './wdio/tests/reports/*.e2e.spec.js',
-                    './wdio/tests/forms/*.e2e.spec.js'
+                    //reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
+                    //this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
+                    //because the save and add button is disabled we turned off the reportAddRecord test
+                    //we will turn it back on once this button has been enabled again
+                    // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                    './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+                    // './wdio/tests/forms/*.e2e.spec.js'
                 ]
             },
             test: {
