@@ -97,6 +97,9 @@ export const TableHomePageRoute = React.createClass({
     },
 
     render() {
+        //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
+        //  TODO: this should become unnecessary once flux store is replaced..
+        let homePageParams = _.assign(this.props.params, {rptId: null});
         return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
                 <ReportStage reportData={this.props.reportData} />
@@ -105,7 +108,7 @@ export const TableHomePageRoute = React.createClass({
             {this.getHeader()}
 
             <ReportToolsAndContent
-                params={this.props.params}
+                params={homePageParams}
                 reportData={this.props.reportData}
                 appUsers={this.props.appUsers}
                 routeParams={this.props.routeParams}
