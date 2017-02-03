@@ -253,9 +253,8 @@ let QBForm = React.createClass({
      * @returns {Component}
      */
     createChildReportElementCell(element, sectionIndex, colSpan) {
-        let key = 'field-' + sectionIndex + '-' + element.orderIndex;
-        // TODO: don't use globals
-        const relationship = window.relationships[element.relationshipId];
+        let key = 'relatedField-' + sectionIndex + '-' + element.orderIndex;
+        const relationship = _.get(this, `props.relationships[${element.relationshipId}]`, {});
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
         // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now

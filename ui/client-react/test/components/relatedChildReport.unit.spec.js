@@ -63,5 +63,22 @@ describe('RelatedChildReport', () => {
 
             RelatedChildReport.__ResetDependency__('Breakpoints');
         });
+
+        [
+            "appId",
+            "childTableId",
+            "childReportId",
+            "foreignKeyFid",
+            "foreignKeyValue"
+        ].forEach(prop => {
+            it(`does not render a link if ${prop} is not defined`, () => {
+                const props = {};
+                props[prop] = undefined;
+                component = TestUtils.renderIntoDocument(MockChildReport(props)());
+                domComponent = TestUtils.scryRenderedDOMComponentsWithTag(component, 'a');
+
+                expect(domComponent.length).toEqual(0);
+            });
+        });
     });
 });

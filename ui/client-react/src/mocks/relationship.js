@@ -21,10 +21,10 @@ export const relationships = [
     {
         "masterAppId": "1",
         "masterTableId": "2",
-        "masterFieldId": 3,
+        "masterFieldId": 2,
         "detailAppId": "1",
         "detailTableId": "5",
-        "detailFieldId": 3,
+        "detailFieldId": 2,
         "id": 0,
         "appId": "1",
         "description": "Referential integrity relationship between Master / Child Tables",
