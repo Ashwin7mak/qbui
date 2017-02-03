@@ -224,7 +224,7 @@ export const RecordRoute = React.createClass({
         // let formBuilderUrl = this.getFormBuilderUrl()
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', onClick: this.getFormBuilderUrl},
+            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.getFormBuilderUrl},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},

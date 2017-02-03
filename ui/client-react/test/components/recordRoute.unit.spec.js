@@ -2,6 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import QBForm from  '../../src/components/QBForm/qbform';
 import {ConnectedRecordRoute, RecordRoute} from '../../src/components/record/recordRoute';
+import ReactDOM from 'react-dom';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -11,12 +12,16 @@ import {loadingForm} from '../../src/actions/formActions';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('RecordRoute functions', () => {
+fdescribe('RecordRoute functions', () => {
     'use strict';
 
     let component;
 
     let flux = {};
+    let mockParent = {}
+    mockParent.this = {
+        getFormBuilderUrl() {return;}
+    };
 
     flux.actions = {
         hideTopNav() {return;},
@@ -32,6 +37,7 @@ describe('RecordRoute functions', () => {
         spyOn(flux.actions, 'openingReportRow');
         spyOn(flux.actions, 'showPreviousRecord');
         spyOn(flux.actions, 'showNextRecord');
+        spyOn(mockParent.this, 'getFormBuilderUrl');
     });
 
     afterEach(() => {
@@ -39,6 +45,7 @@ describe('RecordRoute functions', () => {
         flux.actions.openingReportRow.calls.reset();
         flux.actions.showPreviousRecord.calls.reset();
         flux.actions.showNextRecord.calls.reset();
+        mockParent.this.getFormBuilderUrl.calls.reset();
     });
 
     it('test render of component with missing url params', () => {
@@ -156,6 +163,7 @@ describe('RecordRoute functions', () => {
         let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
         let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
 
+
         // should have all 3 nav links
         expect(prevRecord.length).toBe(1);
         expect(nextRecord.length).toBe(1);
@@ -171,9 +179,42 @@ describe('RecordRoute functions', () => {
         expect(flux.actions.showNextRecord).toHaveBeenCalled();
         expectedRouter.push('/qbase/app/1/table/2/report/3/record/3');
 
+        // switch to Form Builder
+        TestUtils.Simulate.click(formBuilderButton[0]);
+        expect(flux.actions.getFormBuilderUrl).toHaveBeenCalled();
+        expectedRouter.push('/qbase/builder/app/1/table/2/record/4');
+
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
         expectedRouter.push('/qbase/app/1/table/2/report/3');
+
+        expect(router).toEqual(expectedRouter);
+    });
+
+    fit('test to see if Build Form Button has the correct href', () => {
+
+        const initialState = {};
+        const store = mockStore(initialState);
+
+        let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
+
+        let router = [];
+        let expectedRouter = [];
+
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
+            </Provider>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let testComponent = ReactDOM.findDOMNode(component);
+        let formBuilderButton = testComponent.children[2].children[1].children[1]
+        TestUtils.Simulate.click(formBuilderButton);
+        expect(mockParent.this.getFormBuilderUrl).toHaveBeenCalled();
+        expectedRouter.push('/qbase/builder/app/1/table/2/record/4');
+        let currentLocation = browser().location;
+        console.log(currentLocation);
+        debugger;
         expect(router).toEqual(expectedRouter);
     });
 });
