@@ -2,15 +2,15 @@ import React, {PropTypes} from 'react';
 import FormBuilder from './formBuilder';
 
 
-const Builder = React.createClass({
+const BuilderWrapper = React.createClass({
     propTypes: {
         /**
          * the raw value to be saved */
         value: React.PropTypes.number,
     },
     render() {
-        return <FormBuilder/>
+        return <FormBuilder/>;
     }
 });
 
-export default Builder;
+export default BuilderWrapper;

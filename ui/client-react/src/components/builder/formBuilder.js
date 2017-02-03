@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import './formBuilder.scss'
+import './formBuilder.scss';
 
 
 const FormBuilder = React.createClass({
@@ -9,12 +9,13 @@ const FormBuilder = React.createClass({
         value: React.PropTypes.number,
     },
     render() {
-        return(
+        return (
             <div>
                 <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
             </div>
-        )
+        );
     }
 });
 
 export default FormBuilder;
+

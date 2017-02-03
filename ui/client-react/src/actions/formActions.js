@@ -110,7 +110,6 @@ export const saveFormSuccess = (id) => {
  * @returns {{type, recId: *}}
  */
 export const openRecordForEdit = (recId) => {
-    console.log('I got hit!');
     // add editRec query param and let the router take action
     WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
 
