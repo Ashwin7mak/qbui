@@ -10,6 +10,9 @@ import * as query from '../constants/query';
 import {hasUnitsText, isSmartUnitsField} from '../../../common/src/formatter/durationFormatter';
 import _ from 'lodash';
 
+import Logger from '../utils/logger';
+let logger = new Logger();
+
 const reportModelHelper = {
     /**
      * Given the field list format the columnDefinition as needed by data grid.
@@ -300,7 +303,7 @@ class ReportModel {
                     let errorCode = reportData.facets[0].errorCode;
                     let id = reportData.facets[0].id;
                     let name = reportData.facets[0].name;
-                    logger.error(`Error response from server. Facet:${id}, name:{$name}, error: ${errorCode}; app:${this.appId}; table:${this.tblId}; report:${this.rptId}.`);
+                    logger.error(`Error response from server. Facet:${id}, name:${name}, error: ${errorCode}; app:${this.model.appId}; table:${this.model.tblId}; report:${this.model.rptId}.`);
                 } else {
                     this.model.facets = reportData.facets;
                 }
