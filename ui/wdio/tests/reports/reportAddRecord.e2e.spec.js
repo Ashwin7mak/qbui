@@ -44,17 +44,16 @@
         beforeEach(function() {
             // Load the List All report on Table 1
             return e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+
         });
 
         it('Click Save and Add a New Record Button, Add a new Record, Assert record is added to the last page', function() {
             browser.logger.info('it spec function - Running the test');
-
             var textToEnter = 'SaveAndAddANewRow';
             var numToEnter = 20;
             var dateToEnter = '03-11-1985';
             var dateToExpect = '03-12-1985';
             var successMessage = 'Record added';
-
             // Step 1- Double click on a record to enter inline edit mode and then 'Save and Add a New Row' button
             ReportInLineEditPO.openRecordEditMenu(3);
             ReportInLineEditPO.clickSaveAddNewRowButton();
@@ -62,7 +61,11 @@
             // Step 2 - Add new row - Text field, num field, date field
             ReportInLineEditPO.editTextField(0, textToEnter);
             ReportInLineEditPO.editNumericField(0, numToEnter);
+            ReportInLineEditPO.editNumericField(1, numToEnter);
+            ReportInLineEditPO.editNumericField(2, numToEnter);
+            ReportInLineEditPO.editNumericField(3, numToEnter);
             ReportInLineEditPO.editDateField(0, dateToEnter);
+            ReportInLineEditPO.editDateField(1, dateToEnter);
 
             // Step 3 - Open the calendar widget and Advance the date ahead 1 day
             if (browserName !== 'safari') {
@@ -72,9 +75,9 @@
 
             // Step 4 - Save the new added row
             ReportInLineEditPO.clickSaveChangesButton();
-            expect(browser.isVisible('.ag-row.editing .saveRecord')).toBeFalsy();
-            expect(browser.isVisible('.ag-row.editing .cancelSelection')).toBeFalsy();
-            expect(browser.isVisible('.ag-row.editing .addRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .saveRecord')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .cancelSelection')).toBeFalsy();
+            expect(browser.isVisible('.qb.editing .addRecord')).toBeFalsy();
 
             // Step 5 - Check for the success message 'Record added'
             //TODO: See if we can handle this a different way so it will work 100%. Would like to have this assertion
@@ -82,19 +85,19 @@
 
             // Step 6 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-
             // Step 7 - Go to the second page to check that the record is added at the last row (due to sorting)
             ReportPagingPO.clickPagingNavButton(ReportPagingPO.pagingToolbarNextButton);
 
             // Step 8 - Check the record values
             var numOfRows = ReportContentPO.reportDisplayedRecordCount();
+            browser.logger.info('This will show up in the log output under an Info tag! ', numOfRows);
             var recordValues = ReportContentPO.getRecordValues(numOfRows - 1);
-            expect(recordValues[0]).toBe(textToEnter);
+            expect(recordValues[1]).toBe(textToEnter);
 
             if (browserName !== 'safari') {
-                expect(recordValues[5]).toBe(dateToExpect);
+                expect(recordValues[6]).toBe(dateToExpect);
             } else {
-                expect(recordValues[5]).toBe(dateToEnter);
+                expect(recordValues[6]).toBe(dateToEnter);
             }
 
         });

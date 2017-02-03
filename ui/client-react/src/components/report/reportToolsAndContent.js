@@ -65,7 +65,7 @@ export const ReportToolsAndContent = React.createClass({
     },
     getInitialState: function() {
         return {
-            reactabular: false
+            reactabular: true
         };
     },
     componentWillMount() {
