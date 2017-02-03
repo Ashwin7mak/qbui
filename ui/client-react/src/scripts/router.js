@@ -10,7 +10,7 @@ import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
-import AppManagementRoute from "../components/app/appManagementRoute";
+import AppManagementRoute from "../components/app/management/appManagementRoute";
 import Logger from "../utils/logger";
 
 import "react-fastclick";
