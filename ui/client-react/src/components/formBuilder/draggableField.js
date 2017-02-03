@@ -2,6 +2,12 @@ import React, {PropTypes, Component} from 'react';
 import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 
+/**
+ * Specifies event handlers and props that are available during dragging events
+ * Recommended: Call any actions that will modify the DOM in "endDrag" (instead of drop [on drop target]), because
+ * in some cases the draggable DOM element might get deleted and endDrag might not be called.
+ * @type {{beginDrag: ((props)), endDrag: ((props?, monitor))}}
+ */
 const fieldDragSource = {
     beginDrag(props) {
         return {
@@ -18,6 +24,13 @@ const fieldDragSource = {
     }
 };
 
+/**
+ * Adds additional properties to the component for dragging events. Includes the `connectDragSource` which allows
+ * the component to be draggable.
+ * @param connect
+ * @param monitor
+ * @returns {{connectDragSource: (any|*), isDragging: *}}
+ */
 function collect(connect, monitor) {
     return {
         connectDragSource: connect.dragSource(),
@@ -25,7 +38,13 @@ function collect(connect, monitor) {
     };
 }
 
-export default (FieldComponent) => {
+/**
+ * A higher order component that accepts a field which will become draggable
+ * @param FieldComponent
+ * @returns {*}
+ * @constructor
+ */
+const DraggableFieldHoc = FieldComponent => {
     let component = (props) => {
         const {connectDragSource, isDragging} = props;
 
@@ -41,3 +60,5 @@ export default (FieldComponent) => {
 
     return DragSource(DraggableItemTypes.FIELD, fieldDragSource, collect)(component);
 };
+
+export default DraggableFieldHoc;

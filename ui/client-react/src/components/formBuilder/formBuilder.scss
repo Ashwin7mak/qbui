@@ -17,6 +17,12 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
         transition: opacity 0.5s, max-height 0.5s;
     }
 
+    /*
+     * In order to show hover and drop effects over existing, but unknown elements, we place a transparent
+     * element over each form element. These are then transitioned based on opacity. Note that dragging elements have
+     * a div appended BEFORE and droppable targets are appended AFTER. This prevents the droppable target from blocking
+     * the draggable one.
+     */
     .notDragging:after, .droppableField:before {
         content: "";
         position: absolute;
@@ -27,6 +33,7 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
         left: -5%;
     }
 
+    // Dragging
     .notDragging:after {
         background-color: $draggable-hover-foreground-color;
         opacity: 0;
@@ -55,6 +62,7 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
         content: none;
     }
 
+    // Dropping
     .droppableField:before {
         background-color: $droppable-hover-foreground-color;
         opacity: 0;
@@ -66,6 +74,7 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
         transition: opacity 0.5s;
     }
 
+    // React CSS Transition Classes for elements that are moved
     .formItem-enter {
         opacity: 0.01;
     }

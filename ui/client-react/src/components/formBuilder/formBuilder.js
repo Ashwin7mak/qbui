@@ -6,6 +6,10 @@ import _ from 'lodash';
 
 import './formBuilder.scss';
 
+/**
+ * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
+ * The state is temporary until the redux stores are developed.
+ */
 class FormBuilder extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +26,13 @@ class FormBuilder extends Component {
         this.setState({formData: this.props.formData});
     }
 
+    /**
+     * Moves the dragged item to the location of the item that it was dropped on.
+     * @param newTabIndex
+     * @param newSectionIndex
+     * @param newOrderIndex
+     * @param draggedItemProps
+     */
     handleFormReorder(newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
         let formDataCopy = _.cloneDeep(this.state.formData);
         let formMeta = formDataCopy.formMeta;

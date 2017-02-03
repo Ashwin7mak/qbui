@@ -7,7 +7,7 @@ import DroppableFormElement from './droppableFormElement';
 export default (FieldComponent) => {
     let component = props => {
         return (
-            <div className="dragDropField">
+            <div className="dragAndDropField">
                 <FieldComponent {...props} />
             </div>
         );
