@@ -4,7 +4,6 @@
 import React, {PropTypes} from 'react';
 import Logger from '../../../utils/logger';
 import QBGrid from '../../dataTable/qbGrid/qbGrid';
-import RowTransformer from '../../dataTable/qbGrid/rowTransformer';
 import './userManagement.scss';
 
 
@@ -19,39 +18,66 @@ const UserManagement = React.createClass({
 
     createUserColumns(cellFormatter) {
          let columns = [
-            {
-                property: 'firstName',
-                header: {
-                    label: <span>First Name</span>
-                },
-                cell: {formatters: [cellFormatter]}
-            },
-            {
-                property: 'email',
-                header: {
-                    label: <span>Email</span>
-                },
-                cell: {formatters: [cellFormatter]}
-            },
-            {
-                property: 'screenName',
-                header: {
-                    label: <span>Screen Name</span>
-                },
-                cell: {formatters: [cellFormatter]}
-            }
+             {
+                 property: 'firstName',
+                 header: {
+                     label: <span>First Name</span>
+                 },
+                 cell: {formatters: [cellFormatter]}
+             },
+             {
+                 property: 'lastName',
+                 header: {
+                     label: <span>Last Name</span>
+                 },
+                 cell: {formatters: [cellFormatter]}
+             },
+             {
+                 property: 'screenName',
+                 header: {
+                     label: <span>Screen Name</span>
+                 },
+                 cell: {formatters: [cellFormatter]}
+             },
+             {
+                 property: 'email',
+                 header: {
+                     label: <span>Email</span>
+                 },
+                 cell: {formatters: [cellFormatter]}
+             },
+             {
+                 property: 'userId',
+                 header: {
+                     label: <span>User ID</span>
+                 },
+                 cell: {formatters: [cellFormatter]}
+             }
         ];
         return columns;
     },
 
+    restructureUserData() {
+        return this.props.appUsers.map(user => {
+            this.updateUserProperties(user);
+            return user;
+        });
+    },
+
+    updateUserProperties(user) {
+        Object.keys(user).forEach(function(key,index) {
+            user[key] = {content: user[key]};
+        });
+    },
+
     render() {
-        const CellRenderer = (props) => {return <div className="customCell">{props.appUsers}</div>;};
-        const cellFormatter = (cellData) => {return React.createElement(CellRenderer, cellData);};
+        const CellRenderer = (props) => {return <div className="customCell">{props.content}</div>;};
+        const cellFormatter = (cellData) => {return <span>{cellData}</span>};
         const columns = this.createUserColumns(cellFormatter);
+        //let users = this.restructureUserData();
         return (
             <div className="userManagementContainer">
                 <QBGrid
-                    cellRenderer={CellRenderer}
                     columns={columns}
                     rows={this.props.appUsers}
                     numberOfColumns={columns.length}

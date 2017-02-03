@@ -99,7 +99,7 @@ const QbGrid = React.createClass({
          * A cellRenderer (a React component) must be passed in.
          * The cellRenderer component will have access to all the props in the row object.
          */
-        cellRenderer: PropTypes.func.isRequired,
+        cellRenderer: PropTypes.func,
 
         /**
          * If there are properties common to all rows, they can be passed in as an addition prop. This is useful for event
