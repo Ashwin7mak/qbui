@@ -46,7 +46,7 @@ class FormBuilder extends Component {
             {FormFieldElement: draggedItemProps.element},
             ...elementsArray.slice(newPlacementIndex, elements.length)
         ];
-        
+
         let newElementsObject = {};
 
         elementsArray.forEach((element, index) => {

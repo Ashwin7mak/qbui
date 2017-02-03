@@ -1,6 +1,12 @@
 @import '../../assets/css/qbVariables';
 
 .formBuilderContainer {
+    // TODO:: To be removed
+    .tempDrop {
+        height: 30px;
+        width: 100%;
+    }
+
     background-color: $color-orange-500;
 
     .notDragging {
@@ -23,23 +29,17 @@
     }
 
     .dropHovering {
-        background-color: $color-orange-500;
-        opacity: 0.5;
+        background-color: $color-teal-500;
+        opacity: 0.4;
 
         transition: opacity 0.5s, background-color 1s;
     }
 
     .notDropHovering {
-        background-color: inherit;
+        background-color: $color-orange-500;
         opacity: 1;
 
         transition: opacity 0.5s, background-color 1s;
-    }
-
-    .tempDrop {
-        background-color: $color-red-500;
-        height: 30px;
-        width: 100%;
     }
 
     .formItem-enter {
