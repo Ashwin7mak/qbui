@@ -11,6 +11,9 @@ import FieldUtils from '../../utils/fieldUtils';
 import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
+import DraggableField from '../formBuilder/draggableField';
+
+import TempDrop from '../formBuilder/tempDrop';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -28,7 +31,8 @@ let QBForm = React.createClass({
     },
 
     propTypes: {
-
+        editing: React.PropTypes.bool,
+        editingForm: React.PropTypes.bool,
         activeTab: React.PropTypes.string,
         formData: React.PropTypes.shape({
             record: React.PropTypes.array,
@@ -65,16 +69,19 @@ let QBForm = React.createClass({
 
         const colSpan = isLast ? 100 : 1;
 
+        // const leftLabel = labelPosition === QBForm.LABEL_LEFT;
+        const leftLabel = false; // Turn off left labels for now
+
         const cells = [];
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
-            if (labelPosition === QBForm.LABEL_LEFT) {
+            if (leftLabel) {
                 cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
             }
-            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
+            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, !leftLabel, colSpan, validationStatus));
         }else if (element.ReferenceElement) {
             if (labelPosition === QBForm.LABEL_LEFT) {
                 cells.push(this.createFieldLabelCell(element.ReferenceElement, orderIndex, {}));
@@ -185,6 +192,7 @@ let QBForm = React.createClass({
      * @param sectionIndex
      * @param includeLabel
      * @param colSpan
+     * @param validationStatus
      * @returns {XML}
      */
     createFieldElementCell(element, sectionIndex, includeLabel, colSpan, validationStatus) {
@@ -200,21 +208,25 @@ let QBForm = React.createClass({
             relatedField.required = relatedField.required || element.required;
         }
 
+        let CurrentFieldElement = (this.props.editingForm ? DraggableField(FieldElement) : FieldElement);
+
         return (
             <td key={key} colSpan={colSpan}>
-              <FieldElement element={element}
-                            key={"fe-" + this.props.idKey}
-                            idKey={"fe-" + this.props.idKey}
-                            relatedField={relatedField}
-                            fieldRecord={fieldRecord}
-                            includeLabel={includeLabel}
-                            indicateRequiredOnLabel={this.props.edit}
-                            edit={this.props.edit && !element.readOnly}
-                            onChange={this.props.onFieldChange}
-                            onBlur={this.props.onFieldChange}
-                            isInvalid={validationStatus.isInvalid}
-                            invalidMessage={validationStatus.invalidMessage}
-                            appUsers={this.props.appUsers}
+              <CurrentFieldElement
+                  handleFormReorder={this.props.handleFormReorder}
+                  element={element}
+                  key={"fe-" + this.props.idKey}
+                  idKey={"fe-" + this.props.idKey}
+                  relatedField={relatedField}
+                  fieldRecord={fieldRecord}
+                  includeLabel={includeLabel}
+                  indicateRequiredOnLabel={this.props.edit}
+                  edit={this.props.edit && !element.readOnly}
+                  onChange={this.props.onFieldChange}
+                  onBlur={this.props.onFieldChange}
+                  isInvalid={validationStatus.isInvalid}
+                  invalidMessage={validationStatus.invalidMessage}
+                  appUsers={this.props.appUsers}
               />
             </td>);
     },
@@ -261,7 +273,7 @@ let QBForm = React.createClass({
      * @param singleColumn force single column
      * @returns {Array} of TR elements
      */
-    createSectionTableRows(section, singleColumn) {
+    createSectionTableRows(section, singleColumn, tabIndex) {
         let rows = [];                  // the TR components
         let currentRowElements = [];    // the TD elements for the current row
 
@@ -282,7 +294,11 @@ let QBForm = React.createClass({
 
             if (singleColumn) {
                 // just one TR containing the current element (a single TD)
-                rows.push(<tr key={key++} className="fieldRow">{this.getTableCells(sectionElement, section.orderIndex, labelPosition, true)}</tr>);
+                rows.push(
+                    <tr key={key++} className="fieldRow">
+                        {this.getTableCells(sectionElement, section.orderIndex, labelPosition, true)}
+                    </tr>
+                );
                 return;
             }
 
@@ -306,6 +322,9 @@ let QBForm = React.createClass({
                 // append the table cell(s) for the current element to the current row
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, isLast));
             }
+
+            // TODO:: Remove once field is both draggable and droppable
+            rows.push(<tr key={`droppable_${key}`}><td><TempDrop tabIndex={tabIndex} sectionIndex={section.orderIndex} orderIndex={sectionElement.FormFieldElement.orderIndex} handleFormReorder={this.props.handleFormReorder} /></td></tr>);
         });
         return rows;
     },
@@ -316,7 +335,7 @@ let QBForm = React.createClass({
      * @param singleColumn force single column
      *
      */
-    createSection(section, singleColumn, isFirstSection) {
+    createSection(section, singleColumn, isFirstSection, tabIndex) {
         let sectionTitle = "";
 
         // build the section header.
@@ -344,7 +363,7 @@ let QBForm = React.createClass({
                      wrapLabels={wrapLabels}>
                 <table className="formTable">
                     <tbody>
-                        {this.createSectionTableRows(section, singleColumn)}
+                        {this.createSectionTableRows(section, singleColumn, tabIndex)}
                     </tbody>
                 </table>
             </QBPanel>
@@ -361,7 +380,7 @@ let QBForm = React.createClass({
         let sections = [];
         if (tab.sections) {
             Object.keys(tab.sections).forEach((key, index) => {
-                sections.push(this.createSection(tab.sections[key], singleColumn, index === 0));
+                sections.push(this.createSection(tab.sections[key], singleColumn, index === 0, tab.orderIndex));
             });
         }
 
