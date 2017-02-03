@@ -1,5 +1,7 @@
 @import '../../../../src/assets/css/qbVariables';
 @import '../../../../src/assets/css/customVariables';
+
+// semantic names to go through and scrub
 $row-box-shadow-color: $color-black-300;
 $cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
@@ -10,7 +12,8 @@ $grid-group-expand-icon-size: 20px;
 $cell-edit-background-edit: $color-blue-200;
 $edit-icon-font-size: 18px;
 
-// New semantic names
+
+// New semantic names - to be moved to _qbColorVariables.scss in a future pull.
 $grid-row-hover-color:                          $color-blue-200;
 $grid-initiate-inline-edit-pencil-base-color:   rgba($color-black-700, 0.2);
 $grid-icon-hover-color:                         $color-cyan-700;
