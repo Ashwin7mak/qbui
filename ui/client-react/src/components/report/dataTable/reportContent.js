@@ -57,12 +57,12 @@ export const ReportContent = React.createClass({
     },
 
     // row was clicked in the report; navigate to record
-    openRow(data) {
+    openRow(recId) {
         const {appId, tblId, rptId} = this.props.reportData;
         const key = this.props.primaryKeyName;
 
         //  data is the row object...get the record id
-        let recId = data[key].value;
+        //let recId = data[key].value;
 
         const {filteredRecords, hasGrouping} = this.props.reportData.data;
 
@@ -99,14 +99,14 @@ export const ReportContent = React.createClass({
      * @param recid
      * @returns {*}
      */
-    getOrigRec(recid) {
+    getOrigRec(recId) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
         let primaryKeyName =  this.props.primaryKeyName;
         _.find(recs, rec => {
             var keys = Object.keys(rec);
             keys.find((col) => {
-                if (col === primaryKeyName && rec[col].value === recid) {
+                if (col === primaryKeyName && rec[col].value === recId) {
                     orig.names = rec;
                     let fids = {};
                     let recKeys = Object.keys(rec);
