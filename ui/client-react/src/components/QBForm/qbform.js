@@ -213,9 +213,12 @@ let QBForm = React.createClass({
         return (
             <td key={key} colSpan={colSpan}>
               <CurrentFieldElement
+                  tabIndex={0}
+                  sectionIndex={sectionIndex}
+                  orderIndex={element.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
                   element={element}
-                  key={"fe-" + this.props.idKey}
+                  key={`fe-${element.fieldId}`}
                   idKey={"fe-" + this.props.idKey}
                   relatedField={relatedField}
                   fieldRecord={fieldRecord}
@@ -239,7 +242,7 @@ let QBForm = React.createClass({
      * @returns {XML}
      */
     createTextElementCell(element, sectionIndex, colSpan) {
-        let key = "field" + sectionIndex + "-" + element.orderIndex;
+        let key = "field-" + sectionIndex + "-" + element.orderIndex;
         return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
     },
 
@@ -251,7 +254,7 @@ let QBForm = React.createClass({
      * @returns {Component}
      */
     createChildReportElementCell(element, sectionIndex, colSpan) {
-        let key = 'field' + sectionIndex + '-' + element.orderIndex;
+        let key = 'field-' + sectionIndex + '-' + element.orderIndex;
         // TODO: don't use globals
         const relationship = window.relationships[element.relationshipId];
         const relatedField = this.getRelatedField(relationship.masterFieldId);
@@ -292,10 +295,13 @@ let QBForm = React.createClass({
 
             let props = this.getElementProps(sectionElement);
 
+
+            let idKey = buildIdKey(tabIndex, section.orderIndex, sectionElement.FormFieldElement.fieldId);
+
             if (singleColumn) {
                 // just one TR containing the current element (a single TD)
                 rows.push(
-                    <tr key={key++} className="fieldRow">
+                    <tr key={idKey} className="fieldRow">
                         {this.getTableCells(sectionElement, section.orderIndex, labelPosition, true)}
                     </tr>
                 );
@@ -305,18 +311,18 @@ let QBForm = React.createClass({
             if (index === arr.length - 1) {
                 // the last element - add the final cell(s) to the row
                 if (!props.positionSameRow) {
-                    rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
+                    rows.push(<tr key={idKey} className="fieldRow">{currentRowElements}</tr>);
                     currentRowElements = [];
                 }
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
-                rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
+                rows.push(<tr key={buildIdKey(tabIndex, section.orderIndex, sectionElement.FormFieldElement.fieldId + 1)} className="fieldRow">{currentRowElements}</tr>);
             } else {
                 // look at the next element to see if it's on the same row - if not the current element is the last one on the row
                 const nextSectionElement = section.elements[arr[index + 1]];
                 const isLast = !this.getElementProps(nextSectionElement).positionSameRow;
                 if (currentRowElements.length > 0 && !props.positionSameRow) {
                     // current element is not on the same row so save the current row and start a new one
-                    rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
+                    rows.push(<tr key={idKey} className="fieldRow">{currentRowElements}</tr>);
                     currentRowElements = [];
                 }
                 // append the table cell(s) for the current element to the current row
@@ -324,7 +330,7 @@ let QBForm = React.createClass({
             }
 
             // TODO:: Remove once field is both draggable and droppable
-            rows.push(<tr key={`droppable_${key}`}><td><TempDrop tabIndex={tabIndex} sectionIndex={section.orderIndex} orderIndex={sectionElement.FormFieldElement.orderIndex} handleFormReorder={this.props.handleFormReorder} /></td></tr>);
+            rows.push(<tr key={`droppable_${idKey}`}><td><TempDrop tabIndex={tabIndex} sectionIndex={section.orderIndex} orderIndex={sectionElement.FormFieldElement.orderIndex} handleFormReorder={this.props.handleFormReorder} /></td></tr>);
         });
         return rows;
     },
@@ -500,5 +506,9 @@ let QBForm = React.createClass({
         );
     }
 });
+
+function buildIdKey(tabIndex, sectionIndex, fieldId) {
+    return `fieldContainer-tab-${tabIndex}-section-${sectionIndex}-field-${fieldId}`;
+}
 
 export default QBForm;
