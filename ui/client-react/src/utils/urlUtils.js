@@ -67,11 +67,11 @@ const UrlUtils = {
     /**
      * Return URL of route for displaying a child report in the following form:
      *
-     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}/foreignKeyFid/${foreignKeyFid}/foreignKeyValue/${foreignKeyValue}`
+     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}/detailKeyFid/${detailKeyFid}/detailKeyValue/${detailKeyValue}`
      *
      * @return {string} URL of route for displaying a child report
      */
-    getRelatedChildReportLink(appId, tableId, reportId, foreignKeyFid, foreignKeyValue) {
+    getRelatedChildReportLink(appId, tableId, reportId, detailKeyFid, detailKeyValue) {
         return StringUtils.format(CHILD_REPORT_LINK, [...arguments]);
     }
 };

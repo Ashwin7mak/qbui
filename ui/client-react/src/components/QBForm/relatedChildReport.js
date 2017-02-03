@@ -14,12 +14,12 @@ class ChildReport extends React.Component {
         super(...args);
     }
     render() {
-        const {appId, childTableId, childReportId, foreignKeyFid, foreignKeyValue} = this.props;
-        const validProps = [appId, childTableId, childReportId, foreignKeyFid, foreignKeyValue].every(prop => prop || typeof prop === 'number');
+        const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
+        const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
         if (!validProps) {
             return null;
         } else if (Breakpoints.isSmallBreakpoint() || true) {
-            const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, foreignKeyFid, foreignKeyValue);
+            const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
             return <Link to={link} className="relatedChildReport childReportLink">{this.props.childTableName || "Child Table"}</Link>;
         } else {
             // TODO: render embedded report for medium and large breakpoint
@@ -35,9 +35,9 @@ ChildReport.propTypes = {
     /** The name of the child table. The same as what would be shown in the left nav for that table */
     childTableName: React.PropTypes.string,
     /** The fid of the field containing the foreignkey. */
-    foreignKeyFid: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    detailKeyFid: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
     /** The value entered in the foreignkey field. */
-    foreignKeyValue: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
+    detailKeyValue: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
 };
 
 export default ChildReport;

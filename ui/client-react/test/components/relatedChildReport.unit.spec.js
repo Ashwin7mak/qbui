@@ -15,9 +15,9 @@ const appId = 1;
 const childTableId = 2;
 const childReportId = 3;
 const childTableName = 'child table';
-const foreignKeyFid = 4;
-const foreignKeyValue = 5;
-const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}/foreignKeyFid/${foreignKeyFid}/foreignKeyValue/${foreignKeyValue}`;
+const detailKeyFid = 4;
+const detailKeyValue = 5;
+const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}/detailKeyFid/${detailKeyFid}/detailKeyValue/${detailKeyValue}`;
 
 const MockChildReport = (props) => () => {
     props = Object.assign({
@@ -25,8 +25,8 @@ const MockChildReport = (props) => () => {
         childTableId,
         childReportId,
         childTableName,
-        foreignKeyFid,
-        foreignKeyValue
+        detailKeyFid,
+        detailKeyValue
     }, props);
     return <RelatedChildReport {...props} />;
 };
@@ -68,8 +68,8 @@ describe('RelatedChildReport', () => {
             "appId",
             "childTableId",
             "childReportId",
-            "foreignKeyFid",
-            "foreignKeyValue"
+            "detailKeyFid",
+            "detailKeyValue"
         ].forEach(prop => {
             it(`does not render a link if ${prop} is not defined`, () => {
                 const props = {};

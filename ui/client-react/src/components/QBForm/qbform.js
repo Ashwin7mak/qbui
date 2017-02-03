@@ -266,8 +266,8 @@ let QBForm = React.createClass({
                 childTableId={_.get(relationship, "detailTableId")}
                 childReportId={childReportId}
                 childTableName={relationship.name}
-                foreignKeyFid={_.get(relationship, "detailFieldId")}
-                foreignKeyValue={_.get(fieldRecord, "value")}
+                detailKeyFid={_.get(relationship, "detailFieldId")}
+                detailKeyValue={_.get(fieldRecord, "value")}
             />
         </td>;
     },
