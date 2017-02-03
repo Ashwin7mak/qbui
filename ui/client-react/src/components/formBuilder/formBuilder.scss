@@ -1,26 +1,20 @@
 @import '../../assets/css/qbVariables';
 
 .formBuilderContainer {
-    // TODO:: To be removed
-    .tempDrop {
-        height: 30px;
-        width: 100%;
-    }
-
     background-color: $color-orange-500;
 
     .notDragging {
         opacity: 1;
         max-height: 500px;
 
-        transition: opacity 1s, max-height 1s;
+        transition: opacity 0.5s, max-height 0.5s;
     }
 
     .dragging {
         opacity: 0;
         max-height: 0;
 
-        transition: opacity 0.5s, max-height 0.5s;
+        transition: opacity 0.25s, max-height 0.25s;
     }
 
     .droppablePlaceholder {

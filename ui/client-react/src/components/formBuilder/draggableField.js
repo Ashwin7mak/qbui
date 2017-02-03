@@ -8,6 +8,13 @@ const fieldDragSource = {
             element: props.element,
             orderIndex: props.element.orderIndex,
         };
+    },
+
+    endDrag(props, monitor) {
+        if (monitor.didDrop()) {
+            let {tabIndex, sectionIndex, orderIndex} = monitor.getDropResult();
+            props.handleFormReorder(tabIndex, sectionIndex, orderIndex, props);
+        }
     }
 };
 

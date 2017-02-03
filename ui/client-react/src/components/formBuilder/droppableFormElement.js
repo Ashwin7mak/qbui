@@ -4,9 +4,12 @@ import {DropTarget} from 'react-dnd';
 
 const formTarget = {
     drop(props, monitor) {
-        let draggedItemProps = monitor.getItem();
-        props.handleFormReorder(props.tabIndex, props.sectionIndex, props.orderIndex, draggedItemProps);
-        return {};
+        // let draggedItemProps = monitor.getItem();
+        return {
+            tabIndex: props.tabIndex,
+            sectionIndex: props.sectionIndex,
+            orderIndex: props.orderIndex
+        };
     }
 };
 

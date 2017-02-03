@@ -11,9 +11,7 @@ import FieldUtils from '../../utils/fieldUtils';
 import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
-import DraggableField from '../formBuilder/draggableField';
-
-import TempDrop from '../formBuilder/tempDrop';
+import DragAndDropField from '../formBuilder/dragAndDropField';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -208,7 +206,7 @@ let QBForm = React.createClass({
             relatedField.required = relatedField.required || element.required;
         }
 
-        let CurrentFieldElement = (this.props.editingForm ? DraggableField(FieldElement) : FieldElement);
+        let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         return (
             <td key={key} colSpan={colSpan}>
@@ -328,9 +326,6 @@ let QBForm = React.createClass({
                 // append the table cell(s) for the current element to the current row
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, isLast));
             }
-
-            // TODO:: Remove once field is both draggable and droppable
-            rows.push(<tr key={`droppable_${idKey}`}><td><TempDrop tabIndex={tabIndex} sectionIndex={section.orderIndex} orderIndex={sectionElement.FormFieldElement.orderIndex} handleFormReorder={this.props.handleFormReorder} /></td></tr>);
         });
         return rows;
     },
