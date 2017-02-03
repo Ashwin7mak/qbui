@@ -1,39 +1,69 @@
 @import '../../assets/css/qbVariables';
 
+$draggable-hover-foreground-color: $color-orange-700; // needs opacity
+$droppable-hover-foreground-color: $color-black-800; // needs opacity
+
 .formBuilderContainer {
     background-color: $color-orange-500;
 
+    .draggableField, .droppableField {
+        position: relative;
+    }
+
     .notDragging {
-        opacity: 1;
         max-height: 500px;
+        opacity: 1;
 
         transition: opacity 0.5s, max-height 0.5s;
+    }
+
+    .notDragging:after, .droppableField:before {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        width: 110%;
+        height: 120%;
+        top: -10%;
+        left: -5%;
+    }
+
+    .notDragging:after {
+        background-color: $draggable-hover-foreground-color;
+        opacity: 0;
+
+        transition: opacity 0.2s;
+    }
+
+    .notDragging:hover:after {
+        opacity: 0.5;
+
+        transition: opacity 0.2s;
+    }
+
+    .notDragging:active:after {
+        opacity: 0;
     }
 
     .dragging {
         opacity: 0;
         max-height: 0;
 
-        transition: opacity 0.25s, max-height 0.25s;
+        transition: opacity 0.5s, max-height 0.5s;
     }
 
-    .droppablePlaceholder {
-        height: 50px;
-        width: 100%;
+    .dragging:after {
+        content: none;
     }
 
-    .dropHovering {
-        background-color: $color-teal-500;
-        opacity: 0.4;
-
-        transition: opacity 0.5s, background-color 1s;
+    .droppableField:before {
+        background-color: $droppable-hover-foreground-color;
+        opacity: 0;
+        transition: opacity 0.5s;
     }
 
-    .notDropHovering {
-        background-color: $color-orange-500;
-        opacity: 1;
-
-        transition: opacity 0.5s, background-color 1s;
+    .droppableField.dropHovering:before {
+        opacity: 0.7;
+        transition: opacity 0.5s;
     }
 
     .formItem-enter {
