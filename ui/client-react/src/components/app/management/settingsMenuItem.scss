@@ -1,0 +1,43 @@
+@import '../../../assets/css/qbVariables';
+
+.card {
+  background-color: #fafafa;
+  width: 30%;
+  height: 20%;
+  overflow: hidden;
+  box-shadow: .25px .25px 5px .25px;
+  border-radius: 2px 2px 2px 2px;
+  z-index: 5;
+}
+
+.cardIcon {
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  width: 68px;
+  height: 68px;
+  float: left;
+  padding: 0% 4% 0% 4%;
+}
+
+.cardHeader {
+  background-color: #607d8b;
+  padding: 1%;
+  color: #eceff1;
+  position: relative;
+}
+
+.cardContent {
+  color: rgb(0, 0, 0.54);
+  padding: 2%;
+}
+
+.headerH3 {
+  position: relative;
+  padding: 1%;
+}
+
+.contentP {
+  padding: 1%;
+  overflow: hidden;
+}
