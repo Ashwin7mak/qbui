@@ -261,7 +261,7 @@
          */
         clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
             //get all checkboxes in the report table first column
-            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
+            var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
 
@@ -273,7 +273,9 @@
                 //click on the edit pencil in table actions
                 this.editPencilBtnOnReportActions.click();
                 //wait until edit form is visible
-                return formsPO.editFormContainerEl.waitForVisible();
+                formsPO.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }
