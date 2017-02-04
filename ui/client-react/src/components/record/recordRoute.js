@@ -127,6 +127,15 @@ export const RecordRoute = React.createClass({
     },
 
     /**
+     * switches to the form builder page
+     * */
+    getFormBuilderUrl() {
+        const {appId, tblId, recordId} = this.props.reportData;
+        let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recordId;
+        this.props.router.push(link);
+    },
+
+    /**
      * go forward to the next report record
      */
     nextRecord() {
@@ -210,14 +219,6 @@ export const RecordRoute = React.createClass({
         flux.actions.editNewRecord();
 
         this.props.editNewRecord();
-    },
-
-    getFormBuilderUrl() {
-        let appId = this.props.params.appId;
-        let tbldId = this.props.params.tblId;
-        let recordId = this.props.params.recordId;
-        let builderUrl = '/qbase/builder/app/' + appId + '/table/' + tbldId + '/record/' + recordId;
-        AppHistory.history.push(builderUrl);
     },
 
     getPageActions() {
@@ -353,3 +354,13 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRouteWithRouter);
+
+
+// [ '/qbase/app/1/table/2/report/3/record/1',
+//     '/qbase/app/1/table/2/report/3/record/3',
+//     '/qbase/builder/app/1/table/2/record/2',
+//     '/qbase/app/1/table/2/report/3' ]
+//
+// [ '/qbase/app/1/table/2/report/3/record/1',
+//     '/qbase/app/1/table/2/report/3/record/3',
+//     '/qbase/app/1/table/2/report/3' ]

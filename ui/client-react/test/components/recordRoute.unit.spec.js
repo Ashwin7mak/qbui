@@ -19,7 +19,7 @@ fdescribe('RecordRoute functions', () => {
 
     let flux = {};
     let mockParent = {}
-    mockParent.this = {
+    mockParent = {
         getFormBuilderUrl() {return;}
     };
 
@@ -37,7 +37,7 @@ fdescribe('RecordRoute functions', () => {
         spyOn(flux.actions, 'openingReportRow');
         spyOn(flux.actions, 'showPreviousRecord');
         spyOn(flux.actions, 'showNextRecord');
-        spyOn(mockParent.this, 'getFormBuilderUrl');
+        spyOn(mockParent, 'getFormBuilderUrl');
     });
 
     afterEach(() => {
@@ -45,7 +45,7 @@ fdescribe('RecordRoute functions', () => {
         flux.actions.openingReportRow.calls.reset();
         flux.actions.showPreviousRecord.calls.reset();
         flux.actions.showNextRecord.calls.reset();
-        mockParent.this.getFormBuilderUrl.calls.reset();
+        mockParent.getFormBuilderUrl.calls.reset();
     });
 
     it('test render of component with missing url params', () => {
@@ -117,7 +117,7 @@ fdescribe('RecordRoute functions', () => {
         expect(returnToReport.length).toBe(1);
     });
 
-    it('test correct state is pushed to history', () => {
+    fit('test correct state is pushed to history', () => {
         const initialState = {};
         const store = mockStore(initialState);
 
@@ -127,6 +127,7 @@ fdescribe('RecordRoute functions', () => {
             appId:1,
             tblId:2,
             rptId:3,
+            recordId:4,
 
             previousRecordId:1,
             currentRecordId:2,
@@ -162,12 +163,14 @@ fdescribe('RecordRoute functions', () => {
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
         let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
         let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
+        let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
 
 
         // should have all 3 nav links
         expect(prevRecord.length).toBe(1);
         expect(nextRecord.length).toBe(1);
         expect(returnToReport.length).toBe(1);
+        expect(formBuilder.length).toBe(2);
 
         // previous record
         TestUtils.Simulate.click(prevRecord[0]);
@@ -180,8 +183,8 @@ fdescribe('RecordRoute functions', () => {
         expectedRouter.push('/qbase/app/1/table/2/report/3/record/3');
 
         // switch to Form Builder
-        TestUtils.Simulate.click(formBuilderButton[0]);
-        expect(flux.actions.getFormBuilderUrl).toHaveBeenCalled();
+        TestUtils.Simulate.click(formBuilder[0]);
+        expect(mockParent.getFormBuilderUrl).toHaveBeenCalled();
         expectedRouter.push('/qbase/builder/app/1/table/2/record/4');
 
         // return to report
@@ -191,30 +194,4 @@ fdescribe('RecordRoute functions', () => {
         expect(router).toEqual(expectedRouter);
     });
 
-    fit('test to see if Build Form Button has the correct href', () => {
-
-        const initialState = {};
-        const store = mockStore(initialState);
-
-        let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
-
-        let router = [];
-        let expectedRouter = [];
-
-        component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
-            </Provider>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let testComponent = ReactDOM.findDOMNode(component);
-        let formBuilderButton = testComponent.children[2].children[1].children[1]
-        TestUtils.Simulate.click(formBuilderButton);
-        expect(mockParent.this.getFormBuilderUrl).toHaveBeenCalled();
-        expectedRouter.push('/qbase/builder/app/1/table/2/record/4');
-        let currentLocation = browser().location;
-        console.log(currentLocation);
-        debugger;
-        expect(router).toEqual(expectedRouter);
-    });
 });
