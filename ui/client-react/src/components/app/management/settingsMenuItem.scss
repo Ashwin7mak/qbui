@@ -3,17 +3,16 @@
 .card {
   background-color: #fafafa;
   width: 30%;
-  height: 20%;
   overflow: hidden;
   box-shadow: .25px .25px 5px .25px;
   border-radius: 2px 2px 2px 2px;
   z-index: 5;
+  flex:1 1 auto;
+  margin:5px;
 }
 
 .cardIcon {
   border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
   width: 68px;
   height: 68px;
   float: left;

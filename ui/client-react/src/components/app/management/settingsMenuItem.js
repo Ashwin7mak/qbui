@@ -17,7 +17,7 @@ const SettingsMenuItem = React.createClass({
     render() {
         return (
             <div className="card">
-                <div id="header" className="cardHeader"> <QBIcon icon="check" className="cardIcon"/><h3 className="headerH3">{this.props.title}</h3></div>
+                <div id="header" className="cardHeader"> <QBIcon icon={this.props.icon} className="cardIcon"/><h3 className="headerH3">{this.props.title}</h3></div>
                 <div id="content" className="cardContent"><p className="contentP">{this.props.subTitle}</p></div>
             </div>
         );

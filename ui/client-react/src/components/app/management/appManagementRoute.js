@@ -23,6 +23,7 @@ const AppManagementRoute = React.createClass({
     render() {
         return (<AppManagementHome appId={this.props.params.appId}
                                    appUsers={this.props.appUsers}
+                                   selectedApp={this.props.selectedApp}
             />
 
         );
