@@ -354,13 +354,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordRouteWithRouter);
-
-
-// [ '/qbase/app/1/table/2/report/3/record/1',
-//     '/qbase/app/1/table/2/report/3/record/3',
-//     '/qbase/builder/app/1/table/2/record/2',
-//     '/qbase/app/1/table/2/report/3' ]
-//
-// [ '/qbase/app/1/table/2/report/3/record/1',
-//     '/qbase/app/1/table/2/report/3/record/3',
-//     '/qbase/app/1/table/2/report/3' ]
