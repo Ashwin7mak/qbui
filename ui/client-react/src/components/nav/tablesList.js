@@ -7,6 +7,7 @@ import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import TableIconUtils from '../../utils/tableIconUtils';
 import SearchBox from '../search/searchBox';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 
 
 let TablesList = React.createClass({
@@ -113,12 +114,15 @@ let TablesList = React.createClass({
 
     },
     getTopLinksItem() {
-        const appHomePageSelected = !this.props.selectedTableId;
+        const appHomePageSelected = !this.props.selectedTableId && !WindowLocationUtils.searchIncludes("management");
+        const appManagementPageSelected = !appHomePageSelected;
 
         return (
         <li className="horizontal">
             <ul className="topLinks">
                 {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
+                {this.getNavItem('app.settings', `/qbase/app/${this.props.selectedAppId}/management`,
+                    'settings', appManagementPageSelected)}
             </ul>
         </li>);
     },

@@ -13,7 +13,7 @@ const AppManagementHome = React.createClass({
         selectedApp: PropTypes.object.isRequired
     },
 
-    constructSettingsUrl(setting) {
+    constructSettingsLink(setting) {
         return "/qbase/app/" + this.props.appId + "/" + setting;
     },
 
@@ -49,6 +49,7 @@ const AppManagementHome = React.createClass({
                                   title="Users"
                                   subTitle="Add/Remove Users in this app"
                                   icon="users"
+                                  link={this.constructSettingsLink("users")}
                 />
             </div>
         );
