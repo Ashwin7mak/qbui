@@ -79,7 +79,7 @@ let IconActions = React.createClass({
             className += action.className;
         }
 
-        
+
         return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
                     <Button key={action.msg}
                        tabIndex="0"
