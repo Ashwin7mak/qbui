@@ -66,7 +66,6 @@ let IconActions = React.createClass({
      */
     getActionButton(action) {
         let tooltip;
-        let qbIcon;
         if (action.rawMsg) {
             tooltip = (<Tooltip id={action.msg}>{action.msg}</Tooltip>);
         } else {
@@ -79,13 +78,12 @@ let IconActions = React.createClass({
         if (action.className) {
             className += action.className;
         }
-
         return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
                     <Button key={action.msg}
                        tabIndex="0"
                        className={className}
                        onClick={action.onClick}>
-                        <QBicon icon={action.icon}/>
+                            <QBicon icon={action.icon}/>
                     </Button>
                 </OverlayTrigger>);
     },

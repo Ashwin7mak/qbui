@@ -113,6 +113,11 @@ export const RecordRoute = React.createClass({
         this.props.router.push(link);
     },
 
+    navigateToBuilder(appId, tblId, recId) {
+        let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recId;
+        this.props.router.push(link);
+    },
+
     /**
      * go back to the previous report record
      */
@@ -131,11 +136,12 @@ export const RecordRoute = React.createClass({
      * */
     getFormBuilderUrl() {
         const {appId, tblId, recordId} = this.props.reportData;
-        let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recordId;
-        this.props.router.push(link);
 
+        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
         flux.actions.showFormBuilder(recordId);
+
+        this.navigateToBuilder(appId, tblId, recordId);
     },
 
     /**
