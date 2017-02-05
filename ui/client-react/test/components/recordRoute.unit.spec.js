@@ -2,7 +2,6 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import QBForm from  '../../src/components/QBForm/qbform';
 import {ConnectedRecordRoute, RecordRoute} from '../../src/components/record/recordRoute';
-import ReactDOM from 'react-dom';
 
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -18,10 +17,6 @@ fdescribe('RecordRoute functions', () => {
     let component;
 
     let flux = {};
-    let mockParent = {}
-    mockParent = {
-        getFormBuilderUrl() {return;}
-    };
 
     flux.actions = {
         hideTopNav() {return;},
@@ -30,6 +25,7 @@ fdescribe('RecordRoute functions', () => {
         openingReportRow() {return;},
         showPreviousRecord() {return;},
         showNextRecord() {return;},
+        showFormBuilder() {return;},
     };
 
     beforeEach(() => {
@@ -37,7 +33,7 @@ fdescribe('RecordRoute functions', () => {
         spyOn(flux.actions, 'openingReportRow');
         spyOn(flux.actions, 'showPreviousRecord');
         spyOn(flux.actions, 'showNextRecord');
-        spyOn(mockParent, 'getFormBuilderUrl');
+        spyOn(flux.actions, 'showFormBuilder');
     });
 
     afterEach(() => {
@@ -45,7 +41,7 @@ fdescribe('RecordRoute functions', () => {
         flux.actions.openingReportRow.calls.reset();
         flux.actions.showPreviousRecord.calls.reset();
         flux.actions.showNextRecord.calls.reset();
-        mockParent.getFormBuilderUrl.calls.reset();
+        flux.actions.showFormBuilder.calls.reset();
     });
 
     it('test render of component with missing url params', () => {
@@ -165,7 +161,6 @@ fdescribe('RecordRoute functions', () => {
         let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
         let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
 
-
         // should have all 3 nav links
         expect(prevRecord.length).toBe(1);
         expect(nextRecord.length).toBe(1);
@@ -184,7 +179,7 @@ fdescribe('RecordRoute functions', () => {
 
         // switch to Form Builder
         TestUtils.Simulate.click(formBuilder[0]);
-        expect(mockParent.getFormBuilderUrl).toHaveBeenCalled();
+        expect(flux.actions.showFormBuilder).toHaveBeenCalled();
         expectedRouter.push('/qbase/builder/app/1/table/2/record/4');
 
         // return to report
@@ -193,5 +188,4 @@ fdescribe('RecordRoute functions', () => {
 
         expect(router).toEqual(expectedRouter);
     });
-
 });

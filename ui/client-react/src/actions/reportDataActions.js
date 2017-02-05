@@ -234,6 +234,13 @@ let reportDataActions = {
         this.dispatch(actions.OPEN_REPORT_RECORD, {recId});
     },
     /**
+     * Open form builder
+     * @param recId
+     * */
+    showFormBuilder(recId) {
+        this.dispatch(actions.SHOW_FORM_BUILDER, {recId});
+    },
+    /**
      * navigate to previous record after opening record from report
      * @param recId
      */

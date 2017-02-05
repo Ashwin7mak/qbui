@@ -133,6 +133,9 @@ export const RecordRoute = React.createClass({
         const {appId, tblId, recordId} = this.props.reportData;
         let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recordId;
         this.props.router.push(link);
+
+        let flux = this.getFlux();
+        flux.actions.showFormBuilder(recordId);
     },
 
     /**
@@ -222,7 +225,6 @@ export const RecordRoute = React.createClass({
     },
 
     getPageActions() {
-        // let formBuilderUrl = this.getFormBuilderUrl()
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.getFormBuilderUrl},
