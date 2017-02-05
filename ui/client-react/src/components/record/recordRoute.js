@@ -231,6 +231,7 @@ export const RecordRoute = React.createClass({
     },
 
     getPageActions() {
+
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.getFormBuilderUrl},
