@@ -11,7 +11,8 @@ const SettingsMenuItem = React.createClass({
         appId: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         subTitle: PropTypes.string,
-        icon: PropTypes.string.isRequired
+        icon: PropTypes.string.isRequired,
+        onClick: PropTypes.func
     },
 
     render() {

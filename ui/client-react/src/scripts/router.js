@@ -11,6 +11,7 @@ import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import AppManagementRoute from "../components/app/management/appManagementRoute";
+import AppUsersRoute from "../components/app/management/pages/appUsersRoute";
 import Logger from "../utils/logger";
 
 import "react-fastclick";
@@ -50,6 +51,7 @@ render((
             <Route path="/qbase/app/:appId" component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="management" component={AppManagementRoute} />
+                <Route path="users" component={AppUsersRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId" component={ReportRoute} />

@@ -13,6 +13,10 @@ const AppManagementHome = React.createClass({
         selectedApp: PropTypes.object.isRequired
     },
 
+    constructSettingsUrl(setting) {
+        return "/qbase/app/" + this.props.appId + "/" + setting;
+    },
+
     render() {
         return (
             <div className="appManagementHomeContainer">

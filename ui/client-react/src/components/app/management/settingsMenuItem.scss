@@ -1,7 +1,7 @@
 @import '../../../assets/css/qbVariables';
 
 .card {
-  background-color: #fafafa;
+  background-color: $default-text-ondark-color;
   width: 30%;
   overflow: hidden;
   box-shadow: .25px .25px 5px .25px;
@@ -16,11 +16,12 @@
   width: 68px;
   height: 68px;
   float: left;
-  padding: 0% 4% 0% 4%;
+  font-size: 30px;
+  padding-top: 10px;
 }
 
 .cardHeader {
-  background-color: #607d8b;
+  background-color: $selected-color;
   padding: 1%;
   color: #eceff1;
   position: relative;

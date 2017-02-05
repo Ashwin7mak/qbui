@@ -2,8 +2,8 @@
  * Created by rbeyer on 2/2/17.
  */
 import React, {PropTypes} from 'react';
-import Logger from '../../../utils/logger';
-import QBGrid from '../../dataTable/qbGrid/qbGrid';
+import Logger from '../../../../utils/logger';
+import QBGrid from '../../../dataTable/qbGrid/qbGrid';
 import './userManagement.scss';
 
 
