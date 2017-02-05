@@ -11,7 +11,7 @@ import {loadingForm} from '../../src/actions/formActions';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-fdescribe('RecordRoute functions', () => {
+describe('RecordRoute functions', () => {
     'use strict';
 
     let component;
@@ -113,7 +113,7 @@ fdescribe('RecordRoute functions', () => {
         expect(returnToReport.length).toBe(1);
     });
 
-    fit('test correct state is pushed to history', () => {
+    it('test correct state is pushed to history', () => {
         const initialState = {};
         const store = mockStore(initialState);
 
