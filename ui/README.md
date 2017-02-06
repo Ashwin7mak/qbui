@@ -287,34 +287,31 @@ With the Java API service running, from the qbui/ui directory run:
 
 Note that this command will launch your Node express server if it's not running.
 
-###Protractor E2E tests
+###WebdriverIO E2E tests
 
-To setup protractor e2e tests, you must first run
+To setup WebdriverIO for browser end to end tests, follow the **README.md** setup guide in the `qbui/ui/wdio` directory. Make sure to check out the **NEWBIEGUIDE.md** as well!
 
-`npm run update-webdriver` from the qbui/ui directory
+Edit and configure your own copy of **e2e.js** located in `qbui/ui/server/src/config/environment` if needed. The e2e tests have their own config file as they will launch their own node instance when running.
 
-Edit and configure your own copy of e2e.js located in qbui/ui/server/src/config/environment if needed.
+Once everything is configured you can run `grunt test:e2eLocalDataGen` as a smoke test to check that everything is working properly. This script will generate you a test realm and app which you can view in the UI.
 
-Use `grunt test:e2eLocal` to have protractor go through tests located in the `e2e` folder. You will need to have both your local node server
-and your java server running.
+See [Debugging UI](./DEBUGGING.md) for more info on debugging tests.
 
-See [Debugging UI](./DEBUGGING.md)
+To run your local e2e tests out on Sauce Labs against your local dev machine you can run
 
-To connect to an aws swimlane to run your tests from your local, run
+`grunt test:e2eLocalSauce --baseUrl=<the url you want to hit> --sauceKey=<the credentials for our sauceLabs account>`
 
-`grunt test:e2e --baseUrl=<the url you want to hit> --sauceKey=<the credentials for our sauceLabs account>`
+The credentials for the Sauce Labs account can be found in the Jenkins job **try-ui-webdriverIO**
 
-The credentials for the sauceLabs account can be found in the Jenkins job 'AWS_Pipeline-Run_UI_E2E_Tests'
+For more information on Sauce Labs visit: [https://docs.saucelabs.com/](https://docs.saucelabs.com/)
 
-For more information on sauce visit: https://docs.saucelabs.com/
-
-To configure protractor to use different browsers, modify or add a file to the protractor configuration under qbui/ui/e2e/config.
+To configure WebdriverIO to use different browsers, modify or add a file to the wdio configuration under `qbui/ui/wdio/config`.
 
 For all of the browser capabilities check out:
 
-http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config
+[http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config](http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config)
 and
-https://www.browserstack.com/automate/capabilities
+[https://www.browserstack.com/automate/capabilities](https://www.browserstack.com/automate/capabilities)
 
 ##Using Gradle to build distribution node server
 Gradle is used to build a production version of the node server and client application.
