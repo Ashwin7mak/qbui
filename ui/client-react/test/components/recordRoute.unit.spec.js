@@ -11,7 +11,7 @@ import {loadingForm} from '../../src/actions/formActions';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('RecordRoute functions', () => {
+fdescribe('RecordRoute functions', () => {
     'use strict';
 
     let component;
@@ -146,7 +146,7 @@ describe('RecordRoute functions', () => {
 
         component = TestUtils.renderIntoDocument(
             <Provider store={store}>
-                <ConnectedRecordRoute params={routeParams} reportData={reportData}  pizza="Bacon" flux={flux} router={router}/>
+                <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
             </Provider>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -154,13 +154,11 @@ describe('RecordRoute functions', () => {
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
         let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
         let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
-        let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
 
         // should have all 3 nav links
         expect(prevRecord.length).toBe(1);
         expect(nextRecord.length).toBe(1);
         expect(returnToReport.length).toBe(1);
-        expect(formBuilder.length).toBe(2);
 
         // previous record
         TestUtils.Simulate.click(prevRecord[0]);
@@ -172,13 +170,31 @@ describe('RecordRoute functions', () => {
         expect(flux.actions.showNextRecord).toHaveBeenCalled();
         expectedRouter.push('/qbase/app/1/table/2/report/3/record/3');
 
-        // switch to Form Builder
-        TestUtils.Simulate.click(formBuilder[0]);
-        expectedRouter.push('/qbase/builder/app/1/table/2/form');
-
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
         expectedRouter.push('/qbase/app/1/table/2/report/3');
+
+        expect(router).toEqual(expectedRouter);
+    });
+
+    it('navigateToBuilder should render a component without form type or form id', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
+
+        let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
+        let router = [];
+        let expectedRouter = [];
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
+            </Provider>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
+
+        TestUtils.Simulate.click(formBuilder[0]);
+        expectedRouter.push('/qbase/builder/app/1/table/2/form');
 
         expect(router).toEqual(expectedRouter);
     });
