@@ -1,4 +1,4 @@
-import FormBuilderUtils from '../../src/utils/formBuilderUtils';
+import MoveFieldHelper from '../../../src/components/formBuilder/moveFieldHelper';
 
 // Helper variables to more easily find Ids in the formData
 const firstTab = 0;
@@ -360,7 +360,7 @@ function getFieldsAndTheirIndex(formData, tabIndex, sectionIndex) {
     return result;
 }
 
-describe('FormBuilderUtils', () => {
+describe('MoveFieldHelper', () => {
     describe('moveField', () => {
 
         let testCases = [
@@ -440,7 +440,7 @@ describe('FormBuilderUtils', () => {
             it(testCase.description, () => {
                 let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalIndex, testCase.fieldId);
 
-                let result = FormBuilderUtils.moveField(testFormData, testCase.newTab, testCase.newSection, testCase.newIndex, elementProps);
+                let result = MoveFieldHelper.moveField(testFormData, testCase.newTab, testCase.newSection, testCase.newIndex, elementProps);
                 let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection);
 
                 expect(simplifiedResult).toEqual(testCase.expectedResult);

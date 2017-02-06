@@ -7,7 +7,7 @@ import {FormBuilder, __RewireAPI__ as FormBuilderRewire} from '../../../src/comp
 import QbForm from '../../../src/components/QBForm/qbform';
 
 const mockFormData = {formMeta: {tabs: {0: {sections: {0: {elements: {0: 'fieldElement'}}}}}}};
-const mockFormBuilder = {moveField: function(_newTabIndex, _newSectionIndex, _newOrderIndex, _draggedItemProps) {}};
+const mockMoveFieldHelper = {moveField: function(_newTabIndex, _newSectionIndex, _newOrderIndex, _draggedItemProps) {}};
 
 let component;
 let instance;
@@ -15,12 +15,12 @@ let instance;
 describe('FormBuilder (drag/drop container)', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        FormBuilderRewire.__Rewire__('FormBuilderUtils', mockFormBuilder);
-        spyOn(mockFormBuilder, 'moveField');
+        FormBuilderRewire.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        spyOn(mockMoveFieldHelper, 'moveField');
     });
 
     afterEach(() => {
-        FormBuilderRewire.__ResetDependency__('FormBuilderUtils');
+        FormBuilderRewire.__ResetDependency__('MoveFieldHelper');
     });
 
     it('wraps QbForm in a drag drop container', () => {
@@ -53,7 +53,7 @@ describe('FormBuilder (drag/drop container)', () => {
             const draggedItemProps = {draggedItem: 5};
             instance.handleFormReorder(1, 2, 3, draggedItemProps);
 
-            expect(mockFormBuilder.moveField).toHaveBeenCalledWith(mockFormData.formMeta, 1, 2, 3, draggedItemProps);
+            expect(mockMoveFieldHelper.moveField).toHaveBeenCalledWith(mockFormData.formMeta, 1, 2, 3, draggedItemProps);
         });
     });
 });

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const FormBuilderUtils = {
+const MoveFieldHelper = {
     moveField(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
         let formMetaCopy = _.cloneDeep(formMeta);
 
@@ -125,4 +125,4 @@ function addElementToNewSection(formMetaData, newTabIndex, newSectionIndex, newO
     formMetaData.tabs[newTabIndex].sections[newSectionIndex].elements = convertElementsArrayToObject(elementsArray);
 }
 
-export default FormBuilderUtils;
+export default MoveFieldHelper;

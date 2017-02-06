@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import Html5Backend from 'react-dnd-html5-backend';
 import QbForm from '../QBForm/qbform';
-import FormBuilderUtils from '../../utils/formBuilderUtils';
+import MoveFieldHelper from './moveFieldHelper';
 import _ from 'lodash';
 
 import './formBuilder.scss';
@@ -37,7 +37,7 @@ export class FormBuilder extends Component {
     handleFormReorder(newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
         let formDataCopy = _.cloneDeep(this.state.formData);
 
-        formDataCopy.formMeta = FormBuilderUtils.moveField(formDataCopy.formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
+        formDataCopy.formMeta = MoveFieldHelper.moveField(formDataCopy.formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
 
         this.setState({formData: formDataCopy});
     }
