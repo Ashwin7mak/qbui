@@ -228,8 +228,10 @@
          * Given a record element in agGrid, click on the record to open it in view form mode.
          * @param recordRowIndex
          */
-        openRecordInViewMode : {value: function(recordRowIndex) {
-            this.clickOnRecordInReportTable(recordRowIndex);
+        openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
+            //this.clickOnRecordInReportTable(recordRowIndex);
+            var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
+            browser.url(requestRecordPageEndPoint);
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         }},
