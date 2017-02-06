@@ -113,8 +113,10 @@ export const RecordRoute = React.createClass({
         this.props.router.push(link);
     },
 
-    navigateToBuilder(appId, tblId, recId) {
-        let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recId;
+    navigateToBuilder() {
+        const {appId, tblId, recordId} = this.props.reportData;
+
+        let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recordId;
         this.props.router.push(link);
     },
 
@@ -129,19 +131,6 @@ export const RecordRoute = React.createClass({
         flux.actions.showPreviousRecord(previousRecordId);
 
         this.navigateToRecord(appId, tblId, rptId, previousRecordId);
-    },
-
-    /**
-     * switches to the form builder page
-     * */
-    getFormBuilderUrl() {
-        const {appId, tblId, recordId} = this.props.reportData;
-
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.showFormBuilder(recordId);
-
-        this.navigateToBuilder(appId, tblId, recordId);
     },
 
     /**
@@ -234,7 +223,7 @@ export const RecordRoute = React.createClass({
 
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.getFormBuilderUrl},
+            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.navigateToBuilder},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
@@ -276,6 +265,7 @@ export const RecordRoute = React.createClass({
      * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
      */
     render() {
+        console.log('this.props: ', this.props);
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||

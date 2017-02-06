@@ -653,7 +653,6 @@ let ReportDataStore = Fluxxor.createStore({
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
             actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
-            actions.SHOW_FORM_BUILDER, this.onShowFormBuilder,
 
             actions.EDIT_REPORT_RECORD, this.onEditRecord,
             actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
@@ -1222,15 +1221,6 @@ let ReportDataStore = Fluxxor.createStore({
     onOpenRecord(payload) {
         this.updateRecordNavContext(payload.recId);
     },
-
-    /**
-     * Drill into form builder from qbForms
-     * @param payload
-     * */
-    onShowFormBuilder(payload) {
-        this.updateRecordNavContext(payload.recId);
-    },
-
     /**
      * update prev/next props after displaying previous record
      */
