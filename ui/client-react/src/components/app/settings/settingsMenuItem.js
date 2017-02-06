@@ -18,7 +18,7 @@ const SettingsMenuItem = React.createClass({
 
     renderLink() {
         return (
-            this.props.link ? <Link to={this.props.link}>{this.props.title}</Link> : this.props.title
+            this.props.link ? <Link to={this.props.link} className="settingsLink">{this.props.title}</Link> : this.props.title
         );
     },
 

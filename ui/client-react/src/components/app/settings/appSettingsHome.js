@@ -3,9 +3,9 @@
  */
 import React, {PropTypes} from 'react';
 import SettingsMenuItem from './settingsMenuItem';
-import './appManagementHome.scss';
+import './appSettingsHome.scss';
 
-const AppManagementHome = React.createClass({
+const AppSettingsHome = React.createClass({
 
     propTypes: {
         appId: PropTypes.string.isRequired,
@@ -19,7 +19,7 @@ const AppManagementHome = React.createClass({
 
     render() {
         return (
-            <div className="appManagementHomeContainer">
+            <div className="appSettingsHomeContainer">
                 <SettingsMenuItem appId={this.props.appId}
                                   title="Roles"
                                   subTitle="Manage the roles in this app"
@@ -57,4 +57,4 @@ const AppManagementHome = React.createClass({
 
 });
 
-export default AppManagementHome;
+export default AppSettingsHome;

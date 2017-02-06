@@ -23,8 +23,12 @@
 .cardHeader {
   background-color: $selected-color;
   padding: 1%;
-  color: #eceff1;
+  color: $color-teal-100;
   position: relative;
+}
+
+.settingsLink {
+  color: $color-teal-100;
 }
 
 .cardContent {

@@ -81,7 +81,7 @@ var path = require('path');
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/management').get(function(req, res) {
+        app.route('/qbase/app/:appId/settings').get(function(req, res) {
             renderIndex(req, res);
         });
 

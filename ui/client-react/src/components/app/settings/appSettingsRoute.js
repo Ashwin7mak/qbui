@@ -3,15 +3,15 @@
  */
 import React from 'react';
 import Logger from '../../../utils/logger';
-import AppManagementHome from './appManagementHome';
+import AppSettingsHome from './appSettingsHome';
 
 
 let logger = new Logger();
 
-const AppManagementRoute = React.createClass({
+const AppSettingsRoute = React.createClass({
 
     render() {
-        return (<AppManagementHome appId={this.props.params.appId}
+        return (<AppSettingsHome appId={this.props.params.appId}
                                    appUsers={this.props.appUsers}
                                    selectedApp={this.props.selectedApp}
             />
@@ -21,4 +21,4 @@ const AppManagementRoute = React.createClass({
 
 });
 
-export default AppManagementRoute;
+export default AppSettingsRoute;
