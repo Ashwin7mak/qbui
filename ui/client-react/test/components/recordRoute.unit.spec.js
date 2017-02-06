@@ -174,7 +174,7 @@ describe('RecordRoute functions', () => {
 
         // switch to Form Builder
         TestUtils.Simulate.click(formBuilder[0]);
-        expectedRouter.push('/qbase/builder/app/1/table/2');
+        expectedRouter.push('/qbase/builder/app/1/table/2/form');
 
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
