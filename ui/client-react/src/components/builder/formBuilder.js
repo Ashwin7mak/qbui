@@ -5,16 +5,31 @@ import './formBuilder.scss';
 const FormBuilder = React.createClass({
     propTypes: {
         /**
-         * the raw value to be saved */
-        value: React.PropTypes.number,
+         * the app id
+         * */
+        appId: React.PropTypes.string,
+        /**
+         * the table id
+         * */
+        tblId: React.PropTypes.string,
+        /**
+         * the form id
+         * */
+        formId: React.PropTypes.string,
+        /**
+         * the form type
+         * */
+        formType: React.PropTypes.string
     },
     render() {
-        let result;
-        // this.props.location.query
+
         return (
-            <div>
+            <div className="formBuilder">
                 <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
-                <div> {result} </div>
+                <div className="formBuilderBody"> <b>appId:</b> {this.props.appId} </div>
+                <div className="formBuilderBody"> <b>tblId:</b> {this.props.tblId} </div>
+                <div className="formBuilderBody"> <b>formId:</b> {this.props.formId} </div>
+                <div className="formBuilderBody"> <b>formType:</b> {this.props.formType} </div>
             </div>
         );
     }

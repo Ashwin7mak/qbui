@@ -1,6 +1,13 @@
 @import '../../../src/assets/css/qbVariables';
 
-.formBuilderHeader {
-    text-align: center;
-    margin-top: 60px;
+.formBuilder {
+    .formBuilderHeader {
+        text-align: center;
+        margin-top: 60px;
+        margin-bottom: 60px;
+    }
+    .formBuilderBody {
+        padding-bottom: 15px;
+        text-align: center;
+    }
 }
