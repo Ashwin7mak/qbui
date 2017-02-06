@@ -132,7 +132,7 @@ export const RecordRoute = React.createClass({
                 link = `/qbase/builder/app/${appId}/table/${tblId}/form/${formId}`;
             }
         } else if (formType) {
-            link = `/qbase/builder/app/${appId}/table/${tblId}/form/?formType=${formType}`;
+            link = `/qbase/builder/app/${appId}/table/${tblId}/form?formType=${formType}`;
         } else {
             link = `/qbase/builder/app/${appId}/table/${tblId}/form`;
         }
