@@ -35,6 +35,8 @@ export default {
     LOG_PERF            : 'clientPerf',
     USERS               : 'users',
     RIGHTS              : 'accessRights',
+    FEATURE_SWITCHES    : 'featureSwitches',
+    FEATURE_STATES      : 'featureStates',
 
     // Node Entity actions
     FORMCOMPONENTS      : 'formComponents',

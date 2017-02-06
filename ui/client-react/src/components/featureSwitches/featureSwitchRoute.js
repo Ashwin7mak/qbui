@@ -2,46 +2,50 @@ import React from 'react';
 import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
 
-import './featureSwitchAdmin.scss';
+import './featureSwitches.scss';
 
 
 const columns = [
     {
-        property: 'name',
+        property: 'entityType',
         header: {
-            label: 'Switch Name'
+            label: 'Type'
+        },
+    },
+    {
+        property: 'entityValue',
+        header: {
+            label: 'Name'
         }
     },
     {
-        property: 'team',
+        property: 'id',
         header: {
-            label: 'Team'
+            label: 'ID'
         }
     },
     {
-        property: 'description',
+        property: 'on',
         header: {
-            label: 'Description'
-        }
-    },
-    {
-        property: 'defaultOn',
-        header: {
-            label: 'Default On/Off'
+            label: 'On/Off'
         }
     },
 ];
 
-export const FeatureSwitchAdminRoute = React.createClass({
+export const FeatureSwitchRoute = React.createClass({
+
     render() {
+
+        let featureSwitch = this.props.switches.find((item) => item.id.toString() === this.props.params.id);
+        console.log(featureSwitch);
         return (
             <div className="featureSwitches">
-                <h1>Feature Switches</h1>
+                <h1>Feature Switch Exceptions</h1>
                 <Table.Provider className="featureSwitchTable" columns={columns}>
 
                     <Table.Header />
 
-                    <Table.Body rows={this.props.switches} rowKey="id" />
+                    <Table.Body rows={featureSwitch.exceptions} rowKey="id" />
                 </Table.Provider>
             </div>
         );
@@ -50,11 +54,9 @@ export const FeatureSwitchAdminRoute = React.createClass({
 
 
 const mapStateToProps = (state) => {
-    console.log(state);
+
     return {
-        statuses: state.featureSwitches.statuses,
-        switches: state.featureSwitches.switches,
-        exceptions: state.featureSwitches.exceptions
+        switches: state.featureSwitches.switches
     };
 };
 
@@ -67,4 +69,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FeatureSwitchAdminRoute);
+)(FeatureSwitchRoute);

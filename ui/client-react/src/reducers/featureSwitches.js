@@ -5,8 +5,7 @@ const featureSwitches = (
         //  default states
 
         switches: [],
-        exceptions: [],
-        statuses: [],
+        states: [],
     },
     action) => {
 
@@ -17,15 +16,10 @@ const featureSwitches = (
             ...state,
             switches: action.switches
         };
-    case types.SET_FEATURE_SWITCH_EXCEPTIONS:
+    case types.SET_FEATURE_SWITCH_STATES:
         return {
             ...state,
-            exceptions: action.exceptions
-        };
-    case types.SET_FEATURE_SWITCH_STATUSES:
-        return {
-            ...state,
-            statuses: action.statuses
+            states: action.states
         };
     default:
         // return existing state by default in redux

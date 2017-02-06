@@ -1,9 +1,43 @@
+
+var featureSwitches = [
+    {
+        id: 1,
+        name: 'Feature X',
+        team: 'Team with no name',
+        description: 'My first node feature switch',
+        defaultOn: true,
+        exceptions: [
+            {
+                entityType: 'realm',
+                entityValue: '123',
+                on: false,
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: 'Feature Y',
+        team: 'Jade Empire',
+        description: 'Another node feature switch',
+        defaultOn: false,
+        exceptions: [
+            {
+                entityType: 'app',
+                entityValue: 'sdfsdf',
+                on: true,
+            }
+        ]
+    }
+];
 /**
  * The route mapper provides a static mapping from each route to the function we expect to call for that route
  * Created by cschneider1 on 7/2/15.
  */
 (function() {
     'use strict';
+
+
+
 
     let log = require('../logger').getLogger();
     let perfLogger = require('../perfLogger');
@@ -36,6 +70,9 @@
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
+
+        routeToGetFunction[routeConsts.FEATURE_SWITCHES] = getFeatureSwitches;
+        routeToGetFunction[routeConsts.FEATURE_STATES] = getFeatureStates;
 
         //  app endpoints
         routeToGetFunction[routeConsts.APPS] = getApps;
@@ -82,6 +119,7 @@
          */
         var routeToPatchFunction = {};
         routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
+        routeToPatchFunction[routeConsts.FEATURE_SWITCHES] = saveFeatureSwitches;
 
         /*
          * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
@@ -233,6 +271,43 @@
         }
     }
 
+    function getFeatureSwitches(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get Feature Switches', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            let response = featureSwitches;
+            res.send(response);
+
+            logApiSuccess(req, response, perfLog, 'Get Feature Switches');
+        });
+    }
+    function saveFeatureSwitches(req, res) {
+
+        let activityName = 'Save Feature Switches';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+
+        let response = {}
+        res.send(response);
+        console.log('\n\n\nsave ', req.rawBody);
+        logApiSuccess(req, response, perfLog, activityName);
+
+    }
+    function getFeatureStates(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get Feature Switches', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            let response = {
+                'Feature X': true,
+                'Feature Y': true
+            };
+            res.send(response);
+
+            logApiSuccess(req, response, perfLog, 'Get Feature States');
+        });
+    }
     /**
      * Return list of apps.
      *

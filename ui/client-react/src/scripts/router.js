@@ -10,7 +10,8 @@ import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
-import FeatureSwitchAdminRoute from "../components/featureSwitches/featureSwitchAdminRoute";
+import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
+import FeatureSwitchRoute from "../components/featureSwitches/featureSwitchRoute";
 import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 
 import Logger from "../utils/logger";
@@ -39,9 +40,8 @@ const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state a
 const store = createAppStore();
 
 // init the feature switches
-store.dispatch(FeatureSwitchActions.setSwitches());
-store.dispatch(FeatureSwitchActions.setExceptions());
-store.dispatch(FeatureSwitchActions.setStatuses());
+store.dispatch(FeatureSwitchActions.getSwitches());
+store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 
@@ -55,7 +55,8 @@ render((
             </Route>
 
             <Route path="/qbase/admin" component={ConnectedNav} >
-                <Route path="featureSwitches" component={FeatureSwitchAdminRoute} />
+                <Route path="featureSwitches" component={FeatureSwitchesRoute} />
+                <Route path="featureSwitch/:id" component={FeatureSwitchRoute} />
             </Route>
 
             <Route path="/qbase/app/:appId" component={ConnectedNav} >
