@@ -116,6 +116,7 @@ export const RecordRoute = React.createClass({
     navigateToBuilder() {
         /**
          *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
+         * a new unit test will need to be added to recordRoute.unit.spec.js
          * */
         const formId = null;
         const {appId, tblId} = this.props.params;
