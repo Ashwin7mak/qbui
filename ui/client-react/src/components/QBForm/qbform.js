@@ -294,7 +294,14 @@ let QBForm = React.createClass({
             let props = this.getElementProps(sectionElement);
 
 
-            let idKey = buildIdKey(tabIndex, section.orderIndex, sectionElement.FormFieldElement.fieldId);
+            let formFieldId;
+            if (_.has(sectionElement, 'FormFieldElement.fieldId')) {
+                formFieldId = sectionElement.FormFieldElement.fieldId;
+            } else {
+                formFieldId = _.uniqueId('fieldContainer_');
+            }
+
+            let idKey = buildIdKey(tabIndex, section.orderIndex, formFieldId);
 
             if (singleColumn) {
                 // just one TR containing the current element (a single TD)
@@ -313,7 +320,7 @@ let QBForm = React.createClass({
                     currentRowElements = [];
                 }
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
-                rows.push(<tr key={buildIdKey(tabIndex, section.orderIndex, sectionElement.FormFieldElement.fieldId + 1)} className="fieldRow">{currentRowElements}</tr>);
+                rows.push(<tr key={buildIdKey(tabIndex, section.orderIndex, formFieldId + 1)} className="fieldRow">{currentRowElements}</tr>);
             } else {
                 // look at the next element to see if it's on the same row - if not the current element is the last one on the row
                 const nextSectionElement = section.elements[arr[index + 1]];
