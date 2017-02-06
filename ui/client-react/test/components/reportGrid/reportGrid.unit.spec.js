@@ -304,6 +304,7 @@ describe('ReportGrid', () => {
         expect(qbGrid).toHaveProp('cellRenderer', ReportCell);
         expect(qbGrid).toHaveProp('commonCellProps', {
             appUsers: testAppUsers,
+            isInlineEditOpen: isInlineEditOpen,
             onCellChange: instance.onCellChange,
             onCellBlur: instance.onCellBlur,
             onCellClick: actions.onCellClick,
