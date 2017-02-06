@@ -114,7 +114,11 @@ export const RecordRoute = React.createClass({
     },
 
     navigateToBuilder() {
-        const {appId, tblId, formId} = this.props.params;
+        /**
+         *
+         * */
+        const formId = null;
+        const {appId, tblId} = this.props.params;
         let formType;
         if (this.props.forms) {
             formType = this.props.forms[0].id;
@@ -128,9 +132,9 @@ export const RecordRoute = React.createClass({
                 link = `/qbase/builder/app/${appId}/table/${tblId}/form/${formId}`;
             }
         } else if (formType) {
-            link = `/qbase/builder/app/${appId}/table/${tblId}?formType=${formType}`;
+            link = `/qbase/builder/app/${appId}/table/${tblId}/form/?formType=${formType}`;
         } else {
-            link = `/qbase/builder/app/${appId}/table/${tblId}`;
+            link = `/qbase/builder/app/${appId}/table/${tblId}/form`;
         }
 
         this.props.router.push(link);
