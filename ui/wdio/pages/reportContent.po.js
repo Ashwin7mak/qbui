@@ -229,7 +229,7 @@
          * @param recordRowIndex
          */
         openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
-            //this.clickOnRecordInReportTable(recordRowIndex);
+            //navigate to record page directly
             var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
             browser.url(requestRecordPageEndPoint);
             //wait until view form is visible
