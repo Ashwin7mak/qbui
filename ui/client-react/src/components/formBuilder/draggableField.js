@@ -6,13 +6,15 @@ import DraggableItemTypes from './draggableItemTypes';
  * Specifies event handlers and props that are available during dragging events
  * Recommended: Call any actions that will modify the DOM in "endDrag" (instead of drop [on drop target]), because
  * in some cases the draggable DOM element might get deleted and endDrag might not be called.
- * @type {{beginDrag: ((props)), endDrag: ((props?, monitor))}}
+ * @type {{beginDrag: ((props)), endDrag: ((props, monitor))}}
  */
 const fieldDragSource = {
     beginDrag(props) {
         return {
             element: props.element,
-            orderIndex: props.element.orderIndex,
+            tabIndex: props.tabIndex,
+            sectionIndex: props.sectionIndex,
+            orderIndex: props.orderIndex,
         };
     },
 
