@@ -120,7 +120,6 @@ describe('RecordRoute functions', () => {
             appId:1,
             tblId:2,
             rptId:3,
-            formId:4,
 
             previousRecordId:1,
             currentRecordId:2,
@@ -176,7 +175,7 @@ describe('RecordRoute functions', () => {
 
         // switch to Form Builder
         TestUtils.Simulate.click(formBuilder[0]);
-        expectedRouter.push('/qbase/builder/app/1/table/2/form/4');
+        expectedRouter.push('/qbase/builder/app/1/table/2');
 
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
