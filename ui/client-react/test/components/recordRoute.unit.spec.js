@@ -11,7 +11,7 @@ import {loadingForm} from '../../src/actions/formActions';
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-fdescribe('RecordRoute functions', () => {
+describe('RecordRoute functions', () => {
     'use strict';
 
     let component;
@@ -184,6 +184,7 @@ fdescribe('RecordRoute functions', () => {
         let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
         let router = [];
         let expectedRouter = [];
+
         component = TestUtils.renderIntoDocument(
             <Provider store={store}>
                 <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
@@ -195,6 +196,29 @@ fdescribe('RecordRoute functions', () => {
 
         TestUtils.Simulate.click(formBuilder[0]);
         expectedRouter.push('/qbase/builder/app/1/table/2/form');
+
+        expect(router).toEqual(expectedRouter);
+    });
+
+    it('navigateToBuilder should render a component with a form type', () => {
+        const initialState = {forms:[{id:'view'}]};
+        const store = mockStore(initialState);
+
+        let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
+        let router = [];
+        let expectedRouter = [];
+
+        component = TestUtils.renderIntoDocument(
+            <Provider store={store}>
+                <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
+            </Provider>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
+
+        TestUtils.Simulate.click(formBuilder[0]);
+        expectedRouter.push('/qbase/builder/app/1/table/2/form?formType=view');
 
         expect(router).toEqual(expectedRouter);
     });
