@@ -25,7 +25,6 @@ describe('RecordRoute functions', () => {
         openingReportRow() {return;},
         showPreviousRecord() {return;},
         showNextRecord() {return;},
-        showFormBuilder() {return;},
     };
 
     beforeEach(() => {
@@ -33,7 +32,6 @@ describe('RecordRoute functions', () => {
         spyOn(flux.actions, 'openingReportRow');
         spyOn(flux.actions, 'showPreviousRecord');
         spyOn(flux.actions, 'showNextRecord');
-        spyOn(flux.actions, 'showFormBuilder');
     });
 
     afterEach(() => {
@@ -41,7 +39,6 @@ describe('RecordRoute functions', () => {
         flux.actions.openingReportRow.calls.reset();
         flux.actions.showPreviousRecord.calls.reset();
         flux.actions.showNextRecord.calls.reset();
-        flux.actions.showFormBuilder.calls.reset();
     });
 
     it('test render of component with missing url params', () => {
@@ -123,7 +120,7 @@ describe('RecordRoute functions', () => {
             appId:1,
             tblId:2,
             rptId:3,
-            recordId:4,
+            formId:4,
 
             previousRecordId:1,
             currentRecordId:2,
@@ -179,8 +176,7 @@ describe('RecordRoute functions', () => {
 
         // switch to Form Builder
         TestUtils.Simulate.click(formBuilder[0]);
-        expect(flux.actions.showFormBuilder).toHaveBeenCalled();
-        expectedRouter.push('/qbase/builder/app/1/table/2/record/4');
+        expectedRouter.push('/qbase/builder/app/1/table/2/form/4');
 
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
