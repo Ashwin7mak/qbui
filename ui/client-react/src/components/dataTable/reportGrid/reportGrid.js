@@ -133,7 +133,8 @@ const ReportGrid = React.createClass({
                 primaryKeyFieldName: this.props.primaryKeyName,
                 editingRecordId: editingRecordId,
                 pendEdits: this.props.pendEdits,
-                selectedRows: this.props.selectedRows
+                selectedRows: this.props.selectedRows,
+                isInlineEditOpen: this.props.isInlineEditOpen
             }
         );
     },
@@ -191,7 +192,7 @@ const ReportGrid = React.createClass({
         // Editing Id trumps editingRowId when editingIndex is set
         // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
         // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
-        // and editingId (id of newly created row).
+        // and editingId (id of newly created row). The editingIndex could be any integer, but if it is not null, we can assume a new row is added.
         // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
@@ -199,7 +200,7 @@ const ReportGrid = React.createClass({
             editingRowId = this.props.pendEdits.currentEditingRecordId;
         }
 
-        if (this.props.editingIndex && this.props.editingId !== editingRowId) {
+        if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
             editingRowId = this.props.editingId;
         }
 
@@ -247,6 +248,7 @@ const ReportGrid = React.createClass({
                 onCellClick: this.props.onCellClick,
                 onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
+                isInlineEditOpen: this.props.isInlineEditOpen
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}

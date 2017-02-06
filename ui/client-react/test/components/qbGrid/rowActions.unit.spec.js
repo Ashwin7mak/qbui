@@ -55,29 +55,14 @@ describe('RowActions (QbGrid)', () => {
         expect(checkbox).not.toBeChecked();
     });
 
-    let emptyColumnTestCases = [
-        {
-            description: 'Renders an empty div if inlineEditing is open',
-            isInlineEditOpen: true,
-            rowId: rowId
-        },
-        {
-            description: 'Renders an empty div if no rowId is provided',
-            isInlineEditOpen: false,
-            rowId: null
-        },
-    ];
+    it('Renders an empty div if inlineEditing is open', () => {
+        component = shallow(<RowActions {...props} isInlineEditOpen={true} rowId={rowId} />);
 
-    emptyColumnTestCases.forEach(testCase => {
-        it(testCase.description, () => {
-            component = shallow(<RowActions {...props} isInlineEditOpen={testCase.isInlineEditOpen} rowId={testCase.rowId} />);
-
-            expect(component).toHaveClassName('emptyRowActions');
-            expect(component).not.toHaveClassName('actionsCol');
-            expect(component.find(checkboxSelector)).toBeEmpty();
-            expect(component.find(QbIconActions)).toBeEmpty();
-            expect(component).not.toContainReact(<PositionedRowEditActions />);
-        });
+        expect(component).toHaveClassName('emptyRowActions');
+        expect(component).not.toHaveClassName('actionsCol');
+        expect(component.find(checkboxSelector)).toBeEmpty();
+        expect(component.find(QbIconActions)).toBeEmpty();
+        expect(component).not.toContainReact(<PositionedRowEditActions />);
     });
 
     it('renders the row edit actions if the row being editing', () => {
