@@ -58,7 +58,7 @@ render((
             </Route>
 
             <Route path="/qbase/builder/app/:appId" component={BuilderWrapper}>
-                <Route path="table/:tblId/record/:recordId" component={FormBuilder} />
+                <Route path="table/:tblId(/form/:formId)" component={FormBuilder} />
             </Route>
 
         </Router>
