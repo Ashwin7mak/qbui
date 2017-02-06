@@ -116,7 +116,7 @@ export const RecordRoute = React.createClass({
     navigateToBuilder() {
         const {appId, tblId, recordId} = this.props.reportData;
 
-        let link = '/qbase/builder/app/' + appId + '/table/' + tblId + '/record/' + recordId;
+        let link = `/qbase/builder/app/${appId}/table/${tblId}/record/${recordId}`;
         this.props.router.push(link);
     },
 
