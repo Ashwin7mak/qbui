@@ -177,35 +177,8 @@
      * @param formId
      * @returns {*}
      */
-    function getEEFormsRoute(url, formId) {
-        let root = getUrlRoot(url, TABLES);
-
-        if (root) {
-            root = getEEReqURL(root);
-
-            if (formId) {
-                return root + '/' + FORMS + (formId ? '/' + formId : '');
-            }
-
-            if (url.search('formType') !== -1) {
-                let formType;
-                url.split("&").forEach(item => {
-                    let s = item.split("="),
-                        k = s[0],
-                        v = s[1];
-                    if (k.search('formType') !== -1) {
-                        formType = v;
-                    }
-                });
-
-                return root + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
-            }
-
-            return root;
-        }
-
-        //  no url root for TABLES found; return original url unchanged
-        return url;
+    function getEEFormsRoute(url) {
+        return getEEReqURL(url);
     }
 
     module.exports  = {
@@ -369,7 +342,7 @@
          */
         getFormsRoute: function(url, isEeEnable, formId) {
             if (isEeEnable) {
-                return getEEFormsRoute(url, formId);
+                return getEEFormsRoute(url);
             } else {
                 return getCoreFormsRoute(url, formId);
             }

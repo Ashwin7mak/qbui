@@ -37,6 +37,7 @@
         var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
         var FORMS_ENDPOINT = '/forms/';
+        var FORM_TYPE_ENDPOINT = 'formType/';
         var REPORTS_ENDPOINT = '/reports/';
         var REPORTS_RESULTS_ENDPOINT = '/results';
         var RECORDS_ENDPOINT = '/records/';
@@ -209,10 +210,13 @@
                 }
                 return tableEndpoint;
             },
-            resolveFormsEndpoint      : function(appId, tableId, formId) {
+            resolveFormsEndpoint      : function(appId, tableId, formId, formType) {
                 var formEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
                 if (formId) {
                     formEndpoint = formEndpoint + formId;
+                }
+                if (formType) {
+                    formEndpoint = FORM_TYPE_ENDPOINT + formType;
                 }
                 return formEndpoint;
             },

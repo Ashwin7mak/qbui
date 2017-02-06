@@ -142,8 +142,8 @@
         function createForm(appId, tableId, form) {
             return new promise(function(resolve, reject) {
                 const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                recordBase.apiBase.executeRequest(formEndpoint, 'POST', form).then(function(result) {
-                    let formId =  JSON.parse(result.body).id;
+                recordBase.apiBase.executeRequest(formEndpoint, consts.POST, form).then(function(result) {
+                    let formId =  JSON.parse(JSON.parse(result.body).body).formId;
                     resolve({appId, tableId, formId});
                 }).catch(function(error) {
                     log.debug(JSON.stringify(error));
@@ -166,7 +166,7 @@
 
             return new promise(function(resolve, reject) {
                 recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
-                    const responseBody =  JSON.parse(result.body);
+                    const responseBody = JSON.parse(JSON.parse(result.body).body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
@@ -189,11 +189,11 @@
          *
          */
         function retriveFormByType(appId, tableId, formType) {
-            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, null, formType);
 
             return new promise(function(resolve, reject) {
-                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, '?formType=' + formType).then(function(result) {
-                    const responseBody =  JSON.parse(result.body);
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null).then(function(result) {
+                    const responseBody =  JSON.parse(JSON.parse(result.body).body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;

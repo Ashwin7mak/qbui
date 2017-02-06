@@ -238,6 +238,26 @@
                         reject(ex);
                     });
                 }.bind(this));
+            },
+
+            createForm: function(req) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                const formUrl = routeHelper.getFormsRoute(req.url, requestHelper.getRequestEeHostEnable());
+
+                if (requestHelper.getRequestEeHostEnable()) {
+                    opts.url = requestHelper.getRequestEeHost() + formUrl;
+                } else {
+                    opts.url = requestHelper.getRequestJavaHost() + formUrl;
+                }
+                //  ensure any request parameters are appended..
+                let search = url.parse(req.url).search;
+                if (search) {
+                    opts.url += search;
+                }
+
+                return requestHelper.executeRequest(req, opts);
             }
         };
 

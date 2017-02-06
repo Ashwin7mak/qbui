@@ -41,13 +41,17 @@
      *  in the node layer and are not just proxied through to the quickbase public api.
      */
     var quickBaseApiEndpoints = {
-        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
+
+        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
-        FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
+        FORMS                       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/forms',
+        FORM                        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/forms/:formId',
+        FORM_TYPE                   : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/forms/formType/:formType',
+        // FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
         RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                     : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         RECORDS_BULK                : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',

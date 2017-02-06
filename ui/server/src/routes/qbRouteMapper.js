@@ -45,7 +45,8 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
         //  form endpoints
-        routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
+        routeToGetFunction[routeConsts.FORM] = fetchFormComponents;
+        routeToGetFunction[routeConsts.FORM_TYPE] = fetchFormComponents;
         routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
 
         //  record endpoints
@@ -71,6 +72,7 @@
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
         routeToPostFunction[routeConsts.APP_STACK_PREFERENCE] = applicationStackPreference;
+        routeToPostFunction[routeConsts.FORMS] = createForm;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -400,7 +402,7 @@
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            formsApi.fetchFormComponents(req, false).then(
+            formsApi.fetchFormMetaData(req, false).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Form Components');
@@ -429,6 +431,29 @@
 
         processRequest(req, res, function(req, res) {
             formsApi.fetchFormComponents(req, true).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function createForm(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            formsApi.createForm(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Form Components');
