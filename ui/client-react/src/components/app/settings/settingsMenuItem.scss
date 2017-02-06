@@ -3,18 +3,25 @@
 .card {
   background-color: $default-text-ondark-color;
   width: 30%;
-  overflow: hidden;
   box-shadow: .25px .25px 5px .25px;
   border-radius: 2px 2px 2px 2px;
   z-index: 5;
   flex:1 1 auto;
   margin:5px;
+
+  @include medium-breakpoint {
+    width: 40%;
+  }
+
+  @include small-breakpoint {
+    width: 100%;
+  }
+
 }
 
 .cardIcon {
   border-radius: 50%;
   width: 68px;
-  height: 68px;
   float: left;
   font-size: 30px;
   padding-top: 10px;
@@ -32,16 +39,11 @@
 }
 
 .cardContent {
-  color: rgb(0, 0, 0.54);
+  color: $color-black-800;
   padding: 2%;
 }
 
 .headerH3 {
   position: relative;
   padding: 1%;
-}
-
-.contentP {
-  padding: 1%;
-  overflow: hidden;
 }
