@@ -293,6 +293,8 @@ To setup WebdriverIO for browser end to end tests, follow the **README.md** setu
 
 Edit and configure your own copy of **e2e.js** located in `qbui/ui/server/src/config/environment` if needed. The e2e tests have their own config file as they will launch their own node instance when running.
 
+Now run `npm run update-webdriver` in terminal from the `qbui/ui` directory
+
 Once everything is configured you can run `grunt test:e2eLocalDataGen` as a smoke test to check that everything is working properly. This script will generate you a test realm and app which you can view in the UI.
 
 See [Debugging UI](./DEBUGGING.md) for more info on debugging tests.
