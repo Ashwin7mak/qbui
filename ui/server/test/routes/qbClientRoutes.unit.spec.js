@@ -120,7 +120,7 @@ describe('Express Client Routes', function() {
 
     it('validate get form builder route with formId', function(done) {
         request(app).
-        get('/qbase/builder/app/1/table/2/formId/3').
+        get('/qbase/builder/app/1/table/2/form/3').
         expect(200);
         done();
     });
