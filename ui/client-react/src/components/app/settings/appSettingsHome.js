@@ -34,6 +34,7 @@ const AppSettingsHome = React.createClass({
                                   title="App Properties"
                                   subTitle="Manage the properties of this app"
                                   icon="settings"
+                                  link={this.constructSettingsLink("properties")}
                 />
                 <SettingsMenuItem appId={this.props.appId}
                                   title="Pages"
