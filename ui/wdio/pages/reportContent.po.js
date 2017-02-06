@@ -228,8 +228,10 @@
          * Given a record element in agGrid, click on the record to open it in view form mode.
          * @param recordRowIndex
          */
-        openRecordInViewMode : {value: function(recordRowIndex) {
-            this.clickOnRecordInReportTable(recordRowIndex);
+        openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
+            //navigate to record page directly
+            var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
+            browser.url(requestRecordPageEndPoint);
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         }},
@@ -261,7 +263,7 @@
          */
         clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
             //get all checkboxes in the report table first column
-            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
+            var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
 
@@ -273,7 +275,9 @@
                 //click on the edit pencil in table actions
                 this.editPencilBtnOnReportActions.click();
                 //wait until edit form is visible
-                return formsPO.editFormContainerEl.waitForVisible();
+                formsPO.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }
