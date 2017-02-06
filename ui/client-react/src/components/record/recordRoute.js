@@ -116,13 +116,15 @@ export const RecordRoute = React.createClass({
     navigateToBuilder() {
         const {appId, tblId, formId} = this.props.params;
         const formType = this.props.forms[0].id;
+
         let link;
-        console.log('appId: ', appId, '\ntblId: ', tblId);
+
         if (formId) {
             link = `/qbase/builder/app/${appId}/table/${tblId}/form/${formId}/?formType=${formType}`;
         } else {
             link = `/qbase/builder/app/${appId}/table/${tblId}?formType=${formType}`;
         }
+
         this.props.router.push(link);
     },
 
@@ -271,7 +273,6 @@ export const RecordRoute = React.createClass({
      * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
      */
     render() {
-        console.log('this.props: ', this.props);
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||
