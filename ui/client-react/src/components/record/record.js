@@ -120,13 +120,14 @@ let Record = React.createClass({
      */
     getRelationshipsFromProps() {
         const app = _.get(this, 'props.selectedApp');
-        const thing = _.get(app, 'relationships', [])
+        return _.get(app, 'relationships', [])
                 .map(rel => {
+                    const parentTable = _.find(app.tables, {id:rel.masterTableId}) || {};
                     const childTable = _.find(app.tables, {id:rel.detailTableId}) || {};
-                    rel.name = childTable.name;
+                    rel.parentTableName = parentTable.name;
+                    rel.childTalbeName = childTable.name;
                     return rel;
                 });
-        return thing;
     },
 
     render() {
