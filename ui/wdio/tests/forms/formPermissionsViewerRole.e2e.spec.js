@@ -91,13 +91,13 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
 
             //Step 3 - Open a record
-            formsPO.openRecordInViewMode(2);
+            reportContentPO.openRecordInViewMode(realmName, appId, tableId, reportId, 2);
 
             //Step 4 - Verify cannot see any text fields on the form in view mode as readaccess set to false
             formsPO.verifyFieldsNotPresentOnForm(formsPO.viewFormContainerEl, expectedFieldsWhichHasNoFieldRights);
 
             //Step 5 - go to edit mode by clicking on Add record button on stage
-            formsPO.clickAddRecordBtnOnStage();
+            reportContentPO.clickAddRecordBtnOnStage();
 
             //Step 6 - Verify cannot see any text fields on the form in edit mode as modify access set to false
             formsPO.verifyFieldsNotPresentOnForm(formsPO.editFormContainerEl, expectedFieldsWhichHasNoFieldRights);
@@ -119,7 +119,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 4 - Click on Add Record Button on the report Stage
-            formsPO.clickAddRecordBtnOnStage();
+            reportContentPO.clickAddRecordBtnOnStage();
 
             //Step 5 - enter form values
             fieldTypes.forEach(function(fieldType) {
@@ -155,7 +155,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 3 - Click on 2nd record edit pencil
-            formsPO.clickRecordEditPencilInRecordActions(1);
+            reportContentPO.clickRecordEditPencilInRecordActions(1);
 
             //Step 4 - enter form values
             fieldTypes.forEach(function(fieldType) {

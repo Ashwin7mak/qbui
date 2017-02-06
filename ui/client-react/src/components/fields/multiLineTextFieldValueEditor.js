@@ -67,14 +67,15 @@ const MultiLineTextFieldValueEditor = React.createClass({
 
     statics: {
         MAX_TEXTAREA_HEIGHT: 200,
-        MAX_TEXTAREA_WIDTH: 200
+        MAX_TEXTAREA_WIDTH: 200,
+        INITIAL_HEIGHT_TEXTAREA: "32px"
     },
 
     getInitialState() {
         return {
             style: {
                 width: MultiLineTextFieldValueEditor.MAX_TEXTAREA_WIDTH,
-                height: "auto"
+                height: MultiLineTextFieldValueEditor.INITIAL_HEIGHT_TEXTAREA
             }
         };
     },
@@ -105,7 +106,11 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     componentDidMount() {
-        this.resize();
+        if (this.props.isFormView) {
+            this.setState({style: {height: "auto", width: MultiLineTextFieldValueEditor.MAX_TEXTAREA_WIDTH}});
+        } else {
+            this.resize();
+        }
     },
 
     /**
@@ -113,7 +118,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * in which case start using vertical scrolling
      */
     resize() {
-        this.setState({style: {height: "auto"}}, () => {
+        this.setState({style: {height: MultiLineTextFieldValueEditor.INITIAL_HEIGHT_TEXTAREA}}, () => {
             // now we can query the actual (auto) height
             let newHeight = this.getScrollHeight();
 
@@ -131,7 +136,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
      */
     onKeyUp(ev) {
         if (this.getScrollHeight() < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
-            this.resize();
+            if (!this.props.isFormView) {
+                this.resize();
+            }
         }
     },
 
@@ -140,7 +147,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let style = this.props.showScrollForMultiLine ? this.state.style : {};
+        let style = !this.props.showScrollForMultiLine ? this.state.style : {};
         return <ClearableTextArea
                     ref="textarea"
                     {...this.props}

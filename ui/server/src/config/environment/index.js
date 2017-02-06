@@ -19,8 +19,12 @@
             requireCert: false
         },
 
-        // api rest server endpoints...environments must configure
+        // core api rest server endpoints...environments must configure
         javaHost: '',
+
+        // ee api rest server endpoints...environments must configure
+        eeHost: '',
+        eeHostEnable: false,
 
         // api rest server endpoints for legacy quickbase..environments must configure
         legacyHost: '',

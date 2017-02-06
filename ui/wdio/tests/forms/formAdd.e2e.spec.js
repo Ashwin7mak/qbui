@@ -57,7 +57,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 2 - Click on Add Record Button on the report Stage
-            formsPO.clickAddRecordBtnOnStage();
+            reportContentPO.clickAddRecordBtnOnStage();
 
             //Step 3 - enter form values
             fieldTypes.forEach(function(fieldType) {

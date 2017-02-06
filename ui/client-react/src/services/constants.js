@@ -22,7 +22,7 @@ export default {
         LEGACY      : '/api/l/' + Configuration.api.legacyVersion
     },
 
-    // API Entities
+    // Entities
     APPS                : 'apps',
     FIELD               : 'fields',
     RECORDS             : 'records',
@@ -36,7 +36,7 @@ export default {
     USERS               : 'users',
     RIGHTS              : 'accessRights',
 
-    // API Entity actions
+    // Node Entity actions
     FORMCOMPONENTS      : 'formComponents',
     HOMEPAGE            : 'homePage',
     RECORDSCOUNT        : 'recordsCount',
@@ -45,6 +45,6 @@ export default {
     PARSE               : 'parse',
     BULK                : 'bulk',
 
-    // API Legacy actions
+    // Legacy actions
     STACK               : 'stack'
 };

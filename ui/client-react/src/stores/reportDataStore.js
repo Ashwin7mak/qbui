@@ -663,7 +663,7 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onSelectedRows(selectedRows) {
-        this.selectedRows = selectedRows;
+        this.selectedRows = selectedRows.slice();
 
         this.emit('change');
     },
@@ -842,10 +842,11 @@ let ReportDataStore = Fluxxor.createStore({
                 let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
                 //set the default values in the answer for each field
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
-                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
+                    valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
                 } else {
-                    valueAnswer = {value: FieldUtils.getDefaultValueForFieldType(theCorrespondingField.datatypeAttributes.type), id: obj.id};
+                    valueAnswer = (obj.id === SchemaConsts.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
                 }
+
                 return valueAnswer;
             });
 
@@ -887,6 +888,9 @@ let ReportDataStore = Fluxxor.createStore({
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
                 newRecords.unshift(newRecord);
             }
+
+            // Always make sure to return an editing index so QbGrid can detect the new row
+            this.editingIndex = (this.editingIndex === undefined ? -1 : this.editingIndex);
             model.records = newRecords;
             model.recordsCount++;
         }
@@ -898,22 +902,27 @@ let ReportDataStore = Fluxxor.createStore({
      * @param afterRecId
      */
     createNewGroupedRecord(afterRecId) {
+        let afterRecordIdValue = afterRecId;
+        if (!_.isNumber(afterRecId)) {
+            afterRecordIdValue = afterRecId.value;
+        }
+
         const model = this.reportModel.get();
 
         if (model.filteredRecords.length > 0) {
             //find record to add after
-            let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
-            if (afterRecId === -1) {
-                record = ReportUtils.findFirstGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
+            let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecordIdValue, this.reportModel.model.keyField.name);
+            if (afterRecordIdValue === -1) {
+                record = ReportUtils.findFirstGroupedRecord(model.filteredRecords, afterRecordIdValue, this.reportModel.model.keyField.name);
             }
 
             if (record === null) {
-                logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecId}`);
+                logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecordIdValue}`);
                 return;
             }
             let groupFids = [];
 
-            if (afterRecId !== -1) {
+            if (afterRecordIdValue !== -1) {
                 groupFids = model.groupFields.map(field => {
                     return field.field.id;
                 });
@@ -930,14 +939,14 @@ let ReportDataStore = Fluxxor.createStore({
                 });
                 if (isGroupedFid !== -1) {
                     let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
-                    valueAnswer = {value: fieldValuesForRecord.value, id:obj.id};
+                    valueAnswer = {id: obj.id, value: fieldValuesForRecord.value};
                 } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
                     //set the default values in the answer for each field
-                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
+                    valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
                 } else {
-                    //TBD : type specific values
-                    valueAnswer = {value: null, id: obj.id};
+                    valueAnswer = (obj.id === SchemaConsts.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
                 }
+
                 return valueAnswer;
             });
 
@@ -955,11 +964,11 @@ let ReportDataStore = Fluxxor.createStore({
             let filteredRecordAdded = false;
             let recordAdded = false;
 
-            if (afterRecId === -1) {
+            if (afterRecordIdValue === -1) {
                 filteredRecordAdded = newFilteredRecords.unshift(newRecord);
                 recordAdded = filteredRecordAdded;
             } else {
-                filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+                filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecordIdValue, this.reportModel.model.keyField.name, newRecord);
                 recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
             }
 
@@ -972,8 +981,13 @@ let ReportDataStore = Fluxxor.createStore({
                 model.recordsCount++; //for pagination
             }
 
+            let afterRecIndex = -1;
+            if (afterRecId) {
+                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId);
+            }
+
             //editing index for aggrid to open inline edit
-            this.editingIndex = SchemaConsts.UNSAVED_RECORD_ID;
+            this.editingIndex = afterRecIndex;
             this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
         }
     },
@@ -989,6 +1003,7 @@ let ReportDataStore = Fluxxor.createStore({
         if (this.editingIndex !== undefined || this.editingId !== undefined) {
             this.onRecordEditCancel(payload);
         }
+
         if (this.reportModel.model.hasGrouping) {
             this.createNewGroupedRecord(payload.afterRecId);
         } else {
@@ -1013,6 +1028,8 @@ let ReportDataStore = Fluxxor.createStore({
     onDeleteReportRecordSuccess(recId) {
         this.reportModel.deleteRecordsFromLists(recId);
         this.isRecordDeleted = true;
+
+        this.selectedRows = _.without(this.selectedRows, recId);
         this.emit('change');
     },
 
@@ -1105,9 +1122,14 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload
      */
     onRecordEditCancel(payload) {
-        //remove record if its new unsaved
-        if (payload.recId && payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.reportModel.deleteRecordsFromLists(payload.recId.value);
+        // Check for object can be removed once AgGrid is removed. QbGrid always sends up integer for recordId.
+        var recordId = payload.recId;
+        if (_.isObject(recordId)) {
+            recordId = recordId.value;
+        }
+        //remove record if its new and unsaved (but only if the user is on a table [see AppHistory - called on every route change])
+        if (payload.tblId && recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+            this.reportModel.deleteRecordsFromLists(recordId);
         }
         this.onClearEdit();
     },
@@ -1268,5 +1290,13 @@ let ReportDataStore = Fluxxor.createStore({
         };
     }
 });
+
+function getDefaultValue(id, type) {
+    let defaultValue = FieldUtils.getDefaultValueForFieldType(type);
+    return {
+        id: id,
+        value: defaultValue
+    };
+}
 
 export default ReportDataStore;

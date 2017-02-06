@@ -8,7 +8,6 @@
     // Import the base page object
 
     var e2ePageBase = requirePO('e2ePageBase');
-    var ReportInLineEditPO = requirePO('reportInLineEdit');
     var reportContentPO = requirePO('reportContent');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
 
@@ -23,8 +22,6 @@
     var sUser = 'administrator User for default SQL Installation';
 
     var FormsPage = Object.create(e2ePageBase, {
-        //Record add button on stage
-        addRecordBtnOnStage : {get: function() {return browser.element('.layout-stage .pageActions .iconTableUISturdy-add');}},
         //view form
         viewFormContainerEl : {get: function() {return browser.element('form.viewForm');}},
         //edit Form
@@ -36,10 +33,6 @@
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
-        //edit pencil in report actions tool bar
-        editPencilBtnOnReportActions : {get: function() {return browser.element('.reportActions .actionIcons .iconTableUISturdy-edit');}},
-        //edit pencil in record actions
-        editPencilBtnInRecordActions : {get: function() {return browser.elements('.recordActions .iconActionButton.edit');}},
 
         //form close button
         formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconTableUISturdy-close');}},
@@ -63,25 +56,13 @@
 
 
         /**
-         * Method to click Add Record button on Report Table
-         */
-        clickAddRecordBtnOnStage: {value: function() {
-            this.addRecordBtnOnStage.waitForVisible();
-            //Click on add record button
-            this.addRecordBtnOnStage.click();
-            //wait until you see edit container and save buttons in footer
-            this.editFormContainerEl.waitForVisible();
-            return this.editFormSaveBtns.waitForVisible();
-        }},
-
-        /**
          * Method for spinner to dissaper after hitting on any save buttons on edit forms
          */
         waitUntilSpinnerGoesAwayAfterSave : {value: function(btnName) {
             //wait until loading screen disappear
-            browser.waitForVisible('.trowserChildren .loader .spinner', e2eConsts.extraLongWaitTimeMilliseonds, true);
+            browser.waitForVisible('.trowserChildren .loader .spinner', e2eConsts.extraLongWaitTimeMs, true);
             //Need this to wait for container to slide away
-            return browser.pause(3000);
+            return browser.pause(e2eConsts.shortWaitTimeMs);
         }},
 
         /**
@@ -143,7 +124,7 @@
          * @returns Array of field Labels
          */
         getAllFieldLabelsOnForm: {value: function(elementFormName) {
-            elementFormName.elements('.fieldLabel').waitForVisible();
+            elementFormName.element('.fieldLabel').waitForVisible();
             return elementFormName.elements('.fieldLabel');
         }},
 
@@ -152,7 +133,7 @@
          * @returns Array of text input fields
          */
         getAllFieldRows: {value: function() {
-            this.editFormContainerEl.elements('.fieldRow').waitForVisible();
+            this.editFormContainerEl.element('.fieldRow').waitForVisible();
             return this.editFormContainerEl.elements('.fieldRow');
         }},
 
@@ -161,8 +142,8 @@
          * @returns Array of email input fields
          */
         getAllEmailInputFields: {value: function() {
-            this.editFormContainerEl.elements('input[type="email"].textField').waitForVisible();
-            return this.editFormContainerEl.elements('input[type="email"].textField');
+            this.editFormContainerEl.element('input.emailField').waitForVisible();
+            return this.editFormContainerEl.elements('input.emailField');
         }},
 
         /**
@@ -170,7 +151,7 @@
          * @returns Array of phone input fields
          */
         getAllPhoneInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.phoneNumber').waitForVisible();
+            this.editFormContainerEl.element('input.phoneNumber').waitForVisible();
             return this.editFormContainerEl.elements('input.phoneNumber');
         }},
 
@@ -179,7 +160,7 @@
          * @returns Array of url input fields
          */
         getAllUrlInputFields: {value: function() {
-            this.editFormContainerEl.elements('input[type="url"].textField').waitForVisible();
+            this.editFormContainerEl.element('input[type="url"].textField').waitForVisible();
             return this.editFormContainerEl.elements('input[type="url"].textField');
         }},
 
@@ -188,7 +169,7 @@
          * @returns Array of duration input fields
          */
         getAllDurationInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.durationField').waitForVisible();
+            this.editFormContainerEl.element('input.durationField').waitForVisible();
             return this.editFormContainerEl.elements('input.durationField');
         }},
 
@@ -197,7 +178,7 @@
          * @returns Array of numeric input fields
          */
         getAllNumericInputFields: {value: function() {
-            this.editFormContainerEl.elements('input.numericField').waitForVisible();
+            this.editFormContainerEl.element('input.numericField').waitForVisible();
             return this.editFormContainerEl.elements('input.numericField');
         }},
 
@@ -206,7 +187,7 @@
          * @returns Array of date input fields
          */
         getAllDateInputFields: {value: function() {
-            this.editFormContainerEl.elements('.cellEdit.dateCell').waitForVisible();
+            this.editFormContainerEl.element('.cellEdit.dateCell').waitForVisible();
             return this.editFormContainerEl.elements('.cellEdit.dateCell');
         }},
 
@@ -215,7 +196,7 @@
          * @returns Array of time input fields
          */
         getAllTimeInputFields: {value: function() {
-            this.editFormContainerEl.elements('.cellEdit.timeCell').waitForVisible();
+            this.editFormContainerEl.element('.cellEdit.timeCell').waitForVisible();
             return this.editFormContainerEl.elements('.cellEdit.timeCell');
         }},
 
@@ -224,7 +205,7 @@
          * @returns Array of checkbox fields
          */
         getAllCheckboxFields: {value: function() {
-            this.editFormContainerEl.elements('.checkbox').waitForVisible();
+            this.editFormContainerEl.element('.checkbox').waitForVisible();
             return this.editFormContainerEl.elements('.checkbox');
         }},
 
@@ -233,7 +214,7 @@
          * @returns Array of user fields
          */
         getAllUserFields: {value: function() {
-            this.editFormContainerEl.elements('.cellEdit.userFormat').waitForVisible();
+            this.editFormContainerEl.element('.cellEdit.userFormat').waitForVisible();
             return this.editFormContainerEl.elements('.cellEdit.userFormat');
         }},
 
@@ -246,25 +227,6 @@
             //wait for datePicker to be visible
             fieldDateIconElement.element('.datepicker .active').waitForVisible();
             return fieldDateIconElement.element('.datepicker .active').click();
-        }},
-
-        /**
-         * Select List option from the List combo
-         *
-         */
-        selectFromList : {value: function(fieldElement, listOption) {
-            fieldElement.element('.Select-menu-outer').waitForVisible();
-            //get all options from the list
-            var option = browser.elements('.Select-option').value.filter(function(optionText) {
-                return optionText.element(' div div').getText() === listOption;
-            });
-
-            if (option !== []) {
-                //Click on filtered option
-                return option[0].element(' div div').click();
-            } else {
-                throw new Error('Option with name ' + listOption + " not found in the list");
-            }
         }},
 
         /**
@@ -327,94 +289,31 @@
          * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
          * @param recordRowIndex
          */
-        openRecordInViewMode : {value: function(recordRowIndex) {
-            var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
-            // Hardcoded to click on the third cell of the record
-            var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[3];
-
-            //scroll to third cell of recordRowIndex row
-            if (browserName === 'chrome') {
-                recordCellEl.moveToObject();
-            } else {
-                browser.execute(function(elelemt) {
-                    elelemt.scrollIntoView(false);
-                }, recordCellEl);
-            }
-            //Click on the third cell of recordRowIndex row
-            recordCellEl.click();
-            //wait until view form is visible
-            return this.viewFormContainerEl.waitForVisible();
-        }},
-
-        /**
-         * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
-         * @param recordRowIndex
-         */
-        clickRecordEditPencilInRecordActions : {value: function(recordRowIndex) {
-            //get all edit buttons in the report table first column
-            var getAllEdits = this.editPencilBtnInRecordActions.value.filter(function(edit) {
-                return edit.index === recordRowIndex;
-            });
-
-            if (getAllEdits !== []) {
-                //Click on filtered save button
-                getAllEdits[0].click();
-                this.editFormContainerEl.waitForVisible();
-                //need these for trowser to drop down
-                return browser.pause(3000);
-            } else {
-                throw new Error('Edit button not found at row ' + recordRowIndex);
-            }
-        }},
-
-        /**
-         * Given a record element in agGrid, click on the checkbox to select that record and then click on edit pencil from the table actions
-         * @param recordRowIndex
-         */
-        clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
-            //get all checkboxes in the report table first column
-            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
-                return checkbox.index === recordRowIndex;
-            });
-
-            if (getAllCheckBoxs !== []) {
-                //Click on filtered save button
-                getAllCheckBoxs[0].click();
-                //wait for edit pencil to be visible
-                this.editPencilBtnOnReportActions.waitForVisible();
-                //click on the edit pencil in table actions
-                this.editPencilBtnOnReportActions.click();
-                //wait until edit form is visible
-                return this.editFormContainerEl.waitForVisible();
-            } else {
-                throw new Error('Checkbox not found at row ' + recordRowIndex);
-            }
-        }},
-
-        /**
-         * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
-         * @param recordRowIndex
-         */
         clickRecordEditPencilInViewForm : {value: function(recordRowIndex) {
-            var recordRowEl = reportContentPO.getRecordRowElement(recordRowIndex);
-            // Hardcoded to click on the first cell of the record
-            var recordCellEl = reportContentPO.getRecordRowCells(recordRowEl).value[0];
-            //scroll to third cell of recordRowIndex row
-            if (browserName === 'chrome') {
-                recordCellEl.moveToObject();
-            } else {
-                browser.execute(function(elelemt) {
-                    elelemt.scrollIntoView(false);
-                }, recordCellEl);
-            }
-            //Click on the first cell of recordRowIndex row
-            recordCellEl.click();
-            //wait until view form is visible
-            this.viewFormContainerEl.waitForVisible();
+            this.editPencilBtnOnStageInViewForm.waitForVisible();
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
             //wait until edit form is visible
             return this.editFormContainerEl.waitForVisible();
+        }},
+
+        /**
+         * Select List option from the List combo
+         *
+         */
+        selectFromList : {value: function(fieldElement, listOption) {
+            fieldElement.element('.Select-menu-outer').waitForVisible();
+            //get all options from the list
+            var option = browser.elements('.Select-option').value.filter(function(optionText) {
+                return optionText.element('div div').getText() === listOption;
+            });
+
+            if (option !== []) {
+                //Click on filtered option
+                return option[0].element('div div').click();
+            } else {
+                throw new Error('Option with name ' + listOption + " not found in the list");
+            }
         }},
 
         /**
@@ -433,6 +332,17 @@
                 } else {
                     fieldTypes.value[i].setValue(fieldValue);
                 }
+            }
+        }},
+
+        /**
+         * Method to select value from a dropDown List.
+         */
+        setDropDownValue: {value: function(getAllUniqueFieldTypes, fieldValue) {
+            var fieldTypes = getAllUniqueFieldTypes;
+            for (var i = 0; i < fieldTypes.value.length; i++) {
+                fieldTypes.value[i].element('.Select-multi-value-wrapper').click();
+                this.selectFromList(fieldTypes.value[i], fieldValue);
             }
         }},
 
@@ -471,29 +381,18 @@
                     }
                 }
             } else if (fieldType === 'allTimeFields') {
-                //get all time fields on form
-                var timeFields = this.getAllTimeInputFields();
-                for (i = 0; i < timeFields.value.length; i++) {
-                    timeFields.value[i].element('.Select-control').click();
-                    this.selectFromList(timeFields.value[i], sTime);
-                }
-
+                this.setDropDownValue(this.getAllTimeInputFields(), sTime);
             } else if (fieldType === 'allCheckboxFields') {
                 //get all checkbox fields on form
                 var checkboxFields = this.getAllCheckboxFields();
                 for (i = 0; i < checkboxFields.value.length; i++) {
                     //if checkbox not selected then check it.
                     if (!checkboxFields.value[i].element('input').isSelected()) {
-                        checkboxFields.value[i].click();
+                        checkboxFields.value[i].element('label').click();
                     }
                 }
-            }else if (fieldType === 'allUserField') {
-                //get all user field input validators
-                var userFields = this.getAllUserFields();
-                for (i = 0; i < userFields.value.length; i++) {
-                    userFields.value[i].element('.Select-control').click();
-                    this.selectFromList(userFields.value[i], sUser);
-                }
+            } else if (fieldType === 'allUserField') {
+                this.setDropDownValue(this.getAllUserFields(), sUser);
             }
         }},
 
@@ -583,36 +482,36 @@
             for (var i = 0; i < expectedRecordValues.length; i++) {
                 console.log("The expected values are: " + JSON.stringify(expectedRecordValues));
                 //text field
-                expect(expectedRecordValues[0]).toBe(sText.toString());
+                expect(expectedRecordValues[1]).toBe(sText.toString());
                 //numeric field
-                expect(expectedRecordValues[1]).toBe(sNumeric.toString());
+                expect(expectedRecordValues[2]).toBe(sNumeric.toString());
                 //numeric currency field
-                expect(expectedRecordValues[2]).toBe('$' + sNumeric.toString());
+                expect(expectedRecordValues[3]).toBe('$' + sNumeric.toString());
                 //numeric percent field
-                expect(expectedRecordValues[3]).toBe(sNumeric.toString() + '%');
+                expect(expectedRecordValues[4]).toBe(sNumeric.toString() + '%');
                 //numeric rating field
-                expect(expectedRecordValues[4]).toBe(sNumeric.toString());
+                expect(expectedRecordValues[5]).toBe(sNumeric.toString());
                 //date field
-                expect(expectedRecordValues[5]).toBe(sDate.toString());
+                expect(expectedRecordValues[6]).toBe(sDate.toString());
                 //date time field
-                expect(expectedRecordValues[6]).toBe(sDate.toString() + ' ' + sTime.toString());
+                expect(expectedRecordValues[7]).toBe(sDate.toString() + ' ' + sTime.toString());
                 //TODO time of day field not working on firefox verify. i do see it gets selected via automation. do manual testing to verify this
                 if (browserName !== 'firefox') {
-                    expect(expectedRecordValues[7]).toBe(sTime.toString());
+                    expect(expectedRecordValues[8]).toBe(sTime.toString());
                 }
                 //numeric duration field
-                expect(expectedRecordValues[8]).toBe('4.76142857142857  weeks');
+                expect(expectedRecordValues[9]).toBe('4.76142857142857  weeks');
                 //checkbox field
-                expect(expectedRecordValues[9]).toBe('true');
+                expect(expectedRecordValues[10]).toBe('true');
                 //email field
-                expect(expectedRecordValues[10]).toBe('(508) 481-1015');
+                expect(expectedRecordValues[11]).toBe('(508) 481-1015');
                 //phone field
-                expect(expectedRecordValues[11]).toBe(sEmail.toString());
+                expect(expectedRecordValues[12]).toBe(sEmail.toString());
                 //url field
-                expect(expectedRecordValues[12]).toBe(sUrl.toString());
+                expect(expectedRecordValues[13]).toBe(sUrl.toString());
                 //user Field
                 if (browserName !== 'firefox') {
-                    expect(expectedRecordValues[13]).toBe('administrator User for default SQL Installation');
+                    expect(expectedRecordValues[14]).toBe('administrator User for default SQL Installation');
                 }
             }
         }},

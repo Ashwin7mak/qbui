@@ -26,18 +26,25 @@ import AppQbModal from '../qbModal/appQbModal';
 import UrlUtils from '../../utils/urlUtils';
 import CookieConstants from '../../../../common/src/constants';
 import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
-
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
+import * as ReportActions from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
+
+// This shared view with the server layer must be loaded as raw HTML because
+// the current backend setup cannot handle a react component in a common directory. It is loaded
+// as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
+import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
+const OPEN_APPSLIST = true;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -48,7 +55,6 @@ export let Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
-            reportsData: flux.store('ReportsStore').getState(),
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
@@ -77,8 +83,6 @@ export let Nav = React.createClass({
     },
 
     onSelectTableReports(tableId) {
-        const flux = this.getFlux();
-
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
@@ -87,7 +91,7 @@ export let Nav = React.createClass({
         }
 
         this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORTS_LIST.NAV, this.state.apps.selectedAppId, tableId));
     },
 
     /**
@@ -108,11 +112,12 @@ export let Nav = React.createClass({
      * get table object for currently selected table (or null if no table selected)
      *
      */
-    getSelectedTable() {
-        const app = this.getSelectedApp();
-
-        if (app && this.state.reportsData.tableId) {
-            return _.find(app.tables, (t) => t.id === this.state.reportsData.tableId);
+    getSelectedTable(tableId) {
+        if (tableId) {
+            const app = this.getSelectedApp();
+            if (app) {
+                return _.find(app.tables, (t) => t.id === tableId);
+            }
         }
         return null;
     },
@@ -140,12 +145,10 @@ export let Nav = React.createClass({
      *  if left nav is collapsed, open the apps list and dispatch event to open nav
      */
     toggleAppsList(open) {
-        const flux = this.getFlux();
-
         if (this.props.qbui.shell.leftNavExpanded) {
-            flux.actions.toggleAppsList(open);
+            this.props.dispatch(ShellActions.toggleAppsList(open));
         } else {
-            flux.actions.toggleAppsList(true);
+            this.props.dispatch(ShellActions.toggleAppsList(OPEN_APPSLIST));
             this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
         }
     },
@@ -196,10 +199,19 @@ export let Nav = React.createClass({
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
-            return null;
+            // The common loading screen html is shared across server and client as an HTML file and
+            // therefore must be loaded using the dnagerouslySetInnerHTML attribute
+            // see more information in common/src/views/Readme.md
+            return <div dangerouslySetInnerHTML={{__html: LoadingScreen}} />;
         }
 
         const flux = this.getFlux();
+
+        const selectedApp = this.getSelectedApp();
+        // TODO: don't use globals. Separate task exists to pass this info to components in a sane way.
+        if (_.get(selectedApp, 'relationships.length') > 0) {
+            window.relationships = selectedApp.relationships;
+        }
 
         let classes = "navShell";
         if (this.props.qbui.shell.leftNavVisible) {
@@ -217,10 +229,17 @@ export let Nav = React.createClass({
             viewingRecordId = this.props.params.recordId;
         }
 
+        // pull the NAV context report from the list
+        let report = _.find(this.props.qbui.reports, function(rpt) {
+            return rpt.id === CONTEXT.REPORTS_LIST.NAV;
+        });
+        //  make sure reportsData is an object if NAV context is not found
+        let reportsData = report || {};
+
         return (<div className={classes}>
             <NavPageTitle
                 app={this.getSelectedApp()}
-                table={this.getSelectedTable()}
+                table={this.getSelectedTable(reportsData.tableId)}
                 report={this.getSelectedReport()}
                 editingRecordId={editRecordIdForPageTitle}
                 selectedRecordId={viewingRecordId}
@@ -240,24 +259,23 @@ export let Nav = React.createClass({
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable()}
+                               selectedTable={this.getSelectedTable(reportsData.tableId)}
                                reportData={this.state.reportData}
-                               errorPopupHidden={this.state.nav.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
-                                      selectedTable={this.getSelectedTable()}
+                                      selectedTable={this.getSelectedTable(reportsData.tableId)}
                                       filterReportsName={this.state.nav.filterReportsName}
-                                      reportsData={this.state.reportsData}
+                                      reportsData={reportsData}
                                       onHideTrowser={this.hideTrowser}/>
             }
 
             <LeftNav
                 visible={this.props.qbui.shell.leftNavVisible}
                 expanded={this.props.qbui.shell.leftNavExpanded}
-                appsListOpen={this.state.nav.appsListOpen}
+                appsListOpen={this.props.qbui.shell.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
@@ -289,10 +307,9 @@ export let Nav = React.createClass({
                             pendEdits:this.state.pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
-                            forms: this.props.qbui.forms,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
-                            selectedTable: this.getSelectedTable(),
+                            selectedTable: this.getSelectedTable(reportsData.tableId),
                             scrollingReport: this.state.nav.scrollingReport,
                             flux: flux}
                         )}
@@ -359,4 +376,3 @@ export let Nav = React.createClass({
 
 export let NavWithRouter = withRouter(Nav);
 export default NavWithRouter;
-

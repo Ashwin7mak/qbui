@@ -56,8 +56,7 @@ const RowActions = React.createClass({
         }
 
         // Display an empty div instead of row actions when inline edit is open
-        // or the current row is new and does not yet have an id
-        if (this.props.isInlineEditOpen || !this.props.rowId) {
+        if (this.props.isInlineEditOpen) {
             return <div className="emptyRowActions"></div>;
         }
 

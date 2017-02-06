@@ -108,6 +108,7 @@ export default {
             addRecord: "Add a record",
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
+            saveAndAddRecordDisabled: "Adding records in the grid is not working right now",
             cancelSelection: "Cancel changes",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
@@ -210,6 +211,7 @@ export default {
         },
         report : {
             blank : "blank",
+            inlineEdit: "Edit record inline",
             facets : {
                 noFacets : "No values",
                 seeMore : "more...",
@@ -417,6 +419,7 @@ export default {
             api: {
                 notUniqueSingleField: "Fill in a different value. Another {recordName} is already using this {fieldName}.",
                 notUniqueMultiChoice: "Select a different {fieldName}. Another {recordName} is already using this one.",
+                invalidRecord: "Invalid data type. Fill in a different value."
             },
             unknown: "Invalid unknown type. Results: ",
             required: "Fill in the {fieldName}",

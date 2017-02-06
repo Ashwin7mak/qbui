@@ -2,6 +2,8 @@
 
 let config = {
     javaHost: 'http://javaHost',
+    eeHost: 'http://eeHost',
+    eeHostEnable: false,
     SSL_KEY : {
         private    : 'privateKey',
         cert       : 'cert',
@@ -71,6 +73,43 @@ describe('Validate FormsApi unit tests', function() {
                 done(new Error('unable to resolve fetchFormMetaData success test: ' + JSON.stringify(errorMsg)));
             });
 
+        });
+
+        it('the correct rest endpoint is used (EE/Core) ', function(done) {
+            req.url = '/apps/123/tables/456?format=display';
+
+            let getRequestEeHostEnableStub = sinon.stub(requestHelper, "getRequestEeHostEnable");
+
+            let getRequestEeHostSpy = sinon.spy(requestHelper, "getRequestEeHost");
+            let getRequestJavaHostSpy = sinon.spy(requestHelper, "getRequestJavaHost");
+            formsApi.setRequestHelperObject(requestHelper);
+
+            let targetObject = "[{formMeta: [id:1]}]";
+            executeReqStub.returns(Promise.resolve(targetObject));
+
+            [true, false].forEach(eeEnableFlag => {
+                getRequestEeHostEnableStub.returns(eeEnableFlag);
+
+                let promise = formsApi.fetchFormMetaData(req);
+
+                promise.then(
+                    function(response) {
+                        assert.deepEqual(response, targetObject);
+                        if (eeEnableFlag) {
+                            assert(getRequestEeHostSpy.called);
+                        } else {
+                            assert(getRequestJavaHostSpy.called);
+                        }
+                    },
+                    function(error) {
+                        assert.fail('fail', 'success', 'fail response returned when success expected');
+
+                    }
+                );
+            });
+
+
+            done();
         });
 
         it('fail return results ', function(done) {
