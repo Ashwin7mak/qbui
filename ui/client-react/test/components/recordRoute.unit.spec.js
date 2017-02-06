@@ -115,7 +115,6 @@ describe('RecordRoute functions', () => {
         const store = mockStore(initialState);
 
         let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
-
         let reportData = {
             appId:1,
             tblId:2,
@@ -147,7 +146,7 @@ describe('RecordRoute functions', () => {
 
         component = TestUtils.renderIntoDocument(
             <Provider store={store}>
-                <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
+                <ConnectedRecordRoute params={routeParams} reportData={reportData}  pizza="Bacon" flux={flux} router={router}/>
             </Provider>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
