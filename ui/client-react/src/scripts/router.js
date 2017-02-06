@@ -34,6 +34,7 @@ const mapStateToProps = (state) => {
     };
 };
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
+const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
 
 const store = createAppStore();
 
@@ -57,8 +58,8 @@ render((
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>
 
-            <Route path="/qbase/builder/app/:appId" component={BuilderWrapper}>
-                <Route path="table/:tblId(/form/:formId)" component={FormBuilder} />
+            <Route path="/qbase/builder/app/:appId" component={ConnectedBuilderNav}>
+                <Route path="table/:tblId/form(/:formId)" component={FormBuilder} />
             </Route>
 
         </Router>
