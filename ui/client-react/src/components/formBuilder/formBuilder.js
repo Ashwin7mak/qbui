@@ -11,7 +11,7 @@ import './formBuilder.scss';
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
  * The state is temporary until the redux stores are developed.
  */
-class FormBuilder extends Component {
+export class FormBuilder extends Component {
     constructor(props) {
         super(props);
 
