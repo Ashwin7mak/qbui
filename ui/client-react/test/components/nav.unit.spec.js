@@ -286,7 +286,7 @@ describe('Nav', () => {
         expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
     });
 
-    fdescribe('navigateToBuilder function', () => {
+    describe('navigateToBuilder function', () => {
         it('renders a component without form type or form id', () => {
             let routeParams = {appId: 1, tblId: 2};
             let router = [];
