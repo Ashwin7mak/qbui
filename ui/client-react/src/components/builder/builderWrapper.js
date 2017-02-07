@@ -15,7 +15,10 @@ const BuilderWrapper = React.createClass({
         return (
             <div className="builderWrapper">
                 {this.props.children}
-                <SaveOrCancelFooter />
+                <SaveOrCancelFooter
+                    reportData={this.props.reportData}
+                    shell={this.props.shell}
+                />
             </div>
         );
     }

@@ -21,7 +21,7 @@ let SaveOrCancelFooter = React.createClass({
     },
 
     getTrowserRightIcons() {
-        const errorFlg = this.props.hasErrorsAndAttemptedSave();
+        const errorFlg = this.props.hasErrorsAndAttemptedSave ? this.props.hasErrorsAndAttemptedSave() : null;
 
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
