@@ -34,7 +34,6 @@
                 return deferred.promise;
             },
 
-
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
              * Returns a promise.
@@ -45,6 +44,42 @@
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
             },
+
+            /**
+             * Edit a table's records.
+             * @param {number} appId
+             * @param {number} tableId
+             * @param {Array <Array <Object> >} recordEdits an array of edits being made. Each array should contain an
+             *            array of objects representing the edits to be made.
+             *            [ [{ // edits to recordID 1
+             *                    id    : <fieldId of field being edited>,
+             *                    value : <new value for the field>
+             *               }],
+             *              [{ // edits to recordId 2
+             *                    id    : 3,
+             *                    value : 'thing'
+             *               }]
+             *            ]
+             * @returns {Promise}
+             */
+            editRecords: function(appId, tableId, recordEdits) {
+                var deferred = promise.pending();
+                //Resolve the proper record endpoint specific to the generated app and table
+                var editRecordPromises = recordEdits.map(function(currentRecord, idx) {
+                    var recordId = idx + 1;
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(appId, tableId);
+                    return recordBase.editRecord(recordsEndpoint, recordId, recordEdits[idx]);
+                });
+                promise.all(editRecordPromises)
+                    .then(function(results) {
+                        deferred.resolve(results);
+                    }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+
             /**
              * Uses the generators in the test_generators package to generate a list of record objects based on the
              * given list of fields and number of records. This list can then be passed into the addRecords function.
@@ -71,6 +106,23 @@
                 }
                 return generatedEmptyRecords;
             },
+
+            /**
+             * Generates an array of edits to be consumed by editRecords().
+             * @param field
+             * @param {Array} values
+             * @returns {Array}
+             */
+            generateRecordsFromValues: function(field, values) {
+                var emptyRecords = this.generateEmptyRecords([field], values.length);
+                return emptyRecords.map(function(record, idx) {
+                    return record.map(function (field) {
+                        field.value = values[idx];
+                        return field;
+                    })
+                });
+            },
+
             /**
              * Function that will compare actual and expected record values
              */

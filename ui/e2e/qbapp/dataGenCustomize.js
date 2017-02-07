@@ -420,7 +420,7 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
-            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
             var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
 
             createdResults.then(function(results) {
@@ -456,6 +456,12 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             //Reset default report for table 8
             return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE8].id, 2);
+        }).then(function() {
+            // Numeric key entry for the relationship's child table corresponds to a parent's recordId.
+            // These need to be integers in the range of 1~n, n being the number of parent records
+            var fieldToEdit = app.tables[e2eConsts.TABLE8].fields[6];
+            var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE8].id, editRecords);
         }).then(function() {
             //Create tables relationship
             return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
