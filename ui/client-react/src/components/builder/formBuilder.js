@@ -40,7 +40,6 @@ const FormBuilder = React.createClass({
                     <div> <b>formId:</b> {this.props.formId} </div>
                     <div> <b>formType:</b>  </div>
                 </div>
-                {this.props.saveOrCancelFooter}
             </div>
         );
     }

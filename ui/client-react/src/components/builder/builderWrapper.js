@@ -3,7 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './builderWrapper.scss';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
-
+import TopNav from '../header/topNav'
 
 const BuilderWrapper = React.createClass({
     onCancel() {
@@ -41,15 +41,17 @@ const BuilderWrapper = React.createClass({
         />
     },
     render() {
-        const childrenWithProps = React.Children.map(this.props.children,
-            (child) => React.cloneElement(child, {
-                saveOrCancelFooter: this.saveOrCancelFooter()
-            })
-        );
 
         return (
-            <div className="builderWrapper" >
-                {childrenWithProps}
+            <div className="builderWrapperContent" >
+                <div className="builderWrapperChildren">
+                    {this.props.children}
+
+                </div>
+                <SaveOrCancelFooter
+                    rightAlignedButtons={this.getRightAlignedButtons()}
+                    centerAligendButtons={this.getCenterAlignedButtons()}
+                    leftAligendBUttons={this.getLeftAlignedButtons()} />
             </div>
         );
     }
