@@ -1,71 +1,34 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import {I18nMessage} from '../../utils/i18nMessage';
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './builderWrapper.scss';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
 
 
 const BuilderWrapper = React.createClass({
-    // _hasErrorsAndAttemptedSave() {
-    //     return (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length > 0 && this.props.pendEdits.hasAttemptedSave);
-    // },
-    //
-    // _doesNotHaveErrors() {
-    //     return (!_.has(this.props, 'pendEdits.editErrors.errors') || this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
-    // },
-    /**
-     * User wants to save changes to a record. First we do client side validation
-     * and if validation is successful we initiate the save action for the new or existing record
-     * if validation if not ok we stay in edit mode and show the errors (TBD)
-     * @param saveAnother if true, keep trowser open after save with a new blank record
-     * @returns {boolean}
-     */
-    saveClicked(saveAnother = false) {
-        //validate changed values -- this is skipped for now
-        //get pending changes
-        let validationResult = {
-            ok : true,
-            errors: []
-        };
 
-        if (validationResult.ok) {
-            //signal record save action, will update an existing records with changed values
-            // or add a new record
-            let promise;
+    saveClicked() {
+        //This will connect with redux
+    },
 
-            const formType = "edit";
+    getRightAlignedButtons() {
+      return <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+    },
 
-            this.props.savingForm(formType);
-            if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
-            } else {
-                promise = this.handleRecordChange(this.props.recId);
-            }
-            promise.then((recId) => {
-                this.props.saveFormSuccess(formType);
+    getLeftAlignedButtons() {
+        return <div></div>
+    },
 
-                if (this.props.viewingRecordId === recId) {
-                    this.props.syncForm("view");
-                }
+    getCenterAlignedButtons() {
+        return <div className={"centerActions"} />;
 
-                if (saveAnother) {
-                    this.props.editNewRecord(false);
-                } else {
-                    this.hideTrowser();
-                    this.navigateToNewRecord(recId);
-                }
-
-            }, (errorStatus) => {
-                this.props.saveFormError(formType, errorStatus);
-                this.showErrorDialog();
-            });
-        }
-        return validationResult;
     },
 
     saveOrCancelFooter() {
         return <SaveOrCancelFooter
-            rightAlignedButtons={this.getTrowserRightIcons()}
-            centerAligendButtons={this.getTrowserActions()}
-            leftAligendBUttons={this.getTrowserActions()}
+            rightAlignedButtons={this.getRightAlignedButtons()}
+            centerAligendButtons={this.getCenterAlignedButtons()}
+            leftAligendBUttons={this.getLeftAlignedButtons()}
         />
     },
     render() {
