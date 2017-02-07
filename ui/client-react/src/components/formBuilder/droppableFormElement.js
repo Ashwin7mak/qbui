@@ -20,8 +20,11 @@ const formTarget = {
 
     canDrop(props, monitor) {
         let draggableProps = monitor.getItem();
-        // TODO:: Update to include comparison of tab and section
-        return props.orderIndex !== draggableProps.orderIndex;
+
+        // Make sure a component isn't being dropped on itself
+        return props.tabIndex !== draggableProps.tabIndex ||
+            props.sectionIndex !== draggableProps.sectionIndex ||
+            props.orderIndex !== draggableProps.orderIndex;
     }
 };
 

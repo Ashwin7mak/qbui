@@ -509,6 +509,14 @@ let QBForm = React.createClass({
     }
 });
 
+/**
+ * Build a consistent key that will be used anytime a form element appears on the page so
+ * that it can be tracked by React.
+ * @param tabIndex
+ * @param sectionIndex
+ * @param fieldId
+ * @returns {string}
+ */
 function buildIdKey(tabIndex, sectionIndex, fieldId) {
     return `fieldContainer-tab-${tabIndex}-section-${sectionIndex}-field-${fieldId}`;
 }

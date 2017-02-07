@@ -63,7 +63,7 @@ export const FormBuilderContainer = React.createClass({
                         <b>appId:</b> {this.props.appId} |
                         <b> tblId:</b> {this.props.tblId} |
                         <b> formId:</b> {this.props.formId || 'not specified'} |
-                        <b> formType:</b> {this.props.formType|| 'not specified'}
+                        <b> formType:</b> {this.props.formType || 'not specified'}
                     </div>
 
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT_REPORT}>

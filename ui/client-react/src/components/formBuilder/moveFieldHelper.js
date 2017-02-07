@@ -1,5 +1,9 @@
 import _ from 'lodash';
 
+/**
+ * A helper class to move a field from one location in teh FormMetaData to another place in the data.
+ * @type {{moveField}}
+ */
 const MoveFieldHelper = {
     moveField(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
         let formMetaCopy = _.cloneDeep(formMeta);
