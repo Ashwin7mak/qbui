@@ -527,7 +527,7 @@ module.exports = function(grunt) {
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
                     './wdio/tests/forms/*.e2e.spec.js',
-                    './wdio/tests/reports/Sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
                 ]
             },
             test: {
