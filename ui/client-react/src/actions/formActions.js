@@ -11,6 +11,7 @@ import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
+import {NEW_FORM_RECORD_ID} from '../constants/schema';
 
 let logger = new Logger();
 
@@ -149,8 +150,6 @@ export const editNewRecord = (navigateAfterSave = false) => {
  */
 export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
-    const NEW_RECORD_ID = "new";
-
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 
@@ -167,7 +166,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
             let promise;
 
-            if (recordId === NEW_RECORD_ID) {
+            if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
 
             } else {
@@ -177,7 +176,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             promise.then(response => {
                 response.data.formType = formType;
 
-                if (recordId === NEW_RECORD_ID) {
+                if (recordId === NEW_FORM_RECORD_ID) {
                     response.data.record = null;
                 } else {
                     response.data.recordId = recordId;
