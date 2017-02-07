@@ -29,6 +29,7 @@
     //      /i - case insensitive
     let REGEX_FIELDS_ROUTE = /apps\/.*\/tables\/.*\/fields(.*)?$/i;
     let REGEX_RECORDS_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
+    let REGEX_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/formcomponents(.*)?$/i;
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
@@ -178,7 +179,8 @@
      * @returns {*}
      */
     function getEEFormsRoute(url, formId) {
-        if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url)) {
+        if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) &&
+            !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
             return getEEReqURL(url);
         } else {
             let root = getUrlRoot(url, TABLES);
