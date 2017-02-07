@@ -114,14 +114,14 @@ let TablesList = React.createClass({
     },
     getTopLinksItem() {
         const appHomePageSelected = !this.props.selectedTableId && !WindowLocationUtils.searchIncludes("settings");
-        const appManagementPageSelected = !appHomePageSelected;
+        const appSettingsPageSelected = (appHomePageSelected == false) && WindowLocationUtils.searchIncludes("settings");
 
         return (
         <li className="horizontal">
             <ul className="topLinks">
                 {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
                 {this.getNavItem('app.settings', `/qbase/app/${this.props.selectedAppId}/settings`,
-                    'settings', appManagementPageSelected)}
+                    'settings', appSettingsPageSelected)}
             </ul>
         </li>);
     },
