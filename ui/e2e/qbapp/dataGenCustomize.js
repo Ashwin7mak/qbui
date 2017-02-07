@@ -464,7 +464,7 @@ consts = require('../../common/src/constants.js');
             return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE8].id, editRecords);
         }).then(function() {
             //Create tables relationship
-            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
+            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8], 7);
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)
