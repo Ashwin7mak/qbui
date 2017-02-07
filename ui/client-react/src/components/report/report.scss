@@ -241,6 +241,10 @@
     flex-direction: column;
     position: relative;
     overflow: auto;
+
+    .loadedContent {
+        padding: 0 10px;
+    }
 }
 
 .reportToolbarContainer {
