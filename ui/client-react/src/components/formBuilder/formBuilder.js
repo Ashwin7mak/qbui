@@ -50,6 +50,7 @@ export class FormBuilder extends Component {
                     editingForm={true}
                     formData={this.state.formData}
                     handleFormReorder={this.handleFormReorder}
+                    appUsers={[]}
                 />
             </div>
         );
