@@ -41,6 +41,9 @@ module.exports = function(grunt) {
 
     grunt.log.writeln('NODE_ENV: ' + process.env.NODE_ENV);
 
+    // Used as an option for e2e try builds to pass in a custom browser config file
+    var wdioSauceConfig = grunt.option('wdioSauceConfig') || 'wdioSauce.conf.js';
+
     var sauceDns = grunt.option('sauceDns') || '127.0.0.1';
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
@@ -530,7 +533,7 @@ module.exports = function(grunt) {
                 ]
             },
             test: {
-                configFile: './wdio/config/wdioSauce.conf.js'
+                configFile: './wdio/config/' + wdioSauceConfig
             }
         },
 
