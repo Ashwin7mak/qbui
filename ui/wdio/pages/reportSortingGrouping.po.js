@@ -1,8 +1,5 @@
 (function() {
     'use strict';
-    //Bluebird Promise library
-    var Promise = require('bluebird');
-
     var e2ePageBase = requirePO('e2ePageBase');
     var reportContentPO = requirePO('reportContent');
 
