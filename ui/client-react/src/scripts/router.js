@@ -10,7 +10,7 @@ import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
-import FormBuilder from '../components/builder/formBuilder';
+import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import Logger from "../utils/logger";
 
@@ -33,6 +33,7 @@ const mapStateToProps = (state) => {
         qbui: state
     };
 };
+
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
 
@@ -59,7 +60,7 @@ render((
             </Route>
 
             <Route path="/qbase/builder/app/:appId" component={ConnectedBuilderNav}>
-                <Route path="table/:tblId/form(/:formId)" component={FormBuilder} />
+                <Route path="table/:tblId/form(/:formId)" component={FormBuilderContainer} />
             </Route>
 
         </Router>
