@@ -300,7 +300,7 @@ describe('Nav functions', () => {
         expect(router).toEqual(expectedRouter);
     });
 
-    fit('should render a component with a form type', () => {
+    it('should render a component with a form type', () => {
         let routeParams = {appId: 1, tblId: 2};
         let props = {
             qbui: {
@@ -316,7 +316,7 @@ describe('Nav functions', () => {
         let expectedRouter = [];
 
         component = TestUtils.renderIntoDocument(<Nav params={routeParams} {...props} flux={flux} router={router} dispatch={dispatchMethod}></Nav>);
-        debugger;
+
         component.navigateToBuilder();
 
         expectedRouter.push('/qbase/builder/app/1/table/2/form?formType=view');
