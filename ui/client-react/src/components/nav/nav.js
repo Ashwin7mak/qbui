@@ -72,8 +72,8 @@ export let Nav = React.createClass({
 
         let formType;
         let link = `/qbase/builder/app/${appId}/table/${tblId}/form`;
-
-        if (this.props.forms) {
+        console.log('this.props: ', this.props);
+        if (this.props.qbui) {
             formType = this.props.qbui.forms[0].id;
         }
 
