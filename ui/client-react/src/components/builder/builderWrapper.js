@@ -4,6 +4,13 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
 
 
 const BuilderWrapper = React.createClass({
+    // _hasErrorsAndAttemptedSave() {
+    //     return (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length > 0 && this.props.pendEdits.hasAttemptedSave);
+    // },
+    //
+    // _doesNotHaveErrors() {
+    //     return (!_.has(this.props, 'pendEdits.editErrors.errors') || this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
+    // },
     saveOrCancelFooter() {
         return <SaveOrCancelFooter
             reportData={this.props.reportData}

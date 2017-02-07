@@ -32,12 +32,14 @@ const FormBuilder = React.createClass({
     render() {
 
         return (
-            <div className="formBuilder">
-                <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
-                <div className="formBuilderBody"> <b>appId:</b> {this.props.appId} </div>
-                <div className="formBuilderBody"> <b>tblId:</b> {this.props.tblId} </div>
-                <div className="formBuilderBody"> <b>formId:</b> {this.props.formId} </div>
-                <div className="formBuilderBody"> <b>formType:</b> {this.props.formType} </div>
+            <div className="formBuilderContainer">
+                <div className="formBuilderBody">
+                    <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
+                    <div> <b>appId:</b> {this.props.params.appId} </div>
+                    <div> <b>tblId:</b> {this.props.params.tblId} </div>
+                    <div> <b>formId:</b> {this.props.formId} </div>
+                    <div> <b>formType:</b>  </div>
+                </div>
                 {this.props.saveOrCancelFooter}
             </div>
         );
@@ -45,4 +47,3 @@ const FormBuilder = React.createClass({
 });
 
 export default FormBuilder;
-
