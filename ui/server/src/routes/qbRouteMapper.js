@@ -59,11 +59,16 @@
         routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
-        routeToGetFunction[routeConsts.SWAGGER_API_EE] = fetchExperienceEngineSwagger;
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
+
+        routeToGetFunction[routeConsts.SWAGGER_API_EE] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_RESOURCES_EE] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_IMAGES_EE] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION_EE] = fetchSwagger;
+
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         /*
@@ -722,41 +727,14 @@
     }
 
     /**
-     * This is the function for proxying to an experience
-     * engine swagger endpoint
-     *
-     * @param req
-     * @param res
-     */
-    function fetchExperienceEngineSwagger(req, res) {
-        log.debug({req: req}, 'Fetch experience engine swagger');
-
-        let opts = requestHelper.setExperienceEngineOptions(req);
-        fetchSwagger(req, res, opts);
-    }
-
-    /**
-     * This is the function for proxying to a core
-     * engine swagger endpoint
-     *
-     * @param req
-     * @param res
-     */
-    function fetchCoreSwagger(req, res) {
-        log.debug({req: req}, 'Fetch core swagger');
-
-        let opts = requestHelper.setOptions(req);
-        fetchSwagger(req, res, opts);
-    }
-
-    /**
      * This is the function for proxying to a swagger endpoint on
      * either core or experience engine.
      *
      * @param req
      * @param res
      */
-    function fetchSwagger(req, res, opts) {
+    function fetchSwagger(req, res) {
+        //  ensure the route is enabled
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
             return;
@@ -764,6 +742,9 @@
 
         //  log some route info and set the request options
         log.debug({req: req}, 'Fetch swagger');
+
+        //  experience engine or core
+        let opts = req.url.startsWith(routeConsts.SWAGGER_API_EE) ? requestHelper.setExperienceEngineOptions(req) : requestHelper.setOptions(req);
         request(opts)
             .on('error', function(error) {
                 log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));

@@ -80,11 +80,14 @@
      * List of Quickbase public API Swagger doc endpoints.
      */
     var swaggerApiEndpoints = {
-        SWAGGER_API             : '/api',
-        SWAGGER_API_EE          : '/ee',
-        SWAGGER_DOCUMENTATION   : '/api/documentation/*',
-        SWAGGER_IMAGES          : '/api/images/*',
-        SWAGGER_RESOURCES       : '/api/resources/*'
+        SWAGGER_API              : '/api',
+        SWAGGER_DOCUMENTATION    : '/api/documentation/*',
+        SWAGGER_IMAGES           : '/api/images/*',
+        SWAGGER_RESOURCES        : '/api/resources/*',
+        SWAGGER_API_EE           : '/ee',
+        SWAGGER_DOCUMENTATION_EE : '/ee/documentation/*',
+        SWAGGER_IMAGES_EE        : '/ee/images/*',
+        SWAGGER_RESOURCES_EE     : '/ee/resources/*'
     };
 
     //  Export the combined list of endpoints.
