@@ -1,24 +1,25 @@
 import React, {PropTypes} from 'react';
-import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
 import './builderWrapper.scss';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
 
 
 const BuilderWrapper = React.createClass({
+    saveOrCancelFooter() {
+        return <SaveOrCancelFooter
+            reportData={this.props.reportData}
+            shell={this.props.shell}
+        />
+    },
     render() {
-        /**
-         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
-         * */
-        const formId = null;
-        const {appId, tblId} = this.props.params;
-        const formType = this.props.location.query.formType;
+        const childrenWithProps = React.Children.map(this.props.children,
+            (child) => React.cloneElement(child, {
+                saveOrCancelFooter: this.saveOrCancelFooter()
+            })
+        );
 
         return (
-            <div className="builderWrapper">
-                {this.props.children}
-                <SaveOrCancelFooter
-                    reportData={this.props.reportData}
-                    shell={this.props.shell}
-                />
+            <div className="builderWrapper" >
+                {childrenWithProps}
             </div>
         );
     }

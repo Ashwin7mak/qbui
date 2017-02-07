@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import './formBuilder.scss';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
 
 
 const FormBuilder = React.createClass({
@@ -30,6 +31,7 @@ const FormBuilder = React.createClass({
                 <div className="formBuilderBody"> <b>tblId:</b> {this.props.tblId} </div>
                 <div className="formBuilderBody"> <b>formId:</b> {this.props.formId} </div>
                 <div className="formBuilderBody"> <b>formType:</b> {this.props.formType} </div>
+                {this.props.saveOrCancelFooter}
             </div>
         );
     }

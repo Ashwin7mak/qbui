@@ -1,6 +1,14 @@
 @import '../../../src/assets/css/qbVariables';
 
 .formBuilder {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    padding: 0;
+
     .formBuilderHeader {
         text-align: center;
         margin-top: 60px;
