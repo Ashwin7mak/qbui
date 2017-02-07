@@ -22,6 +22,13 @@ const FormBuilder = React.createClass({
          * */
         formType: React.PropTypes.string
     },
+    //Do we want this? pulled from trowser.js
+    // handleKey(e) {
+    //     // close trowser when Esc is pressed
+    //     if (this.props.visible && e.key === 'Escape') {
+    //         this.props.onCancel();
+    //     }
+    // },
     render() {
 
         return (
