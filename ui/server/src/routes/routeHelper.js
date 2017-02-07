@@ -197,7 +197,7 @@
                     }
                 });
 
-            return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+                return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
             }
 
             //  no url root for TABLES found; return original url unchanged
