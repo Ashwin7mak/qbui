@@ -4,11 +4,11 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import DraggableField from '../../../src/components/formBuilder/draggableField';
 
-const mockDragSource = (_types, _fieldDragSource, collect) => component => component;
+const mockDragSource = (_types, _fieldDragSource, _collect) => component => component;
 const MockFieldComponent = props => <div className="mockField"></div>;
 const mockConnectDragSource = component => component;
 
-let ComponentClass;
+let DraggableComponent;
 let component;
 
 describe('DraggableField', () => {
@@ -17,7 +17,7 @@ describe('DraggableField', () => {
 
         DraggableField.__Rewire__('DragSource', mockDragSource);
 
-        ComponentClass = DraggableField(MockFieldComponent);
+        DraggableComponent = DraggableField(MockFieldComponent);
     });
 
     afterEach(() => {
@@ -25,7 +25,7 @@ describe('DraggableField', () => {
     });
 
     it('wraps a FieldComponent in a DragSource to make it draggable', () => {
-        component = shallow(<ComponentClass connectDragSource={mockConnectDragSource} isDragging={false} />);
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={false} />);
 
         expect(component.find('.notDragging')).toBePresent();
         let parentDiv = component.find('.draggableField');
@@ -34,7 +34,7 @@ describe('DraggableField', () => {
     });
 
     it('adds a dragging class when the component is being dragged', () => {
-        component = shallow(<ComponentClass connectDragSource={mockConnectDragSource} isDragging={true} />);
+        component = shallow(<DraggableComponent connectDragSource={mockConnectDragSource} isDragging={true} />);
 
         expect(component.find('.dragging')).toBePresent();
         expect(component.find('.notDragging')).not.toBePresent();
