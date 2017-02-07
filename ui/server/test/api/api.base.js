@@ -216,7 +216,7 @@
                     formEndpoint = formEndpoint + formId;
                 }
                 if (formType) {
-                    formEndpoint = FORM_TYPE_ENDPOINT + formType;
+                    formEndpoint = formEndpoint + FORM_TYPE_ENDPOINT + formType;
                 }
                 return formEndpoint;
             },

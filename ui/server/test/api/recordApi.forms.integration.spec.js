@@ -161,7 +161,7 @@
          * @return A promise to make node call
          *
          */
-        function retriveFormByID(inputAppId, inputTableId, inputFormId) {
+        function retrieveFormByID(inputAppId, inputTableId, inputFormId) {
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(inputAppId, inputTableId, inputFormId);
 
             return new promise(function(resolve, reject) {
@@ -188,7 +188,7 @@
          * @return A promise to make node call
          *
          */
-        function retriveFormByType(appId, tableId, formType) {
+        function retrieveFormByType(appId, tableId, formType) {
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, null, formType);
 
             return new promise(function(resolve, reject) {
@@ -246,7 +246,7 @@
                 let getFormsPromises = [];
 
                 targetFormBuildList.forEach(form => {
-                    getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formId));
+                    getFormsPromises.push(retrieveFormByID(form.appId, form.tableId, form.formId));
                 });
 
                 promise.all(getFormsPromises).then(returnForm => {
@@ -285,7 +285,7 @@
 
                 targetFormBuildList.forEach(form => {
                     formTypeList.forEach(formType => {
-                        getFormsPromises.push(retriveFormByType(form.appId, form.tableId, formType));
+                        getFormsPromises.push(retrieveFormByType(form.appId, form.tableId, formType));
                     });
                 });
 

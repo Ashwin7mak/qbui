@@ -45,8 +45,9 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
         //  form endpoints
-        routeToGetFunction[routeConsts.FORM] = fetchFormComponents;
-        routeToGetFunction[routeConsts.FORM_TYPE] = fetchFormComponents;
+        routeToGetFunction[routeConsts.FORM] = fetchFormMetaData;
+        routeToGetFunction[routeConsts.FORM_TYPE] = fetchFormMetaData;
+        routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
         routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
 
         //  record endpoints
@@ -392,6 +393,35 @@
     }
 
     /**
+     * Fetch form meta data
+     *
+     * @param req
+     * @param res
+     */
+    function fetchFormMetaData(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            formsApi.fetchFormMetaData(req, false).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
      * Fetch form meta data and record data for a record.
      *
      * @param req
@@ -402,7 +432,7 @@
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            formsApi.fetchFormMetaData(req, false).then(
+            formsApi.fetchFormComponents(req, false).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Form Components');

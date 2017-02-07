@@ -177,8 +177,32 @@
      * @param formId
      * @returns {*}
      */
-    function getEEFormsRoute(url) {
-        return getEEReqURL(url);
+    function getEEFormsRoute(url, formId) {
+        if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url)) {
+            return getEEReqURL(url);
+        } else {
+            let root = getUrlRoot(url, TABLES);
+            let eeUrl = getEEReqURL(root);
+            if (formId) {
+                return eeUrl + '/' + FORMS + (formId ? '/' + formId : '');
+            }
+            if (url.search('formType') !== -1) {
+                let formType;
+                url.split("&").forEach(item => {
+                    let s = item.split("="),
+                        k = s[0],
+                        v = s[1];
+                    if (k.search('formType') !== -1) {
+                        formType = v;
+                    }
+                });
+
+            return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+            }
+
+            //  no url root for TABLES found; return original url unchanged
+            return eeUrl;
+        }
     }
 
     module.exports  = {
