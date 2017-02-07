@@ -63,13 +63,9 @@ const BuilderWrapper = React.createClass({
 
     saveOrCancelFooter() {
         return <SaveOrCancelFooter
-            reportData={this.props.reportData}
-            shell={this.props.shell}
-            toggleErrorDialog={this.toggleErrorDialog}
-            saveAndNextClicked={this.saveAndNextClicked}
-            saveClicked={this.saveClicked}
-            recId={this.recId}
-            hasErrorsAndAttemptedSave={this._hasErrorsAndAttemptedSave}
+            rightAlignedButtons={this.getTrowserRightIcons()}
+            centerAligendButtons={this.getTrowserActions()}
+            leftAligendBUttons={this.getTrowserActions()}
         />
     },
     render() {
