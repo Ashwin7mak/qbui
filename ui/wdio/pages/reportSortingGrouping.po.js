@@ -23,7 +23,8 @@
             //for each record row get the cell values
             for (var i = 0; i < numOfRows; i++) {
                 var cellValues = reportContentPO.getRecordValues(i);
-                //we need shift to remove record actions like print, email etc
+                //we need to remove record actions like print, email etc
+                cellValues.splice(0, 1);
                 tableRecords.push(cellValues);
             }
             return tableRecords;
