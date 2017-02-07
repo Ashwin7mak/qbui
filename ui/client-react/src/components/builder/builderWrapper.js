@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import FormBuilder from './formBuilder';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
+import './builderWrapper.scss';
 
 
 const BuilderWrapper = React.createClass({
@@ -11,10 +12,12 @@ const BuilderWrapper = React.createClass({
         const {appId, tblId} = this.props.params;
         const formType = this.props.location.query.formType;
 
-        return <FormBuilder appId={appId}
-                            tblId={tblId}
-                            formType={formType}
-                            formId={formId}/>;
+        return (
+            <div className="builderWrapper">
+                {this.props.children}
+                <SaveOrCancelFooter />
+            </div>
+        );
     }
 });
 
