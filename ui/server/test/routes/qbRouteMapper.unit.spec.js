@@ -112,13 +112,13 @@ describe('Qb Route Mapper Unit Test', function() {
             {message: 'DELETE request to app users endpoint', request: '/api/v1/apps/fakeApp/users', expectedPath: '/api/api/v1/apps/fakeApp/users', route: routeConsts.APP_USERS, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.APP_USERS), expectedDefined: false, httpVerb: 'DELETE'},
 
             {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
-            {message: 'GET request to the swagger api endpoint', request: '/api/v1/api', expectedPath: '/api/v1/api', route: routeConsts.SWAGGER_API, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to the swagger api endpoint', request: '/api/v1/someEndpoint', expectedPath: '/api/v1/someEndpoint', route: routeConsts.SWAGGER_API, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
     function eePathModificationProvider() {
         return [
-            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee/v1/api', expectedPath: '/ee/v1/api', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
+            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee/v1/someEndpoint', expectedPath: '/ee/v1/someEndpoint', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
