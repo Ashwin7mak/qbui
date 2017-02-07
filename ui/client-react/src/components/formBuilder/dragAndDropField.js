@@ -3,7 +3,11 @@ import _ from 'lodash';
 import DraggableField from './draggableField';
 import DroppableFormElement from './droppableFormElement';
 
-
+/**
+ * This HOC is a convenience method to wrap a field in both a drag and drop source.
+ * @param FieldComponent
+ * @returns {*}
+ */
 export default (FieldComponent) => {
     let component = props => {
         return (
@@ -13,8 +17,8 @@ export default (FieldComponent) => {
         );
     };
 
-    return _.flow(
+    return _.flow([
         DraggableField,
         DroppableFormElement
-    )(component);
+    ])(component);
 };
