@@ -77,13 +77,6 @@ export const RecordTrowser = React.createClass({
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
-    // /**
-    //  *  get actions element for bottom center of trowser (placeholders for now)
-    //  */
-    // getTrowserActions() {
-    //     return (
-    //         <div className={"centerActions"} />);
-    // },
 
     /**
      * navigate to new record if appropriate
@@ -278,28 +271,6 @@ export const RecordTrowser = React.createClass({
             </div>);
 
     },
-    // getTrowserRightIcons() {
-    //     const errorFlg = this._hasErrorsAndAttemptedSave();
-    //
-    //     const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
-    //
-    //     const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
-    //     return (
-    //         <div className="saveButtons">
-    //             {errorFlg &&
-    //                 <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
-    //                     <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
-    //                 </OverlayTrigger>
-    //             }
-    //             {showNext &&
-    //                 <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
-    //             }
-    //             {this.props.recId === null &&
-    //             <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
-    //             }
-    //             <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
-    //         </div>);
-    // },
 
     hideTrowser() {
         WindowLocationUtils.pushWithoutQuery();
