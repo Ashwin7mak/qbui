@@ -285,4 +285,18 @@ describe('Nav functions', () => {
         component.toggleNav();
         expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
     });
+
+    it('test navigateToBuilder method', () => {
+        let routeParams = {appId: 1, tblId: 2};
+        let router = [];
+        let expectedRouter = [];
+
+        component = TestUtils.renderIntoDocument(<Nav params={routeParams} {...props} flux={flux} router={router} dispatch={dispatchMethod}></Nav>);
+        debugger;
+        component.navigateToBuilder();
+
+        expectedRouter.push('/qbase/builder/app/1/table/2/form');
+
+        expect(router).toEqual(expectedRouter);
+    });
 });

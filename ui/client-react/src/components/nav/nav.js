@@ -226,7 +226,6 @@ export let Nav = React.createClass({
     },
 
     render() {
-        console.log('this.props: ', this.props);
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
