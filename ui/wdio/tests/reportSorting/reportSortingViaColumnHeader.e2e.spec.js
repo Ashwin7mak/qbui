@@ -5,6 +5,7 @@
     var newStackAuthPO = requirePO('newStackAuth');
     var e2ePageBase = requirePO('e2ePageBase');
     var reportSortingPO = requirePO('reportSortingGrouping');
+    var reportContentPO = requirePO('reportContent');
 
     describe('Report Sorting Via Column Header Tests  - ', function() {
         var realmName;
@@ -99,13 +100,13 @@
                 e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
                 //Step 3 - get all table results which are expected to be sorted already via API
-                actualTableRecords = reportSortingPO.getAllRecordsFromTable();
+                actualTableRecords = reportContentPO.getAllRecordsFromTable();
 
                 //Step 4 - Using API get report records(results) from report 1 (List All report) then get FIDS(specific column) records specified and sort them using LoDash
                 expectedRecords = reportSortingPO.getReportResultsAndSortFidsUsingLoDashAndVerify(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, testcase.Fids, testcase.sortFids, testcase.sortOrder, actualTableRecords);
 
                 //Step 5 - Verify the actual versus expected sorted records
-                reportSortingPO.verifyResults(actualTableRecords, expectedRecords);
+                reportSortingPO.verifySortedResults(actualTableRecords, expectedRecords);
 
             });
 
@@ -139,13 +140,13 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, reportId);
 
             //Step 3 - get all table results which are expected to be sorted already via API
-            actualTableRecords = reportSortingPO.getAllRecordsFromTable();
+            actualTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 4 - Using API get report records(results) from report 1 (List All report) then get FIDS(specific column) records specified and sort them using LoDash
             expectedRecords = reportSortingPO.getReportResultsAndSortFidsUsingLoDashAndVerify(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, Fids, sortFids, ['asc', 'desc']);
 
             //Step 5 - Verify the actual versus expected sorted records
-            reportSortingPO.verifyResults(actualTableRecords, expectedRecords);
+            reportSortingPO.verifySortedResults(actualTableRecords, expectedRecords);
         });
 
         it("Verify Sorting and Checkmark beside selected Item in column header for report WITHOUT SORTFIDS or FACETS", function(done) {
@@ -167,13 +168,13 @@
             reportSortingPO.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort Z to A");
 
             //Step 5 - get the sorted table results
-            actualTableRecords = reportSortingPO.getAllRecordsFromTable();
+            actualTableRecords = reportContentPO.getAllRecordsFromTable();
 
             //Step 6 - Using API get report records(results) from report 1 (List All report) then get FIDS(specific column) records specified and sort them using LoDash
             expectedRecords = reportSortingPO.getReportResultsAndSortFidsUsingLoDashAndVerify(testApp.id, testApp.tables[e2eConsts.TABLE1].id, DEFAULT_REPORT_ID, [6], [function(row) {return reportSortingPO.getSortValue(row, 6);}], ['desc']);
 
             //Step 7 - Verify the actual versus expected sorted records
-            reportSortingPO.verifyResults(actualTableRecords, expectedRecords);
+            reportSortingPO.verifySortedResults(actualTableRecords, expectedRecords);
         });
 
         it("Verify Checkmark appears beside sorting menuItem for report with sortFids already set.", function(done) {

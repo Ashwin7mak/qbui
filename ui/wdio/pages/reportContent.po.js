@@ -167,6 +167,24 @@
         }},
 
         /**
+         * Function that will get all the records from the UI report table grid.
+         *@returns an array of cell values (as strings)
+         */
+        getAllRecordsFromTable: {value: function() {
+            var tableRecords = [];
+            //get the count of records rows in a table
+            var numOfRows = this.reportDisplayedRecordCount();
+            //for each record row get the cell values
+            for (var i = 0; i < numOfRows; i++) {
+                var cellValues = this.getRecordValues(i);
+                //we need to remove record actions like print, email etc
+                cellValues.splice(0, 1);
+                tableRecords.push(cellValues);
+            }
+            return tableRecords;
+        }},
+
+        /**
          * Helper function to format record values returned a record cell element
          * @param rawRecordValue
          * @returns formatted value as a string

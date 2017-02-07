@@ -9,24 +9,6 @@
 
 
     var ReportSortingGroupingPage = Object.create(e2ePageBase, {
-        /**
-         * Function that will get all the records from the UI report table grid.
-         *
-         */
-        getAllRecordsFromTable: {value: function() {
-            var tableRecords = [];
-            //get the count of records rows in a table
-            var numOfRows = reportContentPO.reportDisplayedRecordCount();
-            //for each record row get the cell values
-            for (var i = 0; i < numOfRows; i++) {
-                var cellValues = reportContentPO.getRecordValues(i);
-                //we need to remove record actions like print, email etc
-                cellValues.splice(0, 1);
-                tableRecords.push(cellValues);
-            }
-            return tableRecords;
-        }},
-
         /*
          * Function to sort Records using loDash _.orderBy
          */
@@ -89,14 +71,14 @@
          * Function that will verify the actual versus expected sorted records
          *@parms actualSortedResults, expectedsortedResults
          */
-        verifyResults: {value: function(actualSortedResults, expectedSortedResults) {
+        verifySortedResults: {value: function(actualSortedResults, expectedSortedResults) {
             expect(actualSortedResults.join()).toEqual(expectedSortedResults.join());
         }},
 
         /*
          * Function will select the Item passed in parameter from the column header popup menu
          */
-        selectItems: {value: function(itemToSelect) {
+        selectColumnHeaderMenuItem: {value: function(itemToSelect) {
             var items = reportContentPO.qbGridContainer.elements('.dropdown-menu').elements('li').value.filter(function(elm) {
                 return elm.getText() === itemToSelect;
             });
@@ -137,7 +119,7 @@
             this.openColumnHeaderMenu(columnName);
 
             //Select the sort order Item to be Ascending (eg:A to Z , small to Large, lower to highest etc)
-            return this.selectItems(itemToSelect);
+            return this.selectColumnHeaderMenuItem(itemToSelect);
         }},
 
         /*
@@ -148,13 +130,13 @@
             this.openColumnHeaderMenu(columnName);
 
             //Verify the sort order Item and checkmark beside it
-            return this.verifyItemSelected(itemToVerifySelected);
+            return this.verifyColumnHeaderMenuItemSelected(itemToVerifySelected);
         }},
 
         /*
          * Function will select the Item passed in parameter from the column header popup menu
          */
-        verifyItemSelected: {value: function(itemToVerify) {
+        verifyColumnHeaderMenuItemSelected: {value: function(itemToVerify) {
             var items = reportContentPO.qbGridContainer.elements('.dropdown-menu').elements('li').value.filter(function(elm) {
                 return elm.getText() === itemToVerify;
             });
