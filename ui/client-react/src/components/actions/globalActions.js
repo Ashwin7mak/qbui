@@ -140,6 +140,27 @@ let GlobalActions = React.createClass({
                 </Dropdown.Menu>
             </Dropdown>);
     },
+
+    getBuilderDropdown() {
+        let eventKeyIdx = 20;
+        return (
+            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"}>
+
+                <a bsRole="toggle"
+                   className={"dropdownToggle globalActionLink"}
+                   tabIndex={this.props.startTabIndex + this.props.actions.length}>
+                    <QBicon icon={this.props.formBuilderIcon}/>
+                </a>
+
+                <Dropdown.Menu>
+
+                    <MenuItem onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
+                        message={"pageActions.configureFormBuilder"}/></MenuItem>
+
+                </Dropdown.Menu>
+            </Dropdown>);
+    },
+
     getHelpWalkme() {
         let touch = "ontouchstart" in window;
         if (touch) {
@@ -163,6 +184,7 @@ let GlobalActions = React.createClass({
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
+                    <li className={"link globalAction withDropdown"}>{this.getBuilderDropdown()}</li>
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 

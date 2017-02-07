@@ -62,6 +62,33 @@ export let Nav = React.createClass({
         };
     },
 
+    navigateToBuilder() {
+        /**
+         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
+         * a new unit test will need to be added to recordRoute.unit.spec.js
+         * */
+        const formId = null;
+        const {appId, tblId} = this.props.params;
+
+        let formType;
+        let link = `/qbase/builder/app/${appId}/table/${tblId}/form`;
+
+        if (this.props.forms) {
+            formType = this.props.qbui.forms[0].id;
+        }
+
+
+        if (formId && formType) {
+            link = `${link}/${formId}?formType=${formType}`;
+        } else if (formType) {
+            link = `${link}?formType=${formType}`;
+        } else if (formId) {
+            link = `${link}/${formId}`;
+        }
+
+        this.props.router.push(link);
+    },
+
     getTopGlobalActions() {
         const actions = [];
         return (<GlobalActions actions={actions}
@@ -69,7 +96,9 @@ export let Nav = React.createClass({
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
-                               app={this.getSelectedApp()}/>);
+                               app={this.getSelectedApp()}
+                               formBuilderIcon="settings-hollow"
+                               navigateToBuilder={this.navigateToBuilder}/>);
     },
 
     getLeftGlobalActions() {
@@ -197,6 +226,7 @@ export let Nav = React.createClass({
     },
 
     render() {
+        console.log('this.props: ', this.props);
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
             // The common loading screen html is shared across server and client as an HTML file and
