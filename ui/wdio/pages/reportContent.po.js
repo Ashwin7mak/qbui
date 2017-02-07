@@ -117,7 +117,7 @@
          * @returns a list of record cell elements
          */
         getRecordRowCells: {value: function(recordRowElement) {
-            return recordRowElement.elements('.qbCell');
+            return recordRowElement.elements('.qbCell.cellData');
         }},
 
         /**
