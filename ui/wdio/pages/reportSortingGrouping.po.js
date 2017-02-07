@@ -116,7 +116,7 @@
          */
         openColumnHeaderMenu: {value: function(columnName) {
             //get all column headers names and filter the one we want
-            var columns = reportContentPO.qbGridColHeaderElList.value.filter(function(elm) {
+            var columns = browser.elements('.gridHeaderCell').value.filter(function(elm) {
                 var columnHeader = elm.element('.gridHeaderLabel').getAttribute('textContent');
                 return columnHeader === columnName;
             });
