@@ -7,7 +7,7 @@ const BuilderWrapper = React.createClass({
         /**
          *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
          * */
-        const formId= null;
+        const formId = null;
         const {appId, tblId} = this.props.params;
         const formType = this.props.location.query.formType;
 
