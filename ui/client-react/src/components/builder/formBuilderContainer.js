@@ -8,7 +8,7 @@ import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 
 import FormBuilder from '../formBuilder/formBuilder';
 
-import './formBuilder.scss';
+import './formBuilderContainer.scss';
 
 const mapStateToProps = state => {
     return {
@@ -59,10 +59,12 @@ export const FormBuilderContainer = React.createClass({
         return (
                 <div className="formBuilder">
                     <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
-                    <div className="formBuilderBody"> <b>appId:</b> {this.props.appId} </div>
-                    <div className="formBuilderBody"> <b>tblId:</b> {this.props.tblId} </div>
-                    <div className="formBuilderBody"> <b>formId:</b> {this.props.formId} </div>
-                    <div className="formBuilderBody"> <b>formType:</b> {this.props.formType} </div>
+                    <div className="formBuilderBody">
+                        <b>appId:</b> {this.props.appId} |
+                        <b> tblId:</b> {this.props.tblId} |
+                        <b> formId:</b> {this.props.formId || 'not specified'} |
+                        <b> formType:</b> {this.props.formType|| 'not specified'}
+                    </div>
 
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT_REPORT}>
                         <FormBuilder formData={formData} />
