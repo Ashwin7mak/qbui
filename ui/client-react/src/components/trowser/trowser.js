@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
 import './trowser.scss';
-import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 /**
  * Transaction browser (like a modal but slides up/down and width & height=100%)
@@ -88,12 +87,7 @@ let Trowser = React.createClass({
                     <div className={"trowserChildren"}>
                         {this.props.content}
                     </div>
-
-                <SaveOrCancelFooter
-                    centerActions={this.props.centerActions}
-                    rightIcons={this.props.rightIcons}
-                />
-
+                    {this.props.children}
                 </div>
             </div>
         );

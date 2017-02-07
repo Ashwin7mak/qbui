@@ -17,6 +17,7 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
 
@@ -76,13 +77,13 @@ export const RecordTrowser = React.createClass({
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
-    /**
-     *  get actions element for bottom center of trowser (placeholders for now)
-     */
-    getTrowserActions() {
-        return (
-            <div className={"centerActions"} />);
-    },
+    // /**
+    //  *  get actions element for bottom center of trowser (placeholders for now)
+    //  */
+    // getTrowserActions() {
+    //     return (
+    //         <div className={"centerActions"} />);
+    // },
 
     /**
      * navigate to new record if appropriate
@@ -351,10 +352,18 @@ export const RecordTrowser = React.createClass({
             <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     rightIcons={this.getTrowserRightIcons()}
                      onCancel={this.cancelEditing}
-                     content={this.getTrowserContent()} />
+                     content={this.getTrowserContent()} >
+                <SaveOrCancelFooter
+                    reportData={this.props.reportData}
+                    shell={this.props.shell}
+                    toggleErrorDialog={this.toggleErrorDialog}
+                    saveAndNextClicked={this.saveAndNextClicked}
+                    saveClicked={this.saveClicked}
+                    recId={this.recId}
+                    hasErrorsAndAttemptedSave={this._hasErrorsAndAttemptedSave}
+                />
+            </Trowser>
         );
     }
 });
