@@ -86,6 +86,7 @@ export default {
             save: "Speichern",
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
+            cancel: "Stornieren",
             new: "Neu"
         },
         field: {

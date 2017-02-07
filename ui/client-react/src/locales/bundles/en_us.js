@@ -89,6 +89,7 @@ export default {
             save: "Save",
             saveAndNext: "Save & Next",
             saveAndAddAnother: "Save & Add Another",
+            cancel: 'Cancel',
             new: "New"
         },
         field: {

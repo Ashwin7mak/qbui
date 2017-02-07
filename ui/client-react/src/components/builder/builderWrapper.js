@@ -6,13 +6,22 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
 
 
 const BuilderWrapper = React.createClass({
-
+    onCancel() {
+        //This will redirect to previous page
+        console.log('Canceling!');
+    },
     saveClicked() {
         //This will connect with redux
+        console.log('Saving!');
     },
 
     getRightAlignedButtons() {
-      return <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+      return(
+          <div>
+            <Button bsStyle="primary" onClick={this.onCancel}><I18nMessage message="nav.cancel"/></Button>
+            <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+          </div>
+      );
     },
 
     getLeftAlignedButtons() {

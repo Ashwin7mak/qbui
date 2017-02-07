@@ -86,6 +86,7 @@ export default {
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
             saveAndAddAnother: "Sauver et ajouter un autre",
+            cancel: "Annuler",
             new: "Nouveau"
         },
         field: {

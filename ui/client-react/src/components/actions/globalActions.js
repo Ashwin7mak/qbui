@@ -184,7 +184,7 @@ let GlobalActions = React.createClass({
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
-                    <li className={"link globalAction withDropdown formBuilder"}>{this.getBuilderDropdown()}</li>
+                    <li className={"link globalAction withDropdown builder"}>{this.getBuilderDropdown()}</li>
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
