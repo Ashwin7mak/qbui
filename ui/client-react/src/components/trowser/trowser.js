@@ -17,21 +17,9 @@ let Trowser = React.createClass({
          */
         position: React.PropTypes.string, // top or bottom
         /**
-         * left footer actions
-         */
-        leftActions: React.PropTypes.node,
-        /**
-         * center footer actions
-         */
-        centerActions: React.PropTypes.node,
-        /**
          * header content (breadcrumbs)
          */
         breadcrumbs: React.PropTypes.node,
-        /**
-         * right footer icons
-         */
-        rightIcons: React.PropTypes.node,
         /**
          * main content of trowser
          */
