@@ -14,8 +14,7 @@
          */
         sortRecordsUsingLoDash: {value: function(recordsToSort, columnListToSort, sortOrder) {
             // sorts the list of records passed in specified sort order for a given fid.
-            var sortedRecords = _.orderBy(recordsToSort, columnListToSort, sortOrder);
-            return sortedRecords;
+            return _.orderBy(recordsToSort, columnListToSort, sortOrder);
         }},
 
         /*
