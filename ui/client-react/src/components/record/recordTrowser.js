@@ -331,7 +331,7 @@ export const RecordTrowser = React.createClass({
                     toggleErrorDialog={this.toggleErrorDialog}
                     saveAndNextClicked={this.saveAndNextClicked}
                     saveClicked={this.saveClicked}
-                    recId={this.recId}
+                    recId={this.props.recId}
                     hasErrorsAndAttemptedSave={this._hasErrorsAndAttemptedSave}
                 />
             </Trowser>

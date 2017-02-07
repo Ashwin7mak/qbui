@@ -1,4 +1,5 @@
 import React from 'react';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -18,6 +19,14 @@ let SaveOrCancelFooter = React.createClass({
          * right footer icons
          */
         rightIcons: React.PropTypes.node,
+        /**
+         * This is the save function for a single save button on the page
+         * */
+        saveClicked: React.PropTypes.func,
+        /**
+         * This function is for 'save' and 'save and add another' buttons
+         * */
+        saveAndClicked: React.PropTypes.func
     },
 
     getTrowserRightIcons() {
