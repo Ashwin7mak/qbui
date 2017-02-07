@@ -1,6 +1,6 @@
 @import '../../../src/assets/css/qbVariables';
 
-.formBuilderContainer {
+.formBuilderContent {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -17,7 +17,7 @@
         margin-top: 60px;
         margin-bottom: 60px;
     }
-    .formBuilderBody {
+    .formBuilderChildren {
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;

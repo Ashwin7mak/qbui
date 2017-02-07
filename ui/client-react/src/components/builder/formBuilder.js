@@ -32,8 +32,8 @@ const FormBuilder = React.createClass({
     render() {
 
         return (
-            <div className="formBuilderContainer">
-                <div className="formBuilderBody">
+            <div className="formBuilderContent">
+                <div className="formBuilderChildren">
                     <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
                     <div> <b>appId:</b> {this.props.params.appId} </div>
                     <div> <b>tblId:</b> {this.props.params.tblId} </div>
