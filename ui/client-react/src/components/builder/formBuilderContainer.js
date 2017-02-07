@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+
 import './formBuilder.scss';
 
 
@@ -7,19 +8,19 @@ const FormBuilder = React.createClass({
         /**
          * the app id
          * */
-        appId: React.PropTypes.string,
+        appId: PropTypes.string,
         /**
          * the table id
          * */
-        tblId: React.PropTypes.string,
+        tblId: PropTypes.string,
         /**
          * the form id
          * */
-        formId: React.PropTypes.string,
+        formId: PropTypes.string,
         /**
          * the form type
          * */
-        formType: React.PropTypes.string
+        formType: PropTypes.string
     },
     render() {
 
@@ -30,6 +31,8 @@ const FormBuilder = React.createClass({
                 <div className="formBuilderBody"> <b>tblId:</b> {this.props.tblId} </div>
                 <div className="formBuilderBody"> <b>formId:</b> {this.props.formId} </div>
                 <div className="formBuilderBody"> <b>formType:</b> {this.props.formType} </div>
+
+
             </div>
         );
     }
