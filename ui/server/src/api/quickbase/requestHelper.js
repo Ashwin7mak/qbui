@@ -128,7 +128,22 @@
             },
 
             /**
-             * Set common shared request attributes on the server request
+             * Set common shared request attributes on an experience engine server request
+             *
+             * @param req
+             * @param forceGet - Regardless of req method setting, always set to a get request
+             * @returns request object used when submitting a server request
+             */
+            setExperienceEngineOptions: function(req, forceGet) {
+                let opts = this.setOptions(req, forceGet);
+
+                //  reset the url to the experience engine
+                opts.url = this.getRequestEEUrl(req);
+                return opts;
+            },
+
+            /**
+             * Set common shared request attributes on a core server request
              *
              * @param req
              * @param forceGet - Regardless of req method setting, always set to a get request

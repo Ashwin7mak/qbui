@@ -25,7 +25,7 @@ describe('Qb Route Mapper Unit Test', function() {
         routeMapper.setRequest(requestStub);
     });
 
-    function pathModificationProvider() {
+    function corePathModificationProvider() {
         var defaultPagingQueryParams = '?' + constants.REQUEST_PARAMETER.OFFSET + '=' + constants.PAGE.DEFAULT_OFFSET;
         var testPagingQueryParams = '?' + constants.REQUEST_PARAMETER.OFFSET + '=20';
         testPagingQueryParams += '&' + constants.REQUEST_PARAMETER.NUM_ROWS + '=40';
@@ -113,7 +113,12 @@ describe('Qb Route Mapper Unit Test', function() {
 
             {message: 'GET request to the health check endpoint', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.HEALTH_CHECK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.HEALTH_CHECK), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to the swagger api endpoint', request: '/api/v1/api', expectedPath: '/api/v1/api', route: routeConsts.SWAGGER_API, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API), expectedDefined: true, httpVerb: 'GET'}
+        ];
+    }
 
+    function eePathModificationProvider() {
+        return [
+            {message: 'GET request to the swagger experience engine api endpoint', request: '/ee/v1/api', expectedPath: '/ee/v1/api', route: routeConsts.SWAGGER_API_EE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.SWAGGER_API_EE), expectedDefined: true, httpVerb: 'GET'}
         ];
     }
 
@@ -121,52 +126,59 @@ describe('Qb Route Mapper Unit Test', function() {
      * Unit test that validates generating an app with a specified number of tables
      */
     describe('test modify path for request', function() {
-        pathModificationProvider().forEach(function(entry) {
-            it('Test case: ' + entry.message, function(done) {
-                var expectedPath = entry.expectedPath;
-
-                //mock out the request and response objects with some utility methods they need in this flow
-                var originalReq = {
-                    params: {
-                        reportId: entry.request && entry.request.indexOf('default/results') !== -1 ? 'default' : '1'
-                    }
-                };
-
-                originalReq.method = originalReq.url = entry.request;
-                originalReq.route = {path: entry.route};
-                originalReq.headers = {};
-
-                var res = {
-                    send: function() {
-                        return '';
-                    },
-                    status: function() {
-                        return {
-                            send: function() {}
-                        };
-                    }
-                };
-
-                var method = entry.method;
-                var expectedDefined = entry.expectedDefined;
-
-                requestStub.yields(null, {statusCode: 200}, {login: 'cleo'});
-
-                if (expectedDefined) {
-                    if (method === undefined) {
-                        assert.fail();
-                    } else {
-                        try {
-                            method(originalReq, res);
-                        } catch (error) {
-                            //ignore errors, we shouldn't have fully formed objects
-                        }
-                        //verify that we have properly mutated the request string
-                        assert.equal(originalReq.url, expectedPath);
-                    }
-                }
-                done();
-            });
+        corePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        eePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
         });
     });
+
+    function runTestCase(entry) {
+        it('Test case: ' + entry.message, function(done) {
+            var expectedPath = entry.expectedPath;
+
+            //mock out the request and response objects with some utility methods they need in this flow
+            var originalReq = {
+                params: {
+                    reportId: entry.request && entry.request.indexOf('default/results') !== -1 ? 'default' : '1'
+                }
+            };
+
+            originalReq.method = originalReq.url = entry.request;
+            originalReq.route = {path: entry.route};
+            originalReq.headers = {};
+
+            var res = {
+                send: function() {
+                    return '';
+                },
+                status: function() {
+                    return {
+                        send: function() {}
+                    };
+                }
+            };
+
+            var method = entry.method;
+            var expectedDefined = entry.expectedDefined;
+
+            requestStub.yields(null, {statusCode: 200}, {login: 'cleo'});
+
+            if (expectedDefined) {
+                if (method === undefined) {
+                    assert.fail();
+                } else {
+                    try {
+                        method(originalReq, res);
+                    } catch (error) {
+                        //ignore errors, we shouldn't have fully formed objects
+                    }
+                    //verify that we have properly mutated the request string
+                    assert.equal(originalReq.url, expectedPath);
+                }
+            }
+            done();
+        });
+    }
 });
