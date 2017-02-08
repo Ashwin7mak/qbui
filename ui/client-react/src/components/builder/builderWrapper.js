@@ -65,7 +65,7 @@ const BuilderWrapper = React.createClass({
                                app={this.getSelectedApp()}/>);
     },
 
-    saveOrCancelFooter() {
+    getSaveOrCancelFooter() {
         return <SaveOrCancelFooter
             rightAlignedButtons={this.getRightAlignedButtons()}
             centerAligendButtons={this.getCenterAlignedButtons()}
@@ -85,10 +85,7 @@ const BuilderWrapper = React.createClass({
                     {this.props.children}
 
                 </div>
-                <SaveOrCancelFooter
-                    rightAlignedButtons={this.getRightAlignedButtons()}
-                    centerAligendButtons={this.getCenterAlignedButtons()}
-                    leftAligendBUttons={this.getLeftAlignedButtons()} />
+                {this.getSaveOrCancelFooter()}
             </div>
         );
     }
