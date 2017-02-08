@@ -65,6 +65,12 @@
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION] = fetchSwagger;
+
+        routeToGetFunction[routeConsts.SWAGGER_API_EE] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_RESOURCES_EE] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_IMAGES_EE] = fetchSwagger;
+        routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION_EE] = fetchSwagger;
+
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         /*
@@ -98,6 +104,7 @@
          */
         var routeToAllFunction = {};
         routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
+        routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
 
         /*** public data ****/
         return {
@@ -775,11 +782,14 @@
     }
 
     /**
-     * This is the function for proxying to the swagger endpoint
+     * This is the function for proxying to a swagger endpoint on
+     * either core or experience engine.
+     *
      * @param req
      * @param res
      */
     function fetchSwagger(req, res) {
+        //  ensure the route is enabled
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
             return;
@@ -788,7 +798,8 @@
         //  log some route info and set the request options
         log.debug({req: req}, 'Fetch swagger');
 
-        var opts = requestHelper.setOptions(req);
+        //  experience engine or core
+        let opts = req.url.startsWith(routeConsts.SWAGGER_API_EE) ? requestHelper.setExperienceEngineOptions(req) : requestHelper.setOptions(req);
         request(opts)
             .on('error', function(error) {
                 log.error({req:req}, 'API SWAGGER ERROR: ' + JSON.stringify(error));
@@ -810,6 +821,31 @@
 
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
+            request(opts)
+                .on('response', function(response) {
+                    logApiSuccess(req, response, perfLog);
+                })
+                .on('error', function(error) {
+                    logApiFailure(req, error, perfLog);
+                })
+                .pipe(res);
+        });
+    }
+
+    /**
+     * This is the function for forwarding a request to the experience engine server.  Expectation
+     * is that the data in the body of the response is a json structure for all requests.
+     *
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function forwardExperienceEngineApiRequest(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Forward experience engine API Request', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            var opts = requestHelper.setExperienceEngineOptions(req);
             request(opts)
                 .on('response', function(response) {
                     logApiSuccess(req, response, perfLog);

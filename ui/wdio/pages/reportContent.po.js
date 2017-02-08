@@ -167,6 +167,24 @@
         }},
 
         /**
+         * Function that will get all the records from the UI report table grid.
+         *@returns an array of cell values (as strings)
+         */
+        getAllRecordsFromTable: {value: function() {
+            var tableRecords = [];
+            //get the count of records rows in a table
+            var numOfRows = this.reportDisplayedRecordCount();
+            //for each record row get the cell values
+            for (var i = 0; i < numOfRows; i++) {
+                var cellValues = this.getRecordValues(i);
+                //we need to remove record actions like print, email etc
+                cellValues.splice(0, 1);
+                tableRecords.push(cellValues);
+            }
+            return tableRecords;
+        }},
+
+        /**
          * Helper function to format record values returned a record cell element
          * @param rawRecordValue
          * @returns formatted value as a string
@@ -228,8 +246,10 @@
          * Given a record element in agGrid, click on the record to open it in view form mode.
          * @param recordRowIndex
          */
-        openRecordInViewMode : {value: function(recordRowIndex) {
-            this.clickOnRecordInReportTable(recordRowIndex);
+        openRecordInViewMode : {value: function(realmName, appId, tableId, reportId, recordId) {
+            //navigate to record page directly
+            var requestRecordPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/record/' + recordId);
+            browser.url(requestRecordPageEndPoint);
             //wait until view form is visible
             return formsPO.viewFormContainerEl.waitForVisible();
         }},
@@ -261,7 +281,7 @@
          */
         clickRecordEditPencilInTableActions : {value: function(recordRowIndex) {
             //get all checkboxes in the report table first column
-            var getAllCheckBoxs = browser.elements('input.ag-selection-checkbox').value.filter(function(checkbox) {
+            var getAllCheckBoxs = browser.elements('input.selectRowCheckbox').value.filter(function(checkbox) {
                 return checkbox.index === recordRowIndex;
             });
 
@@ -273,7 +293,9 @@
                 //click on the edit pencil in table actions
                 this.editPencilBtnOnReportActions.click();
                 //wait until edit form is visible
-                return formsPO.editFormContainerEl.waitForVisible();
+                formsPO.editFormContainerEl.waitForVisible();
+                //need these for trowser to drop down
+                return browser.pause(e2eConsts.shortWaitTimeMs);
             } else {
                 throw new Error('Checkbox not found at row ' + recordRowIndex);
             }

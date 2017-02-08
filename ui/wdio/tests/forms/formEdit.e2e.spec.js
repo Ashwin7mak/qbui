@@ -49,7 +49,7 @@
             //Step 2 - Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
 
-            //Step 3 - Click on 3rd record edit pencil
+            //Step 3 - Click on 1st record edit pencil
             reportContentPO.clickRecordEditPencilInRecordActions(1);
 
             //Step 4 - Edit values
@@ -88,7 +88,7 @@
             origRecordCount = formsPO.getRecordsCountInATable();
 
             //Step 3 - Click on 3rd record edit pencil
-            reportContentPO.clickRecordEditPencilInTableActions(2);
+            reportContentPO.clickRecordEditPencilInTableActions(3);
 
             //Step 4 - Edit values
             fieldTypes.forEach(function(fieldType) {
