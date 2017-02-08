@@ -453,29 +453,6 @@
         });
     }
 
-    function createForm(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            formsApi.createForm(req).then(
-                function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
-                    //  client is waiting for a response..make sure one is always returned
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(500).send(response);
-                    }
-                }
-            );
-        });
-    }
-
     /**
      * Fetch the count of total records in a report.
      *
