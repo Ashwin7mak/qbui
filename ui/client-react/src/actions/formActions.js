@@ -256,3 +256,42 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
         });
     };
 };
+
+export const saveForm = (appId, tblId, formId, form) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && formId) {
+                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, formId:${formId}`);
+
+                let formType = 'view';  //todo: form.type???
+                dispatch(loadingForm(formType));
+
+                let formService = new FormService();
+                formService.saveForm(appId, tblId, formId, form).then(
+                    (response) => {
+                        logger.debug('FormService saveForm success');
+                        //TODO: form.type ??
+                        dispatch(loadFormSuccess(formType, response.data));
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
+                        dispatch(loadFormError(formType, error.response ? error.response.status : error.response));
+                        reject();
+                    }
+                ).catch((ex) => {
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}, formId:${formId}`);
+                dispatch(loadFormError(formType, '500'));
+                reject();
+            }
+        });
+    };
+};
+
+
