@@ -51,7 +51,7 @@
          */
         it('Add a record via form', function() {
             var origRecordCount;
-            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allDurationFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField'];
+            var fieldTypes = ['allTextFields', 'allPhoneFields', 'allEmailFields', 'allUrlFields', 'allNumericFields', 'allDateFields', 'allTimeFields', 'allCheckboxFields', 'allUserField', 'allDurationFields'];
 
             //Step 1 - Get the original records count in a report
             origRecordCount = formsPO.getRecordsCountInATable();
