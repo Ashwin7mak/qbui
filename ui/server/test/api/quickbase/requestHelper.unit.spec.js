@@ -167,6 +167,15 @@ describe('Validate RequestHelper unit tests', function() {
         req.protocol = 'http';
         req.rawBody = 'test';
 
+        it('Test setExperienceEngineOptions with GET method', function(done) {
+            req.method = 'GET';
+            let request = requestHelper.setExperienceEngineOptions(req);
+            should(request.url).be.exactly(config.eeHost + req.url);
+            should.not.exist(request.body);
+            should(request.method).be.exactly(req.method);
+            done();
+        });
+
         it('Test setOptions with GET method', function(done) {
             req.method = 'GET';
             let request = requestHelper.setOptions(req);

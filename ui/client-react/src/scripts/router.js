@@ -5,10 +5,12 @@ import {Router, Route, IndexRoute} from "react-router";
 import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
+import BuilderWrapper from '../components/builder/builderWrapper';
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
+import FormBuilder from '../components/builder/formBuilder';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
 import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
@@ -35,6 +37,7 @@ const mapStateToProps = (state) => {
     };
 };
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
+const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
 
 const store = createAppStore();
 
@@ -59,6 +62,10 @@ render((
                 <Route path="table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+            </Route>
+
+            <Route path="/qbase/builder/app/:appId" component={ConnectedBuilderNav}>
+                <Route path="table/:tblId/form(/:formId)" component={FormBuilder} />
             </Route>
 
         </Router>

@@ -34,3 +34,6 @@ node_modules/
 wdio/config/wdio.conf.js
 # generated error screenshots shouldn't be tracked either
 wdio/screenshots/
+
+#this folder is created everytime I run webdriverIO, do not commit
+wdio/ui

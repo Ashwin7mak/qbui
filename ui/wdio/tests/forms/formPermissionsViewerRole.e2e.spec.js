@@ -91,7 +91,7 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
 
             //Step 3 - Open a record
-            reportContentPO.openRecordInViewMode(2);
+            reportContentPO.openRecordInViewMode(realmName, appId, tableId, reportId, 2);
 
             //Step 4 - Verify cannot see any text fields on the form in view mode as readaccess set to false
             formsPO.verifyFieldsNotPresentOnForm(formsPO.viewFormContainerEl, expectedFieldsWhichHasNoFieldRights);
