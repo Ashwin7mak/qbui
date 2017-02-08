@@ -4,6 +4,7 @@ import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './builderWrapper.scss';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import GlobalActions from '../actions/globalActions';
+import {NotificationContainer} from "react-notifications";
 
 const BuilderWrapper = React.createClass({
 
@@ -67,6 +68,7 @@ const BuilderWrapper = React.createClass({
                 <div className="main">
                     <div className="topNav">
                         {this.getTopGlobalActions()}
+                        <NotificationContainer/>
                     </div>
                 </div>
                 <div className="builderWrapperChildren">
