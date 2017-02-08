@@ -41,13 +41,14 @@
         {route: routeConsts.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
         // swagger endpoints
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.SWAGGER_API_EE, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_DOCUMENTATION, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.TOMCAT_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}];
+        {route: routeConsts.TOMCAT_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}, // get allowed
+        {route: routeConsts.EXPERIENCE_ENGINE_ALL, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}]; //get allowed
 
     module.exports = {
-
         /**
          * For the app environment return all valid routes for this env
          * @param routeGroup
