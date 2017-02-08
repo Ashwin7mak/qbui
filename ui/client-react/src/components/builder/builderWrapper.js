@@ -8,26 +8,25 @@ import {NotificationContainer} from "react-notifications";
 import AppHistory from '../../globals/appHistory';
 
 const BuilderWrapper = React.createClass({
-    
+
     onCancel() {
         AppHistory.history.goBack();
     },
     saveClicked() {
         //This will connect with redux
-        console.log('Saving!');
     },
 
     getRightAlignedButtons() {
-      return(
-          <div>
-            <Button bsStyle="primary" onClick={this.onCancel}><I18nMessage message="nav.cancel"/></Button>
-            <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
-          </div>
+        return (
+              <div>
+                <Button bsStyle="primary" onClick={this.onCancel}><I18nMessage message="nav.cancel"/></Button>
+                <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+              </div>
       );
     },
 
     getLeftAlignedButtons() {
-        return <div></div>
+        return <div></div>;
     },
 
     getCenterAlignedButtons() {
@@ -59,7 +58,7 @@ const BuilderWrapper = React.createClass({
             rightAlignedButtons={this.getRightAlignedButtons()}
             centerAligendButtons={this.getCenterAlignedButtons()}
             leftAligendBUttons={this.getLeftAlignedButtons()}
-        />
+        />;
     },
     render() {
         return (

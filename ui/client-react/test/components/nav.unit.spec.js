@@ -303,7 +303,7 @@ describe('Nav', () => {
 
         it('renders a component with a form type', () => {
             let routeParams = {appId: 1, tblId: 2};
-            let props = {
+            props = {
                 qbui: {
                     forms: [{id: 'view'}],
                     shell: {
