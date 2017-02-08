@@ -63,10 +63,10 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: javaHost,
+        javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
 
-        eeHost: eeHost,
-        eeHostEnable: false,
+        eeHost: 'https://ee.trunk-int-experienceengine.newstack.quickbaserocks.com',
+        eeHostEnable: true,
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
