@@ -107,7 +107,7 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
-            configureFormBuilder: 'Configure Form Builder',
+            configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not working right now",

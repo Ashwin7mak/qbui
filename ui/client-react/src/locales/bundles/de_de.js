@@ -104,7 +104,7 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
-            configureFormBuilder: "Konfigurieren Bilden Erbauer",
+            configureFormBuilder: "Ändern Sie dieses Formular",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",

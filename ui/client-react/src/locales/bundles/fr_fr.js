@@ -104,7 +104,7 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            configureFormBuilder: 'Configurer Forme Constructeur',
+            configureFormBuilder: 'Modifier ce formulaire',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
