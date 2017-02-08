@@ -1,16 +1,26 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
-import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import './builderWrapper.scss';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import GlobalActions from '../actions/globalActions';
 import {NotificationContainer} from "react-notifications";
+import AppHistory from '../../globals/appHistory';
 
 const BuilderWrapper = React.createClass({
 
+    /**
+     * navigate back/forth to a new record
+     * @param recId
+     */
+    navigateBackToRecord(appId, tblId, rptId, recId) {
+        let app = this.props.flux.store('AppsStore').getState();
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        this.props.router.push(link);
+    },
+
     onCancel() {
-        //This will redirect to previous page
-        console.log('Canceling!');
+        AppHistory.history.goBack();
     },
     saveClicked() {
         //This will connect with redux
