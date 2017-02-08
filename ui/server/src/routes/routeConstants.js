@@ -48,9 +48,6 @@
 
         HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
-        FORMS                       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/forms',
-        FORM                        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/forms/:formId',
-        FORM_TYPE                   : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/forms/formType/:formType',
         FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
         RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                     : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',

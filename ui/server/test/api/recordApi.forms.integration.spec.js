@@ -142,8 +142,8 @@
         function createForm(appId, tableId, form) {
             return new promise(function(resolve, reject) {
                 const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                recordBase.apiBase.executeRequest(formEndpoint, consts.POST, form).then(function(result) {
-                    let formId =  JSON.parse(JSON.parse(result.body).body).formId;
+                recordBase.apiBase.executeRequest(formEndpoint, consts.POST, form, null, null, true).then(function(result) {
+                    let formId = JSON.parse(result.body).formId;
                     resolve({appId, tableId, formId});
                 }).catch(function(error) {
                     log.debug(JSON.stringify(error));
@@ -165,8 +165,8 @@
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(inputAppId, inputTableId, inputFormId);
 
             return new promise(function(resolve, reject) {
-                recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
-                    const responseBody = JSON.parse(JSON.parse(result.body).body);
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, null, true).then(function(result) {
+                    const responseBody = JSON.parse(result.body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
@@ -192,8 +192,8 @@
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, null, formType);
 
             return new promise(function(resolve, reject) {
-                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null).then(function(result) {
-                    const responseBody =  JSON.parse(JSON.parse(result.body).body);
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, null, true).then(function(result) {
+                    const responseBody =  JSON.parse(result.body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;

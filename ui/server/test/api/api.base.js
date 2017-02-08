@@ -294,7 +294,7 @@
              * @param headers
              * @param params
              */
-            executeRequest              : function(optsOrStringPath, method, body, headers, params) {
+            executeRequest              : function(optsOrStringPath, method, body, headers, params, isEE) {
                 var stringPath = optsOrStringPath;
                 if (_.isObject(stringPath)) {
                     var temp = _.assign({}, stringPath);
@@ -310,7 +310,12 @@
                 if (this.realm) {
                     subdomain = this.realm.subdomain;
                 }
-                var opts = generateRequestOpts(stringPath, method, subdomain);
+                var opts;
+                if (isEE) {
+                    opts = generateEERequestOpts(stringPath, method, subdomain);
+                }else {
+                    opts = generateRequestOpts(stringPath, method, subdomain);
+                }
                 if (body) {
                     opts.body = jsonBigNum.stringify(body);
                 }
