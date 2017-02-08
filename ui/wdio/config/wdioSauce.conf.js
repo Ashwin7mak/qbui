@@ -114,7 +114,7 @@ exports.config = {
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
-            version: '46.0',
+            version: '42.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
             screenResolution : '1600x1200',
