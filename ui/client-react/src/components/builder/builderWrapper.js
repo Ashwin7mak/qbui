@@ -8,17 +8,7 @@ import {NotificationContainer} from "react-notifications";
 import AppHistory from '../../globals/appHistory';
 
 const BuilderWrapper = React.createClass({
-
-    /**
-     * navigate back/forth to a new record
-     * @param recId
-     */
-    navigateBackToRecord(appId, tblId, rptId, recId) {
-        let app = this.props.flux.store('AppsStore').getState();
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.router.push(link);
-    },
-
+    
     onCancel() {
         AppHistory.history.goBack();
     },
@@ -46,7 +36,7 @@ const BuilderWrapper = React.createClass({
     },
     getSelectedApp() {
         let app = this.props.flux.store('AppsStore').getState();
-        console.log('APP: ', app);
+
         if (app.selectedAppId) {
             return _.find(app.apps, (a) => a.id === app.selectedAppId);
         }
@@ -72,7 +62,6 @@ const BuilderWrapper = React.createClass({
         />
     },
     render() {
-        console.log('this.props: ', this.props);
         return (
             <div className="builderWrapperContent" >
                 <div className="main">
