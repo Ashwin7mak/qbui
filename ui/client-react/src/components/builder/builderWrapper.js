@@ -2,10 +2,11 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './builderWrapper.scss';
-import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter'
-import TopNav from '../header/topNav'
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
+import GlobalActions from '../actions/globalActions';
 
 const BuilderWrapper = React.createClass({
+
     onCancel() {
         //This will redirect to previous page
         console.log('Canceling!');
@@ -32,6 +33,25 @@ const BuilderWrapper = React.createClass({
         return <div className={"centerActions"} />;
 
     },
+    getSelectedApp() {
+        let app = this.props.flux.store('AppsStore').getState();
+        console.log('APP: ', app);
+        if (app.selectedAppId) {
+            return _.find(app.apps, (a) => a.id === app.selectedAppId);
+        }
+        return null;
+    },
+
+    getTopGlobalActions() {
+        const actions = [];
+        return (<GlobalActions actions={actions}
+                               flux={this.props.flux}
+                               position={"top"}
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
+                               startTabIndex={4}
+                               app={this.getSelectedApp()}/>);
+    },
 
     saveOrCancelFooter() {
         return <SaveOrCancelFooter
@@ -41,9 +61,14 @@ const BuilderWrapper = React.createClass({
         />
     },
     render() {
-
+        console.log('this.props: ', this.props);
         return (
             <div className="builderWrapperContent" >
+                <div className="main">
+                    <div className="topNav">
+                        {this.getTopGlobalActions()}
+                    </div>
+                </div>
                 <div className="builderWrapperChildren">
                     {this.props.children}
 
