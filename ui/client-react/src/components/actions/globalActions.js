@@ -189,6 +189,9 @@ let GlobalActions = React.createClass({
             </a>);
     },
     render() {
+        /**
+         * This removes the hover shadow when the form builder button is disabled
+         * */
         let isFormView = this.props.recId ? true : false;
         let isDisabled = isFormView ? "link globalAction withDropdown builder" : "link globalAction disabled withDropdown builder";
         return (
