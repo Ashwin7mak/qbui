@@ -5,7 +5,12 @@ import {I18nMessage} from '../../utils/i18nMessage';
 
 let BuilderDropDownAction = React.createClass({
     propTypes: {
-        linkClass: React.PropTypes.string,
+        actions: React.PropTypes.arrayOf(actionPropType),
+        formBuilderIcon: React.PropTypes.string,
+        startTabIndex: React.PropTypes.number.isRequired,
+        recId: React.PropTypes.number,
+        navigateToBuilder: React.PropTypes.func.isRequired,
+        position: React.PropTypes.string.isRequired,
     },
 
     hasOverLayTrigger(formBuilderDropDown) {
