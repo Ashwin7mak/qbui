@@ -6,7 +6,7 @@ export const WALKME_ID_FOR_LARGE = 228348;
 export const WALKME_ID_FOR_SMALL_AND_MEDIUM = 272137;
 
 //  client routes
-export const BASE_CLIENT_ROUTE = '/qbase'
+export const BASE_CLIENT_ROUTE = '/qbase';
 export const APPS_ROUTE = `${BASE_CLIENT_ROUTE}/apps`;
 export const APP_ROUTE = `${BASE_CLIENT_ROUTE}/app`;
 export const BUILDER_ROUTE = `${BASE_CLIENT_ROUTE}/builder`;
