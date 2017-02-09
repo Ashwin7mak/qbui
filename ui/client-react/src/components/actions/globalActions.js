@@ -141,17 +141,19 @@ let GlobalActions = React.createClass({
             </Dropdown>);
     },
 
-    getBuilderDropdown() {
-        // "dropdownToggle globalActionLink formBuilder"
-        let eventKeyIdx = 20;
-        let isFormView = this.props.recId ? true : false;
-        let isDisabled = isFormView ? "dropdownToggle globalActionLink formBuilder" : "dropdownToggle formBuilder disabled btn";
+    hasOverLayTrigger(formBuilderDropDown) {
         const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
 
-        return (
-            <OverlayTrigger placement="bottom" trigger={['hover', 'click']}
-                            overlay={unimplementedFavoritesTip}>
-                <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
+        return <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={unimplementedFavoritesTip}>
+                    {formBuilderDropDown}
+               </OverlayTrigger>;
+    },
+    getBuilderDropdown() {
+        let eventKeyIdx = 20;
+        let isFormView = this.props.recId ? true : false;
+        let isDisabled = isFormView ? "dropdownToggle globalActionLink formBuilder" : "disabled btn btn-default";
+
+        let formBuilderDropdown = <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
 
                     <a bsRole="toggle"
                        className={isDisabled}
@@ -165,9 +167,10 @@ let GlobalActions = React.createClass({
                             message={"pageActions.configureFormBuilder"}/></MenuItem>
 
                     </Dropdown.Menu>
-                </Dropdown>
-            </OverlayTrigger>
-        );
+                </Dropdown>;
+
+        return isFormView ? formBuilderDropdown : this.hasOverLayTrigger(formBuilderDropdown);
+
     },
 
     getHelpWalkme() {
