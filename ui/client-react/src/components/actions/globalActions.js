@@ -142,6 +142,7 @@ let GlobalActions = React.createClass({
     },
 
     getBuilderDropdown() {
+        // "dropdownToggle globalActionLink formBuilder"
         let eventKeyIdx = 20;
         let isFormView = this.props.recId ? true : false;
         let isDisabled = isFormView ? "" : "dropdownToggle formBuilder disabled btn";
@@ -153,7 +154,7 @@ let GlobalActions = React.createClass({
                 <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
 
                     <a bsRole="toggle"
-                       className={"dropdownToggle globalActionLink formBuilder"}
+                       className={isDisabled}
                        tabIndex={this.props.startTabIndex + this.props.actions.length}>
                         <QBicon icon={this.props.formBuilderIcon}/>
                     </a>
