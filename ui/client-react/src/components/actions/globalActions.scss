@@ -9,3 +9,19 @@
     padding-bottom: 5px;
     display: inline-block;
 }
+
+.dropdownToggle.formBuilder.disabled.btn {
+    display: inline-block;
+    background: $topnav-header-background-color;
+}
+
+.dropdownToggle.formBuilder.btn:not(.disabled):hover {
+        background: $topnav-header-background-color;
+        > a {
+            color: $topnav-header-background-color;
+        }
+
+    span {
+        color: $topnav-hover-color;
+    }
+}

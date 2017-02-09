@@ -84,6 +84,13 @@
         }
     }
 
+    .globalAction.disabled:hover {
+        background: $topnav-header-background-color;
+
+        > a {
+            color: $topnav-header-background-color;
+        }
+    }
     .globalAction:hover {
         background: $topnav-hover-background-color;
 

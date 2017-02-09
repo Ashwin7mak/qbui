@@ -2,7 +2,7 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
-import {MenuItem, Dropdown, Button} from 'react-bootstrap';
+import {MenuItem, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
@@ -144,22 +144,29 @@ let GlobalActions = React.createClass({
     getBuilderDropdown() {
         let eventKeyIdx = 20;
         let isFormView = this.props.recId ? true : false;
+        let isDisabled = isFormView ? "" : "dropdownToggle formBuilder disabled btn";
+        const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
+
         return (
-            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"} disabled={!isFormView}>
+            <OverlayTrigger placement="bottom" trigger={['hover', 'click']}
+                            overlay={unimplementedFavoritesTip}>
+                <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
 
-                <a bsRole="toggle"
-                   className={"dropdownToggle globalActionLink"}
-                   tabIndex={this.props.startTabIndex + this.props.actions.length}>
-                    <QBicon icon={this.props.formBuilderIcon}/>
-                </a>
+                    <a bsRole="toggle"
+                       className={"dropdownToggle globalActionLink formBuilder"}
+                       tabIndex={this.props.startTabIndex + this.props.actions.length}>
+                        <QBicon icon={this.props.formBuilderIcon}/>
+                    </a>
 
-                <Dropdown.Menu>
+                    <Dropdown.Menu>
 
-                    <MenuItem onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
-                        message={"pageActions.configureFormBuilder"}/></MenuItem>
+                        <MenuItem onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
+                            message={"pageActions.configureFormBuilder"}/></MenuItem>
 
-                </Dropdown.Menu>
-            </Dropdown>);
+                    </Dropdown.Menu>
+                </Dropdown>
+            </OverlayTrigger>
+        );
     },
 
     getHelpWalkme() {
@@ -182,10 +189,12 @@ let GlobalActions = React.createClass({
             </a>);
     },
     render() {
+        let isFormView = this.props.recId ? true : false;
+        let isDisabled = isFormView ? "link globalAction withDropdown builder" : "link globalAction disabled withDropdown builder";
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
-                    <li className={"link globalAction withDropdown builder"}>{this.getBuilderDropdown()}</li>
+                    <li className={isDisabled}>{this.getBuilderDropdown()}</li>
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
