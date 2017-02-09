@@ -64,7 +64,7 @@ consts = require('../../common/src/constants.js');
         var table7Name = 'Unique Fields';
         var table8Name = 'Parent Table 1';
         var table9Name = 'Child Table 1';
-        var table10Name = 'Parent Talbe 2';
+        var table10Name = 'Parent Table 2';
         var table11Name = 'Child Table 2';
 
         // convenience reusable settings

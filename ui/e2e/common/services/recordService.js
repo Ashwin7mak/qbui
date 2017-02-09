@@ -63,21 +63,13 @@
              * @returns {Promise}
              */
             editRecords: function(appId, tableId, recordEdits) {
-                var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var editRecordPromises = recordEdits.map(function(currentRecord, idx) {
                     var recordId = idx + 1;
                     var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(appId, tableId);
                     return recordBase.editRecord(recordsEndpoint, recordId, recordEdits[idx]);
                 });
-                promise.all(editRecordPromises)
-                    .then(function(results) {
-                        deferred.resolve(results);
-                    }).catch(function(error) {
-                    console.log(JSON.stringify(error));
-                    deferred.reject(error);
-                });
-                return deferred.promise;
+                return promise.all(editRecordPromises);
             },
 
             /**
@@ -116,10 +108,10 @@
             generateRecordsFromValues: function(field, values) {
                 var emptyRecords = this.generateEmptyRecords([field], values.length);
                 return emptyRecords.map(function(record, idx) {
-                    return record.map(function (field) {
-                        field.value = values[idx];
-                        return field;
-                    })
+                    return record.map(function(_field) {
+                        _field.value = values[idx];
+                        return _field;
+                    });
                 });
             },
 
