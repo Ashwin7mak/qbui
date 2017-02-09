@@ -226,7 +226,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 }
 
                 ////  TODO: for testing..remember to remove
-                //updateForm(appId, tblId, response.data.formMeta).then(
+                //updateForm(appId, tblId, formType, response.data.formMeta).then(
                 //    (resp) => {
                 //        logger.debug('success');
                 //    },
@@ -269,11 +269,28 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
-export const createForm = (appId, tblId, form) => {
-    return saveForm(appId, tblId, form, true);
+/**
+ * Create a new form
+ *
+ * @param appId
+ * @param tblId
+ * @param formType
+ * @param form
+ */
+export const createForm = (appId, tblId, formType, form) => {
+    return saveForm(appId, tblId, formType, form, true);
 };
-export const updateForm = (appId, tblId, form) => {
-    return saveForm(appId, tblId, form, false);
+
+/**
+ * Update an existing form layout
+ *
+ * @param appId
+ * @param tblId
+ * @param formType
+ * @param form
+ */
+export const updateForm = (appId, tblId, formType, form) => {
+    return saveForm(appId, tblId, formType, form, false);
 };
 
 /*
@@ -290,14 +307,14 @@ function event(id, type, content) {
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, form, isNew) {
+function saveForm(appId, tblId, formType, form, isNew) {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
                 //  TODO: refactor once record events are moved out..
-                dispatch(event(form.id, types.SAVING_FORM));
+                dispatch(event(formType, types.SAVING_FORM));
 
                 let formService = new FormService();
 
@@ -305,12 +322,12 @@ function saveForm(appId, tblId, form, isNew) {
                 formPromise.then(
                     (response) => {
                         logger.debug('FormService saveForm success');
-                        dispatch(event(form.id, types.SAVING_FORM_SUCCESS, response.data));
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
-                        dispatch(event(form.id, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+                        dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
                         reject();
                     }
                 ).catch((ex) => {

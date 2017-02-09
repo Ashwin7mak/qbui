@@ -1,5 +1,5 @@
 import * as formActions from '../../src/actions/formActions';
-import {editNewRecord, openRecordForEdit, loadForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
+import {editNewRecord, openRecordForEdit, loadForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as UrlConsts from "../../src/constants/urlConstants";
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
@@ -208,4 +208,53 @@ describe('Form Actions functions', () => {
                 });
         });
     });
+
+    describe('save form data action', () => {
+
+        // we mock the Redux store when testing async action creators
+        const middlewares = [thunk];
+        const mockStore = configureMockStore(middlewares);
+
+        let formData = {
+            formId: 1
+        };
+
+        class mockFormService {
+            constructor() { }
+            updateForm() {
+                return Promise.resolve({data:formData});
+            }
+        }
+
+        beforeEach(() => {
+            spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+        });
+
+        afterEach(() => {
+            FormActionsRewireAPI.__ResetDependency__('FormService');
+        });
+
+        it('save a form update', (done) => {
+
+            // the mock store makes the actions dispatched available via getActions()
+            // so we don't need to spy on the dispatcher etc.
+            const expectedActions = [
+                {id:'view', type:types.SAVING_FORM, content:null},
+                {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
+            ];
+            const store = mockStore({});
+
+            return store.dispatch(updateForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
 });
