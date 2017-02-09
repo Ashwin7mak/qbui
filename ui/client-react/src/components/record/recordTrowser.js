@@ -78,7 +78,14 @@ export const RecordTrowser = React.createClass({
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
-
+    /**
+     *  get actions element for bottom center of trowser (placeholders for now)
+     */
+    getTrowserActions() {
+        return (
+            <div className={"centerActions"} />);
+    },
+    
     /**
      * navigate to new record if appropriate
      */
@@ -313,13 +320,6 @@ export const RecordTrowser = React.createClass({
                 }
                 <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
-    },
-    /**
-     *  get actions element for bottom center of trowser (placeholders for now)
-     */
-    getTrowserActions() {
-        return (
-            <div className={"centerActions"} />);
     },
 
     cancelEditing() {
