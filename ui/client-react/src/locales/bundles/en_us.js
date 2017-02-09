@@ -445,7 +445,7 @@ export default {
         },
         noneOption: "\<None\>",
         unimplemented: {
-            formBuilder: "Available on form view only",
+            formBuilder: "Configuration not currently available for this view",
             search: "Searching is not available yet",
             favorites: "Accessing favorites is not available yet",
             makeFavorite: "Marking as a favorite is not available yet",

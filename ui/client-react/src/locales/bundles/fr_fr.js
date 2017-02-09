@@ -438,7 +438,7 @@ export default {
         },
         noneOption: "\<Aucun\>",
         unimplemented: {
-            formBuilder: "Disponible uniquement en mode formulaire",
+            formBuilder: "Configuration non disponible actuellement pour cette vue",
             search: "La recherche n'est pas encore disponible",
             favorites: "L'accès aux Favoris n'est pas encore disponible",
             makeFavorite: "Marquer comme favori n'est pas encore disponible",
