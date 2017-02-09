@@ -57,6 +57,36 @@ To verify installation enter `nvm list default` which should print:
 ```
 If nvm and node were successfully installed, skip the next section about installing Node.js and global node configuration.
 
+##### Tip for NVM and Zsh
+
+If you used NVM and also use [OhMyZsh](https://github.com/robbyrussell/oh-my-zsh) to manage your terminal you can add 
+the following script to your `~/.zshconfig` file to automatically switch to the correct node version when you go to the `qbui/ui` folder.
+
+``` bash
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+```
+See more about this at https://github.com/creationix/nvm
+
 #### Install Node and configure global node modules
 
 * Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
