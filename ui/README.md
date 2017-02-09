@@ -315,6 +315,36 @@ For all of the browser capabilities check out:
 and
 [https://www.browserstack.com/automate/capabilities](https://www.browserstack.com/automate/capabilities)
 
+### Running E2E Tests Through SauceLabs
+
+1. In IntelliJ, create a new Node configuration (Run -> Edit Configurations)
+    - *Note:* You may need to add the NodeJs IntelliJ plugin if you do not see an option to create a Node configuration.
+    - ![IntelliJ Configuration for E2E Tests on SauceLabs](./Config_for_E2E_on_SauceLabs.png)
+
+2. You need to click the ellipses (...) next to "Environment Variables" and define the following:
+    - `NODE_ENV` = `e2e`
+    - `SAUCE_JOB_NAME` = `<your initials>Sauce` (or whatever you want)
+    - `ENV_TUNNEL_NAME` = `<your initials>SauceTunnel` (or whatever you want)
+    - `SAUCE_DOMAIN` = `http://localhost:9000` (or the route you access your local server in the browser)
+    - `SAUCE_USERNAME` = Obtain this from another Dev or QA
+    - `SAUCE_KEY` = Obtain this from another DEV or QA
+
+3. You will need to have any services your tests will use running locally on your machine (e.g., Qbui, Core, EE)
+
+4. By default, `wdioSauce.conf.js` does not have any tests activated. Add tests or directories in the `specs` array in `wdioSauce.conf.js`.
+
+5. Run the tests with the play or debug button in Intellij.
+
+*Bonus 1:* You can login to SauceLabs and watch the tests run live (go to Dashboard -> Automated Tests)
+
+*Bonus 2:* To run specific browsers, you can modify the `Application Parameters` (in the IntelliJ job) to point to a browser specific config
+instead of the generic `wdioSauce.conf.js` (e.g., `wdioSauceChrome.conf.js`, `wdioSauceFirefox.conf.js`, `wdioSauceSafari.conf.js`). These
+files inherit all of the properties from `wdioSauce.conf.js` except for those specifically listed in the browser specific config file. You
+may want to change the `SAUCE_JOB_NAME` variable in your IntelliJ job to reflect the specific browser so it is easier to find on SauceLabs.
+
+*Bonus 3:* In your IntelliJ configuration, click the "+" button under "Before Launch" and add a task to run `npm run webpack` before the tests
+run to ensure you have the most up to date code running in your E2E test.
+
 ##Using Gradle to build distribution node server
 Gradle is used to build a production version of the node server and client application.
 
