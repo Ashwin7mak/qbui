@@ -77,7 +77,6 @@ const BuilderWrapper = React.createClass({
         />;
     },
     render() {
-        console.log('builderWrapper: ', this.props);
         return (
             <div className="builderWrapperContent" >
                 <div className="main">
