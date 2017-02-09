@@ -91,13 +91,17 @@ export let Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [];
+        let recordId;
+        if (this.props.params) {
+            recordId = this.props.params.recordId;
+        }
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
                                app={this.getSelectedApp()}
-                               recId={this.props.params.recordId}
+                               recId={recordId}
                                formBuilderIcon="settings-hollow"
                                navigateToBuilder={this.navigateToBuilder}/>);
     },
