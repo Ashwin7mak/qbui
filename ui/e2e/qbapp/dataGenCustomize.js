@@ -393,19 +393,19 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
 
-
+        // Parent table 1 is a parent to child table1 and child table2
         tableToFieldToFieldTypeMap[table8Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
-
+        // Child table 1 is a child of Parent table 1
         tableToFieldToFieldTypeMap[table9Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
-
+        // Parent table 2 is a parent to Child table 2
         tableToFieldToFieldTypeMap[table10Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
-
+        // Child table 2 is a child of Parent table 1 and Parent table 2
         tableToFieldToFieldTypeMap[table11Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
