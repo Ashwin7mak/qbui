@@ -47,6 +47,7 @@ const forms = (
         return newState;
     }
 
+    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
     case types.SAVE_FORM: {
 
         newState.push({
@@ -58,7 +59,7 @@ const forms = (
 
         return newState;
     }
-
+   //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
     case types.SAVE_FORM_SUCCESS: {
 
         newState.push({
@@ -70,7 +71,7 @@ const forms = (
 
         return newState;
     }
-
+     //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
     case types.SAVE_FORM_FAILED: {
 
         newState.push({
@@ -90,6 +91,30 @@ const forms = (
         return newState;
     }
 
+    case types.SAVING_FORM: {
+        newState.push({
+            id,
+            saving: true,
+            errorStatus: null
+        });
+        return newState;
+    }
+    case types.SAVING_FORM_ERROR: {
+        newState.push({
+            id,
+            saving: false,
+            errorStatus: action.content
+        });
+        return newState;
+    }
+    case types.SAVING_FORM_SUCCESS: {
+        newState.push({
+            id,
+            saving: false,
+            formData: action.content
+        });
+        return newState;
+    }
     default:
         // return existing state by default in redux
         return state;

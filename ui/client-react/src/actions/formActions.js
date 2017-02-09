@@ -70,6 +70,7 @@ export const syncForm = (id) => {
  * @param container
  * @returns {{type, container: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const savingForm = (id) => {
     return {
         id,
@@ -83,6 +84,7 @@ export const savingForm = (id) => {
  * @param error error message from server
  * @returns {{type, container: *, error: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const saveFormError = (id, error) => {
     return {
         id,
@@ -96,6 +98,7 @@ export const saveFormError = (id, error) => {
  * @param container
  * @returns {{type, container: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const saveFormSuccess = (id) => {
     return {
         id,
@@ -257,28 +260,48 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
     };
 };
 
-export const saveForm = (appId, tblId, formId, form) => {
-    // we're returning a promise to the caller (not a Redux action) since this is an async action
-    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+export const createForm = (appId, tblId, form) => {
+    return saveForm(appId, tblId, form, true);
+};
+export const updateForm = (appId, tblId, form) => {
+    return saveForm(appId, tblId, form, false);
+};
+
+/*
+    Redux event for saving a form
+    TODO: refactor once record events moved
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
+// we're returning a promise to the caller (not a Redux action) since this is an async action
+// (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+function saveForm(appId, tblId, form, isNew) {
     return (dispatch) => {
         return new Promise((resolve, reject) => {
-            if (appId && tblId && formId) {
-                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, formId:${formId}`);
+            if (appId && tblId) {
+                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
-                let formType = 'view';  //todo: form.type???
-                dispatch(loadingForm(formType));
+                //  TODO: refactor once record events are moved out..
+                dispatch(event(form.id, types.SAVING_FORM));
 
                 let formService = new FormService();
-                formService.saveForm(appId, tblId, formId, form).then(
+
+                let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
+                formPromise.then(
                     (response) => {
                         logger.debug('FormService saveForm success');
-                        //TODO: form.type ??
-                        dispatch(loadFormSuccess(formType, response.data));
+                        dispatch(event(form.id, types.SAVING_FORM_SUCCESS, response.data));
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
-                        dispatch(loadFormError(formType, error.response ? error.response.status : error.response));
+                        dispatch(event(form.id, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
                         reject();
                     }
                 ).catch((ex) => {
@@ -286,12 +309,12 @@ export const saveForm = (appId, tblId, formId, form) => {
                     reject();
                 });
             } else {
-                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}, formId:${formId}`);
-                dispatch(loadFormError(formType, '500'));
+                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
                 reject();
             }
         });
     };
-};
+}
 
 

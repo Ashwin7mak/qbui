@@ -86,16 +86,19 @@ class FormService extends BaseService {
     }
 
     /**
-     * Save a form
+     * Update a form
      *
      * @param appId
      * @param tableId
-     * @param formId
      * @param form
      */
-    saveForm(appId, tableId, formId, form) {
+    updateForm(appId, tableId, form) {
+        // get the form id from the form object
+        let formId = form ? form.formId : {};
+
+        //  construct the put url
         let url = super.constructUrl(this.API.GET_FORM, [appId, tableId, formId]);
-        return super.patch(url, form);
+        return super.put(url, form);
     }
 }
 
