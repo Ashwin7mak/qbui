@@ -225,6 +225,16 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     });
                 }
 
+                ////  TODO: for testing..remember to remove
+                //updateForm(appId, tblId, response.data.formMeta).then(
+                //    (resp) => {
+                //        logger.debug('success');
+                //    },
+                //    (fail) => {
+                //        logger.debug('failure');
+                //    }
+                //);
+
                 dispatch(loadFormSuccess(formType, response.data));
 
                 resolve();
