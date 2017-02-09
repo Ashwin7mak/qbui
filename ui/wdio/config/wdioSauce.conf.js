@@ -10,7 +10,7 @@ exports.config = {
     // Define all options that are relevant for connecting WebdriverIO to Sauce Labs via Sauce Connect here
     //
     protocol: 'http',
-    user: 'QuickBaseNS',
+    user: process.env.SAUCE_USER_NAME,
     key: process.env.SAUCE_KEY,
     sauceConnect: true,
     sauceConnectOpts: {
