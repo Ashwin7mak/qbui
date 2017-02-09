@@ -100,11 +100,6 @@ const BuilderWrapper = React.createClass({
                 formType={formType}
                 formId={formId} />
 
-
-                <div className="builderWrapperChildren">
-                    {this.props.children}
-
-                </div>
                 {this.getSaveOrCancelFooter()}
             </div>
         );
