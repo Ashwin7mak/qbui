@@ -16,7 +16,7 @@ export const referenceElement = (orderIndex = 0, relationshipId = 0) => ({
 });
 
 // A relationship array containing a single relationship object. Currently returned as part of an
-// app request.
+// app request. Used only by unit tests.
 export const relationships = [
     {
         "masterAppId": "1",

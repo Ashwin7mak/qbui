@@ -246,7 +246,7 @@ let QBForm = React.createClass({
     },
 
     /**
-     * TODO: actually render the child report as an embedded report.
+     * Create a TD element which wraps an embedded child report or a link to a child report.
      * @param {Object} element section element
      * @param {Number} sectionIndex this element's index within this section
      * @param {Number} colSpan used to set the width of the Element

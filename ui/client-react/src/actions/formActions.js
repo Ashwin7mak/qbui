@@ -191,7 +191,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 // Experience Engine.
                 if (_.get(window, 'relationships.length') > 0) {
                     window.relationships.forEach((relation) => {
-                        // if a relathinship in which this form is a parent is defined, mock ReferenceElement
+                        // if a relationship in which this form is a parent is defined, mock ReferenceElement
                         if (relation.masterTableId === response.data.formMeta.tableId) {
                             (response.data.formMeta.relationships || []).push(relation);
                             // add as many elements as we have relationships

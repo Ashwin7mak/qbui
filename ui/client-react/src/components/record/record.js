@@ -125,7 +125,7 @@ let Record = React.createClass({
                     const parentTable = _.find(app.tables, {id:rel.masterTableId}) || {};
                     const childTable = _.find(app.tables, {id:rel.detailTableId}) || {};
                     rel.parentTableName = parentTable.name;
-                    rel.childTalbeName = childTable.name;
+                    rel.childTableName = childTable.name;
                     return rel;
                 });
     },
