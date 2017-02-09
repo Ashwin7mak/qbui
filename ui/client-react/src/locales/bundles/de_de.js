@@ -86,6 +86,7 @@ export default {
             save: "Speichern",
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
+            cancel: "Stornieren",
             new: "Neu"
         },
         field: {
@@ -103,7 +104,7 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
-            formBuilder: "Bilden Erbauer",
+            configureFormBuilder: "Ändern Sie dieses Formular",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
@@ -438,6 +439,7 @@ export default {
         },
         noneOption: "\<Keiner\>",
         unimplemented: {
+            formBuilder: "Nur in Formularansicht verfügbar",
             search: "Die Suche ist noch nicht verfügbar",
             favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
             makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",

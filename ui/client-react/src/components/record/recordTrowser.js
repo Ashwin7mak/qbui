@@ -18,6 +18,7 @@ import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {APP_ROUTE} from '../../constants/urlConstants';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
 
@@ -76,13 +77,6 @@ export const RecordTrowser = React.createClass({
                     edit={true} />
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
-    },
-    /**
-     *  get actions element for bottom center of trowser (placeholders for now)
-     */
-    getTrowserActions() {
-        return (
-            <div className={"centerActions"} />);
     },
 
     /**
@@ -278,28 +272,6 @@ export const RecordTrowser = React.createClass({
             </div>);
 
     },
-    getTrowserRightIcons() {
-        const errorFlg = this._hasErrorsAndAttemptedSave();
-
-        const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
-
-        const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
-        return (
-            <div className="saveButtons">
-                {errorFlg &&
-                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
-                        <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
-                    </OverlayTrigger>
-                }
-                {showNext &&
-                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
-                }
-                {this.props.recId === null &&
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
-                }
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
-            </div>);
-    },
 
     hideTrowser() {
         WindowLocationUtils.pushWithoutQuery();
@@ -319,6 +291,35 @@ export const RecordTrowser = React.createClass({
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
         this.props.onHideTrowser();
+    },
+    getTrowserRightIcons() {
+        const errorFlg = this._hasErrorsAndAttemptedSave();
+
+        const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+
+        const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
+        return (
+            <div className="saveButtons">
+                {errorFlg &&
+                <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
+                    <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
+                </OverlayTrigger>
+                }
+                {showNext &&
+                <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                }
+                {this.props.recId === null &&
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                }
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+            </div>);
+    },
+    /**
+     *  get actions element for bottom center of trowser (placeholders for now)
+     */
+    getTrowserActions() {
+        return (
+            <div className={"centerActions"} />);
     },
 
     cancelEditing() {
@@ -352,10 +353,14 @@ export const RecordTrowser = React.createClass({
             <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     rightIcons={this.getTrowserRightIcons()}
                      onCancel={this.cancelEditing}
-                     content={this.getTrowserContent()} />
+                     content={this.getTrowserContent()} >
+                <SaveOrCancelFooter
+                    rightAlignedButtons={this.getTrowserRightIcons()}
+                    centerAligendButtons={this.getTrowserActions()}
+                    leftAligendBUttons={this.getTrowserActions()}
+                />
+            </Trowser>
         );
     }
 });
