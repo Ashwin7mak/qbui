@@ -12,6 +12,10 @@ import AppHistory from '../../globals/appHistory';
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
+/**
+ * The NavStore and the AppsStore are both needed for globalActions (The User and Help Button Located at the top of the screen)
+ * The NavStore updates the locale and the AppsStore selects the appId.
+ * */
 const BuilderWrapper = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
 
@@ -73,6 +77,7 @@ const BuilderWrapper = React.createClass({
         />;
     },
     render() {
+        console.log('builderWrapper: ', this.props);
         return (
             <div className="builderWrapperContent" >
                 <div className="main">
