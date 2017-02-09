@@ -142,9 +142,9 @@ let GlobalActions = React.createClass({
     },
 
     hasOverLayTrigger(formBuilderDropDown) {
-        const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
+        const availableOnFormView = <Tooltip><I18nMessage message="unimplemented.formBuilder"/></Tooltip>;
 
-        return <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={unimplementedFavoritesTip}>
+        return <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={availableOnFormView}>
                     {formBuilderDropDown}
                </OverlayTrigger>;
     },

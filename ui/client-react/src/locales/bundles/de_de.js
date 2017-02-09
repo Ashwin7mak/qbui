@@ -439,6 +439,7 @@ export default {
         },
         noneOption: "\<Keiner\>",
         unimplemented: {
+            formBuilder: "Nur in Formularansicht verfügbar",
             search: "Die Suche ist noch nicht verfügbar",
             favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
             makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
