@@ -2,26 +2,10 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReportStage  from '../../src/components/report/reportStage';
 
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
-
 /* TODO: When the expand/collapse behavior is added, add related tests */
 
 describe('Report stage functions', () => {
     'use strict';
-
-    beforeEach(() => {
-        ReportStage.__Rewire__('I18nMessage', I18nMessageMock);
-    });
-
-    afterEach(() => {
-        ReportStage.__ResetDependency__('I18nMessage');
-    });
 
     it('test render of component', () => {
         const reportData = {
