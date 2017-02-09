@@ -9,6 +9,7 @@ import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import * as SchemaConsts from "../../constants/schema";
 import GlobalActions from "../actions/globalActions";
+import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter} from 'react-router';
@@ -100,10 +101,13 @@ export let Nav = React.createClass({
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
-                               app={this.getSelectedApp()}
-                               recId={recordId}
-                               formBuilderIcon="settings-hollow"
-                               navigateToBuilder={this.navigateToBuilder}/>);
+                               app={this.getSelectedApp()}>
+                    <BuilderDropDownAction recId={recordId}
+                                           actions={actions}
+                                           formBuilderIcon="settings-hollow"
+                                           navigateToBuilder={this.navigateToBuilder}
+                                           startTabIndex={4}/>
+                </GlobalActions>);
     },
 
     getLeftGlobalActions() {

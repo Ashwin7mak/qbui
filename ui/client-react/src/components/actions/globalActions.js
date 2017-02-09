@@ -141,38 +141,6 @@ let GlobalActions = React.createClass({
             </Dropdown>);
     },
 
-    hasOverLayTrigger(formBuilderDropDown) {
-        const availableOnFormView = <Tooltip><I18nMessage message="unimplemented.formBuilder"/></Tooltip>;
-
-        return <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={availableOnFormView}>
-                    {formBuilderDropDown}
-               </OverlayTrigger>;
-    },
-    getBuilderDropdown() {
-        let eventKeyIdx = 20;
-        let isFormView = this.props.recId ? true : false;
-        let isDisabled = isFormView ? "dropdownToggle globalActionLink formBuilder" : "disabled btn btn-default";
-
-        let formBuilderDropdown = <Dropdown className={isDisabled} id="nav-right-dropdown" dropup={this.props.position === "left"} >
-
-                    <a bsRole="toggle"
-                       className={isDisabled}
-                       tabIndex={this.props.startTabIndex + this.props.actions.length}>
-                        <QBicon icon={this.props.formBuilderIcon}/>
-                    </a>
-
-                    <Dropdown.Menu>
-
-                        <MenuItem onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
-                            message={"pageActions.configureFormBuilder"}/></MenuItem>
-
-                    </Dropdown.Menu>
-                </Dropdown>;
-
-        return isFormView ? formBuilderDropdown : this.hasOverLayTrigger(formBuilderDropdown);
-
-    },
-
     getHelpWalkme() {
         let touch = "ontouchstart" in window;
         if (touch) {
@@ -196,12 +164,10 @@ let GlobalActions = React.createClass({
         /**
          * This removes the hover shadow when the form builder button is disabled
          * */
-        let isFormView = this.props.recId ? true : false;
-        let isDisabled = isFormView ? "link globalAction withDropdown builder" : "link globalAction disabled withDropdown builder";
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
-                    <li className={isDisabled}>{this.getBuilderDropdown()}</li>
+                    {this.props.children}
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
