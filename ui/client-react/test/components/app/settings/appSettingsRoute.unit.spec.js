@@ -1,7 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import AppSettingsRoute  from '../../../../src/components/app/settings/appSettingsRoute';
-import HtmlUtils from '../../../../src/utils/htmlUtils';
 
 describe('AppSettingsRoute functions', () => {
     'use strict';
