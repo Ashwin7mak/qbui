@@ -17,48 +17,48 @@ const UserManagement = React.createClass({
     },
 
     createUserColumns(cellFormatter) {
-         let columns = [
-             {
-                 property: 'firstName',
-                 header: {
-                     label: <span>First Name</span>
-                 },
-                 cell: {formatters: [cellFormatter]}
-             },
-             {
-                 property: 'lastName',
-                 header: {
-                     label: <span>Last Name</span>
-                 },
-                 cell: {formatters: [cellFormatter]}
-             },
-             {
-                 property: 'screenName',
-                 header: {
-                     label: <span>Screen Name</span>
-                 },
-                 cell: {formatters: [cellFormatter]}
-             },
-             {
-                 property: 'email',
-                 header: {
-                     label: <span>Email</span>
-                 },
-                 cell: {formatters: [cellFormatter]}
-             },
-             {
-                 property: 'userId',
-                 header: {
-                     label: <span>User ID</span>
-                 },
-                 cell: {formatters: [cellFormatter]}
-             }
+        let columns = [
+            {
+                property: 'firstName',
+                header: {
+                    label: <span>First Name</span>
+                },
+                cell: {formatters: [cellFormatter]}
+            },
+            {
+                property: 'lastName',
+                header: {
+                    label: <span>Last Name</span>
+                },
+                cell: {formatters: [cellFormatter]}
+            },
+            {
+                property: 'screenName',
+                header: {
+                    label: <span>Screen Name</span>
+                },
+                cell: {formatters: [cellFormatter]}
+            },
+            {
+                property: 'email',
+                header: {
+                    label: <span>Email</span>
+                },
+                cell: {formatters: [cellFormatter]}
+            },
+            {
+                property: 'userId',
+                header: {
+                    label: <span>User ID</span>
+                },
+                cell: {formatters: [cellFormatter]}
+            }
         ];
         return columns;
     },
 
     render() {
-        const cellFormatter = (cellData) => {return <span>{cellData}</span>};
+        const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
         return (
             <div className="userManagementContainer">

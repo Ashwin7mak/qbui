@@ -114,14 +114,16 @@ let TablesList = React.createClass({
     },
     getTopLinksItem() {
         const appHomePageSelected = !this.props.selectedTableId && !WindowLocationUtils.searchIncludes("settings");
-        const appSettingsPageSelected = (appHomePageSelected == false) && WindowLocationUtils.searchIncludes("settings");
+        /*
+         * comment this back out once we fix the state of app home button this will hide settings page from users (even though url is accessible)
+         * const appSettingsPageSelected = (appHomePageSelected === false) && WindowLocationUtils.searchIncludes("settings");
+         * {this.getNavItem('app.settings', `/qbase/app/${this.props.selectedAppId}/settings`,'settings', appSettingsPageSelected)}
+         */
 
         return (
         <li className="horizontal">
             <ul className="topLinks">
                 {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
-                {this.getNavItem('app.settings', `/qbase/app/${this.props.selectedAppId}/settings`,
-                    'settings', appSettingsPageSelected)}
             </ul>
         </li>);
     },

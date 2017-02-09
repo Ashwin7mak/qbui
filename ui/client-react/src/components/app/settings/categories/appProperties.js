@@ -29,7 +29,7 @@ const AppProperties = React.createClass({
     render() {
         var fields = [];
         var properties = ["dateFormat", "firstDayOfWeek", "id", "name", "numberFormat", "timeZone"];
-        for (var c = 0; c < properties.length; c++){
+        for (var c = 0; c < properties.length; c++) {
             fields.push(this.createField(properties[c]));
         }
         return (
