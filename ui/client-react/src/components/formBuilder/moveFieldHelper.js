@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Logger from '../../utils/logger';
 
 /**
  * A helper class to move a field from one location in teh FormMetaData to another place in the data.
@@ -6,6 +7,10 @@ import _ from 'lodash';
  */
 const MoveFieldHelper = {
     moveField(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
+        if (!hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps)) {
+            return formMeta;
+        }
+
         let formMetaCopy = _.cloneDeep(formMeta);
 
         removeElementFromCurrentSection(formMetaCopy, draggedItemProps);
@@ -16,6 +21,33 @@ const MoveFieldHelper = {
 };
 
 // -- PRIVATE METHODS
+function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
+    let errors = [];
+    const baseMessage = 'MoveFieldHelper Error:';
+
+    if (!formMeta || !_.isObject(formMeta)) {
+        errors.push(`${baseMessage} formMeta is required and must be an object`);
+    }
+
+    if (!_.isInteger(newTabIndex) || !_.isInteger(newSectionIndex) || !_.isInteger(newOrderIndex)) {
+        errors.push(`${baseMessage} newTabIndex, newSectionIndex, and newOrderIndex are required and must be an integer`);
+    }
+
+    if (!draggedItemProps || !_.isObject(draggedItemProps)) {
+        errors.push(`${baseMessage} draggedItemProps is required and must be an object`);
+    } else {
+        let {tabIndex, sectionIndex, orderIndex, element} = draggedItemProps;
+        if (!_.isInteger(tabIndex) || !_.isInteger(sectionIndex) || !_.isInteger(orderIndex) || !_.isObject(element)) {
+            errors.push(`${baseMessage} draggedItemProps must have the following properties: tabIndex, sectionIndex, orderIndex, element`);
+        }
+    }
+
+    let logger = new Logger(); // Rewire won't work during testing if this is defined at the top of the file
+    errors.forEach(error => logger.error(error));
+
+    return (errors.length === 0);
+}
+
 /**
  * Convert the elements object into an array that is easier to sort and filter
  * @param elementsObject

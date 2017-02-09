@@ -433,7 +433,7 @@ describe('MoveFieldHelper', () => {
                     {orderIndex: 4, fieldId: fourthFieldId}
                 ],
                 expectFieldToBeRemoved: true
-            },
+            }
         ];
 
         testCases.forEach(testCase => {
@@ -455,5 +455,36 @@ describe('MoveFieldHelper', () => {
                 }
             });
         });
+
+        describe('check for missing arguments', () => {
+            let errors = [];
+            class mockLogger {
+                error(message) {
+                    errors.push(message);
+                }
+            }
+
+            beforeEach(() => {
+                errors = [];
+                MoveFieldHelper.__Rewire__('Logger', mockLogger);
+            });
+
+            afterEach(() => {
+                MoveFieldHelper.__ResetDependency__('Logger');
+            });
+
+            it('logs errors if the required arguments are not passed in', () => {
+                MoveFieldHelper.moveField();
+
+                expect(errors.length).toEqual(3);
+            });
+
+            it('returns errors if the draggedItemProps is missing required properties', () => {
+                MoveFieldHelper.moveField({}, 2, 3, 4, {});
+
+                expect(errors.length).toEqual(1);
+            });
+        });
+
     });
 });
