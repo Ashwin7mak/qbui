@@ -59,8 +59,8 @@ If nvm and node were successfully installed, skip the next section about install
 
 ##### Tip for NVM and Zsh
 
-If you used NVM and also use [OhMyZsh](https://github.com/robbyrussell/oh-my-zsh) to manage your terminal you can add 
-the following script to your `~/.zshconfig` file to automatically switch to the correct node version when you go to the `qbui/ui` folder.
+You can add the following script to your `~/.zshconfig` file to automatically switch to the correct node version for the qbui project
+when you `cd` into the `qbui/ui` folder if you used NVM (see above) and also use [OhMyZsh](https://github.com/robbyrussell/oh-my-zsh).
 
 ``` bash
 # place this after nvm initialization!
