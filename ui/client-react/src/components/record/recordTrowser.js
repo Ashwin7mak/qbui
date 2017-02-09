@@ -85,7 +85,6 @@ export const RecordTrowser = React.createClass({
         return (
             <div className={"centerActions"} />);
     },
-    
     /**
      * navigate to new record if appropriate
      */
@@ -279,26 +278,6 @@ export const RecordTrowser = React.createClass({
             </div>);
 
     },
-
-    hideTrowser() {
-        WindowLocationUtils.pushWithoutQuery();
-
-        this.props.onHideTrowser();
-    },
-
-    saveAndClose() {
-        HideAppModal();
-        this.saveClicked();
-    },
-
-    clearEditsAndClose() {
-        const flux = this.getFlux();
-
-        HideAppModal();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
-        WindowLocationUtils.pushWithoutQuery();
-        this.props.onHideTrowser();
-    },
     getTrowserRightIcons() {
         const errorFlg = this._hasErrorsAndAttemptedSave();
 
@@ -320,6 +299,25 @@ export const RecordTrowser = React.createClass({
                 }
                 <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
+    },
+    hideTrowser() {
+        WindowLocationUtils.pushWithoutQuery();
+
+        this.props.onHideTrowser();
+    },
+
+    saveAndClose() {
+        HideAppModal();
+        this.saveClicked();
+    },
+
+    clearEditsAndClose() {
+        const flux = this.getFlux();
+
+        HideAppModal();
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
+        WindowLocationUtils.pushWithoutQuery();
+        this.props.onHideTrowser();
     },
 
     cancelEditing() {
