@@ -87,6 +87,9 @@ load-nvmrc
 ```
 See more about this at https://github.com/creationix/nvm
 
+*Note:* Don't have Zsh? That's ok. You can use the command `nvm use` when you are in the `qbui/ui` directly 
+to automatically switch to the correct version of Node.
+
 #### Install Node and configure global node modules
 
 * Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
