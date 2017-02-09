@@ -3,12 +3,19 @@ import {MenuItem, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 
+const actionPropType = React.PropTypes.shape({
+    icon: React.PropTypes.string.isRequired,
+    msg: React.PropTypes.string.isRequired,
+    link: React.PropTypes.string
+});
+
 let BuilderDropDownAction = React.createClass({
+
     propTypes: {
         actions: React.PropTypes.arrayOf(actionPropType),
         formBuilderIcon: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired,
-        recId: React.PropTypes.number,
+        recId: React.PropTypes.string,
         navigateToBuilder: React.PropTypes.func.isRequired,
         position: React.PropTypes.string.isRequired,
     },
