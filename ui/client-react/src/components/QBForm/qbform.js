@@ -29,7 +29,6 @@ let QBForm = React.createClass({
     },
 
     propTypes: {
-        editing: React.PropTypes.bool,
         editingForm: React.PropTypes.bool,
         activeTab: React.PropTypes.string,
         formData: React.PropTypes.shape({
@@ -67,21 +66,22 @@ let QBForm = React.createClass({
 
         const colSpan = isLast ? 100 : 1;
 
-        // const leftLabel = labelPosition === QBForm.LABEL_LEFT;
-        const leftLabel = false; // Turn off left labels for now
+        // Turn off left labels to get Drag & Drop Working.
+        // Fix with: https://quickbase.atlassian.net/browse/MC-171
+        const leftLabel = false;
 
         const cells = [];
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
-        }else if (element.FormFieldElement) {
+        } else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
             if (leftLabel) {
                 cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
             }
             cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, !leftLabel, colSpan, validationStatus));
-        }else if (element.ReferenceElement) {
-            if (labelPosition === QBForm.LABEL_LEFT) {
+        } else if (element.ReferenceElement) {
+            if (leftLabel) {
                 cells.push(this.createFieldLabelCell(element.ReferenceElement, orderIndex, {}));
             }
             cells.push(this.createChildReportElementCell(element.ReferenceElement, orderIndex, colSpan));
