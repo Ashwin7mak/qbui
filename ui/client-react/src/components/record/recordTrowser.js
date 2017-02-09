@@ -17,6 +17,7 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
+import {APP_ROUTE} from '../../constants/urlConstants';
 
 import './recordTrowser.scss';
 
@@ -91,7 +92,7 @@ export const RecordTrowser = React.createClass({
 
         if (this.props.reportData && this.props.reportData.navigateAfterSave) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`/qbase/app/${appId}/table/${tblId}/record/${recId}`);
+            this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 

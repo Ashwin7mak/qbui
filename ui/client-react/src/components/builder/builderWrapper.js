@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import FormBuilder from './formBuilder';
+import FormBuilderContainer from './formBuilderContainer';
 
 
 const BuilderWrapper = React.createClass({
@@ -11,10 +11,12 @@ const BuilderWrapper = React.createClass({
         const {appId, tblId} = this.props.params;
         const formType = this.props.location.query.formType;
 
-        return <FormBuilder appId={appId}
-                            tblId={tblId}
-                            formType={formType}
-                            formId={formId}/>;
+        return <FormBuilderContainer
+            appId={appId}
+            tblId={tblId}
+            formType={formType}
+            formId={formId}
+        />;
     }
 });
 

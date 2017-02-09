@@ -1,6 +1,7 @@
 import React from 'react';
 import './apps.css';
 import sortBy from 'lodash/sortBy.js';
+import {APP_ROUTE} from '../../constants/urlConstants';
 
 var Content = React.createClass({
 
@@ -15,7 +16,7 @@ var Content = React.createClass({
                                 <ul className="tables">
                                     {sortBy(app.tables, ['name']).map((table) => {
                                         let tblName = table.name + ' (' + table.id + ')';
-                                        let href = `/qbase/app/${app.id}/table/${table.id}`;
+                                        let href = `${APP_ROUTE}/${app.id}/table/${table.id}`;
                                         return (
                                             <li key={table.id}>
                                                 <div><a href={href}>{tblName}</a></div>
