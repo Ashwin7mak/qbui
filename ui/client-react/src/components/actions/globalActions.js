@@ -145,7 +145,7 @@ let GlobalActions = React.createClass({
         // "dropdownToggle globalActionLink formBuilder"
         let eventKeyIdx = 20;
         let isFormView = this.props.recId ? true : false;
-        let isDisabled = isFormView ? "" : "dropdownToggle formBuilder disabled btn";
+        let isDisabled = isFormView ? "dropdownToggle globalActionLink formBuilder" : "dropdownToggle formBuilder disabled btn";
         const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
 
         return (
