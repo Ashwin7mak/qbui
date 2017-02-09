@@ -62,8 +62,10 @@ consts = require('../../common/src/constants.js');
         var table5Name = 'All Required';
         var table6Name = 'Durations';
         var table7Name = 'Unique Fields';
-        var table8Name = 'REL by ID (Parent)';
-        var table9Name = 'REL by ID (Child)';
+        var table8Name = 'Parent Table 1';
+        var table9Name = 'Child Table 1';
+        var table10Name = 'Parent Talbe 2';
+        var table11Name = 'Child Table 2';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -394,12 +396,20 @@ consts = require('../../common/src/constants.js');
 
         tableToFieldToFieldTypeMap[table8Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
 
         tableToFieldToFieldTypeMap[table9Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
 
+        tableToFieldToFieldTypeMap[table10Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+
+        tableToFieldToFieldTypeMap[table11Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
+        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent2 ID', {unique: false});
 
         return tableToFieldToFieldTypeMap;
     }
@@ -417,6 +427,10 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
@@ -459,12 +473,29 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             // Numeric key entry for the relationship's child table corresponds to a parent's recordId.
             // These need to be integers in the range of 1~n, n being the number of parent records
+            // We also want these to be consistent, as opposed to randomly generated numbers, for
+            // testing purposes.
             var fieldToEdit = app.tables[e2eConsts.TABLE8].fields[6];
             var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
             return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE8].id, editRecords);
         }).then(function() {
-            //Create tables relationship
+            // TABLE10 has 2 parents, set first numeric field
+            var fieldToEdit = app.tables[e2eConsts.TABLE10].fields[6];
+            var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords);
+        }).then(function() {
+            // TABLE10 has 2 parents, set 2nd numeric field
+            var fieldToEdit = app.tables[e2eConsts.TABLE10].fields[7];
+            var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords);
+        }).then(function() {
+            // Create tables relationship, table 8 is a child of table 7
             return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8], 7);
+        }).then(function() {
+            // table 10 is a child of both table 7 and table 9
+            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE10], 7);
+        }).then(function() {
+            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE9], app.tables[e2eConsts.TABLE10], 8);
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)
