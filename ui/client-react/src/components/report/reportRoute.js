@@ -16,6 +16,7 @@ import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import {APP_ROUTE} from '../../constants/urlConstants';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -112,7 +113,7 @@ const ReportRoute = React.createClass({
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.params;
-        const tableLink = `/qbase/app/${appId}/table/${tblId}`;
+        const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 

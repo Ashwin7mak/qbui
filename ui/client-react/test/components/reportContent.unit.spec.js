@@ -1,18 +1,14 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
-import {CardViewListHolder} from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
-import {reactCellRendererFactory} from 'ag-grid-react';
-import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 import _ from 'lodash';
 import Locales from '../../src/locales/locales';
 import * as SchemaConsts from '../../src/constants/schema';
 import * as GroupTypes from '../../../common/src/groupTypes';
-import LimitConstants from '../../../common/src/limitConstants';
 import Promise from 'bluebird';
+import {APP_ROUTE} from '../../src/constants/urlConstants';
 
-import Breakpoints from '../../src/utils/breakpoints';
 
 //TODO Code hygiene: Clean up names with underscores, replace with camelcase. Tracked at https://quickbase.atlassian.net/browse/MB-501
 var LocalesMock = {
@@ -1555,7 +1551,7 @@ describe('ReportContent functions', () => {
                                                                 router={[]}
                                                                 recordsCount={100}/>);
         component.openRow({RecId: {value: 2}});
-        expect(component.props.router).toContain('/qbase/app/123/table/456/report/2/record/2');
+        expect(component.props.router).toContain(`${APP_ROUTE}/123/table/456/report/2/record/2`);
     });
 
     describe('handleRecordDelete', () => {
