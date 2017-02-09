@@ -85,6 +85,7 @@ export const RecordTrowser = React.createClass({
         return (
             <div className={"centerActions"} />);
     },
+
     /**
      * navigate to new record if appropriate
      */
@@ -286,7 +287,7 @@ export const RecordTrowser = React.createClass({
         const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
         return (
             <div className="saveButtons">
-                    {errorFlg &&
+                {errorFlg &&
                     <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
                         <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
                     </OverlayTrigger>
@@ -300,6 +301,7 @@ export const RecordTrowser = React.createClass({
                 <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
+
     hideTrowser() {
         WindowLocationUtils.pushWithoutQuery();
 
