@@ -18,6 +18,7 @@ import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {APP_ROUTE} from '../../constants/urlConstants';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
 
@@ -352,10 +353,14 @@ export const RecordTrowser = React.createClass({
             <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     rightIcons={this.getTrowserRightIcons()}
                      onCancel={this.cancelEditing}
-                     content={this.getTrowserContent()} />
+                     content={this.getTrowserContent()} >
+                <SaveOrCancelFooter
+                    rightAlignedButtons={this.getTrowserRightIcons()}
+                    centerAlignedButtons={this.getTrowserActions()}
+                    leftAlignedButtons={this.getTrowserActions()}
+                />
+            </Trowser>
         );
     }
 });
