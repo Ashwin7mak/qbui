@@ -6,33 +6,12 @@
     display: flex;
     flex-direction: row;
 
-    //.navTopHeader, .formBuilder, .toolPaletteContainer, .saveOrCancelFooter, .fieldPropertiesContainer {
-    //    //flex: 1 100%;
-    //}
-
-    //.navTopHeader {
-    //    width: 100%
-    //}
-    //
-    .toolPaletteContainer {
-        //order: 2
-        align-items: stretch ;
-    }
-    //
-    //.formBuilder {
-    //    order: 2;
-    //}
-    //
-    //.fieldPropertiesContainer {
-    //    order: 2;
-    //}
-    //
     .saveOrCancelFooter {
         position: absolute;
         bottom: 0;
         right: 30px;
-        width: 280px;
-        background-color: #e3eaf3;
+        width: 100%;
+        color: $color-black-100;
     }
 
 
@@ -41,7 +20,6 @@
         flex: 0 0 auto;
         flex-basis: 40px;
         display: flex;
-        order: 1;
         flex-direction: column;
         background-color: #e3eaf3;
         .topNav {
