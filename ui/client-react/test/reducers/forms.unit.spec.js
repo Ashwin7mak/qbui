@@ -36,7 +36,7 @@ describe('Forms reducer functions', () => {
             expect(reducer(syncFormState, {id:'view', type: types.SYNC_FORM})).toEqual([{
                 id:'view',
                 syncLoadedForm: true,
-                formData:'someData',
+                formData:'someData'
             }]);
         });
     });
@@ -116,6 +116,35 @@ describe('Forms reducer functions', () => {
                 id: 'edit',
                 saving: false,
                 errorStatus:null
+            }]);
+        });
+    });
+
+    let VIEW = 'view';
+    describe('Update form functions', () => {
+        let savingFormState = [{
+            id: VIEW,
+            saving: true,
+            errorStatus: null
+        }];
+
+        it('returns correct state when creating/updating a form', () => {
+            expect(reducer(initialState, {id: VIEW, type: types.SAVING_FORM})).toDeepEqual(savingFormState);
+        });
+
+        it('returns correct state when creating/updating a form error occurs', () => {
+            expect(reducer(savingFormState, {id: VIEW, type: types.SAVING_FORM_ERROR, content: 'bah'})).toDeepEqual([{
+                id: VIEW,
+                saving: false,
+                errorStatus: 'bah'
+            }]);
+        });
+
+        it('returns correct state when creating/updating a form succeeds', () => {
+            expect(reducer(savingFormState, {id: VIEW, type: types.SAVING_FORM_SUCCESS, content:'data'})).toDeepEqual([{
+                id: VIEW,
+                saving: false,
+                formData: 'data'
             }]);
         });
     });
