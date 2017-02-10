@@ -18,7 +18,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  * The NavStore updates the locale and the AppsStore selects the appId.
  * */
 const BuilderWrapper = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore','AppsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
 
     getStateFromFlux() {
         let flux = this.getFlux();
