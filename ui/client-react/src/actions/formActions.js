@@ -11,6 +11,7 @@ import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
+import {NEW_FORM_RECORD_ID} from '../constants/schema';
 
 let logger = new Logger();
 
@@ -70,6 +71,7 @@ export const syncForm = (id) => {
  * @param container
  * @returns {{type, container: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const savingForm = (id) => {
     return {
         id,
@@ -83,6 +85,7 @@ export const savingForm = (id) => {
  * @param error error message from server
  * @returns {{type, container: *, error: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const saveFormError = (id, error) => {
     return {
         id,
@@ -96,6 +99,7 @@ export const saveFormError = (id, error) => {
  * @param container
  * @returns {{type, container: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const saveFormSuccess = (id) => {
     return {
         id,
@@ -149,8 +153,6 @@ export const editNewRecord = (navigateAfterSave = false) => {
  */
 export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
-    const NEW_RECORD_ID = "new";
-
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 
@@ -167,7 +169,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
             let promise;
 
-            if (recordId === NEW_RECORD_ID) {
+            if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
 
             } else {
@@ -177,7 +179,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             promise.then(response => {
                 response.data.formType = formType;
 
-                if (recordId === NEW_RECORD_ID) {
+                if (recordId === NEW_FORM_RECORD_ID) {
                     response.data.record = null;
                 } else {
                     response.data.recordId = recordId;
@@ -223,6 +225,16 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     });
                 }
 
+                ////  TODO: for testing..will remove when action is hooked up to react ui
+                //updateForm(appId, tblId, formType, response.data.formMeta).then(
+                //    (resp) => {
+                //        logger.debug('success');
+                //    },
+                //    (fail) => {
+                //        logger.debug('failure');
+                //    }
+                //);
+
                 dispatch(loadFormSuccess(formType, response.data));
 
                 resolve();
@@ -256,3 +268,79 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
         });
     };
 };
+
+/**
+ * Create a new form
+ *
+ * @param appId
+ * @param tblId
+ * @param formType
+ * @param form
+ */
+export const createForm = (appId, tblId, formType, form) => {
+    return saveForm(appId, tblId, formType, form, true);
+};
+
+/**
+ * Update an existing form layout
+ *
+ * @param appId
+ * @param tblId
+ * @param formType
+ * @param form
+ */
+export const updateForm = (appId, tblId, formType, form) => {
+    return saveForm(appId, tblId, formType, form, false);
+};
+
+// we're returning a promise to the caller (not a Redux action) since this is an async action
+// (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+function saveForm(appId, tblId, formType, form, isNew) {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId) {
+                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
+
+                //  TODO: refactor once record events are moved out..
+                dispatch(event(formType, types.SAVING_FORM));
+
+                let formService = new FormService();
+
+                let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
+                formPromise.then(
+                    (response) => {
+                        logger.debug('FormService saveForm success');
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
+                        dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+                        reject(error);
+                    }
+                ).catch((ex) => {
+                    logger.logException(ex);
+                    reject(ex);
+                });
+            } else {
+                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
+                reject();
+            }
+        });
+    };
+}
+
+/*
+ Redux event for saving a form
+ TODO: refactor once record events moved
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
+

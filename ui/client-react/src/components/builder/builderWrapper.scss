@@ -1,0 +1,39 @@
+@import '../../../src/assets/css/qbVariables';
+
+.builderWrapperContent {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    opacity: 1;
+    max-width: 1440px;
+
+    .builderWrapperChildren {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        overflow: auto;
+    }
+
+    .main {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        .topNav {
+            z-index: 10;
+            min-width: 200px;
+            flex: 0 0 auto;
+            flex-basis: $top-nav-height;
+            display: flex;
+            order: 1;
+            flex-direction: column;
+            background-color: $topnav-header-background-color;
+            text-align: right;
+        }
+    }
+}

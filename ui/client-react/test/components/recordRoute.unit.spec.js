@@ -7,6 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
 import {loadingForm} from '../../src/actions/formActions';
+import {APP_ROUTE} from '../../src/constants/urlConstants';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -164,64 +165,16 @@ describe('RecordRoute', () => {
             // previous record
             TestUtils.Simulate.click(prevRecord[0]);
             expect(flux.actions.showPreviousRecord).toHaveBeenCalled();
-            expectedRouter.push('/qbase/app/1/table/2/report/3/record/1');
+            expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3/record/1`);
 
             // next record
             TestUtils.Simulate.click(nextRecord[0]);
             expect(flux.actions.showNextRecord).toHaveBeenCalled();
-            expectedRouter.push('/qbase/app/1/table/2/report/3/record/3');
+            expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3/record/3`);
 
             // return to report
             TestUtils.Simulate.click(returnToReport[0]);
-            expectedRouter.push('/qbase/app/1/table/2/report/3');
-
-            expect(router).toEqual(expectedRouter);
-        });
-    });
-    describe('navigateToBuilder function', () => {
-
-        it('should render a component without form type or form id', () => {
-            const initialState = {};
-            const store = mockStore(initialState);
-
-            let routeParams = {appId: 1, tblId: 2, rptId: 3, recordId: 2};
-            let router = [];
-            let expectedRouter = [];
-
-            component = TestUtils.renderIntoDocument(
-                <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
-                </Provider>);
-
-            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-            let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
-
-            TestUtils.Simulate.click(formBuilder[0]);
-            expectedRouter.push('/qbase/builder/app/1/table/2/form');
-
-            expect(router).toEqual(expectedRouter);
-        });
-
-        it('should render a component with a form type', () => {
-            const initialState = {forms: [{id: 'view'}]};
-            const store = mockStore(initialState);
-
-            let routeParams = {appId: 1, tblId: 2, rptId: 3, recordId: 2};
-            let router = [];
-            let expectedRouter = [];
-
-            component = TestUtils.renderIntoDocument(
-                <Provider store={store}>
-                    <ConnectedRecordRoute params={routeParams} flux={flux} router={router}/>
-                </Provider>);
-
-            expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-            let formBuilder = TestUtils.scryRenderedDOMComponentsWithClass(component, "formBuilderButton");
-
-            TestUtils.Simulate.click(formBuilder[0]);
-            expectedRouter.push('/qbase/builder/app/1/table/2/form?formType=view');
+            expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3`);
 
             expect(router).toEqual(expectedRouter);
         });

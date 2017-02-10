@@ -1,0 +1,66 @@
+@import '../../../src/assets/css/qbVariables';
+
+
+.saveOrCancelFooter {
+    color: $color-black-100;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    background-color: $trowser-footer-background-color;
+    padding: 3px 0;
+    z-index: 10;
+
+    .leftActions {
+        flex: 0 0 auto;
+    }
+
+    .centerActions {
+        display: flex;
+        flex: 1 1 auto;
+        justify-content: center;
+        align-items: center;
+
+        a {
+            display: flex;
+            height: 23px;
+            line-height: 23px;
+            padding: 0 30px;
+            color: $color-black-100;
+            border-left: 1px solid $trowser-action-separator-color;
+            text-decoration: none;
+            align-items: center;
+
+            .qbIcon {
+                font-size: 16px;
+                margin-right: 10px;
+            }
+        }
+
+        a:last-child {
+            border-right: 1px solid $trowser-action-separator-color;
+        }
+    }
+
+    .rightIcons {
+        flex: 0 0 auto;
+        align-self: center;
+
+        button {
+            margin: 4px 10px 4px 4px;
+        }
+        display: flex;
+    }
+
+    .saveAlertButton {
+        font-size: 22px;
+        align-self: center;
+        color: $color-red-700;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        background-color: transparent;
+        border-color: transparent;
+        margin: 4px 0px 0px 4px;
+        padding: 0 0px 0px 1px;
+    }
+}
