@@ -225,7 +225,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     });
                 }
 
-                ////  TODO: for testing..remember to remove
+                ////  TODO: for testing..will remove when action is hooked up to react ui
                 //updateForm(appId, tblId, formType, response.data.formMeta).then(
                 //    (resp) => {
                 //        logger.debug('success');

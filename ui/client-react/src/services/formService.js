@@ -78,7 +78,7 @@ class FormService extends BaseService {
      *
      * @param appId
      * @param tableId
-     * @param form
+     * @param form - the new form object
      */
     createForm(appId, tableId, form) {
         let url = super.constructUrl(this.API.GET_FORMS, [appId, tableId]);
@@ -86,11 +86,11 @@ class FormService extends BaseService {
     }
 
     /**
-     * Update a form
+     * Update an existing form
      *
      * @param appId
      * @param tableId
-     * @param form
+     * @param form - the updated form object
      */
     updateForm(appId, tableId, form) {
         // get the form id from the form object
