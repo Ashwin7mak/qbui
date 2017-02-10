@@ -29,24 +29,16 @@ describe('Form Actions load form error functions', () => {
     class mockFormService {
         constructor() { }
         getFormAndRecord() {
-            var p = Promise.defer();
-            p.reject({response:{message:'someError', status:errorStatus}});
-            return p.promise;
+            return Promise.reject({response:{message:'someError', status:errorStatus}});
         }
         getForm() {
-            var p = Promise.defer();
-            p.reject({response:{message:'someError', status:errorStatus}});
-            return p.promise;
+            return Promise.reject({response:{message:'someError', status:errorStatus}});
         }
         updateForm() {
-            var p = Promise.defer();
-            p.reject({response:{message:'someError', status:errorStatus}});
-            return p.promise;
+            return Promise.reject({response:{message:'someError', status:errorStatus}});
         }
         createForm() {
-            var p = Promise.defer();
-            p.reject({response:{message:'someError', status:errorStatus}});
-            return p.promise;
+            return Promise.reject({response:{message:'someError', status:errorStatus}});
         }
     }
 

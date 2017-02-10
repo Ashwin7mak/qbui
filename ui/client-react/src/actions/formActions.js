@@ -316,11 +316,11 @@ function saveForm(appId, tblId, formType, form, isNew) {
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
                         dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
-                        reject();
+                        reject(error);
                     }
                 ).catch((ex) => {
                     logger.logException(ex);
-                    reject();
+                    reject(ex);
                 });
             } else {
                 logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
