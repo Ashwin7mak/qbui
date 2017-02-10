@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import AppSettingsHome  from '../../../../src/components/app/settings/appSettingsHome';
 
-describe('AppSettingsRoute functions', () => {
+describe('AppSettingsHome functions', () => {
     'use strict';
 
 

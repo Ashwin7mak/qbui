@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import SettingsMenuItem  from '../../../../src/components/app/settings/settingsMenuItem';
 
-describe('AppSettingsRoute functions', () => {
+describe('SettingsMenuItem functions', () => {
     'use strict';
 
     const title = 'Users';
