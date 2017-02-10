@@ -13,7 +13,7 @@ describe('AppSettingsRoute functions', () => {
         {userId: 2, firstName: 'Tony', lastName: 'Stark'},
         {userId: 3, firstName: 'Steve', lastName: 'Rogers'}
     ];
-    const setting = "users"
+    const setting = "users";
     const settingsLinkWithParameter = `/qbase/app/${appId}/${setting}`;
     const settingsLinkWithoutParameter = `/qbase/app/${appId}/`;
 

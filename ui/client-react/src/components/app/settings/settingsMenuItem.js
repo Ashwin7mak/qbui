@@ -9,7 +9,6 @@ import './settingsMenuItem.scss';
 const SettingsMenuItem = React.createClass({
 
     propTypes: {
-        appId: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         subTitle: PropTypes.string,
         icon: PropTypes.string.isRequired,

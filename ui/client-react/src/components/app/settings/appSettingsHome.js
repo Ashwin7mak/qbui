@@ -20,34 +20,28 @@ const AppSettingsHome = React.createClass({
     render() {
         return (
             <div className="appSettingsHomeContainer">
-                <SettingsMenuItem appId={this.props.appId}
-                                  title="Roles"
+                <SettingsMenuItem title="Roles"
                                   subTitle="Manage the roles in this app"
                                   icon="thumbs-up"
                 />
-                <SettingsMenuItem appId={this.props.appId}
-                                  title="Tables"
+                <SettingsMenuItem title="Tables"
                                   subTitle="Manage the tables in this app"
                                   icon="report-table"
                 />
-                <SettingsMenuItem appId={this.props.appId}
-                                  title="App Properties"
+                <SettingsMenuItem title="App Properties"
                                   subTitle="Manage the properties of this app"
                                   icon="settings"
                                   link={this.constructSettingsLink("properties")}
                 />
-                <SettingsMenuItem appId={this.props.appId}
-                                  title="Pages"
+                <SettingsMenuItem title="Pages"
                                   subTitle="Manage the pages in this app"
                                   icon="report-menu-4"
                 />
-                <SettingsMenuItem appId={this.props.appId}
-                                  title="Branding"
+                <SettingsMenuItem title="Branding"
                                   subTitle="Customize the appearance of your app"
                                   icon="favicon"
                 />
-                <SettingsMenuItem appId={this.props.appId}
-                                  title="Users"
+                <SettingsMenuItem title="Users"
                                   subTitle="Add/Remove Users in this app"
                                   icon="users"
                                   link={this.constructSettingsLink("users")}
