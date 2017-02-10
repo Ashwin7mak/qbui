@@ -4,6 +4,9 @@
 import React, {PropTypes} from 'react';
 import './appProperties.scss';
 
+const propertiesToDisplay = ["dateFormat", "firstDayOfWeek", "id", "name", "numberFormat", "timeZone"];
+const displayProps = {dateFormat: "Date Format", firstDayOfWeek: "First Day of the Week", id: "id",
+                      name: "Name", numberFormat: "Number Format", timeZone: "Time Zone"};
 const AppProperties = React.createClass({
 
     propTypes: {
@@ -20,18 +23,18 @@ const AppProperties = React.createClass({
     createField(curProperty) {
         return (
             <div className="field">
-                <h5 className={"fieldLabel"}>{curProperty}</h5>
+                <h5 className={"fieldLabel"}>{displayProps[curProperty]}</h5>
                 {this.createSpan(curProperty)}
             </div>
         );
     },
 
     render() {
-        var fields = [];
-        var properties = ["dateFormat", "firstDayOfWeek", "id", "name", "numberFormat", "timeZone"];
-        for (var c = 0; c < properties.length; c++) {
-            if (this.props.selectedApp.hasOwnProperty(properties[c])) {
-                fields.push(this.createField(properties[c]));
+        let fields = [];
+        let keys = Object.keys(displayProps);
+        for (var c = 0; c < keys.length; c++) {
+            if (this.props.selectedApp.hasOwnProperty(keys[c])) {
+                fields.push(this.createField(keys[c]));
             }
         }
         return (

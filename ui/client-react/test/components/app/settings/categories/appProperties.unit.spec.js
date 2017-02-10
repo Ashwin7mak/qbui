@@ -5,7 +5,6 @@ import AppProperties  from '../../../../../src/components/app/settings/categorie
 describe('AppProperties functions', () => {
     'use strict';
 
-
     const selectedAppNoProperties = {duder: 1, shield: 'Washington'};
     const selectedApp = {dateFormat: "MM-dd-uuuu", firstDayOfWeek: "Sunday", id: "1", name: "Dat App",
                          numberFormat: "12,345,678.00", timeZone: "America/Los_Angeles"};
