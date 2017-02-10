@@ -27,9 +27,9 @@
         //edit Form
         editFormContainerEl : {get: function() {return browser.element('form.editForm');}},
         //form footer save buttons(there will be 2 buttons)
-        editFormSaveBtns : {get: function() {return browser.elements('.trowserFooter .rightIcons .saveButtons button');}},
+        editFormSaveBtns : {get: function() {return browser.elements('.saveOrCancelFooter .rightIcons .saveButtons button');}},
         //form footer alert button
-        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.trowserFooter .iconTableUISturdy-alert');}},
+        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.saveOrCancelFooter .iconTableUISturdy-alert');}},
 
         //edit pencil in view form
         editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
