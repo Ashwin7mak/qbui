@@ -311,11 +311,19 @@ function saveForm(appId, tblId, formType, form, isNew) {
                     (response) => {
                         logger.debug('FormService saveForm success');
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+
+                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
                         dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+
+                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+
                         reject(error);
                     }
                 ).catch((ex) => {

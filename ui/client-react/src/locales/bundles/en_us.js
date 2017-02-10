@@ -170,6 +170,12 @@ export default {
                 lastUpdatedBy: "Last updated by ",
                 createdOn: "Created on ",
                 ownedBy: "Owned by "
+            },
+            notification: {
+                save: {
+                    success: "Form saved",
+                    error: "Error saving form"
+                }
             }
         },
         durationWithUnits: {
