@@ -73,7 +73,6 @@ export let Nav = React.createClass({
 
         let formType;
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/form`;
-        console.log('linK: ', link);
 
         if (this.props.qbui && this.props.qbui.forms && this.props.qbui.forms[0]) {
             formType = this.props.qbui.forms[0].id;
