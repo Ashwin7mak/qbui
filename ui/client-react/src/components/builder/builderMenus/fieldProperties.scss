@@ -1,5 +1,13 @@
 @import '../../../../src/assets/css/qbVariables';
 
 .fieldPropertiesContainer {
-
+  width: 220px;
+  heigth: 100%;
+  background-color: #193048;
+  //display: flex;
+  flex-direction: column;
+  //flex: 1 100%;
+  color: #ffffff;
+  //position: relative;
+  //order: 1;
 }

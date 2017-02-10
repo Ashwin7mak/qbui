@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import './toolPalette.scss';
+import './fieldProperties.scss';
 
 let FieldProperties = React.createClass({
     propTypes: {

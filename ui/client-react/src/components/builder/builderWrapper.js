@@ -8,6 +8,8 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import GlobalActions from '../actions/globalActions';
 import {NotificationContainer} from "react-notifications";
 import AppHistory from '../../globals/appHistory';
+import ToolPalette from './builderMenus/toolPalette';
+import FieldProperties from './builderMenus/fieldProperties';
 
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -86,18 +88,21 @@ const BuilderWrapper = React.createClass({
 
         return (
             <div className="builderWrapperContent" >
-                <div className="main">
+                <div className="navTopHeader">
                     <div className="topNav">
                     {this.getTopGlobalActions()}
                      <NotificationContainer/>
                 </div>
             </div>
+                <ToolPalette />
 
                 <FormBuilderContainer
                 appId={appId}
                 tblId={tblId}
                 formType={formType}
                 formId={formId} />
+
+                <FieldProperties />
 
                 {this.getSaveOrCancelFooter()}
             </div>
