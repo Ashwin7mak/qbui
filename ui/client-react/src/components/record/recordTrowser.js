@@ -357,8 +357,8 @@ export const RecordTrowser = React.createClass({
                      content={this.getTrowserContent()} >
                 <SaveOrCancelFooter
                     rightAlignedButtons={this.getTrowserRightIcons()}
-                    centerAligendButtons={this.getTrowserActions()}
-                    leftAligendBUttons={this.getTrowserActions()}
+                    centerAlignedButtons={this.getTrowserActions()}
+                    leftAlignedButtons={this.getTrowserActions()}
                 />
             </Trowser>
         );

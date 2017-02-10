@@ -6,11 +6,11 @@ let SaveOrCancelFooter = React.createClass({
         /**
          * left footer actions
          */
-        leftAligendBUttons: React.PropTypes.node,
+        leftAlignedButtons: React.PropTypes.node,
         /**
          * center footer actions
          */
-        centerAligendButtons: React.PropTypes.node,
+        centerAlignedButtons: React.PropTypes.node,
         /**
          * right footer icons
          */
@@ -22,10 +22,10 @@ let SaveOrCancelFooter = React.createClass({
         return (
             <div className="saveOrCancelFooter">
                 <div className="leftActions">
-                    {this.props.leftAligendBUttons}
+                    {this.props.leftAlignedButtons}
                 </div>
 
-                {this.props.centerAligendButtons}
+                {this.props.centerAlignedButtons}
 
                 <div className="rightIcons">
                     {this.props.rightAlignedButtons}
