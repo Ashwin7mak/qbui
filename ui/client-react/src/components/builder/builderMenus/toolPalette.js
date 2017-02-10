@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import './toolPalette.scss'
 
 let ToolPalette = React.createClass({
     propTypes: {
