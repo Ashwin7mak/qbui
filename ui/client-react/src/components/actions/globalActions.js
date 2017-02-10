@@ -2,7 +2,7 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
-import {MenuItem, Dropdown, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {MenuItem, Dropdown} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
