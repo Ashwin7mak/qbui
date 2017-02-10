@@ -21,7 +21,7 @@ let BuilderDropDownAction = React.createClass({
     },
 
     hasOverLayTrigger(formBuilderDropDown) {
-        const availableOnFormView = <Tooltip><I18nMessage message="unimplemented.formBuilder"/></Tooltip>;
+        const availableOnFormView = <Tooltip id="unimplemented.formBuilder.tt"><I18nMessage message="unimplemented.formBuilder"/></Tooltip>;
 
         return <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={availableOnFormView}>
             {formBuilderDropDown}
