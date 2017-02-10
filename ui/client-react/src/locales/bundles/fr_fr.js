@@ -86,6 +86,7 @@ export default {
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
             saveAndAddAnother: "Sauver et ajouter un autre",
+            cancel: "Annuler",
             new: "Nouveau"
         },
         field: {
@@ -103,7 +104,7 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            formBuilder: 'Forme Constructeur',
+            configureFormBuilder: 'Modifier ce formulaire',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -437,6 +438,7 @@ export default {
         },
         noneOption: "\<Aucun\>",
         unimplemented: {
+            formBuilder: "Configuration non disponible actuellement pour cette vue",
             search: "La recherche n'est pas encore disponible",
             favorites: "L'accès aux Favoris n'est pas encore disponible",
             makeFavorite: "Marquer comme favori n'est pas encore disponible",

@@ -2,7 +2,7 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
-import {MenuItem, Dropdown, Button} from 'react-bootstrap';
+import {MenuItem, Dropdown} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
@@ -140,6 +140,7 @@ let GlobalActions = React.createClass({
                 </Dropdown.Menu>
             </Dropdown>);
     },
+
     getHelpWalkme() {
         let touch = "ontouchstart" in window;
         if (touch) {
@@ -160,9 +161,13 @@ let GlobalActions = React.createClass({
             </a>);
     },
     render() {
+        /**
+         * This removes the hover shadow when the form builder button is disabled
+         * */
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
+                    {this.props.children}
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
