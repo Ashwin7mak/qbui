@@ -73,6 +73,8 @@
     var experienceEngineApiEndpoints = {
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
+        // TODO: Temporary until ee endpoint for put is implemented
+        FORMS                       : baseUrl.EXPERIENCE_ENGINE + '/apps/:appId/tables/:tableId/forms/:formId',
         EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*'
     };
 
