@@ -293,18 +293,6 @@ export const updateForm = (appId, tblId, formType, form) => {
     return saveForm(appId, tblId, formType, form, false);
 };
 
-/*
-    Redux event for saving a form
-    TODO: refactor once record events moved
- */
-function event(id, type, content) {
-    return {
-        id: id,
-        type: type,
-        content: content || null
-    };
-}
-
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveForm(appId, tblId, formType, form, isNew) {
@@ -340,6 +328,18 @@ function saveForm(appId, tblId, formType, form, isNew) {
                 reject();
             }
         });
+    };
+}
+
+/*
+ Redux event for saving a form
+ TODO: refactor once record events moved
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
     };
 }
 
