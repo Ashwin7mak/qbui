@@ -3,6 +3,7 @@ import {DragLayer} from 'react-dnd';
 import draggableItemTypes from './draggableItemTypes';
 import FieldToken from './fieldToken/fieldToken';
 import Locale from '../../locales/locales';
+import consts from '../../../../common/src/constants';
 
 const layerStyles = {
     cursor: 'move',
@@ -43,9 +44,9 @@ function getItemStyles(props) {
     };
 }
 
-class FormBuilderCustomDragLayer extends Component {
+export class FormBuilderCustomDragLayer extends Component {
     renderItem(type, item) {
-        let fieldType = (_.has(item, 'relatedField.datatypeAttributes.type') ? item.relatedField.datatypeAttributes.type : 'TEXT');
+        let fieldType = (_.has(item, 'relatedField.datatypeAttributes.type') ? item.relatedField.datatypeAttributes.type : consts.TEXT);
         let label = (_.has(item, 'relatedField.name') ? item.relatedField.name : Locale.getMessage(`builder.fields.${fieldType}`));
 
         switch (type) {
@@ -65,7 +66,7 @@ class FormBuilderCustomDragLayer extends Component {
 
         return (
             <div className="customDragPreview" style={layerStyles}>
-                <div style={getItemStyles(this.props)}>
+                <div className="previewContainer" style={getItemStyles(this.props)}>
                     {this.renderItem(itemType, item)}
                 </div>
             </div>
