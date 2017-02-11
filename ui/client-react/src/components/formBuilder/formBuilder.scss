@@ -1,10 +1,18 @@
 @import '../../assets/css/qbVariables';
 
-$draggable-hover-foreground-color: $color-orange-700; // needs opacity
-$droppable-hover-foreground-color: $color-black-800; // needs opacity
+$droppable-hover-foreground-color: $color-black-800; // temporary until drop-preview is created
 
 .formBuilderContainer {
-    background-color: $color-orange-500;
+    .formContainer {
+        /* When in builder mode we need to push out the
+        left margin to make room for the editing tools */
+        padding-left: 25px;
+    }
+
+    .dragAndDropField {
+        position: relative;
+        z-index: 1;
+    }
 
     .draggableField, .droppableField {
         position: relative;
@@ -23,21 +31,52 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
      * a div appended BEFORE and droppable targets are appended AFTER. This prevents the droppable target from blocking
      * the draggable one.
      */
-    .notDragging:after, .droppableField:before {
+    .draggableField:before, .droppableField:before {
         content: "";
         position: absolute;
-        z-index: 1;
+        z-index: 0;
         width: 110%;
         height: 120%;
         top: -10%;
         left: -5%;
     }
 
-    // Dragging
-    .notDragging:after {
-        background-color: $draggable-hover-foreground-color;
-        opacity: 0;
+    .editingTools {
+        border: 1px solid $color-black-400;
+        border-radius: 2px;
 
+        opacity: 0;
+        transition: opacity 0.5s;
+
+        .qbIcon {
+            color: $color-black-600;
+        }
+
+        .deleteFieldIcon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            transition: color 0.4s;
+
+            &:hover {
+                color: $color-red-700;
+                transition: color 0.4s;
+            }
+        }
+
+        .tipChildWrapper {
+            cursor: pointer;
+        }
+    }
+
+    .draggableField:hover .editingTools {
+        opacity: 1;
+        transition: opacity 0.5s;
+    }
+
+    // Dragging
+    .notDragging:before {
+        opacity: 0;
         transition: opacity 0.2s;
     }
 
@@ -52,9 +91,7 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
     }
 
     .dragging {
-        opacity: 0;
-        max-height: 0;
-
+        opacity: 0.5;
         transition: opacity 0.5s, max-height 0.5s;
     }
 
@@ -66,12 +103,13 @@ $droppable-hover-foreground-color: $color-black-800; // needs opacity
     .droppableField:before {
         background-color: $droppable-hover-foreground-color;
         opacity: 0;
-        transition: opacity 0.5s;
+        transition: opacity 0.4s;
     }
 
     .droppableField.dropHovering:before {
-        opacity: 0.7;
-        transition: opacity 0.5s;
+        opacity: 0.5;
+        z-index: 1;
+        transition: opacity 0.4s;
     }
 
     // React CSS Transition Classes for elements that are moved

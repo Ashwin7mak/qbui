@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import Html5Backend from 'react-dnd-html5-backend';
 import QbForm from '../QBForm/qbform';
+import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 import MoveFieldHelper from './moveFieldHelper';
 import _ from 'lodash';
 
@@ -45,6 +46,7 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
+                <FormBuilderCustomDragLayer />
                 <QbForm
                     edit={true}
                     editingForm={true}
