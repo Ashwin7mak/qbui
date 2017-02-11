@@ -46,7 +46,7 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
-                <FormBuilderCustomDragLayer />
+                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
                     edit={true}
                     editingForm={true}
@@ -60,10 +60,15 @@ export class FormBuilder extends Component {
 }
 
 FormBuilder.propTypes = {
+    showCustomDragLayer: PropTypes.bool,
     formData: PropTypes.shape({
         fields: PropTypes.array,
         formMeta: PropTypes.object
     }).isRequired
+};
+
+FormBuilder.defaultProps = {
+    showCustomDragLayer: true
 };
 
 export default DragDropContext(Html5Backend)(FormBuilder);

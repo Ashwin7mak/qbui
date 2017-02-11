@@ -24,7 +24,7 @@ describe('FormBuilder (drag/drop container)', () => {
     });
 
     it('wraps QbForm in a drag drop container', () => {
-        component = shallow(<FormBuilder formData={mockFormData} />);
+        component = shallow(<FormBuilder formData={mockFormData} showCustomDragLayer={false} />);
         instance = component.instance();
         // Calling component did mount manually because I don't want to render child components for this test
         // and the componentDidMount stuff will be removed once the redux store is build.
