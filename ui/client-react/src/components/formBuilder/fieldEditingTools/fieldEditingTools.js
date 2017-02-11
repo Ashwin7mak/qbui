@@ -35,7 +35,7 @@ class FieldEditingTools extends Component {
 
             this.setState(Object.assign({}, this.state, styles));
         }
-    };
+    }
 
     onClickDelete() {
         if (this.props.onClickDelete) {

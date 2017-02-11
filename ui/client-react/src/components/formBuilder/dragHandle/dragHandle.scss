@@ -20,13 +20,14 @@
 
     @for $i from 0 through 3 {
         .dot#{$i} {
-            @include getDotPosition($i)
+            @include getDotPosition($i);
         }
+
     }
 
     @for $i from 4 through 7 {
         .dot#{$i} {
-            @include getDotPosition($i - 4)
+            @include getDotPosition($i - 4);
             left: 3px;
         }
     }
