@@ -272,6 +272,40 @@ class FieldUtils {
 
         return isDifferent;
     }
+
+    /**
+    * Returns the icon for a field type (used in Builder)
+    * TODO:: Replace with icon names once icons have been created. Currently using letters to represent fields.
+    */
+    static getFieldSpecificIcon(field, fieldDef) {
+        let type = _.has(field, 'datatypeAttributes.type') ? field.datatypeAttributes.type : null;
+
+        if (!type) {
+            return 'T';
+        }
+
+        switch (type) {
+        case consts.DATE:            return "D";
+        case consts.DATE_TIME:        return "Dt";
+        case consts.TIME_OF_DAY:            return "Tm";
+        case consts.NUMERIC:          return "N";
+        case consts.RATING:          return "R";
+        case consts.CURRENCY:        return "C";
+        case consts.PERCENT:         return "P";
+        case consts.DURATION:        return 'Du';
+        case consts.PHONE_NUMBER:           return "Ph";
+        case consts.TEXT:            return "T";
+        // case consts.MULTI_LINE_TEXT: return "Ml";
+        case consts.USER:            return "U";
+        case consts.URL:             return "Ur";
+        case consts.EMAIL_ADDRESS:   return "E";
+        case consts.TEXT_FORMULA:    return "F";
+        case consts.NUMERIC_FORMULA: return "F";
+        case consts.URL_FORMULA:     return "F";
+        case consts.CHECKBOX:        return 'C';
+        default:                     return "T";
+        }
+    }
 }
 
 // PRIVATE METHODS
