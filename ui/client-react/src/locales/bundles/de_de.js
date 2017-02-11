@@ -461,6 +461,39 @@ export default {
             versionSelectTitle: "Meine nutzer öffnen diese app in",
             manageAccessTip: "*Nur app-administratoren können den benutzerzugriff verwalten"
         },
-        missingWalkMe: "Tutorial ist nicht verfügbar"
+        missingWalkMe: "Tutorial ist nicht verfügbar",
+        builder: {
+            formBuilder: {
+                unimplemented: "Feature ist momentan nicht verfügbar"
+            },
+            fields: {
+                // Keys are equal to server constants for field types to make it easier to get these keys
+                FORMULA: "Formel",
+                SCALAR: "Scalar",
+                CONCRETE: "Beton",
+                REPORT_LINK: "Berichtslink",
+                SUMMARY: "Zusammenfassung",
+                LOOKUP: "Nachschlagen",
+                //Data types
+                CHECKBOX: "Kontrollkästchen",
+                TEXT: "Text",
+                PHONE_NUMBER: "Telefonnummer",
+                DATE_TIME: "Datum & Uhrzeit",
+                DATE: "Datum",
+                DURATION: "Dauer",
+                TIME_OF_DAY: "Uhrzeit",
+                NUMERIC: "Numerisch",
+                CURRENCY: "Währung",
+                RATING: "Rating",
+                PERCENT: "Prozent",
+                URL: "Url",
+                EMAIL_ADDRESS: "Email",
+                USER: "Benutzer",
+                FILE_ATTACHMENT: "Datei",
+                TEXT_FORMULA: "Textformel",
+                URL_FORMULA: "Url-Formel",
+                NUMERIC_FORMULA: "Numerische Formel"
+            }
+        }
     }
 };

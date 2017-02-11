@@ -468,6 +468,39 @@ export default {
             manageAccessTip: "*Only app admins can manage user access"
 
         },
-        missingWalkMe: "Tutorial is not available"
+        missingWalkMe: "Tutorial is not available",
+        builder: {
+            formBuilder: {
+                unimplemented: "Feature is not available right now"
+            },
+            fields: {
+                // Keys are equal to server constants for field types to make it easier to get these keys
+                FORMULA: "Formula",
+                SCALAR: "Scalar",
+                CONCRETE: "Concrete",
+                REPORT_LINK: "Report link",
+                SUMMARY: "Summary",
+                LOOKUP: "Lookup",
+                //Data types
+                CHECKBOX: "Checkbox",
+                TEXT: "Text",
+                PHONE_NUMBER: "Phone number",
+                DATE_TIME: "Date & time",
+                DATE: "Date",
+                DURATION: "Duration",
+                TIME_OF_DAY: "Time of day",
+                NUMERIC: "Numeric",
+                CURRENCY: "Currency",
+                RATING: "Rating",
+                PERCENT: "Percent",
+                URL: "Url",
+                EMAIL_ADDRESS: "Email",
+                USER: "User",
+                FILE_ATTACHMENT: "File",
+                TEXT_FORMULA: "Text formula",
+                URL_FORMULA: "Url formula",
+                NUMERIC_FORMULA: "Numeric formula"
+            }
+        }
     }
 };
