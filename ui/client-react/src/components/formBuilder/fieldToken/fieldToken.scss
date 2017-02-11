@@ -1,0 +1,44 @@
+@import "../../../assets/css/_qbVariables";
+
+$dragtoken-background-color1: $color-blue-700;
+$dragtoken-background-color2: rgba($color-blue-700, 0.8);
+$dragtoken-text-color: $color-black-100;
+$dragtoken-shadow-color: rgba($color-black-800, 0.5);
+
+
+.fieldToken {
+    background-color: $dragtoken-background-color2;
+    border: 1px solid $dragtoken-background-color2;
+    border-radius: 2px;
+    color: $dragtoken-text-color;
+    height: 35px;
+    width: 250px;
+
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px 0 $dragtoken-shadow-color;
+
+    .fieldTokenIconContainer {
+        width: 35px;
+        height: 34px;
+        border-radius: 2px;
+        background-color: $dragtoken-background-color1;
+
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .fieldTokenIcon {
+        font-size: 20px;
+    }
+
+    .fieldTokenText {
+        margin-left: 5px; /* TODO:: Change to semantic name */
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
+    }
+}
