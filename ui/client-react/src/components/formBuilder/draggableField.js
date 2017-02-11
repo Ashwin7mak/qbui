@@ -1,5 +1,4 @@
-import React, {PropTypes, Component} from 'react';
-import ReactDom from 'react-dom';
+import React, {Component} from 'react';
 import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
@@ -52,30 +51,29 @@ function collect(connect, monitor) {
  */
 const DraggableFieldHoc = FieldComponent => {
 
-    const component = React.createClass({
+    class DraggableField extends Component {
         componentDidMount() {
             // Use empty image as a drag preview so browsers don't draw it
             // and we can draw whatever we want on the custom drag layer instead.
             this.props.connectDragPreview(getEmptyImage());
-            this.setPositionOfFieldEditingTools();
-        },
+        }
 
         render() {
-            const {connectDragSource, isDragging} = this.props;
+            const {connectDragSource, isDragging, tabIndex, sectionIndex, orderIndex} = this.props;
 
             let classNames = ['draggableField'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>
-                    <FieldEditingTools/>
+                    <FieldEditingTools tabIndex={tabIndex} sectionIndex={sectionIndex} orderIndex={orderIndex} />
                     <FieldComponent {...this.props}/>
                 </div>
             );
         }
-    });
+    }
 
-    return DragSource(DraggableItemTypes.FIELD, fieldDragSource, collect)(component);
+    return DragSource(DraggableItemTypes.FIELD, fieldDragSource, collect)(DraggableField);
 };
 
 export default DraggableFieldHoc;

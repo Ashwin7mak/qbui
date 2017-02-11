@@ -41,39 +41,6 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
         left: -5%;
     }
 
-    .editingTools {
-        border: 1px solid $color-black-400;
-        border-radius: 2px;
-
-        opacity: 0;
-        transition: opacity 0.5s;
-
-        .qbIcon {
-            color: $color-black-600;
-        }
-
-        .deleteFieldIcon {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            transition: color 0.4s;
-
-            &:hover {
-                color: $color-red-700;
-                transition: color 0.4s;
-            }
-        }
-
-        .tipChildWrapper {
-            cursor: pointer;
-        }
-    }
-
-    .draggableField:hover .editingTools {
-        opacity: 1;
-        transition: opacity 0.5s;
-    }
-
     // Dragging
     .notDragging:before {
         opacity: 0;

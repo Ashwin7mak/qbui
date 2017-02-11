@@ -1,15 +1,16 @@
 import React, {PropTypes, Component} from 'react';
-import QbIcon from '../qbIcon/qbIcon';
-import QbToolTip from '../qbToolTip/qbToolTip';
-import DragHandle from './dragHandle/dragHandle';
+import ReactDom from 'react-dom';
+import QbIcon from '../../qbIcon/qbIcon';
+import QbToolTip from '../../qbToolTip/qbToolTip';
+import DragHandle from '../dragHandle/dragHandle';
+
+import './fieldEditingTools.scss';
 
 class FieldEditingTools extends Component {
-    componentDidMount() {
-        this.setPositionOfFieldEditingTools();
-    }
+    constructor(props) {
+        super(props);
 
-    getInitialState() {
-        return {
+        this.state = {
             position: 'absolute',
             top: 0,
             left: 0,
@@ -17,6 +18,12 @@ class FieldEditingTools extends Component {
             width: '250px',
             zIndex: 0
         };
+
+        this.setPositionOfFieldEditingTools = this.setPositionOfFieldEditingTools.bind(this);
+    }
+
+    componentDidMount() {
+        this.setPositionOfFieldEditingTools();
     }
 
     setPositionOfFieldEditingTools(editingTools) {
@@ -30,17 +37,23 @@ class FieldEditingTools extends Component {
             };
             this.setState(Object.assign({}, this.state, styles));
         }
+    };
+
+    onClickDelete() {
+        if (this.props.onClickDelete) {
+            return this.props.onClickDelete(this.props.tabIndex, this.props.sectionIndex, this.props.orderIndex);
+        }
     }
 
     render() {
         return (
             <div
-                className="editingTools"
+                className="fieldEditingTools"
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
             >
                 <DragHandle />
-                <div className="deleteFieldIcon">
+                <div className="deleteFieldIcon" onClick={this.onClickDelete}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
                         <QbIcon icon="delete" />
                     </QbToolTip>
@@ -49,3 +62,12 @@ class FieldEditingTools extends Component {
         );
     }
 }
+
+FieldEditingTools.propTypes = {
+    tabIndex: PropTypes.number,
+    sectionIndex: PropTypes.number,
+    orderIndex: PropTypes.number,
+    onClickDelete: PropTypes.func
+};
+
+export default FieldEditingTools;
