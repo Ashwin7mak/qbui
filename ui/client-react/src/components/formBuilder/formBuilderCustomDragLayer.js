@@ -4,6 +4,7 @@ import draggableItemTypes from './draggableItemTypes';
 import FieldToken from './fieldToken/fieldToken';
 import Locale from '../../locales/locales';
 import consts from '../../../../common/src/constants';
+import _ from 'lodash';
 
 const layerStyles = {
     cursor: 'move',

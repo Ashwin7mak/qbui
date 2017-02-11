@@ -477,4 +477,110 @@ describe('FieldUtils', () => {
             expect(FieldUtils.compareFieldValues([], [])).toEqual(false);
         });
     });
+
+    describe('getFieldSpecificIcon', () => {
+        let testCases = [
+            {
+                description: 'returns default icon',
+                type: null,
+                expectedType: 'T'
+            },
+            {
+                description: 'returns Date field icon',
+                type: consts.DATE,
+                expectedType: 'D'
+            },
+            {
+                description: 'returns DateTime field icon',
+                type: consts.DATE_TIME,
+                expectedType: 'Dt'
+            },
+            {
+                description: 'returns Time of day field icon',
+                type: consts.TIME_OF_DAY,
+                expectedType: 'Tm'
+            },
+            {
+                description: 'returns Numeric field icon',
+                type: consts.NUMERIC,
+                expectedType: 'N'
+            },
+            {
+                description: 'returns Rating field icon',
+                type: consts.RATING,
+                expectedType: 'R'
+            },
+            {
+                description: 'returns Currency field icon',
+                type: consts.CURRENCY,
+                expectedType: 'C'
+            },
+            {
+                description: 'returns Percent field icon',
+                type: consts.PERCENT,
+                expectedType: 'P'
+            },
+            {
+                description: 'returns Duration field icon',
+                type: consts.DURATION,
+                expectedType: 'Du'
+            },
+            {
+                description: 'returns Phone field icon',
+                type: consts.PHONE_NUMBER,
+                expectedType: 'Ph'
+            },
+            {
+                description: 'returns Text field icon',
+                type: consts.TEXT,
+                expectedType: 'T'
+            },
+            {
+                description: 'returns User field icon',
+                type: consts.USER,
+                expectedType: 'U'
+            },
+            {
+                description: 'returns URL field icon',
+                type: consts.URL,
+                expectedType: 'Ur'
+            },
+            {
+                description: 'returns Email field icon',
+                type: consts.EMAIL_ADDRESS,
+                expectedType: 'E'
+            },
+            {
+                description: 'returns Text Formula field icon',
+                type: consts.TEXT_FORMULA,
+                expectedType: 'F'
+            },
+            {
+                description: 'returns Numeric Formula field icon',
+                type: consts.NUMERIC_FORMULA,
+                expectedType: 'F'
+            },
+            {
+                description: 'returns Url Formula field icon',
+                type: consts.URL_FORMULA,
+                expectedType: 'F'
+            },
+            {
+                description: 'returns Checkbox Formula field icon',
+                type: consts.CHECKBOX,
+                expectedType: 'C'
+            },
+            {
+                description: 'returns Text if type is not found',
+                type: 'invalid type',
+                expectedType: 'T'
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(FieldUtils.getFieldSpecificIcon(testCase.type)).toEqual(testCase.expectedType);
+            });
+        });
+    });
 });
