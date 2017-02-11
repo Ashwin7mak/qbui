@@ -1,15 +1,10 @@
 @import "../../../assets/css/_qbVariables";
 
-$dragtoken-background-color1: $color-blue-700;
-$dragtoken-background-color2: rgba($color-blue-700, 0.8);
-$dragtoken-text-color: $color-black-100;
-$dragtoken-shadow-color: rgba($color-black-800, 0.5);
-
 
 .fieldToken {
     background-color: $dragtoken-background-color2;
-    border: 1px solid $dragtoken-background-color2;
-    border-radius: 2px;
+    border: $stroke-width-thin solid $dragtoken-background-color2;
+    border-radius: $radius-base;
     color: $dragtoken-text-color;
     height: 35px;
     width: 250px;
@@ -35,10 +30,9 @@ $dragtoken-shadow-color: rgba($color-black-800, 0.5);
     }
 
     .fieldTokenTitle {
-        margin-left: 5px; /* TODO:: Change to semantic name */
+        margin-left: $spacing-tiny;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-
     }
 }

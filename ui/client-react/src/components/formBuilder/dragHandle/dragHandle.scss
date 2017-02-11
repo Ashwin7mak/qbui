@@ -3,7 +3,7 @@
 .dragHandle {
     cursor: -webkit-grab;
     position: relative;
-    margin-left: 2px;
+    margin-left: $spacing-x-tiny;
     margin-top: 12px;
 
     .dot {

@@ -6,7 +6,7 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
     .formContainer {
         /* When in builder mode we need to push out the
         left margin to make room for the editing tools */
-        padding-left: 25px;
+        padding-left: $spacing-small;
     }
 
     .dragAndDropField {

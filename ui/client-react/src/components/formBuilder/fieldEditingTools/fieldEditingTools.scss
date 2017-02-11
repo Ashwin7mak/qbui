@@ -6,8 +6,8 @@
 }
 
 .fieldEditingTools {
-    border: 1px solid $color-black-400;
-    border-radius: 2px;
+    border: $stroke-width-thin solid $color-black-400;
+    border-radius: $radius-base;
 
     opacity: 0;
     transition: opacity 0.5s;
