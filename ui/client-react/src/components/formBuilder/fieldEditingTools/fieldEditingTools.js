@@ -20,10 +20,7 @@ class FieldEditingTools extends Component {
         };
 
         this.setPositionOfFieldEditingTools = this.setPositionOfFieldEditingTools.bind(this);
-    }
-
-    componentDidMount() {
-        this.setPositionOfFieldEditingTools();
+        this.onClickDelete = this.onClickDelete.bind(this);
     }
 
     setPositionOfFieldEditingTools(editingTools) {
@@ -35,6 +32,7 @@ class FieldEditingTools extends Component {
                 height: `${fieldDomElement.offsetHeight + 26}px`,
                 width: `${fieldDomElement.offsetWidth + 40}px`
             };
+
             this.setState(Object.assign({}, this.state, styles));
         }
     };
