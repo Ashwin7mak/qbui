@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import './toolPalette.scss'
+import './toolPalette.scss';
 
 let ToolPalette = React.createClass({
     propTypes: {
@@ -11,7 +11,7 @@ let ToolPalette = React.createClass({
             <div className="toolPaletteContainer">
 
             </div>
-        )
+        );
     }
 });
 
