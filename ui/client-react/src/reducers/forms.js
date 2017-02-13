@@ -92,6 +92,10 @@ const forms = (
     }
 
     case types.SAVING_FORM: {
+        //  TODO:
+        //  because the state object holds both form and record data, make sure the
+        //  currentForm object is passed along for the ride.  This will get cleaned
+        //  up once form and record data is separated.
         newState.push({
             ...currentForm,
             id,
@@ -101,6 +105,10 @@ const forms = (
         return newState;
     }
     case types.SAVING_FORM_ERROR: {
+        //  TODO:
+        //  because the state object holds both form and record data, make sure the
+        //  currentForm object is passed along for the ride.  This will get cleaned
+        //  up once form and record data is separated.
         newState.push({
             ...currentForm,
             id,
@@ -110,10 +118,16 @@ const forms = (
         return newState;
     }
     case types.SAVING_FORM_SUCCESS: {
-        let updatedForm = currentForm;
-        currentForm.formData = action.content;
+        //  TODO:
+        //  because the state object holds both form and record data, make sure the
+        //  currentForm object is passed along for the ride.  This will get cleaned
+        //  up once form and record data is separated.
+        //
+        //no changes to state..
+        let updatedForm = _.cloneDeep(currentForm);
+        updatedForm.formData.formMeta = action.content;
         newState.push({
-            ...currentForm,
+            ...updatedForm,
             id,
             saving: false
         });

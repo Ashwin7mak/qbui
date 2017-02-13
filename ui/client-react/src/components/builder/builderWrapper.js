@@ -113,12 +113,13 @@ const BuilderWrapper = React.createClass({
     }
 });
 
+//TODO  NO reference to component redux store -- once we start implementing different builders,
+//TODO  this will get very difficult to manage.  Move this into the form builder container.
 const mapStateToProps = (state) => {
     return {
         forms: state.forms
     };
 };
-
 const mapDispatchToProps = (dispatch) => {
     return {
         updateForm: (appId, tblId, formType, form) => {
