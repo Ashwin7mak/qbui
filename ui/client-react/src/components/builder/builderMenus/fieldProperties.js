@@ -3,7 +3,6 @@ import './fieldProperties.scss';
 
 let FieldProperties = React.createClass({
     propTypes: {
-        value: PropTypes.bool,
     },
     render() {
         return (

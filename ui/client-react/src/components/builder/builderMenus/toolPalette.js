@@ -3,7 +3,6 @@ import './toolPalette.scss';
 
 let ToolPalette = React.createClass({
     propTypes: {
-        value: PropTypes.bool,
     },
 
     render() {
