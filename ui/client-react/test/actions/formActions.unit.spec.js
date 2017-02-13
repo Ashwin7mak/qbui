@@ -281,4 +281,18 @@ describe('Form Actions functions', () => {
         });
     });
 
+    describe('moveFieldOnForm', () => {
+        it('creates an action that will move a field on a form', () => {
+            expect(formActions.moveFieldOnForm(1, 2, 3, 4, 5)).toEqual({
+                id: 1,
+                type: types.MOVE_FIELD,
+                content: {
+                    newTabIndex: 2,
+                    newSectionIndex: 3,
+                    newOrderIndex: 4,
+                    draggedItemProps: 5
+                }
+            })
+        });
+    });
 });

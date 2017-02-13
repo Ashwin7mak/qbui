@@ -237,7 +237,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
                 dispatch(loadFormSuccess(formType, response.data));
 
-                resolve();
+                resolve(response.data);
             }).catch(error => {
 
                 if (error.response) {
@@ -267,6 +267,24 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             });
         });
     };
+};
+
+/**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newTabIndex
+ * @param newSectionIndex
+ * @param newOrderIndex
+ * @param draggedItemProps
+ * @returns {{id, type, content}|*}
+ */
+export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) => {
+    return event(formId, types.MOVE_FIELD, {
+        newTabIndex,
+        newSectionIndex,
+        newOrderIndex,
+        draggedItemProps
+    });
 };
 
 /**
