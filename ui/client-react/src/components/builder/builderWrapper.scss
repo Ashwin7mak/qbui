@@ -12,17 +12,10 @@
         text-align: right;
     }
 
-    .builderWrapperBody {
-        display: flex;
-        height: 100%;
+    .saveOrCancelFooter {
+        position: absolute;
+        bottom: 0;
         width: 100%;
-        overflow: auto;
-
-        .saveOrCancelFooter {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            color: $color-black-100;
-        }
+        color: $color-black-100;
     }
 }

@@ -5,7 +5,8 @@ import {loadForm} from '../../actions/formActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT_REPORT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
-
+import ToolPalette from './builderMenus/toolPalette';
+import FieldProperties from './builderMenus/fieldProperties';
 import FormBuilder from '../formBuilder/formBuilder';
 
 import './formBuilderContainer.scss';
@@ -57,10 +58,15 @@ export const FormBuilderContainer = React.createClass({
         }
 
         return (
-                <div className="formBuilder">
+                <div className="formBuilderContainer">
+                    <ToolPalette />
+
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT_REPORT}>
                         <FormBuilder formData={formData} />
                     </Loader>
+
+                    <FieldProperties />
+
                 </div>
         );
     }
