@@ -7,7 +7,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import Locale from '../locales/locales';
-import Notifications from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
@@ -237,10 +237,10 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                     }
 
                     if (error.response && error.response.status === 403) {
-                        Notifications.NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                     } else {
-                        Notifications.NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                     }
 
@@ -252,7 +252,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                 }
             ).catch((ex) => {
                 logger.logException(ex);
-                Notifications.NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
                     CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 // remove the editRec query string since we are not successfully editing the form
                 WindowLocationUtils.pushWithoutQuery();
@@ -305,7 +305,7 @@ function saveForm(appId, tblId, formType, form, isNew) {
                         logger.debug('FormService saveForm success');
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
 
-                        Notifications.NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
+                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         resolve();
@@ -314,14 +314,14 @@ function saveForm(appId, tblId, formType, form, isNew) {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
                         dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
 
-                        Notifications.NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                         reject(error);
                     }
                 ).catch((ex) => {
                     logger.logException(ex);
-                    Notifications.NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                    NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
                         CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                     reject(ex);
                 });

@@ -233,29 +233,14 @@ describe('Form Actions functions', () => {
             }
         }
 
-        let mockNotifications = {
-            NotificationManager: {
-                success: function() {
-                    return true;
-                },
-                error: function() {
-                    return false;
-                }
-            }
-        };
-
         beforeEach(() => {
             spyOn(mockFormService.prototype, 'createForm').and.callThrough();
             spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
-            spyOn(mockNotifications.NotificationManager, 'success').and.callThrough();
-            spyOn(mockNotifications.NotificationManager, 'error').and.callThrough();
             FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
-            FormActionsRewireAPI.__Rewire__('Notifications', mockNotifications);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
-            FormActionsRewireAPI.__ResetDependency__('Notifications');
         });
 
         it('save a form update', (done) => {
@@ -268,7 +253,6 @@ describe('Form Actions functions', () => {
                 () => {
                     expect(mockFormService.prototype.createForm).not.toHaveBeenCalled();
                     expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
-                    expect(mockNotifications.NotificationManager.success).toHaveBeenCalled();
                     expect(store.getActions()).toEqual(expectedActions);
                     done();
                 },
@@ -288,7 +272,6 @@ describe('Form Actions functions', () => {
                     expect(mockFormService.prototype.createForm).toHaveBeenCalled();
                     expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
                     expect(store.getActions()).toEqual(expectedActions);
-                    expect(mockNotifications.NotificationManager.success).toHaveBeenCalled();
                     done();
                 },
                 () => {
