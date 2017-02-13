@@ -21,7 +21,7 @@
     // same thing with node so we don't have colliding ports
     var nodeHostPort = 9000 + Number(process.env.EXECUTOR_NUMBER);
     var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
-    var eeHostEnable = false;
+    var eeHostEnable = true;
 
     // For the e2e try job we want to connect to an integration instance of Tomcat. If we set the env var in Jenkins
     // then use that otherwise default to the above
