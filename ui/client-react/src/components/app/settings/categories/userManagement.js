@@ -16,6 +16,12 @@ const UserManagement = React.createClass({
         appUsers: PropTypes.array.isRequired
     },
 
+    createUserRows() {
+        this.props.appUsers.forEach(function(user) {
+            user.id = user.userId;
+        });
+    },
+
     createUserColumns(cellFormatter) {
         let columns = [
             {
@@ -58,6 +64,7 @@ const UserManagement = React.createClass({
     },
 
     render() {
+        this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
         return (
