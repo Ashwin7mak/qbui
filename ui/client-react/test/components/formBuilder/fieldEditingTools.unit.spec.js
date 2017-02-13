@@ -17,8 +17,13 @@ const mockReactDom = {
 };
 
 const mockParentProps = {
-    deleteField(_tabIndex, _sectionIndex, _orderIndex) {}
+    deleteField(_tabIndex, _sectionIndex, _orderIndex) {},
+    openFieldPreferences(_tabIndex, _sectionIndex, _orderIndex) {}
 };
+
+const tabIndex = 0;
+const sectionIndex = 1;
+const orderIndex = 3;
 
 let component;
 
@@ -40,9 +45,6 @@ describe('FieldEditingTools', () => {
     });
 
     it('has a delete button', () => {
-        const tabIndex = 0;
-        const sectionIndex = 1;
-        const orderIndex = 3;
         spyOn(mockParentProps, 'deleteField');
 
         component = shallow(<FieldEditingTools
@@ -60,6 +62,24 @@ describe('FieldEditingTools', () => {
         expect(mockParentProps.deleteField).toHaveBeenCalledWith(tabIndex, sectionIndex, orderIndex);
     });
 
+    it('has a field preferences button', () => {
+        spyOn(mockParentProps, 'openFieldPreferences');
+
+        component = shallow(<FieldEditingTools
+            tabIndex={tabIndex}
+            sectionIndex={sectionIndex}
+            orderIndex={orderIndex}
+            onClickFieldPreferences={mockParentProps.openFieldPreferences}
+        />);
+
+        let preferencesIcon = component.find('.fieldPreferencesIcon');
+        expect(preferencesIcon).toBePresent();
+
+        preferencesIcon.simulate('click');
+
+        expect(mockParentProps.openFieldPreferences).toHaveBeenCalledWith(tabIndex, sectionIndex, orderIndex);
+    });
+
     it('positions the editing tools over the next sibling element', () => {
         component = shallow(<FieldEditingTools/>);
         let instance = component.instance();
@@ -68,11 +88,11 @@ describe('FieldEditingTools', () => {
 
         expect(instance.state).toEqual({
             position: 'absolute',
-            zIndex: 0,
+            zIndex: 2,
             top: '-5px',
-            left: '-15px',
+            left: '-10px',
             height: '76px',
-            width: '140px'
+            width: '130px'
         });
     });
 });

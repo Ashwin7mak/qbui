@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDom from 'react-dom';
-import QbIcon from '../../qbIcon/qbIcon';
+import QbIcon, {AVAILABLE_FONTS} from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
 
@@ -16,11 +16,15 @@ class FieldEditingTools extends Component {
             left: 0,
             height: '250px',
             width: '250px',
-            zIndex: 0
+            // Z-index is set above the field so that delete and preference icons can be selected
+            // TODO:: Modify z-index below (to 0) the field when the field is selected so that the
+            // field itself can be clicked.
+            zIndex: 2
         };
 
         this.setPositionOfFieldEditingTools = this.setPositionOfFieldEditingTools.bind(this);
         this.onClickDelete = this.onClickDelete.bind(this);
+        this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
     }
 
     setPositionOfFieldEditingTools(editingTools) {
@@ -28,9 +32,9 @@ class FieldEditingTools extends Component {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
-                left: `${fieldDomElement.offsetLeft - 20}px`,
+                left: `${fieldDomElement.offsetLeft - 15}px`,
                 height: `${fieldDomElement.offsetHeight + 26}px`,
-                width: `${fieldDomElement.offsetWidth + 40}px`
+                width: `${fieldDomElement.offsetWidth + 30}px`
             };
 
             this.setState(Object.assign({}, this.state, styles));
@@ -40,6 +44,12 @@ class FieldEditingTools extends Component {
     onClickDelete() {
         if (this.props.onClickDelete) {
             return this.props.onClickDelete(this.props.tabIndex, this.props.sectionIndex, this.props.orderIndex);
+        }
+    }
+
+    onClickFieldPreferences() {
+        if (this.props.onClickFieldPreferences) {
+            return this.props.onClickFieldPreferences(this.props.tabIndex, this.props.sectionIndex, this.props.orderIndex);
         }
     }
 
@@ -56,6 +66,11 @@ class FieldEditingTools extends Component {
                         <QbIcon icon="delete" />
                     </QbToolTip>
                 </div>
+                <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
+                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                        <QbIcon iconFont={AVAILABLE_FONTS.TABLE_STURDY} icon="Dimensions"/>
+                    </QbToolTip>
+                </div>
             </div>
         );
     }
@@ -65,7 +80,8 @@ FieldEditingTools.propTypes = {
     tabIndex: PropTypes.number,
     sectionIndex: PropTypes.number,
     orderIndex: PropTypes.number,
-    onClickDelete: PropTypes.func
+    onClickDelete: PropTypes.func,
+    onClickFieldPreferences: PropTypes.func
 };
 
 export default FieldEditingTools;

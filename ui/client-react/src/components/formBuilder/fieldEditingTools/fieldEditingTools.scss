@@ -20,10 +20,21 @@
     .deleteFieldIcon {
         position: absolute;
         top: 5px;
-        right: 5px;
+        right: 25px;
 
         &:hover .qbIcon {
             color: $color-red-700;
+            transition: color 0.4s;
+        }
+    }
+
+    .fieldPreferencesIcon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+
+        &:hover .qbIcon {
+            color: $color-cyan-700;
             transition: color 0.4s;
         }
     }
