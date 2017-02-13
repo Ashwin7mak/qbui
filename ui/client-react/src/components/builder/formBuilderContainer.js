@@ -1,9 +1,8 @@
 import React, {PropTypes} from 'react';
-import _ from 'lodash';
 import {connect} from 'react-redux';
-import {loadForm} from '../../actions/formActions';
+import {loadForm, moveFieldOnForm} from '../../actions/formActions';
 import Loader from 'react-loader';
-import {LARGE_BREAKPOINT_REPORT} from "../../constants/spinnerConfigurations";
+import {LARGE_BREAKPOINT_FORM} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 
 import FormBuilder from '../formBuilder/formBuilder';
@@ -21,6 +20,10 @@ const mapDispatchToProps = dispatch => {
         loadForm(appId, tableId, reportId, formType, recordId) {
             return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
         },
+
+        moveField(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
+            return dispatch(moveFieldOnForm(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps))
+        }
     };
 };
 
@@ -48,28 +51,31 @@ export const FormBuilderContainer = React.createClass({
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
     },
+
     render() {
-        let loaded = (this.props.forms && this.props.forms.length > 0 && !this.props.forms[0].loading);
+        let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
         let formData = null;
+        let formId = null;
         if (loaded) {
+            formId = this.props.forms[0].id;
             formData = this.props.forms[0].formData;
         }
 
         return (
-                <div className="formBuilder">
-                    <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
-                    <div className="formBuilderBody">
-                        <b>appId:</b> {this.props.appId} |
-                        <b> tblId:</b> {this.props.tblId} |
-                        <b> formId:</b> {this.props.formId || 'not specified'} |
-                        <b> formType:</b> {this.props.formType || 'not specified'}
-                    </div>
-
-                    <Loader loaded={loaded} options={LARGE_BREAKPOINT_REPORT}>
-                        <FormBuilder formData={formData} />
-                    </Loader>
+            <div className="formBuilder">
+                <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
+                <div className="formBuilderBody">
+                    <b>appId:</b> {this.props.appId} |
+                    <b> tblId:</b> {this.props.tblId} |
+                    <b> formId:</b> {this.props.formId || 'not specified'} |
+                    <b> formType:</b> {this.props.formType || 'not specified'}
                 </div>
+
+                <Loader loaded={loaded} options={LARGE_BREAKPOINT_FORM}>
+                    <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                </Loader>
+            </div>
         );
     }
 });
