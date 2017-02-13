@@ -34,7 +34,6 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
     .draggableField:before, .droppableField:before {
         content: "";
         position: absolute;
-        z-index: 0;
         width: 110%;
         height: 120%;
         top: -10%;

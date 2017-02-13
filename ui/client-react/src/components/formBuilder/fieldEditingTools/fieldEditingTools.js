@@ -7,6 +7,9 @@ import DragHandle from '../dragHandle/dragHandle';
 
 import './fieldEditingTools.scss';
 
+/**
+ * Adds chrome around a field so that the field can be moved and edited.
+ */
 class FieldEditingTools extends Component {
     constructor(props) {
         super(props);
@@ -28,6 +31,10 @@ class FieldEditingTools extends Component {
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
     }
 
+    /**
+     * Position the chrome around the sibling field
+     * @param editingTools
+     */
     setPositionOfFieldEditingTools(editingTools) {
         if (editingTools) {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
