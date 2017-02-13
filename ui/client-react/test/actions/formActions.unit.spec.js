@@ -292,7 +292,7 @@ describe('Form Actions functions', () => {
                     newOrderIndex: 4,
                     draggedItemProps: 5
                 }
-            })
+            });
         });
     });
 });

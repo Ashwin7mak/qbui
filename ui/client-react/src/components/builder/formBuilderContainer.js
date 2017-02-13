@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => {
         },
 
         moveField(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-            return dispatch(moveFieldOnForm(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps))
+            return dispatch(moveFieldOnForm(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps));
         }
     };
 };

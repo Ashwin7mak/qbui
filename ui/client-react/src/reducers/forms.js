@@ -1,6 +1,6 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
-import MoveFieldHelper from '../components/formBuilder/moveFieldHelper'
+import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
 const forms = (
 
