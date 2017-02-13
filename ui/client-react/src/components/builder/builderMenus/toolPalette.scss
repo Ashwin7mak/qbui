@@ -2,10 +2,6 @@
 
 .toolPaletteContainer {
   width: 220px;
-  background-color: $left-nav-color;
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  color: #ffffff;
-  position: relative;
+  //background-color: $left-nav-background-color;
+  background-color: $color-black-250;
 }
