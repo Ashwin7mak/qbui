@@ -35,8 +35,7 @@ let QBForm = React.createClass({
             record: React.PropTypes.array,
             fields: React.PropTypes.array,
             formMeta: React.PropTypes.object
-        }),
-        relationships: React.PropTypes.array
+        })
     },
 
     getDefaultProps() {
@@ -254,18 +253,21 @@ let QBForm = React.createClass({
      */
     createChildReportElementCell(element, sectionIndex, colSpan) {
         let key = 'relatedField-' + sectionIndex + '-' + element.orderIndex;
-        const relationship = _.get(this, `props.relationships[${element.relationshipId}]`, {});
+        const relationship = _.get(this, `props.formData.formMeta.relationships[${element.relationshipId}]`, {});
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
         // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now
         const childReportId = _.get(relationship, 'childDefaultReportId', 0);
 
+        // find the child table so we can retrieve its table name
+        const tables = _.get(this, 'props.selectedApp.tables');
+        const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
         return <td key={key}>
             <RelatedChildReport
                 appId={_.get(relationship, "appId")}
                 childTableId={_.get(relationship, "detailTableId")}
                 childReportId={childReportId}
-                childTableName={relationship.name}
+                childTableName={childTable.name}
                 detailKeyFid={_.get(relationship, "detailFieldId")}
                 detailKeyValue={_.get(fieldRecord, "value")}
             />

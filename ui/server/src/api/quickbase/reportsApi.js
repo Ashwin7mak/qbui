@@ -584,6 +584,41 @@
                 }.bind(this));
             },
 
+
+            /**
+             * Get the default report id, defaults to constants.SYNTHETIC_TABLE_REPORT.ID if not found.
+             * @param req
+             * @returns Promise
+             */
+            fetchDefaultReportId: function(req) {
+                let opts = requestHelper.setOptions(req, true);
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
+                return new Promise((resolve, reject) => {
+                    return requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            //  As a default, will generate a synthetic report using the table defaults if
+                            //  a saved report is not defined as the homepage.
+                            let homepageReportId = constants.SYNTHETIC_TABLE_REPORT.ID;
+                            if (response.body) {
+                                let responseBodyParsed = JSON.parse(response.body);
+                                if (responseBodyParsed) {
+                                    //  fetch the specified report home page report id..we don't necessarily
+                                    //  know if the id value is valid, so fetch it and find out..
+                                    homepageReportId = responseBodyParsed;
+                                }
+                            }
+
+                            resolve(homepageReportId);
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
+                            reject(error);
+                        }
+                    );
+                });
+            },
+
             /**
              * Return the table homepage report using it's meta data to determine its initial display state.
              *
@@ -592,25 +627,9 @@
              */
             fetchTableHomePageReport: function(req) {
                 return new Promise((resolve, reject) => {
-                    let opts = requestHelper.setOptions(req, true);
-                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
-
                     //  make the api request to get the table homepage report id
-                    requestHelper.executeRequest(req, opts).then(
-                        (response) => {
-                            //  As a default, will generate a synthetic report using the table defaults if
-                            //  a saved report is not defined as the homepage.
-                            let homepageReportId = constants.SYNTHETIC_TABLE_REPORT.ID;
-                            if (response.body) {
-                                let responseBodyParsed = JSON.parse(response.body);
-                                if (responseBodyParsed) {
-                                    //  fetch the specified report home page report id..who don't necessarily
-                                    //  know if the id value is valid, so fetch it and find out..
-                                    homepageReportId = responseBodyParsed;
-                                }
-                            }
-
+                    this.fetchDefaultReportId(req, opts).then(
+                        (homepageReportId) => {
                             //  fetch the report
                             this.fetchReport(req, homepageReportId, true, true).then(
                                 (reportResponse) => {
@@ -624,10 +643,6 @@
                                 requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
                                 reject(ex);
                             });
-                        },
-                        (error) => {
-                            log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
-                            reject(error);
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('reportsAPI..fetch report homepage in fetchTableHomePageReport', ex, true);

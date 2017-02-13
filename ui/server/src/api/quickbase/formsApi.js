@@ -19,6 +19,7 @@
 
         let requestHelper = require('./requestHelper')(config);
         let recordsApi = require('./recordsApi')(config);
+        let appsApi = require('./appsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
 
         /**
@@ -147,7 +148,68 @@
                     opts.url += search;
                 }
 
-                return requestHelper.executeRequest(req, opts);
+                // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
+                // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
+                if (req.query.relationshipPrototype) {
+                    return this.createReferenceElments(req, opts);
+                } else {
+                    return requestHelper.executeRequest(req, opts)
+                        .then(response => JSON.parse(response.body));
+                }
+            },
+
+            /**
+             * Eventually FormMetaData returned from the experience engine should include ReferenceElements. For now,
+             * this function will get the formMetaData and add ReferenceElements to the form.
+             * @param req
+             * @param opts
+             * @returns {Promise}
+             */
+            createReferenceElments: (req, opts) => {
+                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req)];
+                return Promise.all(promises).then(response => {
+                    const formMeta = JSON.parse(response[0].body);
+                    const relationships = response[1] || [];
+                    formMeta.relationships = relationships;
+
+                    if (relationships.length) {
+                        let referenceElements = [];
+                        // creates the mock referenceElement
+                        const referenceElement = (orderIndex, relationshipId) => {
+                            return {
+                                ReferenceElement: {
+                                    displayOptions: [
+                                        "VIEW",
+                                        "ADD",
+                                        "EDIT"
+                                    ],
+                                    type: "EMBEDREPORT",
+                                    orderIndex: orderIndex,
+                                    positionSameRow: false,
+                                    relationshipId: relationshipId
+                                }
+                            };
+                        };
+                        relationships.forEach((relation, relationshipIdx) => {
+                            // if a relationship in which this form is a parent is defined, mock ReferenceElement
+                            if (relation.masterTableId === formMeta.tableId) {
+                                referenceElements.push(referenceElement(referenceElements.length, relationshipIdx));
+                            }
+                        });
+                        // if we created referenceElements, inject relationship elements in its own section
+                        if (referenceElements.length) {
+                            const length = Object.keys(formMeta.tabs[0].sections).length;
+                            let sections = formMeta.tabs[0].sections;
+                            sections[length] = Object.assign(lodash.cloneDeep(sections[0]), {
+                                elements: lodash.keyBy(referenceElements, 'ReferenceElement.orderIndex'),
+                                fields: [],
+                                orderIndex: length
+                            });
+                            sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
+                        }
+                    }
+                    return formMeta;
+                });
             },
 
             fetchTableFields: function(req) {
@@ -173,13 +235,13 @@
                         function(response) {
                             //  create return object with the form meta data
                             let obj = {
-                                formMeta: JSON.parse(response[0].body),
+                                formMeta: response[0],
                                 tableFields: JSON.parse(response[1].body),
                                 record: {},
                                 fields: {}
                             };
 
-                            //  extract into list all the fields defined on the form.  If any fields, will query
+                                //  extract into list all the fields defined on the form.  If any fields, will query
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);

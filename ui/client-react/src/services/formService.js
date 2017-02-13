@@ -46,6 +46,11 @@ class FormService extends BaseService {
         //  always want formatted data
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
 
+        // use the prototype relationship object elements included in the returned form
+        if (window.location.search.indexOf('relationshipPrototype') > -1) {
+            params.relationshipPrototype = window.location.search.indexOf('relationshipPrototype') > -1;
+        }
+
         let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
         return super.get(url, {params:params});
     }
