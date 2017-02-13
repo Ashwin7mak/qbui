@@ -20,6 +20,7 @@
         let requestHelper = require('./requestHelper')(config);
         let recordsApi = require('./recordsApi')(config);
         let appsApi = require('./appsApi')(config);
+        let reportsApi = require('./reportsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
 
         /**
@@ -148,9 +149,9 @@
                     opts.url += search;
                 }
 
-                // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
-                // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
                 if (req.query.relationshipPrototype) {
+                    // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
+                    // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
                     return this.createReferenceElments(req, opts);
                 } else {
                     return requestHelper.executeRequest(req, opts)
@@ -236,12 +237,42 @@
                             //  create return object with the form meta data
                             let obj = {
                                 formMeta: response[0],
-                                tableFields: JSON.parse(response[1].body),
-                                record: {},
-                                fields: {}
+                                tableFields: JSON.parse(response[1].body)
                             };
 
-                                //  extract into list all the fields defined on the form.  If any fields, will query
+                            // If form object has a relationship defined, attach the default child reportId to each
+                            // relationship object.
+                            obj.formMeta.relationships = obj.formMeta.relationships || [];
+                            if (obj.formMeta.relationships.length) {
+                                // collect all childTableIds
+                                let childTableIds = obj.formMeta.relationships.map(rel => rel.detailTableId);
+                                childTableIds = lodash.uniq(childTableIds);
+                                // find default reportId for each child
+                                const defaultReportIdPromises = childTableIds.map(childTableId => reportsApi.fetchDefaultReportId(req, childTableId));
+
+                                return Promise.all(defaultReportIdPromises).then(defaultReportIds => {
+                                    // The id in childTableIds corresponds to the response array
+                                    const idToReportMap = {};
+                                    childTableIds.forEach((childTableId, idx) => {
+                                        idToReportMap[childTableId] = defaultReportIds[idx];
+                                    });
+
+                                    // attach the defaultReportId to each relationship object
+                                    obj.formMeta.relationships = obj.formMeta.relationships.map(relationship => {
+                                        relationship.childDefaultReportId = idToReportMap[relationship.detailTableId];
+                                        return relationship;
+                                    });
+
+                                    return obj;
+                                });
+                            } else {
+                                return obj;
+                            }
+                        }).then(obj => {
+                            obj.record = {};
+                            obj.fields = {};
+
+                            //  extract into list all the fields defined on the form.  If any fields, will query
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);

@@ -253,23 +253,31 @@ let QBForm = React.createClass({
      */
     createChildReportElementCell(element, sectionIndex, colSpan) {
         let key = 'relatedField-' + sectionIndex + '-' + element.orderIndex;
+
+        // Find the relationship object for this element.
+        // This element represents a single relationship from the `formMeta.relationships` array.
+        // The `element.relationshipId` is the index offset within the relationship array.
         const relationship = _.get(this, `props.formData.formMeta.relationships[${element.relationshipId}]`, {});
+
+        // Find the foreign key value. This is the value stored in one of the master record's fields
+        // the field id is specified as 'masterFieldId' in the relationship object.
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
-        // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now
-        const childReportId = _.get(relationship, 'childDefaultReportId', 0);
+        const detailKeyValue = _.get(fieldRecord, 'value');
 
-        // find the child table so we can retrieve its table name
+        // Find the child table's name.
         const tables = _.get(this, 'props.selectedApp.tables');
         const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
+        const childTableName = childTable.name;
+
         return <td key={key}>
             <RelatedChildReport
                 appId={_.get(relationship, "appId")}
                 childTableId={_.get(relationship, "detailTableId")}
-                childReportId={childReportId}
-                childTableName={childTable.name}
+                childReportId={_.get(relationship, 'childDefaultReportId')}
+                childTableName={childTableName}
                 detailKeyFid={_.get(relationship, "detailFieldId")}
-                detailKeyValue={_.get(fieldRecord, "value")}
+                detailKeyValue={detailKeyValue}
             />
         </td>;
     },

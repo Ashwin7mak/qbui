@@ -588,12 +588,18 @@
             /**
              * Get the default report id, defaults to constants.SYNTHETIC_TABLE_REPORT.ID if not found.
              * @param req
+             * @param tableId Optional tableId to use instead of the tableId in the req.url
              * @returns Promise
              */
-            fetchDefaultReportId: function(req) {
+            fetchDefaultReportId: function(req, tableId) {
                 let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
+
+                let requestUrl = req.url;
+                if (tableId) {
+                    requestUrl = routeHelper.getTablesRoute(req.url, tableId);
+                }
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(requestUrl);
                 return new Promise((resolve, reject) => {
                     return requestHelper.executeRequest(req, opts).then(
                         (response) => {
@@ -628,7 +634,7 @@
             fetchTableHomePageReport: function(req) {
                 return new Promise((resolve, reject) => {
                     //  make the api request to get the table homepage report id
-                    this.fetchDefaultReportId(req, opts).then(
+                    this.fetchDefaultReportId(req).then(
                         (homepageReportId) => {
                             //  fetch the report
                             this.fetchReport(req, homepageReportId, true, true).then(
