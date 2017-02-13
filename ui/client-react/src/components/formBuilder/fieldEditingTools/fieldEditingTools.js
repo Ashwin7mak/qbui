@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDom from 'react-dom';
-import QbIcon, {AVAILABLE_FONTS} from '../../qbIcon/qbIcon';
+import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
+import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
 
@@ -68,7 +69,7 @@ class FieldEditingTools extends Component {
                 </div>
                 <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                        <QbIcon iconFont={AVAILABLE_FONTS.TABLE_STURDY} icon="Dimensions"/>
+                        <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
                     </QbToolTip>
                 </div>
             </div>
