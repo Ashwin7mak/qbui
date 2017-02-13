@@ -33,6 +33,7 @@ describe('Shell actions', () => {
 
         const navState = true;
         expect(shellActions.toggleLeftNav(navState)).toEqual({type: types.TOGGLE_LEFT_NAV_EXPANDED, navState});
+        shellActions.__ResetDependency__('Breakpoints');
     });
 
     it('should create an action to show row actions menu', () => {
