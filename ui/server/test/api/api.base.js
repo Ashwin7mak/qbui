@@ -31,6 +31,7 @@
         var HTTPS = 'https://';
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
+        var EE_BASE_ENDPOINT = '/ee/v1';
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
@@ -211,7 +212,7 @@
                 return tableEndpoint;
             },
             resolveFormsEndpoint      : function(appId, tableId, formId, formType) {
-                var formEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
+                var formEndpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
                 if (formId) {
                     formEndpoint = formEndpoint + formId;
                 }

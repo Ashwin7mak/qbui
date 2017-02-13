@@ -28,6 +28,9 @@
     if (process.env.JAVA_HOST) {
         javaHost = process.env.JAVA_HOST;
     }
+    if (process.env.EE_HOST) {
+        eeHost = process.env.EE_HOST;
+    }
 
     if (!eeHostEnable) {
         eeHost = javaHost;
@@ -63,9 +66,9 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
+        javaHost: javaHost,
 
-        eeHost: 'https://ee.trunk-int-experienceengine.newstack.quickbaserocks.com',
+        eeHost: eeHost,
         eeHostEnable: true,
 
         //Express Server
