@@ -1,8 +1,9 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
+import AVAILABLE_ICON_FONTS from '../../src/constants/iconConstants';
 
-import QbIcon, {AVAILABLE_FONTS} from '../../src/components/qbIcon/qbIcon';
+import QbIcon from '../../src/components/qbIcon/qbIcon';
 
 let component;
 
@@ -14,12 +15,12 @@ describe('QbIcon', () => {
     it('renders an icon from the default font set', () => {
         component = shallow(<QbIcon icon="pencil" />);
 
-        expect(component.find(`.${AVAILABLE_FONTS.DEFAULT}-pencil`)).toBePresent();
+        expect(component.find(`.${AVAILABLE_ICON_FONTS.DEFAULT}-pencil`)).toBePresent();
     });
 
     it('renders an icon from a different font set', () => {
-        component = shallow(<QbIcon iconFont={AVAILABLE_FONTS.TABLE_STURDY} icon="Dimensions"/>);
+        component = shallow(<QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>);
 
-        expect(component.find(`.${AVAILABLE_FONTS.TABLE_STURDY}-Dimensions`)).toBePresent();
+        expect(component.find(`.${AVAILABLE_ICON_FONTS.TABLE_STURDY}-Dimensions`)).toBePresent();
     });
 });
