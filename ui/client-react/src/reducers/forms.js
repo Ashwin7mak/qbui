@@ -93,6 +93,7 @@ const forms = (
 
     case types.SAVING_FORM: {
         newState.push({
+            ...currentForm,
             id,
             saving: true,
             errorStatus: null
@@ -101,6 +102,7 @@ const forms = (
     }
     case types.SAVING_FORM_ERROR: {
         newState.push({
+            ...currentForm,
             id,
             saving: false,
             errorStatus: action.content
@@ -108,10 +110,12 @@ const forms = (
         return newState;
     }
     case types.SAVING_FORM_SUCCESS: {
+        let updatedForm = currentForm;
+        currentForm.formData = action.content;
         newState.push({
+            ...currentForm,
             id,
-            saving: false,
-            formData: action.content
+            saving: false
         });
         return newState;
     }
