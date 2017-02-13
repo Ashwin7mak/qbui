@@ -42,16 +42,31 @@ describe('Form Actions load form error functions', () => {
         }
     }
 
+    let mockNotifications = {
+        NotificationManager: {
+            success: function() {
+                return true;
+            },
+            error: function() {
+                return false;
+            }
+        }
+    };
+
     beforeEach(() => {
         spyOn(mockFormService.prototype, 'getFormAndRecord').and.callThrough();
         spyOn(mockFormService.prototype, 'getForm').and.callThrough();
         spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
         spyOn(mockFormService.prototype, 'createForm').and.callThrough();
+        spyOn(mockNotifications.NotificationManager, 'success').and.callThrough();
+        spyOn(mockNotifications.NotificationManager, 'error').and.callThrough();
         FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+        FormActionsRewireAPI.__Rewire__('Notifications', mockNotifications);
     });
 
     afterEach(() => {
         FormActionsRewireAPI.__ResetDependency__('FormService');
+        FormActionsRewireAPI.__ResetDependency__('Notifications');
     });
 
     it('test missing params to loadForm', (done) => {
@@ -112,10 +127,13 @@ describe('Form Actions load form error functions', () => {
                 () => {
                     if (testCase.id === NEW) {
                         expect(mockFormService.prototype.getForm).toHaveBeenCalled();
+                        expect(mockFormService.prototype.getFormAndRecord).not.toHaveBeenCalled();
                     } else {
                         expect(mockFormService.prototype.getFormAndRecord).toHaveBeenCalled();
+                        expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
                     }
                     expect(store.getActions()).toEqual(loadFormExpectedActions);
+                    expect(mockNotifications.NotificationManager.error).toHaveBeenCalled();
                     done();
                 }
             );
@@ -138,6 +156,7 @@ describe('Form Actions load form error functions', () => {
                 expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
                 expect(mockFormService.prototype.createForm).not.toHaveBeenCalled();
                 expect(store.getActions()).toEqual(saveFormExpectedActions);
+                expect(mockNotifications.NotificationManager.error).toHaveBeenCalled();
                 done();
             }
         );
@@ -153,6 +172,7 @@ describe('Form Actions load form error functions', () => {
                 expect(mockFormService.prototype.createForm).toHaveBeenCalled();
                 expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
                 expect(store.getActions()).toEqual(saveFormExpectedActions);
+                expect(mockNotifications.NotificationManager.error).toHaveBeenCalled();
                 done();
             }
         );
