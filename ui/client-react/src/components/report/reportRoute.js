@@ -48,7 +48,7 @@ const ReportRoute = React.createClass({
         flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
-        let {appId, tblId, detailKeyFid, detailKeyValue} = params;
+        let {appId, tblId} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
@@ -56,6 +56,7 @@ const ReportRoute = React.createClass({
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
 
+            const {detailKeyFid, detailKeyValue} = this.props.location.query;
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
             if (detailKeyFid && detailKeyValue) {

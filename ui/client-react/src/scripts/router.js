@@ -55,7 +55,6 @@ render((
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
-                <Route path="table/:tblId/report/:rptId/detailKeyFid/:detailKeyFid/detailKeyValue/:detailKeyValue" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>

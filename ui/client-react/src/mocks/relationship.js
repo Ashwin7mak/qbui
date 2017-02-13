@@ -29,6 +29,7 @@ export const relationships = [
         "appId": "1",
         "description": "Referential integrity relationship between Master / Child Tables",
         "referentialIntegrity": false,
-        "cascadeDelete": false
+        "cascadeDelete": false,
+        "childDefaultReportId": 0
     }
 ];

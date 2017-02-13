@@ -67,7 +67,7 @@ const UrlUtils = {
     /**
      * Return URL of route for displaying a child report in the following form:
      *
-     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}/detailKeyFid/${detailKeyFid}/detailKeyValue/${detailKeyValue}`
+     *   `/qbase/app/${appId}/table/${tableId}/report/${reportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`
      *
      * @return {string} URL of route for displaying a child report
      */
