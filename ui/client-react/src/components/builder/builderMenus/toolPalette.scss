@@ -1,8 +1,9 @@
 @import '../../../../src/assets/css/qbVariables';
 
 .toolPaletteContainer {
+  z-index: 20;
   width: 300px;
-  background-color: #193048;
+  background-color: green;
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;

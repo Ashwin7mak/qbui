@@ -3,17 +3,6 @@
 .builderWrapperContent {
     height: 100%;
     width: 100%;
-    display: flex;
-    flex-direction: row;
-
-    .saveOrCancelFooter {
-        position: absolute;
-        bottom: 0;
-        right: 30px;
-        width: 100%;
-        color: $color-black-100;
-    }
-
 
     .navTopHeader {
         min-width: 200px;
@@ -22,8 +11,9 @@
         display: flex;
         flex-direction: column;
         background-color: #e3eaf3;
+
         .topNav {
-            z-index: 10;
+            z-index: 7;
             min-width: 200px;
             flex: 0 0 auto;
             flex-basis: $top-nav-height;
@@ -31,6 +21,22 @@
             flex-direction: column;
             background-color: $topnav-header-background-color;
             text-align: right;
+        }
+    }
+
+    .builderWrapperBody {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+
+        .saveOrCancelFooter {
+            position: absolute;
+            bottom: 0;
+            right: 30px;
+            width: 100%;
+            color: $color-black-100;
         }
     }
 }

@@ -2,13 +2,13 @@
 
 
 .saveOrCancelFooter {
+    z-index: 8;
     color: $color-black-100;
     flex: 0 0 auto;
     display: flex;
     flex-direction: row;
     background-color: $trowser-footer-background-color;
     padding: 3px 0;
-    z-index: 10;
 
     .leftActions {
         flex: 0 0 auto;

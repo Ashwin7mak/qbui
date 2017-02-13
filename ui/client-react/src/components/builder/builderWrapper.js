@@ -87,24 +87,29 @@ const BuilderWrapper = React.createClass({
         const formType = this.props.location.query.formType;
 
         return (
-            <div className="builderWrapperContent" >
+            <div className="builderWrapperContent">
+
                 <div className="navTopHeader">
                     <div className="topNav">
-                    {this.getTopGlobalActions()}
-                     <NotificationContainer/>
+                        {this.getTopGlobalActions()}
+                         <NotificationContainer/>
+                    </div>
                 </div>
-            </div>
-                <ToolPalette />
 
-                <FormBuilderContainer
-                appId={appId}
-                tblId={tblId}
-                formType={formType}
-                formId={formId} />
+                <div className="builderWrapperBody">
+                    <ToolPalette />
 
-                <FieldProperties />
+                    <FormBuilderContainer
+                    appId={appId}
+                    tblId={tblId}
+                    formType={formType}
+                    formId={formId} />
 
-                {this.getSaveOrCancelFooter()}
+                    <FieldProperties />
+
+                    {this.getSaveOrCancelFooter()}
+                </div>
+
             </div>
         );
     }
