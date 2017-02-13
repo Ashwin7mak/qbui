@@ -15,8 +15,8 @@ class FormService extends BaseService {
             GET_FORMS     : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}`,
             GET_FORM_TYPE : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}/${constants.FORMS_TYPE}/{2}`,
             //  core engine endpoints
-            GET_FORM_COMPONENTS  : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}/${constants.FORMCOMPONENTS}`,
-            GET_FORM_COMPONENTS_ONLY  : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMCOMPONENTS}`
+            GET_FORM_COMPONENTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}/${constants.FORMCOMPONENTS}`,
+            GET_FORM_COMPONENTS_ONLY  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMCOMPONENTS}`
         };
     }
 
