@@ -5,6 +5,7 @@
     width: 100%;
 
     .topNav {
+        border: $stroke-width-thin solid  $formBuilder-border-color;
         flex-direction: column;
         min-width: 200px;
         background-color: $topnav-header-background-color;
