@@ -198,6 +198,8 @@ describe('Forms reducer functions', () => {
 
         it('returns existing state if there is no current form', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.moveField).not.toHaveBeenCalled();
         });
     });
 });

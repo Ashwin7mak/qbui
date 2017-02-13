@@ -56,9 +56,9 @@ describe('FormBuilderContainer', () => {
         let testCases = [
             {
                 description: 'loads the FormBuilder if a form has loaded',
-                forms: [{loading: false, formData: 'some form'}],
+                forms: [{loading: false, formData: {formMeta: {includeBuiltIns: false}}}],
                 expectedLoaded: true,
-                expectedFormData: 'some form'
+                expectedFormData: {formMeta: {includeBuiltIns: false}}
             },
             {
                 description: 'shows the loading spinner if there is no form data',
