@@ -125,6 +125,10 @@ const forms = (
         //
         //no changes to state..
         let updatedForm = _.cloneDeep(currentForm);
+        //  ..for now until the store is refactored..
+        if (!updatedForm.formData) {
+            updatedForm.formData = {};
+        }
         updatedForm.formData.formMeta = action.content;
         newState.push({
             ...updatedForm,
