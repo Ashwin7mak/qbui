@@ -88,12 +88,9 @@ const BuilderWrapper = React.createClass({
 
         return (
             <div className="builderWrapperContent">
-
-                <div className="navTopHeader">
-                    <div className="topNav">
-                        {this.getTopGlobalActions()}
-                         <NotificationContainer/>
-                    </div>
+                <div className="topNav">
+                    {this.getTopGlobalActions()}
+                     <NotificationContainer/>
                 </div>
 
                 <div className="builderWrapperBody">

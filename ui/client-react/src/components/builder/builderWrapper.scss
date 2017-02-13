@@ -4,24 +4,11 @@
     height: 100%;
     width: 100%;
 
-    .navTopHeader {
-        min-width: 200px;
-        flex: 0 0 auto;
-        flex-basis: 40px;
-        display: flex;
+    .topNav {
         flex-direction: column;
-        background-color: #e3eaf3;
-
-        .topNav {
-            z-index: 7;
-            min-width: 200px;
-            flex: 0 0 auto;
-            flex-basis: $top-nav-height;
-            display: flex;
-            flex-direction: column;
-            background-color: $topnav-header-background-color;
-            text-align: right;
-        }
+        min-width: 200px;
+        background-color: $topnav-header-background-color;
+        text-align: right;
     }
 
     .builderWrapperBody {
