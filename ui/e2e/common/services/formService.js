@@ -55,19 +55,18 @@
             createDefaultForms: function(app) {
                 var generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
                 var appId = app.id;
-                var createdFormIds = [];
+                var createdFormPromises = [];
 
                 for (var i = 0; i < app.tables.length; i++) {
                     var tableId = app.tables[i].id;
                     var formJSON = generatedForms[i];
                     var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                    recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON).then(function(result) {
-                        var id = JSON.parse(result.body);
-                        createdFormIds.push(id);
-                    });
+                    createdFormPromises.push(recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON));
                 }
 
-                return createdFormIds;
+                return Promise.all(createdFormPromises).then(results => {
+                    return results.map(result => JSON.parse(result.body));
+                });
             },
 
             /**

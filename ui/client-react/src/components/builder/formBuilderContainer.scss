@@ -1,14 +1,15 @@
 @import '../../../src/assets/css/qbVariables';
 
-.formBuilder {
+.formBuilderContainer {
     display: flex;
     height: 100%;
-    flex-direction: column;
+    width: 100%;
+    overflow: auto;
 
     .loadedContent {
-        flex: 1 0 auto;
-        height: 100%;
         overflow: auto;
+        padding-bottom: 65px;
+        width: 100%;
     }
 
     .formBuilderHeader {

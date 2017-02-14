@@ -18,6 +18,7 @@
     let REPORT_RESULTS = 'results';
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
+    let RELATIONSHIPS = 'relationships';
 
     let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
     let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
@@ -289,6 +290,22 @@
             }
 
             //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * Given a url segment containging an APPS id, return the relationships
+         * end point for that app.
+         * Example:  url: /apps/123/rest/of/url
+         *           return: /apps/123/relationships
+         * @param url
+         * @returns {*}
+         */
+        getRelationshipsRoute: function(url) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                return root + '/' + RELATIONSHIPS;
+            }
             return url;
         },
 

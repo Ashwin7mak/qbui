@@ -109,3 +109,24 @@ $formula-background-small-height: 38px;
 //inline edit input box height
 $form-view-box-height: 32px;
 $inline-edit-input-box-height: 32px;
+
+// Semantic names for borders
+// TODO:: $radius-base is different than specified in _customVariables, but this matches spec at https://quickbase.atlassian.net/wiki/display/qbasepd/Semantic+Names
+$radius-base: 2px;
+$stroke-width-thin: 1px;
+
+// Semantic names for icon fonts
+$size-iconfont-small: 16px;
+
+// Semantic names for padding/margins
+$spacing-none: 0;
+$spacing-xx-tiny: 1px;
+$spacing-x-tiny: 2px;
+$spacing-tiny: 5px;
+$spacing-xxx-small: 10px;
+$spacing-xx-small: 15px;
+$spacing-x-small: 20px;
+$spacing-small: 25px;
+$spacing-medium1: 30px;
+$spacing-medium2: 40px;
+$spacing-medium3: 50px;

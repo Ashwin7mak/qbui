@@ -90,13 +90,6 @@ describe('Express Client Routes', function() {
         done();
     });
 
-    it('Validate get child report route', function(done) {
-        request(app).
-        get('/app/1/table/2/report/3/fieldWithParentId/4/masterRecordId/5').
-        expect(200);
-        done();
-    });
-
     it('Validate get component route', function(done) {
         request(app).
         get('/components').
