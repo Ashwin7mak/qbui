@@ -18,25 +18,6 @@ import './formBuilderContainer.scss';
 
 let logger = new Logger();
 
-const mapStateToProps = state => {
-    return {
-        forms: state.forms
-    };
-};
-
-//TODO  NO reference to component redux store -- once we start implementing different builders,
-//TODO  this will get very difficult to manage.  Move this into the form builder container.
-const mapDispatchToProps = dispatch => {
-    return {
-        loadForm(appId, tableId, reportId, formType, recordId) {
-            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
-        },
-        updateForm(appId, tblId, formType, form) {
-            return dispatch(updateForm(appId, tblId, formType, form));
-        }
-    };
-};
-
 export const FormBuilderContainer = React.createClass({
     propTypes: {
         /**
@@ -101,8 +82,6 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
-        console.log('this.props: ', this.props);
-
         let loaded = (this.props.forms && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
         let formData = null;
@@ -125,6 +104,24 @@ export const FormBuilderContainer = React.createClass({
         );
     }
 });
+
+const mapStateToProps = state => {
+    return {
+        forms: state.forms
+    };
+};
+
+//TODO  NO reference to component redux store -- once we start implementing different builders,
+const mapDispatchToProps = dispatch => {
+    return {
+        loadForm(appId, tableId, reportId, formType, recordId) {
+            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
+        },
+        updateForm(appId, tblId, formType, form) {
+            return dispatch(updateForm(appId, tblId, formType, form));
+        }
+    };
+};
 
 export default connect(
     mapStateToProps,
