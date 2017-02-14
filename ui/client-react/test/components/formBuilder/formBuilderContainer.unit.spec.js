@@ -53,12 +53,13 @@ describe('FormBuilderContainer', () => {
 
 
     describe('showing FormBuilder', () => {
+        const testFormData = {fields: [], formMeta:{name: 'some form'}};
         let testCases = [
             {
                 description: 'loads the FormBuilder if a form has loaded',
-                forms: [{loading: false, formData: 'some form'}],
+                forms: [{loading: false, formData: testFormData}],
                 expectedLoaded: true,
-                expectedFormData: 'some form'
+                expectedFormData: testFormData
             },
             {
                 description: 'shows the loading spinner if there is no form data',
@@ -82,8 +83,12 @@ describe('FormBuilderContainer', () => {
                 expect(component.find(Loader)).toBePresent();
                 expect(component.find(Loader)).toHaveProp('loaded', testCase.expectedLoaded);
 
-                expect(component.find(FormBuilder)).toBePresent();
-                expect(component.find(FormBuilder)).toHaveProp('formData', testCase.expectedFormData);
+                if (testCase.expectedFormData) {
+                    expect(component.find(FormBuilder)).toBePresent();
+                    expect(component.find(FormBuilder)).toHaveProp('formData', testCase.expectedFormData);
+                } else {
+                    expect(component.find(FormBuilder)).not.toBePresent();
+                }
             });
         });
     });
