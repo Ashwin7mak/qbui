@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import UrlUtils from '../../utils/urlUtils';
 import Breakpoints from '../../utils/breakpoints';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 /**
  * This component renders a link to a child report, which is the behavior in the small breakpoint.
@@ -20,7 +21,17 @@ class ChildReport extends React.Component {
             return null;
         } else if (Breakpoints.isSmallBreakpoint() || true) {
             const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
-            return <Link to={link} className="relatedChildReport childReportLink">{this.props.childTableName || "Child Table"}</Link>;
+            let reportLink;
+            if (this.props.childTableName) {
+                reportLink = <span>{this.props.childTableName}</span>;
+            } else {
+                reportLink = <I18nMessage message="relationship.childTable" />;
+            }
+            return (
+                <Link to={link} className="relatedChildReport childReportLink">
+                    {reportLink}
+                </Link>
+            );
         } else {
             // TODO: render embedded report for medium and large breakpoint
             return null;

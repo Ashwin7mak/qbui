@@ -175,6 +175,9 @@ export default {
                 }
             }
         },
+        relationship: {
+            childTable: "Table Enfant"
+        },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
             Days:"{value, plural, \n =0 {0 jours}\n =1 {1 jour}\n other {{value}  jours}\n} ",
