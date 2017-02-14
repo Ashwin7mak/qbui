@@ -107,8 +107,8 @@
              */
             generateRecordsFromValues: function(field, values) {
                 var emptyRecords = this.generateEmptyRecords([field], values.length);
-                return emptyRecords.map(function(record, idx) {
-                    return record.map(function(_field) {
+                return emptyRecords.map((record, idx) => {
+                    return record.map(_field => {
                         _field.value = values[idx];
                         return _field;
                     });

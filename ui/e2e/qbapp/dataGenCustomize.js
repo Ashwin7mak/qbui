@@ -414,7 +414,7 @@ consts = require('../../common/src/constants.js');
         return tableToFieldToFieldTypeMap;
     }
 
-    function generateNewData(done) {
+    function generateNewData(createdRecs) {
         e2eBase.tablesSetUp(makeAppMap()).then(function(createdApp) {
             // Set your global objects to use in the test functions
             app = createdApp;
@@ -437,7 +437,7 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
             var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
 
-            createdResults.then(function(results) {
+            return createdResults.then(function(results) {
                 console.log(JSON.stringify(createdResults));
                 // after all the promises in results are done then call done callback to report complete
                 return Promise.all(results.allPromises);
@@ -471,36 +471,39 @@ consts = require('../../common/src/constants.js');
             //Reset default report for table 8
             return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE8].id, 2);
         }).then(function() {
+            const promises = [];
             // Numeric key entry for the relationship's child table corresponds to a parent's recordId.
             // These need to be integers in the range of 1~n, n being the number of parent records
             // We also want these to be consistent, as opposed to randomly generated numbers, for
             // testing purposes.
-            var fieldToEdit = app.tables[e2eConsts.TABLE8].fields[6];
-            var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
-            return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE8].id, editRecords);
-        }).then(function() {
+            let fieldToEdit = app.tables[e2eConsts.TABLE8].fields[6];
+            let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            promises.push(e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE8].id, editRecords));
+
             // TABLE10 has 2 parents, set first numeric field
-            var fieldToEdit = app.tables[e2eConsts.TABLE10].fields[6];
-            var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
-            return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords);
-        }).then(function() {
+            fieldToEdit = app.tables[e2eConsts.TABLE10].fields[6];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            promises.push(e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords));
+
             // TABLE10 has 2 parents, set 2nd numeric field
-            var fieldToEdit = app.tables[e2eConsts.TABLE10].fields[7];
-            var editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
-            return e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords);
-        }).then(function() {
+            fieldToEdit = app.tables[e2eConsts.TABLE10].fields[7];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            promises.push(e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords));
+
             // Create tables relationship, table 8 is a child of table 7
-            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8], 7);
-        }).then(function() {
+            promises.push(e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8], 7));
+
             // table 10 is a child of both table 7 and table 9
-            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE10], 7);
-        }).then(function() {
-            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE9], app.tables[e2eConsts.TABLE10], 8);
+            promises.push(e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE10], 7));
+            promises.push(e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE9], app.tables[e2eConsts.TABLE10], 8));
+            return Promise.all(promises);
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)
-            e2eBase.formService.createDefaultForms(app);
-            done();
+            return e2eBase.formService.createDefaultForms(app);
+        }).then(function() {
+            // print the generated test data and endpoints
+            createdRecs();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {
