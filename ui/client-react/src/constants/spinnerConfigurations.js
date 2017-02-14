@@ -59,8 +59,7 @@ export const LARGE_RELATIVE_LIGHT_SPINNER = _.merge({}, LARGE_RELATIVE_SPINNER, 
 //-----------------------------------
 
 // Used in AgGrid when refreshing the full report, for large breakpoint.
-export const LARGE_BREAKPOINT_REPORT = LARGE_ABSOLUTE_CENTERED_SPINNER;
-export const LARGE_BREAKPOINT_FORM = LARGE_ABSOLUTE_CENTERED_SPINNER;
+export const LARGE_BREAKPOINT = LARGE_ABSOLUTE_CENTERED_SPINNER;
 
 // Used in the left navbar when apps or tables are loading
 export const LEFT_NAV_BAR =  LARGE_RELATIVE_LIGHT_SPINNER;

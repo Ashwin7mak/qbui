@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {loadForm, moveFieldOnForm} from '../../actions/formActions';
 import Loader from 'react-loader';
-import {LARGE_BREAKPOINT_FORM} from "../../constants/spinnerConfigurations";
+import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
@@ -66,7 +66,7 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
                 <ToolPalette />
 
-                <Loader loaded={loaded} options={LARGE_BREAKPOINT_FORM}>
+                <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                     <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
                 </Loader>
 
