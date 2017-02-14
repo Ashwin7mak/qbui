@@ -1,4 +1,4 @@
-import {ReportColumnTransformer, __RewireAPI__ as ReportColumnTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
+import ReportColumnTransformer, {__RewireAPI__ as ReportColumnTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import SchemaConsts from '../../../../common/src/constants';
 
 const testFieldDef = {fieldDef: true};

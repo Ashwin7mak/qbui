@@ -27,7 +27,7 @@ describe('RecordTrowser functions', () => {
             recordPendingEditsCommit() {},
             recordPendingEditsCancel() {},
             saveRecord() {return Promise.resolve({});},
-            saveNewRecord() {return Promise.resolve({});}
+            saveNewRecord() {return Promise.resolve({});},
             editNextRecord() {},
             editPreviousRecord() {},
             openRecordForEdit() {}

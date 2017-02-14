@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {ReportGrid, __RewireAPI__ as ReportGridRewireAPI} from '../../../src/components/dataTable/reportGrid/reportGrid';
+import ReportGrid, {__RewireAPI__ as ReportGridRewireAPI} from '../../../src/components/dataTable/reportGrid/reportGrid';
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
 import ReportColumnHeaderMenu from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';

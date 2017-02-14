@@ -4,7 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import RowActions from '../../../src/components/dataTable/qbGrid/rowActions';
 import {PositionedRowEditActions} from '../../../src/components/dataTable/qbGrid/rowEditActions';
-import {QbIconActions, __RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
+import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 
 let component;
 

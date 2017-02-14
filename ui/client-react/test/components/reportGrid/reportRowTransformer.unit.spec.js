@@ -1,4 +1,4 @@
-import {ReportRowTransformer, __RewireAPI__ as ReportRowTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportRowTransformer';
+import ReportRowTransformer, {__RewireAPI__ as ReportRowTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportRowTransformer';
 import SchemaConsts from '../../../../common/src/constants';
 import {DEFAULT_RECORD_KEY} from '../../../src/constants/schema';
 
