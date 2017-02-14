@@ -176,6 +176,9 @@ export default {
                 }
             }
         },
+        relationship: {
+            childTable: "Kind Tisch"
+        },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
             Days:"{value, plural, \n =0 {0 Tage}\n =1 {1 Tag}\n other {{value} Tage}\n} ",

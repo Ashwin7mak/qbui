@@ -1,10 +1,12 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 import QBForm from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
 import Breakpoints from '../../src/utils/breakpoints';
+import {referenceElement, relationships} from '../../src/mocks/relationship';
 
 const fakeQBFormData = {
     formMeta: {
@@ -134,6 +136,27 @@ const fakeQBFormData = {
     fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 2, name: "field 2", datatypeAttributes: {type: "TEXT"}}]
 };
 
+const QBFormDataWithRelationship = _.cloneDeep(fakeQBFormData);
+QBFormDataWithRelationship.formMeta.tabs[0].sections[2] = {
+    "orderIndex": 2,
+    "headerElement": {
+        "FormHeaderElement": {
+            "displayText": "Child report link",
+            "displayOptions": [
+                "ADD",
+                "EDIT",
+                "VIEW"
+            ],
+            "labelPosition": "LEFT",
+            "type": "HEADER"
+        }
+    },
+    "elements" : {
+        "0": referenceElement()
+    }
+};
+QBFormDataWithRelationship.formMeta.relationships = relationships;
+
 const emptyQBFormData = {
     formMeta: {
         "tabs": {
@@ -236,6 +259,21 @@ describe('QBForm functions', () => {
         expect(textElements.length).toEqual(2);
     });
 
+    it('does not render relationship element if no relationships exist', () => {
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        const childReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "relatedChildReport");
+        expect(childReport.length).toEqual(0);
+    });
+
+    it('renders relationship links in smallBP', () => {
+        QBForm.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={QBFormDataWithRelationship}></QBForm>);
+        const childReportLink = TestUtils.findRenderedDOMComponentWithClass(component, "childReportLink");
+        expect(childReportLink).toBeTruthy();
+
+        QBForm.__ResetDependency__('Breakpoints');
+    });
 
     it('test render of empty section', () => {
         component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={emptyQBFormData}></QBForm>);
