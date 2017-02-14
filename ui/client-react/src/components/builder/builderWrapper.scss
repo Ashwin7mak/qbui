@@ -7,7 +7,6 @@
     .builderWrapperBody {
         width: 100%;
     }
-    
     .topNav {
         border: $stroke-width-thin solid  $formBuilder-border-color;
         flex-direction: column;
@@ -15,7 +14,6 @@
         background-color: $topnav-header-background-color;
         text-align: right;
     }
-
     .saveOrCancelFooter {
         position: absolute;
         bottom: 0;
