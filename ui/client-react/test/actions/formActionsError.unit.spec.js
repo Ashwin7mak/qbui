@@ -112,8 +112,10 @@ describe('Form Actions load form error functions', () => {
                 () => {
                     if (testCase.id === NEW) {
                         expect(mockFormService.prototype.getForm).toHaveBeenCalled();
+                        expect(mockFormService.prototype.getFormAndRecord).not.toHaveBeenCalled();
                     } else {
                         expect(mockFormService.prototype.getFormAndRecord).toHaveBeenCalled();
+                        expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
                     }
                     expect(store.getActions()).toEqual(loadFormExpectedActions);
                     done();

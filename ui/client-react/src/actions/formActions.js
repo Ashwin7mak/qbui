@@ -12,7 +12,6 @@ import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
-import {referenceElement} from '../mocks/relationship';
 
 let logger = new Logger();
 
@@ -169,62 +168,55 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             let formService = new FormService();
 
             let promise;
-
             if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
-
             } else {
                 promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
             }
 
-            promise.then(response => {
-                response.data.formType = formType;
+            promise.then(
+                response => {
+                    response.data.formType = formType;
 
-                if (recordId === NEW_FORM_RECORD_ID) {
-                    response.data.record = null;
-                } else {
-                    response.data.recordId = recordId;
-                }
-
-                ////  TODO: for testing..will remove when action is hooked up to react ui
-                //updateForm(appId, tblId, formType, response.data.formMeta).then(
-                //    (resp) => {
-                //        logger.debug('success');
-                //    },
-                //    (fail) => {
-                //        logger.debug('failure');
-                //    }
-                //);
-
-                dispatch(loadFormSuccess(formType, response.data));
-
-                resolve();
-            }).catch(error => {
-
-                if (error.response) {
-                    if (error.response.status === 403) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                    if (recordId === NEW_FORM_RECORD_ID) {
+                        response.data.record = null;
                     } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        response.data.recordId = recordId;
                     }
-                }
 
-                if (error.response && error.response.status === 403) {
-                    NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                } else {
-                    NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                }
+                    dispatch(loadFormSuccess(formType, response.data));
+                    resolve();
+                },
+                (error) => {
+                    if (error.response) {
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        }
+                    }
 
+                    if (error.response && error.response.status === 403) {
+                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                    } else {
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    }
+
+                    // remove the editRec query string since we are not successfully editing the form
+                    WindowLocationUtils.pushWithoutQuery();
+                    dispatch(loadFormError(formType, error.response.status));
+
+                    reject(error);
+                }
+            ).catch((ex) => {
+                logger.logException(ex);
+                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 // remove the editRec query string since we are not successfully editing the form
                 WindowLocationUtils.pushWithoutQuery();
-
-                if (error.response) {
-                    dispatch(loadFormError(formType, error.response.status));
-                }
-
-                reject(error);
+                reject(ex);
             });
         });
     };
@@ -272,15 +264,25 @@ function saveForm(appId, tblId, formType, form, isNew) {
                     (response) => {
                         logger.debug('FormService saveForm success');
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+
+                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
                         dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+
+                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+
                         reject(error);
                     }
                 ).catch((ex) => {
                     logger.logException(ex);
+                    NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                     reject(ex);
                 });
             } else {
