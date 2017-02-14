@@ -1,15 +1,22 @@
 import React, {PropTypes} from 'react';
-import _ from 'lodash';
+import {Button} from 'react-bootstrap';
+import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
-import {loadForm} from '../../actions/formActions';
+import {loadForm , updateForm} from '../../actions/formActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT_REPORT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
 import FormBuilder from '../formBuilder/formBuilder';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
+import AppHistory from '../../globals/appHistory';
+import Logger from '../../utils/logger';
+
 
 import './formBuilderContainer.scss';
+
+let logger = new Logger();
 
 const mapStateToProps = state => {
     return {
@@ -17,11 +24,16 @@ const mapStateToProps = state => {
     };
 };
 
+//TODO  NO reference to component redux store -- once we start implementing different builders,
+//TODO  this will get very difficult to manage.  Move this into the form builder container.
 const mapDispatchToProps = dispatch => {
     return {
         loadForm(appId, tableId, reportId, formType, recordId) {
             return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
         },
+        updateForm(appId, tblId, formType, form) {
+            return dispatch(updateForm(appId, tblId, formType, form));
+        }
     };
 };
 
@@ -49,7 +61,48 @@ export const FormBuilderContainer = React.createClass({
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
     },
+
+    onCancel() {
+        AppHistory.history.goBack();
+    },
+
+    saveClicked() {
+        logger.debug('clicked form save');
+        // get the form meta data from the store..hard code offset for now...this is going to change..
+        let formMeta = this.props.forms[0].formData.formMeta;
+        let formType = this.props.forms[0].formData.formType;
+        this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
+    },
+
+    getRightAlignedButtons() {
+        return (
+            <div>
+                <Button bsStyle="primary" onClick={this.onCancel}><I18nMessage message="nav.cancel"/></Button>
+                <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+            </div>
+        );
+    },
+
+    getLeftAlignedButtons() {
+        return <div></div>;
+    },
+
+    getCenterAlignedButtons() {
+        return <div className={"centerActions"} />;
+
+    },
+
+    getSaveOrCancelFooter() {
+        return <SaveOrCancelFooter
+            rightAlignedButtons={this.getRightAlignedButtons()}
+            centerAlignedButtons={this.getCenterAlignedButtons()}
+            leftAlignedButtons={this.getLeftAlignedButtons()}
+        />;
+    },
+
     render() {
+        console.log('this.props: ', this.props);
+
         let loaded = (this.props.forms && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
         let formData = null;
@@ -67,9 +120,13 @@ export const FormBuilderContainer = React.createClass({
 
                     <FieldProperties />
 
+                    {this.getSaveOrCancelFooter()}
                 </div>
         );
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormBuilderContainer);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FormBuilderContainer);
