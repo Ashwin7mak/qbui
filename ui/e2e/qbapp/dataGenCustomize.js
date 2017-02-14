@@ -414,7 +414,7 @@ consts = require('../../common/src/constants.js');
         return tableToFieldToFieldTypeMap;
     }
 
-    function generateNewData(createdRecs) {
+    function generateNewData(_createdRecs) {
         e2eBase.tablesSetUp(makeAppMap()).then(function(createdApp) {
             // Set your global objects to use in the test functions
             app = createdApp;
@@ -503,7 +503,7 @@ consts = require('../../common/src/constants.js');
             return e2eBase.formService.createDefaultForms(app);
         }).then(function() {
             // print the generated test data and endpoints
-            createdRecs();
+            _createdRecs();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {
