@@ -3,7 +3,7 @@
  */
 'use strict';
 
-let config = {javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
+let config = {javaHost: 'http://javaHost', eeHost: 'http://eeHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
 let sinon = require('sinon');
 let assert = require('assert');
 let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
@@ -274,7 +274,6 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when saveSingleRecord is called", function() {
-
         it('success return results ', function(done) {
             req.url = '/records/2';
             req.body = [];
@@ -293,24 +292,19 @@ describe("Validate recordsApi", function() {
 
         });
 
-        it('fail return results ', function(done) {
+        it('fail return results ', function() {
             req.url = '/records/2';
-            let error_message = "fail unit test case execution";
+            let errorMessage = "fail unit test case execution";
 
-            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            executeReqStub.returns(Promise.reject({message: errorMessage, statusCode: 500}));
             let promise = recordsApi.saveSingleRecord(req);
 
-            promise.then(
-                function(error) {
-                },
-                function(error) {
-                    assert.equal(error, "Error: fail unit test case execution");
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            return promise.then(function() {
+                assert(false, 'saveSingleRecord request should have failed, but it succeeded');
+            }).catch(function(error) {
+                assert.equal(error.message, errorMessage);
+                assert.equal(error.statusCode, 500);
             });
-
         });
     });
     describe("when saveSingleRecord with body to validate is called", function() {
@@ -391,24 +385,19 @@ describe("Validate recordsApi", function() {
 
         });
 
-        it('fail return results ', function(done) {
+        it('fail return results ', function() {
             req.url = '/records/';
-            let error_message = "fail unit test case execution";
+            let errorMessage = "fail unit test case execution";
 
-            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            executeReqStub.returns(Promise.reject({message: errorMessage, statusCode: 500}));
             let promise = recordsApi.createSingleRecord(req);
 
-            promise.then(
-                function(error) {
-                },
-                function(error) {
-                    assert.equal(error, "Error: fail unit test case execution");
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            return promise.then(function() {
+                assert(false, 'createSingleRecord request should have failed, but it succeeded');
+            }).catch(function(error) {
+                assert.equal(error.message, errorMessage);
+                assert.equal(error.statusCode, 500);
             });
-
         });
 
         it('fail return results required field', function(done) {

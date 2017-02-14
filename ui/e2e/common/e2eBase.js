@@ -19,6 +19,7 @@
         var formService = require('./services/formService.js');
         var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
+        var relationshipService = require('./services/relationshipService.js');
 
         var e2eBase = {
             // Instantiate recordBase module to use for your tests
@@ -48,6 +49,7 @@
             formService: formService(recordBase),
             userService: userService(recordBase),
             roleService: roleService(recordBase),
+            relationshipService: relationshipService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
@@ -342,8 +344,27 @@
                         });
                     }
                 }).then(function() {
+                    if (createdApp.tables[2] && createdApp.tables[3]) {
+                        const relationshipTable = [2, 3];
+                        let reportPromise = [];
+                        relationshipTable.forEach(relationshipTableIndex => {
+                            let table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[relationshipTableIndex]);
+                            let table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
+                            e2eBase.recordService.addRecords(createdApp, createdApp.tables[relationshipTableIndex], table2GeneratedRecords).then(function() {
+                                reportPromise.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[relationshipTableIndex].id, 'List All Report', null, null, null, null));
+                            });
+                        });
+
+                        return reportPromise;
+                    }
+                }).then(function() {
+                    //Create tables relationship
+                    return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3]);
+                }).then(function() {
                     //Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
+                }).then(function() {
+                    return e2eBase.formService.createEEDefaultForms(createdApp);
                 }).then(function() {
                     // Set default table homepage for Table 1
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);

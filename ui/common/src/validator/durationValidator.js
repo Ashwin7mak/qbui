@@ -1,117 +1,52 @@
 (function() {
     var dataErrorCodes = require('../dataEntryErrorCodes');
-    var ALLOWED_DURATION_TYPE = ['s', 'second', 'seconds', 'ms', 'millisecond', 'milliseconds', 'm', 'minute', 'minutes', 'h', 'hour', 'hours', 'd', 'day', 'days', 'w', 'week', 'weeks'];
-    var regexNumsDecimalsColons = /[0-9.:]+/g;
-    var removeCommas = /[,]+/g;
-    /**
-     * ******IMPORTANT****
-     * Currently the isValid and isTimeFormatValid methods are both in this file and the durationEditorParsing file
-     * a common location for this method will be updated and addressed in an upcoming story which is now in the backlog
-     * */
+    var DURATION_CONSTS = require('../constants').DURATION_CONSTS;
     module.exports = {
         /**
          * Validate a duration field
          * @param user input
          * @returns {boolean}
          */
-        isTimeFormatValid: function(value, type) {
-            var regexTimeFormat = /\./g;
-            var colons;
-            /**
-             * If a type is inserted with time format, it is not valid
-             * HH:MM:SS minutes is not a valid format
-             * */
-            type = type.join('').trim().split(' ');
-            if (type.length > 1 || type.length === 1 && type[0] !== '') {
-                return false;
-            }
-            /**
-             * Decimals are not a valid input with time formats
-             * Example 5.5:5.5:5.5 is an invalid input
-             * 5:5:5 is a valid input
-             * */
-            if (regexTimeFormat.test(value)) {
-                return false;
-            }
-            colons = value.match(/:/g);
-            if (colons.length > 3) {
-                return false;
-            }
-            return true;
-        },
         isValid: function(value) {
-            var regexHasNums = /[0-9]+/g;
-            var tempNum;
-            var tempType = [];
-            var valid = true;
-            var type;
-            /**
-             * Don't validate empty strings
-             * */
-            if (!value) {
-                return true;
-            }
-            /**
-             * If a user does not input a number, throw an error
-             * */
-            if (!regexHasNums.test(value)) {
-                return false;
-            }
-            /**
-             * If the input is only a number, return true
-             * */
-            if (typeof value === 'number' || !value) {
-                return true;
-            }
-            /**
-             * If a user inserted a colon, it will be validated based off of time formats validation requirements
-             * */
-            value = value.toLowerCase();
-            type = value.replace(regexNumsDecimalsColons, ' ').split(' ');
-            if (value.split('').indexOf(':') !== -1) {
-                return this.isTimeFormatValid(value, type);
-            }
-            /**
-             * Strips out all numbers
-             * If there is an invalid type return false
-             * If there are no types, return true
-             * If there are only accepted types return true
-             * */
-            type.forEach(function(val) {
-                if (ALLOWED_DURATION_TYPE.indexOf(val) === -1 && val !== '') {
-                    valid = false;
-                } else if (val !== '') {
-                    tempType.push(val);
-                }
-            });
-            /**
-             * If a user inserts more types than nums return false
-             * 1 week day invalid format
-             * 1 week 2 days valid format
-             * */
-            tempNum = value.match(regexNumsDecimalsColons);
-            if (!(tempType.length === 0) && tempNum.length !== tempType.length) {
-                return false;
-            }
-            return valid;
+            return !(value === DURATION_CONSTS.ACCEPTED_TYPE.DURATION_TYPE_INVALID_INPUT);
         },
         // Helper method for React property isInvalid on many components. Returns opposite value of validate
         isInvalid: function(value) {
             return !this.isValid(value);
         },
         validateAndReturnResults: function(value, fieldName, results) {
-            var scale;
+            /**
+             * The scales for HHMMSS, HHMM, MM, MMSS and Smart Units are not formatted properly when it comes back from
+             * the database. By using an object, the proper format is set to each scale.
+             * Note: Smart Units always default to days, for placeholders or error messsages according to XD specs
+             * */
+            var scale = results.def.fieldDef.datatypeAttributes.scale;
+            var scaleTimeFormat = {};
+            scaleTimeFormat[DURATION_CONSTS.SCALES.SMART_UNITS] = DURATION_CONSTS.SCALES.DAYS;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.HHMMSS] = DURATION_CONSTS.ACCEPTED_TYPE.HHMMSS;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.HHMM] = DURATION_CONSTS.ACCEPTED_TYPE.HHMM;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.MMSS] = DURATION_CONSTS.ACCEPTED_TYPE.MMSS;
+            scaleTimeFormat[DURATION_CONSTS.SCALES.MM] = DURATION_CONSTS.ACCEPTED_TYPE.MM;
+
+
+
             if (this.isInvalid(value)) {
                 if (!results) {
                     results = {
                         error: {}
                     };
                 }
-                scale = results.def.fieldDef.datatypeAttributes.scale;
                 results.error.code = dataErrorCodes.INVALID_ENTRY;
                 results.error.messageId = 'invalidMsg.duration';
-                results.error.data = {fieldName: fieldName, scale: scale};
+                results.error.data = {fieldName: fieldName};
                 results.isInvalid = true;
+
+                if (scaleTimeFormat[scale]) {
+                    results.error.messageId = 'invalidMsg.duration.timeFormat';
+                    results.error.data = {fieldName: fieldName, value: scaleTimeFormat[scale]};
+                } else {
+                    results.error.messageId = 'invalidMsg.duration.' + scale;
+                }
             }
             return results;
         }

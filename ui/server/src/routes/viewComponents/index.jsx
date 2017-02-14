@@ -14,11 +14,14 @@ var Index = React.createClass({
         return (
             <Html {...this.props}>
                 <div id="content">
-                    {/*The content in here will be replaced as soon as React loads*/}
+                    {/*The content in here will be replaced as soon as React in client-side bundle loads*/}
                     <LoadingScreen/>
                 </div>
                 <script async={true} src={this.props.hostBase +
                              this.props.jsPath + this.props.bundleFileName}></script>
+
+                <script type="text/javascript" async src={this.props.wistiaJs1}></script>
+                <script type="text/javascript" async src={this.props.wistiaJs2}></script>
             </Html>
         );
     }

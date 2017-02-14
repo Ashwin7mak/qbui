@@ -87,7 +87,9 @@
             HOME_PAGE_ID: 'homePageId',
             OPEN_IN_V3: 'openInV3',
             HYDRATE: 'hydrate',
-
+            META_DATA: {
+                WITH_REPORT_DEFAULTS: 'withReportDefaults'
+            },
             //  legacy stack request paameters
             LEGACY_STACK: {
                 ACTION: 'a',
@@ -134,41 +136,45 @@
                 SECONDS: 'Seconds',
                 MILLISECONDS: 'Milliseconds',
             },
-            //The below constants will be moved to the locale file in an upcoming story
-            HHMM: ':HH:MM',
-            HHMMSS: ':HH:MM:SS',
-            MM: ':MM',
-            MMSS: ':MM:SS',
-            SMART_UNITS:'Smart Units',
-            WEEKS: 'Weeks',
-            W: 'W',
-            DAYS: 'Days',
-            DAY: 'Day',
-            D: 'D',
-            HOURS: 'Hours',
-            HOUR: 'Hour',
-            H: 'H',
-            MINUTES: 'Minutes',
-            MINUTE: 'Minute',
-            M:'M',
-            SECONDS: 'Seconds',
-            SECOND: 'Second',
-            S: 'S',
-            MILLISECONDS: 'Milliseconds',
-            MILLISECOND: 'Millisecond',
-            MS: 'MS',
-            SECS: 'secs',
-            MSECS: 'msecs',
-            PLACEHOLDER: {
-                HHMM: 'hh:mm',
-                HHMMSS: 'hh:mm:ss',
-                MM: ':mm',
-                MMSS: ':mm:ss',
-                WEEKS: 'weeks',
-                DAYS: 'days',
-                HOURS: 'hours',
-                MINUTES: 'minutes',
-                SECONDS: 'seconds',
+            /**
+             * Accepted_Types are the scales that a user is allowed to enter in the input box, a user's input is compared and checked
+             * against the accepted types below.
+             * */
+            ACCEPTED_TYPE: {
+                DURATION_TYPE_INVALID_INPUT: 'Invalid Input',
+                /**
+                 * Do not change ACCEPTED_DURATION_TYPE
+                 * This is used to localize accepted types, it allows a user
+                 * to type in a German or France and have it compared to scales that are accepted.
+                 * */
+                ACCEPTED_DURATION_TYPE: 'acceptedDurationType.',
+                //The scales coming back from core is not formatted correctly according to XD specs for placeholders for HHMMSS, HHMM, MM, MMS
+                //Below is the correct format for placeholders
+                HHMMSS: 'HH:MM:SS',
+                HHMM: 'HH:MM',
+                MM: ':MM',
+                MMSS: ':MM:SS',
+                WEEKS: 'Weeks',
+                WEEK: 'Week',
+                W: 'W',
+                DAYS: 'Days',
+                DAY: 'Day',
+                D: 'D',
+                HOURS: 'Hours',
+                HOUR: 'Hour',
+                H: 'H',
+                MINUTES: 'Minutes',
+                MINUTE: 'Minute',
+                MINS: 'Mins',
+                M: 'M',
+                SECONDS: 'Seconds',
+                SECOND: 'Second',
+                S: 'S',
+                MILLISECONDS: 'Milliseconds',
+                MILLISECOND: 'Millisecond',
+                MS: 'MS',
+                SECS: 'Secs',
+                MSECS: 'Msecs'
             }
         },
         PAGE : {

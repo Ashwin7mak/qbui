@@ -85,10 +85,6 @@ describe('AppHistory', () => {
                             return {
                                 fields: {data: "reportFields"}
                             };
-                        } else if (storeName === 'FormStore') {
-                            return {
-                                editFormData: {fields: "formFields"}
-                            };
                         }
                     }
                 };
@@ -145,7 +141,7 @@ describe('AppHistory', () => {
 
     describe('showPendingEditsConfirmationModal', () => {
         it('shows a default confirmation modal for allowing the user to decide what to do if they have unsaved changed', () => {
-            let mockShowAppModal = jasmine.createSpy('ShowAppModal');
+            let mockShowAppModal                                                           = jasmine.createSpy('ShowAppModal');
             AppHistoryRewireAPI.__Rewire__('ShowAppModal', mockShowAppModal);
 
 
@@ -214,7 +210,7 @@ describe('AppHistory', () => {
             mockActions.clickSaveButton();
 
 
-            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: undefined}, "formFields");
+            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: undefined}, null);
             expect(AppHistory._continueToDestination).toHaveBeenCalled();
         });
 

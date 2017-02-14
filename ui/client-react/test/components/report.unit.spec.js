@@ -1,15 +1,15 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Report, {__RewireAPI__ as ReportRewireAPI} from '../../src/components/report/reportRoute';
-import ReportToolbar from '../../src/components/report/reportToolbar';
-import Stage from '../../src/components/stage/stage';
-import ReportDataSearchStore from '../../src/stores/reportDataSearchStore';
 import Constants from '../../../common/src/constants';
 import Fluxxor from 'fluxxor';
+import {Provider} from "react-redux";
+import configureMockStore from 'redux-mock-store';
 
 import Locale from '../../src/locales/locales';
 var i18n = Locale.getI18nBundle();
+
+const mockStore = configureMockStore();
 
 describe('Report functions', () => {
     'use strict';
@@ -71,41 +71,69 @@ describe('Report functions', () => {
     });
 
     it('test flux action loadReport is not called with no app data', () => {
-        var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux}  />, div);
+        const initialState = {};
+        const store = mockStore(initialState);
+        const div = document.createElement('div');
+        ReactDOM.render(<Provider store={store}><Report {...i18n} flux={flux}  /></Provider>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
     it('test flux action loadReport is called with app data', () => {
+        const initialState = {};
+        const store = mockStore(initialState);
+
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits} />, div);
+        ReactDOM.render(
+            <Provider store={store}>
+                <Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits} />
+            </Provider>, div);
         expect(flux.actions.loadReport).toHaveBeenCalledWith(reportParams.appId, reportParams.tblId, reportParams.rptId, reportParams.format, reportParams.offSet, reportParams.numRows);
     });
 
     it('test flux action loadReport is not called on 2nd called with same app data', () => {
-        var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
+        const initialState = {};
+        const store = mockStore(initialState);
+        const div = document.createElement('div');
+
+        ReactDOM.render(
+            <Provider store={store}>
+                <Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>
+            </Provider>, div);
         expect(flux.actions.loadReport).toHaveBeenCalled();
 
         //  on subsequent call with same parameter data, the loadReport function is not called
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
+        ReactDOM.render(
+            <Provider store={store}>
+                <Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>
+            </Provider>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalledWith();
     });
 
     it('test flux action loadReport is not called with missing app data', () => {
-        var div = document.createElement('div');
+
+        const initialState = {};
+        const store = mockStore(initialState);
+        const div = document.createElement('div');
 
         reportParams.appId = null;
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
+        ReactDOM.render(
+            <Provider store={store}>
+                <Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>
+            </Provider>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
     it('test flux action loadReport is not called with app data while reportData loading is true', () => {
 
-        var div = document.createElement('div');
+        const initialState = {};
+        const store = mockStore(initialState);
+        const div = document.createElement('div');
 
         reportDataParams.reportData.loading = true;
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits}/>, div);
+        ReactDOM.render(
+            <Provider store={store}>
+                <Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits}/>
+            </Provider>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 

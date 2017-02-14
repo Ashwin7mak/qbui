@@ -1,8 +1,6 @@
 //need to import colors and update accordingly where I changed css code.
 
 @import '../../assets/css/qbVariables';
-$activeTab-color: $color-black-600;
-$disabledTab-color: $nav-border;
 $chevronFontSize: 16px;
 
 .rc-tabs {
@@ -15,7 +13,7 @@ $chevronFontSize: 16px;
     position: absolute;
     box-sizing: border-box;
     margin-top: -3px;
-    background-color: $tabsUnderLine;
+    background-color: $tabs-underline-background-color;
     -webkit-transform: scaleX(1);
     -ms-transform: scaleX(1);
     transform: scaleX(1);
@@ -68,7 +66,7 @@ $chevronFontSize: 16px;
 
 .rc-tabs-tab-btn-disabled {
     cursor: default;
-    color: $disabledTab-color;
+    color: $tabs-disabled-color;
 }
 
 .rc-tabs-nav-wrap {
@@ -101,7 +99,7 @@ $chevronFontSize: 16px;
 
 .rc-tabs-nav div.rc-tabs-tab-disabled {
     cursor: default;
-    color: $disabledTab-color;
+    color: $tabs-disabled-color;
 }
 
 .rc-tabs-nav div.rc-tabs-tab-disabled > .rc-tabs-tab-inner {
@@ -109,7 +107,7 @@ $chevronFontSize: 16px;
 }
 
 .rc-tabs-nav div.rc-tabs-tab-disabled > .rc-tabs-tab-inner:hover {
-    color: $disabledTab-color;
+    color: $tabs-disabled-color;
 }
 
 .rc-tabs-nav .rc-tabs-tab {
@@ -316,7 +314,7 @@ $chevronFontSize: 16px;
     font-family: "QuickBase-Sturdy";
     content: "\E902";
     font-size: $chevronFontSize;
-    color: $icon-color;
+    color: $iconfont-on-light-normal-color;
 }
 
 .rc-tabs-top .rc-tabs-tab-prev {
@@ -329,7 +327,7 @@ $chevronFontSize: 16px;
     font-family: "QuickBase-Sturdy";
     content: "\E8DD";
     font-size: $chevronFontSize;
-    color: $icon-color;
+    color: $iconfont-on-light-normal-color;
 }
 
 .rc-tabs-top .rc-tabs-tab-prev, .rc-tabs-top .rc-tabs-tab-next {
@@ -358,5 +356,5 @@ $chevronFontSize: 16px;
     float: left;
     height: 100%;
     margin-right: 30px;
-    color: $activeTab-color;
+    color: $tabs-active-color;
 }

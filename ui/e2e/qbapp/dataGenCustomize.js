@@ -61,6 +61,9 @@ consts = require('../../common/src/constants.js');
         var table4Name = 'Table 4 ';
         var table5Name = 'All Required';
         var table6Name = 'Durations';
+        var table7Name = 'Unique Fields';
+        var table8Name = 'REL by ID (Parent)';
+        var table9Name = 'REL by ID (Child)';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -96,6 +99,12 @@ consts = require('../../common/src/constants.js');
         let emailDefaultDomain = {
             defaultDomain: "quickbase.dev",
             clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)
+        };
+        let urlButton = {
+            clientSideAttributes: Object.assign({show_as_button: true}, baseTextClientRequiredProps)
+        };
+        let urlOpenInSameWindow = {
+            clientSideAttributes: Object.assign({open_in_new_window: false}, baseTextClientRequiredProps)
         };
 
         var emptyChoice = {
@@ -144,6 +153,11 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS, "Email with Default Domain",
             {dataAttr: emailDefaultDomain});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL, "URL Button",
+            {dataAttr: urlButton});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL, "URL Same Window",
+            {dataAttr: urlOpenInSameWindow});
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.USER);
 
         tableToFieldToFieldTypeMap[table2Name] = {};
         var textChoices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
@@ -168,7 +182,6 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number With Ext");
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER, "Phone Number without Ext", {dataAttr:{clientSideAttributes: baseTextClientRequiredProps, includeExtension: false}});
-
 
         tableToFieldToFieldTypeMap[table3Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
@@ -233,7 +246,7 @@ consts = require('../../common/src/constants.js');
                 dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
                 multipleChoice: {
                     choices: _.clone(textChoices),
-                    allowNew: false,
+                    allowNew: true,
                     sortAsGiven: true
                 }
             });
@@ -258,7 +271,7 @@ consts = require('../../common/src/constants.js');
                 }
             });
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CURRENCY, null, {required: true});
-        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required: true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required: false});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.RATING, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE, null, {required: true});
         addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE_TIME, null, {required: true});
@@ -335,6 +348,59 @@ consts = require('../../common/src/constants.js');
                 }
             }));
 
+        tableToFieldToFieldTypeMap[table7Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique Text MultiChoice',
+            {
+                unique: true,
+                dataAttr: {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+                multipleChoice: {
+                    choices: _.clone(textChoices),
+                    allowNew: true,
+                    sortAsGiven: true
+                }
+            });
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TEXT, 'Unique MultiLine',
+            {
+                unique: true,
+                dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines: 5})}
+            });
+
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.NUMERIC, 'Unique Numeric MultiChoice',
+            {
+                unique: true,
+                dataAttr: {clientSideAttributes: baseNumClientRequiredProps},
+                decimalPlaces: 0,
+                treatNullAsZero: true,
+                unitsDescription: "",
+                multipleChoice: {
+                    choices: _.clone(numericChoices),
+                    allowNew: true,
+                    sortAsGiven: false
+                }
+            });
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.CURRENCY, 'Unique Currency', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PERCENT, 'Unique Percent', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.RATING, 'Unique Rating', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DATE, 'Unique Date', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DATE_TIME, 'Unique Date Time', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.TIME_OF_DAY, 'Unique Time', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.DURATION, 'Unique Duration', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.PHONE_NUMBER, 'Unique Phone', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
+
+
+        tableToFieldToFieldTypeMap[table8Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
+
+        tableToFieldToFieldTypeMap[table9Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
+
+
         return tableToFieldToFieldTypeMap;
     }
 
@@ -351,6 +417,10 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 5;
             var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
 
             createdResults.then(function(results) {
@@ -369,8 +439,26 @@ consts = require('../../common/src/constants.js');
             var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
             return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedEmptyRecords);
         }).then(function() {
+            // Create a report that includes fields that are not editable by the user
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [1, 2, 3, 4, 5, 6, 7, 8], null, 'Report with Uneditable Fields');
+        }).then(function() {
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
+        }).then(function() {
+            //Create a report with ID field in table 7
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE7].id, [3, 6, 7], null, 'Report with ID field');
+        }).then(function() {
+            //Reset default report for table 7
+            return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE7].id, 2);
+        }).then(function() {
+            //Create a report with ID field in table 8
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE8].id, [3, 6, 7], null, 'Report with ID field');
+        }).then(function() {
+            //Reset default report for table 8
+            return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE8].id, 2);
+        }).then(function() {
+            //Create tables relationship
+            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)

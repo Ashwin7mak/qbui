@@ -115,7 +115,13 @@ module.exports = function(config) {
                     __QB_LOCAL__: JSON.stringify(false)
                 })
             ],
-            watch: true
+            watch: true,
+            externals: {
+                // Settings used to support React unit tests that use Enzyme
+                'react/addons': true,
+                'react/lib/ExecutionEnvironment': true,
+                'react/lib/ReactContext': true
+            }
         },
         webpackServer: {
             noInfo: true
@@ -170,8 +176,8 @@ module.exports = function(config) {
         port: 8083,
 
         // browser activity settings
-        browserDisconnectTimeout : 5000,    // default 2000
-        browserNoActivityTimeout : 5000,    // default 10000
+        browserDisconnectTimeout : 50000,    // default 2000
+        browserNoActivityTimeout : 50000,    // default 10000
         browserDisconnectTolerance : 99,     // default 0
 
         colors: true,

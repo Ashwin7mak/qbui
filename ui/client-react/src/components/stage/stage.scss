@@ -1,5 +1,4 @@
 @import '../../assets/css/qbVariables';
-$breadCrumbsSeparatorColor: $color-black-400;
 
 .stageHeader {
     display: flex;
@@ -68,7 +67,7 @@ $breadCrumbsSeparatorColor: $color-black-400;
             }
 
             .breadCrumbsSeparator {
-                color: $breadCrumbsSeparatorColor;
+                color: $stage-breadcrumb-separator-color;
             }
         }
     }
@@ -83,13 +82,13 @@ $breadCrumbsSeparatorColor: $color-black-400;
         }
 
         .iconActionButton.disabled {
-            color: $icon-disabled-color;
+            color: $iconfont-on-light-disabled-color;
         }
     }
 }
 
 .layout-stage {
-    border-bottom: 1px solid $header-bg;
+    border-bottom: 1px solid $topnav-header-background-color;
     position: relative;
     margin-bottom: 30px;
     background-color: $color-black-100;
@@ -100,11 +99,11 @@ $breadCrumbsSeparatorColor: $color-black-400;
         bottom: -24px;
         right: 4px;
         height: 24px;
-        border: 1px solid $header-bg;
+        border: 1px solid $topnav-header-background-color;
         border-top: 0;
         border-radius: 0 0 2px 2px;
         background-color: $color-black-100;
-        color: $icon-color;
+        color: $iconfont-on-light-normal-color;
     }
 
     .well {

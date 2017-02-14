@@ -11,6 +11,7 @@ import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
+import * as UrlConsts from "../constants/urlConstants";
 
 let logger = new Logger();
 
@@ -29,7 +30,27 @@ function _withDisplayFormat(options = {}) {
     return Object.assign(displayOptions, options);
 }
 
+function _logValidationErrors(errors, msgPrefix) {
+    if (errors && Array.isArray(errors)) {
+        errors.forEach((err) => {
+            // make a copy of the error object and then remove the
+            // def property as it could contain customer sensitive
+            // information in the fieldDef array.
+            let errorObj = _.clone(err);
+            delete errorObj.def;
+            logger.parseAndLogError(LogLevel.ERROR, {data:errorObj}, msgPrefix);
+        });
+    }
+}
+
 let recordActions = {
+    /**
+     * start editing a new record
+     */
+    editNewRecord() {
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId:UrlConsts.NEW_RECORD_VALUE});
+    },
+
     /**
      * Action to save a new record. On successful save get a copy of the newly created record from server.
      * @param appId
@@ -72,15 +93,13 @@ let recordActions = {
             let record = formatRecordChanges(recordChanges);
 
             if (appId && tblId && record) {
-
                 this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
-
                 let recordService = new RecordService();
 
                 // save the changes to the record
                 recordService.createRecord(appId, tblId, record).then(
                     response => {
-                        logger.debug('RecordService createRecord success:' + JSON.stringify(response));
+                        logger.debug('RecordService createRecord success');
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
                             if (resJson.id) {
@@ -95,7 +114,7 @@ let recordActions = {
                                 this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
                                 recordService.getRecord(appId, tblId, resJson.id, clist, _withDisplayFormat()).then(
                                     getResponse => {
-                                        logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                        logger.debug('RecordService getRecord success');
                                         this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
 
                                         if (!showNotificationOnSuccess) {
@@ -125,18 +144,6 @@ let recordActions = {
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            if (error.response.status === 403) {
-                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                            }
-                            if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
-                                const {status} = error.response.data.response;
-                                if (status !== 422) {
-                                    // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
-                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                                }
-                            }
                             // this delay allows for saving modal to trap inputs otherwise
                             // clicks get invoked after create
                             Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -146,8 +153,14 @@ let recordActions = {
                         }
                     },
                     error => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
+                        //  if a validation error, print each one individually..
+                        if (error && error.data && error.data.response && error.data.response.errors) {
+                            let errors = error.data.response.errors;
+                            _logValidationErrors(errors, 'recordService.createRecord');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord');
+                        }
+
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
                         if (error.response.status === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
@@ -193,7 +206,7 @@ let recordActions = {
                 //delete the record
                 recordService.deleteRecord(appId, tblId, recId).then(
                     response => {
-                        logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
+                        logger.debug('RecordService deleteRecord success');
                         this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
                         NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -251,7 +264,7 @@ let recordActions = {
                 //delete the records
                 recordService.deleteRecordBulk(appId, tblId, recIds).then(
                     response => {
-                        logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
+                        logger.debug('RecordService deleteRecordBulk success');
                         this.dispatch(actions.DELETE_RECORD_BULK_SUCCESS, recIds);
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
                         NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -383,7 +396,7 @@ let recordActions = {
                 //  save the changes to the record
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
-                        logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
+                        logger.debug('RecordService saveRecord success');
                         let clist = colList ? colList : [];
                         if (!clist.length && fields) {
                             fields.forEach((field) => {
@@ -394,7 +407,7 @@ let recordActions = {
                         this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
                         recordService.getRecord(appId, tblId, recId, clist, _withDisplayFormat()).then(
                             getResponse => {
-                                logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                logger.debug('RecordService getRecord success');
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
@@ -421,8 +434,14 @@ let recordActions = {
                         );
                     },
                     error => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
+                        //  if a validation error, print each one individually..
+                        if (error && error.data && error.data.response && error.data.response.errors) {
+                            let errors = error.data.response.errors;
+                            _logValidationErrors(errors, 'recordService.saveRecord');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord');
+                        }
+
                         this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);

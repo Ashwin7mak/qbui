@@ -17,16 +17,16 @@
 
     .modal-content {
         border-bottom: none;
-        border-left: 30px white solid;
+        border-left: 30px $color-black-100 solid;
         border-radius: 2px;
-        border-right: 30px white solid;
+        border-right: 30px $color-black-100 solid;
         border-top: none;
         padding-top: 10px;
 
         @include small-breakpoint {
-            border-left: 10px white solid;
+            border-left: 10px $color-black-100 solid;
             border-radius: 0;
-            border-right: 10px white solid;
+            border-right: 10px $color-black-100 solid;
         }
     }
 
@@ -113,11 +113,11 @@
     }
 
     .modalIcon--alert {
-        color: $modal-icon-color;
+        color: $modal-icon-color;   // should be changed to $alert-color?
     }
 
     .modalIcon--success {
-        color: $color-green-600;
+        color: $success-color;
     }
 
     .buttons {

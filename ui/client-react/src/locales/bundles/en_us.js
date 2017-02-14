@@ -93,7 +93,7 @@ export default {
         },
         field: {
             search: "Search",
-            searchNoMatch: "No users found"
+            searchNoMatch: "Nobody matches"
         },
         grid: {
             no_data: "There is no data to display."
@@ -108,6 +108,7 @@ export default {
             addRecord: "Add a record",
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
+            saveAndAddRecordDisabled: "Adding records in the grid is not working right now",
             cancelSelection: "Cancel changes",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
@@ -179,6 +180,28 @@ export default {
             Seconds: "{value, plural, \n =0 {0 seconds}\n =1 {1 second}\n other {{value}  seconds}\n} ",
             Milliseconds: "{value, plural, \n =0 {0 milliseconds}\n =1 {1 millisecond}\n other {{value}  milliseconds}\n} "
         },
+        acceptedDurationType: {
+            Weeks: 'weeks',
+            Week: 'week',
+            W: 'w',
+            Days: 'days',
+            Day: 'day',
+            D: 'd',
+            Hours: 'hours',
+            Hour: 'hour',
+            H: 'h',
+            Minutes: 'minutes',
+            Minute: 'minute',
+            M: 'm',
+            Seconds: 'seconds',
+            Second: 'second',
+            S: 's',
+            Milliseconds: 'milliseconds',
+            Millisecond: 'millisecond',
+            MS: 'ms',
+            Secs: 'secs',
+            Msecs: 'msecs'
+        },
         durationTableHeader: {
             Weeks:"weeks",
             Days:"days",
@@ -188,6 +211,7 @@ export default {
         },
         report : {
             blank : "blank",
+            inlineEdit: "Edit record inline",
             facets : {
                 noFacets : "No values",
                 seeMore : "more...",
@@ -392,6 +416,11 @@ export default {
             }
         },
         invalidMsg : {
+            api: {
+                notUniqueSingleField: "Fill in a different value. Another {recordName} is already using this {fieldName}.",
+                notUniqueMultiChoice: "Select a different {fieldName}. Another {recordName} is already using this one.",
+                invalidRecord: "Invalid data type. Fill in a different value."
+            },
             unknown: "Invalid unknown type. Results: ",
             required: "Fill in the {fieldName}",
             email: "Format the {fieldName} like name@domain.com",
@@ -400,7 +429,15 @@ export default {
             choiceMaxLength : "Select a choice with {maxNum} characters or less",
             phone: "Format the {fieldName} like (xxx) xxx-xxxx",
             phoneInvalidCountryCode: "Format the country code like +x for international numbers",
-            duration: "Format the {fieldName} in {scale}"
+            duration: {
+                timeFormat: "Format the {fieldName} in {value}",
+                Weeks: 'Format the {fieldName} in weeks',
+                Days: 'Format the {fieldName} in days',
+                Hours: 'Format the {fieldName} in hours',
+                Minutes: 'Format the {fieldName} in minutes',
+                Seconds: 'Format the {fieldName} in seconds',
+                Milliseconds: 'Format the {fieldName} in milliseconds',
+            }
         },
         createInQuickBaseClassicMessage: {
         },

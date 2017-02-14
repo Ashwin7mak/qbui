@@ -1,6 +1,8 @@
 import FieldUtils from '../../src/utils/fieldUtils';
 import * as SchemaConsts from '../../src/constants/schema';
 import consts from '../../../common/src/constants';
+import FieldFormats from '../../src/utils/fieldFormats';
+import {DURATION_CONSTS} from '../../../common/src/constants';
 
 describe('FieldUtils', () => {
     let testData;
@@ -248,6 +250,231 @@ describe('FieldUtils', () => {
                 let result = FieldUtils.isFieldEditable(testCase.data);
                 expect(result).toBe(testCase.expectation);
             });
+        });
+    });
+
+    describe('getDefaultValueForFieldType', () => {
+        let testCases = [
+            {
+                description: 'gets the default value for a checkbox',
+                fieldType: SchemaConsts.CHECKBOX,
+                expectedValue: false
+            },
+            {
+                description: 'gets the default value for duration fields',
+                fieldType: SchemaConsts.DURATION,
+                expectedValue: null
+            },
+            {
+                description: 'gets the default value for other types not specifically checked',
+                fieldType: SchemaConsts.TEXT,
+                expectedValue: ''
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(FieldUtils.getDefaultValueForFieldType(testCase.fieldType)).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
+    describe('getFieldSpecificCellClass', () => {
+        let testCases = [
+            {
+                description: 'get class for Date Field',
+                type: FieldFormats.DATE_FORMAT,
+                expectedValue: 'dateFormat'
+            },
+            {
+                description: 'get class for DateTime Field',
+                type: FieldFormats.DATETIME_FORMAT,
+                expectedValue: 'dateTimeFormat'
+            },
+            {
+                description: 'get class for Time Field',
+                type: FieldFormats.TIME_FORMAT,
+                expectedValue: 'timeFormat'
+            },
+            {
+                description: 'get class for Numeric Field',
+                type: FieldFormats.NUMBER_FORMAT,
+                expectedValue: 'numberFormat'
+            },
+            {
+                description: 'get class for Rating Field',
+                type: FieldFormats.RATING_FORMAT,
+                expectedValue: 'ratingFormat'
+            },
+            {
+                description: 'get class for Currency Field',
+                type: FieldFormats.CURRENCY_FORMAT,
+                expectedValue: 'currencyFormat'
+            },
+            {
+                description: 'get class for Percent Field',
+                type: FieldFormats.PERCENT_FORMAT,
+                expectedValue: 'percentFormat'
+            },
+            {
+                description: 'get class for Phone Field',
+                type: FieldFormats.PHONE_FORMAT,
+                expectedValue: 'phoneFormat'
+            },
+            {
+                description: 'get class for Text Field',
+                type: FieldFormats.TEXT_FORMAT,
+                expectedValue: 'textFormat'
+            },
+            {
+                description: 'get class for MultiLineText Field',
+                type: FieldFormats.MULTI_LINE_TEXT_FORMAT,
+                expectedValue: 'multiLineTextFormat'
+            },
+            {
+                description: 'get class for User Field',
+                type: FieldFormats.USER_FORMAT,
+                expectedValue: 'userFormat'
+            },
+            {
+                description: 'get class for URL Field',
+                type: FieldFormats.URL,
+                expectedValue: 'urlFormat'
+            },
+            {
+                description: 'get class for Email Field',
+                type: FieldFormats.EMAIL_ADDRESS,
+                expectedValue: 'emailFormat'
+            },
+            {
+                description: 'get class for Formula Text Field',
+                type: FieldFormats.TEXT_FORMULA_FORMAT,
+                expectedValue: 'formulaTextFormat'
+            },
+            {
+                description: 'get class for Formula Number Field',
+                type: FieldFormats.NUMERIC_FORMULA_FORMAT,
+                expectedValue: 'formulaNumericFormat'
+            },
+            {
+                description: 'get class for Formula Url Field',
+                type: FieldFormats.URL_FORMULA_FORMAT,
+                expectedValue: 'formulaUrlFormat'
+            },
+            {
+                description: 'get class for Checkbox Field',
+                type: FieldFormats.CHECKBOX_FORMAT,
+                expectedValue: 'checkboxFormat'
+            },
+            {
+                description: 'get class for Duration Field (default)',
+                type: FieldFormats.DURATION_FORMAT,
+                expectedValue: 'durationFormat'
+            },
+            {
+                description: 'get class for Duration Field with Scale',
+                type: FieldFormats.DURATION_FORMAT,
+                fieldDef: {
+                    datatypeAttributes: {
+                        scale: DURATION_CONSTS.SCALES.WEEKS
+                    }
+                },
+                expectedValue: 'durationFormat wUnitsText'
+            },
+            {
+                description: 'get class for Duration Field without Scale',
+                type: FieldFormats.DURATION_FORMAT,
+                fieldDef: {
+                    datatypeAttributes: {
+                        scale: DURATION_CONSTS.SCALES.HHMM
+                    }
+                },
+                expectedValue: 'durationFormat'
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(FieldUtils.getFieldSpecificCellClass(testCase.type, testCase.fieldDef)).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
+    describe('getColumnHeaderClasses', () => {
+        it('gets the classes for a header column', () => {
+            const fieldDef = {datatypeAttributes: {type: SchemaConsts.CHECKBOX}};
+            spyOn(FieldUtils, 'getCellAlignmentClassesForFieldType').and.returnValue(['AlignCenter']);
+            expect(FieldUtils.getColumnHeaderClasses(fieldDef)).toEqual('gridHeaderCell AlignCenter');
+            expect(FieldUtils.getCellAlignmentClassesForFieldType).toHaveBeenCalledWith(fieldDef);
+        });
+    });
+
+    describe('getCellAlignmentClassesForFieldType', () => {
+        const AlignLeft = ['AlignLeft'];
+        const AlignCenter = ['AlignCenter'];
+        const AlignRight = ['AlignRight'];
+
+        let testCases = [
+            {
+                description: 'aligns left by default',
+                type: null,
+                expectedValue: AlignLeft
+            },
+            {
+                description: 'gets alignment for Numeric',
+                type: SchemaConsts.NUMERIC,
+                expectedValue: AlignRight
+            },
+            {
+                description: 'gets alignment for Currency',
+                type: SchemaConsts.CURRENCY,
+                expectedValue: AlignRight
+            },
+            {
+                description: 'gets alignment for Rating',
+                type: SchemaConsts.RATING,
+                expectedValue: AlignRight
+            },
+            {
+                description: 'gets alignment for Percent',
+                type: SchemaConsts.PERCENT,
+                expectedValue: AlignRight
+            },
+            {
+                description: 'gets alignment for Checkbox',
+                type: SchemaConsts.CHECKBOX,
+                expectedValue: AlignCenter
+            },
+            {
+                description: 'gets alignment for Duration',
+                type: SchemaConsts.DURATION,
+                expectedValue: AlignLeft
+            },
+            {
+                description: 'gets alignment for Duration with Scale',
+                type: SchemaConsts.DURATION,
+                scale: DURATION_CONSTS.SCALES.WEEKS,
+                expectedValue: AlignLeft
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(FieldUtils.getCellAlignmentClassesForFieldType({
+                    datatypeAttributes: {
+                        type: testCase.type, // <-- Important line here!
+                        scale: testCase.scale // Only used for duration fields
+                    }
+                })).toEqual(testCase.expectedValue);
+            });
+        });
+    });
+
+    // TODO:: Increase complexity of this test once we use this again for render performance improvements in QbGrid
+    // https://quickbase.atlassian.net/browse/MB-1976
+    describe('compareFieldValues', () => {
+        it('returns false if there are no values to compare', () => {
+            expect(FieldUtils.compareFieldValues([], [])).toEqual(false);
         });
     });
 });

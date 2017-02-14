@@ -90,7 +90,7 @@ export default {
         },
         field: {
             search: "Chercher",
-            searchNoMatch: "Aucun utilisateur trouvé"
+            searchNoMatch: "Personne ne correspond à"
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher."
@@ -105,6 +105,7 @@ export default {
             addRecord: "Ajouter un enregistrement",
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
+            saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
             cancelSelection: "Annuler les modifications",
             favorite: "Préféré",
             gridEdit: "Grille modifier",
@@ -174,6 +175,28 @@ export default {
             Seconds: "{value, plural, \n =0 {0 secondes}\n =1 {1 seconde}\n other {{value}  secondes}\n} ",
             Milliseconds: "{value, plural, \n =0 {0 millisecondes}\n =1 {1 milliseconde}\n other {{value}  millisecondes}\n} "
         },
+        acceptedDurationType: {
+            Weeks: 'semaines',
+            Week: 'semaine',
+            W: 'se',
+            Days: 'journees',
+            Day: 'journee',
+            D: 'j',
+            Hours: 'heures',
+            Hour: 'heure',
+            H: 'h',
+            Minutes: 'minutes',
+            Minute: 'minute',
+            M: 'm',
+            Seconds: 'secondes',
+            Second: 'seconde',
+            S: 's',
+            Milliseconds: 'millisecondes',
+            Millisecond: 'milliseconde',
+            MS: 'ms',
+            Secs: 'secs',
+            Msecs: 'msecs'
+        },
         durationTableHeader: {
             Weeks:"semaines",
             Days:"jours",
@@ -183,6 +206,7 @@ export default {
         },
         report : {
             blank : "blanc",
+            inlineEdit: "Modifier enregistrement en ligne",
             facets :{
                 noFacets : "Non valeurs",
                 seeMore : "plus...",
@@ -387,6 +411,11 @@ export default {
             }
         },
         invalidMsg : {
+            api: {
+                notUniqueSingleField: "Remplissez une valeur différente. Un autre {recordName} utilise déjà ce {fieldName}.",
+                notUniqueMultiChoice: "Sélectionnez un autre {fieldName}. Un autre {recordName} utilise déjà celui-ci.",
+                invalidRecord: "Type de données non valide. Remplissez une valeur différente."
+            },
             unknown: "Type inconnu non valide. Résultats: ",
             required: "Remplissez {fieldName}",
             email: "Formater la {fieldName} comme prénom@domaine.fr",
@@ -395,7 +424,15 @@ export default {
             choiceMaxLength : "Sélectionnez un choix avec {maxNum} caractères ou moins",
             phone: "Formater le {fieldName} comme +x x xx xx xx xx",
             phoneInvalidCountryCode: "Formatez le code du pays comme +x pour les numéros internationaux",
-            duration: "Formater le  {fieldName} dans {scale}"
+            duration: {
+                timeFormat: "Formater le {fieldName} dans {value}",
+                Weeks: 'Formater le {fieldName} dans semaines',
+                Days: 'Formater le {fieldName} dans journées',
+                Hours: 'Formater le {fieldName} dans heures',
+                Minutes: 'Formater le {fieldName} dans minutes',
+                Seconds: 'Formater le {fieldName} dans secondes',
+                Milliseconds: 'Formater le {fieldName} dans millisecondes',
+            }
         },
         noneOption: "\<Aucun\>",
         unimplemented: {

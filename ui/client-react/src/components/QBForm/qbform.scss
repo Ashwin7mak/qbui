@@ -61,16 +61,13 @@ $edit-field-padding: 5px;
             .qbPanelHeaderIcon {
                 display: none;
             }
-
-            .qbPanelHeader {
-                padding-top: 0;
-            }
         }
 
         .fieldRow {
             td {
                 vertical-align: top;
-                padding-bottom: 25px;
+                padding-top: 5px;
+                padding-bottom: 20px;
             }
 
             tr:last-child td {
@@ -89,7 +86,7 @@ $edit-field-padding: 5px;
             .fieldLabel {
                 text-align: right;
                 display: block;
-                color: $fieldLabel-color;
+                color: $field-label-normal-color;
 
                 span {
                     display: inline-block;

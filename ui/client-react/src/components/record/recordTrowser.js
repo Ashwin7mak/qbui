@@ -3,9 +3,8 @@ import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
-import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
-import QBToolTip from '../qbToolTip/qbToolTip';
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
@@ -14,8 +13,10 @@ import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-
-import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
+import {HideAppModal} from '../qbModal/appQbModalFunctions';
+import {connect} from 'react-redux';
+import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
+import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 
 import './recordTrowser.scss';
 
@@ -23,19 +24,23 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * trowser containing a record component
+ *
+ * Note: this component has been partially migrated to Redux
  */
-let RecordTrowser = React.createClass({
+export const RecordTrowser = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         recId: React.PropTypes.string,
+        viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
-        form: React.PropTypes.object,
+        editForm: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
-        errorPopupHidden: React.PropTypes.bool
+        errorPopupHidden: React.PropTypes.bool,
+        onHideTrowser: React.PropTypes.func.isRequired
     },
 
     _hasErrorsAndAttemptedSave() {
@@ -50,7 +55,7 @@ let RecordTrowser = React.createClass({
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
-        let hideErrorMessage = this.props.errorPopupHidden;
+        let hideErrorMessage = this.props.shell ? this.props.shell.errorPopupHidden : true;
         let errorMessage = [];
         if (_.has(this.props, 'pendEdits.editErrors.errors')) {
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
@@ -58,21 +63,21 @@ let RecordTrowser = React.createClass({
         }
 
         return (this.props.visible &&
-            <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)}
+            <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
                 <Record appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
-                    errorStatus={this.props.form && this.props.form.editFormErrorStatus ? this.props.form.editFormErrorStatus : null}
+                    errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
-                    formData={this.props.form ? this.props.form.editFormData : null}
+                    formData={this.props.editForm ? this.props.editForm.formData : null}
                     edit={true} />
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
-     *  get actions element for bottome center of trowser (placeholders for now)
+     *  get actions element for bottom center of trowser (placeholders for now)
      */
     getTrowserActions() {
         return (
@@ -106,30 +111,35 @@ let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
-            const flux = this.getFlux();
-
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
 
-            flux.actions.savingForm();
+            const formType = "edit";
+
+            this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then((recId) => {
-                flux.actions.saveFormSuccess();
+                this.props.saveFormSuccess(formType);
+
+                if (this.props.viewingRecordId === recId) {
+                    this.props.syncForm("view");
+                }
 
                 if (saveAnother) {
-                    flux.actions.editNewRecord(false);
+                    this.props.editNewRecord(false);
                 } else {
                     this.hideTrowser();
                     this.navigateToNewRecord(recId);
                 }
 
             }, (errorStatus) => {
-                flux.actions.saveFormFailed(errorStatus);
+                this.props.saveFormError(formType, errorStatus);
+                this.showErrorDialog();
             });
         }
         return validationResult;
@@ -151,23 +161,27 @@ let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
-            const flux = this.getFlux();
-
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
+            const formType = "edit";
 
-            flux.actions.savingForm();
+            this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
-                flux.actions.saveFormSuccess();
+                this.props.saveFormSuccess(formType);
+                if (this.props.viewingRecordId === this.props.recId) {
+                    this.props.syncForm("view");
+                }
+
                 this.nextRecord();
             }, (errorStatus) => {
-                flux.actions.saveFormFailed(errorStatus);
+                this.props.saveFormError(formType, errorStatus);
+                this.showErrorDialog();
             });
         }
         return validationResult;
@@ -188,7 +202,7 @@ let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields, colList);
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.formData.fields, colList);
     },
 
     /**
@@ -206,7 +220,7 @@ let RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields, colList);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList);
     },
 
     /**
@@ -219,7 +233,7 @@ let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
 
-        flux.actions.openRecordForEdit(previousEditRecordId);
+        this.props.openRecordForEdit(previousEditRecordId);
     },
 
     /**
@@ -232,7 +246,7 @@ let RecordTrowser = React.createClass({
         let flux = this.getFlux();
         flux.actions.editNextRecord(nextEditRecordId);
 
-        flux.actions.openRecordForEdit(nextEditRecordId);
+        this.props.openRecordForEdit(nextEditRecordId);
     },
     /**
      *  get breadcrumb element for top of trowser
@@ -268,10 +282,11 @@ let RecordTrowser = React.createClass({
 
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
+        const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
         return (
             <div className="saveButtons">
                 {errorFlg &&
-                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{this.props.errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
+                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
                         <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
                     </OverlayTrigger>
                 }
@@ -288,8 +303,7 @@ let RecordTrowser = React.createClass({
     hideTrowser() {
         WindowLocationUtils.pushWithoutQuery();
 
-        let flux = this.getFlux();
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
 
     saveAndClose() {
@@ -303,12 +317,10 @@ let RecordTrowser = React.createClass({
         HideAppModal();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
-        flux.actions.hideTrowser();
+        this.props.onHideTrowser();
     },
 
     cancelEditing() {
-        const flux = this.getFlux();
-
         if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
@@ -317,19 +329,18 @@ let RecordTrowser = React.createClass({
         }
     },
     toggleErrorDialog() {
-        if (this.props.errorPopupHidden) {
+        const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
+        if (errorPopupHidden) {
             this.showErrorDialog();
         } else {
             this.dismissErrorDialog();
         }
     },
     showErrorDialog() {
-        let flux = this.getFlux();
-        flux.actions.showErrorMsgDialog();
+        this.props.showErrorMsgDialog();
     },
     dismissErrorDialog() {
-        let flux = this.getFlux();
-        flux.actions.hideErrorMsgDialog();
+        this.props.hideErrorMsgDialog();
     },
     /**
      * trowser to wrap report manager
@@ -348,4 +359,44 @@ let RecordTrowser = React.createClass({
     }
 });
 
-export default RecordTrowser;
+
+const mapStateToProps = (state) => {
+    return {
+        forms: state.forms,
+        shell : state.shell
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        openRecordForEdit: (recId) => {
+            dispatch(openRecordForEdit(recId));
+        },
+        savingForm: (formType) => {
+            dispatch(savingForm(formType));
+        },
+        saveFormSuccess: (formType)=>{
+            dispatch(saveFormSuccess(formType));
+        },
+        editNewRecord: (navigateAfterSave) => {
+            dispatch(editNewRecord(navigateAfterSave));
+        },
+        saveFormError: (formType, errorStatus) => {
+            dispatch(saveFormError(formType, errorStatus));
+        },
+        syncForm: (formType) => {
+            dispatch(syncForm(formType));
+        },
+        hideErrorMsgDialog: () => {
+            dispatch(hideErrorMsgDialog());
+        },
+        showErrorMsgDialog: () => {
+            dispatch(showErrorMsgDialog());
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RecordTrowser);

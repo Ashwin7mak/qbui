@@ -130,7 +130,7 @@ describe('Duration record formatter unit test', function() {
             type              : 'SCALAR',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.WEEKS
+                scale: CONSTS.SCALES.WEEKS
             }
         }];
 
@@ -218,7 +218,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.DAYS
+                scale: CONSTS.SCALES.DAYS
             },
             type              : 'SCALAR'
         }];
@@ -302,7 +302,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.HOURS
+                scale: CONSTS.SCALES.HOURS
             },
             type              : 'SCALAR'
         }];
@@ -387,7 +387,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.MINUTES
+                scale: CONSTS.SCALES.MINUTES
             },
             type              : 'SCALAR'
         }];
@@ -475,7 +475,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.SECONDS
+                scale: CONSTS.SCALES.SECONDS
             },
             type              : 'SCALAR'
         }];
@@ -560,7 +560,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.HHMM
+                scale: CONSTS.SCALES.HHMM
             },
             type              : 'SCALAR'
         }];
@@ -649,7 +649,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.HHMMSS
+                scale: CONSTS.SCALES.HHMMSS
             },
             type              : 'SCALAR'
         }];
@@ -738,7 +738,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.MM
+                scale: CONSTS.SCALES.MM
             },
             type              : 'SCALAR'
         }];
@@ -827,7 +827,7 @@ describe('Duration record formatter unit test', function() {
             name              : 'duration',
             datatypeAttributes: {
                 type : 'DURATION',
-                scale: CONSTS.MMSS
+                scale: CONSTS.SCALES.MMSS
             },
             type              : 'SCALAR'
         }];

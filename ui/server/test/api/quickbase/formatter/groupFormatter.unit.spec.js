@@ -3,6 +3,7 @@
  */
 
 var assert = require('assert');
+var _ = require('lodash');
 var constants = require('../../../../../common/src/constants');
 var groupFormatter = require('../../../../src/api/quickbase/formatter/groupFormatter');
 var groupUtils = require('../../../../src/utility/groupUtils');
@@ -13,22 +14,28 @@ var groupTypes = require('../../../../../common/src/groupTypes').GROUP_TYPE;
 describe('Validate GroupFormatter unit tests', function() {
 
     function generateData(dataType) {
+        var value = '';
         if (dataType === constants.TEXT || dataType === constants.USER) {
-            return (0 | Math.random() * 9e6).toString(36);
+            value = (0 | Math.random() * 9e6).toString(36);
         }
         if (dataType === constants.EMAIL_ADDRESS) {
-            return (0 | Math.random() * 9e6).toString(36) + '@test.com';
+            value = (0 | Math.random() * 9e6).toString(36) + '@test.com';
         }
         if (dataType === constants.NUMERIC || dataType === constants.DURATION) {
-            return (0 | Math.random() * 10000000);
+            value = (0 | Math.random() * 10000000);
         }
         if (dataType === constants.DATE || dataType === constants.DATE_TIME) {
-            return dateUtils.formatDate(new Date(), '%M-%D-%Y');
+            value = dateUtils.formatDate(new Date(), '%M-%D-%Y');
         }
         if (dataType === constants.TIME_OF_DAY) {
-            return dateUtils.formatDate(new Date(), '%Y-%M-%DT%h:%m:%sZ');
+            value = dateUtils.formatDate(new Date(), '%Y-%M-%DT%h:%m:%sZ');
         }
-        return '';
+        if (dataType === constants.PHONE_NUMBER) {
+            // Phone number is a special case, because the returned display is an object instead of a plain string or number
+            value = `508-481-${_.random(1000, 9999)}`;
+            return {value: value, display: {display: value, countryCode: 'US'}};
+        }
+        return {value: value, display: value};
     }
 
     function setupRecords(numOfFields, numOfRecords, dataType, gList) {
@@ -61,11 +68,7 @@ describe('Validate GroupFormatter unit tests', function() {
             var record = [];
             var genData = generateData(dataType);
             for (var y = 0; y < setup.fields.length; y++) {
-                field = {
-                    id: setup.fields[y].id,
-                    display: genData,
-                    value: genData
-                };
+                field = Object.assign({id: setup.fields[y].id}, genData);
                 record.push(field);
             }
             setup.records.push(record);
@@ -118,10 +121,7 @@ describe('Validate GroupFormatter unit tests', function() {
                 var record = [];
                 var genData = generateData(dataType);
                 for (var z = 0; z < setup.fields.length; z++) {
-                    field = {
-                        id: setup.fields[z].id,
-                        value: genData
-                    };
+                    field = Object.assign({id: setup.fields[z].id}, genData);
                     record.push(field);
                 }
                 groupRecords.records.push(record);
@@ -290,6 +290,7 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'TEXT: first word grouping', numFields: 5, numRecords: 2, gList: groupByTextWord, dataType: constants.TEXT},
             {message: 'TEXT: first letter grouping', numFields: 5, numRecords: 2, gList: groupByTextFirstLetter, dataType: constants.TEXT},
             {message: 'TEXT: multiple grouping against same fid', numFields: 5, numRecords: 2, gList: groupByTextWord + '.' + groupByEquals, dataType: constants.TEXT},
+            {message: 'TEXT: multiple grouping against diff fid', numFields: 5, numRecords: 2, gList: groupByTextWord + '.' + groupByEquals2, dataType: constants.TEXT},
             //  USER data type
             {message: 'USER: No input records', numFields: 5, numRecords: 0, gList: groupByEquals, dataType: constants.USER},
             {message: 'USER: one equals grouping', numFields: 5, numRecords: 1, gList: groupByEquals, dataType: constants.USER},
@@ -355,12 +356,12 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'NUMERIC: equals grouping rating', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.RATING},
             //  CHECKBOX
             {message: 'CHECKBOX: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.CHECKBOX},
-            {message: 'PHONE: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.PHONE_NUMBER},
+            {message: 'PHONE: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.PHONE_NUMBER, testComplexDisplay: true},
             {message: 'URL: equals grouping', numFields: 5, numRecords: 2, gList: groupByEquals, dataType: constants.URL}
         ];
 
         testCases.forEach(function(testCase) {
-            it('Test case: ' + testCase.message, function(done) {
+            it('Test case: ' + testCase.message, function() {
                 var numberOfGroups = 2;
                 var format = (testCase.numRecords === 1);
 
@@ -381,6 +382,7 @@ describe('Validate GroupFormatter unit tests', function() {
 
                 //  the order of the fids in the list must match the order in the groupData.fields array
                 var groupList = testCase.gList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                var groupByEqualsCount = 0;
                 for (var idx = 0; idx < groupList.length; idx++) {
                     var el = groupList[idx].split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
                     assert.equal(Math.abs(el[0]), groupData.fields[idx].field.id);
@@ -388,18 +390,41 @@ describe('Validate GroupFormatter unit tests', function() {
 
                     //  add the fid to the map.
                     map.set(el[0]);
+
+                    //  is this a groupByEquals
+                    if (el[1] === groupTypes.COMMON.equals) {
+                        groupByEqualsCount++;
+                    }
                 }
 
                 //  number of valid group list elements must match the number of elements in the groupData.fields array
                 assert.equal(groupList.length, groupData.fields.length);
                 assert.equal(groupList.length, coreGroupData.fields.length);
 
-                //  the gridColumns array should not include the fields being grouped
-                assert.equal(testCase.numFields - map.size, groupData.gridColumns.length);
-                assert.equal(testCase.numFields - map.size, coreGroupData.gridColumns.length);
-                done();
+                //  the gridColumns array should not include the fields being grouped if using EQUALS
+                assert.equal(testCase.numFields - groupByEqualsCount, groupData.gridColumns.length);
+                assert.equal(testCase.numFields - groupByEqualsCount, coreGroupData.gridColumns.length);
+
+                if (testCase.testComplexDisplay) {
+                    assertGroupHeadersEqualDisplayValue(groupData, setup);
+                }
             });
         });
     });
 
+    function assertGroupHeadersEqualDisplayValue(groupData, setup) {
+        var groupedFieldId = groupData.fields[0].field.id;
+        var expectedGroupNames = setup.records.map(record => {
+            var expectedGroupName = record.find(field => field.id === groupedFieldId).display;
+            // For complex display objects, be sure to get the value of its display property
+            if (_.has(expectedGroupName, 'display')) {
+                expectedGroupName = expectedGroupName.display;
+            }
+            return expectedGroupName;
+        });
+
+        groupData.gridData.forEach((group, index) => {
+            assert.equal(group.group, expectedGroupNames[index]);
+        });
+    }
 });

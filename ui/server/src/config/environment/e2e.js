@@ -51,6 +51,8 @@
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8080',
         javaHost: 'http://localhost:8080',
+        eeHost: 'http://localhost:8081',
+        eeHostEnable: false,
 
         //Express Server
         //DOMAIN  : 'http://localhost:9000',
@@ -74,7 +76,11 @@
         // the client to use
         client: clientConsts.REACT,
 
-        // walkme java script
-        walkmeJSSnippet : ''
+        /**
+         * Scripts for Wistia video popover
+         * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+         */
+        wistiaScriptPart1: '',
+        wistiaScriptPart2: '',
     };
 }());

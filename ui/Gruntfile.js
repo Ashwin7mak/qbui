@@ -445,6 +445,22 @@ module.exports = function(grunt) {
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
                 }
+            },
+            integration_coverage: {
+                src    : ['server/test/api'],
+                options: {
+                    mask          : '**/*.integration.spec.js',
+                    root          : 'server/src/api',
+                    includes      : ['server/src/api/**/.js'],
+                    noColors      : !useColors,
+                    reportFormats : ['lcov'],
+                    coverageFolder: 'build/reports/integration/coverage',
+                    reporter: (function() {
+                        process.env.MOCHA_COLORS = useColors;
+                        process.env.JUNIT_REPORT_PATH = serverReportDir + '/integration/server_report.xml';
+                        return 'mocha-jenkins-reporter';
+                    }())
+                }
             }
         },
 
@@ -499,13 +515,34 @@ module.exports = function(grunt) {
             }
         },
 
+        //TODO: Figure out how to define multiple webdriver tasks
+        webdriver: {
+            options: {
+                specs: [
+                    //reportAddRecord is currently broken on Reactabular, the save and add a new row button for inline editing has been disabled
+                    //this bug is logged in reactabular backlog under https://quickbase.atlassian.net/browse/MB-2115
+                    //because the save and add button is disabled we turned off the reportAddRecord test
+                    //we will turn it back on once this button has been enabled again
+                    // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
+                    './wdio/tests/reports/reportEditRecord.e2e.spec.js',
+                    './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
+                    // './wdio/tests/forms/*.e2e.spec.js'
+                ]
+            },
+            test: {
+                configFile: './wdio/config/wdioSauce.conf.js'
+            }
+        },
+
+
         env: {
             test : {
                 NODE_ENV                    : 'test',
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey
+                SAUCE_KEY                   : sauceKey,
+                SAUCE_DOMAIN                : testJsConfig.DOMAIN
             },
             e2e  : {
                 NODE_ENV                    : 'e2e',
@@ -823,6 +860,15 @@ module.exports = function(grunt) {
             ]);
         }
 
+        if (target === 'integration_coverage') {
+            //server integration tests
+            return grunt.task.run([
+                'codeStandards',
+                'clean:server',
+                'mocha_istanbul:integration_coverage'
+            ]);
+        }
+
         if (target === 'client-wip') {
             //client unit tests
             return grunt.task.run([
@@ -893,6 +939,15 @@ module.exports = function(grunt) {
             ]);
         }
 
+        // Run your webdriverIO tests via Sauce Labs against a local stack in the CI env
+        // Currently used for e2e-webdriverIO try job
+        if (target === 'e2eWebdriver') {
+            return grunt.task.run([
+                'env:test',
+                'webdriver'
+            ]);
+        }
+
         //  default task if no target specified
         return grunt.task.run([
             // run lint and coding standards tests
@@ -907,6 +962,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask('testIntegration', function() {
         grunt.task.run(['test:integration']);
+    });
+
+    grunt.registerTask('testIntegrationCoverage', function() {
+        grunt.task.run(['test:integration_coverage']);
     });
 
     grunt.registerTask('testE2ELocal', function() {
@@ -925,6 +984,11 @@ module.exports = function(grunt) {
     grunt.registerTask('ciIntegration', [
         'env:test',
         'test:integration'
+    ]);
+
+    grunt.registerTask('ciIntegrationCoverage', [
+        'env:test',
+        'test:integration_coverage'
     ]);
 
     grunt.registerTask('logGitState', 'output Git branch state to file', function() {
@@ -955,4 +1019,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-sauce-connect-launcher');
+    grunt.loadNpmTasks('grunt-webdriver');
 };

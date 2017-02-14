@@ -62,12 +62,12 @@ const PhoneFieldValueRenderer = React.createClass({
                                  </span>);
         const displayWithIcons = (<div className="phoneQBIconWrapper phoneWrapper">
                                         <a href={telPhoneNumberLink} tabIndex="-1" className="telLink">
-                                            <span tabIndex="0">
+                                            <span tabIndex="0" className="phoneData mainNumber">
                                                 {displayValue}
                                             </span>
+                                            {extraDigits && (<span className="phoneData noLink extraDigits" tabIndex="0">{extraDigits}</span>)}
+                                            {extension && <span className="phoneData noLink extension" tabIndex="0">{extension}</span>}
                                         </a>
-                                        {extraDigits && (<span className="extraDigits" tabIndex="0">{extraDigits}</span>)}
-                                        {extension && <span className="extension" tabIndex="0">{extension}</span>}
                                         <div className="urlIcon phoneIcon">
                                             <a href={smsPhoneNumberLink} tabIndex="0" className="smsIconLink">
                                                 <QBicon className="smsIcon" icon="speechbubble-outline"/>
@@ -86,10 +86,11 @@ const PhoneFieldValueRenderer = React.createClass({
         }
     },
     render() {
-        let classes = (_.isObject(this.props.display) && this.props.display.isDialable ? 'urlField' : '');
+        let classes = 'phoneCell';
+        classes += (_.isObject(this.props.display) && this.props.display.isDialable ? ' urlField' : '');
         classes += (this.props.disabled ? ' disabled' : '');
         return (
-            <div className = {classes}>
+            <div className={classes}>
                 {this.renderLink()}
             </div>
         );

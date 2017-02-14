@@ -1,4 +1,6 @@
 import React from 'react';
+import {Link} from 'react-router';
+import _ from 'lodash';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import FieldElement from './fieldElement';
@@ -6,6 +8,7 @@ import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import FieldUtils from '../../utils/fieldUtils';
+import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 
@@ -43,17 +46,11 @@ let QBForm = React.createClass({
     /**
      * helper function to get object props from this craptastical JSON we get from the server
      * @param element
-     * @returns the FormTextElement or FormFieldElement object properties (whichever is present)
+     * @returns FormTextElement, FormFieldElement, or ChildReportElement object properties
+     *          (whichever is present)
      */
     getElementProps(element) {
-
-        if (element.FormTextElement) {
-            return element.FormTextElement;
-        }
-        if (element.FormFieldElement) {
-            return element.FormFieldElement;
-        }
-        return {};
+        return _.values(element)[0] || {};
     },
 
     /**
@@ -71,15 +68,20 @@ let QBForm = React.createClass({
         const cells = [];
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
-        }
-        if (element.FormFieldElement) {
+        }else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
             if (labelPosition === QBForm.LABEL_LEFT) {
                 cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
             }
             cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
+        }else if (element.ReferenceElement) {
+            if (labelPosition === QBForm.LABEL_LEFT) {
+                cells.push(this.createFieldLabelCell(element.ReferenceElement, orderIndex, {}));
+            }
+            cells.push(this.createChildReportElementCell(element.ReferenceElement, orderIndex, colSpan));
         }
+
         return cells;
     },
 
@@ -124,7 +126,7 @@ let QBForm = React.createClass({
 
             // If the fieldRecord.value exists or is a boolean (for checkbox fields), then return the field record
             // otherwise set the default values if available
-            if (fieldRecord && (fieldRecord.value || typeof fieldRecord.value === "boolean")) {
+            if (fieldRecord && (fieldRecord.value || typeof fieldRecord.value === "boolean" || fieldRecord.value === 0)) {
                 return fieldRecord;
             } else if (field.defaultValue && field.defaultValue.coercedValue) {
                 fieldRecord = {};
@@ -227,6 +229,30 @@ let QBForm = React.createClass({
     createTextElementCell(element, sectionIndex, colSpan) {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
+    },
+
+    /**
+     * TODO: actually render the child report as an embedded report.
+     * @param {Object} element section element
+     * @param {Number} sectionIndex this element's index within this section
+     * @param {Number} colSpan used to set the width of the Element
+     * @returns {Component}
+     */
+    createChildReportElementCell(element, sectionIndex, colSpan) {
+        let key = 'field' + sectionIndex + '-' + element.orderIndex;
+        // TODO: don't use globals
+        const relationship = window.relationships[element.relationshipId];
+        const relatedField = this.getRelatedField(relationship.masterFieldId);
+        const fieldRecord = this.getFieldRecord(relatedField);
+        const appId = _.get(relationship, 'appId');
+        const childTableId = _.get(relationship, 'detailTableId');
+        // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now
+        const childReportId = _.get(relationship, 'childDefaultReportId', 0);
+        const fieldWithParentId = _.get(relationship, 'detailFieldId');
+        const parentRecordId = _.get(fieldRecord, 'value');
+
+        const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, fieldWithParentId, parentRecordId);
+        return <td key={key}><Link to={link}>Child Table</Link></td>;
     },
 
     /**

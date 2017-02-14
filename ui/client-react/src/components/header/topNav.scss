@@ -1,6 +1,4 @@
 @import '../../assets/css/qbVariables';
-$global-action-fg: $badcolor17;
-$top-nav-color: $color-blue-700;
 
 .searchPopover {
     .buttonContainer {
@@ -16,19 +14,19 @@ $top-nav-color: $color-blue-700;
 }
 
 .topNav  .btn {
-    background: $header-bg;
+    background: $topnav-header-background-color;
     border: 0;
 }
 
 .topNav  .btn.disabled {
-    background: $header-bg;
+    background: $topnav-header-background-color;
 }
 
 .topNav .navGroup .btn-group .btn:not(.disabled):hover {
-    background: $nav-hover-bg;
+    background: $topnav-hover-background-color;
 
     span {
-        color: $nav-hover-fg;
+        color: $topnav-hover-color;
     }
 }
 
@@ -46,10 +44,10 @@ $top-nav-color: $color-blue-700;
     }
 
     a.dropdownToggle:hover {
-        background-color: $nav-hover-bg;
+        background-color: $topnav-hover-background-color;
 
         span {
-            color: $nav-hover-fg;
+            color: $topnav-hover-color;
         }
     }
 }
@@ -87,10 +85,10 @@ $top-nav-color: $color-blue-700;
     }
 
     .globalAction:hover {
-        background: $nav-hover-bg;
+        background: $topnav-hover-background-color;
 
         > a {
-            color: $nav-hover-fg;
+            color: $topnav-hover-color;
         }
     }
 
@@ -123,7 +121,7 @@ $top-nav-color: $color-blue-700;
 
         .qbIcon {
             vertical-align: middle;
-            color: $top-nav-title-icon-color;
+            color: $topnav-title-icon-color;
         }
 
         .qbIcon + span {

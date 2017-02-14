@@ -173,6 +173,35 @@ describe('Logger', () => {
         LoggerRewireAPI.__ResetDependency__('Configuration');
     });
 
+    it('test debug handling of error stack', () => {
+        const mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        LoggerRewireAPI.__Rewire__('Configuration', mockConfig);
+        const logger = new Logger();
+
+        spyOn(console, 'debug');
+
+        const ex = {
+            stack: 'fakestack',
+            name: 'name'
+        };
+        const errorMessage = `I make the best error messages, the best ones, they're great. Ask all my fiends. All my fiends agree I make the best.`;
+        logger.debug(errorMessage, ex);
+
+        let consoleDebugArg = console.debug.calls.argsFor(0)[0];
+        expect(console.debug).toHaveBeenCalled();
+        expect(consoleDebugArg.indexOf(errorMessage) > -1).toBeTruthy();
+        expect(consoleDebugArg.indexOf(ex.stack) > -1).toBeTruthy();
+
+        LoggerRewireAPI.__ResetDependency__('Configuration');
+    });
+
     it('test Logger with console and server logging', () => {
         let mockConfig = {
             logger: {

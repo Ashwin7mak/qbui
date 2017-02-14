@@ -54,7 +54,7 @@
             cursor: not-allowed;
 
             .qbIcon {
-                color: $icon-disabled-color;
+                color: $iconfont-on-light-disabled-color;
             }
         }
 
@@ -66,64 +66,48 @@
 }
 
 .reportActions {
-    a.iconLink.icon-badge {
-        color: $icon-badge-color;
-    }
-
     a.iconLink.icon-edit {
-        color: $icon-edit-color;
+        color: $edit-icon-normal-color;
     }
 
     a.iconLink.icon-print {
-        color: $icon-print-color;
+        color: $print-icon-normal-color;
     }
 
     a.iconLink.icon-mail {
-        color: $icon-mail-color;
+        color: $mail-icon-normal-color;
     }
 
     a.iconLink.icon-duplicate {
-        color: $icon-duplicate-color;
+        color: $copy-icon-normal-color;
     }
 
     a.iconLink.icon-delete {
-        color: $icon-delete-color;
-    }
-
-    a.iconLink.icon-pickles {
-        color: $icon-pickles-color;
+        color: $delete-icon-normal-color;
     }
 
     a.iconLink {
         text-decoration: none;
     }
 
-    a.iconLink.icon-badge:hover {
-        background-color: $icon-badge-color;
-    }
-
     a.iconLink.icon-edit:hover {
-        background-color: $icon-edit-color;
+        background-color: $edit-icon-normal-color;
     }
 
     a.iconLink.icon-print:hover {
-        background-color: $icon-print-color;
+        background-color: $print-icon-normal-color;
     }
 
     a.iconLink.icon-mail:hover {
-        background-color: $icon-mail-color;
+        background-color: $mail-icon-normal-color;
     }
 
     a.iconLink.icon-duplicate:hover {
-        background-color: $icon-duplicate-color;
+        background-color: $copy-icon-normal-color;
     }
 
     a.iconLink.icon-delete:hover {
-        background-color: $icon-delete-color;
-    }
-
-    a.iconLink.icon-pickles:hover {
-        background-color: $icon-pickles-color;
+        background-color: $delete-icon-normal-color;
     }
 
     a.iconLink:hover {

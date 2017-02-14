@@ -2,15 +2,6 @@ html, body {
     margin: 0;
 }
 
-@-webkit-keyframes loadingScreen-loadInElement {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
 @keyframes loadingScreen-loadInElement {
     0% {
         opacity: 0;
@@ -21,10 +12,9 @@ html, body {
 }
 
 .loadingScreen {
-    min-height: 100vh;
-    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    min-height: 100vh;
 }
 
 .loadingScreen .leftNav,
@@ -35,158 +25,107 @@ html, body {
 .loadingScreen .tableHeader,
 .loadingScreen .tableBody,
 .loadingScreen .cards {
-    opacity: 0;
-    -webkit-animation: loadingScreen-loadInElement 1s normal forwards;
     animation: loadingScreen-loadInElement 1s normal forwards;
+    opacity: 0;
 }
 
 .loadingScreen .leftNav {
     background-color: transparent;
-    width: 100px;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 1 auto;
-    flex: 0 1 auto;
+    display: -ms-flexbox;
     display: flex;
+    flex: 0 1 auto;
     flex-direction: column;
+    -ms-flex-direction: column;
+    width: 100px;
+    -ms-flex: 0 1 auto;
 }
 
 .loadingScreen .logoArea {
-    background-color: rgba(0, 171, 244, .2);
+    background-color: rgba(0, 171, 244, 0.2);
     height: 110px;
 }
 
 .loadingScreen .appsListArea {
     background-color: #edf0f3;
     flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
 }
 
 .loadingScreen .mainBody {
     background: #fff;
-    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    -ms-flex: 1;
 }
 
 .loadingScreen .mainContent {
-    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
+    flex: 1;
     -ms-flex-pack: center;
     justify-content: center;
-    -webkit-box-flex: 1;
     -ms-flex: 1;
-    flex: 1;
 }
 
 .loadingScreen .topNav {
+    animation-delay: 0.5s;
     background-color: #edf0f3;
     height: 45px;
-
-    -webkit-animation-delay: .5s;
-
-    animation-delay: .5s;
 }
 
 .loadingScreen .header {
+    align-items: center;
+    animation-delay: 1s;
     background-color: #f5f5f5;
-    height: 80px;
-    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center;
-
-    -webkit-animation-delay: 1s;
-
-    animation-delay: 1s;
+    height: 80px;
 }
 
 .loadingScreen .table {
-    z-index: 0;
     height: 40%;
     margin-top: 79px;
     width: 90%;
+    z-index: 0;
 }
 
 .loadingScreen .table .tableHeader {
-    height: 28px;
-    background-color: rgba(229, 246, 254, .6);
-
-    -webkit-animation-delay: 1.5s;
-
     animation-delay: 1.5s;
+    background-color: rgba(229, 246, 254, 0.6);
+    height: 28px;
 }
 
 .loadingScreen .tableBody {
+    align-items: center;
+    animation-delay: 2s;
     background-color: #f5f5f5;
-    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
     -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
     -ms-flex-pack: center;
+    height: 300px;
     justify-content: center;
     width: 100%;
-    height: 300px;
-
-    -webkit-animation-delay: 2s;
-
-    animation-delay: 2s;
 }
 
 .loadingScreen .cards {
-    display: none;
-    -webkit-box-flex: 1;
-    -ms-flex: 1 auto;
-    flex: 1 auto;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: center;
+    animation-delay: 1.5s;
+    display: none;
+    flex: 1 auto;
+    -ms-flex-align: center;
+    flex-direction: column;
+    -ms-flex-direction: column;
     -ms-flex-pack: center;
     justify-content: center;
+    -ms-flex: 1 auto;
 }
 
-@-webkit-keyframes animateTableRow {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: .1;
-    }
-}
-
-@keyframes animateTableRow {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: .1;
-    }
-}
-
-/*Small breakpoing*/
+/* Small breakpoing */
 @media (max-width: 640px) {
     .loadingScreen .leftNav {
         width: 0;
@@ -205,27 +144,26 @@ html, body {
     }
 
     .loadingScreen .cards {
-        display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
     }
 }
 
-/*Medium breakpoint*/
+/* Medium breakpoint */
 @media (min-width: 641px) and (max-width: 1024px) {
     .loadingScreen .leftNav {
         width: 200px;
     }
 }
 
-/*Large breakpoint*/
+/* Large breakpoint */
 @media (min-width: 1025px) and (max-width: 1440px) {
     .loadingScreen .leftNav {
         width: 220px;
     }
 }
 
-/*Extra-Large breakpoint*/
+/* Extra-Large breakpoint */
 @media (min-width: 1441px) {
     .loadingScreen .leftNav {
         width: 300px;
@@ -233,104 +171,99 @@ html, body {
 }
 
 
-/** CSS Loader based on http://tobiasahlin.com/spinkit **/
-.loadingScreen .loading-circle {
-    width: 100px;
-    height: 100px;
-    position: relative;
+/* Loader was created by copying the DOM created by React-Loader, filling in the missing CSS, and then removing inline styles */
+/* We cannot use the React-Loader because React/Vendor packages have not loaded yet when this screen appears */
+@keyframes loadingScreen-qbLoader {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
 }
-.loadingScreen .loading-circle .loading-circle-child {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 5;
-}
-.loadingScreen .loading-circle .loading-circle-child:before {
-    content: '';
-    display: block;
-    margin: 0 auto;
-    width: 15%;
-    height: 15%;
-    background-color: #969696;
-    border-radius: 100%;
-    -webkit-animation: loadingScreen-loaderBounceDelay 1.2s infinite ease-in-out both;
-    animation: loadingScreen-loaderBounceDelay 1.2s infinite ease-in-out both;
-}
-.loadingScreen .loading-circle .loading-circle2 {
-    -webkit-transform: rotate(30deg);
-    transform: rotate(30deg); }
-.loadingScreen .loading-circle .loading-circle3 {
-    -webkit-transform: rotate(60deg);
-    transform: rotate(60deg); }
-.loadingScreen .loading-circle .loading-circle4 {
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg); }
-.loadingScreen .loading-circle .loading-circle5 {
-    -webkit-transform: rotate(120deg);
-    transform: rotate(120deg); }
-.loadingScreen .loading-circle .loading-circle6 {
-    -webkit-transform: rotate(150deg);
-    transform: rotate(150deg); }
-.loadingScreen .loading-circle .loading-circle7 {
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg); }
-.loadingScreen .loading-circle .loading-circle8 {
-    -webkit-transform: rotate(210deg);
-    transform: rotate(210deg); }
-.loadingScreen .loading-circle .loading-circle9 {
-    -webkit-transform: rotate(240deg);
-    transform: rotate(240deg); }
-.loadingScreen .loading-circle .loading-circle10 {
-    -webkit-transform: rotate(270deg);
-    transform: rotate(270deg); }
-.loadingScreen .loading-circle .loading-circle11 {
-    -webkit-transform: rotate(300deg);
-    transform: rotate(300deg); }
-.loadingScreen .loading-circle .loading-circle12 {
-    -webkit-transform: rotate(330deg);
-    transform: rotate(330deg); }
-.loadingScreen .loading-circle .loading-circle2:before {
-    -webkit-animation-delay: -1.1s;
-    animation-delay: -1.1s; }
-.loadingScreen .loading-circle .loading-circle3:before {
-    -webkit-animation-delay: -1s;
-    animation-delay: -1s; }
-.loadingScreen .loading-circle .loading-circle4:before {
-    -webkit-animation-delay: -0.9s;
-    animation-delay: -0.9s; }
-.loadingScreen .loading-circle .loading-circle5:before {
-    -webkit-animation-delay: -0.8s;
-    animation-delay: -0.8s; }
-.loadingScreen .loading-circle .loading-circle6:before {
-    -webkit-animation-delay: -0.7s;
-    animation-delay: -0.7s; }
-.loadingScreen .loading-circle .loading-circle7:before {
-    -webkit-animation-delay: -0.6s;
-    animation-delay: -0.6s; }
-.loadingScreen .loading-circle .loading-circle8:before {
-    -webkit-animation-delay: -0.5s;
-    animation-delay: -0.5s; }
-.loadingScreen .loading-circle .loading-circle9:before {
-    -webkit-animation-delay: -0.4s;
-    animation-delay: -0.4s; }
-.loadingScreen .loading-circle .loading-circle10:before {
-    -webkit-animation-delay: -0.3s;
-    animation-delay: -0.3s; }
-.loadingScreen .loading-circle .loading-circle11:before {
-    -webkit-animation-delay: -0.2s;
-    animation-delay: -0.2s; }
-.loadingScreen .loading-circle .loading-circle12:before {
-    -webkit-animation-delay: -0.1s;
-    animation-delay: -0.1s; }
 
-@-webkit-keyframes loadingScreen-loaderBounceDelay {
-    0%, 80%, 100% {
-        -webkit-transform: scale(0);
-        transform: scale(0);
-    } 40% {
-          -webkit-transform: scale(1);
-          transform: scale(1);
-      }
+.loadingScreen .qbLoader {
+    position: absolute;
+    width: 0;
+}
+
+.loadingScreen .qbLoaderCircle {
+    animation: loadingScreen-qbLoader 1s infinite ease-in-out;
+    opacity: 1;
+    position: absolute;
+    top: -8px;
+}
+
+.loadingScreen .qbLoaderCircleInner {
+    background: rgb(150, 150, 150);
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.0980392) 0 0 1px;
+    height: 16px;
+    position: absolute;
+    transform-origin: left center 0;
+    -ms-transform-origin: left center 0;
+    width: 16px;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-1 {
+    animation-delay: 0.143s;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-2 {
+    animation-delay: 0.286s;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-3 {
+    animation-delay: 0.429s;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-4 {
+    animation-delay: 0.571s;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-5 {
+    animation-delay: 0.714s;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-6 {
+    animation-delay: 0.857s;
+}
+
+.loadingScreen .qbLoaderCircle.qbLoaderCircle-7 {
+    animation-delay: 1s;
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-1 {
+    transform: rotate(0deg) translate(17px, 0);
+    -ms-transform: rotate(0deg) translate(17px, 0);
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-2 {
+    transform: rotate(51deg) translate(17px, 0);
+    -ms-transform: rotate(51deg) translate(17px, 0);
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-3 {
+    transform: rotate(102deg) translate(17px, 0);
+    -ms-transform: rotate(102deg) translate(17px, 0);
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-4 {
+    transform: rotate(154deg) translate(17px, 0);
+    -ms-transform: rotate(154deg) translate(17px, 0);
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-5 {
+    transform: rotate(205deg) translate(17px, 0);
+    -ms-transform: rotate(205deg) translate(17px, 0);
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-6 {
+    transform: rotate(257deg) translate(17px, 0);
+    -ms-transform: rotate(257deg) translate(17px, 0);
+}
+
+.loadingScreen .qbLoaderCircleInner.qbLoaderCircleInner-7 {
+    transform: rotate(308deg) translate(17px, 0);
+    -ms-transform: rotate(308deg) translate(17px, 0);
 }

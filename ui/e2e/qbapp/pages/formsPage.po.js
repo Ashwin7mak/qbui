@@ -195,6 +195,13 @@
                     }).map(function(elm) {
                         return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
                     });
+                } else if (fieldLabel === 'durationField') {
+                    //enter duration fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                        return elm;
+                    }).map(function(elm) {
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
+                    });
                 } else if (fieldLabel === 'checkbox') {
                     //select checkbox field
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
@@ -270,7 +277,7 @@
                 return reportServicePage.waitForElement(self.formsSaveChangesDialog).then(function() {
                     expect(self.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
                     //close the dialogue by clicking on dont save
-                    return self.clickButtonOnSaveChangesDialog("Don't Save");
+                    return self.clickButtonOnSaveChangesDialog("Don't save");
                 });
             });
         };
@@ -279,27 +286,27 @@
             return reportServicePage.agGridRecordElList.then(function(records) {
                 if (fieldType === 'numericField') {
                     //numeric field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 2)).toBe(sNumeric.toString());
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 1)).toBe(sNumeric.toString());
                     //numeric currency field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 3)).toBe('$' + sNumeric);
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 2)).toBe('$' + sNumeric);
                     //numeric percent field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 4)).toBe(sNumeric + '%');
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 3)).toBe(sNumeric + '%');
                     //numeric rating field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 5)).toBe(sNumeric.toString());
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 4)).toBe(sNumeric.toString());
                     //numeric duration field
                     //expect(reportServicePage.getRecordValues(records[recordRowNo], 9)).toBe('9.92063E-9 weeks');
                 } if (fieldType === 'dateCell') {
                     //date field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 6)).toBe(sDate);
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 5)).toBe(sDate);
                     //date Time field
                     //TODO enable this after entering value into time field is fixed for safari and firefox
                     //expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate + ' ' + sTime);
                 } if (fieldType === 'timeCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //time of day field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 8)).toBe(sTime);
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sTime);
                 } if (fieldType === 'checkbox') {
                     //checkbox field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 10)).toBe('true');
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 9)).toBe('true');
                 }
             });
         };

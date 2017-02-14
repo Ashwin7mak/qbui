@@ -2,7 +2,18 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
+import * as ShellActions from '../../src/actions/shellActions';
 import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+
+
+let smallBreakpoint = false;
+class BreakpointsMock {
+    static isSmallBreakpoint() {
+        return smallBreakpoint;
+    }
+}
+let dispatchMethod = () => { };
+
 
 var LeftNavMock = React.createClass({
     render() {
@@ -26,6 +37,7 @@ var V2V3FooterMock = React.createClass({
         return <div>mock v2 v3 admin toggle</div>;
     }
 });
+
 
 class WindowLocationUtilsMock {
     static update(url) { }
@@ -61,9 +73,9 @@ describe('Nav functions', () => {
             return {apps: [{id:"1", openInV3: false}], selectedAppId: "1"};
         }
     });
-    let reportsStore = Fluxxor.createStore({
+    let appsStoreWithNoApps = Fluxxor.createStore({
         getState: function() {
-            return {list: []};
+            return {apps: null};
         }
     });
     let reportDataStore = Fluxxor.createStore({
@@ -81,11 +93,7 @@ describe('Nav functions', () => {
             return [];
         }
     });
-    let formStore = Fluxxor.createStore({
-        getState: function() {
-            return [];
-        }
-    });
+
     let reportDataSearchStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -94,20 +102,21 @@ describe('Nav functions', () => {
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appsStore(),
-        ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
         RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
-        FormStore : new formStore(),
         ReportDataSearchStore: new reportDataSearchStore()
     };
     let flux = new Fluxxor.Flux(stores);
-    flux.addActions({
-        toggleLeftNav() {
-            return;
+    let props = {
+        qbui: {
+            shell: {
+                leftNavVisible: true,
+                leftNavExpanded: false
+            },
+            reports: []
         }
-    });
-
+    };
 
     beforeEach(() => {
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
@@ -125,6 +134,7 @@ describe('Nav functions', () => {
         NavRewireAPI.__ResetDependency__('TopNav');
         NavRewireAPI.__ResetDependency__('V2V3Footer');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
+
     });
 
     it('test render of component', () => {
@@ -136,12 +146,12 @@ describe('Nav functions', () => {
             }
         });
 
-        component = TestUtils.renderIntoDocument(<Nav flux={flux}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test renders large by default', () => {
-        component = TestUtils.renderIntoDocument(<Nav flux={flux}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, LeftNavMock).length).toEqual(1);
         expect(TestUtils.scryRenderedComponentsWithType(component, TopNavMock).length).toEqual(1);
     });
@@ -156,7 +166,7 @@ describe('Nav functions', () => {
                 return {touch: true};
             },
             render() {
-                return <Nav ref="nav" flux={flux}></Nav>;
+                return <Nav {...props} ref="nav" flux={flux} dispatch={dispatchMethod}></Nav>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -174,16 +184,14 @@ describe('Nav functions', () => {
         let storesWithAdminApp = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithAdminApp(), // has an app with admin access (EDIT_SCHEMA)
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithAdminApp = new Fluxxor.Flux(storesWithAdminApp);
 
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithAdminApp}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithAdminApp}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(1);
     });
 
@@ -191,15 +199,13 @@ describe('Nav functions', () => {
         let storesWithV3App = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App(),  // has an app with openInV3 = true
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithV3App = new Fluxxor.Flux(storesWithV3App);
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithV3App}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithV3App}></Nav>);
         expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(0);
     });
 
@@ -208,21 +214,86 @@ describe('Nav functions', () => {
         let storesWithoutV3App = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithoutV3App(),  // no admin rights and has no app with openInV3 = true
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
-            FormStore : new formStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
         let fluxWithoutV3App = new Fluxxor.Flux(storesWithoutV3App);
 
         spyOn(WindowLocationUtilsMock, 'update');
 
-        component = TestUtils.renderIntoDocument(<Nav flux={fluxWithoutV3App}></Nav>);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutV3App}></Nav>);
 
         expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable?appId=1");
     });
 
+    it('renders the loading screen while no apps are loaded', () => {
+        let storesWithoutApps = {
+            NavStore: new navStore(),
+            AppsStore: new appsStoreWithNoApps(),
+            ReportDataStore: new reportDataStore(),
+            RecordPendingEditsStore: new recordPendingEditsStore(),
+            FieldsStore : new fieldsStore(),
+            ReportDataSearchStore: new reportDataSearchStore()
+        };
 
+        let fluxWithoutApps = new Fluxxor.Flux(storesWithoutApps);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutApps} />);
+
+        let domComponent = ReactDOM.findDOMNode(component);
+        let loadingScreen = domComponent.querySelector('.loadingScreen');
+        let leftMenu = domComponent.querySelector('.leftMenu');
+
+        expect(loadingScreen).not.toBeNull();
+        // Left Menu is an element that is not on the loading screen, but is on the final nav screen
+        expect(leftMenu).toBeNull();
+    });
+
+    it('does not render the loading screen if apps are loaded', () => {
+        let storesWithApps = {
+            NavStore: new navStore(),
+            AppsStore: new appsStoreWithV3App(),
+            ReportDataStore: new reportDataStore(),
+            RecordPendingEditsStore: new recordPendingEditsStore(),
+            FieldsStore : new fieldsStore(),
+            ReportDataSearchStore: new reportDataSearchStore()
+        };
+
+        let fluxWithApps = new Fluxxor.Flux(storesWithApps);
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithApps} />);
+
+        let domComponent = ReactDOM.findDOMNode(component);
+        let loadingScreen = domComponent.querySelector('.loadingScreen');
+        let leftMenu = domComponent.querySelector('.leftMenu');
+
+        expect(loadingScreen).toBeNull();
+        // Left Menu is an element that is not on the loading screen, but is on the final nav screen
+        expect(leftMenu).not.toBeNull();
+    });
+
+    it('test onSelectItem method', () => {
+        smallBreakpoint = true;
+        spyOn(ShellActions, "toggleLeftNav");
+
+        NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
+
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
+        component.onSelectItem();
+        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
+        NavRewireAPI.__ResetDependency__('Breakpoints');
+        ShellActions.toggleLeftNav.calls.reset();
+
+    });
+
+    it('test toggleNav method', () => {
+        spyOn(ShellActions, "toggleLeftNav");
+
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
+        component.toggleNav();
+        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
+        ShellActions.toggleLeftNav.calls.reset();
+
+
+    });
 });

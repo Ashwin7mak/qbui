@@ -77,8 +77,7 @@ describe('Report Navigation tests', () => {
         expect(reportNavigation).toBeDefined();
     });
 
-    //  temporarily disabled until paging is re-implemented..
-    xit('test previous link is generated', () => {
+    it('test previous link is generated', () => {
         component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
                                                                    pageStart={fakeReportNavigationData.valid.pageStart}
                                                                    pageEnd={fakeReportNavigationData.valid.pageEnd}
@@ -101,8 +100,7 @@ describe('Report Navigation tests', () => {
         expect(previousPage.length).toBe(0);
     });
 
-    //  temporarily disabled until paging is re-implemented..
-    xit('test next link is generated', () => {
+    it('test next link is generated', () => {
         component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
                                                                    pageStart={fakeReportNavigationData.valid.pageStart}
                                                                    pageEnd={fakeReportNavigationData.valid.pageEnd}
@@ -125,8 +123,7 @@ describe('Report Navigation tests', () => {
         expect(nextPage.length).toBe(0);
     });
 
-    //  temporarily disabled until paging is re-implemented..
-    xit('test next link and previous link are generated', () => {
+    it('test next link and previous link are generated', () => {
         component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
                                                                    pageStart={fakeReportNavigationData.valid.pageStart}
                                                                    pageEnd={fakeReportNavigationData.valid.pageEnd}

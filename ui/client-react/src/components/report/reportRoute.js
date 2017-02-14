@@ -1,14 +1,12 @@
 import React from 'react';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
 import Stage from '../stage/stage';
-import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import ReportStage from './reportStage';
 import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
 import {Link} from 'react-router';
 import Logger from '../../utils/logger';
+import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
@@ -16,10 +14,17 @@ import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
+import {connect} from 'react-redux';
+import {editNewRecord} from '../../actions/formActions';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * report route
+ *
+ * Note: this component has been partially migrated to Redux
+ */
 const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
@@ -30,16 +35,38 @@ const ReportRoute = React.createClass({
         flux.actions.loadFields(appId, tblId);
         flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
     },
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
+        const flux = this.getFlux();
+        flux.actions.selectTableId(tblId);
+        flux.actions.loadFields(appId, tblId);
+        // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
+        // tables with relationships
+        flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
+    },
     loadReportFromParams(params) {
-        let appId = params.appId;
-        let tblId = params.tblId;
+        let {appId, tblId, fieldWithParentId, masterRecordId} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
             //  loading a report..always render the 1st page on initial load
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
-            this.loadReport(appId, tblId, rptId, offset, numRows);
+
+            // A link from a parent component (see qbform.createChildReportElementCell) was used
+            // to display a filtered child report.
+            if (fieldWithParentId && masterRecordId) {
+                const queryParams = {
+                    query: QueryUtils.parseStringIntoExactMatchExpression(fieldWithParentId, masterRecordId),
+                    offset,
+                    numRows
+                };
+                this.loadDynamicReportFromParams(appId, tblId, rptId, queryParams);
+            } else {
+                this.loadReport(appId, tblId, rptId, offset, numRows);
+            }
         }
     },
     componentDidMount() {
@@ -65,9 +92,11 @@ const ReportRoute = React.createClass({
      */
     editNewRecord() {
 
+        // need to dispatch to Fluxxor since report store handles this too...
         const flux = this.getFlux();
-
         flux.actions.editNewRecord();
+
+        this.props.dispatch(editNewRecord());
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -135,4 +164,4 @@ const ReportRoute = React.createClass({
     }
 });
 
-export default ReportRoute;
+export default connect()(ReportRoute);

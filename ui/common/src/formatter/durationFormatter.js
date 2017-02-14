@@ -228,10 +228,10 @@
         //Entered as days
         var smartUnits = '';
         if (millis.compareTo(DURATION_CONSTS.ZERO) === 0) {
-            smartUnits += '0 weeks';
+            smartUnits += 0;
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
-                opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
+                opts.formattedObj.units = DURATION_CONSTS.SCALES.DAYS;
             }
         } else if (weeks.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_WEEK, opts);
@@ -239,41 +239,41 @@
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.WEEKS;
             }
-            smartUnits += ' weeks';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.WEEKS.toLowerCase();
         } else if (days.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_DAY, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.DAYS;
             }
-            smartUnits += ' days';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.DAYS.toLowerCase();
         } else if (hours.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_HOUR, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.HOURS;
             }
-            smartUnits += ' hours';
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.HOURS.toLowerCase();
         } else if (minutes.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_MIN, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.MINUTES;
             }
-            smartUnits += ' mins';
+            smartUnits += ' ' + DURATION_CONSTS.ACCEPTED_TYPE.MINS.toLowerCase();
         } else if (seconds.abs().compareTo(DURATION_CONSTS.ONE) !== -1) {
             smartUnits += divideToString(millis, DURATION_CONSTS.MILLIS_PER_SECOND, opts);
             if (opts.formattedObj) {
                 opts.formattedObj.string = smartUnits;
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.SECONDS;
             }
-            smartUnits += ' ' + DURATION_CONSTS.SECONDS;
+            smartUnits += ' ' + DURATION_CONSTS.SCALES.SECONDS.toLowerCase();
         } else {
             if (opts.formattedObj) {
                 opts.formattedObj.string = millis.toString();
                 opts.formattedObj.units = DURATION_CONSTS.SCALES.MILLISECONDS;
             }
-            smartUnits += millis.toString() + ' ' + DURATION_CONSTS.MILLISECONDS;
+            smartUnits += millis.toString() + ' ' + DURATION_CONSTS.SCALES.MILLISECONDS.toLowerCase();
         }
         return smartUnits;
     }
@@ -292,7 +292,7 @@
                 opts.decimalPlaces = fieldInfo.decimalPlaces;
             }
             if (!opts.scale) {
-                opts.scale = DURATION_CONSTS.SMART_UNITS;
+                opts.scale = DURATION_CONSTS.SCALES.SMART_UNITS;
             }
             if (!opts.decimalPlaces && opts.decimalPlaces !== 0) {
                 opts.decimalPlaces = DURATION_CONSTS.DEFAULT_DECIMAL_PLACES;

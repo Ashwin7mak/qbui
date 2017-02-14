@@ -29,7 +29,8 @@
                     name: 'qbse-local-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
-            src: true               // this is slow...do not use in prod
+            showBody: false,        // include req/res body in log...caution in prod as customer sensitive data could get exposed
+            src: false              // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for
@@ -51,6 +52,9 @@
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost:8443',
         javaHost: 'http://localhost:8080',
+        eeHost: 'http://localhost:8081',
+        eeHostEnable: true,
+
         isMockServer : false,
 
         //Express Server
@@ -76,6 +80,13 @@
         //noHotLoad : true,
 
         // the client to use
-        client : client
+        client : client,
+
+        /**
+         * Scripts for Wistia video popover
+         * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+         */
+        wistiaScriptPart1: '',
+        wistiaScriptPart2: '',
     };
 }());

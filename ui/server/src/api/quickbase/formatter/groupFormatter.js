@@ -8,7 +8,7 @@
     var constants = require('../../../../../common/src/constants');
     var log = require('../../../logger').getLogger();
     var perfLogger = require('../../../perfLogger');
-    var lodash = require('lodash');
+    var _ = require('lodash');
     var requestHelper = require('../requestHelper')();
 
     var recordFormatter = require('./recordFormatter')();
@@ -331,7 +331,7 @@
 
         //  orderBy function to reorder the group data using supplied function callback array
         //  and field ordering requirement.
-        return lodash.orderBy(group, callBackArray, fieldOrderArray);
+        return _.orderBy(group, callBackArray, fieldOrderArray);
     }
 
     /**
@@ -356,12 +356,17 @@
             let groupType = groupFields[idx].groupType;
 
             //  Group the data based on the field dataType and grouping type
-            let groupedData = lodash.groupBy(reportData, function(record) {
+            let groupedData = _.groupBy(reportData, function(record) {
 
                 //  the data value to group by
                 let rawDataValue = record[groupField.name].value;
                 //  if no display value in obj, then use the raw
                 let dataValue = record[groupField.name].display === undefined ? rawDataValue : record[groupField.name].display;
+                // If the dataValue is a complex display object (e.g., like phone numbers), make sure to use the display
+                // property on the object instead of stringifying the object itself
+                if (_.has(dataValue, 'display')) {
+                    dataValue = dataValue.display;
+                }
 
                 let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
                 //  Convert empty strings into null as both are treated the same by the client.
@@ -570,6 +575,7 @@
                                         // Mark the field as one that is grouped.  This is referenced when building the
                                         // groupBy.gridColumns as grouped fields are not displayed in the grid.
                                         field.grouped = true;
+                                        field.groupType = groupType;
                                         groupBy.fields.push({field: field, groupType: groupType});
                                     } else {
                                         log.warn("Unsupported group type.  FieldId: " + field.id + "; FieldName: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
@@ -601,9 +607,8 @@
 
                     if (groupBy.fields.length > 0) {
                         fields.forEach(function(field) {
-                            //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
-                            //  array the fields NOT designated to be grouped.
-                            if (!field.grouped) {
+                            //  Exclude grouped fields with a groupType of equals in the grid
+                            if (!field.grouped || (field.grouped && field.groupType !== groupTypes.COMMON.equals)) {
                                 groupBy.gridColumns.push(field);
                             }
                         });

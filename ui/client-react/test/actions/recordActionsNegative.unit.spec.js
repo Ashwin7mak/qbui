@@ -270,6 +270,8 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 return Promise.resolve({data: {}});
             }
         }
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
+
         flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {
                 expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
@@ -299,6 +301,8 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 return mockPromiseError();
             }
         }
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
+
         flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {
                 expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();

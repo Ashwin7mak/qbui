@@ -15,15 +15,22 @@
     // we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
     // so we add 8080 + executor number (which is what the shell script does to ensure uniqueness)
     var javaHostPort = 8080 + Number(process.env.EXECUTOR_NUMBER);
+    var eeHostPort = 8081 + Number(process.env.EXECUTOR_NUMBER);
     var javaHost = 'http://quickbase-dev.com:' + javaHostPort;
+    var eeHost = 'http://quickbase-dev.com:' + eeHostPort;
     // same thing with node so we don't have colliding ports
     var nodeHostPort = 9000 + Number(process.env.EXECUTOR_NUMBER);
     var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
+    var eeHostEnable = false;
 
     // For the e2e try job we want to connect to an integration instance of Tomcat. If we set the env var in Jenkins
     // then use that otherwise default to the above
     if (process.env.JAVA_HOST) {
         javaHost = process.env.JAVA_HOST;
+    }
+
+    if (!eeHostEnable) {
+        eeHost = javaHost;
     }
 
     module.exports = {
@@ -58,6 +65,9 @@
         //javaHost: 'https://quickbase-dev.com:8443',
         javaHost: javaHost,
 
+        eeHost: eeHost,
+        eeHostEnable: false,
+
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
         DOMAIN: nodeHost,
@@ -78,6 +88,13 @@
         noHotLoad : true,
 
         // the client to use
-        client: client
+        client: client,
+
+        /**
+         * Scripts for Wistia video popover
+         * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+         */
+        wistiaScriptPart1: '',
+        wistiaScriptPart2: '',
     };
 }());

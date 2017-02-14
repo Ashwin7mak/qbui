@@ -1,509 +1,403 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Table} from 'reactabular';
-import Fluxxor from 'fluxxor';
-import Locale from '../../../locales/locales';
-import {Button, Dropdown, MenuItem} from 'react-bootstrap';
-import QBicon from '../../qbIcon/qbIcon';
-import {I18nMessage} from '../../../utils/i18nMessage';
-import ReportUtils from '../../../utils/reportUtils';
-import * as query from '../../../constants/query';
+import React, {PropTypes} from 'react';
+import * as Table from 'reactabular-table';
+import Loader  from 'react-loader';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
+import QbHeaderCell from './qbHeaderCell';
+import QbRow from './qbRow';
+import QbCell from './qbCell';
+import {UNSAVED_RECORD_ID} from '../../../constants/schema';
+import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
+import QbIcon from '../../qbIcon/qbIcon';
+import CollapsedGroupsHelper from './collapsedGroupHelper';
 
-import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, DurationCellRenderer,
-    PhoneCellRenderer, NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
-    CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer} from '../agGrid/cellRenderers';
-
-const serverTypeConsts = require('../../../../../common/src/constants');
+import Logger from '../../../utils/logger';
+const logger = new Logger();
 
 import './qbGrid.scss';
 
-const FluxMixin = Fluxxor.FluxMixin(React);
+const ICON_ACTIONS_COLUMN_ID = 'ICON_ACTIONS';
 
-
-const QBGrid = React.createClass({
-    mixins: [FluxMixin],
-    displayName: 'QBGrid',
-
+const QbGrid = React.createClass({
     propTypes: {
-        columns: React.PropTypes.array,
-        records: React.PropTypes.array,
-        scrollParentClass: React.PropTypes.string, // class of parent who may be scrolling this grid
-        selectedRows: React.PropTypes.array,
-        primaryKeyName: React.PropTypes.string
+        /**
+         * The total number of columns displayed on the grid. Passed in as a prop to prevent recalculating this value
+         * multiple times across components */
+        numberOfColumns: PropTypes.number.isRequired,
+
+        /**
+         * The columns displayed on the grid. Use the ColumnTransformer class to help format data in a way that
+         * the QbGrid can display columns correctly
+         */
+        columns: PropTypes.array.isRequired,
+
+        /**
+         * The data for the rows displayed on the grid. Use the RowTransformer class to help format data in a way
+         * that the QbGrid can display rows correctly
+         */
+        rows: PropTypes.array.isRequired,
+
+        /**
+         * The id of the editing row. QbGrid assumes each row has a unique id property. */
+        editingRowId: PropTypes.number,
+
+        // TODO:: Refactor out isInlineEditOpen once agGrid is removed. See more detail in reportGrid.js
+        /**
+         * A boolean value indicating if inline editing is currently open*/
+        isInlineEditOpen: PropTypes.bool,
+
+        /**
+         * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
+        selectedRows: PropTypes.array,
+
+        /**
+         * Indicates if all the rows currently displayed in the grid are selected */
+        areAllRowsSelected: PropTypes.bool,
+
+        /**
+         * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
+        onClickToggleSelectedRow: PropTypes.func,
+
+        /**
+         * The action that occurs when the edit icon is clicked (in the first column) */
+        onClickEditIcon: PropTypes.func,
+
+        /**
+         * The action that occurs when the delete icon is clicked (in the first column) */
+        onClickDeleteIcon: PropTypes.func,
+
+        /**
+         * The action that selects/deselects all of the rows */
+        onClickToggleSelectAllRows: PropTypes.func,
+
+        /**
+         * A value that indicates whether the current row being edited is in a valid state. */
+        isEditingRowValid: PropTypes.bool,
+
+        /**
+         * A value indicating if the current row being edited is currently in a saving state */
+        isEditingRowSaving: PropTypes.bool,
+
+        /**
+         * An array of errors that affect the row currently being edited. This value is used to display a number
+         * of errors to fix to the user. I.e., "Please fix 3 errors" */
+        editingRowErrors: PropTypes.array,
+
+        /**
+         * The action to cancel editing a row */
+        onCancelEditingRow: PropTypes.func,
+
+        /**
+         * The action that will create a new row in the grid */
+        onClickAddNewRow: PropTypes.func,
+
+        /**
+         * The action that occurs when the user clicks save */
+        onClickSaveRow: PropTypes.func,
+
+        /**
+         * To make QbGrid flexible, it makes no assumptions about what is rendered inside of a cell.
+         * A cellRenderer (a React component) must be passed in.
+         * The cellRenderer component will have access to all the props in the row object.
+         */
+        cellRenderer: PropTypes.func.isRequired,
+
+        /**
+         * If there are properties common to all rows, they can be passed in as an addition prop. This is useful for event
+         * handlers that are the same across all rows. Instead of mapping them to each row object, you can add them once here and
+         * they will be available as props to the cellRenderer. */
+        commonCellProps: PropTypes.object,
+
+        /**
+         * A function used to compare changes to a cell. This function is used to improve the performance of the grid. A cell will
+         * only re-render if there are differences. */
+        compareCellChanges: PropTypes.func,
+
+        /**
+         * A menu that can be displayed next to the text in the header row. */
+        menuComponent: PropTypes.func,
+
+        /**
+         * Additional props that can be passed to the menu in addition to the column properties from the grid data */
+        menuProps: PropTypes.object,
+
+        /**
+         * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
+        showRowActionsColumn: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
-            selectedRows: [],
+            numberOfColumns: 0,
             columns: [],
-            records: []
+            rows: [],
+            editingRowId: null,
+            isInlineEditOpen: false,
+            isEditingRowValid: true,
+            isEditingRowSaving: false,
+            showRowActionsColumn: true
         };
     },
 
     getInitialState() {
         return {
-            editRow: -1 // which row index is being edited, -1 if none
+            collapsedGroups: []
+        };
+    },
+
+    componentWillMount() {
+        this.collapsedGroupHelper = new CollapsedGroupsHelper();
+    },
+
+    onClickAddNewRow() {
+        if (this.props.onClickAddNewRow) {
+            this.props.onClickAddNewRow(this.props.editingRowId);
+        }
+    },
+
+    /**
+     * Renders the action cells. These are the cells that appear in the first column of the grid and have actions like
+     * "edit" and "delete"
+     * @param _cellDataRow
+     * @param rowProps
+     * @returns {XML}
+     */
+    getActionsCell(_cellDataRow, rowProps) {
+        return <RowActions
+            rowId={rowProps.rowData.id}
+            onClickDeleteRowIcon={this.props.onClickDeleteIcon}
+            onClickEditRowIcon={this.props.onClickEditIcon}
+            isEditing={rowProps.rowData.isEditing}
+            editingRowId={this.props.editingRowId}
+            isEditingRowValid={this.props.isEditingRowValid}
+            isEditingRowSaving={this.props.isEditingRowSaving}
+            isInlineEditOpen={this.props.isInlineEditOpen}
+            isSelected={rowProps.rowData.isSelected}
+            editingRowErrors={this.props.editingRowErrors}
+            onCancelEditingRow={this.props.onCancelEditingRow}
+            onClickAddNewRow={this.onClickAddNewRow}
+            onClickSaveRow={this.props.onClickSaveRow}
+            onClickToggleSelectedRow={this.onClickToggleSelectedRow}
+        />;
+    },
+
+    /**
+     * The row actions in the first column should be sticky as the user scrolls left and right on the grid
+     * This function adds the isStickyCell:true prop to qbCell
+     * @returns {{isStickyCell: boolean}}
+     */
+    getActionCellProps() {
+        return {
+            isStickyCell: true
         };
     },
 
     /**
-     * render using a Reactabular table
+     * Render a single cell
+     * @param cellData
+     * @returns {ReactElement<P>|ClassicElement<P>|DOMElement<P>}
      */
-    render() {
-
-        let data = this.props.records ? this.props.records : [];
-        data.forEach((record, index) => {
-            record.id = record[this.props.primaryKeyName].value;
-        });
-
-        return (this.props.columns &&
-
-            <Table ref="qbGridTable"
-                   className="qbGrid"
-                   columns={this.getColumns()}
-                   data={data}
-                   rowKey="id"
-                   row={this.getRow}/>
-        );
+    renderCell(cellData) {
+        // The createElement function is used here instead of the shorthand JSX to build a component from a component class or function
+        return React.createElement(this.props.cellRenderer, Object.assign({}, cellData, this.props.commonCellProps));
     },
 
     /**
-     * get the column definition
-     * @returns column defs for Reactabular
+     * Render a single column
      */
     getColumns() {
-        const rtCols = [];
-
-        // add the selection/actions column
-
-        rtCols.push({
-            property: this.props.primaryKeyName,
-            headerClass: "gridHeaderCell",
-            header: this.getCheckboxHeader(),
-            cell: this.getActionsCell()
+        return this.props.columns.map(column => {
+            try {
+                return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
+            } catch (err) {
+                // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
+                // but provide a warning in case using the ColumnTransformer class was forgotten.
+                logger.warn('The columns passed to QbGrid are not instances of ColumnTransformer. Use the ColumnTransformer helper class in the QbGrid folder for better results in the grid.');
+                return column;
+            }
         });
+    },
 
-        // add the qb columns
-        this.props.columns.forEach(col => {
+    /**
+     * Adds properties to the row so that the row component can access information set on the QbGrid component.
+     * @param row
+     * @returns {*}
+     */
+    addRowProps(row) {
+        let classes = ['qbRow'];
+        if (row.isEditing) {
+            classes.push('editing');
+        }
+        if (row.classes) {
+            classes = [...classes, ...row.classes];
+        }
 
-            const rtCol = {
-                property: col.field,
-                headerClass: "gridHeaderCell",
-                header: this.getFieldColumnHeader(col), // just a string for now
-                cell: this.getColumnDataCell(col)
-            };
-            rtCols.push(rtCol);
-        });
-        return rtCols;
+        let rowProps = Object.assign({
+            subHeaderId: row.id,
+            toggleCollapseGroup: this.toggleCollapseGroup,
+            isCollapsed: row.isCollapsed,
+            className: classes.join(' '),
+            editingRowId: this.props.editingRowId,
+            isValid: this.props.isEditingRowValid,
+            isSaving: this.props.isEditingRowSaving,
+            // Add one to account for the extra column at the start of the grid for the row actions.
+            numberOfColumns: (this.props.showRowActionsColumn ? this.props.numberOfColumns + 1 : this.props.numberOfColumns),
+            compareCellChanges: this.props.compareCellChanges,
+        }, row);
+
+        return rowProps;
     },
 
     /**
      * get the 1st column header (select-all toggle)
-     * @returns {XML}
+     * @returns {React}
      */
     getCheckboxHeader() {
+        let collapseAllIcon = null;
+        if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
+            let iconType = (this.collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
 
-        const allSelected = this.props.selectedRows.length === this.props.records.length;
-
-        return (
-            <input type="checkbox" className="selectAllCheckbox"
-                   checked={allSelected}
-                   onChange={ ev => {
-                       if (ev.target.checked) {
-                           this.selectAllRows();
-                       } else {
-                           this.getFlux().actions.selectedRows([]);
-                       }
-                   }
-                   }
-            />);
-    },
-
-    /**
-     * select all grid rows
-     */
-    selectAllRows() {
-        let selected = []; // array of record ids to select
-        this.props.records.forEach(rec => {
-            selected.push(rec[this.props.primaryKeyName].value);
-        });
-        this.getFlux().actions.selectedRows(selected);
-    },
-
-    /**
-     * renderer for selection/actions cells (higher order function)
-     * @returns function that renders an actions column cell
-     */
-    getActionsCell() {
-
-        // for compatibility with ag-grid, pass a params prop to the cell renderer
-        // to provide a grid-level context object for callbacks etc.
-
-        return (data, rowData, rowIndex) => {
-
-            const id = data.value; // the record ID
-            const params = {
-                context: this.getContext(),
-                api: this.api,
-                data: rowData[rowIndex]
-            };
-
-            return (
-                <span className="actionsCol">
-                    <input type="checkbox"
-                           checked={this.isRowSelected(id)}
-                           onChange={() => this.toggleSelectedRow(id)}/>
-                        <SelectionColumnCheckBoxCellRenderer params={params}/>
-                </span>
+            collapseAllIcon = (
+                <div className="collapseAllIcon">
+                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />
+                </div>
             );
-        };
-    },
-
-    /**
-     * create a column header menu
-     * @param columnIndex
-     * @param pullRight position from right side to avoid clipping
-     * @returns JSX columh header dropdown
-     */
-    getFieldColumnHeader(colDef) {
-
-        let isSortedAsc = true;
-
-        const isFieldSorted = _.find(this.props.sortFids, fid => {
-            if (Math.abs(fid) === colDef.id) {
-                isSortedAsc = fid > 0;
-                return true;
-            }
-        });
-
-        const sortAscText = this.getSortAscText(colDef, "sort");
-        const sortDescText = this.getSortDescText(colDef, "sort");
-        const groupAscText = this.getSortAscText(colDef, "group");
-        const groupDescText = this.getSortDescText(colDef, "group");
+        }
 
         return (
-            <div className="headerCell">
-                <span className="headerName">{colDef.headerName}</span>
-                <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
-                    <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
-                        <QBicon icon="caret-filled-down"/>
-                    </Button>
-
-                    <Dropdown.Menu>
-                        <MenuItem onSelect={() => this.sortReport(colDef, true, isFieldSorted && isSortedAsc)}>
-                            {isFieldSorted && isSortedAsc && <QBicon icon="check"/>} {sortAscText}
-                        </MenuItem>
-                        <MenuItem onSelect={() => this.sortReport(colDef, false, isFieldSorted && !isSortedAsc)}>
-                            {isFieldSorted && !isSortedAsc && <QBicon icon="check"/>} {sortDescText}
-                        </MenuItem>
-                        <MenuItem divider/>
-                        <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
-                        <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
-                        <MenuItem divider/>
-                        <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                        <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                        <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
-                        <MenuItem divider/>
-                        <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
-                        <MenuItem divider/>
-                        <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
-                        <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
-                    </Dropdown.Menu>
-                </Dropdown>
-            </div>);
-
-    },
-    /**
-     * On selection of sort option from menu fire off the action to sort the data
-     * @param column
-     * @param asc
-     */
-    sortReport(column, asc, alreadySorted) {
-
-        if (alreadySorted) {
-            return;
-        }
-        let flux = this.getFlux();
-
-        let queryParams = {};
-        // for on-the-fly sort selection, this selection will result in removal of old sort order
-        // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
-        let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
-
-        let sortList = ReportUtils.getSortListString(this.props.groupEls);
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
-        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
-        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
-
-        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-    },
-    /**
-     * Build the menu items for sort/group
-     * @param column
-     * @param prependText
-     * @returns {*}
-     */
-    getSortAscText(column, prependText) {
-        let message = " ";
-        switch (column.fieldDef.datatypeAttributes.type) {
-        case "CHECKBOX": message =  "uncheckedToChecked"; break;
-        case "TEXT":
-        case "URL":
-        case "USER":
-        case "EMAIL_ADDRESS": message =  "aToZ"; break;
-        case "DATE":
-        case "DATE_TIME": message =  "oldToNew"; break;
-        case "NUMERIC":
-        case "RATING":
-        default: message = "lowToHigh"; break;
-        }
-        return Locale.getMessage("report.menu." + prependText + "." + message);
-    },
-    getSortDescText(column, prependText) {
-        let message = " ";
-        switch (column.fieldDef.datatypeAttributes.type) {
-        case "CHECKBOX": message =  "checkedToUnchecked"; break;
-        case "TEXT":
-        case "URL":
-        case "USER":
-        case "EMAIL_ADDRESS": message =  "zToA"; break;
-        case "DATE":
-        case "DATE_TIME": message =  "newToOld"; break;
-        case "NUMERIC":
-        case "RATING":
-        default: message =  "highToLow"; break;
-        }
-        return Locale.getMessage("report.menu." + prependText + "." + message);
-    },
-    /**
-     * get a context object to pass to the cells (could use react context if not for ag-grid)
-     * @returns {{keyField: (*|null|boolean), flux: *, onEditRecordCancel: onEditRecordCancel, cellTabCallback: cellTabCallback}}
-     */
-    getContext() {
-        return {
-            primaryKeyName: this.props.primaryKeyName,
-            flux: this.getFlux(),
-            onEditRecordCancel: () => {
-                this.setState({editRow: -1});
-            },
-            cellTabCallback: this.onCellTab,
-            onRecordSaveClicked: id => {
-                this.setState({editRow: -1});
-                this.props.onRecordChange(id);
-            },
-            onFieldChange: this.props.onFieldChange,
-            onEditRecordStart: this.props.onEditRecordStart
-        };
-    },
-    /**
-     * user has tabbed out of a cell, move the edit row if necessary
-     * @param colDef
-     */
-    onCellTab(colDef) {
-
-        const lastColumn = this.props.columns[this.props.columns.length - 1];
-        if (colDef.field === lastColumn.field) {
-            // tabbed out of last column
-            if (this.state.editRow !== this.props.records.length - 1) {
-                this.setState({editRow: this.state.editRow + 1});
-            } else {
-                this.setState({editRow: -1});
-            }
-        }
+            <div className="actionHeader">
+                <input
+                    type="checkbox"
+                    className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
+                    checked={this.props.areAllRowsSelected}
+                    onChange={this.props.onClickToggleSelectAllRows}
+                />
+                {collapseAllIcon}
+            </div>
+        );
     },
 
     /**
-     * is the row with a record ID selected
+     * Action that is fired when the selection checkbox in the first column for an individual row is clicked
      * @param id
-     * @returns {boolean}
+     * @returns {function()}
      */
-    isRowSelected(id) {
-
-        return this.props.selectedRows.indexOf(id) !== -1;
-    },
-
-    /**
-     * select row with data by
-     * @param data
-     */
-
-    toggleSelectedRow(id) {
-
-        const flux = this.getFlux();
-
-        let selectedRows = this.props.selectedRows;
-
-        if (selectedRows.indexOf(id) === -1) {
-            // not already selected, add to selectedRows
-            selectedRows.push(id);
-        } else {
-            // already selected, remove from selectedRows
-            selectedRows = _.without(selectedRows, id);
-        }
-        flux.actions.selectedRows(selectedRows);
-    },
-
-    /**
-     * get cell renderer for column (higher order function)
-     *
-     * @param colDef qb column definition
-     * @returns function that renders a data column cell
-     */
-    getColumnDataCell(colDef) {
-
-        return (data, rowData, rowIndex) => {
-
-            // todo: clean up dup column props when ag-grid no longer exists
-
-            const params = {
-                context: this.getContext(),
-                api: this.api,
-                column: {
-                    colId: colDef.field,
-                    colDef
-                },
-                colDef,
-                value: data,
-                data: rowData[rowIndex]
-            };
-
-            const editing = rowIndex === this.state.editRow;
-
-            switch (colDef.fieldDef.datatypeAttributes.type) {
-            case serverTypeConsts.NUMERIC:      return <NumericCellRenderer  qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.DATE:         return <DateCellRenderer     qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.DATE_TIME:    return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.TIME_OF_DAY:  return <TimeCellRenderer     qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.CHECKBOX:     return <CheckBoxCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.USER:         return <UserCellRenderer     qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.CURRENCY:     return <CurrencyCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.RATING:       return <RatingCellRenderer   qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.PERCENT:      return <PercentCellRenderer  qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.DURATION:     return <DurationCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.PHONE_NUMBER: return <PhoneCellRenderer    qbGrid={true} params={params} editing={editing}/>;
-            default:                            return <TextCellRenderer     qbGrid={true} params={params} editing={editing}/>;
+    onClickToggleSelectedRow(id) {
+        return () => {
+            if (this.props.onClickToggleSelectedRow) {
+                this.props.onClickToggleSelectedRow(id);
             }
         };
     },
 
     /**
-     * decorate the Reactabular row TR element
-     * @param data row data
+     * Returns a unique key that can be used for the row
+     * For rows without an id, uses the index of the row in the array as the id
+     * @param rowData
      * @param rowIndex
-     * @returns {{className: string, onDoubleClick: onDoubleClick}}
+     * @returns {string}
      */
-    getRow(data, rowIndex) {
-        return {
-            className: rowIndex === this.state.editRow ? "editing" : "",
-            onClick: event => {
-                this.onRowClicked(data, rowIndex, event);
-            }
-        };
-    },
-
-    /**
-     * Capture the row-click event. Send to record view on row-click
-     * @param params
-     */
-    onRowClicked(data, rowIndex, event) {
-
-        const target = event.target;
-
-        // edit row on doubleclick
-        if (event.detail === 2) {
-            clearTimeout(this.clickTimeout);
-            this.clickTimeout = null;
-            this.props.onEditRecordStart(data[this.props.primaryKeyName].value);
-            this.setState({editRow: rowIndex});
-            return;
+    getUniqueRowKey({rowData, rowIndex}) {
+        if (rowData.id === UNSAVED_RECORD_ID) {
+            return `newRow-${rowIndex}`;
         }
-        if (this.clickTimeout) {
-            // already waiting for 2nd click
-            return;
+        return `row-${rowData.id}`;
+    },
+
+    toggleCollapseAllGroups() {
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups()});
+    },
+
+    toggleCollapseGroup(subHeaderId) {
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseGroup(subHeaderId)});
+    },
+
+    /**
+     * stick the header and sticky first column when the grid scrolls
+     */
+    handleScroll() {
+
+        let scrolled = this.tableRef;
+
+        let currentLeftScroll = scrolled.scrollLeft;
+        let currentTopScroll = scrolled.scrollTop;
+
+        // move the headers down to their original positions
+        let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
+        for (let i = 0; i < stickyHeaders.length; i++) {
+            let translate = "translate(0," + currentTopScroll + "px)";
+            stickyHeaders[i].style.transform = translate;
         }
 
-        this.clickTimeout = setTimeout(() => {
-            // handle row click callback if we're not editing
-            this.clickTimeout = null;
-            if (this.props.onRowClick && (this.state.editRow === -1) && this.allowRowClick(target)) {
-                this.props.onRowClick(data);
-            }
-        }, 500);
+        // move the sticky cells (1st col) right to their original positions
+        let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
-    },
-    /**
-     * should row click handling be allowed (i.e. not editing)
-     * @param elem
-     * @returns {boolean}
-     */
-    allowRowClick(node) {
-        while (node) {
-            if (node.classList.contains("editing") || node.classList.contains("actionsCol")) {
-                return false;
-            }
-            if (node.classList.contains("qbGrid")) {
-                return true;
-            }
-            node = node.parentNode; // traverse up the DOM
-        }
-        return false;
-    },
-    /**
-     * emulate current QuickBase fixed column behavior
-     * @param ev
-     */
-    handleScroll(ev) {
+        stickyCells[0].style.left = currentLeftScroll + 'px';
+        stickyCells[0].style.right = 0;
+        stickyCells[0].style.bottom = 0;
 
-        const offset = ev.target.scrollLeft;
-
-        document.querySelectorAll("table.qbGrid>tbody>tr>td:first-child").forEach(td => {
-            td.style.left = offset + "px";
-        });
-    },
-
-    /**
-     * init api property first
-     */
-    componentWillMount() {
-        // ag-grid dependency, could be in context
-        this.api = {
-            deselectAll: () => { },
-            onEditRecordCancel: () => {},
-            deleteRecord: this.deleteRecord
-        };
-    },
-
-    /**
-     * delete the record
-     * @param data
-     */
-    deleteRecord(data) {
-        //flux.actions.deleteRecord(...) which should do the delete causing the grid to re-render
-    },
-
-    /**
-     * handle scroll events and init API
-     */
-    componentDidMount() {
-        let scrollParent = document.querySelector(".reportContent");
-
-        if (scrollParent) {
-            scrollParent.addEventListener("scroll", this.handleScroll);
+        for (let i = 1; i < stickyCells.length; i++) {
+            let translate = "translate(" + currentLeftScroll + "px,0)";
+            stickyCells[i].style.transform = translate;
         }
     },
 
-    /**
-     * clean up scroll event handler
-     */
-    componentWillUnmount() {
-        let scrollParent = document.querySelector(".reportContent");
-
-        if (scrollParent) {
-            scrollParent.removeEventListener("scroll", this.handleScroll);
+    render() {
+        let columns;
+        if (this.props.showRowActionsColumn) {
+            columns = [
+                ...[{
+                    property: ICON_ACTIONS_COLUMN_ID,
+                    headerClass: "gridHeaderCell",
+                    header: {
+                        props: {
+                            scope: 'col'
+                        },
+                        label: this.getCheckboxHeader(),
+                        transforms: [this.getActionCellProps],
+                    },
+                    cell: {
+                        formatters: [this.getActionsCell],
+                        transforms: [this.getActionCellProps],
+                    }
+                }],
+                ...this.getColumns()
+            ];
+        } else {
+            columns = this.getColumns();
         }
+
+        return (
+
+            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
+                <Table.Provider
+                    ref="qbGridTable"
+                    className="qbGrid"
+                    columns={columns}
+                    onScroll={this.handleScroll}
+                    components={{
+                        header: {
+                            cell: QbHeaderCell
+                        },
+                        body: {
+                            row: QbRow,
+                            cell: QbCell
+                        }
+                    }}
+                >
+                    <Table.Header className="qbHeader"/>
+
+                    <Table.Body className="qbTbody"
+                        onRow={this.addRowProps}
+                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
+                        rowKey={this.getUniqueRowKey}
+                        ref={body => {
+                            this.tableRef = body && body.getRef().parentNode;
+                        }}
+                    />
+                </Table.Provider>
+            </Loader>
+        );
     }
 });
 
-export default QBGrid;
-
-
+export default QbGrid;

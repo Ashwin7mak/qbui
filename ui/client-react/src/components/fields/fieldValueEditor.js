@@ -120,6 +120,11 @@ const FieldValueEditor = React.createClass({
          * how to identify the field input
          */
         idKey : React.PropTypes.any,
+
+        /**
+         * List of users for the app which is required for the user picker to function
+         */
+        appUsers: React.PropTypes.array.isRequired
     },
 
     getDefaultProps() {
@@ -225,7 +230,9 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldValueEditor {...commonProps} showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
+            return <MultiLineTextFieldValueEditor {...commonProps}
+                                                  isFormView={this.props.isFormView}
+                                                  showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
         }
 
         case FieldFormats.URL: {
@@ -249,6 +256,7 @@ const FieldValueEditor = React.createClass({
                                             onChange={this.props.onChange ? this.props.onChange : ()=>{}}
                                             key={'tfve-' + this.props.idKey}
                                             classes="cellEdit"
+                                            showClearButton={true}
                     />;
                     //Drew's change per Andrew if users want text box that
                     // grows in height use a multiline not single line text
@@ -271,11 +279,13 @@ const FieldValueEditor = React.createClass({
     onExitField(value) {
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state
-        if (this.props.validateFieldValue && this.props.onValidated) {
+        if (this.props.validateFieldValue) {
             let fldValue = value ? value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
             let checkRequired = (this.props.fieldDef && this.props.fieldDef.required && this.props.isInvalid);
             let results = this.props.validateFieldValue(this.props.fieldDef, this.props.fieldName, fldValue, checkRequired);
-            this.props.onValidated(results);
+            if (this.props.onValidated) {
+                this.props.onValidated(results);
+            }
         }
     },
 

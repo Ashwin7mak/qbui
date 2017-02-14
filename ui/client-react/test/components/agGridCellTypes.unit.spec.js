@@ -21,8 +21,8 @@ import {
     DurationCellRenderer
 } from '../../src/components/dataTable/agGrid/cellRenderers';
 
-import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
-import {__RewireAPI__ as DurationFieldValueRendererRewire}  from '../../src/components/fields/durationFieldValueRenderer';
+import {__RewireAPI__ as NumberFieldValueRendererRewireAPI}  from '../../src/components/fields/fieldValueRenderers';
+import {__RewireAPI__ as DurationFieldValueRendererRewireAPI}  from '../../src/components/fields/durationFieldValueRenderer';
 import consts from '../../../common/src/constants';
 
 describe('AGGrid cell editor functions', () => {
@@ -56,22 +56,22 @@ describe('AGGrid cell editor functions', () => {
 
         CellRenderersRewireAPI.__Rewire__('I18nDate', I18nMessageMock);
         CellRenderersRewireAPI.__Rewire__('I18nNumber', I18nMessageMock);
-        NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
-        DurationFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
-        DurationFieldValueRendererRewire.__Rewire__('I18nMessage', I18nMessageMock);
-        DurationFieldValueRendererRewire.__Rewire__('Locale', LocalesMock);
-        DurationFieldValueRendererRewire.__Rewire__('IntlNumberOnly', IntlNumberOnlyMock);
+        NumberFieldValueRendererRewireAPI.__Rewire__('I18nNumber', I18nMessageMock);
+        DurationFieldValueRendererRewireAPI.__Rewire__('I18nNumber', I18nMessageMock);
+        DurationFieldValueRendererRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        DurationFieldValueRendererRewireAPI.__Rewire__('Locale', LocalesMock);
+        DurationFieldValueRendererRewireAPI.__Rewire__('IntlNumberOnly', IntlNumberOnlyMock);
     });
 
     afterEach(() => {
 
         CellRenderersRewireAPI.__ResetDependency__('I18nDate');
         CellRenderersRewireAPI.__ResetDependency__('I18nNumber');
-        NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
-        DurationFieldValueRendererRewire.__ResetDependency__('I18nNumber');
-        DurationFieldValueRendererRewire.__ResetDependency__('I18nMessage');
-        DurationFieldValueRendererRewire.__ResetDependency__('Locale');
-        DurationFieldValueRendererRewire.__ResetDependency__('IntlNumberOnly');
+        NumberFieldValueRendererRewireAPI.__ResetDependency__('I18nNumber');
+        DurationFieldValueRendererRewireAPI.__ResetDependency__('I18nNumber');
+        DurationFieldValueRendererRewireAPI.__ResetDependency__('I18nMessage');
+        DurationFieldValueRendererRewireAPI.__ResetDependency__('Locale');
+        DurationFieldValueRendererRewireAPI.__ResetDependency__('IntlNumberOnly');
     });
 
     it('test TextCellRenderer scalar', () => {
@@ -776,7 +776,7 @@ describe('AGGrid cell editor functions', () => {
             column: {
                 colDef: {
                     fieldDef: {
-                        datatypeAttributes: {scale:consts.DURATION_CONSTS.WEEKS},
+                        datatypeAttributes: {scale:consts.DURATION_CONSTS.SCALES.WEEKS},
                         type: consts.SCALAR
                     }
                 }

@@ -36,10 +36,10 @@
     }
 
     .facetButtons {
-        color: $icon-color;
+        color: $iconfont-on-light-normal-color;
 
         @include small-breakpoint {
-            color: $secondary-bar-fg;
+            color: $secondary-bar-color;
         }
     }
 
@@ -47,7 +47,7 @@
         color: $icon-color-hover;
 
         @include small-breakpoint {
-            color: $secondary-bar-fg;
+            color: $secondary-bar-color;
         }
     }
 
@@ -66,7 +66,7 @@
 
 .facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
-    border-color: $facetMenu-BorderColor;
+    border-color: $facetmenu-border-color;
     width: 300px;
     position: absolute;
     margin-left: -29px;
@@ -115,7 +115,7 @@
 
     .noOptions {
         margin-left: 19px;
-        color: $facetMenu-NoOptionsColor;
+        color: $facetmenu-nooptions-color;
         font-family: "Lato", sans-serif;
         padding-top: 0.5em;
     }
@@ -134,15 +134,15 @@
     }
 
     .panel-default > .panel-heading {
-        background-color: $facetMenu-backgroundColor;
+        background-color: $facetmenu-background-color;
         border: none;
         box-shadow: none;
-        border-top: 1px solid $facetMenu-BorderColor;
+        border-top: 1px solid $facetmenu-border-color;
         padding: 0;
         border-radius: 0;
 
         &:hover {
-            background-color: $facetMenu-itemHoverColor;
+            background-color: $facetmenu-item-hover-background-color;
         }
     }
 
@@ -181,12 +181,12 @@
     }
 
     .list-group-item:hover {
-        background-color: $facetMenu-itemHoverColor;
+        background-color: $facetmenu-item-hover-background-color;
     }
 
     .list-group-item:focus {
         outline: none;
-        background-color: $facetMenu-backgroundColor;
+        background-color: $facetmenu-background-color;
     }
 
     .list-group-item-inner-wrapper {
@@ -195,7 +195,7 @@
     }
 
     .listMore {
-        color: $facetMenu-showMoreColor;
+        color: $facetmenu-show-more-color;
         padding-left: 2.4em;
         cursor: pointer;
     }
@@ -219,12 +219,12 @@
     }
 
     .clearFacet {
-        color: $facetMenu-backgroundColor;
+        color: $facetmenu-background-color;
         cursor: pointer;
     }
 
     .selections .clearFacet {
-        color: $facetMenu-clearButtonColor;
+        color: $facetmenu-clear-button-color;
     }
 }
 
@@ -243,8 +243,8 @@
         border-radius: 12px;
         font-size: 10px;
         font-weight: 500;
-        background-color: $facetMenu-facetTokenBackgroundColor;
-        color: $facetMenu-facetTokenTextColor;
+        background-color: $facetmenu-facet-token-background-color;
+        color: $facetmenu-facet-token-color;
         display: flex;
         flex-direction: column;
 
@@ -281,7 +281,7 @@
         height: 40px;
 
         input {
-            color: $search-input-fg;
+            color: $search-input-color;
         }
 
         .facetMenuPopup {

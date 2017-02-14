@@ -51,6 +51,8 @@
         //javaHost: 'http://localhost.intuit.com:8080',
         javaHost: 'http://localhost:8080',
 
+        eeHost: 'http://localhost:8081',
+        eeHostEnable: false,
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443',
@@ -73,6 +75,13 @@
         noHotLoad : true,
 
         // the client to use
-        client : client
+        client : client,
+
+        /**
+         * Scripts for Wistia video popover
+         * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+         */
+        wistiaScriptPart1: 'https://fast.wistia.com/embed/medias/zl4za7cf5e.jsonp',
+        wistiaScriptPart2: 'https://fast.wistia.com/assets/external/E-v1.js',
     };
 }());

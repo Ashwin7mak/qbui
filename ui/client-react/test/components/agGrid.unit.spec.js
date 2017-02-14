@@ -1,11 +1,9 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import AGGrid, {__RewireAPI__ as AGGridRewireAPI} from '../../src/components/dataTable/agGrid/agGrid';
+import {AGGrid, __RewireAPI__ as AGGridRewireAPI} from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
-
-import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
-
+import {__RewireAPI__ as NumberFieldValueRendererRewireAPI}  from '../../src/components/fields/fieldValueRenderers';
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
@@ -166,7 +164,7 @@ describe('AGGrid functions', () => {
 
     beforeEach(() => {
         AGGridRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-        NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+        NumberFieldValueRendererRewireAPI.__Rewire__('I18nNumber', I18nMessageMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
         spyOn(flux.actions, 'openRecordForEdit');
@@ -175,7 +173,7 @@ describe('AGGrid functions', () => {
 
     afterEach(() => {
         AGGridRewireAPI.__ResetDependency__('I18nMessage');
-        NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+        NumberFieldValueRendererRewireAPI.__ResetDependency__('I18nNumber');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
         flux.actions.openRecordForEdit.calls.reset();
@@ -470,10 +468,6 @@ describe('AGGrid functions', () => {
         // find the edit icons
         const editButtons = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell button.edit");
         expect(editButtons.length).toBe(fakeReportData_before.data.records.length);
-
-        // click on edit icon
-        TestUtils.Simulate.click(editButtons[0]);
-        expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
 
         // find the dropdown buttons
         const dropdownButtons = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell button.dropdownToggle");

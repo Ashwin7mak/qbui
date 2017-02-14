@@ -5,7 +5,7 @@ import FieldValueEditor  from '../../src/components/fields/fieldValueEditor';
 import FieldFormats from '../../src/utils/fieldFormats';
 var simpleStringify = require('../../../common/src/simpleStringify.js');
 
-import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
+import {__RewireAPI__ as NumberFieldValueRendererRewireAPI}  from '../../src/components/fields/fieldValueRenderers';
 
 import {DEFAULT_RECORD_KEY_ID} from '../../src/constants/schema';
 
@@ -17,11 +17,11 @@ function setupI18nNumberMock() {
             );
         }
     });
-    NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+    NumberFieldValueRendererRewireAPI.__Rewire__('I18nNumber', I18nMessageMock);
 }
 
 function tearDownI18nNumberMock() {
-    NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+    NumberFieldValueRendererRewireAPI.__ResetDependency__('I18nNumber');
 }
 
 const users = [
@@ -64,7 +64,9 @@ describe('FieldValueEditor functions', () => {
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required: true}} type={data.type} appUsers={users}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required: true}}
+                                                                           type={data.type}
+                                                                           appUsers={users} />);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });
