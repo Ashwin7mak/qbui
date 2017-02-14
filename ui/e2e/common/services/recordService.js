@@ -64,7 +64,7 @@
              */
             editRecords: function(appId, tableId, recordEdits) {
                 //Resolve the proper record endpoint specific to the generated app and table
-                var editRecordPromises = recordEdits.map(function(currentRecord, idx) {
+                var editRecordPromises = recordEdits.map((currentRecord, idx) => {
                     var recordId = idx + 1;
                     var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(appId, tableId);
                     return recordBase.editRecord(recordsEndpoint, recordId, recordEdits[idx]);
