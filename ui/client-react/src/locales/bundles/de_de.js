@@ -168,6 +168,12 @@ export default {
                 lastUpdatedBy: "Zuletzt aktualisiert von ",
                 createdOn: "Erstellt am ",
                 ownedBy: "gehört "
+            },
+            notification: {
+                save: {
+                    success: "Formular gespeichert",
+                    error: "Fehler beim Speichern des Formulars"
+                }
             }
         },
         durationWithUnits: {

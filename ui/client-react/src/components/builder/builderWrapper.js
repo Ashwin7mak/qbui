@@ -8,10 +8,15 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import GlobalActions from '../actions/globalActions';
 import {NotificationContainer} from "react-notifications";
 import AppHistory from '../../globals/appHistory';
+import Logger from '../../utils/logger';
+import {updateForm} from '../../actions/formActions';
+import {connect} from 'react-redux';
 
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+
+let logger = new Logger();
 
 /**
  * The NavStore and the AppsStore are both needed for globalActions (The User and Help Button Located at the top of the screen)
@@ -23,7 +28,7 @@ const BuilderWrapper = React.createClass({
     getStateFromFlux() {
         let flux = this.getFlux();
         return {
-            apps: flux.store('AppsStore').getState(),
+            apps: flux.store('AppsStore').getState()
         };
     },
 
@@ -31,7 +36,11 @@ const BuilderWrapper = React.createClass({
         AppHistory.history.goBack();
     },
     saveClicked() {
-        //This will connect with redux
+        logger.debug('clicked form save');
+        // get the form meta data from the store..hard code offset for now...this is going to change..
+        let formMeta = this.props.qbui.forms[0].formData.formMeta;
+        let formType = this.props.qbui.forms[0].formData.formType;
+        this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
     },
 
     getRightAlignedButtons() {
@@ -85,13 +94,11 @@ const BuilderWrapper = React.createClass({
         const formType = this.props.location.query.formType;
 
         return (
-            <div className="builderWrapperContent" >
-                <div className="main">
-                    <div className="topNav">
+            <div className="builderWrapperContent">
+                <div className="topNav">
                     {this.getTopGlobalActions()}
                      <NotificationContainer/>
                 </div>
-            </div>
 
                 <FormBuilderContainer
                 appId={appId}
@@ -105,4 +112,22 @@ const BuilderWrapper = React.createClass({
     }
 });
 
-export default BuilderWrapper;
+//TODO  NO reference to component redux store -- once we start implementing different builders,
+//TODO  this will get very difficult to manage.  Move this into the form builder container.
+const mapStateToProps = (state) => {
+    return {
+        forms: state.forms
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateForm: (appId, tblId, formType, form) => {
+            dispatch(updateForm(appId, tblId, formType, form));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BuilderWrapper);

@@ -104,7 +104,7 @@ export let Nav = React.createClass({
                     <BuilderDropDownAction recId={recordId}
                                            actions={actions}
                                            position={"top"}
-                                           formBuilderIcon="settings-hollow"
+                                           formBuilderIcon="settings"
                                            navigateToBuilder={this.navigateToBuilder}
                                            startTabIndex={4}/>
                 </GlobalActions>);

@@ -167,6 +167,12 @@ export default {
                 lastUpdatedBy: "Dernière mise à jour par ",
                 createdOn: "Créé sur ",
                 ownedBy: "Propriétaire "
+            },
+            notification: {
+                save: {
+                    success: "Formulaire enregistré",
+                    error: "Erreur lors de l'enregistrement du formulaire"
+                }
             }
         },
         durationWithUnits: {
