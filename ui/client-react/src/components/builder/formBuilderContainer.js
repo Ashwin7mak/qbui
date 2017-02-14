@@ -12,8 +12,6 @@ import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
-
-
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
