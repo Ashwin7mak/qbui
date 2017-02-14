@@ -18,7 +18,7 @@ let languages = [
     'de-de'
 ];
 
-xdescribe('DurationFieldValueEditor seed:' + (seed), () => {
+describe('DurationFieldValueEditor seed:' + (seed), () => {
     beforeEach(function() {
         Locale.changeLocale('en-us');
     });
