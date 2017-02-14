@@ -25,6 +25,13 @@ $grid-column-icon-hover-color:                  $color-cyan-700;
 $grid-lefticon-normal-color:                    $color-black-300;
 $grid-lefticon-hover-color:                     $color-cyan-700;
 $grid-line-color:                               $color-black-400;
+$inline-edit-shadow-color:                      $color-black-300;
+
+// Semantic line-height sizes
+$line-height-heading:           20px;
+$line-height-text-compact:      14px;
+$line-height-text-comfortable:  16px;
+$line-height-text-generous:     24px;
 
 //-------------------------------------------------------------------
 // GRID COMPONENT
@@ -71,6 +78,7 @@ $grid-line-color:                               $color-black-400;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
+        vertical-align: top;
 
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
@@ -81,6 +89,7 @@ $grid-line-color:                               $color-black-400;
             padding-left: $grid-default-cell-padding;
             padding-right: $grid-default-cell-padding;
             border-left: 1px solid $grid-column-header-border-color;
+            vertical-align: middle;
         }
 
         &:last-of-type {
@@ -109,14 +118,16 @@ $grid-line-color:                               $color-black-400;
     // this node goes inside the qbHeaderCell above
     .gridHeaderCell {
         display: flex;
-        align-items: center;
 
         // text label for the header cell
         .gridHeaderLabel {
-            max-height: 36px;
+            // set max-height to 2 lines. An extra 2px is needed to prevent clipping
+            max-height: (($line-height-text-comfortable * 2) + 2);
             overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
+            padding-top: 2px;
+            line-height: $line-height-text-comfortable;
         }
 
         // menu to access sorting options
@@ -137,8 +148,12 @@ $grid-line-color:                               $color-black-400;
             // of the gridHeaderCell above when the menu shows and hides.
             // This temporary fix positions the menu below the entire header row so as not
             // to be clipped by adjacent cells.
+            .dropdown {
+                position: initial; // we want to position the popup menu relative to the <th> for now.
+            }
             .dropdown-menu {
-                top: 120%; // ugly - do not do this... it is not safe long term. YUCK! WE NEED TO FIX THIS!
+                top: calc(100% - 1px);
+                left: calc(100% - #{$grid-group-expand-icon-size} - #{$grid-header-cell-padding});
             }
         }
 
@@ -166,8 +181,7 @@ $grid-line-color:                               $color-black-400;
         // padding-left: $grid-default-group-padding + 3;   // TODO: We need to see what the spec requires for this. It looks strange with it right now.
         vertical-align: top;
         font-weight: bold;
-        border-right: 1px solid $grid-line-color;
-        border-top: 1px solid $grid-line-color;
+        border-bottom: 1px solid $grid-line-color;
     }
 
     // indentations for nested group header rows - assuming that we can have up to 6 group levels
@@ -214,7 +228,7 @@ $grid-line-color:                               $color-black-400;
         vertical-align: top;
         font-size: $grid-font-size;
         border-right: 1px solid $grid-line-color;
-        border-top: 1px solid $grid-line-color;
+        border-bottom: 1px solid $grid-line-color;
         transition: border 100ms ease-out;
 
         &:hover .cellEditIcon {
@@ -473,12 +487,6 @@ $grid-line-color:                               $color-black-400;
     }
 
 
-    // adjust colors of the last row of cells
-    .qbRow:last-of-type .qbCell {
-        border-bottom: 1px solid $grid-line-color;
-    }
-
-
     // row hover highlighting - only done while not inline editing
     .reportContent:not(.inlineEditing) & {
 
@@ -512,7 +520,8 @@ $grid-line-color:                               $color-black-400;
 
     //== Editing a row of data
     .editing {
-        box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+        //box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+        box-shadow: 0 0 4px 4px rgba($inline-edit-shadow-color, 0.8);
         margin-top: -15px;
         z-index: $zindex-qbGrid-editing;
         background-color: $qbgrid-cell-edit-background-color;
