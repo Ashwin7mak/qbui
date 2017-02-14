@@ -56,8 +56,8 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results ', function(done) {
             req.url = '/apps/123/tables/456?format=display';
 
-            let targetObject = "[{formMeta: [id:1]}]";
-            executeReqStub.returns(Promise.resolve(targetObject));
+            let targetObject = {formMeta:{id:1}};
+            executeReqStub.returns(Promise.resolve({body: JSON.stringify(targetObject)}));
             let promise = formsApi.fetchFormMetaData(req);
 
             promise.then(
@@ -208,6 +208,52 @@ describe('Validate FormsApi unit tests', function() {
         let fetchTableFieldsStub;
         let fetchRecordStub;
         let addQuerySpy;
+
+        const formMeta = () => {
+            return {
+                "formId": 1,
+                "tableId": "0wbfabsaaaaac",
+                "appId": "0wbfabsaaaaab",
+                "includeBuiltIns": true,
+                "tabs": {
+                    "0": {
+                        "orderIndex": 0,
+                        "title": "nameMdhfp1464879524917",
+                        "sections": {
+                            "0": {
+                                "orderIndex": 0,
+                                "elements": {
+                                    "1": {
+                                        "FormFieldElement": {
+                                            "displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz",
+                                            "fieldId": 3
+                                        }
+                                    },
+                                    "2": {
+                                        "FormFieldElement": {
+                                            "displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE",
+                                            "fieldId": 2
+                                        }
+                                    },
+                                    "3": {
+                                        "FormFieldElement": {
+                                            "displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE",
+                                            "fieldId": ""
+                                        }
+                                    },
+                                    "4": {
+                                        "FormTextElement": {
+                                            "displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
         beforeEach(function() {
             fetchFormMetaStub = sinon.stub(formsApi, "fetchFormMetaData");
             fetchTableFieldsStub = sinon.stub(formsApi, "fetchTableFields");
@@ -228,20 +274,18 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results without elements', function(done) {
             req.url = '/apps/123/tables/456';
 
-            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
-                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
-                '"sections": {"0": {"orderIndex": 0}}' +
-                '}}' +   // close tabs
-                '}';
+            const formNoElements = formMeta();
+            delete formNoElements.tabs[0].sections[0].elements;
+
             let bodyFields = '[{"id":1}]';
             let expectedSuccessResponse = {
-                formMeta: JSON.parse(body),
+                formMeta: formNoElements,
                 tableFields: JSON.parse(bodyFields),
                 record: [],
                 fields: []
             };
 
-            fetchFormMetaStub.returns(Promise.resolve({body:body}));
+            fetchFormMetaStub.returns(Promise.resolve(formNoElements));
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
@@ -265,25 +309,15 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results with fids in table including built-ins', function(done) {
             req.url = '/apps/123/tables/456';
 
-            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab","includeBuiltIns":true,' +
-                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
-                '"sections": {"0": {"orderIndex": 0,' +
-                '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
-                '"2": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": 2}},' +
-                '"3": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": ""}},' +
-                '"4": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
-                '}}' +   // close sections
-                '}}' +   // close tabs
-                '}';
             let bodyFields = '[{"id":3},{"id":2},{"id":1,"builtIn":true}]';
             let expectedSuccessResponse = {
-                formMeta: JSON.parse(body),
+                formMeta: formMeta(),
                 tableFields: JSON.parse(bodyFields),
                 record: 'record1',
                 fields: JSON.parse('[{"id":2}]')
             };
 
-            fetchFormMetaStub.returns(Promise.resolve({body:body}));
+            fetchFormMetaStub.returns(Promise.resolve(formMeta()));
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
@@ -307,24 +341,15 @@ describe('Validate FormsApi unit tests', function() {
         it('success return results with fid not in table', function(done) {
             req.url = '/apps/123/tables/456';
 
-            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
-                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
-                '"sections": {"0": {"orderIndex": 0,' +
-                '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
-                '"2": {"FormFieldElement": {"displayTextWithDeletedFid": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": "2"}},' +
-                '"3": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
-                '}}' +   // close sections
-                '}}' +   // close tabs
-                '}';
             let bodyFields = '[{"id":3}]';
             let expectedSuccessResponse = {
-                formMeta: JSON.parse(body),
+                formMeta: formMeta(),
                 tableFields: JSON.parse(bodyFields),
                 record: 'record1',
                 fields: JSON.parse('[{"id":2}]')
             };
 
-            fetchFormMetaStub.returns(Promise.resolve({body:body}));
+            fetchFormMetaStub.returns(Promise.resolve(formMeta()));
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
@@ -392,17 +417,10 @@ describe('Validate FormsApi unit tests', function() {
                 message: 'error',
                 body: '{"msg":"NOT_CONNECTED"}'
             };
-            let body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
-                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
-                '"sections": {"0": {"orderIndex": 0,' +
-                '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
-                '"2": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
-                '}}' +   // close sections
-                '}}' +   // close tabs
-                '}';
+
             let bodyFields = '[{"id":3}]';
 
-            fetchFormMetaStub.returns(Promise.resolve({body:body}));
+            fetchFormMetaStub.returns(Promise.resolve(formMeta()));
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.reject(error_message));
 

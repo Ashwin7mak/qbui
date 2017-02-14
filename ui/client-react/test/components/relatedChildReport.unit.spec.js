@@ -17,7 +17,7 @@ const childReportId = 3;
 const childTableName = 'child table';
 const detailKeyFid = 4;
 const detailKeyValue = 5;
-const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}/detailKeyFid/${detailKeyFid}/detailKeyValue/${detailKeyValue}`;
+const relatedChildReportUrl = `/qbase/app/${appId}/table/${childTableId}/report/${childReportId}?detailKeyFid=${detailKeyFid}&detailKeyValue=${detailKeyValue}`;
 
 const MockChildReport = (props) => () => {
     props = Object.assign({

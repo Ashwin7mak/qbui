@@ -149,7 +149,7 @@
                     opts.url += search;
                 }
 
-                if (req.query.relationshipPrototype) {
+                if (lodash.get(req, 'query.relationshipPrototype')) {
                     // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
                     // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
                     return this.createReferenceElments(req, opts);
@@ -171,9 +171,9 @@
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];
-                    formMeta.relationships = relationships;
 
                     if (relationships.length) {
+                        formMeta.relationships = relationships;
                         let referenceElements = [];
                         // creates the mock referenceElement
                         const referenceElement = (orderIndex, relationshipId) => {
@@ -242,8 +242,7 @@
 
                             // If form object has a relationship defined, attach the default child reportId to each
                             // relationship object.
-                            obj.formMeta.relationships = obj.formMeta.relationships || [];
-                            if (obj.formMeta.relationships.length) {
+                            if (lodash.get(obj, 'formMeta.relationships.length')) {
                                 // collect all childTableIds
                                 let childTableIds = obj.formMeta.relationships.map(rel => rel.detailTableId);
                                 childTableIds = lodash.uniq(childTableIds);
@@ -269,8 +268,8 @@
                                 return obj;
                             }
                         }).then(obj => {
-                            obj.record = {};
-                            obj.fields = {};
+                            obj.record = [];
+                            obj.fields = [];
 
                             //  extract into list all the fields defined on the form.  If any fields, will query
                             //  for record and fields; otherwise will return just the form meta data and empty

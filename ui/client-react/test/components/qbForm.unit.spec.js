@@ -155,6 +155,7 @@ QBFormDataWithRelationship.formMeta.tabs[0].sections[2] = {
         "0": referenceElement()
     }
 };
+QBFormDataWithRelationship.formMeta.relationships = relationships;
 
 const emptyQBFormData = {
     formMeta: {
@@ -267,7 +268,7 @@ describe('QBForm functions', () => {
     it('renders relationship links in smallBP', () => {
         QBForm.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
 
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={QBFormDataWithRelationship} relationships={relationships}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={QBFormDataWithRelationship}></QBForm>);
         const childReportLink = TestUtils.findRenderedDOMComponentWithClass(component, "childReportLink");
         expect(childReportLink).toBeTruthy();
 

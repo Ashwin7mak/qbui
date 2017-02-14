@@ -621,7 +621,10 @@
                             log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
                             reject(error);
                         }
-                    );
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching homepage report id in fetchDefaultReportId', ex, true);
+                        reject(ex);
+                    });
                 });
             },
 
