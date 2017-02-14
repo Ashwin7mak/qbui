@@ -1,9 +1,13 @@
 import * as types from '../actions/types';
 import FeatureSwitchService from '../services/featureSwitchService';
 import Promise from 'bluebird';
+import {NotificationManager} from 'react-notifications';
+import * as CompConsts from '../constants/componentConstants';
+import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 let logger = new Logger();
+
 
 const loadSwitchesSuccess = (switches) => {
     return {
@@ -41,6 +45,29 @@ export const getSwitches = () => {
 };
 
 
+export const createRow = (id) => ({
+    type: 'CREATE_ROW',
+    feature: { id, defaultOn: false, description: 'Description', exceptions: [], name: 'Feature', team: 'Team' }
+});
+
+export const deleteRow = id => ({
+    type: 'DELETE_ROW',
+    id
+});
+
+export const editRow = (id, column) => ({
+    type: 'EDIT_ROW',
+    id,
+    column
+});
+
+export const confirmEdit = (id, property, value) => ({
+    type: 'CONFIRM_EDIT',
+    id,
+    property,
+    value
+})
+
 const saveSwitchesSuccess = (switches) => {
     return {
         type: types.SAVED_FEATURE_SWITCHES,
@@ -59,7 +86,8 @@ export const saveSwitches = (switches) => {
 
             promise.then(response => {
                 dispatch(saveSwitchesSuccess(switches));
-
+                NotificationManager.success('Feature Switches Saved', Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                 resolve();
             }).catch(error => {
 
@@ -107,6 +135,14 @@ export const getStates = () => {
                 reject(error);
             });
         });
+    };
+};
+
+export const setSwitchDefaultState = (id, defaultOn) => {
+    return {
+        type: types.SET_SWITCH_DEFAULT_STATE,
+        id,
+        defaultOn
     };
 };
 

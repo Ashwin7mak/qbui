@@ -1,8 +1,24 @@
 
 .featureSwitches {
     margin: 20px;
+
+    .globalButtons {
+        margin-top:30px;
+        button {
+            margin-right: 10px;
+        }
+    }
+    .selectionButtons button {
+        margin-right: 10px;
+         &:disabled {
+             color: #bbb;
+         }
+
+    }
 }
+
 .featureSwitchTable {
+    table-layout: fixed;
     margin-top: 20px;
     width: 100%;
     tbody tr:nth-child(odd) {
@@ -12,9 +28,24 @@
         background-color: #ddd;
     }
     th,td {
-        padding: .5em;
+        height: 40px;
+
+        input {
+            width: calc(100% - 10px);
+        }
     }
+
     tbody td {
         border-top: 1px solid #ccc;
+
+    }
+
+    &.switches {
+        th:first-child,
+        td:first-child {
+            width: 40px;
+            padding-left: 10px;
+        }
     }
 }
+

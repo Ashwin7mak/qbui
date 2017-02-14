@@ -10,6 +10,7 @@ import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import FeatureCheck from '../featureSwitches/featureCheck';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -100,21 +101,34 @@ export const TableHomePageRoute = React.createClass({
                 <ReportStage reportData={this.props.reportData} />
             </Stage>
 
+            <FeatureCheck featureName="Feature X">
+                <h2>Feature X is on!</h2>
+            </FeatureCheck>
+
             {this.getHeader()}
 
-            <ReportToolsAndContent
-                params={this.props.params}
-                reportData={this.props.reportData}
-                appUsers={this.props.appUsers}
-                routeParams={this.props.routeParams}
-                selectedAppId={this.props.selectedAppId}
-                fields={this.props.fields}
-                searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                selectedRows={this.props.reportData.selectedRows}
-                scrollingReport={this.props.scrollingReport}
-                rptId={this.props.reportData ? this.props.reportData.rptId : null}
-                nameForRecords={this.nameForRecords}
-                pendEdits={this.props.pendEdits} />
+            <FeatureCheck featureName="HideTable">
+                <h2>Table is off</h2>
+            </FeatureCheck>
+
+            <FeatureCheck featureName="HideTable" show={false}>
+                <ReportToolsAndContent
+                    params={this.props.params}
+                    reportData={this.props.reportData}
+                    appUsers={this.props.appUsers}
+                    routeParams={this.props.routeParams}
+                    selectedAppId={this.props.selectedAppId}
+                    fields={this.props.fields}
+                    searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                    selectedRows={this.props.reportData.selectedRows}
+                    scrollingReport={this.props.scrollingReport}
+                    rptId={this.props.reportData ? this.props.reportData.rptId : null}
+                    nameForRecords={this.nameForRecords}
+                    pendEdits={this.props.pendEdits} />
+
+            </FeatureCheck>
+
+
         </div>);
     }
 });

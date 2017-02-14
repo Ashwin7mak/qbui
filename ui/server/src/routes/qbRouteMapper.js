@@ -1,29 +1,29 @@
 
 var featureSwitches = [
     {
-        id: 1,
+        id: 123,
         name: 'Feature X',
-        team: 'Team with no name',
-        description: 'My first node feature switch',
+        team: 'Cthulu',
+        description: 'Demo feature switch',
         defaultOn: true,
         exceptions: [
             {
                 entityType: 'realm',
-                entityValue: '123',
+                entityValue: 'realm-9aa27cd7-7f2a-41ee-b52d-fcb6758344a0-1478550241021',
                 on: false,
             }
         ]
     },
     {
-        id: 2,
-        name: 'Feature Y',
-        team: 'Jade Empire',
-        description: 'Another node feature switch',
+        id: 2322,
+        name: 'Hide Table',
+        team: 'Hydra',
+        description: 'Hide table feature',
         defaultOn: false,
         exceptions: [
             {
                 entityType: 'app',
-                entityValue: 'sdfsdf',
+                entityValue: 'bmbahnjyp',
                 on: true,
             }
         ]
@@ -113,13 +113,13 @@ var featureSwitches = [
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
          */
         var routeToPutFunction = {};
+        routeToPutFunction[routeConsts.FEATURE_SWITCHES] = saveFeatureSwitches;
 
         /*
          * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
          */
         var routeToPatchFunction = {};
         routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
-        routeToPatchFunction[routeConsts.FEATURE_SWITCHES] = saveFeatureSwitches;
 
         /*
          * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
@@ -290,7 +290,10 @@ var featureSwitches = [
 
         let response = {}
         res.send(response);
-        console.log('\n\n\nsave ', req.rawBody);
+
+        let bodyJSON = JSON.parse(req.rawBody);
+        featureSwitches = bodyJSON.switches;
+
         logApiSuccess(req, response, perfLog, activityName);
 
     }
@@ -299,10 +302,11 @@ var featureSwitches = [
         perfLog.init('Get Feature Switches', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            let response = {
-                'Feature X': true,
-                'Feature Y': true
-            };
+            let response = {};
+
+            featureSwitches.forEach(function (featureSwitch) {
+                response[featureSwitch.name] = featureSwitch.defaultOn;
+            });
             res.send(response);
 
             logApiSuccess(req, response, perfLog, 'Get Feature States');
