@@ -12,6 +12,7 @@ import Logger from '../../utils/logger';
 import {updateForm} from '../../actions/formActions';
 import {connect} from 'react-redux';
 
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -93,13 +94,11 @@ const BuilderWrapper = React.createClass({
         const formType = this.props.location.query.formType;
 
         return (
-            <div className="builderWrapperContent" >
-                <div className="main">
-                    <div className="topNav">
+            <div className="builderWrapperContent">
+                <div className="topNav">
                     {this.getTopGlobalActions()}
                      <NotificationContainer/>
                 </div>
-            </div>
 
                 <FormBuilderContainer
                 appId={appId}
