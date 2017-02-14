@@ -251,7 +251,7 @@ describe('Validate FormsApi unit tests', function() {
                         }
                     }
                 }
-            }
+            };
         };
 
         beforeEach(function() {
