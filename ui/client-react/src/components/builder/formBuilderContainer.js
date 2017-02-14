@@ -62,7 +62,7 @@ export const FormBuilderContainer = React.createClass({
                     <ToolPalette />
 
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT_REPORT}>
-                        <FormBuilder formData={formData} />
+                        {formData && <FormBuilder formData={formData} />}
                     </Loader>
 
                     <FieldProperties />
