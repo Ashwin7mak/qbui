@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import Html5Backend from 'react-dnd-html5-backend';
 import QbForm from '../QBForm/qbform';
+import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 
 import './formBuilder.scss';
 
@@ -32,6 +33,7 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
+                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
                     edit={true}
                     editingForm={true}
@@ -47,12 +49,18 @@ export class FormBuilder extends Component {
 FormBuilder.propTypes = {
     formId: PropTypes.string.isRequired,
 
+    showCustomDragLayer: PropTypes.bool,
+
     formData: PropTypes.shape({
         fields: PropTypes.array,
         formMeta: PropTypes.object
     }).isRequired,
 
     moveFieldOnForm: PropTypes.func
+};
+
+FormBuilder.defaultProps = {
+    showCustomDragLayer: true
 };
 
 export default DragDropContext(Html5Backend)(FormBuilder);

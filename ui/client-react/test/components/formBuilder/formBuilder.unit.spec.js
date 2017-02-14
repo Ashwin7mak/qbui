@@ -17,7 +17,7 @@ describe('FormBuilder (drag/drop container)', () => {
     });
 
     it('wraps QbForm in a drag drop container', () => {
-        component = shallow(<FormBuilder formData={mockFormData} />);
+        component = shallow(<FormBuilder formData={mockFormData} showCustomDragLayer={false} />);
         instance = component.instance();
 
         expect(component.find('.formBuilderContainer')).toBePresent();
