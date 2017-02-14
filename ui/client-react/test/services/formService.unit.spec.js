@@ -98,4 +98,23 @@ describe('FormService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
+    it('test createForm function', () => {
+        var appId = 1;
+        var tblId = 2;
+        var form = {formId:1};
+        var url = formService.constructUrl(formService.API.GET_FORM, [appId, tblId]);
+
+        formService.createForm(appId, tblId, form);
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, form);
+    });
+
+    it('test updateForm function', () => {
+        var appId = 1;
+        var tblId = 2;
+        var form = {formId:1};
+        var url = formService.constructUrl(formService.API.GET_FORM, [appId, tblId]);
+
+        formService.updateForm(appId, tblId, form);
+        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, form);
+    });
 });
