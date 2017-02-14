@@ -9,7 +9,7 @@
     let FACET_RESULTS = 'facets/results';
     let FIELDS = 'fields';
     let FORMS = 'forms';
-    let FORM_TYPE = 'action';
+    let FORM_TYPE = 'formType';
     let TABLES = 'tables';
     let RECORDS = 'records';
     let COUNT_QUERY = 'countQuery';

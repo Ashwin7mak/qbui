@@ -24,6 +24,7 @@ let defaultConfig = {
     uid: uuid.v1(),
     api: {
         qbVersion: 'v1',
+        eeVersion: 'v1',
         nodeVersion: 'v1',
         legacyVersion: 'v1'
     },
@@ -72,6 +73,7 @@ if (__QB_LOCAL__) {
             logToConsole: true,
             logToServer: false
         },
+        detectInvalidMutations: false, /* use redux-immutable-state-invariant middleware? */
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
         walkmeJSSnippet : ''

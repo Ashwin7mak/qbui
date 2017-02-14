@@ -3,6 +3,15 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+import * as ShellActions from '../../src/actions/shellActions';
+
+let smallBreakpoint = false;
+class BreakpointsMock {
+    static isSmallBreakpoint() {
+        return smallBreakpoint;
+    }
+}
+let dispatchMethod = () => { };
 
 var LeftNavMock = React.createClass({
     render() {
@@ -66,11 +75,6 @@ describe('Nav functions', () => {
             return {apps: null};
         }
     });
-    let reportsStore = Fluxxor.createStore({
-        getState: function() {
-            return {list: []};
-        }
-    });
     let reportDataStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -95,7 +99,6 @@ describe('Nav functions', () => {
     let stores = {
         NavStore: new navStore(),
         AppsStore: new appsStore(),
-        ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
         RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
@@ -107,7 +110,8 @@ describe('Nav functions', () => {
             shell: {
                 leftNavVisible: true,
                 leftNavExpanded: false
-            }
+            },
+            reports: []
         }
     };
 
@@ -158,7 +162,7 @@ describe('Nav functions', () => {
                 return {touch: true};
             },
             render() {
-                return <Nav {...props} ref="nav" flux={flux}></Nav>;
+                return <Nav {...props} ref="nav" flux={flux} dispatch={dispatchMethod}></Nav>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -176,7 +180,6 @@ describe('Nav functions', () => {
         let storesWithAdminApp = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithAdminApp(), // has an app with admin access (EDIT_SCHEMA)
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -192,7 +195,6 @@ describe('Nav functions', () => {
         let storesWithV3App = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App(),  // has an app with openInV3 = true
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -208,7 +210,6 @@ describe('Nav functions', () => {
         let storesWithoutV3App = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithoutV3App(),  // no admin rights and has no app with openInV3 = true
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -227,7 +228,6 @@ describe('Nav functions', () => {
         let storesWithoutApps = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithNoApps(),
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -250,7 +250,6 @@ describe('Nav functions', () => {
         let storesWithApps = {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App(),
-            ReportsStore: new reportsStore(),
             ReportDataStore: new reportDataStore(),
             RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
@@ -267,5 +266,23 @@ describe('Nav functions', () => {
         expect(loadingScreen).toBeNull();
         // Left Menu is an element that is not on the loading screen, but is on the final nav screen
         expect(leftMenu).not.toBeNull();
+    });
+
+    it('test onSelectItem method', () => {
+        smallBreakpoint = true;
+        NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
+
+        spyOn(ShellActions, "toggleLeftNav");
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
+        component.onSelectItem();
+        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
+        ShellActions.__ResetDependency__('Breakpoints');
+    });
+
+    it('test toggleNav method', () => {
+        spyOn(ShellActions, "toggleLeftNav");
+        component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
+        component.toggleNav();
+        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
     });
 });

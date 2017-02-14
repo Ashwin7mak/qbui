@@ -20,6 +20,17 @@ describe('qbRow', () => {
         subHeaderLevel: null,
     };
 
+    const subHeaderId = 'testSubHeaderId';
+    const subHeaderLabel = 'This is a subheader';
+    const subHeaderLevel = 2;
+    const subHeaderProps = Object.assign({}, testProps, {
+        subHeaderId: subHeaderId,
+        isSubHeader: true,
+        subHeaderLabel: subHeaderLabel,
+        subHeaderLevel: subHeaderLevel,
+        toggleCollapseGroup() {}
+    });
+
     it('renders a table row with a key based on the rowId', () => {
         component = shallow(<QbRow {...testProps} />);
 
@@ -30,18 +41,24 @@ describe('qbRow', () => {
     });
 
     it('renders a subheader row isSubHeader is true', () => {
-        const subHeaderLabel = 'This is a subheader';
-        const subHeaderLevel = 2;
-        const subHeaderProps = Object.assign({}, testProps, {
-            isSubHeader: true,
-            subHeaderLabel: subHeaderLabel,
-            subHeaderLevel: subHeaderLevel
-        });
-
         component = shallow(<QbRow {...subHeaderProps}/>);
 
         expect(component.find('.subHeaderLabel')).toHaveText(subHeaderLabel);
         expect(component).toHaveClassName(`subHeaderLevel-${subHeaderLevel}`);
         expect(component.find('td')).toHaveClassName('subHeaderCell');
+    });
+
+    it('can be collapsed if it is a subheader row', () => {
+        spyOn(subHeaderProps, 'toggleCollapseGroup');
+
+        component = shallow(<QbRow {...subHeaderProps}/>);
+        let instance = component.instance();
+
+        let collapseToggleButton = component.find({onClick: instance.toggleCollapseGroup});
+        expect(collapseToggleButton).toBePresent();
+
+        collapseToggleButton.simulate('click');
+
+        expect(subHeaderProps.toggleCollapseGroup).toHaveBeenCalledWith(subHeaderId);
     });
 });

@@ -7,7 +7,8 @@ import QbRow from './qbRow';
 import QbCell from './qbCell';
 import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
-import _ from 'lodash';
+import QbIcon from '../../qbIcon/qbIcon';
+import CollapsedGroupsHelper from './collapsedGroupHelper';
 
 import Logger from '../../../utils/logger';
 const logger = new Logger();
@@ -47,6 +48,10 @@ const QbGrid = React.createClass({
         /**
          * The currently selected rows (e.g., by clicking the checkboxes in the first column) */
         selectedRows: PropTypes.array,
+
+        /**
+         * Indicates if all the rows currently displayed in the grid are selected */
+        areAllRowsSelected: PropTypes.bool,
 
         /**
          * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
@@ -131,6 +136,16 @@ const QbGrid = React.createClass({
             isEditingRowSaving: false,
             showRowActionsColumn: true
         };
+    },
+
+    getInitialState() {
+        return {
+            collapsedGroups: []
+        };
+    },
+
+    componentWillMount() {
+        this.collapsedGroupHelper = new CollapsedGroupsHelper();
     },
 
     onClickAddNewRow() {
@@ -218,9 +233,10 @@ const QbGrid = React.createClass({
 
         let rowProps = Object.assign({
             subHeaderId: row.id,
+            toggleCollapseGroup: this.toggleCollapseGroup,
+            isCollapsed: row.isCollapsed,
             className: classes.join(' '),
             editingRowId: this.props.editingRowId,
-            isInlineEditOpen: this.props.isInlineEditOpen,
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
             // Add one to account for the extra column at the start of the grid for the row actions.
@@ -236,16 +252,27 @@ const QbGrid = React.createClass({
      * @returns {React}
      */
     getCheckboxHeader() {
-        let {selectedRows, rows} = this.props;
-        const allSelected = (selectedRows && rows && selectedRows.length === rows.length);
+        let collapseAllIcon = null;
+        if (CollapsedGroupsHelper.isGrouped(this.props.rows)) {
+            let iconType = (this.collapsedGroupHelper.areNoneCollapsed() ? 'caret-filled-down' : 'caret-filled-right');
+
+            collapseAllIcon = (
+                <div className="collapseAllIcon">
+                    <QbIcon icon={iconType} onClick={this.toggleCollapseAllGroups} />
+                </div>
+            );
+        }
 
         return (
-            <input
-                type="checkbox"
-                className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
-                checked={allSelected}
-                onChange={this.props.onClickToggleSelectAllRows}
-            />
+            <div className="actionHeader">
+                <input
+                    type="checkbox"
+                    className={`${SELECT_ROW_CHECKBOX} selectAllCheckbox`}
+                    checked={this.props.areAllRowsSelected}
+                    onChange={this.props.onClickToggleSelectAllRows}
+                />
+                {collapseAllIcon}
+            </div>
         );
     },
 
@@ -276,6 +303,14 @@ const QbGrid = React.createClass({
         return `row-${rowData.id}`;
     },
 
+    toggleCollapseAllGroups() {
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseAllGroups()});
+    },
+
+    toggleCollapseGroup(subHeaderId) {
+        this.setState({collapsedGroups: this.collapsedGroupHelper.toggleCollapseGroup(subHeaderId)});
+    },
+
     /**
      * stick the header and sticky first column when the grid scrolls
      */
@@ -289,10 +324,11 @@ const QbGrid = React.createClass({
         // move the headers down to their original positions
         let stickyHeaders = scrolled.getElementsByClassName('qbHeaderCell');
         for (let i = 0; i < stickyHeaders.length; i++) {
-            stickyHeaders[i].style.top = currentTopScroll + 'px';
+            let translate = "translate(0," + currentTopScroll + "px)";
+            stickyHeaders[i].style.transform = translate;
         }
 
-        // move the stick cells (1st col) right to their original positions
+        // move the sticky cells (1st col) right to their original positions
         let stickyCells = scrolled.getElementsByClassName('stickyCell');
 
         stickyCells[0].style.left = currentLeftScroll + 'px';
@@ -300,9 +336,11 @@ const QbGrid = React.createClass({
         stickyCells[0].style.bottom = 0;
 
         for (let i = 1; i < stickyCells.length; i++) {
-            stickyCells[i].style.left = currentLeftScroll + 'px';
+            let translate = "translate(" + currentLeftScroll + "px,0)";
+            stickyCells[i].style.transform = translate;
         }
     },
+
     render() {
         let columns;
         if (this.props.showRowActionsColumn) {
@@ -344,15 +382,18 @@ const QbGrid = React.createClass({
                             row: QbRow,
                             cell: QbCell
                         }
-                    }}>
-                    <Table.Header />
+                    }}
+                >
+                    <Table.Header className="qbHeader"/>
 
-                    <Table.Body onRow={this.addRowProps}
-                                rows={this.props.rows}
-                                rowKey={this.getUniqueRowKey}
-                                ref={body => {
-                                    this.tableRef = body && body.getRef().parentNode;
-                                }}/>
+                    <Table.Body className="qbTbody"
+                        onRow={this.addRowProps}
+                        rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
+                        rowKey={this.getUniqueRowKey}
+                        ref={body => {
+                            this.tableRef = body && body.getRef().parentNode;
+                        }}
+                    />
                 </Table.Provider>
             </Loader>
         );

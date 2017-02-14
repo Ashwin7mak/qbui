@@ -59,6 +59,14 @@ describe('RowEditActions (QbGrid)', () => {
         expect(component.find(Button).find({className: 'addRecord disabled'})).toBePresent();
     });
 
+    // Heads up: This should be removed once a user can add multiple records
+    it('disables the "Save and Add New Record" button when editing a new row (cannot add multiple rows consecutively)', () => {
+        component = shallow(<RowEditActions isValid={true} rowId={null} />);
+
+        expect(component.find(Button).find({className: 'addRecord disabled'})).toBePresent();
+        expect(component.find(QBToolTip).find({i18nMessageKey: 'pageActions.saveAndAddRecordDisabled'})).toBePresent();
+    });
+
     it('displays a loading icon if the record isSaving and disables the add button', () => {
         component = shallow(<RowEditActions isSaving={true}/>);
 
@@ -108,13 +116,13 @@ describe('RowEditActions (QbGrid)', () => {
             expect(actions.onClickCancel).not.toHaveBeenCalled();
         });
 
-        it('does not called the "add new record" method if the record is invalid', () => {
-            component = shallow(<RowEditActions onClickCancel={actions.onClickAdd} isValid={false} rowId={rowId}/>);
+        it('does not call the "add new record" method if the record is invalid', () => {
+            component = shallow(<RowEditActions {...actions} isValid={false} rowId={rowId}/>);
 
-            let saveButton = component.find(Button).find({className: 'rowEditActionsCancel'});
+            let saveButton = component.find(Button).find({className: 'rowEditActionsSaveAndAdd'});
             saveButton.simulate('click');
 
-            expect(actions.onClickAdd).not.toHaveBeenCalledWith();
+            expect(actions.onClickAdd).not.toHaveBeenCalled();
             expect(actions.onClickSave).not.toHaveBeenCalled();
             expect(actions.onClickCancel).not.toHaveBeenCalled();
         });

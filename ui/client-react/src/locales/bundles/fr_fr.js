@@ -103,8 +103,10 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
+            formBuilder: 'Forme Constructeur',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
+            saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
             cancelSelection: "Annuler les modifications",
             favorite: "Préféré",
             gridEdit: "Grille modifier",
@@ -205,6 +207,7 @@ export default {
         },
         report : {
             blank : "blanc",
+            inlineEdit: "Modifier enregistrement en ligne",
             facets :{
                 noFacets : "Non valeurs",
                 seeMore : "plus...",
@@ -412,6 +415,7 @@ export default {
             api: {
                 notUniqueSingleField: "Remplissez une valeur différente. Un autre {recordName} utilise déjà ce {fieldName}.",
                 notUniqueMultiChoice: "Sélectionnez un autre {fieldName}. Un autre {recordName} utilise déjà celui-ci.",
+                invalidRecord: "Type de données non valide. Remplissez une valeur différente."
             },
             unknown: "Type inconnu non valide. Résultats: ",
             required: "Remplissez {fieldName}",

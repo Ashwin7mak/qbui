@@ -82,36 +82,35 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [
-        //TODO Chrome is not stable in sauce labs . So will deal this as seperate PR.
-        //{
-        //    platform : 'OS X 10.11',
-        //    browserName     : 'chrome',
-        //    version: '53.0',
-        //    tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-        //    name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
-        //    //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        //    idleTimeout: '120',
-        //    screenResolution : '1600x1200',
-        //    maxDuration: 10800,
-        //    breakpointSize: 'xlarge',
-        //    // These two values enable parallel testing which will run a spec file per instance
-        //    shardTestFiles: true,
-        //    maxInstances: 2
-        //},
         {
-            platform: 'OS X 10.11',
-            browserName: 'safari',
-            version: '10.0',
+            platform : 'OS X 10.11',
+            browserName     : 'chrome',
+            version: '55.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
-            screenResolution : '1600x1200',
+            name            : process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
+            idleTimeout: '120',
+            screenResolution : '1600x1200',
             maxDuration: 10800,
-            breakpointSize: 'large',
+            breakpointSize: 'xlarge',
+            // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 2
         },
+        // {
+        //     platform: 'OS X 10.11',
+        //     browserName: 'safari',
+        //     version: '10.0',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+        //     screenResolution : '1600x1200',
+        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     idleTimeout: '180',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'large',
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // },
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',

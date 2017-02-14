@@ -1,4 +1,5 @@
 import React from 'react';
+import AppHistory from '../../globals/appHistory';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import Button from 'react-bootstrap/lib/Button';
@@ -114,6 +115,33 @@ export const RecordRoute = React.createClass({
         this.props.router.push(link);
     },
 
+    navigateToBuilder() {
+        /**
+         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
+         * a new unit test will need to be added to recordRoute.unit.spec.js
+         * */
+        const formId = null;
+        const {appId, tblId} = this.props.params;
+
+        let formType;
+        let link = `/qbase/builder/app/${appId}/table/${tblId}/form`;
+
+        if (this.props.forms) {
+            formType = this.props.forms[0].id;
+        }
+
+
+        if (formId && formType) {
+            link = `${link}/${formId}?formType=${formType}`;
+        } else if (formType) {
+            link = `${link}?formType=${formType}`;
+        } else if (formId) {
+            link = `${link}/${formId}`;
+        }
+
+        this.props.router.push(link);
+    },
+
     /**
      * go back to the previous report record
      */
@@ -199,6 +227,7 @@ export const RecordRoute = React.createClass({
     openRecordForEdit() {
         this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
+
     /**
      * edit the selected record in the trowser
      * @param data row record data
@@ -211,10 +240,12 @@ export const RecordRoute = React.createClass({
 
         this.props.editNewRecord();
     },
+
     getPageActions() {
 
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.navigateToBuilder},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
@@ -261,7 +292,7 @@ export const RecordRoute = React.createClass({
             _.isUndefined(this.props.params.tblId) ||
             (_.isUndefined(this.props.params.recordId))
         ) {
-            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            logger.info("the necessary params were not specified to recordRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
             const viewData = this.getViewFormFromProps();

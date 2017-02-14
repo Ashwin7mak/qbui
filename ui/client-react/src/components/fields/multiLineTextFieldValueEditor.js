@@ -136,7 +136,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
      */
     onKeyUp(ev) {
         if (this.getScrollHeight() < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
-            this.resize();
+            if (!this.props.isFormView) {
+                this.resize();
+            }
         }
     },
 
