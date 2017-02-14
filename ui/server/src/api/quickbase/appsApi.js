@@ -211,6 +211,35 @@
             },
 
             /**
+             * Gets relationships object from relationships endpoint for a specific app given that the req.url contains
+             * an appId.
+             * @param req assumes that req.url contains an appId
+             * @returns {Promise}
+             */
+            getRelationshipsForApp: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRelationshipsRoute(req.url);
+
+                    //  make the api request to get the relationships for an app
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let relationships = JSON.parse(response.body);
+                            resolve(relationships);
+                        },
+                        (error) => {
+                            log.error({req: req}, "appsApi.getRelationshipsForApp(): Error retrieving relationships.");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('appsApi.getRelationshipsForApp(): unexpected error fetching relationships', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
              * Supports both GET and POST request to resolve an applications run-time stack
              * preference.
              *

@@ -178,6 +178,9 @@ export default {
                 }
             }
         },
+        relationship: {
+            childTable: "Child Table"
+        },
         durationWithUnits: {
             // these keys can't change they correspond to the
             // duration consts for localization lookup
