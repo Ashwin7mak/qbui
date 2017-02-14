@@ -101,8 +101,8 @@ export const TableHomePageRoute = React.createClass({
                 <ReportStage reportData={this.props.reportData} />
             </Stage>
 
-            <FeatureCheck featureName="Feature X">
-                <h2>Feature X is on!</h2>
+            <FeatureCheck featureName="demo">
+                <h2>Demo feature X is on!</h2>
             </FeatureCheck>
 
             {this.getHeader()}

@@ -35,12 +35,7 @@ class FeatureSwitchesRoute extends React.Component {
     }
 
     saveSwitches() {
-
-        const switchesToSave = [];
-        this.props.switches.forEach((uiSwitch) => {
-            switchesToSave.push(_.omit(uiSwitch, 'editing'));
-        });
-        this.props.saveSwitches(switchesToSave);
+        this.props.saveSwitches(this.props.switches);
     }
 
     addNewFeature() {
@@ -72,6 +67,7 @@ class FeatureSwitchesRoute extends React.Component {
         this.state.selectedRows.forEach((id) => {
             this.props.deleteRow(id);
         });
+        this.setState({selectedRows: []});
     }
 
     getColumns() {

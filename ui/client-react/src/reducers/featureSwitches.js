@@ -58,7 +58,7 @@ const featureSwitches = (
     case 'CONFIRM_EDIT': {
         const switches = [...state.switches];
         const switchToConfirmEdit = switches.find(item => item.id === action.id);
-        switchToConfirmEdit.editing = false;
+        delete switchToConfirmEdit.editing;
         switchToConfirmEdit[action.property] = action.value;
 
         return {
