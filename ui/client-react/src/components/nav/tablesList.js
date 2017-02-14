@@ -7,6 +7,7 @@ import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import TableIconUtils from '../../utils/tableIconUtils';
 import SearchBox from '../search/searchBox';
+import {APP_ROUTE} from '../../constants/urlConstants';
 
 
 let TablesList = React.createClass({
@@ -66,7 +67,7 @@ let TablesList = React.createClass({
      * get link to table homepage
      */
     getTableLink(table) {
-        return `/qbase/app/${this.props.selectedAppId}/table/${table.id}`;
+        return `${APP_ROUTE}/${this.props.selectedAppId}/table/${table.id}`;
     },
 
     /**
@@ -118,7 +119,7 @@ let TablesList = React.createClass({
         return (
         <li className="horizontal">
             <ul className="topLinks">
-                {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
+                {this.getNavItem('nav.home', `${APP_ROUTE}/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
             </ul>
         </li>);
     },

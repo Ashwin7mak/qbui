@@ -1,0 +1,21 @@
+@import '../../../src/assets/css/qbVariables';
+
+.builderWrapperContent {
+    height: 100%;
+    width: 100%;
+
+    .topNav {
+        border: $stroke-width-thin solid  $formBuilder-border-color;
+        flex-direction: column;
+        min-width: 200px;
+        background-color: $topnav-header-background-color;
+        text-align: right;
+    }
+
+    .saveOrCancelFooter {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        color: $color-black-100;
+    }
+}

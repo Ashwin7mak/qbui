@@ -216,15 +216,6 @@ describe('QBForm functions', () => {
         expect(sections.length).toEqual(2);
     });
 
-    it('test render of formElements with labels on left', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
-        const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-        expect(fieldElements.length).toEqual(2);
-
-        const fieldLabelElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement fieldLabel");
-        expect(fieldLabelElements.length).toEqual(2);
-    });
-
     it('test render of formElements with single column due to small breakpoint', () => {
 
         QBForm.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);

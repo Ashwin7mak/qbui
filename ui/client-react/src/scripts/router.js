@@ -10,9 +10,10 @@ import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
-import FormBuilder from '../components/builder/formBuilder';
+import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import Logger from "../utils/logger";
+import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
 
 import "react-fastclick";
 
@@ -33,6 +34,7 @@ const mapStateToProps = (state) => {
         qbui: state
     };
 };
+
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
 
@@ -45,11 +47,11 @@ render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
 
-            <Route path="/qbase/apps" component={ConnectedNav} >
+            <Route path={APPS_ROUTE} component={ConnectedNav} >
                 <IndexRoute component={AppsRoute} />
             </Route>
 
-            <Route path="/qbase/app/:appId" component={ConnectedNav} >
+            <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
@@ -58,8 +60,8 @@ render((
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
             </Route>
 
-            <Route path="/qbase/builder/app/:appId" component={ConnectedBuilderNav}>
-                <Route path="table/:tblId/form(/:formId)" component={FormBuilder} />
+            <Route path={`${BUILDER_ROUTE}/app/:appId`} component={ConnectedBuilderNav}>
+                <Route path="table/:tblId/form(/:formId)" component={FormBuilderContainer} />
             </Route>
 
         </Router>

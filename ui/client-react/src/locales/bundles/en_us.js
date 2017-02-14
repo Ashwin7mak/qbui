@@ -89,6 +89,7 @@ export default {
             save: "Save",
             saveAndNext: "Save & Next",
             saveAndAddAnother: "Save & Add Another",
+            cancel: 'Cancel',
             new: "New"
         },
         field: {
@@ -106,7 +107,7 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
-            formBuilder: 'Form Builder',
+            configureFormBuilder: 'Modify this form',
             saveRecord: "Save changes",
             saveAndAddRecord: "Save and add a new row",
             saveAndAddRecordDisabled: "Adding records in the grid is not working right now",
@@ -169,6 +170,12 @@ export default {
                 lastUpdatedBy: "Last updated by ",
                 createdOn: "Created on ",
                 ownedBy: "Owned by "
+            },
+            notification: {
+                save: {
+                    success: "Form saved",
+                    error: "Error saving form"
+                }
             }
         },
         durationWithUnits: {
@@ -444,6 +451,7 @@ export default {
         },
         noneOption: "\<None\>",
         unimplemented: {
+            formBuilder: "Configuration not currently available for this view",
             search: "Searching is not available yet",
             favorites: "Accessing favorites is not available yet",
             makeFavorite: "Marking as a favorite is not available yet",

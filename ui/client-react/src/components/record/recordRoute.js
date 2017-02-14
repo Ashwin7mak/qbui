@@ -22,6 +22,7 @@ import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+import {APP_ROUTE, BUILDER_ROUTE} from '../../constants/urlConstants';
 
 import './record.scss';
 
@@ -102,7 +103,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.params;
 
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}`;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
 
@@ -111,34 +112,7 @@ export const RecordRoute = React.createClass({
      * @param recId
      */
     navigateToRecord(appId, tblId, rptId, recId) {
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.router.push(link);
-    },
-
-    navigateToBuilder() {
-        /**
-         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
-         * a new unit test will need to be added to recordRoute.unit.spec.js
-         * */
-        const formId = null;
-        const {appId, tblId} = this.props.params;
-
-        let formType;
-        let link = `/qbase/builder/app/${appId}/table/${tblId}/form`;
-
-        if (this.props.forms) {
-            formType = this.props.forms[0].id;
-        }
-
-
-        if (formId && formType) {
-            link = `${link}/${formId}?formType=${formType}`;
-        } else if (formType) {
-            link = `${link}?formType=${formType}`;
-        } else if (formId) {
-            link = `${link}/${formId}`;
-        }
-
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.router.push(link);
     },
 
@@ -181,7 +155,7 @@ export const RecordRoute = React.createClass({
         if (this.props.params) {
             const {appId, tblId, rptId} = this.props.params;
 
-            const tableLink = `/qbase/app/${appId}/table/${tblId}`;
+            const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
             const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
@@ -245,7 +219,6 @@ export const RecordRoute = React.createClass({
 
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.formBuilder', icon: 'settings-hollow', className:"formBuilderButton", onClick: this.navigateToBuilder},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'unimplemented.email', icon:'mail', disabled:true},
             {msg: 'unimplemented.print', icon:'print', disabled:true},

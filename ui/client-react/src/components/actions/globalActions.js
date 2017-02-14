@@ -141,6 +141,7 @@ let GlobalActions = React.createClass({
                 </Dropdown.Menu>
             </Dropdown>);
     },
+
     getHelpWalkme() {
         let touch = "ontouchstart" in window;
         if (touch) {
@@ -161,9 +162,13 @@ let GlobalActions = React.createClass({
             </a>);
     },
     render() {
+        /**
+         * This removes the hover shadow when the form builder button is disabled
+         * */
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
+                    {this.props.children}
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
