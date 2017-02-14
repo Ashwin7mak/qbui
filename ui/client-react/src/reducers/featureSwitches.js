@@ -4,7 +4,7 @@ import _ from 'lodash';
 const featureSwitches = (
     state = {
         //  default states
-
+        edited: false,
         switches: [],
         states: [],
     },
@@ -17,11 +17,13 @@ const featureSwitches = (
             ...state,
             switches: action.switches
         };
+
     case types.SET_FEATURE_SWITCH_STATES:
         return {
             ...state,
             states: action.states
         };
+
     case types.SET_SWITCH_DEFAULT_STATE: {
         const switches = [...state.switches];
         const switchToToggle = switches.find(item => item.id === action.id);
@@ -29,20 +31,23 @@ const featureSwitches = (
 
         return  {
             ...state,
-            switches
+            switches,
+            edited: true
         };
     }
 
     case 'CREATE_ROW':
         return {
             ...state,
-            switches: [...state.switches, action.feature]
+            switches: [...state.switches, action.feature],
+            edited: true
         };
 
     case 'DELETE_ROW':
         return {
             ...state,
-            switches: _.remove([...state.switches], fs => fs.id !== action.id)
+            switches: _.remove([...state.switches], fs => fs.id !== action.id),
+            edited: true
         };
 
     case 'EDIT_ROW': {
@@ -63,9 +68,16 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches
+            switches,
+            edited: true
         };
     }
+
+    case 'SAVED_FEATURE_SWITCHES':
+        return {
+            ...state,
+            edited: false
+        };
 
     default:
         // return existing state by default in redux

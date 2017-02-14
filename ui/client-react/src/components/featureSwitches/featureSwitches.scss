@@ -2,18 +2,19 @@
 .featureSwitches {
     margin: 20px;
 
+    button {
+        margin-right: 10px;
+    }
+    button:disabled {
+        color: #bbb;
+    }
+    button.save:not(:disabled) {
+        color: #fff;
+        background-color: #008000;
+    }
+
     .globalButtons {
         margin-top:30px;
-        button {
-            margin-right: 10px;
-        }
-    }
-    .selectionButtons button {
-        margin-right: 10px;
-         &:disabled {
-             color: #bbb;
-         }
-
     }
 }
 

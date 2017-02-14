@@ -149,6 +149,7 @@ class FeatureSwitchesRoute extends React.Component {
     render() {
         const selectedSize = this.state.selectedRows.length;
         const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected feature(s)');
+
         return (
             <div className="featureSwitches">
                 <h1>Feature Switches</h1>
@@ -157,7 +158,7 @@ class FeatureSwitchesRoute extends React.Component {
                 <div className="globalButtons">
 
                     <button onClick={this.addNewFeature}>Add new</button>
-                    <button onClick={this.saveSwitches}>Save switches</button>
+                    <button disabled={!this.props.edited} className='save' onClick={this.saveSwitches}>Save switches</button>
                 </div>
 
                 <Table.Provider className="featureSwitchTable switches"
@@ -194,6 +195,7 @@ class FeatureSwitchesRoute extends React.Component {
 const mapStateToProps = (state) => {
 
     return {
+        edited: state.featureSwitches.edited,
         switches: state.featureSwitches.switches
     };
 };
