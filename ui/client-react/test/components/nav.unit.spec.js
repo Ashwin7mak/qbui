@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import * as ShellActions from '../../src/actions/shellActions';
-import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 
 
 let smallBreakpoint = false;
@@ -14,6 +14,22 @@ class BreakpointsMock {
 }
 let dispatchMethod = () => { };
 
+//mock the actions so we can spy on them
+//and rewire nav to use the mock
+let ShellActionsMock = {
+    toggleLeftNav : function () {
+        ShellActions.toggleLeftNav()
+    },
+    showTrowser : function showTrowser() {
+        ShellActions.showTrowser()
+    },
+    hideTrowser : function hideTrowser() {
+        ShellActions.hideTrowser()
+    },
+    toggleAppsList : function toggleAppsList() {
+        ShellActions.toggleAppsList()
+    }
+}
 
 var LeftNavMock = React.createClass({
     render() {
@@ -274,26 +290,31 @@ describe('Nav functions', () => {
 
     it('test onSelectItem method', () => {
         smallBreakpoint = true;
-        spyOn(ShellActions, "toggleLeftNav");
+        spyOn(ShellActionsMock, "toggleLeftNav");
 
+        NavRewireAPI.__Rewire__('ShellActions', ShellActionsMock);
         NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
 
         component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
         component.onSelectItem();
-        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
+        expect(ShellActionsMock.toggleLeftNav).toHaveBeenCalled();
         NavRewireAPI.__ResetDependency__('Breakpoints');
-        ShellActions.toggleLeftNav.calls.reset();
+        ShellActionsMock.toggleLeftNav.calls.reset();
+        NavRewireAPI.__ResetDependency__('ShellActions');
+
 
     });
 
     it('test toggleNav method', () => {
-        spyOn(ShellActions, "toggleLeftNav");
+        spyOn(ShellActionsMock, "toggleLeftNav");
+        NavRewireAPI.__Rewire__('ShellActions', ShellActionsMock);
 
         component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
         component.toggleNav();
-        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
-        ShellActions.toggleLeftNav.calls.reset();
+        expect(ShellActionsMock.toggleLeftNav).toHaveBeenCalled();
+        ShellActionsMock.toggleLeftNav.calls.reset();
 
+        NavRewireAPI.__ResetDependency__('ShellActions');
 
     });
 });
