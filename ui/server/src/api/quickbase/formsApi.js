@@ -160,18 +160,19 @@
             },
 
             /**
-             * Eventually FormMetaData returned from the experience engine should include ReferenceElements. For now,
-             * this function will get the formMetaData and add ReferenceElements to the form.
+             * Eventually FormMetaData returned from the experience engine should include ReferenceElements at which
+             * point this function should be deleted. For now, this function will get the formMetaData and add
+             * ReferenceElements to the form.
              * @param req
              * @param opts
              * @returns {Promise}
              */
             createReferenceElments: (req, opts) => {
                 const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req)];
+                /* istanbul ignore next  */
                 return Promise.all(promises).then(response => {
                     const formMeta = JSON.parse(response[0].body);
                     const relationships = response[1] || [];
-
                     if (relationships.length) {
                         formMeta.relationships = relationships;
                         let referenceElements = [];

@@ -225,8 +225,8 @@
                     //  make the api request to get the relationships for an app
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            let app = JSON.parse(response.body);
-                            resolve(app);
+                            let relationships = JSON.parse(response.body);
+                            resolve(relationships);
                         },
                         (error) => {
                             log.error({req: req}, "appsApi.getRelationshipsForApp(): Error retrieving relationships.");
