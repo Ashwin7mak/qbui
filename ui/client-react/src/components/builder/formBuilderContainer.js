@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
-import {loadForm , updateForm} from '../../actions/formActions';
+import {loadForm, updateForm} from '../../actions/formActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT_REPORT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
