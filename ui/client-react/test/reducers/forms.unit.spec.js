@@ -144,7 +144,10 @@ describe('Forms reducer functions', () => {
             expect(reducer(savingFormState, {id: VIEW, type: types.SAVING_FORM_SUCCESS, content:'data'})).toDeepEqual([{
                 id: VIEW,
                 saving: false,
-                formData: 'data'
+                errorStatus: null,
+                formData: {
+                    formMeta: 'data'
+                }
             }]);
         });
     });

@@ -176,8 +176,8 @@ module.exports = function(config) {
         port: 8083,
 
         // browser activity settings
-        browserDisconnectTimeout : 6000,    // default 2000
-        browserNoActivityTimeout : 6000,    // default 10000
+        browserDisconnectTimeout : 5000,    // default 2000
+        browserNoActivityTimeout : 10000,    // default 10000
         browserDisconnectTolerance : 99,     // default 0
 
         colors: true,
