@@ -11,6 +11,8 @@ describe('FormService functions', () => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
         spyOn(BaseService.prototype, 'get');
+        spyOn(BaseService.prototype, 'put');
+        spyOn(BaseService.prototype, 'post');
 
         formService = new FormService();
     });
