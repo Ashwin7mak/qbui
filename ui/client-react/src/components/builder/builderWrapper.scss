@@ -1,39 +1,21 @@
 @import '../../../src/assets/css/qbVariables';
 
 .builderWrapperContent {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    opacity: 1;
-    max-width: 1440px;
+    height: 100%;
+    width: 100%;
 
-    .builderWrapperChildren {
-        display: flex;
+    .topNav {
+        border: $stroke-width-thin solid  $formBuilder-border-color;
         flex-direction: column;
-        flex: 1 1 auto;
-        overflow: auto;
+        min-width: 200px;
+        background-color: $topnav-header-background-color;
+        text-align: right;
     }
 
-    .main {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        .topNav {
-            z-index: 10;
-            min-width: 200px;
-            flex: 0 0 auto;
-            flex-basis: $top-nav-height;
-            display: flex;
-            order: 1;
-            flex-direction: column;
-            background-color: $topnav-header-background-color;
-            text-align: right;
-        }
+    .saveOrCancelFooter {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        color: $color-black-100;
     }
 }

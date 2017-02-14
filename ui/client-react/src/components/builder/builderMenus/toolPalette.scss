@@ -1,0 +1,20 @@
+@import '../../../../src/assets/css/qbVariables';
+
+.toolPaletteContainer {
+    border: $stroke-width-thin solid  $formBuilder-border-color;
+    border-top: none;
+    width: 220px;
+    background-color: $color-black-250;
+
+    @include medium-breakpoint {
+        width: $leftNav-width-medium-breakpoint;
+    }
+
+    @include large-breakpoint {
+        width: $leftNav-width-large-breakpoint;
+    }
+
+    @include xlarge-breakpoint {
+        width: $leftNav-width-xLarge-breakpoint;
+    }
+}

@@ -4,7 +4,8 @@ import {loadForm, moveFieldOnForm} from '../../actions/formActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT_FORM} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
-
+import ToolPalette from './builderMenus/toolPalette';
+import FieldProperties from './builderMenus/fieldProperties';
 import FormBuilder from '../formBuilder/formBuilder';
 
 import './formBuilderContainer.scss';
@@ -61,20 +62,15 @@ export const FormBuilderContainer = React.createClass({
             formId = this.props.forms[0].id;
             formData = this.props.forms[0].formData;
         }
-
         return (
-            <div className="formBuilder">
-                <h1 className="formBuilderHeader">Welcome To Form Builder</h1>
-                <div className="formBuilderBody">
-                    <b>appId:</b> {this.props.appId} |
-                    <b> tblId:</b> {this.props.tblId} |
-                    <b> formId:</b> {this.props.formId || 'not specified'} |
-                    <b> formType:</b> {this.props.formType || 'not specified'}
-                </div>
+            <div className="formBuilderContainer">
+                <ToolPalette />
 
                 <Loader loaded={loaded} options={LARGE_BREAKPOINT_FORM}>
                     <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
                 </Loader>
+
+                <FieldProperties />
             </div>
         );
     }
