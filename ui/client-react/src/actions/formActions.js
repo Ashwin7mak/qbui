@@ -168,102 +168,95 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             let formService = new FormService();
 
             let promise;
-
             if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
-
             } else {
                 promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
             }
 
-            promise.then(response => {
-                response.data.formType = formType;
+            promise.then(
+                response => {
+                    response.data.formType = formType;
 
-                if (recordId === NEW_FORM_RECORD_ID) {
-                    response.data.record = null;
-                } else {
-                    response.data.recordId = recordId;
-                }
-
-                // TODO: using mock data: should retrieve relationships data without the use of
-                // globals.
-                if (_.get(window, 'relationships.length') > 0) {
-                    window.relationships.forEach((relation) => {
-                        // if a relathinship in which this form is a parent is defined, mock ReferenceElement
-                        if (relation.masterTableId === response.data.formMeta.tableId) {
-                            (response.data.formMeta.relationships || []).push(relation);
-                            const mockElement =  {
-                                ReferenceElement: {
-                                    displayOptions: [
-                                        "VIEW",
-                                        "ADD",
-                                        "EDIT"
-                                    ],
-                                    type: "EMBEDREPORT",
-                                    orderIndex: 0,
-                                    positionSameRow: false,
-                                    relationshipId: 0
-                                }
-                            };
-                            // add as many elements as we have relationships
-                            const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
-                                const element = _.cloneDeep(mockElement);
-                                _.set(element, 'ReferenceElement.relationshipId', idx);
-                                _.set(element, 'ReferenceElement.orderIndex', idx);
-                                return element;
-                            });
-                            const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
-                            // inject relationship elements in its own section
-                            let sections = response.data.formMeta.tabs[0].sections;
-                            sections[length] = Object.assign(_.cloneDeep(sections[0]), {
-                                elements: elements,
-                                fields: [],
-                                orderIndex: length
-                            });
-                            sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
-                        }
-                    });
-                }
-
-                ////  TODO: for testing..will remove when action is hooked up to react ui
-                //updateForm(appId, tblId, formType, response.data.formMeta).then(
-                //    (resp) => {
-                //        logger.debug('success');
-                //    },
-                //    (fail) => {
-                //        logger.debug('failure');
-                //    }
-                //);
-
-                dispatch(loadFormSuccess(formType, response.data));
-
-                resolve(response.data);
-            }).catch(error => {
-
-                if (error.response) {
-                    if (error.response.status === 403) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                    if (recordId === NEW_FORM_RECORD_ID) {
+                        response.data.record = null;
                     } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        response.data.recordId = recordId;
                     }
-                }
 
-                if (error.response && error.response.status === 403) {
-                    NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                } else {
-                    NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                }
+                    // TODO: using mock data: should retrieve relationships data without the use of
+                    // globals.
+                    if (_.get(window, 'relationships.length') > 0) {
+                        window.relationships.forEach((relation) => {
+                            // if a relathinship in which this form is a parent is defined, mock ReferenceElement
+                            if (relation.masterTableId === response.data.formMeta.tableId) {
+                                (response.data.formMeta.relationships || []).push(relation);
+                                const mockElement =  {
+                                    ReferenceElement: {
+                                        displayOptions: [
+                                            "VIEW",
+                                            "ADD",
+                                            "EDIT"
+                                        ],
+                                        type: "EMBEDREPORT",
+                                        orderIndex: 0,
+                                        positionSameRow: false,
+                                        relationshipId: 0
+                                    }
+                                };
+                                // add as many elements as we have relationships
+                                const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
+                                    const element = _.cloneDeep(mockElement);
+                                    _.set(element, 'ReferenceElement.relationshipId', idx);
+                                    _.set(element, 'ReferenceElement.orderIndex', idx);
+                                    return element;
+                                });
+                                const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
+                                // inject relationship elements in its own section
+                                let sections = response.data.formMeta.tabs[0].sections;
+                                sections[length] = Object.assign(_.cloneDeep(sections[0]), {
+                                    elements: elements,
+                                    fields: [],
+                                    orderIndex: length
+                                });
+                                sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
+                            }
+                        });
+                    }
 
+                    dispatch(loadFormSuccess(formType, response.data));
+                    resolve(response.data);
+                },
+                (error) => {
+                    if (error.response) {
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        }
+                    }
+
+                    if (error.response && error.response.status === 403) {
+                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                    } else {
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    }
+
+                    // remove the editRec query string since we are not successfully editing the form
+                    WindowLocationUtils.pushWithoutQuery();
+                    dispatch(loadFormError(formType, error.response.status));
+
+                    reject(error);
+                }
+            ).catch((ex) => {
+                logger.logException(ex);
+                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 // remove the editRec query string since we are not successfully editing the form
                 WindowLocationUtils.pushWithoutQuery();
-
-                if (error.response) {
-                    dispatch(loadFormError(formType, error.response.status));
-                }
-
-                reject(error);
+                reject(ex);
             });
         });
     };
@@ -329,15 +322,25 @@ function saveForm(appId, tblId, formType, form, isNew) {
                     (response) => {
                         logger.debug('FormService saveForm success');
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+
+                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                         resolve();
                     },
                     (error) => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
                         dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+
+                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+
                         reject(error);
                     }
                 ).catch((ex) => {
                     logger.logException(ex);
+                    NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                     reject(ex);
                 });
             } else {
