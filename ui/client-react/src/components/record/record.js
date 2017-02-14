@@ -117,7 +117,8 @@ let Record = React.createClass({
         return <QBForm {...this.props}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
-                    onFieldChange={this.handleFieldChange}/>;
+                    onFieldChange={this.handleFieldChange}
+                />;
     }
 });
 

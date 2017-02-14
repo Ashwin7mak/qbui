@@ -43,12 +43,10 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
-        // tables with relationships
         flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
-        let {appId, tblId, fieldWithParentId, masterRecordId} = params;
+        let {appId, tblId} = params;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
         if (appId && tblId && rptId) {
@@ -56,11 +54,12 @@ const ReportRoute = React.createClass({
             let offset = constants.PAGE.DEFAULT_OFFSET;
             let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
 
+            const {detailKeyFid, detailKeyValue} = _.get(this, 'props.location.query', {});
             // A link from a parent component (see qbform.createChildReportElementCell) was used
             // to display a filtered child report.
-            if (fieldWithParentId && masterRecordId) {
+            if (detailKeyFid && detailKeyValue) {
                 const queryParams = {
-                    query: QueryUtils.parseStringIntoExactMatchExpression(fieldWithParentId, masterRecordId),
+                    query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue),
                     offset,
                     numRows
                 };

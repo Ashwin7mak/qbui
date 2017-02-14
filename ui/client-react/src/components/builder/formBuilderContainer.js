@@ -2,9 +2,9 @@ import React, {PropTypes} from 'react';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
-import {loadForm, updateForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
 import Loader from 'react-loader';
-import {LARGE_BREAKPOINT_REPORT} from "../../constants/spinnerConfigurations";
+import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
 import ToolPalette from './builderMenus/toolPalette';
 import FieldProperties from './builderMenus/fieldProperties';
@@ -15,6 +15,27 @@ import Logger from '../../utils/logger';
 import './formBuilderContainer.scss';
 
 let logger = new Logger();
+
+const mapStateToProps = state => {
+    return {
+        forms: state.forms
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadForm(appId, tableId, reportId, formType, recordId) {
+            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
+        },
+
+        moveField(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
+            return dispatch(moveFieldOnForm(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps));
+        },
+        updateForm(appId, tblId, formType, form) {
+            return dispatch(updateForm(appId, tblId, formType, form));
+        }
+    };
+};
 
 export const FormBuilderContainer = React.createClass({
     propTypes: {
@@ -80,46 +101,29 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
-        let loaded = (this.props.forms && this.props.forms.length > 0 && !this.props.forms[0].loading);
+        let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
         let formData = null;
+        let formId = null;
         if (loaded) {
+            formId = this.props.forms[0].id;
             formData = this.props.forms[0].formData;
         }
-
         return (
-                <div className="formBuilderContainer">
-                    <ToolPalette />
+            <div className="formBuilderContainer">
+                <ToolPalette />
 
-                    <Loader loaded={loaded} options={LARGE_BREAKPOINT_REPORT}>
-                        <FormBuilder formData={formData} />
-                    </Loader>
+                <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                    <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                </Loader>
 
-                    <FieldProperties />
+                {this.getSaveOrCancelFooter()}
 
-                    {this.getSaveOrCancelFooter()}
-                </div>
+                <FieldProperties />
+            </div>
         );
     }
 });
-
-const mapStateToProps = state => {
-    return {
-        forms: state.forms
-    };
-};
-
-//TODO  NO reference to component redux store -- once we start implementing different builders,
-const mapDispatchToProps = dispatch => {
-    return {
-        loadForm(appId, tableId, reportId, formType, recordId) {
-            return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
-        },
-        updateForm(appId, tblId, formType, form) {
-            return dispatch(updateForm(appId, tblId, formType, form));
-        }
-    };
-};
 
 export default connect(
     mapStateToProps,

@@ -3,9 +3,8 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
 
-import {FormBuilderContainer} from '../../../src/components/builder/formBuilderContainer';
+import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
 import Loader from 'react-loader';
-import FormBuilder from '../../../src/components/formBuilder/formBuilder';
 
 const appId = 1;
 const tblId = 2;
@@ -53,12 +52,13 @@ describe('FormBuilderContainer', () => {
 
 
     describe('showing FormBuilder', () => {
+        const testFormData = {fields: [], formMeta: {name: 'some form', includeBuiltIns: false}};
         let testCases = [
             {
                 description: 'loads the FormBuilder if a form has loaded',
-                forms: [{loading: false, formData: 'some form'}],
+                forms: [{loading: false, formData: testFormData}],
                 expectedLoaded: true,
-                expectedFormData: 'some form'
+                expectedFormData: testFormData
             },
             {
                 description: 'shows the loading spinner if there is no form data',
@@ -82,8 +82,8 @@ describe('FormBuilderContainer', () => {
                 expect(component.find(Loader)).toBePresent();
                 expect(component.find(Loader)).toHaveProp('loaded', testCase.expectedLoaded);
 
-                expect(component.find(FormBuilder)).toBePresent();
-                expect(component.find(FormBuilder)).toHaveProp('formData', testCase.expectedFormData);
+                let formBuilderComponent = component.find({formData: testCase.expectedFormData});
+                expect(formBuilderComponent).toBePresent();
             });
         });
     });
