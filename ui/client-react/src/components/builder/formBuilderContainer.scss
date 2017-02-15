@@ -1,0 +1,23 @@
+@import '../../../src/assets/css/qbVariables';
+
+.formBuilderContainer {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+
+    .loadedContent {
+        overflow: auto;
+        padding-bottom: 65px;
+        width: 100%;
+    }
+
+    .formBuilderHeader {
+        text-align: center;
+    }
+
+    .formBuilderBody {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+}

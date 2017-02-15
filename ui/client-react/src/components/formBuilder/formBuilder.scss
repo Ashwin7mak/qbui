@@ -1,0 +1,95 @@
+@import '../../assets/css/qbVariables';
+
+$droppable-hover-foreground-color: $color-black-800; // temporary until drop-preview is created
+
+.formBuilderContainer {
+
+    .draggableField {
+        /* When in builder mode we need to push out the
+        left padding to make room for the editing tools */
+        margin-left: $spacing-tiny;
+    }
+
+    .draggableField, .droppableField {
+        position: relative;
+    }
+
+    .notDragging {
+        max-height: 500px;
+        opacity: 1;
+
+        transition: opacity 0.5s, max-height 0.5s;
+    }
+
+    /*
+     * In order to show hover and drop effects over existing, but unknown elements, we place a transparent
+     * element over each form element. These are then transitioned based on opacity. Note that dragging elements have
+     * a div appended BEFORE and droppable targets are appended AFTER. This prevents the droppable target from blocking
+     * the draggable one.
+     */
+    .draggableField:before, .droppableField:before {
+        content: "";
+        position: absolute;
+        width: 110%;
+        height: 120%;
+        top: -10%;
+        left: -5%;
+    }
+
+    // Dragging
+    .notDragging:before {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .notDragging:hover:after {
+        opacity: 0.5;
+
+        transition: opacity 0.2s;
+    }
+
+    .notDragging:active:after {
+        opacity: 0;
+    }
+
+    .dragging {
+        opacity: 0.5;
+        transition: opacity 0.5s, max-height 0.5s;
+    }
+
+    .dragging:after {
+        content: none;
+    }
+
+    // Dropping
+    .droppableField:before {
+        background-color: $droppable-hover-foreground-color;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    .droppableField.dropHovering:before {
+        opacity: 0.5;
+        z-index: 1;
+        transition: opacity 0.4s;
+    }
+
+    // React CSS Transition Classes for elements that are moved
+    .formItem-enter {
+        opacity: 0.01;
+    }
+
+    .formItem-enter.formItem-enter-active {
+        opacity: 1;
+        transition: opacity 1s;
+    }
+
+    .formItem-leave {
+        opacity: 1;
+    }
+
+    .formItem-leave.formItem-leave-active {
+        opacity: 0.01;
+        transition: opacity 1s;
+    }
+}

@@ -96,7 +96,7 @@
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
 
             //Step 3 - Open a record
-            reportContentPO.openRecordInViewMode(2);
+            reportContentPO.openRecordInViewMode(realmName, appId, tableId, reportId, 2);
 
             //Step 4 - Verify cannot see any text fields on the form in view mode as readaccess set to false
             formsPO.verifyFieldsNotPresentOnForm(formsPO.viewFormContainerEl, expectedNumericFieldsWhichHasNoFieldRights);
@@ -175,8 +175,8 @@
 
             //Step 7 - Verify record edited with expected values
             var recordValues = reportContentPO.getRecordValues(5);
-            expect(recordValues[1]).toBe('test@gmail.com');
-            expect(recordValues[2]).toBe('http://www.yahoo.com');
+            expect(recordValues[2]).toBe('test@gmail.com');
+            expect(recordValues[3]).toBe('http://www.yahoo.com');
 
             // Step 8 - Reload the report after saving row as the row is added at the last page
             e2ePageBase.loadReportByIdInBrowser(realmName, appId, tableId, reportId);

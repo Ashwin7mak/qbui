@@ -37,6 +37,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'get', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'get', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'get', expectedOutput: true},
+            {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'get', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' GET', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'get', expectedOutput: true},
 
             {message: 'LH_V1, ' + routeConsts.APPS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'post', expectedOutput: false},
@@ -55,6 +57,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'post', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'post', expectedOutput: false},
 
             {message: 'LH_V1, ' + routeConsts.APPS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'delete', expectedOutput: false},
@@ -73,6 +77,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'delete', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'delete', expectedOutput: false},
 
             {message: 'LH_V1, ' + routeConsts.APPS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'patch', expectedOutput: false},
@@ -91,6 +97,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'patch', expectedOutput: false},
 
             {message: 'LH_V1, ' + routeConsts.APPS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.APPS, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.APP_USERS + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.APP_USERS, method: 'put', expectedOutput: false},
@@ -109,7 +117,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'put', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'put', expectedOutput: false},
-
+            {message: 'LH_V1, ' + routeConsts.SWAGGER_API_EE + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API_EE, method: 'put', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.EXPERIENCE_ENGINE_ALL + ' PUT', routeGroup: routeGroups.LH_V1, route: routeConsts.EXPERIENCE_ENGINE_ALL, method: 'put', expectedOutput: false},
             //DEBUG
             {message: 'DEBUG, ' + routeConsts.APPS + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.APPS, method: 'get', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.APP_USERS + ' GET', routeGroup: routeGroups.DEBUG, route: routeConsts.APP_USERS, method: 'get', expectedOutput: true},

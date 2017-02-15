@@ -56,6 +56,19 @@ class BaseService {
     }
 
     /**
+     * Http put request
+     *
+     * @param url - request url.  Can be relative or set to explicit domain
+     * @param data - optional data properties
+     * @param conf - optional http header configuration
+     * @returns {*} - promise
+     */
+    put(url, data, conf) {
+        let config = conf || {};
+        return axios.put(url, data, config);
+    }
+
+    /**
      * Http patch request
      *
      * @param url - request url.  Can be relative or set to explicit domain
