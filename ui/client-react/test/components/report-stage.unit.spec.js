@@ -1,27 +1,12 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportStage, {__RewireAPI__ as ReportStageRewireAPI}  from '../../src/components/report/reportStage';
-
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
+import ReportStage  from '../../src/components/report/reportStage';
 
 /* TODO: When the expand/collapse behavior is added, add related tests */
 
 describe('Report stage functions', () => {
     'use strict';
 
-    beforeEach(() => {
-        ReportStageRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-    });
-
-    afterEach(() => {
-        ReportStageRewireAPI.__ResetDependency__('I18nMessage');
-    });
 
     it('test render of component', () => {
         const reportData = {

@@ -31,12 +31,14 @@
         var HTTPS = 'https://';
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
+        var EE_BASE_ENDPOINT = '/ee/v1';
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
         var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
         var FORMS_ENDPOINT = '/forms/';
+        var FORM_TYPE_ENDPOINT = 'formType/';
         var REPORTS_ENDPOINT = '/reports/';
         var REPORTS_RESULTS_ENDPOINT = '/results';
         var RECORDS_ENDPOINT = '/records/';
@@ -209,10 +211,13 @@
                 }
                 return tableEndpoint;
             },
-            resolveFormsEndpoint      : function(appId, tableId, formId) {
-                var formEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
+            resolveFormsEndpoint      : function(appId, tableId, formId, formType) {
+                var formEndpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
                 if (formId) {
                     formEndpoint = formEndpoint + formId;
+                }
+                if (formType) {
+                    formEndpoint = formEndpoint + FORM_TYPE_ENDPOINT + formType;
                 }
                 return formEndpoint;
             },
@@ -290,7 +295,7 @@
              * @param headers
              * @param params
              */
-            executeRequest              : function(optsOrStringPath, method, body, headers, params) {
+            executeRequest              : function(optsOrStringPath, method, body, headers, params, isEE) {
                 var stringPath = optsOrStringPath;
                 if (_.isObject(stringPath)) {
                     var temp = _.assign({}, stringPath);
@@ -306,7 +311,12 @@
                 if (this.realm) {
                     subdomain = this.realm.subdomain;
                 }
-                var opts = generateRequestOpts(stringPath, method, subdomain);
+                var opts;
+                if (isEE) {
+                    opts = generateEERequestOpts(stringPath, method, subdomain);
+                }else {
+                    opts = generateRequestOpts(stringPath, method, subdomain);
+                }
                 if (body) {
                     opts.body = jsonBigNum.stringify(body);
                 }
@@ -340,6 +350,7 @@
             },
 
             executeEERequest              : function(stringPath, method, body, headers, params) {
+
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {

@@ -9,6 +9,7 @@ import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import * as SchemaConsts from "../../constants/schema";
 import GlobalActions from "../actions/globalActions";
+import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter} from 'react-router';
@@ -62,14 +63,51 @@ export let Nav = React.createClass({
         };
     },
 
+    navigateToBuilder() {
+        /**
+         *formId is set to null for now, it is left here, because formId will need to be passed down as a prop in a future story
+         * a new unit test will need to be added to recordRoute.unit.spec.js
+         * */
+        const formId = null;
+        const {appId, tblId} = this.props.params;
+        let formType;
+
+        if (this.props.qbui && this.props.qbui.forms && this.props.qbui.forms[0]) {
+            formType = this.props.qbui.forms[0].id;
+        }
+
+        let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/form`;
+
+        if (formId && formType) {
+            link = `${link}/${formId}?formType=${formType}`;
+        } else if (formType) {
+            link = `${link}?formType=${formType}`;
+        } else if (formId) {
+            link = `${link}/${formId}`;
+        }
+
+        this.props.router.push(link);
+    },
+
     getTopGlobalActions() {
         const actions = [];
+        let recordId;
+        if (this.props.params) {
+            recordId = this.props.params.recordId;
+        }
         return (<GlobalActions actions={actions}
                                position={"top"}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={4}
-                               app={this.getSelectedApp()}/>);
+                               app={this.getSelectedApp()}>
+                    <BuilderDropDownAction recId={recordId}
+                                           actions={actions}
+                                           position={"top"}
+                                           formBuilderIcon="settings"
+                                           navigateToBuilder={this.navigateToBuilder}
+                                           startTabIndex={4}/>
+                </GlobalActions>);
     },
 
     getLeftGlobalActions() {

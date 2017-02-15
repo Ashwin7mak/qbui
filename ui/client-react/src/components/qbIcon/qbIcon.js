@@ -1,6 +1,8 @@
 import React from 'react';
+import AVAILABLE_ICON_FONTS from '../../constants/iconConstants';
 import './qbIcon.scss';
 import './style.css';
+import './tableIcons.css';
 
 /**
  * # QuickBase Icon Font
@@ -17,18 +19,27 @@ const QBicon = React.createClass({
          */
         icon: React.PropTypes.string.isRequired,
         className: React.PropTypes.string,
-        onClick: React.PropTypes.func
+        onClick: React.PropTypes.func,
+
+        /**
+         * Optionally set the font set to use for this icon
+         * Import the iconConstants.AVAILABLE_ICON_FONTS constant for easy access to available fonts
+         */
+        iconFont: React.PropTypes.oneOf(Object.keys(AVAILABLE_ICON_FONTS).map(key => AVAILABLE_ICON_FONTS[key])),
     },
     getDefaultProps() {
         return {
-            className: ""
+            className: '',
+            isTableIcon: false,
+            iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
     render: function() {
-        let className = this.props.className + ' qbIcon iconTableUISturdy-' + this.props.icon;
+        let {className, iconFont, icon} = this.props;
+        let qbIconClassName = `${className} qbIcon ${iconFont}-${icon}`;
 
         return (
-            <span className={className} onClick={this.props.onClick}>
+            <span className={qbIconClassName} onClick={this.props.onClick}>
                 {this.props.children}
             </span>
         );
@@ -36,4 +47,3 @@ const QBicon = React.createClass({
 });
 
 export default QBicon;
-

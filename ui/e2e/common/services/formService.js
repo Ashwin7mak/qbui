@@ -55,17 +55,42 @@
             createDefaultForms: function(app) {
                 var generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
                 var appId = app.id;
-                var createdFormIds = [];
+                var createdFormPromises = [];
 
                 for (var i = 0; i < app.tables.length; i++) {
                     var tableId = app.tables[i].id;
                     var formJSON = generatedForms[i];
                     var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                    recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON).then(function(result) {
+                    createdFormPromises.push(recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON));
+                }
+
+                return Promise.all(createdFormPromises).then(results => {
+                    return results.map(result => JSON.parse(result.body));
+                });
+            },
+
+            /**
+             * Given a created app object (returned via the API), create default forms for each table in the app based on it's appId and tableId
+             */
+            createEEDefaultForms: function(app) {
+                let createdFormIds = [];
+
+                if (!eeEnableFlag) {
+                    return createdFormIds;
+                }
+                let appId = app.id;
+                let generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
+
+                app.tables.forEach((createdTable, i) => {
+                    let tableId = createdTable.id;
+                    let formJSON = generatedForms[i];
+                    const formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+
+                    recordBase.apiBase.executeEERequest(formsEndpoint, 'POST', formJSON).then(function(result) {
                         var id = JSON.parse(result.body);
                         createdFormIds.push(id);
                     });
-                }
+                });
 
                 return createdFormIds;
             },

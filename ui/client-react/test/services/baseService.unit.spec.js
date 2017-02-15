@@ -1,4 +1,3 @@
-
 import BaseService, {__RewireAPI__ as BaseServiceRewireAPI} from '../../src/services/baseService';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
 
@@ -12,14 +11,17 @@ describe('BaseService rewire tests', () => {
         }
     };
     var mockAxios = {
+        delete: function() {
+            return {deleteMethodCalled:true};
+        },
         get: function() {
             return {getMethodCalled:true};
         },
         patch: function() {
             return {patchMethodCalled:true};
         },
-        delete: function() {
-            return {deleteMethodCalled:true};
+        put: function() {
+            return {putMethodCalled:true};
         }
     };
 
@@ -89,6 +91,12 @@ describe('BaseService rewire tests', () => {
         expect(cookie.loadMethodCalled).toBeTruthy();
     });
 
+    it('test axios delete method', () => {
+        baseService = new BaseService();
+        var axios = baseService.delete('url', 'config');
+        expect(axios.deleteMethodCalled).toBeTruthy();
+    });
+
     it('test axios get method', () => {
         baseService = new BaseService();
         var axios = baseService.get('url', 'config');
@@ -101,10 +109,10 @@ describe('BaseService rewire tests', () => {
         expect(axios.patchMethodCalled).toBeTruthy();
     });
 
-    it('test axios delete method', () => {
+    it('test axios put method', () => {
         baseService = new BaseService();
-        var axios = baseService.delete('url', 'config');
-        expect(axios.deleteMethodCalled).toBeTruthy();
+        var axios = baseService.put('url', 'config');
+        expect(axios.putMethodCalled).toBeTruthy();
     });
 
     /**

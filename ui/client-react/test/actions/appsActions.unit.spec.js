@@ -3,11 +3,12 @@ import appsActions, {__RewireAPI__ as appsActionsRewireAPI} from '../../src/acti
 import * as actions from '../../src/constants/actions';
 import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
+import {APP_ROUTE} from '../../src/constants/urlConstants';
 
 describe('Apps Actions functions with Tables', () => {
     'use strict';
 
-    let responseData = [{id:'tableId', link:'/qbase/app/tableId'}];
+    let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
 
     class mockAppService {
         constructor() { }

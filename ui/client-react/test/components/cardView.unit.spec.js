@@ -39,7 +39,6 @@ describe('Report Mobile View functions', () => {
     var TestParent;
     beforeEach(() => {
         CardViewRewireAPI.__Rewire__('RecordActions', RecordActionsMock);
-
         TestParent = (data = fakeReportData_valid.data.results) => React.createFactory(React.createClass({
             render() {
                 return <CardView ref="refCardView"

@@ -3,6 +3,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
+import IconActions from '../../../src/components/actions/iconActions';
 
 const props = {
     onClickEditRowIcon() {},

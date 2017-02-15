@@ -141,4 +141,28 @@ describe('UrlUtils', () => {
             expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, fieldWithParentId, masterRecordId)).toEqual(url);
         });
     });
+
+    describe('getReportLink', () => {
+        it('returns a link to a report', () => {
+            let appId = '1';
+            let tblId = '2';
+            let rptId = '3';
+            let url = StringUtils.format(REPORT_LINK, [appId, tblId, rptId]);
+
+            expect(UrlUtils.getReportLink(appId, tblId, rptId)).toEqual(url);
+        });
+    });
+
+    describe('getRelatedChildReportLink', () => {
+        it('returns a link to a child report', () => {
+            let appId = '1';
+            let tblId = '2';
+            let rptId = '3';
+            let detailKeyFid = '4';
+            let detailKeyValue = '5';
+            let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, detailKeyFid, detailKeyValue]);
+
+            expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, detailKeyFid, detailKeyValue)).toEqual(url);
+        });
+    });
 });

@@ -17,6 +17,7 @@ const RecordMock = React.createClass({
     }
 });
 
+
 const mockStore = configureMockStore();
 let initialState = {};
 let store = {};
@@ -29,7 +30,7 @@ describe('RecordTrowser functions', () => {
             recordPendingEditsCommit() {},
             recordPendingEditsCancel() {},
             saveRecord() {return Promise.resolve({});},
-            saveNewRecord() {return Promise.resolve({});},
+            saveNewRecord() {return Promise.resolve({});}
             editNextRecord() {},
             editPreviousRecord() {},
             openRecordForEdit() {}
@@ -102,9 +103,9 @@ describe('RecordTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .btn");
-        expect(saveButton.length).toBe(2);
+        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .btn");
 
+        expect(saveButton.length).toBe(2);
         TestUtils.Simulate.click(saveButton[0]);
 
         expect(flux.actions.saveNewRecord).toHaveBeenCalled();
@@ -118,7 +119,7 @@ describe('RecordTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .btn");
+        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .btn");
         expect(saveButton.length).toBe(1);
 
         TestUtils.Simulate.click(saveButton[0]);
@@ -151,7 +152,7 @@ describe('RecordTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlertButton");
+        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .saveAlertButton");
         expect(errorMessageAlertIcon.length).toBe(1);
     });
 
@@ -160,7 +161,7 @@ describe('RecordTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlertButton");
+        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".saveOrCancelFooter .rightIcons .saveAlertButton");
         expect(errorMessageAlertIcon.length).toBe(0);
     });
 

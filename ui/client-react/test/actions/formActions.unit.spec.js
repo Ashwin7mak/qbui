@@ -1,5 +1,5 @@
 import * as formActions from '../../src/actions/formActions';
-import {editNewRecord, openRecordForEdit, loadForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
+import {editNewRecord, openRecordForEdit, loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as UrlConsts from "../../src/constants/urlConstants";
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
@@ -208,4 +208,87 @@ describe('Form Actions functions', () => {
                 });
         });
     });
+
+    describe('save form data action', () => {
+
+        let formData = {
+            formId: 1
+        };
+
+        // we mock the Redux store when testing async action creators
+        const middlewares = [thunk];
+        const mockStore = configureMockStore(middlewares);
+        const expectedActions = [
+            {id:'view', type:types.SAVING_FORM, content:null},
+            {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
+    ];
+        class mockFormService {
+            constructor() {}
+            createForm() {
+                return Promise.resolve({data:formData});
+            }
+            updateForm() {
+                return Promise.resolve({data:formData});
+            }
+        }
+
+        beforeEach(() => {
+            spyOn(mockFormService.prototype, 'createForm').and.callThrough();
+            spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+        });
+
+        afterEach(() => {
+            FormActionsRewireAPI.__ResetDependency__('FormService');
+        });
+
+        it('save a form update', (done) => {
+
+            // the mock store makes the actions dispatched available via getActions()
+            // so we don't need to spy on the dispatcher etc.
+
+            const store = mockStore({});
+            return store.dispatch(updateForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(mockFormService.prototype.createForm).not.toHaveBeenCalled();
+                    expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
+                    expect(store.getActions()).toEqual(expectedActions);
+                    done();
+                }).catch(error => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+        it('save a form create', (done) => {
+
+            // the mock store makes the actions dispatched available via getActions()
+            // so we don't need to spy on the dispatcher etc.
+            const store = mockStore({});
+
+            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(mockFormService.prototype.createForm).toHaveBeenCalled();
+                    expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
+                    expect(store.getActions()).toEqual(expectedActions);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+    });
+
+    describe('moveFieldOnForm', () => {
+        it('creates an action that will move a field on a form', () => {
+            expect(formActions.moveFieldOnForm(1, 2, 3, 4, 5)).toEqual({
+                id: 1,
+                type: types.MOVE_FIELD,
+                content: {
+                    newTabIndex: 2,
+                    newSectionIndex: 3,
+                    newOrderIndex: 4,
+                    draggedItemProps: 5
+                }
+            });
 });

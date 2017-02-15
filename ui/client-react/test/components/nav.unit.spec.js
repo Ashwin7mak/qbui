@@ -60,7 +60,7 @@ class WindowLocationUtilsMock {
 }
 
 
-describe('Nav functions', () => {
+describe('Nav', () => {
     'use strict';
 
     var component;
@@ -297,12 +297,11 @@ describe('Nav functions', () => {
 
         component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
         component.onSelectItem();
+
         expect(ShellActionsMock.toggleLeftNav).toHaveBeenCalled();
         NavRewireAPI.__ResetDependency__('Breakpoints');
-        ShellActionsMock.toggleLeftNav.calls.reset();
         NavRewireAPI.__ResetDependency__('ShellActions');
-
-
+        ShellActionsMock.toggleLeftNav.calls.reset();
     });
 
     it('test toggleNav method', () => {
@@ -311,10 +310,50 @@ describe('Nav functions', () => {
 
         component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
         component.toggleNav();
+
         expect(ShellActionsMock.toggleLeftNav).toHaveBeenCalled();
-        ShellActionsMock.toggleLeftNav.calls.reset();
-
         NavRewireAPI.__ResetDependency__('ShellActions');
+        ShellActionsMock.toggleLeftNav.calls.reset();
+    });
 
+    describe('navigateToBuilder function', () => {
+        it('renders a component without form type or form id', () => {
+            let routeParams = {appId: 1, tblId: 2};
+            let router = [];
+            let expectedRouter = [];
+
+            component = TestUtils.renderIntoDocument(<Nav params={routeParams} {...props} flux={flux} router={router}
+                                                          dispatch={dispatchMethod}></Nav>);
+            component.navigateToBuilder();
+
+            expectedRouter.push('/qbase/builder/app/1/table/2/form');
+
+            expect(router).toEqual(expectedRouter);
+        });
+
+        it('renders a component with a form type', () => {
+            let routeParams = {appId: 1, tblId: 2};
+            props = {
+                qbui: {
+                    forms: [{id: 'view'}],
+                    shell: {
+                        leftNavVisible: true,
+                        leftNavExpanded: false
+                    },
+                    reports: []
+                }
+            };
+            let router = [];
+            let expectedRouter = [];
+
+            component = TestUtils.renderIntoDocument(<Nav params={routeParams} {...props} flux={flux} router={router}
+                                                          dispatch={dispatchMethod}></Nav>);
+
+            component.navigateToBuilder();
+
+            expectedRouter.push('/qbase/builder/app/1/table/2/form?formType=view');
+
+            expect(router).toEqual(expectedRouter);
+        });
     });
 });

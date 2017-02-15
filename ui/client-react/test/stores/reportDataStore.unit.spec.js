@@ -776,7 +776,7 @@ describe('Test ReportData Store', () => {
                         id:3,
                         name: "Record ID#",
                         type: "SCALAR",
-                        datatypeAttributes: {
+                        datatypeAttributes : {
                         type: "NUMERIC",
                             decimalPlaces: 0
                     }
@@ -1788,7 +1788,7 @@ describe('Test ReportData Store', () => {
                         id:3,
                         name: "Record ID#",
                         type: "SCALAR",
-                        datatypeAttributes: {
+                        datatypeAttributes : {
                         type: "NUMERIC",
                             decimalPlaces: 0
                     }
