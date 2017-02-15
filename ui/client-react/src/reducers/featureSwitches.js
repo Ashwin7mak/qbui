@@ -36,21 +36,21 @@ const featureSwitches = (
         };
     }
 
-    case 'CREATE_ROW':
+    case types.CREATE_ROW:
         return {
             ...state,
             switches: [...state.switches, action.feature],
             edited: true
         };
 
-    case 'DELETE_ROW':
+    case types.DELETE_ROW:
         return {
             ...state,
             switches: _.remove([...state.switches], fs => fs.id !== action.id),
             edited: true
         };
 
-    case 'EDIT_ROW': {
+    case types.EDIT_ROW: {
         const switches = [...state.switches];
         const switchToEdit = switches.find(item => item.id === action.id);
         switchToEdit.editing = action.column;
@@ -60,7 +60,7 @@ const featureSwitches = (
         };
     }
 
-    case 'CONFIRM_EDIT': {
+    case types.CONFIRM_EDIT: {
         const switches = [...state.switches];
         const switchToConfirmEdit = switches.find(item => item.id === action.id);
         delete switchToConfirmEdit.editing;
@@ -73,12 +73,33 @@ const featureSwitches = (
         };
     }
 
-    case 'SAVED_FEATURE_SWITCHES':
+    case types.SAVED_FEATURE_SWITCHES:
         return {
             ...state,
             edited: false
         };
 
+    case types.EDIT_EXCEPTION_ROW: {
+        const switches = [...state.switches];
+        const switchToEdit = switches.find(item => item.id === action.id);
+        switchToEdit.exceptions[action.row].editing = action.column;
+        return {
+            ...state,
+            switches
+        };
+    }
+    case types.CONFIRM_EXCEPTION_EDIT: {
+        const switches = [...state.switches];
+        const switchToConfirmEdit = switches.find(item => item.id === action.id);
+        delete switchToConfirmEdit.exceptions[action.row].editing;
+        switchToConfirmEdit.exceptions[action.row][action.property] = action.value;
+
+        return {
+            ...state,
+            switches,
+            edited: true
+        };
+    }
     default:
         // return existing state by default in redux
         return state;

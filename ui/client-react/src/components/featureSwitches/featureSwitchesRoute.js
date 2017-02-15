@@ -3,7 +3,6 @@ import * as Table from 'reactabular-table';
 import * as edit from 'react-edit';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
-import {cloneDeep} from 'lodash';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import ToggleButton from 'react-toggle-button';
 import uuid from 'uuid';
@@ -103,7 +102,7 @@ class FeatureSwitchesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (data,{rowData}) => <Link to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
+                        (data,{rowData}) => <Link onClick={e => {e.stopPropagation();}} to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
                     ],
                     transforms: [editable(edit.input())]
                 }

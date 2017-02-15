@@ -46,27 +46,28 @@ export const getSwitches = () => {
 
 
 export const createRow = (id) => ({
-    type: 'CREATE_ROW',
+    type: types.CREATE_ROW,
     feature: { id, defaultOn: false, description: 'Description', exceptions: [], name: 'Feature', team: 'Team' }
 });
 
 export const deleteRow = id => ({
-    type: 'DELETE_ROW',
+    type: types.DELETE_ROW,
     id
 });
 
 export const editRow = (id, column) => ({
-    type: 'EDIT_ROW',
+    type: types.EDIT_ROW,
     id,
     column
 });
 
 export const confirmEdit = (id, property, value) => ({
-    type: 'CONFIRM_EDIT',
+    type: types.CONFIRM_EDIT,
     id,
     property,
     value
 })
+
 
 const saveSwitchesSuccess = (switches) => {
     return {
@@ -146,3 +147,19 @@ export const setSwitchDefaultState = (id, defaultOn) => {
     };
 };
 
+
+export const editExceptionRow = (id, row, column) => ({
+    type: types.EDIT_EXCEPTION_ROW,
+    id,
+    row,
+    column
+});
+
+
+export const confirmExceptionEdit = (id, row, property, value) => ({
+    type: types.CONFIRM_EDIT,
+    id,
+    row,
+    property,
+    value
+})
