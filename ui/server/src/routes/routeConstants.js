@@ -41,11 +41,12 @@
      *  List of QuickBase public API endpoints used by the client.
      */
     var quickBaseApiEndpoints = {
-        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
+
+        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
         RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',

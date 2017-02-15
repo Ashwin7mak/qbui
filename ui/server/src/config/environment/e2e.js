@@ -50,9 +50,9 @@
 
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8080',
-        javaHost: 'http://localhost:8080',
-        eeHost: 'http://localhost:8081',
-        eeHostEnable: false,
+        javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
+        eeHost: 'https://ee.trunk-int-experienceengine.newstack.quickbaserocks.com',
+        eeHostEnable: true,
 
         //Express Server
         //DOMAIN  : 'http://localhost:9000',
