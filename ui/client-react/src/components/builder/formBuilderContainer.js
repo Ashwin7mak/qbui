@@ -69,34 +69,25 @@ export const FormBuilderContainer = React.createClass({
     saveClicked() {
         logger.debug('clicked form save');
         // get the form meta data from the store..hard code offset for now...this is going to change..
-        let formMeta = this.props.forms[0].formData.formMeta;
-        let formType = this.props.forms[0].formData.formType;
-        this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
+        if (this.props.forms && this.props.forms.length > 0 && this.props.forms[0].formData) {
+            let formMeta = this.props.forms[0].formData.formMeta;
+            let formType = this.props.forms[0].formData.formType;
+            this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
+        }
     },
 
     getRightAlignedButtons() {
         return (
             <div>
-                <Button bsStyle="primary" onClick={this.onCancel}><I18nMessage message="nav.cancel"/></Button>
-                <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+                <Button bsStyle="primary" onClick={this.onCancel} className="cancelFormButton"><I18nMessage message="nav.cancel"/></Button>
+                <Button bsStyle="primary" onClick={this.saveClicked} className="saveFormButton"><I18nMessage message="nav.save"/></Button>
             </div>
         );
-    },
-
-    getLeftAlignedButtons() {
-        return <div></div>;
-    },
-
-    getCenterAlignedButtons() {
-        return <div className={"centerActions"} />;
-
     },
 
     getSaveOrCancelFooter() {
         return <SaveOrCancelFooter
             rightAlignedButtons={this.getRightAlignedButtons()}
-            centerAlignedButtons={this.getCenterAlignedButtons()}
-            leftAlignedButtons={this.getLeftAlignedButtons()}
         />;
     },
 
