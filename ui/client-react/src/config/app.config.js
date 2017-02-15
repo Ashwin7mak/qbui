@@ -55,8 +55,8 @@ if (__QB_TEST__) {
         env: 'TEST',
         logger: {
             logLevel: LogLevel.DEBUG,
-            logToConsole: true,
-            logToServer: true
+            logToConsole: false,
+            logToServer: false
         },
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script
