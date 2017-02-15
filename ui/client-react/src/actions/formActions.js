@@ -179,36 +179,36 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
             promise.then(
                 response => {
-                response.data.formType = formType;
+                    response.data.formType = formType;
 
                     if (recordId === NEW_FORM_RECORD_ID) {
-                    response.data.record = null;
-                } else {
-                    response.data.recordId = recordId;
-                }
+                        response.data.record = null;
+                    } else {
+                        response.data.recordId = recordId;
+                    }
 
                     dispatch(loadFormSuccess(formType, response.data));
                     resolve(response.data);
                 },
                 (error) => {
                     if (error.response) {
-                    if (error.response.status === 403) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
-                    } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
-                    }
-                }
-
-                if (error.response && error.response.status === 403) {
-                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
                         } else {
-                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
                         }
+                    }
+
+                    if (error.response && error.response.status === 403) {
+                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                    } else {
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    }
 
                         // remove the editRec query string since we are not successfully editing the form
-                        WindowLocationUtils.pushWithoutQuery();
+                    WindowLocationUtils.pushWithoutQuery();
                     dispatch(loadFormError(formType, error.response.status));
 
                     reject(error);

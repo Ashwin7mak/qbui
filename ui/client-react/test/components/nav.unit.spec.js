@@ -17,19 +17,19 @@ let dispatchMethod = () => { };
 //mock the actions so we can spy on them
 //and rewire nav to use the mock
 let ShellActionsMock = {
-    toggleLeftNav : function () {
-        ShellActions.toggleLeftNav()
+    toggleLeftNav : function() {
+        ShellActions.toggleLeftNav();
     },
     showTrowser : function showTrowser() {
-        ShellActions.showTrowser()
+        ShellActions.showTrowser();
     },
     hideTrowser : function hideTrowser() {
-        ShellActions.hideTrowser()
+        ShellActions.hideTrowser();
     },
     toggleAppsList : function toggleAppsList() {
-        ShellActions.toggleAppsList()
+        ShellActions.toggleAppsList();
     }
-}
+};
 
 var LeftNavMock = React.createClass({
     render() {

@@ -57,12 +57,12 @@ describe('RecordRoute', () => {
 
         it('test render of component without report param', () => {
 
-        const initialState = {};
-        const store = mockStore(initialState);
+            const initialState = {};
+            const store = mockStore(initialState);
 
             let routeParams = {appId: 1, tblId: 2, recordId: 4};
 
-        component = TestUtils.renderIntoDocument(
+            component = TestUtils.renderIntoDocument(
             <Provider store={store}>
                 <ConnectedRecordRoute params={routeParams} flux={flux}/>
             </Provider>);
@@ -72,7 +72,7 @@ describe('RecordRoute', () => {
             expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
 
         // test Redux actions
-        expect(store.getActions()[0]).toEqual(loadingForm("view"));
+            expect(store.getActions()[0]).toEqual(loadingForm("view"));
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
             expect(qbForm.length).toBe(1);
@@ -89,12 +89,12 @@ describe('RecordRoute', () => {
 
         it('test render of component with report param', () => {
 
-        const initialState = {};
-        const store = mockStore(initialState);
+            const initialState = {};
+            const store = mockStore(initialState);
 
             let routeParams = {appId: 1, tblId: 2, recordId: 3, rptId: 4};
 
-        component = TestUtils.renderIntoDocument(
+            component = TestUtils.renderIntoDocument(
             <Provider store={store}>
                 <ConnectedRecordRoute params={routeParams} flux={flux}/>
             </Provider>);
@@ -114,8 +114,8 @@ describe('RecordRoute', () => {
         });
 
         it('test correct state is pushed to history', () => {
-        const initialState = {};
-        const store = mockStore(initialState);
+            const initialState = {};
+            const store = mockStore(initialState);
 
             let routeParams = {appId: 1, tblId: 2, rptId: 3, recordId: 2};
             let reportData = {
@@ -147,7 +147,7 @@ describe('RecordRoute', () => {
             let router = [];
             let expectedRouter = [];
 
-        component = TestUtils.renderIntoDocument(
+            component = TestUtils.renderIntoDocument(
             <Provider store={store}>
                 <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
             </Provider>);
@@ -177,7 +177,7 @@ describe('RecordRoute', () => {
             TestUtils.Simulate.click(returnToReport[0]);
             expectedRouter.push(`${APP_ROUTE}/1/table/2/report/3`);
 
-        expect(router).toEqual(expectedRouter);
+            expect(router).toEqual(expectedRouter);
         });
     });
 });

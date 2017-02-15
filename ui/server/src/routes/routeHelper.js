@@ -184,7 +184,7 @@
             !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
             return getEEReqURL(url);
         } else {
-        let root = getUrlRoot(url, TABLES);
+            let root = getUrlRoot(url, TABLES);
 
             let eeUrl = getEEReqURL(root);
 
@@ -206,10 +206,7 @@
                 return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
             }
 
-            return root;
-        }
-
-        //  no url root for TABLES found; return original url unchanged
+            //  no url root for TABLES found; return original url unchanged
             return eeUrl;
         }
     }

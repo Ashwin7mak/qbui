@@ -74,7 +74,7 @@ let QBForm = React.createClass({
         const cells = [];
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
-        }else if (element.FormFieldElement) {
+        } else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
             if (leftLabel) {

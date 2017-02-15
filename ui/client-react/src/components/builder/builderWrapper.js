@@ -49,7 +49,7 @@ const BuilderWrapper = React.createClass({
                 <Button bsStyle="primary" onClick={this.onCancel}><I18nMessage message="nav.cancel"/></Button>
                 <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
               </div>
-      );
+        );
     },
 
     getLeftAlignedButtons() {

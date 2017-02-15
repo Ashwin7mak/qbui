@@ -552,19 +552,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -624,19 +624,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -695,19 +695,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -766,19 +766,19 @@ describe('Test ReportData Store', () => {
                     id: 3,
                     name: "Record #Id",
                     type: "SCALAR",
-                        datatypeAttributes: {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
+                    datatypeAttributes: {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -848,19 +848,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -924,19 +924,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1071,16 +1071,16 @@ describe('Test ReportData Store', () => {
                                 decimalPlaces: 3
                             }
                         },
-                            {
-                                builtId:true,
-                                id:3,
-                                name: "Record ID#",
-                                type: "SCALAR",
-                                datatypeAttributes : {
-                                    type: "NUMERIC",
-                                    decimalPlaces: 0
-                                }
+                        {
+                            builtId:true,
+                            id:3,
+                            name: "Record ID#",
+                            type: "SCALAR",
+                            datatypeAttributes : {
+                                type: "NUMERIC",
+                                decimalPlaces: 0
                             }
+                        }
                         ],
                         records: [[
                             {id: 16, value: data.value},
@@ -1144,19 +1144,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1220,19 +1220,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1290,19 +1290,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1373,19 +1373,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1455,19 +1455,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1535,19 +1535,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1616,19 +1616,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1699,19 +1699,19 @@ describe('Test ReportData Store', () => {
                     id:8,
                     name: "Score",
                     type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
                     datatypeAttributes : {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],
@@ -1778,19 +1778,19 @@ describe('Test ReportData Store', () => {
                     id: 3,
                     name: "Record #Id",
                     type: "SCALAR",
-                        datatypeAttributes: {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
+                    datatypeAttributes: {
                         type: "NUMERIC",
-                            decimalPlaces: 0
+                        decimalPlaces: 3
+                    }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
                     }
                 }
                 ],

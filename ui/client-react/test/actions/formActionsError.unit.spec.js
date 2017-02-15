@@ -159,6 +159,8 @@ describe('Form Actions load form error functions', () => {
                 expect(mockFormService.prototype.createForm).toHaveBeenCalled();
                 expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
                 expect(store.getActions()).toEqual(saveFormExpectedActions);
-    });
+            });
 
+    });
 });
+

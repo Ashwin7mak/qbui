@@ -314,7 +314,7 @@
                 var opts;
                 if (isEE) {
                     opts = generateEERequestOpts(stringPath, method, subdomain);
-                }else {
+                } else {
                     opts = generateRequestOpts(stringPath, method, subdomain);
                 }
                 if (body) {

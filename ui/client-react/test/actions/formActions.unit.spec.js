@@ -221,7 +221,7 @@ describe('Form Actions functions', () => {
         const expectedActions = [
             {id:'view', type:types.SAVING_FORM, content:null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
-    ];
+        ];
         class mockFormService {
             constructor() {}
             createForm() {
@@ -291,4 +291,6 @@ describe('Form Actions functions', () => {
                     draggedItemProps: 5
                 }
             });
+        });
+    });
 });
