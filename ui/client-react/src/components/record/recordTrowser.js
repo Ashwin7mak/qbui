@@ -229,7 +229,7 @@ export const RecordTrowser = React.createClass({
     previousRecord() {
         const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
 
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
+        // let flux know we're traversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
         flux.actions.editPreviousRecord(previousEditRecordId);
 
@@ -242,7 +242,7 @@ export const RecordTrowser = React.createClass({
     nextRecord() {
         const {appId, tblId, rptId, nextEditRecordId} = this.props.reportData;
 
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
+        // let flux know we're traversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
         flux.actions.editNextRecord(nextEditRecordId);
 
@@ -396,7 +396,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordTrowser);
+
