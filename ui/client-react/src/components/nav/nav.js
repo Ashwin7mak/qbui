@@ -104,7 +104,7 @@ export let Nav = React.createClass({
                     <BuilderDropDownAction recId={recordId}
                                            actions={actions}
                                            position={"top"}
-                                           formBuilderIcon="settings-hollow"
+                                           formBuilderIcon="settings"
                                            navigateToBuilder={this.navigateToBuilder}
                                            startTabIndex={4}/>
                 </GlobalActions>);
@@ -244,12 +244,6 @@ export let Nav = React.createClass({
         }
 
         const flux = this.getFlux();
-
-        const selectedApp = this.getSelectedApp();
-        // TODO: don't use globals. Separate task exists to pass this info to components in a sane way.
-        if (_.get(selectedApp, 'relationships.length') > 0) {
-            window.relationships = selectedApp.relationships;
-        }
 
         let classes = "navShell";
         if (this.props.qbui.shell.leftNavVisible) {

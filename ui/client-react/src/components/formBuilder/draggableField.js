@@ -1,7 +1,8 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
-
+import {getEmptyImage} from 'react-dnd-html5-backend';
+import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 /**
  * Specifies event handlers and props that are available during dragging events
  * Recommended: Call any actions that will modify the DOM in "endDrag" (instead of drop [on drop target]), because
@@ -12,6 +13,7 @@ const fieldDragSource = {
     beginDrag(props) {
         return {
             element: props.element,
+            relatedField: props.relatedField,
             tabIndex: props.tabIndex,
             sectionIndex: props.sectionIndex,
             orderIndex: props.orderIndex,
@@ -36,6 +38,7 @@ const fieldDragSource = {
 function collect(connect, monitor) {
     return {
         connectDragSource: connect.dragSource(),
+        connectDragPreview: connect.dragPreview(),
         isDragging: monitor.isDragging()
     };
 }
@@ -47,20 +50,30 @@ function collect(connect, monitor) {
  * @constructor
  */
 const DraggableFieldHoc = FieldComponent => {
-    let component = (props) => {
-        const {connectDragSource, isDragging} = props;
 
-        let classNames = ['draggableField'];
-        classNames.push(isDragging ? 'dragging' : 'notDragging');
+    class DraggableField extends Component {
+        componentDidMount() {
+            // Use empty image as a drag preview so browsers don't draw it
+            // and we can draw whatever we want on the custom drag layer instead.
+            this.props.connectDragPreview(getEmptyImage());
+        }
 
-        return connectDragSource(
-            <div className={classNames.join(' ')}>
-                <FieldComponent {...props} />
-            </div>
-        );
-    };
+        render() {
+            const {connectDragSource, isDragging, tabIndex, sectionIndex, orderIndex} = this.props;
 
-    return DragSource(DraggableItemTypes.FIELD, fieldDragSource, collect)(component);
+            let classNames = ['draggableField'];
+            classNames.push(isDragging ? 'dragging' : 'notDragging');
+
+            return connectDragSource(
+                <div className={classNames.join(' ')}>
+                    <FieldEditingTools tabIndex={tabIndex} sectionIndex={sectionIndex} orderIndex={orderIndex} />
+                    <FieldComponent {...this.props}/>
+                </div>
+            );
+        }
+    }
+
+    return DragSource(DraggableItemTypes.FIELD, fieldDragSource, collect)(DraggableField);
 };
 
 export default DraggableFieldHoc;

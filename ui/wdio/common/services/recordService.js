@@ -103,6 +103,34 @@
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
             },
+
+            /**
+             * Edit a table's records.
+             * @param {number} appId
+             * @param {number} tableId
+             * @param {Array <Array <Object> >} recordEdits an array of edits being made. Each array should contain an
+             *            array of objects representing the edits to be made.
+             *            [ [{ // edits to recordID 1
+             *                    id    : <fieldId of field being edited>,
+             *                    value : <new value for the field>
+             *               }],
+             *              [{ // edits to recordId 2
+             *                    id    : 3,
+             *                    value : 'thing'
+             *               }]
+             *            ]
+             * @returns {Promise}
+             */
+            editRecords: function(appId, tableId, recordEdits) {
+                //Resolve the proper record endpoint specific to the generated app and table
+                var editRecordPromises = recordEdits.map((currentRecord, idx) => {
+                    var recordId = idx + 1;
+                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(appId, tableId);
+                    return recordBase.editRecord(recordsEndpoint, recordId, recordEdits[idx]);
+                });
+                return promise.all(editRecordPromises);
+            },
+
             /**
              * Uses the generators in the test_generators package to generate a list of record objects based on the
              * given list of fields and number of records. This list can then be passed into the addRecords function.
@@ -127,6 +155,23 @@
                 }
                 return generatedEmptyRecords;
             },
+
+            /**
+             * Generates an array of edits to be consumed by editRecords().
+             * @param field
+             * @param {Array} values
+             * @returns {Array}
+             */
+            generateRecordsFromValues: function(field, values) {
+                var emptyRecords = this.generateEmptyRecords([field], values.length);
+                return emptyRecords.map((record, idx) => {
+                    return record.map(_field => {
+                        _field.value = values[idx];
+                        return _field;
+                    });
+                });
+            },
+
             /**
              * Function that will compare actual and expected record values
              */
