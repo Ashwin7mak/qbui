@@ -85,9 +85,19 @@ export const FormBuilderContainer = React.createClass({
         );
     },
 
+    /**
+     *  get actions element for bottom center of trowser (placeholders for now)
+     */
+    getTrowserActions() {
+        return (
+            <div className={"centerActions"} />);
+    },
+
     getSaveOrCancelFooter() {
         return <SaveOrCancelFooter
             rightAlignedButtons={this.getRightAlignedButtons()}
+            centerAlignedButtons={this.getTrowserActions()}
+            leftAlignedButtons={this.getTrowserActions()}
         />;
     },
 
