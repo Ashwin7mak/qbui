@@ -51,7 +51,7 @@ export const loadFormSuccess = (id, formData) => {
     return {
         id,
         type: types.LOAD_FORM_SUCCESS,
-        formData
+        formData: convertFormToArrayForClient(formData)
     };
 };
 
@@ -344,6 +344,43 @@ function event(id, type, content) {
         type: type,
         content: content || null
     };
+}
+
+function convertFormToArrayForClient (formData) {
+
+    formData.formMeta.tabs = Object.keys(formData.formMeta.tabs).map(tabKey => {
+        let tab = formData.formMeta.tabs[tabKey];
+
+        tab.sections = Object.keys(tab.sections).map(sectionKey => {
+            let section = tab.sections[sectionKey];
+
+            section.elements = Object.keys(section.elements).map(elementKey => {
+                let row = [];
+                let element = section.elements[elementKey];
+                if (_.has(element, 'FormFieldElement')) {
+                    element = element.FormFieldElement;
+                }
+
+                return element;
+            });
+
+            section.elements = _.sortBy(section.elements, 'orderIndex');
+
+            return section;
+        });
+
+        tab.sections = _.sortBy(tab.sections, 'orderIndex');
+
+        return tab;
+    });
+
+    let result = _.sortBy(formData.formMeta.tabs, 'orderIndex');
+
+    return formData;
+}
+
+function convertFormToObjectForServer () {
+
 }
 
 
