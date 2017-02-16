@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import ToggleButton from 'react-toggle-button';
+import dateEditor from './dateEditor';
 import uuid from 'uuid';
 import _ from 'lodash';
 import './featureSwitches.scss';
@@ -15,20 +16,12 @@ BodyWrapper.shouldComponentUpdate = true;
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
 
-const dateEditor = ({ props } = {}) => {
-    const DateEditor = ({ value, onValue }) => (
-        <div {...props}>
-            <input type="date" value={value} onChange={(e)=>{onValue(e.target.value);e.preventDefault();e.stopPropagation()}}/>
-        </div>
-    );
-    DateEditor.propTypes = {
-        value: React.PropTypes.any,
-        onChange: React.PropTypes.func,
-        onValue: React.PropTypes.func
-    };
 
-    return DateEditor;
-};
+const expiredBehaviorOptions = [
+    {name:'Turn feature on',value:'on'},
+    {name:'Turn feature off',value:'off'},
+    {name:'Flip on/off',value:'flip'}
+    ];
 
 class FeatureSwitchesRoute extends React.Component {
 
@@ -53,7 +46,7 @@ class FeatureSwitchesRoute extends React.Component {
     }
 
     addNewFeature() {
-        this.props.createRow(uuid.v4());
+        this.props.createFeatureSwitch(uuid.v4());
     }
 
     selectRow(id, selected) {
@@ -79,7 +72,7 @@ class FeatureSwitchesRoute extends React.Component {
 
     deleteSelectedSwitches() {
         this.state.selectedRows.forEach((id) => {
-            this.props.deleteRow(id);
+            this.props.deleteFeatureSwitch(id);
         });
         this.setState({selectedRows: []});
     }
@@ -89,10 +82,10 @@ class FeatureSwitchesRoute extends React.Component {
         const editable = edit.edit({
             isEditing: ({ columnIndex, rowData }) => columnIndex === rowData.editing,
             onActivate: ({ columnIndex, rowData }) => {
-                this.props.editRow(rowData.id, columnIndex);
+                this.props.editFeatureSwitch(rowData.id, columnIndex);
             },
             onValue: ({ value, rowData, property }) => {
-                this.props.confirmEdit(rowData.id, property, value);
+                this.props.featureSwitchEdited(rowData.id, property, value);
             }
         });
 
@@ -172,7 +165,14 @@ class FeatureSwitchesRoute extends React.Component {
                     label: 'When expired'
                 },
                 cell: {
-                    transforms: [editable(edit.dropdown({options: [{name:'Turn feature on',value:'on'},{name:'Turn feature off',value:'off'},{name:'Flip on/off',value:'flip'}]}))]
+                    transforms: [editable(edit.dropdown({options: expiredBehaviorOptions}))],
+                    formatters: [
+                        (value) => {
+                            let option = expiredBehaviorOptions.find(option => option.value === value);
+                            return option && option.name;
+                        }
+
+                    ]
                 }
             },
         ];
@@ -192,7 +192,6 @@ class FeatureSwitchesRoute extends React.Component {
 
 
                 <div className="globalButtons">
-
                     <button onClick={this.addNewFeature}>Add new</button>
                     <button disabled={!this.props.edited} className='save' onClick={this.saveSwitches}>Save switches</button>
                 </div>

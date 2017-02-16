@@ -1,5 +1,4 @@
 import * as types from '../actions/types';
-import _ from 'lodash';
 
 const featureSwitches = (
     state = {
@@ -19,13 +18,8 @@ const featureSwitches = (
             switches: action.switches
         };
 
-    case types.SET_FEATURE_SWITCH_STATES:
-        return {
-            ...state,
-            states: action.states
-        };
 
-    case types.SET_SWITCH_DEFAULT_STATE: {
+    case types.SET_FEATURE_SWITCH_DEFAULT_STATE: {
         const switches = [...state.switches];
         const switchToToggle = switches.find(item => item.id === action.id);
         switchToToggle.defaultOn = action.defaultOn;
@@ -37,21 +31,22 @@ const featureSwitches = (
         };
     }
 
-    case types.CREATE_ROW:
+    case types.CREATE_FEATURE_SWITCH:
         return {
             ...state,
             switches: [...state.switches, action.feature],
             edited: true
         };
 
-    case types.DELETE_ROW:
+    case types.DELETE_FEATURE_SWITCH: {
         return {
             ...state,
-            switches: _.remove([...state.switches], fs => fs.id !== action.id),
+            switches: state.switches.filter(fs => fs.id !== action.id),
             edited: true
         };
+    }
 
-    case types.EDIT_ROW: {
+    case types.EDIT_FEATURE_SWITCH: {
         const switches = [...state.switches];
         const switchToEdit = switches.find(item => item.id === action.id);
         switchToEdit.editing = action.column;
@@ -61,7 +56,7 @@ const featureSwitches = (
         };
     }
 
-    case types.CONFIRM_EDIT: {
+    case types.FEATURE_SWITCH_EDITED: {
         const switches = [...state.switches];
         const switchToConfirmEdit = switches.find(item => item.id === action.id);
         delete switchToConfirmEdit.editing;
@@ -81,16 +76,16 @@ const featureSwitches = (
         };
 
     // exceptions
-    case types.EDIT_EXCEPTIONS: {
+    case types.SELECT_FEATURE_SWITCH_EXCEPTIONS: {
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
-            exceptions: _.cloneDeep(currentSwitch.exceptions)
+            exceptions: [...currentSwitch.exceptions]
         }
     }
 
     case types.SET_EXCEPTION_STATE: {
-        const exceptions = _.cloneDeep(state.exceptions);
+        const exceptions = [...state.exceptions];
         exceptions[action.row].on = action.on;
         return  {
             ...state,
@@ -98,16 +93,16 @@ const featureSwitches = (
             edited: true
         };
     }
-    case types.EDIT_EXCEPTION_ROW: {
-        const exceptions = _.cloneDeep(state.exceptions);
+    case types.EDIT_EXCEPTION: {
+        const exceptions = [...state.exceptions];
         exceptions[action.row].editing = action.column;
         return {
             ...state,
             exceptions
         };
     }
-    case types.CONFIRM_EXCEPTION_EDIT: {
-        const exceptions = _.cloneDeep(state.exceptions);
+    case types.EXCEPTION_EDITED: {
+        const exceptions = [...state.exceptions];
         delete exceptions[action.row].editing;
         exceptions[action.row][action.property] = action.value;
 
@@ -117,6 +112,33 @@ const featureSwitches = (
             edited: true
         };
     }
+
+    case types.CREATE_EXCEPTION:
+        console.log('create',action);
+        return {
+            ...state,
+            exceptions: [...state.exceptions, action.exception],
+            edited: true
+        };
+
+    case types.DELETE_EXCEPTION: {
+        const exceptions = [...state.exceptions];
+        exceptions.splice(action.id, 1);
+
+        return {
+            ...state,
+            exceptions,
+            edited: true
+        };
+    }
+
+
+    case types.SET_FEATURE_SWITCH_STATES:
+        return {
+            ...state,
+            states: action.states
+        };
+
     default:
         // return existing state by default in redux
         return state;

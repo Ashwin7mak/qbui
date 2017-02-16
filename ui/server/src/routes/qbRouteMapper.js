@@ -1,8 +1,8 @@
 
 var featureSwitches = [
     {
-        id: 123,
-        name: 'Feature X',
+        id: 101,
+        name: 'Feature A',
         team: 'Cthulu',
         description: 'Demo feature switch',
         defaultOn: true,
@@ -11,11 +11,31 @@ var featureSwitches = [
                 entityType: 'realm',
                 entityValue: '12345',
                 on: false,
+            },
+            {
+                entityType: 'app',
+                entityValue: 'app1',
+                on: false,
+            },
+            {
+                entityType: 'app',
+                entityValue: 'app2',
+                on: true,
             }
         ]
     },
     {
-        id: 2322,
+        id: 102,
+        name: 'Feature B',
+        team: 'Hydra',
+        description: 'Another demo feature',
+        defaultOn: false,
+        exceptions: [
+
+        ]
+    },
+    {
+        id: 103,
         name: 'Hide Table',
         team: 'Hydra',
         description: 'Hide table feature',

@@ -41,18 +41,10 @@
 
     }
 
-    &.exceptions {
-        td:first-child {
-            padding-left: 10px;
-        }
-    }
-
-    &.switches {
-        th:first-child,
-        td:first-child {
-            width: 40px;
-            padding-left: 10px;
-        }
+    th:first-child,
+    td:first-child {
+        width: 40px;
+        padding-left: 10px;
     }
 }
 

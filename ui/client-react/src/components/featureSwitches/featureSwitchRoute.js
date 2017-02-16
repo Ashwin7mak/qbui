@@ -27,39 +27,30 @@ class FeatureSwitchRoute extends React.Component {
         }
 
         this.getFeatureSwitchID = this.getFeatureSwitchID.bind(this);
-        this.saveSwitches = this.saveSwitches.bind(this);
-        this.addException = this.addException.bind(this);
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
+        this.saveExceptions = this.saveExceptions.bind(this);
         this.deleteSelectedExceptions = this.deleteSelectedExceptions.bind(this);
-    }
-
-    saveSwitches() {
-        this.props.saveSwitches(this.props.switches);
-    }
-
-    addException() {
-        this.props.createExceptionRow(this.getFeatureSwitchID().id, uuid.v4());
     }
 
     selectRow(id, selected) {
 
         const selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
-        const allSelected = selectedRows.length === this.props.switches.length;
+        const allSelected = selectedRows.length === this.props.exceptions.length;
 
         this.setState({selectedRows, allSelected});
     }
 
     selectAll(allSelected) {
 
-        const selectedRows = allSelected ? this.props.switches.map(sw => sw.id) : [];
+        const selectedRows = allSelected ? this.props.exceptions.map((sw, index) => index) : [];
 
         this.setState({selectedRows, allSelected});
     }
 
     setSelectedExceptionStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.props.setSwitchExceptionState(id, defaultOn)
+            this.props.setExceptionState(id, defaultOn)
         });
     }
 
@@ -80,6 +71,10 @@ class FeatureSwitchRoute extends React.Component {
         return parseInt(this.props.params.id);
     }
 
+    saveExceptions() {
+        this.props.saveExceptions(this.props.exceptions);
+    }
+
     getColumns() {
 
         const editable = edit.edit({
@@ -93,6 +88,19 @@ class FeatureSwitchRoute extends React.Component {
         });
 
         return [
+            {
+                property: 'selected',
+                header: {
+                    formatters: [
+                        (data, {rowData}) => <input type="checkbox" checked={this.state.allSelected} onChange={(e) => {this.selectAll(e.target.checked);}}/>
+                    ]
+                },
+                cell: {
+                    formatters: [
+                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedRows.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
+                    ]
+                }
+            },
             {
                 property: 'entityType',
                 header: {
@@ -148,42 +156,65 @@ class FeatureSwitchRoute extends React.Component {
         return rows.map((row, i) => {return {...row, id: i}});
     }
 
-    componentDidMount() {
+    componentWillMount() {
+
         if (this.props.switches.length === 0) {
-            this.props.getSwitches().then(() => {console.log('okay');this.props.editExceptions(this.getFeatureSwitchID());});
+            this.props.getSwitches().then(() => {
+                this.props.selectFeatureSwitchExceptions(this.getFeatureSwitchID());
+            });
         }
         else {
-            this.props.editExceptions(this.getFeatureSwitchID());
+            this.props.selectFeatureSwitchExceptions(this.getFeatureSwitchID());
         }
-
     }
 
     render() {
 
         let featureSwitch = this.props.switches.find((item) => item.id === this.getFeatureSwitchID());
 
-        return (
-            <div className="featureSwitches">
-                <div><strong>Team:</strong> {featureSwitch.team}</div>
-                <div><strong>Description:</strong> {featureSwitch.description}</div>
-                <div><strong>Default State:</strong> {featureSwitch.defaultOn ? "On" : "Off"}</div>
-                <p/>
-                <h3>Feature Switch Exceptions:</h3>
-                <Table.Provider className="featureSwitchTable exceptions"
-                                columns={this.state.columns}
-                                components={{
-                                    body: {
-                                        wrapper: BodyWrapper,
-                                        row: RowWrapper
-                                    }
-                                }}>
+        if (featureSwitch) {
 
-                    <Table.Header />
+            const selectedSize = this.state.selectedRows.length;
+            const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected exceptions(s)');
 
-                    <Table.Body rows={this.getTableRowsWithIds(this.props.exceptions)} rowKey="id" />
-                </Table.Provider>
-            </div>
-        );
+            return (
+                <div className="featureSwitches">
+                    <div><strong>Team:</strong> {featureSwitch.team}</div>
+                    <div><strong>Description:</strong> {featureSwitch.description}</div>
+                    <div><strong>Default State:</strong> {featureSwitch.defaultOn ? "On" : "Off"}</div>
+                    <p/>
+                    <h3>Feature Switch Exceptions:</h3>
+
+                    <div className="globalButtons">
+                        <button onClick={this.props.createException}>Add new</button>
+                        <button disabled={!this.props.edited} className='save' onClick={this.saveExceptions}>Save exceptions</button>
+                    </div>
+
+                    <Table.Provider className="featureSwitchTable exceptions"
+                                    columns={this.state.columns}
+                                    components={{
+                                        body: {
+                                            wrapper: BodyWrapper,
+                                            row: RowWrapper
+                                        }
+                                    }}>
+
+                        <Table.Header />
+
+                        <Table.Body rows={this.getTableRowsWithIds(this.props.exceptions)} rowKey="id"/>
+                    </Table.Provider>
+                    <p/>
+                    <div className="selectionButtons">
+                        <button disabled={selectedSize === 0} onClick={this.deleteSelectedExceptions}>Delete</button>
+                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedExceptionStates(true)}>Turn On</button>
+                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedExceptionStates(false)}>Turn Off</button>
+                        <span>{selectedSizeLabel}</span>
+                    </div>
+                </div>
+            );
+        } else {
+            return false;
+        }
     }
 };
 
