@@ -201,13 +201,13 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
                     if (error.response && error.response.status === 403) {
                         NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                     } else {
                         NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                     }
 
-                        // remove the editRec query string since we are not successfully editing the form
+                    // remove the editRec query string since we are not successfully editing the form
                     WindowLocationUtils.pushWithoutQuery();
                     dispatch(loadFormError(formType, error.response.status));
 

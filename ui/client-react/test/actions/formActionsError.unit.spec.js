@@ -55,9 +55,7 @@ describe('Form Actions load form error functions', () => {
     });
 
     it('test missing params to loadForm', (done) => {
-
         const store = mockStore({});
-
         return store.dispatch(loadForm()).then(
             () => {
                 expect(false).toBe(true);
@@ -134,7 +132,6 @@ describe('Form Actions load form error functions', () => {
     ];
     it('test promise reject handling updateForm', (done) => {
         const store = mockStore({});
-
         return store.dispatch(updateForm(1, 2, VIEW, {})).then(
             () => {
                 expect(false).toBe(true);
@@ -159,8 +156,9 @@ describe('Form Actions load form error functions', () => {
                 expect(mockFormService.prototype.createForm).toHaveBeenCalled();
                 expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
                 expect(store.getActions()).toEqual(saveFormExpectedActions);
-            });
-
+                done();
+            }
+        );
     });
-});
 
+});
