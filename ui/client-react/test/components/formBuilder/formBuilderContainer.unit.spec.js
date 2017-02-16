@@ -1,8 +1,7 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {NEW_FORM_RECORD_ID} from '../../../src/constants/schema';
-
 import {FormBuilderContainer, __RewireAPI__ as FormBuilderRewireAPI} from '../../../src/components/builder/formBuilderContainer';
 import Loader from 'react-loader';
 
@@ -11,7 +10,8 @@ const tblId = 2;
 const formType = 'edit';
 
 const mockActions = {
-    loadForm() {}
+    loadForm() {},
+    updateForm() {}
 };
 
 let component;
@@ -21,6 +21,7 @@ describe('FormBuilderContainer', () => {
     beforeEach(() => {
         jasmineEnzyme();
         spyOn(mockActions, 'loadForm');
+        spyOn(mockActions, 'updateForm');
     });
 
     describe('load form data', () => {
@@ -85,6 +86,24 @@ describe('FormBuilderContainer', () => {
                 let formBuilderComponent = component.find({formData: testCase.expectedFormData});
                 expect(formBuilderComponent).toBePresent();
             });
+        });
+    });
+
+    describe('saving on FormBuilder', () => {
+        it('test saveButton on the formBuilder footer', () => {
+            let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}] ;
+
+            component = mount(<FormBuilderContainer appId={appId}
+                                                    forms={forms}
+                                                    tblId={tblId}
+                                                    loadForm={mockActions.loadForm}
+                                                    updateForm={mockActions.updateForm} />);
+
+            let saveButton = component.find('.saveFormButton');
+
+            saveButton.simulate('click');
+
+            expect(mockActions.updateForm).toHaveBeenCalled();
         });
     });
 
