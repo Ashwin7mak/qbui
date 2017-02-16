@@ -4,6 +4,8 @@ import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
 import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
+import BuilderUtils from '../../../utils/builderUtils'
+
 
 import './fieldEditingTools.scss';
 
@@ -62,9 +64,15 @@ class FieldEditingTools extends Component {
     }
 
     render() {
+        let classNames = ["fieldEditingTools"];
+
+        if (BuilderUtils.isTouchDevice()) {
+            classNames.push('touchDevice');
+        }
+
         return (
             <div
-                className="fieldEditingTools"
+                className={classNames.join(' ')}
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
             >

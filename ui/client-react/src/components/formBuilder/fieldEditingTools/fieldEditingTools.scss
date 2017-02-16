@@ -12,6 +12,10 @@
     opacity: 0;
     transition: opacity 0.4s;
 
+    &.touchDevice {
+        opacity: 1;
+    }
+
     .qbIcon {
         color: $color-black-600;
         transition: color 0.4s;
