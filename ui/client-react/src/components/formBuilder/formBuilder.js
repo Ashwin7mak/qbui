@@ -1,30 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
-import Html5Backend from 'react-dnd-html5-backend';
-import {default as TouchBackend} from 'react-dnd-touch-backend';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
-
+import BuilderUtils from '../../utils/builderUtils';
 import './formBuilder.scss';
 
-/**
- * In order to enable drag and drop on desktop or mobile we need to swap out the backend
- * isTouchDevice detects if a user is on a touchDevice or a desktop
- * if a user is on a touchDevice we will use the TouchBackend for mobile device drag and drop
- * if a user is not on a touchDevice then we will use the Html5backend for drag and drop
- * */
-let backend;
 
-/* touch detection */
-let isTouchDevice = () => {
-    return "ontouchstart" in window;
-};
-
-if (isTouchDevice()) {
-    backend = TouchBackend;
-} else {
-    backend = Html5Backend;
-}
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
  * The state is temporary until the redux stores are developed.
@@ -83,4 +64,5 @@ FormBuilder.defaultProps = {
     showCustomDragLayer: true
 };
 
-export default DragDropContext(backend)(FormBuilder);
+
+export default DragDropContext(BuilderUtils.getBackEnd(BuilderUtils.isTouchDevice()))(FormBuilder);
