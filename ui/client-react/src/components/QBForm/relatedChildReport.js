@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+
+import mockReport from '../../mocks/reports';
+import ReportGrid from 'app/components/dataTable/reportGrid/reportGrid';
 
 import UrlUtils from '../../utils/urlUtils';
 import Breakpoints from '../../utils/breakpoints';
@@ -19,7 +22,7 @@ class ChildReport extends React.Component {
         const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
         if (!validProps) {
             return null;
-        } else if (Breakpoints.isSmallBreakpoint() || true) {
+        } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK' || true) {
             const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
             let reportLink;
             if (this.props.childTableName) {
@@ -32,23 +35,26 @@ class ChildReport extends React.Component {
                     {reportLink}
                 </Link>
             );
-        } else {
+        } else if (this.props.type === 'EMBEDREPORT') {
             // TODO: render embedded report for medium and large breakpoint
+            return <ReportGrid {...mockReport} />;
+        } else {
             return null;
         }
     }
 }
 
 ChildReport.propTypes = {
-    appId: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    childTableId: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    childReportId: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    childTableId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    childReportId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The name of the child table. The same as what would be shown in the left nav for that table */
-    childTableName: React.PropTypes.string,
+    childTableName: PropTypes.string,
     /** The fid of the field containing the foreignkey. */
-    detailKeyFid: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    detailKeyFid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     /** The value entered in the foreignkey field. */
-    detailKeyValue: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
+    detailKeyValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    type: PropTypes.oneOf(['EMBEDREPORT', 'REPORTLINK'])
 };
 
 export default ChildReport;
