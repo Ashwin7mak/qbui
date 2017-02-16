@@ -23,7 +23,9 @@ import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
 import {openRecord} from '../../../actions/recordActions';
+import {updateReportRecord} from '../../../actions/reportActions';
 import {APP_ROUTE} from '../../../constants/urlConstants';
+import {CONTEXT} from '../../../actions/context';
 
 let logger = new Logger();
 
@@ -429,7 +431,12 @@ export const ReportContent = React.createClass({
                 colList.push(field.id);
             });
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            promise.then((obj) => {
+                //  Temporary solution to display a redux event to update the report grid with in-line editor change
+                //  This will get refactored once the record store is moved to redux
+                this.props.dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+            });
         }
     },
 

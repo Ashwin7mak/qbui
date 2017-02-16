@@ -17,8 +17,10 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
+import {updateReportRecord} from '../../actions/reportActions';
 import {editRecord} from '../../actions/recordActions';
 import {APP_ROUTE} from '../../constants/urlConstants';
+import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
@@ -122,16 +124,23 @@ export const RecordTrowser = React.createClass({
 
             const formType = "edit";
 
+            let updateRecord = false;
             this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
-                promise = this.handleRecordChange(this.props.recId);
+                updateRecord = true;
+                promise = this.handleRecordChange();
             }
-            promise.then((recId) => {
+            promise.then((obj) => {
+                //  update the grid with the change..this is expected to get refactored once the record store is moved to redux..
+                if (updateRecord === true) {
+                    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
+                }
+
                 this.props.saveFormSuccess(formType);
 
-                if (this.props.viewingRecordId === recId) {
+                if (this.props.viewingRecordId === obj.recId) {
                     this.props.syncForm("view");
                 }
 
@@ -139,7 +148,7 @@ export const RecordTrowser = React.createClass({
                     this.props.editNewRecord(false);
                 } else {
                     this.hideTrowser();
-                    this.navigateToNewRecord(recId);
+                    this.navigateToNewRecord(obj.recId);
                 }
 
             }, (errorStatus) => {
@@ -171,13 +180,20 @@ export const RecordTrowser = React.createClass({
             let promise;
             const formType = "edit";
 
+            let updateRecord = false;
             this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
-                promise = this.handleRecordChange(this.props.recId);
+                updateRecord = true;
+                promise = this.handleRecordChange();
             }
-            promise.then(() => {
+            promise.then((obj) => {
+                //  update the grid with the change..this is expected to get refactored once the record store is moved to redux..
+                if (updateRecord === true) {
+                    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
+                }
+
                 this.props.saveFormSuccess(formType);
                 if (this.props.viewingRecordId === this.props.recId) {
                     this.props.syncForm("view");
@@ -409,6 +425,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecord: (recId) => {
             dispatch(editRecord(recId));
+        },
+        updateReportRecord: (obj, context) => {
+            dispatch(updateReportRecord(obj, context));
         }
     };
 };

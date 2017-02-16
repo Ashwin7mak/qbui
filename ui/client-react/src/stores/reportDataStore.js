@@ -19,6 +19,8 @@ import * as passThroughFormatter from '../../../common/src/formatter/passthrough
 import * as durationFormatter from '../../../common/src/formatter/durationFormatter';
 import _ from 'lodash';
 
+import {updateRecord} from '../../src/actions/recordActions';
+
 const serverTypeConsts = require('../../../common/src/constants');
 
 let logger = new Logger();
@@ -640,8 +642,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.DELETE_RECORD_BULK, this.onDeleteReportRecordBulk,
             actions.DELETE_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
             actions.DELETE_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
-            actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
-            actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            //actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
+            //actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onClearEdit,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onClearEdit,
@@ -1084,14 +1086,14 @@ let ReportDataStore = Fluxxor.createStore({
      * with the specified field value changes
      * @param payload paramater contains recId :number, changes :[]
      */
-    onSaveRecordSuccess(payload) {
-        // update the  record values
-        this.editingIndex = undefined;
-        let record = payload.record ? payload.record.record : [];
-        let fields = payload.record ? payload.record.fields : [];
-        this.reportModel.updateARecord(payload.recId, null, record, fields);
-        this.emit("change");
-    },
+    //onSaveRecordSuccess(payload) {
+    //    // update the  record values
+    //    this.editingIndex = undefined;
+    //    let record = payload.record ? payload.record.record : [];
+    //    let fields = payload.record ? payload.record.fields : [];
+    //    this.reportModel.updateARecord(payload.recId, null, record, fields);
+    //    this.emit("change");
+    //},
 
     /**
      * updates the list of records at the specified record id or end of list if no recId specified
@@ -1311,3 +1313,4 @@ function getDefaultValue(id, type) {
 }
 
 export default ReportDataStore;
+

@@ -412,6 +412,7 @@ let recordActions = {
                         recordService.getRecord(appId, tblId, recId, clist, _withDisplayFormat()).then(
                             getResponse => {
                                 logger.debug('RecordService getRecord success');
+                                //  flux action to update recordPendingEditsStore AND reportDataStore..to be removed
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
@@ -421,7 +422,13 @@ let recordActions = {
                                 // clicks get invoked after saving
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                                     this.dispatch(actions.AFTER_RECORD_EDIT);
-                                    resolve(recId);
+                                    let obj = {
+                                        recId:recId,
+                                        appId:appId,
+                                        tblId:tblId,
+                                        record:getResponse.data
+                                    };
+                                    resolve(obj);
                                 });
                             },
                             getError => {

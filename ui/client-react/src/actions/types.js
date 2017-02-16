@@ -45,6 +45,7 @@ export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 export const LOAD_REPORT = 'LOAD_REPORT';
 export const LOAD_REPORT_SUCCESS = 'LOAD_REPORT_SUCCESS';
 export const LOAD_REPORT_FAILED = 'LOAD_REPORT_FAILED';
+export const UPDATE_REPORT_RECORD = 'UPDATE_REPORT_RECORD';
 
 //  **** table report list actions ****
 export const LOAD_REPORTS = 'LOAD_REPORTS';
