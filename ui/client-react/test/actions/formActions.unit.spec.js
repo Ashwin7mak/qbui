@@ -332,5 +332,19 @@ describe('Form Actions functions', () => {
                 ['Tab2-Section1-Field7']
             ]);
         });
+
+        it('adds unique Ids that can be used as react keys', () => {
+            let tab = result.formData.formMeta.tabs[0];
+            let section = tab.sections[0];
+            let column = section.columns[0];
+            let row = column.rows[0];
+            let element = row.elements[0];
+
+            expect(tab.id).toBeDefined();
+            expect(section.id).toBeDefined();
+            expect(column.id).toBeDefined();
+            expect(row.id).toBeDefined();
+            expect(element.id).toBeDefined();
+        });
     })
 });

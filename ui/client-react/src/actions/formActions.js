@@ -346,6 +346,12 @@ function event(id, type, content) {
     };
 }
 
+/**
+ * TODO:: Consider using orderIndex for the unique id for tabs, sections, columns,
+ * even though it will be wrong after the element is moved
+ * @param formData
+ * @returns {*}
+ */
 function convertFormToArrayForClient (formData) {
     if (!_.has(formData, 'formMeta.tabs')) {
         return formData;
@@ -364,12 +370,11 @@ function convertFormToArrayForClient (formData) {
 
             Object.keys(section.elements).forEach(elementKey => {
                 let element = section.elements[elementKey];
-                element.sectionIndex = section.orderIndex;
-                element.tabIndex = tab.orderIndex;
+                element.id = _.uniqueId('element-');
 
                 if (!_.has(element, 'FormFieldElement') || !element.FormFieldElement.positionSameRow) {
                     currentRowIndex++;
-                    section.rows.push({elements: [], orderIndex: currentRowIndex});
+                    section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
                 }
 
                 section.rows[currentRowIndex].elements.push(element);
@@ -377,14 +382,15 @@ function convertFormToArrayForClient (formData) {
 
             // Assume a single column for now. Once columns are officially implemented we would get columns from the
             // data returned from the Node layer
-            section.columns = [{rows: section.rows, orderIndex: 0}];
+            section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
+            section.id = _.uniqueId('section-');
             return section;
         });
 
         tab.sections = _.sortBy(tab.sections, 'orderIndex');
 
         // delete tab.sections;
-
+        tab.id = _.uniqueId('tab-');
         return tab;
     });
 
