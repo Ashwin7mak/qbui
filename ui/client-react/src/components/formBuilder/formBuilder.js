@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import Html5Backend from 'react-dnd-html5-backend';
-import { default as TouchBackend } from 'react-dnd-touch-backend';
+import {default as TouchBackend} from 'react-dnd-touch-backend';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 
@@ -16,14 +16,14 @@ import './formBuilder.scss';
 let backend;
 
 /* touch detection */
-let isTouchDevice = function () {
+let isTouchDevice = () => {
     return "ontouchstart" in window;
-}
+};
 
 if (isTouchDevice()) {
     backend = TouchBackend;
 } else {
-    backend = Html5Backend
+    backend = Html5Backend;
 }
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
