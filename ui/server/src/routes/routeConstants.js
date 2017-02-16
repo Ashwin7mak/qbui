@@ -13,6 +13,7 @@
     var baseUrl = {
         // TODO: merge the 2 quickbase_api constants into 1...need to fix integration tests first..
         QUICKBASE           : '/api/api/:version',
+        EXPERIENCE_ENGINE   : '/ee/:version',
         QUICKBASE_HEALTH    : '/api/:version',
         NODE                : '/api/n/:version',
         QUICKBASE_LEGACY    : '/api/l/:version'
@@ -37,15 +38,15 @@
     };
 
     /*
-     *  List of QuickBase public API endpoints used by the client which perform pre/post operations
-     *  in the node layer and are not just proxied through to the quickbase public api.
+     *  List of QuickBase public API endpoints used by the client.
      */
     var quickBaseApiEndpoints = {
-        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
+
+        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
         RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
@@ -67,17 +68,31 @@
         TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*'
     };
 
+    /*
+     *  List of Experience engine public API endpoints
+     */
+    var experienceEngineApiEndpoints = {
+        // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
+        // is configured to act as proxy and pass the request directly to the server side resource.
+        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*'
+    };
+
     /**
      * List of Quickbase public API Swagger doc endpoints.
      */
     var swaggerApiEndpoints = {
-        SWAGGER_API             : '/api',
-        SWAGGER_DOCUMENTATION   : '/api/documentation/*',
-        SWAGGER_IMAGES          : '/api/images/*',
-        SWAGGER_RESOURCES       : '/api/resources/*'
+        SWAGGER_API              : '/api',
+        SWAGGER_DOCUMENTATION    : '/api/documentation/*',
+        SWAGGER_IMAGES           : '/api/images/*',
+        SWAGGER_RESOURCES        : '/api/resources/*',
+        SWAGGER_API_EE           : '/ee',
+        SWAGGER_DOCUMENTATION_EE : '/ee/documentation/*',
+        SWAGGER_IMAGES_EE        : '/ee/images/*',
+        SWAGGER_RESOURCES_EE     : '/ee/resources/*'
     };
 
     //  Export the combined list of endpoints.
-    module.exports = Object.freeze(_.assign({}, swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints));
+    module.exports = Object.freeze(_.assign({},
+        swaggerApiEndpoints, nodeApiEndpoints, legacyApiEndpoints, quickBaseApiEndpoints, experienceEngineApiEndpoints));
 
 }());

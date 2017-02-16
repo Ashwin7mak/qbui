@@ -62,8 +62,10 @@ consts = require('../../common/src/constants.js');
         var table5Name = 'All Required';
         var table6Name = 'Durations';
         var table7Name = 'Unique Fields';
-        var table8Name = 'REL by ID (Parent)';
-        var table9Name = 'REL by ID (Child)';
+        var table8Name = 'Parent Table 1';
+        var table9Name = 'Child Table 1';
+        var table10Name = 'Parent Table 2';
+        var table11Name = 'Child Table 2';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -391,20 +393,28 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.EMAIL_ADDRESS, 'Unique Email', {unique: true});
         addColumn(tableToFieldToFieldTypeMap[table7Name], e2eConsts.dataType.URL, 'Unique URL', {unique: true});
 
-
+        // Parent table 1 is a parent to child table1 and child table2
         tableToFieldToFieldTypeMap[table8Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
-
+        addColumn(tableToFieldToFieldTypeMap[table8Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+        // Child table 1 is a child of Parent table 1
         tableToFieldToFieldTypeMap[table9Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
-        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false, decimalPlaces: 0});
-
+        addColumn(tableToFieldToFieldTypeMap[table9Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
+        // Parent table 2 is a parent to Child table 2
+        tableToFieldToFieldTypeMap[table10Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table10Name], e2eConsts.dataType.NUMERIC, 'Numeric Field', {unique: false});
+        // Child table 2 is a child of Parent table 1 and Parent table 2
+        tableToFieldToFieldTypeMap[table11Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.TEXT, 'Text Field', {unique: true});
+        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent1 ID', {unique: false});
+        addColumn(tableToFieldToFieldTypeMap[table11Name], e2eConsts.dataType.NUMERIC, 'Numeric Parent2 ID', {unique: false});
 
         return tableToFieldToFieldTypeMap;
     }
 
-    function generateNewData(done) {
+    function generateNewData(_createdRecs) {
         e2eBase.tablesSetUp(makeAppMap()).then(function(createdApp) {
             // Set your global objects to use in the test functions
             app = createdApp;
@@ -420,10 +430,14 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
-            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE7].name].numRecordsToCreate = 5;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE8].name].numRecordsToCreate = 6;
             var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
 
-            createdResults.then(function(results) {
+            return createdResults.then(function(results) {
                 console.log(JSON.stringify(createdResults));
                 // after all the promises in results are done then call done callback to report complete
                 return Promise.all(results.allPromises);
@@ -457,13 +471,39 @@ consts = require('../../common/src/constants.js');
             //Reset default report for table 8
             return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE8].id, 2);
         }).then(function() {
-            //Create tables relationship
-            return e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8]);
+            const promises = [];
+            // Numeric key entry for the relationship's child table corresponds to a parent's recordId.
+            // These need to be integers in the range of 1~n, n being the number of parent records
+            // We also want these to be consistent, as opposed to randomly generated numbers, for
+            // testing purposes.
+            let fieldToEdit = app.tables[e2eConsts.TABLE8].fields[6];
+            let editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            promises.push(e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE8].id, editRecords));
+
+            // TABLE10 has 2 parents, set first numeric field
+            fieldToEdit = app.tables[e2eConsts.TABLE10].fields[6];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            promises.push(e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords));
+
+            // TABLE10 has 2 parents, set 2nd numeric field
+            fieldToEdit = app.tables[e2eConsts.TABLE10].fields[7];
+            editRecords = e2eBase.recordService.generateRecordsFromValues(fieldToEdit, [1, 1, 2, 2, 2, 3]);
+            promises.push(e2eBase.recordService.editRecords(app.id, app.tables[e2eConsts.TABLE10].id, editRecords));
+
+            // Create tables relationship, table 8 is a child of table 7
+            promises.push(e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE8], 7));
+
+            // table 10 is a child of both table 7 and table 9
+            promises.push(e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE7], app.tables[e2eConsts.TABLE10], 7));
+            promises.push(e2eBase.relationshipService.createOneToOneRelationship(app, app.tables[e2eConsts.TABLE9], app.tables[e2eConsts.TABLE10], 8));
+            return Promise.all(promises);
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)
-            e2eBase.formService.createDefaultForms(app);
-            done();
+            return e2eBase.formService.createDefaultForms(app);
+        }).then(function() {
+            // print the generated test data and endpoints
+            _createdRecs();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {

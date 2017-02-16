@@ -153,6 +153,7 @@ $page-background-color:         $color-black-200;
 $border-focused-color:          $color-indigo-800;
 $border-nofocus-color:          $color-black-400;
 $border-shadow-base-color:      $color-indigo-700;
+$formBuilder-border-color:      $color-black-400;
 $ghost-text-color:              $color-black-500;
 $required-asterisk-color:       $color-blue-500;
 $dropdown-hover-color:          $color-blue-300;
@@ -369,15 +370,9 @@ $formula-spinner-color:                     $color-black-700;
 
 // qbGrid
 // These colors are prefixed with qbgrid so that they do not conflict with others while the qbGrid is updated.
-//$row-background-color-hover: $color-blue-200;
-//$row-cell-border-color: $color-black-300;
-$qbgrid-row-bg-color: $color-black-100;
-$qbgrid-row-noneditable-background-color: $color-black-200;
 $qbgrid-row-border-color: $color-black-300;
 $qbgrid-row-box-shadow-color: $color-black-300;
 $qbgrid-cell-edit-background-color: $color-blue-200;
-$qbgrid-row-hover-color: $color-blue-200;
-$qbgrid-onpencil-row-border-color: $color-cyan-700;
 
 // pagination
 $arrow-normal-color:                        $color-black-700;
@@ -465,6 +460,12 @@ $panel-shadow-color:            rgba($color-blue-600, 0.2); // not in XD spreads
 $tabs-underline-background-color:   $color-indigo-700;  // not in XD spreadsheet
 $tabs-disabled-color:               $badcolor5-color18; // not in XD spreadsheet
 $tabs-active-color:                 $color-black-600;   // not in XD spreadsheet
+
+// FormBuilder - Drag & Drop
+$dragtoken-background-color1: $color-blue-700;
+$dragtoken-background-color2: rgba($color-blue-700, 0.8);
+$dragtoken-text-color: $color-black-100;
+$dragtoken-shadow-color: rgba($color-black-800, 0.5);
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES

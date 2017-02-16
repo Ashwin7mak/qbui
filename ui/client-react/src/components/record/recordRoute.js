@@ -1,4 +1,5 @@
 import React from 'react';
+import AppHistory from '../../globals/appHistory';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
@@ -20,6 +21,8 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
+import {APP_ROUTE, BUILDER_ROUTE} from '../../constants/urlConstants';
+
 
 import './record.scss';
 
@@ -102,7 +105,7 @@ export const RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.params;
 
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}`;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
 
@@ -153,7 +156,7 @@ export const RecordRoute = React.createClass({
 
                 this.props.openRecord(recId, nextRecordId, previousRecordId);
 
-                const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+                const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
                 this.props.router.push(link);
             }
         }
@@ -189,7 +192,7 @@ export const RecordRoute = React.createClass({
             const {appId, tblId, rptId} = this.props.params;
             const record = this.getRecordFromProps(this.props);
 
-            const tableLink = `/qbase/app/${appId}/table/${tblId}`;
+            const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
             const reportName = _.has(this.props.reportData, 'data.name') ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && record.previousRecordId !== null);
@@ -235,6 +238,7 @@ export const RecordRoute = React.createClass({
     openRecordForEdit() {
         this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
+
     /**
      * edit the selected record in the trowser
      * @param data row record data
@@ -247,6 +251,7 @@ export const RecordRoute = React.createClass({
 
         this.props.editNewRecord();
     },
+
     getPageActions() {
 
         const actions = [
@@ -332,6 +337,7 @@ export const RecordRoute = React.createClass({
                                 loaded={(!this.props.forms || !viewData || !viewData.loading)}
                                 options={SpinnerConfigurations.TROWSER_CONTENT}>
                         <Record key={key}
+                                selectedApp={this.props.selectedApp}
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}

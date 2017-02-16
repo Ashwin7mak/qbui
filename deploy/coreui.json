@@ -570,6 +570,7 @@
         "SecurityGroups": [{"Ref": "InstanceSecurityGroup"}, {"Ref": "paramInternetAccessSecurityGroupID"}],
         "KeyName": {"Ref": "KeyName"},
         "IamInstanceProfile": {"Ref": "InstanceProfile"},
+        "BlockDeviceMappings": [{"DeviceName": "/dev/sda1", "Ebs": {"VolumeSize": "20"}}],
         "UserData": {
           "Fn::Base64": {
             "Fn::Join": [

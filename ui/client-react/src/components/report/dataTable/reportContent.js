@@ -23,6 +23,7 @@ import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
 import {openRecord} from '../../../actions/recordActions';
+import {APP_ROUTE} from '../../../constants/urlConstants';
 
 let logger = new Logger();
 
@@ -88,7 +89,7 @@ export const ReportContent = React.createClass({
         this.props.dispatch(openRecord(recId, nextRecordId, previousRecordId));
 
         //create the link we want to send the user to and then send them on their way
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         if (this.props.router) {
             this.props.router.push(link);
         }

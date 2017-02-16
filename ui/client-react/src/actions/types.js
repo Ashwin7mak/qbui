@@ -10,9 +10,18 @@ export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
 
+//  TODO: these actions seem to be used when saving a RECORD.
+//  TODO: thinking they should be renamed to record constants
+//  TODO: to better reflect what is happending.
 export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_SUCCESS = 'SAVE_FORM_SUCCESS';
 export const SAVE_FORM_FAILED = 'SAVE_FORM_FAILED';
+
+export const SAVING_FORM = 'SAVING_FORM';
+export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
+export const SAVING_FORM_ERROR = 'SAVING_FORM_ERROR';
+
+export const MOVE_FIELD = 'MOVE_FIELD';
 
 export const SYNC_FORM = 'SYNC_FORM';
 
