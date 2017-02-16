@@ -67,7 +67,6 @@ export const FormBuilderContainer = React.createClass({
     },
 
     saveClicked() {
-        logger.debug('clicked form save');
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.forms && this.props.forms.length > 0 && this.props.forms[0].formData) {
             let formMeta = this.props.forms[0].formData.formMeta;
