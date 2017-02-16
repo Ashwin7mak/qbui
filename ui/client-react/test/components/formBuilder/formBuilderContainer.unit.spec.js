@@ -91,7 +91,7 @@ describe('FormBuilderContainer', () => {
 
     describe('saving on FormBuilder', () => {
         it('test saveButton on the formBuilder footer', () => {
-            let forms = [ {formData: {loading: false, formType: {}, formMeta: {} }} ] ;
+            let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}] ;
 
             component = mount(<FormBuilderContainer appId={appId}
                                                     forms={forms}
