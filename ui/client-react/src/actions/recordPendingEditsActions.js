@@ -16,8 +16,7 @@ let recordPendingEditsActions = {
     },
     /* cancel editing a record */
     recordPendingEditsCancel(appId, tblId, recId) {
-        // TODO - temp disable to avoid issue with redux..mutating state exception
-        //this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
+        this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
     },
     /* committing changes from editing a record */
     recordPendingEditsCommit(appId, tblId, recId) {
