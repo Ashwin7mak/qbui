@@ -43,7 +43,7 @@ let AddRecordButton = React.createClass({
  */
 export const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
-    facetFields : {},
+    //facetFields : {},
     debounceInputMillis: 700, // a key send delay
     nameForRecords: "Records",  // get from table meta data
     propTypes: {
@@ -74,10 +74,10 @@ export const ReportToolsAndContent = React.createClass({
         // last time the debouncedFilterReport was invoked.
         this.debouncedFilterReport = _.debounce(this.filterReport, this.debounceInputMillis);
         // note the facets by id
-        this.mapFacetFields();
+        //this.mapFacetFields();
     },
     componentWillReceiveProps() {
-        this.mapFacetFields();
+        ///this.mapFacetFields();
     },
 
     //when report changed from not loading to loading start measure of components performance
@@ -119,14 +119,17 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     mapFacetFields() {
-        this.facetFields = {};
+        //this.facetFields = {};
+        let facetFields = {};
         if (this.props.reportData && this.props.reportData.data &&
             this.props.reportData.data.facets) {
             this.props.reportData.data.facets.map((facet) => {
                 // a fields id ->facet lookup
-                this.facetFields[facet.id] = facet;
+                //this.facetFields[facet.id] = facet;
+                facetFields[facet.id] = facet;
             });
         }
+        return facetFields;
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -150,7 +153,8 @@ export const ReportToolsAndContent = React.createClass({
         if (trimmedSearch !== this.props.searchStringForFiltering || alwaysRunReport === true) {
             logger.debug('Sending filter action with:' + trimmedSearch);
 
-            const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, this.facetFields);
+            let facetFields = this.mapFacetFields();
+            const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, facetFields);
 
             let queryParams = {};
             queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
