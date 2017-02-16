@@ -347,36 +347,50 @@ function event(id, type, content) {
 }
 
 function convertFormToArrayForClient (formData) {
+    if (!_.has(formData, 'formMeta.tabs')) {
+        return formData;
+    }
 
-    formData.formMeta.tabs = Object.keys(formData.formMeta.tabs).map(tabKey => {
+    let formDataCopy = _.cloneDeep(formData);
+
+    formDataCopy.formMeta.tabs = Object.keys(formData.formMeta.tabs).map(tabKey => {
         let tab = formData.formMeta.tabs[tabKey];
 
         tab.sections = Object.keys(tab.sections).map(sectionKey => {
             let section = tab.sections[sectionKey];
 
-            section.elements = Object.keys(section.elements).map(elementKey => {
-                let row = [];
+            section.rows = [];
+            let currentRowIndex = -1;
+
+            Object.keys(section.elements).forEach(elementKey => {
                 let element = section.elements[elementKey];
-                if (_.has(element, 'FormFieldElement')) {
-                    element = element.FormFieldElement;
+                element.sectionIndex = section.orderIndex;
+                element.tabIndex = tab.orderIndex;
+
+                if (!_.has(element, 'FormFieldElement') || !element.FormFieldElement.positionSameRow) {
+                    currentRowIndex++;
+                    section.rows.push({elements: [], orderIndex: currentRowIndex});
                 }
 
-                return element;
+                section.rows[currentRowIndex].elements.push(element);
             });
 
-            section.elements = _.sortBy(section.elements, 'orderIndex');
-
+            // Assume a single column for now. Once columns are officially implemented we would get columns from the
+            // data returned from the Node layer
+            section.columns = [{rows: section.rows, orderIndex: 0}];
             return section;
         });
 
         tab.sections = _.sortBy(tab.sections, 'orderIndex');
 
+        // delete tab.sections;
+
         return tab;
     });
 
-    let result = _.sortBy(formData.formMeta.tabs, 'orderIndex');
+    formDataCopy.formMeta.tabs = _.sortBy(formDataCopy.formMeta.tabs, 'orderIndex');
 
-    return formData;
+    return formDataCopy;
 }
 
 function convertFormToObjectForServer () {
