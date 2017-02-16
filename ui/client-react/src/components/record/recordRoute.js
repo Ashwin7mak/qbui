@@ -194,7 +194,8 @@ export const RecordRoute = React.createClass({
 
             const tableLink = `${APP_ROUTE}/${appId}/table/${tblId}`;
 
-            const reportName = _.has(this.props.reportData, 'data.name') ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
+            //  ensure the property exists and it has some content
+            const reportName = _.has(this.props.reportData, 'data.name') && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && record.previousRecordId !== null);
             const showNext = !!(this.props.reportData && record.nextRecordId !== null);
 
