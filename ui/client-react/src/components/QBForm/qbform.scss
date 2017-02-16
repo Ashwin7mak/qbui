@@ -63,16 +63,29 @@ $edit-field-padding: 5px;
             }
         }
 
-        .fieldRow {
-            td {
-                vertical-align: top;
+        .sectionRow {
+            display: flex;
+            flex-wrap: nowrap;
+
+            .formElementContainer {
+                flex: 1 1 auto;
                 padding-top: 5px;
                 padding-bottom: 20px;
             }
 
-            tr:last-child td {
-                padding-bottom: 0;
+            @include small-breakpoint {
+                flex-wrap: wrap;
+
+                .formElementContainer {
+                    flex: 1 100%;
+                    margin-right: 15px;
+                }
+
+                .phoneWrapper {
+                    width: 100%;
+                }
             }
+
 
             .formElement {
                 word-wrap: break-word;
@@ -112,7 +125,7 @@ $edit-field-padding: 5px;
                 }
             }
 
-            td:last-child .field {
+            .formElementContainer:last-child .field {
                 margin-right: 0;
             }
         }
@@ -231,7 +244,7 @@ $edit-field-padding: 5px;
                 padding: 10px 0 20px 10px;
             }
 
-            .formTable {
+            .sectionBody {
                 margin-left: 0;
                 width: 100%;
             }

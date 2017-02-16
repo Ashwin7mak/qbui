@@ -1,13 +1,10 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import FieldElement from './fieldElement';
-import FieldLabelElement from './fieldLabelElement';
-import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
-import FieldUtils from '../../utils/fieldUtils';
 import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
@@ -23,18 +20,14 @@ import './tabs.scss';
 let QBForm = React.createClass({
     displayName: 'QBForm',
 
-    statics: {
-        LABEL_ABOVE: "ABOVE", // label is in same cell as field value, above it
-        LABEL_LEFT: "LEFT"    // label is in a separate cell as the fielv value, to its left
-    },
-
     propTypes: {
-        editingForm: React.PropTypes.bool,
-        activeTab: React.PropTypes.string,
-        formData: React.PropTypes.shape({
-            record: React.PropTypes.array,
-            fields: React.PropTypes.array,
-            formMeta: React.PropTypes.object
+        edit: PropTypes.bool,
+        editingForm: PropTypes.bool,
+        activeTab: PropTypes.string,
+        formData: PropTypes.shape({
+            record: PropTypes.array,
+            fields: PropTypes.array,
+            formMeta: PropTypes.object
         })
     },
 
@@ -45,52 +38,6 @@ let QBForm = React.createClass({
     },
 
     /**
-     * helper function to get object props from this craptastical JSON we get from the server
-     * @param element
-     * @returns FormTextElement, FormFieldElement, or ChildReportElement object properties
-     *          (whichever is present)
-     */
-    getElementProps(element) {
-        return _.values(element)[0] || {};
-    },
-
-    /**
-     * get table cell (or 2 table cells) for the section element
-     * @param element section element
-     * @param orderIndex
-     * @param labelPosition above or left
-     * @param isLast is this the last cell in the row?
-     * @returns {Array}
-     */
-    getTableCells(element, orderIndex, labelPosition, isLast) {
-
-        const colSpan = isLast ? 100 : 1;
-
-        // Turn off left labels to get Drag & Drop Working.
-        // Fix with: https://quickbase.atlassian.net/browse/MC-171
-        const leftLabel = false;
-
-        const cells = [];
-        if (element.FormTextElement) {
-            cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
-        } else if (element.FormFieldElement) {
-            let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
-            // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
-            if (leftLabel) {
-                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
-            }
-            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, !leftLabel, colSpan, validationStatus));
-        } else if (element.ReferenceElement) {
-            if (leftLabel) {
-                cells.push(this.createFieldLabelCell(element.ReferenceElement, orderIndex, {}));
-            }
-            cells.push(this.createChildReportElementCell(element.ReferenceElement, orderIndex, colSpan));
-        }
-
-        return cells;
-    },
-
-    /**
      * get the form data field
      * @param fieldId
      * @returns the field from formdata fields with the field ID
@@ -98,11 +45,7 @@ let QBForm = React.createClass({
     getRelatedField(fieldId) {
         let fields = this.props.formData.fields || [];
 
-        return _.find(fields, field => {
-            if (field.id === fieldId) {
-                return true;
-            }
-        });
+        return _.find(fields, field => field.id === fieldId);
     },
 
     /**
@@ -113,6 +56,7 @@ let QBForm = React.createClass({
     getFieldRecord(field) {
         if (field) {
             const fieldId = field.id;
+
             if (this.props.pendEdits && this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges[fieldId]) {
                 let vals = {};
                 vals.id = fieldId;
@@ -142,119 +86,169 @@ let QBForm = React.createClass({
         }
     },
 
-    /**
-     * create a TD with a field label
-     * @param element
-     * @param sectionIndex
-     * @param validationStatus
-     * @returns {XML}
-     */
-    createFieldLabelCell(element, sectionIndex, validationStatus) {
-
-        let relatedField = this.getRelatedField(element.fieldId);
-
-        let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
-
-        return (
-            <td key={key}>
-                <FieldLabelElement
-                    element={element}
-                    relatedField={relatedField}
-                    indicateRequiredOnLabel={this.props.edit}
-                    isInvalid={validationStatus.isInvalid}
-                    label={FieldUtils.getFieldLabel(element, relatedField)}
-                />
-            </td>);
-    },
-
     getFieldValidationStatus(fieldId) {
         let validationResult = {
             isInvalid : false,
-            invalidMessage: ""
+            invalidMessage: ''
         };
+
         if (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length) {
-            let relatedError = _.find(this.props.pendEdits.editErrors.errors, (error) =>{
-                return error.id === fieldId;
-            });
+            let relatedError = _.find(this.props.pendEdits.editErrors.errors, error => error.id === fieldId);
+
             if (relatedError) {
                 validationResult.isInvalid = relatedError.isInvalid;
                 validationResult.invalidMessage = relatedError.invalidMessage;
             }
         }
+
         return validationResult;
     },
 
     /**
-     * create a TD with a fielv value
-     * @param element
-     * @param sectionIndex
-     * @param includeLabel
-     * @param colSpan
+     * create a tab pane
+     * @param tab tab data (sections)
+     * @returns {XML}
+     */
+    createTab(tab) {
+        return (
+            <TabPane key={tab.id} tab={tab.title || `${Locale.getMessage('form.tab')} ${tab.orderIndex}`}>
+                {tab.sections.map(section => this.createSection(section))}
+            </TabPane>
+        );
+    },
+
+    /**
+     * create a section
+     * @param section data
+     */
+    createSection(section) {
+        let sectionTitle = '';
+
+        // build the section header.
+        if (_.has(section, 'headerElement.FormHeaderElement.displayText')) {
+            sectionTitle = section.headerElement.FormHeaderElement.displayText;
+        }
+
+        /*
+         A section is marked as pseudo if its the user did not select a set of elements to be part of a section but for uniformity of structure core
+         adds a section around these elements. In this case the interface is similar to a section except for collapsible behavior.
+         A section is also treated non-collapsible if its the first section and has no elements or no header
+         */
+
+        const collapsible = !(section.pseudo || (section.orderIndex == 0 && (!sectionTitle.length || !section.elements.length)));
+
+        const wrapLabels = !_.has(this.props, "formData.formMeta.wrapLabel") || this.props.formData.formMeta.wrapLabel;
+
+        return (
+            <QBPanel className="formSection"
+                     title={sectionTitle}
+                     key={section.id}
+                     isOpen={true}
+                     panelNum={section.orderIndex}
+                     collapsible={collapsible}
+                     wrapLabels={wrapLabels}>
+                <div className="formTable">
+                    {section.columns.map(column => this.createColumn(column))}
+                </div>
+            </QBPanel>
+        );
+    },
+
+    createColumn(column) {
+        return (
+            <div key={column.id} className="sectionColumn">
+                <div className="sectionRows">
+                    {column.rows.map(row => this.createRow(row))}
+                </div>
+            </div>
+        )
+    },
+
+    createRow(row) {
+        return (
+            <div key={row.id} className="sectionRow">
+                {row.elements.map(element => this.createElement(element, row.elements.length))}
+            </div>
+        );
+    },
+
+    createElement(element, numberOfChildren) {
+        let formattedElement;
+        let width = {width: `${100 / numberOfChildren}%`};
+
+        if (element.FormTextElement) {
+            formattedElement = this.createTextElement(element.id, element.FormTextElement, width);
+        } else if (element.FormFieldElement) {
+            let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId, width);
+            formattedElement = this.createFieldElement(element.id, element.FormFieldElement, validationStatus, width);
+        } else if (element.ReferenceElement) {
+            formattedElement = this.createChildReportElement(element.id, element.ReferenceElement, width);
+        }
+
+        return formattedElement;
+    },
+
+    /**
+     * create a form field element
+     * @param id
+     * @param FormFieldElement
      * @param validationStatus
      * @returns {XML}
      */
-    createFieldElementCell(element, sectionIndex, includeLabel, colSpan, validationStatus) {
+    createFieldElement(id, FormFieldElement, validationStatus, style) {
 
-        let relatedField = this.getRelatedField(element.fieldId);
-
+        let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
-
-        let key = "field" + sectionIndex + "-" + element.orderIndex;
 
         //if the form prop calls for element to be required update fieldDef accordingly
         if (relatedField) {
-            relatedField.required = relatedField.required || element.required;
+            relatedField.required = relatedField.required || FormFieldElement.required;
         }
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         return (
-            <td key={key} colSpan={colSpan}>
+            <div key={id} className="formElementContainer" style={style}>
               <CurrentFieldElement
-                  tabIndex={0}
-                  sectionIndex={sectionIndex}
-                  orderIndex={element.orderIndex}
+                  orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
-                  element={element}
-                  key={`fe-${element.fieldId}`}
+                  element={FormFieldElement}
+                  key={`fe-${FormFieldElement.fieldId}`}
                   idKey={"fe-" + this.props.idKey}
                   relatedField={relatedField}
                   fieldRecord={fieldRecord}
-                  includeLabel={includeLabel}
+                  includeLabel={true}
                   indicateRequiredOnLabel={this.props.edit}
-                  edit={this.props.edit && !element.readOnly}
+                  edit={this.props.edit && !FormFieldElement.readOnly}
                   onChange={this.props.onFieldChange}
                   onBlur={this.props.onFieldChange}
                   isInvalid={validationStatus.isInvalid}
                   invalidMessage={validationStatus.invalidMessage}
                   appUsers={this.props.appUsers}
               />
-            </td>);
+            </div>
+        );
     },
 
     /**
-     * create TD for a text element
-     * @param element section element
-     * @param sectionIndex
-     * @param colSpan
+     * create a text element
      * @returns {XML}
+     * @param id
+     * @param FormTextElement
      */
-    createTextElementCell(element, sectionIndex, colSpan) {
-        let key = "field-" + sectionIndex + "-" + element.orderIndex;
-        return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
+    createTextElement(id, FormTextElement, style) {
+        return <div key={id} className="formElementContainer formElement text" style={style}>{FormTextElement.displayText}</div>;
     },
 
     /**
      * TODO: actually render the child report as an embedded report.
      * @param {Object} element section element
-     * @param {Number} sectionIndex this element's index within this section
-     * @param {Number} colSpan used to set the width of the Element
-     * @returns {Component}
+     * @returns {XML}
      */
-    createChildReportElementCell(element, sectionIndex, colSpan) {
-        let key = 'field-' + sectionIndex + '-' + element.orderIndex;
+    createChildReportElement(id, ReferenceElement, style) {
+
         // TODO: don't use globals
-        const relationship = window.relationships[element.relationshipId];
+        const relationship = window.relationships[ReferenceElement.relationshipId];
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
         const appId = _.get(relationship, 'appId');
@@ -265,164 +259,36 @@ let QBForm = React.createClass({
         const parentRecordId = _.get(fieldRecord, 'value');
 
         const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, fieldWithParentId, parentRecordId);
-        return <td key={key}><Link to={link}>Child Table</Link></td>;
-    },
-
-    /**
-     * create the <TR> elements
-     * @param section section data
-     * @param singleColumn force single column
-     * @returns {Array} of TR elements
-     */
-    createSectionTableRows(section, singleColumn, tabIndex) {
-        let rows = [];                  // the TR components
-        let currentRowElements = [];    // the TD elements for the current row
-
-        // label position is determined by the section settings unless we're in single column mode
-
-        let labelPosition = singleColumn ? QBForm.LABEL_ABOVE : QBForm.LABEL_LEFT;
-
-        if (!singleColumn && section.headerElement && section.headerElement.FormHeaderElement) {
-            labelPosition = section.headerElement.FormHeaderElement.labelPosition;
-        }
-
-        Object.keys(section.elements).forEach((key, index, arr) => {
-
-            // get the next section element
-            let sectionElement = section.elements[key];
-
-            let props = this.getElementProps(sectionElement);
-
-
-            let formFieldId;
-            if (_.has(sectionElement, 'FormFieldElement.fieldId')) {
-                formFieldId = sectionElement.FormFieldElement.fieldId;
-            } else {
-                formFieldId = _.uniqueId('fieldContainer_');
-            }
-
-            let idKey = buildIdKey(tabIndex, section.orderIndex, formFieldId);
-
-            if (singleColumn) {
-                // just one TR containing the current element (a single TD)
-                rows.push(
-                    <tr key={idKey} className="fieldRow">
-                        {this.getTableCells(sectionElement, section.orderIndex, labelPosition, true)}
-                    </tr>
-                );
-                return;
-            }
-
-            if (index === arr.length - 1) {
-                // the last element - add the final cell(s) to the row
-                if (!props.positionSameRow) {
-                    rows.push(<tr key={idKey} className="fieldRow">{currentRowElements}</tr>);
-                    currentRowElements = [];
-                }
-                currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
-                rows.push(<tr key={buildIdKey(tabIndex, section.orderIndex, formFieldId + 1)} className="fieldRow">{currentRowElements}</tr>);
-            } else {
-                // look at the next element to see if it's on the same row - if not the current element is the last one on the row
-                const nextSectionElement = section.elements[arr[index + 1]];
-                const isLast = !this.getElementProps(nextSectionElement).positionSameRow;
-                if (currentRowElements.length > 0 && !props.positionSameRow) {
-                    // current element is not on the same row so save the current row and start a new one
-                    rows.push(<tr key={idKey} className="fieldRow">{currentRowElements}</tr>);
-                    currentRowElements = [];
-                }
-                // append the table cell(s) for the current element to the current row
-                currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, isLast));
-            }
-        });
-        return rows;
-    },
-
-    /**
-     * create a section
-     * @param section data
-     * @param singleColumn force single column
-     *
-     */
-    createSection(section, singleColumn, isFirstSection, tabIndex) {
-        let sectionTitle = "";
-
-        // build the section header.
-        if (section.headerElement && section.headerElement.FormHeaderElement && section.headerElement.FormHeaderElement.displayText) {
-            sectionTitle = section.headerElement.FormHeaderElement.displayText;
-        }
-
-        /*
-        A section is marked as pseudo if its the user did not select a set of elements to be part of a section but for uniformity of structure core
-        adds a section around these elements. In this case the interface is similar to a section except for collapsible behavior.
-        A section is also treated non-collapsible if its the first section and has no elements or no header
-         */
-
-        const collapsible = !(section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length)));
-
-        const wrapLabels = !_.has(this.props, "formData.formMeta.wrapLabel") || this.props.formData.formMeta.wrapLabel;
-
-        return (
-            <QBPanel className="formSection"
-                     title={sectionTitle}
-                     key={"section" + section.orderIndex}
-                     isOpen={true}
-                     panelNum={section.orderIndex}
-                     collapsible={collapsible}
-                     wrapLabels={wrapLabels}>
-                <table className="formTable">
-                    <tbody>
-                        {this.createSectionTableRows(section, singleColumn, tabIndex)}
-                    </tbody>
-                </table>
-            </QBPanel>
-        );
-    },
-
-    /**
-     * create a tab pane
-     * @param tab tab data (sections)
-     * @param singleColumn force single column (small screens)
-     *
-     */
-    createTab(tab, singleColumn) {
-        let sections = [];
-        if (tab.sections) {
-            Object.keys(tab.sections).forEach((key, index) => {
-                sections.push(this.createSection(tab.sections[key], singleColumn, index === 0, tab.orderIndex));
-            });
-        }
-
-        return (
-            <TabPane key={tab.orderIndex} tab={tab.title || Locale.getMessage("form.tab") + ' ' + tab.orderIndex}>
-                {sections}
-            </TabPane>
-        );
+        return <div key={id} className="formElementContainer formElement referenceElement" style={style}>
+            <Link to={link}>Child Table</Link>
+        </div>;
     },
 
     /**
      * Create a form footer with built-in fields
      */
     createFormFooter() {
-
         let fields = this.getBuiltInFieldsForFooter();
-        var msg = [];
-        for (var i = 0; i < fields.length; i++) {
-            if (fields[i].type === Constants.USER) {
-                let user = {
-                    screenName: fields[i].screenName,
-                    email: fields[i].email
-                };
-                let display = fields[i].screenName + ". ";
-                msg.push(<span key={i} className="fieldNormalText">{fields[i].name}</span>);
-                msg.push(<span key={i + "a"} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>);
-            } else {
-                msg.push(<span key={i} className="fieldNormalText">{fields[i].name + " " + fields[i].value + ". "}</span>);
-            }
 
-        }
+        let message = [];
+        fields.forEach((field, index) => {
+            if (field.type === Constants.USER) {
+                let user = {
+                    screenName: field.screenName,
+                    email: field.email
+                };
+                let display = field.screenName + ". ";
+
+                message.push(<span key={index} className="fieldNormalText">{field.name}</span>);
+                message.push(<span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>);
+            } else {
+                message.push(<span key={index} className="fieldNormalText">{`${field.name} ${field.value}. `}</span>);
+            }
+        });
+
         return (
             <div className="formFooter">
-                {msg}
+                {message}
             </div>
         );
     },
@@ -479,28 +345,21 @@ let QBForm = React.createClass({
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
-        const tabChildren = [];
-        const singleColumn = Breakpoints.isSmallBreakpoint();
         let formFooter = [];
         if (this.props.formData && this.props.formData.formMeta.includeBuiltIns) {
-            let frm = this.props.formData;
-
             formFooter = this.createFormFooter();
         }
 
-        // if (frm && <frm className="formMeta includeBuiltIns"></frm>) {
-        //     formFooter = this.createFormFooter();
-        // }
-        if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
-            let tabs = this.props.formData.formMeta.tabs;
-            Object.keys(tabs).forEach(key => {
-                tabChildren.push(this.createTab(tabs[key], singleColumn));
-            });
+        let tabs = [];
+        if (_.has(this.props, 'formData.formMeta.tabs')) {
+            tabs = this.props.formData.formMeta.tabs.map(tab => this.createTab(tab));
         }
-        const formContent = tabChildren.length < 2 ? tabChildren : <Tabs activeKey={this.props.activeTab}>{tabChildren}</Tabs>;
+
+        const formContent = tabs.length < 2 ? tabs : <Tabs activeKey={this.props.activeTab}>{tabs}</Tabs>;
+
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? "editForm" : "viewForm"}>
+                <form className={this.props.edit ? 'editForm' : 'viewForm'}>
                     {formContent}
                 </form>
                 <div>{formFooter}</div>
