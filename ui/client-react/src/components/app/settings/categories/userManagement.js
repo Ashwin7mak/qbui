@@ -1,36 +1,23 @@
 /**
- * Created by rbeyer on 2/2/17.
+ * Created by rbeyer on 2/16/17.
  */
 import React, {PropTypes} from 'react';
 import * as search from 'searchtabular';
+import * as Table from 'reactabular-table';
 import { compose } from 'redux';
-import Logger from '../../../../utils/logger';
-import QBGrid from '../../../dataTable/qbGrid/qbGrid';
 import './userManagement.scss';
 
+class UserManagement extends React.Component {
 
-let logger = new Logger();
-
-const UserManagement = React.createClass({
-
-    propTypes: {
-        appId: PropTypes.string.isRequired,
-        appUsers: PropTypes.array.isRequired
-    },
-
-    getInitialState() {
-        return {
+    constructor(...args) {
+        super(...args);
+        this.state = {
             searchColumn: 'all',
-            query: {},
-            duder: this.props.appUsers
+            query: {}
         };
-    },
-
-    createUserRows() {
-        this.props.appUsers.forEach(function(user) {
-            user.id = user.userId;
-        });
-    },
+        this.createUserColumns = this.createUserColumns.bind(this);
+        this.createUserRows = this.createUserRows.bind(this);
+    }
 
     createUserColumns(cellFormatter) {
         let columns = [
@@ -71,13 +58,19 @@ const UserManagement = React.createClass({
             }
         ];
         return columns;
-    },
+    }
+
+    createUserRows() {
+        this.props.appUsers.forEach(function(user) {
+            user.id = user.userId;
+        });
+    }
 
     render() {
         this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
-        const resolvedRows = this.state.duder;
+        const resolvedRows = this.props.appUsers;
         const query = this.state.query;
         const searchedRows = compose(
             search.highlighter({
@@ -103,16 +96,19 @@ const UserManagement = React.createClass({
                         onChange={query => this.setState({ query })}
                     />
                 </div>
-                <QBGrid
-                    columns={columns}
-                    rows={searchedRows}
-                    numberOfColumns={columns.length}
-                    showRowActionsColumn={false}
-                />
+                <Table.Provider columns={columns} className="userGrid">
+                    <Table.Header headerRows={[columns]} />
+                    <Table.Body rows={searchedRows} rowKey="userId" className="userTBody"/>
+                </Table.Provider>
             </div>
         );
     }
 
-});
+}
+
+UserManagement.propTypes = {
+    appId: PropTypes.string.isRequired,
+    appUsers: PropTypes.array.isRequired
+};
 
 export default UserManagement;
