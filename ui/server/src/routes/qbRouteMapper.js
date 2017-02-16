@@ -9,7 +9,7 @@ var featureSwitches = [
         exceptions: [
             {
                 entityType: 'realm',
-                entityValue: 'realm-9aa27cd7-7f2a-41ee-b52d-fcb6758344a0-1478550241021',
+                entityValue: '12345',
                 on: false,
             }
         ]
@@ -20,6 +20,8 @@ var featureSwitches = [
         team: 'Hydra',
         description: 'Hide table feature',
         defaultOn: false,
+        dateToExpire: '2018-01-18',
+        expiredBehavior: 'flip',
         exceptions: [
             {
                 entityType: 'app',

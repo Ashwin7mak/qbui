@@ -40,7 +40,7 @@ const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state a
 const store = createAppStore();
 
 // init the feature switches
-store.dispatch(FeatureSwitchActions.getSwitches());
+
 store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;

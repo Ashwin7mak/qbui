@@ -15,6 +15,21 @@ BodyWrapper.shouldComponentUpdate = true;
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
 
+const dateEditor = ({ props } = {}) => {
+    const DateEditor = ({ value, onValue }) => (
+        <div {...props}>
+            <input type="date" value={value} onChange={(e)=>{onValue(e.target.value);e.preventDefault();e.stopPropagation()}}/>
+        </div>
+    );
+    DateEditor.propTypes = {
+        value: React.PropTypes.any,
+        onChange: React.PropTypes.func,
+        onValue: React.PropTypes.func
+    };
+
+    return DateEditor;
+};
+
 class FeatureSwitchesRoute extends React.Component {
 
     constructor(props) {
@@ -142,7 +157,29 @@ class FeatureSwitchesRoute extends React.Component {
                     ]
                 }
             },
+            {
+                property: 'dateToExpire',
+                header: {
+                    label: 'Expiration Date'
+                },
+                cell: {
+                    transforms: [editable(dateEditor())]
+                }
+            },
+            {
+                property: 'expiredBehavior',
+                header: {
+                    label: 'When expired'
+                },
+                cell: {
+                    transforms: [editable(edit.dropdown({options: [{name:'Turn feature on',value:'on'},{name:'Turn feature off',value:'off'},{name:'Flip on/off',value:'flip'}]}))]
+                }
+            },
         ];
+    }
+
+    componentDidMount() {
+        this.props.getSwitches();
     }
 
     render() {

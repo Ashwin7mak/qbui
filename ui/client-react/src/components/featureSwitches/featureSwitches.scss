@@ -41,6 +41,12 @@
 
     }
 
+    &.exceptions {
+        td:first-child {
+            padding-left: 10px;
+        }
+    }
+
     &.switches {
         th:first-child,
         td:first-child {

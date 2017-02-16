@@ -9,12 +9,11 @@ import LogLevel from '../utils/logLevels';
 let logger = new Logger();
 
 
-const loadSwitchesSuccess = (switches) => {
-    return {
-        type: types.SET_FEATURE_SWITCHES,
-        switches
-    };
-};
+const loadSwitchesSuccess = (switches) => ({
+    type: types.SET_FEATURE_SWITCHES,
+    switches
+});
+
 
 export const getSwitches = () => {
     return (dispatch) => {
@@ -66,15 +65,14 @@ export const confirmEdit = (id, property, value) => ({
     id,
     property,
     value
-})
+});
 
 
-const saveSwitchesSuccess = (switches) => {
-    return {
-        type: types.SAVED_FEATURE_SWITCHES,
-        switches
-    };
-};
+const saveSwitchesSuccess = (switches) => ({
+    type: types.SAVED_FEATURE_SWITCHES,
+    switches
+});
+
 
 export const saveSwitches = (switches) => {
     return (dispatch) => {
@@ -105,12 +103,11 @@ export const saveSwitches = (switches) => {
     };
 };
 
-const loadStatesSuccess = (states) => {
-    return {
-        type: types.SET_FEATURE_SWITCH_STATES,
-        states
-    };
-};
+const loadStatesSuccess = (states) => ({
+    type: types.SET_FEATURE_SWITCH_STATES,
+    states
+});
+
 export const getStates = () => {
     return (dispatch) => {
 
@@ -139,26 +136,34 @@ export const getStates = () => {
     };
 };
 
-export const setSwitchDefaultState = (id, defaultOn) => {
-    return {
-        type: types.SET_SWITCH_DEFAULT_STATE,
-        id,
-        defaultOn
-    };
-};
-
-
-export const editExceptionRow = (id, row, column) => ({
-    type: types.EDIT_EXCEPTION_ROW,
+export const setSwitchDefaultState = (id, defaultOn) => ({
+    type: types.SET_SWITCH_DEFAULT_STATE,
     id,
+    defaultOn
+});
+
+// exceptions for selected feature switch
+
+export const editExceptions = (id) => ({
+    type: types.EDIT_EXCEPTIONS,
+    id
+});
+
+export const setExceptionState = (row, on) => ({
+    type: types.SET_EXCEPTION_STATE,
+    row,
+    on
+});
+
+export const editExceptionRow = (row, column) => ({
+    type: types.EDIT_EXCEPTION_ROW,
     row,
     column
 });
 
 
-export const confirmExceptionEdit = (id, row, property, value) => ({
-    type: types.CONFIRM_EDIT,
-    id,
+export const confirmExceptionEdit = (row, property, value) => ({
+    type: types.CONFIRM_EXCEPTION_EDIT,
     row,
     property,
     value

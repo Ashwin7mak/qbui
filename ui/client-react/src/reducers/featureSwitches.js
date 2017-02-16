@@ -6,6 +6,7 @@ const featureSwitches = (
         //  default states
         edited: false,
         switches: [],
+        exceptions: [],
         states: [],
     },
     action) => {
@@ -79,24 +80,40 @@ const featureSwitches = (
             edited: false
         };
 
-    case types.EDIT_EXCEPTION_ROW: {
-        const switches = [...state.switches];
-        const switchToEdit = switches.find(item => item.id === action.id);
-        switchToEdit.exceptions[action.row].editing = action.column;
+    // exceptions
+    case types.EDIT_EXCEPTIONS: {
+        const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
-            switches
+            exceptions: _.cloneDeep(currentSwitch.exceptions)
+        }
+    }
+
+    case types.SET_EXCEPTION_STATE: {
+        const exceptions = _.cloneDeep(state.exceptions);
+        exceptions[action.row].on = action.on;
+        return  {
+            ...state,
+            exceptions,
+            edited: true
+        };
+    }
+    case types.EDIT_EXCEPTION_ROW: {
+        const exceptions = _.cloneDeep(state.exceptions);
+        exceptions[action.row].editing = action.column;
+        return {
+            ...state,
+            exceptions
         };
     }
     case types.CONFIRM_EXCEPTION_EDIT: {
-        const switches = [...state.switches];
-        const switchToConfirmEdit = switches.find(item => item.id === action.id);
-        delete switchToConfirmEdit.exceptions[action.row].editing;
-        switchToConfirmEdit.exceptions[action.row][action.property] = action.value;
+        const exceptions = _.cloneDeep(state.exceptions);
+        delete exceptions[action.row].editing;
+        exceptions[action.row][action.property] = action.value;
 
         return {
             ...state,
-            switches,
+            exceptions,
             edited: true
         };
     }

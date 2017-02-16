@@ -70,6 +70,11 @@ class FeatureSwitchRoute extends React.Component {
         this.setState({selectedRows: []});
     }
 
+    getFeatureSwitch() {
+
+        return this.props.switches.find(item => item.id === parseInt(this.props.params.id));
+    }
+
     getFeatureSwitchID() {
 
         return parseInt(this.props.params.id);
@@ -80,10 +85,10 @@ class FeatureSwitchRoute extends React.Component {
         const editable = edit.edit({
             isEditing: ({columnIndex, rowData}) => columnIndex === rowData.editing,
             onActivate: ({columnIndex, rowIndex}) => {
-                this.props.editExceptionRow(this.getFeatureSwitchID(), rowIndex, columnIndex);
+                this.props.editExceptionRow(rowIndex, columnIndex);
             },
             onValue: ({value, rowIndex, property}) => {
-                this.props.confirmExceptionEdit(this.getFeatureSwitchID(), rowIndex, property, value);
+                this.props.confirmExceptionEdit(rowIndex, property, value);
             }
         });
 
@@ -94,7 +99,7 @@ class FeatureSwitchRoute extends React.Component {
                     label: 'Type'
                 },
                 cell: {
-                    transforms: [editable(edit.dropdown({options: [['Realm','realm'],['App','app']]}))]
+                    transforms: [editable(edit.dropdown({options: [{name:'Realm',value:'realm'},{name:'App',value:'app'}]}))]
                 }
             },
             {
@@ -113,10 +118,10 @@ class FeatureSwitchRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (value, {rowData}) => {
+                        (value, {rowIndex}) => {
                             return <ToggleButton  value={value}
                                                   onToggle={(value) => {
-                                                      this.props.setSwitchDefaultState(rowData.id, !value)
+                                                      this.props.setExceptionState(rowIndex, !value)
                                                   }}/>
                         }
 
@@ -130,7 +135,7 @@ class FeatureSwitchRoute extends React.Component {
                 cell: {
                     formatters: [
                         (value, {rowData}) => {
-                            return <span>Different...</span>
+                            return <span>{rowData.on !== this.getFeatureSwitch().defaultOn ? "Yes" : "No"} </span>
                         }
 
                     ]
@@ -139,13 +144,31 @@ class FeatureSwitchRoute extends React.Component {
         ]
     }
 
+    getTableRowsWithIds(rows) {
+        return rows.map((row, i) => {return {...row, id: i}});
+    }
+
+    componentDidMount() {
+        if (this.props.switches.length === 0) {
+            this.props.getSwitches().then(() => {console.log('okay');this.props.editExceptions(this.getFeatureSwitchID());});
+        }
+        else {
+            this.props.editExceptions(this.getFeatureSwitchID());
+        }
+
+    }
+
     render() {
 
         let featureSwitch = this.props.switches.find((item) => item.id === this.getFeatureSwitchID());
 
         return (
             <div className="featureSwitches">
-                <h1>Feature Switch Exceptions</h1>
+                <div><strong>Team:</strong> {featureSwitch.team}</div>
+                <div><strong>Description:</strong> {featureSwitch.description}</div>
+                <div><strong>Default State:</strong> {featureSwitch.defaultOn ? "On" : "Off"}</div>
+                <p/>
+                <h3>Feature Switch Exceptions:</h3>
                 <Table.Provider className="featureSwitchTable exceptions"
                                 columns={this.state.columns}
                                 components={{
@@ -157,7 +180,7 @@ class FeatureSwitchRoute extends React.Component {
 
                     <Table.Header />
 
-                    <Table.Body rows={featureSwitch.exceptions} rowKey="id" />
+                    <Table.Body rows={this.getTableRowsWithIds(this.props.exceptions)} rowKey="id" />
                 </Table.Provider>
             </div>
         );
@@ -169,7 +192,8 @@ const mapStateToProps = (state) => {
 
     return {
         edited: state.featureSwitches.edited,
-        switches: state.featureSwitches.switches
+        switches: state.featureSwitches.switches,
+        exceptions: state.featureSwitches.exceptions
     };
 };
 
