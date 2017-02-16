@@ -21,7 +21,8 @@ const UserManagement = React.createClass({
     getInitialState() {
         return {
             searchColumn: 'all',
-            query: {}
+            query: {},
+            duder: this.props.appUsers
         };
     },
 
@@ -76,7 +77,7 @@ const UserManagement = React.createClass({
         this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
-        const resolvedRows = this.props.appUsers;
+        const resolvedRows = this.state.duder;
         const query = this.state.query;
         const searchedRows = compose(
             search.highlighter({
@@ -104,7 +105,7 @@ const UserManagement = React.createClass({
                 </div>
                 <QBGrid
                     columns={columns}
-                    rows={resolvedRows}
+                    rows={searchedRows}
                     numberOfColumns={columns.length}
                     showRowActionsColumn={false}
                 />
