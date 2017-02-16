@@ -1,5 +1,14 @@
 @import '../../assets/css/qbVariables';
 
+// semantic names
+/*
+$leftnav-brandarea-stroke-size: $stroke-width-thin;
+$lefftnav-table-icon-size:      $size-iconfont-medium;
+$leftnav-tablenames-size:       $font-size-xs;
+$leftnav-table-name-size:       $font-size-l;
+ */
+
+
 .leftNav.expanded {
     overflow: visible;
 }
@@ -114,7 +123,7 @@ div.leftNavTooltip {
         width: 40px;
         transition: width 100ms ease;
 
-        .branding {
+        .appsToggleArea {
             .logo, .appsToggle .navLabel, .appsToggleIcon {
                 display: none;
             }
@@ -168,21 +177,24 @@ div.leftNavTooltip {
 }
 
 .leftNav {
-    background-color: $left-nav-background-color;
+    background-color: $leftnav-background-color;
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
     color: $left-nav-color;
     position: relative;
+    border-right: 1px solid $leftnav-background-stroke-color;
 
     .qbIcon {
         font-size: 22px;
     }
 
-    .branding {
+    .appsToggleArea {
         position: relative;
         flex: 0 0 auto;
-        border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
+        min-height: 40px;
+        background-color: $leftnav-app-background-color;
+        //border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
 
         .toggleNavButton {
             display: none;
@@ -194,15 +206,6 @@ div.leftNavTooltip {
             .qbIcon {
                 font-size: 16px;
             }
-        }
-
-        .logo {
-            line-height: 54px;
-            padding-left: 10px;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         button.appsToggle {
@@ -245,6 +248,21 @@ div.leftNavTooltip {
         .globalActionLink, .dropup {
             width: 100%;
             line-height: 25px;
+        }
+    }
+
+    .branding {
+        background-color:   $leftnav-brandarea-background-color;
+        border-top: 1px solid $leftnav-brandarea-stroke-color;
+        padding: 10px;
+        text-align: center;
+
+        .logo {
+            color: $color-blue-600;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
@@ -483,7 +501,7 @@ div.leftNavTooltip {
         transition: width 100ms ease;
         z-index: 9999;
 
-        .branding {
+        .appsToggleArea {
             .toggleNavButton {
                 display: block;
             }
@@ -551,7 +569,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
+.leftNav.appsListOpen .appsToggleArea .qbIcon.iconTableUISturdy-caret-filled-up {
     transform: rotate(0deg);
 }
 

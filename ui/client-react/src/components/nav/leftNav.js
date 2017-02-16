@@ -36,21 +36,30 @@ let LeftNav = React.createClass({
     },
 
     /**
-     * create a branding section (logo with an apps toggle if an app is selected)
+     * create apps toggle section (if an app is selected)
+     */
+    createAppsToggleArea() {
+        let app = _.find(this.props.apps, {id: this.props.selectedAppId});
+        return (<div className="appsToggleArea">
+            {this.props.selectedAppId &&
+            <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
+                <QBicon icon={"favicon"}/>
+                <span className={"navLabel"}> {app ? app.name : ''}</span>
+                <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
+            </Button>
+            }
+        </div>);
+    },
+
+    /**
+     * create a branding section
      */
     createBranding() {
-        let app = _.find(this.props.apps, {id: this.props.selectedAppId});
         return (<div className="branding">
-                    <h2 className={"logo"}>QuickBase</h2>
-                    {this.props.selectedAppId &&
-                        <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
-                            <QBicon icon={"favicon"}/>
-                            <span className={"navLabel"}> {app ? app.name : ''}</span>
-                            <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
-                        </Button>
-                    }
-                </div>);
+            <h2 className={"logo"}>QuickBase</h2>
+        </div>);
     },
+
 
     onSelectApp() {
         this.props.onToggleAppsList(false);
@@ -80,13 +89,15 @@ let LeftNav = React.createClass({
 
         return (
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
-                {this.createBranding()}
+                {this.createAppsToggleArea()}
 
                 <Loader loadedClassName="transitionGroup" loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
                     {this.renderNavContent()}
                 </Loader>
 
                 {this.props.globalActions}
+
+                {this.createBranding()}
             </Swipeable>
         );
     }
