@@ -39,8 +39,10 @@
                     appId        : createApp.id,
                     masterAppId  : createApp.id,
                     masterTableId: masterTableId,
+                    masterFieldId: masterTablePkFieldId,
                     detailAppId  : createApp.id,
                     detailTableId: detailTableId,
+                    detailFieldId: detailTableFkFieldId,
                     referentialIntegrity: false,
                     cascadeDelete: false,
                     description  : 'Referential integrity relationship between Master / Child Tables'

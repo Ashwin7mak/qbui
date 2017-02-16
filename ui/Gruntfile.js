@@ -176,7 +176,8 @@ module.exports = function(grunt) {
             },
             express   : {
                 files  : [
-                    '<%= express.root %>/**/*.{js,json}'
+                    '<%= express.root %>/**/*.{js,json,jsx}',
+                    '<%= quickbase.commonDir %>/src/**/*'
                 ],
                 tasks  : ['express:local', 'wait'],
                 options: {

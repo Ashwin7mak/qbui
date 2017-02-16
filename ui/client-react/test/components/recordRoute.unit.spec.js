@@ -63,9 +63,9 @@ describe('RecordRoute', () => {
             let routeParams = {appId: 1, tblId: 2, recordId: 4};
 
             component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordRoute params={routeParams} flux={flux}/>
-            </Provider>);
+                <Provider store={store}>
+                    <ConnectedRecordRoute params={routeParams} flux={flux}/>
+                </Provider>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -95,9 +95,9 @@ describe('RecordRoute', () => {
             let routeParams = {appId: 1, tblId: 2, recordId: 3, rptId: 4};
 
             component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordRoute params={routeParams} flux={flux}/>
-            </Provider>);
+                <Provider store={store}>
+                    <ConnectedRecordRoute params={routeParams} flux={flux}/>
+                </Provider>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -148,9 +148,9 @@ describe('RecordRoute', () => {
             let expectedRouter = [];
 
             component = TestUtils.renderIntoDocument(
-            <Provider store={store}>
-                <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
-            </Provider>);
+                <Provider store={store}>
+                    <ConnectedRecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>
+                </Provider>);
 
             expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 

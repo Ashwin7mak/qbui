@@ -254,7 +254,8 @@ describe('Form Actions functions', () => {
                     expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
                     expect(store.getActions()).toEqual(expectedActions);
                     done();
-                }).catch(error => {
+                },
+                () => {
                     expect(false).toBe(true);
                     done();
                 });
