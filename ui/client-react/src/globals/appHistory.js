@@ -47,8 +47,9 @@ class AppHistory {
      * move to Redux, this may not be necessary.
      * @param flux
      */
-    setup(flux) {
+    setup(flux, redux) {
         self.flux = flux;
+        self.redux = redux;
 
         self._setupHistoryListeners();
 
@@ -210,4 +211,4 @@ class AppHistory {
     }
 }
 
-export default new AppHistory();
+export default (new AppHistory());

@@ -18,7 +18,7 @@ import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {updateReportRecord} from '../../actions/reportActions';
-import {editRecord} from '../../actions/recordActions';
+import {editRecord, editRecordCancel} from '../../actions/recordActions';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
@@ -337,10 +337,11 @@ export const RecordTrowser = React.createClass({
     },
 
     clearEditsAndClose() {
-        const flux = this.getFlux();
+        //const flux = this.getFlux();
 
         HideAppModal();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
+        //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
+        this.props.editRecordCancel(this.props.appId, this.props.tblId, recId);
         WindowLocationUtils.pushWithoutQuery();
         this.props.onHideTrowser();
     },
@@ -425,6 +426,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecord: (recId) => {
             dispatch(editRecord(recId));
+        },
+        editRecordCancel: (appId, tblId, recId) => {
+            dispatch(editRecordCancel(appId, tblId, recId));
         },
         updateReportRecord: (obj, context) => {
             dispatch(updateReportRecord(obj, context));

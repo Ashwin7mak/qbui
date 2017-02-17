@@ -22,7 +22,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
-import {openRecord} from '../../../actions/recordActions';
+import {openRecord, editRecordStart, editRecordCancel, editRecordChange} from '../../../actions/recordActions';
 import {updateReportRecord} from '../../../actions/reportActions';
 import {APP_ROUTE} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -202,7 +202,7 @@ export const ReportContent = React.createClass({
      */
     handleEditRecordStart(recId, fieldToStartEditing = null) {
         if (_.has(this.props, 'reportData.data')) {
-            const flux = this.getFlux();
+            //const flux = this.getFlux();
             let origRec = null;
             let changes = {};
 
@@ -239,7 +239,8 @@ export const ReportContent = React.createClass({
                 }
             }
 
-            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
+            //flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
+            this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
         }
     },
 
@@ -249,8 +250,9 @@ export const ReportContent = React.createClass({
      * @param recId
      */
     handleEditRecordCancel(recId) {
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
+        //const flux = this.getFlux();
+        //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
+        this.props.editRecordCancel(this.props.appId, this.props.tblId, recId);
     },
 
     /**
@@ -435,7 +437,7 @@ export const ReportContent = React.createClass({
             promise.then((obj) => {
                 //  Temporary solution to display a redux event to update the report grid with in-line editor change
                 //  This will get refactored once the record store is moved to redux
-                this.props.dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+                this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
             });
         }
     },
@@ -847,6 +849,13 @@ export const ReportContent = React.createClass({
         this.capturePerfTiming(prevProps);
     },
     render() {
+        //  Get the pending props from the redux store..
+        //  TODO: just getting to work....improve this...
+        let pendEdits = {};
+        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
+            pendEdits = this.props.record[0].pendEdits;
+        }
+
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
 
@@ -863,7 +872,7 @@ export const ReportContent = React.createClass({
 
         let addPadding;
         const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
-        const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        const isInlineEditOpen = pendEdits.isInlineEditOpen;
         if (isInlineEditOpen) {
             addPadding = "reportContent inlineEditing";
         } else if (isRowPopUpMenuOpen) {
@@ -871,8 +880,10 @@ export const ReportContent = React.createClass({
         } else {
             addPadding = "reportContent";
         }
-        let showDTSErrorModal = this.props.pendEdits ? this.props.pendEdits.showDTSErrorModal : false;
-        const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
+
+        //  TODO: remove
+        let showDTSErrorModal = pendEdits.showDTSErrorModal || false;
+        const editErrors = pendEdits.editErrors || null;
 
         let reportContent;
 
@@ -881,7 +892,7 @@ export const ReportContent = React.createClass({
         } else {
             reportContent = (
                     <div className={addPadding}>
-                        <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
+                        <DTSErrorModal show={showDTSErrorModal} tid={pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                             <ReportGrid
                                 appId={this.props.reportData.appId}
@@ -896,7 +907,7 @@ export const ReportContent = React.createClass({
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onCellClick={this.openRow}
-                                pendEdits={this.props.pendEdits}
+                                pendEdits={pendEdits}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordCancel={this.handleEditRecordCancel}
@@ -944,7 +955,7 @@ export const ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
                                 isInlineEditOpen={isInlineEditOpen}
-                                pendEdits={this.props.pendEdits}
+                                pendEdits={pendEdits}
                                 editErrors={editErrors}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
@@ -1013,5 +1024,36 @@ ReportContent.propTypes = {
     onGridReady: React.PropTypes.func
 };
 
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        record: state.record
+    };
+};
+
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateReportRecord: (obj, context) => {
+            dispatch(updateReportRecord(obj, context));
+        },
+        editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
+            dispatch(editRecordStart(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing));
+        },
+        editRecordCancel: (appId, tblId, recId) => {
+            dispatch(editRecordCancel(appId, tblId, recId));
+        }
+    };
+};
+
 export const ReportContentWithRouter = withRouter(ReportContent);
-export default connect()(ReportContentWithRouter);
+export const ConnectedReportContentRoute = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportContent);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportContentWithRouter);

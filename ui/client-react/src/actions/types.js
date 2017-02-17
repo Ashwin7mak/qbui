@@ -38,8 +38,15 @@ export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 //  **** Record actions ****
 export const OPEN_RECORD = 'OPEN_RECORD';
 export const EDIT_RECORD = 'EDIT_RECORD';
-
+export const SAVE_RECORD = 'SAVE_RECORD';
+export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
 export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
+
+export const EDIT_RECORD_START = 'EDIT_RECORD_START';
+export const EDIT_RECORD_CHANGE = 'EDIT_RECORD_CHANGE';
+export const EDIT_RECORD_CANCEL = 'EDIT_RECORD_CANCEL';
+export const EDIT_RECORD_COMMIT = 'EDIT_RECORD_COMMIT';
+export const EDIT_RECORD_VALIDATE_FIELD = 'EDIT_RECORD_VALIDATE_FIELD';
 
 //  **** Report actions ****
 export const LOAD_REPORT = 'LOAD_REPORT';

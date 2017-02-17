@@ -22,7 +22,7 @@ const record = (state = [], action) => {
         // reducer - no mutations against current state!
         const stateList = _.cloneDeep(state);
 
-        //  does the state already hold an entry for the report context/id
+        //  does the state already hold an entry for the record context/id
         const index = _.findIndex(stateList, rec => rec.id === obj.id);
 
         //  append or replace obj into the cloned copy
@@ -38,6 +38,7 @@ const record = (state = [], action) => {
     switch (action.type) {
     case types.OPEN_RECORD: {
         const obj = {
+            id: action.id,
             recId: action.content.recId,
             nextRecordId: action.content.nextRecordId,
             previousRecordId: action.content.previousRecordId
@@ -46,9 +47,41 @@ const record = (state = [], action) => {
     }
     case types.EDIT_RECORD: {
         const obj = {
+            id: action.id,
             recId: action.content.recId,
             nextRecordId: action.content.nextRecordId,
             previousRecordId: action.content.previousRecordId
+        };
+        return newState(obj);
+    }
+    case types.SAVE_RECORD: {
+        const obj = {
+            id: action.id,
+            appId: action.content.appId,
+            tblId: action.content.tblId,
+            recId: action.content.recId,
+            changes: action.content.changes
+        };
+        return newState(obj);
+    }
+    case types.EDIT_RECORD_START: {
+        const obj = {
+            id: action.id,
+            pendEdits: action.content
+        };
+        return newState(obj);
+    }
+    case types.EDIT_RECORD_CHANGE: {
+        const obj = {
+            id: action.id,
+            pendEdits: action.content
+        };
+        return newState(obj);
+    }
+    case types.EDIT_RECORD_CANCEL: {
+        const obj = {
+            id: action.id,
+            pendEdits: action.content
         };
         return newState(obj);
     }

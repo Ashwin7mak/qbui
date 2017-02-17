@@ -12,8 +12,10 @@ import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
-
+import reportActions from './reportActions';
+import {CONTEXT} from '../actions/context';
 import * as types from '../actions/types';
+import RecordModel from '../models/recordModel';
 
 let logger = new Logger();
 
@@ -477,27 +479,224 @@ let recordActions = {
 
 //  NEW REDUX ACTIONS BELOW>>>
 
-export const openRecord = (recId, nextRecordId, previousRecordId) => {
+/**
+ * Construct a record store payload
+ *
+ * @param type - event type
+ * @param content - optional content related to event type
+ * @returns {{id: *, type: *, content: *}}
+ */
+function event(id, type, content) {
     return {
-        type: types.OPEN_RECORD,
-        content: {
-            recId,
-            nextRecordId,
-            previousRecordId
-        }
+        id: id,
+        type: type,
+        content: content || null
     };
+}
+
+export const openRecord = (recId, nextRecordId, previousRecordId) => {
+    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
 
 export const editRecord = (recId, nextRecordId, previousRecordId) => {
-    return {
-        type: types.EDIT_RECORD,
-        content: {
-            recId,
-            nextRecordId,
-            previousRecordId
-        }
-    };
+    return event(recId, types.EDIT_RECORD, {recId, nextRecordId, previousRecordId});
 };
+
+//recordPendingEditsStart
+/* the start of editing a record */
+export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
+    let model = new RecordModel();
+    let obj = {
+        origRec,
+        changes,
+        isInlineEdit,
+        fieldToStartEditing
+    };
+    model.setEditRecordStart(appId, tblId, recId, obj);
+    return event(recId, types.EDIT_RECORD_START, model.get());
+};
+
+/* the change of a field while editing a record */
+export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
+    let model = new RecordModel();
+    model.setEditRecordChange(appId, tblId, recId, origRec, changes);
+    return event(recId, types.EDIT_RECORD_CHANGE, model.get());
+};
+
+/* cancel editing a record */
+export const editRecordCancel = (appId, tblId, recId) => {
+    let model = new RecordModel();
+    model.setEditRecordCancel();
+    return event(recId, types.EDIT_RECORD_CANCEL, model.get());
+};
+
+//recordPendingEditsCommit
+/* committing changes from editing a record */
+export const editRecordCommit = (appId, tblId, recId) => {
+    return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
+};
+
+//recordPendingValidateField
+/* validate a field when editing a record */
+export const editRecordValidateField = (fieldDef, fieldLabel, value, checkRequired) => {
+    let recId = null; // TODO: need recid as an argument
+    return event(recId, types.EDIT_RECORD_VALIDATE_FIELD, {fieldDef, fieldLabel, value, checkRequired});
+};
+
+
+//export const saveRecord = (appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) => {
+//    function createColChange(value, display, field, payload) {
+//        let colChange = {};
+//        colChange.fieldName = field.name;
+//        //the + before field.id is needed turn the field id from string into a number
+//        colChange.id = +field.id;
+//        colChange.value = _.cloneDeep(value);
+//        colChange.display = _.cloneDeep(display);
+//        colChange.fieldDef = field;
+//        payload.push(colChange);
+//    }
+//    function getConstrainedUnchangedValues(_pendEdits, _fields, changes, list) {
+//        // add in any editable fields values that are required or unique
+//        // so that server can validate them if they were created before
+//        // the field's constraint was made. so modifying a record
+//        // via patch will check those fields for validity even if the user
+//        // didn't edit the value
+//        if (_fields) {
+//            _fields.forEach((field) => {
+//                if (changes[field.id] === undefined) {
+//                    if (!field.builtIn && (field.required || field.unique)) {
+//                        if (_pendEdits.originalRecord && _pendEdits.originalRecord.fids && _pendEdits.originalRecord.fids[field.id]) {
+//                            let newValue = _pendEdits.originalRecord.fids[field.id].value;
+//                            if (newValue === null) {
+//                                newValue = "";
+//                            }
+//                            let newDisplay = _pendEdits.originalRecord.fids[field.id].display;
+//                            createColChange(newValue, newDisplay, field, list);
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//    }
+//    function getChanges(_pendEdits, _fields) {
+//        // get the current edited data
+//        let changes = {};
+//        if (_pendEdits.recordChanges) {
+//            changes = _.cloneDeep(_pendEdits.recordChanges);
+//        }
+//
+//
+//        //calls action to save the record changes
+//        // validate happen here or in action
+//
+//        let payload = [];
+//        // columns id and new values array
+//        //[{"id":6, "value":"Claire"}]
+//
+//
+//        Object.keys(changes).forEach((key) => {
+//            let newValue = changes[key].newVal.value;
+//            let newDisplay = changes[key].newVal.display;
+//            if (_.has(_pendEdits, 'originalRecord.fids')) {
+//                if (newValue !== _pendEdits.originalRecord.fids[key].value) {
+//                    //get each columns matching field description
+//                    let matchingField = changes[key].fieldDef;
+//                    createColChange(newValue, newDisplay, matchingField, payload);
+//                }
+//            }
+//        });
+//
+//        getConstrainedUnchangedValues(_pendEdits, _fields, changes, payload);
+//        return payload;
+//    }
+//
+//    return (dispatch) => {
+//        return new Promise((resolve, reject) => {
+//            return new Promise((resolve, reject) => {
+//                if (appId && tblId && (!!(recId === 0 || recId)) && pendEdits && fields) {
+//                    let changes = getChanges(pendEdits, fields);
+//                    dispatch({type:types.SAVE_RECORD, id:recId, content:{appId, tblId, recId, changes}});
+//
+//                    let recordService = new RecordService();
+//
+//                    //  save the changes to the record
+//                    recordService.saveRecord(appId, tblId, recId, changes).then(
+//                        response => {
+//                            logger.debug('RecordService saveRecord success');
+//                            let clist = colList ? colList : [];
+//                            if (!clist.length && fields) {
+//                                fields.forEach((field) => {
+//                                    clist.push(field.id);
+//                                });
+//                            }
+//                            clist = clist.join('.');
+//                            recordService.getRecord(appId, tblId, recId, clist, _withDisplayFormat()).then(
+//                                getResponse => {
+//                                    logger.debug('RecordService getRecord success');
+//                                    //  TODO: Context should be passed in as a parameter..
+//                                    dispatch({id: CONTEXT.REPORT.NAV, type: types.UPDATE_REPORT_RECORD, content:{appId, tblId, recId, record: getResponse.data}});
+//
+//                                    if (!showNotificationOnSuccess) {
+//                                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
+//                                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+//                                    }
+//                                    // this delay allows for saving modal to trap inputs otherwise
+//                                    // clicks get invoked after saving
+//                                    //TODO: need to migrate the recordPendingEditStore to redux
+//                                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+//                                        this.dispatch(actions.AFTER_RECORD_EDIT);
+//                                        let obj = {
+//                                            recId:recId,
+//                                            appId:appId,
+//                                            tblId:tblId,
+//                                            record:getResponse.data
+//                                        };
+//                                        resolve(obj);
+//                                    });
+//                                },
+//                                getError => {
+//                                    logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+//
+//                                    // this delay allows for saving modal to trap inputs otherwise
+//                                    // clicks get invoked after saving
+//                                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+//                                        this.dispatch(actions.AFTER_RECORD_EDIT);
+//                                        reject();
+//                                    });
+//                                }
+//                            );
+//                        },
+//                        error => {
+//                            //  if a validation error, print each one individually..
+//                            if (error && error.data && error.data.response && error.data.response.errors) {
+//                                let errors = error.data.response.errors;
+//                                _logValidationErrors(errors, 'recordService.saveRecord');
+//                            } else {
+//                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord');
+//                            }
+//
+//                            this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
+//                            NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
+//                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+//                            // this delay allows for saving modal to trap inputs otherwise
+//                            // clicks get invoked after saving
+//                            Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+//                                this.dispatch(actions.AFTER_RECORD_EDIT);
+//                                reject();
+//                            });
+//                        }
+//                    );
+//                } else {
+//                    var errMessage = 'Missing one or more required input parameters to recordActions.saveRecord. AppId:' +
+//                        appId + '; TblId:' + tblId + '; recId:' + recId + '; pendEdits:' + JSON.stringify(pendEdits) + '; fields:' + fields;
+//                    logger.error(errMessage);
+//                    this.dispatch(actions.SAVE_RECORD_FAILED, {error: errMessage});
+//                    reject();
+//                }
+//            });
+//        });
+//    };
+//};
 
 export default recordActions;
 

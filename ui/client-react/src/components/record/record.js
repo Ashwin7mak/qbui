@@ -3,6 +3,8 @@ import Fluxxor from "fluxxor";
 import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
+import {connect} from 'react-redux';
+import {editRecordStart} from '../../actions/recordActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let Record = React.createClass({
@@ -97,7 +99,8 @@ let Record = React.createClass({
             }
 
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
+        //flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
+        this.props.editRecordStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
     },
 
 
@@ -122,4 +125,26 @@ let Record = React.createClass({
     }
 });
 
-export default Record;
+// instead of relying on our parent route component to pass our props down,
+// the react-redux container will generate the required props for this route
+// from the Redux state (the presentational component has no code dependency on Redux!)
+const mapStateToProps = (state) => {
+    return {
+        record: state.record
+    };
+};
+
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit = false, fieldToStartEditing = null) => {
+            dispatch(editRecordStart(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Record);

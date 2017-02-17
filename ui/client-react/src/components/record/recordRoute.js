@@ -1,5 +1,4 @@
 import React from 'react';
-import AppHistory from '../../globals/appHistory';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
