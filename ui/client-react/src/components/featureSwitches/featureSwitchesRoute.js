@@ -98,7 +98,7 @@ class FeatureSwitchesRoute extends React.Component {
                     <Link onClick={e => {e.stopPropagation();}}
                           to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
                      {hasExceptions ? <span> ({rowData.exceptions.length})</span> : ''}
-                </div> );
+                </div>);
         };
 
         return [

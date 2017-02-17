@@ -187,8 +187,7 @@ class FeatureSwitchExceptionsRoute extends React.Component {
                     </div>
 
                     {this.props.exceptions.length === 0 ?
-                        <h4>No exceptions have been set, click 'Add New' to add one.</h4>
-                            :
+                        <h4>No exceptions have been set, click 'Add New' to add one.</h4> :
                         <Table.Provider className="featureSwitchTable exceptions"
                                         columns={this.state.columns}
                                         components={{
@@ -211,7 +210,7 @@ class FeatureSwitchExceptionsRoute extends React.Component {
                         <span>{selectedSizeLabel}</span>
                     </div>
 
-                    <PageTitle title={["Feature Switch Exceptions",featureSwitch.name].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                    <PageTitle title={["Feature Switch Exceptions", featureSwitch.name].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>
             );
         } else {

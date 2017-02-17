@@ -64,7 +64,7 @@
                         let bodyJSON = JSON.parse(req.rawBody);
                         let exceptions = bodyJSON.exceptions;
 
-                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) { return sw.id === featureSwitchId; });
+                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
                         if (featureSwitch) {
                             featureSwitch.exceptions = exceptions;
