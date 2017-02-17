@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as edit from 'react-edit';
 import ToggleButton from 'react-toggle-button';
-import uuid from 'uuid';
+import PageTitle from '../pageTitle/pageTitle';
+import Locale from '../../locales/locales';
 import _ from 'lodash';
 
 import './featureSwitches.scss';
@@ -15,7 +16,7 @@ BodyWrapper.shouldComponentUpdate = true;
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
 
-class FeatureSwitchRoute extends React.Component {
+class FeatureSwitchExceptionsRoute extends React.Component {
 
     constructor(props) {
         super(props);
@@ -66,7 +67,7 @@ class FeatureSwitchRoute extends React.Component {
     }
 
     saveExceptions() {
-        this.props.saveExceptions(this.props.exceptions);
+        this.props.saveExceptions(this.props.params.id, this.props.exceptions);
     }
 
     getColumns() {
@@ -173,8 +174,9 @@ class FeatureSwitchRoute extends React.Component {
 
             return (
                 <div className="featureSwitches">
-                    <div><strong>Team:</strong> {featureSwitch.team}</div>
+                    <div><strong>Name:</strong> {featureSwitch.name}</div>
                     <div><strong>Description:</strong> {featureSwitch.description}</div>
+                    <div><strong>Team:</strong> {featureSwitch.team}</div>
                     <div><strong>Default State:</strong> {featureSwitch.defaultOn ? "On" : "Off"}</div>
                     <p/>
                     <h3>Feature Switch Exceptions:</h3>
@@ -184,19 +186,23 @@ class FeatureSwitchRoute extends React.Component {
                         <button disabled={!this.props.edited} className="save" onClick={this.saveExceptions}>Save exceptions</button>
                     </div>
 
-                    <Table.Provider className="featureSwitchTable exceptions"
-                                    columns={this.state.columns}
-                                    components={{
-                                        body: {
-                                            wrapper: BodyWrapper,
-                                            row: RowWrapper
-                                        }
-                                    }}>
+                    {this.props.exceptions.length === 0 ?
+                        <h4>No exceptions have been set, click 'Add New' to add one.</h4>
+                            :
+                        <Table.Provider className="featureSwitchTable exceptions"
+                                        columns={this.state.columns}
+                                        components={{
+                                            body: {
+                                                wrapper: BodyWrapper,
+                                                row: RowWrapper
+                                            }
+                                        }}>
 
-                        <Table.Header />
+                            <Table.Header />
 
-                        <Table.Body rows={this.getTableRowsWithIds(this.props.exceptions)} rowKey="id"/>
-                    </Table.Provider>
+                            <Table.Body rows={this.getTableRowsWithIds(this.props.exceptions)} rowKey="id"/>
+                        </Table.Provider>
+                    }
                     <p/>
                     <div className="selectionButtons">
                         <button disabled={selectedSize === 0} onClick={this.deleteSelectedExceptions}>Delete</button>
@@ -204,6 +210,8 @@ class FeatureSwitchRoute extends React.Component {
                         <button disabled={selectedSize === 0} onClick={() => this.setSelectedExceptionStates(false)}>Turn Off</button>
                         <span>{selectedSizeLabel}</span>
                     </div>
+
+                    <PageTitle title={["Feature Switch Exceptions",featureSwitch.name].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>
             );
         } else {
@@ -225,4 +233,4 @@ const mapStateToProps = (state) => {
 export default connect(
     mapStateToProps,
     FeatureSwitchActions
-)(FeatureSwitchRoute);
+)(FeatureSwitchExceptionsRoute);

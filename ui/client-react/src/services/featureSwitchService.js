@@ -8,15 +8,11 @@ class FeatureSwitchService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_FEATURE_SWITCHES  : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
-            PUT_FEATURE_SWITCHES  : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
-            GET_FEATURE_STATES  : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_STATES}`
+            GET_FEATURE_SWITCHES         : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
+            PUT_FEATURE_SWITCHES         : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
+            PUT_FEATURE_SWITCH_EXCEPTIONS: `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_SWITCH_EXCEPTIONS}`,
+            GET_FEATURE_STATES           : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_STATES}`
         };
-    }
-
-    saveFeatureSwitches(switches) {
-        let url = super.constructUrl(this.API.PUT_FEATURE_SWITCHES);
-        return super.put(url, {switches});
     }
 
     getFeatureSwitches() {
@@ -25,6 +21,16 @@ class FeatureSwitchService extends BaseService {
         let url = super.constructUrl(this.API.GET_FEATURE_SWITCHES, []);
 
         return super.get(url, {params});
+    }
+
+    saveFeatureSwitches(switches) {
+        let url = super.constructUrl(this.API.PUT_FEATURE_SWITCHES);
+        return super.put(url, {switches});
+    }
+
+    saveFeatureSwitchExceptions(featureSwitchId, exceptions) {
+        let url = super.constructUrl(this.API.PUT_FEATURE_SWITCH_EXCEPTIONS, [featureSwitchId]);
+        return super.put(url, {exceptions});
     }
 
     getFeatureSwitchStates() {

@@ -7,6 +7,7 @@ import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import ToggleButton from 'react-toggle-button';
 import dateEditor from './dateEditor';
 import uuid from 'uuid';
+import PageTitle from '../pageTitle/pageTitle';
 import _ from 'lodash';
 import './featureSwitches.scss';
 
@@ -89,6 +90,17 @@ class FeatureSwitchesRoute extends React.Component {
             }
         });
 
+        const exceptionsLinkFormatter = (data, {rowData}) => {
+
+            const hasExceptions = rowData.exceptions.length > 0;
+            return (
+                <div>
+                    <Link onClick={e => {e.stopPropagation();}}
+                          to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
+                     {hasExceptions ? <span> ({rowData.exceptions.length})</span> : ''}
+                </div> );
+        };
+
         return [
             {
                 property: 'selected',
@@ -110,7 +122,7 @@ class FeatureSwitchesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (data, {rowData}) => <Link onClick={e => {e.stopPropagation();}} to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
+                        exceptionsLinkFormatter
                     ],
                     transforms: [editable(edit.input())]
                 }
@@ -221,7 +233,7 @@ class FeatureSwitchesRoute extends React.Component {
                     <span>{selectedSizeLabel}</span>
                 </div>
 
-
+                <PageTitle title="Feature Switches" />
             </div>
         );
     }

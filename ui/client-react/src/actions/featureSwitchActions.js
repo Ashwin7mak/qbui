@@ -109,8 +109,9 @@ export const saveSwitches = (switches) => {
 };
 
 
-const saveExceptionsSuccess = (exceptions) => ({
+const saveExceptionsSuccess = (id, exceptions) => ({
     type: types.SAVED_FEATURE_SWITCH_EXCEPTIONS,
+    id,
     exceptions
 });
 
@@ -124,7 +125,7 @@ export const saveExceptions = (id, exceptions) => {
             let promise = featureSwitchService.saveFeatureSwitchExceptions(id, exceptions);
 
             promise.then(response => {
-                dispatch(saveExceptionsSuccess(switches));
+                dispatch(saveExceptionsSuccess(id, exceptions));
                 NotificationManager.success('Feature switch exceptions Saved', Locale.getMessage('success'),
                     CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                 resolve();

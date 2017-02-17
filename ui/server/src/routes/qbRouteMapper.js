@@ -300,7 +300,7 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Save feature switch exceptions', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.saveFeatureSwitcheExceptions(req, featureSwitchId).then(
+        featureSwitchesApi.saveFeatureSwitchExceptions(req, req.params.featureSwitchId).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Save feature switch exceptions');

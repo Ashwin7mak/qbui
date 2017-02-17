@@ -38,6 +38,7 @@ export default {
     USERS               : 'users',
     RIGHTS              : 'accessRights',
     FEATURE_SWITCHES    : 'featureSwitches',
+    FEATURE_SWITCH_EXCEPTIONS : 'exceptions',
     FEATURE_STATES      : 'featureStates',
 
     // Node Entity actions

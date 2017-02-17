@@ -13,7 +13,7 @@ import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
-import FeatureSwitchRoute from "../components/featureSwitches/featureSwitchRoute";
+import FeatureSwitchExceptionsRoute from "../components/featureSwitches/featureSwitchExceptionsRoute";
 import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 
 import Logger from "../utils/logger";
@@ -61,7 +61,7 @@ render((
 
             <Route path={ADMIN_ROUTE} component={ConnectedNav} >
                 <Route path="featureSwitches" component={FeatureSwitchesRoute} />
-                <Route path="featureSwitch/:id" component={FeatureSwitchRoute} />
+                <Route path="featureSwitch/:id" component={FeatureSwitchExceptionsRoute} />
             </Route>
 
             <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >

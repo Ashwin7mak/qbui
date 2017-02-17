@@ -15,7 +15,8 @@ const featureSwitches = (
     case types.SET_FEATURE_SWITCHES:
         return {
             ...state,
-            switches: action.switches
+            switches: action.switches,
+            edited: false
         };
 
 
@@ -80,7 +81,8 @@ const featureSwitches = (
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
-            exceptions: [...currentSwitch.exceptions]
+            exceptions: currentSwitch ? [...currentSwitch.exceptions] : [],
+            edited: false
         };
     }
 
@@ -130,7 +132,11 @@ const featureSwitches = (
             edited: true
         };
     }
-
+    case types.SAVED_FEATURE_SWITCH_EXCEPTIONS:
+        return {
+            ...state,
+            edited: false
+        };
     case types.SET_FEATURE_SWITCH_STATES:
         return {
             ...state,
