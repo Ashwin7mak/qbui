@@ -35,7 +35,9 @@ class FeatureSwitchExceptionsRoute extends React.Component {
 
     selectRow(id, selected) {
 
-        const selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
+        let selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
+        selectedRows.sort((a,b) => b - a);
+
         const allSelected = selectedRows.length === this.props.exceptions.length;
 
         this.setState({selectedRows, allSelected});
@@ -43,7 +45,8 @@ class FeatureSwitchExceptionsRoute extends React.Component {
 
     selectAll(allSelected) {
 
-        const selectedRows = allSelected ? this.props.exceptions.map((sw, index) => index) : [];
+        let selectedRows = allSelected ? this.props.exceptions.map((sw, index) => index) : [];
+        selectedRows.sort((a,b) => b - a);
 
         this.setState({selectedRows, allSelected});
     }

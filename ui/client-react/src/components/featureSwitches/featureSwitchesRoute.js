@@ -75,7 +75,7 @@ class FeatureSwitchesRoute extends React.Component {
         this.state.selectedRows.forEach((id) => {
             this.props.deleteFeatureSwitch(id);
         });
-        this.setState({selectedRows: []});
+        this.setState({selectedRows: [], allSelected: false});
     }
 
     getColumns() {
