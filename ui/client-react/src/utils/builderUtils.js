@@ -12,11 +12,10 @@
          * if a user is not on a touchDevice then we will use the Html5backend for drag and drop
          * */
         getBackEnd: function(isTouchDevice) {
-            if (isTouchDevice) {
-                return TouchBackend;
-            } else {
+            if (!isTouchDevice) {
                 return Html5Backend;
             }
+            return TouchBackend({enableMouseEvents: true});
         },
         /**
          * touch detection
