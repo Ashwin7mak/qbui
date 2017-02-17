@@ -175,6 +175,9 @@ export default {
                 }
             }
         },
+        relationship: {
+            childTable: "Table Enfant"
+        },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
             Days:"{value, plural, \n =0 {0 jours}\n =1 {1 jour}\n other {{value}  jours}\n} ",
@@ -467,6 +470,39 @@ export default {
             manageAccessTip: "*Seuls les administrateurs d'applications peuvent gérer l'accès des utilisateurs"
 
         },
-        missingWalkMe: "Le didacticiel n'est pas disponible"
+        missingWalkMe: "Le didacticiel n'est pas disponible",
+        builder: {
+            formBuilder: {
+                unimplemented: "La fonctionnalité n'est pas disponible en ce moment"
+            },
+            fields: {
+                // Keys are equal to server constants for field types to make it easier to get these keys
+                FORMULA: "Formule",
+                SCALAR: "Scalaire",
+                CONCRETE: "Béton",
+                REPORT_LINK: "Lien de rapport",
+                SUMMARY: "Résumé",
+                LOOKUP: "Recherche",
+                //Data types
+                CHECKBOX: "Case à cocher",
+                TEXT: "Texte",
+                PHONE_NUMBER: "Numéro de téléphone",
+                DATE_TIME: "Date et heure",
+                DATE: "Date",
+                DURATION: "Durée",
+                TIME_OF_DAY: "Heure du jour",
+                NUMERIC: "Numérique",
+                CURRENCY: "Devise",
+                RATING: "Cote",
+                PERCENT: "Pourcentage",
+                URL: "Url",
+                EMAIL_ADDRESS: "Email",
+                USER: "Utilisateur",
+                FILE_ATTACHMENT: "Fichier",
+                TEXT_FORMULA: "Formule de texte",
+                URL_FORMULA: "Formule Url",
+                NUMERIC_FORMULA: "Formule numérique"
+            }
+        }
     }
 };

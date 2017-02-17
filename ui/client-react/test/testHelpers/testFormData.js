@@ -1,3 +1,5 @@
+import {referenceElement, relationships} from '../../src/mocks/relationship';
+
 export const textElementText = 'Text element text';
 
 const testFormData = {
@@ -633,4 +635,52 @@ export const testFormDataArrayWithTwoColumns = {
     },
     record:[{id: 2, value: "field value"}],
     fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}]
+};
+
+export const testFormDataWithRelationship = {
+    formMeta: {
+        formId: 1,
+        tableId: 2,
+        appId: 3,
+        name: 'Test Form',
+        tabs: [
+            {
+                orderIndex: 0,
+                title: 'Tab1',
+                id: 'tab1',
+                sections: [
+                    {
+                        id: 'section1',
+                        orderIndex: 0,
+                        location: {tabIndex: 0, sectionIndex: 0},
+                        isEmpty: false,
+                        headerElement: {
+                            FormHeaderElement: {
+                                displayText: 'Child report link',
+                                type: 'HEADER'
+                            }
+                        },
+                        columns: [
+                            {
+                                id: 'column-0',
+                                orderIndex: 0,
+                                rows: [
+                                    {
+                                        id: 'row-0',
+                                        orderIndex: 0,
+                                        elements: [
+                                            referenceElement()
+                                        ]
+                                    },
+                                ],
+                            },
+                        ]
+                    },
+                ]
+            },
+        ],
+        relationships
+    },
+    record:[{id: 2, value: "field value"}],
+    fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}],
 };

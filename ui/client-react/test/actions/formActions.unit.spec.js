@@ -308,7 +308,6 @@ describe('Form Actions', () => {
         });
 
 
-
         it('transforms elements object into an array', () => {
             let actualElements = result.formData.formMeta.tabs[0].sections[0].columns[0].rows.map(row => row.elements[0].FormFieldElement.displayText);
 
@@ -381,6 +380,21 @@ describe('Form Actions', () => {
                 columnIndex: 0,
                 rowIndex: 1,
                 elementIndex: 2
+            });
+        });
+    });
+
+    describe('moveFieldOnForm', () => {
+        it('creates an action that will move a field on a form', () => {
+            expect(formActions.moveFieldOnForm(1, 2, 3, 4, 5)).toEqual({
+                id: 1,
+                type: types.MOVE_FIELD,
+                content: {
+                    newTabIndex: 2,
+                    newSectionIndex: 3,
+                    newOrderIndex: 4,
+                    draggedItemProps: 5
+                }
             });
         });
     });

@@ -6,7 +6,14 @@ import _ from 'lodash';
 import QBForm, {__RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
-import {testArrayBasedFormData as fakeQbFormData, textElementText, testFormDataArrayWithTwoColumns} from '../testHelpers/testFormData';
+import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
+
+import {
+    testArrayBasedFormData as fakeQbFormData,
+    textElementText,
+    testFormDataArrayWithTwoColumns,
+    testFormDataWithRelationship
+} from '../testHelpers/testFormData';
 
 const emptyQBFormData = {
     formMeta: {
@@ -127,10 +134,30 @@ describe('QBForm', () => {
     });
 
     it('renders elements into rows', () => {
-        component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
+        component = mount(<QBForm activeTab="1" formData={fakeQbFormData}/>);
         let rows = component.find('.sectionRow');
 
         expect(rows.length).toEqual(5);
+    });
+
+    it('does not render relationship element if no relationships exist', () => {
+        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
+        let childReport = component.find('.referenceElement');
+
+        expect(childReport).not.toBePresent();
+    });
+
+    it('renders relationship elements if relationships exist', () => {
+        const actualRelationship = testFormDataWithRelationship.formMeta.relationships[0];
+
+        component = mount(<QBForm activeTab="0" formData={testFormDataWithRelationship}/>);
+        let childReport = component.find('.referenceElement');
+        let childReportComponent = component.find(RelatedChildReport);
+
+        expect(childReport).toBePresent();
+        expect(childReportComponent).toHaveProp('appId', actualRelationship.appId);
+        expect(childReportComponent).toHaveProp('childTableId', actualRelationship.detailTableId);
+        expect(childReportComponent).toHaveProp('detailKeyFid', actualRelationship.detailFieldId);
     });
 
     it('renders text form elements', () => {

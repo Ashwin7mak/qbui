@@ -1,14 +1,13 @@
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
 import _ from 'lodash';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import FieldElement from './fieldElement';
 import Locale from '../../locales/locales';
-import UrlUtils from '../../utils/urlUtils';
 import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
+import RelatedChildReport from './relatedChildReport';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -283,27 +282,41 @@ let QBForm = React.createClass({
     },
 
     /**
-     * TODO: actually render the child report as an embedded report.
-     * @param {Object} element section element
+     * Create an element which wraps an embedded child report or a link to a child report.
      * @returns {XML}
+     * @param id
+     * @param ReferenceElement
+     * @param style
      */
     createChildReportElement(id, ReferenceElement, style) {
+        // Find the relationship object for this element.
+        // This element represents a single relationship from the `formMeta.relationships` array.
+        // The `element.relationshipId` is the index offset within the relationship array.
+        const relationship = _.get(this, `props.formData.formMeta.relationships[${ReferenceElement.relationshipId}]`, {});
 
-        // TODO: don't use globals
-        const relationship = window.relationships[ReferenceElement.relationshipId];
+        // Find the foreign key value. This is the value stored in one of the master record's fields
+        // the field id is specified as 'masterFieldId' in the relationship object.
         const relatedField = this.getRelatedField(relationship.masterFieldId);
         const fieldRecord = this.getFieldRecord(relatedField);
-        const appId = _.get(relationship, 'appId');
-        const childTableId = _.get(relationship, 'detailTableId');
-        // TODO: this default report ID should be sent from the node layer, defaulting to 0 for now
-        const childReportId = _.get(relationship, 'childDefaultReportId', 0);
-        const fieldWithParentId = _.get(relationship, 'detailFieldId');
-        const parentRecordId = _.get(fieldRecord, 'value');
+        const detailKeyValue = _.get(fieldRecord, 'value');
 
-        const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, fieldWithParentId, parentRecordId);
-        return <div key={id} className="formElementContainer formElement referenceElement" style={style}>
-            <Link to={link}>Child Table</Link>
-        </div>;
+        // Find the child table's name.
+        const tables = _.get(this, 'props.selectedApp.tables');
+        const childTable = _.find(tables, {id: relationship.detailTableId}) || {};
+        const childTableName = childTable.name;
+
+        return (
+            <div key={id} className="formElementContainer formElement referenceElement" style={style}>
+                <RelatedChildReport
+                    appId={_.get(relationship, "appId")}
+                    childTableId={_.get(relationship, "detailTableId")}
+                    childReportId={_.get(relationship, 'childDefaultReportId')}
+                    childTableName={childTableName}
+                    detailKeyFid={_.get(relationship, "detailFieldId")}
+                    detailKeyValue={detailKeyValue}
+                />
+            </div>
+        );
     },
 
     /**

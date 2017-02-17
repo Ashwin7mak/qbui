@@ -2,8 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import Html5Backend from 'react-dnd-html5-backend';
 import QbForm from '../QBForm/qbform';
-import MoveFieldHelper from './moveFieldHelper';
-import _ from 'lodash';
+import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 
 import './formBuilder.scss';
 
@@ -15,16 +14,7 @@ export class FormBuilder extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            formData: {fields: [], formMeta: {}}
-        };
-
         this.handleFormReorder = this.handleFormReorder.bind(this);
-    }
-
-    componentDidMount() {
-        // Until we have a store, copy over the current form to the state of this object so it can be modified
-        this.setState({formData: this.props.formData});
     }
 
     /**
@@ -35,20 +25,19 @@ export class FormBuilder extends Component {
      * @param draggedItemProps
      */
     handleFormReorder(newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-        let formDataCopy = _.cloneDeep(this.state.formData);
-
-        formDataCopy.formMeta = MoveFieldHelper.moveField(formDataCopy.formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
-
-        this.setState({formData: formDataCopy});
+        if (this.props.moveFieldOnForm) {
+            return this.props.moveFieldOnForm(this.props.formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
+        }
     }
 
     render() {
         return (
             <div className="formBuilderContainer">
+                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
                     edit={true}
                     editingForm={true}
-                    formData={this.state.formData}
+                    formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
                     appUsers={[]}
                 />
@@ -58,10 +47,20 @@ export class FormBuilder extends Component {
 }
 
 FormBuilder.propTypes = {
+    formId: PropTypes.string.isRequired,
+
+    showCustomDragLayer: PropTypes.bool,
+
     formData: PropTypes.shape({
         fields: PropTypes.array,
         formMeta: PropTypes.object
-    }).isRequired
+    }).isRequired,
+
+    moveFieldOnForm: PropTypes.func
+};
+
+FormBuilder.defaultProps = {
+    showCustomDragLayer: true
 };
 
 export default DragDropContext(Html5Backend)(FormBuilder);

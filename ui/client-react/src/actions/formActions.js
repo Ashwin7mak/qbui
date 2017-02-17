@@ -184,48 +184,8 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    // TODO: using mock data: should retrieve relationships data without the use of
-                    // globals.
-                    if (_.get(window, 'relationships.length') > 0) {
-                        window.relationships.forEach((relation) => {
-                            // if a relathinship in which this form is a parent is defined, mock ReferenceElement
-                            if (relation.masterTableId === response.data.formMeta.tableId) {
-                                (response.data.formMeta.relationships || []).push(relation);
-                                const mockElement =  {
-                                    ReferenceElement: {
-                                        displayOptions: [
-                                            "VIEW",
-                                            "ADD",
-                                            "EDIT"
-                                        ],
-                                        type: "EMBEDREPORT",
-                                        orderIndex: 0,
-                                        positionSameRow: false,
-                                        relationshipId: 0
-                                    }
-                                };
-                                // add as many elements as we have relationships
-                                const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
-                                    const element = _.cloneDeep(mockElement);
-                                    _.set(element, 'ReferenceElement.relationshipId', idx);
-                                    _.set(element, 'ReferenceElement.orderIndex', idx);
-                                    return element;
-                                });
-                                const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
-                                // inject relationship elements in its own section
-                                let sections = response.data.formMeta.tabs[0].sections;
-                                sections[length] = Object.assign(_.cloneDeep(sections[0]), {
-                                    elements: elements,
-                                    fields: [],
-                                    orderIndex: length
-                                });
-                                sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
-                            }
-                        });
-                    }
-
                     dispatch(loadFormSuccess(formType, response.data));
-                    resolve();
+                    resolve(response.data);
                 },
                 (error) => {
                     if (error.response) {
@@ -260,6 +220,24 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             });
         });
     };
+};
+
+/**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newTabIndex
+ * @param newSectionIndex
+ * @param newOrderIndex
+ * @param draggedItemProps
+ * @returns {{id, type, content}|*}
+ */
+export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) => {
+    return event(formId, types.MOVE_FIELD, {
+        newTabIndex,
+        newSectionIndex,
+        newOrderIndex,
+        draggedItemProps
+    });
 };
 
 /**
@@ -303,7 +281,8 @@ function saveForm(appId, tblId, formType, form, isNew) {
                 formPromise.then(
                     (response) => {
                         logger.debug('FormService saveForm success');
-                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+                        //  for now return the original form..
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, response.data));
 
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
