@@ -67,7 +67,7 @@ class UserManagement extends React.Component {
     }
 
     render() {
-        this.createUserRows();
+        //this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
         const resolvedRows = this.props.appUsers;

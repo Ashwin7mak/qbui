@@ -187,17 +187,22 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let users = {};
+                            let usersFormatted = [];
                             if (response.body) {
                                 users = JSON.parse(response.body);
                                 if (users) {
                                     //  convert id property to userId for consistency with user values in records
-                                    users.forEach(user => {
-                                        user.userId = user.id;
-                                        _.unset(user, "id");
+                                    Object.keys(users).forEach(function(key) {
+                                        users[key].forEach(user => {
+                                            user.userId = user.id;
+                                            user.roleId = key;
+                                            _.unset(user, "id");
+                                            usersFormatted.push(user);
+                                        });
                                     });
                                 }
                             }
-                            resolve(users);
+                            resolve(usersFormatted);
                         },
                         (error) => {
                             log.error({req: req}, "Error getting app users in getAppUsers()");
