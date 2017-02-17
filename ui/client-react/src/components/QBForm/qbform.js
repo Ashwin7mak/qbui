@@ -351,7 +351,7 @@ let QBForm = React.createClass({
         }
 
         let tabs = [];
-        if (_.has(this.props, 'formData.formMeta.tabs')) {
+        if (_.has(this.props, 'formData.formMeta.tabs') && Array.isArray(this.props.formData.formMeta.tabs)) {
             tabs = this.props.formData.formMeta.tabs.map(tab => this.createTab(tab));
         }
 
