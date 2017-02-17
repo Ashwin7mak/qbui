@@ -122,7 +122,11 @@ const QbGrid = React.createClass({
 
         /**
          * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
-        showRowActionsColumn: PropTypes.bool
+        showRowActionsColumn: PropTypes.bool,
+
+        /**
+         * Specify whether this reportGrid is editable or viewOnly */
+        isViewOnly: PropTypes.bool
     },
 
     getDefaultProps() {

@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import _ from 'lodash';
 
 import mockReport from '../../mocks/reports';
-import ReportGrid from 'app/components/dataTable/reportGrid/reportGrid';
+import ReportGrid from '../dataTable/reportGrid/reportGrid';
 
 import UrlUtils from '../../utils/urlUtils';
 import Breakpoints from '../../utils/breakpoints';
@@ -22,7 +22,7 @@ class ChildReport extends React.Component {
         const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');
         if (!validProps) {
             return null;
-        } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK' || true) {
+        } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
             const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
             let reportLink;
             if (this.props.childTableName) {
@@ -37,7 +37,7 @@ class ChildReport extends React.Component {
             );
         } else if (this.props.type === 'EMBEDREPORT') {
             // TODO: render embedded report for medium and large breakpoint
-            return <ReportGrid {...mockReport} />;
+            return <ReportGrid isViewOnly={true} {...mockReport} />;
         } else {
             return null;
         }
