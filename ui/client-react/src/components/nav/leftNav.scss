@@ -476,6 +476,11 @@ div.leftNavTooltip {
 }
 
 @include small-breakpoint {
+
+    .builder .dropdown-menu {
+        width: 315%;
+    }
+
     .leftNav {
         margin: 0;
         height: 100%;
