@@ -6,7 +6,7 @@ import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Promise from 'bluebird';
-import testFormData from './helpers/testFormData';
+import testFormData from '../testHelpers/testFormData';
 
 class WindowLocationUtilsMock {
     static pushWithQuery(url) { }

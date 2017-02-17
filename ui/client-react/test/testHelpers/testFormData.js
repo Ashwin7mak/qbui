@@ -180,7 +180,9 @@ const testFormData = {
                 }
             }
         },
-    }
+    },
+    record:[{id: 2, value: "field value"}],
+    fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}]
 };
 
 export default testFormData;
