@@ -347,8 +347,18 @@ function event(id, type, content) {
 }
 
 /**
- * TODO:: Consider using orderIndex for the unique id for tabs, sections, columns,
- * even though it will be wrong after the element is moved
+ * Final data structure:
+ * formMeta: {
+ *     tabs: [{
+ *         sections: [{
+ *             columns: [{ <- Columns are not currently implemented on EE/Node layer
+ *                 rows: [{
+ *                     elements: []
+ *                 }]
+ *             }]
+ *         }]
+ *     }]
+ * }
  * @param formData
  * @returns {*}
  */
@@ -377,6 +387,14 @@ function convertFormToArrayForClient (formData) {
                     section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
                 }
 
+                element.location = {
+                    tabIndex: tab.orderIndex,
+                    sectionIndex: section.orderIndex,
+                    columnIndex: 0, // hardcoded until columns are implemented
+                    rowIndex: currentRowIndex,
+                    elementIndex: section.rows.length // Element hasn't been added yet, so we don't subtract one from the length for 0 based index
+                };
+
                 section.rows[currentRowIndex].elements.push(element);
             });
 
@@ -384,6 +402,12 @@ function convertFormToArrayForClient (formData) {
             // data returned from the Node layer
             section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
             section.id = _.uniqueId('section-');
+            section.location = {
+                tabIndex: tab.orderIndex,
+                sectionIndex: section.orderIndex
+            };
+
+
             return section;
         });
 

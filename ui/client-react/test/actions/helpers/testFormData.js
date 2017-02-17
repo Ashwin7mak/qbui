@@ -58,7 +58,7 @@ const testFormData = {
                         },
                     },
                     1: {
-                        orderIndex: 0,
+                        orderIndex: 1,
                         headerElement: {
                             FormHeaderElement: {
                                 displayText: 'Tab1-Section2',
@@ -100,7 +100,7 @@ const testFormData = {
             },
 
             1: {
-                orderIndex: 0,
+                orderIndex: 1,
                 title: 'Tab2',
                 sections: {
                     0: {
