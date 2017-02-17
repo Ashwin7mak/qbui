@@ -221,7 +221,7 @@ let QBForm = React.createClass({
             formattedElement = this.createTextElement(element.id, element.FormTextElement, width);
         } else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId, width);
-            formattedElement = this.createFieldElement(element.id, element.FormFieldElement, validationStatus, width);
+            formattedElement = this.createFieldElement(element.id, element.FormFieldElement, validationStatus, width, element.location);
         } else if (element.ReferenceElement) {
             formattedElement = this.createChildReportElement(element.id, element.ReferenceElement, width);
         }
@@ -236,7 +236,7 @@ let QBForm = React.createClass({
      * @param validationStatus
      * @returns {XML}
      */
-    createFieldElement(id, FormFieldElement, validationStatus, style) {
+    createFieldElement(id, FormFieldElement, validationStatus, style, location) {
 
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
@@ -251,6 +251,7 @@ let QBForm = React.createClass({
         return (
             <div key={id} className="formElementContainer" style={style}>
               <CurrentFieldElement
+                  location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
                   element={FormFieldElement}

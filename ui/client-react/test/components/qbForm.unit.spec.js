@@ -175,6 +175,19 @@ describe('QBForm', () => {
         expect(fieldElements.length).toEqual(0);
     });
 
+    it('renders for field elements with a location for use in dragging and dropping', () => {
+        component = mount(<QBForm actieTab="0" formData={fakeQbFormData} />);
+        const fieldElement = component.find(FieldElementMock).first();
+
+        expect(fieldElement).toHaveProp('location', {
+            tabIndex: 0,
+            sectionIndex: 0,
+            columnIndex: 0,
+            rowIndex: 0,
+            elementIndex: 0
+        });
+
+    });
 
     it('renders form field element with data from pendingEdits', () => {
         const editedValue = 'edited value';

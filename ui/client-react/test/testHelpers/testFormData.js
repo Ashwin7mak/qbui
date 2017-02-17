@@ -2,7 +2,7 @@ import {referenceElement, relationships} from '../../src/mocks/relationship';
 
 export const textElementText = 'Text element text';
 
-const testFormData = {
+export const testFormData = {
     formMeta: {
         formId: 1,
         tableId: 2,
@@ -188,8 +188,6 @@ const testFormData = {
     record:[{id: 2, value: "field value"}],
     fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}]
 };
-
-export default testFormData;
 
 export const testArrayBasedFormData = {
     formMeta: {
@@ -684,3 +682,5 @@ export const testFormDataWithRelationship = {
     record:[{id: 2, value: "field value"}],
     fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 7, name: "field 7", datatypeAttributes: {type: "TEXT"}}],
 };
+
+export default testFormData;
