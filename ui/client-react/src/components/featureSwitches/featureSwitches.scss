@@ -25,7 +25,7 @@
     width: 100%;
 
     tbody tr:hover, tr:nth-child(odd):hover {
-        background-color: $qbgrid-row-hover-color;
+        background-color: $grid-row-hover-color;
     }
     th, td {
         height: 40px;
@@ -36,7 +36,7 @@
     }
 
     tbody td {
-        border-top: 1px solid $qbgrid-row-border-color;
+        border-top: 1px solid $grid-line-color;
 
     }
 
