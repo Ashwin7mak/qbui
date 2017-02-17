@@ -2,29 +2,13 @@
 @import '../../../../src/assets/css/customVariables';
 
 // semantic names to go through and scrub
-$row-box-shadow-color: $color-black-300;
-$cell-edit-background-edit: $color-blue-200;
 $grid-font-size: $font-size-p;
 $grid-default-group-padding: 20px;
 $grid-default-cell-padding: 6px;
 $grid-header-cell-padding: 4px;
 $grid-group-expand-icon-size: 20px;
-$cell-edit-background-edit: $color-blue-200;
 $edit-icon-font-size: 18px;
 
-
-// New semantic names - to be moved to _qbColorVariables.scss in a future pull.
-$grid-row-hover-color:                          $color-blue-200;
-$grid-initiate-inline-edit-pencil-base-color:   rgba($color-black-700, 0.2);
-$grid-icon-hover-color:                         $color-cyan-700;
-$grid-onpencil-row-border-color:                $color-cyan-700;
-$grid-column-header-background-color:           $color-cyan-100;
-$grid-column-header-border-color:               $color-cyan-300;
-$grid-column-icon-normal-color:                 $color-blue-400;
-$grid-column-icon-hover-color:                  $color-cyan-700;
-$grid-lefticon-normal-color:                    $color-black-300;
-$grid-lefticon-hover-color:                     $color-cyan-700;
-$grid-line-color:                               $color-black-400;
 
 //-------------------------------------------------------------------
 // GRID COMPONENT
@@ -71,6 +55,7 @@ $grid-line-color:                               $color-black-400;
         -webkit-font-smoothing: antialiased;
         background-color: $grid-column-header-background-color;
         cursor: default;
+        vertical-align: top;
 
         // set the default z-index of header cells so the one displaying the popup menu can be made higher than these
         z-index: $zindex-qbGrid-th;
@@ -81,6 +66,7 @@ $grid-line-color:                               $color-black-400;
             padding-left: $grid-default-cell-padding;
             padding-right: $grid-default-cell-padding;
             border-left: 1px solid $grid-column-header-border-color;
+            vertical-align: middle;
         }
 
         &:last-of-type {
@@ -109,14 +95,16 @@ $grid-line-color:                               $color-black-400;
     // this node goes inside the qbHeaderCell above
     .gridHeaderCell {
         display: flex;
-        align-items: center;
 
         // text label for the header cell
         .gridHeaderLabel {
-            max-height: 36px;
+            // set max-height to 2 lines. An extra 2px is needed to prevent clipping
+            max-height: (($line-height-text-comfortable * 2) + 2);
             overflow: hidden;
             flex-grow: 1;
             padding-right: 4px;
+            padding-top: 2px;
+            line-height: $line-height-text-comfortable;
         }
 
         // menu to access sorting options
@@ -137,8 +125,12 @@ $grid-line-color:                               $color-black-400;
             // of the gridHeaderCell above when the menu shows and hides.
             // This temporary fix positions the menu below the entire header row so as not
             // to be clipped by adjacent cells.
+            .dropdown {
+                position: initial; // we want to position the popup menu relative to the <th> for now.
+            }
             .dropdown-menu {
-                top: 120%; // ugly - do not do this... it is not safe long term. YUCK! WE NEED TO FIX THIS!
+                top: calc(100% - 1px);
+                left: calc(100% - #{$grid-group-expand-icon-size} - #{$grid-header-cell-padding});
             }
         }
 
@@ -166,7 +158,6 @@ $grid-line-color:                               $color-black-400;
         // padding-left: $grid-default-group-padding + 3;   // TODO: We need to see what the spec requires for this. It looks strange with it right now.
         vertical-align: top;
         font-weight: bold;
-        border-right: 1px solid $grid-line-color;
         border-top: 1px solid $grid-line-color;
     }
 
@@ -288,13 +279,13 @@ $grid-line-color:                               $color-black-400;
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        background-color: $qbgrid-cell-edit-background-color;
-        box-shadow: -6px 0px 14px $qbgrid-row-box-shadow-color;
+        background-color: $cell-edit-background-edit;
+        box-shadow: -6px 0px 14px $inline-edit-shadow-color;
         position: absolute;
         top: -47px;
         left: -79px;
         padding: 0 24px;
-        border: 1px solid $qbgrid-row-border-color;
+        border: 1px solid $grid-line-color;
 
         .loadedContent {
             padding: 0;
@@ -314,7 +305,7 @@ $grid-line-color:                               $color-black-400;
         button {
             flex: 0 0 auto;
             border: 0;
-            background-color: $qbgrid-cell-edit-background-color;
+            background-color: $cell-edit-background-edit;
             margin: 1px;
             padding: 6px 4px;
 
@@ -472,12 +463,14 @@ $grid-line-color:                               $color-black-400;
         color: $grid-lefticon-hover-color;
     }
 
-
-    // adjust colors of the last row of cells
+    // because the gridlines are done on the top of the cells, we need to turn off an extra border
+    // on the first row, and add a border on the last row.
+    .qbRow:first-of-type .qbCell {
+        border-top: none;
+    }
     .qbRow:last-of-type .qbCell {
         border-bottom: 1px solid $grid-line-color;
     }
-
 
     // row hover highlighting - only done while not inline editing
     .reportContent:not(.inlineEditing) & {
@@ -490,6 +483,11 @@ $grid-line-color:                               $color-black-400;
         // Outline the data cells in the row when the use hovers over a pencil.
         // This works by turning on the top border of cells in the hovered row and the row below it,
         // and the right border of the sticky cell and the last cell in the hovered row.
+        //
+        // NOTE: We must make the grid rows the top border and not the bottom.
+        // It makes it more complicated... but... if we don't, then we can't style the way we want below
+        // because CSS does not have a *previous sibling* selector. We have no way to change the border
+        // of the row *above* the row that will be edited. Only the one after.
         .qbRow.willEdit .qbCell:not(.stickyCell),
         .qbRow.willEdit + .qbRow .qbCell:not(.stickyCell) {
             border-top: 1px solid $grid-onpencil-row-border-color;
@@ -500,6 +498,7 @@ $grid-line-color:                               $color-black-400;
         }
         .qbRow.willEdit .qbCell.stickyCell {
             border-right: 1px solid $grid-onpencil-row-border-color;
+            transition: border 150ms ease-in;
         }
 
         // Special case for outlining data cells... the last row doesn't have a row below it so we have to use the bottom border on only that row.
@@ -512,16 +511,16 @@ $grid-line-color:                               $color-black-400;
 
     //== Editing a row of data
     .editing {
-        box-shadow: 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 0 0 $qbgrid-cell-edit-background-color, 0 0 20px 10px rgba($border-shadow-base-color, 0.5);
+        box-shadow: 0 0 4px 4px rgba($inline-edit-shadow-color, 0.8);
         margin-top: -15px;
         z-index: $zindex-qbGrid-editing;
-        background-color: $qbgrid-cell-edit-background-color;
+        background-color: $cell-edit-background-edit;
         border-top: $cell-edit-background-edit;
 
         // row header (leftmost cell)
         .qbCell.stickyCell {
             padding-left: 4px;
-            border-left: 1px solid $qbgrid-row-border-color;
+            border-left: 1px solid $grid-line-color;
 
             // need to increase the z-index for the cell being edited so it isn't clipped by peer cells
             // stickyCells are each a different stacking context

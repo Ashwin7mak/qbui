@@ -2,8 +2,9 @@
 
 .formBuilderContainer {
     display: flex;
+    flex-direction: row;
     height: 100%;
-    width: 100%;
+    min-width: 100%;
     overflow: auto;
 
     .loadedContent {

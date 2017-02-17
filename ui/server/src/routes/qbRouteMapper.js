@@ -82,8 +82,6 @@
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
          */
         var routeToPutFunction = {};
-        // TODO: temporary until ee put endpoint is implementted
-        routeToPutFunction[routeConsts.FORMS] = updateForm;
 
         /*
          * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
@@ -828,15 +826,6 @@
         }
 
         return enabled;
-    }
-
-    function updateForm(req, res) {
-
-        log.debug('Update form.');
-        processRequest(req, res, function(req, res) {
-            res.send('success');
-        });
-
     }
 
 }());
