@@ -117,7 +117,14 @@ export let Nav = React.createClass({
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
-                               position={"left"}/>);
+                               position={"left"}>
+                    <BuilderDropDownAction recId={this.props.params.recordId}
+                                           actions={actions}
+                                           position={"left"}
+                                           formBuilderIcon="settings"
+                                           navigateToBuilder={this.navigateToBuilder}
+                                           startTabIndex={4}/>
+                </GlobalActions>);
     },
 
     onSelectTableReports(tableId) {
