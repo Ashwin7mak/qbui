@@ -36,7 +36,7 @@ class FeatureSwitchExceptionsRoute extends React.Component {
     selectRow(id, selected) {
 
         let selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
-        selectedRows.sort((a,b) => b - a);
+        selectedRows.sort((a, b) => b - a);
 
         const allSelected = selectedRows.length === this.props.exceptions.length;
 
@@ -46,7 +46,7 @@ class FeatureSwitchExceptionsRoute extends React.Component {
     selectAll(allSelected) {
 
         let selectedRows = allSelected ? this.props.exceptions.map((sw, index) => index) : [];
-        selectedRows.sort((a,b) => b - a);
+        selectedRows.sort((a, b) => b - a);
 
         this.setState({selectedRows, allSelected});
     }
@@ -58,6 +58,10 @@ class FeatureSwitchExceptionsRoute extends React.Component {
     }
 
     deleteSelectedExceptions() {
+
+        // state.selectedRows is sorted in reverse order so after deleting a row
+        // the remaining row indexes are still valid!
+
         this.state.selectedRows.forEach((id) => {
             this.props.deleteException(id);
         });
