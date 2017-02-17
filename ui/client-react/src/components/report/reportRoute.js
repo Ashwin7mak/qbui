@@ -43,8 +43,6 @@ const ReportRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
-        // tables with relationships
         flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {

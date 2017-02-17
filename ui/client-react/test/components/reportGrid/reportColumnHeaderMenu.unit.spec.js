@@ -2,8 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {ReportColumnHeaderMenu} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
-import {Container, __RewireAPI__ as ContainerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
+import {ReportColumnHeaderMenu, __RewireAPI__ as ContainerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
 import * as FieldConsts from '../../../src/constants/schema';
 import {MenuItem} from 'react-bootstrap';
 
