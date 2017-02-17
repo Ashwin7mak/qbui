@@ -97,31 +97,31 @@ exports.config = {
             shardTestFiles: true,
             maxInstances: 2
         },
-        {
-            platform: 'OS X 10.11',
-            browserName: 'safari',
-            version: '10.0',
-            tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
-            name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
-            screenResolution : '1600x1200',
-            //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '180',
-            maxDuration: 10800,
-            breakpointSize: 'large',
-            shardTestFiles: true,
-            maxInstances: 2
-        },
+        // {
+        //     platform: 'OS X 10.11',
+        //     browserName: 'safari',
+        //     version: '10.0',
+        //     tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
+        //     name: process.env.SAUCE_JOB_NAME + '_OSX_Safari',
+        //     screenResolution : '1600x1200',
+        //     //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
+        //     idleTimeout: '180',
+        //     maxDuration: 10800,
+        //     breakpointSize: 'large',
+        //     shardTestFiles: true,
+        //     maxInstances: 2
+        // },
         {
             platform: 'OS X 10.11',
             browserName: 'firefox',
             version: '46.0',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
             name: process.env.SAUCE_JOB_NAME + '_OSX_Firefox',
-            screenResolution : '1600x1200',
+            screenResolution : '2048x1536',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'large',
+            breakpointSize: 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
         },

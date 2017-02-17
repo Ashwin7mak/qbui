@@ -51,8 +51,10 @@
 
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost:8443',
-        javaHost: 'http://localhost:8080',
-        eeHost: 'http://localhost:8081',
+        //javaHost: 'http://localhost:8080',
+        //eeHost: 'http://localhost:8081',
+        javaHost: 'https://t.tomcat.trunk.newstack.quickbaserocks.com:8443',
+        eeHost: 'https://ee.trunk-int-experienceengine.newstack.quickbaserocks.com',
         eeHostEnable: true,
 
         isMockServer : false,

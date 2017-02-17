@@ -67,6 +67,7 @@ class BaseService {
         let config = conf || {};
         return axios.put(url, data, config);
     }
+
     /**
      * Http patch request
      *

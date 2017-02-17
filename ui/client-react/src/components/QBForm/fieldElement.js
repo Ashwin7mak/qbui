@@ -8,13 +8,16 @@ import FieldFormats from '../../utils/fieldFormats';
 import FieldUtils from '../../utils/fieldUtils';
 import './qbform.scss';
 
+import getFlux from '../../scripts/fluxxor';
+let fluxxor = getFlux();
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 //TODO currently all fields have a default width of 50 defined by core. This needs to be fixed -- specific field types should have specific defaults
 const DEFAULT_FIELD_WIDTH = 50;
 /**s
  * render a form field value, optionally with its label
  */
-const FieldElement = React.createClass({
+export const FieldElement = React.createClass({
     mixins: [FluxMixin],
     displayName: 'FieldElement',
     propTypes: {
@@ -147,4 +150,16 @@ const FieldElement = React.createClass({
     }
 });
 
-export default FieldElement;
+/**
+ * We need to create an HOC with flux, because upper level components are now connected to redux
+ * and no longer pass down flux. Can be removed once pending edits store is in Redux
+ * https://quickbase.atlassian.net/browse/MB-2183
+ * @param FieldElementComponent
+ * @returns {function(*): XML}
+ * @constructor
+ */
+const FieldElementWithFlux = FieldElementComponent => {
+    return (props) => <FieldElementComponent flux={fluxxor} {...props}/>;
+};
+
+export default FieldElementWithFlux(FieldElement);

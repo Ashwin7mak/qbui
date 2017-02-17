@@ -96,6 +96,9 @@
             formsPO.clickAlertBtnOnFormFooter();
             // By setting the true flag it will do the inverse of the function (in this case wait for it to be invisible)
             browser.waitForExist('.qbErrorMessageVisible', browser.waitforTimeout, true);
+
+            //step 5 - Close the dirty form
+            formsPO.clickFormCloseBtn();
         });
 
     });

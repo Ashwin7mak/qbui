@@ -19,7 +19,6 @@
         var formService = require('./services/formService.js');
         var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
-        var relationshipService = require('./services/relationshipService.js');
 
         var e2eBase = {
             // Instantiate recordBase module to use for your tests
@@ -49,7 +48,6 @@
             formService: formService(recordBase),
             userService: userService(recordBase),
             roleService: roleService(recordBase),
-            relationshipService: relationshipService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
@@ -87,198 +85,13 @@
                 var sessionTicketRequestEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, ticketEndpoint + realmId);
                 return sessionTicketRequestEndPoint;
             },
-            // Resize the browser window to the given pixel width and height. Returns a promise
-            resizeBrowser: function(width, height) {
-                var deferred = Promise.pending();
-                // Define the window size if there is a browser object
-                if (typeof browser !== 'undefined') {
-                    browser.driver.manage().window().getSize().then(function(dimension) {
-                        // Currently our breakpoints only change when browser width is changed so don't need to check height (yet)
-                        if (dimension.width === width) {
-                            // Do nothing because we are already at the current width
-                            deferred.resolve();
-                        } else {
-                            // Resize browser if not at same width
-                            browser.driver.manage().window().setSize(width, height).then(function() {
-                                e2eBase.sleep(browser.params.mediumSleep).then(function() {
-                                    deferred.resolve();
-                                });
-                            });
-                        }
-                    });
-                    return deferred.promise;
-                } else {
-                    return deferred.resolve();
-                }
-            },
-
-            // Setup method that generates an application, table, report and a specified number of records
-            basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
-                var createdApp;
-                var MIN_RECORDSCOUNT = 11;
-
-                // Generate the app JSON object
-                var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
-                // Create the app via the API
-                return e2eBase.appService.createApp(generatedApp).then(function(app) {
-                    createdApp = app;
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    // Generate the record JSON objects
-                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                    // Add 1 duplicate record
-                    var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
-                    var dupRecord = clonedArray[0];
-                    // Edit the numeric field so we can check the second level sort (ex: 6.7)
-                    dupRecord.forEach(function(field) {
-                        if (field.id === 7) {
-                            field.value = 1.90;
-                        }
-                        if (field.id === 11) {
-                            field.value = '1977-12-12';
-                        }
-                    });
-                    // Add the new record back in to create
-                    table1GeneratedRecords.push(dupRecord);
-                    if (numberOfRecords < MIN_RECORDSCOUNT) {
-                        // Via the API create the records, a new report, then run the report.
-                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    } else {
-                        // Via the API create the bulk records
-                        e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    }
-
-                    if (createdApp.tables[1]) {
-                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                        var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
-                        // Generate the record JSON objects
-                        var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
-                        // Via the API create the records, a new report, then run the report.
-                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords);
-                        e2eBase.reportService.createReport(createdApp.id, createdApp.tables[1].id);
-                    }
-                }).then(function() {
-                    //Create a form
-                    return e2eBase.formService.createForm(createdApp.id, createdApp.tables[0].id);
-                }).then(function() {
-                    //TODO: Creating / running a report can be run async so break it out of this chain into a separate function
-                    return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);
-                }).then(function(reportId) {
-                    return e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId);
-                }).then(function(reportRecords) {
-                    // Return back the created app and records
-                    // Pass it back in an array as promise.resolve can only send back one object
-                    return  [createdApp, reportRecords];
-                }).catch(function(error) {
-                    console.error(JSON.stringify(error));
-                });
-            },
-
-            makeBasicMap() {
-                // Create the table schema (map object) to pass into the app generator
-                var tableToFieldToFieldTypeMap = {};
-                tableToFieldToFieldTypeMap['Table 1'] = {};
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[1]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TEXT
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[2]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.NUMERIC
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[3]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CURRENCY
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[4]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PERCENT
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[5]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.RATING
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[6]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[7]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE_TIME
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[8]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TIME_OF_DAY
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[9]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DURATION
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[10]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CHECKBOX
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[11]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PHONE_NUMBER
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[12]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.EMAIL_ADDRESS
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[13]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.URL
-                };
-                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[14]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.USER
-                };
-                tableToFieldToFieldTypeMap['Table 2'] = {};
-                tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[2]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TEXT
-                };
-                tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[6]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE
-                };
-                tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[12]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PHONE_NUMBER
-                };
-                tableToFieldToFieldTypeMap['Table 3'] = {};
-                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[1]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TEXT
-                };
-                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[6]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE
-                };
-                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[7]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE_TIME
-                };
-                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[10]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CHECKBOX
-                };
-                tableToFieldToFieldTypeMap['Table 4'] = {};
-                tableToFieldToFieldTypeMap['Table 4'][e2eConsts.reportFieldNames[1]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TEXT
-                };
-                return tableToFieldToFieldTypeMap;
-            },
 
             /*
              * Setup method that generates an application, table, report and a specified number of records
              * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
              */
-            defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
+            basicAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
-                var MIN_RECORDSCOUNT = 11;
 
                 // Use map of tables passed in or create default
                 if (!tableToFieldToFieldTypeMap) {
@@ -293,78 +106,35 @@
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
-                return e2eBase.appService.createApp(generatedApp).then(function(app) {
-                    createdApp = app;
-                    e2eBase.userService.generateDefaultUserList(createdApp.id);
-
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    // Generate the record JSON objects
-                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                    // Add 1 duplicate record
-                    var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
-                    var dupRecord = clonedArray[0];
-                    // Edit the numeric field so we can check the second level sort (ex: 6.7)
-                    dupRecord.forEach(function(field) {
-                        if (field.id === 7) {
-                            field.value = 1.90;
-                        }
-                        if (field.id === 11) {
-                            field.value = '1977-12-12';
-                        }
-                    });
-                    // Add the new record back in to create
-                    table1GeneratedRecords.push(dupRecord);
-                    if (numberOfRecords < MIN_RECORDSCOUNT) {
-                        // Via the API create the records, a new report, then run the report.
-                        return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    } else {
-                        // Via the API create the bulk records
-                        return e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
-                    }
+                return e2eBase.appService.createApp(generatedApp).then(function(appResponse) {
+                    // Set the global app object for use below
+                    createdApp = appResponse;
+                }).then(function() {
+                    // Generate and add the default set of Users to the app
+                    return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
+                }).then(function() {
+                    // Generate and add records to Table 1 (include a dupe and an empty record)
+                    return e2eBase.recordService.addRecordsToTable(createdApp, 0, numberOfRecords, true, true);
                 }).then(function() {
                     // Create a List all report for the first table
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
+                    return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
                 }).then(function() {
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    // Generate 1 empty record for Table 1
-                    var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(table1NonBuiltInFields, 1);
-                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedEmptyRecords);
-                }).then(function() {
-                    // Create the above for table 2
+                    // Create records and a List all report for table 2
+                    //TODO: Need to do this better. We had inconsistencies when creating test data with promises hence why Table 2 is hardcoded
                     if (createdApp.tables[1]) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                         var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
                         // Generate the record JSON objects
                         var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
                         // Via the API create the records, a new report, then run the report.
+                        //TODO: The looping issue is probably caused by this addRecords function. Investigate.
                         return e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords).then(function() {
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null);
                         });
                     }
                 }).then(function() {
-                    if (createdApp.tables[2] && createdApp.tables[3]) {
-                        const relationshipTable = [2, 3];
-                        let reportPromise = [];
-                        relationshipTable.forEach(relationshipTableIndex => {
-                            let table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[relationshipTableIndex]);
-                            let table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
-                            e2eBase.recordService.addRecords(createdApp, createdApp.tables[relationshipTableIndex], table2GeneratedRecords).then(function() {
-                                reportPromise.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[relationshipTableIndex].id, 'List All Report', null, null, null, null));
-                            });
-                        });
-
-                        return reportPromise;
-                    }
-                }).then(function() {
-                    //Create tables relationship
-                    return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3]);
-                }).then(function() {
-                    //Create forms for both tables
+                    // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
-                }).then(function() {
-                    return e2eBase.formService.createEEDefaultForms(createdApp);
                 }).then(function() {
                     // Set default table homepage for Table 1
                     return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
@@ -387,7 +157,7 @@
             fullReportsSetup: function(numRecords) {
                 var createdApp;
 
-                return this.defaultAppSetup(null, numRecords).then(function(createdAppResponse) {
+                return this.basicAppSetup(null, numRecords).then(function(createdAppResponse) {
                     createdApp = createdAppResponse;
 
                     var TEXT_FID = 6;
@@ -418,19 +188,19 @@
 
                     //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
                     // Create report with fids
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
+                    return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
                         .then(function(rid1) {
                             reportIds.push(rid1);
                             // Create report with sortList
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
                         }).then(function(rid2) {
                             reportIds.push(rid2);
                             // Create report with facetFids
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
                         }).then(function(rid3) {
                             reportIds.push(rid3);
                             // Create report with all params defined
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
+                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
                         }).then(function(rid4) {
                             reportIds.push(rid4);
                             return reportIds;
@@ -442,43 +212,6 @@
                     // Catch any errors and reject the promise with it
                     return Promise.reject(new Error('Error during fullReportsSetup: ' + e.message));
                 });
-            },
-
-
-            /*
-             * @deprecated Please use defaultAppSetup or fullReportsSetup going forward
-             */
-
-            // Setup method for the reports spec files. Creates the table / field mapping to be generated by basicSetup
-            reportsBasicSetUp: function(tableToFieldToFieldTypeMap, numRecords) {
-                var deferred = Promise.pending();
-                var app;
-                var recordList;
-
-                //use map of tables passed in or create basic
-                if (!tableToFieldToFieldTypeMap) {
-                    tableToFieldToFieldTypeMap  = this.makeBasicMap();
-                }
-
-                //use num of records to generate or use 10 by default
-                if (!numRecords) {
-                    numRecords  = 10;
-                }
-
-                // Call the basic app setup function
-                e2eBase.basicSetup(tableToFieldToFieldTypeMap, numRecords).then(function(results) {
-                    // Set your global objects to use in the test functions
-                    app = results[0];
-                    recordList = results[1];
-                    // Return back the created app and records
-                    // Pass it back in an array as promise.resolve can only send back one object
-                    var appAndRecords = [app, recordList, e2eConsts.reportFieldNames];
-                    deferred.resolve(appAndRecords);
-                }).catch(function(error) {
-                    console.error(JSON.stringify(error));
-                    deferred.reject(error);
-                });
-                return deferred.promise;
             },
 
             // Setup method for app schema. Creates the table / field mapping to be generated by basicSetup
@@ -500,7 +233,7 @@
                     reportService : this.reportService,
                     formService : this.formService
                 };
-                return e2eBase.appService.createRecords(app, recordsConfig, services);
+                return e2eBase.recordService.createRecords(app, recordsConfig, services);
             },
 
             /**
@@ -535,20 +268,8 @@
              */
             choicesSetUp(type, numChoices, options) {
                 return this.tableService.generateChoices(type, numChoices, options);
-            },
-
-            // Helper method to sleep a specified number of seconds
-            sleep: function(ms) {
-                var deferred = Promise.pending();
-                try {
-                    browser.driver.sleep(ms);
-                    deferred.resolve();
-                } catch (error) {
-                    console.error(JSON.stringify(error));
-                    deferred.reject(error);
-                }
-                return deferred.promise;
             }
+
         };
         return e2eBase;
     };

@@ -177,7 +177,7 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test invalid url', useEeEndpoint: true, url: '/non/parsing/url', expectation: '/non/parsing/url'},
             {name: 'test invalid url - no table id', useEeEndpoint: true, url: '/apps/123/tables', expectation: '/apps/123/tables'},
             {name: 'test invalid url - no table id2', useEeEndpoint: true, url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
-            {name: 'test valid url - id=2', useEeEndpoint: true, url: '/apps/123/tables/456/records/789?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'},
+            {name: 'test valid url - id=2', useEeEndpoint: true, url: '/apps/123/tables/456/records/789/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'},
             {name: 'test valid url', useEeEndpoint: true, url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'},
             {name: 'test valid url - id=1', useEeEndpoint: true, url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'}
         ];
@@ -197,9 +197,9 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
             {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
             {name: 'test invalid url - no table id2', url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
-            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
             {name: 'test valid url with (/api/api) in table endpoint', url: '/api/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'},
-            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
             {name: 'test valid url with (/api) in table endpoint', url: '/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'}
         ];
 

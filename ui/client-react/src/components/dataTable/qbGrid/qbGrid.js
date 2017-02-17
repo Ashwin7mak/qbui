@@ -237,7 +237,6 @@ const QbGrid = React.createClass({
             isCollapsed: row.isCollapsed,
             className: classes.join(' '),
             editingRowId: this.props.editingRowId,
-            isInlineEditOpen: this.props.isInlineEditOpen,
             isValid: this.props.isEditingRowValid,
             isSaving: this.props.isEditingRowSaving,
             // Add one to account for the extra column at the start of the grid for the row actions.
@@ -369,7 +368,7 @@ const QbGrid = React.createClass({
 
         return (
 
-            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
+            <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <Table.Provider
                     ref="qbGridTable"
                     className="qbGrid"
@@ -385,9 +384,9 @@ const QbGrid = React.createClass({
                         }
                     }}
                 >
-                    <Table.Header />
+                    <Table.Header className="qbHeader"/>
 
-                    <Table.Body
+                    <Table.Body className="qbTbody"
                         onRow={this.addRowProps}
                         rows={this.collapsedGroupHelper.filterRows(this.props.rows)}
                         rowKey={this.getUniqueRowKey}

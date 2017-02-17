@@ -17,21 +17,9 @@ let Trowser = React.createClass({
          */
         position: React.PropTypes.string, // top or bottom
         /**
-         * left footer actions
-         */
-        leftActions: React.PropTypes.node,
-        /**
-         * center footer actions
-         */
-        centerActions: React.PropTypes.node,
-        /**
          * header content (breadcrumbs)
          */
         breadcrumbs: React.PropTypes.node,
-        /**
-         * right footer icons
-         */
-        rightIcons: React.PropTypes.node,
         /**
          * main content of trowser
          */
@@ -87,19 +75,7 @@ let Trowser = React.createClass({
                     <div className={"trowserChildren"}>
                         {this.props.content}
                     </div>
-
-                    <div className={"trowserFooter"}>
-                        <div className={"leftActions"}>
-                            {this.props.leftActions}
-                        </div>
-
-                        {this.props.centerActions}
-
-                        <div className={"rightIcons"}>
-                            {this.props.rightIcons}
-
-                        </div>
-                    </div>
+                    {this.props.children}
                 </div>
             </div>
         );

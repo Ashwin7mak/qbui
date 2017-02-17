@@ -24,6 +24,7 @@ let defaultConfig = {
     uid: uuid.v1(),
     api: {
         qbVersion: 'v1',
+        eeVersion: 'v1',
         nodeVersion: 'v1',
         legacyVersion: 'v1'
     },
@@ -54,8 +55,8 @@ if (__QB_TEST__) {
         env: 'TEST',
         logger: {
             logLevel: LogLevel.DEBUG,
-            logToConsole: true,
-            logToServer: true
+            logToConsole: false,
+            logToServer: false
         },
         unauthorizedRedirect: '/qbase/unauthorized',
         // walkme java script

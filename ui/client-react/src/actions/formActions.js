@@ -11,6 +11,7 @@ import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
+import {NEW_FORM_RECORD_ID} from '../constants/schema';
 
 let logger = new Logger();
 
@@ -70,6 +71,7 @@ export const syncForm = (id) => {
  * @param container
  * @returns {{type, container: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const savingForm = (id) => {
     return {
         id,
@@ -83,6 +85,7 @@ export const savingForm = (id) => {
  * @param error error message from server
  * @returns {{type, container: *, error: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const saveFormError = (id, error) => {
     return {
         id,
@@ -96,6 +99,7 @@ export const saveFormError = (id, error) => {
  * @param container
  * @returns {{type, container: *}}
  */
+//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
 export const saveFormSuccess = (id) => {
     return {
         id,
@@ -110,7 +114,6 @@ export const saveFormSuccess = (id) => {
  * @returns {{type, recId: *}}
  */
 export const openRecordForEdit = (recId) => {
-
     // add editRec query param and let the router take action
     WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
 
@@ -150,8 +153,6 @@ export const editNewRecord = (navigateAfterSave = false) => {
  */
 export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 
-    const NEW_RECORD_ID = "new";
-
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 
@@ -167,93 +168,161 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             let formService = new FormService();
 
             let promise;
-
-            if (recordId === NEW_RECORD_ID) {
+            if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
-
             } else {
                 promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
             }
 
-            promise.then(response => {
-                response.data.formType = formType;
+            promise.then(
+                response => {
+                    response.data.formType = formType;
 
-                if (recordId === NEW_RECORD_ID) {
-                    response.data.record = null;
-                } else {
-                    response.data.recordId = recordId;
-                }
-
-                // TODO: using mock data: should retrieve relationships data without the use of
-                // globals.
-                if (_.get(window, 'relationships.length') > 0) {
-                    window.relationships.forEach((relation) => {
-                        // if a relathinship in which this form is a parent is defined, mock ReferenceElement
-                        if (relation.masterTableId === response.data.formMeta.tableId) {
-                            (response.data.formMeta.relationships || []).push(relation);
-                            const mockElement =  {
-                                ReferenceElement: {
-                                    displayOptions: [
-                                        "VIEW",
-                                        "ADD",
-                                        "EDIT"
-                                    ],
-                                    type: "EMBEDREPORT",
-                                    orderIndex: 0,
-                                    positionSameRow: false,
-                                    relationshipId: 0
-                                }
-                            };
-                            // add as many elements as we have relationships
-                            const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
-                                const element = _.cloneDeep(mockElement);
-                                _.set(element, 'ReferenceElement.relationshipId', idx);
-                                _.set(element, 'ReferenceElement.orderIndex', idx);
-                                return element;
-                            });
-                            const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
-                            // inject relationship elements in its own section
-                            let sections = response.data.formMeta.tabs[0].sections;
-                            sections[length] = Object.assign(_.cloneDeep(sections[0]), {
-                                elements: elements,
-                                fields: [],
-                                orderIndex: length
-                            });
-                            sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
-                        }
-                    });
-                }
-
-                dispatch(loadFormSuccess(formType, response.data));
-
-                resolve();
-            }).catch(error => {
-
-                if (error.response) {
-                    if (error.response.status === 403) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                    if (recordId === NEW_FORM_RECORD_ID) {
+                        response.data.record = null;
                     } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        response.data.recordId = recordId;
                     }
-                }
 
-                if (error.response && error.response.status === 403) {
-                    NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                } else {
-                    NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
-                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                }
+                    dispatch(loadFormSuccess(formType, response.data));
+                    resolve(response.data);
+                },
+                (error) => {
+                    if (error.response) {
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        }
+                    }
 
+                    if (error.response && error.response.status === 403) {
+                        NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                    } else {
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    }
+
+                    // remove the editRec query string since we are not successfully editing the form
+                    WindowLocationUtils.pushWithoutQuery();
+                    dispatch(loadFormError(formType, error.response.status));
+
+                    reject(error);
+                }
+            ).catch((ex) => {
+                logger.logException(ex);
+                NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'),
+                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 // remove the editRec query string since we are not successfully editing the form
                 WindowLocationUtils.pushWithoutQuery();
-
-                if (error.response) {
-                    dispatch(loadFormError(formType, error.response.status));
-                }
-
-                reject(error);
+                reject(ex);
             });
         });
     };
 };
+
+/**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newTabIndex
+ * @param newSectionIndex
+ * @param newOrderIndex
+ * @param draggedItemProps
+ * @returns {{id, type, content}|*}
+ */
+export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) => {
+    return event(formId, types.MOVE_FIELD, {
+        newTabIndex,
+        newSectionIndex,
+        newOrderIndex,
+        draggedItemProps
+    });
+};
+
+/**
+ * Create a new form
+ *
+ * @param appId
+ * @param tblId
+ * @param formType
+ * @param form
+ */
+export const createForm = (appId, tblId, formType, form) => {
+    return saveForm(appId, tblId, formType, form, true);
+};
+
+/**
+ * Update an existing form layout
+ *
+ * @param appId
+ * @param tblId
+ * @param formType
+ * @param form
+ */
+export const updateForm = (appId, tblId, formType, form) => {
+    return saveForm(appId, tblId, formType, form, false);
+};
+
+// we're returning a promise to the caller (not a Redux action) since this is an async action
+// (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+function saveForm(appId, tblId, formType, form, isNew) {
+    return (dispatch) => {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId) {
+                logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
+
+                //  TODO: refactor once record events are moved out..
+                dispatch(event(formType, types.SAVING_FORM));
+
+                let formService = new FormService();
+
+                let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
+                formPromise.then(
+                    (response) => {
+                        logger.debug('FormService saveForm success');
+                        //  for now return the original form..
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, response.data));
+
+                        NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
+                        resolve();
+                    },
+                    (error) => {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.getReports:');
+                        dispatch(event(formType, types.SAVING_FORM_ERROR, error.response ? error.response.status : error.response));
+
+                        NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+
+                        reject(error);
+                    }
+                ).catch((ex) => {
+                    logger.logException(ex);
+                    NotificationManager.error(Locale.getMessage('form.notification.save.error'), Locale.getMessage('failed'),
+                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                    reject(ex);
+                });
+            } else {
+                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
+                reject();
+            }
+        });
+    };
+}
+
+/*
+ Redux event for saving a form
+ TODO: refactor once record events moved
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
+

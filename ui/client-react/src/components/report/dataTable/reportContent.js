@@ -22,6 +22,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
+import {APP_ROUTE} from '../../../constants/urlConstants';
 
 let logger = new Logger();
 
@@ -52,7 +53,7 @@ export const ReportContent = React.createClass({
         flux.actions.openingReportRow(recId);
 
         //create the link we want to send the user to and then send them on their way
-        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         if (this.props.router) {
             this.props.router.push(link);
         }
@@ -261,7 +262,7 @@ export const ReportContent = React.createClass({
         } else {
             return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
         }
-        return null;
+        return Promise.resolve(null);
     },
 
     addNewRowAfterRecordSaveSuccess(afterRecId) {

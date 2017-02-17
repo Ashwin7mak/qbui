@@ -77,10 +77,6 @@ var path = require('path');
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId').get(function(req, res) {
-            renderIndex(req, res);
-        });
-
         app.route('/qbase/app/:appId').get(function(req, res) {
             renderIndex(req, res);
         });
@@ -102,6 +98,14 @@ var path = require('path');
 
         app.route('/qbase/components/:componentName').get(function(req, res) {
             renderIndex(req, res, {title: 'QuickBase Component Library', bundleFileName: compBundleFileName});
+        });
+
+        app.route('/qbase/builder/app/:appId/table/:tblId/form').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
+        app.route('/qbase/builder/app/:appId/table/:tblId/form/:formId').get(function(req, res) {
+            renderIndex(req, res);
         });
 
         //  default application dashboard

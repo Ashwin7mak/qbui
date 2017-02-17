@@ -5,16 +5,19 @@ import {Router, Route, IndexRoute} from "react-router";
 import AppHistory from '../globals/appHistory';
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 import NavWrapper from "../components/nav/navWrapper";
+import BuilderWrapper from '../components/builder/builderWrapper';
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
+import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
 import FeatureSwitchRoute from "../components/featureSwitches/featureSwitchRoute";
 import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 
 import Logger from "../utils/logger";
+import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE, ADMIN_ROUTE} from '../constants/urlConstants';
 
 import "react-fastclick";
 
@@ -35,7 +38,9 @@ const mapStateToProps = (state) => {
         qbui: state
     };
 };
+
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
+const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
 
 const store = createAppStore();
 
@@ -50,22 +55,26 @@ render((
     <Provider store={store}>
         <Router history={history} createElement={createElementWithFlux} >
 
-            <Route path="/qbase/apps" component={ConnectedNav} >
+            <Route path={APPS_ROUTE} component={ConnectedNav} >
                 <IndexRoute component={AppsRoute} />
             </Route>
 
-            <Route path="/qbase/admin" component={ConnectedNav} >
+            <Route path={ADMIN_ROUTE} component={ConnectedNav} >
                 <Route path="featureSwitches" component={FeatureSwitchesRoute} />
                 <Route path="featureSwitch/:id" component={FeatureSwitchRoute} />
             </Route>
 
-            <Route path="/qbase/app/:appId" component={ConnectedNav} >
+            <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
+
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
-                <Route path="table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
                 <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+            </Route>
+
+            <Route path={`${BUILDER_ROUTE}/app/:appId`} component={ConnectedBuilderNav}>
+                <Route path="table/:tblId/form(/:formId)" component={FormBuilderContainer} />
             </Route>
 
         </Router>
