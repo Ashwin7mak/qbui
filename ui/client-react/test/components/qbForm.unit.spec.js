@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import QBForm from '../../src/components/QBForm/qbform';
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
+import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
 import {TabPane} from 'rc-tabs';
 import Breakpoints from '../../src/utils/breakpoints';
 import {referenceElement, relationships} from '../../src/mocks/relationship';
@@ -266,13 +267,15 @@ describe('QBForm functions', () => {
     });
 
     it('renders relationship links in smallBP', () => {
-        QBForm.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        RelatedChildReport.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
 
         component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={QBFormDataWithRelationship}></QBForm>);
+        const dom = ReactDOM.findDOMNode(component);
+        console.log(dom);
         const childReportLink = TestUtils.findRenderedDOMComponentWithClass(component, "childReportLink");
         expect(childReportLink).toBeTruthy();
 
-        QBForm.__ResetDependency__('Breakpoints');
+        RelatedChildReport.__ResetDependency__('Breakpoints');
     });
 
     it('test render of empty section', () => {

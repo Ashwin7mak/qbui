@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import shallowCompare from 'react-addons-shallow-compare';
 
 /**
@@ -20,7 +21,7 @@ const QbCell = React.createClass({
         if (this.props.isStickyCell) {
             classes.push('stickyCell');
         }
-        if (this.props.children.props.isViewOnly) {
+        if (_.get(this, 'props.children.props.isViewOnly')) {
             classes.push('viewOnly');
         }
 

@@ -251,6 +251,7 @@ describe('ReportGrid', () => {
     it('passes the correct props to QbGrid to render the grid correctly', () => {
         const testColumns = [1, 2, 3];
         const isInlineEditOpen = true;
+        const isViewOnly = undefined;
         const pendEdits = {isInlineEditOpen: isInlineEditOpen, currentEditingRecordId: testRecordId, errors: ['an error'], ok: false, saving: true};
         const selectedRows = [4];
         const appId = 'appId';
@@ -305,6 +306,7 @@ describe('ReportGrid', () => {
         expect(qbGrid).toHaveProp('commonCellProps', {
             appUsers: testAppUsers,
             isInlineEditOpen: isInlineEditOpen,
+            isViewOnly,
             onCellChange: instance.onCellChange,
             onCellBlur: instance.onCellBlur,
             onCellClick: actions.onCellClick,
