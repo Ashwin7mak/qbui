@@ -406,7 +406,7 @@ function convertFormToArrayForClient (formData) {
                 tabIndex: tab.orderIndex,
                 sectionIndex: section.orderIndex
             };
-
+            section.isEmpty = isSectionEmpty(section);
 
             return section;
         });
@@ -421,6 +421,17 @@ function convertFormToArrayForClient (formData) {
     formDataCopy.formMeta.tabs = _.sortBy(formDataCopy.formMeta.tabs, 'orderIndex');
 
     return formDataCopy;
+}
+
+/**
+ * Currently the server returns a section with a property of elements so we can check that directly.
+ * If element structure changes to match UI structure, this function may need to deeply check for elements in a section.
+ * section -> columns -> rows -> elements (if any row, in any column, has an element, then this is false)
+ * @param section
+ * @returns {boolean}
+ */
+function isSectionEmpty(section) {
+    return (section.elements.length === 0);
 }
 
 function convertFormToObjectForServer () {

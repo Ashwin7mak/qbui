@@ -21,9 +21,20 @@ let QBForm = React.createClass({
     displayName: 'QBForm',
 
     propTypes: {
+        /**
+         * Boolean that indicates whether to display the form in edit mode or view mode */
         edit: PropTypes.bool,
+
+        /**
+         * Boolean that indicates whether the form itself is currently being edited */
         editingForm: PropTypes.bool,
+
+        /**
+         * The order index of the tab to display */
         activeTab: PropTypes.string,
+
+        /**
+         * Data used to display the form. Expect formMeta to be in an array based structure. */
         formData: PropTypes.shape({
             record: PropTypes.array,
             fields: PropTypes.array,
@@ -107,14 +118,30 @@ let QBForm = React.createClass({
     /**
      * create a tab pane
      * @param tab tab data (sections)
+     * @param numberOfTabs
      * @returns {XML}
      */
-    createTab(tab) {
-        return (
-            <TabPane key={tab.id} tab={tab.title || `${Locale.getMessage('form.tab')} ${tab.orderIndex}`}>
-                {tab.sections.map(section => this.createSection(section))}
-            </TabPane>
-        );
+    createTab(tab, numberOfTabs) {
+        let sections = null;
+        if (tab.sections && Array.isArray(tab.sections)) {
+            sections = tab.sections.map(section => this.createSection(section));
+        }
+
+        if (numberOfTabs > 1) {
+            return (
+                <TabPane key={tab.orderIndex} tab={tab.title || `${Locale.getMessage('form.tab')} ${tab.orderIndex}`}>
+                    <div className="tabContent">
+                        {sections}
+                    </div>
+                </TabPane>
+            );
+        } else {
+            return (
+                <div className="noTabForm tabContent">
+                    {sections}
+                </div>
+            );
+        }
     },
 
     /**
@@ -135,9 +162,14 @@ let QBForm = React.createClass({
          A section is also treated non-collapsible if its the first section and has no elements or no header
          */
 
-        const collapsible = !(section.pseudo || (section.orderIndex == 0 && (!sectionTitle.length || !section.elements.length)));
+        const collapsible = !(section.pseudo || (section.orderIndex == 0 && (!sectionTitle.length || section.isEmpty)));
 
         const wrapLabels = !_.has(this.props, "formData.formMeta.wrapLabel") || this.props.formData.formMeta.wrapLabel;
+
+        let columns = null;
+        if (section.columns && Array.isArray(section.columns)) {
+            columns = section.columns.map(column => this.createColumn(column, section.columns.length));
+        }
 
         return (
             <QBPanel className="formSection"
@@ -148,26 +180,36 @@ let QBForm = React.createClass({
                      collapsible={collapsible}
                      wrapLabels={wrapLabels}>
                 <div className="formTable">
-                    {section.columns.map(column => this.createColumn(column))}
+                    {columns}
                 </div>
             </QBPanel>
         );
     },
 
-    createColumn(column) {
+    createColumn(column, numberOfColumns) {
+        let rows = null;
+        if (column.rows && Array.isArray(column.rows)) {
+            rows = column.rows.map(row => this.createRow(row));
+        }
+
         return (
-            <div key={column.id} className="sectionColumn">
+            <div key={column.id} className="sectionColumn" style={{width: `${100 / numberOfColumns}%`}}>
                 <div className="sectionRows">
-                    {column.rows.map(row => this.createRow(row))}
+                    {rows}
                 </div>
             </div>
         )
     },
 
     createRow(row) {
+        let elements = null;
+        if (row.elements && Array.isArray(row.elements)) {
+            elements = row.elements.map(element => this.createElement(element, row.elements.length));
+        }
+
         return (
             <div key={row.id} className="sectionRow">
-                {row.elements.map(element => this.createElement(element, row.elements.length))}
+                {elements}
             </div>
         );
     },
@@ -352,7 +394,7 @@ let QBForm = React.createClass({
 
         let tabs = [];
         if (_.has(this.props, 'formData.formMeta.tabs') && Array.isArray(this.props.formData.formMeta.tabs)) {
-            tabs = this.props.formData.formMeta.tabs.map(tab => this.createTab(tab));
+            tabs = this.props.formData.formMeta.tabs.map(tab => this.createTab(tab, this.props.formData.formMeta.tabs.length));
         }
 
         const formContent = tabs.length < 2 ? tabs : <Tabs activeKey={this.props.activeTab}>{tabs}</Tabs>;

@@ -12,7 +12,7 @@ class WindowLocationUtilsMock {
     static pushWithQuery(url) { }
 }
 
-describe('Form Actions functions', () => {
+describe('Form Actions', () => {
 
     beforeEach(() => {
         FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
@@ -25,7 +25,7 @@ describe('Form Actions functions', () => {
 
     describe('syncing actions', () => {
 
-        it('should create an action to indicate the view form needs to be reloaded', () => {
+        it('creates an action to indicate the view form needs to be reloaded', () => {
 
             expect(formActions.syncForm("view")).toEqual({type: types.SYNC_FORM, id: "view"});
         });
@@ -33,12 +33,12 @@ describe('Form Actions functions', () => {
 
     describe('loading actions', () => {
 
-        it('should create an action to indicate loading view form', () => {
+        it('creates an action to indicate loading view form', () => {
 
             expect(formActions.loadingForm("view")).toEqual({type: types.LOADING_FORM, id: "view"});
         });
 
-        it('should create an action to indicate load view form error', () => {
+        it('creates an action to indicate load view form error', () => {
 
             expect(formActions.loadFormError("view", "oops")).toEqual({
                 type: types.LOAD_FORM_ERROR,
@@ -47,7 +47,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to indicate form loaded', () => {
+        it('creates an action to indicate form loaded', () => {
 
             expect(formActions.loadFormSuccess("view", "someData")).toEqual({
                 type: types.LOAD_FORM_SUCCESS,
@@ -59,12 +59,12 @@ describe('Form Actions functions', () => {
 
     describe('saving actions', () => {
 
-        it('should create an action to indicate saving a form', () => {
+        it('creates an action to indicate saving a form', () => {
 
             expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
 
-        it('should create an action to indicate save form error', () => {
+        it('creates an action to indicate save form error', () => {
 
             expect(formActions.saveFormError("edit", "oops")).toEqual({
                 type: types.SAVE_FORM_FAILED,
@@ -73,7 +73,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to indicate form saved', () => {
+        it('creates an action to indicate form saved', () => {
 
             expect(formActions.saveFormSuccess("edit", "someData")).toEqual({
                 type: types.SAVE_FORM_SUCCESS,
@@ -85,7 +85,7 @@ describe('Form Actions functions', () => {
 
     describe('edit record actions', () => {
 
-        it('should create an action to open record for edit', () => {
+        it('creates an action to open record for edit', () => {
 
             expect(openRecordForEdit(123)).toEqual({
                 type: types.EDIT_REPORT_RECORD,
@@ -93,7 +93,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to edit new record, no nav after save', () => {
+        it('creates an action to edit new record, no nav after save', () => {
 
             expect(editNewRecord(false)).toEqual({
                 type: types.EDIT_REPORT_RECORD,
@@ -102,7 +102,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to edit new record, nav after save', () => {
+        it('creates an action to edit new record, nav after save', () => {
 
             expect(editNewRecord(true)).toEqual({
                 type: types.EDIT_REPORT_RECORD,
@@ -152,7 +152,7 @@ describe('Form Actions functions', () => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
         });
 
-        it('load view record form', (done) => {
+        it('loads view record form', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
             // so we don't need to spy on the dispatcher etc.
@@ -182,7 +182,7 @@ describe('Form Actions functions', () => {
                 });
         });
 
-        it('load new record form', (done) => {
+        it('loads new record form', (done) => {
 
             const expectedActions = [
                 {type: types.LOADING_FORM, id: 'edit'},
@@ -244,7 +244,7 @@ describe('Form Actions functions', () => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
         });
 
-        it('save a form update', (done) => {
+        it('saves a form update', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
             // so we don't need to spy on the dispatcher etc.
@@ -262,7 +262,7 @@ describe('Form Actions functions', () => {
                     done();
                 });
         });
-        it('save a form create', (done) => {
+        it('saves a form create', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
             // so we don't need to spy on the dispatcher etc.
@@ -282,7 +282,7 @@ describe('Form Actions functions', () => {
         });
     });
 
-    describe('tranforming formMeta for use in the UI', () => {
+    describe('transforming formMeta for use in the UI', () => {
         let result;
         beforeEach(() => {
             result = formActions.loadFormSuccess("view", testFormData);

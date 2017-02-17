@@ -33,12 +33,18 @@ $edit-field-padding: 5px;
 
         .formTable {
             margin-left: 10px;
+            display: flex;
 
             /* Fields in cardview span the width of the small device */
 
             @include small-breakpoint {
                 width: 100%;
                 table-layout: fixed;
+                flex-direction: column;
+            }
+
+            .sectionColumn {
+                flex: 0 auto;
             }
         }
 
