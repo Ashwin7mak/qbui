@@ -1,15 +1,15 @@
 import React from 'react';
 
-const dateEditor = ({ props } = {}) => {
-    const DateEditor = ({ value, onValue }) => {
+const dateEditor = ({props} = {}) => {
+    const DateEditor = ({value, onValue}) => {
 
-        const onKeyUp = ({key, target: {value}}) => {
+        const onKeyUp = ({key, target}) => {
             if (key === 'Enter') {
-                onValue(value);
+                onValue(target.value);
             }
         };
-        const onBlur = ({target: {value}}) => {
-            onValue(value);
+        const onBlur = ({target}) => {
+            onValue(target.value);
         };
 
         return (

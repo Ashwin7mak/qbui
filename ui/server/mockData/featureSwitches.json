@@ -1,0 +1,50 @@
+[
+  {
+    "id": "101",
+    "name": "Feature A",
+    "team": "Cthulu",
+    "description": "Demo feature switch",
+    "defaultOn": true,
+    "exceptions": [
+      {
+        "entityType": "realm",
+        "entityValue": "12345",
+        "on": false
+      },
+      {
+        "entityType": "app",
+        "entityValue": "app1",
+        "on": false
+      },
+      {
+        "entityType": "app",
+        "entityValue": "app2",
+        "on": true
+      }
+    ]
+  },
+  {
+    "id": "102",
+    "name": "Feature B",
+    "team": "Hydra",
+    "description": "Another demo feature",
+    "defaultOn": false,
+    "exceptions": []
+  },
+  {
+    "id": "103",
+    "name": "Hide Table",
+    "team": "Hydra",
+    "description": "Hide table feature",
+    "defaultOn": false,
+    "dateToExpire": "2018-01-18",
+    "expiredBehavior": "flip",
+    "exceptions": [
+      {
+        "entityType": "app",
+        "entityValue": "bmbahnjyp",
+        "on": true
+      }
+    ]
+  }
+]

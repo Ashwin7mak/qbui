@@ -81,7 +81,7 @@ const featureSwitches = (
         return {
             ...state,
             exceptions: [...currentSwitch.exceptions]
-        }
+        };
     }
 
     case types.SET_EXCEPTION_STATE: {
@@ -114,7 +114,6 @@ const featureSwitches = (
     }
 
     case types.CREATE_EXCEPTION:
-        console.log('create',action);
         return {
             ...state,
             exceptions: [...state.exceptions, action.exception],
@@ -131,7 +130,6 @@ const featureSwitches = (
             edited: true
         };
     }
-
 
     case types.SET_FEATURE_SWITCH_STATES:
         return {

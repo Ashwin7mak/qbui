@@ -63,6 +63,7 @@
         APP_USERS                   : baseUrl.QUICKBASE + '/apps/:appId/users',
 
         FEATURE_SWITCHES            : baseUrl.QUICKBASE + '/featureSwitches',
+        FEATURE_SWITCH_EXCEPTIONS   : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId',
         FEATURE_STATES              : baseUrl.QUICKBASE + '/featureStates',
 
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper

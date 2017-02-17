@@ -18,10 +18,10 @@ RowWrapper.shouldComponentUpdate = true;
 
 
 const expiredBehaviorOptions = [
-    {name:'Turn feature on',value:'on'},
-    {name:'Turn feature off',value:'off'},
-    {name:'Flip on/off',value:'flip'}
-    ];
+    {name:'Turn feature on', value:'on'},
+    {name:'Turn feature off', value:'off'},
+    {name:'Flip on/off', value:'flip'}
+];
 
 class FeatureSwitchesRoute extends React.Component {
 
@@ -32,7 +32,7 @@ class FeatureSwitchesRoute extends React.Component {
             columns: this.getColumns(),
             selectedRows: [],
             allSelected: false
-        }
+        };
 
         this.saveSwitches = this.saveSwitches.bind(this);
         this.addNewFeature = this.addNewFeature.bind(this);
@@ -66,7 +66,7 @@ class FeatureSwitchesRoute extends React.Component {
 
     setSelectedSwitchStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.props.setSwitchDefaultState(id, defaultOn)
+            this.props.setSwitchDefaultState(id, defaultOn);
         });
     }
 
@@ -80,11 +80,11 @@ class FeatureSwitchesRoute extends React.Component {
     getColumns() {
 
         const editable = edit.edit({
-            isEditing: ({ columnIndex, rowData }) => columnIndex === rowData.editing,
-            onActivate: ({ columnIndex, rowData }) => {
+            isEditing: ({columnIndex, rowData}) => columnIndex === rowData.editing,
+            onActivate: ({columnIndex, rowData}) => {
                 this.props.editFeatureSwitch(rowData.id, columnIndex);
             },
-            onValue: ({ value, rowData, property }) => {
+            onValue: ({value, rowData, property}) => {
                 this.props.featureSwitchEdited(rowData.id, property, value);
             }
         });
@@ -110,7 +110,7 @@ class FeatureSwitchesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (data,{rowData}) => <Link onClick={e => {e.stopPropagation();}} to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
+                        (data, {rowData}) => <Link onClick={e => {e.stopPropagation();}} to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
                     ],
                     transforms: [editable(edit.input())]
                 }
@@ -141,10 +141,11 @@ class FeatureSwitchesRoute extends React.Component {
                 cell: {
                     formatters: [
                         (value, {rowData}) => {
-                            return <ToggleButton  value={value} 
-                                                  onToggle={(value) => { 
-                                                      this.props.setSwitchDefaultState(rowData.id, !value) 
-                                                  }}/>
+                            return (
+                                <ToggleButton value={value}
+                                              onToggle={newValue => {
+                                                  this.props.setSwitchDefaultState(rowData.id, !newValue);
+                                              }}/>);
                         }
 
                     ]
@@ -168,7 +169,7 @@ class FeatureSwitchesRoute extends React.Component {
                     transforms: [editable(edit.dropdown({options: expiredBehaviorOptions}))],
                     formatters: [
                         (value) => {
-                            let option = expiredBehaviorOptions.find(option => option.value === value);
+                            let option = expiredBehaviorOptions.find(opt => opt.value === value);
                             return option && option.name;
                         }
 
@@ -193,7 +194,7 @@ class FeatureSwitchesRoute extends React.Component {
 
                 <div className="globalButtons">
                     <button onClick={this.addNewFeature}>Add new</button>
-                    <button disabled={!this.props.edited} className='save' onClick={this.saveSwitches}>Save switches</button>
+                    <button disabled={!this.props.edited} className="save" onClick={this.saveSwitches}>Save switches</button>
                 </div>
 
                 <Table.Provider className="featureSwitchTable switches"
@@ -224,7 +225,7 @@ class FeatureSwitchesRoute extends React.Component {
             </div>
         );
     }
-};
+}
 
 
 const mapStateToProps = (state) => {

@@ -1,3 +1,4 @@
+@import '../../../src/assets/css/qbVariables';
 
 .featureSwitches {
     margin: 20px;
@@ -6,15 +7,15 @@
         margin-right: 10px;
     }
     button:disabled {
-        color: #bbb;
+        color: $color-black-500;
     }
     button.save:not(:disabled) {
-        color: #fff;
-        background-color: #008000;
+        color: $default-text-ondark-color;
+        background-color: $success-color;
     }
 
     .globalButtons {
-        margin-top:30px;
+        margin-top: 30px;
     }
 }
 
@@ -22,13 +23,11 @@
     table-layout: fixed;
     margin-top: 20px;
     width: 100%;
-    tbody tr:nth-child(odd) {
-        background-color: #f5f5f5;
-    }
+
     tbody tr:hover, tr:nth-child(odd):hover {
-        background-color: #ddd;
+        background-color: $qbgrid-row-hover-color;
     }
-    th,td {
+    th, td {
         height: 40px;
 
         input {
@@ -37,7 +36,7 @@
     }
 
     tbody td {
-        border-top: 1px solid #ccc;
+        border-top: 1px solid $qbgrid-row-border-color;
 
     }
 

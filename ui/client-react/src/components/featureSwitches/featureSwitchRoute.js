@@ -24,9 +24,8 @@ class FeatureSwitchRoute extends React.Component {
             columns: this.getColumns(),
             selectedRows: [],
             allSelected: false
-        }
+        } ;
 
-        this.getFeatureSwitchID = this.getFeatureSwitchID.bind(this);
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
         this.saveExceptions = this.saveExceptions.bind(this);
@@ -50,7 +49,7 @@ class FeatureSwitchRoute extends React.Component {
 
     setSelectedExceptionStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.props.setExceptionState(id, defaultOn)
+            this.props.setExceptionState(id, defaultOn);
         });
     }
 
@@ -63,12 +62,7 @@ class FeatureSwitchRoute extends React.Component {
 
     getFeatureSwitch() {
 
-        return this.props.switches.find(item => item.id === parseInt(this.props.params.id));
-    }
-
-    getFeatureSwitchID() {
-
-        return parseInt(this.props.params.id);
+        return this.props.switches.find(item => item.id === this.props.params.id);
     }
 
     saveExceptions() {
@@ -107,7 +101,7 @@ class FeatureSwitchRoute extends React.Component {
                     label: 'Type'
                 },
                 cell: {
-                    transforms: [editable(edit.dropdown({options: [{name:'Realm',value:'realm'},{name:'App',value:'app'}]}))]
+                    transforms: [editable(edit.dropdown({options: [{name:'Realm', value:'realm'}, {name:'App', value:'app'}]}))]
                 }
             },
             {
@@ -127,10 +121,11 @@ class FeatureSwitchRoute extends React.Component {
                 cell: {
                     formatters: [
                         (value, {rowIndex}) => {
-                            return <ToggleButton  value={value}
-                                                  onToggle={(value) => {
-                                                      this.props.setExceptionState(rowIndex, !value)
-                                                  }}/>
+                            return (
+                             <ToggleButton value={value}
+                                              onToggle={(newValue) => {
+                                                  this.props.setExceptionState(rowIndex, !newValue);
+                                              }}/>);
                         }
 
                     ]
@@ -143,34 +138,33 @@ class FeatureSwitchRoute extends React.Component {
                 cell: {
                     formatters: [
                         (value, {rowData}) => {
-                            return <span>{rowData.on !== this.getFeatureSwitch().defaultOn ? "Yes" : "No"} </span>
+                            return <span>{rowData.on !== this.getFeatureSwitch().defaultOn ? 'Yes' : 'No'} </span>;
                         }
 
                     ]
                 }
             }
-        ]
+        ];
     }
 
     getTableRowsWithIds(rows) {
-        return rows.map((row, i) => {return {...row, id: i}});
+        return rows.map((row, i) => {return {...row, id: i};});
     }
 
     componentWillMount() {
 
         if (this.props.switches.length === 0) {
             this.props.getSwitches().then(() => {
-                this.props.selectFeatureSwitchExceptions(this.getFeatureSwitchID());
+                this.props.selectFeatureSwitchExceptions(this.props.params.id);
             });
-        }
-        else {
-            this.props.selectFeatureSwitchExceptions(this.getFeatureSwitchID());
+        } else {
+            this.props.selectFeatureSwitchExceptions(this.props.params.id);
         }
     }
 
     render() {
 
-        let featureSwitch = this.props.switches.find((item) => item.id === this.getFeatureSwitchID());
+        let featureSwitch = this.props.switches.find((item) => item.id === this.props.params.id);
 
         if (featureSwitch) {
 
@@ -187,7 +181,7 @@ class FeatureSwitchRoute extends React.Component {
 
                     <div className="globalButtons">
                         <button onClick={this.props.createException}>Add new</button>
-                        <button disabled={!this.props.edited} className='save' onClick={this.saveExceptions}>Save exceptions</button>
+                        <button disabled={!this.props.edited} className="save" onClick={this.saveExceptions}>Save exceptions</button>
                     </div>
 
                     <Table.Provider className="featureSwitchTable exceptions"
@@ -216,7 +210,7 @@ class FeatureSwitchRoute extends React.Component {
             return false;
         }
     }
-};
+}
 
 
 const mapStateToProps = (state) => {

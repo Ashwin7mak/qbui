@@ -46,7 +46,13 @@ export const getSwitches = () => {
 
 export const createFeatureSwitch = (id) => ({
     type: types.CREATE_FEATURE_SWITCH,
-    feature: { id, defaultOn: false, description: 'Description', exceptions: [], name: 'Feature', team: 'Team' }
+    feature: {
+        id,
+        defaultOn: false,
+        description: 'Description',
+        name: 'Feature',
+        team: 'Team',
+        exceptions: []}
 });
 
 export const deleteFeatureSwitch = id => ({
@@ -73,6 +79,40 @@ const saveSwitchesSuccess = (switches) => ({
     switches
 });
 
+export const saveSwitches = (switches) => {
+    return (dispatch) => {
+
+        return new Promise((resolve, reject) => {
+
+            let featureSwitchService = new FeatureSwitchService();
+
+            let promise = featureSwitchService.saveFeatureSwitches(switches);
+
+            promise.then(response => {
+                dispatch(saveSwitchesSuccess(switches));
+                NotificationManager.success('Feature switches saved', Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                resolve();
+            }).catch(error => {
+
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.saveFeatureSwitches:');
+                    } else {
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.saveFeatureSwitches:');
+                    }
+                }
+                reject(error);
+            });
+        });
+    };
+};
+
+
+const saveExceptionsSuccess = (exceptions) => ({
+    type: types.SAVED_FEATURE_SWITCH_EXCEPTIONS,
+    exceptions
+});
 
 export const saveExceptions = (id, exceptions) => {
     return (dispatch) => {
@@ -102,10 +142,7 @@ export const saveExceptions = (id, exceptions) => {
         });
     };
 };
-const saveExceptionsSuccess = (exceptions) => ({
-    type: types.SAVED_FEATURE_SWITCH_EXCEPTIONS,
-    exceptions
-});
+
 
 const loadStatesSuccess = (states) => ({
     type: types.SET_FEATURE_SWITCH_STATES,
@@ -181,5 +218,9 @@ export const confirmExceptionEdit = (row, property, value) => ({
 
 export const createException = () => ({
     type: types.CREATE_EXCEPTION,
-    exception: { entityType: 'realm', entityValue: '',  on: false }
+    exception: {
+        entityType: 'realm',
+        entityValue: '',
+        on: false
+    }
 });

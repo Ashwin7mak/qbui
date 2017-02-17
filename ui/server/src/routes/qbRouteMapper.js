@@ -1,65 +1,10 @@
 
-var featureSwitches = [
-    {
-        id: 101,
-        name: 'Feature A',
-        team: 'Cthulu',
-        description: 'Demo feature switch',
-        defaultOn: true,
-        exceptions: [
-            {
-                entityType: 'realm',
-                entityValue: '12345',
-                on: false,
-            },
-            {
-                entityType: 'app',
-                entityValue: 'app1',
-                on: false,
-            },
-            {
-                entityType: 'app',
-                entityValue: 'app2',
-                on: true,
-            }
-        ]
-    },
-    {
-        id: 102,
-        name: 'Feature B',
-        team: 'Hydra',
-        description: 'Another demo feature',
-        defaultOn: false,
-        exceptions: [
-
-        ]
-    },
-    {
-        id: 103,
-        name: 'Hide Table',
-        team: 'Hydra',
-        description: 'Hide table feature',
-        defaultOn: false,
-        dateToExpire: '2018-01-18',
-        expiredBehavior: 'flip',
-        exceptions: [
-            {
-                entityType: 'app',
-                entityValue: 'bmbahnjyp',
-                on: true,
-            }
-        ]
-    }
-];
 /**
  * The route mapper provides a static mapping from each route to the function we expect to call for that route
  * Created by cschneider1 on 7/2/15.
  */
 (function() {
     'use strict';
-
-
-
 
     let log = require('../logger').getLogger();
     let perfLogger = require('../perfLogger');
@@ -77,6 +22,7 @@ var featureSwitches = [
     let reportsApi;
     let appsApi;
     let routeGroup;
+    let featureSwitchesApi;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -86,6 +32,7 @@ var featureSwitches = [
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
+        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config);
 
         /* internal data */
         /*
@@ -136,6 +83,7 @@ var featureSwitches = [
          */
         var routeToPutFunction = {};
         routeToPutFunction[routeConsts.FEATURE_SWITCHES] = saveFeatureSwitches;
+        routeToPutFunction[routeConsts.FEATURE_SWITCH_EXCEPTIONS] = saveFeatureSwitchExceptions;
 
         /*
          * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
@@ -298,42 +246,93 @@ var featureSwitches = [
         perfLog.init('Get Feature Switches', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            let response = featureSwitches;
-            res.send(response);
+            featureSwitchesApi.getFeatureSwitches(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get feature switches');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get feature switches');
 
-            logApiSuccess(req, response, perfLog, 'Get Feature Switches');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
         });
     }
+
     function saveFeatureSwitches(req, res) {
 
-        let activityName = 'Save Feature Switches';
         let perfLog = perfLogger.getInstance();
-        perfLog.init(activityName, {req:filterNodeReq(req)});
+        perfLog.init('Save feature switches', {req:filterNodeReq(req)});
 
-        let response = {}
-        res.send(response);
+        featureSwitchesApi.saveFeatureSwitches(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, 'Save feature switches');
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, 'Save feature switches');
 
-        let bodyJSON = JSON.parse(req.rawBody);
-        featureSwitches = bodyJSON.switches;
-
-        logApiSuccess(req, response, perfLog, activityName);
-
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
     }
+
+    function saveFeatureSwitchExceptions(req, res) {
+
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Save feature switch exceptions', {req:filterNodeReq(req)});
+
+        featureSwitchesApi.saveFeatureSwitcheExceptions(req, featureSwitchId).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, 'Save feature switch exceptions');
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, 'Save feature switch exceptions');
+
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    }
+
     function getFeatureStates(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Get Feature Switches', {req:filterNodeReq(req)});
+        perfLog.init('Get feature states', {req:filterNodeReq(req)});
 
-        processRequest(req, res, function(req, res) {
-            let response = {};
+        featureSwitchesApi.getFeatureSwitchStates(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, 'Get feature states');
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, 'Get feature states');
 
-            featureSwitches.forEach(function (featureSwitch) {
-                response[featureSwitch.name] = featureSwitch.defaultOn;
-            });
-            res.send(response);
-
-            logApiSuccess(req, response, perfLog, 'Get Feature States');
-        });
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
     }
+
     /**
      * Return list of apps.
      *

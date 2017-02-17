@@ -88,5 +88,8 @@
          */
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
+
+        //mock data for feature switches for local testing
+        //featureSwitchesMockData: './server/mockData/featureSwitches.json'
     };
 }());

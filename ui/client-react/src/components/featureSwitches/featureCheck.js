@@ -13,7 +13,7 @@ export const FeatureCheck = React.createClass({
     getDefaultProps() {
         return {
             show: true
-        }
+        };
     },
 
     checkFeature(name) {
