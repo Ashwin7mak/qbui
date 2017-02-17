@@ -211,7 +211,11 @@ const QbGrid = React.createClass({
     getColumns() {
         return this.props.columns.map(column => {
             try {
-                return column.addFormatter(this.renderCell).addHeaderMenu(this.props.menuComponent, this.props.menuProps).getGridHeader();
+                column.addFormatter(this.renderCell);
+                if (!this.props.isViewOnly) {
+                    column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
+                }
+                return column.getGridHeader();
             } catch (err) {
                 // If the column is not a type of ColumnTransformer with the appropriate methods, still pass through the column as the dev may have wanted to use a plain object (i.e., in the component library)
                 // but provide a warning in case using the ColumnTransformer class was forgotten.

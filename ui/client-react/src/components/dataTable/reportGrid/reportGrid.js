@@ -251,7 +251,7 @@ const ReportGrid = React.createClass({
             rows={transformedRecords}
             loading={this.props.loading}
             appUsers={this.props.appUsers}
-            viewOnly={this.props.isViewOnly}
+            isViewOnly={this.props.isViewOnly}
             showRowActionsColumn={!this.props.isViewOnly}
 
             onStartEditingRow={this.startEditingRow}

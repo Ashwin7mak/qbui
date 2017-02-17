@@ -209,7 +209,7 @@ let QBForm = React.createClass({
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         return (
-            <td key={key} colSpan={colSpan}>
+            <td className="formElementWrapper" key={key} colSpan={colSpan}>
               <CurrentFieldElement
                   tabIndex={0}
                   sectionIndex={sectionIndex}

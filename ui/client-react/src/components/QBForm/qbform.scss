@@ -33,6 +33,7 @@ $edit-field-padding: 5px;
 
         .formTable {
             margin-left: 10px;
+            margin-bottom: 20px;
 
             /* Fields in cardview span the width of the small device */
 
@@ -64,13 +65,13 @@ $edit-field-padding: 5px;
         }
 
         .fieldRow {
-            td {
+            .formElementWrapper {
                 vertical-align: top;
                 padding-top: 5px;
                 padding-bottom: 20px;
             }
 
-            tr:last-child td {
+            .fieldRow:last-child .formElementWrapper {
                 padding-bottom: 0;
             }
 
@@ -112,7 +113,7 @@ $edit-field-padding: 5px;
                 }
             }
 
-            td:last-child .field {
+            .formElementWrapper:last-child .field {
                 margin-right: 0;
             }
         }
@@ -237,7 +238,7 @@ $edit-field-padding: 5px;
             }
 
             .fieldRow {
-                td {
+                .formElementWrapper {
                     padding-bottom: 20px;
                 }
 
