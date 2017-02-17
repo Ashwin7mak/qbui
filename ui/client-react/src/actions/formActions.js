@@ -362,7 +362,7 @@ function event(id, type, content) {
  * @param formData
  * @returns {*}
  */
-function convertFormToArrayForClient (formData) {
+function convertFormToArrayForClient(formData) {
     if (!_.has(formData, 'formMeta.tabs')) {
         return formData;
     }
@@ -434,7 +434,7 @@ function isSectionEmpty(section) {
     return (section.elements.length === 0);
 }
 
-function convertFormToObjectForServer () {
+function convertFormToObjectForServer() {
 
 }
 

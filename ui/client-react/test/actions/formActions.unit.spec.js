@@ -319,7 +319,7 @@ describe('Form Actions', () => {
                 'Tab1-Section1-Field4'
             ]);
         });
-        
+
         it('puts elements into rows based on the positionSameRow property', () => {
             let actualRows = result.formData.formMeta.tabs[1].sections[0].columns[0].rows.map(row => {
                 return row.elements.map(element => element.FormFieldElement.displayText);
@@ -383,5 +383,5 @@ describe('Form Actions', () => {
                 elementIndex: 2
             });
         });
-    })
+    });
 });

@@ -97,13 +97,13 @@ describe('QBForm', () => {
 
         let expectedSectionTitles = [];
         fakeQbFormData.formMeta.tabs.forEach(tab => {
-            tab.sections.forEach(section => expectedSectionTitles.push(section.title))
+            tab.sections.forEach(section => expectedSectionTitles.push(section.title));
         });
 
         expect(sections.length).toEqual(expectedSectionTitles.length);
         expectedSectionTitles.forEach((title, index) => {
             expect(sections.at(index).find(QBPanel)).toHaveProp('title', title);
-        })
+        });
     });
 
     it('renders a single column', () => {
@@ -132,7 +132,7 @@ describe('QBForm', () => {
 
         expect(rows.length).toEqual(5);
     });
-    
+
     it('renders text form elements', () => {
         component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
         let textElement = component.find('.formElement.text');

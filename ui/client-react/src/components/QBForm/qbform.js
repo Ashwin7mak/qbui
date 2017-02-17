@@ -162,7 +162,7 @@ let QBForm = React.createClass({
          A section is also treated non-collapsible if its the first section and has no elements or no header
          */
 
-        const collapsible = !(section.pseudo || (section.orderIndex == 0 && (!sectionTitle.length || section.isEmpty)));
+        const collapsible = !(section.pseudo || (section.orderIndex === 0 && (!sectionTitle.length || section.isEmpty)));
 
         const wrapLabels = !_.has(this.props, "formData.formMeta.wrapLabel") || this.props.formData.formMeta.wrapLabel;
 
@@ -198,7 +198,7 @@ let QBForm = React.createClass({
                     {rows}
                 </div>
             </div>
-        )
+        );
     },
 
     createRow(row) {
