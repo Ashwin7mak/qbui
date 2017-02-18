@@ -22,7 +22,7 @@ function buildNewLocation(tabIndex, sectionIndex, columnIndex, rowIndex, element
         columnIndex,
         rowIndex,
         elementIndex
-    }
+    };
 }
 
 /**

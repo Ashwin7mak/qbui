@@ -42,8 +42,10 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
 
     if (!draggedItemProps || !_.isObject(draggedItemProps)) {
         errors.push(`${baseMessage} draggedItemProps is required and must be an object`);
-    } else {
-        if (
+    }
+
+    if (
+        draggedItemProps && (
             !_.has(draggedItemProps, 'location') ||
             !_.isInteger(draggedItemProps.location.sectionIndex) ||
             !_.isInteger(draggedItemProps.location.columnIndex) ||
@@ -51,10 +53,10 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
             !_.isInteger(draggedItemProps.location.elementIndex) ||
             !_.isObject(draggedItemProps.element)
         )
-        {
-            errors.push(`${baseMessage} draggedItemProps must have the following properties: location (with tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex) and element`);
-        }
+    ) {
+        errors.push(`${baseMessage} draggedItemProps must have the following properties: location (with tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex) and element`);
     }
+
 
     let logger = new Logger(); // Rewire won't work during testing if this is defined at the top of the file
     errors.forEach(error => logger.error(error));
@@ -152,7 +154,7 @@ function createNewRow(rowIndex, elements) {
             element.orderIndex = elementIndex;
             return element;
         })
-    }
+    };
 }
 
 export default MoveFieldHelper;
