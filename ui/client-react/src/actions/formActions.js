@@ -366,13 +366,7 @@ function convertFormToArrayForClient(formData) {
                     section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
                 }
 
-                element.location = {
-                    tabIndex: tab.orderIndex,
-                    sectionIndex: section.orderIndex,
-                    columnIndex: 0, // hardcoded until columns are implemented
-                    rowIndex: currentRowIndex,
-                    elementIndex: section.rows.length // Element hasn't been added yet, so we don't subtract one from the length for 0 based index
-                };
+                element.orderIndex = section.rows.length; // Element hasn't been added yet, so we don't subtract one from the length for 0 based index
 
                 section.rows[currentRowIndex].elements.push(element);
             });
@@ -381,10 +375,6 @@ function convertFormToArrayForClient(formData) {
             // data returned from the Node layer
             section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
             section.id = _.uniqueId('section-');
-            section.location = {
-                tabIndex: tab.orderIndex,
-                sectionIndex: section.orderIndex
-            };
             section.isEmpty = isSectionEmpty(section);
 
             return section;

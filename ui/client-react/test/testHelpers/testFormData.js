@@ -204,7 +204,6 @@ export const testArrayBasedFormData = {
                     {
                         id: 'section1',
                         orderIndex: 0,
-                        location: {tabIndex: 0, sectionIndex: 0},
                         isEmpty: false,
                         headerElement: {
                             FormHeaderElement: {
@@ -223,7 +222,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '6',
-                                                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab1-Section1-Field1',
                                                     type: 'FIELD',
@@ -240,7 +239,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '7',
-                                                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 1, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab1-Section1-Field2',
                                                     type: 'FIELD',
@@ -257,7 +256,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '8',
-                                                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 2, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab1-Section1-Field3',
                                                     type: 'FIELD',
@@ -274,7 +273,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '9',
-                                                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 3, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab1-Section1-Field4',
                                                     type: 'FIELD',
@@ -293,7 +292,6 @@ export const testArrayBasedFormData = {
                     {
                         id: 'section2',
                         orderIndex: 1,
-                        location: {tabIndex: 0, sectionIndex: 1},
                         isEmpty: false,
                         headerElement: {
                             FormHeaderElement: {
@@ -311,7 +309,7 @@ export const testArrayBasedFormData = {
                                     elements: [
                                         {
                                             id: '11',
-                                            location: {tabIndex: 0, sectionIndex: 1, columnIndex: 0, rowIndex: 0, elementIndex: 0},
+                                            orderIndex: 0,
                                             FormFieldElement: {
                                                 displayText: 'Tab1-Section2-Field1',
                                                 type: 'FIELD',
@@ -328,7 +326,7 @@ export const testArrayBasedFormData = {
                                     elements: [
                                         {
                                             id: '12',
-                                            location: {tabIndex: 0, sectionIndex: 1, columnIndex: 0, rowIndex: 1, elementIndex: 0},
+                                            orderIndex: 0,
                                             FormFieldElement: {
                                                 displayText: 'Tab1-Section2-Field2',
                                                 type: 'FIELD',
@@ -345,7 +343,7 @@ export const testArrayBasedFormData = {
                                     elements: [
                                         {
                                             id: '13',
-                                            location: {tabIndex: 0, sectionIndex: 1, columnIndex: 0, rowIndex: 2, elementIndex: 0},
+                                            orderIndex: 0,
                                             FormFieldElement: {
                                                 displayText: 'Tab1-Section2-Field3',
                                                 labelPosition: 'LEFT',
@@ -371,7 +369,6 @@ export const testArrayBasedFormData = {
                     {
                         id: 'section3',
                         orderIndex: 0,
-                        location: {tabIndex: 1, sectionIndex: 0},
                         isEmpty: false,
                         headerElement: {
                             FormHeaderElement: {
@@ -390,7 +387,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '14',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field1',
                                                     type: 'FIELD',
@@ -401,7 +398,7 @@ export const testArrayBasedFormData = {
                                             },
                                             {
                                                 id: '15',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 1},
+                                                orderIndex: 1,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field2',
                                                     type: 'FIELD',
@@ -418,7 +415,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '16',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 1, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field3',
                                                     type: "FIELD",
@@ -429,7 +426,7 @@ export const testArrayBasedFormData = {
                                             },
                                             {
                                                 id: '17',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 1, elementIndex: 1},
+                                                orderIndex: 1,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field4',
                                                     type: 'FIELD',
@@ -440,7 +437,7 @@ export const testArrayBasedFormData = {
                                             },
                                             {
                                                 id: '18',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 1, elementIndex: 2},
+                                                orderIndex: 2,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field5',
                                                     type: 'FIELD',
@@ -457,7 +454,7 @@ export const testArrayBasedFormData = {
                                         elements: [
                                             {
                                                 id: '19',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 2, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field6',
                                                     type: 'FIELD',
@@ -472,10 +469,9 @@ export const testArrayBasedFormData = {
                                         id: 'row-10',
                                         orderIndex: 3,
                                         elements: [
-
                                             {
                                                 id: '20',
-                                                location: {tabIndex: 1, sectionIndex: 0, columnIndex: 0, rowIndex: 3, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab2-Section1-Field7',
                                                     type: 'FIELD',
@@ -492,8 +488,7 @@ export const testArrayBasedFormData = {
                     },
                     {
                         id: 'section4',
-                        orderIndex: 0,
-                        location: {tabIndex: 1, sectionIndex: 0},
+                        orderIndex: 1,
                         isEmpty: true,
                         headerElement: {
                             FormHeaderElement: {
@@ -509,8 +504,7 @@ export const testArrayBasedFormData = {
                     },
                     {
                         id: 'section5',
-                        orderIndex: 0,
-                        location: {tabIndex: 1, sectionIndex: 0},
+                        orderIndex: 2,
                         isEmpty: true,
                         headerElement: {
                             FormHeaderElement: {
@@ -528,13 +522,58 @@ export const testArrayBasedFormData = {
                                     elements: [
                                         {
                                             id: '21',
-                                            location: {
-                                                tabIndex: 1,
-                                                sectionIndex: 0,
-                                                columnIndex: 0,
-                                                rowIndex: 0,
-                                                elementIndex: 0
-                                            },
+                                            orderIndex: 0,
+                                            FormFieldElement: {
+                                                displayText: 'Tab2-Section5-Field8',
+                                                type: 'FIELD',
+                                                orderIndex: 15,
+                                                positionSameRow: false,
+                                                fieldId: 21,
+                                            }
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: 'row-12',
+                                    orderIndex: 0,
+                                    elements: [
+                                        {
+                                            id: '22',
+                                            orderIndex: 1,
+                                            FormFieldElement: {
+                                                displayText: 'Tab2-Section5-Field9',
+                                                type: 'FIELD',
+                                                orderIndex: 16,
+                                                positionSameRow: false,
+                                                fieldId: 22,
+                                            }
+                                        },
+                                    ]
+                                },
+                            ]
+                        }]
+                    },
+                    {
+                        id: 'section6',
+                        orderIndex: 3,
+                        isEmpty: true,
+                        headerElement: {
+                            FormHeaderElement: {
+                                displayText: 'Tab2-Section3',
+                                type: 'HEADER'
+                            }
+                        },
+                        columns: [{
+                            id: 'column-4',
+                            orderIndex: 0,
+                            rows: [
+                                {
+                                    id: 'row-13',
+                                    orderIndex: 0,
+                                    elements: [
+                                        {
+                                            id: '23',
+                                            orderIndex: 0,
                                             FormTextElement: {
                                                 displayText: textElementText,
                                                 type: 'TEXT',
@@ -570,7 +609,6 @@ export const testFormDataArrayWithTwoColumns = {
                     {
                         id: 'section1',
                         orderIndex: 0,
-                        location: {tabIndex: 0, sectionIndex: 0},
                         isEmpty: false,
                         headerElement: {
                             FormHeaderElement: {
@@ -589,7 +627,7 @@ export const testFormDataArrayWithTwoColumns = {
                                         elements: [
                                             {
                                                 id: '6',
-                                                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 0, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab1-Section1-Field1',
                                                     type: 'FIELD',
@@ -612,7 +650,7 @@ export const testFormDataArrayWithTwoColumns = {
                                         elements: [
                                             {
                                                 id: '7',
-                                                location: {tabIndex: 0, sectionIndex: 0, columnIndex: 0, rowIndex: 1, elementIndex: 0},
+                                                orderIndex: 0,
                                                 FormFieldElement: {
                                                     displayText: 'Tab1-Section1-Field2',
                                                     type: 'FIELD',
@@ -650,7 +688,6 @@ export const testFormDataWithRelationship = {
                     {
                         id: 'section1',
                         orderIndex: 0,
-                        location: {tabIndex: 0, sectionIndex: 0},
                         isEmpty: false,
                         headerElement: {
                             FormHeaderElement: {

@@ -6,22 +6,22 @@ import Logger from '../../utils/logger';
  * @type {{moveField}}
  */
 const MoveFieldHelper = {
-    moveField(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-        if (!hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps)) {
+    moveField(formMeta, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps, sameRow = false) {
+        if (!hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps)) {
             return formMeta;
         }
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
-        removeElementFromCurrentSection(formMetaCopy, draggedItemProps);
-        addElementToNewSection(formMetaCopy, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
+        removeElementFromCurrentLocation(formMetaCopy, draggedItemProps);
+        addElementToNewLocation(formMetaCopy, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps, sameRow);
 
         return formMetaCopy;
     }
 };
 
 // -- PRIVATE METHODS
-function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
+function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps) {
     let errors = [];
     const baseMessage = 'MoveFieldHelper Error:';
 
@@ -29,16 +29,23 @@ function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newOrderIn
         errors.push(`${baseMessage} formMeta is required and must be an object`);
     }
 
-    if (!_.isInteger(newTabIndex) || !_.isInteger(newSectionIndex) || !_.isInteger(newOrderIndex)) {
-        errors.push(`${baseMessage} newTabIndex, newSectionIndex, and newOrderIndex are required and must be an integer`);
+    if (!_.isInteger(newTabIndex) || !_.isInteger(newSectionIndex) || !_.isInteger(newColumnIndex) || !_.isInteger(newRowIndex) || !_.isInteger(newElementIndex)) {
+        errors.push(`${baseMessage} newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, and newOrderIndex are required and must be an integer`);
     }
 
     if (!draggedItemProps || !_.isObject(draggedItemProps)) {
         errors.push(`${baseMessage} draggedItemProps is required and must be an object`);
     } else {
-        let {tabIndex, sectionIndex, orderIndex, element} = draggedItemProps;
-        if (!_.isInteger(tabIndex) || !_.isInteger(sectionIndex) || !_.isInteger(orderIndex) || !_.isObject(element)) {
-            errors.push(`${baseMessage} draggedItemProps must have the following properties: tabIndex, sectionIndex, orderIndex, element`);
+        if (
+            !_.has(draggedItemProps, 'location') ||
+            !_.isInteger(draggedItemProps.location.sectionIndex) ||
+            !_.isInteger(draggedItemProps.location.columnIndex) ||
+            !_.isInteger(draggedItemProps.location.rowIndex) ||
+            !_.isInteger(draggedItemProps.location.elementIndex) ||
+            !_.isObject(draggedItemProps.element)
+        )
+        {
+            errors.push(`${baseMessage} draggedItemProps must have the following properties: location (with tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex) and element`);
         }
     }
 
@@ -49,93 +56,23 @@ function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newOrderIn
 }
 
 /**
- * Convert the elements object into an array that is easier to sort and filter
- * @param elementsObject
- */
-function convertElementsObjectToArray(elementsObject = {}) {
-    return Object.keys(elementsObject).map(elementKey => {
-        return elementsObject[elementKey];
-    });
-}
-
-/**
- * Convert the elements array back to an object expected by the forms api
- * @param elementsArray
- */
-function convertElementsArrayToObject(elementsArray = []) {
-    let elementsObject = {};
-    elementsArray.forEach((element, index) => {
-        element.FormFieldElement.orderIndex = index;
-        elementsObject[index] = element;
-    });
-    return elementsObject;
-}
-
-/**
- * Remove an element from the array based on its order index
- * @param elementsArray
- * @param orderIndex
- */
-function removeElementFromArray(elementsArray, orderIndex) {
-    return elementsArray.filter(element => {
-        return element.FormFieldElement.orderIndex !== orderIndex;
-    });
-}
-
-/**
- * Add an element to a section
- * @param elementsArray
- * @param newOrderIndex
- * @param element
- * @returns {[*,*,*]}
- */
-function addElementToSection(elementsArray, newOrderIndex, element) {
-    return [
-        ...elementsArray.slice(0, newOrderIndex),
-        {FormFieldElement: element},
-        ...elementsArray.slice(newOrderIndex, elementsArray.length)
-    ];
-}
-
-/**
- * Identifies what the new orderIndex for the element should be in its new location.
- * We need to subtract one from the index if the element was above (lower index) the new element in the array
- * because we removed it in the function above so the order index are off by one assuming it is in the same section.
- * Cross tab or cross section moves do not need to account for other elements shifting around.
- * @param newTabIndex
- * @param currentTabIndex
- * @param newSectionIndex
- * @param currentSectionIndex
- * @param newOrderIndex
- * @param currentOrderIndex
- * @returns {*}
- */
-function identifyNewOrderIndex(newTabIndex, currentTabIndex, newSectionIndex, currentSectionIndex, newOrderIndex, currentOrderIndex) {
-    // Move element currently in that position
-
-    if (newTabIndex !== currentTabIndex || newSectionIndex !== currentSectionIndex) {
-        return newOrderIndex;
-    } else {
-        return (newOrderIndex < currentOrderIndex ? newOrderIndex : (newOrderIndex - 1));
-    }
-}
-
-/**
  * Removes the element from where it currently exists in preparation for the move
  * WARNING: This function has side effects on the formMetaData passed in.
  * @param formMetaData
  * @param draggedItemProps
  * @returns {*}
  */
-function removeElementFromCurrentSection(formMetaData, draggedItemProps) {
-    let {tabIndex, sectionIndex, orderIndex} = draggedItemProps;
+function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
+    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = draggedItemProps.location;
 
-    let elements = formMetaData.tabs[tabIndex].sections[sectionIndex].elements;
+    let row = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].rows[rowIndex];
 
-    let elementsArray = convertElementsObjectToArray(elements);
-    elementsArray = removeElementFromArray(elementsArray, orderIndex);
+    row.elements = row.elements.filter(element => {
+        return element.orderIndex !== elementIndex;
+    });
 
-    formMetaData.tabs[tabIndex].sections[sectionIndex].elements = convertElementsArrayToObject(elementsArray);
+    updateOrderIndices(row, 'elements');
+    clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex);
 
     return formMetaData;
 }
@@ -146,19 +83,72 @@ function removeElementFromCurrentSection(formMetaData, draggedItemProps) {
  * @param formMetaData
  * @param newTabIndex
  * @param newSectionIndex
- * @param newOrderIndex
+ * @param newColumnIndex
+ * @param newRowIndex
+ * @param newElementIndex
  * @param draggedItemProps
+ * @param sameRow
  */
-function addElementToNewSection(formMetaData, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-    let {tabIndex, sectionIndex, orderIndex, element} = draggedItemProps;
+function addElementToNewLocation(formMetaData, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps, sameRow) {
+    let column = formMetaData.tabs[newTabIndex].sections[newSectionIndex].columns[newColumnIndex];
+    let rows = column.rows;
 
-    let elements = formMetaData.tabs[newTabIndex].sections[newSectionIndex].elements;
-    let elementsArray = convertElementsObjectToArray(elements);
+    if (sameRow) {
+        // TODO:: Deal with adding an element to the same row
+    } else {
+        rows.splice(newRowIndex, 0, createNewRow(newRowIndex, [draggedItemProps.element]));
+        updateOrderIndices(column, 'rows');
+    }
 
-    let newPlacementIndex = identifyNewOrderIndex(newTabIndex, tabIndex, newSectionIndex, sectionIndex, newOrderIndex, orderIndex);
+    return formMetaData;
+}
 
-    elementsArray = addElementToSection(elementsArray, newPlacementIndex, element);
-    formMetaData.tabs[newTabIndex].sections[newSectionIndex].elements = convertElementsArrayToObject(elementsArray);
+/**
+ * Removes any empty columns or rows from a sectin
+ * WARNING: This function has side effects on the formMetaData passed in.
+ * @param formMetaData
+ * @param tabIndex
+ * @param sectionIndex
+ * @param columnIndex
+ * @returns {*}
+ */
+function clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex) {
+    let columns = formMetaData.tabs[tabIndex].sections[sectionIndex].columns;
+    let column = columns[columnIndex];
+
+    if (column.rows.length === 0) {
+        formMetaData.tabs[tabIndex].sections[sectionIndex].columns = columns.filter(currentColumn => currentColumn.orderIndex !== columnIndex);
+        updateOrderIndices(formMetaData.tabs[tabIndex].sections[sectionIndex], 'columns');
+    } else {
+        column.rows = column.rows.filter(row => row.elements.length > 0);
+        updateOrderIndices(column, 'rows');
+    }
+
+    return formMetaData;
+}
+
+function updateOrderIndices(item, property) {
+    if (item[property].length === 0) {
+        return item;
+    }
+
+    item[property].map((element, index) => {
+        element.orderIndex = index;
+        return element;
+    });
+
+    return item;
+}
+
+function createNewRow(rowIndex, elements) {
+    return {
+        id: _.uniqueId('row-'),
+        orderIndex: rowIndex,
+        elements: elements.map((element, elementIndex) => {
+            element.orderIndex = elementIndex;
+            return element;
+        })
+    }
 }
 
 export default MoveFieldHelper;

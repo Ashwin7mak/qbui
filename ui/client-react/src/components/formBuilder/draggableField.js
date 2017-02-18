@@ -12,11 +12,9 @@ import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 const fieldDragSource = {
     beginDrag(props) {
         return {
-            element: props.element,
+            element: props.containingElement,
+            location: props.location,
             relatedField: props.relatedField,
-            tabIndex: props.tabIndex,
-            sectionIndex: props.sectionIndex,
-            orderIndex: props.orderIndex,
         };
     },
 

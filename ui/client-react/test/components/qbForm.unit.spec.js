@@ -117,7 +117,7 @@ describe('QBForm', () => {
         component = mount(<QBForm activeTab="1" formData={fakeQbFormData} />);
         let columns = component.find('.sectionColumn');
 
-        expect(columns.length).toEqual(3);
+        expect(columns.length).toEqual(4);
         columns.forEach(column => {
             expect(column).toHaveStyle('width', '100%');
         });
@@ -137,7 +137,7 @@ describe('QBForm', () => {
         component = mount(<QBForm activeTab="1" formData={fakeQbFormData}/>);
         let rows = component.find('.sectionRow');
 
-        expect(rows.length).toEqual(5);
+        expect(rows.length).toEqual(7);
     });
 
     it('does not render relationship element if no relationships exist', () => {
@@ -176,7 +176,7 @@ describe('QBForm', () => {
     });
 
     it('renders for field elements with a location for use in dragging and dropping', () => {
-        component = mount(<QBForm actieTab="0" formData={fakeQbFormData} />);
+        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
         const fieldElement = component.find(FieldElementMock).first();
 
         expect(fieldElement).toHaveProp('location', {
@@ -186,7 +186,6 @@ describe('QBForm', () => {
             rowIndex: 0,
             elementIndex: 0
         });
-
     });
 
     it('renders form field element with data from pendingEdits', () => {

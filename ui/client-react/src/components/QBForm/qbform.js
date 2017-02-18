@@ -118,18 +118,21 @@ let QBForm = React.createClass({
      * create a tab pane
      * @param tab tab data (sections)
      * @param numberOfTabs
+     * @param location
      * @returns {XML}
      */
-    createTab(tab, numberOfTabs) {
+    createTab(tab, numberOfTabs, location = {}) {
+        location.tabIndex = tab.orderIndex;
+
         let sections = null;
         if (tab.sections && Array.isArray(tab.sections)) {
-            sections = tab.sections.map(section => this.createSection(section));
+            sections = tab.sections.map(section => this.createSection(section, location));
         }
 
         if (numberOfTabs > 1) {
             return (
                 <TabPane key={tab.orderIndex} tab={tab.title || `${Locale.getMessage('form.tab')} ${tab.orderIndex}`}>
-                    <div className="tabContent">
+                    <div className={`tabContent tab-${tab.orderIndex}`}>
                         {sections}
                     </div>
                 </TabPane>
@@ -146,11 +149,13 @@ let QBForm = React.createClass({
     /**
      * create a section
      * @param section data
+     * @param location
      */
-    createSection(section) {
-        let sectionTitle = '';
+    createSection(section, location) {
+        let newLocation = Object.assign({}, location, {sectionIndex: section.orderIndex});
 
         // build the section header.
+        let sectionTitle = '';
         if (_.has(section, 'headerElement.FormHeaderElement.displayText')) {
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
         }
@@ -167,7 +172,7 @@ let QBForm = React.createClass({
 
         let columns = null;
         if (section.columns && Array.isArray(section.columns)) {
-            columns = section.columns.map(column => this.createColumn(column, section.columns.length));
+            columns = section.columns.map(column => this.createColumn(column, section.columns.length, newLocation));
         }
 
         return (
@@ -178,17 +183,20 @@ let QBForm = React.createClass({
                      panelNum={section.orderIndex}
                      collapsible={collapsible}
                      wrapLabels={wrapLabels}>
-                <div className="formTable">
+                <div className={`formTable section-${section.orderIndex}`}>
                     {columns}
                 </div>
             </QBPanel>
         );
     },
 
-    createColumn(column, numberOfColumns) {
+    createColumn(column, numberOfColumns, location) {
         let rows = null;
+
+        let newLocation = Object.assign({}, location, {columnIndex: column.orderIndex});
+
         if (column.rows && Array.isArray(column.rows)) {
-            rows = column.rows.map(row => this.createRow(row));
+            rows = column.rows.map(row => this.createRow(row, newLocation));
         }
 
         return (
@@ -200,10 +208,12 @@ let QBForm = React.createClass({
         );
     },
 
-    createRow(row) {
+    createRow(row, location) {
         let elements = null;
+        let newLocation = Object.assign({}, location, {rowIndex: row.orderIndex});
+
         if (row.elements && Array.isArray(row.elements)) {
-            elements = row.elements.map(element => this.createElement(element, row.elements.length));
+            elements = row.elements.map(element => this.createElement(element, row.elements.length, newLocation));
         }
 
         return (
@@ -213,15 +223,16 @@ let QBForm = React.createClass({
         );
     },
 
-    createElement(element, numberOfChildren) {
+    createElement(element, numberOfChildren, location) {
         let formattedElement;
         let width = {width: `${100 / numberOfChildren}%`};
+        let newLocation = Object.assign({}, location, {elementIndex: element.orderIndex});
 
         if (element.FormTextElement) {
             formattedElement = this.createTextElement(element.id, element.FormTextElement, width);
         } else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId, width);
-            formattedElement = this.createFieldElement(element.id, element.FormFieldElement, validationStatus, width, element.location);
+            formattedElement = this.createFieldElement(element.id, element.FormFieldElement, validationStatus, width, element, newLocation);
         } else if (element.ReferenceElement) {
             formattedElement = this.createChildReportElement(element.id, element.ReferenceElement, width);
         }
@@ -234,9 +245,12 @@ let QBForm = React.createClass({
      * @param id
      * @param FormFieldElement
      * @param validationStatus
+     * @param style
+     * @param containingElement
+     * @param location
      * @returns {XML}
      */
-    createFieldElement(id, FormFieldElement, validationStatus, style, location) {
+    createFieldElement(id, FormFieldElement, validationStatus, style, containingElement, location) {
 
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
@@ -254,6 +268,7 @@ let QBForm = React.createClass({
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
+                  containingElement={containingElement}
                   element={FormFieldElement}
                   key={`element-${FormFieldElement.id}`}
                   idKey={"fe-" + this.props.idKey}
@@ -277,6 +292,7 @@ let QBForm = React.createClass({
      * @returns {XML}
      * @param id
      * @param FormTextElement
+     * @param style
      */
     createTextElement(id, FormTextElement, style) {
         return <div key={id} className="formElementContainer formElement text" style={style}>{FormTextElement.displayText}</div>;

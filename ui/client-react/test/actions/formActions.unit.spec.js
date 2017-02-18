@@ -346,41 +346,13 @@ describe('Form Actions', () => {
             expect(element.id).toBeDefined();
         });
 
-        it('adds the location of the section so it can be found and moved during drag and drop', () => {
-            let section = result.formData.formMeta.tabs[0].sections[1];
-
-            expect(section.location).toEqual({
-                tabIndex: 0,
-                sectionIndex: 1
-            });
-
-            let sectionInDifferentTab = result.formData.formMeta.tabs[1].sections[0];
-
-            expect(sectionInDifferentTab.location).toEqual({
-                tabIndex: 1,
-                sectionIndex: 0
-            });
-        });
-
-        it('adds the location of the element so the element can be found and moved during drag and drop', () => {
+        it('adds the orderIndex to the containing element for use during drag and drop', () => {
             let element = result.formData.formMeta.tabs[0].sections[1].columns[0].rows[0].elements[0];
 
-            expect(element.location).toEqual({
-                tabIndex: 0,
-                sectionIndex: 1,
-                columnIndex: 0,
-                rowIndex: 0,
-                elementIndex: 1
-            });
+            expect(element.orderIndex).toEqual(1);
 
             let elementInRow = result.formData.formMeta.tabs[1].sections[0].columns[0].rows[1].elements[2];
-            expect(elementInRow.location).toEqual({
-                tabIndex: 1,
-                sectionIndex: 0,
-                columnIndex: 0,
-                rowIndex: 1,
-                elementIndex: 2
-            });
+            expect(elementInRow.orderIndex).toEqual(2);
         });
     });
 
