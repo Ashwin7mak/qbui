@@ -16,6 +16,7 @@
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
+    let ROLES = 'roles';
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
 
@@ -287,6 +288,26 @@
             let root = getUrlRoot(url, APPS);
             if (root) {
                 return root + '/' + USERS + '/';
+            }
+
+            //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS identifier/id and
+         * append the ROLES identifier.
+         *
+         * Example:  url: /apps/123/rest/of/url
+         *           return: /apps/123/roles
+         *
+         * @param url
+         * @returns {*}
+         */
+        getAppRolesRoute: function(url) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                return root + '/' + ROLES + '/';
             }
 
             //  no url root for APPS found; return original url unchanged

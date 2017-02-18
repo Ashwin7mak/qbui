@@ -9,6 +9,7 @@ const AppSettingsRoute = React.createClass({
     render() {
         return (<AppSettingsHome appId={this.props.params.appId}
                                    appUsers={this.props.appUsers}
+                                   appRoles={this.props.appRoles}
                                    selectedApp={this.props.selectedApp}
             />
 

@@ -10,6 +10,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
+        this.appRoles = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.loadingAppUsers = false;
@@ -26,6 +27,10 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_USERS, this.onLoadAppUsers,
             actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
             actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
+
+            actions.LOAD_APP_ROLES, this.onLoadAppRoles,
+            actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
+            actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
 
             actions.SET_APP_STACK, this.onSetAppStack,
             actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess,
@@ -75,6 +80,16 @@ let AppsStore = Fluxxor.createStore({
         this.appUsers = users;
         this.emit('change');
     },
+    onLoadAppRoles() {
+        this.emit('change');
+    },
+    onLoadAppRolesFailed() {
+        this.emit('change');
+    },
+    onLoadAppRolesSuccess(roles) {
+        this.appRoles = roles;
+        this.emit('change');
+    },
     onSelectApp(appId) {
         this.selectedAppId = appId;
 
@@ -111,6 +126,7 @@ let AppsStore = Fluxxor.createStore({
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
+            appRoles: this.appRoles,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,

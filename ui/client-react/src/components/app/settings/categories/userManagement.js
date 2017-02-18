@@ -4,7 +4,7 @@
 import React, {PropTypes} from 'react';
 import * as search from 'searchtabular';
 import * as Table from 'reactabular-table';
-import { compose } from 'redux';
+import {compose} from 'redux';
 import './userManagement.scss';
 
 class UserManagement extends React.Component {
@@ -50,9 +50,9 @@ class UserManagement extends React.Component {
                 cell: {formatters: [cellFormatter]}
             },
             {
-                property: 'userId',
+                property: 'roleName',
                 header: {
-                    label: 'User ID'
+                    label: 'Role'
                 },
                 cell: {formatters: [cellFormatter]}
             }
@@ -61,13 +61,20 @@ class UserManagement extends React.Component {
     }
 
     createUserRows() {
+        //this will add the role name to the user object
+        //this is soooooo inefficient
+        let appRoles = this.props.appRoles;
         this.props.appUsers.forEach(function(user) {
-            user.id = user.userId;
+            appRoles.forEach(function(appRole) {
+                if (appRole.id == user.roleId) {
+                    user.roleName = appRole.name;
+                }
+            });
         });
     }
 
     render() {
-        //this.createUserRows();
+        this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
         const resolvedRows = this.props.appUsers;
@@ -92,8 +99,8 @@ class UserManagement extends React.Component {
                         query={query}
                         columns={columns}
                         rows={resolvedRows}
-                        onColumnChange={searchColumn => this.setState({ searchColumn })}
-                        onChange={query => this.setState({ query })}
+                        onColumnChange={searchColumn => this.setState({searchColumn})}
+                        onChange={query => this.setState({query})}
                     />
                 </div>
                 <Table.Provider columns={columns} className="userGrid">
@@ -108,7 +115,8 @@ class UserManagement extends React.Component {
 
 UserManagement.propTypes = {
     appId: PropTypes.string.isRequired,
-    appUsers: PropTypes.array.isRequired
+    appUsers: PropTypes.array.isRequired,
+    appRoles: PropTypes.array.isRequired
 };
 
 export default UserManagement;

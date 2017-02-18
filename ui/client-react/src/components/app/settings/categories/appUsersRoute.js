@@ -14,6 +14,7 @@ const AppUsersRoute = React.createClass({
         return (
             <UserManagement appId={this.props.params.appId}
                             appUsers={this.props.appUsers}
+                            appRoles={this.props.appRoles}
             />
         );
     }
