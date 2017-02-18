@@ -6,22 +6,22 @@ import Logger from '../../utils/logger';
  * @type {{moveField}}
  */
 const MoveFieldHelper = {
-    moveField(formMeta, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps, sameRow = false) {
-        if (!hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps)) {
+    moveField(formMeta, newLocation, draggedItemProps, sameRow = false) {
+        if (!hasRequiredArguments(formMeta, newLocation, draggedItemProps)) {
             return formMeta;
         }
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
         removeElementFromCurrentLocation(formMetaCopy, draggedItemProps);
-        addElementToNewLocation(formMetaCopy, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps, sameRow);
+        addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps, sameRow);
 
         return formMetaCopy;
     }
 };
 
 // -- PRIVATE METHODS
-function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps) {
+function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
     let errors = [];
     const baseMessage = 'MoveFieldHelper Error:';
 
@@ -29,8 +29,15 @@ function hasRequiredArguments(formMeta, newTabIndex, newSectionIndex, newColumnI
         errors.push(`${baseMessage} formMeta is required and must be an object`);
     }
 
-    if (!_.isInteger(newTabIndex) || !_.isInteger(newSectionIndex) || !_.isInteger(newColumnIndex) || !_.isInteger(newRowIndex) || !_.isInteger(newElementIndex)) {
-        errors.push(`${baseMessage} newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, and newOrderIndex are required and must be an integer`);
+    if (
+        !newLocation ||
+        !_.isInteger(newLocation.tabIndex) ||
+        !_.isInteger(newLocation.sectionIndex) ||
+        !_.isInteger(newLocation.columnIndex) ||
+        !_.isInteger(newLocation.rowIndex) ||
+        !_.isInteger(newLocation.elementIndex)
+    ) {
+        errors.push(`${baseMessage} newLocation is missing or missing props: newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, and newOrderIndex are required and must be an integer`);
     }
 
     if (!draggedItemProps || !_.isObject(draggedItemProps)) {
@@ -81,22 +88,19 @@ function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
  * Adds the element to its new position
  * WARNING: This function has side effects on the formMetaData passed in.
  * @param formMetaData
- * @param newTabIndex
- * @param newSectionIndex
- * @param newColumnIndex
- * @param newRowIndex
- * @param newElementIndex
+ * @param newLocation
  * @param draggedItemProps
  * @param sameRow
  */
-function addElementToNewLocation(formMetaData, newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, newElementIndex, draggedItemProps, sameRow) {
-    let column = formMetaData.tabs[newTabIndex].sections[newSectionIndex].columns[newColumnIndex];
+function addElementToNewLocation(formMetaData, newLocation, draggedItemProps, sameRow) {
+    let {tabIndex, sectionIndex, columnIndex, rowIndex} = newLocation;
+    let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
     let rows = column.rows;
 
     if (sameRow) {
         // TODO:: Deal with adding an element to the same row
     } else {
-        rows.splice(newRowIndex, 0, createNewRow(newRowIndex, [draggedItemProps.element]));
+        rows.splice(rowIndex, 0, createNewRow(rowIndex, [draggedItemProps.containingElement]));
         updateOrderIndices(column, 'rows');
     }
 

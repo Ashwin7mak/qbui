@@ -349,7 +349,7 @@ describe('Form Actions', () => {
         it('adds the orderIndex to the containing element for use during drag and drop', () => {
             let element = result.formData.formMeta.tabs[0].sections[1].columns[0].rows[0].elements[0];
 
-            expect(element.orderIndex).toEqual(1);
+            expect(element.orderIndex).toEqual(0);
 
             let elementInRow = result.formData.formMeta.tabs[1].sections[0].columns[0].rows[1].elements[2];
             expect(elementInRow.orderIndex).toEqual(2);
@@ -358,14 +358,12 @@ describe('Form Actions', () => {
 
     describe('moveFieldOnForm', () => {
         it('creates an action that will move a field on a form', () => {
-            expect(formActions.moveFieldOnForm(1, 2, 3, 4, 5)).toEqual({
+            expect(formActions.moveFieldOnForm(1, 2, 3)).toEqual({
                 id: 1,
                 type: types.MOVE_FIELD,
                 content: {
-                    newTabIndex: 2,
-                    newSectionIndex: 3,
-                    newOrderIndex: 4,
-                    draggedItemProps: 5
+                    newLocation: 2,
+                    draggedItemProps: 3
                 }
             });
         });

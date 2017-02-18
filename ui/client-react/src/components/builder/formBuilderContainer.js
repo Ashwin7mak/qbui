@@ -28,9 +28,10 @@ const mapDispatchToProps = dispatch => {
             return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
         },
 
-        moveField(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-            return dispatch(moveFieldOnForm(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps));
+        moveField(formId, newLocation, draggedItemProps) {
+            return dispatch(moveFieldOnForm(formId, newLocation, draggedItemProps));
         },
+
         updateForm(appId, tblId, formType, form) {
             return dispatch(updateForm(appId, tblId, formType, form));
         }

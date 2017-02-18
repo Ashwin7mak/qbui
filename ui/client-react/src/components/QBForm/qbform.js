@@ -232,7 +232,7 @@ let QBForm = React.createClass({
             formattedElement = this.createTextElement(element.id, element.FormTextElement, width);
         } else if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId, width);
-            formattedElement = this.createFieldElement(element.id, element.FormFieldElement, validationStatus, width, element, newLocation);
+            formattedElement = this.createFieldElement(element.FormFieldElement, validationStatus, width, element, newLocation);
         } else if (element.ReferenceElement) {
             formattedElement = this.createChildReportElement(element.id, element.ReferenceElement, width);
         }
@@ -242,7 +242,6 @@ let QBForm = React.createClass({
 
     /**
      * create a form field element
-     * @param id
      * @param FormFieldElement
      * @param validationStatus
      * @param style
@@ -250,7 +249,7 @@ let QBForm = React.createClass({
      * @param location
      * @returns {XML}
      */
-    createFieldElement(id, FormFieldElement, validationStatus, style, containingElement, location) {
+    createFieldElement(FormFieldElement, validationStatus, style, containingElement, location) {
 
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
@@ -263,14 +262,14 @@ let QBForm = React.createClass({
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         return (
-            <div key={id} className="formElementContainer" style={style}>
+            <div key={containingElement.id} className="formElementContainer" style={style}>
               <CurrentFieldElement
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
                   containingElement={containingElement}
                   element={FormFieldElement}
-                  key={`element-${FormFieldElement.id}`}
+                  key={`fieldElement-${containingElement.id}`}
                   idKey={"fe-" + this.props.idKey}
                   relatedField={relatedField}
                   fieldRecord={fieldRecord}

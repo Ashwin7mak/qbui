@@ -225,17 +225,13 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 /**
  * Move a field from one position on a form to a different position
  * @param formId
- * @param newTabIndex
- * @param newSectionIndex
- * @param newOrderIndex
+ * @param newLocation
  * @param draggedItemProps
  * @returns {{id, type, content}|*}
  */
-export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) => {
+export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
     return event(formId, types.MOVE_FIELD, {
-        newTabIndex,
-        newSectionIndex,
-        newOrderIndex,
+        newLocation,
         draggedItemProps
     });
 };
@@ -366,7 +362,8 @@ function convertFormToArrayForClient(formData) {
                     section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
                 }
 
-                element.orderIndex = section.rows.length; // Element hasn't been added yet, so we don't subtract one from the length for 0 based index
+                // Element hasn't been added to the last row, so we don't subtract one from the length for 0 based index of row.elements
+                element.orderIndex = section.rows[section.rows.length - 1].elements.length;
 
                 section.rows[currentRowIndex].elements.push(element);
             });

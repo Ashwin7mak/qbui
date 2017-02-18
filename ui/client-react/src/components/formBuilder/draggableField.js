@@ -12,7 +12,7 @@ import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 const fieldDragSource = {
     beginDrag(props) {
         return {
-            element: props.containingElement,
+            containingElement: props.containingElement,
             location: props.location,
             relatedField: props.relatedField,
         };
@@ -20,8 +20,8 @@ const fieldDragSource = {
 
     endDrag(props, monitor) {
         if (monitor.didDrop()) {
-            let {tabIndex, sectionIndex, orderIndex} = monitor.getDropResult();
-            props.handleFormReorder(tabIndex, sectionIndex, orderIndex, props);
+            let {location} = monitor.getDropResult();
+            props.handleFormReorder(location, props);
         }
     }
 };

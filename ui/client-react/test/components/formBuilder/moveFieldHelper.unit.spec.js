@@ -1,7 +1,7 @@
 import MoveFieldHelper from '../../../src/components/formBuilder/moveFieldHelper';
 import {testArrayBasedFormData as testFormData} from '../../testHelpers/testFormData';
 
-function buildDraggedItemProps(tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex, element) {
+function buildDraggedItemProps(tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex, containingElement, element) {
     return {
         location: {
             tabIndex,
@@ -10,8 +10,19 @@ function buildDraggedItemProps(tabIndex, sectionIndex, columnIndex, rowIndex, el
             rowIndex,
             elementIndex
         },
+        containingElement,
         element
     };
+}
+
+function buildNewLocation(tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex) {
+    return {
+        tabIndex,
+        sectionIndex,
+        columnIndex,
+        rowIndex,
+        elementIndex
+    }
 }
 
 /**
@@ -135,9 +146,10 @@ describe('MoveFieldHelper', () => {
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].rows[testCase.originalRow].elements[testCase.originalElementIndex];
-                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalRow, testCase.originalElementIndex, originalElement);
+                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalRow, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
+                let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newRow, testCase.newElementIndex);
 
-                let result = MoveFieldHelper.moveField(testFormData.formMeta, testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newRow, testCase.newElementIndex, elementProps);
+                let result = MoveFieldHelper.moveField(testFormData.formMeta, newLocation, elementProps);
                 let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
 
                 expect(simplifiedResult).toEqual(testCase.expectedResult);
@@ -175,7 +187,7 @@ describe('MoveFieldHelper', () => {
             });
 
             it('returns errors if the draggedItemProps is missing required properties', () => {
-                MoveFieldHelper.moveField({}, 2, 3, 4, 5, 6, {});
+                MoveFieldHelper.moveField({}, buildNewLocation(1, 2, 3, 4, 5), {});
 
                 expect(errors.length).toEqual(1);
             });
