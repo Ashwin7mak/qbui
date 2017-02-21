@@ -42,6 +42,7 @@
         outline: none;
 
         .deleteFieldIcon {
+            font-size: $size-iconfont-small;
             position: absolute;
             top: 5px;
             right: 25px;
@@ -54,6 +55,7 @@
         }
 
         .fieldPreferencesIcon {
+            font-size: $size-iconfont-small;
             position: absolute;
             top: 5px;
             right: 5px;
