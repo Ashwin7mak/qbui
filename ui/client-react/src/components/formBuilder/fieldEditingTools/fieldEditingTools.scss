@@ -6,15 +6,14 @@
     transition: opacity 0.4s;
 
     &.notTouchDevice {
-        //Nothing is displayed when it is desktop view
-        //Borders and icons only show up on hover or on focus for desktop
+        //No borders, icon, or drag handles are displayed when it is not a touch device
+        //Everythign shows up on hover
         opacity: 0;
     }
 
     &.isTablet {
-        //The Border is not displayed when viewing from a tablet
+        //Icons and borders only display during focus
         //Drag handle always show
-        //Icons and borders only show up on focus
         border: none;
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
@@ -61,7 +60,7 @@
 
     &:hover {
         opacity: 1;
-
+        
         .deleteFieldIcon {
             .qbIcon {
                 opacity: 1;
