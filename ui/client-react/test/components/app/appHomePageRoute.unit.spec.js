@@ -13,6 +13,7 @@ describe('AppHomePageRoute functions', () => {
     const flux = {
         actions:{
             selectAppId: function() {return;},
+            loadAppRoles: function() {return;},
             showTopNav: function() {return;},
             setTopTitle: function() {return;},
             doneRoute: function() {return;},

@@ -29,6 +29,13 @@ describe('Apps Actions functions with Tables', () => {
         }
     }
 
+    class mockRoleService {
+        constructor() { }
+        getAppRoles(id) {
+            return Promise.resolve({data: responseData});
+        }
+    }
+
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(appsActions);
@@ -40,11 +47,14 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockAppService.prototype, 'getApplicationStack').and.callThrough();
         spyOn(mockAppService.prototype, 'setApplicationStack').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
+        spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
         appsActions.__Rewire__('AppService', mockAppService);
+        appsActions.__Rewire__('RoleService', mockRoleService);
     });
 
     afterEach(() => {
         appsActions.__ResetDependency__('AppService');
+        appsActions.__ResetDependency__('RoleService');
     });
 
     var appsActionTests = [
@@ -134,6 +144,32 @@ describe('Apps Actions functions with Tables', () => {
                         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECT_APP, test.appId]);
                         expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APP_USERS_SUCCESS, responseData]);
+                    }
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var loadAppRolesTests = [
+        {name:'load app roles with app id not cached', appId: 187, cached: false},
+        {name:'load app roles with app id cached', appId: 123, cached: true}
+    ];
+    loadAppRolesTests.forEach(function(test) {
+        it(test.name, function(done) {
+            flux.actions.selectedAppId = test.cached === true ? test.appId : '';
+            flux.actions.loadAppRoles(test.appId).then(
+                () => {
+                    if (test.cached === true) {
+                        expect(mockRoleService.prototype.getAppRoles).not.toHaveBeenCalled();
+                    } else {
+                        expect(mockRoleService.prototype.getAppRoles).toHaveBeenCalledWith(test.appId);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_SUCCESS, responseData]);
                     }
                     done();
                 },
