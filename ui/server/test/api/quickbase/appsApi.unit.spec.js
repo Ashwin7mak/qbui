@@ -48,12 +48,12 @@ describe("Validate appsApi", function() {
         });
 
         it('success return results ', function(done) {
-            executeReqStub.returns(Promise.resolve({'body': '[{"id":1}]'}));
+            executeReqStub.returns(Promise.resolve({'body': '{"1": [{"id":1}]}'}));
             let promise = appsApi.getAppUsers(req);
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, [{"userId":1}]);
+                    assert.deepEqual(response, [{"userId":1, "roleId":1}]);
                     done();
                 },
                 function(error) {
