@@ -12,6 +12,7 @@ import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import {convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
 let logger = new Logger();
 
@@ -262,7 +263,10 @@ export const updateForm = (appId, tblId, formType, form) => {
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, formType, form, isNew) {
+function saveForm(appId, tblId, formType, formMeta, isNew) {
+
+    let form = convertFormToObjectForServer(formMeta);
+
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
@@ -399,9 +403,3 @@ function convertFormToArrayForClient(formData) {
 function isSectionEmpty(section) {
     return (section.elements.length === 0);
 }
-
-function convertFormToObjectForServer() {
-
-}
-
-

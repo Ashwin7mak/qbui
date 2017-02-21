@@ -403,7 +403,7 @@ export const testArrayBasedFormData = {
                                                     displayText: 'Tab2-Section1-Field2',
                                                     type: 'FIELD',
                                                     orderIndex: 1,
-                                                    positionSameRow: true,
+                                                    positionSameRow: false,
                                                     fieldId: 15,
                                                 }
                                             },
@@ -431,7 +431,7 @@ export const testArrayBasedFormData = {
                                                     displayText: 'Tab2-Section1-Field4',
                                                     type: 'FIELD',
                                                     orderIndex: 3,
-                                                    positionSameRow: true,
+                                                    positionSameRow: false,
                                                     fieldId: 17,
                                                 }
                                             },
@@ -442,7 +442,7 @@ export const testArrayBasedFormData = {
                                                     displayText: 'Tab2-Section1-Field5',
                                                     type: 'FIELD',
                                                     orderIndex: 4,
-                                                    positionSameRow: true,
+                                                    positionSameRow: false,
                                                     fieldId: 18,
                                                 }
                                             },
