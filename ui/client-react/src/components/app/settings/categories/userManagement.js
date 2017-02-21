@@ -100,7 +100,7 @@ class UserManagement extends React.Component {
                         columns={columns}
                         rows={resolvedRows}
                         onColumnChange={searchColumn => this.setState({searchColumn})}
-                        onChange={query => this.setState({query})}
+                        onChange={newQuery => this.setState({query: newQuery})}
                     />
                 </div>
                 <Table.Provider columns={columns} className="userGrid">
