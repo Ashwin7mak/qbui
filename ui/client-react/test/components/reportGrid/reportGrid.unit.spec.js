@@ -248,10 +248,9 @@ describe('ReportGrid', () => {
         });
     });
 
-    it('passes the correct props to QbGrid to render the grid correctly', () => {
+    describe('QbGrid props test', () => {
         const testColumns = [1, 2, 3];
         const isInlineEditOpen = true;
-        const isViewOnly = undefined;
         const pendEdits = {isInlineEditOpen: isInlineEditOpen, currentEditingRecordId: testRecordId, errors: ['an error'], ok: false, saving: true};
         const selectedRows = [4];
         const appId = 'appId';
@@ -260,69 +259,114 @@ describe('ReportGrid', () => {
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
 
-        ReportGrid.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
-        ReportGrid.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
+        let isViewOnly = undefined;
 
-        component = shallow(<ReportGrid
-            {...requiredProps}
-            {...actions}
-            columns={testColumns}
-            records={testRecords}
-            isInlineEditOpen={isInlineEditOpen}
-            pendEdits={pendEdits}
-            loading={false}
-            selectedRows={selectedRows}
-            editErrors={pendEdits}
-            appId={appId}
-            tblId={tblId}
-            rptId={rptId}
-            sortFids={sortFids}
-            appUsers={testAppUsers}
-        />);
-        instance = component.instance();
-
-        let qbGrid = component.find(QbGrid);
-        expect(qbGrid).toHaveProp('numberOfColumns', testColumns.length);
-        expect(qbGrid).toHaveProp('columns', testColumns);
-        expect(qbGrid).toHaveProp('rows', testRecords);
-        expect(qbGrid).toHaveProp('loading', false);
-        expect(qbGrid).toHaveProp('onStartEditingRow', instance.startEditingRow);
-        expect(qbGrid).toHaveProp('editingRowId', testRecordId);
-        expect(qbGrid).toHaveProp('isInlineEditOpen', isInlineEditOpen);
-        expect(qbGrid).toHaveProp('appUsers', testAppUsers);
-        expect(qbGrid).toHaveProp('selectedRows', selectedRows);
-        expect(qbGrid).toHaveProp('areAllRowsSelected', true);
-        expect(qbGrid).toHaveProp('onClickToggleSelectedRow', actions.onClickToggle);
-        expect(qbGrid).toHaveProp('onClickEditIcon', actions.openRecordForEdit);
-        expect(qbGrid).toHaveProp('onClickDeleteIcon', instance.onClickDelete);
-        expect(qbGrid).toHaveProp('onClickToggleSelectAllRows', instance.toggleSelectAllRows);
-        expect(qbGrid).toHaveProp('onCancelEditingRow', actions.onEditRecordCancel);
-        expect(qbGrid).toHaveProp('editingRowErrors', pendEdits.errors);
-        expect(qbGrid).toHaveProp('isEditingRowValid', pendEdits.ok);
-        expect(qbGrid).toHaveProp('onClickAddNewRow', actions.onRecordNewBlank);
-        expect(qbGrid).toHaveProp('onClickSaveRow', actions.onClickRecordSave);
-        expect(qbGrid).toHaveProp('isEditingRowSaving', pendEdits.saving);
-        expect(qbGrid).toHaveProp('cellRenderer', ReportCell);
-        expect(qbGrid).toHaveProp('commonCellProps', {
-            appUsers: testAppUsers,
-            isInlineEditOpen: isInlineEditOpen,
-            isViewOnly,
-            onCellChange: instance.onCellChange,
-            onCellBlur: instance.onCellBlur,
-            onCellClick: actions.onCellClick,
-            onCellClickEditIcon: instance.startEditingRow,
-            validateFieldValue: actions.handleValidateFieldValue
-        });
-        expect(qbGrid).toHaveProp('compareCellChanges', FieldUtils.compareFieldValues);
-        expect(qbGrid).toHaveProp('menuComponent', ReportColumnHeaderMenu);
-        expect(qbGrid).toHaveProp('menuProps', {
-            appId: appId,
-            tblId: tblId,
-            rptId: rptId,
-            sortFids: sortFids
+        beforeAll(() => {
+            ReportGrid.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
+            ReportGrid.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
         });
 
-        ReportGrid.__ResetDependency__('ReportRowTransformer');
-        ReportGrid.__ResetDependency__('ReportColumnTransformer');
+        afterAll(() => {
+            ReportGrid.__ResetDependency__('ReportRowTransformer');
+            ReportGrid.__ResetDependency__('ReportColumnTransformer');
+        });
+
+        it('passes the correct props to QbGrid to render the grid correctly', () => {
+            component = shallow(<ReportGrid
+                {...requiredProps}
+                {...actions}
+                columns={testColumns}
+                records={testRecords}
+                isInlineEditOpen={isInlineEditOpen}
+                pendEdits={pendEdits}
+                loading={false}
+                selectedRows={selectedRows}
+                editErrors={pendEdits}
+                appId={appId}
+                tblId={tblId}
+                rptId={rptId}
+                sortFids={sortFids}
+                appUsers={testAppUsers}
+                isViewOnly={isViewOnly}
+            />);
+            instance = component.instance();
+
+            let qbGrid = component.find(QbGrid);
+            expect(qbGrid).toHaveProp('numberOfColumns', testColumns.length);
+            expect(qbGrid).toHaveProp('columns', testColumns);
+            expect(qbGrid).toHaveProp('rows', testRecords);
+            expect(qbGrid).toHaveProp('loading', false);
+            expect(qbGrid).toHaveProp('onStartEditingRow', instance.startEditingRow);
+            expect(qbGrid).toHaveProp('editingRowId', testRecordId);
+            expect(qbGrid).toHaveProp('isInlineEditOpen', isInlineEditOpen);
+            expect(qbGrid).toHaveProp('appUsers', testAppUsers);
+            expect(qbGrid).toHaveProp('selectedRows', selectedRows);
+            expect(qbGrid).toHaveProp('areAllRowsSelected', true);
+            expect(qbGrid).toHaveProp('onClickToggleSelectedRow', actions.onClickToggle);
+            expect(qbGrid).toHaveProp('onClickEditIcon', actions.openRecordForEdit);
+            expect(qbGrid).toHaveProp('onClickDeleteIcon', instance.onClickDelete);
+            expect(qbGrid).toHaveProp('onClickToggleSelectAllRows', instance.toggleSelectAllRows);
+            expect(qbGrid).toHaveProp('onCancelEditingRow', actions.onEditRecordCancel);
+            expect(qbGrid).toHaveProp('editingRowErrors', pendEdits.errors);
+            expect(qbGrid).toHaveProp('isEditingRowValid', pendEdits.ok);
+            expect(qbGrid).toHaveProp('onClickAddNewRow', actions.onRecordNewBlank);
+            expect(qbGrid).toHaveProp('onClickSaveRow', actions.onClickRecordSave);
+            expect(qbGrid).toHaveProp('isEditingRowSaving', pendEdits.saving);
+            expect(qbGrid).toHaveProp('cellRenderer', ReportCell);
+            expect(qbGrid).toHaveProp('commonCellProps', {
+                appUsers: testAppUsers,
+                isInlineEditOpen: isInlineEditOpen,
+                isViewOnly,
+                onCellChange: instance.onCellChange,
+                onCellBlur: instance.onCellBlur,
+                onCellClick: actions.onCellClick,
+                onCellClickEditIcon: instance.startEditingRow,
+                validateFieldValue: actions.handleValidateFieldValue
+            });
+            expect(qbGrid).toHaveProp('compareCellChanges', FieldUtils.compareFieldValues);
+            expect(qbGrid).toHaveProp('menuComponent', ReportColumnHeaderMenu);
+            expect(qbGrid).toHaveProp('menuProps', {
+                appId: appId,
+                tblId: tblId,
+                rptId: rptId,
+                sortFids: sortFids
+            });
+        });
+
+        it('passes the correct props to QbGrid and commonCellProps in viewOnly mode', () => {
+            isViewOnly = true;
+            component = shallow(<ReportGrid
+                {...requiredProps}
+                {...actions}
+                columns={testColumns}
+                records={testRecords}
+                isInlineEditOpen={isInlineEditOpen}
+                pendEdits={pendEdits}
+                loading={false}
+                selectedRows={selectedRows}
+                editErrors={pendEdits}
+                appId={appId}
+                tblId={tblId}
+                rptId={rptId}
+                sortFids={sortFids}
+                appUsers={testAppUsers}
+                isViewOnly={isViewOnly}
+            />);
+            instance = component.instance();
+
+            let qbGrid = component.find(QbGrid);
+            expect(qbGrid).toHaveProp('isViewOnly', isViewOnly);
+            expect(qbGrid).toHaveProp('showRowActionsColumn', !isViewOnly);
+            expect(qbGrid).toHaveProp('commonCellProps', {
+                appUsers: testAppUsers,
+                isInlineEditOpen: isInlineEditOpen,
+                isViewOnly: isViewOnly,
+                onCellChange: instance.onCellChange,
+                onCellBlur: instance.onCellBlur,
+                onCellClick: actions.onCellClick,
+                onCellClickEditIcon: instance.startEditingRow,
+                validateFieldValue: actions.handleValidateFieldValue
+            });
+        });
     });
 });

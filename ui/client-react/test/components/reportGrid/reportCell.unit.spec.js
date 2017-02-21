@@ -66,6 +66,12 @@ describe('ReportCell', () => {
         expect(component.find('.cellEditIcon')).toBeEmpty();
     });
 
+    it('does not have a clickable edit icon when isViewOnly prop is true', () => {
+        component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId} isViewOnly/>);
+
+        expect(component.find('.cellEditIcon')).toBeEmpty();
+    });
+
     it('does not have a clickable edit icon when the row is in editing mode', () => {
         component = shallow(<ReportCell {...actions} isEditing={true} fieldDef={uneditableField} recordId={testRecordId}/>);
 
