@@ -72,16 +72,6 @@ class UserManagement extends React.Component {
             }
         });
         return appUsersFiltered;
-        /*
-        let appRoles = this.props.appRoles;
-        this.props.appUsers.forEach(function(user) {
-            appRoles.forEach(function(appRole) {
-                if (appRole.id == user.roleId) {
-                    user.roleName = appRole.name;
-                }
-            });
-        });
-        */
     }
 
     render() {
