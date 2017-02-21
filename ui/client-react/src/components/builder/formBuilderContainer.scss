@@ -21,9 +21,4 @@
         padding-bottom: 15px;
         text-align: center;
     }
-    @include small-breakpoint {
-        .formContainer .formSection .fieldRow td {
-            padding-bottom: 40px;
-        }
-    }
 }
