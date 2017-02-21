@@ -1,6 +1,6 @@
 @import "../../../assets/css/qbVariables";
 
-.draggableField:hover .fieldEditingTools {
+.draggableField:hover:focus .fieldEditingTools {
     opacity: 1;
     transition: opacity 0.4s;
 }
@@ -8,45 +8,22 @@
 .fieldEditingTools {
     border: $stroke-width-thin solid $color-black-400;
     border-radius: $radius-base;
-    opacity: 0;
     transition: opacity 0.4s;
 
+    &.notTouchDevice {
+        opacity: 0;
+    }
 
+    &.isTablet {
+        border: none;
+    }
 
     @include small-breakpoint {
-        opacity: 1;
         width: 107% !important;
     }
 
-    .showDragHandle {
-        opacity: 1;
-    }
-
     .qbIcon {
-        color: $color-black-600;
-        transition: color 0.4s;
-    }
-
-    .deleteFieldIcon {
-        position: absolute;
-        top: 5px;
-        right: 25px;
-
-        &:active {
-            color: $color-red-700;
-            transition: color 0.4s;
-        }
-    }
-
-    .fieldPreferencesIcon {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-
-        &:active {
-            color: $color-cyan-700;
-            transition: color 0.4s;
-        }
+        opacity: 0;
     }
 
     .tipChildWrapper {
@@ -57,11 +34,28 @@
         opacity: 1;
         border-color: $border-focused-color;
         outline: none;
+
+        .deleteFieldIcon {
+            position: absolute;
+            top: 5px;
+            right: 25px;
+        }
+
+        .fieldPreferencesIcon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
         .fieldPreferencesIcon .qbIcon {
+            opacity: 1;
             color: $color-cyan-700 ;
+            transition: color 0.4s;
         }
         .deleteFieldIcon .qbIcon {
+            opacity: 1;
             color: $color-red-700;
+            transition: color 0.4s;
         }
     }
 }

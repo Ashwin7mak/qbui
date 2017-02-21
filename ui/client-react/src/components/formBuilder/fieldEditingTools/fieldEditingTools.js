@@ -5,7 +5,7 @@ import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
 import BuilderUtils from '../../../utils/builderUtils'
-
+import Breakpoints from '../../../utils/breakpoints';
 
 import './fieldEditingTools.scss';
 
@@ -64,15 +64,20 @@ class FieldEditingTools extends Component {
     }
 
     render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        let isTouch = BuilderUtils.isTouchDevice();
         let showDragHandle = "";
+        let notTouchDevice = ["fieldEditingTools"]
 
-        if (BuilderUtils.isTouchDevice()) {
-            showDragHandle = "showDragHandle";
+        if (isTouch && !isSmall) {
+            showDragHandle = "isTablet";
+        } else if (!isSmall) {
+            notTouchDevice.push("notTouchDevice");
         }
 
         return (
             <div
-                className="fieldEditingTools"
+                className={notTouchDevice.join(' ')}
                 tabIndex="0"
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
