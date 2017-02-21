@@ -16,7 +16,7 @@
     // Generator modules
     var appGenerator = require('../../../test_generators/app.generator.js');
 
-    describe.only('API - Validate report sorting execution', function() {
+    describe('API - Validate report sorting execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
