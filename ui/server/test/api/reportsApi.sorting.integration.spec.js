@@ -16,7 +16,7 @@
     // Generator modules
     var appGenerator = require('../../../test_generators/app.generator.js');
 
-    describe('API - Validate report sorting execution', function() {
+    describe.only('API - Validate report sorting execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
@@ -283,7 +283,7 @@
                 var result = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 400, 'Unexpected status code.');
                 assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                assert.strictEqual(result[0].message, 'The field id is not valid.',
+                assert.strictEqual(result[0].message, 'The field as specified 10 cannot be resolved by either name or field ID',
                     'Unexpected error message returned');
                 done();
             });
