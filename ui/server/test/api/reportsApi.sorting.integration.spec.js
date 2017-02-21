@@ -263,7 +263,7 @@
         /**
          * Negative Test to validate 400 error when calling the Reports API endpoint with invalid sortList param
          */
-        it('Reports API - Should return 400 error when creating report with an invalid sortList param', function(done) {
+        it('Reports API - Should return 400 error when creating report with an invalid fid within the sortList param', function(done) {
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
