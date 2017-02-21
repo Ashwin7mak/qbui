@@ -6,7 +6,6 @@ import NavItem from './navItem';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import SearchBox from '../search/searchBox';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
 
 
 let TablesList = React.createClass({
