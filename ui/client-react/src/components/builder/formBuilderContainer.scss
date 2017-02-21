@@ -13,15 +13,6 @@
         width: 100%;
     }
 
-    .formBuilderHeader {
-        text-align: center;
-    }
-
-    .formBuilderBody {
-        padding-bottom: 15px;
-        text-align: center;
-    }
-
     @include small-breakpoint {
         .formContainer .formSection .fieldRow td {
             padding-bottom: 21px;
