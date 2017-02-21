@@ -1,6 +1,8 @@
 @import "../../../assets/css/qbVariables";
 
 .fieldEditingTools {
+    border: $stroke-width-thin solid $color-black-400;
+    border-radius: $radius-base;
     transition: opacity 0.4s;
 
     &.notTouchDevice {
@@ -20,8 +22,6 @@
         //Drag handles and borders always display during small breakpoints
         //Icons only show up when it is focused
         width: 107% !important;
-        border: $stroke-width-thin solid $color-black-400;
-        border-radius: $radius-base;
 
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
@@ -37,9 +37,40 @@
         cursor: pointer;
     }
 
-    &:focus, &:hover {
+    &:hover {
+        opacity: 1;
+
+        .deleteFieldIcon {
+            font-size: $size-iconfont-small;
+            position: absolute;
+            top: 5px;
+            right: 25px;
+
+            .qbIcon {
+                opacity: 1;
+                color: $color-black-600;
+                transition: color 0.4s;
+            }
+        }
+
+        .fieldPreferencesIcon {
+            font-size: $size-iconfont-small;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+
+            .qbIcon {
+                opacity: 1;
+                color: $color-black-600;
+                transition: color 0.4s;
+            }
+        }
+    }
+    
+    &:focus {
         opacity: 1;
         outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
 
         .deleteFieldIcon {
             font-size: $size-iconfont-small;
@@ -68,12 +99,4 @@
         }
     }
 
-    &:hover {
-        border: $stroke-width-thin solid $color-black-400;
-        border-radius: $radius-base;
-    }
-
-    &:focus {
-        border-color: $border-focused-color;
-    }
 }
