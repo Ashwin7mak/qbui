@@ -56,13 +56,11 @@ const BuilderWrapper = React.createClass({
                      <NotificationContainer/>
                 </div>
 
-                <div className="builderWrapperBody">
-                    <FormBuilderContainer
-                    appId={appId}
-                    tblId={tblId}
-                    formType={formType}
-                    formId={formId} />
-                </div>
+                <FormBuilderContainer
+                appId={appId}
+                tblId={tblId}
+                formType={formType}
+                formId={formId} />
 
             </div>
         );
