@@ -22,7 +22,7 @@
 .featureSwitchTable {
     margin-top: 20px;
     width: 100%;
-
+    table-layout: fixed;
     tbody tr:hover, tr:nth-child(odd):hover {
         background-color: $grid-row-hover-color;
     }
