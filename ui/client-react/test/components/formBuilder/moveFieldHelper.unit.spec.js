@@ -27,22 +27,29 @@ function buildNewLocation(tabIndex, sectionIndex, columnIndex, rowIndex, element
 
 /**
  * A helper method to simplify the formMeta to get relevant data for an expectation
- * WARNING: It ignores rows. If testing row placement, avoid this helper.
+ * WARNING: If a row index is provided, it will only return elements with that row. Otherwise, it ignores rows
+ * and returns a list of all elements in the column.
  * @param formMeta
  * @param tabIndex
  * @param sectionIndex
  * @param columnIndex
  * @returns {Array}
  */
-function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex) {
+function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex, rowIndex = null) {
     let rows = formMeta.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].rows;
 
     let elements = [];
 
-    rows.forEach(row => {
-        let element = row.elements[0];
-        elements.push({orderIndex: row.orderIndex, fieldId: element.FormFieldElement.fieldId});
-    });
+    if (rowIndex) {
+        rows[rowIndex].elements.forEach(element => {
+            elements.push({orderIndex: element.orderIndex, fieldId: element.FormFieldElement.fieldId});
+        });
+    } else {
+        rows.forEach(row => {
+            let element = row.elements[0];
+            elements.push({orderIndex: row.orderIndex, fieldId: element.FormFieldElement.fieldId});
+        });
+    }
 
     return elements;
 }
@@ -140,6 +147,46 @@ describe('MoveFieldHelper', () => {
                 expectedOriginalLocationSimplifiedResult: [
                     {orderIndex: 0, fieldId: 22},
                 ]
+            },
+            {
+                description: 'moves a field to the left within a row',
+                originalTab: 1,
+                originalSection: 0,
+                originalColumn: 0,
+                originalRow: 1,
+                originalElementIndex: 2,
+                fieldId: 18,
+                newTab: 1,
+                newSection: 0,
+                newColumn: 0,
+                newRow: 1,
+                newElementIndex: 1,
+                checkRow: 1,
+                expectedResult: [
+                    {orderIndex: 0, fieldId: 16},
+                    {orderIndex: 1, fieldId: 18},
+                    {orderIndex: 2, fieldId: 17},
+                ]
+            },
+            {
+                description: 'moves a field to the right within a row',
+                originalTab: 1,
+                originalSection: 0,
+                originalColumn: 0,
+                originalRow: 1,
+                originalElementIndex: 0,
+                fieldId: 16,
+                newTab: 1,
+                newSection: 0,
+                newColumn: 0,
+                newRow: 1,
+                newElementIndex: 1,
+                checkRow: 1,
+                expectedResult: [
+                    {orderIndex: 0, fieldId: 17},
+                    {orderIndex: 1, fieldId: 16},
+                    {orderIndex: 2, fieldId: 18},
+                ]
             }
         ];
 
@@ -150,7 +197,7 @@ describe('MoveFieldHelper', () => {
                 let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newRow, testCase.newElementIndex);
 
                 let result = MoveFieldHelper.moveField(testFormData.formMeta, newLocation, elementProps);
-                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn, testCase.checkRow);
 
                 expect(simplifiedResult).toEqual(testCase.expectedResult);
 

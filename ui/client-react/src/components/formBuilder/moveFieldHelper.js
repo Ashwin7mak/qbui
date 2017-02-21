@@ -6,7 +6,7 @@ import Logger from '../../utils/logger';
  * @type {{moveField}}
  */
 const MoveFieldHelper = {
-    moveField(formMeta, newLocation, draggedItemProps, sameRow = false) {
+    moveField(formMeta, newLocation, draggedItemProps) {
         if (!hasRequiredArguments(formMeta, newLocation, draggedItemProps)) {
             return formMeta;
         }
@@ -14,7 +14,7 @@ const MoveFieldHelper = {
         let formMetaCopy = _.cloneDeep(formMeta);
 
         removeElementFromCurrentLocation(formMetaCopy, draggedItemProps);
-        addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps, sameRow);
+        addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
 
         return formMetaCopy;
     }
@@ -94,13 +94,15 @@ function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
  * @param draggedItemProps
  * @param sameRow
  */
-function addElementToNewLocation(formMetaData, newLocation, draggedItemProps, sameRow) {
-    let {tabIndex, sectionIndex, columnIndex, rowIndex} = newLocation;
+function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
+    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = newLocation;
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
     let rows = column.rows;
 
-    if (sameRow) {
-        // TODO:: Deal with adding an element to the same row
+    if (isInSameRow(newLocation, draggedItemProps)) {
+        let row = rows[rowIndex];
+        row.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
+        updateOrderIndices(row, 'elements');
     } else {
         rows.splice(rowIndex, 0, createNewRow(rowIndex, [draggedItemProps.containingElement]));
         updateOrderIndices(column, 'rows');
@@ -155,6 +157,17 @@ function createNewRow(rowIndex, elements) {
             return element;
         })
     };
+}
+
+function isInSameRow(newLocation, draggedItemProps) {
+    let {tabIndex, sectionIndex, columnIndex, rowIndex} = draggedItemProps.location;
+
+    return (
+        tabIndex === newLocation.tabIndex &&
+        sectionIndex === newLocation.sectionIndex &&
+        columnIndex === newLocation.columnIndex &&
+        rowIndex === newLocation.rowIndex
+    );
 }
 
 export default MoveFieldHelper;
