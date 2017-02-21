@@ -53,18 +53,15 @@
         cursor: pointer;
     }
 
-    &:focus {
+    &:focus, &:hover {
         opacity: 1;
-        border-color: blue;
+        border-color: $border-focused-color;
         outline: none;
-        .deleteFieldIcon {
-            color: red
-        }
         .fieldPreferencesIcon .qbIcon {
-            color: blue;
+            color: $color-cyan-700 ;
         }
         .deleteFieldIcon .qbIcon {
-            color: red;
+            color: $color-red-700;
         }
     }
 }
