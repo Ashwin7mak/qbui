@@ -8,18 +8,14 @@
 .fieldEditingTools {
     border: $stroke-width-thin solid $color-black-400;
     border-radius: $radius-base;
-
     opacity: 0;
     transition: opacity 0.4s;
 
-    &:active {
-    border-color: blue;
-    }
+
 
     @include small-breakpoint {
         opacity: 1;
         width: 107% !important;
-        //width: 389px !important;
     }
 
     .showDragHandle {
@@ -55,5 +51,18 @@
 
     .tipChildWrapper {
         cursor: pointer;
+    }
+
+    &:focus {
+        border-color: blue !important;
+        .deleteFieldIcon {
+            color: red
+        }
+        .fieldPreferencesIcon .qbIcon {
+            color: blue;
+        }
+        .deleteFieldIcon .qbIcon {
+            color: red;
+        }
     }
 }

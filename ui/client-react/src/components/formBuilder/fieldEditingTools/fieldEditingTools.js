@@ -73,6 +73,7 @@ class FieldEditingTools extends Component {
         return (
             <div
                 className="fieldEditingTools"
+                tabIndex="0"
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
             >
