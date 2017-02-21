@@ -51,10 +51,7 @@
                     //  make the api request to get the app users
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            let roles = {};
-                            if (response.body) {
-                                roles = JSON.parse(response.body);
-                            }
+                            let roles = JSON.parse(response.body);
                             resolve(roles);
                         },
                         (error) => {
