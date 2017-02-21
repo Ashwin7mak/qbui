@@ -42,7 +42,7 @@ export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 //  **** table reports actions ****
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
-
+export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
 
 // **** feature switches ****
 export const SET_FEATURE_SWITCHES = 'SET_FEATURE_SWITCHES';
