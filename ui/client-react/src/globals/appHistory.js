@@ -197,7 +197,8 @@ class AppHistory {
         if (hideModal) {
             self._hideModal();
         }
-        self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
+        //  TODO: change to call redux
+        //self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
         self._continueToDestination();
     }
 

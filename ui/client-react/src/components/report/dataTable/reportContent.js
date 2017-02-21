@@ -103,27 +103,24 @@ export const ReportContent = React.createClass({
      * @returns {*}
      */
     getOrigRec(recId) {
-        let orig = {names:{}, fids:{}};
-        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let primaryKeyName =  this.props.primaryKeyName;
-        _.find(recs, rec => {
-            var keys = Object.keys(rec);
-            keys.find((col) => {
-                if (col === primaryKeyName && rec[col].value === recId) {
-                    orig.names = rec;
-                    let fids = {};
-                    let recKeys = Object.keys(rec);
-                    // have fid lookup hash
-                    recKeys.forEach(function(item) {
-                        fids[rec[item].id] = rec[item];
-                    });
-                    orig.fids = fids;
-                    return true;
-                }
-            });
-        });
-        return _.cloneDeep(orig);
+        //let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+        let primaryKeyName = this.props.primaryKeyName;
 
+        let fids = {};
+        let orig = {names: {}, fids: fids};
+        let idx = ReportUtils.findRecordIndex(recs, recId, primaryKeyName);
+        if (idx !== -1) {
+            let rec = recs[idx];
+            orig.names = rec;
+            let recKeys = Object.keys(rec);
+            // have fid lookup hash
+            recKeys.forEach((item) => {
+                fids[rec[item].id] = rec[item];
+            });
+        }
+        orig.fids = fids;
+        return _.cloneDeep(orig);
     },
 
     /**
@@ -134,6 +131,7 @@ export const ReportContent = React.createClass({
     getOrigGroupedRec(recId) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
+        //// this.props.report[0].data
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
 
@@ -208,12 +206,15 @@ export const ReportContent = React.createClass({
 
             if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
                 origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
+                //// this.props.report[0].data
             } else {
                 //add each non null value as to the new record as a change
                 let newRec = null;
                 if (this.props.reportData.data.hasGrouping) {
                     newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.primaryKeyName);
+                    // this.props.report[0].data
                 } else {
+                    // this.props.report[0].data
                     newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
                         return rec[this.props.primaryKeyName].value === recId;
                     });
@@ -263,8 +264,12 @@ export const ReportContent = React.createClass({
 
         // call action to hold the field value change
 
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
+        //const flux = this.getFlux();
+        //flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
+        // TODO: change to get from redux store
+        // this.props.report[0].data
+        let origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(change.recId) : this.getOrigRec(change.recId);
+        this.props.editRecordChange(this.props.appId, this.props.tblId, change.recId, origRec, change);
     },
 
     /**
@@ -1043,6 +1048,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));
+        },
+        editRecordChange: (appId, tblId, recId, origRec, changes) => {
+            dispatch(editRecordChange(appId, tblId, recId, origRec, changes));
         }
     };
 };

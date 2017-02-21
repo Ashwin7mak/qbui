@@ -7,17 +7,17 @@ import * as actions from '../constants/actions';
 let recordPendingEditsActions = {
 
     /* the start of editing a record */
-    recordPendingEditsStart(appId, tblId, recId, origRec, changes, isInlineEdit = false, fieldToStartEditing = null) {
-        this.dispatch(actions.RECORD_EDIT_START, {appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing});
-    },
+    //recordPendingEditsStart(appId, tblId, recId, origRec, changes, isInlineEdit = false, fieldToStartEditing = null) {
+    //    this.dispatch(actions.RECORD_EDIT_START, {appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing});
+    //},
     /* the change of a field while editing a record */
-    recordPendingEditsChangeField(appId, tblId, recId, changes) {
-        this.dispatch(actions.RECORD_EDIT_CHANGE_FIELD, {appId, tblId, recId, changes});
-    },
+    //recordPendingEditsChangeField(appId, tblId, recId, changes) {
+    //    this.dispatch(actions.RECORD_EDIT_CHANGE_FIELD, {appId, tblId, recId, changes});
+    //},
     /* cancel editing a record */
-    recordPendingEditsCancel(appId, tblId, recId) {
-        this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
-    },
+    //recordPendingEditsCancel(appId, tblId, recId) {
+    //    this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
+    //},
     /* committing changes from editing a record */
     recordPendingEditsCommit(appId, tblId, recId) {
         this.dispatch(actions.RECORD_EDIT_SAVE, {appId, tblId, recId});

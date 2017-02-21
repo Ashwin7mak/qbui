@@ -102,7 +102,7 @@ function hasChanges(changes, origRec) {
             // If the new and previous values are the same, but different from the original, then the change
             // has already been registered by pendEdits. Therefore, we check to make sure the change is different
             // from both the previous value AND the original value.
-            isDifferentThanOriginalFieldValue(changes) && isDifferentThanPreviousValue(changes, origRec)
+            isDifferentThanOriginalFieldValue(changes, origRec) && isDifferentThanPreviousValue(changes, origRec)
         );
     }
 

@@ -1,14 +1,14 @@
 import React from 'react';
-import Fluxxor from "fluxxor";
+//import Fluxxor from "fluxxor";
 import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
 import {connect} from 'react-redux';
 import {editRecordStart} from '../../actions/recordActions';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
+//let FluxMixin = Fluxxor.FluxMixin(React);
 let Record = React.createClass({
-    mixins: [FluxMixin],
+    //mixins: [FluxMixin],
     displayName: 'Record',
 
     componentWillReceiveProps(nextProps) {
@@ -50,7 +50,7 @@ let Record = React.createClass({
      * @param recId
      */
     handleEditRecordStart() {
-        const flux = this.getFlux();
+        //const flux = this.getFlux();
         let origRec = null;
         let changes = {};
         if (this.props.recId) {
@@ -111,8 +111,10 @@ let Record = React.createClass({
     handleFieldChange(change) {
         change.recId = this.props.recId;
         // call action to hold the field value change
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
+        //const flux = this.getFlux();
+        //flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
+        let origRec = change.recId ? this.getOrigRec() : null;
+        this.props.editRecordChange(this.props.appId, this.props.tblId, change.recId, origRec, change);
     },
 
     render() {
@@ -140,6 +142,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit = false, fieldToStartEditing = null) => {
             dispatch(editRecordStart(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing));
+        },
+        editRecordChange: (appId, tblId, recId, origRec, changes) => {
+            dispatch(editRecordChange(appId, tblId, recId, origRec, changes));
         }
     };
 };
