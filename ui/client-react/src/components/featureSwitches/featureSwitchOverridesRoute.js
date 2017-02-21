@@ -16,7 +16,7 @@ BodyWrapper.shouldComponentUpdate = true;
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
 
-class FeatureSwitchExceptionsRoute extends React.Component {
+class FeatureSwitchOverridesRoute extends React.Component {
 
     constructor(props) {
         super(props);
@@ -29,35 +29,35 @@ class FeatureSwitchExceptionsRoute extends React.Component {
 
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
-        this.saveExceptions = this.saveExceptions.bind(this);
-        this.deleteSelectedExceptions = this.deleteSelectedExceptions.bind(this);
+        this.saveOverrides = this.saveOverrides.bind(this);
+        this.deleteSelectedOverrides = this.deleteSelectedOverrides.bind(this);
     }
 
     selectRow(id, selected) {
 
         let selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
 
-        const allSelected = selectedRows.length === this.props.exceptions.length;
+        const allSelected = selectedRows.length === this.props.overrides.length;
 
         this.setState({selectedRows, allSelected});
     }
 
     selectAll(allSelected) {
 
-        let selectedRows = allSelected ? this.props.exceptions.map((sw, index) => index) : [];
+        let selectedRows = allSelected ? this.props.overrides.map((sw, index) => index) : [];
 
         this.setState({selectedRows, allSelected});
     }
 
-    setSelectedExceptionStates(defaultOn) {
+    setSelectedOverrideStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.props.setExceptionState(id, defaultOn);
+            this.props.setOverrideState(id, defaultOn);
         });
     }
 
-    deleteSelectedExceptions() {
+    deleteSelectedOverrides() {
 
-        this.props.deleteExceptions(this.state.selectedRows);
+        this.props.deleteOverrides(this.state.selectedRows);
 
         this.setState({selectedRows: []});
     }
@@ -67,8 +67,8 @@ class FeatureSwitchExceptionsRoute extends React.Component {
         return this.props.switches.find(item => item.id === this.props.params.id);
     }
 
-    saveExceptions() {
-        this.props.saveExceptions(this.props.params.id, this.props.exceptions);
+    saveOverrides() {
+        this.props.saveOverrides(this.props.params.id, this.props.overrides);
     }
 
     getColumns() {
@@ -76,10 +76,10 @@ class FeatureSwitchExceptionsRoute extends React.Component {
         const editable = edit.edit({
             isEditing: ({columnIndex, rowData}) => columnIndex === rowData.editing,
             onActivate: ({columnIndex, rowIndex}) => {
-                this.props.editExceptionRow(rowIndex, columnIndex);
+                this.props.editOverrideRow(rowIndex, columnIndex);
             },
             onValue: ({value, rowIndex, property}) => {
-                this.props.confirmExceptionEdit(rowIndex, property, value);
+                this.props.confirmOverrideEdit(rowIndex, property, value);
             }
         });
 
@@ -126,7 +126,7 @@ class FeatureSwitchExceptionsRoute extends React.Component {
                             return (
                              <ToggleButton value={value}
                                               onToggle={(newValue) => {
-                                                  this.props.setExceptionState(rowIndex, !newValue);
+                                                  this.props.setOverrideState(rowIndex, !newValue);
                                               }}/>);
                         }
 
@@ -157,10 +157,10 @@ class FeatureSwitchExceptionsRoute extends React.Component {
 
         if (this.props.switches.length === 0) {
             this.props.getSwitches().then(() => {
-                this.props.selectFeatureSwitchExceptions(this.props.params.id);
+                this.props.selectFeatureSwitchOverrides(this.props.params.id);
             });
         } else {
-            this.props.selectFeatureSwitchExceptions(this.props.params.id);
+            this.props.selectFeatureSwitchOverrides(this.props.params.id);
         }
     }
 
@@ -171,7 +171,7 @@ class FeatureSwitchExceptionsRoute extends React.Component {
         if (featureSwitch) {
 
             const selectedSize = this.state.selectedRows.length;
-            const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected exceptions(s)');
+            const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected overrides(s)');
 
             return (
                 <div className="featureSwitches">
@@ -180,16 +180,16 @@ class FeatureSwitchExceptionsRoute extends React.Component {
                     <div><strong>Team:</strong> {featureSwitch.team}</div>
                     <div><strong>Default State:</strong> {featureSwitch.defaultOn ? "On" : "Off"}</div>
                     <p/>
-                    <h3>Feature Switch Exceptions:</h3>
+                    <h3>Feature Switch Overrides:</h3>
 
                     <div className="globalButtons">
-                        <button onClick={this.props.createException}>Add new</button>
-                        <button disabled={!this.props.edited} className="save" onClick={this.saveExceptions}>Save exceptions</button>
+                        <button onClick={this.props.createOverride}>Add new</button>
+                        <button disabled={!this.props.edited} className="save" onClick={this.saveOverrides}>Save overrides</button>
                     </div>
 
-                    {this.props.exceptions.length === 0 ?
-                        <h4>No exceptions have been set, click 'Add New' to add one.</h4> :
-                        <Table.Provider className="featureSwitchTable exceptions"
+                    {this.props.overrides.length === 0 ?
+                        <h4>No overrides have been set, click 'Add New' to add one.</h4> :
+                        <Table.Provider className="featureSwitchTable overrides"
                                         columns={this.state.columns}
                                         components={{
                                             body: {
@@ -200,18 +200,18 @@ class FeatureSwitchExceptionsRoute extends React.Component {
 
                             <Table.Header />
 
-                            <Table.Body rows={this.getTableRowsWithIds(this.props.exceptions)} rowKey="id"/>
+                            <Table.Body rows={this.getTableRowsWithIds(this.props.overrides)} rowKey="id"/>
                         </Table.Provider>
                     }
                     <p/>
                     <div className="selectionButtons">
-                        <button disabled={selectedSize === 0} onClick={this.deleteSelectedExceptions}>Delete</button>
-                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedExceptionStates(true)}>Turn On</button>
-                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedExceptionStates(false)}>Turn Off</button>
+                        <button disabled={selectedSize === 0} onClick={this.deleteSelectedOverrides}>Delete</button>
+                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(true)}>Turn On</button>
+                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(false)}>Turn Off</button>
                         <span>{selectedSizeLabel}</span>
                     </div>
 
-                    <PageTitle title={["Feature Switch Exceptions", featureSwitch.name].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                    <PageTitle title={["Feature Switch Overrides", featureSwitch.name].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>
             );
         } else {
@@ -226,11 +226,11 @@ const mapStateToProps = (state) => {
     return {
         edited: state.featureSwitches.edited,
         switches: state.featureSwitches.switches,
-        exceptions: state.featureSwitches.exceptions
+        overrides: state.featureSwitches.overrides
     };
 };
 
 export default connect(
     mapStateToProps,
     FeatureSwitchActions
-)(FeatureSwitchExceptionsRoute);
+)(FeatureSwitchOverridesRoute);

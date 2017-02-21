@@ -52,7 +52,7 @@ export const createFeatureSwitch = (id) => ({
         description: 'Description',
         name: 'Feature',
         team: 'Team',
-        exceptions: []}
+        overrides: []}
 });
 
 export const deleteFeatureSwitch = id => ({
@@ -109,33 +109,33 @@ export const saveSwitches = (switches) => {
 };
 
 
-const saveExceptionsSuccess = (id, exceptions) => ({
-    type: types.SAVED_FEATURE_SWITCH_EXCEPTIONS,
+const saveOverridesSuccess = (id, overrides) => ({
+    type: types.SAVED_FEATURE_SWITCH_OVERRIDES,
     id,
-    exceptions
+    overrides
 });
 
-export const saveExceptions = (id, exceptions) => {
+export const saveOverrides = (id, overrides) => {
     return (dispatch) => {
 
         return new Promise((resolve, reject) => {
 
             let featureSwitchService = new FeatureSwitchService();
 
-            let promise = featureSwitchService.saveFeatureSwitchExceptions(id, exceptions);
+            let promise = featureSwitchService.saveFeatureSwitchOverrides(id, overrides);
 
             promise.then(response => {
-                dispatch(saveExceptionsSuccess(id, exceptions));
-                NotificationManager.success('Feature switch exceptions Saved', Locale.getMessage('success'),
+                dispatch(saveOverridesSuccess(id, overrides));
+                NotificationManager.success('Feature switch overrides saved', Locale.getMessage('success'),
                     CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                 resolve();
             }).catch(error => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.saveFeatureSwitchExceptions:');
+                        logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.saveFeatureSwitchOverrides:');
                     } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.saveFeatureSwitchExceptions:');
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.saveFeatureSwitchOverrides:');
                     }
                 }
                 reject(error);
@@ -184,42 +184,42 @@ export const setSwitchDefaultState = (id, defaultOn) => ({
     defaultOn
 });
 
-// exceptions for selected feature switch
+// overrides for selected feature switch
 
-export const selectFeatureSwitchExceptions = (id) => ({
-    type: types.SELECT_FEATURE_SWITCH_EXCEPTIONS,
+export const selectFeatureSwitchOverrides = (id) => ({
+    type: types.SELECT_FEATURE_SWITCH_OVERRIDES,
     id
 });
 
-export const setExceptionState = (row, on) => ({
-    type: types.SET_EXCEPTION_STATE,
+export const setOverrideState = (row, on) => ({
+    type: types.SET_OVERRIDE_STATE,
     row,
     on
 });
 
-export const deleteExceptions = ids => ({
-    type: types.DELETE_EXCEPTIONS,
+export const deleteOverrides = ids => ({
+    type: types.DELETE_OVERRIDES,
     ids
 });
 
-export const editExceptionRow = (row, column) => ({
-    type: types.EDIT_EXCEPTION,
+export const editOverrideRow = (row, column) => ({
+    type: types.EDIT_OVERRIDE,
     row,
     column
 });
 
 
-export const confirmExceptionEdit = (row, property, value) => ({
-    type: types.EXCEPTION_EDITED,
+export const confirmOverrideEdit = (row, property, value) => ({
+    type: types.OVERRIDE_EDITED,
     row,
     property,
     value
 });
 
 
-export const createException = () => ({
-    type: types.CREATE_EXCEPTION,
-    exception: {
+export const createOverride = () => ({
+    type: types.CREATE_OVERRIDE,
+    override: {
         entityType: 'realm',
         entityValue: '',
         on: false

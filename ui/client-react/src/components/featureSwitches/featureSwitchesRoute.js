@@ -90,14 +90,14 @@ class FeatureSwitchesRoute extends React.Component {
             }
         });
 
-        const exceptionsLinkFormatter = (data, {rowData}) => {
+        const overridesLinkFormatter = (data, {rowData}) => {
 
-            const hasExceptions = rowData.exceptions.length > 0;
+            const hasOverrides = rowData.overrides.length > 0;
             return (
                 <div>
                     <Link onClick={e => {e.stopPropagation();}}
                           to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
-                     {hasExceptions ? <span> ({rowData.exceptions.length})</span> : ''}
+                     {hasOverrides ? <span> ({rowData.overrides.length})</span> : ''}
                 </div>);
         };
 
@@ -122,7 +122,7 @@ class FeatureSwitchesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        exceptionsLinkFormatter
+                        overridesLinkFormatter
                     ],
                     transforms: [editable(edit.input())]
                 }

@@ -10,7 +10,7 @@ class FeatureSwitchService extends BaseService {
         this.API = {
             GET_FEATURE_SWITCHES         : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
             PUT_FEATURE_SWITCHES         : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
-            PUT_FEATURE_SWITCH_EXCEPTIONS: `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_SWITCH_EXCEPTIONS}`,
+            PUT_FEATURE_SWITCH_OVERRIDES : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_SWITCH_OVERRIDES}`,
             GET_FEATURE_STATES           : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_STATES}`
         };
     }
@@ -28,9 +28,9 @@ class FeatureSwitchService extends BaseService {
         return super.put(url, {switches});
     }
 
-    saveFeatureSwitchExceptions(featureSwitchId, exceptions) {
-        let url = super.constructUrl(this.API.PUT_FEATURE_SWITCH_EXCEPTIONS, [featureSwitchId]);
-        return super.put(url, {exceptions});
+    saveFeatureSwitchOverrides(featureSwitchId, overrides) {
+        let url = super.constructUrl(this.API.PUT_FEATURE_SWITCH_OVERRIDES, [featureSwitchId]);
+        return super.put(url, {overrides});
     }
 
     getFeatureSwitchStates() {

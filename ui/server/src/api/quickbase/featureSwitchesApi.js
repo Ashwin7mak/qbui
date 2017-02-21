@@ -56,18 +56,18 @@
                 });
             },
 
-            saveFeatureSwitchExceptions: function(req, featureSwitchId) {
+            saveFeatureSwitchOverrides: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
 
                         let bodyJSON = JSON.parse(req.rawBody);
-                        let exceptions = bodyJSON.exceptions;
+                        let overrides = bodyJSON.overrides;
 
                         let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
                         if (featureSwitch) {
-                            featureSwitch.exceptions = exceptions;
+                            featureSwitch.overrides = overrides;
                         }
                         resolve();
 

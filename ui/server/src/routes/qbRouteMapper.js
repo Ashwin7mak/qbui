@@ -89,7 +89,7 @@
          */
         var routeToPutFunction = {};
         routeToPutFunction[routeConsts.FEATURE_SWITCHES] = saveFeatureSwitches;
-        routeToPutFunction[routeConsts.FEATURE_SWITCH_EXCEPTIONS] = saveFeatureSwitchExceptions;
+        routeToPutFunction[routeConsts.FEATURE_SWITCH_OVERRIDES] = saveFeatureSwitchOverrides;
 
         /*
          * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
@@ -295,18 +295,18 @@
         );
     }
 
-    function saveFeatureSwitchExceptions(req, res) {
+    function saveFeatureSwitchOverrides(req, res) {
 
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Save feature switch exceptions', {req:filterNodeReq(req)});
+        perfLog.init('Save feature switch overrides', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.saveFeatureSwitchExceptions(req, req.params.featureSwitchId).then(
+        featureSwitchesApi.saveFeatureSwitchOverrides(req, req.params.featureSwitchId).then(
             function(response) {
                 res.send(response);
-                logApiSuccess(req, response, perfLog, 'Save feature switch exceptions');
+                logApiSuccess(req, response, perfLog, 'Save feature switch overrides');
             },
             function(response) {
-                logApiFailure(req, response, perfLog, 'Save feature switch exceptions');
+                logApiFailure(req, response, perfLog, 'Save feature switch overrides');
 
                 //  client is waiting for a response..make sure one is always returned
                 if (response && response.statusCode) {

@@ -5,7 +5,7 @@
     "team": "Cthulu",
     "description": "Demo feature switch",
     "defaultOn": true,
-    "exceptions": [
+    "overrides": [
       {
         "entityType": "realm",
         "entityValue": "12345",
@@ -29,7 +29,7 @@
     "team": "Hydra",
     "description": "Another demo feature",
     "defaultOn": false,
-    "exceptions": []
+    "overrides": []
   },
   {
     "id": "103",
@@ -39,7 +39,7 @@
     "defaultOn": false,
     "dateToExpire": "2018-01-18",
     "expiredBehavior": "flip",
-    "exceptions": [
+    "overrides": [
       {
         "entityType": "app",
         "entityValue": "bmbahnjyp",

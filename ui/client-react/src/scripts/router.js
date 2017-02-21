@@ -13,7 +13,7 @@ import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
-import FeatureSwitchExceptionsRoute from "../components/featureSwitches/featureSwitchExceptionsRoute";
+import FeatureSwitchExceptionsRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
 import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 
 import Logger from "../utils/logger";

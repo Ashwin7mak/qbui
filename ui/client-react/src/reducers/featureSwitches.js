@@ -6,7 +6,7 @@ const featureSwitches = (
         //  default states
         edited: false,
         switches: [],
-        exceptions: [],
+        overrides: [],
         states: [],
     },
     action) => {
@@ -77,63 +77,63 @@ const featureSwitches = (
             edited: false
         };
 
-    // exceptions
-    case types.SELECT_FEATURE_SWITCH_EXCEPTIONS: {
+    // overrides
+    case types.SELECT_FEATURE_SWITCH_OVERRIDES: {
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
-            exceptions: currentSwitch ? [...currentSwitch.exceptions] : [],
+            overrides: currentSwitch ? [...currentSwitch.overrides] : [],
             edited: false
         };
     }
 
-    case types.SET_EXCEPTION_STATE: {
-        const exceptions = [...state.exceptions];
-        exceptions[action.row].on = action.on;
+    case types.SET_OVERRIDE_STATE: {
+        const overrides = [...state.overrides];
+        overrides[action.row].on = action.on;
         return  {
             ...state,
-            exceptions,
+            overrides,
             edited: true
         };
     }
-    case types.EDIT_EXCEPTION: {
-        const exceptions = [...state.exceptions];
-        exceptions[action.row].editing = action.column;
+    case types.EDIT_OVERRIDE: {
+        const overrides = [...state.overrides];
+        overrides[action.row].editing = action.column;
         return {
             ...state,
-            exceptions
+            overrides
         };
     }
-    case types.EXCEPTION_EDITED: {
-        const exceptions = [...state.exceptions];
-        delete exceptions[action.row].editing;
-        exceptions[action.row][action.property] = action.value;
+    case types.OVERRIDE_EDITED: {
+        const overrides = [...state.overrides];
+        delete overrides[action.row].editing;
+        overrides[action.row][action.property] = action.value;
 
         return {
             ...state,
-            exceptions,
+            overrides,
             edited: true
         };
     }
 
-    case types.CREATE_EXCEPTION:
+    case types.CREATE_OVERRIDE:
         return {
             ...state,
-            exceptions: [...state.exceptions, action.exception],
+            overrides: [...state.overrides, action.override],
             edited: true
         };
 
-    case types.DELETE_EXCEPTIONS: {
-        const exceptions = [...state.exceptions];
-        _.pullAt(exceptions, action.ids);
+    case types.DELETE_OVERRIDES: {
+        const overrides = [...state.overrides];
+        _.pullAt(overrides, action.ids);
 
         return {
             ...state,
-            exceptions,
+            overrides,
             edited: true
         };
     }
-    case types.SAVED_FEATURE_SWITCH_EXCEPTIONS:
+    case types.SAVED_FEATURE_SWITCH_OVERRIDES:
         return {
             ...state,
             edited: false
