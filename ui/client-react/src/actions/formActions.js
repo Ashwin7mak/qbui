@@ -281,7 +281,8 @@ function saveForm(appId, tblId, formType, form, isNew) {
                 formPromise.then(
                     (response) => {
                         logger.debug('FormService saveForm success');
-                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+                        //  for now return the original form..
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, response.data));
 
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
