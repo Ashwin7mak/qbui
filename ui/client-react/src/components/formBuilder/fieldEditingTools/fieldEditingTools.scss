@@ -1,13 +1,6 @@
 @import "../../../assets/css/qbVariables";
 
-.draggableField:hover:focus .fieldEditingTools {
-    opacity: 1;
-    transition: opacity 0.4s;
-}
-
 .fieldEditingTools {
-    //border: $stroke-width-thin solid $color-black-400;
-    //border-radius: $radius-base;
     transition: opacity 0.4s;
 
     &.notTouchDevice {
@@ -32,7 +25,7 @@
     }
 
     .qbIcon {
-        //Icons only show up when it is focused
+        //Icons only show up only during focus or hover state
         opacity: 0;
     }
 
@@ -42,7 +35,6 @@
 
     &:focus, &:hover {
         opacity: 1;
-        //border-color: $border-focused-color;
         outline: none;
 
         .deleteFieldIcon {
@@ -74,7 +66,7 @@
         border: $stroke-width-thin solid $color-black-400;
         border-radius: $radius-base;
     }
-    
+
     &:focus {
         border-color: $border-focused-color;
     }
