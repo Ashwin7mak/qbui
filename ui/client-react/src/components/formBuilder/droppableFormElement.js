@@ -53,8 +53,8 @@ const DroppableElement = FieldComponent => {
         classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
 
         return connectDropTarget(
-            <div className={classNames.join(' ')} key={`droppableField-${containingElement.id}`}>
-                <FieldComponent {...props} key={`droppableField-component-${containingElement.id}`} />
+            <div className={classNames.join(' ')}>
+                <FieldComponent {...props} />
             </div>
         );
     };

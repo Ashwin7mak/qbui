@@ -63,9 +63,9 @@ const DraggableFieldHoc = FieldComponent => {
             classNames.push(isDragging ? 'dragging' : 'notDragging');
 
             return connectDragSource(
-                <div key={`draggableField-${containingElement.id}`} className={classNames.join(' ')}>
+                <div className={classNames.join(' ')}>
                     <FieldEditingTools location={location} />
-                    <FieldComponent {...this.props} key={`draggableFieldComponent-${containingElement.id}`}/>
+                    <FieldComponent {...this.props} />
                 </div>
             );
         }
