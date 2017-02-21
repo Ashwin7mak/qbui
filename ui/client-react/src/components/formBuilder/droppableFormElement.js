@@ -47,14 +47,14 @@ function collect(connect, monitor) {
  */
 const DroppableElement = FieldComponent => {
     let component = (props) => {
-        const {connectDropTarget, isOver, canDrop} = props;
+        const {connectDropTarget, isOver, canDrop, containingElement} = props;
 
         let classNames = ['droppableField'];
         classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
 
         return connectDropTarget(
-            <div className={classNames.join(' ')}>
-                <FieldComponent {...props} />
+            <div className={classNames.join(' ')} key={`droppableField-${containingElement.id}`}>
+                <FieldComponent {...props} key={`droppableField-component-${containingElement.id}`} />
             </div>
         );
     };

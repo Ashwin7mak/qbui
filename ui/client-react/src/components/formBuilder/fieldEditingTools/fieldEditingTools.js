@@ -51,13 +51,13 @@ class FieldEditingTools extends Component {
 
     onClickDelete() {
         if (this.props.onClickDelete) {
-            return this.props.onClickDelete(this.props.tabIndex, this.props.sectionIndex, this.props.orderIndex);
+            return this.props.onClickDelete(this.props.location);
         }
     }
 
     onClickFieldPreferences() {
         if (this.props.onClickFieldPreferences) {
-            return this.props.onClickFieldPreferences(this.props.tabIndex, this.props.sectionIndex, this.props.orderIndex);
+            return this.props.onClickFieldPreferences(this.props.location);
         }
     }
 
@@ -85,9 +85,7 @@ class FieldEditingTools extends Component {
 }
 
 FieldEditingTools.propTypes = {
-    tabIndex: PropTypes.number,
-    sectionIndex: PropTypes.number,
-    orderIndex: PropTypes.number,
+    location: PropTypes.object,
     onClickDelete: PropTypes.func,
     onClickFieldPreferences: PropTypes.func
 };
