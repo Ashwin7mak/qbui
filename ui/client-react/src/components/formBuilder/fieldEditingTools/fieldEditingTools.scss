@@ -55,6 +55,7 @@
 
     &:focus {
         border-color: blue !important;
+        outline: none;
         .deleteFieldIcon {
             color: red
         }
