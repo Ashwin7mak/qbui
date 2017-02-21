@@ -61,8 +61,18 @@ class UserManagement extends React.Component {
     }
 
     createUserRows() {
-        //this will add the role name to the user object
-        //this is soooooo inefficient
+        let appUsersFiltered = [];
+        let appUsers = this.props.appUsers;
+        this.props.appRoles.forEach(function(role) {
+            if (appUsers[role.id]) {
+                appUsers[role.id].forEach(function(user) {
+                    user.roleName = role.name;
+                    appUsersFiltered.push(user);
+                });
+            }
+        });
+        return appUsersFiltered;
+        /*
         let appRoles = this.props.appRoles;
         this.props.appUsers.forEach(function(user) {
             appRoles.forEach(function(appRole) {
@@ -71,13 +81,13 @@ class UserManagement extends React.Component {
                 }
             });
         });
+        */
     }
 
     render() {
-        this.createUserRows();
+        const resolvedRows = this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
-        const resolvedRows = this.props.appUsers;
         const query = this.state.query;
         const searchedRows = compose(
             search.highlighter({
@@ -115,7 +125,7 @@ class UserManagement extends React.Component {
 
 UserManagement.propTypes = {
     appId: PropTypes.string.isRequired,
-    appUsers: PropTypes.array.isRequired,
+    appUsers: PropTypes.object.isRequired,
     appRoles: PropTypes.array.isRequired
 };
 

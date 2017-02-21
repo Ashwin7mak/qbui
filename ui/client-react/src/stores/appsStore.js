@@ -10,6 +10,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
+        this.appUsersUnfiltered = [];
         this.appRoles = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
@@ -75,9 +76,14 @@ let AppsStore = Fluxxor.createStore({
         this.loadingAppUsers = false;
         this.emit('change');
     },
-    onLoadAppUsersSuccess(users) {
+    /**
+     * userArray is structured so that the filtered list of users is mapped for our userPicker in index 0
+     * index 1 is the map returned from getAppUsers
+     */
+    onLoadAppUsersSuccess(userArray) {
         this.loadingAppUsers = false;
-        this.appUsers = users;
+        this.appUsers = userArray[0];
+        this.appUsersUnfiltered = userArray[1];
         this.emit('change');
     },
     onLoadAppRoles() {
@@ -126,6 +132,7 @@ let AppsStore = Fluxxor.createStore({
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
+            appUsersUnfiltered: this.appUsersUnfiltered,
             appRoles: this.appRoles,
             selectedTableId: this.selectedTableId,
             loading: this.loading,

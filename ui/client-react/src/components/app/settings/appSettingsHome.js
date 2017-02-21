@@ -9,7 +9,8 @@ const AppSettingsHome = React.createClass({
 
     propTypes: {
         appId: PropTypes.string.isRequired,
-        appUsers: PropTypes.array.isRequired,
+        appUsers: PropTypes.object.isRequired,
+        appRoles: PropTypes.array.isRequired,
         selectedApp: PropTypes.object.isRequired
     },
 

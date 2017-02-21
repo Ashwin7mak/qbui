@@ -195,14 +195,13 @@
                                     Object.keys(users).forEach(function(key) {
                                         users[key].forEach(user => {
                                             user.userId = user.id;
-                                            user.roleId = key;
                                             _.unset(user, "id");
                                             usersFormatted.push(user);
                                         });
                                     });
                                 }
                             }
-                            resolve(usersFormatted);
+                            resolve([usersFormatted, users]);
                         },
                         (error) => {
                             log.error({req: req}, "Error getting app users in getAppUsers()");
