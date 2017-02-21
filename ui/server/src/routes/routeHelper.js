@@ -19,6 +19,7 @@
     let ROLES = 'roles';
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
+    let RELATIONSHIPS = 'relationships';
 
     let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
     let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
@@ -30,6 +31,7 @@
     //      /i - case insensitive
     let REGEX_FIELDS_ROUTE = /apps\/.*\/tables\/.*\/fields(.*)?$/i;
     let REGEX_RECORDS_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
+    let REGEX_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/formcomponents(.*)?$/i;
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
@@ -179,15 +181,15 @@
      * @returns {*}
      */
     function getEEFormsRoute(url, formId) {
-        let root = getUrlRoot(url, TABLES);
-
-        if (root) {
-            root = getEEReqURL(root);
-
+        if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) &&
+            !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
+            return getEEReqURL(url);
+        } else {
+            let root = getUrlRoot(url, TABLES);
+            let eeUrl = getEEReqURL(root);
             if (formId) {
-                return root + '/' + FORMS + (formId ? '/' + formId : '');
+                return eeUrl + '/' + FORMS + (formId ? '/' + formId : '');
             }
-
             if (url.search('formType') !== -1) {
                 let formType;
                 url.split("&").forEach(item => {
@@ -199,14 +201,12 @@
                     }
                 });
 
-                return root + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+                return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
             }
 
-            return root;
+            //  no url root for TABLES found; return original url unchanged
+            return eeUrl;
         }
-
-        //  no url root for TABLES found; return original url unchanged
-        return url;
     }
 
     module.exports  = {
@@ -291,6 +291,22 @@
             }
 
             //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * Given a url segment containging an APPS id, return the relationships
+         * end point for that app.
+         * Example:  url: /apps/123/rest/of/url
+         *           return: /apps/123/relationships
+         * @param url
+         * @returns {*}
+         */
+        getRelationshipsRoute: function(url) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                return root + '/' + RELATIONSHIPS;
+            }
             return url;
         },
 
@@ -390,7 +406,7 @@
          */
         getFormsRoute: function(url, isEeEnable, formId) {
             if (isEeEnable) {
-                return getEEFormsRoute(url, formId);
+                return getEEFormsRoute(url);
             } else {
                 return getCoreFormsRoute(url, formId);
             }

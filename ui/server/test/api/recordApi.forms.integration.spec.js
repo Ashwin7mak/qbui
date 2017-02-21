@@ -142,8 +142,8 @@
         function createForm(appId, tableId, form) {
             return new promise(function(resolve, reject) {
                 const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                recordBase.apiBase.executeRequest(formEndpoint, 'POST', form).then(function(result) {
-                    let formId =  JSON.parse(result.body).id;
+                recordBase.apiBase.executeRequest(formEndpoint, consts.POST, form, null, null, true).then(function(result) {
+                    let formId = JSON.parse(result.body).formId;
                     resolve({appId, tableId, formId});
                 }).catch(function(error) {
                     log.debug(JSON.stringify(error));
@@ -161,12 +161,12 @@
          * @return A promise to make node call
          *
          */
-        function retriveFormByID(inputAppId, inputTableId, inputFormId) {
+        function retrieveFormByID(inputAppId, inputTableId, inputFormId) {
             const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(inputAppId, inputTableId, inputFormId);
 
             return new promise(function(resolve, reject) {
-                recordBase.apiBase.executeRequest(formEndpoint, 'GET').then(function(result) {
-                    const responseBody =  JSON.parse(result.body);
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, null, true).then(function(result) {
+                    const responseBody = JSON.parse(result.body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
@@ -188,11 +188,11 @@
          * @return A promise to make node call
          *
          */
-        function retriveFormByType(appId, tableId, formType) {
-            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
+        function retrieveFormByType(appId, tableId, formType) {
+            const formEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId, null, formType);
 
             return new promise(function(resolve, reject) {
-                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, '?formType=' + formType).then(function(result) {
+                recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, null, true).then(function(result) {
                     const responseBody =  JSON.parse(result.body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
@@ -246,7 +246,7 @@
                 let getFormsPromises = [];
 
                 targetFormBuildList.forEach(form => {
-                    getFormsPromises.push(retriveFormByID(form.appId, form.tableId, form.formId));
+                    getFormsPromises.push(retrieveFormByID(form.appId, form.tableId, form.formId));
                 });
 
                 promise.all(getFormsPromises).then(returnForm => {
@@ -285,7 +285,7 @@
 
                 targetFormBuildList.forEach(form => {
                     formTypeList.forEach(formType => {
-                        getFormsPromises.push(retriveFormByType(form.appId, form.tableId, formType));
+                        getFormsPromises.push(retrieveFormByType(form.appId, form.tableId, formType));
                     });
                 });
 

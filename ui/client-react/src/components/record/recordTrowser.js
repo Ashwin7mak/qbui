@@ -17,6 +17,8 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
+import {APP_ROUTE} from '../../constants/urlConstants';
+import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
 
@@ -65,7 +67,9 @@ export const RecordTrowser = React.createClass({
         return (this.props.visible &&
             <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
-                <Record appId={this.props.appId}
+                <Record
+                    selectedApp={this.props.selectedApp}
+                    appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
@@ -91,7 +95,7 @@ export const RecordTrowser = React.createClass({
 
         if (this.props.reportData && this.props.reportData.navigateAfterSave) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`/qbase/app/${appId}/table/${tblId}/record/${recId}`);
+            this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
@@ -351,10 +355,14 @@ export const RecordTrowser = React.createClass({
             <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     rightIcons={this.getTrowserRightIcons()}
                      onCancel={this.cancelEditing}
-                     content={this.getTrowserContent()} />
+                     content={this.getTrowserContent()} >
+                <SaveOrCancelFooter
+                    rightAlignedButtons={this.getTrowserRightIcons()}
+                    centerAlignedButtons={this.getTrowserActions()}
+                    leftAlignedButtons={this.getTrowserActions()}
+                />
+            </Trowser>
         );
     }
 });

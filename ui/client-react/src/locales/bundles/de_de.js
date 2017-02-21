@@ -87,6 +87,7 @@ export default {
             save: "Speichern",
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
+            cancel: "Stornieren",
             new: "Neu"
         },
         field: {
@@ -104,7 +105,7 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
-            formBuilder: "Bilden Erbauer",
+            configureFormBuilder: "Ändern Sie dieses Formular",
             saveRecord: "Änderungen speichern",
             saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             saveAndAddRecordDisabled: "Hinzufügen von mehreren Datensätzen funktioniert nicht sofort",
@@ -168,7 +169,16 @@ export default {
                 lastUpdatedBy: "Zuletzt aktualisiert von ",
                 createdOn: "Erstellt am ",
                 ownedBy: "gehört "
+            },
+            notification: {
+                save: {
+                    success: "Formular gespeichert",
+                    error: "Fehler beim Speichern des Formulars"
+                }
             }
+        },
+        relationship: {
+            childTable: "Kind Tisch"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 Wochen}\n =1 {1 Woche}\n other {{value} Wochen}\n} ",
@@ -439,6 +449,7 @@ export default {
         },
         noneOption: "\<Keiner\>",
         unimplemented: {
+            formBuilder: "Für diese Ansicht ist derzeit keine Konfiguration verfügbar",
             search: "Die Suche ist noch nicht verfügbar",
             favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
             makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
@@ -460,6 +471,39 @@ export default {
             versionSelectTitle: "Meine nutzer öffnen diese app in",
             manageAccessTip: "*Nur app-administratoren können den benutzerzugriff verwalten"
         },
-        missingWalkMe: "Tutorial ist nicht verfügbar"
+        missingWalkMe: "Tutorial ist nicht verfügbar",
+        builder: {
+            formBuilder: {
+                unimplemented: "Feature ist momentan nicht verfügbar"
+            },
+            fields: {
+                // Keys are equal to server constants for field types to make it easier to get these keys
+                FORMULA: "Formel",
+                SCALAR: "Scalar",
+                CONCRETE: "Beton",
+                REPORT_LINK: "Berichtslink",
+                SUMMARY: "Zusammenfassung",
+                LOOKUP: "Nachschlagen",
+                //Data types
+                CHECKBOX: "Kontrollkästchen",
+                TEXT: "Text",
+                PHONE_NUMBER: "Telefonnummer",
+                DATE_TIME: "Datum & Uhrzeit",
+                DATE: "Datum",
+                DURATION: "Dauer",
+                TIME_OF_DAY: "Uhrzeit",
+                NUMERIC: "Numerisch",
+                CURRENCY: "Währung",
+                RATING: "Rating",
+                PERCENT: "Prozent",
+                URL: "Url",
+                EMAIL_ADDRESS: "Email",
+                USER: "Benutzer",
+                FILE_ATTACHMENT: "Datei",
+                TEXT_FORMULA: "Textformel",
+                URL_FORMULA: "Url-Formel",
+                NUMERIC_FORMULA: "Numerische Formel"
+            }
+        }
     }
 };

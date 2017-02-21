@@ -55,6 +55,11 @@
 .topNav .globalActions {
     display: inline-block;
 
+    .builder {
+        padding-right: 10px;
+    }
+
+
     .link {
         cursor: pointer;
 
@@ -84,6 +89,19 @@
         }
     }
 
+    .globalAction.disabled {
+        vertical-align: middle;
+        margin-right: -12px;
+        padding-top: 3px;
+        height: 40px;
+    }
+    .globalAction.disabled:hover {
+        background: $topnav-header-background-color;
+
+        > a {
+            color: $topnav-header-background-color;
+        }
+    }
     .globalAction:hover {
         background: $topnav-hover-background-color;
 

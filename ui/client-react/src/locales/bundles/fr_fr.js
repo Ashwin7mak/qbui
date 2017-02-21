@@ -87,6 +87,7 @@ export default {
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
             saveAndAddAnother: "Sauver et ajouter un autre",
+            cancel: "Annuler",
             new: "Nouveau"
         },
         field: {
@@ -104,7 +105,7 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
-            formBuilder: 'Forme Constructeur',
+            configureFormBuilder: 'Modifier ce formulaire',
             saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
             saveAndAddRecordDisabled: "Ajout de plusieurs enregistrements ne fonctionnant pas en ce moment",
@@ -167,7 +168,16 @@ export default {
                 lastUpdatedBy: "Dernière mise à jour par ",
                 createdOn: "Créé sur ",
                 ownedBy: "Propriétaire "
+            },
+            notification: {
+                save: {
+                    success: "Formulaire enregistré",
+                    error: "Erreur lors de l'enregistrement du formulaire"
+                }
             }
+        },
+        relationship: {
+            childTable: "Table Enfant"
         },
         durationWithUnits: {
             Weeks:"{value, plural, \n =0 {0 semaines}\n =1 {1 semaine}\n other {{value}  semaines}\n} ",
@@ -438,6 +448,7 @@ export default {
         },
         noneOption: "\<Aucun\>",
         unimplemented: {
+            formBuilder: "Configuration non disponible actuellement pour cette vue",
             search: "La recherche n'est pas encore disponible",
             favorites: "L'accès aux Favoris n'est pas encore disponible",
             makeFavorite: "Marquer comme favori n'est pas encore disponible",
@@ -460,6 +471,39 @@ export default {
             manageAccessTip: "*Seuls les administrateurs d'applications peuvent gérer l'accès des utilisateurs"
 
         },
-        missingWalkMe: "Le didacticiel n'est pas disponible"
+        missingWalkMe: "Le didacticiel n'est pas disponible",
+        builder: {
+            formBuilder: {
+                unimplemented: "La fonctionnalité n'est pas disponible en ce moment"
+            },
+            fields: {
+                // Keys are equal to server constants for field types to make it easier to get these keys
+                FORMULA: "Formule",
+                SCALAR: "Scalaire",
+                CONCRETE: "Béton",
+                REPORT_LINK: "Lien de rapport",
+                SUMMARY: "Résumé",
+                LOOKUP: "Recherche",
+                //Data types
+                CHECKBOX: "Case à cocher",
+                TEXT: "Texte",
+                PHONE_NUMBER: "Numéro de téléphone",
+                DATE_TIME: "Date et heure",
+                DATE: "Date",
+                DURATION: "Durée",
+                TIME_OF_DAY: "Heure du jour",
+                NUMERIC: "Numérique",
+                CURRENCY: "Devise",
+                RATING: "Cote",
+                PERCENT: "Pourcentage",
+                URL: "Url",
+                EMAIL_ADDRESS: "Email",
+                USER: "Utilisateur",
+                FILE_ATTACHMENT: "Fichier",
+                TEXT_FORMULA: "Formule de texte",
+                URL_FORMULA: "Formule Url",
+                NUMERIC_FORMULA: "Formule numérique"
+            }
+        }
     }
 };
