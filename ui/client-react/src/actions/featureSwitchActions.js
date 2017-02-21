@@ -197,9 +197,9 @@ export const setExceptionState = (row, on) => ({
     on
 });
 
-export const deleteException = id => ({
-    type: types.DELETE_EXCEPTION,
-    id
+export const deleteExceptions = ids => ({
+    type: types.DELETE_EXCEPTIONS,
+    ids
 });
 
 export const editExceptionRow = (row, column) => ({

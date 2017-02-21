@@ -14,7 +14,7 @@ const dateEditor = ({props} = {}) => {
 
         return (
             <div {...props}>
-                <input type="date" defaultValue={value} onBlur={onBlur} onKeyUp={onKeyUp}/>
+                <input autofocus={true} type="date" defaultValue={value} onBlur={onBlur} onKeyUp={onKeyUp}/>
             </div>);
     };
 

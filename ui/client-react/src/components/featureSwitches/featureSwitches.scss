@@ -20,7 +20,6 @@
 }
 
 .featureSwitchTable {
-    table-layout: fixed;
     margin-top: 20px;
     width: 100%;
 
@@ -44,6 +43,10 @@
     td:first-child {
         width: 40px;
         padding-left: 10px;
+    }
+
+    td.dateCell {
+        width: 170px;
     }
 }
 

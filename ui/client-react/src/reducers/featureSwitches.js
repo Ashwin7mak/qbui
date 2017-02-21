@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import _ from 'lodash';
 
 const featureSwitches = (
     state = {
@@ -122,9 +123,9 @@ const featureSwitches = (
             edited: true
         };
 
-    case types.DELETE_EXCEPTION: {
+    case types.DELETE_EXCEPTIONS: {
         const exceptions = [...state.exceptions];
-        exceptions.splice(action.id, 1);
+        _.pullAt(exceptions, action.ids);
 
         return {
             ...state,

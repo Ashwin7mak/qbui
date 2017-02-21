@@ -169,6 +169,9 @@ class FeatureSwitchesRoute extends React.Component {
                     label: 'Expiration Date'
                 },
                 cell: {
+                    props: {
+                        className: 'dateCell'
+                    },
                     transforms: [editable(dateEditor())]
                 }
             },
@@ -196,6 +199,7 @@ class FeatureSwitchesRoute extends React.Component {
     }
 
     render() {
+
         const selectedSize = this.state.selectedRows.length;
         const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected feature(s)');
 
