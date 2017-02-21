@@ -10,5 +10,5 @@
         isTouchDevice: function() {
             return "ontouchstart" in window;
         }
-    }
+    };
 }());
