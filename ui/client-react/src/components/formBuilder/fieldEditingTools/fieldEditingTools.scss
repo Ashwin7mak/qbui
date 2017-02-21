@@ -6,23 +6,33 @@
 }
 
 .fieldEditingTools {
-    border: $stroke-width-thin solid $color-black-400;
-    border-radius: $radius-base;
+    //border: $stroke-width-thin solid $color-black-400;
+    //border-radius: $radius-base;
     transition: opacity 0.4s;
 
     &.notTouchDevice {
+        //Nothing is displayed when it is desktop view
+        //Borders and icons only show up on hover or on focus for desktop
         opacity: 0;
     }
 
     &.isTablet {
+        //The Border is not displayed when viewing from a tablet
+        //Drag handle always show
+        //Icons and borders only show up on focus
         border: none;
     }
 
     @include small-breakpoint {
+        //Drag handles and borders always display during small breakpoints
+        //Icons only show up when it is focused
         width: 107% !important;
+        border: $stroke-width-thin solid $color-black-400;
+        border-radius: $radius-base;
     }
 
     .qbIcon {
+        //Icons only show up when it is focused
         opacity: 0;
     }
 
@@ -32,30 +42,40 @@
 
     &:focus, &:hover {
         opacity: 1;
-        border-color: $border-focused-color;
+        //border-color: $border-focused-color;
         outline: none;
 
         .deleteFieldIcon {
             position: absolute;
             top: 5px;
             right: 25px;
+
+            .qbIcon {
+                opacity: 1;
+                color: $color-red-700;
+                transition: color 0.4s;
+            }
         }
 
         .fieldPreferencesIcon {
             position: absolute;
             top: 5px;
             right: 5px;
-        }
 
-        .fieldPreferencesIcon .qbIcon {
-            opacity: 1;
-            color: $color-cyan-700 ;
-            transition: color 0.4s;
+            .qbIcon {
+                opacity: 1;
+                color: $color-cyan-700 ;
+                transition: color 0.4s;
+            }
         }
-        .deleteFieldIcon .qbIcon {
-            opacity: 1;
-            color: $color-red-700;
-            transition: color 0.4s;
-        }
+    }
+
+    &:hover {
+        border: $stroke-width-thin solid $color-black-400;
+        border-radius: $radius-base;
+    }
+    
+    &:focus {
+        border-color: $border-focused-color;
     }
 }

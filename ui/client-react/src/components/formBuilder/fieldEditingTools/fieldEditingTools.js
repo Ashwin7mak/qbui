@@ -66,11 +66,10 @@ class FieldEditingTools extends Component {
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let isTouch = BuilderUtils.isTouchDevice();
-        let showDragHandle = "";
         let notTouchDevice = ["fieldEditingTools"]
 
         if (isTouch && !isSmall) {
-            showDragHandle = "isTablet";
+            notTouchDevice.push("isTablet");
         } else if (!isSmall) {
             notTouchDevice.push("notTouchDevice");
         }
@@ -83,15 +82,14 @@ class FieldEditingTools extends Component {
                 style={this.state}
             >
 
-                <div className={showDragHandle}>
-                    <DragHandle />
-                </div>
+                <DragHandle />
 
                 <div className="deleteFieldIcon" onClick={this.onClickDelete}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
                         <QbIcon icon="delete" />
                     </QbToolTip>
                 </div>
+
                 <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
                         <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
