@@ -95,7 +95,6 @@ $edit-field-padding: 5px;
 
             .formElement {
                 word-wrap: break-word;
-                max-width: 100%;
                 display: flex;
                 flex-direction: column;
                 margin-right: 15px;
@@ -155,7 +154,7 @@ $edit-field-padding: 5px;
         }
 
         .fieldValueEditor {
-            width: 280px;
+            width: $form-edit-input-width;
 
             &.fieldInputWidth {
                 width: inherit;
