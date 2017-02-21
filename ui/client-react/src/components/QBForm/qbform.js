@@ -139,7 +139,7 @@ let QBForm = React.createClass({
             );
         } else {
             return (
-                <div className="noTabForm tabContent">
+                <div key={0} className="noTabForm tabContent">
                     {sections}
                 </div>
             );
