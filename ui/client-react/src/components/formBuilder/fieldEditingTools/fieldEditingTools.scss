@@ -66,9 +66,8 @@
             }
         }
     }
-    
+
     &:focus {
-        opacity: 1;
         outline: none;
         border: $stroke-width-thin solid $border-focused-color;
 
