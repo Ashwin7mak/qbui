@@ -16,6 +16,9 @@
         //Drag handle always show
         //Icons and borders only show up on focus
         border: none;
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
     }
 
     @include small-breakpoint {
@@ -28,9 +31,28 @@
         }
     }
 
-    .qbIcon {
-        //Icons only show up only during focus or hover state
-        opacity: 0;
+    .deleteFieldIcon {
+        font-size: $size-iconfont-small;
+        position: absolute;
+        top: 5px;
+        right: 25px;
+
+        .qbIcon {
+            opacity: 0;
+            transition: color 0.4s;
+        }
+    }
+
+    .fieldPreferencesIcon {
+        font-size: $size-iconfont-small;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+
+        .qbIcon {
+            opacity: 0;
+            transition: color 0.4s;
+        }
     }
 
     .tipChildWrapper {
@@ -41,28 +63,16 @@
         opacity: 1;
 
         .deleteFieldIcon {
-            font-size: $size-iconfont-small;
-            position: absolute;
-            top: 5px;
-            right: 25px;
-
             .qbIcon {
                 opacity: 1;
                 color: $color-black-600;
-                transition: color 0.4s;
             }
         }
 
         .fieldPreferencesIcon {
-            font-size: $size-iconfont-small;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-
             .qbIcon {
                 opacity: 1;
                 color: $color-black-600;
-                transition: color 0.4s;
             }
         }
     }
@@ -72,28 +82,16 @@
         border: $stroke-width-thin solid $border-focused-color;
 
         .deleteFieldIcon {
-            font-size: $size-iconfont-small;
-            position: absolute;
-            top: 5px;
-            right: 25px;
-
             .qbIcon {
                 opacity: 1;
                 color: $color-red-700;
-                transition: color 0.4s;
             }
         }
 
         .fieldPreferencesIcon {
-            font-size: $size-iconfont-small;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-
             .qbIcon {
                 opacity: 1;
                 color: $color-cyan-700 ;
-                transition: color 0.4s;
             }
         }
     }
