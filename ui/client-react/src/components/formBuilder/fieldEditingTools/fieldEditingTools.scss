@@ -22,6 +22,10 @@
         width: 107% !important;
         border: $stroke-width-thin solid $color-black-400;
         border-radius: $radius-base;
+
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
     }
 
     .qbIcon {
