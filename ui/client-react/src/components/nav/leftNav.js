@@ -12,7 +12,7 @@ import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-
+import LogoImg from './QB-logo.svg';
 
 let LeftNav = React.createClass({
 
@@ -53,10 +53,12 @@ let LeftNav = React.createClass({
 
     /**
      * create a branding section
+     * At some point in the future, customers will be able to specify their own branding image.
+     * This is why we kept this as a method instead of coding it down in render();
      */
     createBranding() {
         return (<div className="branding">
-            <h2 className={"logo"}>QuickBase</h2>
+            <img className={"logo"} alt="QuickBase" src={LogoImg} />
         </div>);
     },
 

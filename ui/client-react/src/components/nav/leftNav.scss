@@ -44,7 +44,7 @@ $leftnav-table-name-size:       $font-size-l;
 }
 
 .leftNav .link.selected {
-    background-color: $left-nav-selected-background-color !important;
+    //background-color: $left-nav-selected-background-color !important;
 
     a.leftNavLink {
         color: $left-nav-selected-table-color;
@@ -124,9 +124,13 @@ div.leftNavTooltip {
         transition: width 100ms ease;
 
         .appsToggleArea {
-            .logo, .appsToggle .navLabel, .appsToggleIcon {
+            .appsToggle .navLabel, .appsToggleIcon {
                 display: none;
             }
+        }
+
+        .branding {
+            display: none;
         }
 
         li.horizontal, .globalActions {
@@ -194,7 +198,6 @@ div.leftNavTooltip {
         flex: 0 0 auto;
         min-height: 40px;
         background-color: $leftnav-app-background-color;
-        //border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
 
         .toggleNavButton {
             display: none;
@@ -212,7 +215,7 @@ div.leftNavTooltip {
             text-overflow: ellipsis;
             overflow: hidden;
             padding-right: 25px;
-            color: $left-nav-color;
+            color: $leftnav-app-icon-color;
             height: 40px;
             border: 0;
             border-radius: 0;
@@ -223,7 +226,7 @@ div.leftNavTooltip {
             position: relative;
             white-space: nowrap;
             cursor: pointer;
-            background-color: $left-nav-selected-background-color;
+            background-color: transparent;
 
             .qbIcon {
                 width: 28px;
@@ -258,11 +261,7 @@ div.leftNavTooltip {
         text-align: center;
 
         .logo {
-            color: $color-blue-600;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            max-height: 30px;
         }
     }
 
@@ -446,7 +445,6 @@ div.leftNavTooltip {
 
         > li {
             flex: 1 0 auto;
-            border-right: 1px solid $left-nav-horizontal-icon-border-color;
 
             > a.leftNavLink, .globalActionLink {
                 padding: 5px 0;
@@ -463,10 +461,6 @@ div.leftNavTooltip {
             }
         }
     }
-}
-
-.leftNav .tablesHeading li.horizontal {
-    border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
 }
 
 .leftNav .globalActions {
@@ -504,10 +498,6 @@ div.leftNavTooltip {
         .appsToggleArea {
             .toggleNavButton {
                 display: block;
-            }
-
-            .logo {
-                padding-right: 24px;
             }
         }
     }
