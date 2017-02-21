@@ -12,9 +12,18 @@
     opacity: 0;
     transition: opacity 0.4s;
 
-    &.touchDevice {
+    &:active {
+    border-color: blue;
+    }
+
+    @include small-breakpoint {
         opacity: 1;
-        width: 105% !important;
+        width: 107% !important;
+        //width: 389px !important;
+    }
+
+    .showDragHandle {
+        opacity: 1;
     }
 
     .qbIcon {
@@ -27,7 +36,7 @@
         top: 5px;
         right: 25px;
 
-        &:hover .qbIcon {
+        &:active {
             color: $color-red-700;
             transition: color 0.4s;
         }
@@ -38,7 +47,7 @@
         top: 5px;
         right: 5px;
 
-        &:hover .qbIcon {
+        &:active {
             color: $color-cyan-700;
             transition: color 0.4s;
         }

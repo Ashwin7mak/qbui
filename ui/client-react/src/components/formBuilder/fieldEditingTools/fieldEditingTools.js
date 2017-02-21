@@ -64,19 +64,23 @@ class FieldEditingTools extends Component {
     }
 
     render() {
-        let classNames = ["fieldEditingTools"];
+        let showDragHandle = "";
 
         if (BuilderUtils.isTouchDevice()) {
-            classNames.push('touchDevice');
+            showDragHandle = "showDragHandle";
         }
 
         return (
             <div
-                className={classNames.join(' ')}
+                className="fieldEditingTools"
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
             >
-                <DragHandle />
+
+                <div className={showDragHandle}>
+                    <DragHandle />
+                </div>
+
                 <div className="deleteFieldIcon" onClick={this.onClickDelete}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
                         <QbIcon icon="delete" />
