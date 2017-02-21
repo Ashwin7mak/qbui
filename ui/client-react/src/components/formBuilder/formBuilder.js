@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
-import BuilderUtils from '../../utils/builderUtils';
+import TouchBackend from 'react-dnd-touch-backend';
 import './formBuilder.scss';
 
 
@@ -65,4 +65,4 @@ FormBuilder.defaultProps = {
 };
 
 
-export default DragDropContext(BuilderUtils.getBackEnd(BuilderUtils.isTouchDevice()))(FormBuilder);
+export default DragDropContext(TouchBackend({enableMouseEvents: true}))(FormBuilder);
