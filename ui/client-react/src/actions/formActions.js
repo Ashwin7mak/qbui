@@ -2,7 +2,6 @@
 
 import FormService from '../services/formService';
 import Promise from 'bluebird';
-import _ from 'lodash';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
@@ -12,7 +11,7 @@ import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
-import {convertFormToObjectForServer} from './actionHelpers/transformFormData';
+import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
 let logger = new Logger();
 
@@ -323,83 +322,4 @@ function event(id, type, content) {
         type: type,
         content: content || null
     };
-}
-
-/**
- * Final data structure:
- * formMeta: {
- *     tabs: [{
- *         sections: [{
- *             columns: [{ <- Columns are not currently implemented on EE/Node layer
- *                 rows: [{
- *                     elements: []
- *                 }]
- *             }]
- *         }]
- *     }]
- * }
- * @param formData
- * @returns {*}
- */
-function convertFormToArrayForClient(formData) {
-    if (!_.has(formData, 'formMeta.tabs')) {
-        return formData;
-    }
-
-    let formDataCopy = _.cloneDeep(formData);
-
-    formDataCopy.formMeta.tabs = Object.keys(formData.formMeta.tabs).map(tabKey => {
-        let tab = formData.formMeta.tabs[tabKey];
-
-        tab.sections = Object.keys(tab.sections).map(sectionKey => {
-            let section = tab.sections[sectionKey];
-
-            section.rows = [];
-            let currentRowIndex = -1;
-
-            Object.keys(section.elements).forEach(elementKey => {
-                let element = section.elements[elementKey];
-                element.id = _.uniqueId('element-');
-
-                if (!_.has(element, 'FormFieldElement') || !element.FormFieldElement.positionSameRow) {
-                    currentRowIndex++;
-                    section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
-                }
-
-                // Element hasn't been added to the last row, so we don't subtract one from the length for 0 based index of row.elements
-                element.orderIndex = section.rows[section.rows.length - 1].elements.length;
-
-                section.rows[currentRowIndex].elements.push(element);
-            });
-
-            // Assume a single column for now. Once columns are officially implemented we would get columns from the
-            // data returned from the Node layer
-            section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
-            section.id = _.uniqueId('section-');
-            section.isEmpty = isSectionEmpty(section);
-
-            return section;
-        });
-
-        tab.sections = _.sortBy(tab.sections, 'orderIndex');
-
-        // delete tab.sections;
-        tab.id = _.uniqueId('tab-');
-        return tab;
-    });
-
-    formDataCopy.formMeta.tabs = _.sortBy(formDataCopy.formMeta.tabs, 'orderIndex');
-
-    return formDataCopy;
-}
-
-/**
- * Currently the server returns a section with a property of elements so we can check that directly.
- * If element structure changes to match UI structure, this function may need to deeply check for elements in a section.
- * section -> columns -> rows -> elements (if any row, in any column, has an element, then this is false)
- * @param section
- * @returns {boolean}
- */
-function isSectionEmpty(section) {
-    return (section.elements.length === 0);
 }

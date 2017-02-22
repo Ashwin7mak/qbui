@@ -6,11 +6,15 @@ import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import Promise from 'bluebird';
-import testFormData from '../testHelpers/testFormData';
 
 class WindowLocationUtilsMock {
     static pushWithQuery(url) { }
 }
+
+const mockTransformHelper = {
+    convertFormToArrayForClient() {},
+    convertFormToObjectForServer() {}
+};
 
 describe('Form Actions', () => {
 
@@ -208,6 +212,24 @@ describe('Form Actions', () => {
                     done();
                 });
         });
+
+        it('transforms data to array structure for use on the client UI', () => {
+            spyOn(mockTransformHelper, 'convertFormToArrayForClient');
+            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+
+            const store = mockStore({});
+
+            return store.dispatch(loadForm("appId", "tblId", "report", "edit", "new")).then(
+                () => {
+                    expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
+                    done();
+                }).catch(error => {
+                    expect(false).toBe(true);
+                    done();
+                }).finally(() => {
+                    FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+                });
+        });
     });
 
     describe('save form data action', () => {
@@ -262,6 +284,7 @@ describe('Form Actions', () => {
                     done();
                 });
         });
+
         it('saves a form create', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
@@ -280,79 +303,24 @@ describe('Form Actions', () => {
                     done();
                 });
         });
-    });
 
-    describe('transforming formMeta for use in the UI', () => {
-        let result;
-        beforeEach(() => {
-            result = formActions.loadFormSuccess("view", testFormData);
-        });
+        it('transforms the data from array structure to object for save', () => {
+            spyOn(mockTransformHelper, 'convertFormToObjectForServer');
+            FormActionsRewireAPI.__Rewire__('convertFormToObjectForServer', mockTransformHelper.convertFormToObjectForServer);
 
-        it('transforms the tab object into an array', () => {
-            let actualTabs = result.formData.formMeta.tabs.map(tab => tab.title);
+            const store = mockStore({});
 
-            expect(actualTabs).toEqual(['Tab1', 'Tab2']);
-        });
-
-        it('transforms sections object into an array', () => {
-            let actualSections = result.formData.formMeta.tabs[0].sections.map(section => section.headerElement.FormHeaderElement.displayText);
-
-            expect(actualSections).toEqual(['Tab1-Section1', 'Tab1-Section2']);
-        });
-
-        it('separates sections into column arrays', () => {
-            let actualColumns = result.formData.formMeta.tabs[0].sections[0].columns;
-
-            expect(actualColumns.length).toEqual(1);
-            expect(actualColumns[0].orderIndex).toEqual(0);
-        });
-
-
-        it('transforms elements object into an array', () => {
-            let actualElements = result.formData.formMeta.tabs[0].sections[0].columns[0].rows.map(row => row.elements[0].FormFieldElement.displayText);
-
-            expect(actualElements).toEqual([
-                'Tab1-Section1-Field1',
-                'Tab1-Section1-Field2',
-                'Tab1-Section1-Field3',
-                'Tab1-Section1-Field4'
-            ]);
-        });
-
-        it('puts elements into rows based on the positionSameRow property', () => {
-            let actualRows = result.formData.formMeta.tabs[1].sections[0].columns[0].rows.map(row => {
-                return row.elements.map(element => element.FormFieldElement.displayText);
-            });
-
-            expect(actualRows).toEqual([
-                ['Tab2-Section1-Field1', 'Tab2-Section1-Field2'],
-                ['Tab2-Section1-Field3', 'Tab2-Section1-Field4', 'Tab2-Section1-Field5'],
-                ['Tab2-Section1-Field6'],
-                ['Tab2-Section1-Field7']
-            ]);
-        });
-
-        it('adds unique Ids that can be used as react keys', () => {
-            let tab = result.formData.formMeta.tabs[0];
-            let section = tab.sections[0];
-            let column = section.columns[0];
-            let row = column.rows[0];
-            let element = row.elements[0];
-
-            expect(tab.id).toBeDefined();
-            expect(section.id).toBeDefined();
-            expect(column.id).toBeDefined();
-            expect(row.id).toBeDefined();
-            expect(element.id).toBeDefined();
-        });
-
-        it('adds the orderIndex to the containing element for use during drag and drop', () => {
-            let element = result.formData.formMeta.tabs[0].sections[1].columns[0].rows[0].elements[0];
-
-            expect(element.orderIndex).toEqual(0);
-
-            let elementInRow = result.formData.formMeta.tabs[1].sections[0].columns[0].rows[1].elements[2];
-            expect(elementInRow.orderIndex).toEqual(2);
+            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(mockTransformHelper.convertFormToObjectForServer).toHaveBeenCalled();
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }).finally(() => {
+                    FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
+                });
         });
     });
 
