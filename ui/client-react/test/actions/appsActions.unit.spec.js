@@ -36,6 +36,13 @@ describe('Apps Actions functions with Tables', () => {
         }
     }
 
+    class mockRoleServiceFailure {
+        constructor() { }
+        getAppRoles(id) {
+            return Promise.reject(null);
+        }
+    }
+
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(appsActions);
@@ -175,6 +182,27 @@ describe('Apps Actions functions with Tables', () => {
                 },
                 () => {
                     expect(false).toBe(true);
+                    done();
+                }
+            );
+        });
+    });
+
+    var loadAppRolesTests = [
+        {name:'fail load app roles with app id not cached', appId: 187, cached: false}
+    ];
+    loadAppRolesTests.forEach(function(test) {
+        it(test.name, function(done) {
+            appsActions.__Rewire__('RoleService', mockRoleServiceFailure);
+            flux.actions.selectedAppId = test.cached === true ? test.appId : '';
+            flux.actions.loadAppRoles(test.appId).then(
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                },
+                () => {
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_FAILED]);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     done();
                 }
             );
