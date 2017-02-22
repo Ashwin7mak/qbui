@@ -66,17 +66,17 @@ class FieldEditingTools extends Component {
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let isTouch = BuilderUtils.isTouchDevice();
-        let notTouchDevice = ["fieldEditingTools"];
+        let classNames = ["fieldEditingTools"];
 
         if (isTouch && !isSmall) {
-            notTouchDevice.push("isTablet");
+            classNames.push("isTablet");
         } else if (!isSmall) {
-            notTouchDevice.push("notTouchDevice");
+            classNames.push("notTouchDevice");
         }
 
         return (
             <div
-                className={notTouchDevice.join(' ')}
+                className={classNames.join(' ')}
                 tabIndex="0"
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
