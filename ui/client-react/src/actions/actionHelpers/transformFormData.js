@@ -6,7 +6,7 @@ import _ from 'lodash';
  *     tabs: [{
  *         sections: [{
  *             columns: [{ <- Columns are not currently implemented on EE/Node layer
- *                 rows: [{
+ *                 rows: [{ <- Rows are not supported on the server. These are determined based on an elements positionSameRow property.
  *                     elements: []
  *                 }]
  *             }]
@@ -24,49 +24,69 @@ export function convertFormToArrayForClient(formData) {
 
     let formDataCopy = _.cloneDeep(formData);
 
-    formDataCopy.formMeta.tabs = Object.keys(formData.formMeta.tabs).map(tabKey => {
-        let tab = formData.formMeta.tabs[tabKey];
-
-        tab.sections = Object.keys(tab.sections).map(sectionKey => {
-            let section = tab.sections[sectionKey];
-
-            section.rows = [];
-            let currentRowIndex = -1;
-
-            Object.keys(section.elements).forEach(elementKey => {
-                let element = section.elements[elementKey];
-                element.id = _.uniqueId('element-');
-
-                if (!_.has(element, 'FormFieldElement') || !element.FormFieldElement.positionSameRow) {
-                    currentRowIndex++;
-                    section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
-                }
-
-                // Element hasn't been added to the last row, so we don't subtract one from the length for 0 based index of row.elements
-                element.orderIndex = section.rows[section.rows.length - 1].elements.length;
-
-                section.rows[currentRowIndex].elements.push(element);
-            });
-
-            // Assume a single column for now. Once columns are officially implemented we would get columns from the
-            // data returned from the Node layer
-            section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
-            section.id = _.uniqueId('section-');
-            section.isEmpty = isSectionEmpty(section);
-
-            return section;
-        });
-
-        tab.sections = _.sortBy(tab.sections, 'orderIndex');
-
-        // delete tab.sections;
-        tab.id = _.uniqueId('tab-');
-        return tab;
-    });
-
+    formDataCopy.formMeta.tabs = convertTabsToArrayStructure(formDataCopy.formMeta.tabs);
     formDataCopy.formMeta.tabs = _.sortBy(formDataCopy.formMeta.tabs, 'orderIndex');
 
     return formDataCopy;
+}
+
+
+/**
+ * Final data structure:
+ * formMeta: {
+ *   tabs: {
+ *      0: {
+ *        sections: {
+ *          0: {
+ *            elements: {
+ *               0: {
+ *                  // Element
+ *               }
+ *            }
+ *          }
+ *        }
+ *      }
+ *   }
+ * }
+ * @param formMeta
+ * @returns {*}
+ */
+export function convertFormToObjectForServer(formMeta) {
+    // If it is not likely good formMeta data, then return it without trying to transform
+    if (!_.has(formMeta, 'tabs')) {
+        return formMeta;
+    }
+
+    let copyFormMeta = _.cloneDeep(formMeta);
+
+    let tabs = {};
+
+    copyFormMeta.tabs.forEach((tab, index) => {
+        tab.sections = convertSectionsToObjectStructure(tab);
+
+        // Remove keys added for use in the client UI
+        delete tab.id;
+
+        tabs[index] = tab;
+    });
+
+    copyFormMeta.tabs = tabs;
+
+    return copyFormMeta;
+}
+
+// -- PRIVATE FUNCTIONS --
+/**
+ * We don't know what type of element this might be (FormFieldElement, HeaderElement, FormTextElement, etc.)
+ * so we are going to find it via duck typing. If it has a positionSameRow attribute, that is the one we want.
+ * Returns the element key or undefined.
+ * @param element
+ * @returns {*}
+ */
+function findFormElementKey(element) {
+    return Object.keys(element).find(key => {
+        return (element[key].positionSameRow !== undefined);
+    });
 }
 
 /**
@@ -80,61 +100,134 @@ function isSectionEmpty(section) {
     return (section.elements.length === 0);
 }
 
-export function convertFormToObjectForServer(formMeta) {
-    // If it is not likely good formMeta data, then return it without trying to transform
-    if (!_.has(formMeta, 'tabs')) {
-        return formMeta;
+/**
+ * Transforms the section.elements object into an array of rows that contain arrays of elements based on positionSameRow property
+ * WARNING: Has side effects on section
+ * @param section
+ * @param currentRowIndex
+ * @param elementKey
+ */
+function putElementsIntoRowsAndReIndex(section, currentRowIndex, elementKey) {
+    let element = section.elements[elementKey];
+    element.id = _.uniqueId('element-');
+
+    // We need to use duck typing to find out if an element should be placed on a new row, because we don't know ahead of
+    // time what the key is going to be (Could be FormFieldElement, FormHeaderElement, FormTextElement, etc.)
+    let formElementKey = findFormElementKey(element);
+
+    if (!formElementKey || !element[formElementKey].positionSameRow) {
+        currentRowIndex++;
+        section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
     }
 
-    let copyFormMeta = _.cloneDeep(formMeta);
+    // Element hasn't been added to the last row, so we don't subtract one from the length for 0 based index of row.elements
+    element.orderIndex = section.rows[section.rows.length - 1].elements.length;
 
-    let tabs = {};
+    section.rows[currentRowIndex].elements.push(element);
 
-    copyFormMeta.tabs.forEach((tab, index) => {
-        let sections = {};
+    return currentRowIndex;
+}
 
-        tab.sections.forEach((section, sectionIndex) => {
-            let elements = [];
+/**
+ * Convert section Object into an array where each section has the following structure
+ *
+ * @param tab
+ * @param sectionKey
+ * @returns {*}
+ */
+function convertSectionsToArrayWithColumnsAndRowsOfElement(tab, sectionKey) {
+    let section = tab.sections[sectionKey];
 
-            // Only ever one column for now until server supports columns
-            let rows = section.columns[0].rows;
-            rows.forEach(row => {
-                row.elements.forEach((element, elementIndex) => {
-                    // We don't know what type of element this might be (FormFieldElement, HeaderElement, FormTextElement, etc.)
-                    // so we are going to find it via duck typing. If it has a positionSameRow attribute, that is the one we want.
-                    let formElementKey = Object.keys(element).find(key => {
-                        return (element[key].positionSameRow !== undefined);
-                    });
+    section.rows = [];
+    let currentRowIndex = -1;
 
-                    if (formElementKey) {
-                        element[formElementKey].positionSameRow = (elementIndex > 0);
-                    }
-
-                    delete element.id;
-                    elements.push(element);
-                });
-            });
-
-            // We need to get all the deeply nested elements before we can accurately re-key them in order. That
-            // is why elements is first an array, and then converted to an object last.
-            let elementsObject = {};
-            elements.forEach((element, elementIndex) => elementsObject[elementIndex] = element);
-
-            // We are going to delete the pointer in the next step, so we need to make a copy first.
-            section.elements = _.cloneDeep(elementsObject);
-
-            delete section.columns;
-            delete section.id;
-            delete section.isEmpty;
-            sections[sectionIndex] = section;
-        });
-
-        tab.sections = sections;
-        delete tab.id;
-        tabs[index] = tab;
+    Object.keys(section.elements).forEach(elementKey => {
+        currentRowIndex = putElementsIntoRowsAndReIndex(section, currentRowIndex, elementKey);
     });
 
-    copyFormMeta.tabs = tabs;
+    // Assume a single column for now. Once columns are officially implemented we would get columns from the
+    // data returned from the Node layer
+    section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
+    section.id = _.uniqueId('section-');
+    section.isEmpty = isSectionEmpty(section);
 
-    return copyFormMeta;
+    return section;
+}
+
+/**
+ * Create the array based structure for tabs
+ * WARNING: Has side effects on tab.sections.
+ * @param tabs
+ * @returns {Array}
+ */
+function convertTabsToArrayStructure(tabs) {
+    return Object.keys(tabs).map(tabKey => {
+        let tab = tabs[tabKey];
+
+        tab.sections = Object.keys(tab.sections).map(sectionKey => {
+            return convertSectionsToArrayWithColumnsAndRowsOfElement(tab, sectionKey);
+        });
+
+        tab.sections = _.sortBy(tab.sections, 'orderIndex');
+
+        // delete tab.sections;
+        tab.id = _.uniqueId('tab-');
+        return tab;
+    });
+}
+
+/**
+ * Convert the section array based layout to the one currently supported by the server in which the section only has an elements property
+ * @param section
+ * @returns {Array}
+ */
+function removeColumnsAndRowsFrom(section) {
+    let elements = [];
+
+    // Only ever one column for now until server supports columns
+    let rows = section.columns[0].rows;
+    rows.forEach(row => {
+        row.elements.forEach((element, elementIndex) => {
+            let formElementKey = findFormElementKey(element);
+            if (formElementKey) {
+                element[formElementKey].positionSameRow = (elementIndex > 0);
+            }
+
+            delete element.id;
+            elements.push(element);
+        });
+    });
+
+    return elements;
+}
+
+/**
+ * Converts each tab to an object-based structure for the server from the array-structure used on the client
+ * WARNING: Has side effects on tab and its child elements
+ * @param tab
+ * @returns {Array|*}
+ */
+function convertSectionsToObjectStructure(tab) {
+    let sections = {};
+
+    tab.sections.forEach((section, sectionIndex) => {
+        let elements = removeColumnsAndRowsFrom(section);
+
+        // We need to get all the deeply nested elements before we can accurately re-key them in order. That
+        // is why elements is first an array, and then converted to an object last.
+        let elementsObject = {};
+        elements.forEach((element, elementIndex) => elementsObject[elementIndex] = element);
+
+        // We are going to delete the pointer in the next step, so we need to make a copy first.
+        section.elements = _.cloneDeep(elementsObject);
+
+        // Remove keys added for use in the UI
+        delete section.columns;
+        delete section.id;
+        delete section.isEmpty;
+
+        sections[sectionIndex] = section;
+    });
+
+    return tab.sections;
 }
