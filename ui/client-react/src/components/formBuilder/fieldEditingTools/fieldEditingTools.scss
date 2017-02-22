@@ -4,6 +4,30 @@
     transition: opacity 0.4s;
     border-radius: $radius-base;
 
+    .deleteFieldIcon {
+        font-size: $size-iconfont-small;
+        position: absolute;
+        top: 5px;
+        right: 25px;
+
+        .qbIcon {
+            opacity: 0;
+            transition: color 0.4s;
+        }
+    }
+
+    .fieldPreferencesIcon {
+        font-size: $size-iconfont-small;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+
+        .qbIcon {
+            opacity: 0;
+            transition: color 0.4s;
+        }
+    }
+
     &.notTouchDevice {
         //No borders, icon, or drag handles are displayed when it is not a touch device
         //Everything shows up on hover
@@ -29,6 +53,27 @@
         }
     }
 
+    &:focus {
+        //This opacity is needed to work for 'tabbing'
+        opacity: 1;
+        outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
+
+        .deleteFieldIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+
+        .fieldPreferencesIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-cyan-700;
+            }
+        }
+    }
+
     &.isTablet {
         //Icons and borders only display during focus
         //Drag handle always show
@@ -49,52 +94,7 @@
         }
     }
 
-    .deleteFieldIcon {
-        font-size: $size-iconfont-small;
-        position: absolute;
-        top: 5px;
-        right: 25px;
-
-        .qbIcon {
-            opacity: 0;
-            transition: color 0.4s;
-        }
-    }
-
-    .fieldPreferencesIcon {
-        font-size: $size-iconfont-small;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-
-        .qbIcon {
-            opacity: 0;
-            transition: color 0.4s;
-        }
-    }
-
     .tipChildWrapper {
         cursor: pointer;
-    }
-
-    &:focus {
-        //This opacity is needed to work for 'tabbing'
-        opacity: 1;
-        outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-red-700 !important;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-cyan-700 !important;
-            }
-        }
     }
 }
