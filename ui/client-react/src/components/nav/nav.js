@@ -112,13 +112,17 @@ export let Nav = React.createClass({
 
     getLeftGlobalActions() {
         const actions = [];
+        let recordId;
+        if (this.props.params) {
+            recordId = this.props.params.recordId;
+        }
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position={"left"}>
-                    <BuilderDropDownAction recId={this.props.params.recordId}
+                    <BuilderDropDownAction recId={recordId}
                                            actions={actions}
                                            position={"left"}
                                            formBuilderIcon="settings"
