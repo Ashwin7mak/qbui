@@ -264,11 +264,11 @@ export const updateForm = (appId, tblId, formType, form) => {
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveForm(appId, tblId, formType, formMeta, isNew) {
 
-    let form = convertFormToObjectForServer(formMeta);
-
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
+                let form = convertFormToObjectForServer(formMeta);
+
                 logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
                 //  TODO: refactor once record events are moved out..
