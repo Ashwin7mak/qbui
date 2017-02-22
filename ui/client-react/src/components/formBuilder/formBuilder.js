@@ -62,5 +62,9 @@ FormBuilder.defaultProps = {
     showCustomDragLayer: true
 };
 
+/**
+ * delay is used to allow a user to scroll on mobile
+ * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
+ * */
 
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);
