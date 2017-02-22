@@ -10,6 +10,10 @@ import _ from 'lodash';
  */
 const record = (state = [], action) => {
 
+    //  keep array, but until a use case requires support for
+    //  multiple records, will only have one record in store.
+    const singleRecordStore = true;
+
     /**
      * Create a deep clone of the state array.  If the new state obj
      * id/context is not found, add to the end of the array.
@@ -19,13 +23,15 @@ const record = (state = [], action) => {
      * @returns {*}
      */
     function newState(obj) {
+        if (singleRecordStore === true) {
+            return [obj];
+        }
+
         // reducer - no mutations against current state!
         const stateList = _.cloneDeep(state);
 
         //  does the state already hold an entry for the record context/id
         const index = _.findIndex(stateList, rec => rec.id === obj.id);
-
-        //  append or replace obj into the cloned copy
         if (index !== -1) {
             stateList[index] = obj;
         } else {
@@ -72,6 +78,13 @@ const record = (state = [], action) => {
         return newState(obj);
     }
     case types.EDIT_RECORD_CHANGE: {
+        const obj = {
+            id: action.id,
+            pendEdits: action.content
+        };
+        return newState(obj);
+    }
+    case types.EDIT_RECORD_COMMIT: {
         const obj = {
             id: action.id,
             pendEdits: action.content

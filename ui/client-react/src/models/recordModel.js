@@ -57,6 +57,8 @@ class RecordModel {
     }
 
     setEditRecordChange(appId, tblId, recId, origRec, changes) {
+        this.setEditRecordStart(appId, tblId, recId, {origRec:origRec, changes:changes, isInlineEdit:true});
+
         if (typeof (this.model.recordChanges[changes.fid]) === 'undefined') {
             this.model.recordChanges[changes.fid] = {};
         }
@@ -67,9 +69,6 @@ class RecordModel {
             this.model.recordChanges[changes.fid].newVal = changes.values.newVal;
             this.model.recordChanges[changes.fid].fieldName = changes.fieldName;
             this.model.recordChanges[changes.fid].fieldDef = changes.fieldDef;
-            this.model.currentEditingAppId = appId;
-            this.model.currentEditingTableId = tblId;
-            this.model.currentEditingRecordId = recId;
             this.model.isPendingEdit = true;
         } else {
             if (this.model.recordChanges && this.model.recordChanges[changes.fid] && !isDifferentThanOriginalFieldValue(changes, origRec)) {

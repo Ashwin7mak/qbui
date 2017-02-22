@@ -5,6 +5,7 @@ import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
 import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
+import {connect} from 'react-redux';
 
 import _ from 'lodash';
 
@@ -40,7 +41,7 @@ const ReportGrid = React.createClass({
          * Any currently pending edits to a record that have not been saved. The pending values will be displayed
          * instead of the current record values if they exist and the isInlineEditOpen property is true on pending edits.
          */
-        pendEdits: PropTypes.object,
+        //pendEdits: PropTypes.object,
 
         /**
          * Any validation errors for a record that is being edited */
@@ -80,7 +81,7 @@ const ReportGrid = React.createClass({
 
         /**
          * A property that indicates whether inline edit should be open */
-        isInlineEditOpen: PropTypes.bool,
+        //isInlineEditOpen: PropTypes.bool,
 
         /**
          * When adding a new blank row, there is now record ID yet. Instead the reportDataStore sets the index of the
@@ -126,15 +127,17 @@ const ReportGrid = React.createClass({
     },
 
     transformRecords(editingRecordId) {
+        let isInlineEditOpen = this.getPendEditProps().isInlineEditOpen || false;
         return ReportRowTransformer.transformRecordsForGrid(
             this.props.records,
             this.props.columns,
             {
                 primaryKeyFieldName: this.props.primaryKeyName,
                 editingRecordId: editingRecordId,
-                pendEdits: this.props.pendEdits,
+                //pendEdits: this.props.pendEdits,
+                pendEdits: this.getPendEditProps(),
                 selectedRows: this.props.selectedRows,
-                isInlineEditOpen: this.props.isInlineEditOpen
+                isInlineEditOpen: isInlineEditOpen
             }
         );
     },
@@ -196,8 +199,12 @@ const ReportGrid = React.createClass({
         // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
-        if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
-            editingRowId = this.props.pendEdits.currentEditingRecordId;
+        let pendEdits = this.getPendEditProps();
+        //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
+        //    editingRowId = this.props.pendEdits.currentEditingRecordId;
+        //}
+        if (pendEdits && pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
+            editingRowId = pendEdits.currentEditingRecordId;
         }
 
         if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
@@ -205,6 +212,14 @@ const ReportGrid = React.createClass({
         }
 
         return editingRowId;
+    },
+
+    getPendEditProps() {
+        let pendEdits = {};
+        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
+            pendEdits = this.props.record[0].pendEdits;
+        }
+        return pendEdits;
     },
 
     render() {
@@ -216,6 +231,9 @@ const ReportGrid = React.createClass({
         let editingRecordId = this.getCurrentlyEditingRecordId();
         let transformedRecords = this.transformRecords(editingRecordId);
 
+        let pendEdits = this.getPendEditProps();
+        let isInLineEditOpen = _.has(pendEdits, 'isInlineEditOpen') ? pendEdits.isInlineEditOpen : false;
+
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}
             columns={this.transformColumns()}
@@ -226,7 +244,8 @@ const ReportGrid = React.createClass({
             // TODO:: Refactor out need for this prop once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
             // Currently required because editingRowId could be null for a new record so it is difficult to check if
             // in editing mode with only that property. Future implementation might set a new record's id to 0 or 'new'
-            isInlineEditOpen={this.props.isInlineEditOpen}
+            //isInlineEditOpen={this.props.isInlineEditOpen}
+            isInlineEditOpen={isInLineEditOpen}
             appUsers={this.props.appUsers}
             selectedRows={this.props.selectedRows}
             areAllRowsSelected={ReportUtils.areAllRowsSelected(transformedRecords, this.props.selectedRows)}
@@ -239,7 +258,8 @@ const ReportGrid = React.createClass({
             isEditingRowValid={isRecordValid}
             onClickAddNewRow={this.props.onRecordNewBlank}
             onClickSaveRow={this.props.onClickRecordSave}
-            isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
+            //isEditingRowSaving={_.has(this.props, 'pendEdits.saving') ? this.props.pendEdits.saving : false}
+            isEditingRowSaving={_.has(pendEdits, 'saving') ? pendEdits.saving : false}
             cellRenderer={ReportCell}
             commonCellProps={{
                 appUsers: this.props.appUsers,
@@ -248,7 +268,8 @@ const ReportGrid = React.createClass({
                 onCellClick: this.props.onCellClick,
                 onCellClickEditIcon: this.startEditingRow,
                 validateFieldValue: this.props.handleValidateFieldValue,
-                isInlineEditOpen: this.props.isInlineEditOpen
+                //isInlineEditOpen: this.props.isInlineEditOpen
+                isInlineEditOpen: isInLineEditOpen
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}
@@ -256,7 +277,7 @@ const ReportGrid = React.createClass({
                 appId: this.props.appId,
                 tblId: this.props.tblId,
                 rptId: this.props.rptId,
-                sortFids: this.props.sortFids,
+                sortFids: this.props.sortFids
             }}
         />;
     }
@@ -276,4 +297,13 @@ function formatChange(updatedValues, colDef) {
     };
 }
 
-export default ReportGrid;
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        record: state.record
+    };
+};
+
+export default connect(
+    mapStateToProps
+)(ReportGrid);

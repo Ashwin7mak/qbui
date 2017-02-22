@@ -18,7 +18,7 @@ import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {updateReportRecord} from '../../actions/reportActions';
-import {editRecord, editRecordCancel} from '../../actions/recordActions';
+import {editRecord, editRecordCancel, editRecordCommit} from '../../actions/recordActions';
 import {APP_ROUTE} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
@@ -215,6 +215,8 @@ export const RecordTrowser = React.createClass({
     handleRecordChange() {
         const flux = this.getFlux();
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
+        //this.props.editRecordCommit(this.props.appId, this.props.tblId, this.props.recId);
+
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
@@ -337,7 +339,7 @@ export const RecordTrowser = React.createClass({
     },
 
     clearEditsAndClose() {
-        //const flux = this.getFlux();
+        const flux = this.getFlux();
 
         HideAppModal();
         //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
@@ -429,6 +431,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));
+        },
+        editRecordCommit: (appId, tblId, recId) => {
+            dispatch(editRecordCommit(appId, tblId, recId));
         },
         updateReportRecord: (obj, context) => {
             dispatch(updateReportRecord(obj, context));

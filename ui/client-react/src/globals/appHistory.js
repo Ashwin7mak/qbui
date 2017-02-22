@@ -179,6 +179,7 @@ class AppHistory {
     }
 
     _handleRecordChange() {
+        // TODO: call redux actions
         self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
         self.flux.actions.saveRecord(self.appId, self.tableId, self.recordId, self.pendEdits, self.fields)
             .then(self._onRecordSaved, self._onRecordSavedError);

@@ -533,6 +533,8 @@ export const editRecordCancel = (appId, tblId, recId) => {
 //recordPendingEditsCommit
 /* committing changes from editing a record */
 export const editRecordCommit = (appId, tblId, recId) => {
+    let model = new RecordModel();
+    model.setEditRecordCancel();
     return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
 };
 

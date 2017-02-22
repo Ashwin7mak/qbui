@@ -22,7 +22,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
-import {openRecord, editRecordStart, editRecordCancel, editRecordChange} from '../../../actions/recordActions';
+import {openRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit} from '../../../actions/recordActions';
 import {updateReportRecord} from '../../../actions/reportActions';
 import {APP_ROUTE} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -431,13 +431,14 @@ export const ReportContent = React.createClass({
             recordId = recordId.value;
         }
 
-        const flux = this.getFlux();
+        //const flux = this.getFlux();
         let colList = [];
         if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
+            //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
             let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
             promise.then((obj) => {
                 //  Temporary solution to display a redux event to update the report grid with in-line editor change
@@ -912,14 +913,14 @@ export const ReportContent = React.createClass({
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onCellClick={this.openRow}
-                                pendEdits={pendEdits}
+                                //pendEdits={pendEdits}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 editErrors={editErrors}
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onClickRecordSave={this.handleRecordSaveClicked}
-                                isInlineEditOpen={isInlineEditOpen}
+                                //isInlineEditOpen={isInlineEditOpen}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
                                 selectRows={this.selectRows}
@@ -1051,6 +1052,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecordChange: (appId, tblId, recId, origRec, changes) => {
             dispatch(editRecordChange(appId, tblId, recId, origRec, changes));
+        },
+        editRecordCommit: (appId, tblId, recId) => {
+            dispatch(editRecordCommit(appId, tblId, recId));
         }
     };
 };
