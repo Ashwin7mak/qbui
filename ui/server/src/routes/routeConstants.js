@@ -34,7 +34,7 @@
      *  List of Legacy Quickbase endpoints used by the Quickbase client.
      */
     var legacyApiEndpoints = {
-        APP_STACK_PREFERENCE        : baseUrl.QUICKBASE_LEGACY + '/apps/:appId/stack'
+       // APP_STACK_PREFERENCE        : baseUrl.QUICKBASE_LEGACY + '/apps/:appId/stack'
     };
 
     /*
