@@ -304,7 +304,7 @@ describe('Form Actions', () => {
                 });
         });
 
-        it('transforms the data from array structure to object for save', () => {
+        it('transforms the data from array structure to object before save', () => {
             spyOn(mockTransformHelper, 'convertFormToObjectForServer');
             FormActionsRewireAPI.__Rewire__('convertFormToObjectForServer', mockTransformHelper.convertFormToObjectForServer);
 
@@ -320,6 +320,25 @@ describe('Form Actions', () => {
                     done();
                 }).finally(() => {
                     FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
+                });
+        });
+
+        it('transforms the returned response data after the save', () => {
+            spyOn(mockTransformHelper, 'convertFormToArrayForClient');
+            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+
+            const store = mockStore({});
+
+            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                }).finally(() => {
+                    FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
                 });
         });
     });

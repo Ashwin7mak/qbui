@@ -9,6 +9,11 @@ describe('TransformFormHelpers', () => {
             result = convertFormToArrayForClient(testFormData);
         });
 
+        it('skips the transformation if the passed in data is not likely form data', () => {
+            const badFormData = {foo: 'what is this!?'};
+            expect(convertFormToArrayForClient(badFormData)).toEqual(badFormData);
+        });
+
         it('transforms the tab object into an array', () => {
             let actualTabs = result.formMeta.tabs.map(tab => tab.title);
 
@@ -100,6 +105,7 @@ describe('TransformFormHelpers', () => {
         it('transforms the section array into an object', () => {
             let actualSections = result.tabs[0].sections;
 
+            expect(Array.isArray(actualSections)).toEqual(false);
             expect(_.isObject(actualSections)).toEqual(true);
             expect(actualSections[0].headerElement.FormHeaderElement.displayText).toEqual(testArrayBasedFormData.formMeta.tabs[0].sections[0].headerElement.FormHeaderElement.displayText);
         });
@@ -116,6 +122,7 @@ describe('TransformFormHelpers', () => {
             let actualElements = section.elements;
 
             expect(section.rows).toBeUndefined();
+            expect(Array.isArray(actualElements)).toEqual(false);
             expect(_.isObject(actualElements)).toEqual(true);
 
             let fieldIdAndPosition = Object.keys(actualElements).map(key => {
@@ -141,7 +148,9 @@ describe('TransformFormHelpers', () => {
 
             expect(tab.id).toBeUndefined();
             expect(section.id).toBeUndefined();
+            expect(section.rows).toBeUndefined();
             expect(element.id).toBeUndefined();
+            expect(element.orderIndex).toBeUndefined();
         });
     });
 });

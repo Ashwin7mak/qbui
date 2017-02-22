@@ -216,18 +216,22 @@ function convertSectionsToObjectStructure(tab) {
         // We need to get all the deeply nested elements before we can accurately re-key them in order. That
         // is why elements is first an array, and then converted to an object last.
         let elementsObject = {};
-        elements.forEach((element, elementIndex) => elementsObject[elementIndex] = element);
+        elements.forEach((element, elementIndex) => {
+            delete element.orderIndex;
+            elementsObject[elementIndex] = element;
+        });
 
         // We are going to delete the pointer in the next step, so we need to make a copy first.
         section.elements = _.cloneDeep(elementsObject);
 
         // Remove keys added for use in the UI
         delete section.columns;
+        delete section.rows;
         delete section.id;
         delete section.isEmpty;
 
         sections[sectionIndex] = section;
     });
 
-    return tab.sections;
+    return sections;
 }
