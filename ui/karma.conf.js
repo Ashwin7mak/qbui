@@ -177,7 +177,7 @@ module.exports = function(config) {
 
         // browser activity settings
         browserDisconnectTimeout : 5000,    // default 2000
-        browserNoActivityTimeout : 5000,    // default 10000
+        browserNoActivityTimeout : 10000,    // default 10000
         browserDisconnectTolerance : 99,     // default 0
 
         colors: true,

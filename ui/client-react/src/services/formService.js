@@ -11,9 +11,9 @@ class FormService extends BaseService {
         //  Record service API endpoints
         this.API = {
             //  FUTURE experience engine endpoints
-            GET_FORM      : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}/{2}`,
-            GET_FORMS     : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}`,
-            GET_FORM_TYPE : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}/${constants.FORMS_TYPE}/{2}`,
+            GET_FORM         : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}`,
+            GET_FORM_BY_ID   : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}/{2}`,
+            GET_FORM_BY_TYPE : `${constants.BASE_URL.EXPERIENCE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMS}/${constants.FORMS_TYPE}/{2}`,
             //  core engine endpoints
             GET_FORM_COMPONENTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}/${constants.FORMCOMPONENTS}`,
             GET_FORM_COMPONENTS_ONLY  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMCOMPONENTS}`
@@ -46,6 +46,11 @@ class FormService extends BaseService {
         //  always want formatted data
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
 
+        // use the prototype relationship object elements included in the returned form
+        if (window.location.search.indexOf('relationshipPrototype') > -1) {
+            params.relationshipPrototype = window.location.search.indexOf('relationshipPrototype') > -1;
+        }
+
         let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
         return super.get(url, {params:params});
     }
@@ -71,6 +76,31 @@ class FormService extends BaseService {
         let url = super.constructUrl(this.API.GET_FORM_COMPONENTS_ONLY, [appId, tableId]);
 
         return super.get(url, {params:params});
+    }
+
+    /**
+     * Create a new form
+     *
+     * @param appId
+     * @param tableId
+     * @param form - the new form object
+     */
+    createForm(appId, tableId, form) {
+        let url = super.constructUrl(this.API.GET_FORM, [appId, tableId]);
+        return super.post(url, form);
+    }
+
+    /**
+     * Update an existing form
+     *
+     * @param appId
+     * @param tableId
+     * @param form - the updated form object
+     */
+    updateForm(appId, tableId, form) {
+        //  construct the put url
+        let url = super.constructUrl(this.API.GET_FORM, [appId, tableId]);
+        return super.put(url, form);
     }
 }
 

@@ -54,21 +54,21 @@
 
 @include medium-breakpoint {
     .leftNav.expanded {
-        width: 200px;
+        width: $leftNav-width-medium-breakpoint;
         transition: width 100ms ease;
     }
 }
 
 @include large-breakpoint {
     .leftNav.expanded {
-        width: 220px;
+        width: $leftNav-width-large-breakpoint;
         transition: width 100ms ease;
     }
 }
 
 @include xlarge-breakpoint {
     .leftNav.expanded {
-        width: 300px;
+        width: $leftNav-width-xLarge-breakpoint;
         transition: width 100ms ease;
     }
 }

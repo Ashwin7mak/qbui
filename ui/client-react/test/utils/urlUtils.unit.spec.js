@@ -134,11 +134,11 @@ describe('UrlUtils', () => {
             let appId = '1';
             let tblId = '2';
             let rptId = '3';
-            let fieldWithParentId = '4';
-            let masterRecordId = '5';
-            let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, fieldWithParentId, masterRecordId]);
+            let detailKeyFid = '4';
+            let detailKeyValue = '5';
+            let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, detailKeyFid, detailKeyValue]);
 
-            expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, fieldWithParentId, masterRecordId)).toEqual(url);
+            expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, detailKeyFid, detailKeyValue)).toEqual(url);
         });
     });
 });
