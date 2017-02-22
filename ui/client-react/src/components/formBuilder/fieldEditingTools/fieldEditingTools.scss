@@ -1,7 +1,6 @@
 @import "../../../assets/css/qbVariables";
 
 .fieldEditingTools {
-
     transition: opacity 0.4s;
     border-radius: $radius-base;
 
@@ -79,6 +78,7 @@
     }
 
     &:focus {
+        opacity: 1;
         outline: none;
         border: $stroke-width-thin solid $border-focused-color;
 
@@ -96,5 +96,4 @@
             }
         }
     }
-
 }
