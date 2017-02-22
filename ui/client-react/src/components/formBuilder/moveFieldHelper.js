@@ -112,7 +112,7 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
 }
 
 /**
- * Removes any empty columns or rows from a sectin
+ * Removes any empty columns or rows from a section
  * WARNING: This function has side effects on the formMetaData passed in.
  * @param formMetaData
  * @param tabIndex
