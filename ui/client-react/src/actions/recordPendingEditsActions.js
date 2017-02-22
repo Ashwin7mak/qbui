@@ -19,9 +19,9 @@ let recordPendingEditsActions = {
     //    this.dispatch(actions.RECORD_EDIT_CANCEL, {appId, tblId, recId});
     //},
     /* committing changes from editing a record */
-    recordPendingEditsCommit(appId, tblId, recId) {
-        this.dispatch(actions.RECORD_EDIT_SAVE, {appId, tblId, recId});
-    },
+    //recordPendingEditsCommit(appId, tblId, recId) {
+    //    this.dispatch(actions.RECORD_EDIT_SAVE, {appId, tblId, recId});
+    //},
     /* validate a field when editing a record */
     recordPendingValidateField(fieldDef, fieldLabel, value, checkRequired) {
         this.dispatch(actions.RECORD_EDIT_VALIDATE_FIELD, {fieldDef, fieldLabel, value, checkRequired});

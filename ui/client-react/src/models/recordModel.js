@@ -38,14 +38,18 @@ class RecordModel {
         return this.model;
     }
 
-    setEditRecordStart(appId, tblId, recId, obj) {
-        this.model.appId = appId || null;
-        this.model.tblId = tblId || null;
-        this.model.recId = recId || null;
-        if (this.model.recId) {
-            this.model.currentEditingAppId = this.model.appId;
-            this.model.currentEditingTableId = this.model.tblId;
-            this.model.currentEditingRecordId = this.model.recId;
+    set(model) {
+        this.model = model;
+    }
+
+    setEditRecordStart(obj) {
+        this.model.appId = obj.appId || null;
+        this.model.tblId = obj.tblId || null;
+        this.model.recId = obj.recId || null;
+        if (obj.recId) {
+            this.model.currentEditingAppId = obj.appId;
+            this.model.currentEditingTableId = obj.tblId;
+            this.model.currentEditingRecordId = obj.recId;
         }
 
         this.model.originalRecord = obj.origRec ? _.cloneDeep(obj.origRec) : null;
@@ -56,13 +60,14 @@ class RecordModel {
         this.model.isInlineEditOpen = obj.isInlineEdit || false;
     }
 
-    setEditRecordChange(appId, tblId, recId, origRec, changes) {
-        this.setEditRecordStart(appId, tblId, recId, {origRec:origRec, changes:changes, isInlineEdit:true});
+    setEditRecordChange(changes) {
+        //this.setEditRecordStart(appId, tblId, recId, {origRec:origRec, changes:changes, isInlineEdit:true});
 
         if (typeof (this.model.recordChanges[changes.fid]) === 'undefined') {
             this.model.recordChanges[changes.fid] = {};
         }
 
+        let origRec = this.model.originalRecord;
         if (hasChanges(changes, origRec)) {
             this.model.recordChanges =  _.cloneDeep(this.model.recordChanges);
             this.model.recordChanges[changes.fid].oldVal = changes.values.oldVal;

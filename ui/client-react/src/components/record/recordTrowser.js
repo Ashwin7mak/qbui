@@ -213,9 +213,9 @@ export const RecordTrowser = React.createClass({
      * @returns {Array}
      */
     handleRecordChange() {
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
-        //this.props.editRecordCommit(this.props.appId, this.props.tblId, this.props.recId);
+        //const flux = this.getFlux();
+        //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
+        this.props.editRecordCommit(this.props.appId, this.props.tblId, this.props.recId);
 
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record

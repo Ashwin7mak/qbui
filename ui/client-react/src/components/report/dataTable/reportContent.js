@@ -437,8 +437,8 @@ export const ReportContent = React.createClass({
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
-            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
-            //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
+            //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
+            this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
             let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
             promise.then((obj) => {
                 //  Temporary solution to display a redux event to update the report grid with in-line editor change
@@ -859,7 +859,7 @@ export const ReportContent = React.createClass({
         //  TODO: just getting to work....improve this...
         let pendEdits = {};
         if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            pendEdits = this.props.record[0].pendEdits;
+            pendEdits = this.props.record[0].pendEdits || {};
         }
 
         let isSmall = Breakpoints.isSmallBreakpoint();

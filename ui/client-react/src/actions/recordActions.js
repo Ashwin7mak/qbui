@@ -494,6 +494,18 @@ function event(id, type, content) {
     };
 }
 
+function createEventObject(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) {
+    return {
+        appId,
+        tblId,
+        recId,
+        origRec,
+        changes,
+        isInlineEdit,
+        fieldToStartEditing
+    };
+}
+
 export const openRecord = (recId, nextRecordId, previousRecordId) => {
     return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
@@ -505,36 +517,35 @@ export const editRecord = (recId, nextRecordId, previousRecordId) => {
 //recordPendingEditsStart
 /* the start of editing a record */
 export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
-    let model = new RecordModel();
-    let obj = {
-        origRec,
-        changes,
-        isInlineEdit,
-        fieldToStartEditing
-    };
-    model.setEditRecordStart(appId, tblId, recId, obj);
-    return event(recId, types.EDIT_RECORD_START, model.get());
+    //let model = new RecordModel();
+    let obj = createEventObject(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing);
+    //model.setEditRecordStart(appId, tblId, recId, obj);
+    //return event(recId, types.EDIT_RECORD_START, model.get());
+    return event(recId, types.EDIT_RECORD_START, obj);
 };
 
 /* the change of a field while editing a record */
 export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
-    let model = new RecordModel();
-    model.setEditRecordChange(appId, tblId, recId, origRec, changes);
-    return event(recId, types.EDIT_RECORD_CHANGE, model.get());
+    //let model = new RecordModel();
+    //model.setEditRecordChange(appId, tblId, recId, origRec, changes);
+    //return event(recId, types.EDIT_RECORD_CHANGE, model.get());
+    //let model = new RecordModel();
+    //model.setEditRecordChange(appId, tblId, recId, origRec, changes);
+    let obj = createEventObject(appId, tblId, recId, origRec, changes, true, null);
+    return event(recId, types.EDIT_RECORD_CHANGE, obj);
 };
 
 /* cancel editing a record */
 export const editRecordCancel = (appId, tblId, recId) => {
-    let model = new RecordModel();
-    model.setEditRecordCancel();
-    return event(recId, types.EDIT_RECORD_CANCEL, model.get());
+    //let model = new RecordModel();
+    //model.setEditRecordCancel();
+    //return event(recId, types.EDIT_RECORD_CANCEL, model.get());
+    return event(recId, types.EDIT_RECORD_CANCEL, {appId, tblId, recId});
 };
 
 //recordPendingEditsCommit
 /* committing changes from editing a record */
 export const editRecordCommit = (appId, tblId, recId) => {
-    let model = new RecordModel();
-    model.setEditRecordCancel();
     return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
 };
 

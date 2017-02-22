@@ -217,7 +217,7 @@ const ReportGrid = React.createClass({
     getPendEditProps() {
         let pendEdits = {};
         if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            pendEdits = this.props.record[0].pendEdits;
+            pendEdits = this.props.record[0].pendEdits || {};
         }
         return pendEdits;
     },
@@ -232,7 +232,7 @@ const ReportGrid = React.createClass({
         let transformedRecords = this.transformRecords(editingRecordId);
 
         let pendEdits = this.getPendEditProps();
-        let isInLineEditOpen = _.has(pendEdits, 'isInlineEditOpen') ? pendEdits.isInlineEditOpen : false;
+        let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
         return <QbGrid
             numberOfColumns={_.isArray(this.props.columns) ? this.props.columns.length : 0}

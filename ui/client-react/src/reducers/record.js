@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import RecordModel from '../models/recordModel';
 import _ from 'lodash';
 
 /**
@@ -10,8 +11,8 @@ import _ from 'lodash';
  */
 const record = (state = [], action) => {
 
-    //  keep array, but until a use case requires support for
-    //  multiple records, will only have one record in store.
+    //  Store can be configured to hold just one record
+    //  or array of records.
     const singleRecordStore = true;
 
     /**
@@ -38,6 +39,25 @@ const record = (state = [], action) => {
             stateList.push(obj);
         }
         return stateList;
+    }
+
+    /**
+     * Retrieve the record from the state and return a cloned
+     * object
+     *
+     * @param id
+     * @returns {*}
+     */
+    function getRecordFromState(id) {
+        const index = _.findIndex(state, rec => rec.id === id);
+        if (index !== -1) {
+            return _.cloneDeep(state[index]);
+        }
+        return null;
+    }
+
+    function getEntryKey(currentRecd) {
+        return '' + currentRecd.currentEditingAppId + '/' + currentRecd.currentEditingTableId + '/' + currentRecd.currentEditingRecordId;
     }
 
     //  what record action is being requested
@@ -71,32 +91,76 @@ const record = (state = [], action) => {
         return newState(obj);
     }
     case types.EDIT_RECORD_START: {
-        const obj = {
-            id: action.id,
-            pendEdits: action.content
-        };
-        return newState(obj);
+        //  check if record is already in the store..
+        let currentRecd = getRecordFromState(action.id);
+        if (!currentRecd) {
+            currentRecd = {
+                id: action.id
+            };
+        }
+
+        //  initialize a new record model object used for pending changes
+        let model = new RecordModel();
+        const content = action.content || {};
+        model.setEditRecordStart(content);
+
+        currentRecd.pendEdits = model.get();
+        return newState(currentRecd);
     }
     case types.EDIT_RECORD_CHANGE: {
-        const obj = {
-            id: action.id,
-            pendEdits: action.content
-        };
-        return newState(obj);
+        //  get a clone of the current record
+        let currentRecd = getRecordFromState(action.id);
+        if (!currentRecd) {
+            currentRecd = {
+                id: action.id
+            };
+        }
+
+        //  initialize pending edits model object
+        let model;
+        if (_.has(currentRecd, 'pendEdits')) {
+            model = new RecordModel();
+            model.set(currentRecd.pendEdits);
+        } else {
+            model = new RecordModel();
+            const content = action.content || {};
+            model.setEditRecordStart(content);
+        }
+
+        //  update the model with the content changes
+        const changes = action.content.changes || {};
+        model.setEditRecordChange(changes);
+
+        //  set the pending changes object
+        currentRecd.pendEdits = model.get();
+        return newState(currentRecd);
     }
     case types.EDIT_RECORD_COMMIT: {
-        const obj = {
-            id: action.id,
-            pendEdits: action.content
-        };
-        return newState(obj);
+        //  get a cloned copy of record in the store..its expected that EDIT_RECORD_START
+        //  and/or EDIT_RECORD_CHANGE has already been called, populated the
+        //  store with the record.
+        const currentRecd = getRecordFromState(action.id);
+        if (_.has(currentRecd, 'pendEdits') && currentRecd.pendEdits.isPendingEdit) {
+            const pendEdits = currentRecd.pendEdits;
+            let entry = getEntryKey(pendEdits);
+            if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
+                pendEdits.commitChanges[entry] = {};
+            }
+            if (typeof (pendEdits[entry].changes) === 'undefined') {
+                pendEdits.commitChanges[entry].changes = [];
+            }
+            pendEdits.commitChanges[entry].changes.push(pendEdits.recordChanges);
+            pendEdits.commitChanges[entry].status = '...'; //status is pending response from server
+            return newState(currentRecd);
+        }
+        return state;
     }
     case types.EDIT_RECORD_CANCEL: {
-        const obj = {
-            id: action.id,
-            pendEdits: action.content
-        };
-        return newState(obj);
+        const currentRecd = getRecordFromState(action.id);
+        if (_.has(currentRecd, 'pendEdits')) {
+            delete currentRecd.pendEdits;
+        }
+        return newState(currentRecd);
     }
     default:
         // by default, return existing state
