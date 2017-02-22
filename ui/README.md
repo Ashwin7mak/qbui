@@ -212,7 +212,7 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
     *  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings
 
     *  ESLint dialog
-        * ![eslintDialogScreenShot.png](eslintDialogScreenShot.png)
+        * ![eslintDialogScreenShot.png](https://media-api.atlassian.io/file/39bba957-0c3e-4890-8d24-fb51f577b3cd/binary?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYTFhNzAwNy05OWNmLTQwZWEtYTEyMy1lNzNiN2ViNzIyZTkiLCJhY2Nlc3MiOnsidXJuOmZpbGVzdG9yZTpmaWxlOjM5YmJhOTU3LTBjM2UtNDg5MC04ZDI0LWZiNTFmNTc3YjNjZCI6WyJyZWFkIl19LCJleHAiOjE0ODc4MDY0MTIsIm5iZiI6MTQ4NzgwMzM1Mn0.J1XhV8xQdjHrMwInapWwAPf3zPVf6aa2KPhFvH3aKec&client=ca1a7007-99cf-40ea-a123-e73b7eb722e9&name=eslintDialogScreenShot.png)
     * Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` to override with comment statements.
     * The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffectkr/popularconvention#javascript
 
@@ -234,10 +234,10 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
              $FILE_PATH$.*:$LINE$.*:$COLUMN$
 
            ```
-           * For Example ![eslintExternalTool](eslintExternalTool.png)
+           * For Example ![eslintExternalTool](https://media-api.atlassian.io/file/e362e92f-1676-4ab3-89f8-e58aa3220b77/binary?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYTFhNzAwNy05OWNmLTQwZWEtYTEyMy1lNzNiN2ViNzIyZTkiLCJhY2Nlc3MiOnsidXJuOmZpbGVzdG9yZTpmaWxlOmUzNjJlOTJmLTE2NzYtNGFiMy04OWY4LWU1OGFhMzIyMGI3NyI6WyJyZWFkIl19LCJleHAiOjE0ODc4MDYxNjksIm5iZiI6MTQ4NzgwMzEwOX0.i5iuAew97o1AoqbJM_s2lSAOO3r9gN8Z70yt6rc6yyY&client=ca1a7007-99cf-40ea-a123-e73b7eb722e9&name=eslintExternalTool.png)
 
         3. When launching the tool now any eslint errors listed which have file location will be also clickable. Clicking will take you to the error location in the Intellij editor:
-           ![](eslintErrorExample.png)
+           ![eslint error example](https://media-api.atlassian.io/file/a5aba58d-9b64-4d95-9027-f4de51f8b240/binary?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYTFhNzAwNy05OWNmLTQwZWEtYTEyMy1lNzNiN2ViNzIyZTkiLCJhY2Nlc3MiOnsidXJuOmZpbGVzdG9yZTpmaWxlOmE1YWJhNThkLTliNjQtNGQ5NS05MDI3LWY0ZGU1MWY4YjI0MCI6WyJyZWFkIl19LCJleHAiOjE0ODc4MDYzNzgsIm5iZiI6MTQ4NzgwMzMxOH0.l1PBCaEXYFzYG7kLmzpw9ebDQr866_h0EIOIActO-Rg&client=ca1a7007-99cf-40ea-a123-e73b7eb722e9&name=eslintErrorExample.png)
 
 
 
@@ -352,7 +352,7 @@ and
 
 1. In IntelliJ, create a new Node configuration (Run -> Edit Configurations)
     - *Note:* You may need to add the NodeJs IntelliJ plugin if you do not see an option to create a Node configuration.
-    - ![IntelliJ Configuration for E2E Tests on SauceLabs](./Config_for_E2E_on_SauceLabs.png)
+    - ![IntelliJ Configuration for E2E Tests on SauceLabs](https://media-api.atlassian.io/file/bdac8cdc-63b7-4e69-bf92-8d886de69684/binary?token=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYTFhNzAwNy05OWNmLTQwZWEtYTEyMy1lNzNiN2ViNzIyZTkiLCJhY2Nlc3MiOnsidXJuOmZpbGVzdG9yZTpmaWxlOmJkYWM4Y2RjLTYzYjctNGU2OS1iZjkyLThkODg2ZGU2OTY4NCI6WyJyZWFkIl19LCJleHAiOjE0ODc4MDYwOTksIm5iZiI6MTQ4NzgwMzAzOX0.C5EoYYM0VWpJkcbvGMoBTKJqpfyn_h3h6MvWKXKA1rM&client=ca1a7007-99cf-40ea-a123-e73b7eb722e9&name=Config_for_E2E_on_SauceLabs.png)
 
 2. You need to click the ellipses (...) next to "Environment Variables" and define the following:
     - `NODE_ENV` = `e2e`
