@@ -6,9 +6,27 @@
 
     &.notTouchDevice {
         //No borders, icon, or drag handles are displayed when it is not a touch device
-        //Everythign shows up on hover
+        //Everything shows up on hover
         border: $stroke-width-thin solid $color-black-400;
         opacity: 0;
+
+        &:hover {
+            opacity: 1;
+
+            .deleteFieldIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-black-600;
+                }
+            }
+
+            .fieldPreferencesIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-black-600;
+                }
+            }
+        }
     }
 
     &.isTablet {
@@ -29,10 +47,6 @@
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
         }
-    }
-
-    .dragHandle {
-        opacity: 0;
     }
 
     .deleteFieldIcon {
@@ -63,48 +77,23 @@
         cursor: pointer;
     }
 
-    &:hover {
-        opacity: 1;
-
-        .dragHandle {
-            opacity: 1;
-        }
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-black-600;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-black-600;
-            }
-        }
-    }
-
     &:focus {
+        //This opacity is needed to work for 'tabbing'
         opacity: 1;
         outline: none;
         border: $stroke-width-thin solid $border-focused-color;
 
-        .dragHandle {
-            opacity: 1;
-        }
-
         .deleteFieldIcon {
             .qbIcon {
                 opacity: 1;
-                color: $color-red-700;
+                color: $color-red-700 !important;
             }
         }
 
         .fieldPreferencesIcon {
             .qbIcon {
                 opacity: 1;
-                color: $color-cyan-700;
+                color: $color-cyan-700 !important;
             }
         }
     }
