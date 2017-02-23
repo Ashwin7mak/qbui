@@ -856,10 +856,12 @@ export const ReportContent = React.createClass({
     },
     render() {
         //  Get the pending props from the redux store..
-        //  TODO: just getting to work....improve this...
+        //  TODO: just getting to work....improve this to support multi records...
         let pendEdits = {};
         if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            pendEdits = this.props.record[0].pendEdits || {};
+            if (_.isEmpty(this.props.record[0]) === false) {
+                pendEdits = this.props.record[0].pendEdits || {};
+            }
         }
 
         let isSmall = Breakpoints.isSmallBreakpoint();

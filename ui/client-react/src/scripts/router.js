@@ -27,7 +27,8 @@ let fluxxor = getFlux();
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
-let history = AppHistory.setup(fluxxor).history;
+const store = createAppStore();
+let history = AppHistory.setup(fluxxor, store).history;
 
 const mapStateToProps = (state) => {
     return {
@@ -37,8 +38,6 @@ const mapStateToProps = (state) => {
 
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
-
-const store = createAppStore();
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;
 

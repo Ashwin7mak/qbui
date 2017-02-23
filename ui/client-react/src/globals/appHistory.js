@@ -3,6 +3,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
+import {editRecordCancel, editRecordCommit} from '../actions/recordActions';
 import _ from 'lodash';
 
 // Uses singleton pattern
@@ -21,15 +22,16 @@ class AppHistory {
             // A custom browser history object that can be used by React Router
             this.history = useRouterHistory(useBeforeUnload(createHistory))();
 
-            // The instance of flux (to get stores and call actions)
+            // get redux stores and call actions
+            this.store = null;
             this.flux = null;
 
             // Properties needed to save records with pending edits
-            this.appId = null;
-            this.tableId = null;
-            this.recordId = null;
-            this.pendEdits = null;
-            this.fields = null;
+            //this.appId = null;
+            //this.tableId = null;
+            //this.recordId = null;
+            //this.pendEdits = {};
+            //this.fields = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -42,15 +44,15 @@ class AppHistory {
     }
 
     /**
-     * Setups the singleton for use with flux outside of React. Needs to be run before history can be used.
-     * Flux currently has to be passed in because it is difficult to use Fluxxor outside of React. Once we
-     * move to Redux, this may not be necessary.
-     * @param flux
+     * Setups the singleton for use with Redux store outside of React.
+     * @param redux store
      */
-    setup(flux, redux) {
+    setup(flux, store) {
+        //  TODO remove once all stores are migrated
         self.flux = flux;
-        self.redux = redux;
 
+        //  redux store
+        self.store = store;
         self._setupHistoryListeners();
 
         return self;
@@ -62,7 +64,6 @@ class AppHistory {
     reset() {
         if (self && self.cancelListenBefore) {self.cancelListenBefore();}
         if (self && self.cancelListenBeforeUnload) {self.cancelListenBeforeUnload();}
-
         self = null; // eslint-disable-line
     }
 
@@ -75,13 +76,8 @@ class AppHistory {
         self.cancelListenBefore = self.history.listenBefore((location, callback) => {
             if (self) {
                 self.callback = callback;
-
-                if (self.flux) {
-                    self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
-                }
-
-                if (this.confirmPendingEdits()) {
-                    this.showPendingEditsConfirmationModal();
+                if (self.getIsPendingEdit()) {
+                    self.showPendingEditsConfirmationModal();
                 } else {
                     // cancel any pending pending edits that don't require confirmation, i.e. started inline editing
                     self._discardChanges(false);
@@ -93,13 +89,8 @@ class AppHistory {
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
         self.cancelListenBeforeUnload = self.history.listenBeforeUnload(event => {
-            if (self && self.flux) {
-                self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
-            }
-
-            // The following text does not need to be internationalized because
-            // it will not actually appear in the modal on evergreen browsers.
-            if (this.confirmPendingEdits()) {
+            if (self.getIsPendingEdit()) {
+                // No need to internationalize as it will not appear in the modal on evergreen browsers.
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';
                 }
@@ -108,8 +99,23 @@ class AppHistory {
         });
     }
 
-    confirmPendingEdits() {
-        return (self && self.pendEdits && self.pendEdits.isPendingEdit);
+    getIsPendingEdit() {
+        const pendEdits = self.getPendingEditsFromStore();
+        return pendEdits.isPendingEdit === true;
+    }
+
+    getPendingEditsFromStore() {
+        let pendEdits = {};
+        if (self.store) {
+            const state = self.store.getState();
+            //  TODO: just getting to work....improve this to support multi records...
+            if (Array.isArray(state.record) && state.record.length > 0) {
+                if (_.isEmpty(state.record[0]) === false) {
+                    pendEdits = state.record[0].pendEdits || {};
+                }
+            }
+        }
+        return pendEdits;
     }
 
     /**
@@ -141,18 +147,22 @@ class AppHistory {
      * For edit form get fields from FormStore.
      */
     getFields() {
-        if (self.pendEdits.isInlineEditOpen) {
+        let fields = null;
+        const pendEdits = self.getPendingEditsFromStore();
+        if (pendEdits.isInlineEditOpen) {
             let fieldsStore = self.flux.store('FieldsStore').getState();
             if (_.has(fieldsStore, 'fields.data')) {
-                self.fields = fieldsStore.fields.data;
+                fields = fieldsStore.fields.data;
             }
         } else {
             let formsStore = self.flux.store('FormStore').getState();
             if (_.has(formsStore, 'editFormData.fields')) {
-                self.fields = formsStore.editFormData.fields;
+                fields = formsStore.editFormData.fields;
             }
         }
+        return fields;
     }
+
     /*
     * All functions below reference 'self' instead of 'this' because of a context change
     * after being called from the modal
@@ -160,30 +170,38 @@ class AppHistory {
     _saveChanges() {
         self._hideModal();
 
-        self.appId = self.pendEdits.currentEditingAppId;
-        self.tableId = self.pendEdits.currentEditingTableId;
-        self.recordId = self.pendEdits.currentEditingRecordId;
+        const pendEdits = self.getPendingEditsFromStore();
+        const appId = pendEdits.currentEditingAppId;
+        const tableId = pendEdits.currentEditingTableId;
+        const recordId = pendEdits.currentEditingRecordId;
 
-        self.getFields();
+        let fields = self.getFields();
 
-        if (self.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
-            self._handleRecordAdd();
+        if (pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
+            // handle record add
+            self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
+                .then(self._onRecordSaved, self._onRecordSavedError);
+            //self._handleRecordAdd();
         } else {
-            self._handleRecordChange();
+            self.store.dispatch(appId, tableId, recordId);
+            //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
+            self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields)
+                .then(self._onRecordSaved, self._onRecordSavedError);
+            //self._handleRecordChange();
         }
     }
 
-    _handleRecordAdd() {
-        self.flux.actions.saveNewRecord(self.appId, self.tableId, self.pendEdits.recordChanges, self.fields)
-            .then(self._onRecordSaved, self._onRecordSavedError);
-    }
+    //_handleRecordAdd() {
+    //    self.flux.actions.saveNewRecord(self.appId, self.tableId, self.pendEdits.recordChanges, self.fields)
+    //        .then(self._onRecordSaved, self._onRecordSavedError);
+    //}
 
-    _handleRecordChange() {
-        // TODO: call redux actions
-        self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
-        self.flux.actions.saveRecord(self.appId, self.tableId, self.recordId, self.pendEdits, self.fields)
-            .then(self._onRecordSaved, self._onRecordSavedError);
-    }
+    //_handleRecordChange() {
+    //    self.store.dispatch(editRecordCommit(self.appId, self.tableId, self.recordId));
+    //    //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
+    //    self.flux.actions.saveRecord(self.appId, self.tableId, self.recordId, self.pendEdits, self.fields)
+    //        .then(self._onRecordSaved, self._onRecordSavedError);
+    //}
 
     _onRecordSaved() {
         self._continueToDestination();
@@ -198,7 +216,13 @@ class AppHistory {
         if (hideModal) {
             self._hideModal();
         }
-        //  TODO: change to call redux
+
+        //  clean up pending edits in store
+        const pendEdits = self.getPendingEditsFromStore();
+        if (_.isEmpty(pendEdits) === false) {
+            self.store.dispatch(editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
+        }
+
         //self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
         self._continueToDestination();
     }
