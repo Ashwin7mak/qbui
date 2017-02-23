@@ -10,7 +10,7 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
-        this.appUsersUnfiltered = [];
+        this.appUsersUnfiltered = {};
         this.appRoles = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;

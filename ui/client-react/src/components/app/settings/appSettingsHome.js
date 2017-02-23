@@ -19,10 +19,7 @@ import './appSettingsHome.scss';
 const AppSettingsHome = React.createClass({
 
     propTypes: {
-        appId: PropTypes.string.isRequired,
-        appUsers: PropTypes.object.isRequired,
-        appRoles: PropTypes.array.isRequired,
-        selectedApp: PropTypes.object.isRequired
+        appId: PropTypes.string.isRequired
     },
 
     constructSettingsLink(setting) {

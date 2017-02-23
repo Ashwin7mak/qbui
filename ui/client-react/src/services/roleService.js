@@ -11,7 +11,7 @@ class RoleService extends BaseService {
 
         //  App Service API endpoints
         this.API = {
-            GET_APP_ROLES           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}${constants.ROLES}`
+            GET_APP_ROLES           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.ROLES}`
         };
     }
 
