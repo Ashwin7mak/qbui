@@ -40,11 +40,13 @@ class FieldEditingTools extends Component {
     setPositionOfFieldEditingTools(editingTools) {
         if (editingTools) {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
+            let width = device.isTouch() ? 26 : 30;
+
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
                 left: `${fieldDomElement.offsetLeft - 15}px`,
                 height: `${fieldDomElement.offsetHeight + 26}px`,
-                width: `${fieldDomElement.offsetWidth + 30}px`
+                width: `${fieldDomElement.offsetWidth + width}px`
             };
 
             this.setState(Object.assign({}, this.state, styles));

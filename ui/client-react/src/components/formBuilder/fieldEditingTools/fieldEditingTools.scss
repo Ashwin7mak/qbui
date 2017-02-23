@@ -70,7 +70,6 @@
         //Drag handles and borders always display during small breakpoints
         //Icons only show up when it is focused
         border-bottom: $stroke-width-thin solid $color-black-400;
-        width: 107% !important;
 
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
