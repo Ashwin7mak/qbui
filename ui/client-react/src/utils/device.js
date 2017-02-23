@@ -7,7 +7,7 @@
         /**
          * touch detection
          * */
-        isTouchDevice: function() {
+        isTouch: function() {
             return "ontouchstart" in window;
         }
     };

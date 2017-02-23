@@ -4,7 +4,7 @@ import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
 import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
-import BuilderUtils from '../../../utils/builderUtils';
+import device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 
 import './fieldEditingTools.scss';
@@ -65,13 +65,13 @@ class FieldEditingTools extends Component {
 
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        let isTouch = BuilderUtils.isTouchDevice();
+        let isTouch = device.isTouch();
         let classNames = ["fieldEditingTools"];
 
         if (isTouch && !isSmall) {
             classNames.push("isTablet");
         } else if (!isTouch) {
-            classNames.push("notTouchDevice");
+            classNames.push("notTouch");
         }
 
         return (
