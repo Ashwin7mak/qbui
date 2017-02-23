@@ -40,7 +40,8 @@ class FieldEditingTools extends Component {
     setPositionOfFieldEditingTools(editingTools) {
         if (editingTools) {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
-            let width = device.isTouch() ? 26 : 30;
+            let isSmall = Breakpoints.isSmallBreakpoint();
+            let width = isSmall ? 26 : 30;
 
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
