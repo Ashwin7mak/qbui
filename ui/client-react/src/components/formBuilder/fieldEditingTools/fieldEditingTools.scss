@@ -37,22 +37,22 @@
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-xxx-small;
         }
+    }
 
-        &:hover {
-            opacity: 1;
+    &:hover {
+        opacity: 1;
 
-            .deleteFieldIcon {
-                .qbIcon {
-                    opacity: 1;
-                    color: $color-black-600;
-                }
+        .deleteFieldIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-black-600;
             }
+        }
 
-            .fieldPreferencesIcon {
-                .qbIcon {
-                    opacity: 1;
-                    color: $color-black-600;
-                }
+        .fieldPreferencesIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-black-600;
             }
         }
     }
@@ -88,6 +88,9 @@
     }
 
     @include small-breakpoint {
+        &:hover {
+            display: none;
+        }
         //Drag handles and borders always display during small breakpoints
         //Icons only show up when it is focused
         border-bottom: $stroke-width-thin solid $color-black-400;
