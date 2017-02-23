@@ -76,6 +76,19 @@
 @include small-breakpoint {
     .leftNav .globalActions {
         display: block;
+        .globalAction .disabled {
+            padding-right: 0;
+            padding-top: 4px;
+            padding-left: 20px;
+            border: none;
+            width: 0;
+            background: $left-nav-background-color;
+
+            &:hover {
+                background: $left-nav-background-color;
+
+            }
+        }
     }
 
     .leftNav.open {
