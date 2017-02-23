@@ -7,6 +7,17 @@ import * as Table from 'reactabular-table';
 import {compose} from 'redux';
 import './userManagement.scss';
 
+
+/**
+ * This class is the layout for App Users Management screen
+ * We build a reactabular table and style it to match the rest, adding functionality as needed.
+ * The list of columns in the table is static
+ *
+ * @param appId
+ * @param appUsers the unfiltered list of Users in the app (meaning the role name and other pertinent information hasn't be added to the user object yet)
+ * @param appRoles the list of roles associated with this app
+ * @type {ClassicComponentClass<P>}
+ */
 class UserManagement extends React.Component {
 
     constructor(...args) {
