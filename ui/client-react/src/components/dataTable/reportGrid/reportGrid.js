@@ -127,7 +127,7 @@ const ReportGrid = React.createClass({
     },
 
     transformRecords(editingRecordId) {
-        let isInlineEditOpen = this.getPendEditProps().isInlineEditOpen || false;
+        let isInlineEditOpen = this.getPendEdits().isInlineEditOpen || false;
         return ReportRowTransformer.transformRecordsForGrid(
             this.props.records,
             this.props.columns,
@@ -135,7 +135,7 @@ const ReportGrid = React.createClass({
                 primaryKeyFieldName: this.props.primaryKeyName,
                 editingRecordId: editingRecordId,
                 //pendEdits: this.props.pendEdits,
-                pendEdits: this.getPendEditProps(),
+                pendEdits: this.getPendEdits(),
                 selectedRows: this.props.selectedRows,
                 isInlineEditOpen: isInlineEditOpen
             }
@@ -199,7 +199,7 @@ const ReportGrid = React.createClass({
         // TODO:: This process can be refactored once AgGrid is removed. https://quickbase.atlassian.net/browse/MB-1920
         let editingRowId = null;
 
-        let pendEdits = this.getPendEditProps();
+        let pendEdits = this.getPendEdits();
         //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
         //    editingRowId = this.props.pendEdits.currentEditingRecordId;
         //}
@@ -214,7 +214,7 @@ const ReportGrid = React.createClass({
         return editingRowId;
     },
 
-    getPendEditProps() {
+    getPendEdits() {
         //  TODO: just getting to work....improve this to support multi records...
         let pendEdits = {};
         if (Array.isArray(this.props.record) && this.props.record.length > 0) {
@@ -234,7 +234,7 @@ const ReportGrid = React.createClass({
         let editingRecordId = this.getCurrentlyEditingRecordId();
         let transformedRecords = this.transformRecords(editingRecordId);
 
-        let pendEdits = this.getPendEditProps();
+        let pendEdits = this.getPendEdits();
         let isInLineEditOpen = (pendEdits.isInlineEditOpen === true);
 
         return <QbGrid

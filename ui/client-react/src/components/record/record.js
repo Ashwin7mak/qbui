@@ -4,7 +4,7 @@ import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
 import {connect} from 'react-redux';
-import {editRecordStart} from '../../actions/recordActions';
+import {editRecordStart, editRecordChange} from '../../actions/recordActions';
 
 //let FluxMixin = Fluxxor.FluxMixin(React);
 let Record = React.createClass({
