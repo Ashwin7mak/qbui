@@ -2,7 +2,7 @@
  * Created by rbeyer on 2/3/17.
  */
 import React, {PropTypes} from 'react';
-import SettingsMenuItem from './settingsMenuItem';
+import Card from '../../card/card';
 import './appSettingsHome.scss';
 
 const AppSettingsHome = React.createClass({
@@ -21,28 +21,28 @@ const AppSettingsHome = React.createClass({
     render() {
         return (
             <div className="appSettingsHomeContainer">
-                <SettingsMenuItem title="Roles"
+                <Card title="Roles"
                                   subTitle="Manage the roles in this app"
                                   icon="thumbs-up"
                 />
-                <SettingsMenuItem title="Tables"
+                <Card title="Tables"
                                   subTitle="Manage the tables in this app"
                                   icon="report-table"
                 />
-                <SettingsMenuItem title="App Properties"
+                <Card title="App Properties"
                                   subTitle="Manage the properties of this app"
                                   icon="settings"
                                   link={this.constructSettingsLink("properties")}
                 />
-                <SettingsMenuItem title="Pages"
+                <Card title="Pages"
                                   subTitle="Manage the pages in this app"
                                   icon="report-menu-4"
                 />
-                <SettingsMenuItem title="Branding"
+                <Card title="Branding"
                                   subTitle="Customize the appearance of your app"
                                   icon="favicon"
                 />
-                <SettingsMenuItem title="Users"
+                <Card title="Users"
                                   subTitle="Add/Remove Users in this app"
                                   icon="users"
                                   link={this.constructSettingsLink("users")}

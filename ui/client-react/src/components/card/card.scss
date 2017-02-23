@@ -1,4 +1,4 @@
-@import '../../../assets/css/qbVariables';
+@import '../../assets/css/qbVariables';
 
 .card {
     background-color: $default-text-ondark-color;
@@ -34,7 +34,7 @@
     position: relative;
 }
 
-.settingsLink {
+.cardLink {
     color: $color-teal-100;
 }
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import SettingsMenuItem  from '../../../../src/components/app/settings/settingsMenuItem';
+import Card  from '../../../src/components/card/card';
 
-describe('SettingsMenuItem functions', () => {
+describe('Card functions', () => {
     'use strict';
 
     const title = 'Users';
@@ -11,7 +11,7 @@ describe('SettingsMenuItem functions', () => {
     const link = '/qbase/app/1/users';
 
     it('test render of component', () => {
-        let component = TestUtils.renderIntoDocument(<SettingsMenuItem title={title}
+        let component = TestUtils.renderIntoDocument(<Card title={title}
                                                                         subtitle={subtitle}
                                                                         icon={icon}
                                                                         link={link}/>);
@@ -19,15 +19,15 @@ describe('SettingsMenuItem functions', () => {
     });
 
     it('test renderLink method with link', () => {
-        let component = TestUtils.renderIntoDocument(<SettingsMenuItem title={title}
+        let component = TestUtils.renderIntoDocument(<Card title={title}
                                                                        subtitle={subtitle}
                                                                        icon={icon}
                                                                        link={link}/>);
-        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'settingsLink').length).toEqual(1);
+        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'cardLink').length).toEqual(1);
     });
 
     it('test renderLink method without link', () => {
-        let component = TestUtils.renderIntoDocument(<SettingsMenuItem title={title}
+        let component = TestUtils.renderIntoDocument(<Card title={title}
                                                                        subtitle={subtitle}
                                                                        icon={icon}/>);
         let result = component.renderLink();

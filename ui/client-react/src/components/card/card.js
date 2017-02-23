@@ -3,10 +3,10 @@
  */
 import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
-import QBIcon from '../../qbIcon/qbIcon';
-import './settingsMenuItem.scss';
+import QBIcon from '../qbIcon/qbIcon';
+import './card.scss';
 
-const SettingsMenuItem = React.createClass({
+const Card = React.createClass({
 
     propTypes: {
         title: PropTypes.string.isRequired,
@@ -17,7 +17,7 @@ const SettingsMenuItem = React.createClass({
 
     renderLink() {
         return (
-            this.props.link ? <Link to={this.props.link} className="settingsLink">{this.props.title}</Link> : this.props.title
+            this.props.link ? <Link to={this.props.link} className="cardLink">{this.props.title}</Link> : this.props.title
         );
     },
 
@@ -35,4 +35,4 @@ const SettingsMenuItem = React.createClass({
 
 });
 
-export default SettingsMenuItem;
+export default Card;

@@ -38,7 +38,7 @@ class UserManagement extends React.Component {
             {
                 property: 'screenName',
                 header: {
-                    label: 'Screen Name'
+                    label: 'User Name'
                 },
                 cell: {formatters: [cellFormatter]}
             },
