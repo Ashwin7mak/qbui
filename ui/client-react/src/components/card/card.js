@@ -6,6 +6,14 @@ import {Link} from 'react-router';
 import QBIcon from '../qbIcon/qbIcon';
 import './card.scss';
 
+/**
+ *
+ * @param title The text to display in the main header of the card, goes next to the icon
+ * @param subTitle The subtext of the card, to give a brief description
+ * @param icon the qbIcon you want to display
+ * @param link the url you want the user to be redirected to when they click on the title of the card
+ * @type {ClassicComponentClass<P>}
+ */
 const Card = React.createClass({
 
     propTypes: {

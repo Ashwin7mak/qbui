@@ -201,6 +201,8 @@
                                     });
                                 }
                             }
+                            //we need to return the users formatted with userId as an array of users for the user picker
+                            //we also need to return the hashmap given to use from core for the App User Management screen
                             resolve([usersFormatted, users]);
                         },
                         (error) => {

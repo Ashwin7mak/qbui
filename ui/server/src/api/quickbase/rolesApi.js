@@ -36,10 +36,9 @@
             },
 
             /**
-             * Fetch the requested field meta data for a table.
+             * Fetch the list of roles for an app
              *
              * @param req
-             * @param includeQueryParameters
              * @returns Promise
              */
             getAppRoles: function(req) {

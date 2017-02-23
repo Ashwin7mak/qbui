@@ -159,6 +159,12 @@ let appsActions = {
         });
     },
 
+    /**
+     * Retrieve a list of roles for this app.
+     *
+     * @param appId
+     * @returns Promise
+     */
     loadAppRoles(appId) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {

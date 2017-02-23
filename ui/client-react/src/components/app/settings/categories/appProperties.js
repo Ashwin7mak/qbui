@@ -4,9 +4,13 @@
 import React, {PropTypes} from 'react';
 import './appProperties.scss';
 
-const propertiesToDisplay = ["dateFormat", "firstDayOfWeek", "id", "name", "numberFormat", "timeZone"];
 const displayProps = {dateFormat: "Date Format", firstDayOfWeek: "First Day of the Week", id: "id",
                       name: "Name", numberFormat: "Number Format", timeZone: "Time Zone"};
+/**
+ * A place holder for showing the properties of an app and interacting with them
+ * none of this is expected to stay, throw away code as a POC
+ * @type {ClassicComponentClass<P>}
+ */
 const AppProperties = React.createClass({
 
     propTypes: {

@@ -11,15 +11,13 @@ class RoleService extends BaseService {
 
         //  App Service API endpoints
         this.API = {
-            GET_APP_ROLES           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.ROLES}`
+            GET_APP_ROLES           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}${constants.ROLES}`
         };
     }
 
     /**
-     * Return a QuickBase App
-     *
+     * get roles for app
      * @param appId
-     * @returns promise
      */
     getAppRoles(appId) {
         let url = super.constructUrl(this.API.GET_APP_ROLES, [appId]);
