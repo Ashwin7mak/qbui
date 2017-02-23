@@ -11,6 +11,11 @@ const MoveFieldHelper = {
             return formMeta;
         }
 
+        if (newLocation ===  findCurrentElementLocation(formMeta, draggedItemProps.containingElement)) {
+            // Location hasn't changed so return existing form structure
+            return formMeta;
+        }
+
         let formMetaCopy = _.cloneDeep(formMeta);
 
         removeElementFromCurrentLocation(formMetaCopy, draggedItemProps);
@@ -72,7 +77,14 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
  * @returns {*}
  */
 function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
-    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = draggedItemProps.location;
+    let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
+
+    if (!updatedElementLocation) {
+        // Form doesn't yet appear on the form so we can safely return the existing formMetaData
+        return formMetaData;
+    }
+
+    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = updatedElementLocation;
 
     let row = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].rows[rowIndex];
 
@@ -99,7 +111,8 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
     let rows = column.rows;
 
-    if (isInSameRow(newLocation, draggedItemProps)) {
+    // if (isInSameRow(newLocation, draggedItemProps)) {
+    if (false) {
         let row = rows[rowIndex];
         row.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
         updateOrderIndices(row, 'elements');
@@ -168,6 +181,37 @@ function isInSameRow(newLocation, draggedItemProps) {
         columnIndex === newLocation.columnIndex &&
         rowIndex === newLocation.rowIndex
     );
+}
+
+function findCurrentElementLocation(formMeta, element) {
+    let tabIndex = 0;
+    let sectionIndex = 0;
+    let columnIndex = 0;
+    let rowIndex = 0;
+    let elementIndex = 0;
+    let foundElement = null;
+
+    formMeta.tabs.some(tab => {
+
+
+        return tab.sections.some(section => {
+            tabIndex = tab.orderIndex;
+            return section.columns.some(column => {
+                columnIndex = column.orderIndex;
+                return column.rows.some(row => {
+                    rowIndex = row.orderIndex;
+                    return row.elements.some(currentElement => {
+                        foundElement = currentElement;
+                        return currentElement.id === element.id;
+                    });
+                })
+            });
+        });
+    });
+
+
+
+    return (foundElement ? {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} : undefined);
 }
 
 export default MoveFieldHelper;

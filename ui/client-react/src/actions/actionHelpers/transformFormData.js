@@ -83,7 +83,7 @@ export function convertFormToObjectForServer(formMeta) {
  * @param element
  * @returns {*}
  */
-function findFormElementKey(element) {
+export function findFormElementKey(element) {
     return Object.keys(element).find(key => {
         return (element[key].positionSameRow !== undefined);
     });

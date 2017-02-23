@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
+import {findFormElementKey} from '../../actions/actionHelpers/transformFormData';
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -10,17 +11,49 @@ import {DropTarget} from 'react-dnd';
  * @type {{drop: ((props, monitor))}}
  */
 const formTarget = {
-    drop(props) {
-        return {
-            location: props.location
-        };
+    // drop(props) {
+    //     debugger;
+    //     return {
+    //         location: props.location
+    //     };
+    // },
+
+    hover(dropTargetProps, monitor) {
+        let dragItemProps = monitor.getItem();
+
+        if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
+            let element = dragItemProps.containingElement[findFormElementKey(dragItemProps.containingElement)];
+            dropTargetProps.handleFormReorder(dropTargetProps.location, Object.assign({}, dragItemProps, {element}));
+        }
+        // let {isOver, canDrop, handleFormReorder, location, draggableItem} = props;
+        //
+        // if (isOver) {
+        //     this.reorderTimeout = setTimeout(() => {
+        //         let element = draggableItem.containingElement[findFormElementKey(draggableItem.containingElement)];
+        //         let draggedItemProps = Object.assign({}, draggableItem, {element});
+        //
+        //         if (element) {
+        //             console.log('REORDER EVENT:');
+        //             console.log('LOCATION:', location);
+        //             console.log('draggedItem', draggedItemProps);
+        //             handleFormReorder(location, draggedItemProps);
+        //         }
+        //     }, 1000);
+        // }
+        // if (!isOver && this.reorderTimeout) {
+        //     clearTimeout(this.reorderTimeout);
+        //     this.reorderTimeout = null;
+        // }
     },
 
     canDrop(props, monitor) {
         let draggableProps = monitor.getItem();
 
         // Make sure a component isn't being dropped on itself
-        return props.location !== draggableProps.location;
+        // console.log('canDrop?', props.containingElement.id !== draggableProps.containingElement.id);
+        // console.log(props.containingElement.id, draggableProps.containingElement.id);
+        // return props.containingElement.id !== draggableProps.containingElement.id;
+        return true;
     }
 };
 
@@ -35,7 +68,7 @@ function collect(connect, monitor) {
     return {
         connectDropTarget: connect.dropTarget(),
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop()
+        canDrop: monitor.canDrop(),
     };
 }
 
@@ -46,18 +79,48 @@ function collect(connect, monitor) {
  * @constructor
  */
 const DroppableElement = FieldComponent => {
-    let component = (props) => {
-        const {connectDropTarget, isOver, canDrop, containingElement} = props;
+    class component extends Component {
+        constructor(props) {
+            super(props);
 
-        let classNames = ['droppableField'];
-        classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
+            this.reorderTimeout = null;
+        }
 
-        return connectDropTarget(
-            <div className={classNames.join(' ')}>
-                <FieldComponent {...props} />
-            </div>
-        );
-    };
+        // componentDidUpdate () {
+        //     let {isOver, canDrop, handleFormReorder, location, draggableItem} = this.props;
+        //
+        //     if (isOver) {
+        //         this.reorderTimeout = setTimeout(() => {
+        //             let element = draggableItem.containingElement[findFormElementKey(draggableItem.containingElement)];
+        //             let draggedItemProps = Object.assign({}, draggableItem, {element});
+        //
+        //             if (element) {
+        //                 console.log('REORDER EVENT:');
+        //                 console.log('LOCATION:', location);
+        //                 console.log('draggedItem', draggedItemProps);
+        //                 handleFormReorder(location, draggedItemProps);
+        //             }
+        //         }, 1000);
+        //     }
+        //     if (!isOver && this.reorderTimeout) {
+        //         clearTimeout(this.reorderTimeout);
+        //         this.reorderTimeout = null;
+        //     }
+        // }
+
+        render () {
+            const {connectDropTarget, isOver, canDrop} = this.props;
+
+            let classNames = ['droppableField'];
+            classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
+
+            return connectDropTarget(
+                <div className={classNames.join(' ')}>
+                    <FieldComponent {...this.props} />
+                </div>
+            );
+        }
+    }
 
     component.propTypes = {
         location: PropTypes.object.isRequired

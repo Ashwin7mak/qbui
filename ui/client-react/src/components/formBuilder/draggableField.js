@@ -18,12 +18,20 @@ const fieldDragSource = {
         };
     },
 
-    endDrag(props, monitor) {
-        if (monitor.didDrop()) {
-            let {location} = monitor.getDropResult();
-            props.handleFormReorder(location, props);
-        }
-    }
+    isDragging(props, monitor) {
+        let item = monitor.getItem();
+        return props.containingElement.id === item.containingElement.id;
+    },
+
+    // endDrag(props, monitor) {
+    //     if (monitor.didDrop()) {
+    //         let {location} = monitor.getDropResult();
+    //         props.handleFormReorder(location, props);
+    //     }
+    // }
+    // endDrag(props, monitor) {
+    //     debugger;
+    // }
 };
 
 /**
@@ -57,7 +65,7 @@ const DraggableFieldHoc = FieldComponent => {
         }
 
         render() {
-            const {connectDragSource, isDragging, containingElement, location} = this.props;
+            const {connectDragSource, isDragging, location} = this.props;
 
             let classNames = ['draggableField'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
