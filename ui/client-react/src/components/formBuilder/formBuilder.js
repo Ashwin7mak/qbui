@@ -3,7 +3,14 @@ import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 import TouchBackend from 'react-dnd-touch-backend';
+import withScrolling from 'react-dnd-scrollzone';
 import './formBuilder.scss';
+
+const ScrollZone = withScrolling('div');
+const scrollStyle = {
+    overflowX: 'scroll',
+    overflowY: 'scroll',
+}
 
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
@@ -31,16 +38,18 @@ export class FormBuilder extends Component {
 
     render() {
         return (
-            <div className="formBuilderContainer">
-                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
-                <QbForm
-                    edit={true}
-                    editingForm={true}
-                    formData={this.props.formData}
-                    handleFormReorder={this.handleFormReorder}
-                    appUsers={[]}
-                />
-            </div>
+            <ScrollZone style={scrollStyle} >
+                <div className="formBuilderContainer">
+                        {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
+                        <QbForm
+                            edit={true}
+                            editingForm={true}
+                            formData={this.props.formData}
+                            handleFormReorder={this.handleFormReorder}
+                            appUsers={[]}
+                        />
+                </div>
+            </ScrollZone>
         );
     }
 }
