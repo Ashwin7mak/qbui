@@ -360,26 +360,7 @@ export const ReportToolsAndContent = React.createClass({
             logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
             return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
         } else {
-            let toolbar = <ReportToolbar appId={this.props.params.appId}
-                                         tblId={this.props.params.tblId}
-                                         rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
-                                         reportData={this.props.reportData}
-                                         selections={this.props.reportData.selections}
-                                         searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                                         pageActions={this.getPageActions(0)}
-                                         nameForRecords={this.nameForRecords}
-                                         fields={this.props.fields}
-                                         searchTheString={this.searchTheString}
-                                         filterOnSelections={this.filterOnSelections}
-                                         clearSearchString={this.clearSearchString}
-                                         clearAllFilters={this.clearAllFilters}
-                                         getNextReportPage={this.getNextReportPage}
-                                         getPreviousReportPage={this.getPreviousReportPage}
-                                         pageStart={this.pageStart}
-                                         pageEnd={this.pageEnd}
-                                         recordsCount={this.recordsCount}
-                                         width={this.state.gridWidth}
-                          />;
+            let toolbar = this.getReportToolbar();
 
             let reportFooter = <ReportFooter
                                 reportData={this.props.reportData}

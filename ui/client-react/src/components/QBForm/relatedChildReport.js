@@ -2,7 +2,8 @@ import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 
-import mockReport from '../../mocks/reports';
+import {smallReport, largeReport, reportData} from '../../mocks/reports';
+import ReportToolsAndContent from '../report/reportToolsAndContent';
 import ReportGrid from '../dataTable/reportGrid/reportGrid';
 
 import UrlUtils from '../../utils/urlUtils';
@@ -37,7 +38,7 @@ class ChildReport extends React.Component {
             );
         } else if (this.props.type === 'EMBEDREPORT') {
             // TODO: render embedded report for medium and large breakpoint
-            return <ReportGrid isViewOnly={true} {...mockReport} />;
+            return <ReportToolsAndContent isViewOnly={true} {...reportData} />;
         } else {
             return null;
         }
