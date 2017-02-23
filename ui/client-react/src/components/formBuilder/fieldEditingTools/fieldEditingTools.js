@@ -73,7 +73,7 @@ class FieldEditingTools extends Component {
 
         if (isTouch && !isSmall) {
             classNames.push("isTablet");
-        } else if (!isSmall) {
+        } else if (!isTouch) {
             classNames.push("notTouchDevice");
         }
 
