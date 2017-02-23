@@ -2,7 +2,6 @@
 
 import FormService from '../services/formService';
 import Promise from 'bluebird';
-import _ from 'lodash';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
@@ -12,6 +11,7 @@ import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
 let logger = new Logger();
 
@@ -51,7 +51,7 @@ export const loadFormSuccess = (id, formData) => {
     return {
         id,
         type: types.LOAD_FORM_SUCCESS,
-        formData
+        formData: convertFormToArrayForClient(formData)
     };
 };
 
@@ -225,17 +225,13 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 /**
  * Move a field from one position on a form to a different position
  * @param formId
- * @param newTabIndex
- * @param newSectionIndex
- * @param newOrderIndex
+ * @param newLocation
  * @param draggedItemProps
  * @returns {{id, type, content}|*}
  */
-export const moveFieldOnForm = (formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) => {
+export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
     return event(formId, types.MOVE_FIELD, {
-        newTabIndex,
-        newSectionIndex,
-        newOrderIndex,
+        newLocation,
         draggedItemProps
     });
 };
@@ -266,10 +262,13 @@ export const updateForm = (appId, tblId, formType, form) => {
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, formType, form, isNew) {
+function saveForm(appId, tblId, formType, formMeta, isNew) {
+
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
+                let form = convertFormToObjectForServer(formMeta);
+
                 logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
                 //  TODO: refactor once record events are moved out..
@@ -282,7 +281,7 @@ function saveForm(appId, tblId, formType, form, isNew) {
                     (response) => {
                         logger.debug('FormService saveForm success');
                         //  for now return the original form..
-                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, response.data));
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -324,5 +323,3 @@ function event(id, type, content) {
         content: content || null
     };
 }
-
-
