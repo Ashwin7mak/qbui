@@ -57,6 +57,41 @@
         }
     }
 
+    &.isTablet {
+        //Icons and borders only display during focus
+        //Drag handle always show
+        border: none;
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
+    }
+
+    @include small-breakpoint {
+        //Drag handles and borders always display during small breakpoints
+        //Icons only show up when it is focused
+        border-bottom: $stroke-width-thin solid $color-black-400;
+        width: 107% !important;
+
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
+        //Scrolling activates the hover state and shows the icons
+        //I am having the icons opacity set to 0 so it does not show while scrolling
+        &:hover {
+            .deleteFieldIcon {
+                .qbIcon {
+                    opacity: 0;
+                }
+            }
+
+            .fieldPreferencesIcon {
+                .qbIcon {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
     &:focus {
         //This opacity is needed to work for 'tabbing'
         opacity: 1;
@@ -75,26 +110,6 @@
                 opacity: 1;
                 color: $color-cyan-700;
             }
-        }
-    }
-
-    &.isTablet {
-        //Icons and borders only display during focus
-        //Drag handle always show
-        border: none;
-        .deleteFieldIcon .qbIcon {
-            padding-right: $spacing-medium1;
-        }
-    }
-
-    @include small-breakpoint {
-        //Drag handles and borders always display during small breakpoints
-        //Icons only show up when it is focused
-        border-bottom: $stroke-width-thin solid $color-black-400;
-        width: 107% !important;
-
-        .deleteFieldIcon .qbIcon {
-            padding-right: $spacing-medium1;
         }
     }
 
