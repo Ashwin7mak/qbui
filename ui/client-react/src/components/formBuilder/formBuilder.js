@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
-import Html5Backend from 'react-dnd-html5-backend';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
-
+import TouchBackend from 'react-dnd-touch-backend';
 import './formBuilder.scss';
 
 /**
@@ -61,4 +60,9 @@ FormBuilder.defaultProps = {
     showCustomDragLayer: true
 };
 
-export default DragDropContext(Html5Backend)(FormBuilder);
+/**
+ * delay is used to allow a user to scroll on mobile
+ * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
+ * */
+
+export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);
