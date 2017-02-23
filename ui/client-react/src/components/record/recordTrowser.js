@@ -351,7 +351,7 @@ export const RecordTrowser = React.createClass({
 
         HideAppModal();
         //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
-        this.props.editRecordCancel(this.props.appId, this.props.tblId, recId);
+        this.props.editRecordCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
         this.props.onHideTrowser();
     },

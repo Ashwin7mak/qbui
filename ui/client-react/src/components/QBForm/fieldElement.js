@@ -7,7 +7,7 @@ import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
 import FieldUtils from '../../utils/fieldUtils';
 import './qbform.scss';
-
+import _ from 'lodash';
 import {editRecordValidateField} from '../../actions/recordActions';
 import {connect} from 'react-redux';
 
@@ -68,7 +68,10 @@ export const FieldElement = React.createClass({
             fieldLabel = this.props.relatedField ? this.props.relatedField.name : "";
         }
         //flux.actions.recordPendingValidateField(this.props.relatedField, fieldLabel, theVals.value);
-        this.props.editRecordValidateField(this.props.relatedField, fieldLabel, theVals.value);
+
+        //  TODO: support multiple records in store..
+        const record = _.nth(this.props.record, 0) || {};
+        this.props.editRecordValidateField(record.id, this.props.relatedField, fieldLabel, theVals.value);
         let change = this.getChanges(theVals);
         if (this.props.onBlur) {
             this.props.onBlur(change);
@@ -168,6 +171,13 @@ export const FieldElement = React.createClass({
 //
 //export default FieldElementWithFlux(FieldElement);
 
+
+const mapStateToProps = (state) => {
+    return {
+        record: state.record
+    };
+};
+
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
@@ -179,5 +189,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
+    mapStateToProps,
     mapDispatchToProps
 )(FieldElement);
