@@ -14,19 +14,18 @@
     }
 
     @include small-breakpoint {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-      background-color: #f2f9fe;
-      opacity: 1;
-      max-width: 1440px;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        opacity: 1;
+        max-width: 1440px;
 
-      .formContainer .formSection .fieldRow td {
+        .formContainer .formSection .fieldRow td {
             padding-bottom: 21px;
         }
     }
