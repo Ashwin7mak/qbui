@@ -89,7 +89,7 @@ describe('UserManagement functions', () => {
     ];
     const appUsersEmpty = [];
     const appId = 1;
-    const userColumns = ['firstName','lastName','screenName','email','roleName'];
+    const userColumns = ['firstName', 'lastName', 'screenName', 'email', 'roleName'];
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}

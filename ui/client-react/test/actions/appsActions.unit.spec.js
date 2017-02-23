@@ -132,10 +132,10 @@ describe('Apps Actions functions with Tables', () => {
         });
     });
 
-    var loadAppRolesTests = [
+    var loadAppRolesNegativeTests = [
         {name:'fail load app roles with app id not cached', appId: 187, cached: false}
     ];
-    loadAppRolesTests.forEach(function(test) {
+    loadAppRolesNegativeTests.forEach(function(test) {
         it(test.name, function(done) {
             appsActions.__Rewire__('RoleService', mockRoleServiceFailure);
             flux.actions.selectedAppId = test.cached === true ? test.appId : '';

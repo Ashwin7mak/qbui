@@ -154,7 +154,7 @@ describe('Test Apps Store', () => {
         let unfilteredUsers = {"1": [{"userId":1}]};
         let loadAppsAction = {
             type: actions.LOAD_APP_USERS_SUCCESS,
-            payload: [users,unfilteredUsers]
+            payload: [users, unfilteredUsers]
         };
 
         flux.dispatcher.dispatch(loadAppsAction);
