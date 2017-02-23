@@ -551,9 +551,8 @@ export const editRecordCommit = (appId, tblId, recId) => {
 
 //recordPendingValidateField
 /* validate a field when editing a record */
-export const editRecordValidateField = (fieldDef, fieldLabel, value, checkRequired) => {
-    let recId = null; // TODO: need recid as an argument
-    return event(recId, types.EDIT_RECORD_VALIDATE_FIELD, {fieldDef, fieldLabel, value, checkRequired});
+export const editRecordValidateField = (recId, fieldDef, fieldLabel, value, checkRequired) => {
+    return event(recId, types.EDIT_RECORD_VALIDATE_FIELD, {recId, fieldDef, fieldLabel, value, checkRequired});
 };
 
 

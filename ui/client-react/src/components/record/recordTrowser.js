@@ -42,18 +42,20 @@ export const RecordTrowser = React.createClass({
         viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
-        pendEdits: React.PropTypes.object,
+        //pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
         errorPopupHidden: React.PropTypes.bool,
         onHideTrowser: React.PropTypes.func.isRequired
     },
 
     _hasErrorsAndAttemptedSave() {
-        return (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length > 0 && this.props.pendEdits.hasAttemptedSave);
+        const pendEdits = this.getPendEdits();
+        return (_.has(pendEdits, 'editErrors.errors') && pendEdits.editErrors.errors.length > 0 && pendEdits.hasAttemptedSave);
     },
 
     _doesNotHaveErrors() {
-        return (!_.has(this.props, 'pendEdits.editErrors.errors') || this.props.pendEdits.editErrors.errors.length === 0 || !this.props.pendEdits.hasAttemptedSave);
+        const pendEdits = this.getPendEdits();
+        return (!_.has(pendEdits, 'editErrors.errors') || pendEdits.editErrors.errors.length === 0 || !pendEdits.hasAttemptedSave);
     },
 
     /**
@@ -62,9 +64,10 @@ export const RecordTrowser = React.createClass({
     getTrowserContent() {
         let hideErrorMessage = this.props.shell ? this.props.shell.errorPopupHidden : true;
         let errorMessage = [];
-        if (_.has(this.props, 'pendEdits.editErrors.errors')) {
+        const pendEdits = this.getPendEdits();
+        if (_.has(pendEdits, 'editErrors.errors')) {
             hideErrorMessage = hideErrorMessage || this._doesNotHaveErrors();
-            errorMessage = this.props.pendEdits.editErrors.errors;
+            errorMessage = pendEdits.editErrors.errors;
         }
 
         return (this.props.visible &&
@@ -77,7 +80,7 @@ export const RecordTrowser = React.createClass({
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}
                     errorStatus={this.editForm ? this.props.editForm.errorStatus : null}
-                    pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
+                    pendEdits={pendEdits}
                     formData={this.props.editForm ? this.props.editForm.formData : null}
                     edit={true} />
                 <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
@@ -127,7 +130,9 @@ export const RecordTrowser = React.createClass({
             let updateRecord = false;
             this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+                const pendEdits = this.getPendEdits();
+                // TODO: NPE
+                promise = this.handleRecordAdd(pendEdits.recordChanges);
             } else {
                 updateRecord = true;
                 promise = this.handleRecordChange();
@@ -183,7 +188,9 @@ export const RecordTrowser = React.createClass({
             let updateRecord = false;
             this.props.savingForm(formType);
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+                const pendEdits = this.getPendEdits();
+                // TODO: NPE
+                promise = this.handleRecordAdd(pendEdits.recordChanges);
             } else {
                 updateRecord = true;
                 promise = this.handleRecordChange();
@@ -225,7 +232,8 @@ export const RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.editForm.formData.fields, colList);
+        const pendEdits = this.getPendEdits();
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList);
     },
 
     /**
@@ -349,7 +357,8 @@ export const RecordTrowser = React.createClass({
     },
 
     cancelEditing() {
-        if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
+        const pendEdits = this.getPendEdits();
+        if (pendEdits && pendEdits.isPendingEdit) {
             AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
             // Clean up before exiting the trowser
@@ -370,11 +379,24 @@ export const RecordTrowser = React.createClass({
     dismissErrorDialog() {
         this.props.hideErrorMsgDialog();
     },
+
+    getPendEdits() {
+        let pendEdits = {};
+        //  TODO: just getting to work....improve this to support multi records...
+        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
+            if (_.isEmpty(this.props.record[0]) === false) {
+                pendEdits = this.props.record[0].pendEdits || {};
+            }
+        }
+        return pendEdits;
+    },
+
     /**
      * trowser to wrap report manager
      */
     render() {
-        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
+        const pendEdits = this.getPendEdits();
+        const errorFlg = pendEdits && pendEdits.editErrors && pendEdits.editErrors.errors.length > 0;
         return (
             <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}

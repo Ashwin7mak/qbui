@@ -117,6 +117,16 @@ let Record = React.createClass({
         this.props.editRecordChange(this.props.appId, this.props.tblId, change.recId, origRec, change);
     },
 
+    getPendEdits() {
+        let pendEdits = {};
+        if (Array.isArray(state.record) && state.record.length > 0) {
+            if (_.isEmpty(state.record[0]) === false) {
+                pendEdits = state.record[0].pendEdits || {};
+            }
+        }
+        return {};
+    },
+
     render() {
 
         return <QBForm {...this.props}

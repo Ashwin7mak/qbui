@@ -258,14 +258,14 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * we want to remove the validation result for "myemail"
      * @private
      */
-    _clearOutdatedValidationResults(payload) {
-        let recentlyChangedFieldId = (_.has(payload, 'fieldDef') ? payload.fieldDef.id : null);
-
-        // Get out if we can't find a valid field ID
-        if (recentlyChangedFieldId) {
-            this._removeErrorByFieldId(recentlyChangedFieldId);
-        }
-    },
+    //_clearOutdatedValidationResults(payload) {
+    //    let recentlyChangedFieldId = (_.has(payload, 'fieldDef') ? payload.fieldDef.id : null);
+    //
+    //    // Get out if we can't find a valid field ID
+    //    if (recentlyChangedFieldId) {
+    //        this._removeErrorByFieldId(recentlyChangedFieldId);
+    //    }
+    //},
 
     /**
      * Called when a field is validated typically on blur.
@@ -274,33 +274,33 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @param value
      * @param checkRequired
      */
-    onRecordEditValidateField(payload) {
-        if (!this.editErrors) {
-            this.editErrors = {
-                ok: true,
-                errors: []
-            };
-        }
-
-        this._clearOutdatedValidationResults(payload);
-
-        let results = ValidationUtils.checkFieldValue(payload, payload.fieldLabel, payload.value, payload.checkRequired);
-        if (results.isInvalid) {
-            // Make sure the id is added so that forms can correctly detect which field to mark as invalid
-            // and so that the id can be found by the _clearOutdatedValidationResults method
-            if (!results.id && _.has(results, 'def.fieldDef')) {
-                results.id = results.def.fieldDef.id;
-            }
-
-            if (!results.invalidMessage && _.has(results, 'error.messageId')) {
-                results.invalidMessage = ValidationMessage.getMessage(results);
-            }
-
-            this.editErrors.ok = false;
-            this.editErrors.errors.push(results);
-        }
-        this.emit('change');
-    },
+    //onRecordEditValidateField(payload) {
+    //    if (!this.editErrors) {
+    //        this.editErrors = {
+    //            ok: true,
+    //            errors: []
+    //        };
+    //    }
+    //
+    //    this._clearOutdatedValidationResults(payload);
+    //
+    //    let results = ValidationUtils.checkFieldValue(payload, payload.fieldLabel, payload.value, payload.checkRequired);
+    //    if (results.isInvalid) {
+    //        // Make sure the id is added so that forms can correctly detect which field to mark as invalid
+    //        // and so that the id can be found by the _clearOutdatedValidationResults method
+    //        if (!results.id && _.has(results, 'def.fieldDef')) {
+    //            results.id = results.def.fieldDef.id;
+    //        }
+    //
+    //        if (!results.invalidMessage && _.has(results, 'error.messageId')) {
+    //            results.invalidMessage = ValidationMessage.getMessage(results);
+    //        }
+    //
+    //        this.editErrors.ok = false;
+    //        this.editErrors.errors.push(results);
+    //    }
+    //    this.emit('change');
+    //},
 
     /**
      * On the cancellation of pending edit

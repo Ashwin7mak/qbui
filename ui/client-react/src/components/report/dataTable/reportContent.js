@@ -22,7 +22,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
-import {openRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit} from '../../../actions/recordActions';
+import {openRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField} from '../../../actions/recordActions';
 import {updateReportRecord} from '../../../actions/reportActions';
 import {APP_ROUTE} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -288,15 +288,16 @@ export const ReportContent = React.createClass({
         }
 
         const flux = this.getFlux();
+        let pendEdits = this.getPendEdits();
 
         // Don't allow a user to add multiple records in rapid succession (i.e., clicking "Save and add new" multiple times rapidly)
-        if (this.props.pendEdits.saving) {
+        if (pendEdits.saving) {
             return;
         }
 
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
-        if (this.props.pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+        if (pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
             let saveRecordPromise = this.handleRecordSaveClicked(recordId, true);
 
             // After saving the record successfully, then add the new row
@@ -338,8 +339,9 @@ export const ReportContent = React.createClass({
         // or add a new record
         if (recordId === SchemaConsts.UNSAVED_RECORD_ID) {
             let recordChanges = {};
-            if (this.props.pendEdits.recordChanges) {
-                recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
+            let pendEdits = this.getPendEdits();
+            if (pendEdits.recordChanges) {
+                recordChanges = _.cloneDeep(pendEdits.recordChanges);
             }
             return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
@@ -439,7 +441,8 @@ export const ReportContent = React.createClass({
             });
             //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
             this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
-            let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            let pendEdits = this.getPendEdits();
+            let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
             promise.then((obj) => {
                 //  Temporary solution to display a redux event to update the report grid with in-line editor change
                 //  This will get refactored once the record store is moved to redux
@@ -451,13 +454,58 @@ export const ReportContent = React.createClass({
     handleValidateFieldValue(fieldDef, fieldName, value, checkRequired) {
         // check the value against the fieldDef
         if (fieldDef) {
-            const flux = this.getFlux();
-            return flux.actions.recordPendingValidateField(fieldDef, fieldName, value, checkRequired);
+            //const flux = this.getFlux();
+            //return flux.actions.recordPendingValidateField(fieldDef, fieldName, value, checkRequired);
+
+            let recId = null;
+            let pendEdits = this.getPendEdits();
+
+            // Editing Id trumps editingRowId when editingIndex is set.
+            //
+            // The Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits.
+            // store.  When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of
+            // new row in array) and editingId (id of newly created row). The editingIndex could be any integer, but
+            // if it is not null, we can assume a new row is added.
+            if (pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
+                recId = pendEdits.currentEditingRecordId;
+            }
+            if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== reId) {
+                recId = this.props.editingId;
+            }
+            if (recId) {
+                this.props.editRecordValidateField(recId, fieldDef, fieldName, value, checkRequired);
+            } else {
+                let error = 'Record id not provided for field validation in reportContent';
+                logger.warn(error);
+                return Promise.reject(error);
+            }
         } else {
             let error = 'Field Def not provided for field validation in reportContent';
             logger.warn(error);
             return Promise.reject(error);
         }
+    },
+
+    getCurrentRecordId() {
+        // Editing Id trumps editingRowId when editingIndex is set
+        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
+        // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
+        // and editingId (id of newly created row). The editingIndex could be any integer, but if it is not null, we can assume a new row is added.
+        let editingRowId = null;
+
+        let pendEdits = this.getPendEditProps();
+        //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
+        //    editingRowId = this.props.pendEdits.currentEditingRecordId;
+        //}
+        if (pendEdits && pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
+            editingRowId = pendEdits.currentEditingRecordId;
+        }
+
+        if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
+            editingRowId = this.props.editingId;
+        }
+
+        return editingRowId;
     },
 
     selectRows(selectedRowIds) {
@@ -483,7 +531,7 @@ export const ReportContent = React.createClass({
      * edit the selected record in the trowser
      * @param data row record data
      */
-    openRecordForEdit(recordId) {
+    openRecordForEditInTrowser(recordId) {
         this.props.dispatch(openRecordForEdit(recordId));
 
         // needed until report store is migrated to redux
@@ -847,6 +895,17 @@ export const ReportContent = React.createClass({
         }
     },
 
+    getPendEdits() {
+        let pendEdits = {};
+        //  TODO: just getting to work....improve this to support multi records...
+        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
+            if (_.isEmpty(this.props.record[0]) === false) {
+                pendEdits = this.props.record[0].pendEdits || {};
+            }
+        }
+        return pendEdits;
+    },
+
     componentWillUpdate(nextProps) {
         this.startPerfTiming(nextProps);
     },
@@ -856,13 +915,7 @@ export const ReportContent = React.createClass({
     },
     render() {
         //  Get the pending props from the redux store..
-        //  TODO: just getting to work....improve this to support multi records...
-        let pendEdits = {};
-        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
-            if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
-            }
-        }
+        let pendEdits = this.getPendEdits();
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
@@ -927,7 +980,7 @@ export const ReportContent = React.createClass({
                                 editingId={this.props.reportData.editingId}
                                 selectRows={this.selectRows}
                                 toggleSelectedRow={this.toggleSelectedRow}
-                                openRecordForEdit={this.openRecordForEdit}
+                                openRecordForEdit={this.openRecordForEditInTrowser}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                             />
@@ -953,7 +1006,7 @@ export const ReportContent = React.createClass({
                         {/*filter={{selections: this.props.reportData.selections,*/}
                         {/*facet: this.props.reportData.facetExpression,*/}
                         {/*search: this.props.reportData.searchStringForFiltering}}*/}
-                        {!isSmall && !this.props.reactabular &&
+                        {/*!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
@@ -993,7 +1046,7 @@ export const ReportContent = React.createClass({
                                 filter={{selections: this.props.reportData.selections,
                                     facet: this.props.reportData.facetExpression,
                                     search: this.props.reportData.searchStringForFiltering}}/>
-                        }
+                        */}
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
                                             appUsers={this.props.appUsers}
@@ -1027,7 +1080,7 @@ ReportContent.contextTypes = {
 };
 
 ReportContent.propTypes = {
-    pendEdits: React.PropTypes.object.isRequired,
+    //pendEdits: React.PropTypes.object.isRequired,
     primaryKeyName: React.PropTypes.string.isRequired,
     onGridReady: React.PropTypes.func
 };
@@ -1057,6 +1110,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecordCommit: (appId, tblId, recId) => {
             dispatch(editRecordCommit(appId, tblId, recId));
+        },
+        editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
+            dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
         }
     };
 };

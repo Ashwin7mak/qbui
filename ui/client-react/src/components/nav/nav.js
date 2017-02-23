@@ -45,7 +45,7 @@ const CLOSE_NAV = false;
 const OPEN_APPSLIST = true;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', /*'ReportDataStore',*/ 'RecordPendingEditsStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', /*'ReportDataStore', 'RecordPendingEditsStore',*/ 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -56,7 +56,7 @@ export let Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
-            pendEdits: flux.store('RecordPendingEditsStore').getState(),
+            //pendEdits: flux.store('RecordPendingEditsStore').getState(),
             //reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
             reportSearchData: flux.store('ReportDataSearchStore').getState()
@@ -253,6 +253,17 @@ export let Nav = React.createClass({
         return reportList || {};
     },
 
+    getPendEdits() {
+        let pendEdits = {};
+        //  TODO: just getting to work....improve this to support multi records...
+        if (Array.isArray(this.props.qbui.record) && this.props.qbui.record.length > 0) {
+            if (_.isEmpty(this.props.qbui.record[0]) === false) {
+                pendEdits = this.props.qbui.record[0].pendEdits || {};
+            }
+        }
+        return pendEdits;
+    },
+
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -282,6 +293,7 @@ export let Nav = React.createClass({
 
         let reportsData = this.getReportsData();
         let reportsList = this.getReportsList();
+        let pendEdits = this.getPendEdits();
 
         return (<div className={classes}>
             <NavPageTitle
@@ -303,7 +315,7 @@ export let Nav = React.createClass({
                                tblId={this.props.params.tblId}
                                recId={editRecordId}
                                viewingRecordId={viewingRecordId}
-                               pendEdits={this.state.pendEdits}
+                               pendEdits={pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable(reportsData.tblId)}
@@ -352,7 +364,7 @@ export let Nav = React.createClass({
                             reportData: reportsData,
                             appUsers: this.state.apps.appUsers,
                             locale: this.state.nav.locale,
-                            pendEdits:this.state.pendEdits,
+                            //pendEdits:pendEdits,
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
                             reportSearchData: this.state.reportSearchData,
@@ -366,8 +378,8 @@ export let Nav = React.createClass({
 
             {this.getV2V3Footer()}
 
-            {this.state.pendEdits &&
-                this.renderSavingModal(this.state.pendEdits.saving)
+            {pendEdits &&
+                this.renderSavingModal(pendEdits.saving)
             }
         </div>);
     },
