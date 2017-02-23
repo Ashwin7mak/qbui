@@ -36,6 +36,16 @@
 
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-xxx-small;
+            &:hover {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+        .fieldPreferencesIcon .qbIcon {
+            &:hover {
+                opacity: 1;
+                color: $color-cyan-700;
+            }
         }
     }
 
