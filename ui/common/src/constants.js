@@ -196,6 +196,13 @@
             DATE_CREATED: "Date Created",
             RECORD_OWNER: "Record Owner"
         },
+        BUILTIN_FIELD_ID: {
+            DATE_CREATED: 1,
+            DATE_MODIFIED: 2,
+            RECORD_ID: 3,
+            RECORD_OWNER: 4,
+            LAST_MODIFIED_BY: 5,
+        },
         ERROR_CODE:{
             DTS_ERROR_CODE: "DataOperationOrSyncError"
         },

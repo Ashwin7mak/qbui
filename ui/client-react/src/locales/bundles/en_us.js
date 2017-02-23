@@ -168,6 +168,7 @@ export default {
             },
             footer: {
                 lastUpdatedBy: "Last updated by ",
+                lastUpdatedOn: "Last updated on ",
                 createdOn: "Created on ",
                 ownedBy: "Owned by "
             },

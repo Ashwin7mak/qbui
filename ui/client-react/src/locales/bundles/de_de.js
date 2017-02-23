@@ -166,6 +166,7 @@ export default {
             },
             footer: {
                 lastUpdatedBy: "Zuletzt aktualisiert von ",
+                lastUpdatedOn: "Zuletzt aktualisiert am ",
                 createdOn: "Erstellt am ",
                 ownedBy: "gehört "
             },
