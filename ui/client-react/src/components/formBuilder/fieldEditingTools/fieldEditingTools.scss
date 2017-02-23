@@ -34,6 +34,10 @@
         border: $stroke-width-thin solid $color-black-400;
         opacity: 0;
 
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-xxx-small;
+        }
+
         &:hover {
             opacity: 1;
 
