@@ -16,7 +16,6 @@ let AppsStore = Fluxxor.createStore({
         this.loading = true;
         this.loadingAppUsers = false;
         this.error = false;
-        this.savingAppStack = false;
 
         this.bindActions(
             actions.LOAD_APPS, this.onLoadApps,
@@ -32,10 +31,6 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APP_ROLES, this.onLoadAppRoles,
             actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
             actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
-
-            actions.SET_APP_STACK, this.onSetAppStack,
-            actions.SET_APP_STACK_SUCCESS, this.onSetAppStackSuccess,
-            actions.SET_APP_STACK_FAILED, this.onSetAppStackFailed
         );
 
         this.logger = new Logger();
@@ -106,27 +101,6 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onSetAppStack() {
-        this.savingAppStack = true;
-
-        this.emit('change');
-    },
-    onSetAppStackSuccess(payload) {
-        const {appId, openInV3} = payload;
-
-        this.savingAppStack = false;
-
-        const app = _.find(this.apps, {id: appId});
-
-        if (app) {
-            app.openInV3 = openInV3;
-            this.emit('change');
-        }
-    },
-    onSetAppStackFailed(payLoad) {
-        this.savingAppStack = false;
-        this.emit('change');
-    },
     getState() {
         return {
             apps: this.apps,
@@ -137,7 +111,6 @@ let AppsStore = Fluxxor.createStore({
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,
-            savingAppStack: this.savingAppStack,
             error: this.error
         };
     },

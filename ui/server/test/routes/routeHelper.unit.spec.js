@@ -461,26 +461,6 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
-    describe('validate getApplicationStackPreferenceRoute method', function() {
-        var testCases = [
-            {name: 'test no app id', appId: '', expectation: '/db'},
-            {name: 'test undefined app id', expectation: '/db'},
-            {name: 'test get app preference with undefined value', appId: '12345', isPost: false, expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test get app preference with value', appId: '12345', isPost: false, value: '1',  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test get app preference with only appId', appId: '12345',  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test set app preference with empty value', appId: '12345', isPost: true, value: '',  expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value='},
-            {name: 'test set app preference with undefined value', appId: '12345', isPost: true, expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=undefined'},
-            {name: 'test set app preference', appId: '12345', isPost: true, value: '1', expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=1'}
-        ];
-
-        testCases.forEach(function(testCase) {
-            it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getApplicationStackPreferenceRoute(testCase.appId, testCase.isPost, testCase.value), testCase.expectation);
-                done();
-            });
-        });
-    });
-
     describe('validate getAppRolesRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},

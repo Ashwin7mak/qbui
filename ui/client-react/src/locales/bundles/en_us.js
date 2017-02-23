@@ -472,12 +472,6 @@ export default {
         },
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
-        v2v3: {
-            manageAccessTitle: "Manage user access to Mercury",
-            versionSelectTitle: "My users will open this app in",
-            manageAccessTip: "*Only app admins can manage user access"
-
-        },
         missingWalkMe: "Tutorial is not available",
         builder: {
             formBuilder: {

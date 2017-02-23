@@ -82,17 +82,11 @@
 
             getHydratedApp: function(req, appId) {
                 return new Promise((resolve, reject) => {
-                    let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId), this.stackPreference(req, appId)];
+                    let appRequests = [this.getApp(req, appId), this.getAppAccessRights(req, appId)];
                     Promise.all(appRequests).then(
                         function(response) {
                             let app = response[0];
                             app.accessRights = response[1];
-                            if (response[2].errorCode === 0) {
-                                app.openInV3 = (response[2].value === true);
-                            } else {
-                                log.warn('Error fetching application stack preference.  Setting to open in V3.  Error: ' + response[2].errorText);
-                                app.openInV3 = true;
-                            }
                             resolve(app);
                         },
                         function(error) {
@@ -243,58 +237,7 @@
                         reject(ex);
                     });
                 });
-            },
-
-            /**
-             * Supports both GET and POST request to resolve an applications run-time stack
-             * preference.
-             *
-             * For a GET request, will return which stack (mercury or classic) the application is
-             * configured to run in.
-             *
-             * For a POST request, will set the application stack (mercury or classic) preference
-             * on where the application is to be run.
-             *
-             * @param req
-             * @returns Promise
-             */
-            stackPreference: function(req, appId) {
-                let opts = requestHelper.setOptions(req);
-                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-
-                //  get the request host to help buld the Quickbase classic route
-                let host = requestHelper.getRequestHost(req, true, true);
-                if (requestHelper.isPost(req)) {
-                    //  if a post request, then updating stack preference
-                    let resp = JSON.parse(opts.body);
-                    let value = resp[constants.REQUEST_PARAMETER.OPEN_IN_V3] === true ? 1 : 0;
-                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId, true, value);
-                } else {
-                    opts.url = host + routeHelper.getApplicationStackPreferenceRoute(appId);
-                }
-
-                log.debug("Legacy Stack preference endpoint: " + opts.url);
-
-                return new Promise((resolve) => {
-                    requestHelper.executeRequest(req, opts).then(
-                        (response) => {
-                            let msg = JSON.parse(response.body);
-                            if (msg.errorCode !== 0) {
-                                log.error({req: req}, opts.url);
-                            }
-                            resolve(msg);
-                        },
-                        (error) => {
-                            log.error({req: req, res:error}, opts.url);
-                            resolve({errorText: error ? error.message : 'Unknown error thrown calling for stack preference.'});
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('Unexpected error calling legacy stack preference: ' + opts.url, ex, true);
-                        resolve(ex);
-                    });
-                });
             }
-
         };
         return appsApi;
     };
