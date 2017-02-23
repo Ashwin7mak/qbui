@@ -46,43 +46,5 @@ describe('AppsRoute functions', () => {
         component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} />);
         expect(HtmlUtils.updatePageTitle).toHaveBeenCalledWith(`${mockRealm} - ${DEFAULT_PAGE_TITLE}`);
     });
-
-    it('redirects to error page if non admin user has no v3 apps', () => {
-        spyOn(WindowLocationUtilsMock, 'update');
-
-        const apps = [
-            {id:"1", accessRights: {appRights: []}, openInV3: false},
-            {id:"2", accessRights: {appRights: ["READ"]}, openInV3: false},
-            {id:"3", accessRights: {appRights: ["READ", "MANAGE_USERS"]}, openInV3: false}
-        ];
-
-        component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
-
-        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable");
-    });
-
-    it('does not redirect to error page if non admin user has a v3 app', () => {
-        spyOn(WindowLocationUtilsMock, 'update');
-
-        const apps = [
-            {id:"1", accessRights: {appRights: ["READ"]}, openInV3: true}
-        ];
-
-        component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
-
-        expect(WindowLocationUtilsMock.update).not.toHaveBeenCalled();
-    });
-
-    it('does not redirect to error page if admin user has no v3 apps', () => {
-        spyOn(WindowLocationUtilsMock, 'update');
-
-        const apps = [
-            {id:"1", accessRights: {appRights: ["EDIT_SCHEMA"]}, openInV3: false}
-        ];
-
-        component = TestUtils.renderIntoDocument(<AppsRoute flux={flux} apps={apps}/>);
-
-        expect(WindowLocationUtilsMock.update).not.toHaveBeenCalled();
-    });
 });
 

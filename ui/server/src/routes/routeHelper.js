@@ -20,9 +20,6 @@
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
 
-    let SET_APPLICATION_STACK_JBI = 'JBI_SetAdminRedirectToV3';
-    let GET_APPLICATION_STACK_JBI = 'JBI_GetAdminRedirectToV3';
-
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
     //      \/ - escaped forward slash
@@ -581,34 +578,6 @@
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;
             }
             return url;
-        },
-
-        /**
-         * Return the Quickbase classic url route to get the application's
-         * current stack preference or set the application's stack preference.
-         *
-         * Examples:
-         *      /db/<appid>/?a=JBI_GetAdminRedirectToV3
-         *      /db/<appid>/?a=JBI_SetAdminRedirectToV3&value=1
-         *
-         * @param appId
-         * @param isPost - is this a post request
-         * @param value - value to set the application preference for post request
-         *
-         * @returns {*}
-         */
-        getApplicationStackPreferenceRoute: function(appId, isPost, value) {
-            let root = getLegacyRoot();
-            if (appId) {
-                root += '/' + appId;
-
-                if (isPost === true) {
-                    root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + SET_APPLICATION_STACK_JBI + '&' + constants.REQUEST_PARAMETER.LEGACY_STACK.VALUE + '=' + value;
-                } else {
-                    root += '?' + constants.REQUEST_PARAMETER.LEGACY_STACK.ACTION + '=' + GET_APPLICATION_STACK_JBI;
-                }
-            }
-            return root;
         },
 
         /**

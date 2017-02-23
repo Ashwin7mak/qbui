@@ -48,11 +48,7 @@ var TopNavMock = React.createClass({
         return <div>mock top nav</div>;
     }
 });
-var V2V3FooterMock = React.createClass({
-    render() {
-        return <div>mock v2 v3 admin toggle</div>;
-    }
-});
+
 
 
 class WindowLocationUtilsMock {
@@ -74,19 +70,9 @@ describe('Nav', () => {
             return {};
         }
     });
-    let appsStoreWithAdminApp = Fluxxor.createStore({
-        getState: function() {
-            return {apps: [{id:"1", accessRights: {appRights: ["EDIT_SCHEMA"]}}], selectedAppId: "1"};
-        }
-    });
     let appsStoreWithV3App = Fluxxor.createStore({
         getState: function() {
-            return {apps: [{id:"1", openInV3: true}], selectedAppId: "1"};
-        }
-    });
-    let appsStoreWithoutV3App = Fluxxor.createStore({
-        getState: function() {
-            return {apps: [{id:"1", openInV3: false}], selectedAppId: "1"};
+            return {apps: [{id:"1"}], selectedAppId: "1"};
         }
     });
     let appsStoreWithNoApps = Fluxxor.createStore({
@@ -139,7 +125,6 @@ describe('Nav', () => {
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
-        NavRewireAPI.__Rewire__('V2V3Footer', V2V3FooterMock);
         NavRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
     });
 
@@ -148,7 +133,6 @@ describe('Nav', () => {
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
         NavRewireAPI.__ResetDependency__('TopNav');
-        NavRewireAPI.__ResetDependency__('V2V3Footer');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
 
     });
@@ -194,54 +178,6 @@ describe('Nav', () => {
 
         let leftLink = TestUtils.findRenderedDOMComponentWithClass(component, "leftNavLink");
         TestUtils.Simulate.click(leftLink);
-    });
-
-    it('test renders v2v3 footer for admins', () => {
-        let storesWithAdminApp = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithAdminApp(), // has an app with admin access (EDIT_SCHEMA)
-            ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
-            FieldsStore : new fieldsStore(),
-            ReportDataSearchStore: new reportDataSearchStore()
-        };
-        let fluxWithAdminApp = new Fluxxor.Flux(storesWithAdminApp);
-
-        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithAdminApp}></Nav>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(1);
-    });
-
-    it('test omits v2v3 footer for non-admins with v3 app(s)', () => {
-        let storesWithV3App = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithV3App(),  // has an app with openInV3 = true
-            ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
-            FieldsStore : new fieldsStore(),
-            ReportDataSearchStore: new reportDataSearchStore()
-        };
-        let fluxWithV3App = new Fluxxor.Flux(storesWithV3App);
-        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithV3App}></Nav>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(0);
-    });
-
-    it('test redirects non-admins with no v3 apps', () => {
-
-        let storesWithoutV3App = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithoutV3App(),  // no admin rights and has no app with openInV3 = true
-            ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
-            FieldsStore : new fieldsStore(),
-            ReportDataSearchStore: new reportDataSearchStore()
-        };
-        let fluxWithoutV3App = new Fluxxor.Flux(storesWithoutV3App);
-
-        spyOn(WindowLocationUtilsMock, 'update');
-
-        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutV3App}></Nav>);
-
-        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable?appId=1");
     });
 
     it('renders the loading screen while no apps are loaded', () => {
