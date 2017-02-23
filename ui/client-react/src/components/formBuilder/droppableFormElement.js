@@ -11,12 +11,12 @@ import {findFormElementKey} from '../../actions/actionHelpers/transformFormData'
  * @type {{drop: ((props, monitor))}}
  */
 const formTarget = {
-    // drop(props) {
-    //     debugger;
-    //     return {
-    //         location: props.location
-    //     };
-    // },
+    drop(props) {
+        return {
+            containingElement: props.containingElement,
+            location: props.location
+        };
+    },
 
     hover(dropTargetProps, monitor) {
         let dragItemProps = monitor.getItem();
@@ -25,36 +25,7 @@ const formTarget = {
             let element = dragItemProps.containingElement[findFormElementKey(dragItemProps.containingElement)];
             dropTargetProps.handleFormReorder(dropTargetProps.location, Object.assign({}, dragItemProps, {element}));
         }
-        // let {isOver, canDrop, handleFormReorder, location, draggableItem} = props;
-        //
-        // if (isOver) {
-        //     this.reorderTimeout = setTimeout(() => {
-        //         let element = draggableItem.containingElement[findFormElementKey(draggableItem.containingElement)];
-        //         let draggedItemProps = Object.assign({}, draggableItem, {element});
-        //
-        //         if (element) {
-        //             console.log('REORDER EVENT:');
-        //             console.log('LOCATION:', location);
-        //             console.log('draggedItem', draggedItemProps);
-        //             handleFormReorder(location, draggedItemProps);
-        //         }
-        //     }, 1000);
-        // }
-        // if (!isOver && this.reorderTimeout) {
-        //     clearTimeout(this.reorderTimeout);
-        //     this.reorderTimeout = null;
-        // }
     },
-
-    canDrop(props, monitor) {
-        let draggableProps = monitor.getItem();
-
-        // Make sure a component isn't being dropped on itself
-        // console.log('canDrop?', props.containingElement.id !== draggableProps.containingElement.id);
-        // console.log(props.containingElement.id, draggableProps.containingElement.id);
-        // return props.containingElement.id !== draggableProps.containingElement.id;
-        return true;
-    }
 };
 
 /**

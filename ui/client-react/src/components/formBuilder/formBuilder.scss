@@ -1,7 +1,5 @@
 @import '../../assets/css/qbVariables';
 
-$droppable-hover-foreground-color: $color-black-800; // temporary until drop-preview is created
-
 .formBuilderContainer {
 
     .draggableField {
@@ -59,19 +57,6 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
 
     .dragging:after {
         content: none;
-    }
-
-    // Dropping
-    .droppableField:before {
-        background-color: $droppable-hover-foreground-color;
-        opacity: 0;
-        transition: opacity 0.4s;
-    }
-
-    .droppableField.dropHovering:before {
-        opacity: 0.5;
-        z-index: 1;
-        transition: opacity 0.4s;
     }
 
     // React CSS Transition Classes for elements that are moved

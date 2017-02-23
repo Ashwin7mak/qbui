@@ -3,6 +3,8 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
+import {findFormElementKey} from '../../actions/actionHelpers/transformFormData';
+
 /**
  * Specifies event handlers and props that are available during dragging events
  * Recommended: Call any actions that will modify the DOM in "endDrag" (instead of drop [on drop target]), because
@@ -23,15 +25,16 @@ const fieldDragSource = {
         return props.containingElement.id === item.containingElement.id;
     },
 
-    // endDrag(props, monitor) {
-    //     if (monitor.didDrop()) {
-    //         let {location} = monitor.getDropResult();
-    //         props.handleFormReorder(location, props);
-    //     }
-    // }
-    // endDrag(props, monitor) {
-    //     debugger;
-    // }
+    endDrag(dragItemProps, monitor) {
+        if (monitor.didDrop()) {
+            let dropTargetProps = monitor.getDropResult();
+
+            if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
+                let element = dragItemProps.containingElement[findFormElementKey(dragItemProps.containingElement)];
+                dragItemProps.handleFormReorder(dropTargetProps.location, Object.assign({}, dragItemProps, {element}));
+            }
+        }
+    }
 };
 
 /**
