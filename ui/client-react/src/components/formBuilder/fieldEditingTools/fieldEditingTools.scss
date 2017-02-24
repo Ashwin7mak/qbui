@@ -1,41 +1,124 @@
 @import "../../../assets/css/qbVariables";
 
-.draggableField:hover .fieldEditingTools {
-    opacity: 1;
-    transition: opacity 0.4s;
-}
-
 .fieldEditingTools {
-    border: $stroke-width-thin solid $color-black-400;
+    transition: opacity 0.4s;
     border-radius: $radius-base;
 
-    opacity: 0;
-    transition: opacity 0.4s;
-
-    .qbIcon {
-        color: $color-black-600;
-        transition: color 0.4s;
-    }
-
     .deleteFieldIcon {
+        font-size: $size-iconfont-small;
         position: absolute;
         top: 5px;
         right: 25px;
 
-        &:hover .qbIcon {
-            color: $color-red-700;
+        .qbIcon {
+            opacity: 0;
             transition: color 0.4s;
         }
     }
 
     .fieldPreferencesIcon {
+        font-size: $size-iconfont-small;
         position: absolute;
         top: 5px;
         right: 5px;
 
-        &:hover .qbIcon {
-            color: $color-cyan-700;
+        .qbIcon {
+            opacity: 0;
             transition: color 0.4s;
+        }
+    }
+
+    &.notTouchDevice {
+        //No borders, icon, or drag handles are displayed when it is not a touch device
+        //Everything shows up on hover
+        border: $stroke-width-thin solid $color-black-400;
+        opacity: 0;
+
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-xxx-small;
+            &:hover {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+        .fieldPreferencesIcon .qbIcon {
+            &:hover {
+                opacity: 1;
+                color: $color-cyan-700;
+            }
+        }
+    }
+
+    &:hover {
+        opacity: 1;
+
+        .deleteFieldIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-black-600;
+            }
+        }
+
+        .fieldPreferencesIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-black-600;
+            }
+        }
+    }
+
+    &.isTablet {
+        //Icons and borders only display during focus
+        //Drag handle always show
+        border: none;
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
+    }
+
+    @include small-breakpoint {
+        //Drag handles and borders always display during small breakpoints
+        //Icons only show up when it is focused
+        border-bottom: $stroke-width-thin solid $color-black-400;
+
+        .deleteFieldIcon .qbIcon {
+            padding-right: $spacing-medium1;
+        }
+        //Scrolling activates the hover state and shows the icons
+        //I am having the icons opacity set to 0 so it does not show while scrolling
+        &:hover {
+            .deleteFieldIcon {
+                .qbIcon {
+                    opacity: 0;
+                }
+            }
+
+            .fieldPreferencesIcon {
+                .qbIcon {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    &:focus {
+        //This opacity is needed to work for 'tabbing'
+        opacity: 1;
+        outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
+
+        .deleteFieldIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+
+        .fieldPreferencesIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-cyan-700;
+            }
         }
     }
 

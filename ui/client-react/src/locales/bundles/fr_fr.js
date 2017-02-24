@@ -165,6 +165,7 @@ export default {
             },
             footer: {
                 lastUpdatedBy: "Dernière mise à jour par ",
+                lastUpdatedOn: "Dernière mise à jour le ",
                 createdOn: "Créé sur ",
                 ownedBy: "Propriétaire "
             },
@@ -464,12 +465,6 @@ export default {
         },
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",
-        v2v3: {
-            manageAccessTitle: "Gérer l'accès des utilisateurs au Mercure",
-            versionSelectTitle: "Mes utilisateurs ouvriront cette application dans",
-            manageAccessTip: "*Seuls les administrateurs d'applications peuvent gérer l'accès des utilisateurs"
-
-        },
         missingWalkMe: "Le didacticiel n'est pas disponible",
         builder: {
             formBuilder: {
