@@ -8,6 +8,8 @@ import _ from 'lodash';
 
 import './formBuilder.scss';
 
+const DRAG_PREVIEW_TIMEOUT = 50;
+
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
  * The state is temporary until the redux stores are developed.
@@ -17,6 +19,8 @@ export class FormBuilder extends Component {
         super(props);
 
         this.handleFormReorder = this.handleFormReorder.bind(this);
+        this.cancelFormReorder = this.cancelFormReorder.bind(this);
+        this.reorderTimeout = null;
     }
 
     /**
@@ -24,11 +28,31 @@ export class FormBuilder extends Component {
      * @param newLocation
      * @param draggedItemProps
      */
-    handleFormReorder(newLocation, draggedItemProps) {
+    handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
         if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
             let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
-            return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+
+            if (moveImmediately) {
+                return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+            }
+
+            if (this.reorderTimeout) {
+                clearTimeout(this.reorderTimeout);
+            }
+
+            // Add a short timeout so that very fast dragging doesn't cause multiple reorders
+            this.reorderTimeout = setTimeout(() => {
+                this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
+            }, DRAG_PREVIEW_TIMEOUT);
         }
+    }
+
+    /**
+     * Cancels the timeout for a reorder
+     */
+    cancelFormReorder() {
+        clearTimeout(this.reorderTimeout);
+        this.reorderTimeout = null;
     }
 
     render() {
@@ -40,6 +64,7 @@ export class FormBuilder extends Component {
                     editingForm={true}
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
+                    cancelFormReorder={this.cancelFormReorder}
                     appUsers={[]}
                 />
             </div>
