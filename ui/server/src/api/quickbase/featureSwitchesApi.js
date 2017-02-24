@@ -6,10 +6,12 @@
 
     let fs = require('fs');
     let defaultRequest = require('request');
+    let uuid = require('uuid');
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();
     let _ = require('lodash');
+
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -24,6 +26,10 @@
 
             let data = fs.readFileSync(config.featureSwitchesMockData, 'utf8');
             return JSON.parse(data);
+        }
+
+        function saveSwitchesMockData() {
+            fs.writeFile(config.featureSwitchesMockData, JSON.stringify(featureSwitchesMockData, null, '  '), 'utf8');
         }
 
         let featureSwitchesApi = {
@@ -42,32 +48,39 @@
                 });
             },
 
-            saveFeatureSwitches: function(req) {
+            createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
 
                         let bodyJSON = JSON.parse(req.rawBody);
-                        featureSwitchesMockData = bodyJSON.switches;
-                        resolve();
+                        let feature = bodyJSON.feature;
+                        feature.id = uuid.v4();
+                        feature.overrides = [];
+
+                        featureSwitchesMockData.push(feature);
+
+                        saveSwitchesMockData();
+
+                        resolve(feature.id);
 
                     } else {
                         resolve(); // todo
                     }
                 });
             },
-
-            saveFeatureSwitchOverrides: function(req, featureSwitchId) {
+            saveFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
 
                         let bodyJSON = JSON.parse(req.rawBody);
-                        let overrides = bodyJSON.overrides;
+                        let feature = bodyJSON.feature;
 
-                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
+                        let index = _.findIndex(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
-                        if (featureSwitch) {
-                            featureSwitch.overrides = overrides;
+                        if (index !== -1) {
+                            featureSwitchesMockData[index] = feature;
+                            saveSwitchesMockData();
                         }
                         resolve();
 
@@ -77,6 +90,89 @@
                 });
             },
 
+            deleteFeatureSwitches: function(req, ids) {
+
+                return new Promise((resolve, reject) => {
+                    if (config && config.featureSwitchesMockData) {
+                        _.remove(featureSwitchesMockData, function(sw) {return ids.indexOf(sw.id) !== -1;});
+
+                        saveSwitchesMockData();
+
+                        resolve(ids);
+
+                    } else {
+                        resolve(); // todo
+                    }
+                });
+            },
+            createFeatureSwitchOverride: function(req, featureSwitchId) {
+
+                return new Promise((resolve, reject) => {
+                    if (config && config.featureSwitchesMockData) {
+
+                        let bodyJSON = JSON.parse(req.rawBody);
+                        let override = bodyJSON.override;
+
+                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
+
+                        if (featureSwitch) {
+                            override.id = uuid.v4();
+                            featureSwitch.overrides.push(override);
+                            saveSwitchesMockData();
+                        }
+                        resolve();
+
+                    } else {
+                        resolve(); // todo
+                    }
+                });
+            },
+
+
+            saveFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
+
+                return new Promise((resolve, reject) => {
+                    if (config && config.featureSwitchesMockData) {
+
+                        let bodyJSON = JSON.parse(req.rawBody);
+                        let overrideData = bodyJSON.override;
+
+                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
+
+                        if (featureSwitch && override) {
+                            let index = _.findIndex(featureSwitch.overrides, function(override) {
+                                return override.id === overrideId;
+                            });
+
+                            if (index !== -1) {
+                                featureSwitch.overrides[index] = overrideData;
+                                saveSwitchesMockData();
+                            }
+                        }
+                        resolve();
+
+                    } else {
+                        resolve(); // todo
+                    }
+                });
+            },
+            deleteFeatureSwitchOverrides: function(req, featureSwitchId, ids) {
+
+                return new Promise((resolve, reject) => {
+                    if (config && config.featureSwitchesMockData) {
+                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
+
+                        _.remove(featureSwitch.overrides, function(override) {return ids.indexOf(override.id) !== -1;});
+
+                        saveSwitchesMockData();
+
+                        resolve(ids);
+
+                    } else {
+                        resolve(); // todo
+                    }
+                });
+            },
             getFeatureSwitchStates: function(req, realmId, appId) {
                 return new Promise((resolve, reject) => {
                     let states = {};

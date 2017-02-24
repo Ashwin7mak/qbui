@@ -4,7 +4,6 @@ import _ from 'lodash';
 const featureSwitches = (
     state = {
         //  default states
-        edited: false,
         switches: [],
         overrides: [],
         states: [],
@@ -16,35 +15,22 @@ const featureSwitches = (
     case types.SET_FEATURE_SWITCHES:
         return {
             ...state,
-            switches: action.switches,
-            edited: false
+            switches: action.switches
         };
 
+    case types.CREATED_FEATURE_SWITCH: {
 
-    case types.SET_FEATURE_SWITCH_DEFAULT_STATE: {
-        const switches = [...state.switches];
-        const switchToToggle = switches.find(item => item.id === action.id);
-        switchToToggle.defaultOn = action.defaultOn;
-
-        return  {
+        let newSwitch = {...action.feature, overrides: []};
+        return {
             ...state,
-            switches,
-            edited: true
+            switches: [...state.switches, newSwitch]
         };
     }
 
-    case types.CREATE_FEATURE_SWITCH:
+    case types.FEATURE_SWITCHES_DELETED: {
         return {
             ...state,
-            switches: [...state.switches, action.feature],
-            edited: true
-        };
-
-    case types.DELETE_FEATURE_SWITCH: {
-        return {
-            ...state,
-            switches: state.switches.filter(fs => fs.id !== action.id),
-            edited: true
+            switches: state.switches.filter(fs => action.ids.indexOf(fs.id) === -1)
         };
     }
 
@@ -58,7 +44,7 @@ const featureSwitches = (
         };
     }
 
-    case types.FEATURE_SWITCH_EDITED: {
+    case types.FEATURE_SWITCH_UPDATED: {
         const switches = [...state.switches];
         const switchToConfirmEdit = switches.find(item => item.id === action.id);
         delete switchToConfirmEdit.editing;
@@ -66,78 +52,54 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches,
-            edited: true
+            switches
         };
     }
-
-    case types.SAVED_FEATURE_SWITCHES:
-        return {
-            ...state,
-            edited: false
-        };
 
     // overrides
     case types.SELECT_FEATURE_SWITCH_OVERRIDES: {
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
-            overrides: currentSwitch ? [...currentSwitch.overrides] : [],
-            edited: false
+            overrides: currentSwitch && currentSwitch.overrides ? [...currentSwitch.overrides] : []
         };
     }
 
-    case types.SET_OVERRIDE_STATE: {
-        const overrides = [...state.overrides];
-        overrides[action.row].on = action.on;
-        return  {
-            ...state,
-            overrides,
-            edited: true
-        };
-    }
     case types.EDIT_OVERRIDE: {
         const overrides = [...state.overrides];
-        overrides[action.row].editing = action.column;
+        const overrideToEdit = overrides.find(item => item.id === action.id);
+        overrideToEdit.editing = action.column;
         return {
             ...state,
             overrides
         };
     }
-    case types.OVERRIDE_EDITED: {
+    case types.OVERRIDE_UPDATED: {
         const overrides = [...state.overrides];
-        delete overrides[action.row].editing;
-        overrides[action.row][action.property] = action.value;
+        const overrideToConfirmEdit = overrides.find(item => item.id === action.id);
+        delete overrideToConfirmEdit.editing;
+        overrideToConfirmEdit[action.property] = action.value;
 
         return {
             ...state,
-            overrides,
-            edited: true
+            overrides
         };
     }
 
-    case types.CREATE_OVERRIDE:
+    case types.CREATED_OVERRIDE:
         return {
             ...state,
-            overrides: [...state.overrides, action.override],
-            edited: true
+            overrides: [...state.overrides, action.override]
         };
 
-    case types.DELETE_OVERRIDES: {
-        const overrides = [...state.overrides];
-        _.pullAt(overrides, action.ids);
+    case types.OVERRIDES_DELETED: {
 
         return {
             ...state,
-            overrides,
-            edited: true
+            overrides: state.overrides.filter(override => action.ids.indexOf(override.id) === -1)
         };
     }
-    case types.SAVED_FEATURE_SWITCH_OVERRIDES:
-        return {
-            ...state,
-            edited: false
-        };
+
     case types.SET_FEATURE_SWITCH_STATES:
         return {
             ...state,

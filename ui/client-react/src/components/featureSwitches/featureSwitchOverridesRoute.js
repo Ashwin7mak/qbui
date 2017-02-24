@@ -29,7 +29,8 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
-        this.saveOverrides = this.saveOverrides.bind(this);
+        this.createOverride = this.createOverride.bind(this);
+        this.updateOverride = this.updateOverride.bind(this);
         this.deleteSelectedOverrides = this.deleteSelectedOverrides.bind(this);
     }
 
@@ -44,20 +45,20 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
     selectAll(allSelected) {
 
-        let selectedRows = allSelected ? this.props.overrides.map((sw, index) => index) : [];
+        let selectedRows = allSelected ? this.props.overrides.map((override) => override.id) : [];
 
         this.setState({selectedRows, allSelected});
     }
 
     setSelectedOverrideStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.props.setOverrideState(id, defaultOn);
+            this.updateOverride(id, 'on', defaultOn);
         });
     }
 
     deleteSelectedOverrides() {
 
-        this.props.deleteOverrides(this.state.selectedRows);
+        this.props.deleteOverrides(this.props.params.id, this.state.selectedRows);
 
         this.setState({selectedRows: []});
     }
@@ -67,19 +68,28 @@ class FeatureSwitchOverridesRoute extends React.Component {
         return this.props.switches.find(item => item.id === this.props.params.id);
     }
 
-    saveOverrides() {
-        this.props.saveOverrides(this.props.params.id, this.props.overrides);
+    createOverride() {
+        this.props.createOverride(this.props.params.id, this.props.overrides);
+    }
+
+
+    updateOverride(id, property, value) {
+
+        const overrideToUpdate = this.props.overrides.find(override => override.id === id);
+
+        this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value);
     }
 
     getColumns() {
 
         const editable = edit.edit({
             isEditing: ({columnIndex, rowData}) => columnIndex === rowData.editing,
-            onActivate: ({columnIndex, rowIndex}) => {
-                this.props.editOverrideRow(rowIndex, columnIndex);
+            onActivate: ({columnIndex, rowData}) => {
+                this.props.editOverride(rowData.id, columnIndex);
+
             },
-            onValue: ({value, rowIndex, property}) => {
-                this.props.confirmOverrideEdit(rowIndex, property, value);
+            onValue: ({value, rowData, property}) => {
+                this.updateOverride(rowData.id, property, value);
             }
         });
 
@@ -122,11 +132,11 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (value, {rowIndex}) => {
+                        (value, {rowData}) => {
                             return (
                              <ToggleButton value={value}
                                               onToggle={(newValue) => {
-                                                  this.props.setOverrideState(rowIndex, !newValue);
+                                                  this.updateOverride(rowData.id, 'on', !newValue);
                                               }}/>);
                         }
 
@@ -147,10 +157,6 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             }
         ];
-    }
-
-    getTableRowsWithIds(rows) {
-        return rows.map((row, i) => {return {...row, id: i};});
     }
 
     componentWillMount() {
@@ -183,7 +189,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     <h3>Feature Switch Overrides:</h3>
 
                     <div className="globalButtons">
-                        <button onClick={this.props.createOverride}>Add new</button>
+                        <button onClick={this.createOverride}>Add new</button>
                         <button disabled={!this.props.edited} className="save" onClick={this.saveOverrides}>Save overrides</button>
                     </div>
 
@@ -200,7 +206,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
                             <Table.Header />
 
-                            <Table.Body rows={this.getTableRowsWithIds(this.props.overrides)} rowKey="id"/>
+                            <Table.Body rows={this.props.overrides} rowKey="id"/>
                         </Table.Provider>
                     }
                     <p/>

@@ -1,50 +1,93 @@
 [
   {
-    "id": "101",
+    "id": "1",
     "name": "Feature A",
     "team": "Cthulu",
     "description": "Demo feature switch",
     "defaultOn": true,
     "overrides": [
       {
+        "id": "101",
         "entityType": "realm",
         "entityValue": "12345",
         "on": false
       },
       {
-        "entityType": "app",
-        "entityValue": "app1",
-        "on": false
-      },
-      {
+        "id": "103",
         "entityType": "app",
         "entityValue": "app2",
-        "on": true
+        "on": false
       }
     ]
   },
   {
-    "id": "102",
+    "id": "2",
     "name": "Feature B",
     "team": "Hydra",
     "description": "Another demo feature",
     "defaultOn": false,
-    "overrides": []
+    "overrides": [
+      {
+        "id": "fa45bb6e-b10c-4295-b5bf-2289a9cd1e6e",
+        "entityType": "app",
+        "entityValue": "y",
+        "on": true
+      },
+      {
+        "id": "8b2e671f-0fa1-46a8-808a-95bf60845ec5",
+        "entityType": "realm",
+        "entityValue": "x",
+        "on": false
+      }
+    ]
   },
   {
-    "id": "103",
+    "id": "3",
     "name": "Hide Table",
     "team": "Hydra",
     "description": "Hide table feature",
     "defaultOn": false,
-    "dateToExpire": "2018-01-18",
-    "expiredBehavior": "flip",
     "overrides": [
       {
+        "id": "301",
         "entityType": "app",
         "entityValue": "bmbahnjyp",
         "on": true
       }
     ]
+  },
+  {
+    "defaultOn": false,
+    "description": "Description",
+    "team": "Team",
+    "name": "Feature",
+    "id": "98fca309-b19f-49db-b3b1-6a8666d77559",
+    "overrides": [
+      {
+        "entityType": "realm",
+        "entityValue": "",
+        "on": false,
+        "id": "2304618f-0f6d-47e1-b321-0d77954c9c24"
+      },
+      {
+        "entityType": "realm",
+        "entityValue": "",
+        "on": false,
+        "id": "0e00cc44-e03f-420b-b18c-37e98478fb70"
+      },
+      {
+        "entityType": "realm",
+        "entityValue": "",
+        "on": false,
+        "id": "bb2a69ec-e503-4d7c-a70f-374846e89ac6"
+      }
+    ]
+  },
+  {
+    "id": "7de2a353-c1a5-4927-ab01-f59221c0b8be",
+    "name": "ddd",
+    "team": "Team",
+    "description": "Description",
+    "defaultOn": false
   }
 ]

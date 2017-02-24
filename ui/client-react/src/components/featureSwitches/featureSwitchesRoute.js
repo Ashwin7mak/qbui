@@ -1,12 +1,11 @@
 import React from 'react';
 import * as Table from 'reactabular-table';
 import * as edit from 'react-edit';
+import * as UrlConsts from "../../constants/urlConstants";
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import ToggleButton from 'react-toggle-button';
-import dateEditor from './dateEditor';
-import uuid from 'uuid';
 import PageTitle from '../pageTitle/pageTitle';
 import _ from 'lodash';
 import './featureSwitches.scss';
@@ -35,19 +34,12 @@ class FeatureSwitchesRoute extends React.Component {
             allSelected: false
         };
 
-        this.saveSwitches = this.saveSwitches.bind(this);
-        this.addNewFeature = this.addNewFeature.bind(this);
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
+        this.createFeatureSwitch = this.createFeatureSwitch.bind(this);
+        this.updateFeatureSwitch = this.updateFeatureSwitch.bind(this);
         this.deleteSelectedSwitches = this.deleteSelectedSwitches.bind(this);
-    }
-
-    saveSwitches() {
-        this.props.saveSwitches(this.props.switches);
-    }
-
-    addNewFeature() {
-        this.props.createFeatureSwitch(uuid.v4());
+        this.getDefaultFeatureSwitchName  = this.getDefaultFeatureSwitchName.bind(this);
     }
 
     selectRow(id, selected) {
@@ -65,17 +57,46 @@ class FeatureSwitchesRoute extends React.Component {
         this.setState({selectedRows, allSelected});
     }
 
-    setSelectedSwitchStates(defaultOn) {
+    setSelectedSwitchStates(isOn) {
         this.state.selectedRows.forEach((id) => {
-            this.props.setSwitchDefaultState(id, defaultOn);
+            this.updateFeatureSwitch(id, 'defaultOn', isOn);
         });
     }
 
+    getFeatureByName(name) {
+
+        return this.props.switches.find((feature) => feature.name === name);
+    }
+
+    getDefaultFeatureSwitchName() {
+
+        let proposed = 'Feature';
+
+        let nameFound = this.getFeatureByName(proposed);
+
+        for (let i = 1; nameFound; i++) {
+            proposed = `Feature (${i})`;
+            nameFound = this.getFeatureByName(proposed);
+        }
+
+        return proposed;
+    }
+
+    createFeatureSwitch() {
+        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName());
+    }
+
     deleteSelectedSwitches() {
-        this.state.selectedRows.forEach((id) => {
-            this.props.deleteFeatureSwitch(id);
-        });
-        this.setState({selectedRows: [], allSelected: false});
+        this.props.deleteFeatureSwitches(this.state.selectedRows).then(
+            () => this.setState({selectedRows: [], allSelected: false})
+        );
+    }
+
+    updateFeatureSwitch(id, property, value) {
+
+        const featureSwitch = this.props.switches.find(sw => sw.id === id);
+
+        this.props.updateFeatureSwitch(id, featureSwitch, property, value);
     }
 
     getColumns() {
@@ -86,17 +107,17 @@ class FeatureSwitchesRoute extends React.Component {
                 this.props.editFeatureSwitch(rowData.id, columnIndex);
             },
             onValue: ({value, rowData, property}) => {
-                this.props.featureSwitchEdited(rowData.id, property, value);
+                this.updateFeatureSwitch(rowData.id, property, value);
             }
         });
 
         const overridesLinkFormatter = (data, {rowData}) => {
 
-            const hasOverrides = rowData.overrides.length > 0;
+            const hasOverrides = rowData.overrides && rowData.overrides.length > 0;
             return (
                 <div>
                     <Link onClick={e => {e.stopPropagation();}}
-                          to={`/qbase/admin/featureSwitch/${rowData.id}`}>{data}</Link>
+                          to={`${UrlConsts.ADMIN_ROUTE}/featureSwitch/${rowData.id}`}>{data}</Link>
                      {hasOverrides ? <span> ({rowData.overrides.length})</span> : ''}
                 </div>);
         };
@@ -156,41 +177,13 @@ class FeatureSwitchesRoute extends React.Component {
                             return (
                                 <ToggleButton value={value}
                                               onToggle={newValue => {
-                                                  this.props.setSwitchDefaultState(rowData.id, !newValue);
+                                                  this.updateFeatureSwitch(rowData.id, 'defaultOn', !newValue);
                                               }}/>);
                         }
 
                     ]
                 }
-            },
-            {
-                property: 'dateToExpire',
-                header: {
-                    label: 'Expiration Date'
-                },
-                cell: {
-                    props: {
-                        className: 'dateCell'
-                    },
-                    transforms: [editable(dateEditor())]
-                }
-            },
-            {
-                property: 'expiredBehavior',
-                header: {
-                    label: 'When expired'
-                },
-                cell: {
-                    transforms: [editable(edit.dropdown({options: expiredBehaviorOptions}))],
-                    formatters: [
-                        (value) => {
-                            let option = expiredBehaviorOptions.find(opt => opt.value === value);
-                            return option && option.name;
-                        }
-
-                    ]
-                }
-            },
+            }
         ];
     }
 
@@ -209,8 +202,7 @@ class FeatureSwitchesRoute extends React.Component {
 
 
                 <div className="globalButtons">
-                    <button onClick={this.addNewFeature}>Add new</button>
-                    <button disabled={!this.props.edited} className="save" onClick={this.saveSwitches}>Save switches</button>
+                    <button onClick={this.createFeatureSwitch}>Add new</button>
                 </div>
 
                 <Table.Provider className="featureSwitchTable switches"
@@ -247,7 +239,6 @@ class FeatureSwitchesRoute extends React.Component {
 const mapStateToProps = (state) => {
 
     return {
-        edited: state.featureSwitches.edited,
         switches: state.featureSwitches.switches
     };
 };
