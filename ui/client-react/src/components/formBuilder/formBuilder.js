@@ -1,10 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
-import Html5Backend from 'react-dnd-html5-backend';
 import QbForm from '../QBForm/qbform';
-import MoveFieldHelper from './moveFieldHelper';
-import _ from 'lodash';
-
+import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
+import TouchBackend from 'react-dnd-touch-backend';
 import './formBuilder.scss';
 
 /**
@@ -15,40 +13,28 @@ export class FormBuilder extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            formData: {fields: [], formMeta: {}}
-        };
-
         this.handleFormReorder = this.handleFormReorder.bind(this);
-    }
-
-    componentDidMount() {
-        // Until we have a store, copy over the current form to the state of this object so it can be modified
-        this.setState({formData: this.props.formData});
     }
 
     /**
      * Moves the dragged item to the location of the item that it was dropped on.
-     * @param newTabIndex
-     * @param newSectionIndex
-     * @param newOrderIndex
+     * @param newLocation
      * @param draggedItemProps
      */
-    handleFormReorder(newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-        let formDataCopy = _.cloneDeep(this.state.formData);
-
-        formDataCopy.formMeta = MoveFieldHelper.moveField(formDataCopy.formMeta, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
-
-        this.setState({formData: formDataCopy});
+    handleFormReorder(newLocation, draggedItemProps) {
+        if (this.props.moveFieldOnForm) {
+            return this.props.moveFieldOnForm(this.props.formId, newLocation, draggedItemProps);
+        }
     }
 
     render() {
         return (
             <div className="formBuilderContainer">
+                {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
                     edit={true}
                     editingForm={true}
-                    formData={this.state.formData}
+                    formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
                     appUsers={[]}
                 />
@@ -58,10 +44,25 @@ export class FormBuilder extends Component {
 }
 
 FormBuilder.propTypes = {
+    formId: PropTypes.string.isRequired,
+
+    showCustomDragLayer: PropTypes.bool,
+
     formData: PropTypes.shape({
         fields: PropTypes.array,
         formMeta: PropTypes.object
-    }).isRequired
+    }).isRequired,
+
+    moveFieldOnForm: PropTypes.func
 };
 
-export default DragDropContext(Html5Backend)(FormBuilder);
+FormBuilder.defaultProps = {
+    showCustomDragLayer: true
+};
+
+/**
+ * delay is used to allow a user to scroll on mobile
+ * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
+ * */
+
+export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);

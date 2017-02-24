@@ -11,7 +11,12 @@ class WindowLocationUtilsMock {
     static pushWithQuery(url) { }
 }
 
-describe('Form Actions functions', () => {
+const mockTransformHelper = {
+    convertFormToArrayForClient(data) {return data;},
+    convertFormToObjectForServer(data) {return data;}
+};
+
+describe('Form Actions', () => {
 
     beforeEach(() => {
         FormActionsRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
@@ -24,7 +29,7 @@ describe('Form Actions functions', () => {
 
     describe('syncing actions', () => {
 
-        it('should create an action to indicate the view form needs to be reloaded', () => {
+        it('creates an action to indicate the view form needs to be reloaded', () => {
 
             expect(formActions.syncForm("view")).toEqual({type: types.SYNC_FORM, id: "view"});
         });
@@ -32,12 +37,12 @@ describe('Form Actions functions', () => {
 
     describe('loading actions', () => {
 
-        it('should create an action to indicate loading view form', () => {
+        it('creates an action to indicate loading view form', () => {
 
             expect(formActions.loadingForm("view")).toEqual({type: types.LOADING_FORM, id: "view"});
         });
 
-        it('should create an action to indicate load view form error', () => {
+        it('creates an action to indicate load view form error', () => {
 
             expect(formActions.loadFormError("view", "oops")).toEqual({
                 type: types.LOAD_FORM_ERROR,
@@ -46,7 +51,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to indicate form loaded', () => {
+        it('creates an action to indicate form loaded', () => {
 
             expect(formActions.loadFormSuccess("view", "someData")).toEqual({
                 type: types.LOAD_FORM_SUCCESS,
@@ -58,12 +63,12 @@ describe('Form Actions functions', () => {
 
     describe('saving actions', () => {
 
-        it('should create an action to indicate saving a form', () => {
+        it('creates an action to indicate saving a form', () => {
 
             expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
 
-        it('should create an action to indicate save form error', () => {
+        it('creates an action to indicate save form error', () => {
 
             expect(formActions.saveFormError("edit", "oops")).toEqual({
                 type: types.SAVE_FORM_FAILED,
@@ -72,7 +77,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to indicate form saved', () => {
+        it('creates an action to indicate form saved', () => {
 
             expect(formActions.saveFormSuccess("edit", "someData")).toEqual({
                 type: types.SAVE_FORM_SUCCESS,
@@ -84,7 +89,7 @@ describe('Form Actions functions', () => {
 
     describe('edit record actions', () => {
 
-        it('should create an action to open record for edit', () => {
+        it('creates an action to open record for edit', () => {
 
             expect(openRecordForEdit(123)).toEqual({
                 type: types.EDIT_REPORT_RECORD,
@@ -92,7 +97,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to edit new record, no nav after save', () => {
+        it('creates an action to edit new record, no nav after save', () => {
 
             expect(editNewRecord(false)).toEqual({
                 type: types.EDIT_REPORT_RECORD,
@@ -101,7 +106,7 @@ describe('Form Actions functions', () => {
             });
         });
 
-        it('should create an action to edit new record, nav after save', () => {
+        it('creates an action to edit new record, nav after save', () => {
 
             expect(editNewRecord(true)).toEqual({
                 type: types.EDIT_REPORT_RECORD,
@@ -145,13 +150,17 @@ describe('Form Actions functions', () => {
             spyOn(mockFormService.prototype, 'getFormAndRecord').and.callThrough();
             spyOn(mockFormService.prototype, 'getForm').and.callThrough();
             FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+
+            spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
+            FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
         });
 
-        it('load view record form', (done) => {
+        it('loads view record form', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
             // so we don't need to spy on the dispatcher etc.
@@ -181,7 +190,7 @@ describe('Form Actions functions', () => {
                 });
         });
 
-        it('load new record form', (done) => {
+        it('loads new record form', (done) => {
 
             const expectedActions = [
                 {type: types.LOADING_FORM, id: 'edit'},
@@ -207,43 +216,73 @@ describe('Form Actions functions', () => {
                     done();
                 });
         });
+
+        it('transforms data to array structure for use on the client UI', (done) => {
+
+
+            const store = mockStore({});
+
+            return store.dispatch(loadForm("appId", "tblId", "report", "edit", "new")).then(
+                () => {
+                    expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
+                    done();
+                }).catch(error => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
     });
 
     describe('save form data action', () => {
 
         let formData = {
-            formId: 1
+            formId: 1,
+            formMeta: {tabs: {}}
         };
 
         // we mock the Redux store when testing async action creators
         const middlewares = [thunk];
         const mockStore = configureMockStore(middlewares);
+
+        const expectedSaveActions = [
+            {id:'view', type:types.SAVING_FORM, content: null},
+            {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
+        ];
         const expectedActions = [
-            {id:'view', type:types.SAVING_FORM, content:null},
+            {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
 
         class mockFormService {
             constructor() {}
             createForm() {
-                return Promise.resolve({data:formData});
+                return Promise.resolve({data: formData});
             }
             updateForm() {
-                return Promise.resolve({data:formData});
+                return Promise.resolve({data: formData});
             }
         }
 
         beforeEach(() => {
+
             spyOn(mockFormService.prototype, 'createForm').and.callThrough();
             spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
             FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+
+            spyOn(mockTransformHelper, 'convertFormToObjectForServer').and.returnValue(formData);
+            FormActionsRewireAPI.__Rewire__('convertFormToObjectForServer', mockTransformHelper.convertFormToObjectForServer);
+
+            spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
+            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
+            FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
+            FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
         });
 
-        it('save a form update', (done) => {
+        it('saves a form update', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
             // so we don't need to spy on the dispatcher etc.
@@ -253,7 +292,7 @@ describe('Form Actions functions', () => {
                 () => {
                     expect(mockFormService.prototype.createForm).not.toHaveBeenCalled();
                     expect(mockFormService.prototype.updateForm).toHaveBeenCalled();
-                    expect(store.getActions()).toEqual(expectedActions);
+                    expect(store.getActions()).toEqual(expectedSaveActions);
                     done();
                 },
                 () => {
@@ -261,7 +300,8 @@ describe('Form Actions functions', () => {
                     done();
                 });
         });
-        it('save a form create', (done) => {
+
+        it('saves a form create', (done) => {
 
             // the mock store makes the actions dispatched available via getActions()
             // so we don't need to spy on the dispatcher etc.
@@ -271,7 +311,35 @@ describe('Form Actions functions', () => {
                 () => {
                     expect(mockFormService.prototype.createForm).toHaveBeenCalled();
                     expect(mockFormService.prototype.updateForm).not.toHaveBeenCalled();
-                    expect(store.getActions()).toEqual(expectedActions);
+                    expect(store.getActions()).toEqual(expectedSaveActions);
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+
+        it('transforms the data from array structure to object before save', () => {
+            const store = mockStore({});
+
+            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(mockTransformHelper.convertFormToObjectForServer).toHaveBeenCalled();
+                    done();
+                },
+                () => {
+                    expect(false).toBe(true);
+                    done();
+                });
+        });
+
+        it('transforms the returned response data after the save', () => {
+            const store = mockStore({});
+
+            return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
+                () => {
+                    expect(mockTransformHelper.convertFormToArrayForClient).toHaveBeenCalled();
                     done();
                 },
                 () => {
@@ -281,4 +349,16 @@ describe('Form Actions functions', () => {
         });
     });
 
+    describe('moveFieldOnForm', () => {
+        it('creates an action that will move a field on a form', () => {
+            expect(formActions.moveFieldOnForm(1, 2, 3)).toEqual({
+                id: 1,
+                type: types.MOVE_FIELD,
+                content: {
+                    newLocation: 2,
+                    draggedItemProps: 3
+                }
+            });
+        });
+    });
 });

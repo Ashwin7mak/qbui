@@ -2,22 +2,31 @@
 
 .formBuilderContainer {
     display: flex;
+    flex-direction: row;
     height: 100%;
-    width: 100%;
+    min-width: 100%;
     overflow: auto;
 
-    .loadedContent {
+    .formBuilderContent {
+        flex: 1 auto;
+        max-height: 100%;
         overflow: auto;
-        padding-bottom: 65px;
-        width: 100%;
     }
 
-    .formBuilderHeader {
-        text-align: center;
+    .formContainer {
+        padding-bottom: 70px;
     }
 
-    .formBuilderBody {
-        padding-bottom: 15px;
-        text-align: center;
+    @include small-breakpoint {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        opacity: 1;
     }
+
+
 }

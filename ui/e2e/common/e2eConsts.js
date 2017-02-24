@@ -31,6 +31,8 @@
         TABLE5 : 4,
         TABLE7 : 7,
         TABLE8 : 8,
+        TABLE9 : 9,
+        TABLE10 : 10,
 
         MAX_PAGING_SIZE : clientConsts.PAGE.DEFAULT_NUM_ROWS,
         DEFAULT_NUM_RECORDS_TO_CREATE : 10,

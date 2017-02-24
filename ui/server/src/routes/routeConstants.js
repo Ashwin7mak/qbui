@@ -34,18 +34,18 @@
      *  List of Legacy Quickbase endpoints used by the Quickbase client.
      */
     var legacyApiEndpoints = {
-        APP_STACK_PREFERENCE        : baseUrl.QUICKBASE_LEGACY + '/apps/:appId/stack'
     };
 
     /*
      *  List of QuickBase public API endpoints used by the client.
      */
     var quickBaseApiEndpoints = {
-        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
+
+        HEALTH_CHECK                : baseUrl.QUICKBASE_HEALTH + '/health',
         FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
         FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
         RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
@@ -73,8 +73,6 @@
     var experienceEngineApiEndpoints = {
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
-        // TODO: Temporary until ee endpoint for put is implemented
-        FORMS                       : baseUrl.EXPERIENCE_ENGINE + '/apps/:appId/tables/:tableId/forms/:formId',
         EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*'
     };
 

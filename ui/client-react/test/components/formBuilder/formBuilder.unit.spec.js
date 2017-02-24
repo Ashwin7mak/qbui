@@ -3,11 +3,18 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 
-import {FormBuilder, __RewireAPI__ as FormBuilderRewire} from '../../../src/components/formBuilder/formBuilder';
+import {FormBuilder} from '../../../src/components/formBuilder/formBuilder';
 import QbForm from '../../../src/components/QBForm/qbform';
 
-const mockFormData = {formMeta: {tabs: {0: {sections: {0: {elements: {0: 'fieldElement'}}}}}}};
-const mockMoveFieldHelper = {moveField: function(_newTabIndex, _newSectionIndex, _newOrderIndex, _draggedItemProps) {}};
+const mockFormData = {formMeta: {tabs: [{orderIndex: 0,
+    sections: [{orderIndex: 1,
+        columns: [{orderIndex: 2,
+            rows: [{orderIndex: 3,
+                elements: [{orderIndex: 4}]
+            }]
+        }]
+    }]
+}]}};
 
 let component;
 let instance;
@@ -15,21 +22,11 @@ let instance;
 describe('FormBuilder (drag/drop container)', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        FormBuilderRewire.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
-        spyOn(mockMoveFieldHelper, 'moveField');
-    });
-
-    afterEach(() => {
-        FormBuilderRewire.__ResetDependency__('MoveFieldHelper');
     });
 
     it('wraps QbForm in a drag drop container', () => {
-        component = shallow(<FormBuilder formData={mockFormData} />);
+        component = shallow(<FormBuilder formData={mockFormData} showCustomDragLayer={false} />);
         instance = component.instance();
-        // Calling component did mount manually because I don't want to render child components for this test
-        // and the componentDidMount stuff will be removed once the redux store is build.
-        // TODO:: Remove componentDidMount - https://quickbase.atlassian.net/browse/MC-112
-        instance.componentDidMount();
 
         expect(component.find('.formBuilderContainer')).toBePresent();
 
@@ -43,17 +40,17 @@ describe('FormBuilder (drag/drop container)', () => {
 
     describe('handleFormReorder', () => {
         it('calls the moveField function to initiate moving the field when dropped', () => {
-            component = shallow(<FormBuilder formData={mockFormData} />);
+            let mockParent = {moveField(_formMeta, _newLocation, _draggedItemProps) {}};
+            spyOn(mockParent, 'moveField');
+
+            component = shallow(<FormBuilder formId={'view'} formData={mockFormData} moveFieldOnForm={mockParent.moveField} />);
             instance = component.instance();
-            // Calling component did mount manually because I don't want to render child components for this test
-            // and the componentDidMount stuff will be removed once the redux store is build.
-            // TODO:: Remove componentDidMount - https://quickbase.atlassian.net/browse/MC-112
-            instance.componentDidMount();
 
+            const newLocation = {location: 1};
             const draggedItemProps = {draggedItem: 5};
-            instance.handleFormReorder(1, 2, 3, draggedItemProps);
+            instance.handleFormReorder(newLocation, draggedItemProps);
 
-            expect(mockMoveFieldHelper.moveField).toHaveBeenCalledWith(mockFormData.formMeta, 1, 2, 3, draggedItemProps);
+            expect(mockParent.moveField).toHaveBeenCalledWith('view', newLocation, draggedItemProps);
         });
     });
 });

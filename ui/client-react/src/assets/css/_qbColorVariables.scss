@@ -368,11 +368,20 @@ $urlbutton-background-focus-colorstop2-color:           $color-black-100;   // n
 $formula-background-empty-color:            $color-blue-300;    // spreadsheet has this set to: $color-black-300; (to be updated later)
 $formula-spinner-color:                     $color-black-700;
 
-// qbGrid
-// These colors are prefixed with qbgrid so that they do not conflict with others while the qbGrid is updated.
-$qbgrid-row-border-color: $color-black-300;
-$qbgrid-row-box-shadow-color: $color-black-300;
-$qbgrid-cell-edit-background-color: $color-blue-200;
+// Grid
+$grid-row-hover-color:                          $color-blue-200;
+$grid-initiate-inline-edit-pencil-base-color:   rgba($color-black-700, 0.2);
+$grid-icon-hover-color:                         $color-cyan-700;
+$grid-onpencil-row-border-color:                $color-cyan-700;
+$grid-column-header-background-color:           $color-cyan-100;
+$grid-column-header-border-color:               $color-cyan-300;
+$grid-column-icon-normal-color:                 $color-blue-400;
+$grid-column-icon-hover-color:                  $color-cyan-700;
+$grid-lefticon-normal-color:                    $color-black-300;
+$grid-lefticon-hover-color:                     $color-cyan-700;
+$grid-line-color:                               $color-black-400;
+$inline-edit-shadow-color:                      $color-black-300;
+$cell-edit-background-edit:                     $color-blue-200;
 
 // pagination
 $arrow-normal-color:                        $color-black-700;
@@ -460,6 +469,12 @@ $panel-shadow-color:            rgba($color-blue-600, 0.2); // not in XD spreads
 $tabs-underline-background-color:   $color-indigo-700;  // not in XD spreadsheet
 $tabs-disabled-color:               $badcolor5-color18; // not in XD spreadsheet
 $tabs-active-color:                 $color-black-600;   // not in XD spreadsheet
+
+// FormBuilder - Drag & Drop
+$dragtoken-background-color1: $color-blue-700;
+$dragtoken-background-color2: rgba($color-blue-700, 0.8);
+$dragtoken-text-color: $color-black-100;
+$dragtoken-shadow-color: rgba($color-black-800, 0.5);
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES

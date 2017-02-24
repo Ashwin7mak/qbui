@@ -19,6 +19,8 @@
 
         let requestHelper = require('./requestHelper')(config);
         let recordsApi = require('./recordsApi')(config);
+        let appsApi = require('./appsApi')(config);
+        let reportsApi = require('./reportsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
 
         /**
@@ -147,7 +149,69 @@
                     opts.url += search;
                 }
 
-                return requestHelper.executeRequest(req, opts);
+                if (lodash.get(req, 'query.relationshipPrototype')) {
+                    // Eventually FormMetaData returned from the experience engine should include ReferenceElements.
+                    // For now we are manually adding to the form when the 'relationshipPrototype' query parameter is true.
+                    return this.createReferenceElments(req, opts);
+                } else {
+                    return requestHelper.executeRequest(req, opts)
+                        .then(response => JSON.parse(response.body));
+                }
+            },
+
+            /**
+             * Eventually FormMetaData returned from the experience engine should include ReferenceElements at which
+             * point this function should be deleted. For now, this function will get the formMetaData and add
+             * ReferenceElements to the form.
+             * @param req
+             * @param opts
+             * @returns {Promise}
+             */
+            createReferenceElments: (req, opts) => {
+                const promises = [requestHelper.executeRequest(req, opts), appsApi.getRelationshipsForApp(req)];
+                /* istanbul ignore next  */
+                return Promise.all(promises).then(response => {
+                    const formMeta = JSON.parse(response[0].body);
+                    const relationships = response[1] || [];
+                    if (relationships.length) {
+                        formMeta.relationships = relationships;
+                        let referenceElements = [];
+                        // creates the mock referenceElement
+                        const referenceElement = (orderIndex, relationshipId) => {
+                            return {
+                                ReferenceElement: {
+                                    displayOptions: [
+                                        "VIEW",
+                                        "ADD",
+                                        "EDIT"
+                                    ],
+                                    type: "EMBEDREPORT",
+                                    orderIndex: orderIndex,
+                                    positionSameRow: false,
+                                    relationshipId: relationshipId
+                                }
+                            };
+                        };
+                        relationships.forEach((relation, relationshipIdx) => {
+                            // if a relationship in which this form is a parent is defined, mock ReferenceElement
+                            if (relation.masterTableId === formMeta.tableId) {
+                                referenceElements.push(referenceElement(referenceElements.length, relationshipIdx));
+                            }
+                        });
+                        // if we created referenceElements, inject relationship elements in its own section
+                        if (referenceElements.length) {
+                            const length = Object.keys(formMeta.tabs[0].sections).length;
+                            let sections = formMeta.tabs[0].sections;
+                            sections[length] = Object.assign(lodash.cloneDeep(sections[0]), {
+                                elements: lodash.keyBy(referenceElements, 'ReferenceElement.orderIndex'),
+                                fields: [],
+                                orderIndex: length
+                            });
+                            sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
+                        }
+                    }
+                    return formMeta;
+                });
             },
 
             fetchTableFields: function(req) {
@@ -173,11 +237,40 @@
                         function(response) {
                             //  create return object with the form meta data
                             let obj = {
-                                formMeta: JSON.parse(response[0].body),
-                                tableFields: JSON.parse(response[1].body),
-                                record: {},
-                                fields: {}
+                                formMeta: response[0],
+                                tableFields: JSON.parse(response[1].body)
                             };
+
+                            // If form object has a relationship defined, attach the default child reportId to each
+                            // relationship object.
+                            if (lodash.get(obj, 'formMeta.relationships.length')) {
+                                // collect all childTableIds
+                                let childTableIds = obj.formMeta.relationships.map(rel => rel.detailTableId);
+                                childTableIds = lodash.uniq(childTableIds);
+                                // find default reportId for each child
+                                const defaultReportIdPromises = childTableIds.map(childTableId => reportsApi.fetchDefaultReportId(req, childTableId));
+
+                                return Promise.all(defaultReportIdPromises).then(defaultReportIds => {
+                                    // The id in childTableIds corresponds to the response array
+                                    const idToReportMap = {};
+                                    childTableIds.forEach((childTableId, idx) => {
+                                        idToReportMap[childTableId] = defaultReportIds[idx];
+                                    });
+
+                                    // attach the defaultReportId to each relationship object
+                                    obj.formMeta.relationships = obj.formMeta.relationships.map(relationship => {
+                                        relationship.childDefaultReportId = idToReportMap[relationship.detailTableId];
+                                        return relationship;
+                                    });
+
+                                    return obj;
+                                });
+                            } else {
+                                return obj;
+                            }
+                        }).then(obj => {
+                            obj.record = [];
+                            obj.fields = [];
 
                             //  extract into list all the fields defined on the form.  If any fields, will query
                             //  for record and fields; otherwise will return just the form meta data and empty

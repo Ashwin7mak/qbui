@@ -5,4 +5,8 @@
     border-top: none;
     width: 220px;
     background-color: $color-black-250;
+
+    @include small-breakpoint {
+        display: none;
+    }
 }

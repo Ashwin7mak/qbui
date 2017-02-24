@@ -1055,7 +1055,7 @@ export const AGGrid = React.createClass({
         return (
             <div className="reportTable">
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
+                    <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact

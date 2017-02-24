@@ -2,7 +2,6 @@
 
 import FormService from '../services/formService';
 import Promise from 'bluebird';
-import _ from 'lodash';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
@@ -12,6 +11,7 @@ import * as CompConsts from '../constants/componentConstants';
 import * as types from '../actions/types';
 import * as UrlConsts from "../constants/urlConstants";
 import {NEW_FORM_RECORD_ID} from '../constants/schema';
+import {convertFormToArrayForClient, convertFormToObjectForServer} from './actionHelpers/transformFormData';
 
 let logger = new Logger();
 
@@ -51,7 +51,7 @@ export const loadFormSuccess = (id, formData) => {
     return {
         id,
         type: types.LOAD_FORM_SUCCESS,
-        formData
+        formData: convertFormToArrayForClient(formData)
     };
 };
 
@@ -184,48 +184,8 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    // TODO: using mock data: should retrieve relationships data without the use of
-                    // globals.
-                    if (_.get(window, 'relationships.length') > 0) {
-                        window.relationships.forEach((relation) => {
-                            // if a relathinship in which this form is a parent is defined, mock ReferenceElement
-                            if (relation.masterTableId === response.data.formMeta.tableId) {
-                                (response.data.formMeta.relationships || []).push(relation);
-                                const mockElement =  {
-                                    ReferenceElement: {
-                                        displayOptions: [
-                                            "VIEW",
-                                            "ADD",
-                                            "EDIT"
-                                        ],
-                                        type: "EMBEDREPORT",
-                                        orderIndex: 0,
-                                        positionSameRow: false,
-                                        relationshipId: 0
-                                    }
-                                };
-                                // add as many elements as we have relationships
-                                const elements = Array(window.relationships.length).fill(' ').map((el, idx) => {
-                                    const element = _.cloneDeep(mockElement);
-                                    _.set(element, 'ReferenceElement.relationshipId', idx);
-                                    _.set(element, 'ReferenceElement.orderIndex', idx);
-                                    return element;
-                                });
-                                const length = Object.keys(response.data.formMeta.tabs[0].sections).length;
-                                // inject relationship elements in its own section
-                                let sections = response.data.formMeta.tabs[0].sections;
-                                sections[length] = Object.assign(_.cloneDeep(sections[0]), {
-                                    elements: elements,
-                                    fields: [],
-                                    orderIndex: length
-                                });
-                                sections[length].headerElement.FormHeaderElement.displayText = 'Child Reports';
-                            }
-                        });
-                    }
-
                     dispatch(loadFormSuccess(formType, response.data));
-                    resolve();
+                    resolve(response.data);
                 },
                 (error) => {
                     if (error.response) {
@@ -263,6 +223,20 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
 };
 
 /**
+ * Move a field from one position on a form to a different position
+ * @param formId
+ * @param newLocation
+ * @param draggedItemProps
+ * @returns {{id, type, content}|*}
+ */
+export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
+    return event(formId, types.MOVE_FIELD, {
+        newLocation,
+        draggedItemProps
+    });
+};
+
+/**
  * Create a new form
  *
  * @param appId
@@ -288,10 +262,13 @@ export const updateForm = (appId, tblId, formType, form) => {
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, formType, form, isNew) {
+function saveForm(appId, tblId, formType, formMeta, isNew) {
+
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
+                let form = convertFormToObjectForServer(formMeta);
+
                 logger.debug(`Saving form -- appId:${appId}, tableId:${tblId}, isNew:${isNew}`);
 
                 //  TODO: refactor once record events are moved out..
@@ -303,7 +280,8 @@ function saveForm(appId, tblId, formType, form, isNew) {
                 formPromise.then(
                     (response) => {
                         logger.debug('FormService saveForm success');
-                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, form));
+                        //  for now return the original form..
+                        dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
                         NotificationManager.success(Locale.getMessage('form.notification.save.success'), Locale.getMessage('success'),
                             CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -345,5 +323,3 @@ function event(id, type, content) {
         content: content || null
     };
 }
-
-

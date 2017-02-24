@@ -40,7 +40,6 @@
         //  app endpoints
         routeToGetFunction[routeConsts.APPS] = getApps;
         routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
-        routeToGetFunction[routeConsts.APP_STACK_PREFERENCE] = applicationStackPreference;
 
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
@@ -76,14 +75,11 @@
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
-        routeToPostFunction[routeConsts.APP_STACK_PREFERENCE] = applicationStackPreference;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
          */
         var routeToPutFunction = {};
-        // TODO: temporary until ee put endpoint is implementted
-        routeToPutFunction[routeConsts.FORMS] = updateForm;
 
         /*
          * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
@@ -246,7 +242,7 @@
      * Return list of apps.
      *
      * Note: if request includes query parameter hydrate=1, then the return object will
-     * include appRights and v2/v3 stack preference.
+     * include appRights.
      *
      * @param req
      * @param res
@@ -685,50 +681,6 @@
     }
 
     /**
-     * Supports both GET and POST request to resolve an applications run-time stack
-     * preference.
-     *
-     * For a GET request, will return which stack (mercury or classic) the application is
-     * configured to run in.
-     *
-     * For a POST request, will set the application stack (mercury or classic) preference
-     * on where the application is to be run.
-     *
-     * @param req
-     * @param res
-     */
-    function applicationStackPreference(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Application Stack Preference', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            let appId = req.params.appId;
-            appsApi.stackPreference(req, appId).then(
-                function(response) {
-                    //  Legacy Quickbase returns a response status of 200 when controlled
-                    //  errors(ie:unauthorized) are raised.  Need to examine the errorCode
-                    //  value in the response body to determine the true state of the request.
-                    if (response.errorCode === 0) {
-                        logApiSuccess(req, response, perfLog, 'Application Stack Preference');
-                    } else {
-                        logApiFailure(req, response, perfLog, 'Application Stack Preference. ' + response.errorText);
-                    }
-                    res.send(response);
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Application Stack Preference');
-                    //  client is waiting for a response..make sure one is always returned
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(500).send(response);
-                    }
-                }
-            );
-        });
-    }
-
-    /**
      * This is the function for proxying to a swagger endpoint on
      * either core or experience engine.
      *
@@ -828,15 +780,6 @@
         }
 
         return enabled;
-    }
-
-    function updateForm(req, res) {
-
-        log.debug('Update form.');
-        processRequest(req, res, function(req, res) {
-            res.send('success');
-        });
-
     }
 
 }());

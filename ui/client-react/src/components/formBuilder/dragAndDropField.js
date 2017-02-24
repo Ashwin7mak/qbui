@@ -10,8 +10,9 @@ import DroppableFormElement from './droppableFormElement';
  */
 export default (FieldComponent) => {
     let component = props => {
+        let key = (_.has(props, 'element.id') ? props.element.id : _.uniqueId());
         return (
-            <div className="dragAndDropField">
+            <div key={`dragDropField-${key}`} className="dragAndDropField">
                 <FieldComponent {...props} />
             </div>
         );

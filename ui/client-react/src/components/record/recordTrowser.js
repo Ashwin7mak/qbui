@@ -69,7 +69,9 @@ export const RecordTrowser = React.createClass({
         return (this.props.visible &&
             <Loader loaded={!this.props.editForm || (!this.props.editForm.loading && !this.props.editForm.saving)}
                     options={SpinnerConfigurations.TROWSER_CONTENT}>
-                <Record appId={this.props.appId}
+                <Record
+                    selectedApp={this.props.selectedApp}
+                    appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
                     appUsers={this.props.appUsers}

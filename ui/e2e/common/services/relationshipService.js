@@ -15,23 +15,23 @@
              * Creates one to one relationship between Master and Child tables
              *
              */
-            createOneToOneRelationship: function(createApp, parentTable, childTable) {
+            createOneToOneRelationship: function(createApp, parentTable, childTable, detailFieldId) {
                 const FK_FIELD_NAME = 'Record ID#';
                 let RECORD_ID_NAME = 'Record ID#';
                 let masterTableId = parentTable.id;
                 let detailTableId = childTable.id;
-                let masterTablePkField = null;
-                let detailTableFkField = null;
+                let masterTablePkFieldId;
+                let detailTableFkFieldId = detailFieldId;
 
                 parentTable.fields.forEach(field => {
                     if (field.name === RECORD_ID_NAME) {
-                        masterTablePkField = field;
+                        masterTablePkFieldId = field.id;
                     }
                 });
 
                 childTable.fields.forEach(field => {
-                    if (field.name === FK_FIELD_NAME) {
-                        detailTableFkField = field;
+                    if (detailTableFkFieldId === undefined && field.name === FK_FIELD_NAME) {
+                        detailTableFkFieldId = field.id;
                     }
                 });
 
@@ -39,10 +39,10 @@
                     appId        : createApp.id,
                     masterAppId  : createApp.id,
                     masterTableId: masterTableId,
-                    masterFieldId: masterTablePkField.id,
+                    masterFieldId: masterTablePkFieldId,
                     detailAppId  : createApp.id,
                     detailTableId: detailTableId,
-                    detailFieldId: detailTableFkField.id,
+                    detailFieldId: detailTableFkFieldId,
                     referentialIntegrity: false,
                     cascadeDelete: false,
                     description  : 'Referential integrity relationship between Master / Child Tables'

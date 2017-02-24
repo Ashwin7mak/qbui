@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
+import MoveFieldHelper from '../components/formBuilder/moveFieldHelper';
 
 const forms = (
 
@@ -59,7 +60,8 @@ const forms = (
 
         return newState;
     }
-   //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
+
+    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
     case types.SAVE_FORM_SUCCESS: {
 
         newState.push({
@@ -71,7 +73,8 @@ const forms = (
 
         return newState;
     }
-     //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
+
+    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
     case types.SAVE_FORM_FAILED: {
 
         newState.push({
@@ -104,6 +107,7 @@ const forms = (
         });
         return newState;
     }
+
     case types.SAVING_FORM_ERROR: {
         //  TODO:
         //  because the state object holds both form and record data, make sure the
@@ -117,6 +121,7 @@ const forms = (
         });
         return newState;
     }
+
     case types.SAVING_FORM_SUCCESS: {
         //  TODO:
         //  because the state object holds both form and record data, make sure the
@@ -137,6 +142,26 @@ const forms = (
         });
         return newState;
     }
+
+    case types.MOVE_FIELD :
+        if (!currentForm) {
+            return state;
+        }
+
+        let {newLocation, draggedItemProps} = action.content;
+        let updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.moveField(
+            updatedForm.formData.formMeta,
+            newLocation,
+            draggedItemProps
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+
     default:
         // return existing state by default in redux
         return state;

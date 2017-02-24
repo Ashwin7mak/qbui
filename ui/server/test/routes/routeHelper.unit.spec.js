@@ -177,7 +177,7 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test invalid url', useEeEndpoint: true, url: '/non/parsing/url', expectation: '/non/parsing/url'},
             {name: 'test invalid url - no table id', useEeEndpoint: true, url: '/apps/123/tables', expectation: '/apps/123/tables'},
             {name: 'test invalid url - no table id2', useEeEndpoint: true, url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
-            {name: 'test valid url - id=2', useEeEndpoint: true, url: '/apps/123/tables/456/records/789?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'},
+            {name: 'test valid url - id=2', useEeEndpoint: true, url: '/apps/123/tables/456/records/789/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'},
             {name: 'test valid url', useEeEndpoint: true, url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'},
             {name: 'test valid url - id=1', useEeEndpoint: true, url: '/apps/123/tables/456/formComponents?formType=view', expectation: '/apps/123/tables/456/forms/formType/VIEW'}
         ];
@@ -197,9 +197,9 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
             {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
             {name: 'test invalid url - no table id2', url: '/apps/123/tables/', expectation: '/apps/123/tables/'},
-            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api/api) in record endpoint', url: '/api/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
             {name: 'test valid url with (/api/api) in table endpoint', url: '/api/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'},
-            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456'},
+            {name: 'test valid url with (/api) in record endpoint', url: '/api/apps/123/tables/456/records/789', expectation: '/ee/apps/123/tables/456/records/789'},
             {name: 'test valid url with (/api) in table endpoint', url: '/api/apps/123/tables/456', expectation: '/ee/apps/123/tables/456'}
         ];
 
@@ -460,25 +460,4 @@ describe('Validate RouteHelper unit tests', function() {
             });
         });
     });
-
-    describe('validate getApplicationStackPreferenceRoute method', function() {
-        var testCases = [
-            {name: 'test no app id', appId: '', expectation: '/db'},
-            {name: 'test undefined app id', expectation: '/db'},
-            {name: 'test get app preference with undefined value', appId: '12345', isPost: false, expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test get app preference with value', appId: '12345', isPost: false, value: '1',  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test get app preference with only appId', appId: '12345',  expectation: '/db/12345?a=JBI_GetAdminRedirectToV3'},
-            {name: 'test set app preference with empty value', appId: '12345', isPost: true, value: '',  expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value='},
-            {name: 'test set app preference with undefined value', appId: '12345', isPost: true, expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=undefined'},
-            {name: 'test set app preference', appId: '12345', isPost: true, value: '1', expectation: '/db/12345?a=JBI_SetAdminRedirectToV3&value=1'}
-        ];
-
-        testCases.forEach(function(testCase) {
-            it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getApplicationStackPreferenceRoute(testCase.appId, testCase.isPost, testCase.value), testCase.expectation);
-                done();
-            });
-        });
-    });
-
 });
