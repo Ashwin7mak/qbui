@@ -53,7 +53,7 @@ class FeatureSwitchesRoute extends React.Component {
      */
     selectRow(id, selected) {
 
-        // add or remove selected row to selectedRows
+        // add or remove selected row to selectedIDs
         const selectedIDs = selected ? [...this.state.selectedIDs, id] : _.without(this.state.selectedIDs, id);
 
         // set header checkbox state appropriately
@@ -64,7 +64,7 @@ class FeatureSwitchesRoute extends React.Component {
 
     /**
      * select all rows from header checkbox
-     * @param allSelected
+     * @param allSelected true to select all, false to deselect all
      */
     selectAll(allSelected) {
 

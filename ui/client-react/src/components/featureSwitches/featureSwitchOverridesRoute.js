@@ -1,19 +1,21 @@
 import React from 'react';
-import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
-import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
-import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
-import * as CompConsts from '../../constants/componentConstants';
-import * as edit from 'react-edit';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 
+import * as Table from 'reactabular-table';
+import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
+import * as CompConsts from '../../constants/componentConstants';
+import * as edit from 'react-edit';
+
 import './featureSwitches.scss';
 
+// override the default reactabular body and row rendering which aggressively avoids updates
 const BodyWrapper = props => <tbody {...props} />;
 BodyWrapper.shouldComponentUpdate = true;
 
@@ -27,9 +29,11 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
         this.state = {
             columns: this.getColumns(),
-            selectedRows: [],
+            selectedIDs: [],
             allSelected: false
         } ;
+
+        // need to bind methods since we're an ES6 class
 
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
@@ -38,44 +42,66 @@ class FeatureSwitchOverridesRoute extends React.Component {
         this.deleteSelectedOverrides = this.deleteSelectedOverrides.bind(this);
     }
 
+    /**
+     * select override
+     * @param id
+     * @param selected
+     */
     selectRow(id, selected) {
 
-        let selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
+        let selectedIDs = selected ? [...this.state.selectedIDs, id] : _.without(this.state.selectedIDs, id);
 
-        const allSelected = selectedRows.length === this.props.overrides.length;
+        const allSelected = selectedIDs.length === this.props.overrides.length;
 
-        this.setState({selectedRows, allSelected});
+        this.setState({selectedIDs, allSelected});
     }
 
+    /**
+     * select all
+     * @param allSelected true to select all, false to deselect all
+     */
     selectAll(allSelected) {
 
-        let selectedRows = allSelected ? this.props.overrides.map((override) => override.id) : [];
+        let selectedIDs = allSelected ? this.props.overrides.map((override) => override.id) : [];
 
-        this.setState({selectedRows, allSelected});
+        this.setState({selectedIDs, allSelected});
     }
 
+    /**
+     * turn on/off all selected overrides
+     * @param defaultOn
+     */
     setSelectedOverrideStates(defaultOn) {
-        this.state.selectedRows.forEach((id) => {
+        this.state.selectedIDs.forEach((id) => {
             this.updateOverride(id, FeatureSwitchConsts.OVERRIDE_ON_KEY, defaultOn);
         });
     }
 
+    /**
+     * delete selected overrides
+     */
     deleteSelectedOverrides() {
 
-        this.props.deleteOverrides(this.props.params.id, this.state.selectedRows).then(() => {
+        this.props.deleteOverrides(this.props.params.id, this.state.selectedIDs).then(() => {
 
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesDeleted"), Locale.getMessage('success'),
                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
 
-            this.setState({selectedRows: []});
+            this.setState({selectedIDs: []});
         });
     }
 
+    /**
+     * get feature switch using ID from URL (passed by router)
+     */
     getFeatureSwitch() {
 
         return this.props.switches.find(item => item.id === this.props.params.id);
     }
 
+    /**
+     * create new override
+     */
     createOverride() {
         this.props.createOverride(this.props.params.id, this.props.overrides).then(() => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideCreated"), Locale.getMessage('success'),
@@ -83,7 +109,12 @@ class FeatureSwitchOverridesRoute extends React.Component {
         });
     }
 
-
+    /**
+     * update am override property
+     * @param id override ID
+     * @param property entityType, entityValue, etc.
+     * @param value new value for property
+     */
     updateOverride(id, property, value) {
 
         const overrideToUpdate = this.props.overrides.find(override => override.id === id);
@@ -94,8 +125,13 @@ class FeatureSwitchOverridesRoute extends React.Component {
         });
     }
 
+    /**
+     * get reactabular columns
+     * @returns {[*,*,*,*,*]}
+     */
     getColumns() {
 
+        // react-edit plugin for inline editing
         const editable = edit.edit({
             isEditing: ({columnIndex, rowData}) => columnIndex === rowData.editing,
             onActivate: ({columnIndex, rowData}) => {
@@ -117,7 +153,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedRows.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
+                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedIDs.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
                     ]
                 }
             },
@@ -167,7 +203,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                             const doesOverride = rowData[FeatureSwitchConsts.OVERRIDE_ON_KEY] !== this.getFeatureSwitch()[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY];
 
                             return (<span>
-                                    {doesOverride  ? Locale.getMessage("featureSwitchAdmin.overridesYes") : Locale.getMessage("featureSwitchAdmin.overridesNo") }
+                                    {doesOverride ? Locale.getMessage("featureSwitchAdmin.overridesYes") : Locale.getMessage("featureSwitchAdmin.overridesNo") }
                                 </span>);
                         }
 
@@ -177,6 +213,10 @@ class FeatureSwitchOverridesRoute extends React.Component {
         ];
     }
 
+    /**
+     * load switches if necessary (i.e. we loaded this page from a bookmark) then
+     * use the overrides from the current switch ID (from the URL)
+     */
     componentWillMount() {
 
         if (this.props.switches.length === 0) {
@@ -194,7 +234,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
         if (featureSwitch) {
 
-            const selectedSize = this.state.selectedRows.length;
+            const selectedSize = this.state.selectedIDs.length;
             const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedOverrides")}`;
 
             return (
