@@ -1,5 +1,4 @@
 import * as types from '../actions/types';
-import _ from 'lodash';
 
 const featureSwitches = (
     state = {
@@ -13,6 +12,9 @@ const featureSwitches = (
     // reducer - no mutations!
     switch (action.type) {
     case types.SET_FEATURE_SWITCHES:
+
+        // update switches
+
         return {
             ...state,
             switches: action.switches
@@ -20,24 +22,25 @@ const featureSwitches = (
 
     case types.CREATED_FEATURE_SWITCH: {
 
-        let newSwitch = {...action.feature, overrides: []};
+        // add new switch
+
+        const newSwitch = {...action.feature, overrides: []};
+
         return {
             ...state,
             switches: [...state.switches, newSwitch]
         };
     }
 
-    case types.FEATURE_SWITCHES_DELETED: {
-        return {
-            ...state,
-            switches: state.switches.filter(fs => action.ids.indexOf(fs.id) === -1)
-        };
-    }
-
     case types.EDIT_FEATURE_SWITCH: {
-        const switches = [...state.switches];
+
+        // set editing column on switch with given ID
+
+        const switches = [...state.switches]; // always make a copy
+
         const switchToEdit = switches.find(item => item.id === action.id);
         switchToEdit.editing = action.column;
+
         return {
             ...state,
             switches
@@ -45,10 +48,14 @@ const featureSwitches = (
     }
 
     case types.FEATURE_SWITCH_UPDATED: {
+
+        // update feature switch with given ID with edited property-value
+
         const switches = [...state.switches];
         const switchToConfirmEdit = switches.find(item => item.id === action.id);
-        delete switchToConfirmEdit.editing;
+
         switchToConfirmEdit[action.property] = action.value;
+        switchToConfirmEdit.editing = false;
 
         return {
             ...state,
@@ -56,8 +63,21 @@ const featureSwitches = (
         };
     }
 
+    case types.FEATURE_SWITCHES_DELETED: {
+
+        // keep switches whose ids are not in the deleted ids array
+        return {
+            ...state,
+            switches: state.switches.filter(fs => action.ids.indexOf(fs.id) === -1)
+        };
+    }
+
     // overrides
+
     case types.SET_FEATURE_SWITCH_OVERRIDES: {
+
+        // set the overrides to those of feature switch with given ID
+
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
@@ -65,19 +85,32 @@ const featureSwitches = (
         };
     }
 
+    case types.CREATED_OVERRIDE:
+
+        // add new override
+
+        return {
+            ...state,
+            overrides: [...state.overrides, action.override]
+        };
+
     case types.EDIT_OVERRIDE: {
         const overrides = [...state.overrides];
+
         const overrideToEdit = overrides.find(item => item.id === action.id);
         overrideToEdit.editing = action.column;
+
         return {
             ...state,
             overrides
         };
     }
+
     case types.OVERRIDE_UPDATED: {
         const overrides = [...state.overrides];
+
         const overrideToConfirmEdit = overrides.find(item => item.id === action.id);
-        delete overrideToConfirmEdit.editing;
+        overrideToConfirmEdit.editing;
         overrideToConfirmEdit[action.property] = action.value;
 
         return {
@@ -85,12 +118,6 @@ const featureSwitches = (
             overrides
         };
     }
-
-    case types.CREATED_OVERRIDE:
-        return {
-            ...state,
-            overrides: [...state.overrides, action.override]
-        };
 
     case types.OVERRIDES_DELETED: {
 
