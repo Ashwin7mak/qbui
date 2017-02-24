@@ -12,9 +12,7 @@ import {DropTarget} from 'react-dnd';
 const formTarget = {
     drop(props) {
         return {
-            tabIndex: props.tabIndex,
-            sectionIndex: props.sectionIndex,
-            orderIndex: props.orderIndex
+            location: props.location
         };
     },
 
@@ -22,9 +20,7 @@ const formTarget = {
         let draggableProps = monitor.getItem();
 
         // Make sure a component isn't being dropped on itself
-        return props.tabIndex !== draggableProps.tabIndex ||
-            props.sectionIndex !== draggableProps.sectionIndex ||
-            props.orderIndex !== draggableProps.orderIndex;
+        return props.location !== draggableProps.location;
     }
 };
 
@@ -51,7 +47,7 @@ function collect(connect, monitor) {
  */
 const DroppableElement = FieldComponent => {
     let component = (props) => {
-        const {connectDropTarget, isOver, canDrop} = props;
+        const {connectDropTarget, isOver, canDrop, containingElement} = props;
 
         let classNames = ['droppableField'];
         classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
@@ -64,9 +60,7 @@ const DroppableElement = FieldComponent => {
     };
 
     component.propTypes = {
-        tabIndex: PropTypes.number.isRequired,
-        sectionIndex: PropTypes.number.isRequired,
-        orderIndex: PropTypes.number.isRequired
+        location: PropTypes.object.isRequired
     };
 
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)
