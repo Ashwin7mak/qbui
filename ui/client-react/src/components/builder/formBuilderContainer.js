@@ -66,13 +66,20 @@ export const FormBuilderContainer = React.createClass({
     },
 
     updateScrolling(evt) {
-        console.log('formBuilderContainer:  I have been activated!');
-        console.log('Mouse x: ', evt.clientX, '\nMouse y: ', evt.clientY);
 
-        let clientX = evt.touches[0].clientX;
-        let clientY = evt.touches[0].clientY;
+        let pointerX;
+        let pointerY;
 
-        console.log('touch x: ', clientX, '\ntouchY: ', clientY);
+        if (evt.type === 'touchmove') {
+            pointerX = evt.touches[0].clientX;
+            pointerY = evt.touches[0].clientY;
+            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY);
+        } else {
+            pointerX = evt.clientX;
+            pointerY = evt.clientY;
+            console.log('mouse x: ', pointerX, '\nmouseY: ', pointerY);
+
+        }
 
     },
 
@@ -82,7 +89,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     activateMouseMove() {
-        document.addEventListener("mousemove", this.updateScrolling(evt));
+        document.addEventListener("mousemove", this.updateScrolling);
     },
 
     componentDidMount() {
