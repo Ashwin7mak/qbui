@@ -1,7 +1,6 @@
-import React, {PropTypes, Component} from 'react';
+import React, {PropTypes} from 'react';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
-import {findFormElementKey} from '../../utils/formUtils';
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -22,8 +21,7 @@ const formTarget = {
         let dragItemProps = monitor.getItem();
 
         if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-            let element = dragItemProps.containingElement[findFormElementKey(dragItemProps.containingElement)];
-            dropTargetProps.handleFormReorder(dropTargetProps.location, Object.assign({}, dragItemProps, {element}));
+            dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
         }
     },
 };

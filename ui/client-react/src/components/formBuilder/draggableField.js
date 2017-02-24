@@ -3,7 +3,6 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
-import {findFormElementKey} from '../../utils/formUtils';
 
 /**
  * Specifies event handlers and props that are available during dragging events
@@ -36,8 +35,7 @@ const fieldDragSource = {
             let dropTargetProps = monitor.getDropResult();
 
             if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-                let element = dragItemProps.containingElement[findFormElementKey(dragItemProps.containingElement)];
-                dragItemProps.handleFormReorder(dropTargetProps.location, Object.assign({}, dragItemProps, {element}));
+                dragItemProps.handleFormReorder(dropTargetProps.location, dragItemProps);
             }
         }
     }

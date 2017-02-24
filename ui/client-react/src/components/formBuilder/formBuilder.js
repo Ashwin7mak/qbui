@@ -3,6 +3,9 @@ import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 import TouchBackend from 'react-dnd-touch-backend';
+import {findFormElementKey} from '../../utils/formUtils';
+import _ from 'lodash';
+
 import './formBuilder.scss';
 
 /**
@@ -22,8 +25,9 @@ export class FormBuilder extends Component {
      * @param draggedItemProps
      */
     handleFormReorder(newLocation, draggedItemProps) {
-        if (this.props.moveFieldOnForm) {
-            return this.props.moveFieldOnForm(this.props.formId, newLocation, draggedItemProps);
+        if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
+            let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
+            return this.props.moveFieldOnForm(this.props.formId, newLocation, Object.assign({}, draggedItemProps, {element}));
         }
     }
 
