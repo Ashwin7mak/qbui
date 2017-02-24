@@ -402,6 +402,10 @@ let QBForm = React.createClass({
         let fields = this.props.formData.fields;
         let values = this.props.formData.record;
 
+        if (!fields || !values) {
+            return [];
+        }
+
         const {DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY} = Constants.BUILTIN_FIELD_ID;
         const footerFields = [DATE_CREATED, DATE_MODIFIED, RECORD_OWNER, LAST_MODIFIED_BY];
 
