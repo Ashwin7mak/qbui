@@ -278,7 +278,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                         <span>{selectedSizeLabel}</span>
                     </div>
 
-                    <PageTitle title={[Locale.getMessage('featureSwitchAdmin.featureswitchOverridesTitle'), featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                    <PageTitle title={[Locale.getMessage('featureSwitchAdmin.featureSwitchOverridesTitle'), featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>
             );
         } else {
