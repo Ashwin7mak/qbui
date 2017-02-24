@@ -77,7 +77,7 @@ export const ReportContent = React.createClass({
     },
 
     // row was clicked in the report; navigate to record
-    openRow(recId, navigateAfterSave = false, nextOrPreviousEdit = '') {
+    openRow(recId) {
         //  data is the row object...get the record id
         //let recId = data[key].value;
 
@@ -110,7 +110,7 @@ export const ReportContent = React.createClass({
         // let flux know we've drilled-down into a record so we can navigate back and forth
         //let flux = this.getFlux();
         //flux.actions.openingReportRow(recId);
-        this.props.openRecord(recId, nextRecordId, previousRecordId, navigateAfterSave, nextOrPreviousEdit);
+        this.props.openRecord(recId, nextRecordId, previousRecordId);
     },
 
     /**
@@ -554,7 +554,7 @@ export const ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEditInTrowser(recordId) {
-        this.openRow(recordId, true);
+        this.openRow(recordId);
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
@@ -1120,8 +1120,8 @@ const mapDispatchToProps = (dispatch) => {
         updateReportRecord: (obj, context) => {
             dispatch(updateReportRecord(obj, context));
         },
-        openRecord:(recId, nextRecordId, prevRecordId, navigateAfterSave, nextOrPreviousEdit) => {
-            dispatch(openRecord(recId, nextRecordId, prevRecordId, navigateAfterSave, nextOrPreviousEdit));
+        openRecord:(recId, nextRecordId, prevRecordId) => {
+            dispatch(openRecord(recId, nextRecordId, prevRecordId));
         },
         editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
             dispatch(editRecordStart(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing));

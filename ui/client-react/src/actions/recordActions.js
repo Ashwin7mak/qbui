@@ -506,16 +506,31 @@ function createEventObject(appId, tblId, recId, origRec, changes, isInlineEdit, 
     };
 }
 
-export const openRecord = (recId, nextRecordId, previousRecordId, navigateAfterSave, nextOrPreviousEdit) => {
-    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId, navigateAfterSave, nextOrPreviousEdit});
+/**
+ * Open a record for view or edit.  This will set the current record, previous and
+ * next record for navigation when viewing/editing record detail
+ *
+ * @param recId
+ * @param nextRecordId
+ * @param previousRecordId
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
+export const openRecord = (recId, nextRecordId, previousRecordId) => {
+    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
 };
 
-//export const editRecord = (recId, nextRecordId, previousRecordId, navigateAfterSave) => {
-//    return event(recId, types.EDIT_RECORD, {recId, nextRecordId, previousRecordId, navigateAfterSave});
-//};
-
-//recordPendingEditsStart
-/* the start of editing a record */
+/**
+ * Action called when initiating inline edit of a record from the grid.
+ *
+ * @param appId
+ * @param tblId
+ * @param recId
+ * @param origRec
+ * @param changes
+ * @param isInlineEdit
+ * @param fieldToStartEditing
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
 export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
     //let model = new RecordModel();
     let obj = createEventObject(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing);
@@ -524,7 +539,16 @@ export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineE
     return event(recId, types.EDIT_RECORD_START, obj);
 };
 
-/* the change of a field while editing a record */
+/**
+ * Action called when inline editing a record and changing a field element.
+ *
+ * @param appId
+ * @param tblId
+ * @param recId
+ * @param origRec
+ * @param changes
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
 export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
     //let model = new RecordModel();
     //model.setEditRecordChange(appId, tblId, recId, origRec, changes);
@@ -535,7 +559,14 @@ export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
     return event(recId, types.EDIT_RECORD_CHANGE, obj);
 };
 
-/* cancel editing a record */
+/**
+ * Cancel inline edit of record
+ *
+ * @param appId
+ * @param tblId
+ * @param recId
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
 export const editRecordCancel = (appId, tblId, recId) => {
     //let model = new RecordModel();
     //model.setEditRecordCancel();
@@ -543,14 +574,29 @@ export const editRecordCancel = (appId, tblId, recId) => {
     return event(recId, types.EDIT_RECORD_CANCEL, {appId, tblId, recId});
 };
 
-//recordPendingEditsCommit
-/* committing changes from editing a record */
+/**
+ * Commit/save changes made to a record from inline edit
+ *
+ * @param appId
+ * @param tblId
+ * @param recId
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
 export const editRecordCommit = (appId, tblId, recId) => {
     return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
 };
 
-//recordPendingValidateField
-/* validate a field when editing a record */
+
+/**
+ * Validates a record when inline editing
+ *
+ * @param recId
+ * @param fieldDef
+ * @param fieldLabel
+ * @param value
+ * @param checkRequired
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
 export const editRecordValidateField = (recId, fieldDef, fieldLabel, value, checkRequired) => {
     return event(recId, types.EDIT_RECORD_VALIDATE_FIELD, {recId, fieldDef, fieldLabel, value, checkRequired});
 };

@@ -82,17 +82,6 @@ const record = (state = [], action) => {
             };
             return newState(obj);
         }
-        //case types.EDIT_RECORD: {
-        //    const obj = {
-        //        id: action.id,
-        //        recId: action.content.recId,
-        //        nextEditRecordId: action.content.nextRecordId,
-        //        previousEditRecordId: action.content.previousRecordId,
-        //        nextOrPreviousEdit: action.nextOrPrevious,
-        //        navigateAfterSave: action.navigateAfterSave
-        //    };
-        //    return newState(obj);
-        //}
         case types.SAVE_RECORD: {
             const obj = {
                 id: action.id,
@@ -154,6 +143,7 @@ const record = (state = [], action) => {
             //  store with the record.
             const currentRecd = getRecordFromState(action.id);
             if (_.has(currentRecd, 'pendEdits') && currentRecd.pendEdits.isPendingEdit) {
+                //TODO: move into model method?
                 const pendEdits = currentRecd.pendEdits;
                 let entry = getEntryKey(pendEdits);
                 if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
@@ -171,6 +161,7 @@ const record = (state = [], action) => {
         case types.EDIT_RECORD_VALIDATE_FIELD: {
             const currentRecd = getRecordFromState(action.id);
             if (currentRecd && _.has(currentRecd, 'pendEdits')) {
+                //TODO: move into model method?
                 let content = action.content;
                 let pendEdits = currentRecd.pendEdits;
                 let recentlyChangedFieldId = (_.has(content, 'fieldDef') ? content.fieldDef.id : null);

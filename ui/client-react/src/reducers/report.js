@@ -46,6 +46,13 @@ const report = (state = [], action) => {
         return stateList;
     }
 
+    /**
+     * Search the state list for the report id.  If found, will
+     * return a cloned object.
+     *
+     * @param id
+     * @returns {*}
+     */
     function getReportFromState(id) {
         const index = _.findIndex(state, rpt => rpt.id === id);
         if (index !== -1) {
@@ -119,53 +126,56 @@ const report = (state = [], action) => {
         return state;
     }
     case types.UPDATE_REPORT_RECORD: {
-        const id = action.id;
-        const currentReport = _.find(state, rpt => rpt.id === id);
-        let updatedReport = _.cloneDeep(currentReport);
-
-        let record = null;
-        let filtRecord = null;
-        if (updatedReport.data.hasGrouping) {
-            record = ReportUtils.findGroupedRecord(updatedReport.data.records, action.content.recId, updatedReport.data.keyField.name);
-            filtRecord = ReportUtils.findGroupedRecord(updatedReport.data.filteredRecords, action.content.recId, updatedReport.data.keyField.name);
-        } else {
-            record = findRecordById(updatedReport.data.records, action.content.recId, updatedReport.data.hasGrouping, updatedReport.data.keyField);
-            filtRecord = findRecordById(updatedReport.data.filteredRecords, action.content.recId, updatedReport.data.hasGrouping, updatedReport.data.keyField);
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            updateReportRecord(currentReport);
+            return newState(currentReport);
         }
-
-        // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
-        // formatRecordValues will add all display values
-        // patch the previously created skeleton of record with the newRecord values
-        let formattedRec = formatRecord(action.content.record, updatedReport.data.fields);
-
-        //formatRecordValues(formattedRec, updatedReport.data.fields);
-
-        //  update each cell in the report grid with the updated record data
-        Object.keys(formattedRec).forEach((fieldName) => {
-            //  update the record list
-            if (record && record[fieldName] && formattedRec[fieldName]) {
-                record[fieldName].value = formattedRec[fieldName].value;
-                if (formattedRec[fieldName].display !== undefined) {
-                    record[fieldName].display = formattedRec[fieldName].display;
-                }
-            }
-            //  update the filtered list
-            if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
-                filtRecord[fieldName].value = formattedRec[fieldName].value;
-                if (formattedRec[fieldName].display !== undefined) {
-                    filtRecord[fieldName].display = formattedRec[fieldName].display;
-                }
-            }
-        });
-
-
-        return newState(updatedReport);
+        return state;
     }
     default:
         // by default, return existing state
         return state;
     }
 };
+
+function updateReportRecord(currentReport) {
+    let record = null;
+    let filtRecord = null;
+    if (currentReport.data.hasGrouping) {
+        record = ReportUtils.findGroupedRecord(currentReport.data.records, action.content.recId, currentReport.data.keyField.name);
+        filtRecord = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, action.content.recId, currentReport.data.keyField.name);
+    } else {
+        record = findRecordById(currentReport.data.records, action.content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
+        filtRecord = findRecordById(currentReport.data.filteredRecords, action.content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
+    }
+
+    // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
+    // formatRecordValues will add all display values
+    // patch the previously created skeleton of record with the newRecord values
+    let formattedRec = formatRecord(action.content.record, currentReport.data.fields);
+
+    //TODO: really want to avoid formatting as the individual components should be handling this rqeuirement
+    //formatRecordValues(formattedRec, currentReport.data.fields);
+
+    //  update each cell in the report grid with the updated record data
+    Object.keys(formattedRec).forEach((fieldName) => {
+        //  update the record list
+        if (record && record[fieldName] && formattedRec[fieldName]) {
+            record[fieldName].value = formattedRec[fieldName].value;
+            if (formattedRec[fieldName].display !== undefined) {
+                record[fieldName].display = formattedRec[fieldName].display;
+            }
+        }
+        //  update the filtered list
+        if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
+            filtRecord[fieldName].value = formattedRec[fieldName].value;
+            if (formattedRec[fieldName].display !== undefined) {
+                filtRecord[fieldName].display = formattedRec[fieldName].display;
+            }
+        }
+    });
+}
 
 function formatRecord(record, fields) {
     let formattedRec = {};
@@ -188,6 +198,7 @@ function findRecordById(records, recId, hasGrouping, keyField) {
         return records.find(rec => rec[keyField.name].value == recId);
     }
 }
+
 
 //function formatRecordValues(newRecord, fields) {
 //    Object.keys(newRecord).forEach((key) => {
