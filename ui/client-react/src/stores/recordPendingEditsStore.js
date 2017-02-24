@@ -19,11 +19,11 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
     initialize() {
         this.bindActions(
-            actions.RECORD_EDIT_START, this.onRecordEditStart,
-            actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
-            actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
-            actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
-            actions.RECORD_EDIT_VALIDATE_FIELD, this.onRecordEditValidateField,
+            //actions.RECORD_EDIT_START, this.onRecordEditStart,
+            //actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
+            //actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
+            //actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
+            //actions.RECORD_EDIT_VALIDATE_FIELD, this.onRecordEditValidateField,
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
@@ -77,35 +77,35 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      *      or
      *      changes - if adding a new record the initial default new record values
      */
-    onRecordEditStart(payload) {
-        if (typeof (payload.recId) !== 'undefined') {
-            this.currentEditingRecordId = payload.recId;
-            this.currentEditingAppId = payload.appId;
-            this.currentEditingTableId = payload.tblId;
-            this.recordChanges =  _.cloneDeep(payload.changes);
-            this.originalRecord = _.cloneDeep(payload.origRec);
-            // fieldToStartEditing is an optional parameter that will set that field to have focus when the record goes into editing mode
-            this.fieldToStartEditing = payload.fieldToStartEditing;
-        } else {
-            this.currentEditingRecordId = undefined;
-            this.currentEditingAppId = undefined;
-            this.currentEditingTableId = undefined;
-            this.recordChanges = payload.changes ? _.cloneDeep(payload.changes) : {};
-            this.originalRecord = undefined;
-        }
-        //TODO when a record gets into edit state it might already have errors so this should be populated with those
-        this.editErrors = {
-            ok: true,
-            errors:[]
-        };
-        this.recordEditOpen = true;
-
-        if (payload.isInlineEdit) {
-            this.isInlineEditOpen = true;
-        }
-
-        this.emit('change');
-    },
+    //onRecordEditStart(payload) {
+    //    if (typeof (payload.recId) !== 'undefined') {
+    //        this.currentEditingRecordId = payload.recId;
+    //        this.currentEditingAppId = payload.appId;
+    //        this.currentEditingTableId = payload.tblId;
+    //        this.recordChanges =  _.cloneDeep(payload.changes);
+    //        this.originalRecord = _.cloneDeep(payload.origRec);
+    //        // fieldToStartEditing is an optional parameter that will set that field to have focus when the record goes into editing mode
+    //        this.fieldToStartEditing = payload.fieldToStartEditing;
+    //    } else {
+    //        this.currentEditingRecordId = undefined;
+    //        this.currentEditingAppId = undefined;
+    //        this.currentEditingTableId = undefined;
+    //        this.recordChanges = payload.changes ? _.cloneDeep(payload.changes) : {};
+    //        this.originalRecord = undefined;
+    //    }
+    //    //TODO when a record gets into edit state it might already have errors so this should be populated with those
+    //    this.editErrors = {
+    //        ok: true,
+    //        errors:[]
+    //    };
+    //    this.recordEditOpen = true;
+    //
+    //    if (payload.isInlineEdit) {
+    //        this.isInlineEditOpen = true;
+    //    }
+    //
+    //    this.emit('change');
+    //},
 
     /**
      * Checks if a field actually has changes (i.e., prevents change detection if a user picks the same item from a
@@ -113,20 +113,20 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @param payload
      * @returns {boolean}
      */
-    _hasChanges(payload) {
-        if (_.has(payload, 'changes.values') && _.has(this.originalRecord, 'fids')) {
-            return (
-                // If the new and previous values are the same, but different from the original, then the change
-                // has already been registered by pendEdits. Therefore, we check to make sure the change is different
-                // from both the previous value AND the original value.
-                this._isDifferentThanOriginalFieldValue(payload) && this._isDifferentThanPreviousValue(payload)
-            );
-        }
-
-        // Assume there was a change if not all required properties are present.
-        // This is primarily for testing purposes.
-        return true;
-    },
+    //_hasChanges(payload) {
+    //    if (_.has(payload, 'changes.values') && _.has(this.originalRecord, 'fids')) {
+    //        return (
+    //            // If the new and previous values are the same, but different from the original, then the change
+    //            // has already been registered by pendEdits. Therefore, we check to make sure the change is different
+    //            // from both the previous value AND the original value.
+    //            this._isDifferentThanOriginalFieldValue(payload) && this._isDifferentThanPreviousValue(payload)
+    //        );
+    //    }
+    //
+    //    // Assume there was a change if not all required properties are present.
+    //    // This is primarily for testing purposes.
+    //    return true;
+    //},
 
     /**
      * Checks if the newest value is different than the previous one
@@ -134,23 +134,23 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @returns {boolean}
      * @private
      */
-    _isDifferentThanPreviousValue(payload) {
-        let {newVal, oldVal} = payload.changes.values;
-
-        // We treat '', null, undefined as equivalent since it represents a blank input or a
-        // dropdown with no selection.
-        const isOldValFalsy = !oldVal || (oldVal && !oldVal.value && oldVal.value !== 0);
-        const isNewValFalsy = !newVal || (newVal && !newVal.value && newVal.value !== 0);
-        if (isOldValFalsy && isNewValFalsy) {
-            // both oldValue and newValue is falsy, no change
-            return false;
-        } else if (isOldValFalsy || isNewValFalsy) {
-            // when only one of newValue or oldValue is falsy
-            return true;
-        } else {
-            return (!_.isEqual(newVal.value, oldVal.value));
-        }
-    },
+    //_isDifferentThanPreviousValue(payload) {
+    //    let {newVal, oldVal} = payload.changes.values;
+    //
+    //    // We treat '', null, undefined as equivalent since it represents a blank input or a
+    //    // dropdown with no selection.
+    //    const isOldValFalsy = !oldVal || (oldVal && !oldVal.value && oldVal.value !== 0);
+    //    const isNewValFalsy = !newVal || (newVal && !newVal.value && newVal.value !== 0);
+    //    if (isOldValFalsy && isNewValFalsy) {
+    //        // both oldValue and newValue is falsy, no change
+    //        return false;
+    //    } else if (isOldValFalsy || isNewValFalsy) {
+    //        // when only one of newValue or oldValue is falsy
+    //        return true;
+    //    } else {
+    //        return (!_.isEqual(newVal.value, oldVal.value));
+    //    }
+    //},
 
     /**
      * Checks if the newest value is different than the original record
@@ -216,26 +216,26 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      *          values - {oldVal : {}, newVal : {}
      *          fieldName - name of the field that has a new value
      */
-    onRecordEditChangeField(payload) {
-        if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
-            this.recordChanges[payload.changes.fid] = {};
-        }
-
-        if (this._hasChanges(payload)) {
-            this.recordChanges =  _.cloneDeep(this.recordChanges);
-            this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
-            this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
-            this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
-            this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
-            this.currentEditingAppId = payload.appId;
-            this.currentEditingTableId = payload.tblId;
-            this.currentEditingRecordId = payload.recId;
-            this.isPendingEdit = true;
-            this.emit('change');
-        } else {
-            this._removePriorChangesIfTheyExist(payload);
-        }
-    },
+    //onRecordEditChangeField(payload) {
+    //    if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
+    //        this.recordChanges[payload.changes.fid] = {};
+    //    }
+    //
+    //    if (this._hasChanges(payload)) {
+    //        this.recordChanges =  _.cloneDeep(this.recordChanges);
+    //        this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
+    //        this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
+    //        this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
+    //        this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
+    //        this.currentEditingAppId = payload.appId;
+    //        this.currentEditingTableId = payload.tblId;
+    //        this.currentEditingRecordId = payload.recId;
+    //        this.isPendingEdit = true;
+    //        this.emit('change');
+    //    } else {
+    //        this._removePriorChangesIfTheyExist(payload);
+    //    }
+    //},
 
     /**
      * Remove an error from editErrors.errors by the field id
@@ -305,39 +305,39 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     /**
      * On the cancellation of pending edit
      */
-    onRecordEditCancel() {
-        // record wasn't saved nothing pending
-
-        if (this.isInlineEditOpen) {
-            this.isInlineEditOpen = false;
-        }
-        this.recordEditOpen = false;
-        this._initData();
-        this.emit('change');
-    },
+    //onRecordEditCancel() {
+    //    // record wasn't saved nothing pending
+    //
+    //    if (this.isInlineEditOpen) {
+    //        this.isInlineEditOpen = false;
+    //    }
+    //    this.recordEditOpen = false;
+    //    this._initData();
+    //    this.emit('change');
+    //},
 
     /**
      * On request to save pending changes to an existing record
      * @param payload
      *  - recId that has changed
      */
-    onRecordEditSave(payload) {
-        if (this.isPendingEdit) {
-            //keep list of changes made to records
-            this.currentEditingRecordId = payload.recId;
-            let entry = this._getEntryKey();
-            if (typeof (this.commitChanges[entry]) === 'undefined') {
-                this.commitChanges[entry] = {};
-            }
-            if (typeof (this.commitChanges[entry].changes) === 'undefined') {
-                this.commitChanges[entry].changes = [];
-            }
-            this.commitChanges[entry].changes.push(this.recordChanges);
-            this.commitChanges[entry].status = '...'; //status is pending response from server
-
-            this.emit('change');
-        }
-    },
+    //onRecordEditSave(payload) {
+    //    if (this.isPendingEdit) {
+    //        //keep list of changes made to records
+    //        this.currentEditingRecordId = payload.recId;
+    //        let entry = this._getEntryKey();
+    //        if (typeof (this.commitChanges[entry]) === 'undefined') {
+    //            this.commitChanges[entry] = {};
+    //        }
+    //        if (typeof (this.commitChanges[entry].changes) === 'undefined') {
+    //            this.commitChanges[entry].changes = [];
+    //        }
+    //        this.commitChanges[entry].changes.push(this.recordChanges);
+    //        this.commitChanges[entry].status = '...'; //status is pending response from server
+    //
+    //        this.emit('change');
+    //    }
+    //},
 
     /**
      * On saving changes debug log changes

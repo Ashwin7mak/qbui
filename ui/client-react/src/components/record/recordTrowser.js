@@ -381,14 +381,17 @@ export const RecordTrowser = React.createClass({
     },
 
     getPendEdits() {
-        let pendEdits = {};
-        //  TODO: just getting to work....improve this to support multi records...
+        return this.getRecord().pendEdits || {};
+    },
+
+    getRecord() {
+        let record = {};
         if (Array.isArray(this.props.record) && this.props.record.length > 0) {
             if (_.isEmpty(this.props.record[0]) === false) {
-                pendEdits = this.props.record[0].pendEdits || {};
+                record = this.props.record[0];
             }
         }
-        return pendEdits;
+        return record;
     },
 
     /**
