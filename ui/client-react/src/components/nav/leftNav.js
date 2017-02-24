@@ -1,11 +1,7 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
-import {Tooltip, OverlayTrigger, Button} from 'react-bootstrap';
-import {Link} from 'react-router';
+import Button from 'react-bootstrap/lib/Button';
 import Loader  from 'react-loader';
-import {I18nMessage} from '../../utils/i18nMessage';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import GlobalActions from '../actions/globalActions';
 import AppsList from './appsList';
 import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
