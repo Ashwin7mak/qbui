@@ -316,7 +316,7 @@ export const updateOverride = (featureSwitchId, id, override, property, value) =
             const edited = getOverridePersistProps(override);
 
             // update edited property
-            const[property] = value;
+            edited[property] = value;
 
             const promise = featureSwitchService.updateOverride(featureSwitchId, id, edited);
 
