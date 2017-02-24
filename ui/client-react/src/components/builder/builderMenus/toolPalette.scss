@@ -6,6 +6,10 @@
     width: 220px;
     background-color: $color-black-250;
 
+    @include small-breakpoint {
+        display: none;
+    }
+
     @include medium-breakpoint {
         width: $leftNav-width-medium-breakpoint;
     }
