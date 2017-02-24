@@ -19,7 +19,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
-import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
+import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 
@@ -246,8 +246,6 @@ export const RecordRoute = React.createClass({
         this.navigateToRecord(record.recId);
 
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, record.recId);
-
-        //this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
 
     /**
@@ -378,9 +376,6 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        //openRecordForEdit: (recId) => {
-        //    dispatch(openRecordForEdit(recId));
-        //},
         editNewRecord: () => {
             dispatch(editNewRecord());
         },

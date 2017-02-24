@@ -108,27 +108,6 @@ export const saveFormSuccess = (id) => {
 };
 
 
-//TODO: move into record action...
-/**
- * open an existing record for editing
- * @param recId
- * @returns {{type, recId: *}}
- *
- * TODO: move to redux record
- */
-export const openRecordForEdit = (recId) => {
-    // add editRec query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
-
-    // let store know we're editing a record so we can navigate back and forth
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: recId,
-    };
-};
-
-
 /**
  * open a new record for editing
  * @param navigateAfterSave go to the new record after saving

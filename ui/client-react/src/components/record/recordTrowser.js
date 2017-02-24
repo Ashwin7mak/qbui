@@ -15,7 +15,7 @@ import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
-import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
+import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {updateReportRecord} from '../../actions/reportActions';
 import {openRecord, editRecordCancel, editRecordCommit} from '../../actions/recordActions';
@@ -262,16 +262,6 @@ export const RecordTrowser = React.createClass({
     previousRecord() {
         const record = this.getRecordFromProps(this.props);
         this.navigateToRecord(record.previousRecordId);
-
-        //const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
-        //
-        //// TODO: move to REDUX
-        //
-        //// let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        //let flux = this.getFlux();
-        //flux.actions.editPreviousRecord(previousEditRecordId);
-        //
-        //this.props.openRecordForEdit(previousEditRecordId);
     },
 
     /**
@@ -280,15 +270,6 @@ export const RecordTrowser = React.createClass({
     nextRecord() {
         const record = this.getRecordFromProps(this.props);
         this.navigateToRecord(record.nextRecordId);
-        //const {appId, tblId, rptId, nextEditRecordId} = this.props.reportData;
-        //
-        //// TODO: move to REDUX
-        //
-        //// let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        //let flux = this.getFlux();
-        //flux.actions.editNextRecord(nextEditRecordId);
-        //
-        //this.props.openRecordForEdit(nextEditRecordId);
     },
 
     navigateToRecord(recId) {
@@ -305,8 +286,6 @@ export const RecordTrowser = React.createClass({
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                 this.props.openRecord(recId, nextRecordId, previousRecordId);
-                //this.props.openRecordForEdit(recId);
-
                 WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
             }
         }
@@ -491,9 +470,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        openRecordForEdit: (recId) => {
-            dispatch(openRecordForEdit(recId));
-        },
         savingForm: (formType) => {
             dispatch(savingForm(formType));
         },
