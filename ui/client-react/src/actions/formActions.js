@@ -108,6 +108,7 @@ export const saveFormSuccess = (id) => {
 };
 
 
+//TODO: move into record action...
 /**
  * open an existing record for editing
  * @param recId
@@ -126,6 +127,7 @@ export const openRecordForEdit = (recId) => {
         recId: recId,
     };
 };
+
 
 /**
  * open a new record for editing

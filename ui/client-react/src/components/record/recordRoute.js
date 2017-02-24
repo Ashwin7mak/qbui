@@ -15,12 +15,13 @@ import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord, openRecordForEdit} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
-import {APP_ROUTE, BUILDER_ROUTE} from '../../constants/urlConstants';
+import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 
 
 import './record.scss';
@@ -143,7 +144,7 @@ export const RecordRoute = React.createClass({
 
     navigateToRecord(recId) {
         if (recId) {
-            const {appId, tblId, rptId, data} = this.props.reportData;
+            const {data} = this.props.reportData;
             const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
             if (key) {
                 let recordsArray = this.getRecordsArray();
@@ -154,9 +155,6 @@ export const RecordRoute = React.createClass({
                 let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
                 this.props.openRecord(recId, nextRecordId, previousRecordId);
-
-                const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-                this.props.router.push(link);
             }
         }
     },
@@ -167,6 +165,10 @@ export const RecordRoute = React.createClass({
     previousRecord() {
         const record = this.getRecordFromProps(this.props);
         this.navigateToRecord(record.previousRecordId);
+
+        const {appId, tblId, rptId} = this.props.reportData;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.previousRecordId}`;
+        this.props.router.push(link);
     },
 
     /**
@@ -175,6 +177,10 @@ export const RecordRoute = React.createClass({
     nextRecord() {
         const record = this.getRecordFromProps(this.props);
         this.navigateToRecord(record.nextRecordId);
+
+        const {appId, tblId, rptId} = this.props.reportData;
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${record.nextRecordId}`;
+        this.props.router.push(link);
     },
 
     getTitle() {
@@ -236,7 +242,12 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     openRecordForEdit() {
-        this.props.openRecordForEdit(parseInt(this.props.params.recordId));
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.recId);
+
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, record.recId);
+
+        //this.props.openRecordForEdit(parseInt(this.props.params.recordId));
     },
 
     /**
@@ -367,9 +378,9 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        openRecordForEdit: (recId) => {
-            dispatch(openRecordForEdit(recId));
-        },
+        //openRecordForEdit: (recId) => {
+        //    dispatch(openRecordForEdit(recId));
+        //},
         editNewRecord: () => {
             dispatch(editNewRecord());
         },

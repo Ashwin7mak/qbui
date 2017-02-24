@@ -76,19 +76,23 @@ const record = (state = [], action) => {
                 id: action.id,
                 recId: action.content.recId,
                 nextRecordId: action.content.nextRecordId,
-                previousRecordId: action.content.previousRecordId
+                previousRecordId: action.content.previousRecordId,
+                navigateAfterSave: action.navigateAfterSave || false,
+                nextOrPreviousEdit: action.nextOrPreviousEdit || ''
             };
             return newState(obj);
         }
-        case types.EDIT_RECORD: {
-            const obj = {
-                id: action.id,
-                recId: action.content.recId,
-                nextRecordId: action.content.nextRecordId,
-                previousRecordId: action.content.previousRecordId
-            };
-            return newState(obj);
-        }
+        //case types.EDIT_RECORD: {
+        //    const obj = {
+        //        id: action.id,
+        //        recId: action.content.recId,
+        //        nextEditRecordId: action.content.nextRecordId,
+        //        previousEditRecordId: action.content.previousRecordId,
+        //        nextOrPreviousEdit: action.nextOrPrevious,
+        //        navigateAfterSave: action.navigateAfterSave
+        //    };
+        //    return newState(obj);
+        //}
         case types.SAVE_RECORD: {
             const obj = {
                 id: action.id,

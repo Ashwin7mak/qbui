@@ -1,11 +1,18 @@
 import React from 'react';
 import Locale from '../../locales/locales';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import Fluxxor from "fluxxor";
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {connect} from 'react-redux';
-import {openRecordForEdit} from '../../actions/formActions';
+import {openRecord} from '../../actions/recordActions';
+import {CONTEXT} from '../../actions/context';
+import FieldUtils from '../../utils/fieldUtils';
+import _ from 'lodash';
 import './reportActions.scss';
+
+import {EDIT_RECORD_KEY} from '../../constants/urlConstants';
+
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -72,15 +79,92 @@ export let ReportActions = React.createClass({
     },
 
     /**
+     * do a depth first search of the grouped records array, adding records
+     * to arr so we can determine next/prev records
+     * TODO: this is duplicated in reportContent..should be refactored out
+     * TODY: into shared function
+     * @param arr
+     * @param groups
+     */
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
+
+    getRecordsArray(data) {
+        //  TODO: get from store
+        const {filteredRecords, hasGrouping} = data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
+        }
+        return recordsArray;
+    },
+
+    navigateToRecord(recId) {
+        if (recId) {
+            //  TODO: get from store
+            const {data} = this.getReport();
+            const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+            if (key) {
+                let recordsArray = this.getRecordsArray(data);
+
+                //  fetch the index of the row in the recordsArray that is being opened
+                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+
+                this.props.openRecord(recId, nextRecordId, previousRecordId);
+            }
+        }
+    },
+    /**
      * edit icon was clicked
      */
     onEditClicked() {
 
         if (this.props.selection && this.props.selection.length === 1) {
+            const recordId = this.getRecordIdFromReport(this.props);
+            this.navigateToRecord(recordId);
+            WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
 
-            const recordId = this.props.selection[0];
-            this.props.dispatch(openRecordForEdit(recordId));
+            //this.props.dispatch(openRecordForEdit(record.recId));
         }
+    },
+
+    getReport() {
+        return _.find(this.props.report, function(rpt) {
+            return rpt.id === CONTEXT.REPORT.NAV;
+        });
+    },
+
+    getRecordIdFromReport() {
+        //  find the report loaded for the navigation context
+        let report = this.getReport();
+
+        //  find the record
+        const selectedRow = report.selectedRows;
+        if (selectedRow && selectedRow.length === 1) {
+            const selectedRecId = selectedRow[0];
+
+            const key = FieldUtils.getPrimaryKeyFieldName(report.data);
+            let record = _.find(report.data.records, function(rec) {
+                return rec[key].value === selectedRecId;
+            });
+            return record[key].id;
+        }
+        return null;
     },
 
     /**
@@ -116,6 +200,7 @@ export let ReportActions = React.createClass({
         //                        body={this.getEmailBody()}/>;
         return <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.email")} disabled={true}/>;
     },
+
     /**
      * render the actions, omitting 'edit' if we have multiple selections
      */
@@ -143,5 +228,23 @@ export let ReportActions = React.createClass({
     }
 });
 
-// export the react-redux connected wrapper (which injects the dispatch function as a prop)
-export default connect()(ReportActions);
+const mapStateToProps = (state) => {
+    return {
+        report: state.report
+    };
+};
+
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        openRecord: (recId, nextId, prevId) => {
+            dispatch(openRecord(recId, nextId, prevId));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportActions);
