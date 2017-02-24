@@ -117,10 +117,16 @@
 
                         if (featureSwitch) {
                             override.id = uuid.v4();
-                            featureSwitch.overrides.push(override);
+
+                            if (featureSwitch.overrides)  {
+                                featureSwitch.overrides.push(override);
+                            } else {
+                                featureSwitch.overrides = [override];
+                            }
+
                             saveSwitchesMockData();
                         }
-                        resolve();
+                        resolve(override.id);
 
                     } else {
                         resolve(); // todo
@@ -139,7 +145,7 @@
 
                         let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
-                        if (featureSwitch && override) {
+                        if (featureSwitch && overrideData) {
                             let index = _.findIndex(featureSwitch.overrides, function(override) {
                                 return override.id === overrideId;
                             });
