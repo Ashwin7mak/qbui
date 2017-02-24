@@ -632,6 +632,12 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            nodeVer: {
+                command: 'node -v',
+                options: {
+                    execOptions: {}
+                }
+            },
             modulesPrune: {
                 command: 'npm prune --production',
                 options: {
@@ -1009,6 +1015,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('build', [
+        'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
         'logGitState',
