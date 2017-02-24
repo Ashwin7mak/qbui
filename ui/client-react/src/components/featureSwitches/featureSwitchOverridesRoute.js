@@ -56,7 +56,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
     setSelectedOverrideStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.updateOverride(id, FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY, defaultOn);
+            this.updateOverride(id, FeatureSwitchConsts.OVERRIDE_ON_KEY, defaultOn);
         });
     }
 
@@ -122,7 +122,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             },
             {
-                property: FeatureSwitchConsts.FEATURE_OVERRIDE_TYPE_KEY,
+                property: FeatureSwitchConsts.OVERRIDE_TYPE_KEY,
                 header: {
                     label: Locale.getMessage("featureSwitchAdmin.overrideType"),
                 },
@@ -131,7 +131,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             },
             {
-                property: FeatureSwitchConsts.FEATURE_OVERRIDE_VALUE_KEY,
+                property: FeatureSwitchConsts.OVERRIDE_VALUE_KEY,
                 header: {
                     label: Locale.getMessage("featureSwitchAdmin.overrideValue"),
                 },
@@ -140,7 +140,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             },
             {
-                property: FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY,
+                property: FeatureSwitchConsts.OVERRIDE_ON_KEY,
                 header: {
                     label: Locale.getMessage("featureSwitchAdmin.onOff"),
                 },
@@ -150,7 +150,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                             return (
                              <ToggleButton value={value}
                                               onToggle={(newValue) => {
-                                                  this.updateOverride(rowData.id, FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY, !newValue);
+                                                  this.updateOverride(rowData.id, FeatureSwitchConsts.OVERRIDE_ON_KEY, !newValue);
                                               }}/>);
                         }
 
@@ -164,7 +164,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 cell: {
                     formatters: [
                         (value, {rowData}) => {
-                            const doesOverride = rowData[FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY] !== this.getFeatureSwitch()[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY];
+                            const doesOverride = rowData[FeatureSwitchConsts.OVERRIDE_ON_KEY] !== this.getFeatureSwitch()[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY];
 
                             return (<span>
                                     {doesOverride  ? Locale.getMessage("featureSwitchAdmin.overridesYes") : Locale.getMessage("featureSwitchAdmin.overridesNo") }

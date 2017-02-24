@@ -7,7 +7,7 @@ class FeatureSwitchService extends BaseService {
     constructor() {
         super();
 
-        //  Record service API endpoints
+        //  Feature switch service API endpoints
         this.API = {
             GET_FEATURE_SWITCHES    : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
             POST_FEATURE_SWITCH     : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`,
@@ -23,44 +23,47 @@ class FeatureSwitchService extends BaseService {
     }
 
     getFeatureSwitches() {
-        let params = {};
-
-        let url = super.constructUrl(this.API.GET_FEATURE_SWITCHES, []);
+        const params = {};
+        const url = super.constructUrl(this.API.GET_FEATURE_SWITCHES, []);
 
         return super.get(url, {params});
     }
 
     createFeatureSwitch(feature) {
-        let url = super.constructUrl(this.API.POST_FEATURE_SWITCH);
+        const url = super.constructUrl(this.API.POST_FEATURE_SWITCH);
+
         return super.post(url, {feature});
     }
 
     updateFeatureSwitch(feature) {
-        let url = super.constructUrl(this.API.PUT_FEATURE_SWITCH,  [feature.id]);
+        const url = super.constructUrl(this.API.PUT_FEATURE_SWITCH,  [feature.id]);
+
         return super.put(url, {feature});
     }
 
     deleteFeatureSwitches(ids) {
-        let params = {};
+        const params = {};
         params[query.IDS] = ids.join();
 
-        let url = super.constructUrl(this.API.DELETE_FEATURE_SWITCHES);
+        const url = super.constructUrl(this.API.DELETE_FEATURE_SWITCHES);
 
         return super.delete(url, {params:params});
     }
 
     createOverride(id, override) {
-        let url = super.constructUrl(this.API.POST_OVERRIDE, [id]);
+        const url = super.constructUrl(this.API.POST_OVERRIDE, [id]);
+
         return super.post(url, {override});
     }
 
     updateOverride(featureSwitchId, id, override) {
-        let url = super.constructUrl(this.API.PUT_OVERRIDE,  [featureSwitchId, id]);
+
+        const url = super.constructUrl(this.API.PUT_OVERRIDE,  [featureSwitchId, id]);
         return super.put(url, {override});
     }
 
     deleteOverrides(id, ids) {
-        let params = {};
+        const params = {};
         params[query.IDS] = ids.join();
 
         let url = super.constructUrl(this.API.DELETE_OVERRIDES, [id]);
@@ -68,10 +71,12 @@ class FeatureSwitchService extends BaseService {
         return super.delete(url, {params:params});
     }
 
-    getFeatureSwitchStates() {
-        let params = {};
+    getFeatureSwitchStates(appId) {
+        const params = {
+            appId
+        };
 
-        let url = super.constructUrl(this.API.GET_FEATURE_STATES, []);
+        const url = super.constructUrl(this.API.GET_FEATURE_STATES, []);
 
         return super.get(url, {params});
     }
