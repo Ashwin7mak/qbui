@@ -12,18 +12,16 @@ import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
 const fieldDragSource = {
     beginDrag(props) {
         return {
-            element: props.element,
+            containingElement: props.containingElement,
+            location: props.location,
             relatedField: props.relatedField,
-            tabIndex: props.tabIndex,
-            sectionIndex: props.sectionIndex,
-            orderIndex: props.orderIndex,
         };
     },
 
     endDrag(props, monitor) {
         if (monitor.didDrop()) {
-            let {tabIndex, sectionIndex, orderIndex} = monitor.getDropResult();
-            props.handleFormReorder(tabIndex, sectionIndex, orderIndex, props);
+            let {location} = monitor.getDropResult();
+            props.handleFormReorder(location, props);
         }
     }
 };
@@ -59,15 +57,15 @@ const DraggableFieldHoc = FieldComponent => {
         }
 
         render() {
-            const {connectDragSource, isDragging, tabIndex, sectionIndex, orderIndex} = this.props;
+            const {connectDragSource, isDragging, containingElement, location} = this.props;
 
             let classNames = ['draggableField'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>
-                    <FieldEditingTools tabIndex={tabIndex} sectionIndex={sectionIndex} orderIndex={orderIndex} />
-                    <FieldComponent {...this.props}/>
+                    <FieldEditingTools location={location} />
+                    <FieldComponent {...this.props} />
                 </div>
             );
         }
