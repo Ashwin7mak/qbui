@@ -46,6 +46,14 @@ const report = (state = [], action) => {
         return stateList;
     }
 
+    function getReportFromState(id) {
+        const index = _.findIndex(state, rpt => rpt.id === id);
+        if (index !== -1) {
+            return _.cloneDeep(state[index]);
+        }
+        return null;
+    }
+
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -82,9 +90,12 @@ const report = (state = [], action) => {
             //
             pageOffset: action.content.pageOffset,
             numRows: action.content.numRows,
+            //  faceting and searching
             searchStringForFiltering: action.content.searchStringForFiltering,
             selections: action.content.selections || new FacetSelections(),
-            facetExpression: action.content.facetExpression || {}
+            facetExpression: action.content.facetExpression || {},
+            //  UI row selection list
+            selectedRows: []
         };
         return newState(obj);
     }
@@ -98,6 +109,14 @@ const report = (state = [], action) => {
             list: action.content.reportsList
         };
         return newState(obj);
+    }
+    case types.SELECT_REPORT_LIST: {
+        let rpt = getReportFromState(action.id);
+        if (rpt) {
+            rpt.selectedRows = action.content.selections;
+            return newState(rpt);
+        }
+        return state;
     }
     case types.UPDATE_REPORT_RECORD: {
         const id = action.id;

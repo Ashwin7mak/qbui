@@ -269,3 +269,7 @@ export const updateReportRecord = (payload, context) => {
     };
 };
 
+export const updateReportSelections = (context, selections) => {
+    return event(context, types.SELECT_REPORT_LIST, {selections});
+};
+

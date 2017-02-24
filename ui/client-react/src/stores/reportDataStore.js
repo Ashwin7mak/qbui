@@ -656,7 +656,7 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
             //actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
 
-            actions.EDIT_REPORT_RECORD, this.onEditRecord,
+            //actions.EDIT_REPORT_RECORD, this.onEditRecord,
             actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
             actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
 
@@ -1249,9 +1249,9 @@ let ReportDataStore = Fluxxor.createStore({
      *
      * @param payload
      */
-    onEditRecord(payload) {
-        this.updateRecordNavContext(payload.recId, "", true, payload.navigateAfterSave);
-    },
+    //onEditRecord(payload) {
+    //    this.updateRecordNavContext(payload.recId, "", true, payload.navigateAfterSave);
+    //},
     /**
      * update prev/next props after displaying previous record
      */

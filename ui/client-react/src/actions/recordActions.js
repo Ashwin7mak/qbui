@@ -506,13 +506,13 @@ function createEventObject(appId, tblId, recId, origRec, changes, isInlineEdit, 
     };
 }
 
-export const openRecord = (recId, nextRecordId, previousRecordId) => {
-    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId});
+export const openRecord = (recId, nextRecordId, previousRecordId, navigateAfterSave, nextOrPreviousEdit) => {
+    return event(recId, types.OPEN_RECORD, {recId, nextRecordId, previousRecordId, navigateAfterSave, nextOrPreviousEdit});
 };
 
-export const editRecord = (recId, nextRecordId, previousRecordId) => {
-    return event(recId, types.EDIT_RECORD, {recId, nextRecordId, previousRecordId});
-};
+//export const editRecord = (recId, nextRecordId, previousRecordId, navigateAfterSave) => {
+//    return event(recId, types.EDIT_RECORD, {recId, nextRecordId, previousRecordId, navigateAfterSave});
+//};
 
 //recordPendingEditsStart
 /* the start of editing a record */

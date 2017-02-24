@@ -18,8 +18,8 @@ import {connect} from 'react-redux';
 import {savingForm, saveFormSuccess, editNewRecord, saveFormError, syncForm, openRecordForEdit} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {updateReportRecord} from '../../actions/reportActions';
-import {editRecord, editRecordCancel, editRecordCommit} from '../../actions/recordActions';
-import {APP_ROUTE} from '../../constants/urlConstants';
+import {openRecord, editRecordCancel, editRecordCommit} from '../../actions/recordActions';
+import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
@@ -99,7 +99,9 @@ export const RecordTrowser = React.createClass({
      */
     navigateToNewRecord(recId) {
 
-        if (this.props.reportData && this.props.reportData.navigateAfterSave) {
+        const record = this.getRecordFromProps(this.props);
+        if (record.navigateAfterSave === true) {
+            // TODO: get from store
             let {appId, tblId} = this.props;
             this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
@@ -258,39 +260,99 @@ export const RecordTrowser = React.createClass({
      * go back to the previous report record
      */
     previousRecord() {
-        const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.previousRecordId);
 
-        // TODO: move to REDUX
-
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.editPreviousRecord(previousEditRecordId);
-
-        this.props.openRecordForEdit(previousEditRecordId);
+        //const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
+        //
+        //// TODO: move to REDUX
+        //
+        //// let flux now we're tranversing records so it can pass down updated previous/next record IDs
+        //let flux = this.getFlux();
+        //flux.actions.editPreviousRecord(previousEditRecordId);
+        //
+        //this.props.openRecordForEdit(previousEditRecordId);
     },
 
     /**
      * go forward to the next report record
      */
     nextRecord() {
-        const {appId, tblId, rptId, nextEditRecordId} = this.props.reportData;
-
-        // TODO: move to REDUX
-
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.editNextRecord(nextEditRecordId);
-
-        this.props.openRecordForEdit(nextEditRecordId);
+        const record = this.getRecordFromProps(this.props);
+        this.navigateToRecord(record.nextRecordId);
+        //const {appId, tblId, rptId, nextEditRecordId} = this.props.reportData;
+        //
+        //// TODO: move to REDUX
+        //
+        //// let flux now we're tranversing records so it can pass down updated previous/next record IDs
+        //let flux = this.getFlux();
+        //flux.actions.editNextRecord(nextEditRecordId);
+        //
+        //this.props.openRecordForEdit(nextEditRecordId);
     },
+
+    navigateToRecord(recId) {
+        if (recId) {
+            //TODO - retrieve from store
+            const {appId, tblId, rptId, data} = this.props.reportData;
+            const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+            if (key) {
+                let recordsArray = this.getRecordsArray();
+
+                //  fetch the index of the row in the recordsArray that is being opened
+                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+
+                this.props.openRecord(recId, nextRecordId, previousRecordId);
+                //this.props.openRecordForEdit(recId);
+
+                WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recId);
+            }
+        }
+    },
+
+    getRecordsArray() {
+        //TODO - retrieve from store
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+
+        let recordsArray = [];
+        if (hasGrouping) {
+            // flatten grouped records
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
+        }
+        return recordsArray;
+    },
+
+    addGroupedRecords(arr, groups) {
+        if (Array.isArray(groups)) {
+            groups.forEach(child => {
+                if (child.children) {
+                    this.addGroupedRecords(arr, child.children);
+                } else {
+                    arr.push(child);
+                }
+            });
+        }
+    },
+
+    getRecordFromProps(props = this.props) {
+        return _.nth(props.record, 0) || {};
+    },
+
     /**
      *  get breadcrumb element for top of trowser
      */
     getTrowserBreadcrumbs() {
         const table = this.props.selectedTable;
 
-        const showBack = !!(this.props.reportData && this.props.reportData.previousEditRecordId !== null);
-        const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        let record = this.getRecordFromProps(this.props);
+
+        const showBack = !!(record.previousRecordId !== null);
+        const showNext = !!(record.nextRecordId !== null);
+
         const recordName = this.props.selectedTable && this.props.selectedTable.name;
 
         let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
@@ -315,7 +377,8 @@ export const RecordTrowser = React.createClass({
     getTrowserRightIcons() {
         const errorFlg = this._hasErrorsAndAttemptedSave();
 
-        const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        const record = this.getRecordFromProps(this.props);
+        const showNext = !!(record.nextRecordId !== null);
 
         const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
         return (
@@ -421,7 +484,8 @@ const mapStateToProps = (state) => {
     return {
         forms: state.forms,
         shell: state.shell,
-        record: state.record
+        record: state.record,
+        report: state.report
     };
 };
 
@@ -451,8 +515,8 @@ const mapDispatchToProps = (dispatch) => {
         showErrorMsgDialog: () => {
             dispatch(showErrorMsgDialog());
         },
-        editRecord: (recId) => {
-            dispatch(editRecord(recId));
+        openRecord:(recId, nextRecordId, prevRecordId, navigateAfterSave, nextOrPreviousEdit) => {
+            dispatch(openRecord(recId, nextRecordId, prevRecordId, navigateAfterSave, nextOrPreviousEdit));
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));

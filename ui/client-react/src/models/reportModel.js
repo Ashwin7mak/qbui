@@ -317,9 +317,10 @@ class ReportModel {
      * @param params
      */
     setRunTimeParams(params) {
-        // miscellaneous param elements defined on the client model
+        // miscellaneous param elements defined on the model
         this.model.pageOffset = PAGE.DEFAULT_OFFSET;
         this.model.numRows = PAGE.DEFAULT_NUM_ROWS;
+        //  facet/filtering info
         this.model.facetExpression = '';
         this.model.searchStringForFiltering = '';
         this.model.selections = null;
