@@ -15,6 +15,18 @@ import {NEW_FORM_RECORD_ID} from '../constants/schema';
 
 let logger = new Logger();
 
+/*
+ Redux event for saving a form
+ TODO: refactor once record events moved
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
 /**
  * form load in progress
  * @param container type of form (edit or view)
@@ -299,16 +311,5 @@ function saveForm(appId, tblId, formType, form, isNew) {
     };
 }
 
-/*
- Redux event for saving a form
- TODO: refactor once record events moved
- */
-function event(id, type, content) {
-    return {
-        id: id,
-        type: type,
-        content: content || null
-    };
-}
 
 

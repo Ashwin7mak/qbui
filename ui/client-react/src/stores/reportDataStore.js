@@ -1161,17 +1161,17 @@ let ReportDataStore = Fluxxor.createStore({
      * @param arr
      * @param groups
      */
-    addGroupedRecords(arr, groups) {
-
-        groups.forEach(child => {
-
-            if (child.children) {
-                this.addGroupedRecords(arr, child.children);
-            } else {
-                arr.push(child);
-            }
-        });
-    },
+    //addGroupedRecords(arr, groups) {
+    //
+    //    groups.forEach(child => {
+    //
+    //        if (child.children) {
+    //            this.addGroupedRecords(arr, child.children);
+    //        } else {
+    //            arr.push(child);
+    //        }
+    //    });
+    //},
 
     /**
      * the displayed record has changed, update the previous/next record IDs
@@ -1180,48 +1180,48 @@ let ReportDataStore = Fluxxor.createStore({
      * @param isEdit are we editing a record
      * @param navigateAfterSave if editing, do we navigate to the new record after saving?
      */
-    updateRecordNavContext(recId, nextOrPrevious = "", isEdit = false, navigateAfterSave = false) {
-
-        const {filteredRecords, keyField, hasGrouping} = this.reportModel.get();
-
-        let recordsArray;
-
-        // if we are grouped, flatten out the tree into an array of ordered records
-        if (hasGrouping) {
-            recordsArray = [];
-            this.addGroupedRecords(recordsArray, filteredRecords);
-        } else {
-            recordsArray = filteredRecords;
-        }
-
-        const index = _.findIndex(recordsArray, rec => rec[keyField.name] && rec[keyField.name].value === recId);
-
-        let nextRecordId, previousRecordId;
-
-        if (recId === "new" || index === -1) {
-            // new record, no prev/next navigation
-            nextRecordId = previousRecordId = null;
-        } else {
-            nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][keyField.name].value : null;
-            previousRecordId = index > 0 ? recordsArray[index - 1][keyField.name].value : null;
-        }
-
-        // update the view or edit state properties
-        if (isEdit) {
-            this.nextEditRecordId = nextRecordId;
-            this.previousEditRecordId = previousRecordId;
-            this.currentEditRecordId = recId;
-            this.nextOrPreviousEdit = nextOrPrevious;
-            this.navigateAfterSave = navigateAfterSave;
-        } else {
-            this.nextRecordId = nextRecordId;
-            this.previousRecordId = previousRecordId;
-            this.currentRecordId = recId;
-            this.nextOrPrevious = nextOrPrevious;
-        }
-
-        this.emit("change");
-    },
+    //updateRecordNavContext(recId, nextOrPrevious = "", isEdit = false, navigateAfterSave = false) {
+    //
+    //    const {filteredRecords, keyField, hasGrouping} = this.reportModel.get();
+    //
+    //    let recordsArray;
+    //
+    //    // if we are grouped, flatten out the tree into an array of ordered records
+    //    if (hasGrouping) {
+    //        recordsArray = [];
+    //        this.addGroupedRecords(recordsArray, filteredRecords);
+    //    } else {
+    //        recordsArray = filteredRecords;
+    //    }
+    //
+    //    const index = _.findIndex(recordsArray, rec => rec[keyField.name] && rec[keyField.name].value === recId);
+    //
+    //    let nextRecordId, previousRecordId;
+    //
+    //    if (recId === "new" || index === -1) {
+    //        // new record, no prev/next navigation
+    //        nextRecordId = previousRecordId = null;
+    //    } else {
+    //        nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][keyField.name].value : null;
+    //        previousRecordId = index > 0 ? recordsArray[index - 1][keyField.name].value : null;
+    //    }
+    //
+    //    // update the view or edit state properties
+    //    if (isEdit) {
+    //        this.nextEditRecordId = nextRecordId;
+    //        this.previousEditRecordId = previousRecordId;
+    //        this.currentEditRecordId = recId;
+    //        this.nextOrPreviousEdit = nextOrPrevious;
+    //        this.navigateAfterSave = navigateAfterSave;
+    //    } else {
+    //        this.nextRecordId = nextRecordId;
+    //        this.previousRecordId = previousRecordId;
+    //        this.currentRecordId = recId;
+    //        this.nextOrPrevious = nextOrPrevious;
+    //    }
+    //
+    //    this.emit("change");
+    //},
 
     /**
      * drilldown into record from report
