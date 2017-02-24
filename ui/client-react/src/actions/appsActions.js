@@ -66,7 +66,7 @@ let appsActions = {
             let appService = new AppService();
 
             // fetch the app users list if we don't have it already
-            if (appId && appId !== this.selectedAppId) {
+            if (appId !== this.selectedAppId) {
 
                 appService.getAppUsers(appId).then(response => {
                     this.selectedAppId = appId;
