@@ -13,8 +13,15 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import './formBuilderContainer.scss';
+import withScrolling from 'react-dnd-scrollzone';
 
 let logger = new Logger();
+
+const ScrollZone = withScrolling('div');
+const scrollStyle = {
+    overflowX: 'scroll',
+    overflowY: 'scroll',
+}
 
 const mapStateToProps = state => {
     return {
@@ -58,9 +65,40 @@ export const FormBuilderContainer = React.createClass({
         formType: PropTypes.string
     },
 
+    updateScrolling(evt) {
+        console.log('formBuilderContainer:  I have been activated!');
+        console.log('Mouse x: ', evt.clientX, '\nMouse y: ', evt.clientY);
+
+        let clientX = evt.touches[0].clientX;
+        let clientY = evt.touches[0].clientY;
+
+        console.log('touch x: ', clientX, '\ntouchY: ', clientY);
+
+    },
+
+    stopScrolling() {
+      console.log('formBuilderContainer: I stopped moving!!!!');
+        document.removeEventListener("mousemove", this.updateScrolling);
+    },
+
+    activateMouseMove() {
+        document.addEventListener("mousemove", this.updateScrolling(evt));
+    },
+
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
+
+        document.addEventListener("touchmove", this.updateScrolling);
+        document.addEventListener("touchend", this.stopScrolling);
+
+        document.addEventListener("dragover", this.updateScrolling);
+        document.addEventListener("dragend", this.stopScrolling);
+
+        document.addEventListener("mousedown", this.activateMouseMove);
+        document.addEventListener("mouseup", this.stopScrolling);
+
+
     },
 
     onCancel() {
@@ -114,11 +152,15 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
                 <ToolPalette />
 
+                <ScrollZone style={scrollStyle} >
+
                 <div className="formBuilderContent">
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                         <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
                     </Loader>
                 </div>
+
+                </ScrollZone>
 
                 {this.getSaveOrCancelFooter()}
 

@@ -3,6 +3,7 @@ import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 import TouchBackend from 'react-dnd-touch-backend';
+import Html5Backend from 'react-dnd-html5-backend';
 import withScrolling from 'react-dnd-scrollzone';
 import './formBuilder.scss';
 
@@ -74,4 +75,5 @@ FormBuilder.defaultProps = {
  * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
  * */
 
-export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);
+export default DragDropContext(Html5Backend)(FormBuilder);
+// export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);
