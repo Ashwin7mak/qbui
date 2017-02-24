@@ -50,6 +50,7 @@
     "react-cookie": "^0.3.4",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
+    "react-dnd-touch-backend": "^0.3.5",
     "react-dom": "~15.0.2",
     "react-fastclick": "^2.1.2",
     "react-intl": "1.2.0",
