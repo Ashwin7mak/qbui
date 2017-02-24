@@ -64,12 +64,10 @@ describe('Left Nav functions', () => {
 
     beforeEach(() => {
         NavItem.__Rewire__('I18nMessage', I18nMessageMock);
-        LeftNav.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
         NavItem.__ResetDependency__('I18nMessage');
-        LeftNav.__ResetDependency__('I18nMessage');
     });
 
 
