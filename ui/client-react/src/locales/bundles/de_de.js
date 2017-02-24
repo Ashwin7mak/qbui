@@ -527,8 +527,9 @@ export default {
             overrideCreated: "Override erstellt",
             overrideUpdated: "Überschreiben geändert",
             overridesDeleted: "Überschreibt gelöscht",
-            selectedOverrides: "Ausgewählte Überschreibungen"
-
+            selectedOverrides: "Ausgewählte Überschreibungen",
+            noOverrides: "Es wurden keine Overrides gesetzt",
+            featureNameExists: "Feature-Namen müssen eindeutig sein"
         }
     }
 };

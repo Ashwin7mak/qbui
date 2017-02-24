@@ -1,20 +1,24 @@
 import React from 'react';
-import * as Table from 'reactabular-table';
-import * as edit from 'react-edit';
-import * as UrlConsts from "../../constants/urlConstants";
-import * as CompConsts from '../../constants/componentConstants';
+
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import {Link} from 'react-router';
-import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
-import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import _ from 'lodash';
+
+import * as Table from 'reactabular-table';
+import * as edit from 'react-edit';
+import * as UrlConsts from "../../constants/urlConstants";
+import * as CompConsts from '../../constants/componentConstants';
+import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
+
 import './featureSwitches.scss';
 
+// override the default reactabular body and row rendering which aggressively avoids updates
 const BodyWrapper = props => <tbody {...props} />;
 BodyWrapper.shouldComponentUpdate = true;
 
@@ -28,9 +32,11 @@ class FeatureSwitchesRoute extends React.Component {
 
         this.state = {
             columns: this.getColumns(),
-            selectedRows: [],
+            selectedIDs: [],
             allSelected: false
         };
+
+        // need to bind methods since we're an ES6 class
 
         this.selectRow = this.selectRow.bind(this);
         this.selectAll = this.selectAll.bind(this);
@@ -40,32 +46,56 @@ class FeatureSwitchesRoute extends React.Component {
         this.getDefaultFeatureSwitchName  = this.getDefaultFeatureSwitchName.bind(this);
     }
 
+    /**
+     * select a row
+     * @param id
+     * @param selected
+     */
     selectRow(id, selected) {
 
-        const selectedRows = selected ? [...this.state.selectedRows, id] : _.without(this.state.selectedRows, id);
-        const allSelected = selectedRows.length === this.props.switches.length;
+        // add or remove selected row to selectedRows
+        const selectedIDs = selected ? [...this.state.selectedIDs, id] : _.without(this.state.selectedIDs, id);
 
-        this.setState({selectedRows, allSelected});
+        // set header checkbox state appropriately
+        const allSelected = selectedIDs.length === this.props.switches.length;
+
+        this.setState({selectedIDs, allSelected});
     }
 
+    /**
+     * select all rows from header checkbox
+     * @param allSelected
+     */
     selectAll(allSelected) {
 
-        const selectedRows = allSelected ? this.props.switches.map(sw => sw.id) : [];
+        const selectedIDs = allSelected ? this.props.switches.map(sw => sw.id) : [];
 
-        this.setState({selectedRows, allSelected});
+        this.setState({selectedIDs, allSelected});
     }
 
+    /**
+     * turn on/off selected features at once
+     * @param isOn
+     */
     setSelectedSwitchStates(isOn) {
-        this.state.selectedRows.forEach((id) => {
+        this.state.selectedIDs.forEach((id) => {
             this.updateFeatureSwitch(id, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, isOn);
         });
     }
 
+    /**
+     * find switch with given name
+     * @param name
+     */
     getFeatureByName(name) {
 
         return this.props.switches.find((feature) => feature.name === name);
     }
 
+    /**
+     * get default feature name that doesn't conflict with an existing name
+     * @returns Feature, Feature (1), Feature (2) etc.
+     */
     getDefaultFeatureSwitchName() {
 
         const defaultFeatureName = Locale.getMessage("featureSwitchAdmin.defaultFeatureName");
@@ -73,6 +103,7 @@ class FeatureSwitchesRoute extends React.Component {
 
         let nameFound = this.getFeatureByName(proposed);
 
+        // append (i) to name until it's unique
         for (let i = 1; nameFound; i++) {
             proposed = `${defaultFeatureName} (${i})`;
             nameFound = this.getFeatureByName(proposed);
@@ -81,6 +112,9 @@ class FeatureSwitchesRoute extends React.Component {
         return proposed;
     }
 
+    /**
+     * create new feature switch
+     */
     createFeatureSwitch() {
         this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then(() => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'),
@@ -88,28 +122,56 @@ class FeatureSwitchesRoute extends React.Component {
         });
     }
 
+    /**
+     * delete selected switches
+     */
     deleteSelectedSwitches() {
-        this.props.deleteFeatureSwitches(this.state.selectedRows).then(
+        this.props.deleteFeatureSwitches(this.state.selectedIDs).then(
             () => {
                 NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchesDeleted"), Locale.getMessage('success'),
                     CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                this.setState({selectedRows: [], allSelected: false});
+                this.setState({selectedIDs: [], allSelected: false});
             }
         );
 
     }
 
+    /**
+     * update a feature switch property
+     * @param id
+     * @param property
+     * @param value
+     */
     updateFeatureSwitch(id, property, value) {
 
         const featureSwitch = this.props.switches.find(sw => sw.id === id);
+
+        if (property === FeatureSwitchConsts.FEATURE_NAME_KEY) {
+            const featureByName = this.getFeatureByName(value);
+
+            // prevent renaming feature to an existing name (unless it's the currently edited feature)
+
+            if (featureByName.id !== id) {
+                NotificationManager.error(Locale.getMessage('featureSwitchAdmin.featureNameExists'), Locale.getMessage('failed'),
+                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                return;
+            }
+        }
 
         this.props.updateFeatureSwitch(id, featureSwitch, property, value).then(() => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
         });
+
     }
 
+    /**
+     * get reactabular columns
+     * @returns {[*,*,*,*,*]}
+     */
     getColumns() {
+
+        // inline editing via react-edit
 
         const editable = edit.edit({
             isEditing: ({columnIndex, rowData}) => columnIndex === rowData.editing,
@@ -120,6 +182,8 @@ class FeatureSwitchesRoute extends React.Component {
                 this.updateFeatureSwitch(rowData.id, property, value);
             }
         });
+
+        // render feature switch names as a link to the overrides with # overrides in parenthesis
 
         const overridesLinkFormatter = (data, {rowData}) => {
 
@@ -142,7 +206,7 @@ class FeatureSwitchesRoute extends React.Component {
                 },
                 cell: {
                     formatters: [
-                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedRows.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
+                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedIDs.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
                     ]
                 }
             },
@@ -197,13 +261,16 @@ class FeatureSwitchesRoute extends React.Component {
         ];
     }
 
+    /**
+     * get switches whenever the component mounts
+     */
     componentDidMount() {
         this.props.getSwitches();
     }
 
     render() {
 
-        const selectedSize = this.state.selectedRows.length;
+        const selectedSize = this.state.selectedIDs.length;
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
 
         return (
@@ -211,7 +278,7 @@ class FeatureSwitchesRoute extends React.Component {
                 <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
 
                 <div className="globalButtons">
-                    <button onClick={this.createFeatureSwitch}>Add new</button>
+                    <button onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
                 </div>
 
                 <Table.Provider className="featureSwitchTable switches"
@@ -232,9 +299,9 @@ class FeatureSwitchesRoute extends React.Component {
 
                 <div className="selectionButtons">
 
-                    <button disabled={selectedSize === 0} onClick={this.deleteSelectedSwitches}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                    <button disabled={selectedSize === 0} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                    <button disabled={selectedSize === 0} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                    <button disabled={!selectedSize} onClick={this.deleteSelectedSwitches}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                    <button disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                    <button disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                     <span>{selectedSizeLabel}</span>
                 </div>
 

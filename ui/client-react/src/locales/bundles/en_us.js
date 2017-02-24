@@ -533,8 +533,9 @@ export default {
             overrideCreated: "Override created",
             overrideUpdated: "Override updated",
             overridesDeleted: "Override(s) deleted",
-            selectedOverrides: "Selected overrides(s)"
-
+            selectedOverrides: "Selected overrides(s)",
+            noOverrides: "No overrides have been set, click 'Add New' to add one.",
+            featureNameExists: "Feature names must be unique"
         }
     }
 };

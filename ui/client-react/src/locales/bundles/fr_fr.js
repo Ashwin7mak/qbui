@@ -526,8 +526,9 @@ export default {
             overrideCreated: "Création d'une substitution",
             overrideUpdated: "Remplacement modifié",
             overridesDeleted: "Annulation supprimée",
-            selectedOverrides: "Remplacements sélectionnés"
-
+            selectedOverrides: "Remplacements sélectionnés",
+            noOverrides: "Aucune substitution n'a été définie",
+            featureNameExists: "Les noms des entités doivent être uniques"
         }
 
     }

@@ -211,11 +211,11 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     <h3><I18nMessage message="featureSwitchAdmin.featureSwitchOverridesTitle"/>:</h3>
 
                     <div className="globalButtons">
-                        <button onClick={this.createOverride}>Add new</button>
+                        <button onClick={this.createOverride}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
                     </div>
 
                     {this.props.overrides.length === 0 ?
-                        <h4>No overrides have been set, click 'Add New' to add one.</h4> :
+                        <h4><I18nMessage message="featureSwitchAdmin.noOverrides"/></h4> :
                         <Table.Provider className="featureSwitchTable overrides"
                                         columns={this.state.columns}
                                         components={{
@@ -232,9 +232,9 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     }
                     <p/>
                     <div className="selectionButtons">
-                        <button disabled={selectedSize === 0} onClick={this.deleteSelectedOverrides}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                        <button disabled={!selectedSize} onClick={this.deleteSelectedOverrides}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                        <button disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                        <button disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                         <span>{selectedSizeLabel}</span>
                     </div>
 

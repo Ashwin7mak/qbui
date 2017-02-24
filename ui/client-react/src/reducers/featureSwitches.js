@@ -110,7 +110,7 @@ const featureSwitches = (
         const overrides = [...state.overrides];
 
         const overrideToConfirmEdit = overrides.find(item => item.id === action.id);
-        overrideToConfirmEdit.editing;
+        overrideToConfirmEdit.editing = false;
         overrideToConfirmEdit[action.property] = action.value;
 
         return {
