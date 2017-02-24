@@ -12,8 +12,8 @@ class WindowLocationUtilsMock {
 }
 
 const mockTransformHelper = {
-    convertFormToArrayForClient() {},
-    convertFormToObjectForServer() {}
+    convertFormToArrayForClient(data) {return data;},
+    convertFormToObjectForServer(data) {return data;}
 };
 
 describe('Form Actions', () => {
@@ -150,10 +150,14 @@ describe('Form Actions', () => {
             spyOn(mockFormService.prototype, 'getFormAndRecord').and.callThrough();
             spyOn(mockFormService.prototype, 'getForm').and.callThrough();
             FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
+
+            spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.callThrough();
+            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
         });
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
+            FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
         });
 
         it('loads view record form', (done) => {
@@ -214,8 +218,7 @@ describe('Form Actions', () => {
         });
 
         it('transforms data to array structure for use on the client UI', (done) => {
-            spyOn(mockTransformHelper, 'convertFormToArrayForClient');
-            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+
 
             const store = mockStore({});
 
@@ -226,8 +229,6 @@ describe('Form Actions', () => {
                 }).catch(error => {
                     expect(false).toBe(true);
                     done();
-                }).finally(() => {
-                    FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
                 });
         });
     });
@@ -244,21 +245,21 @@ describe('Form Actions', () => {
         const mockStore = configureMockStore(middlewares);
 
         const expectedSaveActions = [
-            {id:'view', type:types.SAVING_FORM, content:null},
+            {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData.formMeta}
         ];
         const expectedActions = [
-            {id:'view', type:types.SAVING_FORM, content:null},
+            {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
 
         class mockFormService {
             constructor() {}
             createForm() {
-                return Promise.resolve({data:formData});
+                return Promise.resolve({data: formData});
             }
             updateForm() {
-                return Promise.resolve({data:formData});
+                return Promise.resolve({data: formData});
             }
         }
 
