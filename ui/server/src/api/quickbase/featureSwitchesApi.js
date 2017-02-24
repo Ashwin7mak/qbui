@@ -5,7 +5,6 @@
     'use strict';
 
     let fs = require('fs');
-    let defaultRequest = require('request');
     let uuid = require('uuid');
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
@@ -18,16 +17,19 @@
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
 
-        let request = defaultRequest;
-
         let featureSwitchesMockData;
 
+        /**
+         * load mock data from config.featureSwitchesMockData
+         */
         function loadSwitchesMockData() {
-
             let data = fs.readFileSync(config.featureSwitchesMockData, 'utf8');
             return JSON.parse(data);
         }
 
+        /**
+         * save mock data to config.featureSwitchesMockData
+         */
         function saveSwitchesMockData() {
             fs.writeFile(config.featureSwitchesMockData, JSON.stringify(featureSwitchesMockData, null, '  '), 'utf8');
         }
@@ -43,7 +45,7 @@
                         resolve(featureSwitchesMockData);
 
                     } else {
-                        resolve([]); // todo
+                        resolve([]); // todo: call lambda
                     }
                 });
             },
@@ -64,11 +66,12 @@
                         resolve(feature.id);
 
                     } else {
-                        resolve(); // todo
+                        resolve(); // todo: call lambda
                     }
                 });
             },
-            saveFeatureSwitch: function(req, featureSwitchId) {
+
+            updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
@@ -85,7 +88,7 @@
                         resolve();
 
                     } else {
-                        resolve(); // todo
+                        resolve(); // todo: call lambda
                     }
                 });
             },
@@ -101,10 +104,11 @@
                         resolve(ids);
 
                     } else {
-                        resolve(); // todo
+                        resolve(); // todo: call lambda
                     }
                 });
             },
+
             createFeatureSwitchOverride: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
@@ -129,13 +133,12 @@
                         resolve(override.id);
 
                     } else {
-                        resolve(); // todo
+                        resolve(); // todo: call lambda
                     }
                 });
             },
 
-
-            saveFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
+            updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
@@ -158,10 +161,11 @@
                         resolve();
 
                     } else {
-                        resolve(); // todo
+                        resolve(); // todo: call lambda
                     }
                 });
             },
+
             deleteFeatureSwitchOverrides: function(req, featureSwitchId, ids) {
 
                 return new Promise((resolve, reject) => {
@@ -175,11 +179,12 @@
                         resolve(ids);
 
                     } else {
-                        resolve(); // todo
+                        resolve(); // todo: call lambda
                     }
                 });
             },
-            getFeatureSwitchStates: function(req, realmId, appId) {
+
+            getFeatureSwitchStates: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let states = {};
 
@@ -191,7 +196,7 @@
                             states[featureSwitch.name] = featureSwitch.defaultOn;
                         });
                     } else {
-                        // todo
+                        // todo: call lambda
                     }
 
                     resolve(states);

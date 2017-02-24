@@ -84,14 +84,14 @@
 
 
         routeToPostFunction[routeConsts.FEATURE_SWITCHES] = createFeatureSwitch;
-        routeToPostFunction[routeConsts.FEATURE_SWITCH_OVERRIDES] = createFeatureSwitchOverride;
+        routeToPostFunction[routeConsts.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
          */
         var routeToPutFunction = {};
-        routeToPutFunction[routeConsts.FEATURE_SWITCH] = saveFeatureSwitch;
-        routeToPutFunction[routeConsts.FEATURE_SWITCH_OVERRIDE] = saveFeatureSwitchOverride;
+        routeToPutFunction[routeConsts.FEATURE_SWITCH] = updateFeatureSwitch;
+        routeToPutFunction[routeConsts.FEATURE_OVERRIDE] = updateFeatureSwitchOverride;
 
         /*
          * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
@@ -106,7 +106,8 @@
         routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
         routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
         routeToDeleteFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-        routeToDeleteFunction[routeConsts.FEATURE_SWITCH_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+        routeToDeleteFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
          */
@@ -251,9 +252,14 @@
         }
     }
 
+    /**
+     * get feature switches with overrides
+     * @param req
+     * @param res
+     */
     function getFeatureSwitches(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Get Feature Switches', {req:filterNodeReq(req)});
+        perfLog.init('Get feature switches', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             featureSwitchesApi.getFeatureSwitches(req).then(
@@ -275,6 +281,11 @@
         });
     }
 
+    /**
+     * create new feature switch
+     * @param req
+     * @param res
+     */
     function createFeatureSwitch(req, res) {
 
         let perfLog = perfLogger.getInstance();
@@ -298,18 +309,23 @@
         );
     }
 
-    function saveFeatureSwitch(req, res) {
+    /**
+     * update existing feature switch
+     * @param req
+     * @param res
+     */
+    function updateFeatureSwitch(req, res) {
 
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Save feature switch overrides', {req:filterNodeReq(req)});
+        perfLog.init('Update feature switch', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.saveFeatureSwitch(req, req.params.featureSwitchId).then(
+        featureSwitchesApi.updateFeatureSwitch(req, req.params.featureSwitchId).then(
             function(response) {
                 res.send(response);
-                logApiSuccess(req, response, perfLog, 'Save feature switch overrides');
+                logApiSuccess(req, response, perfLog, 'Update feature switch');
             },
             function(response) {
-                logApiFailure(req, response, perfLog, 'Save feature switch overrides');
+                logApiFailure(req, response, perfLog, 'Update feature switch');
 
                 //  client is waiting for a response..make sure one is always returned
                 if (response && response.statusCode) {
@@ -320,10 +336,16 @@
             }
         );
     }
+
+    /**
+     * delete a set of feature switches
+     * @param req
+     * @param res
+     */
     function deleteFeatureSwitchesBulk(req, res) {
 
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Save feature switch overrides', {req:filterNodeReq(req)});
+        perfLog.init('Delete feature switches', {req:filterNodeReq(req)});
 
         featureSwitchesApi.deleteFeatureSwitches(req, req.query.ids.split(',')).then(
             function(response) {
@@ -343,6 +365,11 @@
         );
     }
 
+    /**
+     * create feature switch override
+     * @param req
+     * @param res
+     */
     function createFeatureSwitchOverride(req, res) {
 
         let perfLog = perfLogger.getInstance();
@@ -366,12 +393,17 @@
         );
     }
 
-    function saveFeatureSwitchOverride(req, res) {
+    /**
+     * update an override for a feature switch
+     * @param req
+     * @param res
+     */
+    function updateFeatureSwitchOverride(req, res) {
 
         let perfLog = perfLogger.getInstance();
         perfLog.init('Save feature switch overrides', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.saveFeatureSwitchOverride(req, req.params.featureSwitchId, req.params.overrideId).then(
+        featureSwitchesApi.updateFeatureSwitchOverride(req, req.params.featureSwitchId, req.params.overrideId).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Save feature switch overrides');
@@ -388,6 +420,12 @@
             }
         );
     }
+
+    /**
+     * delete a set of feature switch overrides
+     * @param req
+     * @param res
+     */
     function deleteFeatureSwitchOverridesBulk(req, res) {
 
         let perfLog = perfLogger.getInstance();
@@ -410,11 +448,17 @@
             }
         );
     }
+
+    /**
+     * get current feature states
+     * @param req
+     * @param res
+     */
     function getFeatureStates(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get feature states', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.getFeatureSwitchStates(req).then(
+        featureSwitchesApi.getFeatureSwitchStates(req, req.query.appId).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Get feature states');
