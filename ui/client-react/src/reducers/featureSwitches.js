@@ -57,7 +57,7 @@ const featureSwitches = (
     }
 
     // overrides
-    case types.SELECT_FEATURE_SWITCH_OVERRIDES: {
+    case types.SET_FEATURE_SWITCH_OVERRIDES: {
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,

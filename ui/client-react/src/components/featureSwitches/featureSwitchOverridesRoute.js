@@ -181,10 +181,10 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
         if (this.props.switches.length === 0) {
             this.props.getSwitches().then(() => {
-                this.props.selectFeatureSwitchOverrides(this.props.params.id);
+                this.props.setFeatureSwitchOverrides(this.props.params.id);
             });
         } else {
-            this.props.selectFeatureSwitchOverrides(this.props.params.id);
+            this.props.setFeatureSwitchOverrides(this.props.params.id);
         }
     }
 

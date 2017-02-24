@@ -225,9 +225,9 @@ export const updateFeatureSwitch = (id, featureSwitch, property, value) => {
 };
 
 
-// select the overrides for a given feature switch
-export const selectFeatureSwitchOverrides = (id) => ({
-    type: types.SELECT_FEATURE_SWITCH_OVERRIDES,
+// set the current overrides to a given feature switch
+export const setFeatureSwitchOverrides = (id) => ({
+    type: types.SET_FEATURE_SWITCH_OVERRIDES,
     id
 });
 
