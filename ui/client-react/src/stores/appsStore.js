@@ -73,7 +73,7 @@ let AppsStore = Fluxxor.createStore({
     },
     /**
      * userArray is structured so that the filtered list of users is mapped for our userPicker in index 0
-     * index 1 is the map returned from getAppUsers
+     * index 1 is the untouched response from Core's getAppUsers
      */
     onLoadAppUsersSuccess(userArray) {
         this.loadingAppUsers = false;

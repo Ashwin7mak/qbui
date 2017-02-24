@@ -1,5 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
+import * as UrlConstants from '../../../../src/constants/urlConstants';
 import AppSettingsHome  from '../../../../src/components/app/settings/appSettingsHome';
 
 describe('AppSettingsHome functions', () => {
@@ -14,8 +15,8 @@ describe('AppSettingsHome functions', () => {
         {userId: 3, firstName: 'Steve', lastName: 'Rogers'}
     ];
     const setting = "users";
-    const settingsLinkWithParameter = `/qbase/app/${appId}/${setting}`;
-    const settingsLinkWithoutParameter = `/qbase/app/${appId}/`;
+    const settingsLinkWithParameter = `${UrlConstants.APP_ROUTE}/${appId}/${setting}`;
+    const settingsLinkWithoutParameter = `${UrlConstants.APP_ROUTE}/${appId}/`;
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<AppSettingsHome selectedApp={selectedApp}

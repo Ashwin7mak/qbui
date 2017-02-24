@@ -36,7 +36,7 @@ const AppProperties = React.createClass({
     render() {
         let fields = [];
         let keys = Object.keys(displayProps);
-        for (var c = 0; c < keys.length; c++) {
+        for (let c = 0; c < keys.length; c++) {
             if (this.props.selectedApp.hasOwnProperty(keys[c])) {
                 fields.push(this.createField(keys[c]));
             }

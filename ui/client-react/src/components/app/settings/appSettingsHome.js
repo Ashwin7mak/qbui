@@ -3,6 +3,7 @@
  */
 import React, {PropTypes} from 'react';
 import Card from '../../card/card';
+import * as UrlConstants from '../../../constants/urlConstants';
 import './appSettingsHome.scss';
 
 
@@ -23,7 +24,7 @@ const AppSettingsHome = React.createClass({
     },
 
     constructSettingsLink(setting) {
-        return "/qbase/app/" + this.props.appId + "/" + setting;
+        return `${UrlConstants.APP_ROUTE}/${this.props.appId}/${setting}`;
     },
 
     render() {
@@ -33,22 +34,10 @@ const AppSettingsHome = React.createClass({
                                   subTitle="Manage the roles in this app"
                                   icon="thumbs-up"
                 />
-                <Card title="Tables"
-                                  subTitle="Manage the tables in this app"
-                                  icon="report-table"
-                />
                 <Card title="App Properties"
                                   subTitle="Manage the properties of this app"
                                   icon="settings"
                                   link={this.constructSettingsLink("properties")}
-                />
-                <Card title="Pages"
-                                  subTitle="Manage the pages in this app"
-                                  icon="report-menu-4"
-                />
-                <Card title="Branding"
-                                  subTitle="Customize the appearance of your app"
-                                  icon="favicon"
                 />
                 <Card title="Users"
                                   subTitle="Add/Remove Users in this app"
