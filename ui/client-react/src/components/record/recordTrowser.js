@@ -491,8 +491,8 @@ const mapDispatchToProps = (dispatch) => {
         showErrorMsgDialog: () => {
             dispatch(showErrorMsgDialog());
         },
-        openRecord:(recId, nextRecordId, prevRecordId, navigateAfterSave, nextOrPreviousEdit) => {
-            dispatch(openRecord(recId, nextRecordId, prevRecordId, navigateAfterSave, nextOrPreviousEdit));
+        openRecord:(recId, nextRecordId, prevRecordId) => {
+            dispatch(openRecord(recId, nextRecordId, prevRecordId));
         },
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));

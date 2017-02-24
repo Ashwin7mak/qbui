@@ -657,8 +657,8 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
 
             //actions.EDIT_REPORT_RECORD, this.onEditRecord,
-            actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
-            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
+            //actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
+            //actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
 
             actions.CHANGE_LOCALE, this.onChangeLocale
         );
@@ -1255,15 +1255,15 @@ let ReportDataStore = Fluxxor.createStore({
     /**
      * update prev/next props after displaying previous record
      */
-    onEditPreviousRecord(payload) {
-        this.updateRecordNavContext(payload.recId, "previous", true);
-    },
+    //onEditPreviousRecord(payload) {
+    //    this.updateRecordNavContext(payload.recId, "previous", true);
+    //},
     /**
      * update prev/next props after displaying next record
      */
-    onEditNextRecord(payload) {
-        this.updateRecordNavContext(payload.recId, "next", true);
-    },
+    //onEditNextRecord(payload) {
+    //    this.updateRecordNavContext(payload.recId, "next", true);
+    //},
     /**
      * gets the state of a reportData
      * @returns report state
