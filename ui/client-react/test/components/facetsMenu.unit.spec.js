@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import {__RewireAPI__ as FacetsAspectRewireAPI}  from '../../src/components/facet/facetsAspect';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import {__RewireAPI__ as FacetsItemRewireAPI}  from '../../src/components/facet/facetsItem';
 import {__RewireAPI__ as FacetsListRewireAPI}  from '../../src/components/facet/facetsList';
-import FacetsMenu, {__RewireAPI__ as FacetsMenuRewireAPI}  from '../../src/components/facet/facetsMenu';
+import FacetsMenu from '../../src/components/facet/facetsMenu';
 import facetMenuActions from '../../src/actions/facetMenuActions';
 import Store from '../../src/stores/facetMenuStore';
-import * as actions from '../../src/constants/actions';
 
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
@@ -48,16 +46,12 @@ describe('FacetsMenu functions', () => {
     beforeEach(() => {
         FacetsListRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         FacetsItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsAspectRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsMenuRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         flux.store('FacetMenuStore').initMenu();
     });
 
     afterEach(() => {
         FacetsListRewireAPI.__ResetDependency__('I18nMessage');
         FacetsItemRewireAPI.__ResetDependency__('I18nMessage');
-        FacetsAspectRewireAPI.__ResetDependency__('I18nMessage');
-        FacetsMenuRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     let reportParams = {appId:1, tblId:2, rptId:3};

@@ -1,16 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {OverlayTrigger, Popover} from 'react-bootstrap';
+import Popover from 'react-bootstrap/lib/Popover';
 
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
-import StringUtils from '../../utils/stringUtils';
 
 import  {fieldSelections, facetsProp} from './facetProps';
 
 import FacetsItem from './facetsItem';
-import QBicon from '../qbIcon/qbIcon';
-import simpleStringify from '../../../../common/src/simpleStringify';
 import * as schemaConsts from '../../constants/schema.js';
 import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 import closeOnEscape from '../hoc/catchEscapeKey';

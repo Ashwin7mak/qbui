@@ -3,6 +3,12 @@
 .builderWrapperContent {
     height: 100%;
     width: 100%;
+
+    .builderWrapperBody {
+        height: 100%;
+        width: 100%;
+    }
+
     .topNav {
         border: $stroke-width-thin solid  $formBuilder-border-color;
         flex-direction: column;
@@ -10,6 +16,7 @@
         background-color: $topnav-header-background-color;
         text-align: right;
     }
+
     .saveOrCancelFooter {
         z-index: 2;
         flex: 0 auto;

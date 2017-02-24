@@ -132,9 +132,9 @@
          * Returns all text input fields on the form
          * @returns Array of text input fields
          */
-        getAllFieldRows: {value: function() {
-            this.editFormContainerEl.element('.fieldRow').waitForVisible();
-            return this.editFormContainerEl.elements('.fieldRow');
+        getAllTextFields: {value: function() {
+            this.editFormContainerEl.element('input[type="text"].textField').waitForVisible();
+            return this.editFormContainerEl.elements('input[type="text"].textField');
         }},
 
         /**
@@ -289,7 +289,7 @@
          * Given a record element in agGrid, click on the record to select that record and then click on edit pencil from the view form
          * @param recordRowIndex
          */
-        clickRecordEditPencilInViewForm : {value: function(recordRowIndex) {
+        clickRecordEditPencilInViewForm : {value: function() {
             this.editPencilBtnOnStageInViewForm.waitForVisible();
             //click on the edit pencil in view form actions
             this.editPencilBtnOnStageInViewForm.click();
@@ -354,12 +354,7 @@
             var i;
             //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = this.getAllFieldRows();
-                for (i = 0; i < textFields.value.length; i++) {
-                    if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
-                        textFields.value[i].element('input[type="text"].textField').setValue(sText);
-                    }
-                }
+                this.setFormInputValue(this.getAllTextFields(), sText);
             } else if (fieldType === 'allEmailFields') {
                 this.setFormInputValue(this.getAllEmailInputFields(), sEmail);
             } else if (fieldType === 'allPhoneFields') {
@@ -401,15 +396,8 @@
          */
         enterInvalidFormValues : {value: function(fieldType, invalidValue) {
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            var i;
-            //get all input fields in the form
             if (fieldType === 'allTextFields') {
-                var textFields = this.getAllFieldRows();
-                for (i = 0; i < textFields.value.length; i++) {
-                    if (textFields.value[i].element('.fieldLabel').getText() === 'Text Field') {
-                        textFields.value[i].element('input[type="text"].textField').setValue(invalidValue);
-                    }
-                }
+                this.setFormInputValue(this.getAllTextFields(), invalidValue);
             } else if (fieldType === 'allEmailFields') {
                 this.setFormInputValue(this.getAllEmailInputFields(), invalidValue);
             } else if (fieldType === 'allPhoneFields') {

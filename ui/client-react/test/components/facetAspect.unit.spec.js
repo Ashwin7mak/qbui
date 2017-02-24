@@ -1,27 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 import TestUtils from 'react-addons-test-utils';
-import FacetsAspect, {__RewireAPI__ as FacetsAspectRewireAPI}  from '../../src/components/facet/facetsAspect';
+import FacetsAspect  from '../../src/components/facet/facetsAspect';
 
 
 describe('FacetsAspect functions', () => {
     'use strict';
-
-    var I18nMessageMock = React.createClass({
-        render: function() {
-            return (
-                <div>test</div>
-            );
-        }
-    });
-
-    beforeEach(() => {
-        FacetsAspectRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
-    });
-
-    afterEach(() => {
-        FacetsAspectRewireAPI.__ResetDependency__('I18nMessage');
-    });
 
     let component;
     let item = {

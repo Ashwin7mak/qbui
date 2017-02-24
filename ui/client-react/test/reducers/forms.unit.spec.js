@@ -172,10 +172,8 @@ describe('Forms reducer functions', () => {
             id: VIEW,
             type: types.MOVE_FIELD,
             content: {
-                newTabIndex: 1,
-                newSectionIndex: 2,
-                newOrderIndex: 3,
-                draggedItemProps: 4
+                newLocation: 1,
+                draggedItemProps: 2
             }
         };
 
@@ -195,7 +193,7 @@ describe('Forms reducer functions', () => {
             }]);
 
             expect(mockMoveFieldHelper.moveField).toHaveBeenCalledWith(
-                stateWithViewForm[0].formData.formMeta, 1, 2, 3, 4
+                stateWithViewForm[0].formData.formMeta, 1, 2
             );
         });
 

@@ -1,9 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-import {Overlay} from 'react-bootstrap';
+import Overlay from 'react-bootstrap/lib/Overlay';
 
-import Logger from '../../utils/logger';
 import QBicon from '../qbIcon/qbIcon';
 
 import './sortAndGroup.scss';

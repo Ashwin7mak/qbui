@@ -4,18 +4,7 @@ import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import TopNav, {__RewireAPI__ as TopNavRewireAPI} from '../../src/components/header/topNav';
 import GlobalActions from '../../src/components/actions/globalActions';
-
-import {MenuItem, OverlayTrigger} from 'react-bootstrap';
-import _ from 'lodash';
 import Locale from '../../src/locales/locales';
-
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
 
 var CurrentDateMock = React.createClass({
     render: function() {
@@ -56,15 +45,9 @@ describe('TopNav functions', () => {
     });
 
     beforeEach(() => {
-        TopNavRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         component = TestUtils.renderIntoDocument(<TopNav flux={flux} globalActions={globalActions}/>);
         spyOn(flux.actions, 'searchFor');
         spyOn(flux.actions, 'changeLocale');
-    });
-
-    afterEach(() => {
-        TopNavRewireAPI.__ResetDependency__('I18nMessage');
-
     });
 
     it('test render of component', () => {

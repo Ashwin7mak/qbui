@@ -1,10 +1,6 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
 import Logger from '../../utils/logger';
-import StringUtils from '../../utils/stringUtils';
-import {Well} from 'react-bootstrap';
-import QBicon from '../qbIcon/qbIcon';
 import FieldChoiceList from './fieldChoiceList';
 import './sortAndGroup.scss';
 

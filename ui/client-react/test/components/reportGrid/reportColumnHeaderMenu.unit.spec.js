@@ -4,7 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import {ReportColumnHeaderMenu, __RewireAPI__ as ContainerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
 import * as FieldConsts from '../../../src/constants/schema';
-import {MenuItem} from 'react-bootstrap';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 const testPrependText = 'groupTest';
 const MockLocale = {
