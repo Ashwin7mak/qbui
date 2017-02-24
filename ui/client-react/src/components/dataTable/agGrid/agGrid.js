@@ -13,8 +13,6 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
-
-import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
 
 import Breakpoints from "../../../utils/breakpoints";
@@ -396,16 +394,16 @@ export const AGGrid = React.createClass({
      * @param data row record data
      */
     openRecordForEdit(data) {
-
-        const recordId = data[this.props.primaryKeyName].value;
-
-        this.props.dispatch(openRecordForEdit(recordId));
-
-        // needed until report store is migrated to redux
-
-        const flux = this.getFlux();
-
-        flux.actions.editingReportRow(recordId);
+        // NOTE: NOT REFACTORING TO REDUX AS AGGRID CODE IS OBSOLETE
+        //const recordId = data[this.props.primaryKeyName].value;
+        //
+        //this.props.dispatch(openRecordForEdit(recordId));
+        //
+        //// needed until report store is migrated to redux
+        //
+        //const flux = this.getFlux();
+        //
+        //flux.actions.editingReportRow(recordId);
     },
 
     /**

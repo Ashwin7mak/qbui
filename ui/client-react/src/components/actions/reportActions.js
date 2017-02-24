@@ -116,16 +116,18 @@ export let ReportActions = React.createClass({
         if (recId) {
             //  TODO: get from store
             const {data} = this.getReport();
-            const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
-            if (key) {
-                let recordsArray = this.getRecordsArray(data);
+            if (data) {
+                const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
+                if (key) {
+                    let recordsArray = this.getRecordsArray(data);
 
-                //  fetch the index of the row in the recordsArray that is being opened
-                const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
-                let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
-                let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+                    //  fetch the index of the row in the recordsArray that is being opened
+                    const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
+                    let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+                    let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
 
-                this.props.openRecord(recId, nextRecordId, previousRecordId);
+                    this.props.openRecord(recId, nextRecordId, previousRecordId);
+                }
             }
         }
     },
@@ -138,8 +140,6 @@ export let ReportActions = React.createClass({
             const recordId = this.getRecordIdFromReport(this.props);
             this.navigateToRecord(recordId);
             WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
-
-            //this.props.dispatch(openRecordForEdit(record.recId));
         }
     },
 

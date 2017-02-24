@@ -21,7 +21,6 @@ import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
-import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
 import {openRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField} from '../../../actions/recordActions';
 import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
@@ -60,8 +59,15 @@ export const ReportContent = React.createClass({
         }
     },
 
-    openRowToView(recId) {
+    openRowToView(row) {
         const {appId, tblId, rptId} = this.props.reportData;
+
+        var recId = row;
+        //  for small breakpoint, row is an object..
+        if (!_.isNumber(row)) {
+            recId = row[this.props.primaryKeyName].value;
+        }
+
         this.openRow(recId);
         //create the link we want to send the user to and then send them on their way
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
@@ -548,14 +554,8 @@ export const ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEditInTrowser(recordId) {
-
         this.openRow(recordId, true);
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
-
-        // needed until report store is migrated to redux
-        //this.props.dispatch(openRecordForEdit(recordId));
-        //const flux = this.getFlux();
-        //flux.actions.editingReportRow(recordId);
     },
 
     /**
