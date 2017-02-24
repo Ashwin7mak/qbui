@@ -142,6 +142,31 @@ const report = (state = [], action) => {
 
         return newState(updatedReport);
     }
+    case types.LOAD_EMBEDDED_REPORT_SUCCESS: {
+        const obj = {
+            id: action.id,
+            loading: false,
+            error: false,
+            data: action.content,
+            //  TODO: needed??..these are on the data property
+            appId: action.content.appId,
+            tblId: action.content.tblId,
+            rptId: action.content.rptId,
+            //
+            pageOffset: action.content.pageOffset,
+            numRows: action.content.numRows,
+            searchStringForFiltering: action.content.searchStringForFiltering,
+            selections: action.content.selections || new FacetSelections(),
+            facetExpression: action.content.facetExpression || {}
+        };
+        // reducer - no mutations against current state!
+        const stateList = _.cloneDeep(state);
+
+        //  append or replace obj into the cloned copy
+        stateList[2] = obj;
+
+        return stateList;
+    }
     default:
         // by default, return existing state
         return state;

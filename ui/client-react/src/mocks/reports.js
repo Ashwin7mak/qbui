@@ -2598,5 +2598,14 @@ export const reportData = {
         "currentTable": "0duiiaaaaje",
         "fieldsLoading": false,
         "error": false
-    }
+    },
+    appUsers: [
+        {
+            "firstName": "administrator",
+            "lastName": "none",
+            "screenName": "administrator",
+            "email": "administrator@quickbase.com",
+            "userId": "10000"
+        }
+    ]
 };

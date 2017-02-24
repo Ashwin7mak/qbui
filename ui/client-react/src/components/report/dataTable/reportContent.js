@@ -983,6 +983,9 @@ export const ReportContent = React.createClass({
                                 openRecordForEdit={this.openRecordForEditInTrowser}
                                 handleValidateFieldValue={this.handleValidateFieldValue}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+
+                                // for relationships phase-1
+                                isViewOnly={this.props.isViewOnly}
                             />
                         }
                         {/*TODO:: Remove once API for ReportGrid is closer to finalized. https://quickbase.atlassian.net/browse/MB-2023 */}

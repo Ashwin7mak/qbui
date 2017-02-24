@@ -56,7 +56,10 @@ export const ReportToolsAndContent = React.createClass({
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
-        pageEnd: React.PropTypes.number
+        pageEnd: React.PropTypes.number,
+
+        // used for relationships phase-1
+        isViewOnly: React.PropTypes.bool
     },
     getDefaultProps() {
         return {
@@ -211,10 +214,13 @@ export const ReportToolsAndContent = React.createClass({
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
+        appId = _.get(this, 'props.params.appId', appId);
+        tblId = _.get(this, 'props.params.tblId', tblId);
+        rptId = _.get(this, 'props.params.rptId', rptId);
 
-        return <ReportToolbar appId={this.props.params.appId}
-                              tblId={this.props.params.tblId}
-                              rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+        return <ReportToolbar appId={appId}
+                              tblId={tblId}
+                              rptId={rptId}
                               reportData={this.props.reportData}
                               selections={this.props.reportData.selections}
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
@@ -231,6 +237,7 @@ export const ReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
                               width={this.state.gridWidth}
+                              isViewOnly={this.props.isViewOnly}
                />;
     },
     getSelectionActions() {
