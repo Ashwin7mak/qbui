@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
-import {findFormElementKey} from '../../actions/actionHelpers/transformFormData';
+import {findFormElementKey} from '../../utils/formUtils';
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -39,7 +39,7 @@ function collect(connect, monitor) {
     return {
         connectDropTarget: connect.dropTarget(),
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
+        canDrop: monitor.canDrop()
     };
 }
 
@@ -50,51 +50,22 @@ function collect(connect, monitor) {
  * @constructor
  */
 const DroppableElement = FieldComponent => {
-    class component extends Component {
-        constructor(props) {
-            super(props);
+    const component = (props) => {
+        const {connectDropTarget, isOver, canDrop} = this.props;
 
-            this.reorderTimeout = null;
-        }
+        let classNames = ['droppableField'];
+        classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
 
-        // componentDidUpdate () {
-        //     let {isOver, canDrop, handleFormReorder, location, draggableItem} = this.props;
-        //
-        //     if (isOver) {
-        //         this.reorderTimeout = setTimeout(() => {
-        //             let element = draggableItem.containingElement[findFormElementKey(draggableItem.containingElement)];
-        //             let draggedItemProps = Object.assign({}, draggableItem, {element});
-        //
-        //             if (element) {
-        //                 console.log('REORDER EVENT:');
-        //                 console.log('LOCATION:', location);
-        //                 console.log('draggedItem', draggedItemProps);
-        //                 handleFormReorder(location, draggedItemProps);
-        //             }
-        //         }, 1000);
-        //     }
-        //     if (!isOver && this.reorderTimeout) {
-        //         clearTimeout(this.reorderTimeout);
-        //         this.reorderTimeout = null;
-        //     }
-        // }
-
-        render () {
-            const {connectDropTarget, isOver, canDrop} = this.props;
-
-            let classNames = ['droppableField'];
-            classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
-
-            return connectDropTarget(
-                <div className={classNames.join(' ')}>
-                    <FieldComponent {...this.props} />
-                </div>
-            );
-        }
-    }
+        return connectDropTarget(
+            <div className={classNames.join(' ')}>
+                <FieldComponent {...this.props} />
+            </div>
+        );
+    };
 
     component.propTypes = {
-        location: PropTypes.object.isRequired
+        location: PropTypes.object.isRequired,
+        containingElement: PropTypes.object.isRequired
     };
 
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)

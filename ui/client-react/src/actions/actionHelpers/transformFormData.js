@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {findFormElementKey} from '../../utils/formUtils';
 
 /**
  * Final data structure:
@@ -76,18 +77,6 @@ export function convertFormToObjectForServer(formMeta) {
 }
 
 // -- PRIVATE FUNCTIONS --
-/**
- * We don't know what type of element this might be (FormFieldElement, HeaderElement, FormTextElement, etc.)
- * so we are going to find it via duck typing. If it has a positionSameRow attribute, that is the one we want.
- * Returns the element key or undefined.
- * @param element
- * @returns {*}
- */
-export function findFormElementKey(element) {
-    return Object.keys(element).find(key => {
-        return (element[key].positionSameRow !== undefined);
-    });
-}
 
 /**
  * Currently the server returns a section with a property of elements so we can check that directly.

@@ -3,7 +3,7 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
-import {findFormElementKey} from '../../actions/actionHelpers/transformFormData';
+import {findFormElementKey} from '../../utils/formUtils';
 
 /**
  * Specifies event handlers and props that are available during dragging events
@@ -20,6 +20,12 @@ const fieldDragSource = {
         };
     },
 
+    /**
+     * Identifies which element should be considered in a dragging state. The DOM element isn't actually moved until
+     * the drop event, so we use this to apply CSS styles to hide or dim the element while a token version of that element is being dragged.
+     * @param props
+     * @param monitor
+     */
     isDragging(props, monitor) {
         let item = monitor.getItem();
         return props.containingElement.id === item.containingElement.id;

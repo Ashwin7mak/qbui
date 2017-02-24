@@ -80,7 +80,7 @@ function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
     let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
 
     if (!updatedElementLocation) {
-        // Form doesn't yet appear on the form so we can safely return the existing formMetaData
+        // Element doesn't yet appear on the form so we can safely return the existing formMetaData without removing anything
         return formMetaData;
     }
 
@@ -111,15 +111,8 @@ function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
     let rows = column.rows;
 
-    // if (isInSameRow(newLocation, draggedItemProps)) {
-    if (false) {
-        let row = rows[rowIndex];
-        row.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
-        updateOrderIndices(row, 'elements');
-    } else {
-        rows.splice(rowIndex, 0, createNewRow(rowIndex, [draggedItemProps.containingElement]));
-        updateOrderIndices(column, 'rows');
-    }
+    rows.splice(rowIndex, 0, createNewRow(rowIndex, [draggedItemProps.containingElement]));
+    updateOrderIndices(column, 'rows');
 
     return formMetaData;
 }
@@ -148,6 +141,13 @@ function clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, col
     return formMetaData;
 }
 
+/**
+ * Update the order indexes for an array of elements. Pass in the parent and the name of the property that holds the array
+ * that needs to be re-indexed.
+ * @param item
+ * @param property
+ * @returns {*}
+ */
 function updateOrderIndices(item, property) {
     if (item[property].length === 0) {
         return item;
@@ -161,6 +161,12 @@ function updateOrderIndices(item, property) {
     return item;
 }
 
+/**
+ * Build a new row that holds an array of elements passed in as a second parameter.
+ * @param rowIndex
+ * @param elements
+ * @returns {{id: (string|*), orderIndex: *, elements}}
+ */
 function createNewRow(rowIndex, elements) {
     return {
         id: _.uniqueId('row-'),
@@ -172,17 +178,12 @@ function createNewRow(rowIndex, elements) {
     };
 }
 
-function isInSameRow(newLocation, draggedItemProps) {
-    let {tabIndex, sectionIndex, columnIndex, rowIndex} = draggedItemProps.location;
-
-    return (
-        tabIndex === newLocation.tabIndex &&
-        sectionIndex === newLocation.sectionIndex &&
-        columnIndex === newLocation.columnIndex &&
-        rowIndex === newLocation.rowIndex
-    );
-}
-
+/**
+ * Finds the location of the current element nested within the formMeta
+ * @param formMeta
+ * @param element
+ * @returns {*}
+ */
 function findCurrentElementLocation(formMeta, element) {
     let tabIndex = 0;
     let sectionIndex = 0;
@@ -191,9 +192,8 @@ function findCurrentElementLocation(formMeta, element) {
     let elementIndex = 0;
     let foundElement = null;
 
+    // Use .some to improve efficiency of query. Some function will stop the loop as soon as it returns truthy.
     formMeta.tabs.some(tab => {
-
-
         return tab.sections.some(section => {
             tabIndex = tab.orderIndex;
             return section.columns.some(column => {
@@ -208,8 +208,6 @@ function findCurrentElementLocation(formMeta, element) {
             });
         });
     });
-
-
 
     return (foundElement ? {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} : undefined);
 }
