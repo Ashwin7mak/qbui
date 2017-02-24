@@ -498,6 +498,37 @@ export default {
                 URL_FORMULA: "Formule Url",
                 NUMERIC_FORMULA: "Formule numérique"
             }
+        },
+        featureSwitchAdmin: {
+            defaultFeatureName: "Fonctionnalité",
+            featureSwitchesTitle: "Commutateurs de fonctions",
+            featureSwitchOverridesTitle: "Fonctionnalité switche surcharges",
+            switchName: "Nom du commutateur",
+            teamName: "Nom de l'équipe",
+            description: "La description",
+            on: "Sur    ",
+            off: "Vide",
+            onOrOff: "Sure/Vide",
+            defaultState: "État par défaut",
+            addNew: "Ajouter un nouveau",
+            delete: "Effacer",
+            turnOn: "Allumer",
+            turnOff: "Éteindre",
+            featureSwitchCreated: "Fonction créée",
+            featureSwitchUpdated: "Fonctionnalité modifiée",
+            featureSwitchesDeleted: "Fonction supprimée",
+            selectedFeatures: "Fonctions sélectionnées",
+            overrideType: "La catégorie",
+            overrideValue: "ID",
+            overrideChangesDefault: "Remplace la valeur par défaut?",
+            overridesYes: "Oui",
+            overridesNo: "Non",
+            overrideCreated: "Création d'une substitution",
+            overrideUpdated: "Remplacement modifié",
+            overridesDeleted: "Annulation supprimée",
+            selectedOverrides: "Remplacements sélectionnés"
+
         }
+
     }
 };

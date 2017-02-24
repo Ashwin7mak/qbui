@@ -1,10 +1,10 @@
 import * as types from '../actions/types';
 import FeatureSwitchService from '../services/featureSwitchService';
 import Promise from 'bluebird';
-import {NotificationManager} from 'react-notifications';
+
 import * as CompConsts from '../constants/componentConstants';
 import * as FeatureSwitchConsts from '../constants/featureSwitchConstants';
-import Locale from '../locales/locales';
+
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import _ from 'lodash';
@@ -85,8 +85,6 @@ export const createFeatureSwitch = (name) => {
                 feature.id = response.data; // save the generated ID
                 feature.overrides = [];
                 dispatch(createdFeatureSwitch(feature));
-                NotificationManager.success('Feature switch created', Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                 resolve();
             }).catch(error => {
 
@@ -119,8 +117,7 @@ export const deleteFeatureSwitches = ids => {
 
             promise.then(response => {
                 dispatch(featureSwitchesDeleted(ids));
-                NotificationManager.success('Feature switch(es) deleted', Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                 resolve();
             }).catch(error => {
 
@@ -167,8 +164,7 @@ export const updateFeatureSwitch = (id, featureSwitch, property, value) => {
 
             promise.then(response => {
                 dispatch(featureSwitchUpdated(id, property, value));
-                NotificationManager.success('Feature switch updated', Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                 resolve();
             }).catch(error => {
 
@@ -217,8 +213,7 @@ export const createOverride = (switchId) => {
                 override.id = response.data; // save the generated ID
 
                 dispatch(createdOverride(override));
-                NotificationManager.success('Feature switch override created', Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                 resolve();
             }).catch(error => {
 
@@ -265,8 +260,7 @@ export const updateOverride = (featureSwitchId, id, override, property, value) =
 
             promise.then(response => {
                 dispatch(overrideUpdated(id, property, value));
-                NotificationManager.success('Override updated', Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                 resolve();
             }).catch(error => {
 
@@ -299,8 +293,7 @@ export const deleteOverrides = (switchId, ids) => {
 
             promise.then(response => {
                 dispatch(overridesDeleted(ids));
-                NotificationManager.success('Feature switch override(s) deleted', Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
                 resolve();
             }).catch(error => {
 

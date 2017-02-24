@@ -499,6 +499,36 @@ export default {
                 URL_FORMULA: "Url-Formel",
                 NUMERIC_FORMULA: "Numerische Formel"
             }
+        },
+        featureSwitchAdmin: {
+            defaultFeatureName: "Feature",
+            featureSwitchesTitle: "Funktionsschalter",
+            featureSwitchOverridesTitle: "Feature-Schalter-Overrides",
+            switchName: "Funktionsname",
+            teamName: "Teamname",
+            description: "Beschreibung",
+            on: "Auf",
+            off: "Aus",
+            onOrOff: "Auf/Aus",
+            defaultState: "Standardzustand",
+            addNew: "Neue hinzufügen",
+            delete: "Löschen",
+            turnOn: "Einschalten",
+            turnOff: "Abschalten",
+            featureSwitchCreated: "Feature erstellt",
+            featureSwitchUpdated: "Feature geändert",
+            featureSwitchesDeleted: "Features entfernt",
+            selectedFeatures: "Ausgewählte Merkmale",
+            overrideType: "Typ",
+            overrideValue: "ID",
+            overrideChangesDefault: "Überschreibt standardmäßig?",
+            overridesYes: "Ja",
+            overridesNo: "Nein",
+            overrideCreated: "Override erstellt",
+            overrideUpdated: "Überschreiben geändert",
+            overridesDeleted: "Überschreibt gelöscht",
+            selectedOverrides: "Ausgewählte Überschreibungen"
+
         }
     }
 };

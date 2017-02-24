@@ -1,12 +1,15 @@
 import React from 'react';
 import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
+import {NotificationManager} from 'react-notifications';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
+import * as CompConsts from '../../constants/componentConstants';
 import * as edit from 'react-edit';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import Locale from '../../locales/locales';
+import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 
 import './featureSwitches.scss';
@@ -59,9 +62,13 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
     deleteSelectedOverrides() {
 
-        this.props.deleteOverrides(this.props.params.id, this.state.selectedRows);
+        this.props.deleteOverrides(this.props.params.id, this.state.selectedRows).then(() => {
 
-        this.setState({selectedRows: []});
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesDeleted"), Locale.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
+            this.setState({selectedRows: []});
+        });
     }
 
     getFeatureSwitch() {
@@ -70,7 +77,10 @@ class FeatureSwitchOverridesRoute extends React.Component {
     }
 
     createOverride() {
-        this.props.createOverride(this.props.params.id, this.props.overrides);
+        this.props.createOverride(this.props.params.id, this.props.overrides).then(() => {
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideCreated"), Locale.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+        });
     }
 
 
@@ -78,7 +88,10 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
         const overrideToUpdate = this.props.overrides.find(override => override.id === id);
 
-        this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value);
+        this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value).then(() => {
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+        });
     }
 
     getColumns() {
@@ -111,7 +124,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_OVERRIDE_TYPE_KEY,
                 header: {
-                    label: 'Type'
+                    label: Locale.getMessage("featureSwitchAdmin.overrideType"),
                 },
                 cell: {
                     transforms: [editable(edit.dropdown({options: [{name:'Realm', value:'realm'}, {name:'App', value:'app'}]}))]
@@ -120,7 +133,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_OVERRIDE_VALUE_KEY,
                 header: {
-                    label: 'ID'
+                    label: Locale.getMessage("featureSwitchAdmin.overrideValue"),
                 },
                 cell: {
                     transforms: [editable(edit.input())]
@@ -129,7 +142,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY,
                 header: {
-                    label: 'On/Off'
+                    label: Locale.getMessage("featureSwitchAdmin.onOff"),
                 },
                 cell: {
                     formatters: [
@@ -146,12 +159,16 @@ class FeatureSwitchOverridesRoute extends React.Component {
             },
             {
                 header: {
-                    label: 'Overrides default?'
+                    label: Locale.getMessage("featureSwitchAdmin.overrideChangesDefault"),
                 },
                 cell: {
                     formatters: [
                         (value, {rowData}) => {
-                            return <span>{rowData.on !== this.getFeatureSwitch()[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] ? 'Yes' : 'No'} </span>;
+                            const doesOverride = rowData[FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY] !== this.getFeatureSwitch()[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY];
+
+                            return (<span>
+                                    {doesOverride  ? Locale.getMessage("featureSwitchAdmin.overridesYes") : Locale.getMessage("featureSwitchAdmin.overridesNo") }
+                                </span>);
                         }
 
                     ]
@@ -178,20 +195,23 @@ class FeatureSwitchOverridesRoute extends React.Component {
         if (featureSwitch) {
 
             const selectedSize = this.state.selectedRows.length;
-            const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected overrides(s)');
+            const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedOverrides")}`;
 
             return (
                 <div className="featureSwitches">
-                    <div><strong>Name:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]}</div>
-                    <div><strong>Description:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY_KEY]}</div>
-                    <div><strong>Team:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_TEAM_KEY]}</div>
-                    <div><strong>Default State:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] ? "On" : "Off"}</div>
+                    <div><strong><I18nMessage message="featureSwitchAdmin.switchName"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]}</div>
+                    <div><strong><I18nMessage message="featureSwitchAdmin.description"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY]}</div>
+                    <div><strong><I18nMessage message="featureSwitchAdmin.teamName"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_TEAM_KEY]}</div>
+                    <div>
+                        <strong><I18nMessage message="featureSwitchAdmin.defaultState"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] ?
+                        <I18nMessage message="featureSwitchAdmin.on"/> :
+                        <I18nMessage message="featureSwitchAdmin.off"/>}
+                    </div>
                     <p/>
-                    <h3>Feature Switch Overrides:</h3>
+                    <h3><I18nMessage message="featureSwitchAdmin.featureSwitchOverridesTitle"/>:</h3>
 
                     <div className="globalButtons">
                         <button onClick={this.createOverride}>Add new</button>
-                        <button disabled={!this.props.edited} className="save" onClick={this.saveOverrides}>Save overrides</button>
                     </div>
 
                     {this.props.overrides.length === 0 ?
@@ -212,13 +232,13 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     }
                     <p/>
                     <div className="selectionButtons">
-                        <button disabled={selectedSize === 0} onClick={this.deleteSelectedOverrides}>Delete</button>
-                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(true)}>Turn On</button>
-                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(false)}>Turn Off</button>
+                        <button disabled={selectedSize === 0} onClick={this.deleteSelectedOverrides}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                        <button disabled={selectedSize === 0} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                         <span>{selectedSizeLabel}</span>
                     </div>
 
-                    <PageTitle title={["Feature Switch Overrides", featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                    <PageTitle title={[Locale.getMessage('featureSwitchAdmin.featureswitchOverridesTitle'), featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>
             );
         } else {

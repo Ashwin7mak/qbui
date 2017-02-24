@@ -4,7 +4,7 @@ export const FEATURE_ID_KEY = 'id';
 export const FEATURE_NAME_KEY = 'name';
 export const FEATURE_TEAM_KEY = 'teamName';
 export const FEATURE_DEFAULT_ON_KEY = 'defaultOn';
-export const FEATURE_DESCRIPTION_KEY = 'name';
+export const FEATURE_DESCRIPTION_KEY = 'description';
 
 export const FEATURE_OVERRIDE_ID_KEY = 'id';
 export const FEATURE_OVERRIDE_TYPE_KEY = 'entityType';

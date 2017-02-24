@@ -2,7 +2,11 @@ import React from 'react';
 import * as Table from 'reactabular-table';
 import * as edit from 'react-edit';
 import * as UrlConsts from "../../constants/urlConstants";
+import * as CompConsts from '../../constants/componentConstants';
+import Locale from '../../locales/locales';
+import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
+import {NotificationManager} from 'react-notifications';
 import {Link} from 'react-router';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
@@ -16,13 +20,6 @@ BodyWrapper.shouldComponentUpdate = true;
 
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
-
-
-const expiredBehaviorOptions = [
-    {name:'Turn feature on', value:'on'},
-    {name:'Turn feature off', value:'off'},
-    {name:'Flip on/off', value:'flip'}
-];
 
 class FeatureSwitchesRoute extends React.Component {
 
@@ -71,12 +68,13 @@ class FeatureSwitchesRoute extends React.Component {
 
     getDefaultFeatureSwitchName() {
 
-        let proposed = 'Feature';
+        const defaultFeatureName = Locale.getMessage("featureSwitchAdmin.defaultFeatureName");
+        let proposed = defaultFeatureName;
 
         let nameFound = this.getFeatureByName(proposed);
 
         for (let i = 1; nameFound; i++) {
-            proposed = `Feature (${i})`;
+            proposed = `${defaultFeatureName} (${i})`;
             nameFound = this.getFeatureByName(proposed);
         }
 
@@ -84,20 +82,31 @@ class FeatureSwitchesRoute extends React.Component {
     }
 
     createFeatureSwitch() {
-        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName());
+        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then(() => {
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+        });
     }
 
     deleteSelectedSwitches() {
         this.props.deleteFeatureSwitches(this.state.selectedRows).then(
-            () => this.setState({selectedRows: [], allSelected: false})
+            () => {
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchesDeleted"), Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                this.setState({selectedRows: [], allSelected: false});
+            }
         );
+
     }
 
     updateFeatureSwitch(id, property, value) {
 
         const featureSwitch = this.props.switches.find(sw => sw.id === id);
 
-        this.props.updateFeatureSwitch(id, featureSwitch, property, value);
+        this.props.updateFeatureSwitch(id, featureSwitch, property, value).then(() => {
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
+                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+        });
     }
 
     getColumns() {
@@ -140,7 +149,7 @@ class FeatureSwitchesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_NAME_KEY,
                 header: {
-                    label: 'Switch Name',
+                    label: Locale.getMessage("featureSwitchAdmin.switchName"),
                 },
                 cell: {
                     formatters: [
@@ -152,7 +161,7 @@ class FeatureSwitchesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_TEAM_KEY,
                 header: {
-                    label: 'Team'
+                    label: Locale.getMessage("featureSwitchAdmin.teamName")
                 },
                 cell: {
                     transforms: [editable(edit.input())]
@@ -161,7 +170,7 @@ class FeatureSwitchesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY,
                 header: {
-                    label: 'Description'
+                    label: Locale.getMessage("featureSwitchAdmin.description")
                 },
                 cell: {
                     transforms: [editable(edit.input())]
@@ -170,7 +179,7 @@ class FeatureSwitchesRoute extends React.Component {
             {
                 property: FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY,
                 header: {
-                    label: 'On/Off'
+                    label: Locale.getMessage("featureSwitchAdmin.onOrOff")
                 },
                 cell: {
                     formatters: [
@@ -195,12 +204,11 @@ class FeatureSwitchesRoute extends React.Component {
     render() {
 
         const selectedSize = this.state.selectedRows.length;
-        const selectedSizeLabel = selectedSize > 0 && (selectedSize + ' Selected feature(s)');
+        const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
 
         return (
             <div className="featureSwitches">
-                <h1>Feature Switches</h1>
-
+                <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
 
                 <div className="globalButtons">
                     <button onClick={this.createFeatureSwitch}>Add new</button>
@@ -224,13 +232,13 @@ class FeatureSwitchesRoute extends React.Component {
 
                 <div className="selectionButtons">
 
-                    <button disabled={selectedSize === 0} onClick={this.deleteSelectedSwitches}>Delete</button>
-                    <button disabled={selectedSize === 0} onClick={() => this.setSelectedSwitchStates(true)}>Turn On</button>
-                    <button disabled={selectedSize === 0} onClick={() => this.setSelectedSwitchStates(false)}>Turn Off</button>
+                    <button disabled={selectedSize === 0} onClick={this.deleteSelectedSwitches}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                    <button disabled={selectedSize === 0} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                    <button disabled={selectedSize === 0} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                     <span>{selectedSizeLabel}</span>
                 </div>
 
-                <PageTitle title="Feature Switches" />
+                <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
             </div>
         );
     }

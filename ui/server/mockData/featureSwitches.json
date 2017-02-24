@@ -1,25 +1,25 @@
 [
   {
-    "id": "1",
-    "name": "Feature Asdfdsfsdf",
-    "teamName": "Cthulusdfsdf"
-  },
-  {
     "id": "2",
     "name": "Feature B",
-    "teamName": "Hydra",
-    "description": "Another demo feature",
-    "defaultOn": false,
+    "teamName": "Hydradssdfsdd",
+    "description": "d",
     "overrides": [
       {
-        "id": "fa45bb6e-b10c-4295-b5bf-2289a9cd1e6e",
+        "id": "5d9309da-f856-4050-9e20-892e7852ce4b",
         "entityType": "realm",
+        "on": true
+      },
+      {
+        "id": "9dc7f645-e7e7-455e-9d19-fdd53808b4d0",
+        "entityType": "app",
         "on": false
       },
       {
-        "id": "c4833ce2-fde2-4e91-8017-79419da66f8d",
-        "entityType": "app",
-        "on": false
+        "entityType": "realm",
+        "entityValue": "",
+        "on": false,
+        "id": "48278996-1186-4db6-b02f-c217d6facd25"
       }
     ]
   },
@@ -27,15 +27,13 @@
     "id": "3",
     "name": "Hide Table",
     "teamName": "Hydra",
-    "description": "Hide table feature",
-    "defaultOn": false,
-    "overrides": [
-      {
-        "id": "301",
-        "entityType": "app",
-        "entityValue": "bmbahnjyp",
-        "on": true
-      }
-    ]
+    "description": "d"
+  },
+  {
+    "id": "d5159115-2c4e-4ffd-b090-a7c4a44d2c3b",
+    "name": "Feature",
+    "teamName": "Team",
+    "description": "Description",
+    "defaultOn": true
   }
 ]
