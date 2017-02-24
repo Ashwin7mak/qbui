@@ -147,46 +147,6 @@ describe('MoveFieldHelper', () => {
                 expectedOriginalLocationSimplifiedResult: [
                     {orderIndex: 0, fieldId: 22},
                 ]
-            },
-            {
-                description: 'moves a field to the left within a row',
-                originalTab: 1,
-                originalSection: 0,
-                originalColumn: 0,
-                originalRow: 1,
-                originalElementIndex: 2,
-                fieldId: 18,
-                newTab: 1,
-                newSection: 0,
-                newColumn: 0,
-                newRow: 1,
-                newElementIndex: 1,
-                checkRow: 1,
-                expectedResult: [
-                    {orderIndex: 0, fieldId: 16},
-                    {orderIndex: 1, fieldId: 18},
-                    {orderIndex: 2, fieldId: 17},
-                ]
-            },
-            {
-                description: 'moves a field to the right within a row',
-                originalTab: 1,
-                originalSection: 0,
-                originalColumn: 0,
-                originalRow: 1,
-                originalElementIndex: 0,
-                fieldId: 16,
-                newTab: 1,
-                newSection: 0,
-                newColumn: 0,
-                newRow: 1,
-                newElementIndex: 1,
-                checkRow: 1,
-                expectedResult: [
-                    {orderIndex: 0, fieldId: 17},
-                    {orderIndex: 1, fieldId: 16},
-                    {orderIndex: 2, fieldId: 18},
-                ]
             }
         ];
 

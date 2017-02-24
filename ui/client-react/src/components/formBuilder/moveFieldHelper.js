@@ -179,7 +179,7 @@ function createNewRow(rowIndex, elements) {
 }
 
 /**
- * Finds the location of the current element nested within the formMeta
+ * Finds the location of the current element by id nested within the formMeta
  * @param formMeta
  * @param element
  * @returns {*}
@@ -192,19 +192,21 @@ function findCurrentElementLocation(formMeta, element) {
     let elementIndex = 0;
     let foundElement = null;
 
-    // Use .some to improve efficiency of query. Some function will stop the loop as soon as it returns truthy.
+    // Use .some to improve efficiency of query. ".some" function will stop the loop as soon as it returns truthy.
     formMeta.tabs.some(tab => {
+        tabIndex = tab.orderIndex;
         return tab.sections.some(section => {
-            tabIndex = tab.orderIndex;
+            sectionIndex = section.orderIndex;
             return section.columns.some(column => {
                 columnIndex = column.orderIndex;
                 return column.rows.some(row => {
                     rowIndex = row.orderIndex;
                     return row.elements.some(currentElement => {
+                        elementIndex = currentElement.orderIndex;
                         foundElement = currentElement;
                         return currentElement.id === element.id;
                     });
-                })
+                });
             });
         });
     });
