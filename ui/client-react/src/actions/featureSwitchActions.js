@@ -3,6 +3,7 @@ import FeatureSwitchService from '../services/featureSwitchService';
 import Promise from 'bluebird';
 import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
+import * as FeatureSwitchConsts from '../constants/featureSwitchConstants';
 import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
@@ -16,11 +17,20 @@ const loadSwitchesSuccess = (switches) => ({
 });
 
 const getFeatureSwitchPersistProps = (featureSwitch) => {
-    return _.pick(featureSwitch, ['id', 'name', 'team', 'description', 'defaultOn']);
+    return _.pick(featureSwitch, [
+        FeatureSwitchConsts.FEATURE_ID_KEY,
+        FeatureSwitchConsts.FEATURE_NAME_KEY,
+        FeatureSwitchConsts.FEATURE_TEAM_KEY,
+        FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY,
+        FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY_KEY]);
 };
 
 const getOverridePersistProps = (featureSwitch) => {
-    return _.pick(featureSwitch, ['id', 'entityType', 'entityValue', 'on']);
+    return _.pick(featureSwitch, [
+        FeatureSwitchConsts.FEATURE_OVERRIDE_ID_KEY,
+        FeatureSwitchConsts.FEATURE_OVERRIDE_TYPE_KEY,
+        FeatureSwitchConsts.FEATURE_OVERRIDE_VALUE_KEY_KEY,
+        FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY]);
 };
 
 export const getSwitches = () => {
@@ -63,12 +73,11 @@ export const createFeatureSwitch = (name) => {
 
             let featureSwitchService = new FeatureSwitchService();
 
-            let feature = {
-                defaultOn: false,
-                description: 'Description',
-                team: 'Team',
-                name
-            };
+            let feature = {};
+            feature[FeatureSwitchConsts.FEATURE_NAME_KEY] = name;
+            feature[FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY] = 'Description';
+            feature[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] = false;
+            feature[FeatureSwitchConsts.FEATURE_TEAM_KEY] = 'Team';
 
             let promise = featureSwitchService.createFeatureSwitch(feature);
 

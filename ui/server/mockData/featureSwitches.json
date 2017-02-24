@@ -1,42 +1,24 @@
 [
   {
     "id": "1",
-    "name": "Feature A",
-    "team": "Cthulu",
-    "description": "Demo feature switch",
-    "defaultOn": true,
-    "overrides": [
-      {
-        "id": "101",
-        "entityType": "realm",
-        "entityValue": "12345",
-        "on": false
-      },
-      {
-        "id": "103",
-        "entityType": "app",
-        "entityValue": "app2",
-        "on": false
-      }
-    ]
+    "name": "Feature Asdfdsfsdf",
+    "teamName": "Cthulusdfsdf"
   },
   {
     "id": "2",
     "name": "Feature B",
-    "team": "Hydra",
+    "teamName": "Hydra",
     "description": "Another demo feature",
     "defaultOn": false,
     "overrides": [
       {
         "id": "fa45bb6e-b10c-4295-b5bf-2289a9cd1e6e",
-        "entityType": "app",
-        "entityValue": "y",
-        "on": true
+        "entityType": "realm",
+        "on": false
       },
       {
-        "id": "8b2e671f-0fa1-46a8-808a-95bf60845ec5",
-        "entityType": "realm",
-        "entityValue": "x",
+        "id": "c4833ce2-fde2-4e91-8017-79419da66f8d",
+        "entityType": "app",
         "on": false
       }
     ]
@@ -44,7 +26,7 @@
   {
     "id": "3",
     "name": "Hide Table",
-    "team": "Hydra",
+    "teamName": "Hydra",
     "description": "Hide table feature",
     "defaultOn": false,
     "overrides": [
@@ -53,108 +35,6 @@
         "entityType": "app",
         "entityValue": "bmbahnjyp",
         "on": true
-      }
-    ]
-  },
-  {
-    "defaultOn": false,
-    "description": "Description",
-    "team": "Team",
-    "name": "Feature",
-    "id": "98fca309-b19f-49db-b3b1-6a8666d77559",
-    "overrides": [
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "2304618f-0f6d-47e1-b321-0d77954c9c24"
-      },
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "0e00cc44-e03f-420b-b18c-37e98478fb70"
-      },
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "bb2a69ec-e503-4d7c-a70f-374846e89ac6"
-      },
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "ff90e4ec-9cbc-448e-b22e-58239b8f72b1"
-      }
-    ]
-  },
-  {
-    "id": "7de2a353-c1a5-4927-ab01-f59221c0b8be",
-    "name": "drew",
-    "team": "Team",
-    "description": "Description",
-    "defaultOn": false,
-    "overrides": [
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "c7fa0252-a0ed-432c-baa8-d3e21b46c9c3"
-      },
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "39b23e63-8dc1-4ad3-9bd9-fc4f043f1d2c"
-      }
-    ]
-  },
-  {
-    "defaultOn": false,
-    "description": "Description",
-    "team": "Team",
-    "name": "Feature (1)",
-    "id": "36ab1432-c619-48e9-9421-c6ea1d9b1f1a",
-    "overrides": [
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "72e65b10-a40e-42b2-97f4-9e15d05f80ae"
-      },
-      {
-        "entityType": "realm",
-        "entityValue": "",
-        "on": false,
-        "id": "56c4e2d3-8214-458a-96d3-0fbd26547dce"
-      },
-      {
-        "id": "bcb86956-1cc7-49b5-9f75-bb7a125cd843",
-        "entityType": "app",
-        "entityValue": "aaa",
-        "on": true
-      },
-      {
-        "id": "c8857a39-ceda-4ab4-b384-14ac4181b2fd",
-        "entityType": "realm",
-        "entityValue": "rrr",
-        "on": true
-      }
-    ]
-  },
-  {
-    "defaultOn": false,
-    "description": "Description",
-    "team": "Team",
-    "name": "Feature (2)",
-    "id": "f087f804-c1e2-4c0f-8466-afdcec8cffea",
-    "overrides": [
-      {
-        "id": "835445cf-aa37-45d1-8bbf-5d0248c5e71b",
-        "entityType": "realm",
-        "entityValue": "t",
-        "on": false
       }
     ]
   }

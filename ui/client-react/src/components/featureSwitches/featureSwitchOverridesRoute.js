@@ -2,6 +2,7 @@ import React from 'react';
 import * as Table from 'reactabular-table';
 import {connect} from 'react-redux';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
 import * as edit from 'react-edit';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
@@ -52,7 +53,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
     setSelectedOverrideStates(defaultOn) {
         this.state.selectedRows.forEach((id) => {
-            this.updateOverride(id, 'on', defaultOn);
+            this.updateOverride(id, FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY, defaultOn);
         });
     }
 
@@ -108,7 +109,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             },
             {
-                property: 'entityType',
+                property: FeatureSwitchConsts.FEATURE_OVERRIDE_TYPE_KEY,
                 header: {
                     label: 'Type'
                 },
@@ -117,7 +118,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             },
             {
-                property: 'entityValue',
+                property: FeatureSwitchConsts.FEATURE_OVERRIDE_VALUE_KEY,
                 header: {
                     label: 'ID'
                 },
@@ -126,7 +127,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 }
             },
             {
-                property: 'on',
+                property: FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY,
                 header: {
                     label: 'On/Off'
                 },
@@ -136,7 +137,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                             return (
                              <ToggleButton value={value}
                                               onToggle={(newValue) => {
-                                                  this.updateOverride(rowData.id, 'on', !newValue);
+                                                  this.updateOverride(rowData.id, FeatureSwitchConsts.FEATURE_OVERRIDE_ON_KEY, !newValue);
                                               }}/>);
                         }
 
@@ -150,7 +151,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 cell: {
                     formatters: [
                         (value, {rowData}) => {
-                            return <span>{rowData.on !== this.getFeatureSwitch().defaultOn ? 'Yes' : 'No'} </span>;
+                            return <span>{rowData.on !== this.getFeatureSwitch()[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] ? 'Yes' : 'No'} </span>;
                         }
 
                     ]
@@ -181,10 +182,10 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
             return (
                 <div className="featureSwitches">
-                    <div><strong>Name:</strong> {featureSwitch.name}</div>
-                    <div><strong>Description:</strong> {featureSwitch.description}</div>
-                    <div><strong>Team:</strong> {featureSwitch.team}</div>
-                    <div><strong>Default State:</strong> {featureSwitch.defaultOn ? "On" : "Off"}</div>
+                    <div><strong>Name:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]}</div>
+                    <div><strong>Description:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY_KEY]}</div>
+                    <div><strong>Team:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_TEAM_KEY]}</div>
+                    <div><strong>Default State:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] ? "On" : "Off"}</div>
                     <p/>
                     <h3>Feature Switch Overrides:</h3>
 
@@ -217,7 +218,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                         <span>{selectedSizeLabel}</span>
                     </div>
 
-                    <PageTitle title={["Feature Switch Overrides", featureSwitch.name].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                    <PageTitle title={["Feature Switch Overrides", featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>
             );
         } else {

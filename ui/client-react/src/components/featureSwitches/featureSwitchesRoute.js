@@ -5,6 +5,7 @@ import * as UrlConsts from "../../constants/urlConstants";
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import _ from 'lodash';
@@ -59,7 +60,7 @@ class FeatureSwitchesRoute extends React.Component {
 
     setSelectedSwitchStates(isOn) {
         this.state.selectedRows.forEach((id) => {
-            this.updateFeatureSwitch(id, 'defaultOn', isOn);
+            this.updateFeatureSwitch(id, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, isOn);
         });
     }
 
@@ -137,7 +138,7 @@ class FeatureSwitchesRoute extends React.Component {
                 }
             },
             {
-                property: 'name',
+                property: FeatureSwitchConsts.FEATURE_NAME_KEY,
                 header: {
                     label: 'Switch Name',
                 },
@@ -149,7 +150,7 @@ class FeatureSwitchesRoute extends React.Component {
                 }
             },
             {
-                property: 'team',
+                property: FeatureSwitchConsts.FEATURE_TEAM_KEY,
                 header: {
                     label: 'Team'
                 },
@@ -158,7 +159,7 @@ class FeatureSwitchesRoute extends React.Component {
                 }
             },
             {
-                property: 'description',
+                property: FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY,
                 header: {
                     label: 'Description'
                 },
@@ -167,7 +168,7 @@ class FeatureSwitchesRoute extends React.Component {
                 }
             },
             {
-                property: 'defaultOn',
+                property: FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY,
                 header: {
                     label: 'On/Off'
                 },
@@ -177,7 +178,7 @@ class FeatureSwitchesRoute extends React.Component {
                             return (
                                 <ToggleButton value={value}
                                               onToggle={newValue => {
-                                                  this.updateFeatureSwitch(rowData.id, 'defaultOn', !newValue);
+                                                  this.updateFeatureSwitch(rowData.id, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, !newValue);
                                               }}/>);
                         }
 
