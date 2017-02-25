@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 import DateTimeFieldValueEditor from '../../src/components/fields/dateTimeFieldValueEditor';
-import DateFieldValueEditor from '../../src/components/fields/dateFieldValueEditor';
-import TimeFieldValueEditor from '../../src/components/fields/timeFieldValueEditor';
+import DateFieldValueEditor, {__RewireAPI__ as DateFieldValueEditorRewireAPI} from '../../src/components/fields/dateFieldValueEditor';
+import TimeFieldValueEditor, {__RewireAPI__ as TimeFieldValueEditorRewireAPI} from '../../src/components/fields/timeFieldValueEditor';
 
 
 class BreakpointsAlwaysSmallMock {
@@ -62,19 +62,19 @@ describe('dateFieldValueEditor', () => {
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(datePickerSelector)).toBeTruthy();
     });
     it('renders date picker on small breakpoint devices', () => {
-        DateFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        DateFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let parentComponent = TestUtils.renderIntoDocument(React.createElement(buildMockParent({date: true})));
 
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(datePickerSelector)).toBeTruthy();
-        DateFieldValueEditor.__ResetDependency__('Breakpoints');
+        DateFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
     it('renders native date input on small breakpoint touch devices', () => {
-        DateFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        DateFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let parentComponent = TestUtils.renderIntoDocument(React.createElement(buildMockParent({date: true, touch: true})));
 
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(datePickerSelector)).toBeFalsy();
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(dateNativeInputSelector)).toBeTruthy();
-        DateFieldValueEditor.__ResetDependency__('Breakpoints');
+        DateFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
 });
 
@@ -85,19 +85,19 @@ describe('timeFieldValueEditor', () => {
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeDropdownSelector)).toBeTruthy();
     });
     it('renders Select dropdown on small breakpoint devices', () => {
-        TimeFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        TimeFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let parentComponent = TestUtils.renderIntoDocument(React.createElement(buildMockParent({time: true})));
 
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeDropdownSelector)).toBeTruthy();
-        TimeFieldValueEditor.__ResetDependency__('Breakpoints');
+        TimeFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
     it('renders native time input on small breakpoint touch devices', () => {
-        TimeFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        TimeFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let parentComponent = TestUtils.renderIntoDocument(React.createElement(buildMockParent({time: true, touch: true})));
 
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeDropdownSelector)).toBeFalsy();
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeNativeInputSelector)).toBeTruthy();
-        TimeFieldValueEditor.__ResetDependency__('Breakpoints');
+        TimeFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
 });
 
@@ -122,23 +122,23 @@ describe('dateTimeFieldValueEditor', () => {
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeDropdownSelector)).toBeTruthy();
     });
     it('renders date picker and time Select dropdown on small breakpoint devices', () => {
-        DateFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
-        TimeFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        DateFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        TimeFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let parentComponent = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
 
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(datePickerSelector)).toBeTruthy();
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeDropdownSelector)).toBeTruthy();
-        DateFieldValueEditor.__ResetDependency__('Breakpoints');
-        TimeFieldValueEditor.__ResetDependency__('Breakpoints');
+        DateFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
+        TimeFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
     it('renders native date input and time input on small breakpoint touch devices', () => {
-        DateFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
-        TimeFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        DateFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        TimeFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let parentComponent = TestUtils.renderIntoDocument(React.createElement(buildMockParent({touch: true})));
 
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(dateNativeInputSelector)).toBeTruthy();
         expect(ReactDOM.findDOMNode(parentComponent).querySelector(timeNativeInputSelector)).toBeTruthy();
-        DateFieldValueEditor.__ResetDependency__('Breakpoints');
-        TimeFieldValueEditor.__ResetDependency__('Breakpoints');
+        DateFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
+        TimeFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
 });

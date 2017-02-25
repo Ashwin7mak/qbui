@@ -180,7 +180,8 @@
                 this.notificationSuccessPopupEl.waitForVisible();
                 var messageText = this.notificationSuccessPopupEl.getText();
                 expect(messageText).toContain(successMessage.toString(), 'Expected Message not found');
-            }}},
+            }
+        }},
 
         /**
          * Loop through the records being displayed and return the one being edited

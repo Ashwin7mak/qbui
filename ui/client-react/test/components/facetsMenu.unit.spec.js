@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import FacetSelections  from '../../src/components/facet/facetSelections';
-import FacetsItem  from '../../src/components/facet/facetsItem';
-import FacetsList  from '../../src/components/facet/facetsList';
-import FacetsMenu  from '../../src/components/facet/facetsMenu';
+import {__RewireAPI__ as FacetsItemRewireAPI}  from '../../src/components/facet/facetsItem';
+import {__RewireAPI__ as FacetsListRewireAPI}  from '../../src/components/facet/facetsList';
+import FacetsMenu from '../../src/components/facet/facetsMenu';
 import facetMenuActions from '../../src/actions/facetMenuActions';
 import Store from '../../src/stores/facetMenuStore';
 
@@ -26,8 +26,8 @@ describe('FacetsMenu functions', () => {
     const fakeReportData_valid = {
         data: {
             facets : [{id:1, name:'test', type:"TEXT",
-                        values:[{value:"a"}, {value:"b"}, {value:"c"}]}
-                ]
+                values:[{value:"a"}, {value:"b"}, {value:"c"}]}
+            ]
         }
     };
     const fakeReportDataNoFacets_valid = {
@@ -44,14 +44,14 @@ describe('FacetsMenu functions', () => {
     });
 
     beforeEach(() => {
-        FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsListRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         flux.store('FacetMenuStore').initMenu();
     });
 
     afterEach(() => {
-        FacetsList.__ResetDependency__('I18nMessage');
-        FacetsItem.__ResetDependency__('I18nMessage');
+        FacetsListRewireAPI.__ResetDependency__('I18nMessage');
+        FacetsItemRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     let reportParams = {appId:1, tblId:2, rptId:3};
@@ -267,7 +267,7 @@ describe('FacetsMenu functions', () => {
         const fakeReportLongData_valid = {
             data: {
                 facets : [{id:1, name:'test', type:"TEXT",
-                            values:[{value:"a"}, {value:"b"}, {value:"c"}, {value:"d"}, {value:"e"}, {value:"f"}]}
+                    values:[{value:"a"}, {value:"b"}, {value:"c"}, {value:"d"}, {value:"e"}, {value:"f"}]}
                 ]
             }
         };

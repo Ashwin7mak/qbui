@@ -133,7 +133,7 @@ const FieldsPanel = React.createClass({
         }
         return (
             <ListGroup>{items}</ListGroup>
-           );
+        );
     },
 
     getFieldsInReportOrder(choicesList, usedInReport) {

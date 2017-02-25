@@ -14,6 +14,8 @@ class ChildReport extends React.Component {
     constructor(...args) {
         super(...args);
     }
+    // remove the eslint override when true case is removed
+    /* eslint no-constant-condition:0 */
     render() {
         const {appId, childTableId, childReportId, detailKeyFid, detailKeyValue} = this.props;
         const validProps = [appId, childTableId, childReportId, detailKeyFid, detailKeyValue].every(prop => prop || typeof prop === 'number');

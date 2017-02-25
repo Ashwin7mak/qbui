@@ -1,4 +1,4 @@
-import React,  {Component}from 'react';
+import React,  {Component} from 'react';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 import './facet.scss';
 import  {facetItemValueShape, facetShape} from './facetProps';

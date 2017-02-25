@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import fieldsActions from '../../src/actions/fieldsActions';
+import fieldsActions, {__RewireAPI__ as fieldsActionsRewireAPI} from '../../src/actions/fieldsActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
@@ -34,11 +34,11 @@ describe('Fields Actions getFields missing params -- ', () => {
         spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
         spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
 
-        fieldsActions.__Rewire__('FieldsService', mockFieldsService);
+        fieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldsService);
     });
 
     afterEach(() => {
-        fieldsActions.__ResetDependency__('FieldsService');
+        fieldsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
     it('test promise reject handling', (done) => {
@@ -85,11 +85,11 @@ describe('Fields Actions getFields -- ', () => {
         spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
         spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
 
-        fieldsActions.__Rewire__('FieldsService', mockFieldsService);
+        fieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldsService);
     });
 
     afterEach(() => {
-        fieldsActions.__ResetDependency__('FieldsService');
+        fieldsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
     it('test promise reject handling', (done) => {
@@ -144,13 +144,13 @@ describe('Fields Actions getFields -- ', () => {
         spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
         spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
         spyOn(mockLogger.prototype, 'logException').and.callThrough();
-        fieldsActions.__Rewire__('FieldsService', mockFieldsService);
-        fieldsActions.__Rewire__('Logger', mockLogger);
+        fieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldsService);
+        fieldsActionsRewireAPI.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
-        fieldsActions.__ResetDependency__('FieldsService');
-        fieldsActions.__ResetDependency__('Logger');
+        fieldsActionsRewireAPI.__ResetDependency__('FieldsService');
+        fieldsActionsRewireAPI.__ResetDependency__('Logger');
     });
 
     it('test exception handling', (done) => {

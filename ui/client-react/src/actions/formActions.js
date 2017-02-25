@@ -117,6 +117,7 @@ export const openRecordForEdit = (recId) => {
     // add editRec query param and let the router take action
     WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
 
+
     // let store know we're editing a record so we can navigate back and forth
 
     return {
@@ -168,8 +169,10 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
             let formService = new FormService();
 
             let promise;
+
             if (recordId === NEW_FORM_RECORD_ID) {
                 promise = formService.getForm(appId, tblId, rptId, formType);
+
             } else {
                 promise = formService.getFormAndRecord(appId, tblId, recordId, rptId, formType);
             }

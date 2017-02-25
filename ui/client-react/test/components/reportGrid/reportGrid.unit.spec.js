@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ReportGrid from '../../../src/components/dataTable/reportGrid/reportGrid';
+import ReportGrid, {__RewireAPI__ as ReportGridRewireAPI} from '../../../src/components/dataTable/reportGrid/reportGrid';
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ReportCell from '../../../src/components/dataTable/reportGrid/reportCell';
 import ReportColumnHeaderMenu from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
@@ -259,8 +259,8 @@ describe('ReportGrid', () => {
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
 
-        ReportGrid.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
-        ReportGrid.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
+        ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
+        ReportGridRewireAPI.__Rewire__('ReportColumnTransformer', {transformColumnsForGrid() {return testColumns;}});
 
         component = shallow(<ReportGrid
             {...requiredProps}
@@ -320,7 +320,7 @@ describe('ReportGrid', () => {
             sortFids: sortFids
         });
 
-        ReportGrid.__ResetDependency__('ReportRowTransformer');
-        ReportGrid.__ResetDependency__('ReportColumnTransformer');
+        ReportGridRewireAPI.__ResetDependency__('ReportRowTransformer');
+        ReportGridRewireAPI.__ResetDependency__('ReportColumnTransformer');
     });
 });

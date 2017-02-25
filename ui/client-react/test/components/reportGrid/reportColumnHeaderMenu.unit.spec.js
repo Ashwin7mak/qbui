@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import Container, {ReportColumnHeaderMenu} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
+import {ReportColumnHeaderMenu, __RewireAPI__ as ContainerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnHeaderMenu';
 import * as FieldConsts from '../../../src/constants/schema';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
@@ -26,11 +26,11 @@ describe('ReportColumnHeaderMenu', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
-        Container.__Rewire__('Locale', MockLocale);
+        ContainerRewireAPI.__Rewire__('Locale', MockLocale);
     });
 
     afterEach(() => {
-        Container.__ResetDependency__('Locale');
+        ContainerRewireAPI.__ResetDependency__('Locale');
     });
 
     describe('getSortAscText', () => {

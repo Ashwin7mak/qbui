@@ -357,11 +357,11 @@
                 this.setFormInputValue(this.getAllTextFields(), sText);
             } else if (fieldType === 'allEmailFields') {
                 this.setFormInputValue(this.getAllEmailInputFields(), sEmail);
-            }else if (fieldType === 'allPhoneFields') {
+            } else if (fieldType === 'allPhoneFields') {
                 this.setFormInputValue(this.getAllPhoneInputFields(), sPhone);
-            }else if (fieldType === 'allUrlFields') {
+            } else if (fieldType === 'allUrlFields') {
                 this.setFormInputValue(this.getAllUrlInputFields(), sUrl);
-            }else if (fieldType === 'allDurationFields') {
+            } else if (fieldType === 'allDurationFields') {
                 this.setFormInputValue(this.getAllDurationInputFields(), sNumeric);
             } else if (fieldType === 'allNumericFields') {
                 this.setFormInputValue(this.getAllNumericInputFields(), sNumeric);
@@ -400,11 +400,11 @@
                 this.setFormInputValue(this.getAllTextFields(), invalidValue);
             } else if (fieldType === 'allEmailFields') {
                 this.setFormInputValue(this.getAllEmailInputFields(), invalidValue);
-            }else if (fieldType === 'allPhoneFields') {
+            } else if (fieldType === 'allPhoneFields') {
                 this.setFormInputValue(this.getAllPhoneInputFields(), invalidValue);
-            }else if (fieldType === 'allUrlFields') {
+            } else if (fieldType === 'allUrlFields') {
                 this.setFormInputValue(this.getAllUrlInputFields(), invalidValue);
-            }else if (fieldType === 'allDurationFields') {
+            } else if (fieldType === 'allDurationFields') {
                 this.setFormInputValue(this.getAllDurationInputFields(), invalidValue);
             } else if (fieldType === 'allNumericFields') {
                 this.setFormInputValue(this.getAllNumericInputFields(), invalidValue);

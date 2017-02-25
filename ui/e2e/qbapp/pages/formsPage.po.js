@@ -301,10 +301,10 @@
                     //date Time field
                     //TODO enable this after entering value into time field is fixed for safari and firefox
                     //expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate + ' ' + sTime);
-                }if (fieldType === 'timeCell' && browserName !== 'safari' && browserName !== 'firefox') {
+                } if (fieldType === 'timeCell' && browserName !== 'safari' && browserName !== 'firefox') {
                     //time of day field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sTime);
-                }if (fieldType === 'checkbox') {
+                } if (fieldType === 'checkbox') {
                     //checkbox field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 9)).toBe('true');
                 }

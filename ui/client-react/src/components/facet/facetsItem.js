@@ -1,4 +1,4 @@
-import React,  {Component}from 'react';
+import React,  {Component} from 'react';
 import ListGroup from 'react-bootstrap/lib/ListGroup';
 import Panel from 'react-bootstrap/lib/Panel';
 import './facet.scss';
@@ -122,7 +122,7 @@ class FacetsItem extends Component {
                     </h4>
                     {selectionInfo}
                 </div>
-            );
+        );
     }
 
 

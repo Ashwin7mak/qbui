@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-import CheckBoxFieldValueRenderer  from '../../src/components/fields/checkBoxFieldValueRenderer';
+import CheckBoxFieldValueRenderer, {__RewireAPI__ as CheckBoxFieldValueRendererRewireAPI}  from '../../src/components/fields/checkBoxFieldValueRenderer';
 
-let I18nMessageMock = React.createClass({
+
+var I18nMessageMock = React.createClass({
     render: function() {
         if (this.props.message === 'fields.checkbox.yes') {
             return <span>Yes</span>;
@@ -51,11 +52,11 @@ function it_has_an_optional_class(className) {
 }
 
 beforeEach(() => {
-    CheckBoxFieldValueRenderer.__Rewire__('I18nMessage', I18nMessageMock);
+    CheckBoxFieldValueRendererRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
 });
 
 afterEach(() => {
-    CheckBoxFieldValueRenderer.__ResetDependency__('I18nMessage');
+    CheckBoxFieldValueRendererRewireAPI.__ResetDependency__('I18nMessage');
 });
 
 describe('CheckBoxFieldValueRenderer', () => {

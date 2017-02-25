@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import LeftNav from '../../src/components/nav/leftNav';
-import NavItem from '../../src/components/nav/navItem';
+import NavItem, {__RewireAPI__ as NavItemRewireAPI} from '../../src/components/nav/navItem';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -63,11 +63,11 @@ describe('Left Nav functions', () => {
     var component;
 
     beforeEach(() => {
-        NavItem.__Rewire__('I18nMessage', I18nMessageMock);
+        NavItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        NavItem.__ResetDependency__('I18nMessage');
+        NavItemRewireAPI.__ResetDependency__('I18nMessage');
     });
 
 

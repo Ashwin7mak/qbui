@@ -243,8 +243,8 @@ const SortAndGroup = React.createClass({
                                     index, field, isDescending, KIND.SORT);
         }
         this.setState({newSelectionsGroup:editArrays.newSelectionsGroup,
-                        newSelectionsSort:editArrays.newSelectionsSort,
-                        dirty: true});
+            newSelectionsSort:editArrays.newSelectionsSort,
+            dirty: true});
     },
 
     handleAddField(type, field) {
@@ -266,8 +266,8 @@ const SortAndGroup = React.createClass({
             editArrays.newSelectionsSort.push(item);
         }
         this.setState({newSelectionsGroup: editArrays.newSelectionsGroup,
-                       newSelectionsSort:editArrays.newSelectionsSort,
-                       dirty: true});
+            newSelectionsSort:editArrays.newSelectionsSort,
+            dirty: true});
     },
 
 
