@@ -69,18 +69,21 @@ export const FormBuilderContainer = React.createClass({
 
         let pointerX;
         let pointerY;
+        let containerHeight = this.getContainerSize();
 
         if (evt.type === 'touchmove') {
             pointerX = evt.touches[0].clientX;
             pointerY = evt.touches[0].clientY;
-            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY);
+            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         } else {
             pointerX = evt.clientX;
             pointerY = evt.clientY;
-            console.log('mouse x: ', pointerX, '\nmouseY: ', pointerY);
-
+            console.log('mouse x: ', pointerX, '\nmouseY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         }
 
+        if (containerHeight - pointerY < 10) {
+            console.log('I should start scrolling!');
+        }
     },
 
     stopScrolling() {
@@ -92,9 +95,16 @@ export const FormBuilderContainer = React.createClass({
         document.addEventListener("mousemove", this.updateScrolling);
     },
 
+    getContainerSize() {
+        let container = document.getElementsByClassName("formBuilderContainer")[0].clientHeight;
+        return container;
+    },
+
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
+
+        this.getContainerSize();
 
         document.addEventListener("touchmove", this.updateScrolling);
         document.addEventListener("touchend", this.stopScrolling);
