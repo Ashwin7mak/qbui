@@ -1,11 +1,11 @@
 import React from 'react';
 import Locale from '../../locales/locales';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-import Fluxxor from "fluxxor";
+//import Fluxxor from "fluxxor";
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {connect} from 'react-redux';
-import {openRecord} from '../../actions/recordActions';
+import {openRecord, deleteRecords} from '../../actions/recordActions';
 import {CONTEXT} from '../../actions/context';
 import FieldUtils from '../../utils/fieldUtils';
 import _ from 'lodash';
@@ -14,7 +14,7 @@ import './reportActions.scss';
 import {EDIT_RECORD_KEY} from '../../constants/urlConstants';
 
 
-let FluxMixin = Fluxxor.FluxMixin(React);
+//let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * report-level actions
@@ -22,7 +22,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * Note: this component has been partially migrated to Redux
  */
 export let ReportActions = React.createClass({
-    mixins: [FluxMixin],
+    //mixins: [FluxMixin],
 
     propTypes: {
         selection: React.PropTypes.array,
@@ -73,8 +73,9 @@ export let ReportActions = React.createClass({
      * this.props.selection has the current selected rows with the unique identifier as the value in the array
      */
     handleBulkDelete() {
-        const flux = this.getFlux();
-        flux.actions.deleteRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
+        //const flux = this.getFlux();
+        //flux.actions.deleteRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
+        this.props.deleteRecords(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
 
@@ -240,6 +241,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         openRecord: (recId, nextId, prevId) => {
             dispatch(openRecord(recId, nextId, prevId));
+        },
+        deleteRecords: (recId, tblId, recIds, nameForRecords) => {
+            dispatch(deleteRecords(recId, tblId, recIds, nameForRecords));
         }
     };
 };

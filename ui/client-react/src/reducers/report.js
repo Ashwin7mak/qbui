@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import FieldFormats from '../utils/fieldFormats';
+import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
 
 //import * as textFormatter from '../../../common/src/formatter/textFormatter';
@@ -133,6 +134,17 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.REMOVE_REPORT_RECORDS: {
+        // remove record from all report stores
+        const ids = action.content.recIds;
+        const reports = _.cloneDeep(state);
+        reports.forEach((rpt) => {
+            ids.forEach((recId) => {
+                deleteRecordFromReport(rpt.data, recId);
+            });
+        });
+        return reports;
+    }
     default:
         // by default, return existing state
         return state;
@@ -196,6 +208,46 @@ function findRecordById(records, recId, hasGrouping, keyField) {
     } else {
         /*eslint eqeqeq:0*/
         return records.find(rec => rec[keyField.name].value == recId);
+    }
+}
+
+function deleteRecordFromReport(reportData, recId) {
+    // TODO: needed?
+    var recordValueToMatch = {};
+    recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
+
+    const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
+    const newRecords = reportData.records ? reportData.records.slice(0) : null;
+    let recordDeleted = false;
+    let filteredRecordDeleted = false;
+
+    if (reportData.hasGrouping) {
+        filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
+        recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
+    } else {
+        //find record
+        let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
+        //remove it
+        if (filteredRecordIndex !== -1) {
+            filteredRecordDeleted = true;
+            newFilteredRecords.splice(filteredRecordIndex, 1);
+        }
+
+        //find record
+        let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
+        //remove it
+        if (recordIndex !== -1) {
+            recordDeleted = true;
+            newRecords.splice(recordIndex, 1);
+        }
+    }
+    if (filteredRecordDeleted) {
+        reportData.filteredRecords = newFilteredRecords;
+        reportData.filteredRecordsCount--;
+    }
+    if (recordDeleted) {
+        reportData.records = newRecords;
+        reportData.recordsCount--; //pagination uses this one.
     }
 }
 

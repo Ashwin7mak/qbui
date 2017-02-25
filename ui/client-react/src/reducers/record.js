@@ -71,6 +71,51 @@ const record = (state = [], action) => {
 
     //  what record action is being requested
     switch (action.type) {
+        case types.DELETE_RECORDS: {
+            // TODO: not sure if need to set 'saving' on state on each when deleting
+            const ids = action.content.recIds;
+            let states = [];
+            ids.forEach((recId) => {
+                let currentRecd = getRecordFromState(recId);
+                if (currentRecd) {
+                    if (currentRecd.pendEdits) {
+                        currentRecd.pendEdits.saving = true;
+                    } else {
+                        currentRecd.pendEdits = {
+                            saving: false
+                        };
+                    }
+                    states = newState(currentRecd);
+                } else {
+                    const obj = {
+                        id: recId,
+                        appId: action.content.appId,
+                        tblId: action.content.tblId,
+                        recId: recId,
+                        pendEdits: {
+                            saving: false
+                        }
+                    };
+                    states.push(obj);
+                }
+            });
+            return states.length > 0 ? states : state;
+        }
+        case types.DELETE_RECORDS_COMPLETE: {
+            // TODO: not sure if need to set 'saving' on state on each when deleting
+            //
+            //  TODO: make sure state is not getting mutated!!!!
+            const ids = action.content.recIds;
+            let states = null;
+            ids.forEach((recId) => {
+                let currentRecd = getRecordFromState(recId);
+                if (currentRecd) {
+                    currentRecd.pendEdits.saving = false;
+                    states = newState(currentRecd);
+                }
+            });
+            return states || state;
+        }
         case types.OPEN_RECORD: {
             const obj = {
                 id: action.id,
