@@ -65,6 +65,55 @@ export const FormBuilderContainer = React.createClass({
         formType: PropTypes.string
     },
 
+
+    startScrolling (scrollDirection) {
+        let body = document.body;
+        let container = document.getElementsByClassName("formBuilderContent")[0];
+        let scrollTop = container.scrollTop;
+        let scrollHeight = container.scrollHeight;
+        var clientHeight = container.clientHeight;
+
+        if (scrollDirection === 'scrollDown') {
+            console.log('============================================START SCROLLING DOWN');
+            console.log('container.scrollTop: ', container.scrollTop);
+            /////////Works On desktop//////
+            console.log('scrollHeight: ', scrollHeight, '\nscrollTopt: ', scrollTop ,'\nscrollHeight - scrollTop: ',  scrollHeight - scrollTop);
+            container.scrollTop = scrollTop + 100;///////
+            //////////////////////////////
+
+            console.log('window.pageYOffset: ', window.pageYOffset);
+            console.log('window.pageXOffset: ', window.pageYOffset);
+
+            // body.scrollTop = 0;
+            container.animate({ scrollTop: 0 }, "fast");
+            // window.scrollTo(0, 1);
+            // window.pageYOffset = 100;
+            // document.body.scrollTop = 0;
+            // document.getElementsByClassName("formBuilderContent")[0].scrollLeft = 100;
+            // window.scrollBy(0, 100);
+        } else if (scrollDirection === 'scrollUp') {
+            console.log('============================================START SCROLLING UP');
+            console.log('container.scrollTop: ', container.scrollTop);
+            /////////Works On desktop//////
+            console.log('scrollHeight: ', scrollHeight, '\nscrollTop: ', scrollTop ,'\nscrollHeight - scrollTop: ',  scrollHeight - scrollTop);
+
+            container.scrollTop = scrollTop - 100;///////
+            //////////////////////////////
+
+
+            console.log('window.pageYOffset: ', window.pageYOffset);
+            console.log('window.pageXOffset: ', window.pageXOffset);
+
+            container.animate({ scrollTop: 0 }, "fast");
+            // body.scrollTop = 0;
+            // window.pageYOffset = 100;
+            // window.scrollTo(0, 1);
+            // document.body.scrollTop = 0;
+            // document.getElementsByClassName("formBuilderContent")[0].scrollLeft = 100;
+            // window.scrollBy(0, -100);
+        }
+    },
+
     updateScrolling(evt) {
 
         let pointerX;
@@ -74,20 +123,21 @@ export const FormBuilderContainer = React.createClass({
         if (evt.type === 'touchmove') {
             pointerX = evt.touches[0].clientX;
             pointerY = evt.touches[0].clientY;
-            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
+            // console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         } else {
             pointerX = evt.clientX;
             pointerY = evt.clientY;
-            console.log('mouse x: ', pointerX, '\nmouseY: ', pointerY,'\ncontainerHeight: ', containerHeight);
+            // console.log('mouse x: ', pointerX, '\nmouseY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         }
 
         if (containerHeight - pointerY < 10) {
-            console.log('I should start scrolling!');
+            this.startScrolling('scrollDown');
+        } else if (pointerY < 20) {
+            this.startScrolling('scrollUp');
         }
     },
 
     stopScrolling() {
-      console.log('formBuilderContainer: I stopped moving!!!!');
         document.removeEventListener("mousemove", this.updateScrolling);
     },
 
@@ -96,7 +146,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     getContainerSize() {
-        let container = document.getElementsByClassName("formBuilderContainer")[0].clientHeight;
+        let container = document.getElementsByClassName("formBuilderContent")[0].clientHeight;
         return container;
     },
 
@@ -109,8 +159,8 @@ export const FormBuilderContainer = React.createClass({
         document.addEventListener("touchmove", this.updateScrolling);
         document.addEventListener("touchend", this.stopScrolling);
 
-        document.addEventListener("dragover", this.updateScrolling);
-        document.addEventListener("dragend", this.stopScrolling);
+        // document.addEventListener("dragover", this.updateScrolling);
+        // document.addEventListener("dragend", this.stopScrolling);
 
         document.addEventListener("mousedown", this.activateMouseMove);
         document.addEventListener("mouseup", this.stopScrolling);
@@ -169,15 +219,11 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
                 <ToolPalette />
 
-                <ScrollZone style={scrollStyle} >
-
                 <div className="formBuilderContent">
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                         <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
                     </Loader>
                 </div>
-
-                </ScrollZone>
 
                 {this.getSaveOrCancelFooter()}
 
