@@ -61,6 +61,7 @@
         DEFAULT_HEADERS[CONTENT_TYPE] = APPLICATION_JSON;
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
+        var TABLES_PROPERTIES = '/tableproperties/';
         //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
 
@@ -275,6 +276,10 @@
             },
             resolveAppRoleFieldRightsEndpoint        : function(appId, roleId, tableId, fieldId) {
                 var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + TABLES_ENDPOINT + tableId + '/field/' + fieldId + FIELD_RIGHTS;
+                return endpoint;
+            },
+            resolveTablePropertiesEndpoint      : function(appId, tableId) {
+                var endpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + TABLES_PROPERTIES;
                 return endpoint;
             },
             defaultHeaders              : DEFAULT_HEADERS,
@@ -594,23 +599,23 @@
                 var self = this;
                 var deferred = promise.pending();
                 // remove created realm if it was not an existing specified realmToUse in the config
-                if (self.realm  && (!config || !config.realmToUse)) {
-                    self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
-                        consts.DELETE, '', DEFAULT_HEADERS)
-                        .then(function(response) {
-                            deferred.resolve(response);
-                            self.realm = null;
-                        }).catch(function(error) {
-                            var realm = self.realm;
-                            self.realm = null;
-                            assert(false, 'Unable to delete realm ' +
-                            JSON.stringify(realm) + ' due to: ' +
-                            JSON.stringify(error));
-                            deferred.reject(error);
-                        });
-                } else {
+                //if (self.realm  && (!config || !config.realmToUse)) {
+                //    self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
+                //        consts.DELETE, '', DEFAULT_HEADERS)
+                //        .then(function(response) {
+                //            deferred.resolve(response);
+                //            self.realm = null;
+                //        }).catch(function(error) {
+                //            var realm = self.realm;
+                //            self.realm = null;
+                //            assert(false, 'Unable to delete realm ' +
+                //            JSON.stringify(realm) + ' due to: ' +
+                //            JSON.stringify(error));
+                //            deferred.reject(error);
+                //        });
+                //} else {
                     deferred.resolve();
-                }
+                //}
                 return deferred.promise;
             }
         };
