@@ -89,7 +89,7 @@ var SortAndGroupDialog = React.createClass({
                               fieldChoiceList={this.props.fieldChoiceList}
                               key={type + "Settings"}
               />
-          );
+        );
     },
 
     handleClickOutside(evt) {

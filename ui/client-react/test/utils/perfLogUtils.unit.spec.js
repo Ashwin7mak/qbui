@@ -1,5 +1,5 @@
 import PerfLogUtils from '../../src/utils/perf/perfLogUtils';
-import Logger from '../../src/utils/logger';
+import Logger, {__RewireAPI__ as LoggerRewireAPI} from '../../src/utils/logger';
 describe('PerfLogUtils', () => {
     describe('PerfLogUtils flag enabled tests', () => {
         'use strict';
@@ -35,7 +35,7 @@ describe('PerfLogUtils', () => {
             window.nodeConfig = {isClientPerfTrackingEnabled: true};
             window.EPISODES = mockEPISODES;
 
-            Logger.__Rewire__('LogService', mockLogService);
+            LoggerRewireAPI.__Rewire__('LogService', mockLogService);
             spyOn(logger, 'warn');
 
             spyOn(mockEPISODES, 'mark').and.callThrough();
@@ -46,7 +46,7 @@ describe('PerfLogUtils', () => {
         });
 
         afterEach(() => {
-            Logger.__ResetDependency__('LogService');
+            LoggerRewireAPI.__ResetDependency__('LogService');
             logger.warn.calls.reset();
             mockEPISODES.mark.calls.reset();
             mockEPISODES.measure.calls.reset();
@@ -144,7 +144,7 @@ describe('PerfLogUtils', () => {
             window.nodeConfig = {isClientPerfTrackingEnabled: false};
             window.EPISODES = mockEPISODES;
 
-            Logger.__Rewire__('LogService', mockLogService);
+            LoggerRewireAPI.__Rewire__('LogService', mockLogService);
             spyOn(logger, 'warn');
 
             spyOn(mockEPISODES, 'mark').and.callThrough();
@@ -155,7 +155,7 @@ describe('PerfLogUtils', () => {
         });
 
         afterEach(() => {
-            Logger.__ResetDependency__('LogService');
+            LoggerRewireAPI.__ResetDependency__('LogService');
             logger.warn.calls.reset();
             mockEPISODES.mark.calls.reset();
             mockEPISODES.measure.calls.reset();

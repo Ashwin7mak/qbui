@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import CardView from '../../src/components/dataTable/cardView/cardView';
+import CardView, {__RewireAPI__ as CardViewRewireAPI} from '../../src/components/dataTable/cardView/cardView';
 import RecordActions from '../../src/components/actions/recordActions';
 
 var RecordActionsMock = React.createClass({
@@ -38,7 +38,7 @@ describe('Report Mobile View functions', () => {
     var component;
     var TestParent;
     beforeEach(() => {
-        CardView.__Rewire__('RecordActions', RecordActionsMock);
+        CardViewRewireAPI.__Rewire__('RecordActions', RecordActionsMock);
         TestParent = (data = fakeReportData_valid.data.results) => React.createFactory(React.createClass({
             render() {
                 return <CardView ref="refCardView"
@@ -50,8 +50,9 @@ describe('Report Mobile View functions', () => {
         }))();
     });
 
+
     afterEach(() => {
-        CardView.__ResetDependency__('RecordActions');
+        CardViewRewireAPI.__ResetDependency__('RecordActions');
     });
 
     it('test render of component', () => {

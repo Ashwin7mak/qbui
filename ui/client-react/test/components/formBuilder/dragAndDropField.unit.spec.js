@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DragAndDropField from '../../../src/components/formBuilder/dragAndDropField';
+import DragAndDropField, {__RewireAPI__ as DragAndDropFieldRewireAPI} from '../../../src/components/formBuilder/dragAndDropField';
 
 const MockDragDropHocs = {
     DraggableField(component) {return component;},
@@ -20,13 +20,13 @@ describe('DragAndDropField', () => {
         spyOn(MockDragDropHocs, 'DraggableField').and.callThrough();
         spyOn(MockDragDropHocs, 'DroppableFormElement').and.callThrough();
 
-        DragAndDropField.__Rewire__('DraggableField', MockDragDropHocs.DraggableField);
-        DragAndDropField.__Rewire__('DroppableFormElement', MockDragDropHocs.DroppableFormElement);
+        DragAndDropFieldRewireAPI.__Rewire__('DraggableField', MockDragDropHocs.DraggableField);
+        DragAndDropFieldRewireAPI.__Rewire__('DroppableFormElement', MockDragDropHocs.DroppableFormElement);
     });
 
     afterEach(() => {
-        DragAndDropField.__ResetDependency__('DraggableField');
-        DragAndDropField.__ResetDependency__('DroppableFormElement');
+        DragAndDropFieldRewireAPI.__ResetDependency__('DraggableField');
+        DragAndDropFieldRewireAPI.__ResetDependency__('DroppableFormElement');
     });
 
     it('connects and element to both a drag and drop source', () => {

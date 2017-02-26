@@ -86,7 +86,7 @@
                 items[0].element('a').click();
                 //wait until report rows in table are loaded
                 return reportContentPO.waitForReportContent();
-            }else {
+            } else {
                 throw new Error('Item with name ' + itemToSelect + ' not found under column header menu');
             }
         }},
@@ -143,7 +143,7 @@
             if (items !== []) {
                 //verify the check mark beside the item selected
                 expect(items[0].element('.iconTableUISturdy-check').isVisible()).toBeTruthy();
-            }else {
+            } else {
                 throw new Error('Item with name ' + itemToVerify + ' not found under column header menu');
             }
         }},

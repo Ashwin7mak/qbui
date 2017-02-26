@@ -66,8 +66,8 @@ const fakeReportData_noNagivationButtons = {
 const singleNodeTreeData = [{
     group:"group1",
     children: [{col_num: 1,
-                col_text: "abc",
-                col_date: "01-01-2015"}]
+        col_text: "abc",
+        col_date: "01-01-2015"}]
 }];
 const fakeReportData_valid = {
     appId: "1",

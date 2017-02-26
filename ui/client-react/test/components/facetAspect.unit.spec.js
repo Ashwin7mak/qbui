@@ -1,4 +1,5 @@
 import React from 'react';
+
 import TestUtils from 'react-addons-test-utils';
 import FacetsAspect  from '../../src/components/facet/facetsAspect';
 

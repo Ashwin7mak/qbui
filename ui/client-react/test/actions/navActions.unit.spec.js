@@ -1,7 +1,7 @@
 /* jshint proto: true */
 
 import Fluxxor from 'fluxxor';
-import navActions from '../../src/actions/navActions';
+import navActions, {__RewireAPI__ as navActionsRewireAPI} from '../../src/actions/navActions';
 import * as actions from '../../src/constants/actions';
 import Breakpoints from '../../src/utils/breakpoints';
 
@@ -33,7 +33,7 @@ describe('Nav Actions functions', () => {
     });
 
     it('test change locale action', () => {
-        navActions.__Rewire__('Locale', mockLocale);
+        navActionsRewireAPI.__Rewire__('Locale', mockLocale);
         spyOn(mockLocale, 'changeLocale');
 
         flux.actions.changeLocale('en-us');
@@ -41,7 +41,7 @@ describe('Nav Actions functions', () => {
         expect(mockLocale.changeLocale).toHaveBeenCalledWith('en-us');
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.CHANGE_LOCALE);
 
-        navActions.__ResetDependency__('Locale');
+        navActionsRewireAPI.__ResetDependency__('Locale');
     });
 
 
