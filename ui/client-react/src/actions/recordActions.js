@@ -202,60 +202,62 @@ let recordActions = {
     /**
      * delete a record
      */
-    deleteRecord(appId, tblId, recId, nameForRecords) {
-        // promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && (!!(recId === 0 || recId))) {
-                this.dispatch(actions.DELETE_RECORD, {appId, tblId, recId});
-                let recordService = new RecordService();
 
-                //delete the record
-                recordService.deleteRecord(appId, tblId, recId).then(
-                    response => {
-                        logger.debug('RecordService deleteRecord success');
-                        this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
-                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'),
-                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after deleting
-                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            this.dispatch(actions.AFTER_RECORD_EDIT);
-                            resolve();
-                        });
-                    },
-                    error => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
-                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after delete
-                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            this.dispatch(actions.AFTER_RECORD_EDIT);
-                            reject();
-                        });
-                    }
-                ).catch(
-                    ex => {
-                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                        logger.logException(ex);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after delete
-                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            this.dispatch(actions.AFTER_RECORD_EDIT);
-                            reject();
-                        });
-                    }
-                );
-            } else {
-                var errMessage = 'Missing one or more required input parameters to recordActions.deleteRecord. AppId:' +
-                    appId + '; TblId:' + tblId + '; recId:' + recId;
-                logger.error(errMessage);
-                this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: errMessage});
-                reject();
-            }
-        });
-    },
+        //  TODO:  MONDAY  migrate deleteRECORD to use redux..
+    //deleteRecord(appId, tblId, recId, nameForRecords) {
+    //    // promise is returned in support of unit testing only
+    //    return new Promise((resolve, reject) => {
+    //        if (appId && tblId && (!!(recId === 0 || recId))) {
+    //            this.dispatch(actions.DELETE_RECORD, {appId, tblId, recId});
+    //            let recordService = new RecordService();
+    //
+    //            //delete the record
+    //            recordService.deleteRecord(appId, tblId, recId).then(
+    //                response => {
+    //                    logger.debug('RecordService deleteRecord success');
+    //                    this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
+    //                    NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'),
+    //                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+    //                    // this delay allows for saving modal to trap inputs otherwise
+    //                    // clicks get invoked after deleting
+    //                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                        this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                        resolve();
+    //                    });
+    //                },
+    //                error => {
+    //                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
+    //                    this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
+    //                    NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'),
+    //                        CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+    //                    // this delay allows for saving modal to trap inputs otherwise
+    //                    // clicks get invoked after delete
+    //                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                        this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                        reject();
+    //                    });
+    //                }
+    //            ).catch(
+    //                ex => {
+    //                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+    //                    logger.logException(ex);
+    //                    // this delay allows for saving modal to trap inputs otherwise
+    //                    // clicks get invoked after delete
+    //                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                        this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                        reject();
+    //                    });
+    //                }
+    //            );
+    //        } else {
+    //            var errMessage = 'Missing one or more required input parameters to recordActions.deleteRecord. AppId:' +
+    //                appId + '; TblId:' + tblId + '; recId:' + recId;
+    //            logger.error(errMessage);
+    //            this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: errMessage});
+    //            reject();
+    //        }
+    //    });
+    //},
 
     ///**
     // * delete records in bulk
@@ -622,10 +624,12 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                         logger.debug('RecordService deleteRecordBulk success');
                         //this.dispatch(actions.DELETE_RECORD_BULK_SUCCESS, recIds);
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
+
+                        //  send out notification message on the client
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
                         NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after deleting
+
+                        // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                             //this.dispatch(actions.AFTER_RECORD_EDIT);
                             dispatch(event(recIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds}));
@@ -633,24 +637,21 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                         });
                     },
                     error => {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
-                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.deleteRecords:');
+                        //this.dispatch(actions.DELETE_RECORDS_ERROR, {appId, tblId, recIds, error: error});
+
+                        //  TODO:  the error object should map to specific records
+                        let errors = [];
+                        if (_.has(error, 'data.response.errors')) {
+                            errors = error.data.response.errors || [];
+                        }
+                        dispatch(event(recIds[0], types.DELETE_RECORDS_ERROR, {appId, tblId, recIds, errors}));
+
+                        //  send out notification message
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
                         NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after delete
-                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            //this.dispatch(actions.AFTER_RECORD_EDIT);
-                            dispatch(event(recIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds}));
-                            reject();
-                        });
-                    }
-                ).catch(
-                    ex => {
-                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                        logger.logException(ex);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after delete
+
+                        // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                             //this.dispatch(actions.AFTER_RECORD_EDIT);
                             dispatch(event(recIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds}));
@@ -659,10 +660,12 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                     }
                 );
             } else {
-                var errMessage = 'Missing one or more required input parameters to recordActions.deleteRecords. AppId:' +
-                    appId + '; TblId:' + tblId + '; recIds:' + recIds ;
-                logger.error(errMessage);
-                this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: errMessage});
+                logger.error(`Missing one or more required input parameters to recordActions.deleteRecords. AppId:${appId}; TblId:/${tblId}; RecId${recIds}`);
+                dispatch(event(recIds[0], types.DELETE_RECORDS_ERROR, {appId, tblId, recIds}));
+
+                //  send out notification message
+                let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
+                NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 reject();
             }
         });

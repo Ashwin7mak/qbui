@@ -141,6 +141,7 @@ const report = (state = [], action) => {
         reports.forEach((rpt) => {
             ids.forEach((recId) => {
                 deleteRecordFromReport(rpt.data, recId);
+                rpt.selectedRows = _.without(rpt.selectedRows, recId);
             });
         });
         return reports;
