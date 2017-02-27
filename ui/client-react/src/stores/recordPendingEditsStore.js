@@ -29,8 +29,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             //actions.DELETE_RECORD, this.onStartEdit,
             //actions.DELETE_RECORD_BULK, this.onStartEdit,
-            actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
-            actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
+            //actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
+            //actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
@@ -486,14 +486,14 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.hasAttemptedSave = true;
         this.emit('change');
     },
-    onDeleteRecordFailed(payload) {
-        this.handleErrors(payload);
-        this.emit('change');
-    },
-    onDeleteRecordBulkFailed(payload) {
-        this.handleErrors(payload);
-        this.emit('change');
-    },
+    //onDeleteRecordFailed(payload) {
+    //    this.handleErrors(payload);
+    //    this.emit('change');
+    //},
+    //onDeleteRecordBulkFailed(payload) {
+    //    this.handleErrors(payload);
+    //    this.emit('change');
+    //},
     onStartEdit(emit = true) {
         this.saving = true;
         if (emit) {
