@@ -151,7 +151,7 @@ class FeatureSwitchesRoute extends React.Component {
 
             // prevent renaming feature to an existing name (unless it's the currently edited feature)
 
-            if (featureByName.id !== id) {
+            if (featureByName && featureByName.id !== id) {
                 NotificationManager.error(Locale.getMessage('featureSwitchAdmin.featureNameExists'), Locale.getMessage('failed'),
                     CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 return;
