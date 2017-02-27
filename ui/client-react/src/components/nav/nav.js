@@ -3,7 +3,6 @@ import cookie from 'react-cookie';
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
-import V2V3Footer from '../footer/v2v3Footer';
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
@@ -112,12 +111,23 @@ export let Nav = React.createClass({
 
     getLeftGlobalActions() {
         const actions = [];
+        let recordId;
+        if (this.props.params) {
+            recordId = this.props.params.recordId;
+        }
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
                                dropdownIcon="user"
                                dropdownMsg="globalActions.user"
                                startTabIndex={100}
-                               position={"left"}/>);
+                               position={"left"}>
+                    <BuilderDropDownAction recId={recordId}
+                                           actions={actions}
+                                           position={"left"}
+                                           formBuilderIcon="settings"
+                                           navigateToBuilder={this.navigateToBuilder}
+                                           startTabIndex={4}/>
+                </GlobalActions>);
     },
 
     onSelectTableReports(tableId) {
@@ -348,46 +358,10 @@ export let Nav = React.createClass({
                     </div>}
             </div>
 
-            {this.getV2V3Footer()}
-
             {this.state.pendEdits &&
                 this.renderSavingModal(this.state.pendEdits.saving)
             }
         </div>);
-    },
-
-    checkOpenInV2(selectedApp) {
-        let v2tov3Cookie = cookie.load(CookieConstants.COOKIES.V2TOV3);
-        if (v2tov3Cookie && CommonCookieUtils.searchCookieValue(v2tov3Cookie, selectedApp.id)) {
-            let qbClassicURL = UrlUtils.getQuickBaseClassicLink(selectedApp.id);
-            WindowLocationUtils.update(qbClassicURL);
-        }
-    },
-
-    /**
-     * get v2/v3 toggle popup (for admins on app pages)
-     *
-     * @returns V2V3Footer or null
-     */
-    getV2V3Footer() {
-        const selectedApp = this.getSelectedApp();
-
-        if (selectedApp) {
-            this.checkOpenInV2(selectedApp);
-            const hasAdmin = AppUtils.hasAdminAccess(selectedApp.accessRights);
-
-            if (hasAdmin) {
-                return <V2V3Footer app={selectedApp} onSelectOpenInV3={this.onSelectOpenInV3}/>;
-            } else if (!selectedApp.openInV3) {
-                WindowLocationUtils.update("/qbase/notAvailable?appId=" + selectedApp.id);
-            }
-        }
-        return null;
-    },
-
-    onSelectOpenInV3(openInV3) {
-        const flux = this.getFlux();
-        flux.actions.setApplicationStack(this.state.apps.selectedAppId, openInV3);
     },
 
     onSelectItem() {

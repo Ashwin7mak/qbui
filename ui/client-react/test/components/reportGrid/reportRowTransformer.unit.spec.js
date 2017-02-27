@@ -1,4 +1,4 @@
-import ReportRowTransformer from '../../../src/components/dataTable/reportGrid/reportRowTransformer';
+import ReportRowTransformer, {__RewireAPI__ as ReportRowTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportRowTransformer';
 import SchemaConsts from '../../../../common/src/constants';
 import {DEFAULT_RECORD_KEY} from '../../../src/constants/schema';
 
@@ -214,11 +214,11 @@ describe('ReportRowTransformer', () => {
     describe('transformRecordsForGrid', () => {
         beforeEach(() => {
             // Mock out Lodash's uniqueId function so it produces a predictable output for tests. Other functions remain the same.
-            ReportRowTransformer.__Rewire__('_', Object.assign({}, _, {uniqueId(name) {return name;}}));
+            ReportRowTransformerRewireAPI.__Rewire__('_', Object.assign({}, _, {uniqueId(name) {return name;}}));
         });
 
         afterEach(() => {
-            ReportRowTransformer.__ResetDependency__('_');
+            ReportRowTransformerRewireAPI.__ResetDependency__('_');
         });
 
         const defaultInfo = {

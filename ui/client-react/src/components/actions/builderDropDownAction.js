@@ -42,9 +42,8 @@ let BuilderDropDownAction = React.createClass({
             </a>
 
             <Dropdown.Menu>
-
-                <MenuItem onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
-                    message={"pageActions.configureFormBuilder"}/></MenuItem>
+                <MenuItem id="modifyForm" onClick={this.props.navigateToBuilder} eventKey={eventKeyIdx++}><I18nMessage
+                message={"pageActions.configureFormBuilder"}/></MenuItem>
 
             </Dropdown.Menu>
         </Dropdown>;

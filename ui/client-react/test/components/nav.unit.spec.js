@@ -2,8 +2,9 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 import * as ShellActions from '../../src/actions/shellActions';
+import {Nav,  __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
+
 
 let smallBreakpoint = false;
 class BreakpointsMock {
@@ -12,6 +13,23 @@ class BreakpointsMock {
     }
 }
 let dispatchMethod = () => { };
+
+//mock the actions so we can spy on them
+//and rewire nav to use the mock
+let ShellActionsMock = {
+    toggleLeftNav : function() {
+        ShellActions.toggleLeftNav();
+    },
+    showTrowser : function showTrowser() {
+        ShellActions.showTrowser();
+    },
+    hideTrowser : function hideTrowser() {
+        ShellActions.hideTrowser();
+    },
+    toggleAppsList : function toggleAppsList() {
+        ShellActions.toggleAppsList();
+    }
+};
 
 var LeftNavMock = React.createClass({
     render() {
@@ -30,11 +48,8 @@ var TopNavMock = React.createClass({
         return <div>mock top nav</div>;
     }
 });
-var V2V3FooterMock = React.createClass({
-    render() {
-        return <div>mock v2 v3 admin toggle</div>;
-    }
-});
+
+
 
 class WindowLocationUtilsMock {
     static update(url) { }
@@ -55,19 +70,9 @@ describe('Nav', () => {
             return {};
         }
     });
-    let appsStoreWithAdminApp = Fluxxor.createStore({
-        getState: function() {
-            return {apps: [{id:"1", accessRights: {appRights: ["EDIT_SCHEMA"]}}], selectedAppId: "1"};
-        }
-    });
     let appsStoreWithV3App = Fluxxor.createStore({
         getState: function() {
-            return {apps: [{id:"1", openInV3: true}], selectedAppId: "1"};
-        }
-    });
-    let appsStoreWithoutV3App = Fluxxor.createStore({
-        getState: function() {
-            return {apps: [{id:"1", openInV3: false}], selectedAppId: "1"};
+            return {apps: [{id:"1"}], selectedAppId: "1"};
         }
     });
     let appsStoreWithNoApps = Fluxxor.createStore({
@@ -120,7 +125,6 @@ describe('Nav', () => {
         NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
-        NavRewireAPI.__Rewire__('V2V3Footer', V2V3FooterMock);
         NavRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
     });
 
@@ -129,8 +133,8 @@ describe('Nav', () => {
         NavRewireAPI.__ResetDependency__('RecordTrowser');
         NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
         NavRewireAPI.__ResetDependency__('TopNav');
-        NavRewireAPI.__ResetDependency__('V2V3Footer');
         NavRewireAPI.__ResetDependency__('WindowLocationUtils');
+
     });
 
     it('test render of component', () => {
@@ -174,54 +178,6 @@ describe('Nav', () => {
 
         let leftLink = TestUtils.findRenderedDOMComponentWithClass(component, "leftNavLink");
         TestUtils.Simulate.click(leftLink);
-    });
-
-    it('test renders v2v3 footer for admins', () => {
-        let storesWithAdminApp = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithAdminApp(), // has an app with admin access (EDIT_SCHEMA)
-            ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
-            FieldsStore : new fieldsStore(),
-            ReportDataSearchStore: new reportDataSearchStore()
-        };
-        let fluxWithAdminApp = new Fluxxor.Flux(storesWithAdminApp);
-
-        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithAdminApp}></Nav>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(1);
-    });
-
-    it('test omits v2v3 footer for non-admins with v3 app(s)', () => {
-        let storesWithV3App = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithV3App(),  // has an app with openInV3 = true
-            ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
-            FieldsStore : new fieldsStore(),
-            ReportDataSearchStore: new reportDataSearchStore()
-        };
-        let fluxWithV3App = new Fluxxor.Flux(storesWithV3App);
-        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithV3App}></Nav>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, V2V3FooterMock).length).toEqual(0);
-    });
-
-    it('test redirects non-admins with no v3 apps', () => {
-
-        let storesWithoutV3App = {
-            NavStore: new navStore(),
-            AppsStore: new appsStoreWithoutV3App(),  // no admin rights and has no app with openInV3 = true
-            ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
-            FieldsStore : new fieldsStore(),
-            ReportDataSearchStore: new reportDataSearchStore()
-        };
-        let fluxWithoutV3App = new Fluxxor.Flux(storesWithoutV3App);
-
-        spyOn(WindowLocationUtilsMock, 'update');
-
-        component = TestUtils.renderIntoDocument(<Nav {...props} flux={fluxWithoutV3App}></Nav>);
-
-        expect(WindowLocationUtilsMock.update).toHaveBeenCalledWith("/qbase/notAvailable?appId=1");
     });
 
     it('renders the loading screen while no apps are loaded', () => {
@@ -270,20 +226,30 @@ describe('Nav', () => {
 
     it('test onSelectItem method', () => {
         smallBreakpoint = true;
+        spyOn(ShellActionsMock, "toggleLeftNav");
+
+        NavRewireAPI.__Rewire__('ShellActions', ShellActionsMock);
         NavRewireAPI.__Rewire__('Breakpoints', BreakpointsMock);
 
-        spyOn(ShellActions, "toggleLeftNav");
         component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
         component.onSelectItem();
-        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
-        ShellActions.__ResetDependency__('Breakpoints');
+
+        expect(ShellActionsMock.toggleLeftNav).toHaveBeenCalled();
+        NavRewireAPI.__ResetDependency__('Breakpoints');
+        NavRewireAPI.__ResetDependency__('ShellActions');
+        ShellActionsMock.toggleLeftNav.calls.reset();
     });
 
     it('test toggleNav method', () => {
-        spyOn(ShellActions, "toggleLeftNav");
+        spyOn(ShellActionsMock, "toggleLeftNav");
+        NavRewireAPI.__Rewire__('ShellActions', ShellActionsMock);
+
         component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux} dispatch={dispatchMethod}></Nav>);
         component.toggleNav();
-        expect(ShellActions.toggleLeftNav).toHaveBeenCalled();
+
+        expect(ShellActionsMock.toggleLeftNav).toHaveBeenCalled();
+        NavRewireAPI.__ResetDependency__('ShellActions');
+        ShellActionsMock.toggleLeftNav.calls.reset();
     });
 
     describe('navigateToBuilder function', () => {

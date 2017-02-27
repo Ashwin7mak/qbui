@@ -31,11 +31,11 @@ describe('Text record formatter unit test', function() {
             value: smallText
         }]];
         var expectedSmallRecord =
-                [[{
-                    id     : 7,
-                    value  : smallText,
-                    display: smallText
-                }]];
+            [[{
+                id     : 7,
+                value  : smallText,
+                display: smallText
+            }]];
 
         // Text string of 4000 characters
         var inputMaxRecord = [[{
@@ -43,11 +43,11 @@ describe('Text record formatter unit test', function() {
             value: maxText
         }]];
         var expectedMaxRecord =
-                [[{
-                    id     : 7,
-                    value  : maxText,
-                    display: maxText
-                }]];
+            [[{
+                id     : 7,
+                value  : maxText,
+                display: maxText
+            }]];
 
         //Empty records
         var emptyRecord = [[{
@@ -55,11 +55,11 @@ describe('Text record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecord =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecord = [[{
@@ -67,11 +67,11 @@ describe('Text record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecord =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'Text - small text', records: inputSmallRecord, expectedRecords: expectedSmallRecord},

@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import reportDataActions from '../../src/actions/reportDataActions';
+import reportDataActions, {__RewireAPI__ as reportDataActionsRewireAPI} from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
@@ -92,11 +92,11 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockLogger.prototype, 'logException').and.callThrough();
-        reportDataActions.__ResetDependency__('ReportService');
-        reportDataActions.__Rewire__('Logger', mockLogger);
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__Rewire__('Logger', mockLogger);
     });
     afterEach(() => {
-        reportDataActions.__ResetDependency__('Logger');
+        reportDataActionsRewireAPI.__ResetDependency__('Logger');
     });
 
     it('test filter report fail on resolve facet', (done) => {
@@ -110,7 +110,7 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
             }
         }
 
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
@@ -135,7 +135,7 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
             }
         }
 
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
@@ -160,7 +160,7 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
             }
         }
 
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
@@ -185,7 +185,7 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
             }
         }
 
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
@@ -219,11 +219,11 @@ describe('Report Data Actions -- load a dynamic report with missing parameters',
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockReportService.prototype, 'parseFacetExpression');
         spyOn(mockReportService.prototype, 'getDynamicReportResults');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     var dataProvider = [
@@ -262,11 +262,11 @@ describe('Report Data Actions -- load a report with missing parameters', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockReportService.prototype, 'getReportResults');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     var dataProvider = [
@@ -304,12 +304,12 @@ describe('Report Data Actions -- Load a report that throws error/exception', () 
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
     });
 
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     var dataProvider = [
@@ -350,13 +350,13 @@ describe('Report Data Actions -- ', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
     });
 
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
-        reportDataActions.__ResetDependency__('RecordService');
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__ResetDependency__('RecordService');
     });
 
     var dataProvider = [

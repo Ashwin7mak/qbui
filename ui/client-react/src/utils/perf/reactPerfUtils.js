@@ -16,18 +16,18 @@ class ReactPerfUtils {
      * @param global if supplied will set global.Perf to the reactPerf object
      * @returns  the reactPerf object you can call stop and print methods on
      */
-   static devPerfInit(configuration, global) {
-       let reactPerf;
-       if (configuration && configuration.env !== 'PROD' &&
+    static devPerfInit(configuration, global) {
+        let reactPerf;
+        if (configuration && configuration.env !== 'PROD' &&
            nodeConfig &&  nodeConfig.isClientPerfTrackingEnabled) {
-           reactPerf = ReactPerfUtils.requireReactDefaultPerf();
-           if (global) {
-               global.Perf = reactPerf;
-           }
-           reactPerf.start();
-       }
-       return reactPerf;
-   }
+            reactPerf = ReactPerfUtils.requireReactDefaultPerf();
+            if (global) {
+                global.Perf = reactPerf;
+            }
+            reactPerf.start();
+        }
+        return reactPerf;
+    }
 
     /**
      * devPerfPrint stops measuring and prints out the captured react component measurements

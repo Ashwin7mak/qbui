@@ -102,10 +102,11 @@ describe('ReactPerfUtils', () => {
         let globalRecipient = {some: "values"};
         let dataProvider = [
             {type: "nonProd envConfig, a true nodeConfig, a globalRecipient",
-                 config:nonProdConfig, nodeConfig:enableTrackingNodeConfig, global:globalRecipient},
+                config:nonProdConfig, nodeConfig:enableTrackingNodeConfig, global:globalRecipient},
             {type: "nonProd envConfig, a true nodeConfig, no globalRecipient",
-                config:nonProdConfig, nodeConfig:enableTrackingNodeConfig, global:null},                             {type: "nonProd envConfig, a true nodeConfig, undefined globalRecipient",
-                 config:nonProdConfig, nodeConfig:enableTrackingNodeConfig, global:undefined},
+                config:nonProdConfig, nodeConfig:enableTrackingNodeConfig, global:null},
+            {type: "nonProd envConfig, a true nodeConfig, undefined globalRecipient",
+                config:nonProdConfig, nodeConfig:enableTrackingNodeConfig, global:undefined},
         ];
         dataProvider.forEach((test) => {
             it(test.type, () => {

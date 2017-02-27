@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import DroppableElement from '../../../src/components/formBuilder/droppableFormElement';
+import DroppableElement, {__RewireAPI__ as DroppableElementRewireAPI} from '../../../src/components/formBuilder/droppableFormElement';
 
 const mockDropTarget = (_types, _formTarget, _collect) => component => component;
 const MockFieldComponent = props => <div className="mockField"></div>;
@@ -15,13 +15,13 @@ describe('DroppableFormElement', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
-        DroppableElement.__Rewire__('DropTarget', mockDropTarget);
+        DroppableElementRewireAPI.__Rewire__('DropTarget', mockDropTarget);
 
         DroppableComponent = DroppableElement(MockFieldComponent);
     });
 
     afterEach(() => {
-        DroppableElement.__ResetDependency__('DropTarget');
+        DroppableElementRewireAPI.__ResetDependency__('DropTarget');
     });
 
     let testCases = [

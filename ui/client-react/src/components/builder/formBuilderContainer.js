@@ -28,9 +28,10 @@ const mapDispatchToProps = dispatch => {
             return dispatch(loadForm(appId, tableId, reportId, formType, recordId));
         },
 
-        moveField(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
-            return dispatch(moveFieldOnForm(formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps));
+        moveField(formId, newLocation, draggedItemProps) {
+            return dispatch(moveFieldOnForm(formId, newLocation, draggedItemProps));
         },
+
         updateForm(appId, tblId, formType, form) {
             return dispatch(updateForm(appId, tblId, formType, form));
         }
@@ -113,9 +114,11 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
                 <ToolPalette />
 
-                <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                    <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
-                </Loader>
+                <div className="formBuilderContent">
+                    <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                        <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                    </Loader>
+                </div>
 
                 {this.getSaveOrCancelFooter()}
 

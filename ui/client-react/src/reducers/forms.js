@@ -148,14 +148,12 @@ const forms = (
             return state;
         }
 
-        let {newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps} = action.content;
+        let {newLocation, draggedItemProps} = action.content;
         let updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
-            newTabIndex,
-            newSectionIndex,
-            newOrderIndex,
+            newLocation,
             draggedItemProps
         );
 
