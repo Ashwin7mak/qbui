@@ -203,19 +203,21 @@
                         featureSwitchesMockData.forEach(function(featureSwitch) {
                             states[featureSwitch.name] = featureSwitch.defaultOn;
 
-                            // realm overrides take precedence over default
-                            featureSwitch.overrides.forEach(function(override) {
-                                if (override.entityType === "realm" && parseInt(override.entityValue) === realmId) {
-                                    states[featureSwitch.name] = override.on;
-                                }
-                            });
+                            if (featureSwitch.overrides) {
+                                // realm overrides take precedence over default
+                                featureSwitch.overrides.forEach(function(override) {
+                                    if (override.entityType === "realm" && parseInt(override.entityValue) === realmId) {
+                                        states[featureSwitch.name] = override.on;
+                                    }
+                                });
 
-                            // app overrides take precedence over default and realm
-                            featureSwitch.overrides.forEach(function(override) {
-                                if (override.entityType === "app" && override.entityValue === appId) {
-                                    states[featureSwitch.name] = override.on;
-                                }
-                            });
+                                // app overrides take precedence over default and realm
+                                featureSwitch.overrides.forEach(function(override) {
+                                    if (override.entityType === "app" && override.entityValue === appId) {
+                                        states[featureSwitch.name] = override.on;
+                                    }
+                                });
+                            }
                         });
                     } else {
                         // todo: call lambda
