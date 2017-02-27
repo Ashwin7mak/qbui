@@ -158,11 +158,12 @@ class FeatureSwitchesRoute extends React.Component {
             }
         }
 
-        this.props.updateFeatureSwitch(id, featureSwitch, property, value).then(() => {
-            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-        });
-
+        if (featureSwitch[property] !== value) {
+            this.props.updateFeatureSwitch(id, featureSwitch, property, value).then(() => {
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            });
+        }
     }
 
     /**
