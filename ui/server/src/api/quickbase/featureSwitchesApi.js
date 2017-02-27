@@ -17,6 +17,9 @@
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
 
+        let cookieUtils = require('../../utility/cookieUtils');
+        let ob32Utils = require('../../utility/ob32Utils');
+        let CookieConsts = require('../../../../common/src/constants');
         let featureSwitchesMockData;
 
         /**
@@ -187,6 +190,11 @@
             getFeatureSwitchStates: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let states = {};
+                    let realmId = null;
+                    let ticketCookie = req.cookies[CookieConsts.COOKIES.TICKET];
+                    if (ticketCookie) {
+                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
+                    }
 
                     if (config && config.featureSwitchesMockData) {
                         if (!featureSwitchesMockData) {
@@ -194,6 +202,20 @@
                         }
                         featureSwitchesMockData.forEach(function(featureSwitch) {
                             states[featureSwitch.name] = featureSwitch.defaultOn;
+
+                            // realm overrides take precedence over default
+                            featureSwitch.overrides.forEach(function(override) {
+                                if (override.entityType === "realm" && parseInt(override.entityValue) === realmId) {
+                                    states[featureSwitch.name] = override.on;
+                                }
+                            });
+
+                            // app overrides take precedence over default and realm
+                            featureSwitch.overrides.forEach(function(override) {
+                                if (override.entityType === "app" && override.entityValue === appId) {
+                                    states[featureSwitch.name] = override.on;
+                                }
+                            });
                         });
                     } else {
                         // todo: call lambda
