@@ -136,19 +136,23 @@ class RecordService extends BaseService {
         return super.delete(url);
     }
 
-    deleteRecords(appId, tableId, recordIds) {
-        //let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
-        //return super.delete(url, {data: recordIds});
+    deleteRecordBulk(appId, tableId, recordIds) {
+        // TODO: remove...
+        return this.deleteRecords(appid, tableId, recordIds);
+    }
 
+    deleteRecords(appId, tableId, recordIds) {
+        let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
+        return super.delete(url, {data: recordIds});
         //data.response.errors
-        let error = {
-            data: {
-                response: {
-                    errors: [{isInvalid:true, txt:'error message 1'}, {isInvalid:true, txt:'error message 2'}]
-                }
-            }
-        };
-        return Promise.resolve();
+        //let error = {
+        //    data: {
+        //        response: {
+        //            errors: [{isInvalid:true, txt:'error message 1'}, {isInvalid:true, txt:'error message 2'}]
+        //        }
+        //    }
+        //};
+        //return Promise.resolve();
     }
 
 }

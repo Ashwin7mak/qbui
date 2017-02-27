@@ -128,17 +128,17 @@ export const saveFormSuccess = (id) => {
  *
  * * TODO: move to redux record
  */
-export const editNewRecord = (navigateAfterSave = false) => {
-
-    // add editRec=new query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: UrlConsts.NEW_RECORD_VALUE,
-        navigateAfterSave
-    };
-};
+//export const editNewRecord = (navigateAfterSave = false) => {
+//
+//    // add editRec=new query param and let the router take action
+//    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+//
+//    return {
+//        type: types.EDIT_REPORT_RECORD,
+//        recId: UrlConsts.NEW_RECORD_VALUE,
+//        navigateAfterSave
+//    };
+//};
 
 /**
  * load a form, optionally with record data

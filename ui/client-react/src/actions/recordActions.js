@@ -53,9 +53,9 @@ let recordActions = {
     /**
      * start editing a new record
      */
-    editNewRecord() {
-        this.dispatch(actions.EDIT_REPORT_RECORD, {recId:UrlConsts.NEW_RECORD_VALUE});
-    },
+    //editNewRecord() {
+    //    this.dispatch(actions.EDIT_REPORT_RECORD, {recId:UrlConsts.NEW_RECORD_VALUE});
+    //},
 
     /**
      * Action to save a new record. On successful save get a copy of the newly created record from server.
