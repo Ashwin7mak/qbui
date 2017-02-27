@@ -81,8 +81,6 @@ let NavWrapper = React.createClass({
             }
         } else {
             this.props.flux.actions.selectAppId(null);
-
-            this.props.dispatch(FeatureSwitchActions.getStates(null));
         }
 
         if (this.props.params.appId !== props.params.appId) {
