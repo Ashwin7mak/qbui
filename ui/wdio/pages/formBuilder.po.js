@@ -22,7 +22,7 @@
         },
         fieldLocator: {
             value: function(index) {
-                 return '.sectionRow:nth-child(' + index + ')';
+                return '.sectionRow:nth-child(' + index + ')';
             }
         },
         fieldPreferencesIcon: {
