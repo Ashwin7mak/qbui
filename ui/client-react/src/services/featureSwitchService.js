@@ -14,9 +14,9 @@ class FeatureSwitchService extends BaseService {
             PUT_FEATURE_SWITCH      : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}`,
             DELETE_FEATURE_SWITCHES : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/bulk`,
 
-            POST_OVERRIDE    : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_SWITCH_OVERRIDES}`,
-            PUT_OVERRIDE     : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_SWITCH_OVERRIDES}/{1}`,
-            DELETE_OVERRIDES : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_SWITCH_OVERRIDES}/bulk`,
+            POST_OVERRIDE    : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_OVERRIDES}`,
+            PUT_OVERRIDE     : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_OVERRIDES}/{1}`,
+            DELETE_OVERRIDES : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_OVERRIDES}/bulk`,
 
             GET_FEATURE_STATES : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_STATES}`
         };

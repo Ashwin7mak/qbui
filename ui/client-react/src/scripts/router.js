@@ -13,7 +13,7 @@ import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import FeatureSwitchesRoute from "../components/featureSwitches/featureSwitchesRoute";
-import FeatureSwitchExceptionsRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
+import FeatureSwitchOverridesRoute from "../components/featureSwitches/featureSwitchOverridesRoute";
 import * as FeatureSwitchActions from '../actions/featureSwitchActions';
 
 import Logger from "../utils/logger";
@@ -59,11 +59,10 @@ render((
 
             <Route path={ADMIN_ROUTE} component={ConnectedNav} >
                 <Route path="featureSwitches" component={FeatureSwitchesRoute} />
-                <Route path="featureSwitch/:id" component={FeatureSwitchExceptionsRoute} />
+                <Route path="featureSwitch/:id" component={FeatureSwitchOverridesRoute} />
             </Route>
 
             <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
-
                 <IndexRoute component={AppHomePageRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />

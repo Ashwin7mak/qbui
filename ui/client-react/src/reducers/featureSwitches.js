@@ -74,7 +74,7 @@ const featureSwitches = (
 
     // overrides
 
-    case types.SET_FEATURE_SWITCH_OVERRIDES: {
+    case types.SET_FEATURE_OVERRIDES: {
 
         // set the overrides to those of feature switch with given ID
 
