@@ -1,5 +1,19 @@
 @import '../../assets/css/qbVariables';
 
+/*
+ * Mixin to create the separator line to the left of the report icon on each table in the nav.
+ * This may be cleaned up/removed when this file gets refactored. We really shouldn't need to use so many of these.
+ */
+@mixin leftNavReportIconSeparator() {
+    &::after {
+        content: '';
+        position: absolute;
+        border-left: 1px solid $leftnav-brandarea-stroke-color;
+        left: 0;
+        height: 24px;
+        top: 9px;
+    }
+}
 
 .leftNav.expanded {
     overflow: visible;
@@ -53,15 +67,8 @@
     a.right {
         opacity: 1;
         color: $leftnav-table-selected-color;
-        // border-left: 1px solid $leftnav-brandarea-stroke-color !important;
-        &::after {
-            content: '';
-            position: absolute;
-            border-left: 1px solid $leftnav-brandarea-stroke-color;
-            left: 0;
-            height: 24px;
-            top: 9px;
-        }
+
+        @include leftNavReportIconSeparator();
     }
 }
 
@@ -391,14 +398,8 @@ div.leftNavTooltip {
                 -moz-transition: opacity 0.2s ease-in-out;
                 border-bottom: 0;
                 // border-left: 1px solid $left-nav-right-icon-separator-color;
-                &::after {
-                    content: '';
-                    position: absolute;
-                    border-left: 1px solid $leftnav-brandarea-stroke-color;
-                    left: 0;
-                    height: 24px;
-                    top: 9px;
-                }
+
+                @include leftNavReportIconSeparator();
 
             }
         }
@@ -435,14 +436,8 @@ div.leftNavTooltip {
                 a.right {
                     flex: 0 0 auto;
                     color: $left-nav-color;
-                    &::after {
-                        content: '';
-                        position: absolute;
-                        border-left: 1px solid $leftnav-brandarea-stroke-color;
-                        left: 0;
-                        height: 24px;
-                        top: 9px;
-                    }
+
+                    @include leftNavReportIconSeparator();
                 }
             }
 
