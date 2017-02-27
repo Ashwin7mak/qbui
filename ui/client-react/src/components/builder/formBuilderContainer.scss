@@ -1,11 +1,15 @@
 @import '../../../src/assets/css/qbVariables';
 
 .formBuilderContainer {
-    display: flex;
-    flex-direction: row;
     height: 100%;
-    min-width: 100%;
-    overflow: auto;
+    
+    .toolsAndForm {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        min-width: 100%;
+        overflow: auto;
+    }
 
     .formBuilderContent {
         flex: 1 auto;
@@ -20,11 +24,6 @@
     @include small-breakpoint {
         display: flex;
         flex-direction: column;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
         opacity: 1;
     }
 
