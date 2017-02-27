@@ -13,17 +13,9 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import './formBuilderContainer.scss';
-import withScrolling from 'react-dnd-scrollzone';
+import AutoScroll from '../autoScroll/autoScroll';
 
 let logger = new Logger();
-
-let animation;
-
-const ScrollZone = withScrolling('div');
-const scrollStyle = {
-    overflowX: 'scroll',
-    overflowY: 'scroll',
-}
 
 const mapStateToProps = state => {
     return {
@@ -67,124 +59,10 @@ export const FormBuilderContainer = React.createClass({
         formType: PropTypes.string
     },
 
-    scrollDown() {
-        let downBy = 1;
-        let container = document.getElementsByClassName("formBuilderContent")[0];
-        let scrollTop = container.scrollTop;
-
-
-        container.scrollTop = scrollTop + downBy;
-        downBy = downBy + 1;
-
-        animation = requestAnimationFrame(this.scrollDown);
-        },
-
-    scrollUp() {
-        let upBy = -1;
-        let container = document.getElementsByClassName("formBuilderContent")[0];
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + upBy;
-        upBy = upBy - 1;
-
-        animation = requestAnimationFrame(this.scrollUp);
-    },
-
-    startScrolling (scrollDirection) {
-        //https://css-tricks.com/using-requestanimationframe/
-        let body = document.body;
-        let container = document.getElementsByClassName("formBuilderContent")[0];
-        let scrollTop = container.scrollTop;
-        let scrollHeight = container.scrollHeight;
-        var clientHeight = container.clientHeight;
-
-        if (scrollDirection === 'scrollDown') {
-            console.log('============================================START SCROLLING DOWN');
-            console.log('container.scrollTop: ', container.scrollTop);
-            /////////Works On desktop//////
-            animation = requestAnimationFrame(this.scrollDown);
-
-            // body.scrollTop = 0;
-            // container.animate({ scrollTop: 0 }, "fast"); //animate is not stable and it does not work
-            // window.scrollTo(0, 1);
-            // window.pageYOffset = 100;
-            // document.body.scrollTop = 0;
-            // document.getElementsByClassName("formBuilderContent")[0].scrollLeft = 100;
-            // window.scrollBy(0, 100);
-        } else if (scrollDirection === 'scrollUp') {
-            console.log('============================================START SCROLLING UP');
-            /////////Works On desktop//////
-            animation = requestAnimationFrame(this.scrollUp);
-
-            // container.animate({ scrollTop: 0 }, "fast"); //animate is not stable and it does not work
-            // body.scrollTop = 0;
-            // window.pageYOffset = 100;
-            // window.scrollTo(0, 1);
-            // document.body.scrollTop = 0;
-            // document.getElementsByClassName("formBuilderContent")[0].scrollLeft = 100;
-            // window.scrollBy(0, -100);
-        }
-        console.log('what is the animation key? ', animation);
-    },
-
-    updateScrolling(evt) {
-        let pointerX;
-        let pointerY;
-        let containerHeight = this.getContainerSize();
-
-        if (evt.type === 'touchmove') {
-            pointerX = evt.touches[0].clientX;
-            pointerY = evt.touches[0].clientY;
-            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
-        } else {
-            pointerX = evt.clientX;
-            pointerY = evt.clientY;
-        }
-
-        if (containerHeight - pointerY < 10) {
-            console.log('pointerY: ', pointerY);
-            this.startScrolling('scrollDown');
-        } else if (pointerY < 20) {
-            this.startScrolling('scrollUp');
-        } else {
-            this.stopScrolling();
-        }
-    },
-
-    stopScrolling() {
-        console.log('I stopped scrolling: ', animation);
-        if (animation) {
-            cancelAnimationFrame(animation);
-        }
-    },
-
-    removeMouseMove() {
-        this.stopScrolling();
-        document.removeEventListener("mousemove", this.updateScrolling);
-
-    },
-
-    activateMouseMove() {
-        document.addEventListener("mousemove", this.updateScrolling);
-    },
-
-    getContainerSize() {
-        let container = document.getElementsByClassName("formBuilderContent")[0].clientHeight;
-        return container;
-    },
 
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
-
-        this.getContainerSize();
-
-        document.addEventListener("touchmove", this.updateScrolling);
-        document.addEventListener("touchend", this.stopScrolling);
-
-        document.addEventListener("mousedown", this.activateMouseMove);
-        document.addEventListener("mouseup", this.removeMouseMove);
-
 
     },
 
@@ -240,11 +118,13 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
                 <ToolPalette />
 
-                <div className="formBuilderContent">
-                    <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                        <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
-                    </Loader>
-                </div>
+                <AutoScroll>
+                    <div className="formBuilderContent">
+                        <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                            <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                        </Loader>
+                    </div>
+                </AutoScroll>
 
                 {this.getSaveOrCancelFooter()}
 
