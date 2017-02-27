@@ -1,13 +1,5 @@
 @import '../../assets/css/qbVariables';
 
-// semantic names
-/*
-$leftnav-brandarea-stroke-size: $stroke-width-thin;
-$lefftnav-table-icon-size:      $size-iconfont-medium;
-$leftnav-tablenames-size:       $font-size-xs;
-$leftnav-table-name-size:       $font-size-l;
- */
-
 
 .leftNav.expanded {
     overflow: visible;
@@ -51,17 +43,25 @@ $leftnav-table-name-size:       $font-size-l;
     &::before {
         content: '';
         position: absolute;
-        width: 5px;
-        height: 25px;
+        width: 4px;
+        height: 30px;
         left: 0;
-        top: 8px;
-        border-left: 5px solid $leftnav-table-selected-color;
+        top: 6px;
+        border-left: 4px solid $leftnav-table-selected-color;
     }
 
     a.right {
         opacity: 1;
         color: $leftnav-table-selected-color;
         // border-left: 1px solid $leftnav-brandarea-stroke-color !important;
+        &::after {
+            content: '';
+            position: absolute;
+            border-left: 1px solid $leftnav-brandarea-stroke-color;
+            left: 0;
+            height: 24px;
+            top: 9px;
+        }
     }
 }
 
@@ -245,11 +245,12 @@ div.leftNavTooltip {
                 vertical-align: middle;
             }
 
-            .iconTableUISturdy-caret-filled-up {
+            .iconTableUISturdy-caret-up {
                 position: absolute;
                 right: 5px;
                 width: auto;
-                top: 8px;
+                top: 12px;
+                font-size: 14px;
                 transition: transform 300ms ease-in;
                 transform: rotate(-180deg);
             }
@@ -390,6 +391,15 @@ div.leftNavTooltip {
                 -moz-transition: opacity 0.2s ease-in-out;
                 border-bottom: 0;
                 // border-left: 1px solid $left-nav-right-icon-separator-color;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    border-left: 1px solid $leftnav-brandarea-stroke-color;
+                    left: 0;
+                    height: 24px;
+                    top: 9px;
+                }
+
             }
         }
     }
@@ -424,7 +434,15 @@ div.leftNavTooltip {
 
                 a.right {
                     flex: 0 0 auto;
-                    //border-left: 1px solid $left-nav-right-icon-separator-color;
+                    color: $left-nav-color;
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        border-left: 1px solid $leftnav-brandarea-stroke-color;
+                        left: 0;
+                        height: 24px;
+                        top: 9px;
+                    }
                 }
             }
 
@@ -446,7 +464,12 @@ div.leftNavTooltip {
 }
 
 .leftNav li.horizontal {
+    border-top: 1px solid $leftnav-background-color;
     border-bottom: 1px solid $leftnav-background-stroke-color;
+
+    &:hover {
+        border-top-color: $color-cyan-300;
+    }
 }
 
 .leftNav li.horizontal, .leftNav .globalActions {
@@ -586,7 +609,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .appsToggleArea .qbIcon.iconTableUISturdy-caret-filled-up {
+.leftNav.appsListOpen .appsToggleArea .qbIcon.iconTableUISturdy-caret-up {
     transform: rotate(0deg);
 }
 

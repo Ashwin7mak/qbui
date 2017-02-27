@@ -45,7 +45,7 @@ let LeftNav = React.createClass({
             <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
                 <QBicon icon={"favicon"}/>
                 <span className={"navLabel"}> {app ? app.name : ''}</span>
-                <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
+                <QBicon className={"appsToggleIcon"} icon="caret-up"/>
             </Button>
             }
         </div>);
