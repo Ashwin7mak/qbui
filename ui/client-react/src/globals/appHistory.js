@@ -3,7 +3,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
-import {editRecordCancel, editRecordCommit} from '../actions/recordActions';
+//import {editRecordCancel, editRecordCommit} from '../actions/recordActions';
 import _ from 'lodash';
 
 // Uses singleton pattern
@@ -47,12 +47,15 @@ class AppHistory {
      * Setups the singleton for use with Redux store outside of React.
      * @param redux store
      */
-    setup(flux, store) {
+    setup(flux, store, editRecordCancel, editRecordCommit) {
         //  TODO remove once all stores are migrated
         self.flux = flux;
 
         //  redux store
         self.store = store;
+        self.editRecordCancel = editRecordCancel;
+        self.editRecordCommit = editRecordCommit;
+
         self._setupHistoryListeners();
 
         return self;
@@ -220,7 +223,7 @@ class AppHistory {
         //  clean up pending edits in store
         const pendEdits = self.getPendingEditsFromStore();
         if (_.isEmpty(pendEdits) === false) {
-            self.store.dispatch(editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
+            self.store.dispatch(self.editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
         }
 
         //self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);

@@ -40,7 +40,7 @@ export const OPEN_RECORD = 'OPEN_RECORD';
 export const EDIT_RECORD = 'EDIT_RECORD';
 export const SAVE_RECORD = 'SAVE_RECORD';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
-export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
+//export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 
 //  Record actions for inline edit
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';
