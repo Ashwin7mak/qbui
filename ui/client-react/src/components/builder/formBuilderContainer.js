@@ -17,6 +17,8 @@ import withScrolling from 'react-dnd-scrollzone';
 
 let logger = new Logger();
 
+let animation;
+
 const ScrollZone = withScrolling('div');
 const scrollStyle = {
     overflowX: 'scroll',
@@ -65,8 +67,31 @@ export const FormBuilderContainer = React.createClass({
         formType: PropTypes.string
     },
 
+    scrollDown() {
+        let downBy = 1;
+        let container = document.getElementsByClassName("formBuilderContent")[0];
+        let scrollTop = container.scrollTop;
+
+
+        container.scrollTop = scrollTop + downBy;
+        downBy = downBy + 1;
+
+        animation = requestAnimationFrame(this.scrollDown);
+        },
+
+    scrollUp() {
+        let upBy = -1;
+        let container = document.getElementsByClassName("formBuilderContent")[0];
+        let scrollTop = container.scrollTop;
+
+        container.scrollTop = scrollTop + upBy;
+        upBy = upBy - 1;
+
+        animation = requestAnimationFrame(this.scrollUp);
+    },
 
     startScrolling (scrollDirection) {
+        //https://css-tricks.com/using-requestanimationframe/
         let body = document.body;
         let container = document.getElementsByClassName("formBuilderContent")[0];
         let scrollTop = container.scrollTop;
@@ -77,15 +102,10 @@ export const FormBuilderContainer = React.createClass({
             console.log('============================================START SCROLLING DOWN');
             console.log('container.scrollTop: ', container.scrollTop);
             /////////Works On desktop//////
-            console.log('scrollHeight: ', scrollHeight, '\nscrollTopt: ', scrollTop ,'\nscrollHeight - scrollTop: ',  scrollHeight - scrollTop);
-            container.scrollTop = scrollTop + 100;///////
-            //////////////////////////////
-
-            console.log('window.pageYOffset: ', window.pageYOffset);
-            console.log('window.pageXOffset: ', window.pageYOffset);
+            animation = requestAnimationFrame(this.scrollDown);
 
             // body.scrollTop = 0;
-            container.animate({ scrollTop: 0 }, "fast");
+            // container.animate({ scrollTop: 0 }, "fast"); //animate is not stable and it does not work
             // window.scrollTo(0, 1);
             // window.pageYOffset = 100;
             // document.body.scrollTop = 0;
@@ -93,18 +113,10 @@ export const FormBuilderContainer = React.createClass({
             // window.scrollBy(0, 100);
         } else if (scrollDirection === 'scrollUp') {
             console.log('============================================START SCROLLING UP');
-            console.log('container.scrollTop: ', container.scrollTop);
             /////////Works On desktop//////
-            console.log('scrollHeight: ', scrollHeight, '\nscrollTop: ', scrollTop ,'\nscrollHeight - scrollTop: ',  scrollHeight - scrollTop);
+            animation = requestAnimationFrame(this.scrollUp);
 
-            container.scrollTop = scrollTop - 100;///////
-            //////////////////////////////
-
-
-            console.log('window.pageYOffset: ', window.pageYOffset);
-            console.log('window.pageXOffset: ', window.pageXOffset);
-
-            container.animate({ scrollTop: 0 }, "fast");
+            // container.animate({ scrollTop: 0 }, "fast"); //animate is not stable and it does not work
             // body.scrollTop = 0;
             // window.pageYOffset = 100;
             // window.scrollTo(0, 1);
@@ -112,10 +124,10 @@ export const FormBuilderContainer = React.createClass({
             // document.getElementsByClassName("formBuilderContent")[0].scrollLeft = 100;
             // window.scrollBy(0, -100);
         }
+        console.log('what is the animation key? ', animation);
     },
 
     updateScrolling(evt) {
-
         let pointerX;
         let pointerY;
         let containerHeight = this.getContainerSize();
@@ -123,22 +135,33 @@ export const FormBuilderContainer = React.createClass({
         if (evt.type === 'touchmove') {
             pointerX = evt.touches[0].clientX;
             pointerY = evt.touches[0].clientY;
-            // console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
+            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         } else {
             pointerX = evt.clientX;
             pointerY = evt.clientY;
-            // console.log('mouse x: ', pointerX, '\nmouseY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         }
 
         if (containerHeight - pointerY < 10) {
+            console.log('pointerY: ', pointerY);
             this.startScrolling('scrollDown');
         } else if (pointerY < 20) {
             this.startScrolling('scrollUp');
+        } else {
+            this.stopScrolling();
         }
     },
 
     stopScrolling() {
+        console.log('I stopped scrolling: ', animation);
+        if (animation) {
+            cancelAnimationFrame(animation);
+        }
+    },
+
+    removeMouseMove() {
+        this.stopScrolling();
         document.removeEventListener("mousemove", this.updateScrolling);
+
     },
 
     activateMouseMove() {
@@ -159,11 +182,8 @@ export const FormBuilderContainer = React.createClass({
         document.addEventListener("touchmove", this.updateScrolling);
         document.addEventListener("touchend", this.stopScrolling);
 
-        // document.addEventListener("dragover", this.updateScrolling);
-        // document.addEventListener("dragend", this.stopScrolling);
-
         document.addEventListener("mousedown", this.activateMouseMove);
-        document.addEventListener("mouseup", this.stopScrolling);
+        document.addEventListener("mouseup", this.removeMouseMove);
 
 
     },
@@ -207,6 +227,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
+
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
         let formData = null;
