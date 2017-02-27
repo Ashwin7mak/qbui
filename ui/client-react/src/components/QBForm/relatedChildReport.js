@@ -39,7 +39,12 @@ class ChildReport extends React.Component {
         } else if (this.props.type === 'EMBEDREPORT') {
             // TODO: render embedded report for medium and large breakpoint
             //return <ReportGrid isViewOnly={true} {...smallReport} />;
-            return <EmbeddedReportToolsAndContent {...reportData} />;
+            return (
+                <EmbeddedReportToolsAndContent
+                    tblId={childTableId}
+                    rptId={childReportId}
+                    {...this.props}
+                />);
         } else {
             return null;
         }

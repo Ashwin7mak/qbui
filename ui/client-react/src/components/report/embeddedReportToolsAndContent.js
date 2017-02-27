@@ -9,7 +9,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
-import {loadDynamicReport} from '../../mocks/mockReportActions';
+import {loadDynamicEmbeddedReport} from '../../mocks/mockReportActions';
 import {CONTEXT} from '../../actions/context';
 
 let logger = new Logger();
@@ -39,7 +39,7 @@ const EmbeddedReportToolsAndContent = React.createClass({
         //const flux = this.getFlux();
         //flux.actions.loadFields(appId, tblId);
 
-        this.props.dispatch(loadDynamicEmbeddedReport('CONTEXT.REPORT.FORM', appId, tblId, rptId, true, /*filter*/{}, queryParams));
+        this.props.loadDynamicEmbeddedReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
 
     /**
@@ -69,30 +69,37 @@ const EmbeddedReportToolsAndContent = React.createClass({
     },
 
     componentDidMount() {
+        this.uniqId = 'FORM' + Math.floor(Math.random() * 100000);
+        let thing = this.uniqId;
         this.loadReportFromProps();
     },
 
+    componentWillUnmount() {
+        // TODO: cleanup entry in store
+        // this.uniqId
+    },
+
     render() {
-        const propsInvalid = false;
-        if (false || propsInvalid) {
+        const record = _.get(this, `props.records[${this.uniqId}]`);
+        if (!record) {
             logger.info("the necessary params were not specified to embeddedReportToolsAndContent render params=" + simpleStringify(this.props.params));
             return null;
         } else {
+            const params = {
+                appId: record.appId,
+                tblId: record.tblId,
+                rptId: record.rptId
+            };
             return (
                 <div className="reportContainer">
                     <ReportToolsAndContent
-                        params={this.props.params}
-                        reportData={this.props.reportData}
+                        params={params}
+                        reportData={record}
                         appUsers={this.props.appUsers}
-                        pendEdits={this.props.pendEdits}
-                        isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                         routeParams={this.props.routeParams}
-                        selectedAppId={this.props.selectedAppId}
-                        fields={this.props.fields}
-                        searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                        selectedAppId={record.appId}
+                        fields={this.props.fields || !("nope, viewOnly")}
                         nameForRecords={this.nameForRecords}
-                        selectedRows={this.props.reportData.selectedRows}
-                        scrollingReport={this.props.scrollingReport}
                         isViewOnly={true}
                     />
                 </div>);
@@ -102,8 +109,20 @@ const EmbeddedReportToolsAndContent = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        record: state.record
+        records: state.mockReportReducer
     };
 };
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadDynamicEmbeddedReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicEmbeddedReport(context, appId, tblId, rptId, format, filter, queryParams));
+        }
+    };
+};
+
 // create mapDispatchToProps function here if you want dispatch available when using mapStateToProps
-export default connect()(EmbeddedReportToolsAndContent);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(EmbeddedReportToolsAndContent);

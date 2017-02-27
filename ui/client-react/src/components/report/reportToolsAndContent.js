@@ -348,6 +348,10 @@ export const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+        appId = appId || _.get(this, 'props.params.appId');
+        tblId = tblId || _.get(this, 'props.params.tblId');
+        rptId = rptId || _.get(this, 'props.params.rptId');
+
         let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
@@ -359,11 +363,7 @@ export const ReportToolsAndContent = React.createClass({
         this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
 
 
-        if (_.isUndefined(this.props.params) ||
-            _.isUndefined(this.props.params.appId) ||
-            _.isUndefined(this.props.params.tblId) ||
-            (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
-        ) {
+        if (_.isUndefined(appId) || _.isUndefined(tblId) || _.isUndefined(rptId)) {
             logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
             return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
         } else {

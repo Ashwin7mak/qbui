@@ -279,6 +279,7 @@ let QBForm = React.createClass({
                 detailKeyFid={_.get(relationship, "detailFieldId")}
                 detailKeyValue={detailKeyValue}
                 type={element.type}
+                appUsers={this.props.appUsers}
             />
         </td>;
     },
