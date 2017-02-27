@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import tableActions from '../../src/actions/tableActions';
+import tableActions, {__RewireAPI__ as tableActionsRewireAPI} from '../../src/actions/tableActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
@@ -33,11 +33,11 @@ describe('Table Actions table negative tests -- error conditions', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
-        tableActions.__Rewire__('TableService', mockTableService);
+        tableActionsRewireAPI.__Rewire__('TableService', mockTableService);
     });
 
     afterEach(() => {
-        tableActions.__ResetDependency__('TableService');
+        tableActionsRewireAPI.__ResetDependency__('TableService');
     });
 
     it('test missing params', (done) => {
@@ -101,13 +101,13 @@ describe('Table Actions table negative tests -- exception condition', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
         spyOn(mockLogger.prototype, 'logException').and.callThrough();
-        tableActions.__Rewire__('TableService', mockTableService);
-        tableActions.__Rewire__('Logger', mockLogger);
+        tableActionsRewireAPI.__Rewire__('TableService', mockTableService);
+        tableActionsRewireAPI.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
-        tableActions.__ResetDependency__('TableService');
-        tableActions.__ResetDependency__('Logger');
+        tableActionsRewireAPI.__ResetDependency__('TableService');
+        tableActionsRewireAPI.__ResetDependency__('Logger');
         flux.dispatchBinder.dispatch.calls.reset();
     });
 

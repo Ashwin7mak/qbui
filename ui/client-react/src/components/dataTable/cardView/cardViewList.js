@@ -1,8 +1,6 @@
 import React from 'react';
-import {I18nMessage} from '../../../utils/i18nMessage';
 import CardView from './cardView';
-import Loader  from 'react-loader';
-import {Collapse} from 'react-bootstrap';
+import Collapse from 'react-bootstrap/lib/Collapse';
 import './cardViewList.scss';
 import QBicon from '../../qbIcon/qbIcon';
 

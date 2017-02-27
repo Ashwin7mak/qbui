@@ -34,10 +34,8 @@ const mapStateToProps = (state) => {
         qbui: state
     };
 };
-
 const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state as qbui prop
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
-
 const store = createAppStore();
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;

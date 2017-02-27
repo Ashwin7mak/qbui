@@ -108,8 +108,8 @@ describe('Facet formatter unit test', function() {
         // setup user test
         var userFacetValues = [
             {firstName: 'First1',
-             lastName: 'Last1',
-             userId: 1}
+                lastName: 'Last1',
+                userId: 1}
         ];
         var userFacetRecords = [];
         var expectedUserFacets = {id: 10, name:'user', type:constants.USER, values:[], hasBlanks: false};
