@@ -636,11 +636,11 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
-            actions.DELETE_RECORD, this.onDeleteReportRecord,
-            actions.DELETE_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
+            //actions.DELETE_RECORD, this.onDeleteReportRecord,
+            //actions.DELETE_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
             actions.DELETE_RECORD_FAILED, this.onDeleteReportRecordFailed,
-            actions.DELETE_RECORD_BULK, this.onDeleteReportRecordBulk,
-            actions.DELETE_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
+            //actions.DELETE_RECORD_BULK, this.onDeleteReportRecordBulk,
+            //actions.DELETE_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
             actions.DELETE_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             //actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             //actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
@@ -1026,9 +1026,9 @@ let ReportDataStore = Fluxxor.createStore({
      * if anyone is listening this is me telling you we are deleting a record
      * @param payload {appId, tblId, recId}
      */
-    onDeleteReportRecord(payload) {
-        //add code here when we want to do something with this action
-    },
+    //onDeleteReportRecord(payload) {
+    //    //add code here when we want to do something with this action
+    //},
 
     /**
      * removes the record with the matching value in the keyfield from the
@@ -1055,9 +1055,9 @@ let ReportDataStore = Fluxxor.createStore({
      * if anyone is listening this is me telling you we are deleting records in bulk
      * @param payload {appId, tblId, recIds}
      */
-    onDeleteReportRecordBulk(payload) {
-        //add code here when we want to do something with this action
-    },
+    //onDeleteReportRecordBulk(payload) {
+    //    //add code here when we want to do something with this action
+    //},
 
     /**
      * removes the records with the matching values in keyfield from the

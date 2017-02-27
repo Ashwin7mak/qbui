@@ -22,7 +22,7 @@ import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
-import {openRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField} from '../../../actions/recordActions';
+import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord} from '../../../actions/recordActions';
 import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -389,8 +389,9 @@ export const ReportContent = React.createClass({
      * @returns {{confirmDeletesDialogOpen: boolean}}
      */
     deleteRecord() {
-        const flux = this.getFlux();
-        flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
+        //const flux = this.getFlux();
+        //flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
+        this.props.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
 
@@ -1137,6 +1138,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
             dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
+        },
+        deleteRecord:  (appId, tblId, recId, nameForRecords) => {
+            dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         }
     };
 };

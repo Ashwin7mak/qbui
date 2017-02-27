@@ -71,6 +71,62 @@ const record = (state = [], action) => {
 
     //  what record action is being requested
     switch (action.type) {
+        case types.DELETE_RECORDS: {
+            // TODO: not sure if need to set 'saving' on state on each when deleting
+            const ids = action.content.recIds;
+            let states = [];
+            ids.forEach((recId) => {
+                let currentRecd = getRecordFromState(recId);
+                if (!currentRecd) {
+                    currentRecd = {
+                        id: recId
+                    };
+                }
+
+                //  initialize a new record model object used for delete
+                let model = new RecordModel(action.content.appId, action.content.tblId, action.content.recId);
+                model.setSaving(true);
+                currentRecd.pendEdits = model.get();
+
+                states.push(currentRecd);
+            });
+            return states.length > 0 ? states : state;
+        }
+        case types.DELETE_RECORDS_COMPLETE: {
+            // TODO: not sure if need to set 'saving' on state on each when deleting
+            //
+            //  TODO: make sure state is not getting mutated!!!!
+            const ids = action.content.recIds;
+            let states = null;
+            ids.forEach((recId) => {
+                let currentRecd = getRecordFromState(recId);
+                if (_.has(currentRecd, 'pendEdits')) {
+                    let model = new RecordModel();
+                    model.set(currentRecd.pendEdits);
+                    model.setSaving(false);
+                    states = newState(currentRecd);
+                }
+            });
+            return states || state;
+        }
+        case types.DELETE_RECORDS_ERROR: {
+            //  update errors..if any
+            let states = null;
+            let errors = action.content.errors;
+            if (errors) {
+                const ids = action.content.recIds;
+                ids.forEach((recId) => {
+                    let currentRecd = getRecordFromState(recId);
+                    if (_.has(currentRecd, 'pendEdits')) {
+                        let model = new RecordModel();
+                        model.set(currentRecd.pendEdits);
+                        model.setErrors(errors);
+                        states = newState(currentRecd);
+                    }
+                });
+            }
+            return states || state;
+        }
         case types.OPEN_RECORD: {
             const obj = {
                 id: action.id,
