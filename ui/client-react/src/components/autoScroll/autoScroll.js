@@ -33,7 +33,7 @@ class AutoScroll extends Component {
 
 
         container.scrollTop = scrollTop + downBy;
-        downBy = downBy + 1;
+        downBy = downBy + 10;
 
         this.animationId = requestAnimationFrame(this.scrollDown);
     }
@@ -44,7 +44,7 @@ class AutoScroll extends Component {
         let scrollTop = container.scrollTop;
 
         container.scrollTop = scrollTop + upBy;
-        upBy = upBy - 1;
+        upBy = upBy - 10;
 
         this.animationId = requestAnimationFrame(this.scrollUp);
     }
@@ -59,29 +59,11 @@ class AutoScroll extends Component {
 
         if (scrollDirection === 'scrollDown') {
             console.log('============================================START SCROLLING DOWN');
-            console.log('container.scrollTop: ', container.scrollTop);
-            /////////Works On desktop//////
             this.animationId = requestAnimationFrame(this.scrollDown);
 
-            // body.scrollTop = 0;
-            // container.animate({ scrollTop: 0 }, "fast"); //animate is not stable and it does not work
-            // window.scrollTo(0, 1);
-            // window.pageYOffset = 100;
-            // document.body.scrollTop = 0;
-            // document.getElementsByClassName("this.props.className)[0].scrollLeft = 100;
-            // window.scrollBy(0, 100);
         } else if (scrollDirection === 'scrollUp') {
             console.log('============================================START SCROLLING UP');
-            /////////Works On desktop//////
             this.animationId = requestAnimationFrame(this.scrollUp);
-
-            // container.animate({ scrollTop: 0 }, "fast"); //animate is not stable and it does not work
-            // body.scrollTop = 0;
-            // window.pageYOffset = 100;
-            // window.scrollTo(0, 1);
-            // document.body.scrollTop = 0;
-            // document.getElementsByClassName("this.props.className)[0].scrollLeft = 100;
-            // window.scrollBy(0, -100);
         }
     }
 
@@ -99,7 +81,7 @@ class AutoScroll extends Component {
             pointerY = evt.clientY;
         }
 
-        if (containerHeight - pointerY < 10) {
+        if (containerHeight - pointerY < 20) {
             this.startScrolling('scrollDown');
         } else if (pointerY < 20) {
             this.startScrolling('scrollUp');
