@@ -163,6 +163,8 @@ class FeatureSwitchesRoute extends React.Component {
                 NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
                     CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
             });
+        } else {
+            this.props.featureSwitchUpdated(id, property, value); // don't save, just get out of edit mode
         }
     }
 

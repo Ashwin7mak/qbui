@@ -39,7 +39,7 @@ const getOverridePersistProps = (override) => {
 };
 
 // add loaded switches to store
-const loadSwitchesSuccess = (switches) => ({
+export const loadSwitchesSuccess = (switches) => ({
     type: types.SET_FEATURE_SWITCHES,
     switches
 });
@@ -380,7 +380,7 @@ export const deleteOverrides = (switchId, ids) => {
 };
 
 // set feature states in store
-const loadStatesSuccess = (states) => ({
+export const loadStatesSuccess = (states) => ({
     type: types.SET_FEATURE_SWITCH_STATES,
     states
 });

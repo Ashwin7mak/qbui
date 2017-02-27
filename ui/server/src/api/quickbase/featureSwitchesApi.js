@@ -85,7 +85,7 @@
                         let index = _.findIndex(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
                         if (index !== -1) {
-                            featureSwitchesMockData[index] = feature;
+                            Object.assign(featureSwitchesMockData[index], feature);
                             saveSwitchesMockData();
                         }
                         resolve();

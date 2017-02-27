@@ -119,10 +119,14 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
         const overrideToUpdate = this.props.overrides.find(override => override.id === id);
 
-        this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value).then(() => {
-            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-        });
+        if (overrideToUpdate[property] !== value) {
+            this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value).then(() => {
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            });
+        } else {
+            this.props.overrideUpdated(id, property, value); // don't save, just get out of edit mode
+        }
     }
 
     /**
