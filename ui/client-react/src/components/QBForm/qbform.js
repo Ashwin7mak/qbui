@@ -10,6 +10,7 @@ import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
 import Device from '../../utils/device';
+import MobileDropTarget from '../formBuilder/mobileDropTarget';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -40,12 +41,17 @@ let QBForm = React.createClass({
             record: PropTypes.array,
             fields: PropTypes.array,
             formMeta: PropTypes.object
-        })
+        }),
+
+        /**
+         * Whether to display animation when reordering elements on a field in builder mode */
+        hasAnimation: PropTypes.bool,
     },
 
     getDefaultProps() {
         return {
-            activeTab: '0'
+            activeTab: '0',
+            hasAnimation: false,
         };
     },
 
@@ -213,7 +219,7 @@ let QBForm = React.createClass({
             elements = column.elements.map(element => this.createElement(element, newLocation));
         }
 
-        let arrangedElements;
+        let arrangedElements = elements;
         if (this.props.hasAnimation && this.props.editingForm && !Device.isTouch()) {
             // Adds animation when field elements are moved during form editing.
             arrangedElements = (
@@ -221,8 +227,19 @@ let QBForm = React.createClass({
                     {elements}
                 </FlipMove>
             );
-        } else {
-            arrangedElements = elements;
+        }
+
+        if(Device.isTouch() && this.props.editingForm) {
+            let mobileDropTargets = [];
+            for(let i = 0; i < elements.length; i++) {
+                mobileDropTargets.push(<MobileDropTarget containingElement={{id: _.uniqueId('mobile-drop')}} location={elements[i].props.children.props.location} handleFormReorder={this.props.handleFormReorder} />);
+            }
+
+            arrangedElements = [];
+            elements.forEach((element, index) => {
+                arrangedElements.push(mobileDropTargets[index]);
+                arrangedElements.push(element);
+            });
         }
 
         return (

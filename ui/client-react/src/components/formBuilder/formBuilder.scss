@@ -87,4 +87,26 @@
     .dragAndDropField {
         max-width: $form-edit-input-width;
     }
+
+    .dropHovering .mobileDropTarget {
+        opacity: 1;
+        height: 30px;
+
+        transition: opacity 0.5s, height 0.2s;
+    }
+
+    .mobileDropTarget {
+        opacity: 0;
+        width: $form-edit-input-width;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .mobileDropTargetVisibleLine {
+            height: 3px;
+            background-color: $color-green-600;
+            flex: 1 auto;
+        }
+    }
 }
