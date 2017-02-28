@@ -31,7 +31,6 @@ class AutoScroll extends Component {
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
 
-
         container.scrollTop = scrollTop + downBy;
         downBy = downBy + 10;
 
@@ -59,7 +58,7 @@ class AutoScroll extends Component {
         }
     }
 
-    updateScrolling(evt) {
+    updateScrolling(e) {
 
         let pointerY;
         let windowInnerHeight = window.innerHeight;
@@ -72,10 +71,10 @@ class AutoScroll extends Component {
          * */
         let containerBottom =  windowInnerHeight - (containerOffSetTop + containerOffSetHeight);
 
-        if (evt.type === 'touchmove') {
-            pointerY = evt.touches[0].clientY;
+        if (e.type === 'touchmove') {
+            pointerY = e.touches[0].clientY;
         } else {
-            pointerY = evt.clientY;
+            pointerY = e.clientY;
         }
         /**
          * If the Container is equal to or has the same height as the window, then we will just set the bottom to the window's bottom
