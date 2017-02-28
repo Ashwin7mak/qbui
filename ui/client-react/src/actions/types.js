@@ -39,7 +39,9 @@ export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 export const OPEN_RECORD = 'OPEN_RECORD';
 export const EDIT_RECORD = 'EDIT_RECORD';
 export const SAVE_RECORD = 'SAVE_RECORD';
+export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
+export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
 //export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 
 //  Record actions for inline edit

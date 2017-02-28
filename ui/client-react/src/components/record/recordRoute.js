@@ -17,6 +17,7 @@ import RecordHeader from './recordHeader';
 import Breakpoints from '../../utils/breakpoints';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SpinnerConfigurations from '../../constants/spinnerConfigurations';
+import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
@@ -255,10 +256,11 @@ export const RecordRoute = React.createClass({
     editNewRecord() {
 
         // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
-
-        this.props.editNewRecord();
+        //const flux = this.getFlux();
+        //flux.actions.editNewRecord();
+        //
+        //this.props.editNewRecord();
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     getPageActions() {

@@ -22,7 +22,7 @@ import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
-import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord} from '../../../actions/recordActions';
+import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord, saveRecord} from '../../../actions/recordActions';
 import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -361,7 +361,7 @@ export const ReportContent = React.createClass({
             }
             return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
-            return this.handleRecordChange(recordId, addNewRecord);
+            return this.handleRecordChange(recordId);
         }
     },
 
@@ -443,7 +443,7 @@ export const ReportContent = React.createClass({
      * @param recId
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(id, addNewRecordAfterSave = false) {
+    handleRecordChange(id) {
         let recordId = id;
         // To maintain compatibility with AgGrid
         if (_.isObject(id)) {
@@ -457,14 +457,15 @@ export const ReportContent = React.createClass({
                 colList.push(field.id);
             });
             //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
-            this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
+            //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
             let pendEdits = this.getPendEdits();
-            let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
-            promise.then((obj) => {
-                //  Temporary solution to display a redux event to update the report grid with in-line editor change
-                //  This will get refactored once the record store is moved to redux
-                this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
-            });
+            //let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, true);
+
+            //let promise = this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            //promise.then((obj) => {
+            //    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
+            //});
         }
     },
 
@@ -1118,9 +1119,6 @@ const mapDispatchToProps = (dispatch) => {
         updateReportSelections: (context, selections) => {
             dispatch(updateReportSelections(context, selections));
         },
-        updateReportRecord: (obj, context) => {
-            dispatch(updateReportRecord(obj, context));
-        },
         openRecord:(recId, nextRecordId, prevRecordId) => {
             dispatch(openRecord(recId, nextRecordId, prevRecordId));
         },
@@ -1141,6 +1139,13 @@ const mapDispatchToProps = (dispatch) => {
         },
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
+        },
+        saveRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
+            dispatch(saveRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
+                (obj) => {
+                    dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+                }
+            );
         }
     };
 };
