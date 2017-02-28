@@ -1,6 +1,4 @@
 import React, {PropTypes, Component} from 'react';
-import ReactDom from 'react-dom';
-
 
 /**
  * AutoScroll is triggered when a user either touches and holds down on a touch device and moves her finger
