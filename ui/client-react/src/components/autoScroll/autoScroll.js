@@ -38,6 +38,14 @@ class AutoScroll extends Component {
         document.addEventListener("mouseup", this.removeMouseMove);
     }
 
+    componentWillUnmount() {
+        document.removeEventListener("touchmove", this.updateScrolling);
+        document.removeEventListener("touchend", this.stopScrolling);
+
+        document.removeEventListener("mousedown", this.activateMouseMove);
+        document.removeEventListener("mouseup", this.removeMouseMove);
+    }
+
     scrollDown() {
         let downBy = 1;
         let container = this.getContainer();
