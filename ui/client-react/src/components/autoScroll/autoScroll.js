@@ -51,39 +51,43 @@ class AutoScroll extends Component {
 
     startScrolling (scrollDirection) {
         //https://css-tricks.com/using-requestanimationframe/
-        let body = document.body;
-        let container = this.getContainer();
-        let scrollTop = container.scrollTop;
-        let scrollHeight = container.scrollHeight;
-        var clientHeight = container.clientHeight;
-
         if (scrollDirection === 'scrollDown') {
-            console.log('============================================START SCROLLING DOWN');
             this.animationId = requestAnimationFrame(this.scrollDown);
 
         } else if (scrollDirection === 'scrollUp') {
-            console.log('============================================START SCROLLING UP');
             this.animationId = requestAnimationFrame(this.scrollUp);
         }
     }
 
     updateScrolling(evt) {
-        let pointerX;
+
         let pointerY;
-        let containerHeight = this.getContainer().clientHeight;
+        let windowInnerHeight = window.innerHeight;
+        let container = this.getContainer();
+        let containerOffSetHeight = container.offsetHeight;
+        let containerOffSetTop = container.offsetTop;
+
+        /**
+         * This is making the assumption the bottom of the container is not positioned at the bottom of the page
+         * */
+        let containerBottom =  windowInnerHeight - (containerOffSetTop + containerOffSetHeight);
 
         if (evt.type === 'touchmove') {
-            pointerX = evt.touches[0].clientX;
             pointerY = evt.touches[0].clientY;
-            console.log('touch x: ', pointerX, '\ntouchY: ', pointerY,'\ncontainerHeight: ', containerHeight);
         } else {
-            pointerX = evt.clientX;
             pointerY = evt.clientY;
         }
+        /**
+         * If the Container is equal to or has the same height as the window, then we will just set the bottom to the window's bottom
+         * We also subtract 40px to allow the scrolling to start 40 pixels before the mouse or touch gets to the bottom of the page
+         * */
+        if (windowInnerHeight <= containerOffSetHeight) {
+            containerBottom = windowInnerHeight - 40;
+        }
 
-        if (containerHeight - pointerY < 20) {
+        if (pointerY > containerBottom) {
             this.startScrolling('scrollDown');
-        } else if (pointerY < 20) {
+        } else if (pointerY < containerOffSetTop) {
             this.startScrolling('scrollUp');
         } else {
             this.stopScrolling();
@@ -91,10 +95,13 @@ class AutoScroll extends Component {
     }
 
     stopScrolling() {
+        console.log('Did I even get called?');
         cancelAnimationFrame(this.animationId);
     }
 
     removeMouseMove() {
+        console.log('I stopped scrolling');
+        this.stopScrolling();
         document.removeEventListener("mousemove", this.updateScrolling);
         this.stopScrolling();
     }
