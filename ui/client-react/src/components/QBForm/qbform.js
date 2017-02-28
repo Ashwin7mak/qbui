@@ -229,9 +229,9 @@ let QBForm = React.createClass({
             );
         }
 
-        if(Device.isTouch() && this.props.editingForm) {
+        if (Device.isTouch() && this.props.editingForm) {
             let mobileDropTargets = [];
-            for(let i = 0; i < elements.length; i++) {
+            for (let i = 0; i < elements.length; i++) {
                 mobileDropTargets.push(<MobileDropTarget containingElement={{id: _.uniqueId('mobile-drop')}} location={elements[i].props.children.props.location} handleFormReorder={this.props.handleFormReorder} />);
             }
 
