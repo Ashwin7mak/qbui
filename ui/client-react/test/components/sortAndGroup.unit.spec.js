@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
-import SortAndGroup  from '../../src/components/sortGroup/sortAndGroup';
+import SortAndGroup, {__RewireAPI__ as SortAndGroupRewireAPI}  from '../../src/components/sortGroup/sortAndGroup';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import MockData from '../../src/mocks/sortGroup';
 import constants from '../../../common/src/constants';
@@ -149,11 +149,11 @@ describe('SortAndGroup functions', () => {
     };
 
     beforeEach(() => {
-        SortAndGroup.__Rewire__('SortAndGroupDialog', SortAndGroupDialogMock);
+        SortAndGroupRewireAPI.__Rewire__('SortAndGroupDialog', SortAndGroupDialogMock);
     });
 
     afterEach(() => {
-        SortAndGroup.__ResetDependency__('SortAndGroupDialog');
+        SortAndGroupRewireAPI.__ResetDependency__('SortAndGroupDialog');
     });
 
     it('test render of not visible SortAndGroup', () => {
@@ -524,7 +524,7 @@ describe('SortAndGroup functions', () => {
             }
 
             it('test mockData ', () => {
-                SortAndGroup.__Rewire__('WindowLocationUtils', mockMethod);
+                SortAndGroupRewireAPI.__Rewire__('WindowLocationUtils', mockMethod);
 
                 component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
                                                                        fields={fieldsData}
@@ -534,7 +534,7 @@ describe('SortAndGroup functions', () => {
                 expect(grp).toBe(MockData.GROUP);
                 let srt = component.getSortFields(null);
                 expect(srt).toBe(MockData.SORT);
-                SortAndGroup.__ResetDependency__('WindowLocationUtils');
+                SortAndGroupRewireAPI.__ResetDependency__('WindowLocationUtils');
 
             });
         });

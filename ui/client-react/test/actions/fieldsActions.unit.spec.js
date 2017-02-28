@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import fieldsActions from '../../src/actions/fieldsActions';
+import fieldsActions, {__RewireAPI__ as fieldsActionsRewireAPI} from '../../src/actions/fieldsActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
@@ -28,11 +28,11 @@ describe('Fields Actions functions', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
         spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
-        fieldsActions.__Rewire__('FieldsService', mockFieldsService);
+        fieldsActionsRewireAPI.__Rewire__('FieldsService', mockFieldsService);
     });
 
     afterEach(() => {
-        fieldsActions.__ResetDependency__('FieldsService');
+        fieldsActionsRewireAPI.__ResetDependency__('FieldsService');
     });
 
     var fieldsActionTests = [

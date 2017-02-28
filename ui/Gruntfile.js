@@ -176,7 +176,8 @@ module.exports = function(grunt) {
             },
             express   : {
                 files  : [
-                    '<%= express.root %>/**/*.{js,json}'
+                    '<%= express.root %>/**/*.{js,json,jsx}',
+                    '<%= quickbase.commonDir %>/src/**/*'
                 ],
                 tasks  : ['express:local', 'wait'],
                 options: {
@@ -631,6 +632,12 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            nodeVer: {
+                command: 'node -v',
+                options: {
+                    execOptions: {}
+                }
+            },
             modulesPrune: {
                 command: 'npm prune --production',
                 options: {
@@ -1008,6 +1015,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('build', [
+        'shell:nodeVer',
         'clean:dist',
         'webpackbuild',
         'logGitState',

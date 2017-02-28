@@ -252,7 +252,6 @@ describe('Form Actions', () => {
             {id:'view', type:types.SAVING_FORM, content: null},
             {id: 'view', type: types.SAVING_FORM_SUCCESS, content: formData}
         ];
-
         class mockFormService {
             constructor() {}
             createForm() {

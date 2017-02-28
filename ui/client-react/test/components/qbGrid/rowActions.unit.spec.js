@@ -4,7 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import RowActions from '../../../src/components/dataTable/qbGrid/rowActions';
 import {PositionedRowEditActions} from '../../../src/components/dataTable/qbGrid/rowEditActions';
-import QbIconActions from '../../../src/components/dataTable/qbGrid/qbIconActions';
+import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 
 let component;
 
@@ -30,11 +30,11 @@ describe('RowActions (QbGrid)', () => {
         jasmineEnzyme();
         // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
         // TODO:: Refactor once redux stores are implemented. https://quickbase.atlassian.net/browse/MB-1920
-        QbIconActions.__Rewire__('IconActions', () => {return <div></div>;});
+        QbIconActionsRewireAPI.__Rewire__('IconActions', () => {return <div></div>;});
     });
 
     afterEach(() => {
-        QbIconActions.__ResetDependency__('IconActions');
+        QbIconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
     it('Renders the row actions', () => {

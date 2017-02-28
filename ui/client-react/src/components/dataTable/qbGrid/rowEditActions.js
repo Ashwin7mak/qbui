@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 import QBIcon from '../../qbIcon/qbIcon';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
@@ -85,6 +85,8 @@ export const RowEditActions = React.createClass({
         // Heads up: We currently disable the Save and add Button hence the 'true' as the first parameter.
         // This check should be removed once creating multiple records in the grid is working.
         // https://quickbase.atlassian.net/browse/MB-2115
+        // remove the eslint override when this is addressed
+        /* eslint no-constant-condition:0 */
         if (true || !isValid || saving) {
             addRecordClasses.push('disabled');
 
