@@ -62,6 +62,8 @@ export default {
             delete: "Löschen",
             dontDelete: "Nicht löschen",
             deleteThisRecord: "Löschen Sie diesen Datensatz?",
+            deleteTheseSwitches: "Löschen sie diesen Schaltet?",
+            deleteTheseOverrides: "Löschen sie diesen Überschreibt?",
             more: "Mehr...",
             placeholder: 'Wählen...',
             notFound: "Nicht gefunden"

@@ -62,6 +62,8 @@ export default {
             delete: "Effacer",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",
+            deleteTheseSwitches: "Supprimer ces commutateurs?",
+            deleteTheseOverrides: "Supprimer ces annule?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
