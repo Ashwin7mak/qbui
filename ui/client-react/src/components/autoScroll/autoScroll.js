@@ -15,6 +15,37 @@ import React, {PropTypes, Component} from 'react';
  * Note: Autoscroll will only work if the parent container has overflow set to auto
  * */
 
+
+/**
+ * Like many fancy web features, it's nice to use it when available and fallback to something that works when you can't.
+ * Below is a polyfill from https://css-tricks.com/using-requestanimationframe/
+ * */
+
+(function() {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame']
+            || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
 class AutoScroll extends Component {
 
     constructor(props) {
@@ -47,7 +78,7 @@ class AutoScroll extends Component {
         container.scrollTop = scrollTop + pixelsPerFrame;
         pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
 
-        this.animationId = requestAnimationFrame(this.scrollDown);
+        this.animationId = window.requestAnimationFrame(this.scrollDown);
     }
 
     scrollUp() {
@@ -58,7 +89,7 @@ class AutoScroll extends Component {
         container.scrollTop = scrollTop + -pixelsPerFrame;
         pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
 
-        this.animationId = requestAnimationFrame(this.scrollUp);
+        this.animationId = window.requestAnimationFrame(this.scrollUp);
     }
 
     updateScrolling(e) {
@@ -92,16 +123,16 @@ class AutoScroll extends Component {
         }
 
         if (pointerY > containerBottom) {
-            this.animationId = requestAnimationFrame(this.scrollDown);
+            this.animationId = window.requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerTop) {
-            this.animationId = requestAnimationFrame(this.scrollUp);
+            this.animationId = window.requestAnimationFrame(this.scrollUp);
         } else {
             this.stopScrolling();
         }
     }
 
     stopScrolling() {
-        cancelAnimationFrame(this.animationId);
+        window.cancelAnimationFrame(this.animationId);
     }
 
     activateMouseMove() {

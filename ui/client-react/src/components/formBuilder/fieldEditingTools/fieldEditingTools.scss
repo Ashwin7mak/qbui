@@ -1,5 +1,6 @@
 @import "../../../assets/css/qbVariables";
 
+
 .fieldEditingTools {
     transition: opacity 0.4s;
     border-radius: $radius-base;
@@ -120,6 +121,12 @@
                 color: $color-cyan-700;
             }
         }
+    }
+
+    &:active {
+        transition: 1.7s;
+        opacity: 0.9;
+        background: lightgray;
     }
 
     .tipChildWrapper {
