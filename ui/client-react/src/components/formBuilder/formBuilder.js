@@ -106,4 +106,4 @@ FormBuilder.defaultProps = {
  * */
 
 // export default DragDropContext(Html5Backend)(FormBuilder);
-export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);
+export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 50}))(FormBuilder);
