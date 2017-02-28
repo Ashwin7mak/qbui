@@ -91,7 +91,7 @@ const featureSwitches = (
 
         return {
             ...state,
-            overrides: [...state.overrides, action.override]
+            overrides: [...state.overrides, {...action.override}]
         };
 
     case types.EDIT_OVERRIDE: {
@@ -130,7 +130,7 @@ const featureSwitches = (
     case types.SET_FEATURE_SWITCH_STATES:
         return {
             ...state,
-            states: action.states
+            states: [...action.states]
         };
 
     default:
