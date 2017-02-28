@@ -335,7 +335,6 @@ class FeatureSwitchOverridesRoute extends React.Component {
 const mapStateToProps = (state) => {
 
     return {
-        edited: state.featureSwitches.edited,
         switches: state.featureSwitches.switches,
         overrides: state.featureSwitches.overrides
     };
