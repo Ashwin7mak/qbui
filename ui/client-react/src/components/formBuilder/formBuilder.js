@@ -19,7 +19,7 @@ export class FormBuilder extends Component {
         super(props);
 
         this.state = {
-            hasAnimation: true
+            hasAnimation: false
         };
 
         this.handleFormReorder = this.handleFormReorder.bind(this);
