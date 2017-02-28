@@ -18,19 +18,19 @@ export const FeatureCheck = React.createClass({
         };
     },
 
-    checkFeature(name) {
+    getFeatureState(name) {
         return this.props.states[name];
     },
 
     render() {
 
-        const featureOn = this.checkFeature(this.props.featureName);
+        const featureState = this.getFeatureState(this.props.featureName);
 
-        if (this.props.show) {
-            return featureOn ? this.props.children : null;
-        } else {
-            return featureOn ? null : this.props.children;
+        if (typeof featureState === "boolean" && this.props.show) {
+            return featureState ? this.props.children : null;
         }
+
+        return null; // feature not found or show=false
     }
 });
 
