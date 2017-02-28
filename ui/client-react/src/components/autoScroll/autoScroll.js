@@ -96,15 +96,16 @@ class AutoScroll extends Component {
     }
 
     stopScrolling() {
-        console.log('Did I even get called?');
+        console.log('Scrolling');
+        console.log('this.animationId: ', this.animationId);
         cancelAnimationFrame(this.animationId);
     }
 
     removeMouseMove() {
-        console.log('I stopped scrolling');
-        this.stopScrolling();
         document.removeEventListener("mousemove", this.updateScrolling);
         this.stopScrolling();
+        console.log('Remove Mousemove');
+        console.log('this.animationId: ', this.animationId);
     }
 
     activateMouseMove() {
