@@ -1,4 +1,4 @@
-import AppHistory from '../../src/globals/appHistory';
+import AppHistory, {__RewireAPI__ as AppHistoryRewireAPI} from '../../src/globals/appHistory';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
 import Promise from 'bluebird';
 import {ShowAppModal, HideAppModal, SHOW_APP_MODAL_EVENT, HIDE_APP_MODAL_EVENT} from '../../src/components/qbModal/appQbModalFunctions';
@@ -24,13 +24,13 @@ let mockActions = {
 describe('AppHistory', () => {
 
     beforeEach(() => {
-        AppHistory.__Rewire__('ShowAppModal', mockActions.ShowAppModal);
-        AppHistory.__Rewire__('HideAppModal', mockActions.HideAppModal);
+        AppHistoryRewireAPI.__Rewire__('ShowAppModal', mockActions.ShowAppModal);
+        AppHistoryRewireAPI.__Rewire__('HideAppModal', mockActions.HideAppModal);
     });
 
     afterEach(() => {
-        AppHistory.__ResetDependency__('ShowAppModal');
-        AppHistory.__ResetDependency__('HideAppModal');
+        AppHistoryRewireAPI.__ResetDependency__('ShowAppModal');
+        AppHistoryRewireAPI.__ResetDependency__('HideAppModal');
     });
 
     afterAll(() => {
@@ -142,7 +142,7 @@ describe('AppHistory', () => {
     describe('showPendingEditsConfirmationModal', () => {
         it('shows a default confirmation modal for allowing the user to decide what to do if they have unsaved changed', () => {
             let mockShowAppModal = jasmine.createSpy('ShowAppModal');
-            AppHistory.__Rewire__('ShowAppModal', mockShowAppModal);
+            AppHistoryRewireAPI.__Rewire__('ShowAppModal', mockShowAppModal);
 
 
             AppHistory.showPendingEditsConfirmationModal();
@@ -152,7 +152,7 @@ describe('AppHistory', () => {
 
         it('accepts alternate functions that will be called when various buttons on the modal are clicked', () => {
             let mockShowAppModal = jasmine.createSpy('ShowAppModal');
-            AppHistory.__Rewire__('ShowAppModal', mockShowAppModal);
+            AppHistoryRewireAPI.__Rewire__('ShowAppModal', mockShowAppModal);
 
             let fakeSaveFunction = function() {};
             let fakeDiscardFunction = function() {};

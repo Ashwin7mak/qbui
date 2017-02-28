@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import reportDataActions from '../../src/actions/reportDataActions';
+import reportDataActions, {__RewireAPI__ as reportDataActionsRewireAPI} from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import * as query from '../../src/constants/query';
 import Promise from 'bluebird';
@@ -47,12 +47,12 @@ describe('Report Data Actions - load a report', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
         spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
     });
 
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('test load report action with report parameters', (done) => {
@@ -119,11 +119,11 @@ describe('Report Data Actions -- load a dynamic report', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockReportService.prototype, 'parseFacetExpression').and.callThrough();
         spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
-        reportDataActions.__Rewire__('ReportService', mockReportService);
+        reportDataActionsRewireAPI.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActionsRewireAPI.__ResetDependency__('ReportService');
     });
 
     it('test load dynamic report action with no override parameters', (done) => {

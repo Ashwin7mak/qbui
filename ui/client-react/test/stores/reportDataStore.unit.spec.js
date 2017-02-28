@@ -547,37 +547,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                     {id: 16, value: "NYC", display: "NYC"},
                     {id: 8, value: 456, display: 456},
                     {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -619,37 +619,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -690,37 +690,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -761,26 +761,26 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId: false,
-                        id: 3,
-                        name: "Record #Id",
-                        type: "SCALAR",
-                        datatypeAttributes: {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId: false,
+                    id: 3,
+                    name: "Record #Id",
+                    type: "SCALAR",
+                    datatypeAttributes: {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 groups: {
                     gridData: [
@@ -843,42 +843,42 @@ describe('Test ReportData Store', () => {
                     }
 
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ],
-                    [
+                ],
+                [
                         {id: 16, value: "Chicago", display: "Chicago"},
                         {id: 8, value: null, display: null},
                         {id: 3, value: 3, display: 3}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 3
@@ -919,42 +919,42 @@ describe('Test ReportData Store', () => {
                     }
 
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                         {id: 16, value: "Boston", display: "Boston"},
                         {id: 8, value: 1234, display: 1234},
                         {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ],
-                    [
+                ],
+                [
                         {id: 16, value: "Chicago", display: "Chicago"},
                         {id: 8, value: null, display: null},
                         {id: 3, value: 3, display: 3}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 3
@@ -1071,27 +1071,27 @@ describe('Test ReportData Store', () => {
                                 decimalPlaces: 3
                             }
                         },
-                            {
-                                builtId:true,
-                                id:3,
-                                name: "Record ID#",
-                                type: "SCALAR",
-                                datatypeAttributes : {
-                                    type: "NUMERIC",
-                                    decimalPlaces: 0
-                                }
+                        {
+                            builtId:true,
+                            id:3,
+                            name: "Record ID#",
+                            type: "SCALAR",
+                            datatypeAttributes : {
+                                type: "NUMERIC",
+                                decimalPlaces: 0
                             }
+                        }
                         ],
                         records: [[
                             {id: 16, value: data.value},
                             {id: 8, value: 1234},
                             {id: 3, value: 1}
                         ],
-                            [
+                        [
                                 {id: 16, value: data.value},
                                 {id: 8, value: null},
                                 {id: 3, value: 2}
-                            ]],
+                        ]],
                         groups: []
                     },
                     recordCount: 2
@@ -1139,37 +1139,37 @@ describe('Test ReportData Store', () => {
                     }
 
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1215,37 +1215,37 @@ describe('Test ReportData Store', () => {
                     }
 
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: null, display: null},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1285,37 +1285,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1368,37 +1368,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1450,37 +1450,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1530,37 +1530,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1611,37 +1611,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1694,37 +1694,37 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId:false,
-                        id:8,
-                        name: "Score",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId:false,
+                    id:8,
+                    name: "Score",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
                     {id: 3, value: 1, display: 1}
                 ],
-                    [
+                [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456},
                         {id: 3, value: 2, display: 2}
-                    ]],
+                ]],
                 groups: []
             },
             recordCount: 2
@@ -1773,26 +1773,26 @@ describe('Test ReportData Store', () => {
                         type: "TEXT"
                     }
                 },
-                    {
-                        builtId: false,
-                        id: 3,
-                        name: "Record #Id",
-                        type: "SCALAR",
-                        datatypeAttributes: {
-                            type: "NUMERIC",
-                            decimalPlaces: 3
-                        }
-                    },
-                    {
-                        builtId:true,
-                        id:3,
-                        name: "Record ID#",
-                        type: "SCALAR",
-                        datatypeAttributes : {
-                            type: "NUMERIC",
-                            decimalPlaces: 0
-                        }
+                {
+                    builtId: false,
+                    id: 3,
+                    name: "Record #Id",
+                    type: "SCALAR",
+                    datatypeAttributes: {
+                        type: "NUMERIC",
+                        decimalPlaces: 3
                     }
+                },
+                {
+                    builtId:true,
+                    id:3,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    datatypeAttributes : {
+                        type: "NUMERIC",
+                        decimalPlaces: 0
+                    }
+                }
                 ],
                 groups: {
                     gridData: [

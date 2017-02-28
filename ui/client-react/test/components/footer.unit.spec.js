@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ReactDOM from 'react-dom';
-import Footer  from '../../src/components/footer/footer';
+import Footer, {__RewireAPI__ as FooterRewireAPI}  from '../../src/components/footer/footer';
 import Nav from '../../../node_modules/react-bootstrap/lib/Nav';
 import NavItem from '../../../node_modules/react-bootstrap/lib/NavItem';
 import Navbar from '../../../node_modules/react-bootstrap/lib/Navbar';
@@ -24,12 +24,12 @@ describe('Footer functions', () => {
     var component;
     beforeEach(() => {
         //var TestUtils = ReactAddons.TestUtils;
-        Footer.__Rewire__('I18nMessage', I18nMessageMock);
+        FooterRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
         component = TestUtils.renderIntoDocument(<Footer />);
     });
 
     afterEach(() => {
-        Footer.__ResetDependency__('I18nMessage');
+        FooterRewireAPI.__ResetDependency__('I18nMessage');
     });
 
     it('test render of footer', () => {

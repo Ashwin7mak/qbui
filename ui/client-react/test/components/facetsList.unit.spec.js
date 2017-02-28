@@ -1,9 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FacetsAspect  from '../../src/components/facet/facetsAspect';
-import FacetsItem  from '../../src/components/facet/facetsItem';
-import FacetsList  from '../../src/components/facet/facetsList';
+import {__RewireAPI__ as FacetsItemRewireAPI}  from '../../src/components/facet/facetsItem';
+import FacetsList, {__RewireAPI__ as FacetsListRewireAPI}  from '../../src/components/facet/facetsList';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 
 describe('FacetList functions', () => {
@@ -17,15 +15,13 @@ describe('FacetList functions', () => {
     });
 
     beforeEach(() => {
-        FacetsList.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsItem.__Rewire__('I18nMessage', I18nMessageMock);
-        FacetsAspect.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsListRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        FacetsItemRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        FacetsList.__ResetDependency__('I18nMessage');
-        FacetsItem.__ResetDependency__('I18nMessage');
-        FacetsAspect.__ResetDependency__('I18nMessage');
+        FacetsListRewireAPI.__ResetDependency__('I18nMessage');
+        FacetsItemRewireAPI.__ResetDependency__('I18nMessage');
     });
 
 
@@ -33,19 +29,19 @@ describe('FacetList functions', () => {
     let component;
 
     let fakefacets =  [
-            {id : 1, name : "Types", type: "TEXT", hasBlanks: true,
-                values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
-            {id : 2, name : "Names", type: "TEXT", hasBlanks: false,
-                values : [
+        {id : 1, name : "Types", type: "TEXT", hasBlanks: true,
+            values : [{value:"Design"}, {value:"Development"}, {value:"Planning"}, {value:"Test"}]},
+        {id : 2, name : "Names", type: "TEXT", hasBlanks: false,
+            values : [
                     {value: "Aditi Goel"}, {value: "Christopher Deery"}, {value: "Claire Martinez"}, {value: "Claude Keswani"}, {value: "Deborah Pontes"},
                     {value: "Donald Hatch"}, {value: "Drew Stevens"}, {value: "Erica Rodrigues"}, {value: "Kana Eiref"},
                     {value: "Ken LaBak"}, {value: "Lakshmi Kamineni"}, {value: "Lisa Davidson"}, {value: "Marc Labbe"},
                     {value: "Matthew Saforrian"}, {value: "Micah Zimring"}, {value: "Rick Beyer"}, {value: "Sam Jones"}, {value: "XJ He"}
-                ]},
-            {id : 3, name : "Status", type: "TEXT", hasBlanks: false,
-                values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
-            {id : 4, name : "Flag", type: "CHECKBOX",  hasBlanks: false,
-                values : [{value: "true"}, {value: "false"}]}
+            ]},
+        {id : 3, name : "Status", type: "TEXT", hasBlanks: false,
+            values : [{value: "No Started"}, {value: "In Progress"}, {value: "Blocked"}, {value: "Completed"}]},
+        {id : 4, name : "Flag", type: "CHECKBOX",  hasBlanks: false,
+            values : [{value: "true"}, {value: "false"}]}
             //{id : 4, name : "Dates", type: "date",  hasBlanks: false,
             //    range : {start: 1, end: 2}},
     ];

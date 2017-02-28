@@ -7,7 +7,7 @@ describe('AppProperties functions', () => {
 
     const selectedAppNoProperties = {duder: 1, shield: 'Washington'};
     const selectedApp = {dateFormat: "MM-dd-uuuu", firstDayOfWeek: "Sunday", id: "1", name: "Dat App",
-                         numberFormat: "12,345,678.00", timeZone: "America/Los_Angeles"};
+        numberFormat: "12,345,678.00", timeZone: "America/Los_Angeles"};
     const appId = 1;
 
     it('test render of component', () => {

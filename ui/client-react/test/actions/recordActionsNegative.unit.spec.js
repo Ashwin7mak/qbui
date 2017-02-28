@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import recordActions from '../../src/actions/recordActions';
+import recordActions, {__RewireAPI__ as recordActionsRewireAPI} from '../../src/actions/recordActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
@@ -58,11 +58,11 @@ describe('Record actions Edit Record functions -- Negative', () => {
         spyOn(mockRecordService.prototype, 'createRecord');
         spyOn(mockRecordService.prototype, 'deleteRecord');
         spyOn(mockRecordService.prototype, 'deleteRecordBulk');
-        recordActions.__Rewire__('RecordService', mockRecordService);
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
     });
 
     afterEach(() => {
-        recordActions.__ResetDependency__('RecordService');
+        recordActionsRewireAPI.__ResetDependency__('RecordService');
     });
     var dataProvider = [
         {test:'test saveRecord with missing appId', appId:null, tblId:2, recId:3, pendEdits:edits, fields: fields},
@@ -187,11 +187,11 @@ describe('Record actions Edit Record functions -- Error', () => {
         spyOn(errorFlux.dispatchBinder, 'dispatch');
         spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
         spyOn(mockRecordService.prototype, 'deleteRecordBulk').and.callThrough();
-        recordActions.__Rewire__('RecordService', mockRecordService);
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
     });
 
     afterEach(() => {
-        recordActions.__ResetDependency__('RecordService');
+        recordActionsRewireAPI.__ResetDependency__('RecordService');
     });
 
     it('test deleteRecord error', (done) => {
@@ -233,7 +233,7 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
 
     });
     afterEach(() => {
-        recordActions.__ResetDependency__('RecordService');
+        recordActionsRewireAPI.__ResetDependency__('RecordService');
     });
 
 
@@ -246,7 +246,7 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 return mockPromiseError();
             }
         }
-        recordActions.__Rewire__('RecordService', mockRecordService);
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
         flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {
                 expect(true).toBe(false);
@@ -270,7 +270,7 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 return Promise.resolve({data: {}});
             }
         }
-        recordActions.__Rewire__('RecordService', mockRecordService);
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
 
         flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {
@@ -301,7 +301,7 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 return mockPromiseError();
             }
         }
-        recordActions.__Rewire__('RecordService', mockRecordService);
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
 
         flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {

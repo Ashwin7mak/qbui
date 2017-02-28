@@ -183,10 +183,13 @@
             return getEEReqURL(url);
         } else {
             let root = getUrlRoot(url, TABLES);
+
             let eeUrl = getEEReqURL(root);
+
             if (formId) {
                 return eeUrl + '/' + FORMS + (formId ? '/' + formId : '');
             }
+
             if (url.search('formType') !== -1) {
                 let formType;
                 url.split("&").forEach(item => {

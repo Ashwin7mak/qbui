@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import tableActions from '../../src/actions/tableActions';
+import tableActions, {__RewireAPI__ as tableActionsRewireAPI} from '../../src/actions/tableActions';
 import * as actions from '../../src/constants/actions';
 import Constants from '../../../common/src/constants';
 import reportModel from '../../src/models/reportModel';
@@ -33,11 +33,11 @@ describe('Table Actions functions', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
-        tableActions.__Rewire__('TableService', mockTableService);
+        tableActionsRewireAPI.__Rewire__('TableService', mockTableService);
     });
 
     afterEach(() => {
-        tableActions.__ResetDependency__('TableService');
+        tableActionsRewireAPI.__ResetDependency__('TableService');
         flux.dispatchBinder.dispatch.calls.reset();
     });
 

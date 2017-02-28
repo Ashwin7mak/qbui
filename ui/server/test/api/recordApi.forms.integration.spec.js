@@ -166,7 +166,7 @@
 
             return new promise(function(resolve, reject) {
                 recordBase.apiBase.executeRequest(formEndpoint, 'GET', null, null, null, true).then(function(result) {
-                    const responseBody = JSON.parse(result.body);
+                    const responseBody =  JSON.parse(result.body);
                     let resultFormID = responseBody.formId;
                     let resultAppID = responseBody.appId;
                     let resultTableID = responseBody.tableId;
