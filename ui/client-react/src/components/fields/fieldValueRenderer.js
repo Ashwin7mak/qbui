@@ -110,7 +110,7 @@ const FieldValueRenderer = React.createClass({
                                             value={this.props.value} display={this.props.display}
                                             key={'ufvr-' + this.props.idKey}
                                             />
-                );
+            );
         //  Date and dateTime use the same view formatter
         case FieldFormats.DATE_FORMAT:
         case FieldFormats.DATETIME_FORMAT:
@@ -128,7 +128,7 @@ const FieldValueRenderer = React.createClass({
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
                                             />
-                );
+            );
         case FieldFormats.CHECKBOX_FORMAT:
             return (
                     <CheckBoxFieldValueRenderer {...commonProperties}
@@ -137,7 +137,7 @@ const FieldValueRenderer = React.createClass({
                                                 hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
                                                 label={this.props.label}
                                                  />
-                );
+            );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
@@ -146,7 +146,7 @@ const FieldValueRenderer = React.createClass({
                                                      attributes={this.props.attributes}
                                                      key={'mltfvr-' + this.props.idKey}
                                                  />
-                );
+            );
         case FieldFormats.URL:
             let open_in_new_window, show_as_button;
             if (_.has(this.props, 'attributes.clientSideAttributes')) {
@@ -204,7 +204,7 @@ const FieldValueRenderer = React.createClass({
                                             attributes={this.props.attributes}
                                             key={'tfvr-' + this.props.idKey}
                                             />
-                );
+            );
         }
         }
     },

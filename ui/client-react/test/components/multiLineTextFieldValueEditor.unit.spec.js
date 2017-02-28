@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import Breakpoints from '../../src/utils/breakpoints';
 
-import MultiLineTextFieldValueEditor  from '../../src/components/fields/multiLineTextFieldValueEditor';
+import MultiLineTextFieldValueEditor, {__RewireAPI__ as MultiLineTextFieldValueEditorRewireAPI}  from '../../src/components/fields/multiLineTextFieldValueEditor';
 
 class BreakpointsAlwaysSmallMock {
 
@@ -125,7 +125,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
 
         spyOn(mockParent, 'onBlur');
 
-        MultiLineTextFieldValueEditor.__Rewire__('textFormatter', mockTextFormatter);
+        MultiLineTextFieldValueEditorRewireAPI.__Rewire__('textFormatter', mockTextFormatter);
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={mockFieldDef} onBlur={mockParent.onBlur} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -136,7 +136,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
         );
 
         expect(mockParent.onBlur).toHaveBeenCalledWith(expectedVals);
-        MultiLineTextFieldValueEditor.__ResetDependency__('textFormatter');
+        MultiLineTextFieldValueEditorRewireAPI.__ResetDependency__('textFormatter');
     });
 
     it('test render with specified width', () => {
@@ -166,7 +166,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
         expect(+(textArea.getAttribute('rows'))).toEqual(20);
     });
     it('test render with specified width on small breakpoint', () => {
-        MultiLineTextFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        MultiLineTextFieldValueEditorRewireAPI.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
         let fieldDef = {
             datatypeAttributes: {
                 clientSideAttributes: {
@@ -178,6 +178,6 @@ describe('MultiLineTextFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textArea = TestUtils.findRenderedDOMComponentWithTag(component, 'textarea');
         expect(+(textArea.getAttribute('cols'))).toEqual(1);
-        MultiLineTextFieldValueEditor.__ResetDependency__('Breakpoints');
+        MultiLineTextFieldValueEditorRewireAPI.__ResetDependency__('Breakpoints');
     });
 });

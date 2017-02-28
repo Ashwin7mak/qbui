@@ -128,7 +128,6 @@ describe('Component Library functions', () => {
     it('code editor should show', () => {
         let component = TestUtils.renderIntoDocument(<ReactPlayground codeText={exampleCodeText} showCode={false} />);
 
-        // const codeToggler = TestUtils.findRenderedDOMComponentWithClass(component, 'code-toggle');
         const codeToggler = ReactDOM.findDOMNode(component).querySelector(".code-toggle");
         TestUtils.Simulate.click(codeToggler);
 

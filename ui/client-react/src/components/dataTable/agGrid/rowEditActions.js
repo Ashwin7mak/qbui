@@ -1,15 +1,11 @@
 import React from 'react';
-import * as SchemaConsts from "../../../constants/schema";
-import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
 import QBIcon from '../../qbIcon/qbIcon';
-import {NotificationManager} from 'react-notifications';
 import closeOnEscape from '../../hoc/catchEscapeKey';
-import {I18nMessage} from '../../../utils/i18nMessage';
 import FieldUtils from '../../../utils/fieldUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
-import * as CompConsts from "../../../constants/componentConstants";
 
 import _ from 'lodash';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FieldChoice  from '../../src/components/sortGroup/fieldChoice';
+import FieldChoice, {__RewireAPI__ as FieldChoiceRewireAPI}  from '../../src/components/sortGroup/fieldChoice';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -56,11 +56,11 @@ describe('FieldChoice functions', () => {
         spyOn(mockCallbacks, 'removeField').and.callThrough();
         spyOn(mockCallbacks, 'showFields').and.callThrough();
 
-        FieldChoice.__Rewire__('I18nMessage', I18nMessageMock);
+        FieldChoiceRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        FieldChoice.__ResetDependency__('I18nMessage');
+        FieldChoiceRewireAPI.__ResetDependency__('I18nMessage');
     });
 
 

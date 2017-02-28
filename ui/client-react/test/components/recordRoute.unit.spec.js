@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import QBForm from  '../../src/components/QBForm/qbform';
 import {ConnectedRecordRoute, RecordRoute} from '../../src/components/record/recordRoute';
 
+
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import {Provider} from "react-redux";
@@ -70,7 +71,7 @@ describe('RecordRoute', () => {
 
             expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
 
-            // test Redux actions
+        // test Redux actions
             expect(store.getActions()[0]).toEqual(loadingForm("view"));
 
             let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);

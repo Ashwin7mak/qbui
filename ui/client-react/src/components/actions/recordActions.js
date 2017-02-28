@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactIntl from 'react-intl';
-import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import {MenuItem, Dropdown, Input} from 'react-bootstrap';
 import * as SchemaConsts from "../../constants/schema";
 import ActionIcon from './actionIcon';
-import EmailReportLink from './emailReportLink';
 import QBModal from '../qbModal/qbModal';
 import Fluxxor from "fluxxor";
 import './recordActions.scss';

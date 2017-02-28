@@ -1,6 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 import _ from 'lodash';
 import './qbToolTip.scss';
 

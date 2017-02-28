@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import AppsRoute  from '../../src/components/apps/appsRoute';
+import AppsRoute, {__RewireAPI__ as AppsRouteRewireAPI}  from '../../src/components/apps/appsRoute';
 import HtmlUtils from '../../src/utils/htmlUtils';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
@@ -26,7 +26,7 @@ describe('AppsRoute functions', () => {
     let mockRealm = 'Sinatra';
 
     beforeEach(() => {
-        AppsRoute.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+        AppsRouteRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
 
         spyOn(WindowLocationUtils, 'getHostname').and.returnValue(mockRealm);
 
@@ -34,7 +34,7 @@ describe('AppsRoute functions', () => {
     });
 
     afterEach(() => {
-        AppsRoute.__ResetDependency__('WindowLocationUtils');
+        AppsRouteRewireAPI.__ResetDependency__('WindowLocationUtils');
     });
 
     it('test render of component', () => {
