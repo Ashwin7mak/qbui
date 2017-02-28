@@ -1,5 +1,19 @@
 import React, {PropTypes, Component} from 'react';
 
+/**
+ * AutoScroll is triggered when a user either touches and holds down on a touch device and moves her finger
+ * to near the top or bottom of the scrolling container.
+ *
+ * It is also triggered when a user clicks down and holds down the mouse and moves the mouse near the top or bottom
+ * of the scrolling container.
+ *
+ * AutoScroll llistens for mouseup, mousemove, and mouseup for desktop.
+ * AutoScroll listesn for touchmove and touchend for touch devices.
+ *
+ * Autoscroll only works on desktops and tablets, it currently does not work for mobile.
+ *
+ * Note: Autoscroll will only work if the parent container has overflow set to auto
+ * */
 
 class AutoScroll extends Component {
 
@@ -9,8 +23,6 @@ class AutoScroll extends Component {
         this.animationId;
         this.scrollDown = this.scrollDown.bind(this);
         this.scrollUp = this.scrollUp.bind(this);
-        this.startScrolling = this.startScrolling.bind(this);
-        this.startScrolling = this.startScrolling.bind(this);
         this.updateScrolling = this.updateScrolling.bind(this);
         this.stopScrolling = this.stopScrolling.bind(this);
         this.removeMouseMove = this.removeMouseMove.bind(this);
@@ -48,16 +60,6 @@ class AutoScroll extends Component {
         this.animationId = requestAnimationFrame(this.scrollUp);
     }
 
-    startScrolling (scrollDirection) {
-        //https://css-tricks.com/using-requestanimationframe/
-        if (scrollDirection === 'scrollDown') {
-            this.animationId = requestAnimationFrame(this.scrollDown);
-
-        } else if (scrollDirection === 'scrollUp') {
-            this.animationId = requestAnimationFrame(this.scrollUp);
-        }
-    }
-
     updateScrolling(e) {
 
         let pointerY;
@@ -85,9 +87,9 @@ class AutoScroll extends Component {
         }
 
         if (pointerY > containerBottom) {
-            this.startScrolling('scrollDown');
+            this.animationId = requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerOffSetTop) {
-            this.startScrolling('scrollUp');
+            this.animationId = requestAnimationFrame(this.scrollUp);
         } else {
             this.stopScrolling();
         }
