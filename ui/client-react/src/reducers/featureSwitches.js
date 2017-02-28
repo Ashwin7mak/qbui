@@ -17,7 +17,7 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches: action.switches
+            switches: [...action.switches]
         };
 
     case types.CREATED_FEATURE_SWITCH: {

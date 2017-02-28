@@ -33,7 +33,16 @@ describe('Test feature switches', () => {
         });
     });
 
+
     describe('Test feature switches', () => {
+        it('return set feature switches', () => {
+            const switches = [{name: 'Feature A'}, {name: 'Feature B'}];
+            const state = reducer(initialState, {type: types.SET_FEATURE_SWITCHES, switches});
+
+            switches.length = 0;
+            expect(state.switches).toEqual([{name: 'Feature A'}, {name: 'Feature B'}]);
+        });
+
         it('return new feature switch', () => {
             const feature = {name: 'Feature A'};
             const state = reducer(initialState, {type: types.CREATED_FEATURE_SWITCH, feature});
@@ -68,6 +77,16 @@ describe('Test feature switches', () => {
     });
 
     describe('Test feature switch overrides', () => {
+        it('return set overrides', () => {
+
+            const overrides = [{entityType: 'realm', entityValue: '123'}];
+            initialState.switches = [{id:'id', name: 'Feature A', overrides}];
+            const state = reducer(initialState, {type: types.SET_FEATURE_OVERRIDES, id: 'id'});
+
+            overrides.length = 0;
+            expect(state.overrides).toEqual([{entityType: 'realm', entityValue: '123'}]);
+        });
+
         it('return new overrides', () => {
             const override = {entityType: 'realm', entityValue: '123'};
             const state = reducer(initialState, {type: types.CREATED_OVERRIDE, override});
