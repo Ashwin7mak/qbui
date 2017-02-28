@@ -7,8 +7,8 @@ import React, {PropTypes, Component} from 'react';
  * It is also triggered when a user clicks down and holds down the mouse and moves the mouse near the top or bottom
  * of the scrolling container.
  *
- * AutoScroll llistens for mouseup, mousemove, and mouseup for desktop.
- * AutoScroll listesn for touchmove and touchend for touch devices.
+ * AutoScroll listens for mousedown and mouseup for desktop.
+ * AutoScroll listens for touchmove or touch devices.
  *
  * Autoscroll only works on desktops and tablets, it currently does not work for mobile.
  *
@@ -25,45 +25,38 @@ class AutoScroll extends Component {
         this.scrollUp = this.scrollUp.bind(this);
         this.updateScrolling = this.updateScrolling.bind(this);
         this.stopScrolling = this.stopScrolling.bind(this);
-        this.removeMouseMove = this.removeMouseMove.bind(this);
         this.activateMouseMove = this.activateMouseMove.bind(this);
         this.getContainer = this.getContainer.bind(this);
     }
 
     componentDidMount() {
-        document.addEventListener("touchmove", this.updateScrolling);
-        document.addEventListener("touchend", this.stopScrolling);
-
-        document.addEventListener("mousedown", this.activateMouseMove);
-        document.addEventListener("mouseup", this.removeMouseMove);
+        document.querySelector(`.${this.props.children.props.className}`).addEventListener("touchmove", this.updateScrolling);
+        document.querySelector(`.${this.props.children.props.className}`).addEventListener("mousedown", this.activateMouseMove);
     }
 
     componentWillUnmount() {
-        document.removeEventListener("touchmove", this.updateScrolling);
-        document.removeEventListener("touchend", this.stopScrolling);
-
-        document.removeEventListener("mousedown", this.activateMouseMove);
-        document.removeEventListener("mouseup", this.removeMouseMove);
+        document.querySelector(`.${this.props.children.props.className}`).removeEventListener("touchmove", this.updateScrolling);
+        document.querySelector(`.${this.props.children.props.className}`).removeEventListener("mousedown", this.activateMouseMove);
     }
 
     scrollDown() {
-        let downBy = 1;
+        let {pixelsPerFrame} = this.props;
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
 
-        container.scrollTop = scrollTop + downBy;
-        downBy = downBy + 10;
+        container.scrollTop = scrollTop + pixelsPerFrame;
+        pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
 
         this.animationId = requestAnimationFrame(this.scrollDown);
     }
 
     scrollUp() {
-        let upBy = -1;
+        let {pixelsPerFrame} = this.props;
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
 
-        container.scrollTop = scrollTop + upBy;
-        upBy = upBy - 10;
+        container.scrollTop = scrollTop + -pixelsPerFrame;
+        pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
 
         this.animationId = requestAnimationFrame(this.scrollUp);
     }
@@ -75,7 +68,7 @@ class AutoScroll extends Component {
         let container = this.getContainer();
         let containerOffSetHeight = container.offsetHeight;
         let containerOffSetTop = container.offsetTop;
-
+        let containerTop = containerOffSetTop;
         /**
          * This is making the assumption the bottom of the container is not positioned at the bottom of the page
          * */
@@ -91,12 +84,16 @@ class AutoScroll extends Component {
          * We also subtract 40px to allow the scrolling to start 40 pixels before the mouse or touch gets to the bottom of the page
          * */
         if (windowInnerHeight <= containerOffSetHeight) {
-            containerBottom = windowInnerHeight - 40;
+            containerBottom = windowInnerHeight - this.props.pixelsFromBottom;
+        }
+
+        if (this.props.pixelsFromTop) {
+            containerTop = containerTop + this.props.pixelsFromTop
         }
 
         if (pointerY > containerBottom) {
             this.animationId = requestAnimationFrame(this.scrollDown);
-        } else if (pointerY < containerOffSetTop) {
+        } else if (pointerY < containerTop) {
             this.animationId = requestAnimationFrame(this.scrollUp);
         } else {
             this.stopScrolling();
@@ -104,16 +101,7 @@ class AutoScroll extends Component {
     }
 
     stopScrolling() {
-        console.log('Scrolling');
-        console.log('this.animationId: ', this.animationId);
         cancelAnimationFrame(this.animationId);
-    }
-
-    removeMouseMove() {
-        document.removeEventListener("mousemove", this.updateScrolling);
-        this.stopScrolling();
-        console.log('Remove Mousemove');
-        console.log('this.animationId: ', this.animationId);
     }
 
     activateMouseMove() {
@@ -132,6 +120,10 @@ class AutoScroll extends Component {
 }
 
 AutoScroll.propTypes = {
+    pixelsPerFrame: PropTypes.number,
+    pixelsFromBottom: PropTypes.number,
+    pixelsFromTop: PropTypes.number,
+
 };
 
 export default AutoScroll;
