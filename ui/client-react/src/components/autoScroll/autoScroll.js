@@ -147,7 +147,6 @@ class AutoScroll extends Component {
         /**
          * Activating auto scroll is contained withing the element
          * */
-        debugger;
         if (pointerY > containerBottom && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
             this.animationId = window.requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerTop && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
