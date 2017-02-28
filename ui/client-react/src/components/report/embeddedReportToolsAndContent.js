@@ -9,7 +9,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
-import {loadDynamicEmbeddedReport} from '../../mocks/mockReportActions';
+import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
 let logger = new Logger();
@@ -39,7 +39,7 @@ const EmbeddedReportToolsAndContent = React.createClass({
         //const flux = this.getFlux();
         //flux.actions.loadFields(appId, tblId);
 
-        this.props.loadDynamicEmbeddedReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
+        this.props.loadDynamicReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
 
     /**
@@ -91,7 +91,7 @@ const EmbeddedReportToolsAndContent = React.createClass({
                 rptId: record.rptId
             };
             return (
-                <div className="reportContainer">
+                <div className="embeddedReportContainer reportContainer">
                     <ReportToolsAndContent
                         params={params}
                         reportData={record}
@@ -115,8 +115,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadDynamicEmbeddedReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicEmbeddedReport(context, appId, tblId, rptId, format, filter, queryParams));
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         }
     };
 };

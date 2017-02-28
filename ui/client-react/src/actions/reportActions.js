@@ -160,7 +160,14 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
             if (appId && tblId && rptId) {
                 logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
 
-                dispatch(event(context, types.LOAD_REPORT, {appId, tblId, rptId}));
+                const isEmbedded = _.includes(context, 'FORM');
+                const actions = {
+                    LOAD_REPORT: isEmbedded ? types.LOAD_EMBEDDED_REPORT : types.LOAD_REPORT,
+                    LOAD_REPORT_SUCCESS: isEmbedded ? types.LOAD_EMBEDDED_REPORT_SUCCESS : types.LOAD_REPORT_SUCCESS,
+                    LOAD_REPORT_FAILED: isEmbedded ? types.LOAD_EMBEDDED_REPORT_FAILED : types.LOAD_REPORTS_FAILED
+                };
+
+                dispatch(event(context, actions.LOAD_REPORT, {appId, tblId, rptId}));
                 let reportService = new ReportService();
 
                 //  call node to parse the supplied facet expression into a query expression that
@@ -215,12 +222,12 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 
                                 let model = new ReportModel(appId, metaData, reportResponse.data, params);
 
-                                dispatch(event(context, types.LOAD_REPORT_SUCCESS, model.get()));
+                                dispatch(event(context, actions.LOAD_REPORT_SUCCESS, model.get()));
                                 resolve();
                             },
                             (reportResultsError) => {
                                 logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportActions.loadDynamicReport');
-                                dispatch(event(context, types.LOAD_REPORT_FAILED, reportResultsError));
+                                dispatch(event(context, actions.LOAD_REPORT_FAILED, reportResultsError));
                                 reject();
                             }
                         ).catch((ex) => {
@@ -232,7 +239,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportActions.parseFacetExpression');
-                        dispatch(event(context, types.LOAD_REPORT_FAILED, error));
+                        dispatch(event(context, actions.LOAD_REPORT_FAILED, error));
                         reject();
                     }
                 ).catch((ex) => {
@@ -242,7 +249,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                 });
             } else {
                 logger.error('reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
+                dispatch(event(context, actions.LOAD_REPORT_FAILED, 500));
                 reject();
             }
         });
@@ -268,4 +275,3 @@ export const updateReportRecord = (payload, context) => {
         }
     };
 };
-

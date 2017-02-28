@@ -354,6 +354,10 @@ $add-record-fg: $color-black-100;
 $add-record-bg: $badcolor19;
 $add-record-radius: 20px;
 
+.embeddedReportContainer {
+    margin-bottom: 35px;
+}
+
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
         color: $secondary-bar-color;
