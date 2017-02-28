@@ -47,7 +47,7 @@ class AppHistory {
      * Setups the singleton for use with Redux store outside of React.
      * @param redux store
      */
-    setup(flux, store, editRecordCancel, editRecordCommit) {
+    setup(flux, store, editRecordCancel, editRecordCommit, saveRecord) {
         //  TODO remove once all stores are migrated
         self.flux = flux;
 
@@ -55,6 +55,7 @@ class AppHistory {
         self.store = store;
         self.editRecordCancel = editRecordCancel;
         self.editRecordCommit = editRecordCommit;
+        self.saveRecord = saveRecord;
 
         self._setupHistoryListeners();
 
@@ -186,11 +187,19 @@ class AppHistory {
                 .then(self._onRecordSaved, self._onRecordSavedError);
             //self._handleRecordAdd();
         } else {
-            self.store.dispatch(appId, tableId, recordId);
+            //self.store.dispatch(appId, tableId, recordId);
             //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
-            self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields)
-                .then(self._onRecordSaved, self._onRecordSavedError);
+            //self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)
+            //    .then(self._onRecordSaved, self._onRecordSavedError);
             //self._handleRecordChange();
+            self.store.dispatch(self.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)).then(
+                () => {
+                    self._continueToDestination();
+                },
+                () => {
+                    self._haltRouteChange();
+                }
+            );
         }
     }
 
@@ -206,13 +215,13 @@ class AppHistory {
     //        .then(self._onRecordSaved, self._onRecordSavedError);
     //}
 
-    _onRecordSaved() {
-        self._continueToDestination();
-    }
-
-    _onRecordSavedError() {
-        self._haltRouteChange();
-    }
+    //_onRecordSaved() {
+    //    self._continueToDestination();
+    //}
+    //
+    //_onRecordSavedError() {
+    //    self._haltRouteChange();
+    //}
 
     _discardChanges(hideModal = true) {
 
