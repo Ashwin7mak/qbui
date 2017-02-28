@@ -240,6 +240,8 @@ let QBForm = React.createClass({
                 arrangedElements.push(mobileDropTargets[index]);
                 arrangedElements.push(element);
             });
+            // We need to add one more at the bottom so the user can add a field at the bottom of the list
+            arrangedElements.push(<MobileDropTarget containingElement={{id: _.uniqueId('mobile-drop')}} location={Object.assign({}, location, {elementIndex: elements.length})} handleFormReorder={this.props.handleFormReorder} />);
         }
 
         return (
