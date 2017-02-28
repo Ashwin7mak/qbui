@@ -7,6 +7,7 @@ import {NotificationManager} from 'react-notifications';
 import {Link} from 'react-router';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
+import QBModal from '../qbModal/qbModal';
 import _ from 'lodash';
 
 import * as Table from 'reactabular-table';
@@ -33,7 +34,8 @@ class FeatureSwitchesRoute extends React.Component {
         this.state = {
             columns: this.getColumns(),
             selectedIDs: [],
-            allSelected: false
+            allSelected: false,
+            confirmDeletesDialogOpen: false
         };
 
         // need to bind methods since we're an ES6 class
@@ -44,6 +46,8 @@ class FeatureSwitchesRoute extends React.Component {
         this.updateFeatureSwitch = this.updateFeatureSwitch.bind(this);
         this.deleteSelectedSwitches = this.deleteSelectedSwitches.bind(this);
         this.getDefaultFeatureSwitchName  = this.getDefaultFeatureSwitchName.bind(this);
+        this.confirmDelete = this.confirmDelete.bind(this);
+        this.cancelDelete = this.cancelDelete.bind(this);
     }
 
     /**
@@ -126,6 +130,9 @@ class FeatureSwitchesRoute extends React.Component {
      * delete selected switches
      */
     deleteSelectedSwitches() {
+
+        this.setState({confirmDeletesDialogOpen: false});
+
         this.props.deleteFeatureSwitches(this.state.selectedIDs).then(
             () => {
                 NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchesDeleted"), Locale.getMessage('success'),
@@ -134,6 +141,39 @@ class FeatureSwitchesRoute extends React.Component {
             }
         );
 
+    }
+
+    /**
+     * open confirm dialog
+     */
+    confirmDelete() {
+        this.setState({confirmDeletesDialogOpen: true});
+    }
+
+    /**
+     * close the delete confirm dialog
+     */
+    cancelDelete() {
+        this.setState({confirmDeletesDialogOpen: false});
+    }
+
+    /**
+     * render a QBModal
+     * @returns {XML}
+     */
+    getConfirmDialog() {
+
+        let msg = Locale.getMessage('selection.deleteTheseSwitches');
+
+        return (
+            <QBModal
+                show={this.state.confirmDeletesDialogOpen}
+                primaryButtonName={Locale.getMessage('selection.delete')}
+                primaryButtonOnClick={this.deleteSelectedSwitches}
+                leftButtonName={Locale.getMessage('selection.dontDelete')}
+                leftButtonOnClick={this.cancelDelete}
+                bodyMessage={msg}
+                type="alert"/>);
     }
 
     /**
@@ -302,11 +342,13 @@ class FeatureSwitchesRoute extends React.Component {
 
                 <div className="selectionButtons">
 
-                    <button disabled={!selectedSize} onClick={this.deleteSelectedSwitches}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                    <button disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
                     <button disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
                     <button disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                     <span>{selectedSizeLabel}</span>
                 </div>
+
+                {this.getConfirmDialog()}
 
                 <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
             </div>

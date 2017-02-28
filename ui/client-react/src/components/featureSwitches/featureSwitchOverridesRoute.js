@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
+import QBModal from '../qbModal/qbModal';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
@@ -30,8 +31,9 @@ class FeatureSwitchOverridesRoute extends React.Component {
         this.state = {
             columns: this.getColumns(),
             selectedIDs: [],
-            allSelected: false
-        } ;
+            allSelected: false,
+            confirmDeletesDialogOpen: false
+        };
 
         // need to bind methods since we're an ES6 class
 
@@ -40,6 +42,8 @@ class FeatureSwitchOverridesRoute extends React.Component {
         this.createOverride = this.createOverride.bind(this);
         this.updateOverride = this.updateOverride.bind(this);
         this.deleteSelectedOverrides = this.deleteSelectedOverrides.bind(this);
+        this.confirmDelete = this.confirmDelete.bind(this);
+        this.cancelDelete = this.cancelDelete.bind(this);
     }
 
     /**
@@ -81,6 +85,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
      * delete selected overrides
      */
     deleteSelectedOverrides() {
+        this.setState({confirmDeletesDialogOpen: false});
 
         this.props.deleteOverrides(this.props.params.id, this.state.selectedIDs).then(() => {
 
@@ -90,6 +95,39 @@ class FeatureSwitchOverridesRoute extends React.Component {
             this.setState({selectedIDs: []});
         });
     }
+
+    /**
+     * open confirm dialog
+     */
+    confirmDelete() {
+        this.setState({confirmDeletesDialogOpen: true});
+    }
+    /**
+     * close the delete confirm dialog
+     */
+    cancelDelete() {
+        this.setState({confirmDeletesDialogOpen: false});
+    }
+
+    /**
+     * render a QBModal
+     * @returns {XML}
+     */
+    getConfirmDialog() {
+
+        let msg = Locale.getMessage('selection.deleteTheseOverrides');
+
+        return (
+            <QBModal
+                show={this.state.confirmDeletesDialogOpen}
+                primaryButtonName={Locale.getMessage('selection.delete')}
+                primaryButtonOnClick={this.deleteSelectedOverrides}
+                leftButtonName={Locale.getMessage('selection.dontDelete')}
+                leftButtonOnClick={this.cancelDelete}
+                bodyMessage={msg}
+                type="alert"/>);
+    }
+
 
     /**
      * get feature switch using ID from URL (passed by router)
@@ -276,11 +314,13 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     }
                     <p/>
                     <div className="selectionButtons">
-                        <button disabled={!selectedSize} onClick={this.deleteSelectedOverrides}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                        <button disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
                         <button disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
                         <button disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                         <span>{selectedSizeLabel}</span>
                     </div>
+
+                    {this.getConfirmDialog()}
 
                     <PageTitle title={[Locale.getMessage('featureSwitchAdmin.featureSwitchOverridesTitle'), featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
                 </div>

@@ -65,6 +65,8 @@ export default {
             delete: "Delete",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
+            deleteTheseSwitches: "Delete these feature switches?",
+            deleteTheseOverrides: "Delete these overrides?",
             more: "More...",
             placeholder: "Select...",
             notFound: "Not Found"
