@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 import './formBuilder.scss';
 
-const DRAG_PREVIEW_TIMEOUT = 50;
+const DRAG_PREVIEW_TIMEOUT = 75;
 
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
@@ -17,6 +17,10 @@ const DRAG_PREVIEW_TIMEOUT = 50;
 export class FormBuilder extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            hasAnimation: true
+        };
 
         this.handleFormReorder = this.handleFormReorder.bind(this);
         this.cancelFormReorder = this.cancelFormReorder.bind(this);
@@ -27,6 +31,7 @@ export class FormBuilder extends Component {
      * Moves the dragged item to the location of the item that it was dropped on.
      * @param newLocation
      * @param draggedItemProps
+     * @param moveImmediately - Helps with testing. Change to true to ignore the timeout that helps with fast dragging.
      */
     handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
         if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
@@ -58,6 +63,10 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
+                <label style={{display: 'none'}} id="reactabularToggle">
+                    <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
+                    Has drag animation
+                </label>
                 {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
                     edit={true}
@@ -65,6 +74,7 @@ export class FormBuilder extends Component {
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
                     cancelFormReorder={this.cancelFormReorder}
+                    hasAnimation={this.state.hasAnimation}
                     appUsers={[]}
                 />
             </div>

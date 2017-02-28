@@ -1,6 +1,12 @@
 @import '../../assets/css/qbVariables';
 
 .formBuilderContainer {
+    // When using the touch-backend, the user-select: none property turns off text selection while dragging.
+    // Our auto-prefixer doesn't appear to support this one so added prefixes for user-select manually.
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     .draggableField {
         /* When in builder mode we need to push out the

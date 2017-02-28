@@ -39,10 +39,9 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
         !_.isInteger(newLocation.tabIndex) ||
         !_.isInteger(newLocation.sectionIndex) ||
         !_.isInteger(newLocation.columnIndex) ||
-        !_.isInteger(newLocation.rowIndex) ||
         !_.isInteger(newLocation.elementIndex)
     ) {
-        errors.push(`${baseMessage} newLocation is missing or missing props: newTabIndex, newSectionIndex, newColumnIndex, newRowIndex, and newOrderIndex are required and must be an integer`);
+        errors.push(`${baseMessage} newLocation is missing or missing props: newTabIndex, newSectionIndex, newColumnIndex, and newOrderIndex are required and must be an integer`);
     }
 
     if (!draggedItemProps || !_.isObject(draggedItemProps)) {
@@ -54,12 +53,11 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
             !_.has(draggedItemProps, 'location') ||
             !_.isInteger(draggedItemProps.location.sectionIndex) ||
             !_.isInteger(draggedItemProps.location.columnIndex) ||
-            !_.isInteger(draggedItemProps.location.rowIndex) ||
             !_.isInteger(draggedItemProps.location.elementIndex) ||
             !_.isObject(draggedItemProps.element)
         )
     ) {
-        errors.push(`${baseMessage} draggedItemProps must have the following properties: location (with tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex) and element`);
+        errors.push(`${baseMessage} draggedItemProps must have the following properties: location (with tabIndex, sectionIndex, columnIndex, elementIndex) and element`);
     }
 
 
@@ -84,15 +82,15 @@ function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
         return formMetaData;
     }
 
-    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = updatedElementLocation;
+    let {tabIndex, sectionIndex, columnIndex, elementIndex} = updatedElementLocation;
 
-    let row = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].rows[rowIndex];
+    let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
 
-    row.elements = row.elements.filter(element => {
+    column.elements = column.elements.filter(element => {
         return element.orderIndex !== elementIndex;
     });
 
-    updateOrderIndices(row, 'elements');
+    updateOrderIndices(column, 'elements');
     clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex);
 
     return formMetaData;
@@ -107,12 +105,17 @@ function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
  * @param sameRow
  */
 function addElementToNewLocation(formMetaData, newLocation, draggedItemProps) {
-    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = newLocation;
-    let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
-    let rows = column.rows;
+    let {tabIndex, sectionIndex, columnIndex, elementIndex} = newLocation;
+    let columns = formMetaData.tabs[tabIndex].sections[sectionIndex].columns;
+    let column = columns[columnIndex];
 
-    rows.splice(rowIndex, 0, createNewRow(rowIndex, [draggedItemProps.containingElement]));
-    updateOrderIndices(column, 'rows');
+    if (!column) {
+        column = buildNewColumn(columns.length);
+        columns.push(column);
+    }
+
+    column.elements.splice(elementIndex, 0, draggedItemProps.containingElement);
+    updateOrderIndices(column, 'elements');
 
     return formMetaData;
 }
@@ -130,15 +133,20 @@ function clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, col
     let columns = formMetaData.tabs[tabIndex].sections[sectionIndex].columns;
     let column = columns[columnIndex];
 
-    if (column.rows.length === 0) {
+    if (column.elements.length === 0) {
         formMetaData.tabs[tabIndex].sections[sectionIndex].columns = columns.filter(currentColumn => currentColumn.orderIndex !== columnIndex);
         updateOrderIndices(formMetaData.tabs[tabIndex].sections[sectionIndex], 'columns');
-    } else {
-        column.rows = column.rows.filter(row => row.elements.length > 0);
-        updateOrderIndices(column, 'rows');
     }
 
     return formMetaData;
+}
+
+function buildNewColumn(numberOfExistingColumns) {
+    return {
+        id: _.uniqueId('column-'),
+        orderIndex: numberOfExistingColumns,
+        elements: []
+    };
 }
 
 /**
@@ -162,23 +170,6 @@ function updateOrderIndices(item, property) {
 }
 
 /**
- * Build a new row that holds an array of elements passed in as a second parameter.
- * @param rowIndex
- * @param elements
- * @returns {{id: (string|*), orderIndex: *, elements}}
- */
-function createNewRow(rowIndex, elements) {
-    return {
-        id: _.uniqueId('row-'),
-        orderIndex: rowIndex,
-        elements: elements.map((element, elementIndex) => {
-            element.orderIndex = elementIndex;
-            return element;
-        })
-    };
-}
-
-/**
  * Finds the location of the current element by id nested within the formMeta
  * @param formMeta
  * @param element
@@ -188,7 +179,6 @@ function findCurrentElementLocation(formMeta, element) {
     let tabIndex = 0;
     let sectionIndex = 0;
     let columnIndex = 0;
-    let rowIndex = 0;
     let elementIndex = 0;
     let foundElement = null;
 
@@ -199,19 +189,16 @@ function findCurrentElementLocation(formMeta, element) {
             sectionIndex = section.orderIndex;
             return section.columns.some(column => {
                 columnIndex = column.orderIndex;
-                return column.rows.some(row => {
-                    rowIndex = row.orderIndex;
-                    return row.elements.some(currentElement => {
-                        elementIndex = currentElement.orderIndex;
-                        foundElement = currentElement;
-                        return currentElement.id === element.id;
-                    });
+                return column.elements.some(currentElement => {
+                    elementIndex = currentElement.orderIndex;
+                    foundElement = currentElement;
+                    return currentElement.id === element.id;
                 });
             });
         });
     });
 
-    return (foundElement ? {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} : undefined);
+    return (foundElement ? {tabIndex, sectionIndex, columnIndex, elementIndex} : undefined);
 }
 
 export default MoveFieldHelper;

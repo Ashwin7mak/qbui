@@ -1,8 +1,11 @@
 import _ from 'lodash';
-import testFormData, {testArrayBasedFormData} from '../../testHelpers/testFormData';
+import {buildTestFormData, buildTestArrayBasedFormData} from '../../testHelpers/testFormData';
 import {convertFormToArrayForClient, convertFormToObjectForServer} from '../../../src/actions/actionHelpers/transformFormData';
 
-xdescribe('TransformFormData', () => {
+const testFormData = buildTestFormData();
+const testArrayBasedFormData = buildTestArrayBasedFormData();
+
+describe('TransformFormData', () => {
     describe('convertFormToArrayForClient', () => {
         let result;
         beforeEach(() => {

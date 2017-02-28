@@ -90,31 +90,22 @@ function isSectionEmpty(section) {
 }
 
 /**
- * Transforms the section.elements object into an array of rows that contain arrays of elements based on positionSameRow property
- * WARNING: Has side effects on section
+ * Adds an element to a column
+ * WARNING: Has side effects on section and column
  * @param section
- * @param currentRowIndex
+ * @param column
  * @param elementKey
  */
-function putElementsIntoRowsAndReIndex(section, currentRowIndex, elementKey) {
+function addElement(section, column, elementKey) {
     let element = section.elements[elementKey];
     element.id = _.uniqueId('element-');
 
-    // We need to use duck typing to find out if an element should be placed on a new row, because we don't know ahead of
-    // time what the key is going to be (Could be FormFieldElement, FormHeaderElement, FormTextElement, etc.)
-    let formElementKey = findFormElementKey(element);
+    // Element hasn't been added to the column yet, so we don't subtract one from the length for 0 based index of row.elements
+    element.orderIndex = column.elements.length;
 
-    if (!formElementKey || !element[formElementKey].positionSameRow) {
-        currentRowIndex++;
-        section.rows.push({elements: [], orderIndex: currentRowIndex, id: _.uniqueId('row-')});
-    }
+    column.elements.push(element);
 
-    // Element hasn't been added to the last row, so we don't subtract one from the length for 0 based index of row.elements
-    element.orderIndex = section.rows[section.rows.length - 1].elements.length;
-
-    section.rows[currentRowIndex].elements.push(element);
-
-    return currentRowIndex;
+    return column;
 }
 
 /**
@@ -124,19 +115,17 @@ function putElementsIntoRowsAndReIndex(section, currentRowIndex, elementKey) {
  * @param sectionKey
  * @returns {*}
  */
-function convertSectionsToArrayWithColumnsAndRowsOfElement(tab, sectionKey) {
+function convertSectionsToArrayWithColumnsOfElement(tab, sectionKey) {
     let section = tab.sections[sectionKey];
-
-    section.rows = [];
-    let currentRowIndex = -1;
-
-    Object.keys(section.elements).forEach(elementKey => {
-        currentRowIndex = putElementsIntoRowsAndReIndex(section, currentRowIndex, elementKey);
-    });
 
     // Assume a single column for now. Once columns are officially implemented we would get columns from the
     // data returned from the Node layer
-    section.columns = [{rows: section.rows, orderIndex: 0, id: _.uniqueId('column-')}];
+    section.columns = [{elements: [], orderIndex: 0, id: _.uniqueId('column-')}];
+
+    Object.keys(section.elements).forEach(elementKey => {
+        addElement(section, section.columns[0], elementKey);
+    });
+
     section.id = _.uniqueId('section-');
     section.isEmpty = isSectionEmpty(section);
 
@@ -154,7 +143,7 @@ function convertTabsToArrayStructure(tabs) {
         let tab = tabs[tabKey];
 
         tab.sections = Object.keys(tab.sections).map(sectionKey => {
-            return convertSectionsToArrayWithColumnsAndRowsOfElement(tab, sectionKey);
+            return convertSectionsToArrayWithColumnsOfElement(tab, sectionKey);
         });
 
         tab.sections = _.sortBy(tab.sections, 'orderIndex');
@@ -174,9 +163,8 @@ function removeColumnsAndRowsFrom(section) {
     let elements = [];
 
     // Only ever one column for now until server supports columns
-    let rows = section.columns[0].rows;
-    rows.forEach(row => {
-        row.elements.forEach((element, elementIndex) => {
+    section.columns.forEach(column => {
+        column.elements.forEach((element, elementIndex) => {
             let formElementKey = findFormElementKey(element);
             if (formElementKey) {
                 element[formElementKey].positionSameRow = (elementIndex > 0);

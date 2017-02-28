@@ -3,6 +3,7 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
+import Device from '../../utils/device';
 
 /**
  * Specifies event handlers and props that are available during dragging events
@@ -30,13 +31,16 @@ const fieldDragSource = {
         return props.containingElement.id === item.containingElement.id;
     },
 
-    endDrag(dragItemProps, monitor) {
-        if (monitor.didDrop()) {
-            let dropTargetProps = monitor.getDropResult();
-
-            if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-                dragItemProps.handleFormReorder(dropTargetProps.location, dragItemProps);
-            }
+    /**
+     * Calls this function once dragging has stopped. If the device is touch, then handle re-ordering of the field.
+     * Non-touch devices handle re-ordering during the drag.
+     * @param props
+     * @param monitor
+     */
+    endDrag(props, monitor) {
+        if (monitor.didDrop() && Device.isTouch()) {
+            let {location} = monitor.getDropResult();
+            props.handleFormReorder(location, props);
         }
     }
 };

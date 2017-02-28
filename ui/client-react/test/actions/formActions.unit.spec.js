@@ -264,13 +264,9 @@ describe('Form Actions', () => {
         }
 
         beforeEach(() => {
-
             spyOn(mockFormService.prototype, 'createForm').and.callThrough();
             spyOn(mockFormService.prototype, 'updateForm').and.callThrough();
             FormActionsRewireAPI.__Rewire__('FormService', mockFormService);
-
-            spyOn(mockTransformHelper, 'convertFormToObjectForServer').and.returnValue(formData);
-            FormActionsRewireAPI.__Rewire__('convertFormToObjectForServer', mockTransformHelper.convertFormToObjectForServer);
 
             spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
             FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
@@ -278,7 +274,6 @@ describe('Form Actions', () => {
 
         afterEach(() => {
             FormActionsRewireAPI.__ResetDependency__('FormService');
-            FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
             FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
         });
 
@@ -319,8 +314,42 @@ describe('Form Actions', () => {
                     done();
                 });
         });
+    });
 
-        it('transforms the data from array structure to object before save', () => {
+    describe('transforms data appropriately', () => {
+        const middlewares = [thunk];
+        const mockStore = configureMockStore(middlewares);
+
+        const formData = {
+            formId: 1,
+            formMeta: {tabs: {}}
+        };
+
+        class MockFormService {
+            getForm() {return Promise.resolve(formData);}
+            getFormAndRecord() {return Promise.resolve(formData);}
+            createForm() {return Promise.resolve(formData);}
+            updateForm() {return Promise.resolve(formData);}
+        }
+
+        beforeEach(() => {
+            FormActionsRewireAPI.__Rewire__('FormService', MockFormService);
+
+            spyOn(mockTransformHelper, 'convertFormToObjectForServer').and.returnValue(formData);
+            FormActionsRewireAPI.__Rewire__('convertFormToObjectForServer', mockTransformHelper.convertFormToObjectForServer);
+
+            spyOn(mockTransformHelper, 'convertFormToArrayForClient').and.returnValue(formData);
+            FormActionsRewireAPI.__Rewire__('convertFormToArrayForClient', mockTransformHelper.convertFormToArrayForClient);
+        });
+
+        afterEach(() => {
+            FormActionsRewireAPI.__ResetDependency__('FormService');
+            FormActionsRewireAPI.__ResetDependency__('convertFormToObjectForServer');
+            FormActionsRewireAPI.__ResetDependency__('convertFormToArrayForClient');
+        });
+
+
+        it('transforms the data from array structure to object before save', (done) => {
             const store = mockStore({});
 
             return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
@@ -334,7 +363,7 @@ describe('Form Actions', () => {
                 });
         });
 
-        it('transforms the returned response data after the save', () => {
+        it('transforms the returned response data after the save', (done) => {
             const store = mockStore({});
 
             return store.dispatch(createForm("appId", "tblId", "view", formData)).then(
@@ -347,6 +376,7 @@ describe('Form Actions', () => {
                     done();
                 });
         });
+
     });
 
     describe('moveFieldOnForm', () => {
