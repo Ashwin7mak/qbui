@@ -1,4 +1,6 @@
 import React, {PropTypes, Component} from 'react';
+import ReactDom from 'react-dom';
+
 
 /**
  * AutoScroll is triggered when a user either touches and holds down on a touch device and moves her finger
@@ -51,6 +53,7 @@ class AutoScroll extends Component {
     constructor(props) {
         super(props);
 
+        this.autoScroll = null;
         this.animationId = undefined;
         this.scrollDown = this.scrollDown.bind(this);
         this.scrollUp = this.scrollUp.bind(this);
@@ -61,17 +64,13 @@ class AutoScroll extends Component {
     }
 
     componentDidMount() {
-        if (this.props.children) {
-            document.querySelector(`.${this.props.children.props.className}`).addEventListener("touchmove", this.updateScrolling);
-            document.querySelector(`.${this.props.children.props.className}`).addEventListener("mousedown", this.activateMouseMove);
-        }
+        this.autoScroll.addEventListener("touchmove", this.updateScrolling);
+        this.autoScroll.addEventListener("mousedown", this.activateMouseMove);
     }
 
     componentWillUnmount() {
-        if (this.props.children) {
-            document.querySelector(`.${this.props.children.props.className}`).removeEventListener("touchmove", this.updateScrolling);
-            document.querySelector(`.${this.props.children.props.className}`).removeEventListener("mousedown", this.activateMouseMove);
-        }
+        this.autoScroll.removeEventListener("touchmove", this.updateScrolling);
+        this.autoScroll.removeEventListener("mousedown", this.activateMouseMove);
     }
 
     scrollDown() {
@@ -148,6 +147,7 @@ class AutoScroll extends Component {
         /**
          * Activating auto scroll is contained withing the element
          * */
+        debugger;
         if (pointerY > containerBottom && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
             this.animationId = window.requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerTop && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
@@ -162,11 +162,12 @@ class AutoScroll extends Component {
     }
 
     activateMouseMove() {
-        document.addEventListener("mousemove", this.updateScrolling);
+        this.autoScroll.addEventListener("mousemove", this.updateScrolling);
     }
 
     getContainer() {
         let container;
+
         if (this.props.children) {
             container = document.querySelector(`.${this.props.children.props.className}`);
         }
@@ -175,7 +176,11 @@ class AutoScroll extends Component {
     }
 
     render() {
-        return (this.props.children ? this.props.children : null);
+        return (
+            <div className="autoScroll" style={{display: 'flex', flex: '1 auto'}} ref={autoScroll => this.autoScroll = autoScroll}>
+                {this.props.children}
+            </div>
+        );
     }
 
 }
