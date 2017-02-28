@@ -47,10 +47,11 @@ describe('FormBuilder (drag/drop container)', () => {
             instance = component.instance();
 
             const newLocation = {location: 1};
-            const draggedItemProps = {draggedItem: 5};
-            instance.handleFormReorder(newLocation, draggedItemProps);
+            const element = {id: 1, positionSameRow: false};
+            const draggedItemProps = {draggedItem: 5, containingElement: {FormFieldItem: element}};
+            instance.handleFormReorder(newLocation, draggedItemProps, true);
 
-            expect(mockParent.moveField).toHaveBeenCalledWith('view', newLocation, draggedItemProps);
+            expect(mockParent.moveField).toHaveBeenCalledWith('view', newLocation, Object.assign({}, draggedItemProps, {element}));
         });
     });
 });

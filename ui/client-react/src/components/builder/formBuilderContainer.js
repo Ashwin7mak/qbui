@@ -116,7 +116,8 @@ export const FormBuilderContainer = React.createClass({
         }
         return (
             <div className="formBuilderContainer">
-                <ToolPalette />
+                <div className="toolsAndForm">
+                    <ToolPalette />
 
                 <AutoScroll>
                     <div className="formBuilderContent">
@@ -126,9 +127,10 @@ export const FormBuilderContainer = React.createClass({
                     </div>
                 </AutoScroll>
 
-                {this.getSaveOrCancelFooter()}
+                    <FieldProperties />
+                </div>
 
-                <FieldProperties />
+                {this.getSaveOrCancelFooter()}
             </div>
         );
     }
