@@ -61,17 +61,21 @@ class AutoScroll extends Component {
     }
 
     componentDidMount() {
-        document.querySelector(`.${this.props.children.props.className}`).addEventListener("touchmove", this.updateScrolling);
-        document.querySelector(`.${this.props.children.props.className}`).addEventListener("mousedown", this.activateMouseMove);
+        if (this.props.children) {
+            document.querySelector(`.${this.props.children.props.className}`).addEventListener("touchmove", this.updateScrolling);
+            document.querySelector(`.${this.props.children.props.className}`).addEventListener("mousedown", this.activateMouseMove);
+        }
     }
 
     componentWillUnmount() {
-        document.querySelector(`.${this.props.children.props.className}`).removeEventListener("touchmove", this.updateScrolling);
-        document.querySelector(`.${this.props.children.props.className}`).removeEventListener("mousedown", this.activateMouseMove);
+        if (this.props.children) {
+            document.querySelector(`.${this.props.children.props.className}`).removeEventListener("touchmove", this.updateScrolling);
+            document.querySelector(`.${this.props.children.props.className}`).removeEventListener("mousedown", this.activateMouseMove);
+        }
     }
 
     scrollDown() {
-        let {pixelsPerFrame} = this.props;
+        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10;
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
 
@@ -82,7 +86,7 @@ class AutoScroll extends Component {
     }
 
     scrollUp() {
-        let {pixelsPerFrame} = this.props;
+        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10 ;
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
 
@@ -127,7 +131,11 @@ class AutoScroll extends Component {
          * We also subtract 40px to allow the scrolling to start 40 pixels before the mouse or touch gets to the bottom of the page
          * */
         if (windowInnerHeight <= containerOffSetHeight) {
-            containerBottom = windowInnerHeight - this.props.pixelsFromBottom;
+            if (this.props.pixelsFromBottom) {
+                containerBottom = windowInnerHeight - this.props.pixelsFromBottom;
+            } else {
+                containerBottom = windowInnerHeight - 40;
+            }
         }
 
         /**
@@ -158,19 +166,32 @@ class AutoScroll extends Component {
     }
 
     getContainer() {
-        let container = document.querySelector(`.${this.props.children.props.className}`);
+        let container;
+        if (this.props.children) {
+            container = document.querySelector(`.${this.props.children.props.className}`);
+        }
+
         return container;
     }
 
     render() {
-        return (this.props.children);
+        return (this.props.children ? this.props.children : null);
     }
 
 }
 
 AutoScroll.propTypes = {
+    /**
+     * pixelsPerFrame sets how fast the scroll bar should scroll
+     * */
     pixelsPerFrame: PropTypes.number,
+    /**
+     * pixelsFromBottom indicates how many pixels from the bottom of the container should it start autoscrolling
+     * */
     pixelsFromBottom: PropTypes.number,
+    /**
+     * pixelsFromTop indicates how many pixels from the bottom of the container should it start autoscrolling
+     * */
     pixelsFromTop: PropTypes.number,
 
 };
