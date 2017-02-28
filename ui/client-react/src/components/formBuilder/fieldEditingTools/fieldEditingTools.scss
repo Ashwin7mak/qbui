@@ -126,7 +126,7 @@
     &:active {
         transition: 1s;
         opacity: 0.9;
-        background: lightgray;
+        background: $color-black-400;
     }
 
     .tipChildWrapper {
