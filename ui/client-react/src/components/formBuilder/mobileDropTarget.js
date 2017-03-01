@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import DroppableFormElement from './droppableFormElement';
 
-const MobileDropTarget = props => (
+export const MobileDropTarget = props => (
     <div className="mobileDropTarget">
         <div className="mobileDropTargetVisibleLine"></div>
     </div>

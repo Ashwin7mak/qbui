@@ -7,6 +7,7 @@ import QBForm, {__RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBF
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
 import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
+import {MobileDropTarget} from '../../src/components/formBuilder/mobileDropTarget';
 
 import {
     buildTestArrayBasedFormData,
@@ -231,5 +232,22 @@ describe('QBForm', () => {
         let actualProps = fieldElements.at(0).props();
         expect(actualProps.isInvalid).toEqual(true);
         expect(actualProps.invalidMessage).toEqual(invalidMessage);
+    });
+
+    it('adds drop targets for each form element on touch devices', () => {
+        const mockDevice = {isTouch() {return true;}};
+        QbFormRewireAPI.__Rewire__('Device', mockDevice);
+        // Remove dependencies on a drag/drop context for the purpose of this test
+        QbFormRewireAPI.__Rewire__('MobileDropTarget', MobileDropTarget);
+        QbFormRewireAPI.__Rewire__('DragAndDropField', fieldElement => fieldElement);
+
+        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} editingForm={true} />);
+
+        let mobileDropTargets = component.find('.sectionColumn').first().find('.mobileDropTarget');
+        expect(mobileDropTargets.length).toEqual(5);
+
+        QbFormRewireAPI.__ResetDependency__('Device');
+        QbFormRewireAPI.__ResetDependency__('MobileDropTarget');
+        QbFormRewireAPI.__ResetDependency__('DragAndDropField');
     });
 });
