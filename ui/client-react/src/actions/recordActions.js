@@ -66,138 +66,138 @@ let recordActions = {
      * @param colList - optional list of fids to query for getRecord call.
      * @param showNotificationOnSuccess - true to show success notification.
      */
-    saveNewRecord(appId, tblId, recordChanges, fields, colList = [], showNotificationOnSuccess = false) {
-        function formatRecordChanges(_recordChanges) {
-            //save changes in record
-            let payload = [];
-            // columns id and new values array
-            //[{"id":6, "value":"Claire", fieldDef:{}}]
-            if (_recordChanges) {
-                Object.keys(_recordChanges).forEach((recKey) => {
-                    //get each columns matching field description
-                    let matchingField = _recordChanges[recKey].fieldDef;
-
-                    // only post the non built in fields values
-                    if (matchingField && matchingField.builtIn === false) {
-                        let newValue = _recordChanges[recKey].newVal.value;
-                        let newDisplay = _recordChanges[recKey].newVal.display;
-
-                        let colChange = {};
-                        colChange.fieldName = _recordChanges[recKey].fieldName;
-                        colChange.id = +recKey;
-                        colChange.value = _.cloneDeep(newValue);
-                        colChange.display = _.cloneDeep(newDisplay);
-                        colChange.fieldDef = matchingField;
-                        payload.push(colChange);
-                    }
-                });
-            }
-            return payload;
-        }
-        // promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            let record = formatRecordChanges(recordChanges);
-
-            if (appId && tblId && record) {
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
-                let recordService = new RecordService();
-
-                // save the changes to the record
-                recordService.createRecord(appId, tblId, record).then(
-                    response => {
-                        logger.debug('RecordService createRecord success');
-                        if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
-                            let resJson = JSON.parse(response.data.body);
-                            if (resJson.id) {
-                                //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
-                                let clist = colList ? colList : [];
-                                if (!clist.length && fields) {
-                                    fields.forEach((field) => {
-                                        clist.push(field.id);
-                                    });
-                                }
-                                clist = clist.join('.');
-                                this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
-                                recordService.getRecord(appId, tblId, resJson.id, clist, _withDisplayFormat()).then(
-                                    getResponse => {
-                                        logger.debug('RecordService getRecord success');
-                                        this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
-
-                                        if (!showNotificationOnSuccess) {
-                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
-                                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-                                        }
-                                        // this tiny delay allows for saving modal to trap inputs otherwise
-                                        // clicks get queued till after creating
-                                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                                            this.dispatch(actions.AFTER_RECORD_EDIT);
-                                            resolve(resJson.id);
-                                        });
-                                    },
-                                    getError => {
-                                        logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
-                                        // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
-                                        this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
-                                        // this tiny delay allows for saving modal to trap inputs otherwise
-                                        // clicks get queued till after creating
-                                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                                            this.dispatch(actions.AFTER_RECORD_EDIT);
-                                            reject();
-                                        });
-                                    }
-                                );
-                            }
-                        } else {
-                            logger.error('RecordService createRecord call error: no response data value returned');
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            // this delay allows for saving modal to trap inputs otherwise
-                            // clicks get invoked after create
-                            Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                                this.dispatch(actions.AFTER_RECORD_EDIT);
-                                reject();
-                            });
-                        }
-                    },
-                    error => {
-                        //  if a validation error, print each one individually..
-                        if (error && error.data && error.data.response && error.data.response.errors) {
-                            let errors = error.data.response.errors;
-                            _logValidationErrors(errors, 'recordService.createRecord');
-                        } else {
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord');
-                        }
-
-                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
-                        if (error.response.status === 403) {
-                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                        }
-                        if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
-                            const {status} = error.response.data.response;
-                            if (status !== 422) {
-                                // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
-                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                            }
-                        }
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after create
-                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            this.dispatch(actions.AFTER_RECORD_EDIT);
-                            reject();
-                        });
-                    }
-                );
-
-            } else {
-                var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
-                    appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
-                logger.error(errMessage);
-                this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
-                reject();
-            }
-        });
-    },
+    //saveNewRecord(appId, tblId, recordChanges, fields, colList = [], showNotificationOnSuccess = false) {
+    //    function formatRecordChanges(_recordChanges) {
+    //        //save changes in record
+    //        let payload = [];
+    //        // columns id and new values array
+    //        //[{"id":6, "value":"Claire", fieldDef:{}}]
+    //        if (_recordChanges) {
+    //            Object.keys(_recordChanges).forEach((recKey) => {
+    //                //get each columns matching field description
+    //                let matchingField = _recordChanges[recKey].fieldDef;
+    //
+    //                // only post the non built in fields values
+    //                if (matchingField && matchingField.builtIn === false) {
+    //                    let newValue = _recordChanges[recKey].newVal.value;
+    //                    let newDisplay = _recordChanges[recKey].newVal.display;
+    //
+    //                    let colChange = {};
+    //                    colChange.fieldName = _recordChanges[recKey].fieldName;
+    //                    colChange.id = +recKey;
+    //                    colChange.value = _.cloneDeep(newValue);
+    //                    colChange.display = _.cloneDeep(newDisplay);
+    //                    colChange.fieldDef = matchingField;
+    //                    payload.push(colChange);
+    //                }
+    //            });
+    //        }
+    //        return payload;
+    //    }
+    //    // promise is returned in support of unit testing only
+    //    return new Promise((resolve, reject) => {
+    //        let record = formatRecordChanges(recordChanges);
+    //
+    //        if (appId && tblId && record) {
+    //            this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
+    //            let recordService = new RecordService();
+    //
+    //            // save the changes to the record
+    //            recordService.createRecord(appId, tblId, record).then(
+    //                response => {
+    //                    logger.debug('RecordService createRecord success');
+    //                    if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
+    //                        let resJson = JSON.parse(response.data.body);
+    //                        if (resJson.id) {
+    //                            //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
+    //                            let clist = colList ? colList : [];
+    //                            if (!clist.length && fields) {
+    //                                fields.forEach((field) => {
+    //                                    clist.push(field.id);
+    //                                });
+    //                            }
+    //                            clist = clist.join('.');
+    //                            this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
+    //                            recordService.getRecord(appId, tblId, resJson.id, clist, _withDisplayFormat()).then(
+    //                                getResponse => {
+    //                                    logger.debug('RecordService getRecord success');
+    //                                    this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
+    //
+    //                                    if (!showNotificationOnSuccess) {
+    //                                        NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
+    //                                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+    //                                    }
+    //                                    // this tiny delay allows for saving modal to trap inputs otherwise
+    //                                    // clicks get queued till after creating
+    //                                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                                        this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                                        resolve(resJson.id);
+    //                                    });
+    //                                },
+    //                                getError => {
+    //                                    logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+    //                                    // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
+    //                                    this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+    //                                    // this tiny delay allows for saving modal to trap inputs otherwise
+    //                                    // clicks get queued till after creating
+    //                                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                                        this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                                        reject();
+    //                                    });
+    //                                }
+    //                            );
+    //                        }
+    //                    } else {
+    //                        logger.error('RecordService createRecord call error: no response data value returned');
+    //                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
+    //                        // this delay allows for saving modal to trap inputs otherwise
+    //                        // clicks get invoked after create
+    //                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                            this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                            reject();
+    //                        });
+    //                    }
+    //                },
+    //                error => {
+    //                    //  if a validation error, print each one individually..
+    //                    if (error && error.data && error.data.response && error.data.response.errors) {
+    //                        let errors = error.data.response.errors;
+    //                        _logValidationErrors(errors, 'recordService.createRecord');
+    //                    } else {
+    //                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord');
+    //                    }
+    //
+    //                    this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
+    //                    if (error.response.status === 403) {
+    //                        NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
+    //                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+    //                    }
+    //                    if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+    //                        const {status} = error.response.data.response;
+    //                        if (status !== 422) {
+    //                            // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+    //                            NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
+    //                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+    //                        }
+    //                    }
+    //                    // this delay allows for saving modal to trap inputs otherwise
+    //                    // clicks get invoked after create
+    //                    Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+    //                        this.dispatch(actions.AFTER_RECORD_EDIT);
+    //                        reject();
+    //                    });
+    //                }
+    //            );
+    //
+    //        } else {
+    //            var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
+    //                appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
+    //            logger.error(errMessage);
+    //            this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
+    //            reject();
+    //        }
+    //    });
+    //},
 
     /**
      * delete a record
@@ -678,7 +678,191 @@ export const deleteRecord = (appId, tblId, recId, nameForRecords) => {
 };
 
 /**
- * Save changes to an existing record. On successful save get a copy of updated record from server.
+ * Create a new record
+ *
+ * @param appId
+ * @param tblId
+ * @param recordChanges
+ * @param fields
+ * @param colList
+ * @param showNotificationOnSuccess
+ * @returns {Function}
+ */
+export const createRecord = (appId, tblId, changes, fields, colList = [], showNotificationOnSuccess = false) => {
+    function formatRecordChanges(_recordChanges) {
+        //save changes in record
+        let payload = [];
+        // columns id and new values array
+        //[{"id":6, "value":"Claire", fieldDef:{}}]
+        if (_recordChanges) {
+            Object.keys(_recordChanges).forEach((recKey) => {
+                //get each columns matching field description
+                if (_recordChanges[recKey]) {
+                    let matchingField = _recordChanges[recKey].fieldDef;
+
+                    // only post the non built in fields values
+                    if (matchingField && matchingField.builtIn === false) {
+                        let newValue = _recordChanges[recKey].newVal.value;
+                        let newDisplay = _recordChanges[recKey].newVal.display;
+
+                        let colChange = {};
+                        colChange.fieldName = _recordChanges[recKey].fieldName;
+                        colChange.id = +recKey;
+                        colChange.value = _.cloneDeep(newValue);
+                        colChange.display = _.cloneDeep(newDisplay);
+                        colChange.fieldDef = matchingField;
+                        payload.push(colChange);
+                    }
+                }
+            });
+        }
+        return payload;
+    }
+
+    return (dispatch) => {
+        // promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            let record = formatRecordChanges(changes);
+            let recId = UrlConsts.NEW_RECORD_VALUE;
+
+            if (appId && tblId && record) {
+                //this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
+                dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
+
+                let recordService = new RecordService();
+
+                // save the changes to the record
+                recordService.createRecord(appId, tblId, record).then(
+                    response => {
+                        logger.debug('RecordService createRecord success');
+                        if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
+                            let resJson = JSON.parse(response.data.body);
+                            if (resJson.id) {
+                                //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
+                                let clist = colList ? colList : [];
+                                if (!clist.length && fields) {
+                                    fields.forEach((field) => {
+                                        clist.push(field.id);
+                                    });
+                                }
+                                clist = clist.join('.');
+                                //no listener
+                                //this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
+                                recordService.getRecord(appId, tblId, resJson.id, clist, _withDisplayFormat()).then(
+                                    getResponse => {
+                                        logger.debug('RecordService getRecord success');
+                                        //this.dispatch(actions.ADD_RECORD_SUCCESS, {
+                                        //    appId,
+                                        //    tblId,
+                                        //    record: getResponse.data,
+                                        //    recId: resJson.id
+                                        //});
+                                        dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
+
+                                        if (!showNotificationOnSuccess) {
+                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
+                                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                        }
+                                        // this tiny delay allows for saving modal to trap inputs otherwise
+                                        // clicks get queued till after creating
+                                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                            //this.dispatch(actions.AFTER_RECORD_EDIT);
+                                            let obj = {
+                                                recId:resJson.id,
+                                                appId:appId,
+                                                tblId:tblId,
+                                                record:getResponse.data
+                                            };
+                                            resolve(obj);
+                                        });
+                                    },
+                                    getError => {
+                                        logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                        // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
+                                        //this.dispatch(actions.GET_RECORD_FAILED, {
+                                        //    appId,
+                                        //    tblId,
+                                        //    recId,
+                                        //    error: getError.response
+                                        //});
+                                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: getError.response}));
+
+                                        // this tiny delay allows for saving modal to trap inputs otherwise
+                                        // clicks get queued till after creating
+                                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                            //this.dispatch(actions.AFTER_RECORD_EDIT);
+                                            reject();
+                                        });
+                                    }
+                                );
+                            }
+                        } else {
+                            logger.error('RecordService createRecord call error: no response data value returned');
+                            //this.dispatch(actions.ADD_RECORD_FAILED, {
+                            //    appId,
+                            //    tblId,
+                            //    record,
+                            //    error: new Error('no response data member')
+                            //});
+                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: new Error('no response data member')}));
+
+                            // this delay allows for saving modal to trap inputs otherwise
+                            // clicks get invoked after create
+                            Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                                //this.dispatch(actions.AFTER_RECORD_EDIT);
+                                reject();
+                            });
+                        }
+                    },
+                    error => {
+                        //  if a validation error, print each one individually..
+                        if (error && error.data && error.data.response && error.data.response.errors) {
+                            let errors = error.data.response.errors;
+                            _logValidationErrors(errors, 'recordService.createRecord');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord');
+                        }
+
+                        //this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: error.response}));
+
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
+                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        }
+                        if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                            const {status} = error.response.data.response;
+                            if (status !== 422) {
+                                // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
+                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            }
+                        }
+                        // this delay allows for saving modal to trap inputs otherwise
+                        // clicks get invoked after create
+                        Promise.delay(PRE_REQ_DELAY_MS).then(() => {
+                            //this.dispatch(actions.AFTER_RECORD_EDIT);
+                            reject();
+                        });
+                    }
+                );
+
+            } else {
+                var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
+                    appId + '; TblId:' + tblId + '; changes:' + JSON.stringify(changes) + '; fields:' + JSON.stringify(fields);
+                logger.error(errMessage);
+                //this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
+                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errMessage}));
+                reject();
+            }
+        });
+    };
+}
+
+/**
+ * Save changes to an existing record.
+ * On successful save get a copy of updated record from server that is passed to the caller
+ *
  * @param appId
  * @param tblId
  * @param recId
@@ -687,7 +871,7 @@ export const deleteRecord = (appId, tblId, recId, nameForRecords) => {
  * @param colList - optional list of fids to query for getRecord call.
  * @param showNotificationOnSuccess - true to show success notification.
  */
-export const saveRecord = (appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) => {
+export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) => {
     function createColChange(value, display, field, payload) {
         let colChange = {};
         colChange.fieldName = field.name;

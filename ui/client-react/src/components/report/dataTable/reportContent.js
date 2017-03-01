@@ -22,7 +22,7 @@ import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
-import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord, saveRecord} from '../../../actions/recordActions';
+import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
 import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -314,13 +314,13 @@ export const ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
-            let saveRecordPromise = this.handleRecordSaveClicked(recordId, true);
+            let saveRecordPromise = this.handleRecordSaveClicked(recordId, true, true);
 
             // After saving the record successfully, then add the new row
             // Don't do anything if the record wasn't saved successfully or a promise was not returned
-            if (saveRecordPromise) {
-                return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
-            }
+            //if (saveRecordPromise) {
+            //    return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
+            //}
         } else {
             return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
         }
@@ -345,7 +345,7 @@ export const ReportContent = React.createClass({
      * User wants to save changes to a record.
      * @param id
      */
-    handleRecordSaveClicked(id, addNewRecord = false) {
+    handleRecordSaveClicked(id, addNewRecord = false, addNewRow = false) {
         let recordId = id;
         // To maintain compatibility with AgGrid
         if (_.isObject(id)) {
@@ -359,7 +359,7 @@ export const ReportContent = React.createClass({
             if (pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(pendEdits.recordChanges);
             }
-            return this.handleRecordAdd(recordChanges, addNewRecord);
+            return this.handleRecordAdd(recordChanges, addNewRecord, addNewRow);
         } else {
             return this.handleRecordChange(recordId);
         }
@@ -424,7 +424,7 @@ export const ReportContent = React.createClass({
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges, addNewRecordAfterSave = false) {
+    handleRecordAdd(recordChanges, addNewRecordAfterSave = false, addNewRow = false) {
         const flux = this.getFlux();
 
         let fields = {};
@@ -435,7 +435,16 @@ export const ReportContent = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
+
+        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave)).then(
+            (obj) => {
+                if (addNewRow) {
+                    this.addNewRowAfterRecordSaveSuccess();
+                }
+            }
+        );
+
+        ///return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
 
     /**
@@ -460,7 +469,7 @@ export const ReportContent = React.createClass({
             //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
             let pendEdits = this.getPendEdits();
             //let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
-            this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, true);
+            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, true);
 
             //let promise = this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
             //promise.then((obj) => {
@@ -1140,8 +1149,9 @@ const mapDispatchToProps = (dispatch) => {
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
-        saveRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
-            dispatch(saveRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
+        dispatch: dispatch,
+        updateRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
+            dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
                 (obj) => {
                     dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
                 }
