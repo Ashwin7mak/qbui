@@ -81,7 +81,7 @@
         });
 
         function initTableProperties(targetApp, targetTable) {
-            var tablePropertiesEndpoint = recordBase.apiBase.resolveReportsEndpoint(targetApp.id, targetTable.id);
+            var tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(targetApp.id, targetTable.id);
             let propsJson = {"tableNoun":"' + tableNoun + '"};
             return new promise(function(resolve, reject) {
                 recordBase.apiBase.executeRequest(tablePropertiesEndpoint, consts.POST, propsJson).then(function(result) {
