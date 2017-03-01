@@ -9,7 +9,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
-import {loadDynamicReport} from '../../actions/reportActions';
+import {loadDynamicEmbeddedReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
 let logger = new Logger();
@@ -39,7 +39,7 @@ const EmbeddedReportToolsAndContent = React.createClass({
         //const flux = this.getFlux();
         //flux.actions.loadFields(appId, tblId);
 
-        this.props.loadDynamicReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
+        this.props.loadDynamicEmbeddedReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
 
     /**
@@ -115,8 +115,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        loadDynamicEmbeddedReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicEmbeddedReport(context, appId, tblId, rptId, format, filter, queryParams));
         }
     };
 };
