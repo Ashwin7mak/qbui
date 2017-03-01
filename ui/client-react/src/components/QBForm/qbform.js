@@ -229,7 +229,7 @@ let QBForm = React.createClass({
             );
         }
 
-        if(Device.isTouch() && this.props.editingForm && Array.isArray(elements)) {
+        if (Device.isTouch() && this.props.editingForm && Array.isArray(elements)) {
             arrangedElements = this.addTouchDropTargets(elements, newLocation);
         }
 
@@ -243,7 +243,7 @@ let QBForm = React.createClass({
     addTouchDropTargets(elements, location) {
         let elementsLength = elements.length;
         let mobileDropTargets = [];
-        for(let i = 0; i < elementsLength; i++) {
+        for (let i = 0; i < elementsLength; i++) {
             let id = _.uniqueId('mobile-drop');
             mobileDropTargets.push(<MobileDropTarget key={id} containingElement={{id}} location={this.findLocationOfElement(elements[i], location)} handleFormReorder={this.props.handleFormReorder} />);
         }
