@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import QbIconActions from '../../../src/components/dataTable/qbGrid/qbIconActions';
+import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import IconActions from '../../../src/components/actions/iconActions';
 
 const props = {
@@ -41,13 +41,13 @@ let component;
 describe('QbIconActions', () => {
     beforeEach(() => {
         jasmineEnzyme();
-        QbIconActions.__Rewire__('IconActions', mockIconActions);
-        QbIconActions.__Rewire__('Locale', mockLocale);
+        QbIconActionsRewireAPI.__Rewire__('IconActions', mockIconActions);
+        QbIconActionsRewireAPI.__Rewire__('Locale', mockLocale);
     });
 
     afterEach(() => {
-        QbIconActions.__ResetDependency__('IconActions');
-        QbIconActions.__ResetDependency__('Locale');
+        QbIconActionsRewireAPI.__ResetDependency__('IconActions');
+        QbIconActionsRewireAPI.__ResetDependency__('Locale');
     });
 
     it('renders the icon actions', () => {

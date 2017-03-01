@@ -8,7 +8,7 @@ import _ from 'lodash';
 import QbGrid from '../../../src/components/dataTable/qbGrid/qbGrid';
 import ColumnTransformer from '../../../src/components/dataTable/qbGrid/columnTransformer';
 import RowTransformer from '../../../src/components/dataTable/qbGrid/rowTransformer';
-import QbIconActions from '../../../src/components/dataTable/qbGrid/qbIconActions';
+import QbIconActions, {__RewireAPI__ as QbIconActionsRewireAPI} from '../../../src/components/dataTable/qbGrid/qbIconActions';
 import * as Table from 'reactabular-table';
 import {UNSAVED_RECORD_ID} from '../../../src/constants/schema';
 
@@ -87,11 +87,11 @@ describe('QbGrid', () => {
         jasmineEnzyme();
         // IconActions currently relies on the flux store which is difficult to unit test because of the mixin
         // TODO:: Refactor once redux stores are implemented. https://quickbase.atlassian.net/browse/MB-1920
-        QbIconActions.__Rewire__('IconActions', () => {return <div></div>;});
+        QbIconActionsRewireAPI.__Rewire__('IconActions', () => {return <div></div>;});
     });
 
     afterEach(() => {
-        QbIconActions.__ResetDependency__('IconActions');
+        QbIconActionsRewireAPI.__ResetDependency__('IconActions');
     });
 
     it('pass props to reactabular to display rows', () => {

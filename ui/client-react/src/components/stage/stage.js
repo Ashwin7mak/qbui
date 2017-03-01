@@ -2,7 +2,8 @@
 import React from 'react';
 import './stage.scss';
 import QBicon from '../qbIcon/qbIcon';
-import {Collapse, Well} from 'react-bootstrap';
+import Collapse from 'react-bootstrap/lib/Collapse';
+import Well from 'react-bootstrap/lib/Well';
 
 import Logger from '../../utils/logger';
 var logger = new Logger();

@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
-import {Button, Dropdown, MenuItem} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import Dropdown from 'react-bootstrap/lib/Dropdown';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 import QBicon from '../../qbIcon/qbIcon';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
@@ -13,8 +15,10 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 import durationFormatter from '../../../../../common/src/formatter/durationFormatter';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
-import {connect} from 'react-redux';
 
+//import {openRecordForEdit} from '../../../actions/formActions';
+
+import {connect} from 'react-redux';
 import Breakpoints from "../../../utils/breakpoints";
 
 import * as ReportActions from '../../../actions/reportActions';

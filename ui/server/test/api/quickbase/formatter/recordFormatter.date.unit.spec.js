@@ -45,22 +45,22 @@ describe('Date record formatter unit test', function() {
         };
         var fieldInfo_MMDDYYYY = [mmddyyyy];
         var expectedRecords_MMDDYYYY =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '04-12-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '04-12-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowDayOfWeek flag
         var fieldInfo_MMDDYYYY_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_ShowDayOfWeek.datatypeAttributes.showDayOfWeek = true;
         fieldInfo_MMDDYYYY_ShowDayOfWeek = [fieldInfo_MMDDYYYY_ShowDayOfWeek];
         var expectedRecords_MMDDYYYY_ShowDayOfWeek =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowDayOfWeek, ShowMonthAsName flag
         var fieldInfo_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
@@ -68,11 +68,11 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName = [fieldInfo_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName];
         var expectedRecords_MMDDYYYY_ShowDayOfWeek_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12, ' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12, ' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyyyy));
@@ -80,22 +80,22 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent];
         var expectedRecords_MMDDYYYY_ShowDayOfWeek_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName flag
         var fieldInfo_MMDDYYYY_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_MMDDYYYY_ShowMonthAsName = [fieldInfo_MMDDYYYY_ShowMonthAsName];
         var expectedRecords_MMDDYYYY_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: 'Apr 12, ' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: 'Apr 12, ' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_MMDDYYYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyyyy));
@@ -103,28 +103,28 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYYYY_ShowMonthAsName_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYYYY_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_MMDDYYYY_ShowMonthAsName_HideYearIfCurrent];
         var expectedRecords_MMDDYYYY_ShowMonthAsName_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: 'Apr 12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: 'Apr 12'
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and HideYearIfCurrent flag
         var fieldInfo_MMDDYYYY_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyyyy));
         fieldInfo_MMDDYYYY_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYYYY_HideYearIfCurrent = [fieldInfo_MMDDYYYY_HideYearIfCurrent];
         var expectedRecords_MMDDYYYY_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '04-12'
+            }]];
         var expectedRecords_MMDDYYYY_HideYearIfCurrent_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_pm,
-                    display: '04-12-2000'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_pm,
+                display: '04-12-2000'
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YYYY format and all flags enabled
         var fieldInfo_MMDDYYYY_AllFlags = JSON.parse(JSON.stringify(mmddyyyy));
@@ -133,17 +133,17 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYYYY_AllFlags.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYYYY_AllFlags = [fieldInfo_MMDDYYYY_AllFlags];
         var expectedRecords_MMDDYYYY_AllFlags =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'
+            }]];
         var expectedRecords_MMDDYYYY_AllFlags_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_pm,
-                    display: 'Wednesday, Apr 12, 2000'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_pm,
+                display: 'Wednesday, Apr 12, 2000'
+            }]];
 
 
         //Empty records
@@ -152,11 +152,11 @@ describe('Date record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecords =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecords = [[{
@@ -164,11 +164,11 @@ describe('Date record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecords =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'date with MM_DD_YYYY format no flag', records: recordsInput, fieldInfo: fieldInfo_MMDDYYYY, expectedRecords: expectedRecords_MMDDYYYY},
@@ -233,22 +233,22 @@ describe('Date record formatter unit test', function() {
 
         var fieldInfo_MMDDYY = [mmddyy];
         var expectedRecords_MMDDYY =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '04-12-' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '04-12-' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and showDayOfWeek flag
         var fieldInfo_MMDDYY_ShowDayOfWeek = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_ShowDayOfWeek.datatypeAttributes.showDayOfWeek = true;
         fieldInfo_MMDDYY_ShowDayOfWeek = [fieldInfo_MMDDYY_ShowDayOfWeek];
         var expectedRecords_MMDDYY_ShowDayOfWeek =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_MMDDYY_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyy));
@@ -256,11 +256,11 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYY_ShowDayOfWeek_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYY_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_MMDDYY_ShowDayOfWeek_HideYearIfCurrent];
         var expectedRecords_MMDDYY_ShowDayOfWeek_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowDayOfWeek, ShowMonthAsName flag
         var fieldInfo_MMDDYY_ShowDayOfWeek_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
@@ -268,22 +268,22 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYY_ShowDayOfWeek_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_MMDDYY_ShowDayOfWeek_ShowMonthAsName = [fieldInfo_MMDDYY_ShowDayOfWeek_ShowMonthAsName];
         var expectedRecords_MMDDYY_ShowDayOfWeek_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12, ' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12, ' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName flag
         var fieldInfo_MMDDYY_ShowMonthAsName = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_MMDDYY_ShowMonthAsName = [fieldInfo_MMDDYY_ShowMonthAsName];
         var expectedRecords_MMDDYY_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: 'Apr 12, ' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: 'Apr 12, ' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_MMDDYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyy));
@@ -291,28 +291,28 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYY_ShowMonthAsName_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYY_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_MMDDYY_ShowMonthAsName_HideYearIfCurrent];
         var expectedRecords_MMDDYY_ShowMonthAsName_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: 'Apr 12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: 'Apr 12'
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and HideYearIfCurrent flag
         var fieldInfo_MMDDYY_HideYearIfCurrent = JSON.parse(JSON.stringify(mmddyy));
         fieldInfo_MMDDYY_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYY_HideYearIfCurrent = [fieldInfo_MMDDYY_HideYearIfCurrent];
         var expectedRecords_MMDDYY_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '04-12'
+            }]];
         var expectedRecords_MMDDYY_HideYearIfCurrent_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_am,
-                    display: '04-12-00'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_am,
+                display: '04-12-00'
+            }]];
 
         // FieldInfo and record expectation for field with MM_DD_YY format and all flags enabled
         var fieldInfo_MMDDYY_AllFlags = JSON.parse(JSON.stringify(mmddyy));
@@ -321,17 +321,17 @@ describe('Date record formatter unit test', function() {
         fieldInfo_MMDDYY_AllFlags.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_MMDDYY_AllFlags = [fieldInfo_MMDDYY_AllFlags];
         var expectedRecords_MMDDYY_AllFlags =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'
+            }]];
         var expectedRecords_MMDDYY_AllFlags_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_am,
-                    display: 'Wednesday, Apr 12, 00'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_am,
+                display: 'Wednesday, Apr 12, 00'
+            }]];
 
 
         //Empty records
@@ -340,11 +340,11 @@ describe('Date record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecords =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecords = [[{
@@ -352,11 +352,11 @@ describe('Date record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecords =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'date with MM_DD_YY format no flag', records: recordsInput, fieldInfo: fieldInfo_MMDDYY, expectedRecords: expectedRecords_MMDDYY},
@@ -420,22 +420,22 @@ describe('Date record formatter unit test', function() {
         };
         var fieldInfo_DDMMYY = [ddmmyy];
         var expectedRecords_DDMMYY =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '12-04-' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '12-04-' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and showDayOfWeek flag
         var fieldInfo_DDMMYY_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyy));
         fieldInfo_DDMMYY_ShowDayOfWeek.datatypeAttributes.showDayOfWeek = true;
         fieldInfo_DDMMYY_ShowDayOfWeek = [fieldInfo_DDMMYY_ShowDayOfWeek];
         var expectedRecords_DDMMYY_ShowDayOfWeek =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_DDMMYY_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyy));
@@ -443,11 +443,11 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYY_ShowDayOfWeek_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYY_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_DDMMYY_ShowDayOfWeek_HideYearIfCurrent];
         var expectedRecords_DDMMYY_ShowDayOfWeek_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04'
+            }]];
 
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowDayOfWeek, ShowMonthAsName flag
@@ -456,22 +456,22 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYY_ShowDayOfWeek_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_DDMMYY_ShowDayOfWeek_ShowMonthAsName = [fieldInfo_DDMMYY_ShowDayOfWeek_ShowMonthAsName];
         var expectedRecords_DDMMYY_ShowDayOfWeek_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName flag
         var fieldInfo_DDMMYY_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyy));
         fieldInfo_DDMMYY_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_DDMMYY_ShowMonthAsName = [fieldInfo_DDMMYY_ShowMonthAsName];
         var expectedRecords_DDMMYY_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '12-Apr-' + testDateHelper.thisYear2
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '12-Apr-' + testDateHelper.thisYear2
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_DDMMYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyy));
@@ -479,28 +479,28 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYY_ShowMonthAsName_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYY_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_DDMMYY_ShowMonthAsName_HideYearIfCurrent];
         var expectedRecords_DDMMYY_ShowMonthAsName_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '12-Apr'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '12-Apr'
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and HideYearIfCurrent flag
         var fieldInfo_DDMMYY_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyy));
         fieldInfo_DDMMYY_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYY_HideYearIfCurrent = [fieldInfo_DDMMYY_HideYearIfCurrent];
         var expectedRecords_DDMMYY_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '12-04'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '12-04'
+            }]];
         var expectedRecords_DDMMYY_HideYearIfCurrent_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_am,
-                    display: '12-04-00'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_am,
+                display: '12-04-00'
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YY format and all flags enabled
         var fieldInfo_DDMMYY_AllFlags = JSON.parse(JSON.stringify(ddmmyy));
@@ -509,17 +509,17 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYY_AllFlags.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYY_AllFlags = [fieldInfo_DDMMYY_AllFlags];
         var expectedRecords_DDMMYY_AllFlags =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr'
+            }]];
         var expectedRecords_DDMMYY_AllFlags_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_am,
-                    display: 'Wednesday, 12-Apr-00'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_am,
+                display: 'Wednesday, 12-Apr-00'
+            }]];
 
 
         //Empty records
@@ -528,11 +528,11 @@ describe('Date record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecords =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecords = [[{
@@ -540,11 +540,11 @@ describe('Date record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecords =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'date with DD_MM_YY format and no flag', records: recordsInput, fieldInfo: fieldInfo_DDMMYY, expectedRecords: expectedRecords_DDMMYY},
@@ -608,22 +608,22 @@ describe('Date record formatter unit test', function() {
         };
         var fieldInfo_DDMMYYYY = [ddmmyyyy];
         var expectedRecords_DDMMYYYY =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '12-04-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '12-04-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowDayOfWeek flag
         var fieldInfo_DDMMYYYY_ShowDayOfWeek = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_ShowDayOfWeek.datatypeAttributes.showDayOfWeek = true;
         fieldInfo_DDMMYYYY_ShowDayOfWeek = [fieldInfo_DDMMYYYY_ShowDayOfWeek];
         var expectedRecords_DDMMYYYY_ShowDayOfWeek =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyyyy));
@@ -631,11 +631,11 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent];
         var expectedRecords_DDMMYYYY_ShowDayOfWeek_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-04'
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowDayOfWeek, ShowMonthAsName flag
         var fieldInfo_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyyyy));
@@ -643,22 +643,22 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName = [fieldInfo_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName];
         var expectedRecords_DDMMYYYY_ShowDayOfWeek_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName flag
         var fieldInfo_DDMMYYYY_ShowMonthAsName = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_DDMMYYYY_ShowMonthAsName = [fieldInfo_DDMMYYYY_ShowMonthAsName];
         var expectedRecords_DDMMYYYY_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '12-Apr-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '12-Apr-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyyyy));
@@ -666,28 +666,28 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent];
         var expectedRecords_DDMMYYYY_ShowMonthAsName_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '12-Apr'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '12-Apr'
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and HideYearIfCurrent flag
         var fieldInfo_DDMMYYYY_HideYearIfCurrent = JSON.parse(JSON.stringify(ddmmyyyy));
         fieldInfo_DDMMYYYY_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYYYY_HideYearIfCurrent = [fieldInfo_DDMMYYYY_HideYearIfCurrent];
         var expectedRecords_DDMMYYYY_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '12-04'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '12-04'
+            }]];
         var expectedRecords_DDMMYYYY_HideYearIfCurrent_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_pm,
-                    display: '12-04-2000'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_pm,
+                display: '12-04-2000'
+            }]];
 
         // FieldInfo and record expectation for field with DD_MM_YYYY format and all flags enabled
         var fieldInfo_DDMMYYYY_AllFlags = JSON.parse(JSON.stringify(ddmmyyyy));
@@ -696,17 +696,17 @@ describe('Date record formatter unit test', function() {
         fieldInfo_DDMMYYYY_AllFlags.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_DDMMYYYY_AllFlags = [fieldInfo_DDMMYYYY_AllFlags];
         var expectedRecords_DDMMYYYY_AllFlags =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr'
+            }]];
         var expectedRecords_DDMMYYYY_AllFlags_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_pm,
-                    display: 'Wednesday, 12-Apr-2000'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_pm,
+                display: 'Wednesday, 12-Apr-2000'
+            }]];
 
 
         //Empty records
@@ -715,11 +715,11 @@ describe('Date record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecords =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecords = [[{
@@ -727,11 +727,11 @@ describe('Date record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecords =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'date with DD_MM_YYYY format and no flag', records: recordsInput, fieldInfo: fieldInfo_DDMMYYYY, expectedRecords: expectedRecords_DDMMYYYY},
@@ -795,22 +795,22 @@ describe('Date record formatter unit test', function() {
         };
         var fieldInfo_YYYYMMDD = [yyyymmdd];
         var expectedRecords_YYYYMMDD =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.thisYear + '-04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.thisYear + '-04-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and showDayOfWeek flag
         var fieldInfo_YYYYMMDD_ShowDayOfWeek = JSON.parse(JSON.stringify(yyyymmdd));
         fieldInfo_YYYYMMDD_ShowDayOfWeek.datatypeAttributes.showDayOfWeek = true;
         fieldInfo_YYYYMMDD_ShowDayOfWeek = [fieldInfo_YYYYMMDD_ShowDayOfWeek];
         var expectedRecords_YYYYMMDD_ShowDayOfWeek =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-04-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(yyyymmdd));
@@ -818,11 +818,11 @@ describe('Date record formatter unit test', function() {
         fieldInfo_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent];
         var expectedRecords_YYYYMMDD_ShowDayOfWeek_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowDayOfWeek, ShowMonthAsName flag
         var fieldInfo_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName = JSON.parse(JSON.stringify(yyyymmdd));
@@ -830,22 +830,22 @@ describe('Date record formatter unit test', function() {
         fieldInfo_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName = [fieldInfo_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName];
         var expectedRecords_YYYYMMDD_ShowDayOfWeek_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-Apr-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', ' + testDateHelper.thisYear + '-Apr-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowMonthAsName flag
         var fieldInfo_YYYYMMDD_ShowMonthAsName = JSON.parse(JSON.stringify(yyyymmdd));
         fieldInfo_YYYYMMDD_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_YYYYMMDD_ShowMonthAsName = [fieldInfo_YYYYMMDD_ShowMonthAsName];
         var expectedRecords_YYYYMMDD_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.thisYear + '-Apr-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.thisYear + '-Apr-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(yyyymmdd));
@@ -853,28 +853,28 @@ describe('Date record formatter unit test', function() {
         fieldInfo_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent];
         var expectedRecords_YYYYMMDD_ShowMonthAsName_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: 'Apr-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: 'Apr-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and HideYearIfCurrent flag
         var fieldInfo_YYYYMMDD_HideYearIfCurrent = JSON.parse(JSON.stringify(yyyymmdd));
         fieldInfo_YYYYMMDD_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_YYYYMMDD_HideYearIfCurrent = [fieldInfo_YYYYMMDD_HideYearIfCurrent];
         var expectedRecords_YYYYMMDD_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: '04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: '04-12'
+            }]];
         var expectedRecords_YYYYMMDD_HideYearIfCurrent_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_am,
-                    display: '2000-04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_am,
+                display: '2000-04-12'
+            }]];
 
         // FieldInfo and record expectation for field with YYYY_MM_DD format and all flags enabled
         var fieldInfo_YYYYMMDD_AllFlags = JSON.parse(JSON.stringify(yyyymmdd));
@@ -883,17 +883,17 @@ describe('Date record formatter unit test', function() {
         fieldInfo_YYYYMMDD_AllFlags.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_YYYYMMDD_AllFlags = [fieldInfo_YYYYMMDD_AllFlags];
         var expectedRecords_YYYYMMDD_AllFlags =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_am,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_am,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'
+            }]];
         var expectedRecords_YYYYMMDD_AllFlags_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_am,
-                    display: 'Wednesday, 2000-Apr-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_am,
+                display: 'Wednesday, 2000-Apr-12'
+            }]];
 
         //Empty records
         var emptyRecords = [[{
@@ -901,11 +901,11 @@ describe('Date record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecords =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecords = [[{
@@ -913,11 +913,11 @@ describe('Date record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecords =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'date with YYYY_MM_DD format and no flag', records: recordsInput, fieldInfo: fieldInfo_YYYYMMDD, expectedRecords: expectedRecords_YYYYMMDD},
@@ -982,22 +982,22 @@ describe('Date record formatter unit test', function() {
         };
         var fieldInfo_InvalidFormat = [invalidFormat];
         var expectedRecords_InvalidFormat =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '04-12-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '04-12-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek flag
         var fieldInfo_InvalidFormat_ShowDayOfWeek = JSON.parse(JSON.stringify(invalidFormat));
         fieldInfo_InvalidFormat_ShowDayOfWeek.datatypeAttributes.showDayOfWeek = true;
         fieldInfo_InvalidFormat_ShowDayOfWeek = [fieldInfo_InvalidFormat_ShowDayOfWeek];
         var expectedRecords_InvalidFormat_ShowDayOfWeek =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12-' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek, ShowMonthAsName flag
         var fieldInfo_InvalidFormat_ShowDayOfWeek_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
@@ -1005,11 +1005,11 @@ describe('Date record formatter unit test', function() {
         fieldInfo_InvalidFormat_ShowDayOfWeek_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_InvalidFormat_ShowDayOfWeek_ShowMonthAsName = [fieldInfo_InvalidFormat_ShowDayOfWeek_ShowMonthAsName];
         var expectedRecords_InvalidFormat_ShowDayOfWeek_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12, ' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12, ' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowDayOfWeek, HideYearIfCurrent flag
         var fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
@@ -1017,22 +1017,22 @@ describe('Date record formatter unit test', function() {
         fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent];
         var expectedRecords_InvalidFormat_ShowDayOfWeek_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 04-12'
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowMonthAsName flag
         var fieldInfo_InvalidFormat_ShowMonthAsName = JSON.parse(JSON.stringify(invalidFormat));
         fieldInfo_InvalidFormat_ShowMonthAsName.datatypeAttributes.showMonthAsName = true;
         fieldInfo_InvalidFormat_ShowMonthAsName = [fieldInfo_InvalidFormat_ShowMonthAsName];
         var expectedRecords_InvalidFormat_ShowMonthAsName =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: 'Apr 12, ' + testDateHelper.thisYear
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: 'Apr 12, ' + testDateHelper.thisYear
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and ShowMonthAsName, HideYearIfCurrent flag
         var fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
@@ -1040,28 +1040,28 @@ describe('Date record formatter unit test', function() {
         fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent = [fieldInfo_InvalidFormat_ShowMonthAsName_HideYearIfCurrent];
         var expectedRecords_InvalidFormat_ShowMonthAsName_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: 'Apr 12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: 'Apr 12'
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and HideYearIfCurrent flag
         var fieldInfo_InvalidFormat_HideYearIfCurrent = JSON.parse(JSON.stringify(invalidFormat));
         fieldInfo_InvalidFormat_HideYearIfCurrent.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_InvalidFormat_HideYearIfCurrent = [fieldInfo_InvalidFormat_HideYearIfCurrent];
         var expectedRecords_InvalidFormat_HideYearIfCurrent =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: '04-12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: '04-12'
+            }]];
         var expectedRecords_InvalidFormat_HideYearIfCurrent_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_pm,
-                    display: '04-12-2000'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_pm,
+                display: '04-12-2000'
+            }]];
 
         // FieldInfo and record expectation for field with invalid format and all flags enabled
         var fieldInfo_InvalidFormat_AllFlags = JSON.parse(JSON.stringify(invalidFormat));
@@ -1070,17 +1070,17 @@ describe('Date record formatter unit test', function() {
         fieldInfo_InvalidFormat_AllFlags.datatypeAttributes.hideYearIfCurrent = true;
         fieldInfo_InvalidFormat_AllFlags = [fieldInfo_InvalidFormat_AllFlags];
         var expectedRecords_InvalidFormat_AllFlags =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_thisYear_0412_pm,
-                    display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_thisYear_0412_pm,
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'
+            }]];
         var expectedRecords_InvalidFormat_AllFlags_DiffYear =
-                [[{
-                    id     : 7,
-                    value  : testHelperDate_2000_0412_pm,
-                    display: 'Wednesday, Apr 12, 2000'
-                }]];
+            [[{
+                id     : 7,
+                value  : testHelperDate_2000_0412_pm,
+                display: 'Wednesday, Apr 12, 2000'
+            }]];
 
 
         //Empty records
@@ -1089,11 +1089,11 @@ describe('Date record formatter unit test', function() {
             value: ''
         }]];
         var expectedEmptyRecords =
-                [[{
-                    id     : 7,
-                    value  : '',
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : '',
+                display: ''
+            }]];
 
         //null record value
         var nullRecords = [[{
@@ -1101,11 +1101,11 @@ describe('Date record formatter unit test', function() {
             value: null
         }]];
         var nullExpectedRecords =
-                [[{
-                    id     : 7,
-                    value  : null,
-                    display: ''
-                }]];
+            [[{
+                id     : 7,
+                value  : null,
+                display: ''
+            }]];
 
         return [
             {message: 'date with invalid format and no flag', records: recordsInput, fieldInfo: fieldInfo_InvalidFormat, expectedRecords: expectedRecords_InvalidFormat},

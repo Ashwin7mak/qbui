@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import appsActions from '../../src/actions/appsActions';
+import appsActions, {__RewireAPI__ as appsActionsRewireAPI} from '../../src/actions/appsActions';
 import * as actions from '../../src/constants/actions';
 import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
@@ -32,11 +32,11 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
-        appsActions.__Rewire__('AppService', mockAppService);
+        appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
     });
 
     afterEach(() => {
-        appsActions.__ResetDependency__('AppService');
+        appsActionsRewireAPI.__ResetDependency__('AppService');
     });
 
     var appsActionTests = [

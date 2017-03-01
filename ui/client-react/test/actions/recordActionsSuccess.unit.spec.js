@@ -1,5 +1,5 @@
 import Fluxxor from 'fluxxor';
-import recordActions from '../../src/actions/recordActions';
+import recordActions, {__RewireAPI__ as recordActionsRewireAPI} from '../../src/actions/recordActions';
 import * as actions from '../../src/constants/actions';
 import * as query from '../../src/constants/query';
 import Promise from 'bluebird';
@@ -47,11 +47,11 @@ describe('Record actions - Edit Record functions -- success', () => {
         spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
         spyOn(mockRecordService.prototype, 'deleteRecordBulk').and.callThrough();
         spyOn(mockRecordService.prototype, 'getRecord').and.callThrough();
-        recordActions.__Rewire__('RecordService', mockRecordService);
+        recordActionsRewireAPI.__Rewire__('RecordService', mockRecordService);
     });
 
     afterEach(() => {
-        recordActions.__ResetDependency__('RecordService');
+        recordActionsRewireAPI.__ResetDependency__('RecordService');
     });
 
     it('test deleteRecord', (done) => {
@@ -132,7 +132,7 @@ describe('Record actions - Edit Record functions -- success', () => {
 
     it('test saveRecord and prep for a record to be added immediately after (do not call notification until later)', (done) => {
         let notificationSuccess = jasmine.createSpy();
-        recordActions.__Rewire__('NotificationManager', {success: notificationSuccess});
+        recordActionsRewireAPI.__Rewire__('NotificationManager', {success: notificationSuccess});
         let addNewRecordAfterSave = true;
         let fields = [{
             id:6,
@@ -175,7 +175,7 @@ describe('Record actions - Edit Record functions -- success', () => {
             },
             () => {
                 expect(true).toBe(false);
-                recordActions.__ResetDependency__('NotificationManager');
+                recordActionsRewireAPI.__ResetDependency__('NotificationManager');
                 done();
             }
         );

@@ -1,4 +1,4 @@
-import ReportColumnTransformer from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
+import ReportColumnTransformer, {__RewireAPI__ as ReportColumnTransformerRewireAPI} from '../../../src/components/dataTable/reportGrid/reportColumnTransformer';
 import SchemaConsts from '../../../../common/src/constants';
 
 const testFieldDef = {fieldDef: true};
@@ -24,7 +24,7 @@ describe('ReportColumnTransformer', () => {
 
     describe('createFromApiColumn', () => {
         it('transforms data from the api call into a new ColumnTransformer', () => {
-            ReportColumnTransformer.__Rewire__('FieldUtils', {getColumnHeaderClasses(fieldDef) {return fieldDef.datatypeAttributes.type;}, getColumnHeaderLabelClasses() {return '';}});
+            ReportColumnTransformerRewireAPI.__Rewire__('FieldUtils', {getColumnHeaderClasses(fieldDef) {return fieldDef.datatypeAttributes.type;}, getColumnHeaderLabelClasses() {return '';}});
 
             const testApiColumnData = {
                 id: 2,
@@ -35,7 +35,7 @@ describe('ReportColumnTransformer', () => {
             const expectedResult = new ReportColumnTransformer(testApiColumnData.id, testApiColumnData.fieldDef, testApiColumnData.headerName, SchemaConsts.TEXT);
             expect(ReportColumnTransformer.createFromApiColumn(testApiColumnData)).toEqual(expectedResult);
 
-            ReportColumnTransformer.__ResetDependency__('FieldUtils');
+            ReportColumnTransformerRewireAPI.__ResetDependency__('FieldUtils');
         });
     });
 

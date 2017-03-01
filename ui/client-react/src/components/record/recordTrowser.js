@@ -3,7 +3,9 @@ import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
-import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
@@ -306,6 +308,13 @@ export const RecordTrowser = React.createClass({
     previousRecord() {
         const record = this.getRecordFromProps(this.props);
         this.navigateToRecord(record.previousRecordId);
+        //const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
+        //
+        //// let flux know we're traversing records so it can pass down updated previous/next record IDs
+        //let flux = this.getFlux();
+        //flux.actions.editPreviousRecord(previousEditRecordId);
+        //
+        //this.props.openRecordForEdit(previousEditRecordId);
     },
 
     /**
@@ -560,7 +569,9 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordTrowser);
+

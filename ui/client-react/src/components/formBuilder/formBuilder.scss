@@ -92,4 +92,8 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
         opacity: 0.01;
         transition: opacity 1s;
     }
+
+    .dragAndDropField {
+        max-width: $form-edit-input-width;
+    }
 }

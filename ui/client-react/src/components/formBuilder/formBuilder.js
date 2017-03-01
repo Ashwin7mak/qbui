@@ -18,14 +18,12 @@ export class FormBuilder extends Component {
 
     /**
      * Moves the dragged item to the location of the item that it was dropped on.
-     * @param newTabIndex
-     * @param newSectionIndex
-     * @param newOrderIndex
+     * @param newLocation
      * @param draggedItemProps
      */
-    handleFormReorder(newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps) {
+    handleFormReorder(newLocation, draggedItemProps) {
         if (this.props.moveFieldOnForm) {
-            return this.props.moveFieldOnForm(this.props.formId, newTabIndex, newSectionIndex, newOrderIndex, draggedItemProps);
+            return this.props.moveFieldOnForm(this.props.formId, newLocation, draggedItemProps);
         }
     }
 

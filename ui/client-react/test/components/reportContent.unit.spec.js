@@ -73,18 +73,18 @@ const fakeReportData_simple = {
             field: "col_num",
             headerName: "col_num"
         },
-            {
-                field: "col_text",
-                headerName: "col_text"
-            },
-            {
-                field: "col_date",
-                headerName: "col_date"
-            },
-            {
-                field: "col_req",
-                headerName: "col_req"
-            }
+        {
+            field: "col_text",
+            headerName: "col_text"
+        },
+        {
+            field: "col_date",
+            headerName: "col_date"
+        },
+        {
+            field: "col_req",
+            headerName: "col_req"
+        }
         ]
     }
 };

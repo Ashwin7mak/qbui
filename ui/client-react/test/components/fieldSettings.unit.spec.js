@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FieldSettings  from '../../src/components/sortGroup/fieldSettings';
+import FieldSettings, {__RewireAPI__ as FieldSettingsRewireAPI}  from '../../src/components/sortGroup/fieldSettings';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -28,13 +28,13 @@ describe('FieldSettings functions', () => {
     let component;
 
     beforeEach(() => {
-        FieldSettings.__Rewire__('I18nMessage', I18nMessageMock);
-        FieldSettings.__Rewire__('FieldChoiceList', MockFieldChoiceList);
+        FieldSettingsRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
+        FieldSettingsRewireAPI.__Rewire__('FieldChoiceList', MockFieldChoiceList);
     });
 
     afterEach(() => {
-        FieldSettings.__ResetDependency__('I18nMessage');
-        FieldSettings.__ResetDependency__('FieldChoiceList');
+        FieldSettingsRewireAPI.__ResetDependency__('I18nMessage');
+        FieldSettingsRewireAPI.__ResetDependency__('FieldChoiceList');
     });
 
 

@@ -1,10 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {Overlay} from 'react-bootstrap';
 
 import Logger from '../../utils/logger';
-import {I18nMessage} from '../../utils/i18nMessage';
-import StringUtils from '../../utils/stringUtils';
 
 import QBicon from '../qbIcon/qbIcon';
 import QBToolTip from '../qbToolTip/qbToolTip';

@@ -22,6 +22,10 @@ $edit-field-padding: 5px;
         .div {
             display: inline;
         }
+
+        .userInFooter .userDisplayValue {
+            display: inline;
+        }
     }
 
     .formSection {
@@ -33,6 +37,7 @@ $edit-field-padding: 5px;
 
         .formTable {
             margin-left: 10px;
+            display: flex;
             margin-bottom: 20px;
 
             /* Fields in cardview span the width of the small device */
@@ -40,6 +45,11 @@ $edit-field-padding: 5px;
             @include small-breakpoint {
                 width: 100%;
                 table-layout: fixed;
+                flex-direction: column;
+            }
+
+            .sectionColumn {
+                flex: 0 auto;
             }
         }
 
@@ -64,20 +74,32 @@ $edit-field-padding: 5px;
             }
         }
 
-        .fieldRow {
-            .formElementWrapper {
-                vertical-align: top;
+        .sectionRow {
+            display: flex;
+            flex-wrap: nowrap;
+
+            .formElementContainer {
+                flex: 1 1 auto;
                 padding-top: 5px;
                 padding-bottom: 20px;
             }
 
-            .fieldRow:last-child .formElementWrapper {
-                padding-bottom: 0;
+            @include small-breakpoint {
+                flex-wrap: wrap;
+
+                .formElementContainer {
+                    flex: 1 100%;
+                    margin-right: 15px;
+                }
+
+                .phoneWrapper {
+                    width: 100%;
+                }
             }
+
 
             .formElement {
                 word-wrap: break-word;
-                max-width: 100%;
                 display: flex;
                 flex-direction: column;
                 margin-right: 15px;
@@ -113,7 +135,7 @@ $edit-field-padding: 5px;
                 }
             }
 
-            .formElementWrapper:last-child .field {
+            .formElementContainer:last-child .field {
                 margin-right: 0;
             }
         }
@@ -137,7 +159,7 @@ $edit-field-padding: 5px;
         }
 
         .fieldValueEditor {
-            width: 280px;
+            width: $form-edit-input-width;
 
             &.fieldInputWidth {
                 width: inherit;
@@ -232,7 +254,7 @@ $edit-field-padding: 5px;
                 padding: 10px 0 20px 10px;
             }
 
-            .formTable {
+            .sectionBody {
                 margin-left: 0;
                 width: 100%;
             }

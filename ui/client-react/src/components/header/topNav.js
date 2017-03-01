@@ -1,14 +1,14 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
+import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import GlobalActions from '../actions/globalActions';
+
 //import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
-import QBToolTip from '../qbToolTip/qbToolTip';
 //let FluxMixin = Fluxxor.FluxMixin(React);
-import {OverlayTrigger, Popover, ButtonGroup, Button, Input, Tooltip} from 'react-bootstrap';
-import SearchBox from '../search/searchBox';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
+import Button from 'react-bootstrap/lib/Button';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import './topNav.scss';
 

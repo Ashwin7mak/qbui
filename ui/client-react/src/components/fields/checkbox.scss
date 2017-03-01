@@ -215,6 +215,7 @@ $checkbox-font-size-mobile: 16px;
             padding-right: 7px;
 
             @include small-breakpoint {
+                flex: 0 40px; // Make room for the word "Yes" and "No" on mobile.
                 font-size: $checkbox-font-size-mobile;
                 padding-bottom: 0;
                 padding-right: 10px;
