@@ -121,7 +121,6 @@ export const FormBuilderContainer = React.createClass({
 
                 <AutoScroll
                     pixelsPerFrame={10}
-                    pixelsFromTop={30}
                     pixelsFromBottom={30}>
                     <div className="formBuilderContent">
                         <Loader loaded={loaded} options={LARGE_BREAKPOINT}>

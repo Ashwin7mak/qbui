@@ -103,8 +103,10 @@ class AutoScroll extends Component {
             containerOffSetHeight: container.offsetHeight,
             containerOffSetTop: container.offsetTop,
             containerRightSide: container.offsetLeft + container.offsetWidth,
-            containerBottom: container.offsetHeight -40
-        }
+            //Autoscroll activates 40 pixels before it reaches the bottom or top of the container
+            containerBottom: container.offsetHeight - 30,
+            containerTop: container.offsetTop + 30
+        };
 
     }
 
@@ -112,7 +114,7 @@ class AutoScroll extends Component {
         /**
          * Allows a developer to add extra pixels to the top, allowing auto scroll to activate sooner
          * */
-        return containerTop + this.props.pixelsFromTop
+        return containerTop + this.props.pixelsFromTop;
     }
 
     getContainerBottom(containerBottom) {
@@ -147,7 +149,7 @@ class AutoScroll extends Component {
         let pointerY;
         let pointerX;
 
-        let {containerOffsetLeft, containerOffSetHeight, containerOffSetTop, containerRightSide, containerBottom} = this.getContainerDimension();
+        let {containerOffsetLeft, containerOffSetHeight, containerOffSetTop, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
 
         if (e.type === 'touchmove') {
             pointerY = e.touches[0].clientY;
@@ -156,30 +158,25 @@ class AutoScroll extends Component {
             pointerY = e.clientY;
             pointerX = e.clientX;
         }
-        console.log('containerBottom: ', containerBottom);
 
         if (this.props.pixelsFromBottom) {
             containerBottom = this.getContainerBottom(containerBottom);
         }
 
         if (this.props.pixelsFromTop) {
-            containerOffSetTop = this.getContainerTop(containerOffSetTop);
+            containerTop = this.getContainerTop(containerTop);
         }
 
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
-        console.log('containerBottom: ', containerBottom);
-        console.log('pointerY: ', pointerY);
-        console.log('containerOffSetHeight: ', containerOffSetHeight);
-        console.log('c: ', pointerY);
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {
 
             this.animationId = window.requestAnimationFrame(this.scrollDown);
 
-        } else if (pointerY < containerOffSetTop &&
+        } else if (pointerY < containerTop &&
                    pointerX < containerRightSide &&
                    pointerX > containerOffsetLeft) {
 
