@@ -129,7 +129,7 @@ const report = (state = [], action) => {
     case types.UPDATE_REPORT_RECORD: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            updateReportRecord(currentReport);
+            updateReportRecord(currentReport, action.content);
             return newState(currentReport);
         }
         return state;
@@ -152,21 +152,21 @@ const report = (state = [], action) => {
     }
 };
 
-function updateReportRecord(currentReport) {
+function updateReportRecord(currentReport, content) {
     let record = null;
     let filtRecord = null;
     if (currentReport.data.hasGrouping) {
-        record = ReportUtils.findGroupedRecord(currentReport.data.records, action.content.recId, currentReport.data.keyField.name);
-        filtRecord = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, action.content.recId, currentReport.data.keyField.name);
+        record = ReportUtils.findGroupedRecord(currentReport.data.records, content.recId, currentReport.data.keyField.name);
+        filtRecord = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, content.recId, currentReport.data.keyField.name);
     } else {
-        record = findRecordById(currentReport.data.records, action.content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
-        filtRecord = findRecordById(currentReport.data.filteredRecords, action.content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
+        record = findRecordById(currentReport.data.records, content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
+        filtRecord = findRecordById(currentReport.data.filteredRecords, content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
     }
 
     // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
     // formatRecordValues will add all display values
     // patch the previously created skeleton of record with the newRecord values
-    let formattedRec = formatRecord(action.content.record, currentReport.data.fields);
+    let formattedRec = formatRecord(content.record, currentReport.data.fields);
 
     //TODO: really want to avoid formatting as the individual components should be handling this rqeuirement
     //formatRecordValues(formattedRec, currentReport.data.fields);

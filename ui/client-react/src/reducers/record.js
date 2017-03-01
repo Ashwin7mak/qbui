@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import RecordModel from '../models/recordModel';
 import ValidationUtils from '../../../common/src/validationUtils';
 import ValidationMessage from '../utils/validationMessage';
+import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import _ from 'lodash';
 
 /**
@@ -31,6 +32,10 @@ const record = (state = [], action) => {
 
         //  if obj is undefined/null, there's nothing to do..
         if (obj) {
+            //  ensure obj id is stored as a numeric..unless it's a new record
+            if (obj.id !== NEW_RECORD_VALUE) {
+                obj.id = +obj.id;
+            }
             if (singleRecordStore === true) {
                 if (stateList.length === 0) {
                     stateList.push(obj);
@@ -58,7 +63,8 @@ const record = (state = [], action) => {
      * @returns {*}
      */
     function getRecordFromState(id) {
-        const index = _.findIndex(state, rec => rec.id === id);
+        const recId = (id === NEW_RECORD_VALUE ? id : +id);  // ensure always looking up id as a numeric..unless it's a new record
+        const index = _.findIndex(state, rec => rec.id === recId);
         if (index !== -1) {
             return _.cloneDeep(state[index]);
         }
@@ -139,14 +145,90 @@ const record = (state = [], action) => {
             return newState(obj);
         }
         case types.SAVE_RECORD: {
-            const obj = {
-                id: action.id,
-                appId: action.content.appId,
-                tblId: action.content.tblId,
-                recId: action.content.recId,
-                changes: action.content.changes
-            };
-            return newState(obj);
+            let currentRecd = getRecordFromState(action.id);
+            let model;
+            if (_.has(currentRecd, 'pendEdits')) {
+                const pendEdits = currentRecd.pendEdits;
+
+                // saving an existing record
+                model = new RecordModel();
+                model.set(pendEdits);
+
+                //  any inline edit changes...this is replacing commit..
+                if (pendEdits.isPendingEdit) {
+                    let entry = getEntryKey(pendEdits);
+                    if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
+                        pendEdits.commitChanges[entry] = {};
+                    }
+                    if (typeof (pendEdits.commitChanges[entry].changes) === 'undefined') {
+                        pendEdits.commitChanges[entry].changes = [];
+                    }
+                    pendEdits.commitChanges[entry].changes.push(pendEdits.recordChanges);
+                    pendEdits.commitChanges[entry].status = '...'; //status is pending response from server
+                }
+
+                model.setRecordChanges(model.appId, model.tblId, model.recId, action.content.changes);
+            } else {
+                // saving a new record
+                currentRecd = {
+                    id: action.id
+                };
+                model = new RecordModel(action.content.appId, action.content.tblId);
+                model.setRecordChanges(model.appId, model.tblId, null, action.content.changes);
+            }
+            currentRecd.pendEdits = model.get();
+            return newState(currentRecd);
+        }
+        case types.SAVE_RECORD_SUCCESS: {
+            let currentRecd = getRecordFromState(action.id);
+            if (currentRecd) {
+                currentRecd.currentEditingRecordId = action.content.recId;
+                let entry = getEntryKey(currentRecd);
+
+                //  new save is not going to have any commit changes..
+                if (typeof (currentRecd.pendEdits.commitChanges[entry]) === 'undefined') {
+                    currentRecd.pendEdits.commitChanges[entry] = {};
+                }
+                if (typeof (currentRecd.pendEdits.commitChanges[entry].changes) === 'undefined') {
+                    currentRecd.pendEdits.commitChanges[entry].changes = [];
+                }
+                currentRecd.pendEdits.commitChanges[entry].changes.push(currentRecd.pendEdits.recordChanges);
+
+                //  TODO: setting status though it doesn't look like it's referenced anywhere..not sure why it's set.
+                if (typeof (currentRecd.pendEdits.commitChanges[entry]) !== 'undefined') {
+                    currentRecd.pendEdits.commitChanges[entry].status = types.SAVE_RECORD_SUCCESS;
+                }
+
+                currentRecd.pendEdits.updateRecordInReportGrid = true;
+
+                currentRecd.pendEdits.isPendingEdit = false;
+                currentRecd.pendEdits.isInlineEditOpen = false;
+                currentRecd.pendEdits.recordEditOpen = false;
+                currentRecd.pendEdits.recordChanges = {};
+                //TODO fix this..
+                currentRecd.pendEdits.editErrors = {
+                    ok: true,
+                    errors:[]
+                };
+                currentRecd.pendEdits.saving = false;
+                return newState(currentRecd);
+            }
+            return state;
+        }
+        case types.SAVE_RECORD_ERROR:
+            //TODO: look at onSaveRecordFailed method in recordPendingEditsStore
+        case types.SAVE_RECORD_COMPLETE: {
+            // TODO: not sure if need to set 'saving' on state on each when deleting
+            //
+            //  TODO: make sure state is not getting mutated!!!!
+            let currentRecd = getRecordFromState(action.id);
+            if (_.has(currentRecd, 'pendEdits')) {
+                let model = new RecordModel();
+                model.set(currentRecd.pendEdits);
+                model.setSaving(false);
+                return newState(currentRecd);
+            }
+            return state;
         }
         case types.EDIT_RECORD_START: {
             //  check if record is already in the store..
@@ -205,13 +287,15 @@ const record = (state = [], action) => {
                 if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
                     pendEdits.commitChanges[entry] = {};
                 }
-                if (typeof (pendEdits[entry].changes) === 'undefined') {
+                if (typeof (pendEdits.commitChanges[entry].changes) === 'undefined') {
                     pendEdits.commitChanges[entry].changes = [];
                 }
                 pendEdits.commitChanges[entry].changes.push(pendEdits.recordChanges);
                 pendEdits.commitChanges[entry].status = '...'; //status is pending response from server
                 return newState(currentRecd);
             }
+            return state;
+            console.log('WARNING...calling edit record commit');
             return state;
         }
         case types.EDIT_RECORD_VALIDATE_FIELD: {

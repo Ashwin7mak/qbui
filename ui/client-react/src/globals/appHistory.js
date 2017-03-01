@@ -24,7 +24,7 @@ class AppHistory {
 
             // get redux stores and call actions
             this.store = null;
-            this.flux = null;
+            //this.flux = null;
 
             // Properties needed to save records with pending edits
             //this.appId = null;
@@ -47,14 +47,16 @@ class AppHistory {
      * Setups the singleton for use with Redux store outside of React.
      * @param redux store
      */
-    setup(flux, store, editRecordCancel, editRecordCommit) {
+    setup(store, editRecordCancel, editRecordCommit, createRecord, updateRecord) {
         //  TODO remove once all stores are migrated
-        self.flux = flux;
+        //self.flux = flux;
 
         //  redux store
         self.store = store;
         self.editRecordCancel = editRecordCancel;
         self.editRecordCommit = editRecordCommit;
+        self.createRecord = createRecord;
+        self.updateRecord = updateRecord;
 
         self._setupHistoryListeners();
 
@@ -121,6 +123,38 @@ class AppHistory {
         return pendEdits;
     }
 
+    getFieldsFromFormStore() {
+        let fields = [];
+        if (self.store) {
+            const state = self.store.getState();
+            if (array.isArray(state.forms) && state.forms.length > 0) {
+                if (_.isEmpty(state.forms[0]) === false) {
+                    const formsStore = state.forms[0];
+                    if (_.has(formsStore, 'formData.fields')) {
+                        fields = state.forms[0].formData.fields;
+                    }
+                }
+            }
+        }
+        return fields;
+    }
+
+    getFieldsFromReportStore() {
+        let fields = [];
+        if (self.store) {
+            const state = self.store.getState();
+            if (array.isArray(state.forms) && state.forms.length > 0) {
+                if (_.isEmpty(state.report[0]) === false) {
+                    const reportStore = state.report[0];
+                    if (_.has(reportStore, 'data.fields')) {
+                        fields = state.reportStore[0].data.fields;
+                    }
+                }
+            }
+        }
+        return fields;
+    }
+
     /**
      * Displays a modal that asks a user about unsaved changes
      * @param onSave Function that handles if the user wants to save changes and then continue
@@ -146,22 +180,25 @@ class AppHistory {
 
     /*
      * Helper method to get fields from the right store.
-     * For inline edit on reports get fields from FieldsStore
-     * For edit form get fields from FormStore.
+     * For inline edit on reports get fields from ReportStore
+     * Otherwise, get fields from FormStore.
      */
     getFields() {
         let fields = null;
         const pendEdits = self.getPendingEditsFromStore();
         if (pendEdits.isInlineEditOpen) {
-            let fieldsStore = self.flux.store('FieldsStore').getState();
-            if (_.has(fieldsStore, 'fields.data')) {
-                fields = fieldsStore.fields.data;
-            }
+            //TODO: get from fields store?
+            fields = getFieldsFromReportStore();
+            //let fieldsStore = self.flux.store('FieldsStore').getState();
+            //if (_.has(fieldsStore, 'fields.data')) {
+            //    fields = fieldsStore.fields.data;
+            //}
         } else {
-            let formsStore = self.flux.store('FormStore').getState();
-            if (_.has(formsStore, 'editFormData.fields')) {
-                fields = formsStore.editFormData.fields;
-            }
+            fields = getFieldsFromFormStore();
+            //let formsStore = self.flux.store('FormStore').getState();
+            //if (_.has(formsStore, 'editFormData.fields')) {
+            //    fields = formsStore.editFormData.fields;
+            //}
         }
         return fields;
     }
@@ -182,15 +219,31 @@ class AppHistory {
 
         if (pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
             // handle record add
-            self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
-                .then(self._onRecordSaved, self._onRecordSavedError);
+            //self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
+            //    .then(self._onRecordSaved, self._onRecordSavedError);
             //self._handleRecordAdd();
+            self.store.dispatch(self.createRecord(appId, tableId, pendEdits.recordChanges, fields)).then(
+                () => {
+                    self._continueToDestination();
+                },
+                () => {
+                    self._haltRouteChange();
+                }
+            );
         } else {
-            self.store.dispatch(appId, tableId, recordId);
+            //self.store.dispatch(appId, tableId, recordId);
             //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
-            self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields)
-                .then(self._onRecordSaved, self._onRecordSavedError);
+            //self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)
+            //    .then(self._onRecordSaved, self._onRecordSavedError);
             //self._handleRecordChange();
+            self.store.dispatch(self.updateRecord(appId, tableId, recordId, pendEdits, fields, null, false)).then(
+                () => {
+                    self._continueToDestination();
+                },
+                () => {
+                    self._haltRouteChange();
+                }
+            );
         }
     }
 
@@ -206,13 +259,13 @@ class AppHistory {
     //        .then(self._onRecordSaved, self._onRecordSavedError);
     //}
 
-    _onRecordSaved() {
-        self._continueToDestination();
-    }
-
-    _onRecordSavedError() {
-        self._haltRouteChange();
-    }
+    //_onRecordSaved() {
+    //    self._continueToDestination();
+    //}
+    //
+    //_onRecordSavedError() {
+    //    self._haltRouteChange();
+    //}
 
     _discardChanges(hideModal = true) {
 

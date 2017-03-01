@@ -95,6 +95,14 @@ class RecordModel {
         this.model.recId = recId;
     }
 
+    setRecordChanges(appId, tblId, recId, changes) {
+        this.model.currentEditingAppId = appId;
+        this.model.currentEditingTableId = tblId;
+        this.model.currentEditingRecordId = recId;
+        this.model.recordChanges = changes;
+        this.setSaving(true);
+    }
+
     setErrors(errors) {
         // initialize
         this.model.editErrors = {

@@ -8,6 +8,7 @@ import {Link} from 'react-router';
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
@@ -18,7 +19,7 @@ import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
-import {APP_ROUTE} from '../../constants/urlConstants';
+import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -100,10 +101,11 @@ const ReportRoute = React.createClass({
     editNewRecord() {
 
         // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
-
-        this.props.dispatch(editNewRecord());
+        //const flux = this.getFlux();
+        //flux.actions.editNewRecord();
+        //
+        //this.props.dispatch(editNewRecord());
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {

@@ -12,6 +12,8 @@ import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import * as TableActions from '../../actions/tableActions';
 import {CONTEXT} from '../../actions/context';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
+import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -68,10 +70,12 @@ export const TableHomePageRoute = React.createClass({
      */
     editNewRecord() {
         // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
+        //const flux = this.getFlux();
+        //flux.actions.editNewRecord();
+        //
+        //this.props.dispatch(editNewRecord());
 
-        this.props.dispatch(editNewRecord());
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     getPageActions(maxButtonsBeforeMenu) {

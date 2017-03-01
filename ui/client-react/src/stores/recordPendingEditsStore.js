@@ -24,16 +24,16 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             //actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             //actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
             //actions.RECORD_EDIT_VALIDATE_FIELD, this.onRecordEditValidateField,
-            actions.SAVE_REPORT_RECORD, this.onSaveRecord,
-            actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
-            actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
+            //actions.SAVE_REPORT_RECORD, this.onSaveRecord,
+            //actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            //actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             //actions.DELETE_RECORD, this.onStartEdit,
             //actions.DELETE_RECORD_BULK, this.onStartEdit,
             //actions.DELETE_RECORD_FAILED, this.onDeleteRecordFailed,
             //actions.DELETE_RECORD_BULK_FAILED, this.onDeleteRecordBulkFailed,
-            actions.ADD_RECORD, this.onSaveAddedRecord,
-            actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
+            //actions.ADD_RECORD, this.onSaveAddedRecord,
+            //actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
+            //actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
             actions.AFTER_RECORD_EDIT, this.onAfterEdit,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
@@ -346,36 +346,36 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      *      app/tbl/recIds
      *      changes - array of changed rec values
      */
-    onSaveRecord(payload) {
-        this.currentEditingAppId = payload.appId;
-        this.currentEditingTableId = payload.tblId;
-        this.currentEditingRecordId = payload.recId;
-        let changes = payload.changes;
-        this.onStartEdit();
-    },
+    //onSaveRecord(payload) {
+    //    this.currentEditingAppId = payload.appId;
+    //    this.currentEditingTableId = payload.tblId;
+    //    this.currentEditingRecordId = payload.recId;
+    //    let changes = payload.changes;
+    //    this.onStartEdit();
+    //},
 
     /**
      * On successful save of pending changes on an existing record
      * note the committed success and set pendingEdits to false
      * @param payload - the recid
      */
-    onSaveRecordSuccess(payload) {
-        this.currentEditingRecordId = payload.recId;
-        let entry = this._getEntryKey();
-        if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.SAVE_RECORD_SUCCESS;
-        }
-        this.isPendingEdit = false;
-        this.isInlineEditOpen = false;
-        this.recordEditOpen = false;
-        this.recordChanges = {};
-        this.editErrors = {
-            ok: true,
-            errors:[]
-        };
-        this.emit('change');
-
-    },
+    //onSaveRecordSuccess(payload) {
+    //    this.currentEditingRecordId = payload.recId;
+    //    let entry = this._getEntryKey();
+    //    if (typeof (this.commitChanges[entry]) !== 'undefined') {
+    //        this.commitChanges[entry].status = actions.SAVE_RECORD_SUCCESS;
+    //    }
+    //    this.isPendingEdit = false;
+    //    this.isInlineEditOpen = false;
+    //    this.recordEditOpen = false;
+    //    this.recordChanges = {};
+    //    this.editErrors = {
+    //        ok: true,
+    //        errors:[]
+    //    };
+    //    this.emit('change');
+    //
+    //},
     handleErrors(payload) {
         this.getServerErrs(payload);
         if (payload.error) {
@@ -409,83 +409,83 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * note the committed failure
      * @param payload - recid
      */
-    onSaveRecordFailed(payload) {
-        this.currentEditingRecordId = payload.recId;
-        let entry = this._getEntryKey();
-        if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
-        }
-        this.handleErrors(payload);
-        this.recordEditOpen = true;
-        this.hasAttemptedSave = true;
-        this.emit('change');
-    },
+    //onSaveRecordFailed(payload) {
+    //    this.currentEditingRecordId = payload.recId;
+    //    let entry = this._getEntryKey();
+    //    if (typeof (this.commitChanges[entry]) !== 'undefined') {
+    //        this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
+    //    }
+    //    this.handleErrors(payload);
+    //    this.recordEditOpen = true;
+    //    this.hasAttemptedSave = true;
+    //    this.emit('change');
+    //},
 
     /**
      * On request to save pending changes for a new record
      * @param payload
      *  - recId that has changed
      */
-    onSaveAddedRecord(payload) {
-        this.currentEditingAppId = payload.appId;
-        this.currentEditingTableId = payload.tblId;
-        this.currentEditingRecordId = null;
-        this.recordChanges = payload.changes;
-        this.onStartEdit();
-    },
+    //onSaveAddedRecord(payload) {
+    //    this.currentEditingAppId = payload.appId;
+    //    this.currentEditingTableId = payload.tblId;
+    //    this.currentEditingRecordId = null;
+    //    this.recordChanges = payload.changes;
+    //    this.onStartEdit();
+    //},
 
     /**
      * On successful save of pending changes for a new record
      * notes the committed success and sets pendingEdits to false
      * @param payload - the recId
      */
-    onAddRecordSuccess(payload) {
-        this.currentEditingRecordId = payload.recId;
-        let entry = this._getEntryKey();
-        if (typeof (this.commitChanges[entry]) === 'undefined') {
-            this.commitChanges[entry] = {};
-        }
-        if (typeof (this.commitChanges[entry].changes) === 'undefined') {
-            this.commitChanges[entry].changes = [];
-        }
-        this.commitChanges[entry].changes.push(this.recordChanges);
-        if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.ADD_RECORD_SUCCESS;
-        }
-        this.isPendingEdit = false;
-
-        if (this.isInlineEditOpen) {
-            this.isInlineEditOpen = false;
-        }
-        this.recordEditOpen = false;
-        this.recordChanges = {};
-        this.editErrors = {
-            ok: true,
-            errors:[]
-        };
-        this.emit('change');
-    },
+    //onAddRecordSuccess(payload) {
+    //    this.currentEditingRecordId = payload.recId;
+    //    let entry = this._getEntryKey();
+    //    if (typeof (this.commitChanges[entry]) === 'undefined') {
+    //        this.commitChanges[entry] = {};
+    //    }
+    //    if (typeof (this.commitChanges[entry].changes) === 'undefined') {
+    //        this.commitChanges[entry].changes = [];
+    //    }
+    //    this.commitChanges[entry].changes.push(this.recordChanges);
+    //    if (typeof (this.commitChanges[entry]) !== 'undefined') {
+    //        this.commitChanges[entry].status = actions.ADD_RECORD_SUCCESS;
+    //    }
+    //    this.isPendingEdit = false;
+    //
+    //    if (this.isInlineEditOpen) {
+    //        this.isInlineEditOpen = false;
+    //    }
+    //    this.recordEditOpen = false;
+    //    this.recordChanges = {};
+    //    this.editErrors = {
+    //        ok: true,
+    //        errors:[]
+    //    };
+    //    this.emit('change');
+    //},
 
     /**
      * On failure to save pending changes for a new record
      * notes the failure
      * @param payload - the recid
      */
-    onAddRecordFailed(payload) {
-        this.currentEditingRecordId = payload.recId;
-        //TBD what if no recId for new rec on fail
-        let entry = this._getEntryKey();
-        if (typeof (this.commitChanges[entry]) === 'undefined') {
-            this.commitChanges[entry] = {};
-        }
-        if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
-        }
-
-        this.handleErrors(payload);
-        this.hasAttemptedSave = true;
-        this.emit('change');
-    },
+    //onAddRecordFailed(payload) {
+    //    this.currentEditingRecordId = payload.recId;
+    //    //TBD what if no recId for new rec on fail
+    //    let entry = this._getEntryKey();
+    //    if (typeof (this.commitChanges[entry]) === 'undefined') {
+    //        this.commitChanges[entry] = {};
+    //    }
+    //    if (typeof (this.commitChanges[entry]) !== 'undefined') {
+    //        this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
+    //    }
+    //
+    //    this.handleErrors(payload);
+    //    this.hasAttemptedSave = true;
+    //    this.emit('change');
+    //},
     //onDeleteRecordFailed(payload) {
     //    this.handleErrors(payload);
     //    this.emit('change');
