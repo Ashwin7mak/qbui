@@ -216,6 +216,7 @@ const record = (state = [], action) => {
             return state;
         }
         case types.SAVE_RECORD_ERROR:
+            //TODO: look at onSaveRecordFailed method in recordPendingEditsStore
         case types.SAVE_RECORD_COMPLETE: {
             // TODO: not sure if need to set 'saving' on state on each when deleting
             //
