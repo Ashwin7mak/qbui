@@ -55,10 +55,12 @@ class AutoScroll extends Component {
         this.animationId = undefined;
         this.scrollDown = this.scrollDown.bind(this);
         this.scrollUp = this.scrollUp.bind(this);
+        this.getContainerDimension = this.getContainerDimension.bind(this);
         this.updateScrolling = this.updateScrolling.bind(this);
         this.stopScrolling = this.stopScrolling.bind(this);
         this.activateMouseMove = this.activateMouseMove.bind(this);
         this.getContainer = this.getContainer.bind(this);
+        this.getContainerBottom = this.getContainerBottom.bind(this);
     }
 
     componentDidMount() {
@@ -98,22 +100,10 @@ class AutoScroll extends Component {
         let pointerY;
         let pointerX;
 
-        let windowInnerHeight = window.innerHeight;
-        let windowInnerWidth = window.innerWidth;
+        let {windowInnerHeight, windowInnerWidth, containerWidth, containerOffsetLeft, containerOffSetHeight, containerOffSetTop} = this.getContainerDimension(this.getContainer());
 
-        let container = this.getContainer();
-
-        let containerWidth = container.offsetWidth;
-        let containerOffsetLeft = container.offsetLeft;
-
-        let containerOffSetHeight = container.offsetHeight;
-        let containerOffSetTop = container.offsetTop;
         let containerTop = containerOffSetTop;
-
         let containerRightSide = containerOffsetLeft + containerWidth;
-        /**
-         * This is making the assumption the bottom of the container is not positioned at the bottom of the page
-         * */
         let containerBottom =  windowInnerHeight - (containerOffSetTop + containerOffSetHeight);
 
         if (e.type === 'touchmove') {
@@ -123,27 +113,17 @@ class AutoScroll extends Component {
             pointerY = e.clientY;
             pointerX = e.clientX;
         }
-        /**
-         * If the Container is equal to or has the same height as the window, then we will just set the bottom to the window's bottom
-         * We also subtract 40px to allow the scrolling to start 40 pixels before the mouse or touch gets to the bottom of the page
-         * */
+
         if (windowInnerHeight <= containerOffSetHeight) {
-            if (this.props.pixelsFromBottom) {
-                containerBottom = windowInnerHeight - this.props.pixelsFromBottom;
-            } else {
-                containerBottom = windowInnerHeight - 40;
-            }
+            containerBottom = this.getContainerBottom(windowInnerHeight);
         }
 
-        /**
-         * Allows a developer to add extra pixels from the top allowing autoscroll to activate sooner
-         * */
         if (this.props.pixelsFromTop) {
-            containerTop = containerTop + this.props.pixelsFromTop;
+            containerTop = this.getContainerTop(containerTop);
         }
 
         /**
-         * Activating auto scroll is contained withing the element
+         * Activating auto scroll only if it is in the designated scroll zone withing the container
          * */
         if (pointerY > containerBottom && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
             this.animationId = window.requestAnimationFrame(this.scrollDown);
@@ -151,6 +131,40 @@ class AutoScroll extends Component {
             this.animationId = window.requestAnimationFrame(this.scrollUp);
         } else {
             this.stopScrolling();
+        }
+    }
+
+    getContainerDimension(container) {
+        return {
+            windowInnerHeight: window.innerHeight,
+            windowInnerWidth: window.innerWidth,
+
+            containerOffsetLeft: container.offsetLeft,
+            containerWidth: container.offsetWidth,
+
+            containerOffSetHeight: container.offsetHeight,
+            containerOffSetTop: container.offsetTop,
+        }
+
+    }
+
+    getContainerTop(containerTop) {
+        /**
+         * Allows a developer to add extra pixels from the top allowing autoscroll to activate sooner
+         * */
+        return containerTop + this.props.pixelsFromTop
+    }
+
+    getContainerBottom(windowInnerHeight) {
+        /**
+         * If the Container is equal to or has the same height as the window, then we will just set the bottom to the window's bottom
+         * We also subtract a default of 40px to allow the scrolling to start 40 pixels before the mouse or touch gets to the bottom of the container
+         * An optional prop can be passed to add additional or less pixels.
+         * */
+        if (this.props.pixelsFromBottom) {
+            return windowInnerHeight - this.props.pixelsFromBottom;
+        } else {
+            return windowInnerHeight - 40;
         }
     }
 
