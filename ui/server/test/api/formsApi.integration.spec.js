@@ -49,32 +49,25 @@
             //create app, table with random fields and records
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
-
-                //create table properties object
-                var tablePropertiesEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                let propsJson = {"tableNoun":"' + tableNoun + '"};
-
-                recordBase.apiBase.executeRequest(tablePropertiesEndpoint, consts.POST, propsJson).then(function(result) {
-                    var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
-                    // Generate some record JSON objects to add to the app
-                    var generatedRecords = recordBase.generateRecords(nonBuiltInFields, 5);
-                    //Add records to the table
-                    recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(recordIdList) {
-                        assert(recordIdList.length, generatedRecords.length, 'Num of records created does not match num of expected records');
-                        //create a form
-                        var formEndpoint = recordBase.apiBase.resolveFormsEndpoint(app.id, app.tables[0].id);
-                        var formToCreate = {
-                            tableId: app.tables[0].id,
-                            appId: app.id,
-                            name: 'testForm'
-                        };
-                        //Create a form
-                        recordBase.apiBase.executeRequest(formEndpoint, consts.POST, formToCreate).then(function(reportResults) {
-                            formId = JSON.parse(reportResults.body).id;
-                            done();
-                        });
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                var nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
+                // Generate some record JSON objects to add to the app
+                var generatedRecords = recordBase.generateRecords(nonBuiltInFields, 5);
+                //Add records to the table
+                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(recordIdList) {
+                    assert(recordIdList.length, generatedRecords.length, 'Num of records created does not match num of expected records');
+                    //create a form
+                    var formEndpoint = recordBase.apiBase.resolveFormsEndpoint(app.id, app.tables[0].id);
+                    var formToCreate = {
+                        tableId: app.tables[0].id,
+                        appId: app.id,
+                        name: 'testForm'
+                    };
+                    //Create a form
+                    recordBase.apiBase.executeRequest(formEndpoint, consts.POST, formToCreate).then(function(reportResults) {
+                        formId = JSON.parse(reportResults.body).id;
+                        done();
                     });
                 });
             }).catch(function(error) {
