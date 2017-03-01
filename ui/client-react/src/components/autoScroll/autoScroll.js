@@ -100,10 +100,8 @@ class AutoScroll extends Component {
 
         return {
             containerOffsetLeft: container.offsetLeft,
-            containerOffSetHeight: container.offsetHeight,
-            containerOffSetTop: container.offsetTop,
             containerRightSide: container.offsetLeft + container.offsetWidth,
-            //Autoscroll activates 40 pixels before it reaches the bottom or top of the container
+            //Autoscroll activates 30 pixels before it reaches the bottom or top of the container
             containerBottom: container.offsetHeight - 30,
             containerTop: container.offsetTop + 30
         };
@@ -149,7 +147,7 @@ class AutoScroll extends Component {
         let pointerY;
         let pointerX;
 
-        let {containerOffsetLeft, containerOffSetHeight, containerOffSetTop, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
+        let {containerOffsetLeft, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
 
         if (e.type === 'touchmove') {
             pointerY = e.touches[0].clientY;
