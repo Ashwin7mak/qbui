@@ -26,7 +26,7 @@ BodyWrapper.shouldComponentUpdate = true;
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
 
-class FeatureSwitchesRoute extends React.Component {
+export class FeatureSwitchesRoute extends React.Component {
 
     constructor(props) {
         super(props);
@@ -120,6 +120,7 @@ class FeatureSwitchesRoute extends React.Component {
      * create new feature switch
      */
     createFeatureSwitch() {
+
         this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then(() => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'),
                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -244,12 +245,12 @@ class FeatureSwitchesRoute extends React.Component {
                 property: 'selected',
                 header: {
                     formatters: [
-                        (data, {rowData}) => <input type="checkbox" checked={this.state.allSelected} onChange={(e) => {this.selectAll(e.target.checked);}}/>
+                        (data, {rowData}) => <input className="selectAll" type="checkbox" checked={this.state.allSelected} onChange={(e) => {this.selectAll(e.target.checked);}}/>
                     ]
                 },
                 cell: {
                     formatters: [
-                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedIDs.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
+                        (data, {rowData}) => <input className="selectRow" type="checkbox" checked={this.state.selectedIDs.indexOf(rowData.id) !== -1} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
                     ]
                 }
             },
@@ -293,6 +294,7 @@ class FeatureSwitchesRoute extends React.Component {
                         (value, {rowData}) => {
                             return (
                                 <ToggleButton value={value}
+                                              passThroughInputProps={{className: 'toggleButton'}}
                                               onToggle={newValue => {
                                                   this.updateFeatureSwitch(rowData.id, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, !newValue);
                                               }}/>);
@@ -321,7 +323,7 @@ class FeatureSwitchesRoute extends React.Component {
                 <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
 
                 <div className="globalButtons">
-                    <button onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                    <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
                 </div>
 
                 <Table.Provider className="featureSwitchTable switches"
@@ -342,9 +344,9 @@ class FeatureSwitchesRoute extends React.Component {
 
                 <div className="selectionButtons">
 
-                    <button disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                    <button disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                    <button disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                    <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                    <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                    <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                     <span>{selectedSizeLabel}</span>
                 </div>
 
