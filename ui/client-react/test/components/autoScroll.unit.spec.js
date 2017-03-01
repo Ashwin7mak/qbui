@@ -11,12 +11,12 @@ let container = {
     offsetTop: 10
 };
 
-fdescribe('AutoScroll', () => {
+describe('AutoScroll', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
 
-    fit('should call scrollUp when the mouse is in the top scroll zone', function() {
+    it('should call scrollUp when the mouse is in the top scroll zone', function() {
 
         let e = {
             type: 'foo',
@@ -37,7 +37,7 @@ fdescribe('AutoScroll', () => {
         expect(window.requestAnimationFrame).toHaveBeenCalledWith(instance.scrollUp);
     });
 
-    fit('should call scrollDown when the mouse is in the bottom scroll zone', function() {
+    it('should call scrollDown when the mouse is in the bottom scroll zone', function() {
 
         let e = {
             type: 'foo',
@@ -58,7 +58,7 @@ fdescribe('AutoScroll', () => {
         expect(window.requestAnimationFrame).toHaveBeenCalledWith(instance.scrollDown);
     });
 
-    fit('should call stopScrolling when the mouse not in a scroll zone', function() {
+    it('should call stopScrolling when the mouse not in a scroll zone', function() {
 
         let e = {
             type: 'foo',
@@ -77,6 +77,46 @@ fdescribe('AutoScroll', () => {
         instance.updateScrolling(e);
 
         expect(instance.stopScrolling).toHaveBeenCalled();
+    });
+
+    it('should add extra pixels to the top of the container scroll zone when pixelsFromTop prop is passed through', function() {
+
+        let e = {
+            type: 'foo',
+            touches: [{clientY: 90}, {clientX: 90}],
+            clientX: 45,
+            clientY: 50
+        };
+
+        let component = shallow(<AutoScroll pixelsFromTop={5}/>);
+        let instance = component.instance();
+
+        spyOn(instance, 'getContainer').and.returnValue(container);
+        spyOn(instance, 'getContainerTop');
+
+        instance.updateScrolling(e);
+
+        expect(instance.getContainerTop).toHaveBeenCalled();
+    });
+
+    it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottom prop is passed through', function() {
+
+        let e = {
+            type: 'foo',
+            touches: [{clientY: 90}, {clientX: 90}],
+            clientX: 45,
+            clientY: 50
+        };
+
+        let component = shallow(<AutoScroll pixelsFromBottom={5}/>);
+        let instance = component.instance();
+
+        spyOn(instance, 'getContainer').and.returnValue(container);
+        spyOn(instance, 'getContainerBottom');
+
+        instance.updateScrolling(e);
+
+        expect(instance.getContainerBottom).toHaveBeenCalled();
     });
 
 });
