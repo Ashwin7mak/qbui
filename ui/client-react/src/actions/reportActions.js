@@ -30,32 +30,6 @@ function event(context, type, content) {
 }
 
 /**
- * Utility function for handling rejected promises.
- * This is a curried function which returns a function expecting 2 parameters, which returns another
- * function that expects an error object.
- *
- * Ex.
- *     const parseAndLogHandler = parseAndLogError(context, dispatch);
- *     const errorHandler = parseAndLogHandler(action, 'something failed!');
- *     errorHandler(new Error('oh no'));
- *
- * @param {String} context string representing the context to dispatch the failure event
- * @param {Function} dispatch dispatch funtion to call
- * @returns {Function}
- */
-const parseAndLogError = (context, dispatch) =>
-    /* @param {String} action action type for the dispatch event
-     * @param {String} errorString message to log with the Logger
-     * @returns {Function} */
-    (action, errorString) =>
-        /* @param {Error} */
-        (error) => {
-            error = error.response || error;
-            logger.parseAndLogError(LogLevel.ERROR, error, errorString);
-            dispatch(event(context, action, error));
-        };
-
-/**
  * Retrieve a list of reports for the given app/table.  This function is called primarily when
  * populating the left hand navigation window with the list of reports and when displaying a
  * trowser window that displays all of the reports for a table.
@@ -211,6 +185,32 @@ const getDynamicReportResults = ({context, appId, tblId, rptId, queryParams, for
     );
 };
 
+/**
+ * Utility function for handling rejected promises.
+ * This is a curried function which returns a function expecting 2 parameters, which returns another
+ * function that expects an error object.
+ *
+ * Ex.
+ *     const parseAndLogHandler = parseAndLogError(context, dispatch);
+ *     const errorHandler = parseAndLogHandler(action, 'something failed!');
+ *     errorHandler(new Error('oh no'));
+ *
+ * @param {String} context string representing the context to dispatch the failure event
+ * @param {Function} dispatch dispatch funtion to call
+ * @returns {Function}
+ */
+const parseAndLogError = (context, dispatch) =>
+    /* @param {String} action action type for the dispatch event
+     * @param {String} errorString message to log with the Logger
+     * @returns {Function} */
+    (action, errorString) =>
+        /* @param {Error} */
+        (error) => {
+            error = error.response || error;
+            logger.parseAndLogError(LogLevel.ERROR, error, errorString);
+            dispatch(event(context, action, error));
+        };
+
 /* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
  * sort/grouping, query and column list settings.
  *
@@ -237,10 +237,10 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
             logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
 
             dispatch(event(context, types.LOAD_REPORT, {appId, tblId, rptId}));
-            let reportService = new ReportService();
+            const reportService = new ReportService();
 
             // error handler for when a promise is rejected
-            let parseAndLogHandler = parseAndLogError(context, dispatch);
+            const parseAndLogHandler = parseAndLogError(context, dispatch);
 
             //  call node to parse the supplied facet expression into a query expression that
             //  can be included on the request.
@@ -290,10 +290,10 @@ export const loadDynamicEmbeddedReport = (context, appId, tblId, rptId, format, 
             logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
 
             dispatch(event(context, types.LOAD_EMBEDDED_REPORT, {appId, tblId, rptId}));
-            let reportService = new ReportService();
+            const reportService = new ReportService();
 
             // error handler for when a promise is rejected
-            let parseAndLogHandler = parseAndLogError(context, dispatch);
+            const parseAndLogHandler = parseAndLogError(context, dispatch);
 
             //  call node to parse the supplied facet expression into a query expression that
             //  can be included on the request.
