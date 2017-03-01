@@ -136,16 +136,16 @@ describe('MoveFieldHelper', () => {
                 let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newElementIndex);
 
                 let result = MoveFieldHelper.moveField(testFormData.formMeta, newLocation, elementProps);
-                // let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
 
-                // expect(simplifiedResult).toEqual(testCase.expectedResult);
+                expect(simplifiedResult).toEqual(testCase.expectedResult);
 
-                // if (testCase.expectedOriginalLocationSimplifiedResult) {
+                if (testCase.expectedOriginalLocationSimplifiedResult) {
                     // Expect the item to be removed from its original tab/section
-                    // let simplifiedResultForSecondTab = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
+                    let simplifiedResultForSecondTab = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
 
-                    // expect(simplifiedResultForSecondTab).toEqual(testCase.expectedOriginalLocationSimplifiedResult);
-                // }
+                    expect(simplifiedResultForSecondTab).toEqual(testCase.expectedOriginalLocationSimplifiedResult);
+                }
             });
         });
 

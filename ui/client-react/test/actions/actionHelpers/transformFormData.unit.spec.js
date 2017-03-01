@@ -95,7 +95,7 @@ describe('TransformFormData', () => {
             expect(actualSection.columns).toBeUndefined();
         });
 
-        it('puts the elements back into the secion instead of in columns', () => {
+        it('puts the elements back into the section instead of in columns', () => {
             let section = result.tabs[1].sections[0];
             let actualElements = section.elements;
 
