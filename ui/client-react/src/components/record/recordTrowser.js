@@ -238,7 +238,6 @@ export const RecordTrowser = React.createClass({
 
         this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList, true)).then(
             (obj) => {
-                this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
                 this.props.saveFormSuccess(formType);
                 if (this.props.viewingRecordId === this.props.recId) {
                     this.props.syncForm("view");

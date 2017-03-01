@@ -167,14 +167,14 @@ const record = (state = [], action) => {
                     pendEdits.commitChanges[entry].status = '...'; //status is pending response from server
                 }
 
-                model.setRecordChanges(model.appId, model.tblId, model.recId, action.content.changes);
+                model.setRecordChanges(action.content.appId, action.content.tblId, action.content.recId, action.content.changes);
             } else {
                 // saving a new record
                 currentRecd = {
                     id: action.id
                 };
                 model = new RecordModel(action.content.appId, action.content.tblId);
-                model.setRecordChanges(model.appId, model.tblId, null, action.content.changes);
+                model.setRecordChanges(action.content.appId, action.content.tblId, action.content.recId, action.content.changes);
             }
             currentRecd.pendEdits = model.get();
             return newState(currentRecd);

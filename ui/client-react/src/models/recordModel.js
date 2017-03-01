@@ -1,4 +1,5 @@
 import ValidationMessage from '../utils/validationMessage';
+import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import _ from 'lodash';
 
 class RecordModel {
@@ -99,7 +100,9 @@ class RecordModel {
         this.model.currentEditingAppId = appId;
         this.model.currentEditingTableId = tblId;
         this.model.currentEditingRecordId = recId;
-        this.model.recordChanges = changes;
+        if (recId === NEW_RECORD_VALUE) {
+            this.model.recordChanges = changes;
+        }
         this.setSaving(true);
     }
 

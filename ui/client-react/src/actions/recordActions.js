@@ -965,7 +965,14 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                                 //  flux action to update recordPendingEditsStore AND reportDataStore..to be removed
                                 //this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 //dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
-                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
+                                let report = {
+                                    context: 'NAV',
+                                    recId:recId,
+                                    record:getResponse.data
+                                };
+                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
+                                //TODO look at have SAVE_RECORD_SUCCESS in Report store to update report...will need to supply
+                                // content of the record save so that we know which store updates...if done, can remove resolve(obj)..
                                 if (showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
                                         CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
