@@ -229,17 +229,8 @@ let QBForm = React.createClass({
             );
         }
 
-        if(Device.isTouch() && this.props.editingForm) {
-            let mobileDropTargets = [];
-            for(let i = 0; i < elements.length; i++) {
-                mobileDropTargets.push(<MobileDropTarget containingElement={{id: _.uniqueId('mobile-drop')}} location={elements[i].props.children.props.location} handleFormReorder={this.props.handleFormReorder} />);
-            }
-
-            arrangedElements = [];
-            elements.forEach((element, index) => {
-                arrangedElements.push(mobileDropTargets[index]);
-                arrangedElements.push(element);
-            });
+        if (Device.isTouch() && this.props.editingForm && Array.isArray(elements)) {
+            arrangedElements = this.addTouchDropTargets(elements, newLocation);
         }
 
         return (
@@ -247,6 +238,41 @@ let QBForm = React.createClass({
                 {arrangedElements}
             </div>
         );
+    },
+
+    addTouchDropTargets(elements, location) {
+        let elementsLength = elements.length;
+        let mobileDropTargets = [];
+        for (let i = 0; i < elementsLength; i++) {
+            let id = _.uniqueId('mobile-drop');
+            mobileDropTargets.push(<MobileDropTarget key={id} containingElement={{id}} location={this.findLocationOfElement(elements[i], location)} handleFormReorder={this.props.handleFormReorder} />);
+        }
+
+        let arrangedElements = [];
+        // Adds a drop target between each element in the column
+        elements.forEach((element, index) => {
+            arrangedElements.push(mobileDropTargets[index]);
+            arrangedElements.push(element);
+        });
+
+        // We need to add one more at the bottom so the user can add a field at the bottom of the list
+        let id = _.uniqueId('mobile-drop');
+        arrangedElements.push(<MobileDropTarget key={id} containingElement={{id}} location={Object.assign({}, location, {elementIndex: elementsLength})} handleFormReorder={this.props.handleFormReorder} />);
+
+        return arrangedElements;
+    },
+
+    /**
+     * Finds the location for the passed in element
+     * @param element
+     */
+    findLocationOfElement(element, location) {
+        if (!element) {return {};}
+
+        if (_.has(element, 'props.children.props.location')) {
+            return element.props.children.props.location;
+        }
+        return Object.assign({}, location, {elementIndex: element.props.orderIndex ? element.props.orderIndex : 0});
     },
 
     /**
