@@ -95,76 +95,32 @@ class AutoScroll extends Component {
         this.animationId = window.requestAnimationFrame(this.scrollUp);
     }
 
-    updateScrolling(e) {
+    getContainerDimension() {
+        let container = this.getContainer();
 
-        let pointerY;
-        let pointerX;
-
-        let {windowInnerHeight, windowInnerWidth, containerWidth, containerOffsetLeft, containerOffSetHeight, containerOffSetTop} = this.getContainerDimension(this.getContainer());
-
-        let containerTop = containerOffSetTop;
-        let containerRightSide = containerOffsetLeft + containerWidth;
-        let containerBottom =  windowInnerHeight - (containerOffSetTop + containerOffSetHeight);
-
-        if (e.type === 'touchmove') {
-            pointerY = e.touches[0].clientY;
-            pointerX = e.touches[0].clientX;
-        } else {
-            pointerY = e.clientY;
-            pointerX = e.clientX;
-        }
-
-        if (windowInnerHeight <= containerOffSetHeight) {
-            containerBottom = this.getContainerBottom(windowInnerHeight);
-        }
-
-        if (this.props.pixelsFromTop) {
-            containerTop = this.getContainerTop(containerTop);
-        }
-
-        /**
-         * Activating auto scroll only if it is in the designated scroll zone withing the container
-         * */
-        if (pointerY > containerBottom && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
-            this.animationId = window.requestAnimationFrame(this.scrollDown);
-        } else if (pointerY < containerTop && pointerX < containerRightSide && pointerX > containerOffsetLeft) {
-            this.animationId = window.requestAnimationFrame(this.scrollUp);
-        } else {
-            this.stopScrolling();
-        }
-    }
-
-    getContainerDimension(container) {
         return {
-            windowInnerHeight: window.innerHeight,
-            windowInnerWidth: window.innerWidth,
-
             containerOffsetLeft: container.offsetLeft,
-            containerWidth: container.offsetWidth,
-
             containerOffSetHeight: container.offsetHeight,
             containerOffSetTop: container.offsetTop,
+            containerRightSide: container.offsetLeft + container.offsetWidth,
+            containerBottom: container.offsetHeight -40
         }
 
     }
 
     getContainerTop(containerTop) {
         /**
-         * Allows a developer to add extra pixels from the top allowing autoscroll to activate sooner
+         * Allows a developer to add extra pixels to the top, allowing auto scroll to activate sooner
          * */
         return containerTop + this.props.pixelsFromTop
     }
 
-    getContainerBottom(windowInnerHeight) {
+    getContainerBottom(containerBottom) {
         /**
-         * If the Container is equal to or has the same height as the window, then we will just set the bottom to the window's bottom
-         * We also subtract a default of 40px to allow the scrolling to start 40 pixels before the mouse or touch gets to the bottom of the container
-         * An optional prop can be passed to add additional or less pixels.
+         * Allows a developer to add extra pixels to the bottom, allowing auto scroll to activate sooner
          * */
         if (this.props.pixelsFromBottom) {
-            return windowInnerHeight - this.props.pixelsFromBottom;
-        } else {
-            return windowInnerHeight - 40;
+            return containerBottom - this.props.pixelsFromBottom;
         }
     }
 
@@ -184,6 +140,56 @@ class AutoScroll extends Component {
         }
 
         return container;
+    }
+
+    updateScrolling(e) {
+
+        let pointerY;
+        let pointerX;
+
+        let {containerOffsetLeft, containerOffSetHeight, containerOffSetTop, containerRightSide, containerBottom} = this.getContainerDimension();
+
+        if (e.type === 'touchmove') {
+            pointerY = e.touches[0].clientY;
+            pointerX = e.touches[0].clientX;
+        } else {
+            pointerY = e.clientY;
+            pointerX = e.clientX;
+        }
+        console.log('containerBottom: ', containerBottom);
+
+        if (this.props.pixelsFromBottom) {
+            containerBottom = this.getContainerBottom(containerBottom);
+        }
+
+        if (this.props.pixelsFromTop) {
+            containerOffSetTop = this.getContainerTop(containerOffSetTop);
+        }
+
+        /**
+         * Activate auto scroll only if it is in the designated scroll zone within the container
+         * */
+        console.log('containerBottom: ', containerBottom);
+        console.log('pointerY: ', pointerY);
+        console.log('containerOffSetHeight: ', containerOffSetHeight);
+        console.log('c: ', pointerY);
+        if (pointerY > containerBottom &&
+            pointerX < containerRightSide &&
+            pointerX > containerOffsetLeft) {
+
+            this.animationId = window.requestAnimationFrame(this.scrollDown);
+
+        } else if (pointerY < containerOffSetTop &&
+                   pointerX < containerRightSide &&
+                   pointerX > containerOffsetLeft) {
+
+            this.animationId = window.requestAnimationFrame(this.scrollUp);
+
+        } else {
+
+            this.stopScrolling();
+
+        }
     }
 
     render() {

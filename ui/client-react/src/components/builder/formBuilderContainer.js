@@ -121,8 +121,8 @@ export const FormBuilderContainer = React.createClass({
 
                 <AutoScroll
                     pixelsPerFrame={10}
-                    pixelsFromTop={50}
-                    pixelsFromBottom={50}>
+                    pixelsFromTop={30}
+                    pixelsFromBottom={30}>
                     <div className="formBuilderContent">
                         <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                             <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
