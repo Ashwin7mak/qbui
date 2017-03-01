@@ -91,9 +91,8 @@ let appsActions = {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             let roleService = new RoleService();
-
             // fetch the app roles list if we don't have it already
-            if (appId !== this.selectedAppId) {
+            if (!this.appRoles || this.appRoles.length === 0) {
                 roleService.getAppRoles(appId).then(response => {
                     this.dispatch(actions.LOAD_APP_ROLES_SUCCESS, response.data);
                     resolve();

@@ -12,9 +12,24 @@ describe('AppUsersRoute functions', () => {
     const appRoles = [{"9": {"id": 1, "name": "none", "tableRights": {}, "fieldRights": {}, "description": "", "access": "NONE"}}];
     const appId = 1;
 
+    const flux = {
+        actions:{
+            loadAppRoles: function() {return;}
+        }
+    };
+
+    beforeEach(() => {
+        spyOn(flux.actions, 'loadAppRoles');
+    });
+
+    afterEach(() => {
+        flux.actions.loadAppRoles.calls.reset();
+    });
+
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
                                                                     appRoles={appRoles}
+                                                                    flux={flux}
                                                                     params={{appId: appId}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });

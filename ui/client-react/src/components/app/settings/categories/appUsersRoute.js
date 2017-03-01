@@ -10,6 +10,24 @@ let logger = new Logger();
 
 const AppUsersRoute = React.createClass({
 
+    componentDidMount() {
+        this.props.flux.actions.loadAppRoles(this.props.params.appId);
+    },
+
+    componentWillReceiveProps(props) {
+        if (props.params.appId) {
+            if (this.props.params.appId !== props.params.appId) {
+                this.props.flux.actions.loadAppRoles(this.props.params.appId);
+            }
+        } else {
+            this.props.flux.actions.loadAppRoles(null);
+        }
+
+        if (this.props.params.appId !== props.params.appId) {
+            this.props.flux.actions.loadAppRoles(this.props.params.appId);
+        }
+    },
+
     render() {
         return (
             <UserManagement appId={this.props.params.appId}

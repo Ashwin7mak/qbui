@@ -47,7 +47,6 @@ let NavWrapper = React.createClass({
 
         if (this.props.params.appId) {
             this.props.flux.actions.selectAppId(this.props.params.appId);
-            this.props.flux.actions.loadAppRoles(this.props.params.appId);
 
             if (this.props.params.tblId) {
                 this.props.flux.actions.selectTableId(this.props.params.tblId);
@@ -74,16 +73,13 @@ let NavWrapper = React.createClass({
         if (props.params.appId) {
             if (this.props.params.appId !== props.params.appId) {
                 this.props.flux.actions.selectAppId(props.params.appId);
-                this.props.flux.actions.loadAppRoles(this.props.params.appId);
             }
         } else {
             this.props.flux.actions.selectAppId(null);
-            this.props.flux.actions.loadAppRoles(null);
         }
 
         if (this.props.params.appId !== props.params.appId) {
             this.props.flux.actions.selectAppId(props.params.appId);
-            this.props.flux.actions.loadAppRoles(this.props.params.appId);
         }
         if (props.params.tblId) {
             if (this.props.params.tblId !== props.params.tblId) {
