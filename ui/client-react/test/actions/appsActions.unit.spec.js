@@ -1,7 +1,6 @@
 import Fluxxor from 'fluxxor';
 import appsActions, {__RewireAPI__ as appsActionsRewireAPI} from '../../src/actions/appsActions';
 import * as actions from '../../src/constants/actions';
-import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 import {APP_ROUTE} from '../../src/constants/urlConstants';
 
@@ -9,6 +8,7 @@ describe('Apps Actions functions with Tables', () => {
     'use strict';
 
     let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
+    let appRoleResponeData = [4, 5, 6];
 
     class mockAppService {
         constructor() { }
@@ -26,7 +26,7 @@ describe('Apps Actions functions with Tables', () => {
     class mockRoleService {
         constructor() { }
         getAppRoles(id) {
-            return Promise.resolve({data: responseData});
+            return Promise.resolve({data: appRoleResponeData});
         }
     }
 
@@ -108,16 +108,18 @@ describe('Apps Actions functions with Tables', () => {
 
     var loadAppRolesTests = [
         {name:'load app roles with app roles not cached', appId: 187, cached: false, appRoles: [1]},
-        {name:'load app roles with app roles cached', appId: 123, cached: true, appRoles: [1, 2, 3]}
     ];
     loadAppRolesTests.forEach(function(test) {
         it(test.name, function(done) {
-            flux.actions.appRoles = test.appRoles;
             flux.actions.loadAppRoles(test.appId).then(
                 () => {
-                    expect(mockRoleService.prototype.getAppRoles).toHaveBeenCalledWith(test.appId);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_SUCCESS, responseData]);
+                    if (test.cached === true) {
+                        expect(mockRoleService.prototype.getAppRoles).not.toHaveBeenCalled();
+                    } else {
+                        expect(mockRoleService.prototype.getAppRoles).toHaveBeenCalledWith(test.appId);
+                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_SUCCESS, appRoleResponeData]);
+                    }
                     done();
                 },
                 () => {
