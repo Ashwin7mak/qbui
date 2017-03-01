@@ -5,7 +5,7 @@
     'use strict';
     var DURATION_CONSTS = require('../../../../common/src/constants').DURATION_CONSTS;
     var durationFormatter = require('../../../../common/src/formatter/durationFormatter');
-    var Locale = require('../../locales/locales');
+    var Locale = require('../../locales/locales').default;
     var regexNumsDecimalsColons = /-?[0-9.:]+/g;
     var removeCommas = /[,]+/g;
     /**

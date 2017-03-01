@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
-import {Button, Dropdown, MenuItem} from 'react-bootstrap';
+import Button from 'react-bootstrap/lib/Button';
+import Dropdown from 'react-bootstrap/lib/Dropdown';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 import * as FieldConsts from '../../../constants/schema';
 import Locale from '../../../locales/locales';
 import {I18nMessage} from '../../../utils/i18nMessage';

@@ -1,7 +1,7 @@
 import React from 'react';
-
 import QBicon from '../qbIcon/qbIcon';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
 /**
  * an action icon link with a tooltip (icon is from quickbase icon font)

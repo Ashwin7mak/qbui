@@ -1,14 +1,9 @@
-import React,  {Component}from 'react';
-import {Dropdown, MenuItem, ListGroup, Panel, ListGroupItem} from 'react-bootstrap';
-import QBPanel from '../QBPanel/qbpanel.js';
-
+import React,  {Component} from 'react';
+import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 import './facet.scss';
 import  {facetItemValueShape, facetShape} from './facetProps';
-
 import Logger from '../../utils/logger';
-import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
-import simpleStringify from '../../../../common/src/simpleStringify';
 import _ from 'lodash';
 let logger = new Logger();
 

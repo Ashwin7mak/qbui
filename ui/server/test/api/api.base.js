@@ -314,7 +314,7 @@
                 var opts;
                 if (isEE) {
                     opts = generateEERequestOpts(stringPath, method, subdomain);
-                }else {
+                } else {
                     opts = generateRequestOpts(stringPath, method, subdomain);
                 }
                 if (body) {
@@ -350,6 +350,7 @@
             },
 
             executeEERequest              : function(stringPath, method, body, headers, params) {
+
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {

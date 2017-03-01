@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import QBToolTip  from '../../src/components/qbToolTip/qbToolTip';
+import QBToolTip, {__RewireAPI__ as QBToolTipRewireAPI}  from '../../src/components/qbToolTip/qbToolTip';
 
 var I18nMessageMock = React.createClass({
     render: function() {
@@ -14,11 +14,11 @@ describe('QBToolTip functions', () => {
     'use strict';
 
     beforeEach(() => {
-        QBToolTip.__Rewire__('I18nMessage', I18nMessageMock);
+        QBToolTipRewireAPI.__Rewire__('I18nMessage', I18nMessageMock);
     });
 
     afterEach(() => {
-        QBToolTip.__ResetDependency__('I18nMessage');
+        QBToolTipRewireAPI.__ResetDependency__('I18nMessage');
     });
 
 

@@ -60,7 +60,7 @@ class Locale {
             bundle = require('../locales/bundles/en_us');
         }
 
-        return bundle;
+        return bundle.default;
     }
 
     /**

@@ -7,10 +7,14 @@
     min-width: 100%;
     overflow: auto;
 
-    .loadedContent {
+    .formBuilderContent {
+        flex: 1 auto;
+        max-height: 100%;
         overflow: auto;
-        padding-bottom: 65px;
-        width: 100%;
+    }
+
+    .formContainer {
+        padding-bottom: 70px;
     }
 
     @include small-breakpoint {

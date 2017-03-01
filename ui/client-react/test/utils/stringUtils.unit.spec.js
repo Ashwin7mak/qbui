@@ -28,7 +28,7 @@ describe('StringUtils - test trim function with invalid data types', () => {
     var bool = true;
     var func = new function() {
         return true;
-    };
+    }();
 
     var dataProvider = [
         {test:'array', type:arr},
