@@ -110,6 +110,11 @@
                     // Set the global app object for use below
                     createdApp = appResponse;
                 }).then(function() {
+                    // Initialize table properties for generated tables
+                    createdApp.tables.forEach(function(table, index) {
+                        return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
+                    });
+                }).then(function() {
                     // Generate and add the default set of Users to the app
                     return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
                 }).then(function() {
