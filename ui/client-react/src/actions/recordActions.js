@@ -857,7 +857,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
             }
         });
     };
-}
+};
 
 /**
  * Save changes to an existing record.
