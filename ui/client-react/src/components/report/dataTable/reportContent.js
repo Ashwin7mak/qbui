@@ -8,6 +8,7 @@ import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import ReportUtils from '../../../utils/reportUtils';
+import WindowLocationUtils from '../../../utils/windowLocationUtils';
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
@@ -20,11 +21,10 @@ import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
-import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
-import {openRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField} from '../../../actions/recordActions';
-import {updateReportRecord} from '../../../actions/reportActions';
-import {APP_ROUTE} from '../../../constants/urlConstants';
+import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
+import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
+import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 
 let logger = new Logger();
@@ -59,15 +59,31 @@ export const ReportContent = React.createClass({
         }
     },
 
+    openRowToView(row) {
+        const {appId, tblId, rptId} = this.props.reportData;
+
+        var recId = row;
+        //  for small breakpoint, row is an object..
+        if (!_.isNumber(row)) {
+            recId = row[this.props.primaryKeyName].value;
+        }
+
+        this.openRow(recId);
+        //create the link we want to send the user to and then send them on their way
+        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        if (this.props.router) {
+            this.props.router.push(link);
+        }
+    },
+
     // row was clicked in the report; navigate to record
     openRow(recId) {
-        const {appId, tblId, rptId} = this.props.reportData;
-        const key = this.props.primaryKeyName;
-
         //  data is the row object...get the record id
         //let recId = data[key].value;
 
-        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+        //  TODO: improve the retrieve of a report
+        //const {filteredRecords, hasGrouping} = this.props.reportData.data;
+        const {filteredRecords, hasGrouping} = this.props.report[0].data;
 
         let recordsArray = [];
         if (hasGrouping) {
@@ -78,23 +94,23 @@ export const ReportContent = React.createClass({
         }
 
         //  fetch the index of the row in the recordsArray that is being opened
+        const key = this.props.primaryKeyName;
         const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
-
-        //  get the previous and next records id...these are used for navigation when viewing the record detail on the form
-        let nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
-        let previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
-
+        let nextRecordId = null;
+        let previousRecordId = null;
+        if (recId === "new" || index === -1) {
+            // new record, no prev/next navigation
+            nextRecordId = previousRecordId = null;
+        } else {
+            //  get the previous and next records id...these are used for navigation when viewing the record detail on the form
+            nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][key].value : null;
+            previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
+        }
 
         // let flux know we've drilled-down into a record so we can navigate back and forth
         //let flux = this.getFlux();
         //flux.actions.openingReportRow(recId);
-        this.props.dispatch(openRecord(recId, nextRecordId, previousRecordId));
-
-        //create the link we want to send the user to and then send them on their way
-        const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.router) {
-            this.props.router.push(link);
-        }
+        this.props.openRecord(recId, nextRecordId, previousRecordId);
     },
 
     /**
@@ -298,13 +314,13 @@ export const ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
-            let saveRecordPromise = this.handleRecordSaveClicked(recordId, true);
+            let saveRecordPromise = this.handleRecordSaveClicked(recordId, true, true);
 
             // After saving the record successfully, then add the new row
             // Don't do anything if the record wasn't saved successfully or a promise was not returned
-            if (saveRecordPromise) {
-                return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
-            }
+            //if (saveRecordPromise) {
+            //    return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
+            //}
         } else {
             return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
         }
@@ -329,7 +345,7 @@ export const ReportContent = React.createClass({
      * User wants to save changes to a record.
      * @param id
      */
-    handleRecordSaveClicked(id, addNewRecord = false) {
+    handleRecordSaveClicked(id, addNewRecord = false, addNewRow = false) {
         let recordId = id;
         // To maintain compatibility with AgGrid
         if (_.isObject(id)) {
@@ -343,9 +359,9 @@ export const ReportContent = React.createClass({
             if (pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(pendEdits.recordChanges);
             }
-            return this.handleRecordAdd(recordChanges, addNewRecord);
+            return this.handleRecordAdd(recordChanges, addNewRecord, addNewRow);
         } else {
-            return this.handleRecordChange(recordId, addNewRecord);
+            return this.handleRecordChange(recordId);
         }
     },
 
@@ -373,8 +389,9 @@ export const ReportContent = React.createClass({
      * @returns {{confirmDeletesDialogOpen: boolean}}
      */
     deleteRecord() {
-        const flux = this.getFlux();
-        flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
+        //const flux = this.getFlux();
+        //flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
+        this.props.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
 
@@ -407,7 +424,7 @@ export const ReportContent = React.createClass({
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges, addNewRecordAfterSave = false) {
+    handleRecordAdd(recordChanges, addNewRecordAfterSave = false, addNewRow = false) {
         const flux = this.getFlux();
 
         let fields = {};
@@ -418,7 +435,16 @@ export const ReportContent = React.createClass({
                 colList.push(field.id);
             });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
+
+        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave)).then(
+            (obj) => {
+                if (addNewRow) {
+                    this.addNewRowAfterRecordSaveSuccess();
+                }
+            }
+        );
+
+        ///return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
 
     /**
@@ -426,7 +452,7 @@ export const ReportContent = React.createClass({
      * @param recId
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(id, addNewRecordAfterSave = false) {
+    handleRecordChange(id) {
         let recordId = id;
         // To maintain compatibility with AgGrid
         if (_.isObject(id)) {
@@ -440,14 +466,15 @@ export const ReportContent = React.createClass({
                 colList.push(field.id);
             });
             //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
-            this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
+            //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
             let pendEdits = this.getPendEdits();
-            let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
-            promise.then((obj) => {
-                //  Temporary solution to display a redux event to update the report grid with in-line editor change
-                //  This will get refactored once the record store is moved to redux
-                this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
-            });
+            //let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, true);
+
+            //let promise = this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
+            //promise.then((obj) => {
+            //    this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
+            //});
         }
     },
 
@@ -513,9 +540,12 @@ export const ReportContent = React.createClass({
     },
 
     toggleSelectedRow(id) {
-        const flux = this.getFlux();
 
-        let selectedRows = this.props.selectedRows;
+        //let selectedRows = this.props.selectedRows || [];
+        let selectedRows = this.props.reportData.selectedRows;
+        if (!Array.isArray(selectedRows)) {
+            selectedRows = [];
+        }
 
         if (selectedRows.indexOf(id) === -1) {
             // not already selected, add to selectedRows
@@ -524,7 +554,10 @@ export const ReportContent = React.createClass({
             // already selected, remove from selectedRows
             selectedRows = _.without(selectedRows, id);
         }
-        flux.actions.selectedRows(selectedRows);
+
+        //const flux = this.getFlux();
+        //flux.actions.selectedRows(selectedRows);
+        this.props.updateReportSelections(CONTEXT.REPORT.NAV, selectedRows);
     },
 
     /**
@@ -532,13 +565,8 @@ export const ReportContent = React.createClass({
      * @param data row record data
      */
     openRecordForEditInTrowser(recordId) {
-        this.props.dispatch(openRecordForEdit(recordId));
-
-        // needed until report store is migrated to redux
-
-        const flux = this.getFlux();
-
-        flux.actions.editingReportRow(recordId);
+        this.openRow(recordId);
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, recordId);
     },
 
     /**
@@ -919,15 +947,16 @@ export const ReportContent = React.createClass({
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
+        let selectedRows = [];
 
         if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
             recordsCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
             this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
+            selectedRows = this.props.reportData.selectedRows || [];
         }
 
         // Hide the footer if any rows are selected and for small breakpoint.
-        const selectedRows = this.props.selectedRows;
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
@@ -967,7 +996,7 @@ export const ReportContent = React.createClass({
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
-                                onCellClick={this.openRow}
+                                onCellClick={this.openRowToView}
                                 //pendEdits={pendEdits}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
@@ -1040,7 +1069,7 @@ export const ReportContent = React.createClass({
                                 pageActions={this.props.pageActions}
                                 selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}
                                 onScroll={this.onScrollRecords}
-                                onRowClick={this.openRow}
+                                onRowClick={this.openRowToView}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                 recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -1057,7 +1086,7 @@ export const ReportContent = React.createClass({
                                             reportHeader={this.props.reportHeader}
                                             selectionActions={<ReportActions selection={this.props.selectedRows}/>}
                                             onScroll={this.onScrollRecords}
-                                            onRowClicked={this.openRow}
+                                            onRowClicked={this.openRowToView}
                                             selectedRows={this.props.selectedRows}
                                             pageStart={this.props.cardViewPagination.props.pageStart}
                                             pageEnd={this.props.cardViewPagination.props.pageEnd}
@@ -1099,8 +1128,11 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateReportRecord: (obj, context) => {
-            dispatch(updateReportRecord(obj, context));
+        updateReportSelections: (context, selections) => {
+            dispatch(updateReportSelections(context, selections));
+        },
+        openRecord:(recId, nextRecordId, prevRecordId) => {
+            dispatch(openRecord(recId, nextRecordId, prevRecordId));
         },
         editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
             dispatch(editRecordStart(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing));
@@ -1116,6 +1148,17 @@ const mapDispatchToProps = (dispatch) => {
         },
         editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
             dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
+        },
+        deleteRecord:  (appId, tblId, recId, nameForRecords) => {
+            dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
+        },
+        dispatch: dispatch,
+        updateRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
+            dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
+                (obj) => {
+                    dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+                }
+            );
         }
     };
 };

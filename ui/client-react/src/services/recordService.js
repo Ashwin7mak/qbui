@@ -7,6 +7,9 @@ import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import _ from 'lodash';
 
+// TODO: temporary for test...make sure to remove
+import Promise from 'bluebird';
+
 class RecordService extends BaseService {
 
     constructor() {
@@ -133,17 +136,23 @@ class RecordService extends BaseService {
         return super.delete(url);
     }
 
-    /**
-     * Delete records in bulk
-     *
-     * @param appId
-     * @param tableId
-     * @param recordIds
-     * @returns promise
-     */
     deleteRecordBulk(appId, tableId, recordIds) {
+        // TODO: remove...
+        return this.deleteRecords(appid, tableId, recordIds);
+    }
+
+    deleteRecords(appId, tableId, recordIds) {
         let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
-        return super.deleteBulk(url, {data: recordIds});
+        return super.delete(url, {data: recordIds});
+        //data.response.errors
+        //let error = {
+        //    data: {
+        //        response: {
+        //            errors: [{isInvalid:true, txt:'error message 1'}, {isInvalid:true, txt:'error message 2'}]
+        //        }
+        //    }
+        //};
+        //return Promise.resolve();
     }
 
 }

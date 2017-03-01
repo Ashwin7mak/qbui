@@ -240,23 +240,23 @@ let reportDataActions = {
      * navigate to previous record after opening record from report
      * @param recId
      */
-    editPreviousRecord(recId) {
-        this.dispatch(actions.EDIT_PREVIOUS_RECORD, {recId});
-    },
+    //editPreviousRecord(recId) {
+    //    this.dispatch(actions.EDIT_PREVIOUS_RECORD, {recId});
+    //},
     /**
      * navigate to next record after opening record from report
      * @param recId
      */
-    editNextRecord(recId) {
-        this.dispatch(actions.EDIT_NEXT_RECORD, {recId});
-    },
+    //editNextRecord(recId) {
+    //    this.dispatch(actions.EDIT_NEXT_RECORD, {recId});
+    //},
     /**
      * open record from report (i.e. drill-down)
      * @param recId
      */
-    editingReportRow(recId) {
-        this.dispatch(actions.EDIT_REPORT_RECORD, {recId});
-    }
+    //editingReportRow(recId) {
+    //    this.dispatch(actions.EDIT_REPORT_RECORD, {recId});
+    //}
 };
 
 export default reportDataActions;

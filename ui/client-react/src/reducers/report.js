@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import FieldFormats from '../utils/fieldFormats';
+import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
 
 //import * as textFormatter from '../../../common/src/formatter/textFormatter';
@@ -46,6 +47,21 @@ const report = (state = [], action) => {
         return stateList;
     }
 
+    /**
+     * Search the state list for the report id.  If found, will
+     * return a cloned object.
+     *
+     * @param id
+     * @returns {*}
+     */
+    function getReportFromState(id) {
+        const index = _.findIndex(state, rpt => rpt.id === id);
+        if (index !== -1) {
+            return _.cloneDeep(state[index]);
+        }
+        return null;
+    }
+
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
@@ -82,9 +98,12 @@ const report = (state = [], action) => {
             //
             pageOffset: action.content.pageOffset,
             numRows: action.content.numRows,
+            //  faceting and searching
             searchStringForFiltering: action.content.searchStringForFiltering,
             selections: action.content.selections || new FacetSelections(),
-            facetExpression: action.content.facetExpression || {}
+            facetExpression: action.content.facetExpression || {},
+            //  UI row selection list
+            selectedRows: []
         };
         return newState(obj);
     }
@@ -99,54 +118,77 @@ const report = (state = [], action) => {
         };
         return newState(obj);
     }
-    case types.UPDATE_REPORT_RECORD: {
-        const id = action.id;
-        const currentReport = _.find(state, rpt => rpt.id === id);
-        let updatedReport = _.cloneDeep(currentReport);
-
-        let record = null;
-        let filtRecord = null;
-        if (updatedReport.data.hasGrouping) {
-            record = ReportUtils.findGroupedRecord(updatedReport.data.records, action.content.recId, updatedReport.data.keyField.name);
-            filtRecord = ReportUtils.findGroupedRecord(updatedReport.data.filteredRecords, action.content.recId, updatedReport.data.keyField.name);
-        } else {
-            record = findRecordById(updatedReport.data.records, action.content.recId, updatedReport.data.hasGrouping, updatedReport.data.keyField);
-            filtRecord = findRecordById(updatedReport.data.filteredRecords, action.content.recId, updatedReport.data.hasGrouping, updatedReport.data.keyField);
+    case types.SELECT_REPORT_LIST: {
+        let rpt = getReportFromState(action.id);
+        if (rpt) {
+            rpt.selectedRows = action.content.selections;
+            return newState(rpt);
         }
-
-        // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
-        // formatRecordValues will add all display values
-        // patch the previously created skeleton of record with the newRecord values
-        let formattedRec = formatRecord(action.content.record, updatedReport.data.fields);
-
-        //formatRecordValues(formattedRec, updatedReport.data.fields);
-
-        //  update each cell in the report grid with the updated record data
-        Object.keys(formattedRec).forEach((fieldName) => {
-            //  update the record list
-            if (record && record[fieldName] && formattedRec[fieldName]) {
-                record[fieldName].value = formattedRec[fieldName].value;
-                if (formattedRec[fieldName].display !== undefined) {
-                    record[fieldName].display = formattedRec[fieldName].display;
-                }
-            }
-            //  update the filtered list
-            if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
-                filtRecord[fieldName].value = formattedRec[fieldName].value;
-                if (formattedRec[fieldName].display !== undefined) {
-                    filtRecord[fieldName].display = formattedRec[fieldName].display;
-                }
-            }
+        return state;
+    }
+    case types.UPDATE_REPORT_RECORD: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            updateReportRecord(currentReport, action.content);
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.REMOVE_REPORT_RECORDS: {
+        // remove record from all report stores
+        const ids = action.content.recIds;
+        const reports = _.cloneDeep(state);
+        reports.forEach((rpt) => {
+            ids.forEach((recId) => {
+                deleteRecordFromReport(rpt.data, recId);
+                rpt.selectedRows = _.without(rpt.selectedRows, recId);
+            });
         });
-
-
-        return newState(updatedReport);
+        return reports;
     }
     default:
         // by default, return existing state
         return state;
     }
 };
+
+function updateReportRecord(currentReport, content) {
+    let record = null;
+    let filtRecord = null;
+    if (currentReport.data.hasGrouping) {
+        record = ReportUtils.findGroupedRecord(currentReport.data.records, content.recId, currentReport.data.keyField.name);
+        filtRecord = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, content.recId, currentReport.data.keyField.name);
+    } else {
+        record = findRecordById(currentReport.data.records, content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
+        filtRecord = findRecordById(currentReport.data.filteredRecords, content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
+    }
+
+    // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
+    // formatRecordValues will add all display values
+    // patch the previously created skeleton of record with the newRecord values
+    let formattedRec = formatRecord(content.record, currentReport.data.fields);
+
+    //TODO: really want to avoid formatting as the individual components should be handling this rqeuirement
+    //formatRecordValues(formattedRec, currentReport.data.fields);
+
+    //  update each cell in the report grid with the updated record data
+    Object.keys(formattedRec).forEach((fieldName) => {
+        //  update the record list
+        if (record && record[fieldName] && formattedRec[fieldName]) {
+            record[fieldName].value = formattedRec[fieldName].value;
+            if (formattedRec[fieldName].display !== undefined) {
+                record[fieldName].display = formattedRec[fieldName].display;
+            }
+        }
+        //  update the filtered list
+        if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
+            filtRecord[fieldName].value = formattedRec[fieldName].value;
+            if (formattedRec[fieldName].display !== undefined) {
+                filtRecord[fieldName].display = formattedRec[fieldName].display;
+            }
+        }
+    });
+}
 
 function formatRecord(record, fields) {
     let formattedRec = {};
@@ -169,6 +211,47 @@ function findRecordById(records, recId, hasGrouping, keyField) {
         return records.find(rec => rec[keyField.name].value == recId);
     }
 }
+
+function deleteRecordFromReport(reportData, recId) {
+    // TODO: needed?
+    var recordValueToMatch = {};
+    recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
+
+    const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
+    const newRecords = reportData.records ? reportData.records.slice(0) : null;
+    let recordDeleted = false;
+    let filteredRecordDeleted = false;
+
+    if (reportData.hasGrouping) {
+        filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
+        recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
+    } else {
+        //find record
+        let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
+        //remove it
+        if (filteredRecordIndex !== -1) {
+            filteredRecordDeleted = true;
+            newFilteredRecords.splice(filteredRecordIndex, 1);
+        }
+
+        //find record
+        let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
+        //remove it
+        if (recordIndex !== -1) {
+            recordDeleted = true;
+            newRecords.splice(recordIndex, 1);
+        }
+    }
+    if (filteredRecordDeleted) {
+        reportData.filteredRecords = newFilteredRecords;
+        reportData.filteredRecordsCount--;
+    }
+    if (recordDeleted) {
+        reportData.records = newRecords;
+        reportData.recordsCount--; //pagination uses this one.
+    }
+}
+
 
 //function formatRecordValues(newRecord, fields) {
 //    Object.keys(newRecord).forEach((key) => {

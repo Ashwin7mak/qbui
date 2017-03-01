@@ -15,6 +15,18 @@ import {NEW_FORM_RECORD_ID} from '../constants/schema';
 
 let logger = new Logger();
 
+/*
+ Redux event for saving a form
+ TODO: refactor once record events moved
+ */
+function event(id, type, content) {
+    return {
+        id: id,
+        type: type,
+        content: content || null
+    };
+}
+
 /**
  * form load in progress
  * @param container type of form (edit or view)
@@ -109,25 +121,6 @@ export const saveFormSuccess = (id) => {
 
 
 /**
- * open an existing record for editing
- * @param recId
- * @returns {{type, recId: *}}
- *
- * TODO: move to redux record
- */
-export const openRecordForEdit = (recId) => {
-    // add editRec query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
-
-    // let store know we're editing a record so we can navigate back and forth
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: recId,
-    };
-};
-
-/**
  * open a new record for editing
  * @param navigateAfterSave go to the new record after saving
  * @returns {{type, recId, navigateAfterSave: boolean}}
@@ -135,17 +128,17 @@ export const openRecordForEdit = (recId) => {
  *
  * * TODO: move to redux record
  */
-export const editNewRecord = (navigateAfterSave = false) => {
-
-    // add editRec=new query param and let the router take action
-    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
-
-    return {
-        type: types.EDIT_REPORT_RECORD,
-        recId: UrlConsts.NEW_RECORD_VALUE,
-        navigateAfterSave
-    };
-};
+//export const editNewRecord = (navigateAfterSave = false) => {
+//
+//    // add editRec=new query param and let the router take action
+//    WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+//
+//    return {
+//        type: types.EDIT_REPORT_RECORD,
+//        recId: UrlConsts.NEW_RECORD_VALUE,
+//        navigateAfterSave
+//    };
+//};
 
 /**
  * load a form, optionally with record data
@@ -318,16 +311,5 @@ function saveForm(appId, tblId, formType, form, isNew) {
     };
 }
 
-/*
- Redux event for saving a form
- TODO: refactor once record events moved
- */
-function event(id, type, content) {
-    return {
-        id: id,
-        type: type,
-        content: content || null
-    };
-}
 
 

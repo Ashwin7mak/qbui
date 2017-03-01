@@ -275,3 +275,15 @@ export const updateReportRecord = (payload, context) => {
         }
     };
 };
+
+/**
+ * Tracks list of records that are selected when viewing a report.
+ *
+ * @param context - the context that the report is being viewed
+ * @param selections - list of record ids
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
+export const updateReportSelections = (context, selections) => {
+    return event(context, types.SELECT_REPORT_LIST, {selections});
+};
+

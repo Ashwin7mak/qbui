@@ -1,16 +1,17 @@
+import ValidationMessage from '../utils/validationMessage';
 import _ from 'lodash';
 
 class RecordModel {
 
-    constructor() {
-        this.init();
+    constructor(appId, tblId, recId) {
+        this.init(appId, tblId, recId);
     }
 
-    init() {
+    init(appId, tblId, recId) {
         this.model = {};
-        this.model.appId = null;
-        this.model.tblId = null;
-        this.model.recId = null;
+        this.model.appId = appId || null;
+        this.model.tblId = tblId || null;
+        this.model.recId = recId || null;
         this.model.isPendingEdit = false;
         this.model.isInlineEditOpen = false;
 
@@ -22,9 +23,10 @@ class RecordModel {
         this.model.recordChanges = {};
         this.model.commitChanges = [];
 
-        //TODO: needed?
+        //TODO: remove
         this.model.showDTSErrorModal = false;
         this.model.dtsErrorModalTID = "No Transaction ID Available";
+
         this.model.editErrors = {
             ok: true,
             errors:[]
@@ -91,6 +93,41 @@ class RecordModel {
         this.model.appId = appId;
         this.model.tblId = tblId;
         this.model.recId = recId;
+    }
+
+    setRecordChanges(appId, tblId, recId, changes) {
+        this.model.currentEditingAppId = appId;
+        this.model.currentEditingTableId = tblId;
+        this.model.currentEditingRecordId = recId;
+        this.model.recordChanges = changes;
+        this.setSaving(true);
+    }
+
+    setErrors(errors) {
+        // initialize
+        this.model.editErrors = {
+            ok: true,
+            errors: []
+        };
+
+        if (Array.isArray(errors) && errors.length > 0) {
+            let errorMessages = [];
+            errors.forEach(error => {
+                errorMessages.push(ValidationMessage.getMessage(error));
+            });
+
+            if (errorMessages.length > 0) {
+                this.model.editErrors = {
+                    ok: false,
+                    errors: errorMessages
+                };
+            }
+        }
+    }
+
+    setSaving(state) {
+        this.setErrors();  // initialize
+        this.model.saving = state;
     }
 }
 

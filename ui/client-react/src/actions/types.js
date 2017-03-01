@@ -5,7 +5,7 @@
 //  **** App actions ****
 //      ...
 
-//  **** Form actions ****
+//  ******** Form actions ********
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
@@ -25,7 +25,7 @@ export const MOVE_FIELD = 'MOVE_FIELD';
 
 export const SYNC_FORM = 'SYNC_FORM';
 
-//  ****  Nav shell actions ****
+//  ********  Nav shell actions ********
 export const HIDE_TROWSER = 'HIDE_TROWSER';
 export const SHOW_TROWSER = 'SHOW_TROWSER';
 export const TOGGLE_LEFT_NAV_VISIBLE = 'TOGGLE_LEFT_NAV_VISIBLE';
@@ -35,20 +35,28 @@ export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_ERROR_MSG_DIALOG = 'SHOW_ERROR_MSG_DIALOG';
 export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 
-//  **** Record actions ****
+//  ******** Record actions ********
 export const OPEN_RECORD = 'OPEN_RECORD';
 export const EDIT_RECORD = 'EDIT_RECORD';
 export const SAVE_RECORD = 'SAVE_RECORD';
+export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
-export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
+export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
+//export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 
+//  Record actions for inline edit
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';
 export const EDIT_RECORD_CHANGE = 'EDIT_RECORD_CHANGE';
 export const EDIT_RECORD_CANCEL = 'EDIT_RECORD_CANCEL';
 export const EDIT_RECORD_COMMIT = 'EDIT_RECORD_COMMIT';
 export const EDIT_RECORD_VALIDATE_FIELD = 'EDIT_RECORD_VALIDATE_FIELD';
 
-//  **** Report actions ****
+//  Record actions for delete
+export const DELETE_RECORDS = 'DELETE_RECORDS';
+export const DELETE_RECORDS_COMPLETE = 'DELETE_RECORDS_COMPLETE';
+export const DELETE_RECORDS_ERROR = 'DELETE_RECORDS_ERROR';
+
+//  ******** Report actions ********
 export const LOAD_REPORT = 'LOAD_REPORT';
 export const LOAD_REPORT_SUCCESS = 'LOAD_REPORT_SUCCESS';
 export const LOAD_REPORT_FAILED = 'LOAD_REPORT_FAILED';
@@ -56,8 +64,10 @@ export const LOAD_EMBEDDED_REPORT = 'LOAD_EMBEDDED_REPORT';
 export const LOAD_EMBEDDED_REPORT_SUCCESS = 'LOAD_EMBEDDED_REPORT_SUCCESS';
 export const LOAD_EMBEDDED_REPORT_FAILED = 'LOAD_EMBEDDED_REPORT_FAILED';
 export const UPDATE_REPORT_RECORD = 'UPDATE_REPORT_RECORD';
+export const SELECT_REPORT_LIST = 'SELECT_REPORT_LIST';
+export const REMOVE_REPORT_RECORDS = 'REMOVE_REPORT_RECORDS';
 
-//  **** table report list actions ****
+//  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
 export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';

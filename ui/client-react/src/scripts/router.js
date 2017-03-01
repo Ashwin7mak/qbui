@@ -15,6 +15,8 @@ import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import Logger from "../utils/logger";
 import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
 
+import {editRecordCancel, editRecordCommit, createRecord, updateRecord} from '../actions/recordActions';
+
 import "react-fastclick";
 
 import {Provider, connect} from "react-redux";
@@ -28,7 +30,7 @@ let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
 const store = createAppStore();
-let history = AppHistory.setup(fluxxor, store).history;
+let history = AppHistory.setup(store, editRecordCancel, editRecordCommit, createRecord, updateRecord).history;
 
 const mapStateToProps = (state) => {
     return {

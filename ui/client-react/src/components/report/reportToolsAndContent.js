@@ -16,12 +16,14 @@ import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
 import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
+import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let logger = new Logger();
 
@@ -326,10 +328,11 @@ export const ReportToolsAndContent = React.createClass({
      */
     editNewRecord() {
         // need to dispatch to Fluxxor since report store handles this too...
-        const flux = this.getFlux();
-        flux.actions.editNewRecord();
+        //const flux = this.getFlux();
+        //flux.actions.editNewRecord();
 
-        this.props.dispatch(editNewRecord(false));
+        //this.props.dispatch(editNewRecord(false));
+        WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
     render() {
