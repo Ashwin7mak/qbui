@@ -1151,11 +1151,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         dispatch: dispatch,
         updateRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
-            dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
-                (obj) => {
-                    dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
-                }
-            );
+            dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess));
+            //dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
+            //    (obj) => {
+            //        dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+            //    }
+            //);
         }
     };
 };

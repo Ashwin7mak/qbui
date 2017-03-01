@@ -948,6 +948,7 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
                         logger.debug('RecordService saveRecord success');
+
                         let clist = colList ? colList : [];
                         if (!clist.length && fields) {
                             fields.forEach((field) => {

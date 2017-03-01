@@ -126,6 +126,14 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    //case types.SAVE_RECORD: {
+    //    let currentReport = getReportFromState(action.content.report.context);
+    //    if (currentReport) {
+    //        updateReportRecord(currentReport, action.content.report.record);
+    //        return newState(currentReport);
+    //    }
+    //    return state;
+    //}
     case types.UPDATE_REPORT_RECORD: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
