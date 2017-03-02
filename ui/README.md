@@ -38,12 +38,9 @@ To avoid permission issues caused by installing npm modules globally, you can ei
 
 #### Install Node via NVM
 
-[NVM](https://github.com/creationix/nvm) only works with Mac but is the easier and cleaner option.
-Install NVM (Node Version Manager) via Wget:
+NVM only works with Mac but is the easier and cleaner option.
 
-```bash
-    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
-```
+Follow the steps in this[nvm installation docs](https://github.com/creationix/nvm#installation)
 
 Next, install Node.js v6.9.5 and set v6.9.5 as your default version of node 
 
