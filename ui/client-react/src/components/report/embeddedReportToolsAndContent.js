@@ -104,7 +104,7 @@ const EmbeddedReportToolsAndContent = React.createClass({
 // from the Redux state (the presentational component has no code dependency on Redux!)
 const mapStateToProps = (state) => {
     return {
-        records: state.mockReportReducer
+        records: state.embeddedReports
     };
 };
 

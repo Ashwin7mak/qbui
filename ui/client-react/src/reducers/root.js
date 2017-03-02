@@ -3,7 +3,7 @@ import shell from './shell';
 import forms from './forms';
 import record from './record';
 import report from './report';
-import mockReportReducer from '../mocks/mockReportReducer';
+import embeddedReports from './embeddedReports';
 
 // combine individual reducers into a single root reducer (qbui)
 
@@ -13,5 +13,5 @@ export default combineReducers({
     forms,
     record,
     report,
-    mockReportReducer
+    embeddedReports
 });

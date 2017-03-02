@@ -41,7 +41,7 @@ const embeddedReport = (state = {}, action) => {
             appId: action.content.appId,
             tblId: action.content.tblId,
             rptId: action.content.rptId,
-            //
+
             pageOffset: action.content.pageOffset,
             numRows: action.content.numRows,
             searchStringForFiltering: action.content.searchStringForFiltering,
