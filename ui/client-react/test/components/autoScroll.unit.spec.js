@@ -11,7 +11,7 @@ let container = {
     offsetTop: 10
 };
 
-describe('AutoScroll', () => {
+fdescribe('AutoScroll', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
@@ -79,7 +79,7 @@ describe('AutoScroll', () => {
         expect(instance.stopScrolling).toHaveBeenCalled();
     });
 
-    it('should add extra pixels to the top of the container scroll zone when pixelsFromTop prop is passed through', function() {
+    it('should add extra pixels to the top of the container scroll zone when pixelsFromTopForLargeDevices prop is passed through', function() {
 
         let e = {
             type: 'foo',
@@ -88,7 +88,7 @@ describe('AutoScroll', () => {
             clientY: 50
         };
 
-        let component = shallow(<AutoScroll pixelsFromTop={5}/>);
+        let component = shallow(<AutoScroll pixelsFromTopForLargeDevices={5}/>);
         let instance = component.instance();
 
         spyOn(instance, 'getContainer').and.returnValue(container);
@@ -99,7 +99,7 @@ describe('AutoScroll', () => {
         expect(instance.getContainerTop).toHaveBeenCalled();
     });
 
-    it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottom prop is passed through', function() {
+    it('should add extra pixels to the top of the container scroll zone when pixelsFromTopForMobile prop is passed through', function() {
 
         let e = {
             type: 'foo',
@@ -108,7 +108,27 @@ describe('AutoScroll', () => {
             clientY: 50
         };
 
-        let component = shallow(<AutoScroll pixelsFromBottom={5}/>);
+        let component = shallow(<AutoScroll pixelsFromTopForMobile={5}/>);
+        let instance = component.instance();
+
+        spyOn(instance, 'getContainer').and.returnValue(container);
+        spyOn(instance, 'getContainerTop');
+
+        instance.updateScrolling(e);
+
+        expect(instance.getContainerTop).toHaveBeenCalled();
+    });
+
+    it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottomForMobile prop is passed through', function() {
+
+        let e = {
+            type: 'foo',
+            touches: [{clientY: 90}, {clientX: 90}],
+            clientX: 45,
+            clientY: 50
+        };
+
+        let component = shallow(<AutoScroll pixelsFromBottomForMobile={5}/>);
         let instance = component.instance();
 
         spyOn(instance, 'getContainer').and.returnValue(container);
@@ -119,4 +139,46 @@ describe('AutoScroll', () => {
         expect(instance.getContainerBottom).toHaveBeenCalled();
     });
 
+    it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottomForLargeDevices prop is passed through', function() {
+
+        let e = {
+            type: 'foo',
+            touches: [{clientY: 90}, {clientX: 90}],
+            clientX: 45,
+            clientY: 50
+        };
+
+        let component = shallow(<AutoScroll pixelsFromBottomForLargeDevices={5}/>);
+        let instance = component.instance();
+
+        spyOn(instance, 'getContainer').and.returnValue(container);
+        spyOn(instance, 'getContainerBottom');
+
+        instance.updateScrolling(e);
+
+        expect(instance.getContainerBottom).toHaveBeenCalled();
+    });
+
+    it('getContainerBottom and getContainerTop should not be called if extra pixel props are not passed through', function() {
+
+        let e = {
+            type: 'foo',
+            touches: [{clientY: 90}, {clientX: 90}],
+            clientX: 45,
+            clientY: 50
+        };
+
+        let component = shallow(<AutoScroll />);
+        let instance = component.instance();
+
+        spyOn(instance, 'getContainer').and.returnValue(container);
+        spyOn(instance, 'getContainerBottom');
+        spyOn(instance, 'getContainerTop');
+
+        instance.updateScrolling(e);
+
+        expect(instance.getContainerBottom).not.toHaveBeenCalled()
+        expect(instance.getContainerTop).not.toHaveBeenCalled();
+
+    });
 });
