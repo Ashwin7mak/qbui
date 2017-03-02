@@ -28,7 +28,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     * GitHub
     * NodeJS - ui web server plugin
     * SASS support - enhances css with variables and methods plugin
-  * Known working versions of Intellij are 14.1.2 and 14.1.4
+  * Known working versions of Intellij are 2016.3.4
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
@@ -42,18 +42,18 @@ To avoid permission issues caused by installing npm modules globally, you can ei
 Install NVM (Node Version Manager) via Wget:
 
 ```bash
-    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
+    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
 ```
 
-Next, install Node.js v4.2.2 and set v4.2.2 as your default version of node (as of 2/1/2016, v5.5.0 is not fully tested with qbui).
+Next, install Node.js v6.9.5 and set v6.9.5 as your default version of node 
 
 ```bash
-    nvm install 4.2.2 && nvm alias default 4.2.2
+    nvm install 6.9.5 && nvm alias default 6.9.5
 ```
 
 To verify installation enter `nvm list default` which should print:
 ```bash
-    ->         v4.2.2
+    ->         v6.9.5
 ```
 If nvm and node were successfully installed, skip the next section about installing Node.js and global node configuration.
 
@@ -92,28 +92,8 @@ to automatically switch to the correct version of Node.
 
 #### Install Node and configure global node modules
 
-* Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
+* Install node.js (v6.9.5, as of 3/1/2016) via nvm 
 
-* (*Optional*) Make a place for any global node modules and no permission issues
-
-    1. Create a .node folder from command line.
-
-        ``` bash
-        mkdir ~/.node
-        ```
-
-    2. Adjust your node settings so that the global modules get installed locally for your login.
-
-        ``` bash
-        npm config set prefix=~/.node
-        ```
-          This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
-
-    3. Add this directory to your PATH.
-
-       ``` bash
-       export PATH=$PATH:$HOME/.node/bin
-       ```
 
 * Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
 
