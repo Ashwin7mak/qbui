@@ -119,6 +119,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
         return (
             <QBModal
+                uniqueClassName="confirmDeleteOverrides"
                 show={this.state.confirmDeletesDialogOpen}
                 primaryButtonName={Locale.getMessage('selection.delete')}
                 primaryButtonOnClick={this.deleteSelectedOverrides}

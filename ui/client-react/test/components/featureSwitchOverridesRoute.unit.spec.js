@@ -122,7 +122,7 @@ describe('FeatureSwitchOverridesRoute', () => {
 
         TestUtils.Simulate.click(deleteButton[0]);
 
-        let confirmDelete = document.querySelectorAll(".modal-dialog button.primaryButton");
+        let confirmDelete = document.querySelectorAll(".confirmDeleteOverrides button.primaryButton");
         expect(confirmDelete.length).toBe(1);
         TestUtils.Simulate.click(confirmDelete[0]);
 

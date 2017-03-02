@@ -168,6 +168,7 @@ export class FeatureSwitchesRoute extends React.Component {
 
         return (
             <QBModal
+                uniqueClassName="confirmDeleteFeatureSwitches"
                 show={this.state.confirmDeletesDialogOpen}
                 primaryButtonName={Locale.getMessage('selection.delete')}
                 primaryButtonOnClick={this.deleteSelectedSwitches}
