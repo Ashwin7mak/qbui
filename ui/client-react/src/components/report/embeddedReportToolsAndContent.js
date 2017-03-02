@@ -13,14 +13,12 @@ import {loadDynamicEmbeddedReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 
 let logger = new Logger();
-//let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
- * A wrapper for ReportToolsAndContent that renders a report with report tools within a form.
+ * A wrapper for ReportToolsAndContent to be rendered as an embedded report in a form.
  */
 const EmbeddedReportToolsAndContent = React.createClass({
-    //mixins: [FluxMixin],
-    nameForRecords: "Records",  // get from table meta data
+    nameForRecords: "Records",
 
     propTypes: {
         appId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -36,14 +34,11 @@ const EmbeddedReportToolsAndContent = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReport(appId, tblId, rptId, queryParams) {
-        //const flux = this.getFlux();
-        //flux.actions.loadFields(appId, tblId);
-
         this.props.loadDynamicEmbeddedReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
 
     /**
-     * Figure out what report we need to load.
+     * Figure out what report we need to load based on the props.
      */
     loadReportFromProps() {
         const {appId, tblId, rptId, detailKeyFid, detailKeyValue} = this.props;
@@ -63,14 +58,11 @@ const EmbeddedReportToolsAndContent = React.createClass({
                 numRows
             };
             this.loadDynamicReport(appId, tblId, rptId, queryParams);
-        } else {
-            return null;
         }
     },
 
     componentDidMount() {
         this.uniqId = 'FORM' + Math.floor(Math.random() * 100000);
-        let thing = this.uniqId;
         this.loadReportFromProps();
     },
 
@@ -107,12 +99,17 @@ const EmbeddedReportToolsAndContent = React.createClass({
     }
 });
 
+// instead of relying on our parent route component to pass our props down,
+// the react-redux container will generate the required props for this route
+// from the Redux state (the presentational component has no code dependency on Redux!)
 const mapStateToProps = (state) => {
     return {
         records: state.mockReportReducer
     };
 };
 
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
         loadDynamicEmbeddedReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
@@ -121,7 +118,6 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-// create mapDispatchToProps function here if you want dispatch available when using mapStateToProps
 export default connect(
     mapStateToProps,
     mapDispatchToProps

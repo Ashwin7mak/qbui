@@ -125,8 +125,9 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
     };
 };
 
-/** TODO:comments
- *
+/**
+ * Construct a query parameters for the dynamic report using supplied facet expression, filter, and
+ * existing queryParams.
  */
 const constructQueryParams = (facetResponse, filter = {}, queryParams = {}) => {
     const filterQueries = [];
@@ -153,20 +154,22 @@ const constructQueryParams = (facetResponse, filter = {}, queryParams = {}) => {
     return queryParams;
 };
 
-/** TODO:comments
+/**
+ *  Fetch a report with custom attributes.  The response will include:
+ *    - report data/grouping data
+ *    - report meta data (includes the override settings..if any)
+ *    - report fields
+ *    - report count
  *
+ *  NOTE:
+ *    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
+ *    - no faceting data is returned..
+ *
+ * @param {String} context context of the redux action
+ * @param {Object} <Object> containing parameters needed by reportService.getDynamicReportResults
+ * @param {filter} filter Optional, filter being applied to the report
  */
-const getDynamicReportResults = ({context, appId, tblId, rptId, queryParams, format}, filter) => {
-    //  Fetch a report with custom attributes.  The response will include:
-    //    - report data/grouping data
-    //    - report meta data (includes the override settings..if any)
-    //    - report fields
-    //    - report count
-    //
-    //  NOTE:
-    //    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
-    //    - no faceting data is returned..
-    //
+const getDynamicReportResults = (context, {appId, tblId, rptId, queryParams, format}, filter) => {
     const reportService = new ReportService();
     return reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
         (reportResponse) => {
@@ -242,12 +245,12 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
             // error handler for when a promise is rejected
             const parseAndLogHandler = parseAndLogError(context, dispatch);
 
-            //  call node to parse the supplied facet expression into a query expression that
+            //  parse the supplied facet expression into a query expression that
             //  can be included on the request.
             return reportService.parseFacetExpression(filter ? filter.facet : '').then(
                 (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
             ).then((newQueryParams) => {
-                return getDynamicReportResults({context, appId, tblId, rptId, queryParams, format}, filter).then((report) => {
+                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams, format}, filter).then((report) => {
                     dispatch(event(context, types.LOAD_REPORT_SUCCESS, report));
                     return; //resolve promise with undefined
                 }).catch(
@@ -264,8 +267,8 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
     };
 };
 
-/* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
- * sort/grouping, query and column list settings.
+/* Run a customized report displayed as an embedded report, that optionally allows for dynamically
+ * overriding report meta data defaults for sort/grouping, query and column list settings.
  *
  * Currently supported query filtering overrides include:
  *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
@@ -300,7 +303,7 @@ export const loadDynamicEmbeddedReport = (context, appId, tblId, rptId, format, 
             return reportService.parseFacetExpression(filter ? filter.facet : '').then(
                 (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
             ).then((newQueryParams) => {
-                return getDynamicReportResults({context, appId, tblId, rptId, queryParams, format}, filter).then((report) => {
+                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams, format}, filter).then((report) => {
                     dispatch(event(context, types.LOAD_EMBEDDED_REPORT_SUCCESS, report));
                     return; //resolve promise with undefined
                 }).catch(

@@ -21,6 +21,7 @@ const QbCell = React.createClass({
         if (this.props.isStickyCell) {
             classes.push('stickyCell');
         }
+        // this is a tad bit hacky, remove when EmbeddedReportToolsAndContent supports editing
         if (_.get(this, 'props.children.props.isViewOnly')) {
             classes.push('viewOnly');
         }
