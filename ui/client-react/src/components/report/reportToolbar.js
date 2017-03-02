@@ -192,8 +192,9 @@ const ReportToolbar = React.createClass({
             }
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
-        const showFilterSearchBox = !isLoading && isPageLoaded && !isError && !this.props.isViewOnly;
-        const showSortAndGroup = !isLoading && !isError && !this.props.isViewOnly;
+        const showFilterSearchBox = !isLoading && !isError && !this.props.isViewOnly && isPageLoaded;
+        const showSortAndGroup    = !isLoading && !isError && !this.props.isViewOnly;
+        const showFacetsMenu      = !isLoading && !isError && !this.props.isViewOnly && hasFacets;
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <div className="leftReportToolbar">
@@ -217,7 +218,7 @@ const ReportToolbar = React.createClass({
                     }
                     {/* check if facets is enabled for this report,
                      also hide Facets Menu Button if facets disabled  */}
-                    {!isLoading && hasFacets && !isError ?
+                    {showFacetsMenu ?
                         (<FacetsMenu className="facetMenu"
                                      {...this.props}
                                      isLoading={isLoading}
