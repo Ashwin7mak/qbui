@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import isSmall from '../../utils/breakpoints';
 
 /**
  * AutoScroll is triggered when a user either touches and holds down on a touch device and moves her finger
@@ -71,6 +72,7 @@ class AutoScroll extends Component {
     componentWillUnmount() {
         this.autoScroll.removeEventListener("touchmove", this.updateScrolling);
         this.autoScroll.removeEventListener("mousedown", this.activateMouseMove);
+        this.autoScroll.removeEventListener("mousemove", this.updateScrolling);
     }
 
     scrollDown() {
@@ -85,7 +87,8 @@ class AutoScroll extends Component {
     }
 
     scrollUp() {
-        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10 ;
+        let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 5 : 10;
+        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
 
@@ -97,13 +100,19 @@ class AutoScroll extends Component {
 
     getContainerDimension() {
         let container = this.getContainer();
+        let defaultPixelFromTopOrBottom = 30;
+
+        if (isSmall.isSmallBreakpoint()) {
+            defaultPixelFromTopOrBottom = 20;
+        }
+
 
         return {
             containerOffsetLeft: container.offsetLeft,
             containerRightSide: container.offsetLeft + container.offsetWidth,
             //Autoscroll activates 30 pixels before it reaches the bottom or top of the container
-            containerBottom: container.offsetHeight - 30,
-            containerTop: container.offsetTop + 30
+            containerBottom: container.offsetHeight - defaultPixelFromTopOrBottom,
+            containerTop: container.offsetTop + defaultPixelFromTopOrBottom
         };
 
     }
@@ -112,19 +121,26 @@ class AutoScroll extends Component {
         /**
          * Allows a developer to add extra pixels to the top, allowing auto scroll to activate sooner
          * */
-        return containerTop + this.props.pixelsFromTop;
+        if (this.props.pixelsFromTopForLargeDevices) {
+            return containerTop - this.props.pixelsFromTopForLargeDevices;
+        } else {
+            return containerTop - this.props.pixelsFromTopForMobile;
+        }
     }
 
     getContainerBottom(containerBottom) {
         /**
          * Allows a developer to add extra pixels to the bottom, allowing auto scroll to activate sooner
          * */
-        if (this.props.pixelsFromBottom) {
-            return containerBottom - this.props.pixelsFromBottom;
+        if (this.props.pixelsFromBottomForLargeDevices) {
+            return containerBottom - this.props.pixelsFromBottomForLargeDevices;
+        } else {
+            return containerBottom - this.props.pixelsFromBottomForMobile;
         }
     }
 
     stopScrolling() {
+        console.log('stopScrolling: ', this.animationId)
         window.cancelAnimationFrame(this.animationId);
     }
 
@@ -157,11 +173,11 @@ class AutoScroll extends Component {
             pointerX = e.clientX;
         }
 
-        if (this.props.pixelsFromBottom) {
+        if (this.props.pixelsFromBottomForLargeDevices || this.props.pixelsFromBottomForMobile) {
             containerBottom = this.getContainerBottom(containerBottom);
         }
 
-        if (this.props.pixelsFromTop) {
+        if (this.props.pixelsFromTopForLargeDevices || this.props.pixelsFromTopForMobile) {
             containerTop = this.getContainerTop(containerTop);
         }
 
@@ -173,7 +189,7 @@ class AutoScroll extends Component {
             pointerX > containerOffsetLeft) {
 
             this.animationId = window.requestAnimationFrame(this.scrollDown);
-
+            console.log('updateScrolling: ', this.animationId)
         } else if (pointerY < containerTop &&
                    pointerX < containerRightSide &&
                    pointerX > containerOffsetLeft) {
@@ -181,7 +197,6 @@ class AutoScroll extends Component {
             this.animationId = window.requestAnimationFrame(this.scrollUp);
 
         } else {
-
             this.stopScrolling();
 
         }
@@ -205,11 +220,20 @@ AutoScroll.propTypes = {
     /**
      * pixelsFromBottom indicates how many pixels from the bottom of the container should it start autoscrolling
      * */
-    pixelsFromBottom: PropTypes.number,
+    pixelsFromBottomForLargeDevices: PropTypes.number,
     /**
      * pixelsFromTop indicates how many pixels from the bottom of the container should it start autoscrolling
      * */
-    pixelsFromTop: PropTypes.number,
+    pixelsFromTopForLargeDevices: PropTypes.number,
+    /**
+     * pixelsFromTop indicates how many pixels from the bottom of the container should it start autoscrolling for mobile devices
+     * */
+    pixelsFromTopForMobile: PropTypes.number,
+    /**
+     * pixelsFromTop indicates how many pixels from the bottom of the container should it start autoscrolling for mobile devices
+     * */
+    pixelsFromBottomForMobile: PropTypes.number,
+
 
 };
 
