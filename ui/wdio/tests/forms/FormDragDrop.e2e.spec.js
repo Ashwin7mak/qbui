@@ -47,8 +47,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            let source = formBuilderPO.fieldLocator(1);
-            let target = formBuilderPO.fieldLocator(2);
+            let source = formBuilderPO.findFieldByIndex(1);
+            let target = formBuilderPO.findFieldByIndex(2);
             browser.dragAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
@@ -65,8 +65,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
-            let source = formBuilderPO.fieldLocator(1);
-            let target = formBuilderPO.fieldLocator(2);
+            let source = formBuilderPO.findFieldByIndex(1);
+            let target = formBuilderPO.findFieldByIndex(2);
             browser.dragAndDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
@@ -82,8 +82,8 @@
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag 1st field onto 2nd
-            let source = formBuilderPO.fieldLocator(1);
-            let target = formBuilderPO.fieldLocator(2);
+            let source = formBuilderPO.findFieldByIndex(1);
+            let target = formBuilderPO.findFieldByIndex(2);
             browser.moveToObject(source);
             browser.buttonDown();
             // TODO: verify click effects, e.g. field selected & buttons enabled? DOM doesn't change...

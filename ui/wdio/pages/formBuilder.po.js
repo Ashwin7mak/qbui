@@ -20,11 +20,6 @@
                 return browser.elements('.fieldLabel');
             }
         },
-        fieldLocator: {
-            value: function(index) {
-                return '.sectionRow:nth-child(' + index + ')';
-            }
-        },
         fieldPreferencesIcon: {
             get: function() {
                 return browser.element('.fieldPreferencesIcon');
@@ -38,6 +33,11 @@
         fieldTokenTitle: {
             get: function() {
                 return browser.element('.fieldTokenTitle');
+            }
+        },
+        findFieldByIndex: {
+            value: function(index) {
+                return '.sectionRow:nth-child(' + index + ')';
             }
         },
         formContainer: {
