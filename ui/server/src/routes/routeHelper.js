@@ -601,6 +601,14 @@
             return url;
         },
 
+        getUsersRoute: function(url, userId) {
+            let root = getUrlRoot(url, USERS);
+            if (userId && typeof userId === 'string') {
+                return root + '/' + userId;
+            }
+            return root;
+        },
+
         /**
          * Is the route a request for report results
          *
