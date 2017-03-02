@@ -177,7 +177,7 @@ describe('AutoScroll', () => {
 
         instance.updateScrolling(e);
 
-        expect(instance.getContainerBottom).not.toHaveBeenCalled()
+        expect(instance.getContainerBottom).not.toHaveBeenCalled();
         expect(instance.getContainerTop).not.toHaveBeenCalled();
 
     });

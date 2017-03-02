@@ -25,7 +25,7 @@
         //Set's a width to keep long form titles from breaking the div
         width: 350px;
     }
-    
+
     @include small-breakpoint {
         display: flex;
         flex-direction: column;
