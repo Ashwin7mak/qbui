@@ -536,8 +536,8 @@ module.exports = function(grunt) {
                     // permission for viewer are not working correctly
                     './wdio/tests/forms/formAdd*.e2e.spec.js',
                     './wdio/tests/forms/formEdit*.e2e.spec.js',
-                    './wdio/tests/forms/formEditPermissionsParticipantRole.e2e.spec.js',
-                    './wdio/tests/forms/formDragDrop.e2e.spec.js'
+                    './wdio/tests/forms/formEditPermissionsParticipantRole.e2e.spec.js'
+
                 ]
             },
             test: {
