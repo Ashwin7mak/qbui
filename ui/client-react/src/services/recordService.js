@@ -101,10 +101,20 @@ class RecordService extends BaseService {
      * @returns promise
      */
     saveRecord(appId, tableId, recordId, changes) {
-        const fixedChanges = SaveRecordFormatter.formatRecordForSaving(changes);
+        //const fixedChanges = SaveRecordFormatter.formatRecordForSaving(changes);
+        //
+        //let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
+        //return super.patch(url, fixedChanges);
 
-        let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
-        return super.patch(url, fixedChanges);
+        // TODO: remove when in code review
+        let error = {
+            data: {
+                response: {
+                    errors: [{isInvalid:true, txt:'error message 1'}, {isInvalid:true, txt:'error message 2'}]
+                }
+            }
+        };
+        return Promise.reject(error);
     }
 
 
@@ -144,7 +154,8 @@ class RecordService extends BaseService {
     deleteRecords(appId, tableId, recordIds) {
         let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
         return super.delete(url, {data: recordIds});
-        //data.response.errors
+
+        // TODO: remove when in code review
         //let error = {
         //    data: {
         //        response: {

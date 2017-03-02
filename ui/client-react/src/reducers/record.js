@@ -148,6 +148,7 @@ const record = (state = [], action) => {
             let currentRecd = getRecordFromState(action.id);
             let model;
             if (_.has(currentRecd, 'pendEdits')) {
+                //TODO: fix this..messy
                 const pendEdits = currentRecd.pendEdits;
 
                 // saving an existing record
@@ -182,6 +183,7 @@ const record = (state = [], action) => {
         case types.SAVE_RECORD_SUCCESS: {
             let currentRecd = getRecordFromState(action.id);
             if (currentRecd) {
+                //TODO: fix this..messy
                 currentRecd.currentEditingRecordId = action.content.recId;
                 let entry = getEntryKey(currentRecd);
 
@@ -216,7 +218,31 @@ const record = (state = [], action) => {
             return state;
         }
         case types.SAVE_RECORD_ERROR:
-            //TODO: look at onSaveRecordFailed method in recordPendingEditsStore
+        {
+            let currentRecd = getRecordFromState(action.id);
+            if (_.has(currentRecd, 'pendEdits')) {
+                let errors = action.content.errors;
+                if (errors) {
+                    let model = new RecordModel();
+                    model.set(currentRecd.pendEdits);
+                    model.setErrors(errors);
+                    model.currentEditingRecordId = action.content.recId;
+                    model.hasAttemptedSave = true;
+
+                    //  toDO: not sure this is really necessary..but carrying over from flux implementation
+                    let entry = getEntryKey(currentRecd);
+                    if (typeof (currentRecd.pendEdits.commitChanges[entry]) === 'undefined') {
+                        currentRecd.pendEdits.commitChanges[entry] = {};
+                    }
+                    if (typeof (currentRecd.pendEdits.commitChanges[entry]) !== 'undefined') {
+                        currentRecd.pendEdits.commitChanges[entry].status = types.SAVE_RECORD_ERROR;
+                    }
+
+                    return newState(currentRecd);
+                }
+            }
+            return state;
+        }
         case types.SAVE_RECORD_COMPLETE: {
             // TODO: not sure if need to set 'saving' on state on each when deleting
             //
@@ -294,8 +320,6 @@ const record = (state = [], action) => {
                 pendEdits.commitChanges[entry].status = '...'; //status is pending response from server
                 return newState(currentRecd);
             }
-            return state;
-            console.log('WARNING...calling edit record commit');
             return state;
         }
         case types.EDIT_RECORD_VALIDATE_FIELD: {

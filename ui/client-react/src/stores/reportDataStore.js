@@ -638,10 +638,10 @@ let ReportDataStore = Fluxxor.createStore({
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             //actions.DELETE_RECORD, this.onDeleteReportRecord,
             //actions.DELETE_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
-            actions.DELETE_RECORD_FAILED, this.onDeleteReportRecordFailed,
+            //actions.DELETE_RECORD_FAILED, this.onDeleteReportRecordFailed,
             //actions.DELETE_RECORD_BULK, this.onDeleteReportRecordBulk,
             //actions.DELETE_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
-            actions.DELETE_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
+            //actions.DELETE_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             //actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             //actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onClearEdit,
@@ -1035,21 +1035,21 @@ let ReportDataStore = Fluxxor.createStore({
      * models filteredRecord list
      * @param recId
      */
-    onDeleteReportRecordSuccess(recId) {
-        this.reportModel.deleteRecordsFromLists(recId);
-        this.isRecordDeleted = true;
-
-        this.selectedRows = _.without(this.selectedRows, recId);
-        this.emit('change');
-    },
+    //onDeleteReportRecordSuccess(recId) {
+    //    this.reportModel.deleteRecordsFromLists(recId);
+    //    this.isRecordDeleted = true;
+    //
+    //    this.selectedRows = _.without(this.selectedRows, recId);
+    //    this.emit('change');
+    //},
 
     /**
      * Does not do anything if it failed, just emits a change which wont cause an update (for agGrid)
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
-    onDeleteReportRecordFailed(payload) {
-        logger.error(`the record failed to delete: recId ${payload.recId}`);
-    },
+    //onDeleteReportRecordFailed(payload) {
+    //    logger.error(`the record failed to delete: recId ${payload.recId}`);
+    //},
 
     /**
      * if anyone is listening this is me telling you we are deleting records in bulk
@@ -1064,22 +1064,22 @@ let ReportDataStore = Fluxxor.createStore({
      * models filteredRecord list
      * @param recIds
      */
-    onDeleteReportRecordBulkSuccess(recIds) {
-        for (var i = 0; i < recIds.length; i++) {
-            this.reportModel.deleteRecordsFromLists(recIds[i]);
-        }
-        this.selectedRows = [];
-        this.isRecordDeleted = true;
-        this.emit('change');
-    },
+    //onDeleteReportRecordBulkSuccess(recIds) {
+    //    for (var i = 0; i < recIds.length; i++) {
+    //        this.reportModel.deleteRecordsFromLists(recIds[i]);
+    //    }
+    //    this.selectedRows = [];
+    //    this.isRecordDeleted = true;
+    //    this.emit('change');
+    //},
 
     /**
      * Does not do anything if it failed, just emits a change which wont cause an update (for agGrid)
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
-    onDeleteReportRecordBulkFailed(payload) {
-        logger.error(`the records failed to delete: recIds ${payload.recIds}`);
-    },
+    //onDeleteReportRecordBulkFailed(payload) {
+    //    logger.error(`the records failed to delete: recIds ${payload.recIds}`);
+    //},
 
     /**
      * updates the list of records at record at the specified record id

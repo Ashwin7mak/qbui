@@ -785,6 +785,10 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                                         //    recId,
                                         //    error: getError.response
                                         //});
+                                        let errors = [];
+                                        if (_.has(getError, 'data.response.errors')) {
+                                            errors = getError.data.response.errors || [];
+                                        }
                                         dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: getError.response}));
 
                                         // this tiny delay allows for saving modal to trap inputs otherwise
@@ -804,7 +808,8 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                             //    record,
                             //    error: new Error('no response data member')
                             //});
-                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: new Error('no response data member')}));
+                            let errors = ['no response data member'];
+                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
 
                             // this delay allows for saving modal to trap inputs otherwise
                             // clicks get invoked after create
@@ -824,7 +829,11 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                         }
 
                         //this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
-                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: error.response}));
+                        let errors = [];
+                        if (_.has(error, 'data.response.errors')) {
+                            errors = error.data.response.errors || [];
+                        }
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
 
                         if (error.response.status === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
@@ -995,7 +1004,11 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                                 logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
                                 // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
                                 //this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
-                                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: getError.response}));
+                                let errors = [];
+                                if (_.has(getError, 'data.response.errors')) {
+                                    errors = getError.data.response.errors || [];
+                                }
+                                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
                                 // this delay allows for saving modal to trap inputs otherwise
                                 // clicks get invoked after saving
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -1016,7 +1029,11 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                         }
 
                         //this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
-                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: error.response}));
+                        let errors = [];
+                        if (_.has(error, 'data.response.errors')) {
+                            errors = error.data.response.errors || [];
+                        }
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         // this delay allows for saving modal to trap inputs otherwise
