@@ -11,8 +11,6 @@ import isSmall from '../../utils/breakpoints';
  * AutoScroll listens for mousedown and mouseup for desktop.
  * AutoScroll listens for touchmove or touch devices.
  *
- * Autoscroll only works on desktops and tablets, it currently does not work for mobile.
- *
  * Note: Autoscroll will only work if the parent container has overflow set to auto
  * */
 
@@ -87,7 +85,7 @@ class AutoScroll extends Component {
     }
 
     scrollUp() {
-        let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 5 : 10;
+        let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 2 : 10;
         let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
         let container = this.getContainer();
         let scrollTop = container.scrollTop;
@@ -140,7 +138,6 @@ class AutoScroll extends Component {
     }
 
     stopScrolling() {
-        console.log('stopScrolling: ', this.animationId)
         window.cancelAnimationFrame(this.animationId);
     }
 
@@ -189,7 +186,6 @@ class AutoScroll extends Component {
             pointerX > containerOffsetLeft) {
 
             this.animationId = window.requestAnimationFrame(this.scrollDown);
-            console.log('updateScrolling: ', this.animationId)
         } else if (pointerY < containerTop &&
                    pointerX < containerRightSide &&
                    pointerX > containerOffsetLeft) {
