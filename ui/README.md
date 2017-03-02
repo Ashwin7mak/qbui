@@ -28,7 +28,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     * GitHub
     * NodeJS - ui web server plugin
     * SASS support - enhances css with variables and methods plugin
-  * Known working versions of Intellij are 2016.3.4
+  * Known working versions of Intellij is 2016.3.x
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
