@@ -272,7 +272,6 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
     render() {
 
-        console.log(this.props);
         let featureSwitch = this.props.switches.find((item) => item.id === this.props.params.id);
 
         if (featureSwitch) {
