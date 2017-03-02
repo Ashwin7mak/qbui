@@ -23,7 +23,7 @@ BodyWrapper.shouldComponentUpdate = true;
 const RowWrapper = props => <tr {...props} />;
 RowWrapper.shouldComponentUpdate = true;
 
-class FeatureSwitchOverridesRoute extends React.Component {
+export class FeatureSwitchOverridesRoute extends React.Component {
 
     constructor(props) {
         super(props);
@@ -190,12 +190,12 @@ class FeatureSwitchOverridesRoute extends React.Component {
                 property: 'selected',
                 header: {
                     formatters: [
-                        (data, {rowData}) => <input type="checkbox" checked={this.state.allSelected} onChange={(e) => {this.selectAll(e.target.checked);}}/>
+                        (data, {rowData}) => <input className="selectAll" type="checkbox" checked={this.state.allSelected} onChange={(e) => {this.selectAll(e.target.checked);}}/>
                     ]
                 },
                 cell: {
                     formatters: [
-                        (data, {rowData}) => <input type="checkbox" checked={this.state.selectedIDs.includes(rowData.id)} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
+                        (data, {rowData}) => <input className="selectRow" type="checkbox" checked={this.state.selectedIDs.indexOf(rowData.id) !== -1} onChange={(e) => {this.selectRow(rowData.id, e.target.checked);}}/>
                     ]
                 }
             },
@@ -272,6 +272,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
 
     render() {
 
+        console.log(this.props);
         let featureSwitch = this.props.switches.find((item) => item.id === this.props.params.id);
 
         if (featureSwitch) {
@@ -293,7 +294,7 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     <h3><I18nMessage message="featureSwitchAdmin.featureSwitchOverridesTitle"/>:</h3>
 
                     <div className="globalButtons">
-                        <button onClick={this.createOverride}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                        <button className="addButton" onClick={this.createOverride}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
                     </div>
 
                     {this.props.overrides.length === 0 ?
@@ -314,9 +315,9 @@ class FeatureSwitchOverridesRoute extends React.Component {
                     }
                     <p/>
                     <div className="selectionButtons">
-                        <button disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                        <button disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                        <button disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                        <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                        <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                        <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
                         <span>{selectedSizeLabel}</span>
                     </div>
 
