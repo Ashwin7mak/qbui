@@ -20,6 +20,7 @@
     let recordsApi;
     let reportsApi;
     let appsApi;
+    let rolesApi;
     let routeGroup;
 
     module.exports = function(config) {
@@ -30,6 +31,7 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
+        rolesApi = require('../api/quickbase/rolesApi')(config);
 
         /* internal data */
         /*
@@ -67,6 +69,9 @@
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES_EE] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_IMAGES_EE] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_DOCUMENTATION_EE] = fetchSwagger;
+
+        //  role endpoints
+        routeToGetFunction[routeConsts.APP_ROLES] = getAppRoles;
 
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
@@ -669,6 +674,36 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * This is the function for getting all roles for an app
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function getAppRoles(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App Roles', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            rolesApi.getAppRoles(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App Roles');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App Roles');
+
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);

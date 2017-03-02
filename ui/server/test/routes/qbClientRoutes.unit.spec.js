@@ -55,6 +55,27 @@ describe('Express Client Routes', function() {
         done();
     });
 
+    it('Validate get app settings route', function(done) {
+        request(app).
+        get('/app/1/settings').
+        expect(200);
+        done();
+    });
+
+    it('Validate get app users route', function(done) {
+        request(app).
+        get('/app/1/users').
+        expect(200);
+        done();
+    });
+
+    it('Validate get app properties route', function(done) {
+        request(app).
+        get('/app/1/properties').
+        expect(200);
+        done();
+    });
+
     it('Validate get tables route', function(done) {
         request(app).
             get('/app/1/table/2').

@@ -12,6 +12,9 @@ import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import FormBuilderContainer from '../components/builder/formBuilderContainer';
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
+import AppSettingsRoute from "../components/app/settings/appSettingsRoute";
+import AppUsersRoute from "../components/app/settings/categories/appUsersRoute";
+import AppPropertiesRoute from "../components/app/settings/categories/appPropertiesRoute";
 import Logger from "../utils/logger";
 import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
 
@@ -51,6 +54,9 @@ render((
 
             <Route path={`${APP_ROUTE}/:appId`} component={ConnectedNav} >
                 <IndexRoute component={AppHomePageRoute} />
+                <Route path="settings" component={AppSettingsRoute} />
+                <Route path="users" component={AppUsersRoute} />
+                <Route path="properties" component={AppPropertiesRoute} />
                 <Route path="table/:tblId" component={TableHomePageRoute} />
                 <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
                 <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />

@@ -17,7 +17,8 @@
     //  debug
     routeGroupDisabled[routeGroups.DEBUG] = [
         {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
+        {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}
     ];
 
     //  mercury v1
@@ -38,6 +39,8 @@
         {route: routeConsts.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
         {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
         {route: routeConsts.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
+        // role endpoints
+        {route: routeConsts.APP_ROLES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         // swagger endpoints
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_API_EE, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
