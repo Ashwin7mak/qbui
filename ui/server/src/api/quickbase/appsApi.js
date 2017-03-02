@@ -181,17 +181,23 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             let users = {};
+                            let usersFormatted = [];
                             if (response.body) {
                                 users = JSON.parse(response.body);
                                 if (users) {
                                     //  convert id property to userId for consistency with user values in records
-                                    users.forEach(user => {
-                                        user.userId = user.id;
-                                        _.unset(user, "id");
+                                    Object.keys(users).forEach(function(key) {
+                                        users[key].forEach(user => {
+                                            user.userId = user.id;
+                                            _.unset(user, "id");
+                                            usersFormatted.push(user);
+                                        });
                                     });
                                 }
                             }
-                            resolve(users);
+                            //we need to return the users formatted with userId as an array of users for the user picker
+                            //we also need to return the hashmap given to use from core for the App User Management screen
+                            resolve([usersFormatted, users]);
                         },
                         (error) => {
                             log.error({req: req}, "Error getting app users in getAppUsers()");
