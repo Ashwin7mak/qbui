@@ -29,7 +29,8 @@ export default {
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
                 helpLinkPreText: "Please ",
                 helpLinkText: "contact our Care team"
-            }
+            },
+            settings: "Settings"
         },
         appMenu: {
             qbClassicLink: "Switch to QuickBase Classic"

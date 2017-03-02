@@ -62,11 +62,12 @@
                 // Build forms using the info from created app
                 forms = formGenerator.generateSingleTabAndSecFormWithAddAndEdit(app);
 
-                let createRecordPromises = [];
+                let promises = [];
                 app.tables.map((table, index) => {
-                    createRecordPromises.push(createRecordforAppTable(app, table));
+                    promises.push(initTableProperties(app, table));
+                    promises.push(createRecordforAppTable(app, table));
                 });
-                promise.all(createRecordPromises).then(returnedRecords => {
+                promise.all(promises).then(result => {
                     let createReportPromises = [];
                     app.tables.map((table, index) => {
                         createReportPromises.push(createReportforTable(app, table));
@@ -79,6 +80,18 @@
             });
         });
 
+        function initTableProperties(targetApp, targetTable) {
+            var tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(targetApp.id, targetTable.id);
+            let propsJson = {"tableNoun":"' + tableNoun + '"};
+            return new promise(function(resolve, reject) {
+                recordBase.apiBase.executeRequest(tablePropertiesEndpoint, consts.POST, propsJson).then(function(result) {
+                    resolve(result);
+                }).catch(function(error) {
+                    log.debug(JSON.stringify(error));
+                    reject(error);
+                });
+            });
+        }
         /**
          * Add records to each individual table under the provided app
          *
