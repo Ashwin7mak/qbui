@@ -11,7 +11,7 @@ let container = {
     offsetTop: 10
 };
 
-fdescribe('AutoScroll', () => {
+describe('AutoScroll', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
