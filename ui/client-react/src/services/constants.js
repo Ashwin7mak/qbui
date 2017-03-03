@@ -38,6 +38,7 @@ export default {
     USERS               : 'users',
     RIGHTS              : 'accessRights',
     ROLES               : 'roles',
+    TICKET              : 'ticket',
 
     // Node Entity actions
     FORMCOMPONENTS      : 'formComponents',

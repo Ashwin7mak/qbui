@@ -90,6 +90,7 @@
             META_DATA: {
                 WITH_REPORT_DEFAULTS: 'withReportDefaults'
             },
+            REALM_ID: 'realmId',
             //  legacy stack request paameters
             LEGACY_STACK: {
                 ACTION: 'a',

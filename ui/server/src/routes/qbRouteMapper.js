@@ -21,7 +21,7 @@
     let reportsApi;
     let appsApi;
     let rolesApi;
-    let usersApi;
+    let ticketApi;
     let routeGroup;
 
     module.exports = function(config) {
@@ -33,7 +33,7 @@
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
         rolesApi = require('../api/quickbase/rolesApi')(config);
-        usersApi = require('../api/quickbase/usersApi')(config);
+        ticketApi = require('../api/quickbase/ticketApi')(config);
 
         /* internal data */
         /*
@@ -725,13 +725,13 @@
         perfLog.init('Get User by id', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            usersApi.isReqUserAdmin(req).then(
+            ticketApi.isReqUserAdmin(req).then(
                 function(response) {
                     res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Get App Roles');
+                    logApiSuccess(req, response, perfLog, 'IsReqUserAdmin');
                 },
                 function(response) {
-                    logApiFailure(req, response, perfLog, 'Get App Roles');
+                    logApiFailure(req, response, perfLog, 'IsReqUserAdmin');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

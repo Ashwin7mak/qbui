@@ -11,6 +11,7 @@
     let FORMS = 'forms';
     let FORM_TYPE = 'formType';
     let TABLES = 'tables';
+    let TICKET = 'ticket';
     let RECORDS = 'records';
     let COUNT_QUERY = 'countQuery';
     let REPORTS = 'reports';
@@ -20,6 +21,7 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
+    let WHOAMI = 'whoami';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -600,16 +602,32 @@
             }
             return url;
         },
-
-        getUsersRoute: function(url, userId) {
+        /**
+         * Return the ticket route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getTicketRoute: function(url) {
             if (typeof url === 'string') {
-                let offset = url.toLowerCase().indexOf(USERS);
+                let offset = url.toLowerCase().indexOf(TICKET);
                 if (offset !== -1) {
-                    let root = url.substring(0, offset) + USERS;
-                    if (userId) {
-                        root += '/' + userId;
-                    }
+                    let root = url.substring(0, offset) + TICKET;
                     return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return the ticket/whoAmI route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getWhoAmIRoute: function(url) {
+            if (typeof url === 'string') {
+                let root = this.getTicketRoute(url);
+                if (root) {
+                    return root + '/' + WHOAMI;
                 }
             }
             return url;
