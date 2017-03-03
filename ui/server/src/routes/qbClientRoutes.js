@@ -55,70 +55,76 @@ var path = require('path');
 
     module.exports = function(app, config) {
         getBaseOpts(config);
+        var baseRoute = '/qbase';
         var compBundleFileName = config.isProduction ? 'componentLibrary.min.js' : 'componentLibrary.js';
+        var governanceBundleFileName = config.isProduction ? 'governance.min.js' : 'governance.js';
 
-        app.route('/qbase/app/:appId/table/:tblId/report/:rptId').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/table/:tblId/report/:rptId`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId/report/:rptId/record/:recordId').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/table/:tblId/report/:rptId/record/:recordId`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/table/:tblId/record/:recordId`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId/reports').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/table/:tblId/reports`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/table/:tblId`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/settings').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/settings`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/users').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/users`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId/properties').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId/properties`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/app/:appId').get(function(req, res) {
+        app.route(`${baseRoute}/app/:appId`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/apps').get(function(req, res) {
+        app.route(`${baseRoute}/apps`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/components').get(function(req, res) {
+        app.route(`${baseRoute}/components`).get(function(req, res) {
             renderIndex(req, res, {bundleFileName: compBundleFileName});
         });
 
-        app.route('/qbase/components/:componentName').get(function(req, res) {
+        app.route(`${baseRoute}/components/:componentName`).get(function(req, res) {
             renderIndex(req, res, {title: 'QuickBase Component Library', bundleFileName: compBundleFileName});
         });
 
-        app.route('/qbase/builder/app/:appId/table/:tblId/form').get(function(req, res) {
+        app.route(`${baseRoute}/builder/app/:appId/table/:tblId/form`).get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/qbase/builder/app/:appId/table/:tblId/form/:formId').get(function(req, res) {
+        app.route(`${baseRoute}/builder/app/:appId/table/:tblId/form/:formId`).get(function(req, res) {
             renderIndex(req, res);
+        });
+
+        app.route(`${baseRoute}/governance`).get(function(req, res) {
+            renderIndex(req, res, {title: 'QuickBase Governance', bundleFileName: governanceBundleFileName});
         });
 
         //  default application dashboard
-        app.route('/qbase/').get(function(req, res) {
+        app.route(`${baseRoute}/`).get(function(req, res) {
             renderIndex(req, res);
         });
     };
