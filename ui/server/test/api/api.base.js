@@ -32,7 +32,7 @@
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
-        var FEATURE_SWITCH_ENDPOINT = 'https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com/dev/featureSwitch/';
+        var FEATURE_SWITCH_ENDPOINT = '/featureSwitches';
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
@@ -147,13 +147,6 @@
             };
         }
 
-        function generateAWSRequestOpts(stringPath, method) {
-            return {
-                url   : stringPath,
-                method: method
-            };
-        }
-
         //Generates and returns a psuedo-random 32 char string that is URL safe
         function generateValidSubdomainString() {
             var text = '';
@@ -186,7 +179,7 @@
                 return resolveFullUrl(subdomain, relativePath);
             },
             resolveFeatureSwitchEndpoint      : function() {
-                var featureSwitchEndpoint = FEATURE_SWITCH_ENDPOINT;
+                var featureSwitchEndpoint = NODE_BASE_ENDPOINT + FEATURE_SWITCH_ENDPOINT;
                 return featureSwitchEndpoint;
             },
             resolveAppsEndpoint         : function(appId) {
@@ -312,7 +305,7 @@
              * @param headers
              * @param params
              */
-            executeRequest              : function(optsOrStringPath, method, body, headers, params, isEE, isAWS) {
+            executeRequest              : function(optsOrStringPath, method, body, headers, params, isEE) {
                 var stringPath = optsOrStringPath;
                 if (_.isObject(stringPath)) {
                     var temp = _.assign({}, stringPath);
@@ -374,40 +367,6 @@
                     subdomain = this.realm.subdomain;
                 }
                 var opts = generateEERequestOpts(stringPath, method, subdomain);
-                if (body) {
-                    opts.body = jsonBigNum.stringify(body);
-                }
-                // if we have a GET request and have params to add (since GET requests don't use JSON body values)
-                // we have to add those to the end of the generated URL as ?param=value
-                if (params) {
-                    // remove the trailing slash and add the parameters
-                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
-                }
-                //Setup headers
-                if (headers) {
-                    opts.headers = headers;
-                } else {
-                    opts.headers = DEFAULT_HEADERS;
-                }
-                if (this.authTicket) {
-                    opts.headers[TICKET_HEADER_KEY] = this.authTicket;
-                }
-                var reqInfo = opts.url;
-                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
-                //Make request and return promise
-                var deferred = promise.pending();
-                apiBase.executeRequestRetryable(opts, 3).then(function(resp) {
-                    log.debug('Response for reqInfo ' + reqInfo + ' got success response' + resp);
-                    deferred.resolve(resp);
-                }).catch(function(error) {
-                    log.debug('Response ERROR! for reqInfo ' + reqInfo + ' got error response' + error);
-                    deferred.reject(error);
-                });
-                return deferred.promise;
-            },
-            executeAWSRequest              : function(stringPath, method, body, headers, params) {
-
-                var opts = generateAWSRequestOpts(stringPath, method);
                 if (body) {
                     opts.body = jsonBigNum.stringify(body);
                 }
