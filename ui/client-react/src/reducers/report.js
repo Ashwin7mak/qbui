@@ -136,7 +136,7 @@ const report = (state = [], action) => {
     //}
     case types.SAVE_RECORD_SUCCESS: {
         let rpt = action.content.report;
-        if (rpt) {
+        if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);
             if (currentReport) {
                 let obj = {

@@ -303,10 +303,14 @@ export const RecordTrowser = React.createClass({
                         this.navigateToNewRecord(this.props.recId);
                     }
                 }
+            },
+            () => {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormError(formType);
+                this.showErrorDialog();
             }
         );
-
-
     },
 
     /**

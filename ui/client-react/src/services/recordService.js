@@ -130,10 +130,22 @@ class RecordService extends BaseService {
      * @returns promise
      */
     createRecord(appId, tableId, record) {
-        const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
+        //const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
+        //
+        //let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
+        //return super.post(url, fixedRecord);
 
-        let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
-        return super.post(url, fixedRecord);
+        let error = {
+            data: {
+                response: {
+                    errors: [
+                        {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
+                        {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
+                    ]
+                }
+            }
+        };
+        return Promise.reject(error);
     }
 
     /**
