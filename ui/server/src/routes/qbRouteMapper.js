@@ -21,6 +21,7 @@
     let reportsApi;
     let appsApi;
     let rolesApi;
+    let usersApi;
     let routeGroup;
 
     module.exports = function(config) {
@@ -32,6 +33,7 @@
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
         rolesApi = require('../api/quickbase/rolesApi')(config);
+        usersApi = require('../api/quickbase/usersApi')(config);
 
         /* internal data */
         /*
@@ -74,6 +76,9 @@
         routeToGetFunction[routeConsts.APP_ROLES] = getAppRoles;
 
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
+
+        //  users endpoints
+        routeToGetFunction[routeConsts.IS_REQ_USER_ADMIN] = isReqUserAdmin;
 
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
@@ -697,6 +702,30 @@
 
         processRequest(req, res, function(req, res) {
             rolesApi.getAppRoles(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App Roles');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App Roles');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function isReqUserAdmin(req, res, userId) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get User by id', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            usersApi.isReqUserAdmin(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get App Roles');

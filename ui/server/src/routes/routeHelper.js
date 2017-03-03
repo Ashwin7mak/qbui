@@ -602,11 +602,17 @@
         },
 
         getUsersRoute: function(url, userId) {
-            let root = getUrlRoot(url, USERS);
-            if (userId && typeof userId === 'string') {
-                return root + '/' + userId;
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(USERS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
             }
-            return root;
+            return url;
         },
 
         /**

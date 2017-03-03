@@ -35,12 +35,23 @@
                 requestHelper = requestHelperOverride;
             },
 
-            getCurrentUser: function(req) {
-                let ticketCookie = req.cookies[constants.COOKIES.TICKET];
-                if (ticketCookie) {
-                    let userId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 2));
-                    return this.getUserById(req, userId);
-                }
+            isReqUserAdmin: function(req) {
+                return new Promise((resolve, reject) => {
+                    let ticketCookie = req.cookies[constants.COOKIES.TICKET];
+                    if (ticketCookie) {
+                        let userId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 2));
+                        this.getUserById(req, userId).then(function(response) {
+                            resolve(response.administrator);
+                        },
+                        function(error) {
+                            log.error({req: req}, "usersApi.isReqUserAdmin(): Error retrieving user.");
+                            reject(error);
+                        }).catch(function(error) {
+                            requestHelper.logUnexpectedError('usersApi..isReqUserAdmin', error, true);
+                            reject(error);
+                        });
+                    }
+                });
             },
             getUserById: function(req, userId) {
                 return new Promise((resolve, reject) => {

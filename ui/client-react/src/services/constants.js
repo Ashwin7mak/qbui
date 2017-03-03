@@ -47,7 +47,7 @@ export default {
     INVOKE              : 'invoke',
     PARSE               : 'parse',
     BULK                : 'bulk',
-
+    ISREQUSERADMIN      : 'reqUserAdmin',
     // Legacy actions
     STACK               : 'stack'
 };

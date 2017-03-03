@@ -65,6 +65,9 @@
         //  ROLE ENDPOINTS
         APP_ROLES                   : baseUrl.QUICKBASE + '/apps/:appId/roles',
 
+        // USERS ENDPOINTS
+        IS_REQ_USER_ADMIN           : baseUrl.QUICKBASE + '/users/reqUserAdmin',
+
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
         TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*'
