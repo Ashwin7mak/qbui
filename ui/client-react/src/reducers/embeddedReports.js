@@ -2,16 +2,16 @@ import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 
 /**
- * Manage array of report states
+ * Manage map of embedded reports
  *
- * @param state - array of states
- * @param action - event type
+ * @param {Object} state - map of report states
+ * @param {String} action - event type
  * @returns {Array}
  */
 const embeddedReport = (state = {}, action) => {
     //  what report action is being requested
     switch (action.type) {
-    /*case types.LOAD_REPORT: {
+    /*case types.LOAD_EMBEDDED_REPORT: {
         const obj = {
             id: action.id,
             loading: true,
@@ -21,8 +21,7 @@ const embeddedReport = (state = {}, action) => {
         };
         return newState(obj);
     }
-    case types.LOAD_REPORT_FAILED:
-    case types.LOAD_REPORTS_FAILED: {
+    case types.LOAD_EMBEDDED_REPORT_FAILED: {
         const obj = {
             id: action.id,
             loading: false,
