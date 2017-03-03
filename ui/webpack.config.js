@@ -14,6 +14,8 @@ var clientPath = path.join(__dirname, 'client-react');
 
 var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
 
+var governancePath = path.join(__dirname, 'governance');
+
 var envConfig = require('./server/src/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
@@ -62,6 +64,10 @@ var config = {
         componentLibrary: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
             path.resolve(componentLibraryPath, 'index.js')
+        ],
+        governance: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(governancePath, 'src/governance.js')
         ]
     },
     output: {
