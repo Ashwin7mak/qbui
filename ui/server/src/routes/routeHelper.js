@@ -625,9 +625,10 @@
          */
         getWhoAmIRoute: function(url) {
             if (typeof url === 'string') {
-                let root = this.getTicketRoute(url);
-                if (root) {
-                    return root + '/' + WHOAMI;
+                let offset = url.toLowerCase().indexOf(TICKET);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + TICKET + '/' + WHOAMI;
+                    return root;
                 }
             }
             return url;

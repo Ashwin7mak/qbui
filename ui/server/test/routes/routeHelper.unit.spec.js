@@ -478,4 +478,36 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate getTicketRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test with invalid url', url: '/url/prefix/', expectation: '/url/prefix/'},
+            {name: 'test with valid url with ticket', url: '/url/prefix/ticket', expectation: '/url/prefix/ticket'},
+            {name: 'test with valid url with ticket in path', url: '/url/prefix/ticket/abc', expectation: '/url/prefix/ticket'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getTicketRoute(testCase.url, testCase.appId), testCase.expectation);
+                done();
+            });
+        });
+    });
+    describe('validate whoAmIRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test with invalid url w/o ticket', url: '/url/prefix/', expectation: '/url/prefix/'},
+            {name: 'test with valid url w ticket', url: '/url/prefix/ticket', expectation: '/url/prefix/ticket/whoami'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getWhoAmIRoute(testCase.url, testCase.appId), testCase.expectation);
+                done();
+            });
+        });
+    });
+
 });
