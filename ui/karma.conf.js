@@ -26,7 +26,8 @@ module.exports = function(config) {
         // code coverage against all client react code EXCEPT node modules that we have privately forked
         preprocessors: {
             "tests.webpack.js": ["webpack", "sourcemap"],
-            "client-react/src/!(components/node)/**/*.js" : ["coverage"]
+            "client-react/src/!(components/node)/**/*.js" : ["coverage"],
+            "governance/src/**/*.js" : ["coverage"]
         },
 
         webpack: {
@@ -40,7 +41,8 @@ module.exports = function(config) {
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "client-react/test"),
                             path.resolve(__dirname, "componentLibrary/src"),
-                            path.resolve(__dirname, "componentLibrary/test")
+                            path.resolve(__dirname, "componentLibrary/test"),
+                            path.resolve(__dirname, "governance/src"),
                         ],
                         exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
@@ -93,13 +95,15 @@ module.exports = function(config) {
                         test: /\.js$/,
                         include: [
                             path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "componentLibrary/src")
+                            path.resolve(__dirname, "componentLibrary/src"),
+                            path.resolve(__dirname, "governance/src")
                         ],
                         exclude: [
                             nodeModulesPath,
                             nodeComponentsPath,
                             path.resolve(__dirname, "client-react/test"),
-                            path.resolve(__dirname, "componentLibrary/test")
+                            path.resolve(__dirname, "componentLibrary/test"),
+                            path.resolve(__dirname, "governance/test")
                         ],
                         loader: "istanbul-instrumenter"
                     }

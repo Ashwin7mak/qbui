@@ -93,7 +93,9 @@ var config = {
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'client-react/test'),
-                    componentLibraryPath
+                    componentLibraryPath,
+                    path.resolve(__dirname, 'governance/src'),
+                    path.resolve(__dirname, 'governance/test'),
                 ],
                 exclude: [
                     nodeModulesPath,
