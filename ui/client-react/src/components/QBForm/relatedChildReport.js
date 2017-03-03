@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import _ from 'lodash';
 
 import EmbeddedReportToolsAndContent from '../report/embeddedReportToolsAndContent';
-import ReportGrid from '../dataTable/reportGrid/reportGrid';
 
 import UrlUtils from '../../utils/urlUtils';
 import Breakpoints from '../../utils/breakpoints';
