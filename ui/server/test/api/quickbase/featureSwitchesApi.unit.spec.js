@@ -89,7 +89,7 @@ describe("Validate featureSwitchesApi", function() {
         it('success return results ', function(done) {
             req.url = '/featureSwitches';
             req.body = {};
-            let targetObject = null;
+            let targetObject = '';
             executeReqStub.returns(Promise.resolve(targetObject));
             let promise = featureSwitchesApi.createFeatureSwitch(req);
 

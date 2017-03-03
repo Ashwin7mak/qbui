@@ -141,12 +141,12 @@ describe('Qb Route Mapper Unit Test', function() {
      * Unit test that validates generating an app with a specified number of tables
      */
     describe('test modify path for request', function() {
-        // corePathModificationProvider().forEach(function(entry) {
-        //     runTestCase(entry);
-        // });
-        // eePathModificationProvider().forEach(function(entry) {
-        //     runTestCase(entry);
-        // });
+        corePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
+        eePathModificationProvider().forEach(function(entry) {
+            runTestCase(entry);
+        });
         featureSwitchesPathModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });

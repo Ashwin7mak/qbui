@@ -4,13 +4,10 @@
 (function() {
     'use strict';
 
-    let uuid = require('uuid');
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();
     let _ = require('lodash');
-
-
 
     module.exports = function(config) {
         var APPLICATION_JSON = 'application/json';
@@ -23,7 +20,6 @@
         let cookieUtils = require('../../utility/cookieUtils');
         let ob32Utils = require('../../utility/ob32Utils');
         let CookieConsts = require('../../../../common/src/constants');
-        let featureSwitchesMockData;
         let mockApi = require('./mock/mockFeatureSwitchesApi')(config);
 
         let featureSwitchesApi = {
