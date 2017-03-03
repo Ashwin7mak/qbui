@@ -116,17 +116,23 @@ class RecordModel {
         };
 
         if (Array.isArray(errors) && errors.length > 0) {
-            let errorMessages = [];
-            errors.forEach(error => {
-                errorMessages.push(ValidationMessage.getMessage(error));
+            this.model.editErrors.errors = errors;
+            this.model.editErrors.ok = false;
+            // fill in client message
+            errors.forEach(fieldError => {
+                fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
             });
-
-            if (errorMessages.length > 0) {
-                this.model.editErrors = {
-                    ok: false,
-                    errors: errorMessages
-                };
-            }
+            //let errorMessages = [];
+            //errors.forEach(error => {
+            //    errorMessages.push(ValidationMessage.getMessage(error));
+            //});
+            //
+            //if (errorMessages.length > 0) {
+            //    this.model.editErrors = {
+            //        ok: false,
+            //        errors: errorMessages
+            //    };
+            //}
         }
     }
 

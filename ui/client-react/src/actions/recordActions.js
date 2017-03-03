@@ -789,7 +789,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                                         if (_.has(getError, 'data.response.errors')) {
                                             errors = getError.data.response.errors || [];
                                         }
-                                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: getError.response}));
+                                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                                         // this tiny delay allows for saving modal to trap inputs otherwise
                                         // clicks get queued till after creating
@@ -809,7 +809,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                             //    error: new Error('no response data member')
                             //});
                             let errors = ['no response data member'];
-                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
+                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                             // this delay allows for saving modal to trap inputs otherwise
                             // clicks get invoked after create
@@ -833,7 +833,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                         if (_.has(error, 'data.response.errors')) {
                             errors = error.data.response.errors || [];
                         }
-                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                         if (error.response.status === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
@@ -861,7 +861,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                     appId + '; TblId:' + tblId + '; changes:' + JSON.stringify(changes) + '; fields:' + JSON.stringify(fields);
                 logger.error(errMessage);
                 //this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
-                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errMessage}));
+                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId}));
                 reject();
             }
         });
@@ -974,6 +974,7 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                                 //  flux action to update recordPendingEditsStore AND reportDataStore..to be removed
                                 //this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 //dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
+                                // TODO: fix context
                                 let report = {
                                     context: 'NAV',
                                     recId:recId,
@@ -1008,11 +1009,10 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                                 if (_.has(getError, 'data.response.errors')) {
                                     errors = getError.data.response.errors || [];
                                 }
-                                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
-                                // this delay allows for saving modal to trap inputs otherwise
-                                // clicks get invoked after saving
+                                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors, context: 'NAV'}));
+                                // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
+                                // icon in action column does not render.
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                                    //this.dispatch(actions.AFTER_RECORD_EDIT);
                                     dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                     reject();
                                 });
@@ -1033,13 +1033,12 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                         if (_.has(error, 'data.response.errors')) {
                             errors = error.data.response.errors || [];
                         }
-                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errors}));
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors, context: 'NAV'}));
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after saving
+                        // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
+                        // icon in action column does not render.
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            //this.dispatch(actions.AFTER_RECORD_EDIT);
                             dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                             reject();
                         });

@@ -144,11 +144,24 @@ const report = (state = [], action) => {
                     record: rpt.record ? rpt.record.record : []
                 };
                 updateReportRecord(currentReport, obj);
+                currentReport.loading = false;
+                currentReport.error = false;
                 return newState(currentReport);
             }
         }
         return state;
     }
+    //case types.SAVE_RECORD_ERROR: {
+    //    let ctx = action.content.context;
+    //    if (ctx) {
+    //        let currentReport = getReportFromState(ctx);
+    //        if (currentReport) {
+    //            currentReport.loading = false;
+    //            return newState(currentReport);
+    //        }
+    //    }
+    //    return state;
+    //}
     case types.UPDATE_REPORT_RECORD: {
         let currentReport = getReportFromState(action.id);
         if (currentReport) {

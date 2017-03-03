@@ -89,7 +89,7 @@ const record = (state = [], action) => {
                     };
                 }
 
-                //  initialize a new record model object used for delete
+                //  initialize a record model object used for delete
                 let model = new RecordModel(action.content.appId, action.content.tblId, action.content.recId);
                 model.setSaving(true);
                 currentRecd.pendEdits = model.get();
@@ -110,6 +110,8 @@ const record = (state = [], action) => {
                     let model = new RecordModel();
                     model.set(currentRecd.pendEdits);
                     model.setSaving(false);
+
+                    currentRecd.pendEdits = model.get();
                     states = newState(currentRecd);
                 }
             });
@@ -127,6 +129,8 @@ const record = (state = [], action) => {
                         let model = new RecordModel();
                         model.set(currentRecd.pendEdits);
                         model.setErrors(errors);
+
+                        currentRecd.pendEdits = model.get();
                         states = newState(currentRecd);
                     }
                 });
@@ -151,10 +155,6 @@ const record = (state = [], action) => {
                 //TODO: fix this..messy
                 const pendEdits = currentRecd.pendEdits;
 
-                // saving an existing record
-                model = new RecordModel();
-                model.set(pendEdits);
-
                 //  any inline edit changes...this is replacing commit..
                 if (pendEdits.isPendingEdit) {
                     let entry = getEntryKey(pendEdits);
@@ -168,6 +168,9 @@ const record = (state = [], action) => {
                     pendEdits.commitChanges[entry].status = '...'; //status is pending response from server
                 }
 
+                // saving an existing record
+                model = new RecordModel();
+                model.set(pendEdits);
                 model.setRecordChanges(action.content.appId, action.content.tblId, action.content.recId, action.content.changes);
             } else {
                 // saving a new record
@@ -176,43 +179,45 @@ const record = (state = [], action) => {
                 };
                 model = new RecordModel(action.content.appId, action.content.tblId);
                 model.setRecordChanges(action.content.appId, action.content.tblId, action.content.recId, action.content.changes);
+                currentRecd.pendEdits = model.get();
             }
-            currentRecd.pendEdits = model.get();
             return newState(currentRecd);
         }
         case types.SAVE_RECORD_SUCCESS: {
             let currentRecd = getRecordFromState(action.id);
             if (currentRecd) {
-                //TODO: fix this..messy
                 currentRecd.currentEditingRecordId = action.content.recId;
-                let entry = getEntryKey(currentRecd);
 
+                //TODO: fix this..messy
+                const pendEdits = currentRecd.pendEdits;
+
+                let entry = getEntryKey(currentRecd);
                 //  new save is not going to have any commit changes..
-                if (typeof (currentRecd.pendEdits.commitChanges[entry]) === 'undefined') {
-                    currentRecd.pendEdits.commitChanges[entry] = {};
+                if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
+                    pendEdits.commitChanges[entry] = {};
                 }
-                if (typeof (currentRecd.pendEdits.commitChanges[entry].changes) === 'undefined') {
-                    currentRecd.pendEdits.commitChanges[entry].changes = [];
+                if (typeof (pendEdits.commitChanges[entry].changes) === 'undefined') {
+                    pendEdits.commitChanges[entry].changes = [];
                 }
-                currentRecd.pendEdits.commitChanges[entry].changes.push(currentRecd.pendEdits.recordChanges);
+                pendEdits.commitChanges[entry].changes.push(pendEdits.recordChanges);
 
                 //  TODO: setting status though it doesn't look like it's referenced anywhere..not sure why it's set.
-                if (typeof (currentRecd.pendEdits.commitChanges[entry]) !== 'undefined') {
-                    currentRecd.pendEdits.commitChanges[entry].status = types.SAVE_RECORD_SUCCESS;
+                if (typeof (pendEdits.commitChanges[entry]) !== 'undefined') {
+                    pendEdits.commitChanges[entry].status = types.SAVE_RECORD_SUCCESS;
                 }
 
-                currentRecd.pendEdits.updateRecordInReportGrid = true;
+                pendEdits.updateRecordInReportGrid = true;
 
-                currentRecd.pendEdits.isPendingEdit = false;
-                currentRecd.pendEdits.isInlineEditOpen = false;
-                currentRecd.pendEdits.recordEditOpen = false;
-                currentRecd.pendEdits.recordChanges = {};
+                pendEdits.isPendingEdit = false;
+                pendEdits.isInlineEditOpen = false;
+                pendEdits.recordEditOpen = false;
+                pendEdits.recordChanges = {};
                 //TODO fix this..
-                currentRecd.pendEdits.editErrors = {
+                pendEdits.editErrors = {
                     ok: true,
                     errors:[]
                 };
-                currentRecd.pendEdits.saving = false;
+                pendEdits.saving = false;
                 return newState(currentRecd);
             }
             return state;
@@ -223,20 +228,25 @@ const record = (state = [], action) => {
             if (_.has(currentRecd, 'pendEdits')) {
                 let errors = action.content.errors;
                 if (errors) {
-                    let model = new RecordModel();
-                    model.set(currentRecd.pendEdits);
-                    model.setErrors(errors);
-                    model.currentEditingRecordId = action.content.recId;
-                    model.hasAttemptedSave = true;
+                    const pendEdits = currentRecd.pendEdits;
+                    pendEdits.currentEditingRecordId = action.content.recId;
+                    pendEdits.hasAttemptedSave = true;
+                    pendEdits.recordEditOpen = true;
+                    //pendEdits.saving = false;
 
                     //  toDO: not sure this is really necessary..but carrying over from flux implementation
                     let entry = getEntryKey(currentRecd);
-                    if (typeof (currentRecd.pendEdits.commitChanges[entry]) === 'undefined') {
-                        currentRecd.pendEdits.commitChanges[entry] = {};
+                    if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
+                        pendEdits.commitChanges[entry] = {};
                     }
-                    if (typeof (currentRecd.pendEdits.commitChanges[entry]) !== 'undefined') {
-                        currentRecd.pendEdits.commitChanges[entry].status = types.SAVE_RECORD_ERROR;
+                    if (typeof (pendEdits.commitChanges[entry]) !== 'undefined') {
+                        pendEdits.commitChanges[entry].status = types.SAVE_RECORD_ERROR;
                     }
+
+                    //  set the errors
+                    let model = new RecordModel();
+                    model.set(pendEdits);
+                    model.setErrors(errors);
 
                     return newState(currentRecd);
                 }
@@ -249,9 +259,7 @@ const record = (state = [], action) => {
             //  TODO: make sure state is not getting mutated!!!!
             let currentRecd = getRecordFromState(action.id);
             if (_.has(currentRecd, 'pendEdits')) {
-                let model = new RecordModel();
-                model.set(currentRecd.pendEdits);
-                model.setSaving(false);
+                currentRecd.pendEdits.saving = false;
                 return newState(currentRecd);
             }
             return state;
@@ -267,10 +275,9 @@ const record = (state = [], action) => {
 
             //  initialize a new record model object used for pending changes
             let model = new RecordModel();
-            const content = action.content || {};
-            model.setEditRecordStart(content);
-
+            model.setEditRecordStart(action.content || {});
             currentRecd.pendEdits = model.get();
+
             return newState(currentRecd);
         }
         case types.EDIT_RECORD_CHANGE: {
@@ -309,6 +316,7 @@ const record = (state = [], action) => {
             if (_.has(currentRecd, 'pendEdits') && currentRecd.pendEdits.isPendingEdit) {
                 //TODO: move into model method?
                 const pendEdits = currentRecd.pendEdits;
+
                 let entry = getEntryKey(pendEdits);
                 if (typeof (pendEdits.commitChanges[entry]) === 'undefined') {
                     pendEdits.commitChanges[entry] = {};
@@ -328,6 +336,7 @@ const record = (state = [], action) => {
                 //TODO: move into model method?
                 let content = action.content;
                 let pendEdits = currentRecd.pendEdits;
+
                 let recentlyChangedFieldId = (_.has(content, 'fieldDef') ? content.fieldDef.id : null);
 
                 // clear outdated validation results
@@ -359,15 +368,15 @@ const record = (state = [], action) => {
                 }
                 return newState(currentRecd);
             }
-
             return state;
         }
         case types.EDIT_RECORD_CANCEL: {
             const currentRecd = getRecordFromState(action.id);
             if (_.has(currentRecd, 'pendEdits')) {
                 delete currentRecd.pendEdits;
+                return newState(currentRecd);
             }
-            return newState(currentRecd);
+            return state;
         }
         default:
             // by default, return existing state
