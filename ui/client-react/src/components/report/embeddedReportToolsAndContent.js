@@ -1,16 +1,18 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import _ from 'lodash';
+
+import ReportToolsAndContent from '../report/reportToolsAndContent';
+import {loadDynamicEmbeddedReport} from '../../actions/reportActions';
+import {CONTEXT} from '../../actions/context';
+
 import Logger from '../../utils/logger';
 import QueryUtils from '../../utils/queryUtils';
 import NumberUtils from '../../utils/numberUtils';
-import simpleStringify from '../../../../common/src/simpleStringify';
+
 import constants from '../../../../common/src/constants';
-import Fluxxor from 'fluxxor';
-import _ from 'lodash';
+
 import './report.scss';
-import ReportToolsAndContent from '../report/reportToolsAndContent';
-import {connect} from 'react-redux';
-import {loadDynamicEmbeddedReport} from '../../actions/reportActions';
-import {CONTEXT} from '../../actions/context';
 
 let logger = new Logger();
 
@@ -63,7 +65,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
     },
 
     componentDidMount() {
-        this.uniqueId = 'FORM' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+        this.uniqueId = CONTEXT.REPORT.EMBEDDED + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
         //this.setState({});
         this.loadReportFromProps();
     },

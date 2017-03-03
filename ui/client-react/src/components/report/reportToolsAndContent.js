@@ -351,9 +351,9 @@ export const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        appId = appId || _.get(this, 'props.params.appId');
-        tblId = tblId || _.get(this, 'props.params.tblId');
-        rptId = rptId || _.get(this, 'props.params.rptId');
+        appId = _.get(this, 'props.params.appId', appId);
+        tblId = _.get(this, 'props.params.tblId', tblId);
+        rptId = _.get(this, 'props.params.rptId', rptId);
 
         let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
 
