@@ -17,7 +17,8 @@ let logger = new Logger();
 /**
  * A wrapper for ReportToolsAndContent to be rendered as an embedded report in a form.
  */
-const EmbeddedReportToolsAndContent = React.createClass({
+// Export the unconnected base component for testing, the default export is wrapped with `connect`
+export const EmbeddedReportToolsAndContent = React.createClass({
     nameForRecords: "Records",
 
     propTypes: {
@@ -34,7 +35,7 @@ const EmbeddedReportToolsAndContent = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReport(appId, tblId, rptId, queryParams) {
-        this.props.loadDynamicEmbeddedReport(this.uniqId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
+        this.props.loadDynamicEmbeddedReport(this.uniqueId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
 
     /**
@@ -62,7 +63,8 @@ const EmbeddedReportToolsAndContent = React.createClass({
     },
 
     componentDidMount() {
-        this.uniqId = 'FORM' + Math.floor(Math.random() * 100000);
+        this.uniqueId = 'FORM' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+        //this.setState({});
         this.loadReportFromProps();
     },
 
@@ -72,24 +74,24 @@ const EmbeddedReportToolsAndContent = React.createClass({
     },
 
     render() {
-        const record = _.get(this, `props.records[${this.uniqId}]`);
-        if (!record) {
-            logger.info("the necessary params were not specified to embeddedReportToolsAndContent render params=" + simpleStringify(this.props.params));
+        const report = _.get(this, `props.reports[${this.uniqueId}]`);
+        if (!report) {
+            logger.info('no report exists in store for embeddedReportToolsAndContent with uniqueId: ' + this.uniqueId);
             return null;
         } else {
             const params = {
-                appId: record.appId,
-                tblId: record.tblId,
-                rptId: record.rptId
+                appId: report.appId,
+                tblId: report.tblId,
+                rptId: report.rptId
             };
             return (
                 <div className="embeddedReportContainer reportContainer">
                     <ReportToolsAndContent
                         params={params}
-                        reportData={record}
+                        reportData={report}
                         appUsers={this.props.appUsers}
                         routeParams={this.props.routeParams}
-                        selectedAppId={record.appId}
+                        selectedAppId={report.appId}
                         fields={this.props.fields || !("nope, viewOnly")}
                         nameForRecords={this.nameForRecords}
                         isViewOnly={true}
