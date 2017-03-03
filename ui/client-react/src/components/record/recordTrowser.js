@@ -238,6 +238,8 @@ export const RecordTrowser = React.createClass({
 
         this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList, true)).then(
             (obj) => {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
                 this.props.saveFormSuccess(formType);
                 if (this.props.viewingRecordId === this.props.recId) {
                     this.props.syncForm("view");
@@ -254,6 +256,12 @@ export const RecordTrowser = React.createClass({
                         this.navigateToNewRecord(this.props.recId);
                     }
                 }
+            },
+            () => {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormError(formType);
+                this.showErrorDialog();
             }
         );
         //this.props.updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList);

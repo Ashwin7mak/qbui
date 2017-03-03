@@ -110,7 +110,10 @@ class RecordService extends BaseService {
         let error = {
             data: {
                 response: {
-                    errors: [{isInvalid:true, txt:'error message 1'}, {isInvalid:true, txt:'error message 2'}]
+                    errors: [
+                        {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
+                        {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
+                    ]
                 }
             }
         };
