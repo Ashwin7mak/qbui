@@ -122,14 +122,32 @@ describe('Qb Route Mapper Unit Test', function() {
         ];
     }
 
+    function featureSwitchesPathModificationProvider() {
+        return [
+            {message: 'GET request to the feature states endpoint', request: '/api/v1/featureStates', expectedPath: '/api/v1/featureStates', route: routeConsts.FEATURE_STATES, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FEATURE_STATES), expectedDefined: true, httpVerb: 'GET'},
+
+            {message: 'GET request to the feature switches endpoint', request: '/api/v1/featureSwitches', expectedPath: '/api/api/v1/featureSwitches', route: routeConsts.FEATURE_SWITCHES, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FEATURE_SWITCHES), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'POST request to feature switches endpoint', request: '/api/v1/featureSwitches', expectedPath: '/api/v1/featureSwitches', route: routeConsts.FEATURE_SWITCHES, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FEATURE_SWITCHES), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PUT request to feature switches endpoint', request: '/api/v1/featureSwitches/1', expectedPath: '/api/v1/featureSwitches/1', route: routeConsts.FEATURE_SWITCH, method: routeMapper.fetchPutFunctionForRoute(routeConsts.FEATURE_SWITCH), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'DELETE request to feature switches endpoint', request: '/api/v1/featureSwitches/bulk?ids=a,b', expectedPath: '/api/v1/featureSwitches/bulk?ids=a,b', route: routeConsts.FEATURE_SWITCHES_BULK, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.FEATURE_SWITCHES_BULK), expectedDefined: true, httpVerb: 'DELETE'},
+
+            {message: 'POST request to feature overrides endpoint', request: '/api/v1/featureSwitches/1/overrides', expectedPath: '/api/v1/featureSwitches/1/overrides', route: routeConsts.FEATURE_OVERRIDES, method: routeMapper.fetchPostFunctionForRoute(routeConsts.FEATURE_OVERRIDES), expectedDefined: true, httpVerb: 'POST'},
+            {message: 'PUT request to feature overrides endpoint', request: '/api/v1/featureSwitches/1/overrides/1', expectedPath: '/api/v1/featureSwitches/1/overrides/1', route: routeConsts.FEATURE_OVERRIDE, method: routeMapper.fetchPutFunctionForRoute(routeConsts.FEATURE_OVERRIDE), expectedDefined: true, httpVerb: 'PUT'},
+            {message: 'DELETE request to feature overrides endpoint', request: '/api/v1/featureSwitches/1/overrides/bulk?ids=a,b', expectedPath: '/api/v1/featureSwitches/1/overrides/bulk?ids=a,b', route: routeConsts.FEATURE_OVERRIDES_BULK, method: routeMapper.fetchDeleteFunctionForRoute(routeConsts.FEATURE_OVERRIDES_BULK), expectedDefined: true, httpVerb: 'DELETE'},
+
+        ];
+    }
     /**
      * Unit test that validates generating an app with a specified number of tables
      */
     describe('test modify path for request', function() {
-        corePathModificationProvider().forEach(function(entry) {
-            runTestCase(entry);
-        });
-        eePathModificationProvider().forEach(function(entry) {
+        // corePathModificationProvider().forEach(function(entry) {
+        //     runTestCase(entry);
+        // });
+        // eePathModificationProvider().forEach(function(entry) {
+        //     runTestCase(entry);
+        // });
+        featureSwitchesPathModificationProvider().forEach(function(entry) {
             runTestCase(entry);
         });
     });

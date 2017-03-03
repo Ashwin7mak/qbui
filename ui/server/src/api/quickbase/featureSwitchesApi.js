@@ -4,7 +4,6 @@
 (function() {
     'use strict';
 
-    let fs = require('fs');
     let uuid = require('uuid');
     let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
@@ -12,7 +11,11 @@
     let _ = require('lodash');
 
 
+
     module.exports = function(config) {
+        var APPLICATION_JSON = 'application/json';
+        var CONTENT_TYPE = 'Content-Type';
+
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
         let constants = require('../../../../common/src/constants');
@@ -21,34 +24,51 @@
         let ob32Utils = require('../../utility/ob32Utils');
         let CookieConsts = require('../../../../common/src/constants');
         let featureSwitchesMockData;
-
-        /**
-         * load mock data from config.featureSwitchesMockData
-         */
-        function loadSwitchesMockData() {
-            let data = fs.readFileSync(config.featureSwitchesMockData, 'utf8');
-            return JSON.parse(data);
-        }
-
-        /**
-         * save mock data to config.featureSwitchesMockData
-         */
-        function saveSwitchesMockData() {
-            fs.writeFile(config.featureSwitchesMockData, JSON.stringify(featureSwitchesMockData, null, '  '), 'utf8');
-        }
+        let mockApi = require('./mock/mockFeatureSwitchesApi')(config);
 
         let featureSwitchesApi = {
 
-            getFeatureSwitches: function(req) {
+            /**
+             * Allows you to override the request object
+             * @param requestOverride
+             */
+            setRequestObject: function(requestOverride) {
+                request = requestOverride;
+            },
+            /**
+             * Allows you to override the requestHelper object
+             * @param requestRequestOverride
+             */
+            setRequestHelperObject: function(requestHelperOverride) {
+                requestHelper = requestHelperOverride;
+            },
+
+            getFeatureSwitches: function(req, useSSL) {
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
-                        if (!featureSwitchesMockData) {
-                            featureSwitchesMockData = loadSwitchesMockData();
-                        }
-                        resolve(featureSwitchesMockData);
-
+                        resolve(mockApi.getFeatureSwitches(req));
                     } else {
-                        resolve([]); // todo: call lambda
+                        let opts = requestHelper.setOptions(req, false, useSSL);
+                        opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                        const featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url);
+
+                        opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest(req, opts).then(
+                            (response) => {
+                                let featureSwitches = JSON.parse(response.body);
+                                resolve(featureSwitches);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.getFeatureSwitches(): Error retrieving feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.getFeatureSwitches(): unexpected error retrieving feature switches.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
@@ -56,20 +76,10 @@
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
-
-                        let bodyJSON = JSON.parse(req.rawBody);
-                        let feature = bodyJSON.feature;
-                        feature.id = uuid.v4();
-                        feature.overrides = [];
-
-                        featureSwitchesMockData.push(feature);
-
-                        saveSwitchesMockData();
-
-                        resolve(feature.id);
+                        resolve(mockApi.createFeatureSwitch(req));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        resolve(''); // todo: call lambda
                     }
                 });
             },
@@ -78,18 +88,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
-
-                        let bodyJSON = JSON.parse(req.rawBody);
-                        let feature = bodyJSON.feature;
-
-                        let index = _.findIndex(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
-
-                        if (index !== -1) {
-                            Object.assign(featureSwitchesMockData[index], feature);
-                            saveSwitchesMockData();
-                        }
-                        resolve();
-
+                        resolve(mockApi.updateFeatureSwitch(req, featureSwitchId));
                     } else {
                         resolve(); // todo: call lambda
                     }
@@ -100,12 +99,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
-                        _.remove(featureSwitchesMockData, function(sw) {return ids.indexOf(sw.id) !== -1;});
-
-                        saveSwitchesMockData();
-
-                        resolve(ids);
-
+                        resolve(mockApi.deleteFeatureSwitches(req, ids));
                     } else {
                         resolve(); // todo: call lambda
                     }
@@ -116,24 +110,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
-
-                        let bodyJSON = JSON.parse(req.rawBody);
-                        let override = bodyJSON.override;
-
-                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
-
-                        if (featureSwitch) {
-                            override.id = uuid.v4();
-
-                            if (featureSwitch.overrides)  {
-                                featureSwitch.overrides.push(override);
-                            } else {
-                                featureSwitch.overrides = [override];
-                            }
-
-                            saveSwitchesMockData();
-                        }
-                        resolve(override.id);
+                        resolve(mockApi.createFeatureSwitchOverride(req, featureSwitchId));
 
                     } else {
                         resolve(); // todo: call lambda
@@ -146,22 +123,7 @@
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
 
-                        let bodyJSON = JSON.parse(req.rawBody);
-                        let overrideData = bodyJSON.override;
-
-                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
-
-                        if (featureSwitch && overrideData) {
-                            let index = _.findIndex(featureSwitch.overrides, function(override) {
-                                return override.id === overrideId;
-                            });
-
-                            if (index !== -1) {
-                                featureSwitch.overrides[index] = overrideData;
-                                saveSwitchesMockData();
-                            }
-                        }
-                        resolve();
+                        resolve(mockApi.updateFeatureSwitchOverride(req, featureSwitchId, overrideId));
 
                     } else {
                         resolve(); // todo: call lambda
@@ -173,13 +135,7 @@
 
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
-                        let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
-
-                        _.remove(featureSwitch.overrides, function(override) {return ids.indexOf(override.id) !== -1;});
-
-                        saveSwitchesMockData();
-
-                        resolve(ids);
+                        resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId, ids));
 
                     } else {
                         resolve(); // todo: call lambda
@@ -190,35 +146,9 @@
             getFeatureSwitchStates: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let states = {};
-                    let realmId = null;
-                    let ticketCookie = req.cookies[CookieConsts.COOKIES.TICKET];
-                    if (ticketCookie) {
-                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
-                    }
 
                     if (config && config.featureSwitchesMockData) {
-                        if (!featureSwitchesMockData) {
-                            featureSwitchesMockData = loadSwitchesMockData();
-                        }
-                        featureSwitchesMockData.forEach(function(featureSwitch) {
-                            states[featureSwitch.name] = featureSwitch.defaultOn;
-
-                            if (featureSwitch.overrides) {
-                                // realm overrides take precedence over default
-                                featureSwitch.overrides.forEach(function(override) {
-                                    if (override.entityType === "realm" && parseInt(override.entityValue) === realmId) {
-                                        states[featureSwitch.name] = override.on;
-                                    }
-                                });
-
-                                // app overrides take precedence over default and realm
-                                featureSwitch.overrides.forEach(function(override) {
-                                    if (override.entityType === "app" && override.entityValue === appId) {
-                                        states[featureSwitch.name] = override.on;
-                                    }
-                                });
-                            }
-                        });
+                        resolve(mockApi.getFeatureSwitchStates(req, appId));
                     } else {
                         // todo: call lambda
                     }

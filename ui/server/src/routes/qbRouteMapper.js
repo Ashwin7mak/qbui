@@ -267,7 +267,7 @@
         perfLog.init('Get feature switches', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            featureSwitchesApi.getFeatureSwitches(req).then(
+            featureSwitchesApi.getFeatureSwitches(req, true).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get feature switches');
