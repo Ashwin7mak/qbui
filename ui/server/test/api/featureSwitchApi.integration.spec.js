@@ -24,8 +24,8 @@
         });
 
         it('Verify API call POST featureSwitch', function(done) {
-            var awsEndpoint = recordBase.apiBase.resolveFeatureSwitchEndpoint();
-            var JSON = {
+            var featureSwitchEndpoint = recordBase.apiBase.resolveFeatureSwitchEndpoint();
+            var featureSwitchJSON = {
                 id: 1,
                 name: 'Feature A',
                 team: 'Cthulu',
@@ -34,7 +34,7 @@
                 overrides: []
             };
             //Create a feature Switch
-            recordBase.apiBase.executeAWSRequest(awsEndpoint, consts.POST, JSON).then(function(requestResult) {
+            recordBase.apiBase.executeRequest(featureSwitchEndpoint, consts.POST, featureSwitchJSON).then(function(requestResult) {
                 assert.equal(requestResult.statusCode, 200);
                 var featureSwitchId = requestResult.body;
                 console.log("feature switch id is: " + featureSwitchId);
@@ -43,7 +43,6 @@
                 log.error(JSON.stringify(error));
                 done();
             });
-
         });
 
 
