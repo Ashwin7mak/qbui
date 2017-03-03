@@ -101,23 +101,23 @@ class RecordService extends BaseService {
      * @returns promise
      */
     saveRecord(appId, tableId, recordId, changes) {
-        //const fixedChanges = SaveRecordFormatter.formatRecordForSaving(changes);
-        //
-        //let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
-        //return super.patch(url, fixedChanges);
+        const fixedChanges = SaveRecordFormatter.formatRecordForSaving(changes);
+
+        let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
+        return super.patch(url, fixedChanges);
 
         // TODO: remove when in code review
-        let error = {
-            data: {
-                response: {
-                    errors: [
-                        {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
-                        {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
-                    ]
-                }
-            }
-        };
-        return Promise.reject(error);
+        //let error = {
+        //    data: {
+        //        response: {
+        //            errors: [
+        //                {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
+        //                {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
+        //            ]
+        //        }
+        //    }
+        //};
+        //return Promise.reject(error);
     }
 
 
@@ -130,22 +130,23 @@ class RecordService extends BaseService {
      * @returns promise
      */
     createRecord(appId, tableId, record) {
-        //const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
-        //
-        //let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
-        //return super.post(url, fixedRecord);
+        const fixedRecord = SaveRecordFormatter.formatRecordForSaving(record);
 
-        let error = {
-            data: {
-                response: {
-                    errors: [
-                        {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
-                        {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
-                    ]
-                }
-            }
-        };
-        return Promise.reject(error);
+        let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
+        return super.post(url, fixedRecord);
+
+        //TODO: remove..
+        //let error = {
+        //    data: {
+        //        response: {
+        //            errors: [
+        //                {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
+        //                {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
+        //            ]
+        //        }
+        //    }
+        //};
+        //return Promise.reject(error);
     }
 
     /**

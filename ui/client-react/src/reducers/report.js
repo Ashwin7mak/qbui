@@ -4,6 +4,7 @@ import FacetSelections from '../components/facet/facetSelections';
 import FieldFormats from '../utils/fieldFormats';
 import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
+import * as SchemaConstants from '../constants/schema';
 
 //import * as textFormatter from '../../../common/src/formatter/textFormatter';
 //import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
@@ -141,9 +142,14 @@ const report = (state = [], action) => {
             if (currentReport) {
                 let obj = {
                     recId: rpt.recId,
-                    record: rpt.record ? rpt.record.record : []
+                    record: rpt.record ? rpt.record.record : [],
+                    newRecId: rpt.newRecId
                 };
-                updateReportRecord(currentReport, obj);
+                if (rpt.newRecId) {
+                    addReportRecord(currentReport, obj);
+                } else {
+                    updateReportRecord(currentReport, obj);
+                }
                 currentReport.loading = false;
                 currentReport.error = false;
                 return newState(currentReport);
@@ -188,6 +194,144 @@ const report = (state = [], action) => {
     }
 };
 
+//function formatRecordValues(newRecord) {
+//    Object.keys(newRecord).forEach((key) => {
+//        let recField = newRecord[key];
+//        recField.display = this.formatFieldValue(recField);
+//    });
+//}
+
+function getDefaultValue(id, type) {
+    let defaultValue = FieldUtils.getDefaultValueForFieldType(type);
+    return {
+        id: id,
+        value: defaultValue
+    };
+}
+
+function createEmptyRecordInReport(currentReport, content) {
+    let afterRecId = content;
+    let newRecId = content.newRecId;
+
+    if (currentReport.data.filteredRecords.length > 0) {
+        //find record to add after
+        let afterRecIndex = -1;
+
+        //  if there is a newRecId parameter value, then this is a new record and it always goes at the top
+        if (!newRecId) {
+            if (afterRecId) {
+                // The afterRecId is an object if coming from the grid
+                if (_.has(afterRecId, 'value')) {
+                    afterRecId = afterRecId.value;
+                }
+                afterRecIndex = ReportUtils.findRecordIndex(currentReport.data.records, afterRecId, currentReport.data.keyField.name);
+            }
+        }
+
+        // use 1st record to create newRecord
+        const newRecord = _.mapValues(currentReport.data.filteredRecords[0], (obj) => {
+            //get the default value for the fid if any
+            let valueAnswer = null;
+            let theCorrespondingField = _.find(currentReport.data.fields, (item) => item.id === obj.id);
+            //set the default values in the answer for each field
+            if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
+                valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
+            } else {
+                valueAnswer = (obj.id === SchemaConstants.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
+            }
+
+            return valueAnswer;
+        });
+
+        //TODO: really want to avoid formatting as the individual components should be handling this requirement
+        //formatRecordValues(newRecord);
+
+        // set id to unsaved
+        newRecord[currentReport.data.keyField.name].value = newRecId || SchemaConstants.UNSAVED_RECORD_ID;
+
+        //make a copy
+        const newFilteredRecords = currentReport.data.filteredRecords.slice(0);
+
+        //insert after the index
+        currentReport.editingIndex = undefined;
+        currentReport.editingId = undefined;
+
+        // add to filtered records
+        let filteredIndex;
+        if (afterRecIndex !== -1) {
+            newFilteredRecords.splice(afterRecIndex + 1, 0, newRecord);
+            currentReport.editingIndex = afterRecIndex;
+            currentReport.editingId = newRecId || SchemaConstants.UNSAVED_RECORD_ID;
+            filteredIndex = afterRecIndex + 1;
+        } else {
+            currentReport.editingIndex = newFilteredRecords.length;
+            currentReport.editingId = newRecId || SchemaConstants.UNSAVED_RECORD_ID;
+            newFilteredRecords.unshift(newRecord);
+            filteredIndex = newFilteredRecords.length - 1;
+        }
+
+        currentReport.data.filteredRecords = newFilteredRecords;
+        currentReport.data.filteredRecordsCount++;
+
+        // add to records
+        const newRecords = currentReport.data.records.slice(0);
+        let newRecordsIndex;
+        if (afterRecIndex !== -1) {
+            newRecords.splice(afterRecIndex + 1, 0, newRecord);
+            currentReport.editingIndex = afterRecIndex;
+            currentReport.editingId = newRecId || SchemaConstants.UNSAVED_RECORD_ID;
+            newRecordsIndex = afterRecIndex + 1;
+        } else {
+            currentReport.editingIndex = newRecords.length;
+            currentReport.editingId = newRecId || SchemaConstants.UNSAVED_RECORD_ID;
+            newRecords.unshift(newRecord);
+            newRecordsIndex = newRecords.length - 1;
+        }
+
+        // Always make sure to return an editing index so QbGrid can detect the new row
+        currentReport.editingIndex = (currentReport.editingIndex === undefined ? -1 : currentReport.editingIndex);
+
+        currentReport.data.records = newRecords;
+        currentReport.recordsCount++;
+
+        // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
+        // formatRecordValues will add all display values
+        // patch the previously created skeleton of record with the newRecord values
+        let formattedRec = formatRecord(content.record, currentReport.data.fields);
+
+        //TODO: really want to avoid formatting as the individual components should be handling this reqeuirement
+        //formatRecordValues(formattedRec, currentReport.data.fields);
+
+        updateReportRecordData(newRecords[newRecordsIndex], newFilteredRecords[filteredIndex], formattedRec);
+    }
+}
+
+function addReportRecord(currentReport, content) {
+    let record = content.record ? content.record.record : [];
+    if (currentReport.data.hasGrouping) {
+        //createNewGroupedRecord(currentReport, record, -1);
+    } else {
+        createEmptyRecordInReport(currentReport, content);
+    }
+    //    // update the  record values
+    //    this.editingIndex = undefined;
+    //    if (currentReport.data.hasGrouping) {
+    //        let record = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, SchemaConstants.UNSAVED_RECORD_ID, currentReport.data.keyField.name);
+    //        if (record === null) {
+    //            // add record was called without creating an empty record probably from a trowser so create one here
+    //            this.createNewGroupedRecord(-1);
+    //        }
+    //    } else {
+    //        let record = this.reportModel.findARecord(SchemaConstants.UNSAVED_RECORD_ID);
+    //        let filtRecord = this.reportModel.findAFilteredRecord(SchemaConstants.UNSAVED_RECORD_ID);
+    //        if (record === undefined && filtRecord === undefined) {
+    //            // add record was called without creating an empty record probably from a trowser so create one here
+    //            this.createNewRecord(content.recId);
+    //        }
+    //    }
+    //
+}
+
 function updateReportRecord(currentReport, content) {
     let record = null;
     let filtRecord = null;
@@ -204,8 +348,13 @@ function updateReportRecord(currentReport, content) {
     // patch the previously created skeleton of record with the newRecord values
     let formattedRec = formatRecord(content.record, currentReport.data.fields);
 
-    //TODO: really want to avoid formatting as the individual components should be handling this rqeuirement
+    //TODO: really want to avoid formatting as the individual components should be handling this reqeuirement
     //formatRecordValues(formattedRec, currentReport.data.fields);
+
+    updateReportRecordData(record, filtRecord, formattedRec);
+}
+
+function updateReportRecordData(record, filteredRecord, formattedRec) {
 
     //  update each cell in the report grid with the updated record data
     Object.keys(formattedRec).forEach((fieldName) => {
@@ -217,10 +366,10 @@ function updateReportRecord(currentReport, content) {
             }
         }
         //  update the filtered list
-        if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
-            filtRecord[fieldName].value = formattedRec[fieldName].value;
+        if (filteredRecord && filteredRecord[fieldName] && formattedRec[fieldName]) {
+            filteredRecord[fieldName].value = formattedRec[fieldName].value;
             if (formattedRec[fieldName].display !== undefined) {
-                filtRecord[fieldName].display = formattedRec[fieldName].display;
+                filteredRecord[fieldName].display = formattedRec[fieldName].display;
             }
         }
     });

@@ -209,7 +209,9 @@ const record = (state = [], action) => {
                 pendEdits.updateRecordInReportGrid = true;
 
                 pendEdits.isPendingEdit = false;
-                pendEdits.isInlineEditOpen = false;
+                if (pendEdits.isInlineEditOpen) {
+                    pendEdits.isInlineEditOpen = false;
+                }
                 pendEdits.recordEditOpen = false;
                 pendEdits.recordChanges = {};
                 //TODO fix this..
@@ -217,7 +219,7 @@ const record = (state = [], action) => {
                     ok: true,
                     errors:[]
                 };
-                pendEdits.saving = false;
+                //pendEdits.saving = false;
                 return newState(currentRecd);
             }
             return state;
@@ -232,7 +234,7 @@ const record = (state = [], action) => {
                     pendEdits.currentEditingRecordId = action.content.recId;
                     pendEdits.hasAttemptedSave = true;
                     pendEdits.recordEditOpen = true;
-                    pendEdits.saving = false;
+                    //pendEdits.saving = false;
 
                     //  toDO: not sure this is really necessary..but carrying over from flux implementation
                     let entry = getEntryKey(currentRecd);

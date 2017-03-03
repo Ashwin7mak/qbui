@@ -644,9 +644,9 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.DELETE_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             //actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             //actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
-            actions.SAVE_RECORD_FAILED, this.onClearEdit,
-            actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_RECORD_FAILED, this.onClearEdit,
+            //actions.SAVE_RECORD_FAILED, this.onClearEdit,
+            //actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
+            //actions.ADD_RECORD_FAILED, this.onClearEdit,
 
             //actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
             //actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
@@ -1100,29 +1100,29 @@ let ReportDataStore = Fluxxor.createStore({
      * with the new record
      * @param payload paramater contains recId :number, record :[]
      */
-    onAddRecordSuccess(payload) {
-        // update the  record values
-        this.editingIndex = undefined;
-        if (this.reportModel.model.hasGrouping) {
-            let record = ReportUtils.findGroupedRecord(this.reportModel.model.filteredRecords, SchemaConsts.UNSAVED_RECORD_ID, this.reportModel.model.keyField.name);
-            if (record === null) {
-                // add record was called without creating an empty record probably from a trowser so create one here
-                this.createNewGroupedRecord(-1);
-            }
-        } else {
-            let record = this.reportModel.findARecord(SchemaConsts.UNSAVED_RECORD_ID);
-            let filtRecord = this.reportModel.findAFilteredRecord(SchemaConsts.UNSAVED_RECORD_ID);
-            if (record === undefined && filtRecord === undefined) {
-                // add record was called without creating an empty record probably from a trowser so create one here
-                this.createNewRecord(payload.recId);
-            }
-        }
-        let record = payload.record ? payload.record.record : [];
-        let fields = payload.record ? payload.record.fields : [];
-        this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, record, fields);
-
-        this.emit("change");
-    },
+    //onAddRecordSuccess(payload) {
+    //    // update the  record values
+    //    this.editingIndex = undefined;
+    //    if (this.reportModel.model.hasGrouping) {
+    //        let record = ReportUtils.findGroupedRecord(this.reportModel.model.filteredRecords, SchemaConsts.UNSAVED_RECORD_ID, this.reportModel.model.keyField.name);
+    //        if (record === null) {
+    //            // add record was called without creating an empty record probably from a trowser so create one here
+    //            this.createNewGroupedRecord(-1);
+    //        }
+    //    } else {
+    //        let record = this.reportModel.findARecord(SchemaConsts.UNSAVED_RECORD_ID);
+    //        let filtRecord = this.reportModel.findAFilteredRecord(SchemaConsts.UNSAVED_RECORD_ID);
+    //        if (record === undefined && filtRecord === undefined) {
+    //            // add record was called without creating an empty record probably from a trowser so create one here
+    //            this.createNewRecord(payload.recId);
+    //        }
+    //    }
+    //    let record = payload.record ? payload.record.record : [];
+    //    let fields = payload.record ? payload.record.fields : [];
+    //    this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, record, fields);
+    //
+    //    this.emit("change");
+    //},
 
     /**
      * Cancels an record edit
