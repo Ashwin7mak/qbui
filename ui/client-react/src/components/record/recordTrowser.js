@@ -241,7 +241,7 @@ export const RecordTrowser = React.createClass({
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormSuccess(formType);
-                if (this.props.viewingRecordId === this.props.recId) {
+                if (this.props.viewingRecordId === obj.recId) {
                     this.props.syncForm("view");
                 }
 
@@ -253,7 +253,7 @@ export const RecordTrowser = React.createClass({
                     //    this.props.editNewRecord(false);
                     //} else {
                         this.hideTrowser();
-                        this.navigateToNewRecord(this.props.recId);
+                        this.navigateToNewRecord(obj.recId);
                     }
                 }
             },
@@ -288,7 +288,7 @@ export const RecordTrowser = React.createClass({
         this.props.dispatch(createRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList)).then(
             (obj) => {
                 this.props.saveFormSuccess(formType);
-                if (this.props.viewingRecordId === this.props.recId) {
+                if (this.props.viewingRecordId === obj.recId) {
                     this.props.syncForm("view");
                 }
 
@@ -300,7 +300,7 @@ export const RecordTrowser = React.createClass({
                     //    this.props.editNewRecord(false);
                     //} else {
                         this.hideTrowser();
-                        this.navigateToNewRecord(this.props.recId);
+                        this.navigateToNewRecord(obj.recId);
                     }
                 }
             },
