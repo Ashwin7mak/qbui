@@ -299,7 +299,7 @@ function addRecordToReport(currentReport, content) {
                 newRecordsIndex = 0;
             }
 
-            // Always make sure to return an editing index so QbGrid can detect the new row
+            // Always make sure to return an editing index so grid can detect the new row
             currentReport.editingIndex = (currentReport.editingIndex === undefined ? -1 : currentReport.editingIndex);
 
             currentReport.data.records = newRecords;
@@ -336,17 +336,19 @@ function addRecordToGroupedReport(currentReport, content) {
     let record = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, SchemaConstants.UNSAVED_RECORD_ID, currentReport.data.keyField.name);
     if (record === null && currentReport.data.filteredRecords.length > 0) {
         // find record to add after
-        let afterRecordIdValue = content.afterRecId;
-        if (_.has(afterRecId, 'value')) {
-            afterRecordIdValue = afterRecId.value;
+        let afterRecordIdValue = content.afterRecId || -1;
+        if (_.has(content.afterRecId, 'value')) {
+            afterRecordIdValue = content.afterRecId.value;
         }
 
+        //  find the first group if no 'after record id' supplied
+        let templateRecord;
         if (afterRecordIdValue === -1) {
-            record = ReportUtils.findFirstGroupedRecord(currentReport.data.filteredRecords, afterRecordIdValue, currentReport.data.keyField.name);
+            templateRecord = ReportUtils.findFirstGroupedRecord(currentReport.data.filteredRecords, afterRecordIdValue, currentReport.data.keyField.name);
         } else {
-            record = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, afterRecordIdValue, currentReport.data.keyField.name);
+            templateRecord = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, afterRecordIdValue, currentReport.data.keyField.name);
         }
-        if (record === null) {
+        if (templateRecord === null) {
             logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecordIdValue}`);
             return;
         }
@@ -358,8 +360,8 @@ function addRecordToGroupedReport(currentReport, content) {
             });
         }
 
-        // use the record as a template to create new record
-        const newRecord = _.mapValues(record, (obj) => {
+        // use the template record to create new record
+        record = _.mapValues(templateRecord, (obj) => {
             //get the default value for the fid if any
             let valueAnswer = null;
             let theCorrespondingField = _.find(currentReport.data.fields, (item) => item.id === obj.id);
@@ -374,7 +376,7 @@ function addRecordToGroupedReport(currentReport, content) {
                 //set the default values in the answer for each field
                 valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
             } else {
-                valueAnswer = (obj.id === SchemaConsts.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
+                valueAnswer = (obj.id === SchemaConstants.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
             }
             return valueAnswer;
         });
@@ -383,7 +385,7 @@ function addRecordToGroupedReport(currentReport, content) {
         //formatRecordValues(newRecord);
 
         // set id to unsaved
-        newRecord[currentReport.data.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
+        record[currentReport.data.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
 
         //make a copy
         const newFilteredRecords = currentReport.data.filteredRecords.slice(0);
@@ -395,10 +397,10 @@ function addRecordToGroupedReport(currentReport, content) {
 
         if (afterRecordIdValue === -1) {
             // goes to the top of the list
-            filteredRecordAdded = newFilteredRecords.unshift(newRecord);
+            filteredRecordAdded = newFilteredRecords.unshift(record);
             recordAdded = filteredRecordAdded;
         } else {
-            filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecordIdValue, currentReport.data.keyField.name, newRecord);
+            filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecordIdValue, currentReport.data.keyField.name, record);
             recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
         }
 
@@ -420,12 +422,12 @@ function addRecordToGroupedReport(currentReport, content) {
         currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
     }
 
-    let formattedRec = formatRecord(content.record, currentReport.data.fields);
-    if (content.newRecId) {
-        if (record) {
-            record[currentReport.data.keyField.name].value = content.newRecId;
-        }
+    // set the record id
+    if (content.newRecId && record) {
+        record[currentReport.data.keyField.name].value = content.newRecId;
     }
+
+    let formattedRec = formatRecord(content.record, currentReport.data.fields);
     updateReportRecordData(null, record, formattedRec);
 }
 

@@ -130,7 +130,10 @@ export const RecordTrowser = React.createClass({
             //let promise;
             //let updateRecord = false;
             const formType = "edit";
+
+            //  open the 'modal working' spinner/window for the record's form
             this.props.saveForm(formType);
+
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 const pendEdits = this.getPendEdits();
                 this.handleRecordAdd(pendEdits.recordChanges, formType, false, openNewRecord);
@@ -188,7 +191,10 @@ export const RecordTrowser = React.createClass({
 
             //let updateRecord = false;
             const formType = "edit";
+
+            // open the 'modal working' spinner/window for the record's form
             this.props.saveForm(formType);
+
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 const pendEdits = this.getPendEdits();
                 this.handleRecordAdd(pendEdits.recordChanges, formType, true);
@@ -258,7 +264,7 @@ export const RecordTrowser = React.createClass({
                 }
             },
             () => {
-                //  need to call as the form.saving attribute is used to determine when to
+                //  need to call as the form.saving attribute as it is used to determine when to
                 //  open/close the 'modal working' spinner/window..
                 this.props.saveFormComplete(formType);
                 this.showErrorDialog();

@@ -79,7 +79,7 @@ export const syncForm = (id) => {
 };
 
 /**
- * Renders a model window and display a spinner when saving a form or form record.
+ * open the 'modal working' spinner/window when saving a form or form record.
  *
  * @param container
  * @returns {{type, container: *}}
@@ -91,7 +91,7 @@ export const saveForm = (id) => {
     };
 };
 /*
- * Hides the display of a model window and spinner when completing a form save request.
+ * hide the 'modal working' spinner/window when completing a form save request.
  */
 export const saveFormComplete = (id) => {
     return {
