@@ -757,7 +757,14 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                                         //    record: getResponse.data,
                                         //    recId: resJson.id
                                         //});
-                                        dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
+                                        // TODO: fix context
+                                        let report = {
+                                            context: 'NAV',
+                                            recId:recId,
+                                            newRecId: resJson.id,
+                                            record:getResponse.data
+                                        };
+                                        dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
 
                                         if (!showNotificationOnSuccess) {
                                             NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
@@ -767,6 +774,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                                         // clicks get queued till after creating
                                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                                             //this.dispatch(actions.AFTER_RECORD_EDIT);
+                                            dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                             let obj = {
                                                 recId:resJson.id,
                                                 appId:appId,
@@ -785,12 +793,17 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                                         //    recId,
                                         //    error: getError.response
                                         //});
-                                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: getError.response}));
+                                        let errors = [];
+                                        if (_.has(getError, 'data.response.errors')) {
+                                            errors = getError.data.response.errors || [];
+                                        }
+                                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                                         // this tiny delay allows for saving modal to trap inputs otherwise
                                         // clicks get queued till after creating
                                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                                             //this.dispatch(actions.AFTER_RECORD_EDIT);
+                                            dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                             reject();
                                         });
                                     }
@@ -804,12 +817,14 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                             //    record,
                             //    error: new Error('no response data member')
                             //});
-                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: new Error('no response data member')}));
+                            let errors = [{id:1, def:{fieldName:'No response'}, isInvalid:true, txt:'No data object return by server'}];
+                            dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
                             // this delay allows for saving modal to trap inputs otherwise
                             // clicks get invoked after create
                             Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                                 //this.dispatch(actions.AFTER_RECORD_EDIT);
+                                dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                 reject();
                             });
                         }
@@ -824,13 +839,18 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                         }
 
                         //this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
-                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: error.response}));
+                        let errors = [];
+                        if (_.has(error, 'data.response.errors')) {
+                            errors = error.data.response.errors || [];
+                        }
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors}));
 
-                        if (error.response.status === 403) {
+                        let errStatus = error.response ? error.response.status : null;
+                        if (errStatus === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
                                 CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                         }
-                        if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                        if (errStatus === 500 && _.has(error.response, 'data.response.status')) {
                             const {status} = error.response.data.response;
                             if (status !== 422) {
                                 // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
@@ -842,6 +862,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                         // clicks get invoked after create
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
                             //this.dispatch(actions.AFTER_RECORD_EDIT);
+                            dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                             reject();
                         });
                     }
@@ -852,7 +873,7 @@ export const createRecord = (appId, tblId, changes, fields, colList = [], showNo
                     appId + '; TblId:' + tblId + '; changes:' + JSON.stringify(changes) + '; fields:' + JSON.stringify(fields);
                 logger.error(errMessage);
                 //this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
-                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: errMessage}));
+                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId}));
                 reject();
             }
         });
@@ -948,6 +969,7 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
                         logger.debug('RecordService saveRecord success');
+
                         let clist = colList ? colList : [];
                         if (!clist.length && fields) {
                             fields.forEach((field) => {
@@ -964,7 +986,15 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                                 //  flux action to update recordPendingEditsStore AND reportDataStore..to be removed
                                 //this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 //dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
-                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
+                                // TODO: fix context
+                                let report = {
+                                    context: 'NAV',
+                                    recId:recId,
+                                    record:getResponse.data
+                                };
+                                dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
+                                //TODO look at have SAVE_RECORD_SUCCESS in Report store to update report...will need to supply
+                                // content of the record save so that we know which store updates...if done, can remove resolve(obj)..
                                 if (showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
                                         CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -987,12 +1017,15 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                                 logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
                                 // dispatch the GET_RECORD_FAILED. This is not being acted upon right now in any of the stores
                                 //this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
-                                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: getError.response}));
-                                // this delay allows for saving modal to trap inputs otherwise
-                                // clicks get invoked after saving
+                                let errors = [];
+                                if (_.has(getError, 'data.response.errors')) {
+                                    errors = getError.data.response.errors || [];
+                                }
+                                dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors}));
+                                // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
+                                // icon in action column does not render.
                                 Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                                    //this.dispatch(actions.AFTER_RECORD_EDIT);
-                                    dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
+                                    //dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                                     reject();
                                 });
                             }
@@ -1008,14 +1041,17 @@ export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, sh
                         }
 
                         //this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
-                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, error: error.response}));
+                        let errors = [];
+                        if (_.has(error, 'data.response.errors')) {
+                            errors = error.data.response.errors || [];
+                        }
+                        dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId, errors: errors}));
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
                             CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
-                        // this delay allows for saving modal to trap inputs otherwise
-                        // clicks get invoked after saving
+                        // this delay allows for saving modal to trap inputs otherwise clicks get invoked and error message
+                        // icon in action column does not render.
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            //this.dispatch(actions.AFTER_RECORD_EDIT);
-                            dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
+                            //dispatch(event(recId, types.SAVE_RECORD_COMPLETE, {appId, tblId, recId}));
                             reject();
                         });
                     }

@@ -1,4 +1,5 @@
 import ValidationMessage from '../utils/validationMessage';
+import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import _ from 'lodash';
 
 class RecordModel {
@@ -99,7 +100,11 @@ class RecordModel {
         this.model.currentEditingAppId = appId;
         this.model.currentEditingTableId = tblId;
         this.model.currentEditingRecordId = recId;
-        this.model.recordChanges = changes;
+        // only set if a new record; updating when inline editing seems to trigger a hide of the
+        // the inline editing row , which displays the old record values for a short period of time.
+        if (recId === NEW_RECORD_VALUE) {
+            this.model.recordChanges = changes;
+        }
         this.setSaving(true);
     }
 
@@ -111,17 +116,23 @@ class RecordModel {
         };
 
         if (Array.isArray(errors) && errors.length > 0) {
-            let errorMessages = [];
-            errors.forEach(error => {
-                errorMessages.push(ValidationMessage.getMessage(error));
+            this.model.editErrors.errors = errors;
+            this.model.editErrors.ok = false;
+            // fill in client message
+            errors.forEach(fieldError => {
+                fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
             });
-
-            if (errorMessages.length > 0) {
-                this.model.editErrors = {
-                    ok: false,
-                    errors: errorMessages
-                };
-            }
+            //let errorMessages = [];
+            //errors.forEach(error => {
+            //    errorMessages.push(ValidationMessage.getMessage(error));
+            //});
+            //
+            //if (errorMessages.length > 0) {
+            //    this.model.editErrors = {
+            //        ok: false,
+            //        errors: errorMessages
+            //    };
+            //}
         }
     }
 
