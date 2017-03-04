@@ -224,8 +224,7 @@ const record = (state = [], action) => {
             }
             return state;
         }
-        case types.SAVE_RECORD_ERROR:
-        {
+        case types.SAVE_RECORD_ERROR: {
             let currentRecd = getRecordFromState(action.id);
             if (_.has(currentRecd, 'pendEdits')) {
                 let errors = action.content.errors;
@@ -256,9 +255,6 @@ const record = (state = [], action) => {
             return state;
         }
         case types.SAVE_RECORD_COMPLETE: {
-            // TODO: not sure if need to set 'saving' on state on each when deleting
-            //
-            //  TODO: make sure state is not getting mutated!!!!
             let currentRecd = getRecordFromState(action.id);
             if (_.has(currentRecd, 'pendEdits')) {
                 currentRecd.pendEdits.saving = false;
@@ -267,7 +263,6 @@ const record = (state = [], action) => {
             return state;
         }
         case types.EDIT_RECORD_START: {
-            //  check if record is already in the store..
             let currentRecd = getRecordFromState(action.id);
             if (!currentRecd) {
                 currentRecd = {
@@ -283,7 +278,6 @@ const record = (state = [], action) => {
             return newState(currentRecd);
         }
         case types.EDIT_RECORD_CHANGE: {
-            //  get a clone of the current record
             let currentRecd = getRecordFromState(action.id);
             if (!currentRecd) {
                 currentRecd = {
@@ -311,9 +305,8 @@ const record = (state = [], action) => {
             return newState(currentRecd);
         }
         case types.EDIT_RECORD_COMMIT: {
-            //  get a cloned copy of record in the store..its expected that EDIT_RECORD_START
-            //  and/or EDIT_RECORD_CHANGE has already been called, populated the
-            //  store with the record.
+            //  its expected that EDIT_RECORD_START and/or EDIT_RECORD_CHANGE has
+            //   already been called and populated the store with the record.
             const currentRecd = getRecordFromState(action.id);
             if (_.has(currentRecd, 'pendEdits') && currentRecd.pendEdits.isPendingEdit) {
                 //TODO: move into model method?

@@ -136,6 +136,8 @@ const report = (state = [], action) => {
     //    return state;
     //}
     case types.SAVE_RECORD_SUCCESS: {
+        //  listen to record save event.  If there is a report context
+        //  defined, then the report is updated with the new/updated record.
         let rpt = action.content.report;
         if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);

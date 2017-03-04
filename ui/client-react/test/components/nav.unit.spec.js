@@ -85,11 +85,6 @@ describe('Nav', () => {
             return [];
         }
     });
-    let recordPendingEditsStore = Fluxxor.createStore({
-        getState: function() {
-            return [];
-        }
-    });
     let fieldsStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -105,7 +100,6 @@ describe('Nav', () => {
         NavStore: new navStore(),
         AppsStore: new appsStore(),
         ReportDataStore: new reportDataStore(),
-        RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
         ReportDataSearchStore: new reportDataSearchStore()
     };
@@ -185,7 +179,6 @@ describe('Nav', () => {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithNoApps(),
             ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
@@ -207,7 +200,6 @@ describe('Nav', () => {
             NavStore: new navStore(),
             AppsStore: new appsStoreWithV3App(),
             ReportDataStore: new reportDataStore(),
-            RecordPendingEditsStore: new recordPendingEditsStore(),
             FieldsStore : new fieldsStore(),
             ReportDataSearchStore: new reportDataSearchStore()
         };
