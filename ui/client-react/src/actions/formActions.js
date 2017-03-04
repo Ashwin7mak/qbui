@@ -79,15 +79,24 @@ export const syncForm = (id) => {
 };
 
 /**
- * save form in progress
+ * Renders a model window and display a spinner when saving a form or form record.
+ *
  * @param container
  * @returns {{type, container: *}}
  */
-//TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const savingForm = (id) => {
+export const saveForm = (id) => {
     return {
         id,
         type: types.SAVE_FORM
+    };
+};
+/*
+ * Hides the display of a model window and spinner when completing a form save request.
+ */
+export const saveFormComplete = (id) => {
+    return {
+        id,
+        type: types.SAVE_FORM_COMPLETE
     };
 };
 
@@ -98,13 +107,13 @@ export const savingForm = (id) => {
  * @returns {{type, container: *, error: *}}
  */
 //TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const saveFormError = (id, error) => {
-    return {
-        id,
-        type: types.SAVE_FORM_FAILED,
-        error
-    };
-};
+//export const saveFormError = (id, error) => {
+//    return {
+//        id,
+//        type: types.SAVE_FORM_FAILED,
+//        error
+//    };
+//};
 
 /**
  * save form succeeded
@@ -112,12 +121,12 @@ export const saveFormError = (id, error) => {
  * @returns {{type, container: *}}
  */
 //TODO: MOVE TO RECORDS ACTION..THIS IS FIRED WHEN SAVING A RECORD
-export const saveFormSuccess = (id) => {
-    return {
-        id,
-        type: types.SAVE_FORM_SUCCESS
-    };
-};
+//export const saveFormSuccess = (id) => {
+//    return {
+//        id,
+//        type: types.SAVE_FORM_SUCCESS
+//    };
+//};
 
 
 /**
@@ -263,7 +272,7 @@ export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
  * @param form
  */
 export const createForm = (appId, tblId, formType, form) => {
-    return saveForm(appId, tblId, formType, form, true);
+    return saveTheForm(appId, tblId, formType, form, true);
 };
 
 /**
@@ -275,12 +284,12 @@ export const createForm = (appId, tblId, formType, form) => {
  * @param form
  */
 export const updateForm = (appId, tblId, formType, form) => {
-    return saveForm(appId, tblId, formType, form, false);
+    return saveTheForm(appId, tblId, formType, form, false);
 };
 
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-function saveForm(appId, tblId, formType, formMeta, isNew) {
+function saveTheForm(appId, tblId, formType, formMeta, isNew) {
 
     return (dispatch) => {
         return new Promise((resolve, reject) => {
@@ -297,7 +306,7 @@ function saveForm(appId, tblId, formType, formMeta, isNew) {
                 let formPromise = isNew ? formService.createForm(appId, tblId, form) : formService.updateForm(appId, tblId, form);
                 formPromise.then(
                     (response) => {
-                        logger.debug('FormService saveForm success');
+                        logger.debug('FormService saveTheForm success');
                         //  for now return the original form..
                         dispatch(event(formType, types.SAVING_FORM_SUCCESS, convertFormToArrayForClient({formMeta: response.data}).formMeta));
 
@@ -322,7 +331,7 @@ function saveForm(appId, tblId, formType, formMeta, isNew) {
                     reject(ex);
                 });
             } else {
-                logger.error(`formActions.saveForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
+                logger.error(`formActions.saveTheForm: Missing required input parameters.  appId: ${appId}, tableId: ${tblId}`);
                 dispatch(event(form.id, types.SAVING_FORM_ERROR, '500'));
                 reject();
             }

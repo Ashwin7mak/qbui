@@ -143,7 +143,8 @@ const report = (state = [], action) => {
                 let content = {
                     recId: rpt.recId,
                     record: rpt.record ? rpt.record.record : [],
-                    newRecId: rpt.newRecId
+                    newRecId: rpt.newRecId,
+                    afterRecId: rpt.afterRecId
                 };
                 if (content.newRecId) {
                     addReportRecord(currentReport, content);
@@ -209,13 +210,13 @@ function getDefaultValue(id, type) {
     };
 }
 
-function createEmptyRecordInReport(currentReport, content) {
+function addRecordToReport(currentReport, content) {
 
     let record = findRecordById(currentReport.data.records, SchemaConstants.UNSAVED_RECORD_ID, currentReport.data.hasGrouping, currentReport.data.keyField);
     let filtRecord = findRecordById(currentReport.data.filteredRecords, SchemaConstants.UNSAVED_RECORD_ID, currentReport.data.hasGrouping, currentReport.data.keyField);
 
     if (record === undefined && filtRecord === undefined) {
-        let afterRecId = content;  // this needs to get fixed for inline edit add
+        let afterRecId = content.afterRecId;
         let newRecId = content.newRecId;
 
         if (currentReport.data.filteredRecords.length > 0) {
@@ -331,12 +332,110 @@ function createEmptyRecordInReport(currentReport, content) {
     }
 }
 
+function addRecordToGroupedReport(currentReport, content) {
+    let record = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, SchemaConstants.UNSAVED_RECORD_ID, currentReport.data.keyField.name);
+    if (record === null && currentReport.data.filteredRecords.length > 0) {
+        // find record to add after
+        let afterRecordIdValue = content.afterRecId;
+        if (_.has(afterRecId, 'value')) {
+            afterRecordIdValue = afterRecId.value;
+        }
+
+        if (afterRecordIdValue === -1) {
+            record = ReportUtils.findFirstGroupedRecord(currentReport.data.filteredRecords, afterRecordIdValue, currentReport.data.keyField.name);
+        } else {
+            record = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, afterRecordIdValue, currentReport.data.keyField.name);
+        }
+        if (record === null) {
+            logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecordIdValue}`);
+            return;
+        }
+
+        let groupFids = [];
+        if (afterRecordIdValue !== -1) {
+            groupFids = currentReport.data.groupFields.map(field => {
+                return field.field.id;
+            });
+        }
+
+        // use the record as a template to create new record
+        const newRecord = _.mapValues(record, (obj) => {
+            //get the default value for the fid if any
+            let valueAnswer = null;
+            let theCorrespondingField = _.find(currentReport.data.fields, (item) => item.id === obj.id);
+            //copy the group field values
+            let isGroupedFid = _.findIndex(groupFids, item => {
+                return item === theCorrespondingField.id;
+            });
+            if (isGroupedFid !== -1) {
+                let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
+                valueAnswer = {id: obj.id, value: fieldValuesForRecord.value};
+            } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
+                //set the default values in the answer for each field
+                valueAnswer = {id: obj.id, value: theCorrespondingField.defaultValue.coercedValue.value};
+            } else {
+                valueAnswer = (obj.id === SchemaConsts.DEFAULT_RECORD_KEY_ID ? {id: obj.id, value: null} : getDefaultValue(obj.id, theCorrespondingField.datatypeAttributes.type));
+            }
+            return valueAnswer;
+        });
+
+        //format the values in the new record
+        //formatRecordValues(newRecord);
+
+        // set id to unsaved
+        newRecord[currentReport.data.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
+
+        //make a copy
+        const newFilteredRecords = currentReport.data.filteredRecords.slice(0);
+        //const newRecords = model.records.slice(0);
+
+        //insert after the record (in the same group) -- update both record sets and update counts
+        let filteredRecordAdded = false;
+        let recordAdded = false;  //TODO why is this variable necessary??
+
+        if (afterRecordIdValue === -1) {
+            // goes to the top of the list
+            filteredRecordAdded = newFilteredRecords.unshift(newRecord);
+            recordAdded = filteredRecordAdded;
+        } else {
+            filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecordIdValue, currentReport.data.keyField.name, newRecord);
+            recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
+        }
+
+        if (filteredRecordAdded) {
+            currentReport.data.filteredRecords = newFilteredRecords;
+            currentReport.data.filteredRecordsCount++;
+        }
+        if (recordAdded) {
+            currentReport.data.recordsCount++; //for pagination
+        }
+
+        let afterRecIndex = -1;
+        if (content.afterRecId) {
+            afterRecIndex = ReportUtils.findRecordIndex(currentReport.data.filteredRecords, content.afterRecId, currentReport.data.keyField.name);
+        }
+
+        //editing index for aggrid to open inline edit
+        currentReport.editingIndex = afterRecIndex;
+        currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+    }
+
+    let formattedRec = formatRecord(content.record, currentReport.data.fields);
+    if (content.newRecId) {
+        if (record) {
+            record[currentReport.data.keyField.name].value = content.newRecId;
+        }
+    }
+    updateReportRecordData(null, record, formattedRec);
+}
+
 function addReportRecord(currentReport, content) {
+    //  TODO: need to support insertion into the grid via an inline edit add...this is currently not enabled..
     let record = content.record ? content.record.record : [];
     if (currentReport.data.hasGrouping) {
-        //createNewGroupedRecord(currentReport, record, -1);
+        addRecordToGroupedReport(currentReport, content);
     } else {
-        createEmptyRecordInReport(currentReport, content);
+        addRecordToReport(currentReport, content);
     }
     //    // update the  record values
     //    this.editingIndex = undefined;

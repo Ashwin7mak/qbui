@@ -14,9 +14,10 @@ let navActions = {
     /**
      * Resets onToggleRowPopUpMenu count to 0
      * */
-    resetRowMenu() {
-        this.dispatch(actions.RESET_ROW_MENU);
-    },
+    //  NO ONE IS LISTENING TO THIS EVENT
+    //resetRowMenu() {
+    //    this.dispatch(actions.RESET_ROW_MENU);
+    //},
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },
