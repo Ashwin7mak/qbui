@@ -90,10 +90,17 @@
         transition: opacity 1s;
     }
 
-    .dragAndDropField {
-        max-width: $form-edit-input-width;
+    @include medium-breakpoint {
+        .dragAndDropField {
+            max-width: $form-edit-input-width;
+        }
     }
 
+    @include large-breakpoint {
+        .dragAndDropField {
+            max-width: $form-edit-input-width;
+        }
+    }
     .dropHovering .mobileDropTarget {
         opacity: 1;
         height: 30px;
