@@ -126,14 +126,10 @@
 
     &:active {
         border: $stroke-width-thin solid $color-black-400;
-        background: rgba(23, 238, 238, 2); /* For browsers that do not support gradients */
-        background: -webkit-linear-gradient(rgba(238, 238, 238, 0.2), #EEEEEE); /* For Safari 5.1 to 6.0 */
-        background: -o-linear-gradient(rgba(238, 238, 238, 0.2), #EEEEEE); /* For Opera 11.1 to 12.0 */
-        background: -moz-linear-gradient(rgba(238, 238, 238, 0.2), #EEEEEE); /* For Firefox 3.6 to 15 */
-        background: linear-gradient(rgba(238, 238, 238, 0.2), #EEEEEE); /* Standard syntax */
-
+        //background: $color-black-300;
+        background: linear-gradient(rgba($color-black-300, 0.2));
         //Need to remove the z index temporarily to only show the field and the field label for active
-        z-index: 0 !important;
+        //z-index: 1 !important;
 
         .deleteFieldIcon {
             .qbIcon {
