@@ -1,4 +1,5 @@
 //  Report model object used by the client to render a report
+import FacetSelections from '../components/facet/facetSelections';
 import FieldUtils from '../utils/fieldUtils';
 import NumberUtils from '../utils/numberUtils';
 import ReportUtils from '../utils/reportUtils';
@@ -157,12 +158,17 @@ class ReportModel {
 
     init(appId, metaData, reportData, params) {
         this.model.appId = appId;
-        this.model.data = {};
 
+        // initialize report model data
+        this.model.data = {};
         this.setMetaData(metaData);
         this.setReportData(reportData);
         this.setFacetData(reportData);
-        this.setRunTimeDataParams(params);
+
+        //  initialize model data
+        this.setRunTimeParams(params);
+        this.model.tblId = this.model.data.tblId;
+        this.model.rptId = this.model.data.rptId;
     }
 
     /**
@@ -171,7 +177,7 @@ class ReportModel {
      * @param metaData
      */
     setMetaData(metaData) {
-        //  meta data elements defined on the client model.
+        //  meta data elements
         let data = {};
         data.metaData = {};
         data.originalMetaData = null;
@@ -225,7 +231,7 @@ class ReportModel {
             data.groupLevel = data.groupEls.length;
         }
 
-        // attach the meta data to the model
+        // attach the meta data to the model.data obj
         Object.assign(this.model.data, data);
     }
 
@@ -235,9 +241,6 @@ class ReportModel {
      * @param reportData
      */
     setReportData(reportData) {
-        //  report data elements defined on the client model.
-        //this.model.recordData = reportData;// TODO remove..
-
         let data = {};
         data.hasGrouping = false;
         data.columns = null;
@@ -291,7 +294,7 @@ class ReportModel {
             }
         }
 
-        // attach the report data to the model
+        // attach the report data to the model.data obj
         Object.assign(this.model.data, data);
     }
 
@@ -319,24 +322,26 @@ class ReportModel {
             }
         }
 
-        // attach the facet data to the model
+        // attach the facet data to the model.data obj
         Object.assign(this.model.data, data);
     }
 
     /**
-     * What, if any, run-time parameter information like offset, numRow, and filters were used.
+     * What, if any, run-time data parameters like offset, numRow, filters, etc.
      *
      * @param params
      */
-    setRunTimeDataParams(params) {
+    setRunTimeParams(params) {
         // miscellaneous param elements defined on the model
         let data = {};
         data.pageOffset = PAGE.DEFAULT_OFFSET;
         data.numRows = PAGE.DEFAULT_NUM_ROWS;
         //  facet/filtering info
-        data.facetExpression = '';
+        data.facetExpression = {};
         data.searchStringForFiltering = '';
-        data.selections = null;
+        data.selections = new FacetSelections();
+        //  UI row selections
+        data.selectedRows = [];
 
         if (params) {
             const offset = params[query.OFFSET_PARAM];
@@ -349,15 +354,20 @@ class ReportModel {
             }
             //  any run time facet, filter or search
             if (params.filter) {
-                data.facetExpression = params.filter.facet;
-                data.searchStringForFiltering = params.filter.search;
-                data.selections = params.filter.selections;
+                if (params.filter.facet) {
+                    data.facetExpression = params.filter.facet;
+                }
+                if (params.filter.search) {
+                    data.searchStringForFiltering = params.filter.search;
+                }
+                if (params.filter.selections) {
+                    data.selections = params.filter.selections;
+                }
             }
         }
 
         // attach the misc data to the model
-        Object.assign(this.model.data, data);
-
+        Object.assign(this.model, data);
     }
 }
 

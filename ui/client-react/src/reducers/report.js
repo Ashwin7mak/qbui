@@ -4,6 +4,7 @@ import FacetSelections from '../components/facet/facetSelections';
 import FieldFormats from '../utils/fieldFormats';
 import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
+import ReportModel from '../models/ReportModel';
 import * as SchemaConstants from '../constants/schema';
 
 //import * as textFormatter from '../../../common/src/formatter/textFormatter';
@@ -66,64 +67,88 @@ const report = (state = [], action) => {
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
-    case types.LOAD_REPORTS: {
-        const obj = {
+        //  load a report.  Id is the context that the report is being loaded..ie:
+        //  ie: NAV, Embedded report, etc.
+        const loadRptObj = {
             id: action.id,
-            loading: true,
             appId: action.content.appId,
             tblId: action.content.tblId,
-            rptId: action.content.rptId
+            rptId: action.content.rptId,
+            loading: true
         };
-        return newState(obj);
+        return newState(loadRptObj);
+    case types.LOAD_REPORTS: {
+        //  load a list of reports.  Id is the 'LIST' context
+        const loadReportsObj = {
+            id: action.id,
+            appId: action.content.appId,
+            tblId: action.content.tblId,
+            loading: true
+        };
+        return newState(loadReportsObj);
     }
     case types.LOAD_REPORT_FAILED:
     case types.LOAD_REPORTS_FAILED: {
-        const obj = {
-            id: action.id,
-            loading: false,
-            error: true,
-            errorDetails: action.content
-        };
-        return newState(obj);
+        //  Report(s) load request failed
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.loading = false;
+            currentReport.error = true;
+            currentReport.errorDetails = action.content;
+            return newState(currentReport);
+        }
+        return state;
     }
     case types.LOAD_REPORT_SUCCESS: {
-        const obj = {
-            id: action.id,
-            loading: false,
-            error: false,
-            data: action.content.data,
+        //  load a report is successful..update the store with the report info
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            // set the report data
+            currentReport.data = action.content.data;
 
-            appId: action.content.data.appId,
-            tblId: action.content.data.tblId,
-            rptId: action.content.data.rptId,
-            //
-            pageOffset: action.content.data.pageOffset,
-            numRows: action.content.data.numRows,
+            // need to set the report id from the data response as we could be
+            // loading the defualt home page and the report id was not known
+            // at request time.
+            currentReport.rptId = currentReport.data.rptId;
+
+            // set misc report container data
+            currentReport.pageOffset = action.content.pageOffset;
+            currentReport.numRows = action.content.numRows;
             //  faceting and searching
-            searchStringForFiltering: action.content.data.searchStringForFiltering,
-            selections: action.content.data.selections || new FacetSelections(),
-            facetExpression: action.content.data.facetExpression || {},
+            currentReport.searchStringForFiltering = action.content.searchStringForFiltering;
+            currentReport.selections = action.content.selections || new FacetSelections();
+            currentReport.facetExpression = action.content.facetExpression || {};
             //  UI row selection list
-            selectedRows: []
-        };
-        return newState(obj);
+            currentReport.selectedRows = action.content.selectedRows;
+
+            // set loading state
+            currentReport.loading = false;
+            currentReport.error = false;
+            return newState(currentReport);
+        }
+        return state;
     }
     case types.LOAD_REPORTS_SUCCESS: {
-        const obj = {
-            id: action.id,
-            loading: false,
-            error: false,
-            appId: action.content.appId,
-            tblId: action.content.tblId,
-            list: action.content.reportsList
-        };
+        //  load a list of reports is successful..update the store with the report list
+        let currentReports = getReportFromState(action.id);
+        if (currentReports) {
+            // the list of reports to display
+            currentReports.list = action.content.reportsList;
+
+            // set loading state
+            currentReports.loading = false;
+            currentReports.error = false;
+            return newState(currentReports);
+        }
         return newState(obj);
     }
     case types.SELECT_REPORT_LIST: {
-        let rpt = getReportFromState(action.id);
-        if (rpt) {
+        //  1..n rows in a report have been selected by the user...update
+        //  the 'selections' element on the report
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
             rpt.selectedRows = action.content.selections;
-            return newState(rpt);
+            return newState(currentReport);
         }
         return state;
     }
@@ -172,6 +197,9 @@ const report = (state = [], action) => {
     //    return state;
     //}
     case types.UPDATE_REPORT_RECORD: {
+        //  list for record update event.  For the report context,
+        //  update the report data with the new record information.
+        // TODO: REMOVE case block!!
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
             updateReportRecord(currentReport, action.content);
