@@ -128,4 +128,7 @@ export const FormBuilderContainer = React.createClass({
     }
 });
 
-
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FormBuilderContainer);
