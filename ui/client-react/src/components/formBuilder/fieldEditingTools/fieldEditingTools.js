@@ -71,8 +71,6 @@ export class FieldEditingTools extends Component {
     }
 
     onClickDelete() {
-        console.log('fieldEditingTools delete Icon was clicked!', 'formId: ', this.props);
-
         if (this.props.removeField) {
             return this.props.removeField(this.props.forms[0].id, this.props.location);
         }
