@@ -28,7 +28,7 @@ import './fieldEditingTools.scss';
 /**
  * Adds chrome around a field so that the field can be moved and edited.
  */
-class FieldEditingTools extends Component {
+export class FieldEditingTools extends Component {
     constructor(props) {
         super(props);
 
