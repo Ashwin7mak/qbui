@@ -32,7 +32,6 @@
         var NODE_BASE_ENDPOINT = '/api/api/v1';
         var JAVA_BASE_ENDPOINT = '/api/api/v1';
         var EE_BASE_ENDPOINT = '/ee/v1';
-        var FEATURE_SWITCH_ENDPOINT = '/featureSwitches';
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
@@ -177,10 +176,6 @@
             },
             generateFullRequest         : function(subdomain, relativePath) {
                 return resolveFullUrl(subdomain, relativePath);
-            },
-            resolveFeatureSwitchEndpoint      : function() {
-                var featureSwitchEndpoint = NODE_BASE_ENDPOINT + FEATURE_SWITCH_ENDPOINT;
-                return featureSwitchEndpoint;
             },
             resolveAppsEndpoint         : function(appId) {
                 var appsEndpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT;
