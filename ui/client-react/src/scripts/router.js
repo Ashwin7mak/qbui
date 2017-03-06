@@ -15,7 +15,7 @@ import TableHomePageRoute from "../components/table/tableHomePageRoute";
 import Logger from "../utils/logger";
 import {APPS_ROUTE, APP_ROUTE, BUILDER_ROUTE} from '../constants/urlConstants';
 
-import {editRecordCancel, editRecordCommit, createRecord, updateRecord} from '../actions/recordActions';
+import {editRecordCancel, createRecord, updateRecord} from '../actions/recordActions';
 
 import "react-fastclick";
 
@@ -30,7 +30,12 @@ let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
 const store = createAppStore();
-let history = AppHistory.setup(store, editRecordCancel, editRecordCommit, createRecord, updateRecord).history;
+let storeFunc = {
+    editRecordCancel: editRecordCancel,
+    createRecord: createRecord,
+    updateRecord: updateRecord
+}
+let history = AppHistory.setup(store, storeFunc).history;
 
 const mapStateToProps = (state) => {
     return {

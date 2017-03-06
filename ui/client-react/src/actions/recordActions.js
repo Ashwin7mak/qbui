@@ -585,9 +585,9 @@ export const editRecordCancel = (appId, tblId, recId) => {
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 // TODO: REMOVE..not using
-export const editRecordCommit = (appId, tblId, recId) => {
-    return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
-};
+//export const editRecordCommit = (appId, tblId, recId) => {
+//    return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
+//};
 
 
 /**

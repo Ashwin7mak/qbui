@@ -22,7 +22,7 @@ import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
-import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
+import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
 import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
@@ -1154,9 +1154,9 @@ const mapDispatchToProps = (dispatch) => {
         editRecordChange: (appId, tblId, recId, origRec, changes) => {
             dispatch(editRecordChange(appId, tblId, recId, origRec, changes));
         },
-        editRecordCommit: (appId, tblId, recId) => {
-            dispatch(editRecordCommit(appId, tblId, recId));
-        },
+        //editRecordCommit: (appId, tblId, recId) => {
+        //    dispatch(editRecordCommit(appId, tblId, recId));
+        //},
         editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
             dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
         },

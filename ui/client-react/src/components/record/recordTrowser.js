@@ -20,7 +20,7 @@ import {connect} from 'react-redux';
 import {saveForm, saveFormComplete, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {updateReportRecord} from '../../actions/reportActions';
-import {editRecordCancel, editRecordCommit, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
+import {editRecordCancel, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
@@ -583,9 +583,9 @@ const mapDispatchToProps = (dispatch) => {
         editRecordCancel: (appId, tblId, recId) => {
             dispatch(editRecordCancel(appId, tblId, recId));
         },
-        editRecordCommit: (appId, tblId, recId) => {
-            dispatch(editRecordCommit(appId, tblId, recId));
-        },
+        //editRecordCommit: (appId, tblId, recId) => {
+        //    dispatch(editRecordCommit(appId, tblId, recId));
+        //},
         updateReportRecord: (obj, context) => {
             dispatch(updateReportRecord(obj, context));
         },
