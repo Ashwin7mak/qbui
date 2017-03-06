@@ -222,7 +222,14 @@ class AppHistory {
             //self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
             //    .then(self._onRecordSaved, self._onRecordSavedError);
             //self._handleRecordAdd();
-            self.store.dispatch(self.createRecord(appId, tableId, pendEdits.recordChanges, fields)).then(
+            let params = {
+                context: null,
+                recordChanges: pendEdits.recordChanges,
+                fields: fields,
+                colList: [],
+                showNotificationOnSuccess: false
+            };
+            self.store.dispatch(self.createRecord(appId, tableId, params)).then(
                 () => {
                     self._continueToDestination();
                 },
@@ -236,7 +243,15 @@ class AppHistory {
             //self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)
             //    .then(self._onRecordSaved, self._onRecordSavedError);
             //self._handleRecordChange();
-            self.store.dispatch(self.updateRecord(appId, tableId, recordId, pendEdits, fields, null, false)).then(
+
+            let params = {
+                context: null,              // no report context to worry about...
+                pendEdits: pendEdits,
+                fields: fields,
+                colList: null,
+                showNotificationOnSuccess: false
+            };
+            self.store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
                 () => {
                     self._continueToDestination();
                 },

@@ -242,7 +242,14 @@ export const RecordTrowser = React.createClass({
         const pendEdits = this.getPendEdits();
         //return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList);
 
-        this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList, true)).then(
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            pendEdits: pendEdits,
+            fields: this.props.editForm.formData.fields,
+            colList: colList,
+            showNotificationOnSuccess: true
+        };
+        this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, params)).then(
             (obj) => {
                 //  need to call as the form.saving attribute is used to determine when to
                 //  open/close the 'modal working' spinner/window..
@@ -290,8 +297,14 @@ export const RecordTrowser = React.createClass({
             });
         }
         //return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList);
-
-        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList)).then(
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            recordChanges: recordChanges,
+            fields: this.props.editForm.formData.fields,
+            colList: colList,
+            showNotificationOnSuccess: true
+        };
+        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
             (obj) => {
                 this.props.saveFormComplete(formType);
                 if (this.props.viewingRecordId === obj.recId) {
@@ -577,10 +590,10 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(updateReportRecord(obj, context));
         },
         dispatch: dispatch
-        //updateRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
-        //    dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
+        //updateRecord:(appId, tblId, recId, params) => {
+        //    dispatch(updateRecord(appId, tblId, recId, params)).then(
         //        (obj) => {
-        //            dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
+        //            //dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
         //            dispatch(saveFormSuccess('edit'));
         //            dispatch(syncForm("view"));
         //        }
