@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import {FieldEditingTools, __RewireAPI__ as FieldEditingToolsRewireAPI} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
+import FieldEditingTools, {__RewireAPI__ as FieldEditingToolsRewireAPI} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
 import DragHandle from '../../../src/components/formBuilder/dragHandle/dragHandle';
 
 const mockReactDom = {
@@ -15,8 +15,6 @@ const mockReactDom = {
         }};
     }
 };
-
-let formsId = [{id: 'view'}];
 
 const mockParentProps = {
     removeField(_location) {},
@@ -58,7 +56,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeField).toHaveBeenCalledWith(formsId[0].id,location);
+        expect(mockParentProps.removeField).toHaveBeenCalledWith(location);
     });
 
     it('has a field preferences button', () => {
