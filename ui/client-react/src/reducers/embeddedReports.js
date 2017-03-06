@@ -1,4 +1,6 @@
 import _ from 'lodash';
+
+import * as types from '../actions/types';
 import FacetSelections from '../components/facet/facetSelections';
 
 /**
@@ -20,7 +22,7 @@ const embeddedReport = (state = {}, action) => {
             rptId: action.content.rptId
         };
         return newState(obj);
-    }
+    }*/
     case types.LOAD_EMBEDDED_REPORT_FAILED: {
         const obj = {
             id: action.id,
@@ -28,8 +30,11 @@ const embeddedReport = (state = {}, action) => {
             error: true,
             errorDetails: action.content
         };
-        return newState(obj);
-    }*/
+        const stateList = _.cloneDeep(state);
+        // remove entry
+        stateList[action.id] = obj;
+        return stateList;
+    }
     case 'LOAD_EMBEDDED_REPORT_SUCCESS': {
         const obj = {
             id: action.id,
@@ -53,6 +58,13 @@ const embeddedReport = (state = {}, action) => {
         //  append or replace obj into the cloned copy
         stateList[action.id] = obj;
 
+        return stateList;
+    }
+    case types.UNLOAD_EMBEDDED_REPORT: {
+        // reducer - no mutations against current state!
+        const stateList = _.cloneDeep(state);
+        // remove entry
+        delete stateList[action.id];
         return stateList;
     }
     default:

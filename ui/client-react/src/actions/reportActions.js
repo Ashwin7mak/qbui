@@ -277,6 +277,15 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
 };
 
 /**
+ * Called when an embedded report is being unmounted. We want to clear its report entry from the
+ * embeddedReports store.
+ * @param  context unique context for the embeddedReport instance
+ * @return {{id: *, type}}
+ */
+export const unloadEmbeddedReport = (context) =>
+    event(context, types.UNLOAD_EMBEDDED_REPORT);
+
+/**
  * Action called when their is a need to update a report grid row
  * with an updated data record.  This is triggered when updating
  * a report grid row via the in-line editor.

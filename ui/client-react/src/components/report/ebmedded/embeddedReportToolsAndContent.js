@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 
 import ReportToolsAndContent from '../reportToolsAndContent';
-import {loadDynamicReport} from '../../../actions/reportActions';
+import {loadDynamicReport, unloadEmbeddedReport} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
 import Logger from '../../../utils/logger';
@@ -36,8 +36,13 @@ export const EmbeddedReportToolsAndContent = React.createClass({
     /**
      * Load a report with query parameters.
      */
-    loadDynamicReport(appId, tblId, rptId, queryParams) {
-        this.props.loadDynamicReport(this.uniqueId, appId, tblId, rptId, true, /*filter*/{}, queryParams);
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        // Display a filtered child report, the child report should only contain children that
+        // belong to a parent. A child has a parent if its detailKey field contains the
+        // detailKeyValue that contains a parent record's masterKeyValue.
+        queryParams.query = QueryUtils.parseStringIntoExactMatchExpression(this.props.detailKeyFid, this.props.detailKeyValue);
+
+        this.props.loadDynamicEmbeddedReport(this.uniqueId, appId, tblId, rptId, format, filter, queryParams);
     },
 
     /**
@@ -49,18 +54,11 @@ export const EmbeddedReportToolsAndContent = React.createClass({
 
         if (validProps) {
             //  loading a report..always render the 1st page on initial load
-            const offset = constants.PAGE.DEFAULT_OFFSET;
-            const numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
-
-            // Display a filtered child report, the child report should only contain children that
-            // belong to a parent. A child has a parent if its detailKey field contains the
-            // detailKeyValue that contains a parent record's masterKeyValue.
             const queryParams = {
-                query: QueryUtils.parseStringIntoExactMatchExpression(detailKeyFid, detailKeyValue),
-                offset,
-                numRows
+                offset: constants.PAGE.DEFAULT_OFFSET,
+                numRows: NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS
             };
-            this.loadDynamicReport(appId, tblId, rptId, queryParams);
+            this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
         }
     },
 
@@ -71,8 +69,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
     },
 
     componentWillUnmount() {
-        // TODO: cleanup entry in store
-        // this.uniqId
+        this.props.unloadEmbeddedReport(this.uniqueId);
     },
 
     render() {
@@ -97,6 +94,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
                         fields={this.props.fields || !("not used in phase1")}
                         nameForRecords={this.nameForRecords}
                         phase1={true}
+                        loadDynamicReport={this.loadDynamicReport}
                     />
                 </div>);
         }
@@ -118,7 +116,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
             dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
-        }
+        },
+        unloadEmbeddedReport: (context) =>
+            dispatch(unloadEmbeddedReport(context))
     };
 };
 

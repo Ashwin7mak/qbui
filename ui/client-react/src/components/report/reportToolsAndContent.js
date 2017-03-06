@@ -59,6 +59,7 @@ export const ReportToolsAndContent = React.createClass({
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
+        loadDynamicReport: React.PropTypes.func,
 
         // used for relationships phase-1
         phase1: React.PropTypes.bool
@@ -312,7 +313,8 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.NUMROWS_PARAM] = numRows;
 
         //this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
-        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams));
+        //this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams));
+        this.props.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
     },
 
     /**

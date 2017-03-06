@@ -36,6 +36,13 @@ export const TableHomePageRoute = React.createClass({
             />);
     },
 
+    /**
+     * Load a report with query parameters.
+     */
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+    },
+
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
