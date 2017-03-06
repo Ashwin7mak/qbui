@@ -635,6 +635,25 @@
         },
 
         /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRoute: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(USERS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
          * Is the route a request for report results
          *
          * @param url

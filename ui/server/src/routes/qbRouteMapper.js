@@ -23,6 +23,7 @@
     let rolesApi;
     let ticketApi;
     let routeGroup;
+    let usersApi;
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
@@ -34,6 +35,7 @@
         appsApi = require('../api/quickbase/appsApi')(config);
         rolesApi = require('../api/quickbase/rolesApi')(config);
         ticketApi = require('../api/quickbase/ticketApi')(config);
+        usersApi = require('../api/quickbase/usersApi')(config);
 
         /* internal data */
         /*
@@ -720,12 +722,12 @@
         });
     }
 
-    function isReqUserAdmin(req, res, userId) {
+    function isReqUserAdmin(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get User by id', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            ticketApi.isReqUserAdmin(req).then(
+            usersApi.isReqUserAdmin(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'IsReqUserAdmin');

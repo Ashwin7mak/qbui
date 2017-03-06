@@ -8,7 +8,7 @@ class UserService extends BaseService {
 
         //  User api endpoints
         this.API = {
-            IS_REQ_USER_ADMIN : `${constants.BASE_URL.QUICKBASE}/${constants.TICKET}/${constants.ISREQUSERADMIN}`
+            IS_REQ_USER_ADMIN : `${constants.BASE_URL.QUICKBASE}/${constants.USERS}/${constants.ISREQUSERADMIN}`
         };
     }
 

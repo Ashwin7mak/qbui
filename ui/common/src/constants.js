@@ -91,6 +91,7 @@
                 WITH_REPORT_DEFAULTS: 'withReportDefaults'
             },
             REALM_ID: 'realmId',
+            USER_ID: 'userId',
             //  legacy stack request paameters
             LEGACY_STACK: {
                 ACTION: 'a',
