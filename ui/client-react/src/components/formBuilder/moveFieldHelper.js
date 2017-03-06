@@ -7,7 +7,6 @@ import Logger from '../../utils/logger';
  */
 const MoveFieldHelper = {
     moveField(formMeta, newLocation, draggedItemProps) {
-        console.log('dragItemProps: ', draggedItemProps);
         if (!hasRequiredArguments(formMeta, newLocation, draggedItemProps)) {
             return formMeta;
         }
