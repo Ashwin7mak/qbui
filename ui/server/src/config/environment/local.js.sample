@@ -50,11 +50,10 @@
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
         //Java REST endpoint (protocol,server,port)
-        //javaHost: 'https://localhost:8443',
-        //javaHost: 'http://localhost:8080',
-        //eeHost: 'http://localhost:8081',
-        javaHost: 'https://t.tomcat.trunk.newstack.quickbaserocks.com:8443',
-        eeHost: 'https://ee.trunk-int-experienceengine.newstack.quickbaserocks.com',
+        javaHost: 'http://localhost:8080',
+        eeHost: 'http://localhost:8081',
+        //javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
+        //eeHost: 'https://t.experienceengine.trunk.newstack.quickbaserocks.com',
         eeHostEnable: true,
 
         isMockServer : false,
@@ -68,6 +67,9 @@
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
+
+        //Custom realm to use in dataGen scripts (needs to exist first! use swagger to create)
+        //realmToUse: 'testrealm',
 
         //enable to track performance stats to server/splunk
         isClientPerfTrackingEnabled: true,
