@@ -143,29 +143,26 @@ class ReportModel {
     constructor(appId, metaData, reportData, params) {
         this.model = {};
 
-        //  will initialize model to empty state if mimimum of appId is not supplied
+        //  will initialize model to empty state if minimum of appId is not supplied
         if (!appId) {
-            this.init();
+            this.init(null);
         } else {
-            this.set(appId, metaData, reportData, params);
+            this.init(appId, metaData, reportData, params);
         }
-    }
-
-    init() {
-        this.set(null);
     }
 
     get() {
         return this.model;
     }
 
-    set(appId, metaData, reportData, params) {
+    init(appId, metaData, reportData, params) {
         this.model.appId = appId;
+        this.model.data = {};
 
         this.setMetaData(metaData);
         this.setReportData(reportData);
         this.setFacetData(reportData);
-        this.setRunTimeParams(params);
+        this.setRunTimeDataParams(params);
     }
 
     /**
@@ -175,39 +172,43 @@ class ReportModel {
      */
     setMetaData(metaData) {
         //  meta data elements defined on the client model.
-        this.model.metaData = {};
-        this.model.originalMetaData = null;
-        this.model.tblId = null;
-        this.model.rptId = null;
-        this.model.name = null;
-        this.model.description = null;
-        this.model.fids = [];
-        this.model.sortList = [];
-        this.model.sortFids = [];
-        this.model.groupEls = [];
-        this.model.groupLevel = 0;
+        let data = {};
+        data.metaData = {};
+        data.originalMetaData = null;
+        data.appId = null;
+        data.tblId = null;
+        data.rptId = null;
+        data.name = null;
+        data.description = null;
+        data.fids = [];
+        data.sortList = [];
+        data.sortFids = [];
+        data.groupEls = [];
+        data.groupLevel = 0;
 
         if (metaData) {
-            this.model.metaData = metaData;
+            data.metaData = metaData;
+
             // create deep clone to allow for adhoc updates on the client but still have
             // ability to reset the meta data back to its original state.
-            this.model.originalMetaData = _.cloneDeep(metaData);
+            data.originalMetaData = _.cloneDeep(metaData);
 
-            this.model.tblId = metaData.tableId;
+            data.appId = this.model.appId;
+            data.tblId = metaData.tableId;
             if (metaData.id) {
-                this.model.rptId = metaData.id.toString();
+                data.rptId = metaData.id.toString();
             } else {
                 //  if there's no id, we're generating the synthetic default table report
-                this.model.rptId = Constants.SYNTHETIC_TABLE_REPORT.ID;
+                data.rptId = Constants.SYNTHETIC_TABLE_REPORT.ID;
             }
-            this.model.name = metaData.name;
-            this.model.description = metaData.description;
+            data.name = metaData.name;
+            data.description = metaData.description;
 
-            this.model.fids = metaData.fids ? metaData.fids : [];
-            if (this.model.fids.length === 0) {
+            data.fids = metaData.fids ? metaData.fids : [];
+            if (data.fids.length === 0) {
                 // if no fid list, then check the report defaults
                 if (metaData.reportDefaults && metaData.reportDefaults.fids) {
-                    this.model.fids = metaData.reportDefaults.fids;
+                    data.fids = metaData.reportDefaults.fids;
                 }
             }
 
@@ -218,11 +219,14 @@ class ReportModel {
                     sortList = metaData.reportDefaults.sortList;
                 }
             }
-            this.model.sortList = ReportUtils.getSortListFromObject(sortList);
-            this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
-            this.model.groupEls = ReportUtils.getGroupElements(sortList);
-            this.model.groupLevel = this.model.groupEls.length;
+            data.sortList = ReportUtils.getSortListFromObject(sortList);
+            data.sortFids = ReportUtils.getSortFidsOnly(sortList);
+            data.groupEls = ReportUtils.getGroupElements(sortList);
+            data.groupLevel = data.groupEls.length;
         }
+
+        // attach the meta data to the model
+        Object.assign(this.model.data, data);
     }
 
     /**
@@ -232,44 +236,45 @@ class ReportModel {
      */
     setReportData(reportData) {
         //  report data elements defined on the client model.
-        this.model.recordData = reportData;// TODO remove..
+        //this.model.recordData = reportData;// TODO remove..
 
-        this.model.hasGrouping = false;
-        this.model.columns = null;
-        this.model.records = null;
-        this.model.filteredRecords = null;
-        this.model.filteredRecordsCount = 0;
-        this.model.groupFields = null;
-        this.model.gridColumns = null;
-        this.model.fields = null;
-        this.model.fieldsMap = null;
-        this.model.keyField = null;
-        this.model.recordsCount = 0;
+        let data = {};
+        data.hasGrouping = false;
+        data.columns = null;
+        data.records = null;
+        data.filteredRecords = null;
+        data.filteredRecordsCount = 0;
+        data.groupFields = null;
+        data.gridColumns = null;
+        data.fields = null;
+        data.fieldsMap = null;
+        data.keyField = null;
+        data.recordsCount = 0;
 
         if (reportData) {
             if (reportData.groups) {
-                this.model.hasGrouping = reportData.groups.hasGrouping;
+                data.hasGrouping = reportData.groups.hasGrouping;
             }
 
-            if (this.model.hasGrouping === true) {
+            if (data.hasGrouping === true) {
                 // Note the reference to this.model.fids, this.model.groupEls...you'll want to ensure setMetaData() has
                 // already been called as that method sets those properties.
-                this.model.columns = reportModelHelper.getReportColumns(reportData.groups.gridColumns, this.model.fids, this.model.groupEls);
-                this.model.records = reportData.groups.gridData;
-                this.model.filteredRecords = this.model.records;
-                this.model.filteredRecordsCount = reportData.groups.totalRows;
-                this.model.groupFields = reportData.groups.fields;
-                this.model.gridColumns = reportData.groups.gridColumns;
+                data.columns = reportModelHelper.getReportColumns(reportData.groups.gridColumns, this.model.data.fids, this.model.data.groupEls);
+                data.records = reportData.groups.gridData;
+                data.filteredRecords = data.records;
+                data.filteredRecordsCount = reportData.groups.totalRows;
+                data.groupFields = reportData.groups.fields;
+                data.gridColumns = reportData.groups.gridColumns;
             } else {
-                this.model.columns = reportModelHelper.getReportColumns(reportData.fields, this.model.fids, this.model.groupEls);
-                this.model.records = reportModelHelper.getReportData(reportData.fields, reportData.records);
-                this.model.filteredRecords = this.model.records;
-                this.model.filteredRecordsCount = reportData.records ? reportData.records.length : null;
-                this.model.gridColumns = null;
-                this.model.groupFields = null;
+                data.columns = reportModelHelper.getReportColumns(reportData.fields, this.model.data.fids, this.model.data.groupEls);
+                data.records = reportModelHelper.getReportData(reportData.fields, reportData.records);
+                data.filteredRecords = data.records;
+                data.filteredRecordsCount = reportData.records ? reportData.records.length : null;
+                data.gridColumns = null;
+                data.groupFields = null;
             }
 
-            this.model.fields = reportData.fields || [];
+            data.fields = reportData.fields || [];
             // map of fields by field id for fast lookup, any type for key,
             // see http://stackoverflow.com/questions/18541940/map-vs-object-in-javascript
             let map = new Map();
@@ -278,13 +283,16 @@ class ReportModel {
                     map.set(field.id, field);
                 });
             }
-            this.model.fieldsMap = map;
-            this.model.keyField = _.find(this.model.fields, field => field.id === DEFAULT_RECORD_KEY_ID);
+            data.fieldsMap = map;
+            data.keyField = _.find(data.fields, field => field.id === DEFAULT_RECORD_KEY_ID);
 
             if (reportData.filteredCount && !isNaN(reportData.filteredCount)) {
-                this.model.recordsCount = parseInt(reportData.filteredCount);
+                data.recordsCount = parseInt(reportData.filteredCount);
             }
         }
+
+        // attach the report data to the model
+        Object.assign(this.model.data, data);
     }
 
     /**
@@ -293,7 +301,8 @@ class ReportModel {
      * @param reportData
      */
     setFacetData(reportData) {
-        this.model.facets = [];
+        let data = {};
+        data.facets = [];
 
         if (reportData && reportData.facets) {
             //check for an error message ==> [{id:x, name:y, type:z, errorCode: errorCode}]
@@ -303,12 +312,15 @@ class ReportModel {
                     let errorCode = reportData.facets[0].errorCode;
                     let id = reportData.facets[0].id;
                     let name = reportData.facets[0].name;
-                    logger.error(`Error response from server. Facet:${id}, name:${name}, error: ${errorCode}; app:${this.model.appId}; table:${this.model.tblId}; report:${this.model.rptId}.`);
+                    logger.error(`Error response from server. Facet:${id}, name:${name}, error: ${errorCode}; app:${this.model.data.appId}.`);
                 } else {
-                    this.model.facets = reportData.facets;
+                    data.facets = reportData.facets;
                 }
             }
         }
+
+        // attach the facet data to the model
+        Object.assign(this.model.data, data);
     }
 
     /**
@@ -316,31 +328,35 @@ class ReportModel {
      *
      * @param params
      */
-    setRunTimeParams(params) {
+    setRunTimeDataParams(params) {
         // miscellaneous param elements defined on the model
-        this.model.pageOffset = PAGE.DEFAULT_OFFSET;
-        this.model.numRows = PAGE.DEFAULT_NUM_ROWS;
+        let data = {};
+        data.pageOffset = PAGE.DEFAULT_OFFSET;
+        data.numRows = PAGE.DEFAULT_NUM_ROWS;
         //  facet/filtering info
-        this.model.facetExpression = '';
-        this.model.searchStringForFiltering = '';
-        this.model.selections = null;
+        data.facetExpression = '';
+        data.searchStringForFiltering = '';
+        data.selections = null;
 
         if (params) {
             const offset = params[query.OFFSET_PARAM];
             const rows = params[query.NUMROWS_PARAM];
             if (NumberUtils.isInt(offset) && offset >= 0) {
-                this.model.pageOffset = offset;
+                data.pageOffset = offset;
             }
             if (NumberUtils.isInt(rows) && rows >= 0 && rows <= PAGE.MAX_NUM_ROWS) {
-                this.model.numRows = rows;
+                data.numRows = rows;
             }
             //  any run time facet, filter or search
             if (params.filter) {
-                this.model.facetExpression = params.filter.facet;
-                this.model.searchStringForFiltering = params.filter.search;
-                this.model.selections = params.filter.selections;
+                data.facetExpression = params.filter.facet;
+                data.searchStringForFiltering = params.filter.search;
+                data.selections = params.filter.selections;
             }
         }
+
+        // attach the misc data to the model
+        Object.assign(this.model.data, data);
 
     }
 }

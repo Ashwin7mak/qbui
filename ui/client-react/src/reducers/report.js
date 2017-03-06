@@ -91,18 +91,18 @@ const report = (state = [], action) => {
             id: action.id,
             loading: false,
             error: false,
-            data: action.content,
-            //  TODO: needed??..these are on the data property
-            appId: action.content.appId,
-            tblId: action.content.tblId,
-            rptId: action.content.rptId,
+            data: action.content.data,
+
+            appId: action.content.data.appId,
+            tblId: action.content.data.tblId,
+            rptId: action.content.data.rptId,
             //
-            pageOffset: action.content.pageOffset,
-            numRows: action.content.numRows,
+            pageOffset: action.content.data.pageOffset,
+            numRows: action.content.data.numRows,
             //  faceting and searching
-            searchStringForFiltering: action.content.searchStringForFiltering,
-            selections: action.content.selections || new FacetSelections(),
-            facetExpression: action.content.facetExpression || {},
+            searchStringForFiltering: action.content.data.searchStringForFiltering,
+            selections: action.content.data.selections || new FacetSelections(),
+            facetExpression: action.content.data.facetExpression || {},
             //  UI row selection list
             selectedRows: []
         };
