@@ -6,6 +6,22 @@ import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
 import device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
+import {connect} from 'react-redux';
+import {removeFieldFromForm} from '../../../actions/formActions';
+
+const mapStateToProps = state => {
+    return {
+        forms: state.forms
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        removeField(formId, location) {
+            return dispatch(removeFieldFromForm(formId, location));
+        }
+    };
+};
 
 import './fieldEditingTools.scss';
 
@@ -55,8 +71,10 @@ class FieldEditingTools extends Component {
     }
 
     onClickDelete() {
-        if (this.props.onClickDelete) {
-            return this.props.onClickDelete(this.props.location);
+        console.log('fieldEditingTools delete Icon was clicked!', 'formId: ', this.props);
+
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.forms[0].id, this.props.location);
         }
     }
 
@@ -98,6 +116,7 @@ class FieldEditingTools extends Component {
                         <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
                     </QbToolTip>
                 </div>
+
             </div>
         );
     }
@@ -109,4 +128,9 @@ FieldEditingTools.propTypes = {
     onClickFieldPreferences: PropTypes.func
 };
 
-export default FieldEditingTools;
+// export default FieldEditingTools;
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FieldEditingTools);

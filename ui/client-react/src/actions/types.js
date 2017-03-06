@@ -24,6 +24,7 @@ export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
 export const SAVING_FORM_ERROR = 'SAVING_FORM_ERROR';
 
 export const MOVE_FIELD = 'MOVE_FIELD';
+export const REMOVE_FIELD = 'REMOVE_FIELD';
 
 export const SYNC_FORM = 'SYNC_FORM';
 

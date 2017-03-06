@@ -72,6 +72,9 @@ export const FormBuilderContainer = React.createClass({
         if (this.props.forms && this.props.forms.length > 0 && this.props.forms[0].formData) {
             let formMeta = this.props.forms[0].formData.formMeta;
             let formType = this.props.forms[0].formData.formType;
+            console.log('formMeta: ', formMeta);
+            console.log('formType: ', formType);
+            formMeta.fields[0] = formMeta.fields.shift();
             this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
         }
     },

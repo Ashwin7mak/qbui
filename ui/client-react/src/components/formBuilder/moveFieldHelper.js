@@ -7,14 +7,23 @@ import Logger from '../../utils/logger';
  */
 const MoveFieldHelper = {
     moveField(formMeta, newLocation, draggedItemProps) {
+        console.log('dragItemProps: ', draggedItemProps);
         if (!hasRequiredArguments(formMeta, newLocation, draggedItemProps)) {
             return formMeta;
         }
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
-        removeElementFromCurrentLocation(formMetaCopy, draggedItemProps);
+        removeElementFromCurrentLocation(formMetaCopy, draggedItemProps.location);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
+
+        return formMetaCopy;
+    },
+
+    removeField(formMeta, location) {
+        let formMetaCopy = _.cloneDeep(formMeta);
+
+        removeElementFromCurrentLocation(formMetaCopy, location);
 
         return formMetaCopy;
     }
@@ -71,8 +80,8 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
  * @param draggedItemProps
  * @returns {*}
  */
-function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
-    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = draggedItemProps.location;
+function removeElementFromCurrentLocation(formMetaData, location) {
+    let {tabIndex, sectionIndex, columnIndex, rowIndex, elementIndex} = location;
 
     let row = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex].rows[rowIndex];
 
