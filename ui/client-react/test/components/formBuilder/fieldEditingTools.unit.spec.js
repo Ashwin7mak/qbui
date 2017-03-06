@@ -46,7 +46,6 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'removeField');
 
         component = shallow(<FieldEditingTools
-            forms={formsId}
             location={location}
             removeField={mockParentProps.removeField}
         />);
