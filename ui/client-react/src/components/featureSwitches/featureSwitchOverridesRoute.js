@@ -76,9 +76,24 @@ export class FeatureSwitchOverridesRoute extends React.Component {
      * @param defaultOn
      */
     setSelectedOverrideStates(defaultOn) {
+
+        const updatePromises = [];
         this.state.selectedIDs.forEach((id) => {
-            this.updateOverride(id, FeatureSwitchConsts.OVERRIDE_ON_KEY, defaultOn);
+            const overrideToUpdate = this.props.overrides.find(override => override.id === id);
+
+            // only update override who's state needs change
+            if (overrideToUpdate[FeatureSwitchConsts.OVERRIDE_ON_KEY] !== defaultOn) {
+                updatePromises.push(this.props.updateOverride(this.props.params.id, id, overrideToUpdate, FeatureSwitchConsts.OVERRIDE_ON_KEY, defaultOn));
+            }
         });
+
+        // notify of updates if there were any
+        if (updatePromises.length > 0) {
+            Promise.all(updatePromises).then(() => {
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            });
+        }
     }
 
     /**

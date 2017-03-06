@@ -82,9 +82,24 @@ export class FeatureSwitchesRoute extends React.Component {
      * @param isOn
      */
     setSelectedSwitchStates(isOn) {
+
+        const updatePromises = [];
         this.state.selectedIDs.forEach((id) => {
-            this.updateFeatureSwitch(id, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, isOn);
+            const featureSwitch = this.props.switches.find(sw => sw.id === id);
+
+            // only update feature switches who's state needs change
+            if (featureSwitch[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] !== isOn) {
+                updatePromises.push(this.props.updateFeatureSwitch(id, featureSwitch, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, isOn));
+            }
         });
+
+        // notify of updates if there were any
+        if (updatePromises.length > 0) {
+            Promise.all(updatePromises).then(() => {
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            });
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- The purpose of this module is to process /apps/<id>/ api requests.
+ This module implements the feature switches API using a local JSON file store instead of AWS.
  */
 (function() {
     'use strict';
