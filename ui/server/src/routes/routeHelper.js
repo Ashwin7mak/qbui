@@ -20,7 +20,7 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
-    let FEATURE_SWITCHES = 'featureSwitch';
+    let FEATURE_SWITCHES = 'featureSwitches';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)

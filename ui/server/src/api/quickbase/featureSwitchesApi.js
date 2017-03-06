@@ -39,12 +39,14 @@
                 requestHelper = requestHelperOverride;
             },
 
-            getFeatureSwitches: function(req, useSSL) {
+            getFeatureSwitches: function(req) {
                 return new Promise((resolve, reject) => {
                     if (config && config.featureSwitchesMockData) {
                         resolve(mockApi.getFeatureSwitches(req));
                     } else {
-                        let opts = requestHelper.setOptions(req, false, useSSL);
+                        let opts = {
+                            headers: {}
+                        };
                         opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
                         const featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url);
@@ -52,7 +54,7 @@
                         opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
 
                         //  make the api request to get the app rights
-                        requestHelper.executeRequest(req, opts).then(
+                        requestHelper.executeRequest({}, opts).then(
                             (response) => {
                                 let featureSwitches = JSON.parse(response.body);
                                 resolve(featureSwitches);

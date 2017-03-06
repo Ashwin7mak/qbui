@@ -56,12 +56,12 @@
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';
             },
-            getAgentOptions: function(req, useSSL) {
+            getAgentOptions: function(req) {
                 let agentOptions = {
                     rejectUnauthorized: false
                 };
 
-                if ((this.isSecure(req) || useSSL) && config) {
+                if (this.isSecure(req) && config) {
                     //  we're on https..include the certs
                     agentOptions = {
                         strictSSL         : true,
@@ -153,14 +153,14 @@
              * @param forceGet - Regardless of req method setting, always set to a get request
              * @returns request object used when submitting a server request
              */
-            setOptions: function(req, forceGet, useSSL) {
+            setOptions: function(req, forceGet) {
 
                 this.setTidHeader(req);
 
                 let opts = {
                     url         : this.getRequestUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
-                    agentOptions: this.getAgentOptions(req, useSSL),
+                    agentOptions: this.getAgentOptions(req),
                     headers     : req.headers
                 };
 
