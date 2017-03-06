@@ -292,6 +292,7 @@ let QBForm = React.createClass({
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
+                  removeField={this.props.removeField}
                   containingElement={containingElement}
                   element={FormFieldElement}
                   key={`fieldElement-${containingElement.id}`}

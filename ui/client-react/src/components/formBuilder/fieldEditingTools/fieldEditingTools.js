@@ -6,29 +6,13 @@ import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
 import device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
-import {connect} from 'react-redux';
-import {removeFieldFromForm} from '../../../actions/formActions';
-
-const mapStateToProps = state => {
-    return {
-        forms: state.forms
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        removeField(formId, location) {
-            return dispatch(removeFieldFromForm(formId, location));
-        }
-    };
-};
 
 import './fieldEditingTools.scss';
 
 /**
  * Adds chrome around a field so that the field can be moved and edited.
  */
-export class FieldEditingTools extends Component {
+class FieldEditingTools extends Component {
     constructor(props) {
         super(props);
 
@@ -72,7 +56,7 @@ export class FieldEditingTools extends Component {
 
     onClickDelete() {
         if (this.props.removeField) {
-            return this.props.removeField(this.props.forms[0].id, this.props.location);
+            return this.props.removeField(this.props.location);
         }
     }
 
@@ -126,9 +110,4 @@ FieldEditingTools.propTypes = {
     onClickFieldPreferences: PropTypes.func
 };
 
-// export default FieldEditingTools;
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FieldEditingTools);
+export default FieldEditingTools;

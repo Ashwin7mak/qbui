@@ -14,6 +14,7 @@ export class FormBuilder extends Component {
         super(props);
 
         this.handleFormReorder = this.handleFormReorder.bind(this);
+        this.removeField = this.removeField.bind(this);
     }
 
     /**
@@ -27,6 +28,12 @@ export class FormBuilder extends Component {
         }
     }
 
+    removeField(location) {
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.formId, location);
+        }
+    }
+
     render() {
         return (
             <div className="formBuilderContainer">
@@ -36,6 +43,7 @@ export class FormBuilder extends Component {
                     editingForm={true}
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
+                    removeField={this.removeField}
                     appUsers={[]}
                 />
             </div>

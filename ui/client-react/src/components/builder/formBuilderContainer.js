@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm} from '../../actions/formActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -34,6 +34,10 @@ const mapDispatchToProps = dispatch => {
 
         updateForm(appId, tblId, formType, form) {
             return dispatch(updateForm(appId, tblId, formType, form));
+        },
+
+        removeField(formId, location) {
+            return dispatch(removeFieldFromForm(formId, location));
         }
     };
 };
@@ -116,7 +120,7 @@ export const FormBuilderContainer = React.createClass({
 
                 <div className="formBuilderContent">
                     <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                        <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                        <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} removeField={this.props.removeField}/>
                     </Loader>
                 </div>
 
