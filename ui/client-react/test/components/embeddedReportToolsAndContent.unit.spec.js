@@ -55,11 +55,11 @@ describe('EmbeddedReportToolsAndContent', () => {
         expect(component).toBePresent();
     });
 
-    it('calls loadDynamicEmbeddedReport with proper arguments', () => {
+    it('calls loadDynamicReport with proper arguments', () => {
         const spy = jasmine.createSpy('spy');
 
         component = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicEmbeddedReport={spy} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={spy} {...props} />
         );
         expect(spy).toHaveBeenCalled();
         expect(spy).toHaveBeenCalledWith(
@@ -81,10 +81,10 @@ describe('EmbeddedReportToolsAndContent', () => {
         const spy = jasmine.createSpy('spy');
 
         const component1 = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicEmbeddedReport={spy} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={spy} {...props} />
         );
         const component2 = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicEmbeddedReport={spy} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={spy} {...props} />
         );
         expect(spy).toHaveBeenCalled();
         expect(spy.calls.count()).toEqual(2);
@@ -93,7 +93,7 @@ describe('EmbeddedReportToolsAndContent', () => {
 
     it('renders embedded report when a corresponding report exists in the store', () => {
         component = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicEmbeddedReport={() => null} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={() => null} {...props} />
         );
 
         // manually set the instance's uniqueId to 42
@@ -107,7 +107,7 @@ describe('EmbeddedReportToolsAndContent', () => {
 
     it('does not render embedded report when a record is not available', () => {
         component = mount(
-            <UnconnectedEmbeddedReportToolsAndContent loadDynamicEmbeddedReport={() => null} {...props} />
+            <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={() => null} {...props} />
         );
         expect(component.find(ReportToolsAndContentMock).length).toEqual(0);
     });

@@ -8,6 +8,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
 import * as types from '../actions/types';
+import {CONTEXT} from '../actions/context';
 import * as query from '../constants/query';
 
 let logger = new Logger();
@@ -225,6 +226,7 @@ const parseAndLogError = (context, dispatch) =>
  * data defaults will be used.  NOTE: an empty parameter value is considered valid (clear the default value) and will
  * be passed to the node layer.
  *
+ * @param context
  * @param appId
  * @param tblId
  * @param rptId
@@ -236,10 +238,17 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
+        // set the actions to embedded or not embedded using the passed in context
+        const embedded = _.includes(context, CONTEXT.REPORT.EMBEDDED);
+        const actions = {
+            LOAD_REPORT: embedded ? types.LOAD_REPORT : types.LOAD_EMBEDDED_REPORT,
+            LOAD_REPORT_SUCCESS: embedded ? types.LOAD_REPORT_SUCCESS : types.LOAD_EMBEDDED_REPORT_SUCCESS,
+            LOAD_REPORT_FAILED: embedded ? types.LOAD_REPORT_FAILED : types.LOAD_EMBEDDED_REPORT_FAILED,
+        };
         if (appId && tblId && rptId) {
             logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
 
-            dispatch(event(context, types.LOAD_REPORT, {appId, tblId, rptId}));
+            dispatch(event(context, actions.LOAD_REPORT, {appId, tblId, rptId}));
             const reportService = new ReportService();
 
             // error handler for when a promise is rejected
@@ -251,70 +260,17 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                 (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
             ).then((newQueryParams) => {
                 return getDynamicReportResults(context, {appId, tblId, rptId, queryParams, format}, filter).then((report) => {
-                    dispatch(event(context, types.LOAD_REPORT_SUCCESS, report));
+                    dispatch(event(context, actions.LOAD_REPORT_SUCCESS, report));
                     return; //resolve promise with undefined
                 }).catch(
-                    parseAndLogHandler(types.LOAD_REPORT_FAILED, `reportActions.getDynamicReportResults, context: ${context}`)
+                    parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.getDynamicReportResults, context: ${context}`)
                 );
             }).catch(
-                parseAndLogHandler(types.LOAD_REPORT_FAILED, `reportActions.parseFacetExpression, context: ${context}`)
+                parseAndLogHandler(actions.LOAD_REPORT_FAILED, `reportActions.parseFacetExpression, context: ${context}`)
             );
         } else {
             logger.error(`reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
-            dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
-            return new Promise().reject();
-        }
-    };
-};
-
-/* Run a customized report displayed as an embedded report, that optionally allows for dynamically
- * overriding report meta data defaults for sort/grouping, query and column list settings.
- *
- * Currently supported query filtering overrides include:
- *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
- *       search : search string
- *
- * The overrides are expected to be defined in the queryParams parameter.  If no entry is found, then the report meta
- * data defaults will be used.  NOTE: an empty parameter value is considered valid (clear the default value) and will
- * be passed to the node layer.
- *
- * @param appId
- * @param tblId
- * @param rptId
- * @param format: should the report output be formatted for display.  If not true, raw data values are returned.
- * @param filter: {facet, search}
- * @param queryParams: {offset, numrows, cList, sList, query}
- */
-export const loadDynamicEmbeddedReport = (context, appId, tblId, rptId, format, filter, queryParams) => {
-    // we're returning a promise to the caller (not a Redux action) since this is an async action
-    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
-    return (dispatch) => {
-        if (appId && tblId && rptId) {
-            logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
-
-            dispatch(event(context, types.LOAD_EMBEDDED_REPORT, {appId, tblId, rptId}));
-            const reportService = new ReportService();
-
-            // error handler for when a promise is rejected
-            const parseAndLogHandler = parseAndLogError(context, dispatch);
-
-            //  call node to parse the supplied facet expression into a query expression that
-            //  can be included on the request.
-            return reportService.parseFacetExpression(filter ? filter.facet : '').then(
-                (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
-            ).then((newQueryParams) => {
-                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams, format}, filter).then((report) => {
-                    dispatch(event(context, types.LOAD_EMBEDDED_REPORT_SUCCESS, report));
-                    return; //resolve promise with undefined
-                }).catch(
-                    parseAndLogHandler(types.LOAD_EMBEDDED_REPORT_FAILED, `reportActions.getDynamicReportResults, context: ${context}`)
-                );
-            }).catch(
-                parseAndLogHandler(types.LOAD_EMBEDDED_REPORT_FAILED, `reportActions.parseFacetExpression, context: ${context}`)
-            );
-        } else {
-            logger.error(`reportActions.loadDynamicEmbeddedReport: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
-            dispatch(event(context, types.LOAD_EMBEDDED_REPORT_FAILED, 500));
+            dispatch(event(context, actions.LOAD_REPORT_FAILED, 500));
             return new Promise().reject();
         }
     };

@@ -124,4 +124,3 @@ describe('Test ReportsActions function failure workflow', () => {
             });
     });
 });
-
