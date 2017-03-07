@@ -247,7 +247,7 @@ export const removeFieldFromForm = (formId, location) => {
     return event(formId, types.REMOVE_FIELD, {
         location
     });
-}
+};
 /**
  * Create a new form
  *
