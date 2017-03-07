@@ -54,7 +54,7 @@ function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex, r
     return elements;
 }
 
-fdescribe('MoveFieldHelper', () => {
+describe('MoveFieldHelper', () => {
     describe('methods', () => {
 
         let testCases = [
