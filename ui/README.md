@@ -494,7 +494,7 @@ Be aware that enabling other devices to access your dev environment enables *all
 on the network. This is not as big of an issue when at the office or your home.
 However, when using public networks (like at Starbucks), if that network does not block
 peer-to-peer connections, this will enable the people sitting at the table next
-to you, or the black hat network sniffer dude in car in the parking lot,
+to you, or the black hat network sniffer dude in a car in the parking lot,
 or a roaming trojan horse or virus to connect to your node server. So, use
 whatever caution you determine to be appropriate. Note that turning off the
 hotloader only opens up node on port 9000 to other devices. Other services
