@@ -6,6 +6,9 @@ import TouchBackend from 'react-dnd-touch-backend';
 import './formBuilder.scss';
 import {findFormElementKey} from '../../utils/formUtils';
 import _ from 'lodash';
+import {findDOMNode} from 'react-dom';
+import Device from '../../utils/device';
+
 import './formBuilder.scss';
 
 const DRAG_PREVIEW_TIMEOUT = 75;
@@ -22,8 +25,12 @@ export class FormBuilder extends Component {
             hasAnimation: false
         };
 
+        this.elementCache = null;
+
         this.handleFormReorder = this.handleFormReorder.bind(this);
         this.cancelFormReorder = this.cancelFormReorder.bind(this);
+        this.cacheDragElement = this.cacheDragElement.bind(this);
+        this.clearDragElementCache = this.clearDragElementCache.bind(this);
         this.reorderTimeout = null;
     }
 
@@ -60,6 +67,31 @@ export class FormBuilder extends Component {
         this.reorderTimeout = null;
     }
 
+    /**
+     * Unlike mouse drag/drop events, touch drag events will freeze if the DOM node the event was attached to is unmounted.
+     * To get around this limitation, we create a copy of the DOM node with the touch event listener in an div.elementCache
+     * node so that it will not be unmounted. This function (cacheDragElement) is called when the element starts dragging.
+     * @param dragComponent
+     */
+    cacheDragElement(dragComponent) {
+        if (this.elementCache && dragComponent) {
+            findDOMNode(this.elementCache).appendChild(findDOMNode(dragComponent));
+        }
+    }
+
+    /**
+     * See explanation in cacheDragElement.
+     * This function is called on endDrag when dragging is complete. It will remove the element from the elementCache div.
+     */
+    clearDragElementCache() {
+        if (this.elementCache) {
+            let elementCacheInDom = findDOMNode(this.elementCache);
+            while (elementCacheInDom.hasChildNodes()) {
+                elementCacheInDom.removeChild(elementCacheInDom.lastChild);
+            }
+        }
+    }
+
     render() {
         return (
             <div className="formBuilderContainer">
@@ -74,10 +106,13 @@ export class FormBuilder extends Component {
                     editingForm={true}
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
+                    cacheDragElement={this.cacheDragElement}
+                    clearDragElementCache={this.clearDragElementCache}
                     cancelFormReorder={this.cancelFormReorder}
-                    hasAnimation={this.state.hasAnimation}
+                    hasAnimation={!Device.isTouch()}
                     appUsers={[]}
                 />
+                <div className="elementCache" ref={elementCache => this.elementCache = elementCache} />
             </div>
         );
     }
@@ -102,8 +137,6 @@ FormBuilder.defaultProps = {
 
 /**
  * delay is used to allow a user to scroll on mobile
- * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
+ * if a user wants to drag and drop, the screen must be pressed on for 50ms before dragging will start
  * */
-
-// export default DragDropContext(Html5Backend)(FormBuilder);
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 50}))(FormBuilder);

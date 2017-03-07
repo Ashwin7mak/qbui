@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react';
-import {findDOMNode} from 'react-dom';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
-import Device from '../../utils/device';
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -19,28 +17,12 @@ const formTarget = {
         };
     },
 
-    hover(dropTargetProps, monitor, component) {
+    hover(dropTargetProps, monitor) {
         let dragItemProps = monitor.getItem();
 
-        // Reordering is only handled on drop for mobile
-        if (!Device.isTouch() && dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
-            const domComponent = findDOMNode(component);
-            if (!domComponent) {return;}
-
-            const hoverBoundingRect = domComponent.getBoundingClientRect();
-            const height = hoverBoundingRect.bottom - hoverBoundingRect.top;
-            const offset = (height - (height * .5)) / 2;
-
-            const top = hoverBoundingRect.top + offset;
-            const bottom = hoverBoundingRect.bottom - offset;
-
-            const clientOffset = monitor.getClientOffset();
-
-            const hoverClientY = clientOffset.y;
-
-            if (top < hoverClientY && hoverClientY < bottom) {
-                dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
-            }
+        // Don't allow dropping an element on itself (determined by the unique id attached to each element)
+        if (dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
+            dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
         }
     },
 };

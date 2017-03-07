@@ -71,25 +71,6 @@
         content: none;
     }
 
-    // React CSS Transition Classes for elements that are moved
-    .formItem-enter {
-        opacity: 0.01;
-    }
-
-    .formItem-enter.formItem-enter-active {
-        opacity: 1;
-        transition: opacity 1s;
-    }
-
-    .formItem-leave {
-        opacity: 1;
-    }
-
-    .formItem-leave.formItem-leave-active {
-        opacity: 0.01;
-        transition: opacity 1s;
-    }
-
     @include medium-breakpoint {
         .dragAndDropField {
             max-width: $form-edit-input-width;
@@ -101,25 +82,12 @@
             max-width: $form-edit-input-width;
         }
     }
-    .dropHovering .mobileDropTarget {
-        opacity: 1;
-        height: 30px;
 
-        transition: opacity 0.5s, height 0.2s;
-    }
-
-    .mobileDropTarget {
-        opacity: 0;
-        width: $form-edit-input-width;
-        height: 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .mobileDropTargetVisibleLine {
-            height: 3px;
-            background-color: $color-green-600;
-            flex: 1 auto;
-        }
+    /**
+     *  The element cache is always hidden. It contains copies of elements that are being dragged to support
+     *  and issue with touch events. See formBuilder.js for more information.
+     */
+    .elementCache {
+        display: none;
     }
 }
