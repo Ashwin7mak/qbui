@@ -49,13 +49,17 @@
 
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
+        // Use these settings if running Java Core and EE locally
         //Java REST endpoint (protocol,server,port)
         javaHost: 'http://localhost:8080',
         eeHost: 'http://localhost:8081',
         eeHostPort: 8081,
+
+        // Use these settings if you want to connect your qbui code to the trunk integration environment
         //javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
         //eeHost: 'https://t.experienceengine.trunk.newstack.quickbaserocks.com',
         //eeHostPort: 443,
+
         eeHostEnable: true,
 
         isMockServer : false,
