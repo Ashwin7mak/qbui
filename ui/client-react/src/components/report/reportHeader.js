@@ -1,6 +1,6 @@
 import React from 'react';
 import QBicon from '../qbIcon/qbIcon';
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
@@ -12,19 +12,20 @@ import constants from '../../../../common/src/constants';
 import Header from '../header/smallHeader';
 import './reportHeader.scss';
 import {connect} from 'react-redux';
-import * as ShellActions from '../../actions/shellActions';
-import * as ReportActions from '../../actions/reportActions';
+import {toggleLeftNav} from '../../actions/shellActions';
+import {loadDynamicReport} from '../../actions/reportActions';
+import {clearSearchInput, searchInput} from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+//let FluxMixin = Fluxxor.FluxMixin(React);
+//let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 /**
  * A header that takes the place of the top nav when viewing a report
  * (visible on small breakpoint currently)
  */
 var ReportHeader = React.createClass({
-    mixins: [FluxMixin],
+    //mixins: [FluxMixin],
     facetFields : {},
     // a key send delay (keep it very small otherwise noticable lag on keypress entry)
     debounceInputMillis: 100,
@@ -51,16 +52,18 @@ var ReportHeader = React.createClass({
 
     // no top nav present so the hamburger exists here
     onNavClick() {
-        this.props.dispatch(ShellActions.toggleLeftNav());
+        this.props.toggleLeftNav();
     },
 
     searchTheString(searchTxt) {
-        this.getFlux().actions.filterSearchPending(searchTxt);
+        //this.getFlux().actions.filterSearchPending(searchTxt);
+        this.props.searchInput(searchTxt);
         this.debouncedFilterReport(searchTxt, this.props.reportData.selections);
     },
 
     clearSearchString() {
-        this.getFlux().actions.filterSearchPending('');
+        //this.getFlux().actions.filterSearchPending('');
+        this.props.clearSearchInput();
         this.debouncedFilterReport('', this.props.reportData.selections);
     },
 
@@ -89,10 +92,10 @@ var ReportHeader = React.createClass({
         //    this.props.routeParams.tblId,
         //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
         //    true, filter, queryParams);
-        this.props.dispatch(ReportActions.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            true, filter, queryParams));
+            true, filter, queryParams);
 
     },
 
@@ -117,10 +120,36 @@ var ReportHeader = React.createClass({
             onSearchChange={this.handleSearchChange}
             onClearSearch={this.clearSearchString}
             searchPlaceHolder={placeMsg}
-            searchValue={this.props.reportSearchData ? this.props.reportSearchData.searchStringInput : ""}
+            searchValue={this.props.search.searchInput || ""}
         />;
     }
 });
 
-// export the react-redux connected wrapper (which injects the dispatch function as a prop)
-export default connect()(ReportHeader);
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        search: state.search
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchInput: (input) => {
+            dispatch(searchInput(input));
+        },
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
+        },
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        },
+        toggleLeftNav: () => {
+            dispatch(toggleLeftNav());
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportHeader);

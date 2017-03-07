@@ -22,6 +22,7 @@ import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import {loadDynamicReport} from '../../actions/reportActions';
+import {searchInput, clearSearchInput} from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
@@ -169,32 +170,39 @@ export const ReportToolsAndContent = React.createClass({
             //    this.props.routeParams.tblId,
             //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
             //    true, filter, queryParams);
-            this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
+            this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-                true, filter, queryParams));
+                true, filter, queryParams);
         }
     },
 
     searchTheString(searchTxt) {
-        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.props.searchInput(searchTxt);
+        //this.getFlux().actions.filterSearchPending(searchTxt);
         this.filterOnSearch(searchTxt);
     },
 
     filterOnSelections(newSelections) {
-        this.getFlux().actions.filterSelectionsPending(newSelections);
+        // obsolete??
+        //this.getFlux().actions.filterSelectionsPending(newSelections);
         this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections, true);
     },
 
     clearSearchString() {
-        this.getFlux().actions.filterSearchPending('');
-        this.filterOnSearch('');
+        //this.getFlux().actions.filterSearchPending('');
+        this.props.clearSearchInput();
+        //this.filterOnSearch('');
+        // no deboucing when hitting the clear button
+        this.filterReport('', this.props.reportData.selections);
     },
 
     clearAllFilters() {
+        // TODO clear out filter selection
         let noSelections = new FacetSelections();
-        this.getFlux().actions.filterSelectionsPending(noSelections);
-        this.getFlux().actions.filterSearchPending('');
+        //this.getFlux().actions.filterSelectionsPending(noSelections);
+        //this.getFlux().actions.filterSearchPending('');
+        this.props.clearSearchInput();
         this.debouncedFilterReport('', noSelections, true);
     },
 
@@ -305,7 +313,7 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.NUMROWS_PARAM] = numRows;
 
         //this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
-        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams));
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams);
     },
 
     /**
@@ -433,4 +441,28 @@ export const ReportToolsAndContent = React.createClass({
     }
 });
 
-export default connect()(ReportToolsAndContent);
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        search: state.search
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchInput: (input) => {
+            dispatch(searchInput(input));
+        },
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
+        },
+        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportToolsAndContent);
