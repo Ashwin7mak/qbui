@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
+import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
 import Loader from 'react-loader';
@@ -12,8 +13,10 @@ import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
-import './formBuilderContainer.scss';
 import AutoScroll from '../autoScroll/autoScroll';
+import PageTitle from '../pageTitle/pageTitle';
+
+import './formBuilderContainer.scss';
 
 let logger = new Logger();
 
@@ -116,6 +119,8 @@ export const FormBuilderContainer = React.createClass({
         }
         return (
             <div className="formBuilderContainer">
+                <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
+
                 <div className="toolsAndForm">
                     <ToolPalette />
 
