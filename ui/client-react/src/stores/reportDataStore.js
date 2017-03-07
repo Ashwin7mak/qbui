@@ -633,7 +633,7 @@ let ReportDataStore = Fluxxor.createStore({
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SELECTED_ROWS, this.onSelectedRows,
+            //actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             //actions.DELETE_RECORD, this.onDeleteReportRecord,
@@ -664,11 +664,11 @@ let ReportDataStore = Fluxxor.createStore({
         );
     },
 
-    onSelectedRows(selectedRows) {
-        this.selectedRows = selectedRows.slice();
-
-        this.emit('change');
-    },
+    //onSelectedRows(selectedRows) {
+    //    this.selectedRows = selectedRows.slice();
+    //
+    //    this.emit('change');
+    //},
 
     onLoadReport(report) {
         //this.loading = true;

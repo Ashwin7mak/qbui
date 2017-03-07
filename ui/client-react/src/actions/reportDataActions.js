@@ -29,9 +29,9 @@ let reportDataActions = {
      * rows were selected (toolbar etc cares about this)
      * @param rows array of row objects
      */
-    selectedRows(rows) {
-        this.dispatch(actions.SELECTED_ROWS, rows);
-    },
+    //selectedRows(rows) {
+    //    this.dispatch(actions.SELECTED_ROWS, rows);
+    //},
 
     /**
      * setup a a new record not yet saved to the database
