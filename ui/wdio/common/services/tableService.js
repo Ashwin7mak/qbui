@@ -32,8 +32,7 @@
             initTableProperties: function(appId, tableId, tableNoun) {
                 let propsJson = {"tableNoun":"' + tableNoun + '"};
                 const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);
-
-                return recordBase.apiBase.executeEERequest(tablePropertiesEndpoint, 'POST', propsJson).then(function(result) {
+                return recordBase.apiBase.executeRequest(tablePropertiesEndpoint, 'POST', propsJson, null, null, true).then(function(result) {
                     return JSON.parse(result.body);
                 });
             },

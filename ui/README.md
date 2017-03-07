@@ -301,7 +301,7 @@ Note that this command will launch your Node express server if it's not running.
 
 To setup WebdriverIO for browser end to end tests, follow the **README.md** setup guide in the `qbui/ui/wdio` directory. Make sure to check out the **NEWBIEGUIDE.md** as well!
 
-Edit and configure your own copy of **e2e.js** located in `qbui/ui/server/src/config/environment` if needed. The e2e tests have their own config file as they will launch their own node instance when running.
+Create your own copy of the **e2e.js** Node config file by copying and renaming **e2e.js.sample** located in `qbui/ui/server/src/config/environment`. The e2e tests have their own config file as they will launch their own node instance when running.
 
 Now run `npm run update-webdriver` in terminal from the `qbui/ui` directory
 
