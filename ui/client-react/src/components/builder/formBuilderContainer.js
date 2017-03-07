@@ -13,6 +13,7 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import './formBuilderContainer.scss';
+import AutoScroll from '../autoScroll/autoScroll';
 
 let logger = new Logger();
 
@@ -58,9 +59,11 @@ export const FormBuilderContainer = React.createClass({
         formType: PropTypes.string
     },
 
+
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
+
     },
 
     onCancel() {
@@ -102,6 +105,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
+
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
         let formData = null;
@@ -115,11 +119,15 @@ export const FormBuilderContainer = React.createClass({
                 <div className="toolsAndForm">
                     <ToolPalette />
 
-                    <div className="formBuilderContent">
-                        <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                            <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
-                        </Loader>
-                    </div>
+                    <AutoScroll
+                        pixelsPerFrame={10}
+                        pixelsFromBottomForLargeDevices={30}>
+                        <div className="formBuilderContent">
+                            <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                                <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                            </Loader>
+                        </div>
+                    </AutoScroll>
 
                     <FieldProperties />
                 </div>
