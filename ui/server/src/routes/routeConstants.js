@@ -62,6 +62,14 @@
         APPS                        : baseUrl.QUICKBASE + '/apps',
         APP_USERS                   : baseUrl.QUICKBASE + '/apps/:appId/users',
 
+        FEATURE_SWITCHES            : baseUrl.QUICKBASE + '/featureSwitches',
+        FEATURE_SWITCHES_BULK       : baseUrl.QUICKBASE + '/featureSwitches/bulk',
+        FEATURE_SWITCH              : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId',
+        FEATURE_OVERRIDES           : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId/overrides',
+        FEATURE_OVERRIDES_BULK      : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId/overrides/bulk',
+        FEATURE_OVERRIDE            : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId/overrides/:overrideId',
+        FEATURE_STATES              : baseUrl.QUICKBASE + '/featureStates',
+
         //  ROLE ENDPOINTS
         APP_ROLES                   : baseUrl.QUICKBASE + '/apps/:appId/roles',
 
