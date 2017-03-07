@@ -114,7 +114,11 @@
                 methodLess = baseUrl.replace(HTTP, '');
             }
 
-            methodLess = methodLess.replace('9001', process.env.eeHostPort);
+            if (process.env.NODE_ENV === 'test') {
+                methodLess = methodLess.replace('9001', process.env.eeHostPort);
+            } else {
+                methodLess = methodLess.replace('9001', '8081');
+            }
 
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
