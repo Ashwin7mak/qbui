@@ -2,6 +2,7 @@ import React from 'react';
 import Nav from './nav';
 import * as ReportActions from '../../actions/reportActions';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
+import {clearSearchInput} from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import Configuration from '../../config/app.config';
 
@@ -57,6 +58,10 @@ let NavWrapper = React.createClass({
             } else {
                 this.props.flux.actions.selectTableId(null);
             }
+            // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+            // should get removed and the search store should listen for the new event to
+            // clear out any input.
+            this.props.dispatch(clearSearchInput());
         }
     },
     /**
@@ -76,11 +81,18 @@ let NavWrapper = React.createClass({
         if (props.params.appId) {
             if (this.props.params.appId !== props.params.appId) {
                 this.props.flux.actions.selectAppId(props.params.appId);
-
+                // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+                // should get removed and the search store should listen for the new event to
+                // clear out any input.
+                this.props.dispatch(clearSearchInput());
                 this.props.dispatch(FeatureSwitchActions.getStates(props.params.appId));
             }
         } else {
             this.props.flux.actions.selectAppId(null);
+            // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+            // should get removed and the search store should listen for the new event to
+            // clear out any input.
+            this.props.dispatch(clearSearchInput());
         }
 
         if (this.props.params.appId !== props.params.appId) {

@@ -179,8 +179,8 @@ export const ReportToolsAndContent = React.createClass({
 
     searchTheString(searchTxt) {
         this.props.searchInput(searchTxt);
-        //this.getFlux().actions.filterSearchPending(searchTxt);
         this.filterOnSearch(searchTxt);
+        //this.getFlux().actions.filterSearchPending(searchTxt);
     },
 
     filterOnSelections(newSelections) {
@@ -192,15 +192,16 @@ export const ReportToolsAndContent = React.createClass({
     clearSearchString() {
         //this.getFlux().actions.filterSearchPending('');
         this.props.clearSearchInput();
-        //this.filterOnSearch('');
-        // no deboucing when hitting the clear button
+        // no debounce when clicking the clear button
         this.filterReport('', this.props.reportData.selections);
     },
 
     clearAllFilters() {
         // TODO clear out filter selection
         let noSelections = new FacetSelections();
+        // TODO: don't think this filterSelectionsPending is necessray
         //this.getFlux().actions.filterSelectionsPending(noSelections);
+
         //this.getFlux().actions.filterSearchPending('');
         this.props.clearSearchInput();
         this.debouncedFilterReport('', noSelections, true);

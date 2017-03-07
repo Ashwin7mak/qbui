@@ -108,10 +108,6 @@ let appsActions = {
 
     selectTableId(tblId) {
         this.dispatch(actions.SELECT_TABLE, tblId);
-        // TODO: Search has been migrated to redux..when
-        // TODO: this event is migrated, make sure to have the search store listen for this
-        // TODO: redux event.  Until this happen, search input will not clear when
-        // TODO: jumping between tables..
     }
 };
 

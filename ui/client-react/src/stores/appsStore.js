@@ -30,7 +30,7 @@ let AppsStore = Fluxxor.createStore({
 
             actions.LOAD_APP_ROLES, this.onLoadAppRoles,
             actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
-            actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
+            actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess
         );
 
         this.logger = new Logger();
