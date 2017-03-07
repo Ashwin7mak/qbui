@@ -50,7 +50,7 @@
       "script": "scripts/chef_run.sh"
     },
     {
-      "script": "bake/scripts/cleanup.sh",
+      "script": "scripts/cleanup.sh",
       "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'",
       "type": "shell"
     }
