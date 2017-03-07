@@ -23,7 +23,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
 import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
-import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
+import {updateReportSelections} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 

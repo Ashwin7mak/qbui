@@ -196,17 +196,16 @@ const report = (state = [], action) => {
     //    }
     //    return state;
     //}
-    case types.UPDATE_REPORT_RECORD: {
-        //  list for record update event.  For the report context,
-        //  update the report data with the new record information.
-        // TODO: REMOVE case block!!
-        let currentReport = getReportFromState(action.id);
-        if (currentReport) {
-            updateReportRecord(currentReport, action.content);
-            return newState(currentReport);
-        }
-        return state;
-    }
+    //case types.UPDATE_REPORT_RECORD: {
+    //    //  list for record update event.  For the report context,
+    //    //  update the report data with the new record information.
+    //    let currentReport = getReportFromState(action.id);
+    //    if (currentReport) {
+    //        updateReportRecord(currentReport, action.content);
+    //        return newState(currentReport);
+    //    }
+    //    return state;
+    //}
     case types.REMOVE_REPORT_RECORDS: {
         // remove record from all report stores
         const ids = action.content.recIds;

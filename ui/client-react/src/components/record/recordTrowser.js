@@ -19,7 +19,7 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {saveForm, saveFormComplete, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
-import {updateReportRecord} from '../../actions/reportActions';
+//import {updateReportRecord} from '../../actions/reportActions';
 import {editRecordCancel, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
@@ -586,9 +586,9 @@ const mapDispatchToProps = (dispatch) => {
         //editRecordCommit: (appId, tblId, recId) => {
         //    dispatch(editRecordCommit(appId, tblId, recId));
         //},
-        updateReportRecord: (obj, context) => {
-            dispatch(updateReportRecord(obj, context));
-        },
+        //updateReportRecord: (obj, context) => {
+        //    dispatch(updateReportRecord(obj, context));
+        //},
         dispatch: dispatch
         //updateRecord:(appId, tblId, recId, params) => {
         //    dispatch(updateRecord(appId, tblId, recId, params)).then(
