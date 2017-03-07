@@ -241,9 +241,9 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
         // set the actions to embedded or not embedded using the passed in context
         const embedded = _.includes(context, CONTEXT.REPORT.EMBEDDED);
         const actions = {
-            LOAD_REPORT: embedded ? types.LOAD_REPORT : types.LOAD_EMBEDDED_REPORT,
-            LOAD_REPORT_SUCCESS: embedded ? types.LOAD_REPORT_SUCCESS : types.LOAD_EMBEDDED_REPORT_SUCCESS,
-            LOAD_REPORT_FAILED: embedded ? types.LOAD_REPORT_FAILED : types.LOAD_EMBEDDED_REPORT_FAILED,
+            LOAD_REPORT: embedded ? types.LOAD_EMBEDDED_REPORT : types.LOAD_REPORT,
+            LOAD_REPORT_SUCCESS: embedded ? types.LOAD_EMBEDDED_REPORT_SUCCESS : types.LOAD_REPORT_SUCCESS,
+            LOAD_REPORT_FAILED: embedded ? types.LOAD_EMBEDDED_REPORT_FAILED : types.LOAD_REPORT_FAILED
         };
         if (appId && tblId && rptId) {
             logger.debug(`Loading dynamic report for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
