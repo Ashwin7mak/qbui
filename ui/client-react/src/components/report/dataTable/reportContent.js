@@ -22,8 +22,8 @@ import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
-import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordCommit, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
-import {updateReportRecord, updateReportSelections} from '../../../actions/reportActions';
+import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
+import {updateReportSelections} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 
@@ -345,7 +345,7 @@ export const ReportContent = React.createClass({
      * User wants to save changes to a record.
      * @param id
      */
-    handleRecordSaveClicked(id, addNewRecord = false, addNewRow = false) {
+    handleRecordSaveClicked(id, showNotification = false, addNewRow = false) {
         let recordId = id;
         // To maintain compatibility with AgGrid
         if (_.isObject(id)) {
@@ -359,7 +359,7 @@ export const ReportContent = React.createClass({
             if (pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(pendEdits.recordChanges);
             }
-            return this.handleRecordAdd(recordChanges, addNewRecord, addNewRow);
+            return this.handleRecordAdd(recordChanges, showNotification, addNewRow);
         } else {
             return this.handleRecordChange(recordId);
         }
@@ -424,7 +424,7 @@ export const ReportContent = React.createClass({
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges, addNewRecordAfterSave = false, addNewRow = false) {
+    handleRecordAdd(recordChanges, showNotificationOnSuccess = false, addNewRow = false) {
         const flux = this.getFlux();
 
         let fields = {};
@@ -436,7 +436,14 @@ export const ReportContent = React.createClass({
             });
         }
 
-        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave)).then(
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            recordChanges: recordChanges,
+            fields: fields,
+            colList: colList,
+            showNotificationOnSuccess: showNotificationOnSuccess
+        };
+        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
             (obj) => {
                 if (addNewRow) {
                     this.addNewRowAfterRecordSaveSuccess();
@@ -469,7 +476,14 @@ export const ReportContent = React.createClass({
             //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
             let pendEdits = this.getPendEdits();
             //let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
-            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, true);
+            let params = {
+                context: CONTEXT.REPORT.NAV,
+                pendEdits: pendEdits,
+                fields: this.props.fields.fields.data,
+                colList: colList,
+                showNotificationOnSuccess: true
+            };
+            this.props.updateRecord(this.props.appId, this.props.tblId, recordId, params);
 
             //let promise = this.props.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
             //promise.then((obj) => {
@@ -1140,9 +1154,9 @@ const mapDispatchToProps = (dispatch) => {
         editRecordChange: (appId, tblId, recId, origRec, changes) => {
             dispatch(editRecordChange(appId, tblId, recId, origRec, changes));
         },
-        editRecordCommit: (appId, tblId, recId) => {
-            dispatch(editRecordCommit(appId, tblId, recId));
-        },
+        //editRecordCommit: (appId, tblId, recId) => {
+        //    dispatch(editRecordCommit(appId, tblId, recId));
+        //},
         editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
             dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
         },
@@ -1150,8 +1164,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
         dispatch: dispatch,
-        updateRecord:(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess) => {
-            dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess));
+        updateRecord:(appId, tblId, recId, params) => {
+            dispatch(updateRecord(appId, tblId, recId, params));
             //dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
             //    (obj) => {
             //        dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));

@@ -1,8 +1,8 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import AppHomePageRoute  from '../../src/components/app/appHomePageRoute';
-import HtmlUtils from '../../src/utils/htmlUtils';
-import {DEFAULT_PAGE_TITLE} from '../../src/constants/urlConstants';
+import AppHomePageRoute  from '../../../src/components/app/appHomePageRoute';
+import HtmlUtils from '../../../src/utils/htmlUtils';
+import {DEFAULT_PAGE_TITLE} from '../../../src/constants/urlConstants';
 
 //TODO this is a placeholder file to add tests as app home page gets built out
 
@@ -13,6 +13,7 @@ describe('AppHomePageRoute functions', () => {
     const flux = {
         actions:{
             selectAppId: function() {return;},
+            loadAppRoles: function() {return;},
             showTopNav: function() {return;},
             setTopTitle: function() {return;},
             doneRoute: function() {return;},

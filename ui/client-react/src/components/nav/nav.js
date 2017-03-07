@@ -373,6 +373,8 @@ export let Nav = React.createClass({
                             appsLoading: this.state.apps.loading,
                             reportData: reportsData,
                             appUsers: this.state.apps.appUsers,
+                            appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                            appRoles: this.state.apps.appRoles,
                             locale: this.state.nav.locale,
                             //pendEdits:pendEdits,
                             isRowPopUpMenuOpen: this.props.qbui.shell.isRowPopUpMenuOpen,
