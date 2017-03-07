@@ -16,6 +16,7 @@ client-react/dist/
 
 # exclude express server local configuration and logs directory
 server/src/config/environment/local.js
+server/src/config/environment/e2e.js
 server/src/logs/
 
 # local mock

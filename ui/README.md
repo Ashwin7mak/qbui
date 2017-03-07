@@ -28,7 +28,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     * GitHub
     * NodeJS - ui web server plugin
     * SASS support - enhances css with variables and methods plugin
-  * Known working versions of Intellij are 14.1.2 and 14.1.4
+  * Known working versions of Intellij is 2016.3.x
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
@@ -38,22 +38,19 @@ To avoid permission issues caused by installing npm modules globally, you can ei
 
 #### Install Node via NVM
 
-[NVM](https://github.com/creationix/nvm) only works with Mac but is the easier and cleaner option.
-Install NVM (Node Version Manager) via Wget:
+NVM only works with Mac but is the easier and cleaner option.
+
+Follow the steps in this[nvm installation docs](https://github.com/creationix/nvm#installation)
+
+Next, install Node.js v6.9.5 and set v6.9.5 as your default version of node 
 
 ```bash
-    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
-```
-
-Next, install Node.js v4.2.2 and set v4.2.2 as your default version of node (as of 2/1/2016, v5.5.0 is not fully tested with qbui).
-
-```bash
-    nvm install 4.2.2 && nvm alias default 4.2.2
+    nvm install 6.9.5 && nvm alias default 6.9.5
 ```
 
 To verify installation enter `nvm list default` which should print:
 ```bash
-    ->         v4.2.2
+    ->         v6.9.5
 ```
 If nvm and node were successfully installed, skip the next section about installing Node.js and global node configuration.
 
@@ -92,28 +89,8 @@ to automatically switch to the correct version of Node.
 
 #### Install Node and configure global node modules
 
-* Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
+* Install node.js (v6.9.5, as of 3/1/2016) via nvm 
 
-* (*Optional*) Make a place for any global node modules and no permission issues
-
-    1. Create a .node folder from command line.
-
-        ``` bash
-        mkdir ~/.node
-        ```
-
-    2. Adjust your node settings so that the global modules get installed locally for your login.
-
-        ``` bash
-        npm config set prefix=~/.node
-        ```
-          This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
-
-    3. Add this directory to your PATH.
-
-       ``` bash
-       export PATH=$PATH:$HOME/.node/bin
-       ```
 
 * Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
 
@@ -324,7 +301,7 @@ Note that this command will launch your Node express server if it's not running.
 
 To setup WebdriverIO for browser end to end tests, follow the **README.md** setup guide in the `qbui/ui/wdio` directory. Make sure to check out the **NEWBIEGUIDE.md** as well!
 
-Edit and configure your own copy of **e2e.js** located in `qbui/ui/server/src/config/environment` if needed. The e2e tests have their own config file as they will launch their own node instance when running.
+Create your own copy of the **e2e.js** Node config file by copying and renaming **e2e.js.sample** located in `qbui/ui/server/src/config/environment`. The e2e tests have their own config file as they will launch their own node instance when running.
 
 Now run `npm run update-webdriver` in terminal from the `qbui/ui` directory
 
@@ -478,6 +455,51 @@ setting in the local.env.js file:
     //REST endpoint (protocol,server,port)
     javaHost: 'https://localhost.com:8443'
 
+##Accessing your development environment from another laptop or device
+
+To access your development environment from another laptop or device, you need to disable the
+hotloader. Edit local.js, and uncomment the line for the "noHotLoad" property.
+
+    //set notHotLoad true to disable hotloading
+    noHotLoad : true,
+
+This configures node to accept incoming connections from any host as opposed to only localhost.
+You can then access your development environment from other laptops or devices by IP address.
+To help determine the correct IP address for your machine (since you may have several) and to
+easily generate URLs to access your environment, a tool is available. Download it from here:
+
+    smb://qbfs01.corp.quickbase.net/Data/SoftwareEngineering/IPAddressTool/
+
+The tool presents you with a list of the network interfaces on your computer, their IP addresses,
+and a description. When you choose an interface from this list, the tool presents you with a list
+of text items (including things such as a "Create Ticket" URL) that you can easily copy to the clipboard and
+paste into a chat session with yourself or another person on the other laptop or device.
+You can configure the format of the text items in the tool to meet your own personal needs.
+
+By disabling the hotloader, you lose the ability for the watcher to automatically push the
+updates into the browser. However, you can run webpack with file watching enabled and
+see updates in the browser with a manual refresh instead of hotloading changes.
+This process is actually faster sometimes and less likely to crash node.
+Developers who refresh their browsers to reload JavaScript frequently may find this
+configuration preferable to "grunt serve". In this configuration
+you run node to serve the app separate from the watcher. To serve the app:
+
+    node server/src/app.js
+
+To run the watcher, in a different terminal:
+
+    npm run watch
+
+Be aware that enabling other devices to access your dev environment enables *all* devices
+on the network. This is not as big of an issue when at the office or your home.
+However, when using public networks (like at Starbucks), if that network does not block
+peer-to-peer connections, this will enable the people sitting at the table next
+to you, or the black hat network sniffer dude in a car in the parking lot,
+or a roaming trojan horse or virus to connect to your node server. So, use
+whatever caution you determine to be appropriate. Note that turning off the
+hotloader only opens up node on port 9000 to other devices. Other services
+(such as core on port 8080 or Experience Engine on port 8081) are always open to
+all devices on the network and aren't affected by the hotloader settings.
 
 ##Troubleshooting
 POSSIBLE ISSUES -- and how to resolve

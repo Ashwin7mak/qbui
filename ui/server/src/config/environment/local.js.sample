@@ -49,12 +49,17 @@
 
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
+        // Use these settings if running Java Core and EE locally
         //Java REST endpoint (protocol,server,port)
-        //javaHost: 'https://localhost:8443',
-        //javaHost: 'http://localhost:8080',
-        //eeHost: 'http://localhost:8081',
-        javaHost: 'https://t.tomcat.trunk.newstack.quickbaserocks.com:8443',
-        eeHost: 'https://ee.trunk-int-experienceengine.newstack.quickbaserocks.com',
+        javaHost: 'http://localhost:8080',
+        eeHost: 'http://localhost:8081',
+        eeHostPort: 8081,
+
+        // Use these settings if you want to connect your qbui code to the trunk integration environment
+        //javaHost: 'https://localhost.api.trunk.newstack.quickbaserocks.com',
+        //eeHost: 'https://t.experienceengine.trunk.newstack.quickbaserocks.com',
+        //eeHostPort: 443,
+
         eeHostEnable: true,
 
         isMockServer : false,
@@ -68,6 +73,9 @@
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
+
+        //Custom realm to use in dataGen scripts (needs to exist first! use swagger to create)
+        //realmToUse: 'testrealm',
 
         //enable to track performance stats to server/splunk
         isClientPerfTrackingEnabled: true,
@@ -90,5 +98,15 @@
          */
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
+
+        /**
+         * mock data for feature switches for local testing
+         */
+        //featureSwitchesMockData: './server/mockData/featureSwitches.json'
+
+        /**
+         * AWS api gateway to lambda functions for feature switches
+         */
+        //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
     };
 }());
