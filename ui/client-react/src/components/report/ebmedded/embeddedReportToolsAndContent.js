@@ -42,7 +42,7 @@ export const EmbeddedReportToolsAndContent = React.createClass({
         // detailKeyValue that contains a parent record's masterKeyValue.
         queryParams.query = QueryUtils.parseStringIntoExactMatchExpression(this.props.detailKeyFid, this.props.detailKeyValue);
 
-        this.props.loadDynamicEmbeddedReport(this.uniqueId, appId, tblId, rptId, format, filter, queryParams);
+        this.props.loadDynamicReport(this.uniqueId, appId, tblId, rptId, format, filter, queryParams);
     },
 
     /**

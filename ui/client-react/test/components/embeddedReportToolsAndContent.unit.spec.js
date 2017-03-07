@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import configureMockStore from 'redux-mock-store';
 import {Provider} from "react-redux";
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import EmbeddedReportToolsAndContent, {
@@ -110,5 +110,25 @@ describe('EmbeddedReportToolsAndContent', () => {
             <UnconnectedEmbeddedReportToolsAndContent loadDynamicReport={() => null} {...props} />
         );
         expect(component.find(ReportToolsAndContentMock).length).toEqual(0);
+    });
+
+    it('calls unloadEmbeddedReport with uniqueId when component unmounts', () => {
+        const spy = jasmine.createSpy('spy');
+        component = shallow(
+            <UnconnectedEmbeddedReportToolsAndContent
+                loadDynamicReport={() => null}
+                unloadEmbeddedReport={spy}
+                {...props}
+            />
+        );
+
+        // manually set the instance's uniqueId to 42
+        const instance = component.instance();
+        instance.uniqueId = 42;
+
+        component.unmount();
+
+        expect(spy.calls.count()).toEqual(1);
+        expect(spy.calls.argsFor(0)[0]).toEqual(42);
     });
 });
