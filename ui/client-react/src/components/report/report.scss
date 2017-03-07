@@ -245,6 +245,10 @@
     .loadedContent {
         padding: 0 10px;
     }
+    &.loading {
+        min-height: 70px; // allow space for the loader spinner
+        overflow: hidden;
+    }
 }
 
 .reportToolbarContainer {

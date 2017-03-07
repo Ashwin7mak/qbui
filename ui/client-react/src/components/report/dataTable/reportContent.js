@@ -960,16 +960,16 @@ export const ReportContent = React.createClass({
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
-        let addPadding;
+        let classNames = ['reportContent'];
         const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = pendEdits.isInlineEditOpen;
         if (isInlineEditOpen) {
-            addPadding = "reportContent inlineEditing";
+            classNames.push('inlineEditing');
         } else if (isRowPopUpMenuOpen) {
-            addPadding =  "reportContent rowPopUpMenuOpen";
-        } else {
-            addPadding = "reportContent";
+            classNames.push('rowPopUpMenuOpen');
         }
+
+        classNames.push(this.props.reportData.loading ? 'loading' : '');
 
         //  TODO: remove
         let showDTSErrorModal = pendEdits.showDTSErrorModal || false;
@@ -981,7 +981,7 @@ export const ReportContent = React.createClass({
             reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
             reportContent = (
-                    <div className={addPadding}>
+                    <div className={classNames.join(' ')}>
                         <DTSErrorModal show={showDTSErrorModal} tid={pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                             <ReportGrid

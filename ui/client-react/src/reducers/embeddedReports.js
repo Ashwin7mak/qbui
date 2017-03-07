@@ -13,7 +13,7 @@ import FacetSelections from '../components/facet/facetSelections';
 const embeddedReport = (state = {}, action) => {
     //  what report action is being requested
     switch (action.type) {
-    /*case types.LOAD_EMBEDDED_REPORT: {
+    case types.LOAD_EMBEDDED_REPORT: {
         const obj = {
             id: action.id,
             loading: true,
@@ -21,8 +21,10 @@ const embeddedReport = (state = {}, action) => {
             tblId: action.content.tblId,
             rptId: action.content.rptId
         };
-        return newState(obj);
-    }*/
+        const stateList = _.cloneDeep(state);
+        stateList[action.id] = obj;
+        return stateList;
+    }
     case types.LOAD_EMBEDDED_REPORT_FAILED: {
         const obj = {
             id: action.id,
@@ -35,7 +37,7 @@ const embeddedReport = (state = {}, action) => {
         stateList[action.id] = obj;
         return stateList;
     }
-    case 'LOAD_EMBEDDED_REPORT_SUCCESS': {
+    case types.LOAD_EMBEDDED_REPORT_SUCCESS: {
         const obj = {
             id: action.id,
             loading: false,
