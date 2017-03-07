@@ -25,18 +25,7 @@
             },
             setDefaultTableHomePage : function(appId, tableId, reportId) {
                 return recordBase.apiBase.setDefaultTableHomePage(appId, tableId, reportId);
-            },
-            /**
-             * Given an appId, tableId, tableNoun initialize a table properties object.
-             */
-            initTableProperties: function(appId, tableId, tableNoun) {
-                let propsJson = {"tableNoun":"' + tableNoun + '"};
-                const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);
-
-                return recordBase.apiBase.executeEERequest(tablePropertiesEndpoint, 'POST', propsJson).then(function(result) {
-                    return JSON.parse(result.body);
-                });
-            },
+            }
         };
         return tableService;
     };

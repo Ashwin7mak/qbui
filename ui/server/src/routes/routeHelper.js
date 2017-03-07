@@ -16,11 +16,9 @@
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
-    let ROLES = 'roles';
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
-    let FEATURE_SWITCHES = 'featureSwitch';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -46,13 +44,6 @@
      */
     function getEERoot() {
         return '/ee';
-    }
-
-    /**
-     *
-     */
-    function getAWSRoot() {
-        return '/dev';
     }
 
     /**
@@ -154,24 +145,6 @@
     }
 
     /**
-     *
-     * @param url
-     * @returns {*}
-     */
-    function getAWSReqURL(url) {
-        if (url) {
-            if (url.search('/api/api') !== -1) {
-                url = url.replace('/api/api', getAWSRoot());
-            }
-
-            if (url.search('/api') !== -1) {
-                url = url.replace('/api', getAWSRoot());
-            }
-        }
-        return url;
-    }
-
-    /**
      * For the given req.url, extract the APPS and TABLES identifiers/ids and
      * append the FORMS identifier and optional formId.
      *
@@ -233,11 +206,6 @@
             //  no url root for TABLES found; return original url unchanged
             return eeUrl;
         }
-    }
-
-    function getAWSFeatureSwitchesRoute(url) {
-
-        return getAWSRoot() + '/' + FEATURE_SWITCHES;
     }
 
     module.exports  = {
@@ -338,26 +306,6 @@
             if (root) {
                 return root + '/' + RELATIONSHIPS;
             }
-            return url;
-        },
-
-        /**
-         * For the given req.url, extract the APPS identifier/id and
-         * append the ROLES identifier.
-         *
-         * Example:  url: /apps/123/rest/of/url
-         *           return: /apps/123/roles
-         *
-         * @param url
-         * @returns {*}
-         */
-        getAppRolesRoute: function(url) {
-            let root = getUrlRoot(url, APPS);
-            if (root) {
-                return root + '/' + ROLES + '/';
-            }
-
-            //  no url root for APPS found; return original url unchanged
             return url;
         },
 
@@ -695,11 +643,8 @@
                 return REGEX_FIELDS_ROUTE.test(url);
             }
             return false;
-        },
+        }
 
-        getFeatureSwitchesRoute: function(url) {
-            return getAWSFeatureSwitchesRoute(url);
-        },
     };
 
 }());

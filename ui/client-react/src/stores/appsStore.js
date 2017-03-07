@@ -10,8 +10,6 @@ let AppsStore = Fluxxor.createStore({
     initialize() {
         this.apps = null;
         this.appUsers = [];
-        this.appUsersUnfiltered = {};
-        this.appRoles = [];
         // Default is true because the apps must load before the website is usable
         this.loading = true;
         this.loadingAppUsers = false;
@@ -26,11 +24,7 @@ let AppsStore = Fluxxor.createStore({
 
             actions.LOAD_APP_USERS, this.onLoadAppUsers,
             actions.LOAD_APP_USERS_FAILED, this.onLoadAppUsersFailed,
-            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess,
-
-            actions.LOAD_APP_ROLES, this.onLoadAppRoles,
-            actions.LOAD_APP_ROLES_FAILED, this.onLoadAppRolesFailed,
-            actions.LOAD_APP_ROLES_SUCCESS, this.onLoadAppRolesSuccess,
+            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess
         );
 
         this.logger = new Logger();
@@ -71,24 +65,9 @@ let AppsStore = Fluxxor.createStore({
         this.loadingAppUsers = false;
         this.emit('change');
     },
-    /**
-     * userArray is structured so that the filtered list of users is mapped for our userPicker in index 0
-     * index 1 is the untouched response from Core's getAppUsers
-     */
-    onLoadAppUsersSuccess(userArray) {
+    onLoadAppUsersSuccess(users) {
         this.loadingAppUsers = false;
-        this.appUsers = userArray[0];
-        this.appUsersUnfiltered = userArray[1];
-        this.emit('change');
-    },
-    onLoadAppRoles() {
-        this.emit('change');
-    },
-    onLoadAppRolesFailed() {
-        this.emit('change');
-    },
-    onLoadAppRolesSuccess(roles) {
-        this.appRoles = roles;
+        this.appUsers = users;
         this.emit('change');
     },
     onSelectApp(appId) {
@@ -106,8 +85,6 @@ let AppsStore = Fluxxor.createStore({
             apps: this.apps,
             selectedAppId: this.selectedAppId,
             appUsers: this.appUsers,
-            appUsersUnfiltered: this.appUsersUnfiltered,
-            appRoles: this.appRoles,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             loadingAppUsers: this.loadingAppUsers,

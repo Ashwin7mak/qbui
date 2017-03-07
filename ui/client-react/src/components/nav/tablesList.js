@@ -5,6 +5,7 @@ import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
+import TableIconUtils from '../../utils/tableIconUtils';
 import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
 

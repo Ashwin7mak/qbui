@@ -12,6 +12,8 @@ import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
+import reportActions from './reportActions';
+//import {CONTEXT} from '../actions/context';
 import * as types from '../actions/types';
 import RecordModel from '../models/recordModel';
 
@@ -583,9 +585,9 @@ export const editRecordCancel = (appId, tblId, recId) => {
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 // TODO: REMOVE..not using
-//export const editRecordCommit = (appId, tblId, recId) => {
-//    return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
-//};
+export const editRecordCommit = (appId, tblId, recId) => {
+    return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
+};
 
 
 /**
@@ -680,15 +682,13 @@ export const deleteRecord = (appId, tblId, recId, nameForRecords) => {
  *
  * @param appId
  * @param tblId
- * @param params
- *    context - is the record added in a report context
- *    recordChanges - new record
- *    fields
- *    colList
- *    showNotificationOnSuccess
+ * @param recordChanges
+ * @param fields
+ * @param colList
+ * @param showNotificationOnSuccess
  * @returns {Function}
  */
-export const createRecord = (appId, tblId, params = {}) => {
+export const createRecord = (appId, tblId, changes, fields, colList = [], showNotificationOnSuccess = false) => {
     function formatRecordChanges(_recordChanges) {
         //save changes in record
         let payload = [];
@@ -722,11 +722,10 @@ export const createRecord = (appId, tblId, params = {}) => {
     return (dispatch) => {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            let changes = params.recordChanges;
             let record = formatRecordChanges(changes);
             let recId = UrlConsts.NEW_RECORD_VALUE;
 
-            if (appId && tblId && record && params.fields) {
+            if (appId && tblId && record) {
                 //this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
                 dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
 
@@ -740,9 +739,9 @@ export const createRecord = (appId, tblId, params = {}) => {
                             let resJson = JSON.parse(response.data.body);
                             if (resJson.id) {
                                 //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
-                                let clist = params.colList ? params.colList : [];
-                                if (!clist.length && params.fields) {
-                                    params.fields.forEach((field) => {
+                                let clist = colList ? colList : [];
+                                if (!clist.length && fields) {
+                                    fields.forEach((field) => {
                                         clist.push(field.id);
                                     });
                                 }
@@ -767,7 +766,7 @@ export const createRecord = (appId, tblId, params = {}) => {
                                         };
                                         dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
 
-                                        if (params.showNotificationOnSuccess) {
+                                        if (!showNotificationOnSuccess) {
                                             NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
                                                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                                         }
@@ -871,7 +870,7 @@ export const createRecord = (appId, tblId, params = {}) => {
 
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
-                    appId + '; TblId:' + tblId + '; changes:' + JSON.stringify(changes) + '; fields:' + JSON.stringify(params.fields);
+                    appId + '; TblId:' + tblId + '; changes:' + JSON.stringify(changes) + '; fields:' + JSON.stringify(fields);
                 logger.error(errMessage);
                 //this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
                 dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId}));
@@ -888,14 +887,12 @@ export const createRecord = (appId, tblId, params = {}) => {
  * @param appId
  * @param tblId
  * @param recId
- * @param params
- *   context - is the record update in the context of a report
- *   pendEdits - any pending edits
- *   fields
- *   colList - optional list of fids to query for getRecord call.
- *   showNotificationOnSuccess - true to show success notification.
+ * @param pendEdits
+ * @param fields
+ * @param colList - optional list of fids to query for getRecord call.
+ * @param showNotificationOnSuccess - true to show success notification.
  */
-export const updateRecord = (appId, tblId, recId, params = {}) => {
+export const updateRecord = (appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess = false) => {
     function createColChange(value, display, field, payload) {
         let colChange = {};
         colChange.fieldName = field.name;
@@ -961,9 +958,9 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
         // we're returning a promise to the caller (not a Redux action) since this is an async action
         // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
         return new Promise((resolve, reject) => {
-            if (appId && tblId && (!!(recId === 0 || recId)) && params.pendEdits && params.fields) {
+            if (appId && tblId && (!!(recId === 0 || recId)) && pendEdits && fields) {
 
-                let changes = getChanges(params.pendEdits, params.fields);
+                let changes = getChanges(pendEdits, fields);
                 //this.dispatch(actions.SAVE_REPORT_RECORD, {appId, tblId, recId, changes});
                 dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
                 let recordService = new RecordService();
@@ -973,9 +970,9 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                     response => {
                         logger.debug('RecordService saveRecord success');
 
-                        let clist = params.colList ? params.colList : [];
-                        if (!clist.length) {
-                            params.fields.forEach((field) => {
+                        let clist = colList ? colList : [];
+                        if (!clist.length && fields) {
+                            fields.forEach((field) => {
                                 clist.push(field.id);
                             });
                         }
@@ -989,15 +986,16 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                                 //  flux action to update recordPendingEditsStore AND reportDataStore..to be removed
                                 //this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 //dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId}));
+                                // TODO: fix context
                                 let report = {
-                                    context: params.context,
+                                    context: 'NAV',
                                     recId:recId,
                                     record:getResponse.data
                                 };
                                 dispatch(event(recId, types.SAVE_RECORD_SUCCESS, {appId, tblId, recId, report}));
                                 //TODO look at have SAVE_RECORD_SUCCESS in Report store to update report...will need to supply
                                 // content of the record save so that we know which store updates...if done, can remove resolve(obj)..
-                                if (params.showNotificationOnSuccess) {
+                                if (showNotificationOnSuccess) {
                                     NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
                                         CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                                 }
@@ -1059,8 +1057,8 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
                     }
                 );
             } else {
-                var errMessage = 'Missing one or more required input parameters to recordActions.updateRecord. AppId:' +
-                    appId + '; TblId:' + tblId + '; recId:' + recId + '; pendEdits:' + JSON.stringify(params.pendEdits) + '; fields:' + params.fields;
+                var errMessage = 'Missing one or more required input parameters to recordActions.saveRecord. AppId:' +
+                    appId + '; TblId:' + tblId + '; recId:' + recId + '; pendEdits:' + JSON.stringify(pendEdits) + '; fields:' + fields;
                 logger.error(errMessage);
                 //this.dispatch(actions.SAVE_RECORD_FAILED, {error: errMessage});
                 dispatch(event(recId, types.SAVE_RECORD_ERROR, {appId, tblId, recId}));

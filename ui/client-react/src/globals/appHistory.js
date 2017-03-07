@@ -3,6 +3,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
+//import {editRecordCancel, editRecordCommit} from '../actions/recordActions';
 import _ from 'lodash';
 
 // Uses singleton pattern
@@ -23,9 +24,6 @@ class AppHistory {
 
             // get redux stores and call actions
             this.store = null;
-            this.editRecordCancel = null;
-            this.createRecord = null;
-            this.updateRecord = null;
             //this.flux = null;
 
             // Properties needed to save records with pending edits
@@ -49,17 +47,16 @@ class AppHistory {
      * Setups the singleton for use with Redux store outside of React.
      * @param redux store
      */
-    setup(store, storeFunc) {
+    setup(store, editRecordCancel, editRecordCommit, createRecord, updateRecord) {
         //  TODO remove once all stores are migrated
         //self.flux = flux;
 
         //  redux store
         self.store = store;
-        if (storeFunc) {
-            self.editRecordCancel = storeFunc.editRecordCancel;
-            self.createRecord = storeFunc.createRecord;
-            self.updateRecord = storeFunc.updateRecord;
-        }
+        self.editRecordCancel = editRecordCancel;
+        self.editRecordCommit = editRecordCommit;
+        self.createRecord = createRecord;
+        self.updateRecord = updateRecord;
 
         self._setupHistoryListeners();
 
@@ -213,56 +210,40 @@ class AppHistory {
     _saveChanges() {
         self._hideModal();
 
-        if (self.store && _.isFunction(self.createRecord) && _.isFunction(selft.updateRecord)) {
-            const pendEdits = self.getPendingEditsFromStore();
-            const appId = pendEdits.currentEditingAppId;
-            const tableId = pendEdits.currentEditingTableId;
-            const recordId = pendEdits.currentEditingRecordId;
+        const pendEdits = self.getPendingEditsFromStore();
+        const appId = pendEdits.currentEditingAppId;
+        const tableId = pendEdits.currentEditingTableId;
+        const recordId = pendEdits.currentEditingRecordId;
 
-            let fields = self.getFields();
+        let fields = self.getFields();
 
-            if (pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
-                // handle record add
-                //self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
-                //    .then(self._onRecordSaved, self._onRecordSavedError);
-                //self._handleRecordAdd();
-                let params = {
-                    context: null,
-                    recordChanges: pendEdits.recordChanges,
-                    fields: fields,
-                    colList: [],
-                    showNotificationOnSuccess: false
-                };
-                self.store.dispatch(self.createRecord(appId, tableId, params)).then(
-                    () => {
-                        self._continueToDestination();
-                    },
-                    () => {
-                        self._haltRouteChange();
-                    }
-                );
-            } else {
-                //self.store.dispatch(appId, tableId, recordId);
-                //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
-                //self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)
-                //    .then(self._onRecordSaved, self._onRecordSavedError);
-                //self._handleRecordChange();
-                let params = {
-                    context: null,              // no report context to worry about...
-                    pendEdits: pendEdits,
-                    fields: fields,
-                    colList: null,
-                    showNotificationOnSuccess: false
-                };
-                self.store.dispatch(self.updateRecord(appId, tableId, recordId, params)).then(
-                    () => {
-                        self._continueToDestination();
-                    },
-                    () => {
-                        self._haltRouteChange();
-                    }
-                );
-            }
+        if (pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
+            // handle record add
+            //self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
+            //    .then(self._onRecordSaved, self._onRecordSavedError);
+            //self._handleRecordAdd();
+            self.store.dispatch(self.createRecord(appId, tableId, pendEdits.recordChanges, fields)).then(
+                () => {
+                    self._continueToDestination();
+                },
+                () => {
+                    self._haltRouteChange();
+                }
+            );
+        } else {
+            //self.store.dispatch(appId, tableId, recordId);
+            //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
+            //self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)
+            //    .then(self._onRecordSaved, self._onRecordSavedError);
+            //self._handleRecordChange();
+            self.store.dispatch(self.updateRecord(appId, tableId, recordId, pendEdits, fields, null, false)).then(
+                () => {
+                    self._continueToDestination();
+                },
+                () => {
+                    self._haltRouteChange();
+                }
+            );
         }
     }
 
@@ -292,12 +273,10 @@ class AppHistory {
             self._hideModal();
         }
 
-        if (self.store && _.isFunction(self.editRecordCancel)) {
-            //  clean up pending edits in store
-            const pendEdits = self.getPendingEditsFromStore();
-            if (_.isEmpty(pendEdits) === false) {
-                self.store.dispatch(self.editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
-            }
+        //  clean up pending edits in store
+        const pendEdits = self.getPendingEditsFromStore();
+        if (_.isEmpty(pendEdits) === false) {
+            self.store.dispatch(self.editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
         }
 
         //self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);

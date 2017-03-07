@@ -8,7 +8,7 @@ import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-import LogoImg from './QB-logo.svg';
+
 
 let LeftNav = React.createClass({
 
@@ -32,32 +32,21 @@ let LeftNav = React.createClass({
     },
 
     /**
-     * create apps toggle section (if an app is selected)
-     */
-    createAppsToggleArea() {
-        let app = _.find(this.props.apps, {id: this.props.selectedAppId});
-        return (<div className="appsToggleArea">
-            {this.props.selectedAppId &&
-            <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
-                <QBicon icon={"favicon"}/>
-                <span className={"navLabel"}> {app ? app.name : ''}</span>
-                <QBicon className={"appsToggleIcon"} icon="caret-up"/>
-            </Button>
-            }
-        </div>);
-    },
-
-    /**
-     * create a branding section
-     * At some point in the future, customers will be able to specify their own branding image.
-     * This is why we kept this as a method instead of coding it down in render();
+     * create a branding section (logo with an apps toggle if an app is selected)
      */
     createBranding() {
+        let app = _.find(this.props.apps, {id: this.props.selectedAppId});
         return (<div className="branding">
-            <img className={"logo"} alt="QuickBase" src={LogoImg} />
-        </div>);
+                    <h2 className={"logo"}>QuickBase</h2>
+                    {this.props.selectedAppId &&
+                        <Button className="appsToggle" onClick={this.props.onToggleAppsList}>
+                            <QBicon icon={"favicon"}/>
+                            <span className={"navLabel"}> {app ? app.name : ''}</span>
+                            <QBicon className={"appsToggleIcon"} icon="caret-filled-up"/>
+                        </Button>
+                    }
+                </div>);
     },
-
 
     onSelectApp() {
         this.props.onToggleAppsList(false);
@@ -87,15 +76,13 @@ let LeftNav = React.createClass({
 
         return (
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
-                {this.createAppsToggleArea()}
+                {this.createBranding()}
 
                 <Loader loadedClassName="transitionGroup" loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
                     {this.renderNavContent()}
                 </Loader>
 
                 {this.props.globalActions}
-
-                {this.createBranding()}
             </Swipeable>
         );
     }

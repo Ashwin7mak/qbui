@@ -1,6 +1,7 @@
 import Fluxxor from 'fluxxor';
 import appsActions, {__RewireAPI__ as appsActionsRewireAPI} from '../../src/actions/appsActions';
 import * as actions from '../../src/constants/actions';
+import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 import {APP_ROUTE} from '../../src/constants/urlConstants';
 
@@ -8,7 +9,6 @@ describe('Apps Actions functions with Tables', () => {
     'use strict';
 
     let responseData = [{id: 'tableId', link: `${APP_ROUTE}/tableId`}];
-    let appRoleResponeData = [4, 5, 6];
 
     class mockAppService {
         constructor() { }
@@ -23,20 +23,6 @@ describe('Apps Actions functions with Tables', () => {
         }
     }
 
-    class mockRoleService {
-        constructor() { }
-        getAppRoles(id) {
-            return Promise.resolve({data: appRoleResponeData});
-        }
-    }
-
-    class mockRoleServiceFailure {
-        constructor() { }
-        getAppRoles(id) {
-            return Promise.reject(null);
-        }
-    }
-
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(appsActions);
@@ -46,14 +32,11 @@ describe('Apps Actions functions with Tables', () => {
         spyOn(mockAppService.prototype, 'getApps').and.callThrough();
         spyOn(mockAppService.prototype, 'getApp').and.callThrough();
         spyOn(mockAppService.prototype, 'getAppUsers').and.callThrough();
-        spyOn(mockRoleService.prototype, 'getAppRoles').and.callThrough();
         appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
-        appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
     });
 
     afterEach(() => {
-        appsActionsRewireAPI.__Rewire__('AppService', mockAppService);
-        appsActionsRewireAPI.__Rewire__('RoleService', mockRoleService);
+        appsActionsRewireAPI.__ResetDependency__('AppService');
     });
 
     var appsActionTests = [
@@ -100,51 +83,6 @@ describe('Apps Actions functions with Tables', () => {
                 },
                 () => {
                     expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
-    });
-
-    var loadAppRolesTests = [
-        {name:'load app roles with app roles not cached', appId: 187, cached: false, appRoles: [1]},
-    ];
-    loadAppRolesTests.forEach(function(test) {
-        it(test.name, function(done) {
-            flux.actions.loadAppRoles(test.appId).then(
-                () => {
-                    if (test.cached === true) {
-                        expect(mockRoleService.prototype.getAppRoles).not.toHaveBeenCalled();
-                    } else {
-                        expect(mockRoleService.prototype.getAppRoles).toHaveBeenCalledWith(test.appId);
-                        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_SUCCESS, appRoleResponeData]);
-                    }
-                    done();
-                },
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                }
-            );
-        });
-    });
-
-    var loadAppRolesNegativeTests = [
-        {name:'fail load app roles with app id not cached', appId: 187, cached: false,  appRoles: [1]}
-    ];
-    loadAppRolesNegativeTests.forEach(function(test) {
-        it(test.name, function(done) {
-            appsActionsRewireAPI.__Rewire__('RoleService', mockRoleServiceFailure);
-            flux.actions.appRoles = test.cached === true ? test.appRoles : [];
-            flux.actions.loadAppRoles(test.appId).then(
-                () => {
-                    expect(false).toBe(true);
-                    done();
-                },
-                () => {
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APP_ROLES_FAILED]);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                     done();
                 }
             );
