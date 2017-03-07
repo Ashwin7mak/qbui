@@ -476,11 +476,12 @@ of text items (including things such as a "Create Ticket" URL) that you can easi
 paste into a chat session with yourself or another person on the other laptop or device.
 You can configure the format of the text items in the tool to meet your own personal needs.
 
-By disabling the hotloader, you loose the ability for the watcher to automatically push the
-updates into the browser. However, you can still run the watcher to run webpack on each change
-and you can refresh the browser page to load the updates. This process is actually faster sometimes
-and less likely to crash node. Developers who refresh their browsers to reload JavaScript
-frequently may find this configuration preferable to "grunt serve". In this configuration
+By disabling the hotloader, you lose the ability for the watcher to automatically push the
+updates into the browser. However, you can run webpack with file watching enabled and
+see updates in the browser with a manual refresh instead of hotloading changes.
+This process is actually faster sometimes and less likely to crash node.
+Developers who refresh their browsers to reload JavaScript frequently may find this
+configuration preferable to "grunt serve". In this configuration
 you run node to serve the app separate from the watcher. To serve the app:
 
     node server/src/app.js
