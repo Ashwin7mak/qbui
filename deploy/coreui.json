@@ -361,9 +361,7 @@
                       },
                       "logs_to_index": {
                         "monitor:///var/log/qbase": {
-                          "disabled": "0",
-                          "index": "quickbase-ppdidx",
-                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                          "disabled": "0"
                         }
                       }
                     }
@@ -393,9 +391,7 @@
                       },
                       "logs_to_index": {
                         "monitor:///var/log/qbase": {
-                          "disabled": "0",
-                          "index": "quickbase-ppdidx",
-                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                          "disabled": "0"
                         }
                       }
                     }
@@ -425,9 +421,7 @@
                       },
                       "logs_to_index": {
                         "monitor:///var/log/qbase": {
-                          "disabled": "0",
-                          "index": "quickbase-ppdidx",
-                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                          "disabled": "0"
                         }
                       }
                     }
@@ -457,9 +451,7 @@
                       },
                       "logs_to_index": {
                         "monitor:///var/log/qbase": {
-                          "disabled": "0",
-                          "index": "quickbase-ppdidx",
-                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                          "disabled": "0"
                         }
                       }
                     }
@@ -489,9 +481,7 @@
                       },
                       "logs_to_index": {
                         "monitor:///var/log/qbase": {
-                          "disabled": "0",
-                          "index": "quickbase-prdidx",
-                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                          "disabled": "0"
                         }
                       }
                     }
@@ -514,14 +504,11 @@
               }
             },
             "commands": {
-              "01_set_splunk_hostname": {
-                "command": "/opt/splunkforwarder/bin/splunk set default-hostname $(hostname) -auth admin:changeme"
-              },
-              "02_run_chef": {
+              "01_run_chef": {
                 "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig,splunkclouduf::configure_ec2 -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
                 "cwd": "/var/packer/coreui/chef"
               },
-              "03_enable_and_start_splunk": {
+              "02_enable_and_start_splunk": {
                 "command": "systemctl enable splunk && systemctl start splunk"
               }
             }
@@ -582,7 +569,6 @@
                 " - echo \"", {"Ref": "AWS::StackName"}, "\" > /tmp/stack-name\n",
                 " - echo \"", {"Ref": "AWS::Region"}, "\" > /tmp/region\n",
                 " - echo \"iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}, "\" > /tmp/secrets-bucket\n",
-                " - systemctl stop splunk; systemctl disable splunk\n",
                 "runcmd:\n",
                 " - cfn-init -v -s $(cat /tmp/stack-name) -r LaunchConfig --region $(cat /tmp/region); cfn-signal -e $? --stack $(cat /tmp/stack-name) --resource AutoScalingGroup --region $(cat /tmp/region)\n"
               ]
