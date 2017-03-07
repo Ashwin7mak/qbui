@@ -33,7 +33,7 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
-        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config);
+        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
         rolesApi = require('../api/quickbase/rolesApi')(config);
 
         /* internal data */

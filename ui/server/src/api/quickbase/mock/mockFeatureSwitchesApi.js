@@ -48,8 +48,7 @@
 
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
-                    let bodyJSON = JSON.parse(req.rawBody);
-                    let feature = bodyJSON.feature;
+                    let feature = JSON.parse(req.rawBody);
                     feature.id = uuid.v4();
                     feature.overrides = [];
 
@@ -57,15 +56,14 @@
 
                     saveSwitchesMockData();
 
-                    resolve(feature.id);
+                    resolve(feature);
                 });
             },
 
             updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    let bodyJSON = JSON.parse(req.rawBody);
-                    let feature = bodyJSON.feature;
+                    let feature = JSON.parse(req.rawBody);
 
                     let index = _.findIndex(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 

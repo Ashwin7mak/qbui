@@ -31,7 +31,7 @@ describe('RecordService functions', () => {
         const url = featureSwitchService.constructUrl(featureSwitchService.API.POST_FEATURE_SWITCH);
         featureSwitchService.createFeatureSwitch(feature);
 
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, {feature});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, feature);
     });
 
     it('test updateFeatureSwitch function', () => {
@@ -39,7 +39,7 @@ describe('RecordService functions', () => {
         const url = featureSwitchService.constructUrl(featureSwitchService.API.PUT_FEATURE_SWITCH, ['id']);
         featureSwitchService.updateFeatureSwitch(feature);
 
-        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, {feature});
+        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, feature);
     });
 
     it('test deleteFeatureSwitches function', () => {

@@ -32,13 +32,13 @@ class FeatureSwitchService extends BaseService {
     createFeatureSwitch(feature) {
         const url = super.constructUrl(this.API.POST_FEATURE_SWITCH);
 
-        return super.post(url, {feature});
+        return super.post(url, feature);
     }
 
     updateFeatureSwitch(feature) {
         const url = super.constructUrl(this.API.PUT_FEATURE_SWITCH,  [feature.id]);
 
-        return super.put(url, {feature});
+        return super.put(url, feature);
     }
 
     deleteFeatureSwitches(ids) {

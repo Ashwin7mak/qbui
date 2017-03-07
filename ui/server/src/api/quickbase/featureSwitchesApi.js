@@ -9,7 +9,7 @@
     let log = require('../../logger').getLogger();
     let _ = require('lodash');
 
-    module.exports = function(config) {
+    module.exports = function(config, useMockStore) {
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
 
@@ -39,19 +39,28 @@
                 requestHelper = requestHelperOverride;
             },
 
+            getFeatureSwitchesRequestOpts(req) {
+
+                const opts = {
+                    method: req.method,
+                    body: req.rawBody,
+                    headers: {}
+                };
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.cookies = req.cookies;
+                const featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url);
+
+                opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
+
+                return opts;
+            },
+
             getFeatureSwitches: function(req) {
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.getFeatureSwitches(req));
                     } else {
-                        let opts = {
-                            headers: {}
-                        };
-                        opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                        const featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url);
-
-                        opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
+                        let opts = this.getFeatureSwitchesRequestOpts(req);
 
                         //  make the api request to get the app rights
                         requestHelper.executeRequest({}, opts).then(
@@ -73,11 +82,26 @@
 
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.createFeatureSwitch(req));
 
                     } else {
-                        resolve(''); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let feature = JSON.parse(response.body);
+                                resolve(feature);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.createFeatureSwitch(): Error retrieving feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.createFeatureSwitch(): unexpected error retrieving feature switches.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
@@ -85,9 +109,11 @@
             updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.updateFeatureSwitch(req, featureSwitchId));
                     } else {
+                        let opts = this.getFeatureSwitchesRequestOpts(req);
+
                         resolve(); // todo: call lambda
                     }
                 });
@@ -96,7 +122,7 @@
             deleteFeatureSwitches: function(req, ids) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.deleteFeatureSwitches(req, ids));
                     } else {
                         resolve(); // todo: call lambda
@@ -107,7 +133,7 @@
             createFeatureSwitchOverride: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.createFeatureSwitchOverride(req, featureSwitchId));
 
                     } else {
@@ -132,7 +158,7 @@
             deleteFeatureSwitchOverrides: function(req, featureSwitchId, ids) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId, ids));
 
                     } else {
@@ -145,7 +171,7 @@
                 return new Promise((resolve, reject) => {
                     let states = {};
 
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.getFeatureSwitchStates(req, appId));
                     } else {
                         // todo: call lambda

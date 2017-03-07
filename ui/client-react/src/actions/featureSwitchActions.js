@@ -109,7 +109,7 @@ export const createFeatureSwitch = (name) => {
 
             promise.then(response => {
                 // save the generated ID and set an empty override list
-                feature.id = response.data;
+                feature.id = response.data.id;
                 feature.overrides = [];
                 dispatch(createdFeatureSwitch(feature));
                 resolve();
