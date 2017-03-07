@@ -43,8 +43,15 @@
             isReqUserAdmin: function(req) {
                 return new Promise((resolve, reject) => {
                     let ticket = req.cookies[constants.COOKIES.TICKET];
+                    if (!ticket) {
+                        ticket = req.headers.ticket;
+                    }
                     if (ticket) {
-                        let userId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticket, 2));
+                        let userId = cookieUtils.breakTicketDown(ticket, 2);
+                        if (userId.indexOf('_') === -1) {
+                            //its an numeric so we need to decode it
+                            userId = ob32Utils.decoder(userId);
+                        }
                         this.getUserById(req, userId).then(function(response) {
                             resolve(response.administrator);
                         },

@@ -18,8 +18,17 @@
          */
         breakTicketDown: function(ticket, section) {
             var ticketSections = ticket.split("_");
+            if (ticketSections.length > 6) {
+                //the userId must contain an underscore
+                if (section > 2) {
+                    return ticketSections[section + 1];
+                } else if (section === 2) {
+                    return ticketSections[section] + '_' + ticketSections[section + 1];
+                } else {
+                    return ticketSections[section];
+                }
+            }
             return ticketSections[section];
         }
     };
-
 }());
