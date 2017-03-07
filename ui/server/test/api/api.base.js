@@ -604,23 +604,23 @@
                 var self = this;
                 var deferred = promise.pending();
                 // remove created realm if it was not an existing specified realmToUse in the config
-                //if (self.realm  && (!config || !config.realmToUse)) {
-                //    self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
-                //        consts.DELETE, '', DEFAULT_HEADERS)
-                //        .then(function(response) {
-                //            deferred.resolve(response);
-                //            self.realm = null;
-                //        }).catch(function(error) {
-                //            var realm = self.realm;
-                //            self.realm = null;
-                //            assert(false, 'Unable to delete realm ' +
-                //            JSON.stringify(realm) + ' due to: ' +
-                //            JSON.stringify(error));
-                //            deferred.reject(error);
-                //        });
-                //} else {
+                if (self.realm  && (!config || !config.realmToUse)) {
+                    self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
+                        consts.DELETE, '', DEFAULT_HEADERS)
+                        .then(function(response) {
+                            deferred.resolve(response);
+                            self.realm = null;
+                        }).catch(function(error) {
+                            var realm = self.realm;
+                            self.realm = null;
+                            assert(false, 'Unable to delete realm ' +
+                            JSON.stringify(realm) + ' due to: ' +
+                            JSON.stringify(error));
+                            deferred.reject(error);
+                        });
+                } else {
                     deferred.resolve();
-                //}
+                }
                 return deferred.promise;
             }
         };
