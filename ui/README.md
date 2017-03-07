@@ -455,6 +455,40 @@ setting in the local.env.js file:
     //REST endpoint (protocol,server,port)
     javaHost: 'https://localhost.com:8443'
 
+##Accessing your development environment from another laptop or device
+
+To access your development environment from another laptop or device, you need to disable the
+hotloader. Edit local.js, and uncomment the line for the "noHotLoad" property.
+
+    //set notHotLoad true to disable hotloading
+    noHotLoad : true,
+
+This configures node to accept incoming connections from any host as opposed to only localhost.
+You can then access your development environment from other laptops or devices by IP address.
+To help determine the correct IP address for your machine (since you may have several) and to
+easily generate URLs to access your environment, a tool is available. Download it from here:
+
+    smb://qbfs01.corp.quickbase.net/Data/SoftwareEngineering/IPAddressTool/
+
+The tool presents you with a list of the network interfaces on your computer, their IP addresses,
+and a description. When you choose an interface from this list, the tool presents you with a list
+of text items (including things such as a "Create Ticket" URL) that you can easily copy to the clipboard and
+paste into a chat session with yourself or another person on the other laptop or device.
+You can configure the format of the text items in the tool to meet your own personal needs.
+
+By disabling the hotloader, you loose the ability for the watcher to automatically push the
+updates into the browser. However, you can still run the watcher to run webpack on each change
+and you can refresh the browser page to load the updates. This process is actually faster sometimes
+and less likely to crash node. Developers who refresh their browsers to reload JavaScript
+frequently may find this configuration preferable to "grunt serve". In this configuration
+you run node to serve the app separate from the watcher. To serve the app:
+
+    node server/src/app.js
+
+To run the watcher, in a different terminal:
+
+    npm run watch
+
 
 ##Troubleshooting
 POSSIBLE ISSUES -- and how to resolve
