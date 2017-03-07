@@ -90,5 +90,15 @@
          */
         wistiaScriptPart1: '',
         wistiaScriptPart2: '',
+
+        /**
+         * mock data for feature switches for local testing
+         */
+        //featureSwitchesMockData: './server/mockData/featureSwitches.json'
+
+        /**
+         * AWS api gateway to lambda functions for feature switches
+         */
+        //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
     };
 }());

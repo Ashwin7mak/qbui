@@ -66,6 +66,8 @@ export default {
             delete: "Delete",
             dontDelete: "Don't delete",
             deleteThisRecord: "Delete this record?",
+            deleteTheseSwitches: "Delete these feature switches?",
+            deleteTheseOverrides: "Delete these overrides?",
             more: "More...",
             placeholder: "Select...",
             notFound: "Not Found"
@@ -506,6 +508,37 @@ export default {
                 URL_FORMULA: "Url formula",
                 NUMERIC_FORMULA: "Numeric formula"
             }
+        },
+        featureSwitchAdmin: {
+            defaultFeatureName: "Feature",
+            featureSwitchesTitle: "Feature Switches",
+            featureSwitchOverridesTitle: "Feature Switch Overrides",
+            switchName: "Switch Name",
+            teamName: "Team Name",
+            description: "Description",
+            on: "On",
+            off: "Off",
+            onOrOff: "On/Off",
+            defaultState: "Default State",
+            addNew: "Add New",
+            delete: "Delete",
+            turnOn: "Turn On",
+            turnOff: "Turn Off",
+            featureSwitchCreated: "Feature switch created",
+            featureSwitchUpdated: "Feature switch updated",
+            featureSwitchesDeleted: "Feature switch(es) deleted",
+            selectedFeatures: "Selected feature(s)",
+            overrideType: "Type",
+            overrideValue: "ID",
+            overrideChangesDefault: "Overrides default?",
+            overridesYes: "Yes",
+            overridesNo: "No",
+            overrideCreated: "Override created",
+            overrideUpdated: "Override updated",
+            overridesDeleted: "Override(s) deleted",
+            selectedOverrides: "Selected overrides(s)",
+            noOverrides: "No overrides have been set, click 'Add New' to add one.",
+            featureNameExists: "Feature names must be unique"
         }
     }
 };
