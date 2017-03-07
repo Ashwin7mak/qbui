@@ -94,9 +94,9 @@ export const EmbeddedReportToolsAndContent = React.createClass({
                         appUsers={this.props.appUsers}
                         routeParams={this.props.routeParams}
                         selectedAppId={report.appId}
-                        fields={this.props.fields || !("nope, viewOnly")}
+                        fields={this.props.fields || !("not used in phase1")}
                         nameForRecords={this.nameForRecords}
-                        isViewOnly={true}
+                        phase1={true}
                     />
                 </div>);
         }

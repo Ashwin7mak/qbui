@@ -114,9 +114,8 @@ const ReportGrid = React.createClass({
          * A list of ids by which the report has been sorted (used for displaying the report header menu) */
         sortFids: PropTypes.array,
 
-        /**
-         * Specify whether this reportGrid is editable or viewOnly */
-        isViewOnly: PropTypes.bool
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -251,8 +250,8 @@ const ReportGrid = React.createClass({
             rows={transformedRecords}
             loading={this.props.loading}
             appUsers={this.props.appUsers}
-            isViewOnly={this.props.isViewOnly}
-            showRowActionsColumn={!this.props.isViewOnly}
+            phase1={this.props.phase1}
+            showRowActionsColumn={!this.props.phase1}
 
             onStartEditingRow={this.startEditingRow}
             editingRowId={editingRecordId}
@@ -284,7 +283,7 @@ const ReportGrid = React.createClass({
                 validateFieldValue: this.props.handleValidateFieldValue,
                 //isInlineEditOpen: this.props.isInlineEditOpen
                 isInlineEditOpen: isInLineEditOpen,
-                isViewOnly: this.props.isViewOnly
+                phase1: this.props.phase1
             }}
             compareCellChanges={FieldUtils.compareFieldValues}
             menuComponent={ReportColumnHeaderMenu}

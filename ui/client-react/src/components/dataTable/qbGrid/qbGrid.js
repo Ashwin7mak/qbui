@@ -124,9 +124,8 @@ const QbGrid = React.createClass({
          * Flag to include the first column that includes row specific actions. Currently requires fluxxor/FluxMixin to be available. */
         showRowActionsColumn: PropTypes.bool,
 
-        /**
-         * Specify whether this reportGrid is editable or viewOnly */
-        isViewOnly: PropTypes.bool
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -212,7 +211,7 @@ const QbGrid = React.createClass({
         return this.props.columns.map(column => {
             try {
                 column.addFormatter(this.renderCell);
-                if (!this.props.isViewOnly) {
+                if (!this.props.phase1) {
                     column.addHeaderMenu(this.props.menuComponent, this.props.menuProps);
                 }
                 return column.getGridHeader();

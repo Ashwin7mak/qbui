@@ -66,12 +66,6 @@ describe('ReportCell', () => {
         expect(component.find('.cellEditIcon')).toBeEmpty();
     });
 
-    it('does not have a clickable edit icon when isViewOnly prop is true', () => {
-        component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId} isViewOnly/>);
-
-        expect(component.find('.cellEditIcon')).toBeEmpty();
-    });
-
     it('does not have a clickable edit icon when the row is in editing mode', () => {
         component = shallow(<ReportCell {...actions} isEditing={true} fieldDef={uneditableField} recordId={testRecordId}/>);
 
@@ -84,7 +78,7 @@ describe('ReportCell', () => {
         expect(component.find('.cellEditIcon')).toBeEmpty();
     });
 
-    it('navigates to form view when a cell is clicked', () => {
+    it('calls onCellClick click handler with a recordId when a cell is clicked', () => {
         spyOn(actions, 'onCellClick');
         component = shallow(<ReportCell {...actions} isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
 
@@ -92,6 +86,14 @@ describe('ReportCell', () => {
         cellClickableArea.simulate('click');
 
         expect(actions.onCellClick).toHaveBeenCalledWith(testRecordId);
+    });
+
+    it('does not call onCellClick click handler if no handler is defined', () => {
+        component = shallow(<ReportCell isEditing={false} fieldDef={fieldDef} recordId={testRecordId}/>);
+
+        let cellClickableArea = component.find('.cellClickableArea');
+        cellClickableArea.simulate('click');
+        // no assertions, we just want to make sure no error is thrown
     });
 
     it('renders an editor when the cell is in editing mode', () => {

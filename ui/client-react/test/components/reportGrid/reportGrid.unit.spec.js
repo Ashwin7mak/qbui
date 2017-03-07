@@ -259,8 +259,7 @@ describe('ReportGrid', () => {
         const sortFids = [5, 6];
         const testAppUsers = [7, 8];
 
-
-        let isViewOnly = undefined;
+        let phase1 = undefined;
 
         beforeAll(() => {
             ReportGridRewireAPI.__Rewire__('ReportRowTransformer', {transformRecordsForGrid() {return testRecords;}});
@@ -288,7 +287,7 @@ describe('ReportGrid', () => {
                 rptId={rptId}
                 sortFids={sortFids}
                 appUsers={testAppUsers}
-                isViewOnly={isViewOnly}
+                phase1={phase1}
             />);
             instance = component.instance();
 
@@ -317,7 +316,7 @@ describe('ReportGrid', () => {
             expect(qbGrid).toHaveProp('commonCellProps', {
                 appUsers: testAppUsers,
                 isInlineEditOpen: isInlineEditOpen,
-                isViewOnly,
+                phase1,
                 onCellChange: instance.onCellChange,
                 onCellBlur: instance.onCellBlur,
                 onCellClick: actions.onCellClick,
@@ -334,8 +333,8 @@ describe('ReportGrid', () => {
             });
         });
 
-        it('passes the correct props to QbGrid and commonCellProps in viewOnly mode', () => {
-            isViewOnly = true;
+        it('passes the correct props to QbGrid and commonCellProps for relationships phase1', () => {
+            phase1 = true;
             component = shallow(<ReportGrid
                 {...requiredProps}
                 {...actions}
@@ -351,17 +350,17 @@ describe('ReportGrid', () => {
                 rptId={rptId}
                 sortFids={sortFids}
                 appUsers={testAppUsers}
-                isViewOnly={isViewOnly}
+                phase1={phase1}
             />);
             instance = component.instance();
 
             let qbGrid = component.find(QbGrid);
-            expect(qbGrid).toHaveProp('isViewOnly', isViewOnly);
-            expect(qbGrid).toHaveProp('showRowActionsColumn', !isViewOnly);
+            expect(qbGrid).toHaveProp('phase1', phase1);
+            expect(qbGrid).toHaveProp('showRowActionsColumn', !phase1);
             expect(qbGrid).toHaveProp('commonCellProps', {
                 appUsers: testAppUsers,
                 isInlineEditOpen: isInlineEditOpen,
-                isViewOnly: isViewOnly,
+                phase1: phase1,
                 onCellChange: instance.onCellChange,
                 onCellBlur: instance.onCellBlur,
                 onCellClick: actions.onCellClick,

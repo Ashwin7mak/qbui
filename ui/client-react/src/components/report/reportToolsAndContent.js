@@ -61,7 +61,7 @@ export const ReportToolsAndContent = React.createClass({
         pageEnd: React.PropTypes.number,
 
         // used for relationships phase-1
-        isViewOnly: React.PropTypes.bool
+        phase1: React.PropTypes.bool
     },
     getDefaultProps() {
         return {
@@ -239,7 +239,7 @@ export const ReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
                               width={this.state.gridWidth}
-                              isViewOnly={this.props.isViewOnly}
+                              phase1={this.props.phase1}
                />;
     },
     getSelectionActions() {

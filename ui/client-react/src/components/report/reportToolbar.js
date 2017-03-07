@@ -50,7 +50,7 @@ const ReportToolbar = React.createClass({
         width: React.PropTypes.number,
 
         // used for relationships phase-1
-        isViewOnly: React.PropTypes.bool
+        phase1: React.PropTypes.bool
     },
 
     getDefaultProps() {
@@ -192,9 +192,9 @@ const ReportToolbar = React.createClass({
             }
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
-        const showFilterSearchBox = !isLoading && !isError && !this.props.isViewOnly && isPageLoaded;
-        const showSortAndGroup    = !isLoading && !isError && !this.props.isViewOnly;
-        const showFacetsMenu      = !isLoading && !isError && !this.props.isViewOnly && hasFacets;
+        const showFilterSearchBox = !isLoading && !isError && !this.props.phase1 && isPageLoaded;
+        const showSortAndGroup    = !isLoading && !isError && !this.props.phase1;
+        const showFacetsMenu      = !isLoading && !isError && !this.props.phase1 && hasFacets;
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <div className="leftReportToolbar">

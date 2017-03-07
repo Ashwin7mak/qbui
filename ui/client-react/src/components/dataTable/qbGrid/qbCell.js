@@ -22,8 +22,8 @@ const QbCell = React.createClass({
             classes.push('stickyCell');
         }
         // this is a tad bit hacky, remove when EmbeddedReportToolsAndContent supports editing
-        if (_.get(this, 'props.children.props.isViewOnly')) {
-            classes.push('viewOnly');
+        if (_.get(this, 'props.children.props.phase1')) {
+            classes.push('phase1');
         }
 
         return <td className={classes.join(' ')} {...this.props} />;
