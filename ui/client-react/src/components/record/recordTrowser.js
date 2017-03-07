@@ -17,7 +17,7 @@ import AppHistory from '../../globals/appHistory';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
-import {savingForm, saveFormSuccess, saveFormError, syncForm} from '../../actions/formActions';
+import {saveForm, saveFormComplete, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
 import {updateReportRecord} from '../../actions/reportActions';
 import {editRecordCancel, editRecordCommit, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
@@ -130,7 +130,10 @@ export const RecordTrowser = React.createClass({
             //let promise;
             //let updateRecord = false;
             const formType = "edit";
-            this.props.savingForm(formType);
+
+            //  open the 'modal working' spinner/window for the record's form
+            this.props.saveForm(formType);
+
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 const pendEdits = this.getPendEdits();
                 this.handleRecordAdd(pendEdits.recordChanges, formType, false, openNewRecord);
@@ -188,7 +191,10 @@ export const RecordTrowser = React.createClass({
 
             //let updateRecord = false;
             const formType = "edit";
-            this.props.savingForm(formType);
+
+            // open the 'modal working' spinner/window for the record's form
+            this.props.saveForm(formType);
+
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 const pendEdits = this.getPendEdits();
                 this.handleRecordAdd(pendEdits.recordChanges, formType, true);
@@ -238,9 +244,10 @@ export const RecordTrowser = React.createClass({
 
         this.props.dispatch(updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList, true)).then(
             (obj) => {
-                this.props.updateReportRecord(obj, CONTEXT.REPORT.NAV);
-                this.props.saveFormSuccess(formType);
-                if (this.props.viewingRecordId === this.props.recId) {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormComplete(formType);
+                if (this.props.viewingRecordId === obj.recId) {
                     this.props.syncForm("view");
                 }
 
@@ -252,9 +259,15 @@ export const RecordTrowser = React.createClass({
                     //    this.props.editNewRecord(false);
                     //} else {
                         this.hideTrowser();
-                        this.navigateToNewRecord(this.props.recId);
+                        this.navigateToNewRecord(obj.recId);
                     }
                 }
+            },
+            () => {
+                //  need to call as the form.saving attribute as it is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormComplete(formType);
+                this.showErrorDialog();
             }
         );
         //this.props.updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList);
@@ -280,8 +293,8 @@ export const RecordTrowser = React.createClass({
 
         this.props.dispatch(createRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList)).then(
             (obj) => {
-                this.props.saveFormSuccess(formType);
-                if (this.props.viewingRecordId === this.props.recId) {
+                this.props.saveFormComplete(formType);
+                if (this.props.viewingRecordId === obj.recId) {
                     this.props.syncForm("view");
                 }
 
@@ -293,13 +306,17 @@ export const RecordTrowser = React.createClass({
                     //    this.props.editNewRecord(false);
                     //} else {
                         this.hideTrowser();
-                        this.navigateToNewRecord(this.props.recId);
+                        this.navigateToNewRecord(obj.recId);
                     }
                 }
+            },
+            () => {
+                //  need to call as the form.saving attribute is used to determine when to
+                //  open/close the 'modal working' spinner/window..
+                this.props.saveFormComplete(formType);
+                this.showErrorDialog();
             }
         );
-
-
     },
 
     /**
@@ -523,18 +540,21 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        savingForm: (formType) => {
-            dispatch(savingForm(formType));
+        saveForm: (formType) => {
+            dispatch(saveForm(formType));
         },
-        saveFormSuccess: (formType)=>{
-            dispatch(saveFormSuccess(formType));
+        saveFormComplete: (formType) => {
+            dispatch(saveFormComplete(formType));
         },
+        //saveFormSuccess: (formType)=>{
+        //    dispatch(saveFormSuccess(formType));
+        //},
         //editNewRecord: (navigateAfterSave) => {
         //    dispatch(editNewRecord(navigateAfterSave));
         //},
-        saveFormError: (formType, errorStatus) => {
-            dispatch(saveFormError(formType, errorStatus));
-        },
+        //saveFormError: (formType, errorStatus) => {
+        //    dispatch(saveFormError(formType, errorStatus));
+        //},
         syncForm: (formType) => {
             dispatch(syncForm(formType));
         },

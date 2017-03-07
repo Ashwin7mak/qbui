@@ -330,7 +330,7 @@ export let Nav = React.createClass({
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable(reportsData.tblId)}
                                reportData={reportsData}
-                               errorPopupHidden={this.state.nav.errorPopupHidden}
+                               errorPopupHidden={this.props.qbui.shell.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
@@ -375,7 +375,7 @@ export let Nav = React.createClass({
                             appUsers: this.state.apps.appUsers,
                             locale: this.state.nav.locale,
                             //pendEdits:pendEdits,
-                            isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
+                            isRowPopUpMenuOpen: this.props.qbui.shell.isRowPopUpMenuOpen,
                             fields: this.state.fields,
                             reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
