@@ -23,7 +23,9 @@ const ReportCell = React.createClass({
         invalidMessage: PropTypes.string,
         invalidResultData: PropTypes.object,
         validateFieldValue: PropTypes.func,
-        isViewOnly: PropTypes.bool,
+
+        // relationship phase-1, will need remove when we allow editing
+        phase1: PropTypes.bool,
 
         /**
          * A property that tells this component to set focus on the first input in the FieldValue editor when it is in editing mode.
@@ -73,7 +75,7 @@ const ReportCell = React.createClass({
     shouldRenderEditIcon(isFieldEditable) {
         // We don't want to render an edit icon if another row is currently being edited. That is why we check for the editingRecordId to be null.
         const currentlyEditable = !this.props.isInlineEditOpen && isFieldEditable;
-        return (!this.props.isViewOnly && currentlyEditable);
+        return (!this.props.phase1 && currentlyEditable);
     },
 
     renderEditIcon(isFieldEditable) {

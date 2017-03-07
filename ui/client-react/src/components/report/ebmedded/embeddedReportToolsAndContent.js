@@ -2,17 +2,17 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
-import ReportToolsAndContent from '../report/reportToolsAndContent';
-import {loadDynamicReport} from '../../actions/reportActions';
-import {CONTEXT} from '../../actions/context';
+import ReportToolsAndContent from '../reportToolsAndContent';
+import {loadDynamicReport} from '../../../actions/reportActions';
+import {CONTEXT} from '../../../actions/context';
 
-import Logger from '../../utils/logger';
-import QueryUtils from '../../utils/queryUtils';
-import NumberUtils from '../../utils/numberUtils';
+import Logger from '../../../utils/logger';
+import QueryUtils from '../../../utils/queryUtils';
+import NumberUtils from '../../../utils/numberUtils';
 
-import constants from '../../../../common/src/constants';
+import constants from '../../../../../common/src/constants';
 
-import './report.scss';
+import '../report.scss';
 
 let logger = new Logger();
 

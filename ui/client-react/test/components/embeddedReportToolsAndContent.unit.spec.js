@@ -9,7 +9,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 import EmbeddedReportToolsAndContent, {
     EmbeddedReportToolsAndContent as UnconnectedEmbeddedReportToolsAndContent,
     __RewireAPI__ as EmbeddedReportToolsAndContentRewireAPI
-}  from '../../src/components/report/embeddedReportToolsAndContent';
+}  from '../../src/components/report/ebmedded/embeddedReportToolsAndContent';
 const mockStore = configureMockStore();
 
 describe('EmbeddedReportToolsAndContent', () => {
