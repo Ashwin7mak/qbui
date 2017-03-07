@@ -249,25 +249,25 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
     };
 };
 
-/**
- * Action called when their is a need to update a report grid row
- * with an updated data record.  This is triggered when updating
- * a report grid row via the in-line editor.
- *
- * @param payload
- * @param context
- * @returns {{id: *, type, content: {recId: *, record: Array}}}
- */
-export const updateReportRecord = (payload, context) => {
-    return {
-        id: context,
-        type: types.UPDATE_REPORT_RECORD,
-        content: {
-            recId: payload.recId,
-            record: payload.record ? payload.record.record : []
-        }
-    };
-};
+///**
+// * Action called when their is a need to update a report grid row
+// * with an updated data record.  This is triggered when updating
+// * a report grid row via the in-line editor.
+// *
+// * @param payload
+// * @param context
+// * @returns {{id: *, type, content: {recId: *, record: Array}}}
+// */
+//export const updateReportRecord = (payload, context) => {
+//    return {
+//        id: context,
+//        type: types.UPDATE_REPORT_RECORD,
+//        content: {
+//            recId: payload.recId,
+//            record: payload.record ? payload.record.record : []
+//        }
+//    };
+//};
 
 /**
  * Tracks list of records that are selected when viewing a report.

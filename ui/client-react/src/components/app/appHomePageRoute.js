@@ -27,6 +27,7 @@ let AppHomePageRoute = React.createClass({
     selectAppId(appId) {
         let flux = this.getFlux();
         flux.actions.selectAppId(appId);
+        flux.actions.loadAppRoles(appId);
     },
 
     /**
