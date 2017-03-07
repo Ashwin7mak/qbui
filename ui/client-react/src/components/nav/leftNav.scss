@@ -1,5 +1,20 @@
 @import '../../assets/css/qbVariables';
 
+/*
+ * Mixin to create the separator line to the left of the report icon on each table in the nav.
+ * This may be cleaned up/removed when this file gets refactored. We really shouldn't need to use so many of these.
+ */
+@mixin leftNavReportIconSeparator() {
+    &::after {
+        content: '';
+        position: absolute;
+        border-left: 1px solid $leftnav-brandarea-stroke-color;
+        left: 0;
+        height: 24px;
+        top: 9px;
+    }
+}
+
 .leftNav.expanded {
     overflow: visible;
 }
@@ -35,16 +50,25 @@
 }
 
 .leftNav .link.selected {
-    background-color: $left-nav-selected-background-color !important;
-
     a.leftNavLink {
-        color: $left-nav-selected-table-color;
+        color: $leftnav-table-selected-color;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 30px;
+        left: 0;
+        top: 6px;
+        border-left: 4px solid $leftnav-table-selected-color;
     }
 
     a.right {
         opacity: 1;
-        color: $left-nav-selected-table-color;
-        border-left: 1px solid $left-nav-right-icon-separator-hover-color !important;
+        color: $leftnav-table-selected-color;
+
+        @include leftNavReportIconSeparator();
     }
 }
 
@@ -127,10 +151,24 @@ div.leftNavTooltip {
         width: 40px;
         transition: width 100ms ease;
 
-        .branding {
-            .logo, .appsToggle .navLabel, .appsToggleIcon {
+        .appsToggleArea {
+            .appsToggle .navLabel, .appsToggleIcon {
                 display: none;
             }
+        }
+
+        .appsToggleArea button.appsToggle {
+            padding: 0 10px;
+            flex-direction: row;
+
+            .qbIcon {
+                font-size: 20px;
+                width: 20px;
+            }
+        }
+
+        .branding {
+            display: none;
         }
 
         li.horizontal, .globalActions {
@@ -168,6 +206,10 @@ div.leftNavTooltip {
             display: none;
         }
 
+        li.horizontal .leftNavLink {
+            padding-top: 10px;
+        }
+
         .transitionGroup .tablesHeadingAndList .tablesList {
             overflow: visible;
         }
@@ -181,21 +223,23 @@ div.leftNavTooltip {
 }
 
 .leftNav {
-    background-color: $left-nav-background-color;
+    background-color: $leftnav-background-color;
     display: flex;
     flex-direction: column;
     flex: 0 0 auto;
-    color: $left-nav-color;
+    color: $color-black-700;
     position: relative;
+    border-right: 1px solid $leftnav-background-stroke-color;
 
     .qbIcon {
-        font-size: 22px;
+        font-size: 18px;
     }
 
-    .branding {
+    .appsToggleArea {
         position: relative;
         flex: 0 0 auto;
-        border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
+        min-height: 40px;
+        background-color: $leftnav-app-background-color;
 
         .toggleNavButton {
             display: none;
@@ -209,42 +253,41 @@ div.leftNavTooltip {
             }
         }
 
-        .logo {
-            line-height: 54px;
-            padding-left: 10px;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         button.appsToggle {
-            text-overflow: ellipsis;
             overflow: hidden;
-            padding-right: 25px;
-            color: $left-nav-color;
-            height: 40px;
+            padding: 10px 28px;
+            color: $leftnav-app-icon-color;
+            min-height: 40px;
             border: 0;
             border-radius: 0;
             margin: 0;
-            text-align: left;
             width: 100%;
-            padding-left: 8px;
             position: relative;
             white-space: nowrap;
             cursor: pointer;
-            background-color: $left-nav-selected-background-color;
+            background-color: transparent;
+            display: block;
+            align-items: center;
+            font-size: 20px;
 
             .qbIcon {
-                width: 28px;
-                vertical-align: middle;
+                font-size: 40px;
+                width: 40px;
             }
 
-            .iconTableUISturdy-caret-filled-up {
+            .navLabel {
+                margin-top: 10px;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .iconTableUISturdy-caret-up {
                 position: absolute;
-                right: 5px;
+                right: 10px;
                 width: auto;
-                top: 8px;
+                bottom: 16px;
+                font-size: 14px;
                 transition: transform 300ms ease-in;
                 transform: rotate(-180deg);
             }
@@ -259,6 +302,13 @@ div.leftNavTooltip {
             width: 100%;
             line-height: 25px;
         }
+    }
+
+    .branding {
+        background-color: $leftnav-brandarea-background-color;
+        border-top: 1px solid $leftnav-brandarea-stroke-color;
+        padding: 10px;
+        text-align: center;
     }
 
     .search {
@@ -278,10 +328,11 @@ div.leftNavTooltip {
 
     .heading {
         font-size: 12px;
-        color: $left-nav-heading-color;
+        color: $ghost-text-color;
         margin: 0;
         padding-left: 10px;
         line-height: 40px;
+        font-style: oblique;
 
         &.withSecondary {
             cursor: pointer;
@@ -351,8 +402,8 @@ div.leftNavTooltip {
 
             a.leftNavLink, a.right, .hoverComponent > a, .globalActionLink {
                 line-height: 40px;
-                padding-left: 8px;
-                color: $left-nav-link-color;
+                padding-left: 10px;
+                color: $leftnav-tablenames-color;
                 display: inline-block;
                 cursor: pointer;
             }
@@ -364,7 +415,7 @@ div.leftNavTooltip {
         }
 
         > li.link:hover {
-            background-color: $left-nav-hover-background-color;
+            background-color: $leftnav-table-selected-color;
 
             > a, .dropdownToggle {
                 color: $left-nav-link-hover-color;
@@ -376,7 +427,10 @@ div.leftNavTooltip {
                 -webkit-transition: opacity 0.2s ease-in-out;
                 -moz-transition: opacity 0.2s ease-in-out;
                 border-bottom: 0;
-                border-left: 1px solid $left-nav-right-icon-separator-color;
+                // border-left: 1px solid $left-nav-right-icon-separator-color;
+
+                @include leftNavReportIconSeparator();
+
             }
         }
     }
@@ -401,7 +455,7 @@ div.leftNavTooltip {
                 vertical-align: middle;
                 line-height: 40px;
                 width: 200px;
-                background-color: $left-nav-hover-background-color;
+                background-color: $leftnav-table-selected-color;
 
                 a {
                     flex: 1;
@@ -411,12 +465,14 @@ div.leftNavTooltip {
 
                 a.right {
                     flex: 0 0 auto;
-                    border-left: 1px solid $left-nav-right-icon-separator-color;
+                    color: $left-nav-color;
+
+                    @include leftNavReportIconSeparator();
                 }
             }
 
             &.selected .hoverComponent {
-                background-color: $left-nav-selected-background-color;
+                background-color: $leftnav-table-selected-color;
             }
         }
     }
@@ -432,6 +488,15 @@ div.leftNavTooltip {
     height: auto;
 }
 
+.leftNav li.horizontal {
+    border-top: 1px solid $leftnav-background-color;
+    border-bottom: 1px solid $leftnav-background-stroke-color;
+
+    &:hover {
+        border-top-color: $color-cyan-300;
+    }
+}
+
 .leftNav li.horizontal, .leftNav .globalActions {
     height: auto;
 
@@ -441,10 +506,13 @@ div.leftNavTooltip {
 
         > li {
             flex: 1 0 auto;
-            border-right: 1px solid $left-nav-horizontal-icon-border-color;
+            border-right: 1px solid $leftnav-background-stroke-color;
+            &:last-of-type {
+                border-right: none;
+            }
 
             > a.leftNavLink, .globalActionLink {
-                padding: 5px 0;
+                padding: 7px 0 0 0;
                 text-align: center;
                 line-height: 20px;
                 border-radius: 0;
@@ -456,16 +524,22 @@ div.leftNavTooltip {
                     width: 100%;
                 }
             }
+
+            &.selected::before {
+                border-left: none;
+                border-bottom: 3px solid $leftnav-table-selected-color;
+                top: auto;
+                left: auto;
+                bottom: 0;
+                width: 100%;
+                height: 3px;
+            }
         }
     }
 }
 
-.leftNav .tablesHeading li.horizontal {
-    border-bottom: 1px solid $left-nav-horizontal-icon-border-color;
-}
-
 .leftNav .globalActions {
-    border-top: 1px solid $left-nav-horizontal-icon-border-color;
+    border-top: 1px solid $leftnav-background-stroke-color;
 }
 
 /* left nav behaves differently on small breakpoint */
@@ -477,7 +551,6 @@ div.leftNavTooltip {
         border: 0;
 
         .qbIcon {
-            border-left: 1px solid $left-nav-link-color;
             width: 32px;
             padding-left: 2px;
         }
@@ -496,13 +569,9 @@ div.leftNavTooltip {
         transition: width 100ms ease;
         z-index: 9999;
 
-        .branding {
+        .appsToggleArea {
             .toggleNavButton {
                 display: block;
-            }
-
-            .logo {
-                padding-right: 24px;
             }
         }
     }
@@ -564,7 +633,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
+.leftNav.appsListOpen .appsToggleArea .qbIcon.iconTableUISturdy-caret-up {
     transform: rotate(0deg);
 }
 
@@ -580,4 +649,9 @@ $travel-distance: 15;
         top: auto !important;
         left: auto !important;
     }
+}
+
+// hide builder from this nav since it isn't styled
+.leftNav .globalActionsList .builder {
+    display: none;
 }
