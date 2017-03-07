@@ -107,7 +107,9 @@ class AutoScroll extends Component {
         return {
             containerOffsetLeft: container.offsetLeft,
             containerRightSide: container.offsetLeft + container.offsetWidth,
-            //Autoscroll activates 30 pixels before it reaches the bottom or top of the container
+            /**
+             * Autoscroll default is to activate 30 pixels before it reaches the bottom or top of the container
+             */
             containerBottom: container.offsetHeight - defaultPixelFromTopOrBottom,
             containerTop: container.offsetTop + defaultPixelFromTopOrBottom
         };
