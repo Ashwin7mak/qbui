@@ -28,7 +28,7 @@
         max-height: 500px;
         opacity: 1;
 
-        transition: opacity 0.5s, max-height 0.5s;
+        transition: opacity 0.5s;
     }
 
     /*
@@ -63,8 +63,8 @@
     }
 
     .dragging {
-        opacity: 0.5;
-        transition: opacity 0.5s, max-height 0.5s;
+        opacity: 0.8;
+        transition: opacity 0.5s;
     }
 
     .dragging:after {

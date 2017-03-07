@@ -70,12 +70,16 @@ class FieldEditingTools extends Component {
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let isTouch = device.isTouch();
-        let classNames = ["fieldEditingTools"];
+        let classNames = ['fieldEditingTools'];
 
         if (isTouch && !isSmall) {
-            classNames.push("isTablet");
+            classNames.push('isTablet');
         } else if (!isTouch) {
-            classNames.push("notTouchDevice");
+            classNames.push('notTouchDevice');
+        }
+
+        if (this.props.isActive) {
+            classNames.push('active');
         }
 
         return (
@@ -107,7 +111,8 @@ class FieldEditingTools extends Component {
 FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
-    onClickFieldPreferences: PropTypes.func
+    onClickFieldPreferences: PropTypes.func,
+    isActive: PropTypes.bool
 };
 
 export default FieldEditingTools;
