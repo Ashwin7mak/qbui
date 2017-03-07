@@ -650,8 +650,3 @@ $travel-distance: 15;
         left: auto !important;
     }
 }
-
-// hide builder from this nav since it isn't styled
-.leftNav .globalActionsList .builder {
-    display: none;
-}
