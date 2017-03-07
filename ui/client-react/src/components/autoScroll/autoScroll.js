@@ -163,8 +163,8 @@ class AutoScroll extends Component {
         }
 
         if (e && e.type === 'touchmove') {
-            this.pointerY = e.touches[0].clientY;
-            this.pointerX = e.touches[0].clientX;
+            pointerY = e.touches[0].clientY;
+            pointerX = e.touches[0].clientX;
         }
 
         /**
