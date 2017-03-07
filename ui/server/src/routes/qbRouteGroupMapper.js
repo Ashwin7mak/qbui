@@ -23,6 +23,10 @@
 
     //  mercury v1
     routeGroupDisabled[routeGroups.LH_V1] = [
+        {route: routeConsts.FEATURE_STATES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.FEATURE_SWITCHES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.FEATURE_SWITCH, methods: [constants.PATCH]},
+        {route: routeConsts.FEATURE_OVERRIDE, methods: [constants.PATCH]},
         //  app endpoints
         {route: routeConsts.APPS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},

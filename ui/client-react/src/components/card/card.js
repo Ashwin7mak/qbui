@@ -31,7 +31,7 @@ const Card = React.createClass({
 
     render() {
         return (
-            <div className="card">
+            <div className="settingsCard">
                 <div className="cardHeader">
                     <QBIcon icon={this.props.icon} className="cardIcon"/>
                     <h3 className="headerH3">{this.renderLink()}</h3>
