@@ -445,7 +445,6 @@ module.exports = function(grunt) {
                     },
                     mask          : '**/*.unit.spec.js',
                     root          : '.',
-                    excludes      : ['server/src/api/quickbase/mock/mockFeatureSwitchesApi.js'],
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'

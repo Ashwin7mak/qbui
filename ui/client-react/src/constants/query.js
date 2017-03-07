@@ -28,6 +28,3 @@ export const FORMAT_PARAM = "format";
 //export const RAW_FORMAT = "raw";
 export const DISPLAY_FORMAT = 'display';
 export const FACET_EXPRESSION = "facetexpression";
-
-// FEATURE SWITCH API PARAMETERS
-export const IDS = "ids";

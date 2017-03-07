@@ -460,22 +460,4 @@ describe('Validate RouteHelper unit tests', function() {
             });
         });
     });
-
-    describe('validate getAppRolesRoute method', function() {
-        var testCases = [
-            {name: 'test empty url', url: '', expectation: ''},
-            {name: 'test null url', url: null, expectation: null},
-            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
-            {name: 'test invalid url - no app', url: '/apps/', expectation: '/apps/'},
-            {name: 'test valid url', url: '/apps/123/roles', expectation: '/apps/123/roles/'}
-        ];
-
-        testCases.forEach(function(testCase) {
-            it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getAppRolesRoute(testCase.url), testCase.expectation);
-                done();
-            });
-        });
-    });
-
 });

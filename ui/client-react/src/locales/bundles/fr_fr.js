@@ -26,8 +26,7 @@ export default {
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
                 helpLinkPreText: "Veuillez ",
                 helpLinkText: "contacter notre équipe de soins"
-            },
-            settings: "Paramètres"
+            }
         },
         appMenu: {
             qbClassicLink: "Basculer vers QuickBase Classic"
@@ -63,8 +62,6 @@ export default {
             delete: "Effacer",
             dontDelete: "Ne pas supprimer",
             deleteThisRecord: "Supprimer cet enregistrement?",
-            deleteTheseSwitches: "Supprimer ces commutateurs?",
-            deleteTheseOverrides: "Supprimer ces annule?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
@@ -501,38 +498,6 @@ export default {
                 URL_FORMULA: "Formule Url",
                 NUMERIC_FORMULA: "Formule numérique"
             }
-        },
-        featureSwitchAdmin: {
-            defaultFeatureName: "Fonctionnalité",
-            featureSwitchesTitle: "Commutateurs de fonctions",
-            featureSwitchOverridesTitle: "Fonctionnalité switche surcharges",
-            switchName: "Nom du commutateur",
-            teamName: "Nom de l'équipe",
-            description: "La description",
-            on: "Sur    ",
-            off: "Vide",
-            onOrOff: "Sure/Vide",
-            defaultState: "État par défaut",
-            addNew: "Ajouter un nouveau",
-            delete: "Effacer",
-            turnOn: "Allumer",
-            turnOff: "Éteindre",
-            featureSwitchCreated: "Fonction créée",
-            featureSwitchUpdated: "Fonctionnalité modifiée",
-            featureSwitchesDeleted: "Fonction supprimée",
-            selectedFeatures: "Fonctions sélectionnées",
-            overrideType: "La catégorie",
-            overrideValue: "ID",
-            overrideChangesDefault: "Remplace la valeur par défaut?",
-            overridesYes: "Oui",
-            overridesNo: "Non",
-            overrideCreated: "Création d'une substitution",
-            overrideUpdated: "Remplacement modifié",
-            overridesDeleted: "Annulation supprimée",
-            selectedOverrides: "Remplacements sélectionnés",
-            noOverrides: "Aucune substitution n'a été définie",
-            featureNameExists: "Les noms des entités doivent être uniques"
         }
-
     }
 };

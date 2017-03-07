@@ -1,3 +1,5 @@
+import com.quickbase.utils.OracleSqlConnectInfo
+import com.quickbase.utils.Utils
 //
 //  MOVE TO Root project FOLDER ONCE gradle-grunt-plugin IS UPDATED TO ALLOW
 //  FOR GruntFile.js to be located in a folder other than where the gradle
@@ -57,8 +59,26 @@ dependencies {
             "jaxen:jaxen:1.1.6"
 }
 
+def cargoHome = "/tmp/cargo";
+def extraJvmArgs = ""
+def testUser = getTestUser();
+def testUserPassword = generateRandomString(16);
+def sqlConnectInfo = new OracleSqlConnectInfo("${rootDir}/../quickbase")
 def environment = System.getProperty("env");
 def awsEnv = (environment == "aws");
+
+// TODO: after moving off of cloud9 and fully into AWS, remove the default values below - QBSE-19121
+def salt="salt123";
+def anotherSalt="salt456";
+def hashkey="*ad023,.SdfW";
+
+def clusterName="TestCluster";
+def clusterAddress="224.12.1.0";
+def clusterPort=8090;
+
+def cargoHttpPort=8080;
+def cargoAjpPort = 9090;
+def cargoRmiPort = 8200;
 
 def testURL = "http://quickbase-dev.com:8080/api";
 if(System.getProperty("endpoint")) {
@@ -75,6 +95,54 @@ def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
 def sauceProdJobName = "JENKINS_UI_E2E_PROD_SMOKETEST" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
 
+// TODO: Pull the code below out into a separate groovy class - QBSE-19142
+// If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
+if (awsEnv) {
+    // If there is a specific test user, either supplied or needed because using RDS, create the testUser in Oracle.
+    if (testUser) {
+        logger.lifecycle("Running tests with user " + testUser)
+        sqlConnectInfo.createTestUser(testUser, testUserPassword);
+    }
+
+    // Get the authorization secrets using the secret CLI
+    salt = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketHashSalt");
+    anotherSalt = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketAnotherSalt");
+    hashkey = Utils.executeCmd("${rootDir}/tools/ci/getSecret.sh ticket NewStackTicketHashKey");
+
+    extraJvmArgs += " -Dauth.ticket.encryption.salt=\"${salt}\"";
+    extraJvmArgs += " -Dauth.ticket.encryption.anothersalt=\"${anotherSalt}\"";
+    extraJvmArgs += " -Dauth.ticket.encryption.hashkey=\"${hashkey}\"";
+
+    extraJvmArgs += " -Ducp.sql.url=" + sqlConnectInfo.getConnectUrl();
+
+    // Set the DB credentials
+    if (testUser) {
+        extraJvmArgs += " -Ducp.sql.user=" + testUser;
+        extraJvmArgs += " -Ducp.sql.password=" + testUserPassword;
+
+        clusterName = "TestCluster-${testUser}"
+    } else {
+        extraJvmArgs += " -Ducp.sql.user=" + sqlConnectInfo.user;
+        extraJvmArgs += " -Ducp.sql.password=" + sqlConnectInfo.password;
+    }
+
+    // Allow for multiple jobs to be run by dynamically setting cargo port numbers based on the jenkins executor number
+    def executorNumber = System.getenv("EXECUTOR_NUMBER");
+    if (executorNumber) {
+        def iExecutor = Integer.parseInt(executorNumber)
+        clusterAddress = "224.12.1." + executorNumber;
+        clusterPort = 12100 + iExecutor;
+
+        cargoHttpPort = 8080 + iExecutor;
+        cargoAjpPort = 9090 + iExecutor;
+        cargoRmiPort = 8200 + iExecutor;
+
+        cargoHome = "/tmp/cargo_" + executorNumber;
+    }
+
+    extraJvmArgs += " -Denv=aws";
+}
+
 //  CI Builds need the following properties to properly package and archive the build artifacts
 println("CI Build: " + isCIBuild() )
 if (isCIBuild()) {
@@ -84,6 +152,55 @@ if (isCIBuild()) {
 }
 
 println("cwd " + cwd )
+
+println "Checking cargo home directory ${cargoHome}"
+if (!file(cargoHome).exists()) {
+    println "Creating cargo home directory ${cargoHome}"
+    file(cargoHome).mkdir()
+    if (!file(cargoHome).exists()) {
+        println "Failed to create directory ${cargoHome}"
+    }
+}
+
+cargo {
+    containerId = 'tomcat8x'
+
+    port = 8080
+
+    deployable {
+        context = 'api'
+        file = file(getAllServicesWar(cwd))
+    }
+
+    local {
+        timeout=1000000
+        logLevel = 'medium'
+
+        homeDir       = file(cargoHome)
+        configHomeDir = file(cargoHome)
+
+        containerProperties {
+            property 'cargo.servlet.port', cargoHttpPort
+            property 'cargo.tomcat.ajp.port', cargoAjpPort
+            property 'cargo.rmi.port', cargoRmiPort
+        }
+
+        jvmArgs ="-Dspring.profiles.active=default" +
+                " -Dtangosol.coherence.override=${getCommonCoherenceResources(cwd)}/tangosol-coherence-override-test.xml" +
+                " -Dquickbase.coherence.cluster=${clusterName}" +
+                " -Dtangosol.coherence.clusteraddress=${clusterAddress}" +
+                " -Dtangosol.coherence.clusterport=${clusterPort}" +
+                " -Dtangosol.pof.enabled=true" +
+                " -Dtangosol.pof.config=${getCommonCoherenceResources(cwd)}/quickbase-pof-config.xml" + extraJvmArgs
+
+        installer {
+            installUrl = "file://" + cwd + "/../tools/ci/apache-tomcat-8.0.20.zip"
+            downloadDir = file("$buildDir/download")
+            extractDir = file("$buildDir/extract")
+            outputFile = file("$buildDir/tomcat.log")
+        }
+    }
+}
 
 node {
     // Version of node to use.
@@ -235,6 +352,21 @@ task gruntUnitTestsNoColor(type: GruntTask) {
     args = ["ciTest", "--no-color"]
 }
 
+task startTomcat {
+    doFirst {
+        println("Starting Tomcat instance with Cargo");
+        println( "Deploying war: ${getAllServicesWar(cwd)}")
+        println( "Cargo output log folder: $buildDir")
+        tasks.cargoStartLocal.execute()
+    }
+}
+task stopTomcat {
+    doFirst {
+        println("Stopping Tomcat instance with Cargo");
+        tasks.cargoStopLocal.execute()
+    }
+}
+
 task invokeInstallSauceLabs(type:Exec) {
     executable cwd + "/../tools/aws/jenkins_install_sauce.sh"
 }
@@ -253,10 +385,17 @@ task checkForApiUp() {
     doFirst {
         tasks.invokeCheckForApiUp.execute()
     }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 task integrationTestsNoColor(type: GruntTask) {
-    args = ["ciIntegration", "--no-color"]
+    doFirst {
+        tasks.invokeCheckForApiUp.execute()
+        args = ["ciIntegration", "--no-color"]
+    }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 task integrationTestsCoverageNoColor(type: GruntTask) {
@@ -264,6 +403,8 @@ task integrationTestsCoverageNoColor(type: GruntTask) {
         tasks.invokeCheckForApiUp.execute()
         args = ["ciIntegrationCoverage", "--no-color"]
     }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 //browser tests not yet supported on ci
@@ -272,6 +413,8 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
         tasks.invokeCheckForApiUp.execute()
         args = ["test:e2e", "--no-color"]
     }
+    dependsOn startTomcat
+    finalizedBy stopTomcat
 }
 
 //browser tests in AWS running in sauce labs against a candidate build
