@@ -440,7 +440,7 @@ export const RecordTrowser = React.createClass({
         const errorFlg = this._hasErrorsAndAttemptedSave();
 
         const record = this.getRecordFromProps(this.props);
-        const showNext = !!(record.nextRecordId !== null);
+        const showNext = !!(record.nextRecordId !== null) && this.props.recId !== null;
 
         const errorPopupHidden = this.props.shell ? this.props.shell.errorPopupHidden : true;
         return (
