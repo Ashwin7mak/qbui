@@ -14,7 +14,7 @@ var config = {
             breakpointSize: 'xlarge',
             // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 2
+            maxInstances: 4
         }
     ]
 };
