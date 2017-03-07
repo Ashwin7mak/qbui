@@ -3,13 +3,13 @@ import isSmall from '../../utils/breakpoints';
 
 /**
  * AutoScroll is triggered when a user either touches and holds down on a touch device and moves her finger
- * to near the top or bottom of the scrolling container.
+ * near the top or bottom of the scrolling container.
  *
  * It is also triggered when a user clicks down and holds down the mouse and moves the mouse near the top or bottom
  * of the scrolling container.
  *
- * AutoScroll listens for mousedown and mouseup for desktop.
- * AutoScroll listens for touchmove or touch devices.
+ * AutoScroll listens for mousedown, mousemove and mouseup for desktop.
+ * AutoScroll listens for touchmove or touchend for touch devices.
  *
  * Note: Autoscroll will only work if the parent container has overflow set to auto
  * */
@@ -52,7 +52,7 @@ class AutoScroll extends Component {
 
         this.autoScroll = null;
 
-        this.animationId = undefined;
+        this.scrollingAnimationId = undefined;
         this.mouseDownSetIntervalId = undefined;
 
         this.pointerY = undefined;
@@ -173,12 +173,12 @@ class AutoScroll extends Component {
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {
-            this.animationId = window.requestAnimationFrame(this.scrollDown);
+            this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerTop &&
                    pointerX < containerRightSide &&
                    pointerX > containerOffsetLeft) {
 
-            this.animationId = window.requestAnimationFrame(this.scrollUp);
+            this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
 
         } else {
             this.stopScrolling();
@@ -193,7 +193,7 @@ class AutoScroll extends Component {
         container.scrollTop = scrollTop + pixelsPerFrame;
         pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
 
-        this.animationId = window.requestAnimationFrame(this.scrollDown);
+        this.scrollingAnimationId = window.requestAnimationFrame(this.scrollDown);
     }
 
     scrollUp() {
@@ -205,11 +205,11 @@ class AutoScroll extends Component {
         container.scrollTop = scrollTop + -pixelsPerFrame;
         pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
 
-        this.animationId = window.requestAnimationFrame(this.scrollUp);
+        this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
     }
 
     stopScrolling() {
-        window.cancelAnimationFrame(this.animationId);
+        window.cancelAnimationFrame(this.scrollingAnimationId);
     }
 
     mouseDownUpdateScrolling() {
