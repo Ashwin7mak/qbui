@@ -8,6 +8,13 @@
     -webkit-user-select: none;
     user-select: none;
 
+    // For the purpose of current form builder, we lock the height of the textarea so that the height can
+    // be used in determining the height of the field editing tools
+    // !important is needed because this value is set as an inline style in the multilineTextFieldValueEditor
+    textarea {
+        height: 150px !important;
+    }
+
     .draggableField {
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
