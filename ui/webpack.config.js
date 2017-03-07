@@ -67,7 +67,7 @@ var config = {
         ],
         governance: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(governancePath, 'src/governance.js')
+            path.resolve(governancePath, 'src/app/index.js')
         ]
     },
     output: {

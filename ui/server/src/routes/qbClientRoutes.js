@@ -119,7 +119,7 @@ var path = require('path');
             renderIndex(req, res);
         });
 
-        app.route(`${baseRoute}/governance`).get(function(req, res) {
+        app.route(`${baseRoute}/governance/:accountId/users`).get(function(req, res) {
             renderIndex(req, res, {title: 'QuickBase Governance', bundleFileName: governanceBundleFileName});
         });
 
