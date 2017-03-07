@@ -11,7 +11,7 @@ let container = {
     offsetTop: 10
 };
 
-describe('AutoScroll', () => {
+fdescribe('AutoScroll', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
@@ -21,7 +21,6 @@ describe('AutoScroll', () => {
         it('should call scrollUp when the mouse is in the top scroll zone', function() {
 
             let e = {
-                type: 'foo',
                 clientX: 55,
                 clientY: 0
             };
@@ -42,7 +41,6 @@ describe('AutoScroll', () => {
         it('should call scrollDown when the mouse is in the bottom scroll zone', function() {
 
             let e = {
-                type: 'foo',
                 clientX: 55,
                 clientY: 100
             };
@@ -63,7 +61,6 @@ describe('AutoScroll', () => {
         it('should call stopScrolling when the mouse is not in a scroll zone', function() {
 
             let e = {
-                type: 'foo',
                 clientX: 45,
                 clientY: 50
             };
@@ -84,7 +81,6 @@ describe('AutoScroll', () => {
         it('should add extra pixels to the top of the container scroll zone when pixelsFromTopForLargeDevices prop is passed through', function() {
 
             let e = {
-                type: 'foo',
                 clientX: 45,
                 clientY: 50
             };
@@ -103,7 +99,6 @@ describe('AutoScroll', () => {
         it('should add extra pixels to the bottom of the container scroll zone when pixelsFromBottomForLargeDevices prop is passed through', function() {
 
             let e = {
-                type: 'foo',
                 clientX: 45,
                 clientY: 50
             };
