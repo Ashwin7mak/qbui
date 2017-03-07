@@ -32,7 +32,8 @@ describe('AutoScroll', () => {
         spyOn(instance, 'getContainer').and.returnValue(container);
         spyOn(instance, 'stopScrolling');
 
-        instance.updateScrolling(e);
+        instance.updateMouseLocation(e);
+        instance.updateScrolling();
 
         expect(window.requestAnimationFrame).toHaveBeenCalledWith(instance.scrollUp);
     });
@@ -53,12 +54,13 @@ describe('AutoScroll', () => {
         spyOn(instance, 'getContainer').and.returnValue(container);
         spyOn(instance, 'stopScrolling');
 
-        instance.updateScrolling(e);
+        instance.updateMouseLocation(e);
+        instance.updateScrolling();
 
         expect(window.requestAnimationFrame).toHaveBeenCalledWith(instance.scrollDown);
     });
 
-    it('should call stopScrolling when the mouse not in a scroll zone', function() {
+    it('should call stopScrolling when the mouse is not in a scroll zone', function() {
 
         let e = {
             type: 'foo',
