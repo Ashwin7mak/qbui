@@ -51,49 +51,49 @@ class AutoScroll extends Component {
         super(props);
 
         this.autoScroll = null;
+
         this.animationId = undefined;
-        this.scrollDown = this.scrollDown.bind(this);
-        this.scrollUp = this.scrollUp.bind(this);
-        this.getContainerDimension = this.getContainerDimension.bind(this);
+        this.mouseDownSetIntervalId = undefined;
+
+        this.pointerY = undefined;
+        this.pointerX = undefined;
+
         this.updateScrolling = this.updateScrolling.bind(this);
         this.stopScrolling = this.stopScrolling.bind(this);
-        this.activateMouseMove = this.activateMouseMove.bind(this);
+        this.scrollDown = this.scrollDown.bind(this);
+        this.scrollUp = this.scrollUp.bind(this);
+
         this.getContainer = this.getContainer.bind(this);
+        this.getContainerDimension = this.getContainerDimension.bind(this);
         this.getContainerBottom = this.getContainerBottom.bind(this);
+
+        this.updateMouseLocation = this.updateMouseLocation.bind(this);
+        this.mouseDownUpdateScrolling = this.mouseDownUpdateScrolling.bind(this);
+        this.mouseUpStopScrolling = this.mouseUpStopScrolling.bind(this);
     }
 
     componentDidMount() {
         this.autoScroll.addEventListener("touchmove", this.updateScrolling);
-        this.autoScroll.addEventListener("mousedown", this.activateMouseMove);
+        /**
+         * This event listener is added to the document body to account for the edge case of when a user stops touching outside of the container
+         * */
+        document.addEventListener("touchend", this.stopScrolling);
+
+        this.autoScroll.addEventListener("mousemove", this.updateMouseLocation);
+        this.autoScroll.addEventListener("mousedown", this.mouseDownUpdateScrolling);
+        /**
+         * The mouseup event listener is added to the document body to account for the edge case of when a user mouseup outside of the container
+         * */
+        document.addEventListener("mouseup", this.mouseUpStopScrolling);
     }
 
     componentWillUnmount() {
         this.autoScroll.removeEventListener("touchmove", this.updateScrolling);
-        this.autoScroll.removeEventListener("mousedown", this.activateMouseMove);
-        this.autoScroll.removeEventListener("mousemove", this.updateScrolling);
-    }
+        document.removeEventListener("touchend", this.stopScrolling);
 
-    scrollDown() {
-        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10;
-        let container = this.getContainer();
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + pixelsPerFrame;
-        pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
-
-        this.animationId = window.requestAnimationFrame(this.scrollDown);
-    }
-
-    scrollUp() {
-        let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 2 : 10;
-        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
-        let container = this.getContainer();
-        let scrollTop = container.scrollTop;
-
-        container.scrollTop = scrollTop + -pixelsPerFrame;
-        pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
-
-        this.animationId = window.requestAnimationFrame(this.scrollUp);
+        this.autoScroll.removeEventListener("mousedown", this.mouseDownUpdateScrolling);
+        this.autoScroll.removeEventListener("mousemove", this.updateMouseLocation);
+        document.removeEventListener("mouseup", this.stopScrolling);
     }
 
     getContainerDimension() {
@@ -103,7 +103,6 @@ class AutoScroll extends Component {
         if (isSmall.isSmallBreakpoint()) {
             defaultPixelFromTopOrBottom = 20;
         }
-
 
         return {
             containerOffsetLeft: container.offsetLeft,
@@ -137,14 +136,6 @@ class AutoScroll extends Component {
         }
     }
 
-    stopScrolling() {
-        window.cancelAnimationFrame(this.animationId);
-    }
-
-    activateMouseMove() {
-        this.autoScroll.addEventListener("mousemove", this.updateScrolling);
-    }
-
     getContainer() {
         let container;
 
@@ -156,19 +147,12 @@ class AutoScroll extends Component {
     }
 
     updateScrolling(e) {
+        this.stopScrolling();
 
-        let pointerY;
-        let pointerX;
+        let pointerY = this.pointerY;
+        let pointerX = this.pointerX;
 
         let {containerOffsetLeft, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
-
-        if (e.type === 'touchmove') {
-            pointerY = e.touches[0].clientY;
-            pointerX = e.touches[0].clientX;
-        } else {
-            pointerY = e.clientY;
-            pointerX = e.clientX;
-        }
 
         if (this.props.pixelsFromBottomForLargeDevices || this.props.pixelsFromBottomForMobile) {
             containerBottom = this.getContainerBottom(containerBottom);
@@ -178,13 +162,17 @@ class AutoScroll extends Component {
             containerTop = this.getContainerTop(containerTop);
         }
 
+        if (e && e.type === 'touchmove') {
+            this.pointerY = e.touches[0].clientY;
+            this.pointerX = e.touches[0].clientX;
+        }
+
         /**
          * Activate auto scroll only if it is in the designated scroll zone within the container
          * */
         if (pointerY > containerBottom &&
             pointerX < containerRightSide &&
             pointerX > containerOffsetLeft) {
-
             this.animationId = window.requestAnimationFrame(this.scrollDown);
         } else if (pointerY < containerTop &&
                    pointerX < containerRightSide &&
@@ -194,8 +182,48 @@ class AutoScroll extends Component {
 
         } else {
             this.stopScrolling();
-
         }
+    }
+
+    scrollDown() {
+        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : 10;
+        let container = this.getContainer();
+        let scrollTop = container.scrollTop;
+
+        container.scrollTop = scrollTop + pixelsPerFrame;
+        pixelsPerFrame = pixelsPerFrame + pixelsPerFrame;
+
+        this.animationId = window.requestAnimationFrame(this.scrollDown);
+    }
+
+    scrollUp() {
+        let defaultPixelsPerFrame = isSmall.isSmallBreakpoint() ? 2 : 10;
+        let pixelsPerFrame = this.props.pixelsPerFrame ? this.props.pixelsPerFrame : defaultPixelsPerFrame ;
+        let container = this.getContainer();
+        let scrollTop = container.scrollTop;
+
+        container.scrollTop = scrollTop + -pixelsPerFrame;
+        pixelsPerFrame = pixelsPerFrame - pixelsPerFrame;
+
+        this.animationId = window.requestAnimationFrame(this.scrollUp);
+    }
+
+    stopScrolling() {
+        window.cancelAnimationFrame(this.animationId);
+    }
+
+    mouseDownUpdateScrolling() {
+        this.mouseDownSetIntervalId = setInterval(this.updateScrolling, 500);
+    }
+
+    updateMouseLocation(e) {
+        this.pointerY = e.clientY;
+        this.pointerX = e.clientX;
+    }
+
+    mouseUpStopScrolling() {
+        this.stopScrolling();
+        clearInterval(this.mouseDownSetIntervalId);
     }
 
     render() {
