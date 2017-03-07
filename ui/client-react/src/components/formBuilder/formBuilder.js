@@ -105,5 +105,4 @@ FormBuilder.defaultProps = {
  * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
  * */
 
-// export default DragDropContext(Html5Backend)(FormBuilder);
 export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 50}))(FormBuilder);
