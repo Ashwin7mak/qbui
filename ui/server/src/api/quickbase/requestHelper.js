@@ -41,6 +41,9 @@
             getRequestEeHost: function() {
                 return config ? config.eeHost : '';
             },
+            getRequestAWSHost: function() {
+                return config ? config.awsHost : '';
+            },
             getRequestEeHostEnable: function() {
                 return config ? config.eeHostEnable : '';
             },
@@ -53,12 +56,12 @@
             getLegacyHost : function() {
                 return config ? config.legacyHost : '';
             },
-            getAgentOptions: function(req) {
+            getAgentOptions: function(req, useSSL) {
                 let agentOptions = {
                     rejectUnauthorized: false
                 };
 
-                if (this.isSecure(req) && config) {
+                if ((this.isSecure(req) || useSSL) && config) {
                     //  we're on https..include the certs
                     agentOptions = {
                         strictSSL         : true,
@@ -150,14 +153,14 @@
              * @param forceGet - Regardless of req method setting, always set to a get request
              * @returns request object used when submitting a server request
              */
-            setOptions: function(req, forceGet) {
+            setOptions: function(req, forceGet, useSSL) {
 
                 this.setTidHeader(req);
 
                 let opts = {
                     url         : this.getRequestUrl(req),
                     method      : (forceGet === true ? 'GET' : req.method),
-                    agentOptions: this.getAgentOptions(req),
+                    agentOptions: this.getAgentOptions(req, useSSL),
                     headers     : req.headers
                 };
 
