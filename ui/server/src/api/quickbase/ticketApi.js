@@ -36,30 +36,8 @@
             },
 
             /**
-             * Check whether a the requesting user (logged in user) is a system admin. Leverages WhoAmI endpoint.
-             * @param req
-             * @returns {Promise}
-             */
-            isReqUserAdmin: function(req) {
-                return new Promise((resolve, reject) => {
-                    let ticketCookie = req.cookies[constants.COOKIES.TICKET];
-                    if (ticketCookie) {
-                        let realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
-                        this.whoAmI(req, realmId).then(function(response) {
-                            resolve(response.administrator);
-                        },
-                        function(error) {
-                            log.error({req: req}, "ticketApi.isReqUserAdmin(): Error retrieving user.");
-                            reject(error);
-                        }).catch(function(error) {
-                            requestHelper.logUnexpectedError('ticketApi..isReqUserAdmin', error, true);
-                            reject(error);
-                        });
-                    }
-                });
-            },
-            /**
              * Given a realmId get the logged in user's meta data.
+             * NOTE: This api is NOT available in prod and is only available for debugging purposes.
              * @param req
              * @param realmId
              * @returns {Promise}
