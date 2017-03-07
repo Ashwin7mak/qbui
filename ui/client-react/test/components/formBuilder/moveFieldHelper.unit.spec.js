@@ -54,8 +54,8 @@ function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex, r
     return elements;
 }
 
-describe('MoveFieldHelper', () => {
-    describe('moveField', () => {
+fdescribe('MoveFieldHelper', () => {
+    describe('methods', () => {
 
         let testCases = [
             {
@@ -70,11 +70,12 @@ describe('MoveFieldHelper', () => {
                 newColumn: 0,
                 newRow: 1,
                 newElementIndex: 0,
+                expectedRemoveFieldResult: 3,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 7},
                     {orderIndex: 1, fieldId: 6},
                     {orderIndex: 2, fieldId: 8},
-                    {orderIndex: 3, fieldId: 9}
+                    {orderIndex: 3, fieldId: 9},
                 ],
                 expectFieldToBeRemoved: false
             },
@@ -91,6 +92,8 @@ describe('MoveFieldHelper', () => {
                 newColumn: 0,
                 newRow: 1,
                 newElementIndex: 0,
+                expectedRemoveFieldResult: 3,
+
                 expectedResult: [
                     {orderIndex: 0, fieldId: 6},
                     {orderIndex: 1, fieldId: 9},
@@ -112,6 +115,7 @@ describe('MoveFieldHelper', () => {
                 newColumn: 0,
                 newRow: 1,
                 newElementIndex: 0,
+                expectedRemoveFieldResult: 4,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 6},
                     {orderIndex: 1, fieldId: 11},
@@ -137,6 +141,7 @@ describe('MoveFieldHelper', () => {
                 newColumn: 0,
                 newRow: 1,
                 newElementIndex: 0,
+                expectedRemoveFieldResult: 4,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 6},
                     {orderIndex: 1, fieldId: 21},
@@ -162,6 +167,7 @@ describe('MoveFieldHelper', () => {
                 newRow: 1,
                 newElementIndex: 1,
                 checkRow: 1,
+                expectedRemoveFieldResult: 2,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 16},
                     {orderIndex: 1, fieldId: 18},
@@ -182,6 +188,7 @@ describe('MoveFieldHelper', () => {
                 newRow: 1,
                 newElementIndex: 1,
                 checkRow: 1,
+                expectedRemoveFieldResult: 2,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 17},
                     {orderIndex: 1, fieldId: 16},
@@ -191,7 +198,7 @@ describe('MoveFieldHelper', () => {
         ];
 
         testCases.forEach(testCase => {
-            it(testCase.description, () => {
+            fit(`moveField: ${testCase.description}`, () => {
                 let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].rows[testCase.originalRow].elements[testCase.originalElementIndex];
                 let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalRow, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
                 let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newRow, testCase.newElementIndex);
@@ -207,6 +214,16 @@ describe('MoveFieldHelper', () => {
 
                     expect(simplifiedResultForSecondTab).toEqual(testCase.expectedOriginalLocationSimplifiedResult);
                 }
+            });
+
+            fit(`removeField: The form has ${testCase.expectedResult.length} fields, one is removed, and only ${testCase.expectedRemoveFieldResult} remains`, () => {
+                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].rows[testCase.originalRow].elements[testCase.originalElementIndex];
+                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalRow, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
+
+                let result = MoveFieldHelper.removeField(testFormData.formMeta, elementProps.location);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn, testCase.checkRow);
+
+                expect(simplifiedResult.length).toEqual(testCase.expectedRemoveFieldResult);
             });
         });
 
