@@ -62,7 +62,6 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
-
                 <label style={{display: 'none'}} id="reactabularToggle">
                     <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
                     Has drag animation
