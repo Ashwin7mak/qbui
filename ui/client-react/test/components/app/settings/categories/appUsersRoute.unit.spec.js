@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import AppUsersRoute  from '../../../../../src/components/app/settings/categories/appUsersRoute';
+import AppUsersRoute, {__RewireAPI__ as AppUsersRouteAPI} from '../../../../../src/components/app/settings/categories/appUsersRoute';
 
 describe('AppUsersRoute functions', () => {
     'use strict';
@@ -19,6 +19,14 @@ describe('AppUsersRoute functions', () => {
         }
     };
 
+    var IconActionsMock = React.createClass({
+        render: function() {
+            return (
+                <div>test</div>
+            );
+        }
+    });
+
     beforeEach(() => {
         spyOn(flux.actions, 'loadAppRoles');
     });
@@ -28,11 +36,13 @@ describe('AppUsersRoute functions', () => {
     });
 
     it('test render of component', () => {
+        AppUsersRouteAPI.__Rewire__('IconActions', IconActionsMock);
         let component = TestUtils.renderIntoDocument(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
                                                                     appRoles={appRoles}
                                                                     flux={flux}
                                                                     selectedApp={selectedApp}
                                                                     params={{appId: appId}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        AppUsersRouteAPI.__ResetDependency__('IconActions');
     });
 });

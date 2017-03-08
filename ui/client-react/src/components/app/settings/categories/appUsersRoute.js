@@ -12,7 +12,7 @@ import QBIcon from '../../../qbIcon/qbIcon';
 import AppSettingsStage from '../appSettingsStage';
 
 
-let logger = new Logger();
+let logger = new Logger(); 
 
 const AppUsersRoute = React.createClass({
 
