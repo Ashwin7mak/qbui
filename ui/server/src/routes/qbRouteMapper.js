@@ -86,7 +86,7 @@
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         //  users endpoints
-        routeToGetFunction[routeConsts.IS_REQ_USER_ADMIN] = isReqUserAdmin;
+        routeToGetFunction[routeConsts.REQ_USER] = getReqUser;
 
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
@@ -960,18 +960,18 @@
         });
     }
 
-    function isReqUserAdmin(req, res) {
+    function getReqUser(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get User by id', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            usersApi.isReqUserAdmin(req).then(
+            usersApi.getReqUser(req).then(
                 function(response) {
                     res.send(response);
-                    logApiSuccess(req, response, perfLog, 'IsReqUserAdmin');
+                    logApiSuccess(req, response, perfLog, 'getReqUser');
                 },
                 function(response) {
-                    logApiFailure(req, response, perfLog, 'IsReqUserAdmin');
+                    logApiFailure(req, response, perfLog, 'getReqUser');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

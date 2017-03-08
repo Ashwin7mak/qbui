@@ -36,7 +36,7 @@ describe("Validate usersApi", function() {
         beforeEach(function() {
             executeReqStub = sinon.stub(requestHelper, "executeRequest");
             usersApi.setRequestHelperObject(requestHelper);
-            req.url = '/ticket/whoami';
+            req.url = '/users/1234';
             req.method = 'get';
         });
 

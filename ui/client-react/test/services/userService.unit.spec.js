@@ -17,10 +17,10 @@ describe('UserService functions', () => {
         userService = new UserService();
     });
 
-    it('test getReqUserAdmin function', () => {
-        let url = StringUtils.format(userService.API.IS_REQ_USER_ADMIN);
+    it('test getReqUser function', () => {
+        let url = StringUtils.format(userService.API.GET_REQ_USER);
 
-        userService.isReqUserAdmin();
+        userService.getRequestUser();
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 });

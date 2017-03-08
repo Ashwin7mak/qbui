@@ -23,14 +23,15 @@
         });
 
 
-        it('Test isReqUserAdmin returns false for a new user', function(done) {
+        it('Test getReqUser returns false for a new user', function(done) {
             apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
                 apiBase.createUser().then(function(userResponse) {
-                    var userId = JSON.parse(userResponse.body).id;
+                    var user = JSON.parse(userResponse.body);
+                    var userId = user.id;
                     apiBase.createUserAuthentication(userId).then(function() {
-                        var isAdminEndpoint = apiBase.resolveIsReqUserAdminEndpoint();
-                        apiBase.executeRequest(isAdminEndpoint, consts.GET).then(function(result) {
-                            assert.equal(result.body, "false");
+                        var getReqUserEndpoint = apiBase.resolveGetReqUserEndpoint();
+                        apiBase.executeRequest(getReqUserEndpoint, consts.GET).then(function(result) {
+                            assert.equal(result.body, user);
                             done();
                         });
                     });
@@ -39,9 +40,9 @@
         });
         it('Test isReqUserAdmin returns true for administrator user', function(done) {
             apiBase.createUserAuthentication(ADMIN_USER_ID).then(function(response) {
-                var isAdminEndpoint = recordBase.apiBase.resolveIsReqUserAdminEndpoint();
-                recordBase.apiBase.executeRequest(isAdminEndpoint, consts.GET).then(function(result) {
-                    assert.equal(result.body, "true");
+                var getReqUserEndpoint = apiBase.resolveGetReqUserEndpoint();
+                apiBase.executeRequest(getReqUserEndpoint, consts.GET).then(function(result) {
+                    assert.equal(result.body.id, ADMIN_USER_ID);
                     done();
                 });
             });

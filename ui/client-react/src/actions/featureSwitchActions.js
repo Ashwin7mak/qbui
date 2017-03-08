@@ -1,6 +1,7 @@
 // feature switch action creators
 
 import FeatureSwitchService from '../services/featureSwitchService';
+import {forbidden} from './errorActions';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
 import * as FeatureSwitchConsts from '../constants/featureSwitchConstants';
@@ -10,6 +11,7 @@ import Locale from '../locales/locales';
 import _ from 'lodash';
 
 const logger = new Logger();
+
 
 /**
  * get feature switch to send to server (omit props like 'editing')
@@ -68,6 +70,7 @@ export const getSwitches = () => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.getFeatureSwitches:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.getFeatureSwitches:');
@@ -117,6 +120,7 @@ export const createFeatureSwitch = (name) => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.createFeatureSwitch:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.createFeatureSwitch:');
@@ -156,6 +160,7 @@ export const deleteFeatureSwitches = ids => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.deleteFeatureSwitches:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.deleteFeatureSwitches:');
@@ -213,6 +218,7 @@ export const updateFeatureSwitch = (id, featureSwitch, property, value) => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.editFeatureSwitch:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.editFeatureSwitch:');
@@ -271,6 +277,7 @@ export const createOverride = (switchId) => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.createdOverride:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.createdOverride:');
@@ -328,6 +335,7 @@ export const updateOverride = (featureSwitchId, id, override, property, value) =
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.updateOverride:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.updateOverride:');
@@ -368,6 +376,7 @@ export const deleteOverrides = (switchId, ids) => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.deleteOverrides:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.deleteOverrides:');
@@ -406,6 +415,7 @@ export const getStates = (appId = null) => {
 
                 if (error.response) {
                     if (error.response.status === 403) {
+                        dispatch(forbidden());
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.getFeatureSwitchStates:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.getFeatureSwitchStates:');

@@ -36,11 +36,11 @@
             },
 
             /**
-             * Check whether a the requesting user (logged in user) is a system admin. Leverages WhoAmI endpoint.
+             * Get requesting user's meta data.
              * @param req
              * @returns {Promise}
              */
-            isReqUserAdmin: function(req) {
+            getReqUser: function(req) {
                 return new Promise((resolve, reject) => {
                     let ticket = req.cookies[constants.COOKIES.TICKET];
                     if (!ticket) {
@@ -53,13 +53,13 @@
                             userId = ob32Utils.decoder(userId);
                         }
                         this.getUserById(req, userId).then(function(response) {
-                            resolve(response.administrator);
+                            resolve(response);
                         },
                         function(error) {
-                            log.error({req: req}, "usersApi.isReqUserAdmin(): Error retrieving user.");
+                            log.error({req: req}, "usersApi.getReqUser(): Error retrieving user.");
                             reject(error);
                         }).catch(function(error) {
-                            requestHelper.logUnexpectedError('usersApi..isReqUserAdmin', error, true);
+                            requestHelper.logUnexpectedError('usersApi..getReqUser', error, true);
                             reject(error);
                         });
                     }

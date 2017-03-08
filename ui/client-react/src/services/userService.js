@@ -8,15 +8,15 @@ class UserService extends BaseService {
 
         //  User api endpoints
         this.API = {
-            IS_REQ_USER_ADMIN : `${constants.BASE_URL.QUICKBASE}/${constants.USERS}/${constants.ISREQUSERADMIN}`
+            GET_REQ_USER : `${constants.BASE_URL.QUICKBASE}/${constants.USERS}/${constants.REQUSER}`
         };
     }
 
     /**
      * check if requesting user is a  system admin
      */
-    isReqUserAdmin(appId) {
-        let url = super.constructUrl(this.API.IS_REQ_USER_ADMIN);
+    getRequestUser() {
+        let url = super.constructUrl(this.API.GET_REQ_USER);
         return super.get(url);
     }
 }
