@@ -390,4 +390,18 @@ describe('Form Actions', () => {
             });
         });
     });
+
+    describe('updateAnimationState', () => {
+        it('updates the state indicating whether an animation is currently active', () => {
+            expect(formActions.updateAnimationState(true)).toEqual({
+                type: types.UPDATE_FORM_ANIMATION_STATE,
+                isAnimating: true
+            });
+
+            expect(formActions.updateAnimationState(false)).toEqual({
+                type: types.UPDATE_FORM_ANIMATION_STATE,
+                isAnimating: false
+            });
+        });
+    });
 });
