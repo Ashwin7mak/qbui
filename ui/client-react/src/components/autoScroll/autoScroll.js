@@ -98,37 +98,29 @@ class AutoScroll extends Component {
 
     getContainerDimension() {
         let container = this.getContainer();
-        let defaultPixelFromTopOrBottom = 30;
-
-        if (isSmall.isSmallBreakpoint()) {
-            defaultPixelFromTopOrBottom = 20;
-        }
 
         return {
             containerOffsetLeft: container.offsetLeft,
             containerRightSide: container.offsetLeft + container.offsetWidth,
-            /**
-             * Autoscroll default is to activate 30 pixels before it reaches the bottom or top of the container
-             */
-            containerBottom: container.offsetHeight - defaultPixelFromTopOrBottom,
-            containerTop: container.offsetTop + defaultPixelFromTopOrBottom
+            containerBottom: container.offsetHeight,
+            containerTop: container.offsetTop
         };
 
     }
 
     getContainerTop(containerTop) {
-        if (this.props.pixelsFromTopForLargeDevices) {
-            return containerTop - this.props.pixelsFromTopForLargeDevices;
-        } else if (this.props.pixelsFromTopForMobile) {
-            return containerTop - this.props.pixelsFromTopForMobile;
+        if (isSmall.isSmallBreakpoint()) {
+            return containerTop + this.props.pixelsFromTopForMobile;
+        } else {
+            return containerTop + this.props.pixelsFromTopForLargeDevices;
         }
     }
 
     getContainerBottom(containerBottom) {
-        if (this.props.pixelsFromBottomForLargeDevices) {
-            return containerBottom - this.props.pixelsFromBottomForLargeDevices;
-        } else if (this.props.pixelsFromBottomForMobile) {
+        if (isSmall.isSmallBreakpoint()) {
             return containerBottom - this.props.pixelsFromBottomForMobile;
+        } else if (this.props.pixelsFromBottomForMobile) {
+            return containerBottom - this.props.pixelsFromBottomForLargeDevices;
         }
     }
 
@@ -150,13 +142,8 @@ class AutoScroll extends Component {
 
         let {containerOffsetLeft, containerRightSide, containerBottom, containerTop} = this.getContainerDimension();
 
-        if (this.props.pixelsFromBottomForLargeDevices || this.props.pixelsFromBottomForMobile) {
-            containerBottom = this.getContainerBottom(containerBottom);
-        }
-
-        if (this.props.pixelsFromTopForLargeDevices || this.props.pixelsFromTopForMobile) {
-            containerTop = this.getContainerTop(containerTop);
-        }
+        containerBottom = this.getContainerBottom(containerBottom);
+        containerTop = this.getContainerTop(containerTop);
 
         if (e && e.type === 'touchmove') {
             pointerY = e.touches[0].clientY;
@@ -252,8 +239,14 @@ AutoScroll.propTypes = {
      * pixelsFromTop indicates how many pixels from the bottom of the container should it start autoscrolling for mobile devices
      * */
     pixelsFromBottomForMobile: PropTypes.number,
+};
 
-
+AutoScroll.defaultProps = {
+    pixelsPerFrame: 10,
+    pixelsFromBottomForLargeDevices: 30,
+    pixelsFromTopForLargeDevices: 30,
+    pixelsFromTopForMobile: 30,
+    pixelsFromBottomForMobile: 30
 };
 
 export default AutoScroll;
