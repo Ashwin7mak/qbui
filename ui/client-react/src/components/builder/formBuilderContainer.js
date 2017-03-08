@@ -13,6 +13,7 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import './formBuilderContainer.scss';
+import AutoScroll from '../autoScroll/autoScroll';
 
 let logger = new Logger();
 
@@ -102,8 +103,8 @@ export const FormBuilderContainer = React.createClass({
     },
 
     render() {
-        let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
 
+        let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
         let formId = null;
         if (loaded) {
@@ -115,11 +116,15 @@ export const FormBuilderContainer = React.createClass({
                 <div className="toolsAndForm">
                     <ToolPalette />
 
-                    <div className="formBuilderContent">
-                        <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                            <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
-                        </Loader>
-                    </div>
+                    <AutoScroll
+                        pixelsFromBottomForLargeDevices={80}
+                        pixelsFromBottomForMobile={50}>
+                        <div className="formBuilderContent">
+                            <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                                <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                            </Loader>
+                        </div>
+                    </AutoScroll>
 
                     <FieldProperties />
                 </div>
