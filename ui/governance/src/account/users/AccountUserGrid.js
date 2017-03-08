@@ -15,13 +15,13 @@ const CanCreateAppFlag = 0x0004;
 const RealmApprovedFlag = 0x0004;
 const RegisteredFlag = 0x0010;
 
-const HasFlag = (bits, flag) => {return (bits & flag) !== 0;};
-const IsDeactivated = (cellData) => {return HasFlag(cellData.userBasicFlags, DeactivatedFlag);};
-const IsDenied = (cellData) => {return HasFlag(cellData.realmDirectoryFlags, DeniedFlag);};
-const CanCreateApps = (cellData) => {return HasFlag(cellData.accountTrusteeFlags, CanCreateAppFlag);};
-const IsApprovedInRealm = (cellData) => {return HasFlag(cellData.realmDirectoryFlags, RealmApprovedFlag);};
-const IsRegisteredInRealm = (cellData) => {return HasFlag(cellData.realmDirectoryFlags, RegisteredFlag);};
-const IsTimeNull = (timeStr ) => { return timeStr === '0001-01-01T00:00:00Z';}
+const HasFlag = (bits, flag) => (bits & flag) !== 0;
+const IsDeactivated = cellData => HasFlag(cellData.userBasicFlags, DeactivatedFlag);
+const IsDenied = cellData => HasFlag(cellData.realmDirectoryFlags, DeniedFlag);
+const CanCreateApps = cellData => HasFlag(cellData.accountTrusteeFlags, CanCreateAppFlag);
+const IsApprovedInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RealmApprovedFlag);
+const IsRegisteredInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RegisteredFlag);
+const IsTimeNull = timeStr => timeStr === '0001-01-01T00:00:00Z';
 
 const columns = [
     {
