@@ -139,11 +139,11 @@ describe('MoveFieldHelper', () => {
 
         testCases.forEach(testCase => {
             it(`removeField: The form has ${testCase.expectedResult.length} fields, one is removed, and only ${testCase.expectedRemoveFieldResult} remains`, () => {
-                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].rows[testCase.originalRow].elements[testCase.originalElementIndex];
-                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalRow, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
+                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
+                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
 
                 let result = MoveFieldHelper.removeField(testFormData.formMeta, elementProps.location);
-                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn, testCase.checkRow);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.newTab, testCase.newSection, testCase.newColumn);
 
                 expect(simplifiedResult.length).toEqual(testCase.expectedRemoveFieldResult);
             });
