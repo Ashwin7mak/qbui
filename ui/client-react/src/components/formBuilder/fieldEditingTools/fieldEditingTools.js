@@ -88,9 +88,7 @@ class FieldEditingTools extends Component {
                 <DragHandle />
 
                 <div className="deleteFieldIcon" onClick={this.onClickDelete}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                        <QbIcon icon="delete" />
-                    </QbToolTip>
+                    <QbIcon icon="delete" />
                 </div>
 
                 <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
