@@ -7,7 +7,8 @@ function initializeState() {
     initialState = {
         switches: [],
         overrides: [],
-        states: []
+        states: [],
+        errorStatus: null
     };
 }
 
