@@ -119,7 +119,7 @@ class AutoScroll extends Component {
     getContainerTop(containerTop) {
         if (this.props.pixelsFromTopForLargeDevices) {
             return containerTop - this.props.pixelsFromTopForLargeDevices;
-        } else {
+        } else if (this.props.pixelsFromTopForMobile) {
             return containerTop - this.props.pixelsFromTopForMobile;
         }
     }
@@ -127,7 +127,7 @@ class AutoScroll extends Component {
     getContainerBottom(containerBottom) {
         if (this.props.pixelsFromBottomForLargeDevices) {
             return containerBottom - this.props.pixelsFromBottomForLargeDevices;
-        } else {
+        } else if (this.props.pixelsFromBottomForMobile) {
             return containerBottom - this.props.pixelsFromBottomForMobile;
         }
     }
