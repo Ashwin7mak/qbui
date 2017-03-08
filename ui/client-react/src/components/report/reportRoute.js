@@ -36,9 +36,8 @@ const ReportRoute = React.createClass({
     loadReport(appId, tblId, rptId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
-        // should get removed and the search store should listen for the new event to
-        // clear out any input.
+
+        // ensure the search box is cleared for the new report
         this.props.dispatch(clearSearchInput());
 
         flux.actions.loadFields(appId, tblId);
@@ -51,9 +50,8 @@ const ReportRoute = React.createClass({
     loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
-        // should get removed and the search store should listen for the new event to
-        // clear out any input.
+
+        // ensure the search box is cleared for the new report
         this.props.dispatch(clearSearchInput());
 
         flux.actions.loadFields(appId, tblId);
@@ -98,9 +96,7 @@ const ReportRoute = React.createClass({
     },
     getHeader() {
         return (
-            <ReportHeader reportData={this.props.reportData}
-                          nameForRecords={this.nameForRecords}
-                          searchData={this.props.reportSearchData}
+            <ReportHeader nameForRecords={this.nameForRecords}
                 {...this.props}
             />);
     },

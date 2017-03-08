@@ -45,9 +45,8 @@ export const RecordRoute = React.createClass({
         const flux = this.getFlux();
 
         flux.actions.selectTableId(tblId);
-        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
-        // should get removed and the search store should listen for the new event to
-        // clear out any input.
+
+        // ensure the search input is empty
         this.props.clearSearchInput();
 
         this.props.loadForm(appId, tblId, rptId, formType, recordId);

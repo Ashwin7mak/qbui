@@ -10,6 +10,7 @@ const shell = (
     // reducer - no mutations!
     switch (action.type) {
     case types.SEARCH_INPUT:
+        //  set the search input to supplied content
         return {
             ...state,
             searchInput: action.content || ''

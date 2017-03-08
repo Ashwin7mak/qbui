@@ -9,7 +9,7 @@ let ReportDataSearchStore = Fluxxor.createStore({
         this.bindActions(
             //actions.FILTER_SEARCH_PENDING, this.onFilterSearchPending,
             //actions.LOAD_REPORT, this.onSearchContextChanged,
-            actions.SELECT_TABLE, this.onSearchContextChanged
+            //actions.SELECT_TABLE, this.onSearchContextChanged
         );
     },
     initInput() {
