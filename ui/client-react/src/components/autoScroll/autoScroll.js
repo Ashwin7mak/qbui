@@ -117,9 +117,6 @@ class AutoScroll extends Component {
     }
 
     getContainerTop(containerTop) {
-        /**
-         * Allows a developer to add extra pixels to the top, allowing auto scroll to activate sooner
-         * */
         if (this.props.pixelsFromTopForLargeDevices) {
             return containerTop - this.props.pixelsFromTopForLargeDevices;
         } else {
@@ -128,9 +125,6 @@ class AutoScroll extends Component {
     }
 
     getContainerBottom(containerBottom) {
-        /**
-         * Allows a developer to add extra pixels to the bottom, allowing auto scroll to activate sooner
-         * */
         if (this.props.pixelsFromBottomForLargeDevices) {
             return containerBottom - this.props.pixelsFromBottomForLargeDevices;
         } else {
