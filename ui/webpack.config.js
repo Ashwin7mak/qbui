@@ -12,6 +12,8 @@ var buildPath = path.join(__dirname, 'client-react/dist');
 
 var clientPath = path.join(__dirname, 'client-react');
 
+var reuseLibraryPath = path.join(__dirname, 'reuse');
+
 var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
 
 var governancePath = path.join(__dirname, 'governance');
@@ -57,16 +59,25 @@ var config = {
         // main entry point to the app
         // TODO:entry point...when more pages are flushed out
         // we probably should rename to something like quickbase.js and add a builder entry
+        // Global font (Lato) is loaded here directly because importing it in a .scss file
+        // causes the url() to not work when source maps are turned on. Files containing
+        // urls() that aren't inlined must not be loaded into a blob:// URL by webpack.
         bundle: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(clientPath, 'src/scripts/router.js')
         ],
         componentLibrary: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(componentLibraryPath, 'index.js')
         ],
         governance: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
+            path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
             path.resolve(governancePath, 'src/governance.js')
         ]
     },
@@ -93,6 +104,7 @@ var config = {
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'client-react/test'),
+                    reuseLibraryPath,
                     componentLibraryPath,
                     path.resolve(__dirname, 'governance/src'),
                     path.resolve(__dirname, 'governance/test'),
@@ -109,10 +121,27 @@ var config = {
                 test: /\.css?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
+                    reuseLibraryPath,
                     componentLibraryPath,
                     path.resolve(__dirname, 'node_modules/ag-grid'),
                     path.resolve(__dirname, 'node_modules/react-notifications'),
                     path.resolve(__dirname, 'node_modules/react-select')
+                ],
+                exclude: [
+                    // Exclude fonts because webpack sourceMaps mess up the urls for font-face
+                    path.resolve(__dirname, 'client-react/src/components/qbIcon/'),
+                    path.resolve(__dirname, 'reuse/client/src/assets/fonts/')
+                ],
+                loader: 'style?sourceMap!css?sourceMap'
+            },
+            {
+                // all css files can be required into js files with this
+                // This is to process the files excluded in the previous loader.
+                // It turns off source maps for .css files known to have font-face in them.
+                test: /\.css?$/,
+                include: [
+                    path.resolve(__dirname, 'client-react/src/components/qbIcon/'),
+                    path.resolve(__dirname, 'reuse/client/src/assets/fonts/')
                 ],
                 loader: 'style!css'
             },
@@ -122,7 +151,8 @@ var config = {
                 // but can return a Data Url if the file is smaller than a limit.
                 test: /\.(png|gif)?$/,
                 include: [
-                    path.resolve(__dirname, 'client-react/src')
+                    path.resolve(__dirname, 'client-react/src'),
+                    reuseLibraryPath
                 ],
                 loader: 'url-loader'
             },
