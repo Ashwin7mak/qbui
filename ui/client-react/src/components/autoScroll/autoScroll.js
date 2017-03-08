@@ -173,7 +173,6 @@ class AutoScroll extends Component {
         } else if (pointerY < containerTop &&
                    pointerX < containerRightSide &&
                    pointerX > containerOffsetLeft) {
-
             this.scrollingAnimationId = window.requestAnimationFrame(this.scrollUp);
 
         } else {
