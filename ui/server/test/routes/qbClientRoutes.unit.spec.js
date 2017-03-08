@@ -138,4 +138,18 @@ describe('Express Client Routes', function() {
         expect(200);
         done();
     });
+
+    it('validate get feature switches route', function(done) {
+        request(app).
+        get('/qbase/admin/featureSwitches').
+        expect(200);
+        done();
+    });
+
+    it('validate get feature switches route with feature ID', function(done) {
+        request(app).
+        get('/qbase/admin/featureSwitches/1').
+        expect(200);
+        done();
+    });
 });

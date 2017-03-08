@@ -1,6 +1,8 @@
-import React, {PropTypes, Component} from 'react';
+import React, {PropTypes} from 'react';
+import {findDOMNode} from 'react-dom';
 import DraggableItemTypes from './draggableItemTypes';
 import {DropTarget} from 'react-dnd';
+import Device from '../../utils/device';
 
 /**
  * Describes what happens during drop events. The drop function returns an object that can be accessed in the EndDrag
@@ -12,16 +14,35 @@ import {DropTarget} from 'react-dnd';
 const formTarget = {
     drop(props) {
         return {
+            containingElement: props.containingElement,
             location: props.location
         };
     },
 
-    canDrop(props, monitor) {
-        let draggableProps = monitor.getItem();
+    hover(dropTargetProps, monitor, component) {
+        let dragItemProps = monitor.getItem();
 
-        // Make sure a component isn't being dropped on itself
-        return props.location !== draggableProps.location;
-    }
+        // Reordering is only handled on drop for mobile
+        if (!Device.isTouch() && dragItemProps.containingElement.id !== dropTargetProps.containingElement.id) {
+            const domComponent = findDOMNode(component);
+            if (!domComponent) {return;}
+
+            const hoverBoundingRect = domComponent.getBoundingClientRect();
+            const height = hoverBoundingRect.bottom - hoverBoundingRect.top;
+            const offset = (height - (height * .5)) / 2;
+
+            const top = hoverBoundingRect.top + offset;
+            const bottom = hoverBoundingRect.bottom - offset;
+
+            const clientOffset = monitor.getClientOffset();
+
+            const hoverClientY = clientOffset.y;
+
+            if (top < hoverClientY && hoverClientY < bottom) {
+                dropTargetProps.handleFormReorder(dropTargetProps.location, dragItemProps);
+            }
+        }
+    },
 };
 
 /**
@@ -46,21 +67,24 @@ function collect(connect, monitor) {
  * @constructor
  */
 const DroppableElement = FieldComponent => {
-    let component = (props) => {
-        const {connectDropTarget, isOver, canDrop, containingElement} = props;
+    class component extends React.Component {
+        render() {
+            const {connectDropTarget, isOver, canDrop} = this.props;
 
-        let classNames = ['droppableField'];
-        classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
+            let classNames = ['droppableField'];
+            classNames.push((isOver && canDrop) ? 'dropHovering' : 'notDropHovering');
 
-        return connectDropTarget(
-            <div className={classNames.join(' ')}>
-                <FieldComponent {...props} />
-            </div>
-        );
-    };
+            return connectDropTarget(
+                <div className={classNames.join(' ')}>
+                    <FieldComponent {...this.props} />
+                </div>
+            );
+        }
+    }
 
     component.propTypes = {
-        location: PropTypes.object.isRequired
+        location: PropTypes.object.isRequired,
+        containingElement: PropTypes.object.isRequired
     };
 
     // The first argument could be an array of draggable types (e.g., could add tabs and sections here)

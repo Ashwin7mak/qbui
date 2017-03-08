@@ -6,7 +6,7 @@
     border: $stroke-width-thin solid $dragtoken-background-color2;
     border-radius: $radius-base;
     color: $dragtoken-text-color;
-    height: 35px;
+    height: 30px;
     width: 250px;
 
     display: flex;
@@ -15,7 +15,7 @@
 
     .fieldTokenIconContainer {
         width: 35px;
-        height: 34px;
+        height: 29px;
         border-radius: 2px;
         background-color: $dragtoken-background-color1;
 
@@ -26,11 +26,11 @@
     }
 
     .fieldTokenIcon {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .fieldTokenTitle {
-        margin-left: $spacing-tiny;
+        margin-left: $spacing-xx-small;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;

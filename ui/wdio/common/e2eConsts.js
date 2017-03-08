@@ -14,11 +14,11 @@
         MEDIUM_SIZE : 'medium',
         SMALL_SIZE  : 'small',
 
-        XLARGE_BP_WIDTH : 1441,
+        XLARGE_BP_WIDTH : 2048,
         LARGE_BP_WIDTH : 1025,
         MEDIUM_BP_WIDTH : 641,
         SMALL_BP_WIDTH : 500,
-        DEFAULT_HEIGHT : 1440,
+        DEFAULT_HEIGHT : 1536,
 
         //Wait time Objects
         shortWaitTimeMs : 5000,
