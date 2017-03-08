@@ -5,6 +5,7 @@ import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
 import {connect} from 'react-redux';
 import {editRecordStart, editRecordChange} from '../../actions/recordActions';
+import {NEW_RECORD_VALUE} from "../../constants/urlConstants";
 
 //let FluxMixin = Fluxxor.FluxMixin(React);
 let Record = React.createClass({
@@ -109,7 +110,7 @@ let Record = React.createClass({
      * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
      */
     handleFieldChange(change) {
-        change.recId = this.props.recId;
+        change.recId = this.props.recId || NEW_RECORD_VALUE;
         // call action to hold the field value change
         //const flux = this.getFlux();
         //flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);

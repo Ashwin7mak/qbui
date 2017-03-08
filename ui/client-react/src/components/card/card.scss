@@ -1,0 +1,49 @@
+@import '../../assets/css/qbVariables';
+
+.settingsCard {
+    background-color: $default-text-ondark-color;
+    width: 30%;
+    box-shadow: 0.25px 0.25px 5px 0.25px;
+    border-radius: 2px 2px 2px 2px;
+    z-index: 5;
+    flex: 1 1 auto;
+    margin: 5px;
+
+    @include medium-breakpoint {
+        width: 40%;
+    }
+
+    @include small-breakpoint {
+        width: 100%;
+    }
+
+    .cardIcon {
+        border-radius: 50%;
+        width: 40px;
+        float: left;
+        font-size: 30px;
+        padding-top: 20px;
+    }
+
+    .cardHeader {
+        background-color: $selected-color;
+        padding: 1%;
+        color: $color-teal-100;
+        position: relative;
+    }
+
+    .cardLink {
+        color: $color-teal-100;
+    }
+
+    .cardContent {
+        color: $color-black-800;
+        padding: 2%;
+    }
+
+    .headerH3 {
+        position: relative;
+        padding: 1%;
+    }
+
+}

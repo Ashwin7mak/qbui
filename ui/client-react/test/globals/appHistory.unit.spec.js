@@ -75,13 +75,7 @@ describe('AppHistory', () => {
             store(storeName) {
                 return {
                     getState() {
-                        if (storeName === 'RecordPendingEditsStore') {
-                            return {
-                                isPendingEdit: options.isPendingEdit,
-                                currentEditingRecordId: options.currentEditingRecordId,
-                                isInlineEditOpen: options.isInlineEditOpen
-                            };
-                        } else if (storeName === 'FieldsStore') {
+                        if (storeName === 'FieldsStore') {
                             return {
                                 fields: {data: "reportFields"}
                             };

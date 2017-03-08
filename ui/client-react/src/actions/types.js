@@ -10,12 +10,12 @@ export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
 
-//  TODO: these actions seem to be used when saving a RECORD.
-//  TODO: thinking they should be renamed to record constants
-//  TODO: to better reflect what is happending.
+//  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
-export const SAVE_FORM_SUCCESS = 'SAVE_FORM_SUCCESS';
-export const SAVE_FORM_FAILED = 'SAVE_FORM_FAILED';
+export const SAVE_FORM_COMPLETE = 'SAVE_FORM_COMPLETE';
+//export const SAVE_FORM_SUCCESS = 'SAVE_FORM_SUCCESS';
+//export const SAVE_FORM_FAILED = 'SAVE_FORM_FAILED';
+
 
 export const SAVING_FORM = 'SAVING_FORM';
 export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
@@ -60,7 +60,6 @@ export const DELETE_RECORDS_ERROR = 'DELETE_RECORDS_ERROR';
 export const LOAD_REPORT = 'LOAD_REPORT';
 export const LOAD_REPORT_SUCCESS = 'LOAD_REPORT_SUCCESS';
 export const LOAD_REPORT_FAILED = 'LOAD_REPORT_FAILED';
-export const UPDATE_REPORT_RECORD = 'UPDATE_REPORT_RECORD';
 export const SELECT_REPORT_LIST = 'SELECT_REPORT_LIST';
 export const REMOVE_REPORT_RECORDS = 'REMOVE_REPORT_RECORDS';
 
@@ -68,3 +67,18 @@ export const REMOVE_REPORT_RECORDS = 'REMOVE_REPORT_RECORDS';
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
 export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
+
+// **** feature switches ****
+export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';
+
+export const SET_FEATURE_SWITCHES = 'SET_FEATURE_SWITCHES';
+export const CREATED_FEATURE_SWITCH = 'CREATED_FEATURE_SWITCH';
+export const EDIT_FEATURE_SWITCH = 'EDIT_FEATURE_SWITCH';
+export const FEATURE_SWITCH_UPDATED = 'FEATURE_SWITCH_UPDATED';
+export const FEATURE_SWITCHES_DELETED = 'FEATURE_SWITCHES_DELETED';
+
+export const SET_FEATURE_OVERRIDES = 'SET_FEATURE_OVERRIDES';
+export const CREATED_OVERRIDE = 'CREATED_OVERRIDE';
+export const EDIT_OVERRIDE = 'EDIT_OVERRIDE';
+export const OVERRIDE_UPDATED = 'OVERRIDE_UPDATED';
+export const OVERRIDES_DELETED = 'OVERRIDES_DELETED';

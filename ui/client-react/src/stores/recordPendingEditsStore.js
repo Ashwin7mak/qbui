@@ -34,7 +34,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             //actions.ADD_RECORD, this.onSaveAddedRecord,
             //actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             //actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
-            actions.AFTER_RECORD_EDIT, this.onAfterEdit,
+            //actions.AFTER_RECORD_EDIT, this.onAfterEdit,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
         this._initData();
@@ -158,35 +158,35 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @returns {boolean}
      * @private
      */
-    _isDifferentThanOriginalFieldValue(payload) {
-        let {newVal} = payload.changes.values;
-
-        // If there is no newValue object then assume a change
-        if (!newVal) {
-            return true;
-        }
-
-        let originalRecord = this.originalRecord.fids[payload.changes.fid];
-        let originalRecordValue = null;
-        let originalRecordDisplay = null;
-        if (originalRecord) {
-            originalRecordValue = originalRecord.value;
-            originalRecordDisplay = originalRecord.display;
-        }
-
-        // We treat '', null, undefined as equivalent since it represents a blank input or a
-        // dropdown with no selection.
-        const isOldValFalsy = !originalRecord || (!originalRecordValue && originalRecordValue !== 0);
-        const isNewValFalsy = !newVal || (newVal && !newVal.value && newVal.value !== 0);
-        if (isOldValFalsy && isNewValFalsy) {
-            return false;
-        } else if (isOldValFalsy || isNewValFalsy) {
-            // when only one of newValue or oldValue is falsy
-            return true;
-        } else {
-            return (!_.isEqual(newVal.value, originalRecordValue));
-        }
-    },
+    //_isDifferentThanOriginalFieldValue(payload) {
+    //    let {newVal} = payload.changes.values;
+    //
+    //    // If there is no newValue object then assume a change
+    //    if (!newVal) {
+    //        return true;
+    //    }
+    //
+    //    let originalRecord = this.originalRecord.fids[payload.changes.fid];
+    //    let originalRecordValue = null;
+    //    let originalRecordDisplay = null;
+    //    if (originalRecord) {
+    //        originalRecordValue = originalRecord.value;
+    //        originalRecordDisplay = originalRecord.display;
+    //    }
+    //
+    //    // We treat '', null, undefined as equivalent since it represents a blank input or a
+    //    // dropdown with no selection.
+    //    const isOldValFalsy = !originalRecord || (!originalRecordValue && originalRecordValue !== 0);
+    //    const isNewValFalsy = !newVal || (newVal && !newVal.value && newVal.value !== 0);
+    //    if (isOldValFalsy && isNewValFalsy) {
+    //        return false;
+    //    } else if (isOldValFalsy || isNewValFalsy) {
+    //        // when only one of newValue or oldValue is falsy
+    //        return true;
+    //    } else {
+    //        return (!_.isEqual(newVal.value, originalRecordValue));
+    //    }
+    //},
 
     /**
      * If there were previously changes, but user put the values back to the original
@@ -194,18 +194,18 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @param payload
      * @private
      */
-    _removePriorChangesIfTheyExist(payload) {
-        if (this.recordChanges && this.recordChanges[payload.changes.fid] && !this._isDifferentThanOriginalFieldValue(payload)) {
-            delete this.recordChanges[payload.changes.fid];
-
-            // If there are no remaining changes, then the record is not pending edits anymore
-            if (Object.keys(this.recordChanges).length === 0) {
-                this.isPendingEdit = false;
-            }
-
-            this.emit('change');
-        }
-    },
+    //_removePriorChangesIfTheyExist(payload) {
+    //    if (this.recordChanges && this.recordChanges[payload.changes.fid] && !this._isDifferentThanOriginalFieldValue(payload)) {
+    //        delete this.recordChanges[payload.changes.fid];
+    //
+    //        // If there are no remaining changes, then the record is not pending edits anymore
+    //        if (Object.keys(this.recordChanges).length === 0) {
+    //            this.isPendingEdit = false;
+    //        }
+    //
+    //        this.emit('change');
+    //    }
+    //},
 
     /**
      * On the change of a fields value not yet committed
@@ -242,15 +242,15 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @param fieldId
      * @private
      */
-    _removeErrorByFieldId(fieldId) {
-        this.editErrors.errors = this.editErrors.errors.filter(error => {
-            return error.id !== fieldId;
-        });
-
-        if (this.editErrors.errors.length === 0) {
-            this.editErrors.ok = true;
-        }
-    },
+    //_removeErrorByFieldId(fieldId) {
+    //    this.editErrors.errors = this.editErrors.errors.filter(error => {
+    //        return error.id !== fieldId;
+    //    });
+    //
+    //    if (this.editErrors.errors.length === 0) {
+    //        this.editErrors.ok = true;
+    //    }
+    //},
 
     /**
      * Removes any validation results that don't match the current value of the field
@@ -376,29 +376,29 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     //    this.emit('change');
     //
     //},
-    handleErrors(payload) {
-        this.getServerErrs(payload);
-        if (payload.error) {
-            if (payload.error.statusCode === DTS_ERROR_CODE && payload.error.errorMessages[0].code === DTS_ERROR_MESSAGES_CODE) {
-                this.onDTSErrorModal(payload);
-            }
-        }
-    },
-    getServerErrs(payload) {
-        this.editErrors = {
-            ok: true,
-            errors:[]
-        };
-        // get errors from payload if not ok
-        if (_.has(payload, 'error.data.response.errors') && payload.error.data.response.errors.length !== 0) {
-            this.editErrors.errors = payload.error.data.response.errors;
-            this.editErrors.ok = false;
-            // fill in client message
-            this.editErrors.errors.forEach(fieldError => {
-                fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
-            });
-        }
-    },
+    //handleErrors(payload) {
+    //    this.getServerErrs(payload);
+    //    if (payload.error) {
+    //        if (payload.error.statusCode === DTS_ERROR_CODE && payload.error.errorMessages[0].code === DTS_ERROR_MESSAGES_CODE) {
+    //            this.onDTSErrorModal(payload);
+    //        }
+    //    }
+    //},
+    //getServerErrs(payload) {
+    //    this.editErrors = {
+    //        ok: true,
+    //        errors:[]
+    //    };
+    //    // get errors from payload if not ok
+    //    if (_.has(payload, 'error.data.response.errors') && payload.error.data.response.errors.length !== 0) {
+    //        this.editErrors.errors = payload.error.data.response.errors;
+    //        this.editErrors.ok = false;
+    //        // fill in client message
+    //        this.editErrors.errors.forEach(fieldError => {
+    //            fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
+    //        });
+    //    }
+    //},
     onDTSErrorModal(payload) {
         this.dtsErrorModalTID = payload.error ? payload.error.tid : this.dtsErrorModalTID;
         this.showDTSErrorModal = true;
@@ -494,16 +494,16 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     //    this.handleErrors(payload);
     //    this.emit('change');
     //},
-    onStartEdit(emit = true) {
-        this.saving = true;
-        if (emit) {
-            this.emit('change');
-        }
-    },
-    onAfterEdit() {
-        this.saving = false;
-        this.emit('change');
-    },
+    //onStartEdit(emit = true) {
+    //    this.saving = true;
+    //    if (emit) {
+    //        this.emit('change');
+    //    }
+    //},
+    //onAfterEdit() {
+    //    this.saving = false;
+    //    this.emit('change');
+    //},
     /**
      * create a key for pending edit commitChanges map from the current context
      * of app/table/record
@@ -511,9 +511,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @returns {string}
      * @private
      */
-    _getEntryKey() {
-        return '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
-    },
+    //_getEntryKey() {
+    //    return '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
+    //},
 
     /**
      * returns the pending record edit store object

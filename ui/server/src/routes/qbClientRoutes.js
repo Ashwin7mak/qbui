@@ -77,11 +77,34 @@ var path = require('path');
             renderIndex(req, res);
         });
 
+        app.route('/qbase/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
+        app.route('/qbase/app/:appId/settings').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
+        app.route('/qbase/app/:appId/users').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
+        app.route('/qbase/app/:appId/properties').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
         app.route('/qbase/app/:appId').get(function(req, res) {
             renderIndex(req, res);
         });
 
         app.route('/qbase/apps').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
+        app.route('/qbase/admin/featureSwitches').get(function(req, res) {
+            renderIndex(req, res);
+        });
+        app.route('/qbase/admin/featureSwitch/:id').get(function(req, res) {
             renderIndex(req, res);
         });
 

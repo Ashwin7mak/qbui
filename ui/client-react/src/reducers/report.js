@@ -1,19 +1,8 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
-import FieldFormats from '../utils/fieldFormats';
-import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
-
-//import * as textFormatter from '../../../common/src/formatter/textFormatter';
-//import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
-//import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
-//import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
-//import * as userFormatter from '../../../common/src/formatter/userFormatter';
-//import * as urlFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
-//import * as emailFormatter from '../../../common/src/formatter/emailFormatter';
-//import * as passThroughFormatter from '../../../common/src/formatter/passthroughFormatter';
-//import * as durationFormatter from '../../../common/src/formatter/durationFormatter';
+import ReportModelHelper from '../models/reportModelHelper';
 
 /**
  * Manage array of report states
@@ -55,6 +44,7 @@ const report = (state = [], action) => {
      * @returns {*}
      */
     function getReportFromState(id) {
+        //  retreive a copy of the report for the given context/id
         const index = _.findIndex(state, rpt => rpt.id === id);
         if (index !== -1) {
             return _.cloneDeep(state[index]);
@@ -65,72 +55,119 @@ const report = (state = [], action) => {
     //  what report action is being requested
     switch (action.type) {
     case types.LOAD_REPORT:
-    case types.LOAD_REPORTS: {
-        const obj = {
+        //  load a report.  Id is the context that the report is being loaded..ie:
+        //  ie: NAV, Embedded report, etc.
+        const loadRptObj = {
             id: action.id,
-            loading: true,
-            appId: action.content.appId,
-            tblId: action.content.tblId,
-            rptId: action.content.rptId
-        };
-        return newState(obj);
-    }
-    case types.LOAD_REPORT_FAILED:
-    case types.LOAD_REPORTS_FAILED: {
-        const obj = {
-            id: action.id,
-            loading: false,
-            error: true,
-            errorDetails: action.content
-        };
-        return newState(obj);
-    }
-    case types.LOAD_REPORT_SUCCESS: {
-        const obj = {
-            id: action.id,
-            loading: false,
-            error: false,
-            data: action.content,
-            //  TODO: needed??..these are on the data property
             appId: action.content.appId,
             tblId: action.content.tblId,
             rptId: action.content.rptId,
-            //
-            pageOffset: action.content.pageOffset,
-            numRows: action.content.numRows,
-            //  faceting and searching
-            searchStringForFiltering: action.content.searchStringForFiltering,
-            selections: action.content.selections || new FacetSelections(),
-            facetExpression: action.content.facetExpression || {},
-            //  UI row selection list
-            selectedRows: []
+            loading: true
         };
-        return newState(obj);
-    }
-    case types.LOAD_REPORTS_SUCCESS: {
-        const obj = {
+        return newState(loadRptObj);
+    case types.LOAD_REPORTS: {
+        //  load a list of reports.  Id is the 'LIST' context
+        const loadReportsObj = {
             id: action.id,
-            loading: false,
-            error: false,
             appId: action.content.appId,
             tblId: action.content.tblId,
-            list: action.content.reportsList
+            loading: true
         };
-        return newState(obj);
+        return newState(loadReportsObj);
     }
-    case types.SELECT_REPORT_LIST: {
-        let rpt = getReportFromState(action.id);
-        if (rpt) {
-            rpt.selectedRows = action.content.selections;
-            return newState(rpt);
+    case types.LOAD_REPORT_FAILED:
+    case types.LOAD_REPORTS_FAILED: {
+        //  Report(s) load request failed
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.loading = false;
+            currentReport.error = true;
+            currentReport.errorDetails = action.content;
+            return newState(currentReport);
         }
         return state;
     }
-    case types.UPDATE_REPORT_RECORD: {
+    case types.LOAD_REPORT_SUCCESS: {
+        //  load a report is successful..update the store with the report info
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
-            updateReportRecord(currentReport, action.content);
+            // set the report data from action.content.
+            // action.content maps to reportModel.getModel()
+            currentReport.data = action.content.data;
+
+            // if no report id, then we need to set the report id from the data
+            // response as we're loading the default table report.
+            if (!currentReport.rptId) {
+                currentReport.rptId = currentReport.data.rptId;
+            }
+
+            // set misc report container data
+            currentReport.pageOffset = action.content.pageOffset;
+            currentReport.numRows = action.content.numRows;
+            //  faceting and searching
+            currentReport.searchStringForFiltering = action.content.searchStringForFiltering;
+            currentReport.selections = action.content.selections || new FacetSelections();
+            currentReport.facetExpression = action.content.facetExpression || {};
+            //  UI row selection list
+            currentReport.selectedRows = action.content.selectedRows;
+
+            // set loading state
+            currentReport.loading = false;
+            currentReport.error = false;
             return newState(currentReport);
+        }
+        return state;
+    }
+    case types.LOAD_REPORTS_SUCCESS: {
+        //  load a list of reports is successful..update the store with the report list
+        let currentReports = getReportFromState(action.id);
+        if (currentReports) {
+            // the list of reports to display
+            // action.content maps to reportsModel.js
+            currentReports.list = action.content.reportsList;
+
+            // set loading state
+            currentReports.loading = false;
+            currentReports.error = false;
+            return newState(currentReports);
+        }
+        return newState(obj);
+    }
+    case types.SELECT_REPORT_LIST: {
+        //  1..n rows in a report have been selected by the user...update
+        //  the 'selections' element on the report
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            currentReport.selectedRows = action.content.selections;
+            return newState(currentReport);
+        }
+        return state;
+    }
+    case types.SAVE_RECORD_SUCCESS: {
+        //  listen to record save event.  If there is a report context
+        //  defined, then the report is updated with the new/updated record.
+        let rpt = action.content.report;
+        if (rpt && rpt.context) {
+            let currentReport = getReportFromState(rpt.context);
+            if (currentReport) {
+                let content = {
+                    recId: rpt.recId,
+                    record: rpt.record ? rpt.record.record : [],
+                    newRecId: rpt.newRecId,
+                    afterRecId: rpt.afterRecId
+                };
+
+                //  if this is a new record, add it to the report; otherwise
+                //  update the report row with the changes
+                if (content.newRecId) {
+                    ReportModelHelper.addReportRecord(currentReport, content);
+                } else {
+                    ReportModelHelper.updateReportRecord(currentReport, content);
+                }
+                currentReport.loading = false;
+                currentReport.error = false;
+                return newState(currentReport);
+            }
         }
         return state;
     }
@@ -140,7 +177,8 @@ const report = (state = [], action) => {
         const reports = _.cloneDeep(state);
         reports.forEach((rpt) => {
             ids.forEach((recId) => {
-                deleteRecordFromReport(rpt.data, recId);
+                //  remove the record from the report
+                ReportModelHelper.deleteRecordFromReport(rpt.data, recId);
                 rpt.selectedRows = _.without(rpt.selectedRows, recId);
             });
         });
@@ -151,191 +189,5 @@ const report = (state = [], action) => {
         return state;
     }
 };
-
-function updateReportRecord(currentReport, content) {
-    let record = null;
-    let filtRecord = null;
-    if (currentReport.data.hasGrouping) {
-        record = ReportUtils.findGroupedRecord(currentReport.data.records, content.recId, currentReport.data.keyField.name);
-        filtRecord = ReportUtils.findGroupedRecord(currentReport.data.filteredRecords, content.recId, currentReport.data.keyField.name);
-    } else {
-        record = findRecordById(currentReport.data.records, content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
-        filtRecord = findRecordById(currentReport.data.filteredRecords, content.recId, currentReport.data.hasGrouping, currentReport.data.keyField);
-    }
-
-    // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
-    // formatRecordValues will add all display values
-    // patch the previously created skeleton of record with the newRecord values
-    let formattedRec = formatRecord(content.record, currentReport.data.fields);
-
-    //TODO: really want to avoid formatting as the individual components should be handling this rqeuirement
-    //formatRecordValues(formattedRec, currentReport.data.fields);
-
-    //  update each cell in the report grid with the updated record data
-    Object.keys(formattedRec).forEach((fieldName) => {
-        //  update the record list
-        if (record && record[fieldName] && formattedRec[fieldName]) {
-            record[fieldName].value = formattedRec[fieldName].value;
-            if (formattedRec[fieldName].display !== undefined) {
-                record[fieldName].display = formattedRec[fieldName].display;
-            }
-        }
-        //  update the filtered list
-        if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
-            filtRecord[fieldName].value = formattedRec[fieldName].value;
-            if (formattedRec[fieldName].display !== undefined) {
-                filtRecord[fieldName].display = formattedRec[fieldName].display;
-            }
-        }
-    });
-}
-
-function formatRecord(record, fields) {
-    let formattedRec = {};
-    record.forEach(rec => {
-        let matchingField = _.find(fields, (field) => {
-            return rec.id === field.id;
-        });
-        if (matchingField) {
-            formattedRec[matchingField.name] = _.clone(rec);
-        }
-    });
-    return formattedRec;
-}
-
-function findRecordById(records, recId, hasGrouping, keyField) {
-    if (hasGrouping) {
-        return ReportUtils.findGroupedRecord(records, recId, keyField.name);
-    } else {
-        /*eslint eqeqeq:0*/
-        return records.find(rec => rec[keyField.name].value == recId);
-    }
-}
-
-function deleteRecordFromReport(reportData, recId) {
-    // TODO: needed?
-    var recordValueToMatch = {};
-    recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
-
-    const newFilteredRecords = reportData.filteredRecords ? reportData.filteredRecords.slice(0) : null;
-    const newRecords = reportData.records ? reportData.records.slice(0) : null;
-    let recordDeleted = false;
-    let filteredRecordDeleted = false;
-
-    if (reportData.hasGrouping) {
-        filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, reportData.keyField.name);
-        recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, reportData.keyField.name);
-    } else {
-        //find record
-        let filteredRecordIndex = ReportUtils.findRecordIndex(newFilteredRecords, recId, reportData.keyField.name);
-        //remove it
-        if (filteredRecordIndex !== -1) {
-            filteredRecordDeleted = true;
-            newFilteredRecords.splice(filteredRecordIndex, 1);
-        }
-
-        //find record
-        let recordIndex = ReportUtils.findRecordIndex(newRecords, recId, reportData.keyField.name);
-        //remove it
-        if (recordIndex !== -1) {
-            recordDeleted = true;
-            newRecords.splice(recordIndex, 1);
-        }
-    }
-    if (filteredRecordDeleted) {
-        reportData.filteredRecords = newFilteredRecords;
-        reportData.filteredRecordsCount--;
-    }
-    if (recordDeleted) {
-        reportData.records = newRecords;
-        reportData.recordsCount--; //pagination uses this one.
-    }
-}
-
-
-//function formatRecordValues(newRecord, fields) {
-//    Object.keys(newRecord).forEach((key) => {
-//        let recField = newRecord[key];
-//        recField.display = formatFieldValue(recField, fields);
-//    });
-//}
-
-///**
-// * formats a fields value according to the fields type
-// * @param recField
-// * @returns {*} the formatted value
-// */
-//function formatFieldValue(recField, fields) {
-//    let answer = null;
-//
-//    if (recField && recField.value) {
-//        // assume same raw and formatted
-//        answer = recField.value;
-//
-//        //get the corresponding field meta data
-//        let fieldMeta = _.find(fields, (item) => {
-//            return (((recField.id !== undefined) && (item.id === recField.id) ||
-//            ((recField.fieldName !== undefined) && (item.name === recField.fieldName))));
-//        });
-//
-//        //format the value by field display type
-//        if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
-//            let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes);
-//            let formatter = getFormatter(formatType);
-//
-//            // if there's a formatter use it to format the display version
-//            if (formatter !== null) {
-//                answer = formatter.format(recField, fieldMeta.datatypeAttributes);
-//            }
-//        }
-//    }
-//    return answer;
-//}
-//
-///**
-// * given a formatType returns with a formatter object that
-// * can be used to format raw values to display values by the type
-// * @param formatType
-// * @returns {*} - a object with a format method
-// */
-//function getFormatter(formatType) {
-//    let answer = textFormatter;
-//    switch (formatType) {
-//    case FieldFormats.DATETIME_FORMAT:
-//    case FieldFormats.DATE_FORMAT:
-//        answer = dateTimeFormatter;
-//        break;
-//    case FieldFormats.EMAIL_ADDRESS:
-//        answer = emailFormatter;
-//        break;
-//    case FieldFormats.PHONE_FORMAT:
-//        // All phone formatting happens on the server because of the large library required.
-//        // The formatter should only pass through the display value from the server
-//        answer = passThroughFormatter;
-//        break;
-//    case FieldFormats.TIME_FORMAT:
-//        answer = timeOfDayFormatter;
-//        break;
-//    case FieldFormats.TEXT_FORMAT:
-//        answer = textFormatter;
-//        break;
-//    case FieldFormats.USER_FORMAT:
-//        answer = userFormatter;
-//        break;
-//    case FieldFormats.DURATION_FORMAT:
-//        answer = durationFormatter;
-//        break;
-//    case FieldFormats.NUMBER_FORMAT:
-//    case FieldFormats.RATING_FORMAT:
-//    case FieldFormats.CURRENCY_FORMAT:
-//    case FieldFormats.PERCENT_FORMAT:
-//        answer = numericFormatter;
-//        break;
-//    case FieldFormats.URL:
-//        answer = urlFormatter;
-//        break;
-//    }
-//    return answer;
-//}
 
 export default report;
