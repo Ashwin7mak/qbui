@@ -11,6 +11,7 @@ describe('AppUsersRoute functions', () => {
     const appUsersUnfiltered = [{id: 1, name: 'Washington'}];
     const appRoles = [{"9": {"id": 1, "name": "none", "tableRights": {}, "fieldRights": {}, "description": "", "access": "NONE"}}];
     const appId = 1;
+    const selectedApp = {name: "Duder"};
 
     const flux = {
         actions:{
@@ -30,6 +31,7 @@ describe('AppUsersRoute functions', () => {
         let component = TestUtils.renderIntoDocument(<AppUsersRoute appUsersUnfiltered={appUsersUnfiltered}
                                                                     appRoles={appRoles}
                                                                     flux={flux}
+                                                                    selectedApp={selectedApp}
                                                                     params={{appId: appId}}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
