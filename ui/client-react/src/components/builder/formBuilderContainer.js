@@ -116,17 +116,19 @@ export const FormBuilderContainer = React.createClass({
         }
         return (
             <div className="formBuilderContainer">
-                <ToolPalette />
+                <div className="toolsAndForm">
+                    <ToolPalette />
 
-                <div className="formBuilderContent">
-                    <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                        <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} removeField={this.props.removeField}/>
-                    </Loader>
+                    <div className="formBuilderContent">
+                        <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
+                            <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} removeField={this.props.removeField}/>
+                        </Loader>
+                    </div>
+
+                    <FieldProperties />
                 </div>
 
                 {this.getSaveOrCancelFooter()}
-
-                <FieldProperties />
             </div>
         );
     }

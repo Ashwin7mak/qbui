@@ -73,8 +73,9 @@ $edit-field-padding: 5px;
             }
         }
 
-        .sectionRow {
+        .sectionColumn {
             display: flex;
+            flex-direction: column;
             flex-wrap: nowrap;
 
             .formElementContainer {

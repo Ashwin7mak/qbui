@@ -8,6 +8,9 @@ import Constants from '../../../../common/src/constants';
 import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
+import FlipMove from 'react-flip-move';
+import Device from '../../utils/device';
+import MobileDropTarget from '../formBuilder/mobileDropTarget';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -38,12 +41,17 @@ let QBForm = React.createClass({
             record: PropTypes.array,
             fields: PropTypes.array,
             formMeta: PropTypes.object
-        })
+        }),
+
+        /**
+         * Whether to display animation when reordering elements on a field in builder mode */
+        hasAnimation: PropTypes.bool,
     },
 
     getDefaultProps() {
         return {
-            activeTab: '0'
+            activeTab: '0',
+            hasAnimation: false,
         };
     },
 
@@ -203,63 +211,87 @@ let QBForm = React.createClass({
      * @returns {XML}
      */
     createColumn(column, numberOfColumns, location) {
-        let rows = null;
+        let elements = null;
 
         let newLocation = Object.assign({}, location, {columnIndex: column.orderIndex});
 
-        if (column.rows && Array.isArray(column.rows)) {
-            rows = column.rows.map(row => this.createRow(row, newLocation));
+        if (column.elements && Array.isArray(column.elements)) {
+            elements = column.elements.map(element => this.createElement(element, newLocation));
+        }
+
+        let arrangedElements = elements;
+        if (this.props.hasAnimation && this.props.editingForm && !Device.isTouch()) {
+            // Adds animation when field elements are moved during form editing.
+            arrangedElements = (
+                <FlipMove duration="200" easing="ease-out" appearAnimation="accordionVertical">
+                    {elements}
+                </FlipMove>
+            );
+        }
+
+        if (Device.isTouch() && this.props.editingForm && Array.isArray(elements)) {
+            arrangedElements = this.addTouchDropTargets(elements, newLocation);
         }
 
         return (
             <div key={column.id} className="sectionColumn" style={{width: `${100 / numberOfColumns}%`}}>
-                <div className="sectionRows">
-                    {rows}
-                </div>
+                {arrangedElements}
             </div>
         );
     },
 
-    /**
-     * Creates a row that contains elements on the form
-     * @param row
-     * @param location
-     * @returns {XML}
-     */
-    createRow(row, location) {
-        let elements = null;
-        let newLocation = Object.assign({}, location, {rowIndex: row.orderIndex});
-
-        if (row.elements && Array.isArray(row.elements)) {
-            elements = row.elements.map(element => this.createElement(element, row.elements.length, newLocation));
+    addTouchDropTargets(elements, location) {
+        let elementsLength = elements.length;
+        let mobileDropTargets = [];
+        for (let i = 0; i < elementsLength; i++) {
+            let id = _.uniqueId('mobile-drop');
+            mobileDropTargets.push(<MobileDropTarget key={id} containingElement={{id}} location={this.findLocationOfElement(elements[i], location)} handleFormReorder={this.props.handleFormReorder} />);
         }
 
-        return (
-            <div key={row.id} className="sectionRow">
-                {elements}
-            </div>
-        );
+        let arrangedElements = [];
+        // Adds a drop target between each element in the column
+        elements.forEach((element, index) => {
+            arrangedElements.push(mobileDropTargets[index]);
+            arrangedElements.push(element);
+        });
+
+        // We need to add one more at the bottom so the user can add a field at the bottom of the list
+        let id = _.uniqueId('mobile-drop');
+        arrangedElements.push(<MobileDropTarget key={id} containingElement={{id}} location={Object.assign({}, location, {elementIndex: elementsLength})} handleFormReorder={this.props.handleFormReorder} />);
+
+        return arrangedElements;
+    },
+
+    /**
+     * Finds the location for the passed in element
+     * @param element
+     */
+    findLocationOfElement(element, location) {
+        if (!element) {return {};}
+
+        if (_.has(element, 'props.children.props.location')) {
+            return element.props.children.props.location;
+        }
+        return Object.assign({}, location, {elementIndex: element.props.orderIndex ? element.props.orderIndex : 0});
     },
 
     /**
      * Creates an element on the form
      * @param element
-     * @param numberOfChildren
      * @param location
      * @returns {*}
      */
-    createElement(element, numberOfChildren, location) {
+    createElement(element, location) {
         let formattedElement;
-        let width = {width: `${100 / numberOfChildren}%`};
         let newLocation = Object.assign({}, location, {elementIndex: element.orderIndex});
 
         if (element.FormTextElement) {
-            formattedElement = this.createTextElement(element.id, element.FormTextElement, width);
+            formattedElement = this.createTextElement(element.id, element.FormTextElement);
         } else if (element.FormFieldElement) {
-            let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId, width);
-            formattedElement = this.createFieldElement(element.FormFieldElement, validationStatus, width, element, newLocation);
+            let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
+            formattedElement = this.createFieldElement(element.FormFieldElement, validationStatus, element, newLocation);
         } else if (element.ReferenceElement) {
-            formattedElement = this.createChildReportElement(element.id, element.ReferenceElement, width);
+            formattedElement = this.createChildReportElement(element.id, element.ReferenceElement);
         }
 
         return formattedElement;
@@ -274,7 +306,7 @@ let QBForm = React.createClass({
      * @param location
      * @returns {XML}
      */
-    createFieldElement(FormFieldElement, validationStatus, style, containingElement, location) {
+    createFieldElement(FormFieldElement, validationStatus, containingElement, location) {
 
         let relatedField = this.getRelatedField(FormFieldElement.fieldId);
         let fieldRecord = this.getFieldRecord(relatedField);
@@ -287,7 +319,7 @@ let QBForm = React.createClass({
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
 
         return (
-            <div key={containingElement.id} className="formElementContainer" style={style}>
+            <div key={containingElement.id} className="formElementContainer">
               <CurrentFieldElement
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
@@ -319,8 +351,8 @@ let QBForm = React.createClass({
      * @param FormTextElement
      * @param style
      */
-    createTextElement(id, FormTextElement, style) {
-        return <div key={id} className="formElementContainer formElement text" style={style}>{FormTextElement.displayText}</div>;
+    createTextElement(id, FormTextElement) {
+        return <div key={id} className="formElementContainer formElement text">{FormTextElement.displayText}</div>;
     },
 
     /**
@@ -330,7 +362,7 @@ let QBForm = React.createClass({
      * @param ReferenceElement
      * @param style
      */
-    createChildReportElement(id, ReferenceElement, style) {
+    createChildReportElement(id, ReferenceElement) {
         // Find the relationship object for this element.
         // This element represents a single relationship from the `formMeta.relationships` array.
         // The `element.relationshipId` is the index offset within the relationship array.
@@ -348,7 +380,7 @@ let QBForm = React.createClass({
         const childTableName = childTable.name;
 
         return (
-            <div key={id} className="formElementContainer formElement referenceElement" style={style}>
+            <div key={id} className="formElementContainer formElement referenceElement">
                 <RelatedChildReport
                     appId={_.get(relationship, "appId")}
                     childTableId={_.get(relationship, "detailTableId")}
@@ -467,18 +499,6 @@ let QBForm = React.createClass({
         );
     }
 });
-
-/**
- * Build a consistent key that will be used anytime a form element appears on the page so
- * that it can be tracked by React.
- * @param tabIndex
- * @param sectionIndex
- * @param fieldId
- * @returns {string}
- */
-function buildIdKey(tabIndex, sectionIndex, fieldId) {
-    return `fieldContainer-tab-${tabIndex}-section-${sectionIndex}-field-${fieldId}`;
-}
 
 /**
  * Creates a field object for a built in user type
