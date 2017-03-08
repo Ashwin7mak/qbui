@@ -84,9 +84,8 @@ export class FormBuilder extends Component {
      */
     clearDragElementCache() {
         if (this.elementCache) {
-            let elementCacheInDom = findDOMNode(this.elementCache);
-            while (elementCacheInDom.hasChildNodes()) {
-                elementCacheInDom.removeChild(elementCacheInDom.lastChild);
+            while (this.elementCache.hasChildNodes()) {
+                this.elementCache.removeChild(this.elementCache.lastChild);
             }
         }
     }
