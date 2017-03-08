@@ -3,7 +3,6 @@ import {DragDropContext} from 'react-dnd';
 import QbForm from '../QBForm/qbform';
 import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 import TouchBackend from 'react-dnd-touch-backend';
-import './formBuilder.scss';
 import {findFormElementKey} from '../../utils/formUtils';
 import _ from 'lodash';
 import './formBuilder.scss';
