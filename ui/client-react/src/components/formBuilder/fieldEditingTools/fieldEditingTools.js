@@ -41,11 +41,12 @@ class FieldEditingTools extends Component {
         if (editingTools) {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
             let isSmall = Breakpoints.isSmallBreakpoint();
-            let width = isSmall ? 26 : 30;
+            let width = isSmall ? 40 : 30;
+            let left = isSmall ? 25 : 15;
 
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
-                left: `${fieldDomElement.offsetLeft - 15}px`,
+                left: `${fieldDomElement.offsetLeft - left}px`,
                 height: `${fieldDomElement.offsetHeight + 26}px`,
                 width: `${fieldDomElement.offsetWidth + width}px`
             };

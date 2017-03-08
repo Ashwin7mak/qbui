@@ -5,7 +5,6 @@ import FormBuilderCustomDragLayer from './formBuilderCustomDragLayer';
 import TouchBackend from 'react-dnd-touch-backend';
 import {findFormElementKey} from '../../utils/formUtils';
 import _ from 'lodash';
-
 import './formBuilder.scss';
 
 const DRAG_PREVIEW_TIMEOUT = 75;
@@ -111,4 +110,4 @@ FormBuilder.defaultProps = {
  * if a user wants to drag and drop, the screen must be pressed on for 150ms before dragging will start
  * */
 
-export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 150}))(FormBuilder);
+export default DragDropContext(TouchBackend({enableMouseEvents: true, delay: 30}))(FormBuilder);
