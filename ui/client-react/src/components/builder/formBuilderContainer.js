@@ -59,11 +59,9 @@ export const FormBuilderContainer = React.createClass({
         formType: PropTypes.string
     },
 
-
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
-
     },
 
     onCancel() {
@@ -107,7 +105,6 @@ export const FormBuilderContainer = React.createClass({
     render() {
 
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
-
         let formData = null;
         let formId = null;
         if (loaded) {
