@@ -1,6 +1,5 @@
 @import "../../../assets/css/qbVariables";
 
-
 .fieldEditingTools {
     transition: opacity 0.4s;
     border-radius: $radius-base;
@@ -10,8 +9,7 @@
         position: absolute;
         top: 5px;
         right: 35px;
-
-
+        
         .qbIcon {
             opacity: 0;
             transition: color 0.4s;
