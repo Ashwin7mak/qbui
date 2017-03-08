@@ -68,7 +68,7 @@ class FieldEditingTools extends Component {
         }
     }
 
-    renderActionIcons () {
+    renderActionIcons() {
         if (this.props.isDragging) {
             return null;
         }

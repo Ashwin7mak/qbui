@@ -48,13 +48,13 @@ const formTarget = {
 /**
  * A function that passes props that can be used on the component. The connectDropTarget prop is required to
  * wrap the component and make it droppable.
- * @param connect
+ * @param connectDropSource
  * @param monitor
  * @returns {{connectDropTarget: *, isOver: *}}
  */
-function collect(connect, monitor) {
+function collect(connectDropSource, monitor) {
     return {
-        connectDropTarget: connect.dropTarget(),
+        connectDropTarget: connectDropSource.dropTarget(),
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop()
     };

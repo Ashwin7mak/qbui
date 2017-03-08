@@ -8,9 +8,9 @@ import Breakpoints from '../../utils/breakpoints';
 import _ from 'lodash';
 
 // Values from fieldToken.scss
-const TOKEN_WIDTH = 250;
-const TOKEN_HEIGHT = 30;
-const TOKEN_ICON_WIDTH = 35;
+export const TOKEN_WIDTH = 250;
+export const TOKEN_HEIGHT = 30;
+export const TOKEN_ICON_WIDTH = 35;
 
 const layerStyles = {
     cursor: 'move',
