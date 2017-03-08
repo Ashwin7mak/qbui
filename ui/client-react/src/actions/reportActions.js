@@ -31,6 +31,17 @@ function event(context, type, content) {
 }
 
 /**
+ * Track the list of records that are selected when viewing a report.
+ *
+ * @param context - the context that the report is being viewed
+ * @param selections - list of record ids selected
+ * @returns {{id, type, content}|{id: *, type: *, content: *}}
+ */
+export const selectReportRecords = (context, selections) => {
+    return event(context, types.SELECT_REPORT_RECORDS, {selections});
+};
+
+/**
  * Retrieve a list of reports for the given app/table.  This function is called primarily when
  * populating the left hand navigation window with the list of reports and when displaying a
  * trowser window that displays all of the reports for a table.
@@ -284,34 +295,3 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
  */
 export const unloadEmbeddedReport = (context) =>
     event(context, types.UNLOAD_EMBEDDED_REPORT);
-
-/**
- * Action called when their is a need to update a report grid row
- * with an updated data record.  This is triggered when updating
- * a report grid row via the in-line editor.
- *
- * @param payload
- * @param context
- * @returns {{id: *, type, content: {recId: *, record: Array}}}
- */
-export const updateReportRecord = (payload, context) => {
-    return {
-        id: context,
-        type: types.UPDATE_REPORT_RECORD,
-        content: {
-            recId: payload.recId,
-            record: payload.record ? payload.record.record : []
-        }
-    };
-};
-
-/**
- * Tracks list of records that are selected when viewing a report.
- *
- * @param context - the context that the report is being viewed
- * @param selections - list of record ids
- * @returns {{id, type, content}|{id: *, type: *, content: *}}
- */
-export const updateReportSelections = (context, selections) => {
-    return event(context, types.SELECT_REPORT_LIST, {selections});
-};

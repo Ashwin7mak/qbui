@@ -630,10 +630,11 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.LOAD_RECORDS, this.onLoadRecords,
             //actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             //actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
-            actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
-            actions.SHOW_FACET_MENU, this.onShowFacetMenu,
-            actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SELECTED_ROWS, this.onSelectedRows,
+            //TODO: doesn't look like this.selections is ever returned in state
+            //actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
+            //actions.SHOW_FACET_MENU, this.onShowFacetMenu,
+            //actions.HIDE_FACET_MENU, this.onHideFacetMenu,
+            //actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             //actions.DELETE_RECORD, this.onDeleteReportRecord,
@@ -664,11 +665,11 @@ let ReportDataStore = Fluxxor.createStore({
         );
     },
 
-    onSelectedRows(selectedRows) {
-        this.selectedRows = selectedRows.slice();
-
-        this.emit('change');
-    },
+    //onSelectedRows(selectedRows) {
+    //    this.selectedRows = selectedRows.slice();
+    //
+    //    this.emit('change');
+    //},
 
     onLoadReport(report) {
         //this.loading = true;
@@ -818,15 +819,15 @@ let ReportDataStore = Fluxxor.createStore({
     //    this.emit('change');
     //},
 
-    onShowFacetMenu() {
-        this.nonFacetClicksEnabled = false;
-        this.emit('change');
-    },
-
-    onHideFacetMenu() {
-        this.nonFacetClicksEnabled = true;
-        this.emit('change');
-    },
+    //onShowFacetMenu() {
+    //    this.nonFacetClicksEnabled = false;
+    //    this.emit('change');
+    //},
+    //
+    //onHideFacetMenu() {
+    //    this.nonFacetClicksEnabled = true;
+    //    this.emit('change');
+    //},
 
     createNewRecord(afterRecId) {
         const model = this.reportModel.get();

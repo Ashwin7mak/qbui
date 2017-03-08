@@ -22,6 +22,7 @@ import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import {loadDynamicReport} from '../../actions/reportActions';
+import {searchInput, clearSearchInput} from '../../actions/searchActions';
 import {CONTEXT} from '../../actions/context';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
@@ -59,7 +60,7 @@ export const ReportToolsAndContent = React.createClass({
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
-        loadDynamicReport: React.PropTypes.func,
+        context: React.PropTypes.string,
 
         // used for relationships phase-1
         phase1: React.PropTypes.bool
@@ -173,32 +174,40 @@ export const ReportToolsAndContent = React.createClass({
             //    this.props.routeParams.tblId,
             //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
             //    true, filter, queryParams);
-            this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
+            this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-                true, filter, queryParams));
+                true, filter, queryParams);
         }
     },
 
     searchTheString(searchTxt) {
-        this.getFlux().actions.filterSearchPending(searchTxt);
+        this.props.searchInput(searchTxt);
         this.filterOnSearch(searchTxt);
+        //this.getFlux().actions.filterSearchPending(searchTxt);
     },
 
     filterOnSelections(newSelections) {
-        this.getFlux().actions.filterSelectionsPending(newSelections);
+        // obsolete??
+        //this.getFlux().actions.filterSelectionsPending(newSelections);
         this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections, true);
     },
 
     clearSearchString() {
-        this.getFlux().actions.filterSearchPending('');
-        this.filterOnSearch('');
+        //this.getFlux().actions.filterSearchPending('');
+        this.props.clearSearchInput();
+        // no debounce when clicking the clear button
+        this.filterReport('', this.props.reportData.selections);
     },
 
     clearAllFilters() {
+        // TODO clear out filter selection
         let noSelections = new FacetSelections();
-        this.getFlux().actions.filterSelectionsPending(noSelections);
-        this.getFlux().actions.filterSearchPending('');
+        // TODO: don't think this filterSelectionsPending is necessray
+        //this.getFlux().actions.filterSelectionsPending(noSelections);
+
+        //this.getFlux().actions.filterSearchPending('');
+        this.props.clearSearchInput();
         this.debouncedFilterReport('', noSelections, true);
     },
 
@@ -217,13 +226,13 @@ export const ReportToolsAndContent = React.createClass({
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
-        appId = _.get(this, 'props.params.appId', appId);
-        tblId = _.get(this, 'props.params.tblId', tblId);
-        rptId = _.get(this, 'props.params.rptId', rptId);
+        appId = _.get(this, 'props.reportData.appId', appId);
+        tblId = _.get(this, 'props.reportData.tblId', tblId);
+        rptId = _.get(this, 'props.reportData.rptId', rptId);
 
         return <ReportToolbar appId={appId}
                               tblId={tblId}
-                              rptId={rptId}
+                              rptId={rptId || this.props.params.rptId}
                               reportData={this.props.reportData}
                               selections={this.props.reportData.selections}
                               searchStringForFiltering={this.props.reportData.searchStringForFiltering}
@@ -281,9 +290,9 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     getPageUsingOffsetMultiplicant(multiplicant) {
-        let appId = this.props.params.appId;
-        let tblId = this.props.params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+        let appId = this.props.reportData.appId;
+        let tblId = this.props.reportData.tblId;
+        let rptId = typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId;
         let filter = {};
         let queryParams = {};
         let sortList = "";
@@ -313,7 +322,6 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.NUMROWS_PARAM] = numRows;
 
         //this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
-        //this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams));
         this.props.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
     },
 
@@ -339,6 +347,7 @@ export const ReportToolsAndContent = React.createClass({
 
     render() {
         let classes = ['reportToolsAndContentContainer'];
+        // TODO get from reports store
         if (this.props.selectedRows) {
             if (this.props.selectedRows.length > 0) {
                 classes.push('activeSelection');
@@ -353,10 +362,6 @@ export const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        appId = _.get(this, 'props.params.appId', appId);
-        tblId = _.get(this, 'props.params.tblId', tblId);
-        rptId = _.get(this, 'props.params.rptId', rptId);
-
         let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
@@ -368,7 +373,11 @@ export const ReportToolsAndContent = React.createClass({
         this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
 
 
-        if (_.isUndefined(appId) || _.isUndefined(tblId) || _.isUndefined(rptId)) {
+        if (_.isUndefined(this.props.params) ||
+            _.isUndefined(this.props.reportData.appId) ||
+            _.isUndefined(this.props.reportData.tblId) ||
+            (_.isUndefined(this.props.reportData.rptId))
+        ) {
             logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
             return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
         } else {
@@ -399,9 +408,9 @@ export const ReportToolsAndContent = React.createClass({
                     </label>
                     {this.getTableActions()}
 
-                    <ReportContent appId={this.props.params.appId}
-                                   tblId={this.props.params.tblId}
-                                   rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                    <ReportContent appId={this.props.reportData.appId}
+                                   tblId={this.props.reportData.tblId}
+                                   rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
                                    reportData={this.props.reportData}
                                    appUsers={this.props.appUsers}
                                    reportHeader={toolbar}
@@ -422,4 +431,25 @@ export const ReportToolsAndContent = React.createClass({
     }
 });
 
-export default connect()(ReportToolsAndContent);
+const mapStateToProps = (state) => {
+    return {
+        report: state.report,
+        search: state.search
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchInput: (input) => {
+            dispatch(searchInput(input));
+        },
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
+        },
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReportToolsAndContent);

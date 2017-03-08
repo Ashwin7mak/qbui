@@ -57,8 +57,8 @@ export let Nav = React.createClass({
             apps: flux.store('AppsStore').getState(),
             //pendEdits: flux.store('RecordPendingEditsStore').getState(),
             //reportData: flux.store('ReportDataStore').getState(),
-            fields: flux.store('FieldsStore').getState(),
-            reportSearchData: flux.store('ReportDataSearchStore').getState()
+            fields: flux.store('FieldsStore').getState()
+            //reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
 
@@ -373,11 +373,13 @@ export let Nav = React.createClass({
                             appsLoading: this.state.apps.loading,
                             reportData: reportsData,
                             appUsers: this.state.apps.appUsers,
+                            appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
+                            appRoles: this.state.apps.appRoles,
                             locale: this.state.nav.locale,
                             //pendEdits:pendEdits,
                             isRowPopUpMenuOpen: this.props.qbui.shell.isRowPopUpMenuOpen,
                             fields: this.state.fields,
-                            reportSearchData: this.state.reportSearchData,
+                            //reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(reportsData.tblId),
                             scrollingReport: this.state.nav.scrollingReport,
