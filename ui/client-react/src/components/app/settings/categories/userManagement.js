@@ -102,7 +102,7 @@ class UserManagement extends React.Component {
             }),
         )(resolvedRows);
         return (
-            <div className="userManagementContainer">
+            <div className="userManagementReport">
                 <div className="search-container">
                     <span>Search</span>
                     <search.Field
