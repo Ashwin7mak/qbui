@@ -188,21 +188,5 @@ describe('AutoScroll', () => {
 
             expect(instance.getContainerBottom).toHaveBeenCalled();
         });
-
-        it('getContainerBottom and getContainerTop should not be called if extra pixel props are not passed through', function() {
-
-            let component = shallow(<AutoScroll />);
-            let instance = component.instance();
-
-            spyOn(instance, 'getContainer').and.returnValue(container);
-            spyOn(instance, 'getContainerBottom');
-            spyOn(instance, 'getContainerTop');
-
-            instance.updateScrolling();
-
-            expect(instance.getContainerBottom).not.toHaveBeenCalled();
-            expect(instance.getContainerTop).not.toHaveBeenCalled();
-
-        });
     });
 });
