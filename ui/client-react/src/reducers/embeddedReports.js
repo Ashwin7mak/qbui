@@ -42,7 +42,7 @@ const embeddedReport = (state = {}, action) => {
             id: action.id,
             loading: false,
             error: false,
-            data: action.content,
+            data: action.content.data,
             //  TODO: needed??..these are on the data property
             appId: action.content.appId,
             tblId: action.content.tblId,
