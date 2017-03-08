@@ -132,7 +132,7 @@ var config = {
                     path.resolve(__dirname, 'client-react/src/components/qbIcon/'),
                     path.resolve(__dirname, 'reuse/client/src/assets/fonts/')
                 ],
-                loader: 'style?sourceMap!css?sourceMap'
+                loader: LOCAL ? 'style?sourceMap!css?sourceMap' : 'style!css'
             },
             {
                 // all css files can be required into js files with this
@@ -143,7 +143,7 @@ var config = {
                     path.resolve(__dirname, 'client-react/src/components/qbIcon/'),
                     path.resolve(__dirname, 'reuse/client/src/assets/fonts/')
                 ],
-                loader: 'style!css'
+                loader: 'style!css' // never use source maps on these files
             },
             {
                 // all png files can be required into js files with this
