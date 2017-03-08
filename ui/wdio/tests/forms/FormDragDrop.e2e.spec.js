@@ -34,13 +34,12 @@
         });
 
         beforeEach(function() { // why is beforeEach purple here whereas beforeAll is not purple above?
-            // TODO: this needs to be synchronous, how?  I tried to mimic beforeAll...
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
             reportContentPO.clickOnRecordInReportTable(0);
             // invoke form builder
-            formBuilderPO.open();
+            return formBuilderPO.open();
         });
 
         it('move a field via drag/drop, save & verify persistence', function() {

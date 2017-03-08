@@ -65,8 +65,8 @@
         moveByName: {
             value: function(source, target) {
                 let labels = this.getFieldLabels();
-                source = this.fieldLocator(labels.indexOf(source));
-                target = this.fieldLocator(labels.indexOf(target));
+                source = this.findFieldByIndex(labels.indexOf(source));
+                target = this.findFieldByIndex(labels.indexOf(target));
                 browser.dragAndDrop(source, target);
             }
         },
