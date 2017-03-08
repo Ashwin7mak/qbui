@@ -78,7 +78,7 @@ var config = {
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
             path.resolve(reuseLibraryPath, 'client/src/assets/fonts/lato-font.css'),
             path.resolve(reuseLibraryPath, 'client/src/assets/css/qbMain.scss'),
-            path.resolve(governancePath, 'src/governance.js')
+            path.resolve(governancePath, 'src/app/index.js')
         ]
     },
     output: {
