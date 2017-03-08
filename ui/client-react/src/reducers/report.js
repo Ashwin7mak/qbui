@@ -133,8 +133,8 @@ const report = (state = [], action) => {
         }
         return newState(obj);
     }
-    case types.SELECT_REPORT_LIST: {
-        //  1..n rows in a report have been selected by the user...update
+    case types.SELECT_REPORT_RECORDS: {
+        //  1..n records in a report have been selected by the user...update
         //  the 'selections' element on the report
         let currentReport = getReportFromState(action.id);
         if (currentReport) {

@@ -15,7 +15,6 @@ import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
 import * as SchemaConstants from '../constants/schema';
-import {hasUnitsText, isSmartUnitsField} from '../../../common/src/formatter/durationFormatter';
 import _ from 'lodash';
 
 class ReportModelHelper {
@@ -63,7 +62,7 @@ class ReportModelHelper {
                     let durUnits = null;
                     if (fieldDef && _.has(fieldDef, 'datatypeAttributes.type') && fieldDef.datatypeAttributes.type === DURATION) {
                         let scale = fieldDef.datatypeAttributes.scale;
-                        if (hasUnitsText(scale)) {
+                        if (durationFormatter.hasUnitsText(scale)) {
                             durUnits = Locale.getMessage(`durationTableHeader.${scale}`);
                             if (durUnits) {
                                 // the unitsDescription display option on a field will show next to the column header in a table
@@ -79,7 +78,7 @@ class ReportModelHelper {
                     }
 
                     // note if this the table needs updates when locale changes
-                    if (durUnits || isSmartUnitsField(fieldDef)) {
+                    if (durUnits || durationFormatter.isSmartUnitsField(fieldDef)) {
                         //  customized field created to track if the column requires localization.
                         //  TODO - Needed????  Need to figure out if needed since can't set model boolean from this method
                         //  TODO - which is what was being done prior to this work getting shifted to reportModel

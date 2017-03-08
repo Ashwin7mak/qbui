@@ -23,7 +23,7 @@ import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
 import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
-import {updateReportSelections} from '../../../actions/reportActions';
+import {selectReportRecords} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
 import {CONTEXT} from '../../../actions/context';
 
@@ -527,51 +527,28 @@ export const ReportContent = React.createClass({
         }
     },
 
-    getCurrentRecordId() {
-        // Editing Id trumps editingRowId when editingIndex is set
-        // Editing index comes from the reportDataStore whereas editingRecord comes from the pending edits store
-        // When saveAndAddANewRow is clicked, then the reportDataStore sets the editingIndex (index of new row in array)
-        // and editingId (id of newly created row). The editingIndex could be any integer, but if it is not null, we can assume a new row is added.
-        let editingRowId = null;
-
-        let pendEdits = this.getPendEditProps();
-        //if (this.props.pendEdits && this.props.pendEdits.isInlineEditOpen && this.props.pendEdits.currentEditingRecordId) {
-        //    editingRowId = this.props.pendEdits.currentEditingRecordId;
-        //}
-        if (pendEdits && pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
-            editingRowId = pendEdits.currentEditingRecordId;
-        }
-
-        if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== editingRowId) {
-            editingRowId = this.props.editingId;
-        }
-
-        return editingRowId;
-    },
-
-    selectRows(selectedRowIds) {
-        this.getFlux().actions.selectedRows(selectedRowIds);
+    selectRows(selectedRows) {
+        //this.getFlux().actions.selectedRows(selectedRowIds);
+        this.props.selectReportRecords(CONTEXT.REPORT.NAV, selectedRows);
     },
 
     toggleSelectedRow(id) {
 
-        //let selectedRows = this.props.selectedRows || [];
         let selectedRows = this.props.reportData.selectedRows;
         if (!Array.isArray(selectedRows)) {
             selectedRows = [];
         }
-
+        // add to selectedRows if id is not in the list
         if (selectedRows.indexOf(id) === -1) {
-            // not already selected, add to selectedRows
             selectedRows.push(id);
         } else {
-            // already selected, remove from selectedRows
+            // id is in the list, remove it
             selectedRows = _.without(selectedRows, id);
         }
 
         //const flux = this.getFlux();
         //flux.actions.selectedRows(selectedRows);
-        this.props.updateReportSelections(CONTEXT.REPORT.NAV, selectedRows);
+        this.props.selectReportRecords(CONTEXT.REPORT.NAV, selectedRows);
     },
 
     /**
@@ -1139,8 +1116,8 @@ const mapStateToProps = (state) => {
 // (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateReportSelections: (context, selections) => {
-            dispatch(updateReportSelections(context, selections));
+        selectReportRecords: (context, selections) => {
+            dispatch(selectReportRecords(context, selections));
         },
         openRecord:(recId, nextRecordId, prevRecordId) => {
             dispatch(openRecord(recId, nextRecordId, prevRecordId));

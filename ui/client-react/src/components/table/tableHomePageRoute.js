@@ -10,6 +10,7 @@ import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import {clearSearchInput} from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
@@ -39,6 +40,11 @@ export const TableHomePageRoute = React.createClass({
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
+        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+        // should get removed and the search store should listen for the new event to
+        // clear out any input.
+        this.props.dispatch(clearSearchInput());
+
         flux.actions.loadFields(appId, tblId);
         //flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
         this.props.dispatch(TableActions.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows));

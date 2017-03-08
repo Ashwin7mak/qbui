@@ -24,6 +24,7 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import {loadForm, editNewRecord} from '../../actions/formActions';
 import {openRecord} from '../../actions/recordActions';
+import {clearSearchInput} from '../../actions/searchActions';
 import {APP_ROUTE, BUILDER_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 
 
@@ -44,6 +45,10 @@ export const RecordRoute = React.createClass({
         const flux = this.getFlux();
 
         flux.actions.selectTableId(tblId);
+        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+        // should get removed and the search store should listen for the new event to
+        // clear out any input.
+        this.props.clearSearchInput();
 
         this.props.loadForm(appId, tblId, rptId, formType, recordId);
     },
@@ -388,6 +393,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         openRecord: (recId, nextId, prevId) => {
             dispatch(openRecord(recId, nextId, prevId));
+        },
+        clearSearchInput: () => {
+            dispatch(clearSearchInput());
         }
     };
 };

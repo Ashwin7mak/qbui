@@ -16,7 +16,7 @@ import _ from 'lodash';
 import './report.scss';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
-import {editNewRecord} from '../../actions/formActions';
+import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -36,6 +36,11 @@ const ReportRoute = React.createClass({
     loadReport(appId, tblId, rptId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
+        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+        // should get removed and the search store should listen for the new event to
+        // clear out any input.
+        this.props.dispatch(clearSearchInput());
+
         flux.actions.loadFields(appId, tblId);
         //flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
         this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
@@ -46,6 +51,11 @@ const ReportRoute = React.createClass({
     loadDynamicReportFromParams(appId, tblId, rptId, queryParams) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
+        // TODO: once SELECT_TABLE action is migrated to redux, this clearSearch action
+        // should get removed and the search store should listen for the new event to
+        // clear out any input.
+        this.props.dispatch(clearSearchInput());
+
         flux.actions.loadFields(appId, tblId);
 
         // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
