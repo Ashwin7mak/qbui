@@ -55,6 +55,27 @@ describe('Express Client Routes', function() {
         done();
     });
 
+    it('Validate get app settings route', function(done) {
+        request(app).
+        get('/app/1/settings').
+        expect(200);
+        done();
+    });
+
+    it('Validate get app users route', function(done) {
+        request(app).
+        get('/app/1/users').
+        expect(200);
+        done();
+    });
+
+    it('Validate get app properties route', function(done) {
+        request(app).
+        get('/app/1/properties').
+        expect(200);
+        done();
+    });
+
     it('Validate get tables route', function(done) {
         request(app).
             get('/app/1/table/2').
@@ -114,6 +135,20 @@ describe('Express Client Routes', function() {
     it('validate get form builder route with formId', function(done) {
         request(app).
         get('/qbase/builder/app/1/table/2/form/3').
+        expect(200);
+        done();
+    });
+
+    it('validate get feature switches route', function(done) {
+        request(app).
+        get('/qbase/admin/featureSwitches').
+        expect(200);
+        done();
+    });
+
+    it('validate get feature switches route with feature ID', function(done) {
+        request(app).
+        get('/qbase/admin/featureSwitches/1').
         expect(200);
         done();
     });

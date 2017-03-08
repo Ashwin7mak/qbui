@@ -17,7 +17,6 @@ module.exports = function(grunt) {
 
     // For the Protractor tests we need to import the node config files (one for local, one for CI)
     // This way when Protractor starts node it can read in what domain node is started at
-    var e2eJsConfig = require('./server/src/config/environment/e2e.js');
     var testJsConfig = require('./server/src/config/environment/test.js');
 
     var serverReportDir = buildDir + '/reports/server';
@@ -445,6 +444,7 @@ module.exports = function(grunt) {
                     },
                     mask          : '**/*.unit.spec.js',
                     root          : '.',
+                    excludes      : ['server/src/api/quickbase/mock/mockFeatureSwitchesApi.js'],
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
                     coverageFolder: 'build/reports/server/coverage'
@@ -494,7 +494,7 @@ module.exports = function(grunt) {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eJsConfig.DOMAIN
+                        baseUrl   : baseUrl
                     }
                 }
             },
@@ -503,7 +503,7 @@ module.exports = function(grunt) {
                 options: {
                     configFile: './e2e/config/local.sauce.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eJsConfig.DOMAIN,
+                        baseUrl   : baseUrl,
                         sauceSeleniumAddress : 'localhost:' + seleniumPort + '/wd/hub'
                     }
                 }
@@ -513,7 +513,7 @@ module.exports = function(grunt) {
                 options: {
                     configFile: './e2e/config/local.dataGen.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eJsConfig.DOMAIN
+                        baseUrl   : baseUrl
                     }
                 }
             }
@@ -530,14 +530,14 @@ module.exports = function(grunt) {
                     // './wdio/tests/reports/reportAddRecord.e2e.spec.js',
                     './wdio/tests/reports/reportEditRecord.e2e.spec.js',
                     './wdio/tests/reports/reportInlineReloadPageWithoutSaving.e2e.spec.js',
-                    './wdio/tests/reports/sorting/reportSortingViaColumnHeader.e2e.spec.js',
+                    './wdio/tests/reports/sorting/*.e2e.spec.js',
 
-                    // disabling formPermissionsViewerRole test as we are moving to ExperienceEngine,
-                    // permission for viewer are not working correctly
                     './wdio/tests/forms/formAdd*.e2e.spec.js',
                     './wdio/tests/forms/formEdit*.e2e.spec.js',
-                    './wdio/tests/forms/formEditPermissionsParticipantRole.e2e.spec.js',
-                    './wdio/tests/forms/formDragDrop.e2e.spec.js'
+                    './wdio/tests/forms/formPermissionsParticipantRole.e2e.spec.js'
+                    // disabling formPermissionsViewerRole test as we are moving to ExperienceEngine,
+                    // permission for viewer are not working correctly
+                    //'./wdio/tests/forms/formPermissionsViewerRole.e2e.spec.js'
                 ]
             },
             test: {

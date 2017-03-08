@@ -243,14 +243,13 @@ $topnav-header-background-color:        $color-blue-300;                        
 // left navigation
 $leftnav-background-color:              $color-black-250;
 $leftnav-background-stroke-color:       $color-black-500;
-$app-background-color:                  $color-cyan-500;
+$leftnav-app-background-color:          $color-cyan-500;
 $leftnav-brandarea-background-color:    $color-black-100;
 $leftnav-brandarea-stroke-color:        $color-black-500;
 $leftnav-app-icon-color:                $color-black-100;
 $leftnav-table-selected-color:          $color-cyan-500;
-$leftnav-table-default-color:           $color-black-800;
-$leftnav-tablenames-color:              $color-black-800;
-$leftnav-table-selected-color:          $color-cyan-500;
+$leftnav-table-default-color:           $color-black-700;
+$leftnav-tablenames-color:              $color-black-700;
 $leftnav-selected-nub-color:            $color-cyan-500;
 
 // current left navigation variables to be merged with the new ones above
@@ -471,8 +470,8 @@ $tabs-disabled-color:               $badcolor5-color18; // not in XD spreadsheet
 $tabs-active-color:                 $color-black-600;   // not in XD spreadsheet
 
 // FormBuilder - Drag & Drop
-$dragtoken-background-color1: $color-blue-700;
-$dragtoken-background-color2: rgba($color-blue-700, 0.8);
+$dragtoken-background-color1: $color-pink-800;
+$dragtoken-background-color2: rgba($color-pink-700, 0.9);
 $dragtoken-text-color: $color-black-100;
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 

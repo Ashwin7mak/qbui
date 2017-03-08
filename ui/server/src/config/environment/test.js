@@ -69,6 +69,7 @@
         javaHost: javaHost,
 
         eeHost: eeHost,
+        eeHostPort: eeHostPort,
         eeHostEnable: true,
 
         //Express Server

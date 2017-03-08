@@ -1,8 +1,12 @@
 @import '../../assets/css/qbVariables';
 
-$droppable-hover-foreground-color: $color-black-800; // temporary until drop-preview is created
-
 .formBuilderContainer {
+    // When using the touch-backend, the user-select: none property turns off text selection while dragging.
+    // Our auto-prefixer doesn't appear to support this one so added prefixes for user-select manually.
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     .draggableField {
         /* When in builder mode we need to push out the
@@ -61,19 +65,6 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
         content: none;
     }
 
-    // Dropping
-    .droppableField:before {
-        background-color: $droppable-hover-foreground-color;
-        opacity: 0;
-        transition: opacity 0.4s;
-    }
-
-    .droppableField.dropHovering:before {
-        opacity: 0.5;
-        z-index: 1;
-        transition: opacity 0.4s;
-    }
-
     // React CSS Transition Classes for elements that are moved
     .formItem-enter {
         opacity: 0.01;
@@ -95,5 +86,27 @@ $droppable-hover-foreground-color: $color-black-800; // temporary until drop-pre
 
     .dragAndDropField {
         max-width: $form-edit-input-width;
+    }
+
+    .dropHovering .mobileDropTarget {
+        opacity: 1;
+        height: 30px;
+
+        transition: opacity 0.5s, height 0.2s;
+    }
+
+    .mobileDropTarget {
+        opacity: 0;
+        width: $form-edit-input-width;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .mobileDropTargetVisibleLine {
+            height: 3px;
+            background-color: $color-green-600;
+            flex: 1 auto;
+        }
     }
 }
