@@ -86,7 +86,7 @@
             }
         });
 
-        app.all(routeConstants.FEATURE_SWITCHES, function(req, res, next) {
+        app.all(routeConstants.ADMIN + '/*', function(req, res, next) {
             usersApi.getReqUser(req).then(function(response) {
                 if (response.administrator) {
                     return next();
@@ -95,7 +95,6 @@
                 }
             });
         });
-
 
         //  For all requests:
         //     -- log the request route.

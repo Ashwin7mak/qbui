@@ -311,7 +311,7 @@ export class FeatureSwitchesRoute extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if (props.errors.status === 403) {
+        if (props.errorStatus === 403) {
             WindowLocationUtils.update("/qbase/forbidden");
         }
     }
@@ -319,7 +319,7 @@ export class FeatureSwitchesRoute extends React.Component {
      * get switches whenever the component mounts
      */
     componentDidMount() {
-        if (this.props.errors.status === 403) {
+        if (this.props.errorStatus === 403) {
             WindowLocationUtils.update("/qbase/forbidden");
         }
         this.props.getSwitches();
@@ -329,7 +329,7 @@ export class FeatureSwitchesRoute extends React.Component {
 
         const selectedSize = this.state.selectedIDs.length;
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
-        const loaded = this.props.errors.status === 200;
+        const loaded = this.props.errorStatus === 200;
         return (
             <Loader loaded={loaded}>
                 <div className="featureSwitches">
@@ -377,7 +377,7 @@ const mapStateToProps = (state) => {
 
     return {
         switches: state.featureSwitches.switches,
-        errors: state.errors
+        errorStatus: state.featureSwitches.errorStatus
     };
 };
 

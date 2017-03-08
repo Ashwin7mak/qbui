@@ -4,6 +4,7 @@
     let constants = require('../../../common/src/constants');
 
     let ACCESS_RIGHTS = 'accessRights';
+    let ADMIN = 'admin';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -673,6 +674,14 @@
         getUsersRoute: function(url, userId) {
             if (typeof url === 'string') {
                 let offset = url.toLowerCase().indexOf(USERS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+                offset = url.toLowerCase().indexOf(ADMIN);
                 if (offset !== -1) {
                     let root = url.substring(0, offset) + USERS;
                     if (userId) {

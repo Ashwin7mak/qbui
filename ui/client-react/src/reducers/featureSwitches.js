@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import constants from '../../../common/src/constants';
 
 const featureSwitches = (
     state = {
@@ -6,6 +7,7 @@ const featureSwitches = (
         switches: [],
         overrides: [],
         states: [],
+        errorStatus: null
     },
     action) => {
 
@@ -17,7 +19,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches: [...action.switches]
+            switches: [...action.switches],
+            errorStatus: constants.HttpStatusCode.OK
         };
 
     case types.CREATED_FEATURE_SWITCH: {
@@ -28,7 +31,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches: [...state.switches, newSwitch]
+            switches: [...state.switches, newSwitch],
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -43,7 +47,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches
+            switches,
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -59,7 +64,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            switches
+            switches,
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -68,7 +74,8 @@ const featureSwitches = (
         // keep switches whose ids are not in the deleted ids array
         return {
             ...state,
-            switches: state.switches.filter(fs => action.ids.indexOf(fs.id) === -1)
+            switches: state.switches.filter(fs => action.ids.indexOf(fs.id) === -1),
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -81,7 +88,8 @@ const featureSwitches = (
         const currentSwitch = state.switches.find(item => item.id === action.id);
         return {
             ...state,
-            overrides: currentSwitch && currentSwitch.overrides ? [...currentSwitch.overrides] : []
+            overrides: currentSwitch && currentSwitch.overrides ? [...currentSwitch.overrides] : [],
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -91,7 +99,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            overrides: [...state.overrides, {...action.override}]
+            overrides: [...state.overrides, {...action.override}],
+            errorStatus: constants.HttpStatusCode.OK
         };
 
     case types.EDIT_OVERRIDE: {
@@ -102,7 +111,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            overrides
+            overrides,
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -115,7 +125,8 @@ const featureSwitches = (
 
         return {
             ...state,
-            overrides
+            overrides,
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
@@ -123,16 +134,23 @@ const featureSwitches = (
 
         return {
             ...state,
-            overrides: state.overrides.filter(override => action.ids.indexOf(override.id) === -1)
+            overrides: state.overrides.filter(override => action.ids.indexOf(override.id) === -1),
+            errorStatus: constants.HttpStatusCode.OK
         };
     }
 
     case types.SET_FEATURE_SWITCH_STATES:
         return {
             ...state,
-            states: [...action.states]
+            states: [...action.states],
+            errorStatus: constants.HttpStatusCode.OK
         };
 
+    case types.FORBIDDEN:
+        return {
+            ...state,
+            errorStatus: constants.HttpStatusCode.FORBIDDEN
+        };
     default:
         // return existing state by default in redux
         return state;

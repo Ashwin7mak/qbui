@@ -44,6 +44,7 @@ export default {
 
     ROLES               : 'roles',
     TICKET              : 'ticket',
+    ADMIN               : 'admin',
 
     // Node Entity actions
     FORMCOMPONENTS      : 'formComponents',

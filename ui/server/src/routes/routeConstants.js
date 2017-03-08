@@ -62,14 +62,6 @@
         APPS                        : baseUrl.QUICKBASE + '/apps',
         APP_USERS                   : baseUrl.QUICKBASE + '/apps/:appId/users',
 
-        FEATURE_SWITCHES            : baseUrl.QUICKBASE + '/featureSwitches',
-        FEATURE_SWITCHES_BULK       : baseUrl.QUICKBASE + '/featureSwitches/bulk',
-        FEATURE_SWITCH              : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId',
-        FEATURE_OVERRIDES           : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId/overrides',
-        FEATURE_OVERRIDES_BULK      : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId/overrides/bulk',
-        FEATURE_OVERRIDE            : baseUrl.QUICKBASE + '/featureSwitches/:featureSwitchId/overrides/:overrideId',
-        FEATURE_STATES              : baseUrl.QUICKBASE + '/featureStates',
-
         //  ROLE ENDPOINTS
         APP_ROLES                   : baseUrl.QUICKBASE + '/apps/:appId/roles',
 
@@ -78,7 +70,16 @@
 
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
-        TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*'
+        TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*',
+
+        ADMIN                       : baseUrl.QUICKBASE + '/admin',
+        FEATURE_SWITCHES            : baseUrl.QUICKBASE + '/admin/featureSwitches',
+        FEATURE_SWITCHES_BULK       : baseUrl.QUICKBASE + '/admin/featureSwitches/bulk',
+        FEATURE_SWITCH              : baseUrl.QUICKBASE + '/admin/featureSwitches/:featureSwitchId',
+        FEATURE_OVERRIDES           : baseUrl.QUICKBASE + '/admin/featureSwitches/:featureSwitchId/overrides',
+        FEATURE_OVERRIDES_BULK      : baseUrl.QUICKBASE + '/admin/featureSwitches/:featureSwitchId/overrides/bulk',
+        FEATURE_OVERRIDE            : baseUrl.QUICKBASE + '/admin/featureSwitches/:featureSwitchId/overrides/:overrideId',
+        FEATURE_STATES              : baseUrl.QUICKBASE + '/admin/featureStates',
     };
 
     /*
