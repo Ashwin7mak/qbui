@@ -15,10 +15,23 @@
         height: 150px !important;
     }
 
+    .dragAndDropField {
+        max-width: $form-edit-input-width;
+
+        @include small-breakpoint {
+            max-width: inherit;
+        }
+    }
+
     .draggableField {
+        opacity: 1;
+        z-index: 1;
+        transition: opacity 0.5s;
+
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
+
         &:active {
             .formElement.fieldLabel {
                 //need to add a zindex of 1 to show the field label during an active state
@@ -31,63 +44,9 @@
         position: relative;
     }
 
-    .notDragging {
-        max-height: 500px;
-        opacity: 1;
-
-        transition: opacity 0.5s;
-    }
-
-    /*
-     * In order to show hover and drop effects over existing, but unknown elements, we place a transparent
-     * element over each form element. These are then transitioned based on opacity. Note that dragging elements have
-     * a div appended BEFORE and droppable targets are appended AFTER. This prevents the droppable target from blocking
-     * the draggable one.
-     */
-    .draggableField:before, .droppableField:before {
-        content: "";
-        position: absolute;
-        width: 110%;
-        height: 120%;
-        top: -10%;
-        left: -5%;
-    }
-
-    // Dragging
-    .notDragging:before {
-        opacity: 0;
-        transition: opacity 0.2s;
-    }
-
-    .notDragging:hover:after {
-        opacity: 0.5;
-
-        transition: opacity 0.2s;
-    }
-
-    .notDragging:active:after {
-        opacity: 0;
-    }
-
     .dragging {
-        opacity: 0.8;
+        opacity: 0.9;
         transition: opacity 0.5s;
-    }
-
-    .dragging:after {
-        content: none;
-    }
-
-    @include medium-breakpoint {
-        .dragAndDropField {
-            max-width: $form-edit-input-width;
-        }
-    }
-
-    @include large-breakpoint {
-        .dragAndDropField {
-            max-width: $form-edit-input-width;
-        }
     }
 
     /**

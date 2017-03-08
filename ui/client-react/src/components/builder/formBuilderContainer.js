@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, updateAnimationState} from '../../actions/formActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -38,6 +38,10 @@ const mapDispatchToProps = dispatch => {
 
         updateForm(appId, tblId, formType, form) {
             return dispatch(updateForm(appId, tblId, formType, form));
+        },
+
+        updateAnimationState(isAnimating) {
+            return dispatch(updateAnimationState(isAnimating));
         }
     };
 };
@@ -129,7 +133,12 @@ export const FormBuilderContainer = React.createClass({
                         pixelsFromBottomForLargeDevices={30}>
                         <div className="formBuilderContent">
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                                <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                                <FormBuilder
+                                    formId={formId}
+                                    formData={formData}
+                                    moveFieldOnForm={this.props.moveField}
+                                    updateAnimationState={this.props.updateAnimationState}
+                                />
                             </Loader>
                         </div>
                     </AutoScroll>

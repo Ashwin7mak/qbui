@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import _ from 'lodash';
 import DraggableField from './draggableField';
 import DroppableFormElement from './droppableFormElement';
@@ -9,17 +9,21 @@ import DroppableFormElement from './droppableFormElement';
  * @returns {*}
  */
 export default (FieldComponent) => {
-    let component = props => {
-        let key = (_.has(props, 'element.id') ? props.element.id : _.uniqueId());
-        return (
-            <div key={`dragDropField-${key}`} className="dragAndDropField">
-                <FieldComponent {...props} />
-            </div>
-        );
-    };
+    // This must be a component that could have state to work with drag/drop animations.
+    // It cannot be a stateless component built with a function.
+    class DragDropFieldComponent extends Component {
+        render () {
+            let key = (_.has(this.props, 'element.id') ? this.props.element.id : _.uniqueId());
+            return (
+                <div key={`dragDropField-${key}`} className="dragAndDropField">
+                    <FieldComponent {...this.props} />
+                </div>
+            );
+        }
+    }
 
     return _.flow([
         DraggableField,
         DroppableFormElement
-    ])(component);
+    ])(DragDropFieldComponent);
 };

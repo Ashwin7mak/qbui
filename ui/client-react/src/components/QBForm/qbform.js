@@ -220,8 +220,19 @@ let QBForm = React.createClass({
         let arrangedElements = elements;
         if (this.props.hasAnimation && this.props.editingForm) {
             // Adds animation when field elements are moved during form editing.
+            // The animation also callbacks to update the animating state to make sure drop events are not called
+            // when elements are passing each other during animation.
             arrangedElements = (
-                <FlipMove duration="200" easing="ease-out" appearAnimation="accordionVertical">
+                <FlipMove
+                    duration={200}
+                    easing="ease"
+                    appearAnimation="accordionVertical"
+                    staggerDelayBy={0}
+                    staggerDurationBy={0}
+                    delay={0}
+                    onStartAll={() => this.props.updateAnimationState(true)}
+                    onFinishAll={() => this.props.updateAnimationState(false)}
+                >
                     {elements}
                 </FlipMove>
             );

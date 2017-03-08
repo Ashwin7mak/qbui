@@ -11,7 +11,7 @@ import Device from '../../utils/device';
 
 import './formBuilder.scss';
 
-const DRAG_PREVIEW_TIMEOUT = 75;
+const DRAG_PREVIEW_TIMEOUT = 50;
 
 /**
  * A container that holds the DragDropContext. Drag and Drop can only occur with elements inside this container.
@@ -26,12 +26,12 @@ export class FormBuilder extends Component {
         };
 
         this.elementCache = null;
+        this.reorderTimeout = null;
 
         this.handleFormReorder = this.handleFormReorder.bind(this);
         this.cancelFormReorder = this.cancelFormReorder.bind(this);
         this.cacheDragElement = this.cacheDragElement.bind(this);
         this.clearDragElementCache = this.clearDragElementCache.bind(this);
-        this.reorderTimeout = null;
     }
 
     /**
@@ -75,7 +75,7 @@ export class FormBuilder extends Component {
      */
     cacheDragElement(dragComponent) {
         if (this.elementCache && dragComponent) {
-            findDOMNode(this.elementCache).appendChild(findDOMNode(dragComponent));
+            this.elementCache.appendChild(findDOMNode(dragComponent));
         }
     }
 
@@ -109,7 +109,8 @@ export class FormBuilder extends Component {
                     cacheDragElement={this.cacheDragElement}
                     clearDragElementCache={this.clearDragElementCache}
                     cancelFormReorder={this.cancelFormReorder}
-                    hasAnimation={!Device.isTouch()}
+                    updateAnimationState={this.props.updateAnimationState}
+                    hasAnimation={true}
                     appUsers={[]}
                 />
                 <div className="elementCache" ref={elementCache => this.elementCache = elementCache} />
@@ -128,7 +129,9 @@ FormBuilder.propTypes = {
         formMeta: PropTypes.object
     }).isRequired,
 
-    moveFieldOnForm: PropTypes.func
+    moveFieldOnForm: PropTypes.func,
+
+    updateAnimationState: PropTypes.func,
 };
 
 FormBuilder.defaultProps = {
