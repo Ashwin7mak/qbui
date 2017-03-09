@@ -6,15 +6,15 @@ import {GOVERNANCE_USERS_ROUTE} from './routes';
 import AccountUsers from '../account/users/AccountUsers';
 
 import { Provider } from 'react-redux';
+import createGovernanceStore from './store';
 
-import createAppStore from '../../../client-react/src/scripts/store.js';
+const store = createGovernanceStore();
 
-const store = createAppStore();
 
 render((
     <Provider store={store}>
-    <Router history={browserHistory}>
-        <Route path={GOVERNANCE_USERS_ROUTE} component={AccountUsers} />
-    </Router>
+        <Router history={browserHistory}>
+            <Route path={GOVERNANCE_USERS_ROUTE} component={AccountUsers} />
+        </Router>
     </Provider>
 ), document.getElementById('content'));

@@ -268,7 +268,7 @@ export class AccountUsersGrid extends Component {
                 <Table.Header className="qbHeader" />
 
                 <Table.Body className="qbTbody"
-                            rows={data}
+                            rows={this.props.users}
                             rowKey="uid"
                             onRow={(row) => {
                                 return {
@@ -284,7 +284,6 @@ export class AccountUsersGrid extends Component {
 
 const mapStateToProps = (state) => {
 
-    console.log(state);
     return {
         users: state.AccountUsers.users
     };
