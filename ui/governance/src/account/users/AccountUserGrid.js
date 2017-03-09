@@ -9,6 +9,9 @@ import QbRow from '../../../../client-react/src/components/dataTable/qbGrid/qbRo
 import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
 
+import {connect} from 'react-redux';
+import * as AccountUsersActions from '../../actions/AccountUsersActions';
+
 const DeactivatedFlag = 0x00000040;
 const DeniedFlag = 0x0008;
 const CanCreateAppFlag = 0x0004;
@@ -233,7 +236,19 @@ const columns = [
     },
 ];
 
-class AccountUsersGrid extends Component {
+export class AccountUsersGrid extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    /**
+     * get users whenever the component mounts
+     */
+    componentDidMount() {
+        this.props.getUsers();
+    }
+
     render() {
         return (
             <Table.Provider
@@ -266,4 +281,18 @@ class AccountUsersGrid extends Component {
     }
 }
 
-export default AccountUsersGrid;
+
+const mapStateToProps = (state) => {
+
+    console.log(state);
+    return {
+        users: state.AccountUsers.users
+    };
+};
+
+
+export default connect(
+    mapStateToProps,
+    AccountUsersActions
+)(AccountUsersGrid);
+

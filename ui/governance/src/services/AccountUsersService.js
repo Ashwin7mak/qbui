@@ -1,5 +1,4 @@
-import constants from './constants';
-import BaseService from './baseService';
+import BaseService from '../../../client-react/src/services/baseService';
 
 class AccountUsersService extends BaseService {
 
@@ -8,13 +7,13 @@ class AccountUsersService extends BaseService {
 
         //  Feature switch service API endpoints
         this.API = {
-            GET_Users               : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_SWITCHES}`
+            GET_Users               : "https://jsonplaceholder.typicode.com/users"
         };
     }
 
     getUsers() {
         const params = {};
-        const url = super.constructUrl(this.API.GET_FEATURE_SWITCHES, []);
+        const url = super.constructUrl(this.API.GET_Users, []);
 
         return super.get(url, {params});
     }

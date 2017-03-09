@@ -3,8 +3,8 @@
 import AccountUsersService from '../services/AccountUsersService';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
-import Logger from '../utils/logger';
-import LogLevel from '../utils/logLevels';
+import Logger from '../../../client-react/src/utils/logger';
+import LogLevel from '../../../client-react/src/utils/logLevels';
 
 const logger = new Logger();
 
