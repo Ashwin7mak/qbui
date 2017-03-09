@@ -152,4 +152,11 @@ describe('Express Client Routes', function() {
         expect(200);
         done();
     });
+
+    it('validate get governance route with account ID', function(done) {
+        request(app).
+        get('/qbase/governance/1/users').
+        expect(200);
+        done();
+    });
 });
