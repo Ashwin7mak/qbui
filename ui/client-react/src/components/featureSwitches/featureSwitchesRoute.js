@@ -19,6 +19,7 @@ import * as UrlConsts from "../../constants/urlConstants";
 import * as CompConsts from '../../constants/componentConstants';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
+import * as constants from '../../../../common/src/constants';
 
 import './featureSwitches.scss';
 
@@ -310,18 +311,19 @@ export class FeatureSwitchesRoute extends React.Component {
         ];
     }
 
-    componentWillReceiveProps(props) {
-        if (props.errorStatus === 403) {
+    checkAccess(props) {
+        if (props.errorStatus === constants.HttpStatusCode.FORBIDDEN) {
             WindowLocationUtils.update("/qbase/forbidden");
         }
+    }
+    componentWillReceiveProps(props) {
+        this.checkAccess(props);
     }
     /**
      * get switches whenever the component mounts
      */
     componentDidMount() {
-        if (this.props.errorStatus === 403) {
-            WindowLocationUtils.update("/qbase/forbidden");
-        }
+        this.checkAccess(this.props);
         this.props.getSwitches();
     }
 
@@ -329,7 +331,7 @@ export class FeatureSwitchesRoute extends React.Component {
 
         const selectedSize = this.state.selectedIDs.length;
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
-        const loaded = this.props.errorStatus === 200;
+        const loaded = this.props.errorStatus === constants.HttpStatusCode.OK;
         return (
             <Loader loaded={loaded}>
                 <div className="featureSwitches">
