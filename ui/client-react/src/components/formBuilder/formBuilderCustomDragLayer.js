@@ -4,7 +4,7 @@ import draggableItemTypes from './draggableItemTypes';
 import FieldToken from './fieldToken/fieldToken';
 import Locale from '../../locales/locales';
 import consts from '../../../../common/src/constants';
-import Breakpoints from '../../utils/breakpoints';
+import Device from '../../utils/device';
 import _ from 'lodash';
 
 // Values from fieldToken.scss
@@ -45,7 +45,7 @@ function getItemStyles(props) {
 
     // On small breakpoints, the center of the token is under the mouse. In larger breakpoints, the mouse is on the
     // field token icon
-    const shiftTokenX = (Breakpoints.isSmallBreakpoint() ? (TOKEN_WIDTH / 2) : (TOKEN_ICON_WIDTH / 2));
+    const shiftTokenX = (Device.isTouch() ? (TOKEN_WIDTH / 2) : (TOKEN_ICON_WIDTH / 2));
     const shiftTokenY = TOKEN_HEIGHT / 2;
     const transform = `translate(${x - shiftTokenX}px, ${y - shiftTokenY}px)`;
 

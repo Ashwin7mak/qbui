@@ -103,8 +103,8 @@ describe('FormBuilderCustomDragLayer', () => {
             });
         });
 
-        it('centers the drag preview under the cursor on small devices', () => {
-            DragLayerRewireAPI.__Rewire__('Breakpoints', {isSmallBreakpoint: () => true});
+        it('centers the drag preview under the cursor on touch devices', () => {
+            DragLayerRewireAPI.__Rewire__('Device', {isTouch: () => true});
             component = shallow(<FormBuilderCustomDragLayer
                 isDragging={true}
                 currentOffset={{x: TOKEN_WIDTH / 2, y: TOKEN_HEIGHT / 2}}
@@ -115,7 +115,7 @@ describe('FormBuilderCustomDragLayer', () => {
                 WebkitTransform: 'translate(0px, 0px)'
             });
 
-            DragLayerRewireAPI.__ResetDependency__('Breakpoints', {isSmallBreakPoint: () => true});
+            DragLayerRewireAPI.__ResetDependency__('Device');
         });
     });
 });
