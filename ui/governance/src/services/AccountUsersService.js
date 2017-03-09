@@ -4,8 +4,6 @@ class AccountUsersService extends BaseService {
 
     constructor() {
         super();
-
-        //  Feature switch service API endpoints
         this.API = {
             GET_Users               : "https://jsonplaceholder.typicode.com/users"
         };
