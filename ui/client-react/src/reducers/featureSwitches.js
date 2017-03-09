@@ -1,5 +1,4 @@
 import * as types from '../actions/types';
-import * as FeatureSwitchConsts from '../constants/featureSwitchConstants';
 
 const featureSwitches = (
     state = {

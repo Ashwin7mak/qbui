@@ -110,8 +110,7 @@
             updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
-                    let bodyJSON = JSON.parse(req.rawBody);
-                    let overrideData = bodyJSON.override;
+                    let overrideData = JSON.parse(req.rawBody);
 
                     let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
