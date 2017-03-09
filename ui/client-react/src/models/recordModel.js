@@ -1,5 +1,6 @@
 import ValidationMessage from '../utils/validationMessage';
 import ValidationUtils from '../../../common/src/validationUtils';
+import {UNSAVED_RECORD_ID} from "../constants/schema";
 import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import * as types from '../actions/types';
 import _ from 'lodash';
@@ -162,7 +163,8 @@ class RecordModel {
 
         // only set if a new record; updating when inline editing seems to trigger a hide of the
         // the inline editing row , which displays the old record values for a short period of time.
-        if (recId === NEW_RECORD_VALUE) {
+        //if (recId === UNSAVED_RECORD_ID || recId === NEW_RECORD_VALUE) {
+        if (recId === UNSAVED_RECORD_ID ) {
             this.model.recordChanges = changes;
         }
 

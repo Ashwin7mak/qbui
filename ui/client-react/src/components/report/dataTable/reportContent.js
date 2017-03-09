@@ -22,9 +22,10 @@ import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
 import {connect} from 'react-redux';
-import {deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
-import {selectReportRecords} from '../../../actions/reportActions';
+import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
+import {addBlankRecordToReport, selectReportRecords} from '../../../actions/reportActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../../constants/urlConstants';
+import * as SchemaConstants from '../../../constants/schema';
 import {CONTEXT} from '../../../actions/context';
 
 let logger = new Logger();
@@ -322,23 +323,19 @@ export const ReportContent = React.createClass({
             //    return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
             //}
         } else {
-            return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
+            //return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
+            this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, recordId, false);
         }
-        return Promise.resolve(null);
+        //return Promise.resolve(null);
     },
 
     addNewRowAfterRecordSaveSuccess(afterRecId) {
         const flux = this.getFlux();
-        let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+        //let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
 
         // The promise is saved to a variable and called separately for testing purposes
         // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
-        newBlankReportPromise.then(() => {
-            // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
-            // due to the speed of re-rendering
-            NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-        });
+        this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, afterRecId, true);
     },
 
     /**
@@ -1137,17 +1134,23 @@ const mapDispatchToProps = (dispatch) => {
         editRecordValidateField: (fieldDef, fieldName, value, checkRequired) => {
             dispatch(editRecordValidateField(fieldDef, fieldName, value, checkRequired));
         },
+        addBlankRecordToReport: (context, appId, tblId, afterRecId, showNotification) => {
+            dispatch(addBlankRecordToReport(context, afterRecId)).then(
+                () => {
+                    dispatch(editRecordStart(appId, tblId, SchemaConstants.UNSAVED_RECORD_ID, null, null, true, null));
+                    if (showNotification) {
+                        NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'),
+                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                    }
+                }
+            );
+        },
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
         dispatch: dispatch,
         updateRecord:(appId, tblId, recId, params) => {
             dispatch(updateRecord(appId, tblId, recId, params));
-            //dispatch(updateRecord(appId, tblId, recId, pendEdits, fields, colList, showNotificationOnSuccess)).then(
-            //    (obj) => {
-            //        dispatch(updateReportRecord(obj, CONTEXT.REPORT.NAV));
-            //    }
-            //);
         }
     };
 };

@@ -15,6 +15,7 @@ import FieldUtils from '../utils/fieldUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
 import * as SchemaConstants from '../constants/schema';
+import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 
 class ReportModelHelper {
@@ -246,7 +247,6 @@ function findRecordById(records, recId, hasGrouping, keyField) {
     }
 }
 
-
 /**
  *
  * @param currentReport
@@ -263,18 +263,15 @@ function addRecordToReport(currentReport, content) {
         let newRecId = content.newRecId;
 
         if (reportData.filteredRecords.length > 0) {
-            //find record to add after
+            //  Unless there is a specified afterRecId, will add the new record to the top of the list.  Currently, only
+            //  adding a new record from the grid will include the afterRecId.
             let afterRecIndex = -1;
-
-            //  if there is a newRecId parameter value, then this is a new record
-            if (!newRecId) {
-                if (afterRecId) {
-                    // The afterRecId is an object if coming from the grid
-                    if (_.has(afterRecId, 'value')) {
-                        afterRecId = afterRecId.value;
-                    }
-                    afterRecIndex = ReportUtils.findRecordIndex(reportData.records, afterRecId, reportData.keyField.name);
+            if (afterRecId) {
+                // The afterRecId is an object if coming from the grid
+                if (_.has(afterRecId, 'value')) {
+                    afterRecId = afterRecId.value;
                 }
+                afterRecIndex = ReportUtils.findRecordIndex(reportData.records, afterRecId, reportData.keyField.name);
             }
 
             // use 1st record to create newRecord
@@ -361,11 +358,14 @@ function addRecordToReport(currentReport, content) {
             }
         }
 
-        // transform record from format [{id, value}] to [fieldName: {id, value}]
-        let formattedRec = formatRecord(content.record, reportData.fields);
+        // skip if adding a blank row to the report list as content.record will not exist
+        if (content.record) {
+            // transform record from format [{id, value}] to [fieldName: {id, value}]
+            let formattedRec = formatRecord(content.record, reportData.fields);
 
-        //  update the report with the new record data
-        updateReportRecordData(record, filtRecord, formattedRec);
+            //  update the report with the new record data
+            updateReportRecordData(record, filtRecord, formattedRec);
+        }
     }
 }
 
@@ -470,11 +470,14 @@ function addRecordToGroupedReport(currentReport, content) {
         record[reportData.keyField.name].value = content.newRecId;
     }
 
-    // transform record from format [{id, value}] to [fieldName: {id, value}]
-    let formattedRec = formatRecord(content.record, reportData.fields);
+    // skip if adding a blank row to the report list as content.record will not exist
+    if (content.record) {
+        // transform record from format [{id, value}] to [fieldName: {id, value}]
+        let formattedRec = formatRecord(content.record, reportData.fields);
 
-    //  update the report with the new record data
-    updateReportRecordData(null, record, formattedRec);
+        //  update the report with the new record data
+        updateReportRecordData(null, record, formattedRec);
+    }
 }
 
 /**
