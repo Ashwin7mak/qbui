@@ -636,7 +636,7 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             //actions.SELECTED_ROWS, this.onSelectedRows,
 
-            actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
+            //actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             //actions.DELETE_RECORD, this.onDeleteReportRecord,
             //actions.DELETE_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
             //actions.DELETE_RECORD_FAILED, this.onDeleteReportRecordFailed,

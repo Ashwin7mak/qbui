@@ -1,4 +1,6 @@
 import * as types from '../actions/types';
+import {UNSAVED_RECORD_ID} from '../constants/schema';
+import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
@@ -183,6 +185,31 @@ const report = (state = [], action) => {
             });
         });
         return reports;
+    }
+    case types.ADD_BLANK_REPORT_RECORD: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let content = {
+                newRecId: UNSAVED_RECORD_ID,
+                afterRecId: action.content.afterRecId
+            };
+
+            //  gotta have an id to know where to insert the new record
+            if (content.afterRecId) {
+                // remove record from report if its new and unsaved
+                if (currentReport.editingIndex !== undefined || currentReport.editingId !== undefined) {
+                    if (content.afterRecId === UNSAVED_RECORD_ID || content.afterRecId === NEW_RECORD_VALUE) {
+                        ReportModelHelper.deleteRecordFromReport(currentReport, content.afterRecId);
+                    }
+                    currentReport.editingIndex = undefined;
+                    currentReport.editingId = undefined;
+                }
+
+                ReportModelHelper.addReportRecord(currentReport, content);
+                return newState(currentReport);
+            }
+        }
+        return state;
     }
     default:
         // by default, return existing state
