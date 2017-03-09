@@ -36,7 +36,7 @@ class BaseClientRoute {
     }
 
     constructor(app, baseProps, path, options = {}) {
-        app.route(`${baseRoute}${path.charAt(0) == '/' ? path : `/${path}`}`).get((req, res) => {
+        app.route(`${baseRoute}${path.length === 0 || path.charAt(0) == '/' ? path : `/${path}`}`).get((req, res) => {
             renderIndex(req, res, Object.assign({}, baseProps, {title: 'QuickBase', req: req}, options));
         });
     }

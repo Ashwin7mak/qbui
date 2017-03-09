@@ -35,6 +35,13 @@ describe('BaseClientRoute', () => {
 
             assert(mockExpressApp.route.calledWith(`${baseClientPath}/${testPath}`));
         });
+
+        it('does not add a backslash to a blank route (allows route /qbase to be set)', () => {
+            const testPath = '';
+            new BaseClientRoute(mockExpressApp, {}, testPath);
+
+            assert(mockExpressApp.route.calledWith(baseClientPath));
+        });
     });
 
     describe('addRoutesFromArrayOfPaths', () => {
