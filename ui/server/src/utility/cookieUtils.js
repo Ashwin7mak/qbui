@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-
+    var ob32utils = require('./ob32Utils');
 
     module.exports = {
         /**  final String ticket = this.currentTicketVersion + "_" + ob32When + "_" + ob32UserID + "_" + ob32RealmID + "_" + ob32UserTicketVersion + "_" + digest;
@@ -22,6 +22,9 @@
          * @returns {*}
          */
         breakTicketDown: function(ticket, section) {
+            if (!ticket || !section) {
+                return null;
+            }
             var ticketSections = ticket.split("_");
             if (ticketSections.length > 6) {
                 //the userId must contain an underscore
@@ -34,6 +37,17 @@
                 }
             }
             return ticketSections[section];
+        },
+        getUserId: function(ticket) {
+            if (!ticket) {
+                return null;
+            }
+            let userId = this.breakTicketDown(ticket, 2);
+            if (userId.indexOf('_') === -1) {
+                //its an numeric so we need to decode it
+                userId = ob32utils.decoder(userId);
+            }
+            return userId;
         }
     };
 }());

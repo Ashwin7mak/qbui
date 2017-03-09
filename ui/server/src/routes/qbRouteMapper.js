@@ -22,7 +22,6 @@
     let reportsApi;
     let appsApi;
     let rolesApi;
-    let ticketApi;
     let routeGroup;
     let usersApi;
     let featureSwitchesApi;
@@ -37,7 +36,6 @@
         appsApi = require('../api/quickbase/appsApi')(config);
         featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config);
         rolesApi = require('../api/quickbase/rolesApi')(config);
-        ticketApi = require('../api/quickbase/ticketApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
 
         /* internal data */

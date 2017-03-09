@@ -47,11 +47,7 @@
                         ticket = req.headers.ticket;
                     }
                     if (ticket) {
-                        let userId = cookieUtils.breakTicketDown(ticket, 2);
-                        if (userId.indexOf('_') === -1) {
-                            //its an numeric so we need to decode it
-                            userId = ob32Utils.decoder(userId);
-                        }
+                        let userId = cookieUtils.getUserId(ticket);
                         this.getUserById(req, userId).then(function(response) {
                             resolve(response);
                         },
@@ -75,7 +71,11 @@
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getUsersRoute(req.url, userId);
+                    if (routeHelper.isAdminRoute(req.url)) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getUsersRouteForAdmin(req.url, userId);
+                    } else {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getUsersRoute(req.url, userId);
+                    }
                     //  make the api request to get the user object
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {

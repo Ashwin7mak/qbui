@@ -14,3 +14,4 @@ export const ADMIN_ROUTE = `${BASE_CLIENT_ROUTE}/admin`;
 export const REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}`;
 export const CHILD_REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}?detailKeyFid={3}&detailKeyValue={4}`;
 
+export const FORBIDDEN = `${BASE_CLIENT_ROUTE}/forbidden`;

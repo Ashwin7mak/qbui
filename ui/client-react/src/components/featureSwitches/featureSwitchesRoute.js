@@ -312,8 +312,8 @@ export class FeatureSwitchesRoute extends React.Component {
     }
 
     checkAccess(props) {
-        if (props.errorStatus === constants.HttpStatusCode.FORBIDDEN) {
-            WindowLocationUtils.update("/qbase/forbidden");
+        if (props.error && props.error.status === constants.HttpStatusCode.FORBIDDEN) {
+            WindowLocationUtils.update(UrlConsts.FORBIDDEN);
         }
     }
     componentWillReceiveProps(props) {
@@ -331,7 +331,7 @@ export class FeatureSwitchesRoute extends React.Component {
 
         const selectedSize = this.state.selectedIDs.length;
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
-        const loaded = this.props.errorStatus === constants.HttpStatusCode.OK;
+        const loaded = this.props.error === null;
         return (
             <Loader loaded={loaded}>
                 <div className="featureSwitches">
@@ -379,7 +379,7 @@ const mapStateToProps = (state) => {
 
     return {
         switches: state.featureSwitches.switches,
-        errorStatus: state.featureSwitches.errorStatus
+        error: state.featureSwitches.errorResponse
     };
 };
 

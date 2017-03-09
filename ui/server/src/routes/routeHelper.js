@@ -36,6 +36,7 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+    let REGEX_ADMIN_ROUTE = /admin(.*)?$/i;
 
     /**
      *
@@ -640,12 +641,16 @@
          * @returns {*}
          */
         getTicketRoute: function(url) {
-            if (typeof url === 'string') {
-                let offset = url.toLowerCase().indexOf(TICKET);
-                if (offset !== -1) {
-                    let root = url.substring(0, offset) + TICKET;
-                    return root;
-                }
+            //if (typeof url === 'string') {
+            //    let offset = url.toLowerCase().indexOf(TICKET);
+            //    if (offset !== -1) {
+            //        let root = url.substring(0, offset) + TICKET;
+            //        return root;
+            //    }
+            //}
+            let root = getUrlRoot(url, TICKET);
+            if (root) {
+                return root;
             }
             return url;
         },
@@ -681,7 +686,18 @@
                     }
                     return root;
                 }
-                offset = url.toLowerCase().indexOf(ADMIN);
+            }
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRouteForAdmin: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(ADMIN);
                 if (offset !== -1) {
                     let root = url.substring(0, offset) + USERS;
                     if (userId) {
@@ -691,6 +707,13 @@
                 }
             }
             return url;
+        },
+
+        isAdminRoute(url) {
+            if (typeof url === 'string') {
+                return REGEX_ADMIN_ROUTE.test(url);
+            }
+            return false;
         },
 
         /**

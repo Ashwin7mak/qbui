@@ -7,7 +7,7 @@ const featureSwitches = (
         switches: [],
         overrides: [],
         states: [],
-        errorStatus: null
+        errorResponse: undefined
     },
     action) => {
 
@@ -20,7 +20,7 @@ const featureSwitches = (
         return {
             ...state,
             switches: [...action.switches],
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
 
     case types.CREATED_FEATURE_SWITCH: {
@@ -32,7 +32,7 @@ const featureSwitches = (
         return {
             ...state,
             switches: [...state.switches, newSwitch],
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -48,7 +48,7 @@ const featureSwitches = (
         return {
             ...state,
             switches,
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -65,7 +65,7 @@ const featureSwitches = (
         return {
             ...state,
             switches,
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -75,7 +75,7 @@ const featureSwitches = (
         return {
             ...state,
             switches: state.switches.filter(fs => action.ids.indexOf(fs.id) === -1),
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -89,7 +89,7 @@ const featureSwitches = (
         return {
             ...state,
             overrides: currentSwitch && currentSwitch.overrides ? [...currentSwitch.overrides] : [],
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -100,7 +100,7 @@ const featureSwitches = (
         return {
             ...state,
             overrides: [...state.overrides, {...action.override}],
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
 
     case types.EDIT_OVERRIDE: {
@@ -112,7 +112,7 @@ const featureSwitches = (
         return {
             ...state,
             overrides,
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -126,7 +126,7 @@ const featureSwitches = (
         return {
             ...state,
             overrides,
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -135,7 +135,7 @@ const featureSwitches = (
         return {
             ...state,
             overrides: state.overrides.filter(override => action.ids.indexOf(override.id) === -1),
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
     }
 
@@ -143,13 +143,13 @@ const featureSwitches = (
         return {
             ...state,
             states: [...action.states],
-            errorStatus: constants.HttpStatusCode.OK
+            errorResponse: null
         };
 
     case types.FORBIDDEN:
         return {
             ...state,
-            errorStatus: constants.HttpStatusCode.FORBIDDEN
+            errorResponse: action.error.response
         };
     default:
         // return existing state by default in redux
