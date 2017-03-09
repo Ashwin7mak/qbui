@@ -78,15 +78,6 @@ class ReportModelHelper {
                         }
                     }
 
-                    // note if this the table needs updates when locale changes
-                    if (durUnits || durationFormatter.isSmartUnitsField(fieldDef)) {
-                        //  customized field created to track if the column requires localization.
-                        //  TODO - Needed????  Need to figure out if needed since can't set model boolean from this method
-                        //  TODO - which is what was being done prior to this work getting shifted to reportModel
-                        //  TODO - Look at getColumnsHaveLocalization()..probably need to look at the columns..
-                        column.columnHasLocalization = true;
-                    }
-
                     column.fieldType = fieldDef.type;
 
                     column.defaultValue = null;

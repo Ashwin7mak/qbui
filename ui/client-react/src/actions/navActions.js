@@ -1,6 +1,6 @@
 // action creators
 import * as actions from '../constants/actions';
-import Locale from '../locales/locales';
+//import Locale from '../locales/locales';
 import Breakpoints from '../utils/breakpoints';
 
 let navActions = {
@@ -43,10 +43,10 @@ let navActions = {
     hideTopNav() {
         this.dispatch(actions.HIDE_TOP_NAV);
     },
-    changeLocale(locale) {
-        Locale.changeLocale(locale);
-        this.dispatch(actions.CHANGE_LOCALE);
-    },
+    //changeLocale(locale) {
+    //    Locale.changeLocale(locale);
+    //    this.dispatch(actions.CHANGE_LOCALE);
+    //},
     scrollingReport(isScrolling = true) {
         this.dispatch(actions.SCROLLING_REPORT, isScrolling);
     }

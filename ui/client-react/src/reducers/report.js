@@ -211,6 +211,21 @@ const report = (state = [], action) => {
         }
         return state;
     }
+    case types.CHANGE_LOCALE: {
+        // listen for change locale event and update report columns to new locale for all reports
+        const reports = _.cloneDeep(state);
+        reports.forEach((rpt) => {
+            if (rpt && !rpt.loading) {
+                if (_.has(rpt, 'data')) {
+                    let groupEls = rpt.data.groupEls;
+                    let fids = rpt.data.fids;
+                    let fields = rpt.data.hasGrouping ? rpt.data.gridColumns : rpt.data.fields;
+                    rpt.data.columns = ReportModelHelper.getReportColumns(fields, fids, groupEls);
+                }
+            }
+        });
+        return reports;
+    }
     default:
         // by default, return existing state
         return state;
