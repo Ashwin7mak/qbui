@@ -12,6 +12,11 @@
          * 4) ob32 encoded user Ticket Version
          * 5) sha256 digest value (refer to createTicket in QBTicket.java for more information)
          *
+         * NOTE: Currently old stack userids are numeric while new stack creates userids are alphanumeric with an underscore in the middle which look like RHVCGZ_UB.
+         * The old stack userids are ob32encoded in the ticket while new stack userids are not.
+         * As of 03/2017 the plan is to use old stack only for all users but this service is not available. In the meantime the tests create and use users from new stack
+         * This method supports both kinds of userid formats.
+         *
          * @param ticket: the ticket cookie value
          * @param section: the section of the ticket you want to return
          * @returns {*}
