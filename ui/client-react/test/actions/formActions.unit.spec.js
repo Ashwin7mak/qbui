@@ -63,7 +63,7 @@ describe('Form Actions', () => {
 
     describe('saving actions', () => {
         it('creates an action to indicate saving a form', () => {
-            expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
+            expect(formActions.saveForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
     });
 
