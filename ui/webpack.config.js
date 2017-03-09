@@ -102,6 +102,8 @@ var config = {
                 // (it will add some js to magically do the hot reloading)
                 test: /\.js?$/,
                 include: [
+                    path.resolve(__dirname, 'reuse/client/src'),
+                    path.resolve(__dirname, 'reuse/client/test'),
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'client-react/test'),
                     reuseLibraryPath,
