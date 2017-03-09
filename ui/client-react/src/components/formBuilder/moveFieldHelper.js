@@ -91,7 +91,6 @@ function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
  * @param draggedItemProps
  * @returns {*}
  */
-
 function removeElementFromCurrentLocation(formMetaData, location) {
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
 
