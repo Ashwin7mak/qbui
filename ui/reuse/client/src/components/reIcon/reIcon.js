@@ -1,6 +1,6 @@
 import React from 'react';
-import AVAILABLE_ICON_FONTS from '../../constants/iconConstants';
-import './qbIcon.scss';
+import AVAILABLE_ICON_FONTS from './iconConstants.js';
+import './reIcon.scss';
 import './style.css';
 import './tableIcons.css';
 
@@ -9,10 +9,10 @@ import './tableIcons.css';
  * An icon using a new qb icon font (from Lisa)
  * ## Usage
  * ```
- *   <QBicon icon="accessibility" />
+ *   <ReIcon icon="accessibility" />
  * ```
  */
-const QBicon = React.createClass({
+const ReIcon = React.createClass({
     propTypes: {
         /**
          * See QuickBase.design for full list of icons.
@@ -46,4 +46,4 @@ const QBicon = React.createClass({
     }
 });
 
-export default QBicon;
+export default ReIcon;
