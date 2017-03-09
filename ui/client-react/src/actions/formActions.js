@@ -247,6 +247,7 @@ export const removeFieldFromForm = (formId, location) => {
         location
     });
 };
+
 /**
  * Create a new form
  *
