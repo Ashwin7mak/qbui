@@ -146,14 +146,14 @@ describe("Validate featureSwitchesApi", function() {
     describe("when createFeatureSwitchOverride is called", function() {
         it('success return results ', function(done) {
             req.url = '/featureSwitches/id';
-            req.body = {};
-            let targetObject = null;
+            req.body = {name:'testFeature'};
+            let targetObject = {'body': '{"id":"id"}'};
             executeReqStub.returns(Promise.resolve(targetObject));
-            let promise = featureSwitchesApi.createFeatureSwitchOverride(req);
+            let promise = featureSwitchesApi.createFeatureSwitchOverride(req, 'id');
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, targetObject);
+                    assert.deepEqual(response, {id:'id'});
                     done();
                 }
             ).catch(function(errorMsg) {
