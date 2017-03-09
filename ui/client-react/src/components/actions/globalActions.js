@@ -13,7 +13,7 @@ import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as CompConsts from '../../constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-import {changeLocale} from '../../actions/shellActions';
+import * as ShellActions from '../../actions/shellActions';
 import {connect} from 'react-redux';
 import "./globalActions.scss";
 //let FluxMixin = Fluxxor.FluxMixin(React);
@@ -71,7 +71,7 @@ let GlobalActions = React.createClass({
     changeLocale: function(locale) {
         //let flux = this.getFlux();
         //flux.actions.changeLocale(locale);
-        this.props.changeLocale(this.props, locale);
+        this.props.dispatch(ShellActions.changeLocale(locale));
     },
 
     /**
@@ -160,16 +160,4 @@ let GlobalActions = React.createClass({
     }
 });
 
-// similarly, abstract out the Redux dispatcher from the presentational component
-// (another bit of boilerplate to keep the component free of Redux dependencies)
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeLocale: (props, locale) => {
-            props.dispatch(changeLocale(locale));
-        }
-    };
-};
-
-export default connect(
-    mapDispatchToProps
-)(GlobalActions);
+export default connect()(GlobalActions);
