@@ -263,13 +263,6 @@ export const updateForm = (appId, tblId, formType, form) => {
     return saveForm(appId, tblId, formType, form, false);
 };
 
-export const updateAnimationState = (isAnimating) => {
-    return {
-        type: types.UPDATE_FORM_ANIMATION_STATE,
-        isAnimating
-    };
-};
-
 // we're returning a promise to the caller (not a Redux action) since this is an async action
 // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
 function saveForm(appId, tblId, formType, formMeta, isNew) {

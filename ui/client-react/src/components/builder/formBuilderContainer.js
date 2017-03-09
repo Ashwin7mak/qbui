@@ -3,7 +3,8 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, updateAnimationState} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
+import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -41,7 +42,7 @@ const mapDispatchToProps = dispatch => {
         },
 
         updateAnimationState(isAnimating) {
-            return dispatch(updateAnimationState(isAnimating));
+            return dispatch(updateFormAnimationState(isAnimating));
         }
     };
 };
