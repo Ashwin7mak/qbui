@@ -157,9 +157,13 @@ export class FeatureSwitchOverridesRoute extends React.Component {
      * create new override
      */
     createOverride() {
-        this.props.createOverride(this.props.params.id, this.props.overrides).then(() => {
+
+        this.props.createOverride(this.props.params.id).then((override) => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideCreated"), Locale.getMessage('success'),
                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
+            const columnToEdit = _.findIndex(this.state.columns, ['property', FeatureSwitchConsts.OVERRIDE_VALUE_KEY]);
+            this.props.editOverride(override.id, columnToEdit);
         });
     }
 
@@ -221,7 +225,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
                     label: Locale.getMessage("featureSwitchAdmin.overrideType"),
                 },
                 cell: {
-                    transforms: [editable(edit.dropdown({options: [{name:'Realm', value:'realm'}, {name:'App', value:'app'}]}))]
+                    transforms: [editable(edit.dropdown({options: [{name:'REALM', value:'REALM'}, {name:'APP', value:'APP'}]}))]
                 }
             },
             {
@@ -297,6 +301,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
             return (
                 <div className="featureSwitches">
+                    <div className="top">
                     <div><strong><I18nMessage message="featureSwitchAdmin.switchName"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]}</div>
                     <div><strong><I18nMessage message="featureSwitchAdmin.description"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_DESCRIPTION_KEY]}</div>
                     <div><strong><I18nMessage message="featureSwitchAdmin.teamName"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_TEAM_KEY]}</div>
@@ -311,34 +316,40 @@ export class FeatureSwitchOverridesRoute extends React.Component {
                     <div className="globalButtons">
                         <button className="addButton" onClick={this.createOverride}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
                     </div>
-
-                    {this.props.overrides.length === 0 ?
-                        <h4><I18nMessage message="featureSwitchAdmin.noOverrides"/></h4> :
-                        <Table.Provider className="featureSwitchTable overrides"
-                                        columns={this.state.columns}
-                                        components={{
-                                            body: {
-                                                wrapper: BodyWrapper,
-                                                row: RowWrapper
-                                            }
-                                        }}>
-
-                            <Table.Header />
-
-                            <Table.Body rows={this.props.overrides} rowKey="id"/>
-                        </Table.Provider>
-                    }
-                    <p/>
-                    <div className="selectionButtons">
-                        <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                        <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                        <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
-                        <span>{selectedSizeLabel}</span>
                     </div>
 
-                    {this.getConfirmDialog()}
+                    <div className="main">
+                        {this.props.overrides.length === 0 ?
+                            <h4><I18nMessage message="featureSwitchAdmin.noOverrides"/></h4> :
+                            <Table.Provider className="featureSwitchTable overrides"
+                                            columns={this.state.columns}
+                                            components={{
+                                                body: {
+                                                    wrapper: BodyWrapper,
+                                                    row: RowWrapper
+                                                }
+                                            }}>
 
-                    <PageTitle title={[Locale.getMessage('featureSwitchAdmin.featureSwitchOverridesTitle'), featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                                <Table.Header />
+
+                                <Table.Body rows={this.props.overrides} rowKey="id"/>
+                            </Table.Provider>
+                        }
+                    </div>
+
+                    <div className="bottom">
+                        <p/>
+                        <div className="selectionButtons">
+                            <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                            <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                            <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedOverrideStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                            <span>{selectedSizeLabel}</span>
+                        </div>
+
+                        {this.getConfirmDialog()}
+
+                        <PageTitle title={[Locale.getMessage('featureSwitchAdmin.featureSwitchOverridesTitle'), featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]].join(Locale.getMessage('pageTitles.pageTitleSeparator'))} />
+                    </div>
                 </div>
             );
         } else {

@@ -204,6 +204,13 @@ export class FeatureSwitchesRoute extends React.Component {
         const featureSwitch = this.props.switches.find(sw => sw.id === id);
 
         if (property === FeatureSwitchConsts.FEATURE_NAME_KEY) {
+
+            if (value.trim() === '') {
+                NotificationManager.error(Locale.getMessage('featureSwitchAdmin.featureNameEmpty'), Locale.getMessage('failed'),
+                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                return;
+            }
+
             const featureByName = this.getFeatureByName(value);
 
             // prevent renaming feature to an existing name (unless it's the currently edited feature)
@@ -336,39 +343,44 @@ export class FeatureSwitchesRoute extends React.Component {
 
         return (
             <div className="featureSwitches">
-                <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
+                <div className="top">
+                    <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
 
-                <div className="globalButtons">
-                    <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                    <div className="globalButtons">
+                        <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                    </div>
                 </div>
 
-                <Table.Provider className="featureSwitchTable switches"
-                                columns={this.state.columns}
-                                components={{
-                                    body: {
-                                        wrapper: BodyWrapper,
-                                        row: RowWrapper
-                                    }
-                                }}>
+                <div className="main">
+                    <Table.Provider className="featureSwitchTable switches"
+                                    columns={this.state.columns}
+                                    components={{
+                                        body: {
+                                            wrapper: BodyWrapper,
+                                            row: RowWrapper
+                                        }
+                                    }}>
 
-                    <Table.Header />
+                        <Table.Header />
 
-                    <Table.Body rows={this.props.switches} rowKey="id" />
-                </Table.Provider>
-
-                <p/>
-
-                <div className="selectionButtons">
-
-                    <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                    <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                    <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
-                    <span>{selectedSizeLabel}</span>
+                        <Table.Body rows={this.props.switches} rowKey="id" />
+                    </Table.Provider>
                 </div>
 
-                {this.getConfirmDialog()}
+                <div className="bottom">
+                    <div className="selectionButtons">
 
-                <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
+                        <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                        <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                        <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                        <span>{selectedSizeLabel}</span>
+                    </div>
+
+                    {this.getConfirmDialog()}
+
+                    <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
+                </div>
+
             </div>
         );
     }

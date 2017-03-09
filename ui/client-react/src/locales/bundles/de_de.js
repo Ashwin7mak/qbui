@@ -532,7 +532,8 @@ export default {
             overridesDeleted: "Überschreibt gelöscht",
             selectedOverrides: "Ausgewählte Überschreibungen",
             noOverrides: "Es wurden keine Overrides gesetzt",
-            featureNameExists: "Feature-Namen müssen eindeutig sein"
+            featureNameExists: "Feature-Namen müssen eindeutig sein",
+            featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         }
     }
 };

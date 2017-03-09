@@ -2,6 +2,20 @@
 
 .featureSwitches {
     margin: 20px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+
+    .top, .bottom {
+        flex: 0 0 auto;
+    }
+    .bottom {
+        margin: 20px 0;
+    }
+    .main {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
 
     button {
         margin-right: 10px;
@@ -20,6 +34,7 @@
 }
 
 .featureSwitchTable {
+
     margin-top: 20px;
     width: 100%;
     table-layout: fixed;

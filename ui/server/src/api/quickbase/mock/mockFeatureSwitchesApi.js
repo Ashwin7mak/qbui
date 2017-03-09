@@ -14,8 +14,6 @@
         let constants = require('../../../../../common/src/constants');
 
         let cookieUtils = require('../../../utility/cookieUtils');
-        let ob32Utils = require('../../../utility/ob32Utils');
-        let CookieConsts = require('../../../../../common/src/constants');
         let featureSwitchesMockData;
 
         /**
@@ -90,7 +88,7 @@
 
                 return new Promise((resolve, reject) => {
                     let bodyJSON = JSON.parse(req.rawBody);
-                    let override = bodyJSON.override;
+                    let override = bodyJSON;
 
                     let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
@@ -105,7 +103,7 @@
 
                         saveSwitchesMockData();
                     }
-                    resolve(override.id);
+                    resolve(override);
                 });
             },
 
@@ -145,14 +143,9 @@
                 });
             },
 
-            getFeatureSwitchStates: function(req, appId) {
+            getFeatureSwitchStates: function(req, appId, realmId) {
                 return new Promise((resolve, reject) => {
                     let states = {};
-                    let realmId = null;
-                    let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
-                    if (ticketCookie) {
-                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
-                    }
 
                     if (!featureSwitchesMockData) {
                         featureSwitchesMockData = loadSwitchesMockData();
@@ -176,7 +169,12 @@
                             });
                         }
                     });
-                    resolve(states);
+
+                    let switchStates = [];
+                    Object.keys(states).forEach(function(key) {
+                        switchStates.push({name:key, status: states[key]});
+                    });
+                    resolve(switchStates);
                 });
             }
         };

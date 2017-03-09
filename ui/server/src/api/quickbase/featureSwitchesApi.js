@@ -39,7 +39,7 @@
                 requestHelper = requestHelperOverride;
             },
 
-            getFeatureSwitchesRequestOpts(req) {
+            getFeatureSwitchesRequestOpts(req, isOverrides, switchId, overrideId, bulkIds) {
 
                 const opts = {
                     method: req.method,
@@ -48,9 +48,33 @@
                 };
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.cookies = req.cookies;
-                const featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url);
+
+                let featureSwitchesUrl;
+
+                if (bulkIds) {
+                    featureSwitchesUrl = routeHelper.getFeatureSwitchesBulkRoute(req.url, isOverrides, switchId, overrideId, bulkIds);
+                } else {
+                    featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url, isOverrides, switchId, overrideId);
+                }
 
                 opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
+
+                return opts;
+            },
+
+            getFeatureSwitchStatesRequestOpts(req, appId, realmId) {
+
+                const opts = {
+                    method: req.method,
+                    body: req.rawBody,
+                    headers: {}
+                };
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.cookies = req.cookies;
+
+                const featureStatesUrl = routeHelper.getFeatureSwitchStatesRoute(req.url, appId, realmId);
+
+                opts.url = requestHelper.getRequestAWSHost() + featureStatesUrl;
 
                 return opts;
             },
@@ -95,11 +119,11 @@
                                 resolve(feature);
                             },
                             (error) => {
-                                log.error({req: req}, "getFeatureSwitches.createFeatureSwitch(): Error retrieving feature switches.");
+                                log.error({req: req}, "getFeatureSwitches.createFeatureSwitch(): Error creating feature switch.");
                                 reject(error);
                             }
                         ).catch((ex) => {
-                            requestHelper.logUnexpectedError('getFeatureSwitches.createFeatureSwitch(): unexpected error retrieving feature switches.', ex, true);
+                            requestHelper.logUnexpectedError('getFeatureSwitches.createFeatureSwitch(): unexpected error creating feature switch.', ex, true);
                             reject(ex);
                         });
                     }
@@ -112,9 +136,21 @@
                     if (useMockStore) {
                         resolve(mockApi.updateFeatureSwitch(req, featureSwitchId));
                     } else {
-                        let opts = this.getFeatureSwitchesRequestOpts(req);
+                        let opts = this.getFeatureSwitchesRequestOpts(req, false, featureSwitchId);
 
-                        resolve(); // todo: call lambda
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.updateFeatureSwitch(): Error updating feature switch.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.updateFeatureSwitch(): unexpected error updating feature switch.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
@@ -125,7 +161,22 @@
                     if (useMockStore) {
                         resolve(mockApi.deleteFeatureSwitches(req, ids));
                     } else {
-                        resolve(); // todo: call lambda
+
+                        let opts = this.getFeatureSwitchesRequestOpts(req, false, null, null, ids);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.deleteFeatureSwitches(): Error deleting feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.deleteFeatureSwitches(): unexpected error deleting feature switches.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
@@ -137,7 +188,22 @@
                         resolve(mockApi.createFeatureSwitchOverride(req, featureSwitchId));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let override = JSON.parse(response.body);
+                                resolve(override);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.createFeatureSwitchOverride(): Error creating feature override.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.createFeatureSwitchOverride(): unexpected error creating feature override.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
@@ -145,12 +211,27 @@
             updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
 
                         resolve(mockApi.updateFeatureSwitchOverride(req, featureSwitchId, overrideId));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, overrideId);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.updateFeatureSwitchOverride(): Error updating feature override.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.updateFeatureSwitchOverride(): unexpected error updating feature override.', ex, true);
+                            reject(ex);
+                        });
+
                     }
                 });
             },
@@ -162,22 +243,52 @@
                         resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId, ids));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, null, ids);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.deleteFeatureSwitchOverrides(): Error deleting feature overrides.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.deleteFeatureSwitchOverrides(): unexpected error deleting feature overrides.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
 
             getFeatureSwitchStates: function(req, appId) {
                 return new Promise((resolve, reject) => {
-                    let states = {};
-
-                    if (useMockStore) {
-                        resolve(mockApi.getFeatureSwitchStates(req, appId));
-                    } else {
-                        // todo: call lambda
+                    let realmId = null;
+                    let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
+                    if (ticketCookie) {
+                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
                     }
+                    if (useMockStore) {
+                        resolve(mockApi.getFeatureSwitchStates(req, appId, realmId));
+                    } else {
+                        let opts = this.getFeatureSwitchStatesRequestOpts(req, appId, realmId);
 
-                    resolve(states);
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let featureStates = JSON.parse(response.body);
+                                resolve(featureStates);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.getFeatureSwitchStates(): Error retrieving feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.getFeatureSwitchStates(): unexpected error retrieving feature switches.', ex, true);
+                            reject(ex);
+                        });
+                    }
                 });
             }
         };

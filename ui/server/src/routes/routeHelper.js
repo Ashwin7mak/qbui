@@ -21,6 +21,7 @@
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
     let FEATURE_SWITCHES = 'featureSwitches';
+    let FEATURE_SWITCH_STATES = FEATURE_SWITCHES + '/status';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -240,6 +241,10 @@
         return getAWSRoot() + '/' + FEATURE_SWITCHES;
     }
 
+    function getAWSFeatureSwitchStatesRoute(url) {
+
+        return getAWSRoot() + '/' + FEATURE_SWITCH_STATES;
+    }
     module.exports  = {
 
         /**
@@ -697,8 +702,50 @@
             return false;
         },
 
-        getFeatureSwitchesRoute: function(url) {
-            return getAWSFeatureSwitchesRoute(url);
+        getFeatureSwitchesRoute: function(url, isOverrides, switchId, overrideId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+
+            if (overrideId) {
+                route += '/' + overrideId;
+            }
+            return route;
+        },
+
+        getFeatureSwitchesBulkRoute: function(url, isOverrides, switchId, overrideId, ids) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+            route += '/bulk?ids=' + ids.join();
+
+            return route;
+        },
+
+        getFeatureSwitchStatesRoute: function(url, appId, realmId) {
+
+            let route = getAWSFeatureSwitchStatesRoute(url);
+
+            route += '?realmId=' + realmId;
+
+            if (appId) {
+                route += '&app=' + appId;
+            }
+
+            return route;
         },
     };
 
