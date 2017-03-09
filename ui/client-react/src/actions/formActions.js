@@ -242,7 +242,6 @@ export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
 /**
  * Removes a field from the form
  */
-
 export const removeFieldFromForm = (formId, location) => {
     return event(formId, types.REMOVE_FIELD, {
         location
