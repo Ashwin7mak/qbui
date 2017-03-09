@@ -18,7 +18,7 @@ class FeatureSwitchService extends BaseService {
             PUT_OVERRIDE     : `${constants.BASE_URL.QUICKBASE}/${constants.ADMIN}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_OVERRIDES}/{1}`,
             DELETE_OVERRIDES : `${constants.BASE_URL.QUICKBASE}/${constants.ADMIN}/${constants.FEATURE_SWITCHES}/{0}/${constants.FEATURE_OVERRIDES}/bulk`,
 
-            GET_FEATURE_STATES : `${constants.BASE_URL.QUICKBASE}/${constants.ADMIN}/${constants.FEATURE_STATES}`
+            GET_FEATURE_STATES : `${constants.BASE_URL.QUICKBASE}/${constants.FEATURE_STATES}`
         };
     }
 
