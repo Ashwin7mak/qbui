@@ -54,6 +54,7 @@
     "react-dom": "~15.0.2",
     "react-edit": "^6.2.0",
     "react-fastclick": "^2.1.2",
+    "react-flip-move": "^2.9.1",
     "react-intl": "1.2.0",
     "react-loader": "^2.0.0",
     "react-notifications": "^1.2.0",

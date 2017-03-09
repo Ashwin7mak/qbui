@@ -174,7 +174,7 @@
           }
         ],
         "HealthCheck": {
-          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/api/v1/health" ] ]},
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/dist/buildBranchInfo.txt" ] ]},
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "5",
           "Interval": "10",
