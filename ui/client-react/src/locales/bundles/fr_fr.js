@@ -471,7 +471,8 @@ export default {
         missingWalkMe: "Le didacticiel n'est pas disponible",
         builder: {
             formBuilder: {
-                unimplemented: "La fonctionnalité n'est pas disponible en ce moment"
+                unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
+                removeField: "Supprimer le champ du formulaire"
             },
             fields: {
                 // Keys are equal to server constants for field types to make it easier to get these keys
