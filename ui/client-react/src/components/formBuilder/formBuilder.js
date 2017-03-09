@@ -67,9 +67,11 @@ export class FormBuilder extends Component {
     }
 
     /**
-     * Unlike mouse drag/drop events, touch drag events will freeze if the DOM node the event was attached to is unmounted.
-     * To get around this limitation, we create a copy of the DOM node with the touch event listener in an div.elementCache
-     * node so that it will not be unmounted. This function (cacheDragElement) is called when the element starts dragging.
+     * Unlike mouse drag/drop events, touch drag events will freeze if the DOM node the touch event was attached to is unmounted.
+     * To get around this limitation, we copy the DOM node that has the touch event listener to a div with class elementCache
+     * That copy will not be unmounted for the duration of the drag event.
+     * This function (cacheDragElement) is called when the element starts dragging to create a copy of the element and store in in
+     * div.elementCache.
      * @param dragComponent
      */
     cacheDragElement(dragComponent) {
