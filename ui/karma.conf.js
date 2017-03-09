@@ -43,6 +43,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "componentLibrary/test"),
                             path.resolve(__dirname, "governance/src"),
+                            path.resolve(__dirname, "governance/test"),
                         ],
                         exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
