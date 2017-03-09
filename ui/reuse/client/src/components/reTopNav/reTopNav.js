@@ -1,10 +1,8 @@
 import React, {PropTypes, Component} from 'react';
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
+import QbTooltip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
 
 import './reTopNav.scss';
 
@@ -33,10 +31,7 @@ class ReTopNav extends Component {
     render() {
         let {showOnSmall, onNavClick, globalActions} = this.props;
 
-        const classes = "topNav" + (showOnSmall ? "" : " hideSmall");
-
-        const unimplementedSearchTip = <Tooltip id="unimplemented.search.tt"><I18nMessage message="unimplemented.search"/></Tooltip>;
-        const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
+        const classes = `topNav${(showOnSmall ? '' : ' hideSmall')}`;
 
         return (
             <div className={classes}>
@@ -55,15 +50,15 @@ class ReTopNav extends Component {
 
                         <ButtonGroup className="navItem">
 
-                            <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={unimplementedSearchTip}>
+                            <QbTooltip i18nMessageKey="unimplemented.search" location="bottom">
                                 <Button tabIndex="2" className="disabled">
                                     <QBicon icon="search" />
                                 </Button>
-                            </OverlayTrigger>
+                            </QbTooltip>
 
-                            <OverlayTrigger placement="bottom" trigger={['hover', 'click']} overlay={unimplementedFavoritesTip}>
+                            <QbTooltip i18nMessageKey="unimplemented.favorites" location="bottom">
                                 <Button tabIndex="3" className="disabled"><QBicon icon="star-full" /></Button>
-                            </OverlayTrigger>
+                            </QbTooltip>
                         </ButtonGroup>
                     </div>
 
