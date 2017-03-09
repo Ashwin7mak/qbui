@@ -1,5 +1,5 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
+//import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
@@ -13,8 +13,10 @@ import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as CompConsts from '../../constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
+import * as ShellActions from '../../actions/shellActions';
+import {connect} from 'react-redux';
 import "./globalActions.scss";
-let FluxMixin = Fluxxor.FluxMixin(React);
+//let FluxMixin = Fluxxor.FluxMixin(React);
 
 const actionPropType = React.PropTypes.shape({
     icon: React.PropTypes.string.isRequired,
@@ -46,7 +48,7 @@ let GlobalAction = React.createClass({
  * a list of global actions (user, alerts, help, logout etc.)
  */
 let GlobalActions = React.createClass({
-    mixins: [FluxMixin],
+    //mixins: [FluxMixin],
 
     propTypes: {
         linkClass: React.PropTypes.string,
@@ -67,8 +69,9 @@ let GlobalActions = React.createClass({
     },
 
     changeLocale: function(locale) {
-        let flux = this.getFlux();
-        flux.actions.changeLocale(locale);
+        //let flux = this.getFlux();
+        //flux.actions.changeLocale(locale);
+        this.props.dispatch(ShellActions.changeLocale(locale));
     },
 
     /**
@@ -157,4 +160,4 @@ let GlobalActions = React.createClass({
     }
 });
 
-export default GlobalActions;
+export default connect()(GlobalActions);

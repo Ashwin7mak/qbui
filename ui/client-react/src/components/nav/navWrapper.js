@@ -27,7 +27,7 @@ let NavWrapper = React.createClass({
     getChildContext() {
         return {
             touch: this.state.touch,
-            locales: this.state.locales
+            locales: this.props.qbui.shell.locales  //this.state.locales
         };
     },
     render() {
