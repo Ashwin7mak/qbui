@@ -210,6 +210,9 @@
             HTTP: 'http://',
             HTTPS: 'https://'
         },
+        ROUTES: {
+            BASE_CLIENT_ROUTE: '/qbase'
+        },
         HttpStatusCode: {
             'CONTINUE': 100,
             'SWITCHING_PROTOCOLS': 101,
