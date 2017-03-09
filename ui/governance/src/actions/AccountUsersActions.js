@@ -1,5 +1,3 @@
-// feature switch action creators
-
 import AccountUsersService from '../services/AccountUsersService';
 import Promise from 'bluebird';
 import * as types from '../actions/types';
@@ -8,7 +6,6 @@ import LogLevel from '../../../client-react/src/utils/logLevels';
 
 const logger = new Logger();
 
-// add loaded switches to store
 export const getAccountUsersSuccess = (users) => ({
     type: types.SET_USERS,
     users
