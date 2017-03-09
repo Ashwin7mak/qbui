@@ -1,17 +1,17 @@
 import React from 'react';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import Locale from '../../../../../client-react/src/locales/locales';
 import Fluxxor from 'fluxxor';
-import QBicon from '../qbIcon/qbIcon';
+import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 let FluxMixin = Fluxxor.FluxMixin(React);
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 
-import './topNav.scss';
+import './reTopNav.scssopNav.scss';
 
-var TopNav = React.createClass({
+var ReTopNav = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
@@ -86,4 +86,4 @@ var TopNav = React.createClass({
     }
 });
 
-export default TopNav;
+export default ReTopNav;
