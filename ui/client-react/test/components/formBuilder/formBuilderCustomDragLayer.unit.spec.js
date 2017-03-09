@@ -85,13 +85,18 @@ describe('FormBuilderCustomDragLayer', () => {
     });
 
     describe('getItemStyles', () => {
+        afterEach(() => {
+            DragLayerRewireAPI.__ResetDependency__('Device');
+        });
+
         it('hides the dragging preview if there is no position', () => {
             component = shallow(<FormBuilderCustomDragLayer isDragging={true} />);
 
             expect(component.find('.previewContainer')).toHaveProp('style', {display: 'none'});
         });
 
-        it('places the drag preview (specifically the field icon) under the cursor on desktop/tablet', () => {
+        it('places the drag preview (specifically the field icon) under the cursor on non-touch devices', () => {
+            DragLayerRewireAPI.__Rewire__('Device', {isTouch: () => false});
             component = shallow(<FormBuilderCustomDragLayer
                 isDragging={true}
                 currentOffset={{x: TOKEN_ICON_WIDTH / 2, y: TOKEN_HEIGHT / 2}}
@@ -114,8 +119,6 @@ describe('FormBuilderCustomDragLayer', () => {
                 transform: 'translate(0px, 0px)',
                 WebkitTransform: 'translate(0px, 0px)'
             });
-
-            DragLayerRewireAPI.__ResetDependency__('Device');
         });
     });
 });
