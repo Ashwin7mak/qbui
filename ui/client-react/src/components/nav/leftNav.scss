@@ -106,10 +106,10 @@
             padding-left: 18px;
             border: none;
             width: 0;
-            background: $left-nav-background-color;
+            background: $leftnav-background-color;
 
             &:hover {
-                background: $left-nav-background-color;
+                background: $leftnav-background-color;
 
             }
         }
@@ -649,9 +649,4 @@ $travel-distance: 15;
         top: auto !important;
         left: auto !important;
     }
-}
-
-// hide builder from this nav since it isn't styled
-.leftNav .globalActionsList .builder {
-    display: none;
 }

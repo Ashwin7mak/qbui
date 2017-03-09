@@ -7,13 +7,18 @@ import QBForm, {__RewireAPI__ as QbFormRewireAPI} from '../../src/components/QBF
 import QBPanel from '../../src/components/QBPanel/qbpanel.js';
 import {TabPane} from 'rc-tabs';
 import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
+import {MobileDropTarget} from '../../src/components/formBuilder/mobileDropTarget';
 
 import {
-    testArrayBasedFormData as fakeQbFormData,
+    buildTestArrayBasedFormData,
     textElementText,
-    testFormDataArrayWithTwoColumns,
-    testFormDataWithRelationship
+    buildTestFormDataArrayWithTwoColumns,
+    buildTestFormDataWithRelationship
 } from '../testHelpers/testFormData';
+
+const fakeQbFormData = buildTestArrayBasedFormData();
+const testFormDataArrayWithTwoColumns = buildTestFormDataArrayWithTwoColumns();
+const testFormDataWithRelationship = buildTestFormDataWithRelationship();
 
 const emptyQBFormData = {
     formMeta: {
@@ -133,13 +138,6 @@ describe('QBForm', () => {
         });
     });
 
-    it('renders elements into rows', () => {
-        component = mount(<QBForm activeTab="1" formData={fakeQbFormData}/>);
-        let rows = component.find('.sectionRow');
-
-        expect(rows.length).toEqual(7);
-    });
-
     it('does not render relationship element if no relationships exist', () => {
         component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
         let childReport = component.find('.referenceElement');
@@ -183,7 +181,6 @@ describe('QBForm', () => {
             tabIndex: 0,
             sectionIndex: 0,
             columnIndex: 0,
-            rowIndex: 0,
             elementIndex: 0
         });
     });
@@ -235,5 +232,22 @@ describe('QBForm', () => {
         let actualProps = fieldElements.at(0).props();
         expect(actualProps.isInvalid).toEqual(true);
         expect(actualProps.invalidMessage).toEqual(invalidMessage);
+    });
+
+    it('adds drop targets for each form element on touch devices', () => {
+        const mockDevice = {isTouch() {return true;}};
+        QbFormRewireAPI.__Rewire__('Device', mockDevice);
+        // Remove dependencies on a drag/drop context for the purpose of this test
+        QbFormRewireAPI.__Rewire__('MobileDropTarget', MobileDropTarget);
+        QbFormRewireAPI.__Rewire__('DragAndDropField', fieldElement => fieldElement);
+
+        component = mount(<QBForm activeTab="0" formData={fakeQbFormData} editingForm={true} />);
+
+        let mobileDropTargets = component.find('.sectionColumn').first().find('.mobileDropTarget');
+        expect(mobileDropTargets.length).toEqual(5);
+
+        QbFormRewireAPI.__ResetDependency__('Device');
+        QbFormRewireAPI.__ResetDependency__('MobileDropTarget');
+        QbFormRewireAPI.__ResetDependency__('DragAndDropField');
     });
 });
