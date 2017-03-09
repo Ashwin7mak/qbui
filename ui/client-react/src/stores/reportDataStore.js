@@ -72,9 +72,9 @@ let reportModel = {
     /**
      * Reload the report column information as locale change need refresh
      */
-    refreshReportColumns() {
-        this.model.columns = this.getReportColumns(this.model.hasGrouping ? this.model.gridColumns : this.model.fields);
-    },
+    //refreshReportColumns() {
+    //    this.model.columns = this.getReportColumns(this.model.hasGrouping ? this.model.gridColumns : this.model.fields);
+    //},
 
     /**
      * Given the field list format the columnDefinition as needed by data grid.
@@ -98,64 +98,64 @@ let reportModel = {
      * @param hasGrouping
      * @returns {Array}
      */
-    getReportColumns(fields) {
-        let columns = [];
-        let columnsHaveLocalization = false;
-        if (fields) {
-            fields.forEach((fieldDef, index) => {
-                let groupedField = _.find(this.model.groupEls, el => el.split(groupDelimiter)[0] === fieldDef.id);
-                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(fieldDef.id) === -1)) {
-                    //skip this fieldDef since its not on report's column list or on group list
-                } else {
-                    let column = {};
-                    column.order = index;
-                    column.id = fieldDef.id;
-                    column.headerName = fieldDef.name;
-                    column.field = fieldDef.name; //name needed for aggrid
-                    column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
-                    let durUnits = this.getReportColumnUnits(fieldDef);
-                    if (durUnits) {
-                        // the unitsDescription display option on a field will show next to the column header in a table
-                        // the app builder can optionally specify unitsDescription text for numeric fields and that
-                        // text is added to the column header name for a field for example Revenues (thousands)
-                        // where thousands is the unitsDescription.
-                        // for durations the same presentation is desired when the duration values units
-                        // is the same for all cells in the column. i.e non-smart units, non HH:MM: type units
-                        // when the locale changes this value is updated and thus the table column header names updated
-                        column.fieldDef.datatypeAttributes.unitsDescription = durUnits;
-                    }
-                    // note if this the table needs updates when locale changes
-                    if (durUnits || durationFormatter.isSmartUnitsField(fieldDef)) {
-                        columnsHaveLocalization = true;
-                    }
+    //getReportColumns(fields) {
+    //    let columns = [];
+    //    let columnsHaveLocalization = false;
+    //    if (fields) {
+    //        fields.forEach((fieldDef, index) => {
+    //            let groupedField = _.find(this.model.groupEls, el => el.split(groupDelimiter)[0] === fieldDef.id);
+    //            if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(fieldDef.id) === -1)) {
+    //                //skip this fieldDef since its not on report's column list or on group list
+    //            } else {
+    //                let column = {};
+    //                column.order = index;
+    //                column.id = fieldDef.id;
+    //                column.headerName = fieldDef.name;
+    //                column.field = fieldDef.name; //name needed for aggrid
+    //                column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
+    //                let durUnits = this.getReportColumnUnits(fieldDef);
+    //                if (durUnits) {
+    //                    // the unitsDescription display option on a field will show next to the column header in a table
+    //                    // the app builder can optionally specify unitsDescription text for numeric fields and that
+    //                    // text is added to the column header name for a field for example Revenues (thousands)
+    //                    // where thousands is the unitsDescription.
+    //                    // for durations the same presentation is desired when the duration values units
+    //                    // is the same for all cells in the column. i.e non-smart units, non HH:MM: type units
+    //                    // when the locale changes this value is updated and thus the table column header names updated
+    //                    column.fieldDef.datatypeAttributes.unitsDescription = durUnits;
+    //                }
+    //                // note if this the table needs updates when locale changes
+    //                if (durUnits || durationFormatter.isSmartUnitsField(fieldDef)) {
+    //                    columnsHaveLocalization = true;
+    //                }
+    //
+    //                column.fieldType = fieldDef.type;
+    //
+    //                column.defaultValue = null;
+    //                if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
+    //                    column.defaultValue = {value: fieldDef.defaultValue.coercedValue.value, display: fieldDef.defaultValue.displayValue};
+    //                }
+    //
+    //                if (fieldDef.multipleChoice && fieldDef.multipleChoice.choices) {
+    //                    column.multipleChoice = {};
+    //                    column.multipleChoice.choices = fieldDef.multipleChoice.choices;
+    //                }
+    //                //  client side attributes
+    //                let maxLength = FieldUtils.getMaxLength(fieldDef);
+    //                if (maxLength) {
+    //                    column.placeholder = Locale.getMessage('placeholder.maxLength', {maxLength : maxLength});
+    //                }
+    //                columns.push(column);
+    //            }
+    //        });
+    //    }
+    //    this.columnsHaveLocalization = columnsHaveLocalization;
+    //    return columns;
+    //},
 
-                    column.fieldType = fieldDef.type;
-
-                    column.defaultValue = null;
-                    if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
-                        column.defaultValue = {value: fieldDef.defaultValue.coercedValue.value, display: fieldDef.defaultValue.displayValue};
-                    }
-
-                    if (fieldDef.multipleChoice && fieldDef.multipleChoice.choices) {
-                        column.multipleChoice = {};
-                        column.multipleChoice.choices = fieldDef.multipleChoice.choices;
-                    }
-                    //  client side attributes
-                    let maxLength = FieldUtils.getMaxLength(fieldDef);
-                    if (maxLength) {
-                        column.placeholder = Locale.getMessage('placeholder.maxLength', {maxLength : maxLength});
-                    }
-                    columns.push(column);
-                }
-            });
-        }
-        this.columnsHaveLocalization = columnsHaveLocalization;
-        return columns;
-    },
-
-    getColumnsHaveLocalization() {
-        return this.columnsHaveLocalization;
-    },
+    //getColumnsHaveLocalization() {
+    //    return this.columnsHaveLocalization;
+    //},
 
     /**
      * Using fields and records format the report's data.
@@ -630,12 +630,13 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.LOAD_RECORDS, this.onLoadRecords,
             //actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             //actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
-            actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
-            actions.SHOW_FACET_MENU, this.onShowFacetMenu,
-            actions.HIDE_FACET_MENU, this.onHideFacetMenu,
-            actions.SELECTED_ROWS, this.onSelectedRows,
+            //TODO: doesn't look like this.selections is ever returned in state
+            //actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
+            //actions.SHOW_FACET_MENU, this.onShowFacetMenu,
+            //actions.HIDE_FACET_MENU, this.onHideFacetMenu,
+            //actions.SELECTED_ROWS, this.onSelectedRows,
 
-            actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
+            //actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             //actions.DELETE_RECORD, this.onDeleteReportRecord,
             //actions.DELETE_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
             //actions.DELETE_RECORD_FAILED, this.onDeleteReportRecordFailed,
@@ -660,15 +661,15 @@ let ReportDataStore = Fluxxor.createStore({
             //actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
             //actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord,
 
-            actions.CHANGE_LOCALE, this.onChangeLocale
+            //actions.CHANGE_LOCALE, this.onChangeLocale
         );
     },
 
-    onSelectedRows(selectedRows) {
-        this.selectedRows = selectedRows.slice();
-
-        this.emit('change');
-    },
+    //onSelectedRows(selectedRows) {
+    //    this.selectedRows = selectedRows.slice();
+    //
+    //    this.emit('change');
+    //},
 
     onLoadReport(report) {
         //this.loading = true;
@@ -734,14 +735,14 @@ let ReportDataStore = Fluxxor.createStore({
         //this.emit('change');
     },
 
-    onChangeLocale() {
-        if (this.reportModel && !this.loading && this.reportModel.getColumnsHaveLocalization()) {
-            // recalc column names based on locale
-            // duration column units need refresh
-            this.reportModel.refreshReportColumns();
-            this.emit('change');
-        }
-    },
+    //onChangeLocale() {
+    //    if (this.reportModel && !this.loading && this.reportModel.getColumnsHaveLocalization()) {
+    //        // recalc column names based on locale
+    //        // duration column units need refresh
+    //        this.reportModel.refreshReportColumns();
+    //        this.emit('change');
+    //    }
+    //},
 
 
     //onLoadRecords(payload) {
@@ -818,15 +819,15 @@ let ReportDataStore = Fluxxor.createStore({
     //    this.emit('change');
     //},
 
-    onShowFacetMenu() {
-        this.nonFacetClicksEnabled = false;
-        this.emit('change');
-    },
-
-    onHideFacetMenu() {
-        this.nonFacetClicksEnabled = true;
-        this.emit('change');
-    },
+    //onShowFacetMenu() {
+    //    this.nonFacetClicksEnabled = false;
+    //    this.emit('change');
+    //},
+    //
+    //onHideFacetMenu() {
+    //    this.nonFacetClicksEnabled = true;
+    //    this.emit('change');
+    //},
 
     createNewRecord(afterRecId) {
         const model = this.reportModel.get();

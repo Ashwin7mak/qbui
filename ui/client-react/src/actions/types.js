@@ -13,9 +13,6 @@ export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_COMPLETE = 'SAVE_FORM_COMPLETE';
-//export const SAVE_FORM_SUCCESS = 'SAVE_FORM_SUCCESS';
-//export const SAVE_FORM_FAILED = 'SAVE_FORM_FAILED';
-
 
 export const SAVING_FORM = 'SAVING_FORM';
 export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
@@ -34,6 +31,7 @@ export const TOGGLE_ROW_POP_UP_MENU = 'TOGGLE_ROW_POP_UP_MENU';
 export const TOGGLE_APPS_LIST = 'TOGGLE_APPS_LIST';
 export const SHOW_ERROR_MSG_DIALOG = 'SHOW_ERROR_MSG_DIALOG';
 export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
+export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 
 //  ******** Record actions ********
 export const OPEN_RECORD = 'OPEN_RECORD';
@@ -42,7 +40,6 @@ export const SAVE_RECORD = 'SAVE_RECORD';
 export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
 export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
-//export const EDIT_REPORT_RECORD = 'EDIT_REPORT_RECORD';
 
 //  Record actions for inline edit
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';
@@ -60,13 +57,17 @@ export const DELETE_RECORDS_ERROR = 'DELETE_RECORDS_ERROR';
 export const LOAD_REPORT = 'LOAD_REPORT';
 export const LOAD_REPORT_SUCCESS = 'LOAD_REPORT_SUCCESS';
 export const LOAD_REPORT_FAILED = 'LOAD_REPORT_FAILED';
-export const SELECT_REPORT_LIST = 'SELECT_REPORT_LIST';
+export const SELECT_REPORT_RECORDS = 'SELECT_REPORT_RECORDS';
 export const REMOVE_REPORT_RECORDS = 'REMOVE_REPORT_RECORDS';
+export const ADD_BLANK_REPORT_RECORD = 'ADD_BLANK_REPORT_RECORD';
 
 //  ******** table report list actions ********
 export const LOAD_REPORTS = 'LOAD_REPORTS';
 export const LOAD_REPORTS_SUCCESS = 'LOAD_REPORTS_SUCCESS';
 export const LOAD_REPORTS_FAILED = 'LOAD_REPORTS_FAILED';
+
+//  ******** search actions ********
+export const SEARCH_INPUT = 'SEARCH_INPUT';
 
 // **** feature switches ****
 export const SET_FEATURE_SWITCH_STATES = 'SET_FEATURE_SWITCH_STATES';

@@ -10,6 +10,7 @@ import {I18nMessage} from "../../utils/i18nMessage";
 import Constants from '../../../../common/src/constants';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
+import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
@@ -30,8 +31,7 @@ export const TableHomePageRoute = React.createClass({
 
     getHeader() {
         return (
-            <ReportHeader reportData={this.props.reportData}
-                          nameForRecords={this.nameForRecords}
+            <ReportHeader nameForRecords={this.nameForRecords}
                           rptId={this.props.reportData ? this.props.reportData.rptId : null} {...this.props}
             />);
     },
@@ -39,6 +39,10 @@ export const TableHomePageRoute = React.createClass({
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
+
+        // ensure the search input is empty
+        this.props.dispatch(SearchActions.clearSearchInput());
+
         flux.actions.loadFields(appId, tblId);
         //flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
         this.props.dispatch(TableActions.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows));

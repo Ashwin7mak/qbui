@@ -23,7 +23,7 @@ const RowActions = React.createClass({
         onClickToggleSelectedRow: PropTypes.func.isRequired,
         onClickEditRowIcon: PropTypes.func,
         onClickDeleteRowIcon: PropTypes.func,
-        onClickSaveRow: PropTypes.func.isRequired,
+        onClickSaveRow: PropTypes.func.isRequired
     },
 
     onClickEditRowIcon() {

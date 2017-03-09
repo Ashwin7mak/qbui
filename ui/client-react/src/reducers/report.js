@@ -1,4 +1,6 @@
 import * as types from '../actions/types';
+import {UNSAVED_RECORD_ID} from '../constants/schema';
+import {NEW_RECORD_VALUE} from '../constants/urlConstants';
 import _ from 'lodash';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
@@ -133,8 +135,8 @@ const report = (state = [], action) => {
         }
         return newState(obj);
     }
-    case types.SELECT_REPORT_LIST: {
-        //  1..n rows in a report have been selected by the user...update
+    case types.SELECT_REPORT_RECORDS: {
+        //  1..n records in a report have been selected by the user...update
         //  the 'selections' element on the report
         let currentReport = getReportFromState(action.id);
         if (currentReport) {
@@ -181,6 +183,46 @@ const report = (state = [], action) => {
                 ReportModelHelper.deleteRecordFromReport(rpt.data, recId);
                 rpt.selectedRows = _.without(rpt.selectedRows, recId);
             });
+        });
+        return reports;
+    }
+    case types.ADD_BLANK_REPORT_RECORD: {
+        let currentReport = getReportFromState(action.id);
+        if (currentReport) {
+            let content = {
+                newRecId: UNSAVED_RECORD_ID,
+                afterRecId: action.content.afterRecId
+            };
+
+            //  gotta have an id to know where to insert the new record
+            if (content.afterRecId) {
+                // remove record from report if its new and unsaved
+                if (currentReport.editingIndex !== undefined || currentReport.editingId !== undefined) {
+                    if (content.afterRecId === UNSAVED_RECORD_ID || content.afterRecId === NEW_RECORD_VALUE) {
+                        ReportModelHelper.deleteRecordFromReport(currentReport, content.afterRecId);
+                    }
+                    currentReport.editingIndex = undefined;
+                    currentReport.editingId = undefined;
+                }
+
+                ReportModelHelper.addReportRecord(currentReport, content);
+                return newState(currentReport);
+            }
+        }
+        return state;
+    }
+    case types.CHANGE_LOCALE: {
+        // listen for change locale event and update report columns to new locale for all reports
+        const reports = _.cloneDeep(state);
+        reports.forEach((rpt) => {
+            if (rpt && !rpt.loading) {
+                if (_.has(rpt, 'data')) {
+                    let groupEls = rpt.data.groupEls;
+                    let fids = rpt.data.fids;
+                    let fields = rpt.data.hasGrouping ? rpt.data.gridColumns : rpt.data.fields;
+                    rpt.data.columns = ReportModelHelper.getReportColumns(fields, fids, groupEls);
+                }
+            }
         });
         return reports;
     }

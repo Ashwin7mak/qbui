@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import RecordModel from '../models/recordModel';
 import ValidationMessage from '../utils/validationMessage';
 import {NEW_RECORD_VALUE} from "../constants/urlConstants";
+import {UNSAVED_RECORD_ID} from "../constants/schema";
 import _ from 'lodash';
 
 
@@ -34,9 +35,8 @@ const record = (state = [], action) => {
         //  if obj is undefined/null, there's nothing to do..
         if (obj) {
             //  ensure obj id is stored as a numeric..unless it's a new record
-            if (obj.id !== NEW_RECORD_VALUE) {
-                obj.id = +obj.id;
-            }
+            obj.id = (obj.id === NEW_RECORD_VALUE || obj.id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +obj.id);
+
             if (singleRecordStore === true) {
                 if (stateList.length === 0) {
                     stateList.push(obj);
@@ -64,7 +64,8 @@ const record = (state = [], action) => {
      * @returns {*}
      */
     function getRecordFromState(id) {
-        const recId = (id === NEW_RECORD_VALUE ? id : +id);  // ensure always looking up id as a numeric..unless it's a new record
+        // ensure always looking up id as a numeric..unless it's a new record
+        const recId = (id === NEW_RECORD_VALUE || id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +id);
         const index = _.findIndex(state, rec => rec.id === recId);
         if (index !== -1) {
             return _.cloneDeep(state[index]);

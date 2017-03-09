@@ -17,7 +17,6 @@ let logger = new Logger();
 
 /*
  Redux event for saving a form
- TODO: refactor once record events moved
  */
 function event(id, type, content) {
     return {

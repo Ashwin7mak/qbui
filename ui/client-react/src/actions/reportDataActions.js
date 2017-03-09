@@ -17,31 +17,31 @@ import ReportModel from '../models/reportModel';
 
 let reportDataActions = {
 
-    filterSelectionsPending(selections) {
-        this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
-    },
+    //filterSelectionsPending(selections) {
+    //    this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
+    //},
 
-    filterSearchPending(string) {
-        this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
-    },
+    //filterSearchPending(string) {
+    //    this.dispatch(actions.FILTER_SEARCH_PENDING, {string});
+    //},
 
     /**
      * rows were selected (toolbar etc cares about this)
      * @param rows array of row objects
      */
-    selectedRows(rows) {
-        this.dispatch(actions.SELECTED_ROWS, rows);
-    },
+    //selectedRows(rows) {
+    //    this.dispatch(actions.SELECTED_ROWS, rows);
+    //},
 
     /**
      * setup a a new record not yet saved to the database
      */
-    newBlankReportRecord(appId, tblId, afterRecId) {
-        return new Promise((resolve, reject) => {
-            this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
-            resolve();
-        });
-    },
+    //newBlankReportRecord(appId, tblId, afterRecId) {
+    //    return new Promise((resolve, reject) => {
+    //        this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
+    //        resolve();
+    //    });
+    //},
 
     /**
      * Load a report based on it's meta data definition.

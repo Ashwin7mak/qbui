@@ -12,6 +12,7 @@ import {NotificationManager} from 'react-notifications';
 import * as CompConsts from '../constants/componentConstants';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
+import * as SchemaConstants from "../constants/schema";
 import * as types from '../actions/types';
 import RecordModel from '../models/recordModel';
 
@@ -725,7 +726,7 @@ export const createRecord = (appId, tblId, params = {}) => {
             let changes = params.recordChanges;
             let record = formatRecordChanges(changes);
             let recId = UrlConsts.NEW_RECORD_VALUE;
-
+            //let recId = SchemaConstants.UNSAVED_RECORD_ID;
             if (appId && tblId && record && params.fields) {
                 //this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
                 dispatch(event(recId, types.SAVE_RECORD, {appId, tblId, recId, changes}));
