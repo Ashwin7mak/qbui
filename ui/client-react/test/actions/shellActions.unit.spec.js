@@ -9,6 +9,12 @@ class BreakpointsMock {
     }
 }
 
+class LocaleMock {
+    static changeLocale(locale) {
+        return;
+    }
+}
+
 describe('Shell actions', () => {
     it('should create an action to show trowser', () => {
         const content = "reportBrowser";
@@ -52,4 +58,14 @@ describe('Shell actions', () => {
     it('should create an action to show error dialog', () => {
         expect(shellActions.showErrorMsgDialog()).toEqual({type: types.SHOW_ERROR_MSG_DIALOG});
     });
+
+    it('should create an action to change locale', () => {
+        shellActionsRewireAPI.__Rewire__('Locale', LocaleMock);
+        let locale = 'en-us';
+        spyOn(LocaleMock.prototype, 'changeLocale').and.callThrough();
+        expect(shellActions.changeLocale(locale)).toEqual({type: types.CHANGE_LOCALE});
+        expect(LocaleMock.prototype.changeLocale).toHaveBeenCalledWith(locale);
+        shellActionsRewireAPI.__ResetDependency__('Locale');
+    });
+
 });
