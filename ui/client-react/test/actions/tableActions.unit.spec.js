@@ -1,7 +1,5 @@
 import {loadTableHomePage, __RewireAPI__ as TableActionsRewireAPI} from '../../src/actions/tableActions';
-import * as actions from '../../src/constants/actions';
 import * as types from '../../src/actions/types';
-import * as query from '../../src/constants/query';
 import {PAGE} from '../../../common/src/constants';
 import ReportModel from '../../src/models/reportModel';
 import configureMockStore from 'redux-mock-store';

@@ -533,10 +533,7 @@ export const openRecord = (recId, nextRecordId, previousRecordId) => {
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing) => {
-    //let model = new RecordModel();
     let obj = createEditRecordEventObject(appId, tblId, recId, origRec, changes, isInlineEdit, fieldToStartEditing);
-    //model.setEditRecordStart(appId, tblId, recId, obj);
-    //return event(recId, types.EDIT_RECORD_START, model.get());
     return event(recId, types.EDIT_RECORD_START, obj);
 };
 
@@ -551,11 +548,6 @@ export const editRecordStart = (appId, tblId, recId, origRec, changes, isInlineE
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
-    //let model = new RecordModel();
-    //model.setEditRecordChange(appId, tblId, recId, origRec, changes);
-    //return event(recId, types.EDIT_RECORD_CHANGE, model.get());
-    //let model = new RecordModel();
-    //model.setEditRecordChange(appId, tblId, recId, origRec, changes);
     let obj = createEditRecordEventObject(appId, tblId, recId, origRec, changes, true, null);
     return event(recId, types.EDIT_RECORD_CHANGE, obj);
 };
@@ -569,25 +561,8 @@ export const editRecordChange = (appId, tblId, recId, origRec, changes) => {
  * @returns {{id, type, content}|{id: *, type: *, content: *}}
  */
 export const editRecordCancel = (appId, tblId, recId) => {
-    //let model = new RecordModel();
-    //model.setEditRecordCancel();
-    //return event(recId, types.EDIT_RECORD_CANCEL, model.get());
     return event(recId, types.EDIT_RECORD_CANCEL, {appId, tblId, recId});
 };
-
-/**
- * Commit/save changes made to a record from inline edit
- *
- * @param appId
- * @param tblId
- * @param recId
- * @returns {{id, type, content}|{id: *, type: *, content: *}}
- */
-// TODO: REMOVE..not using
-//export const editRecordCommit = (appId, tblId, recId) => {
-//    return event(recId, types.EDIT_RECORD_COMMIT, {appId, tblId, recId});
-//};
-
 
 /**
  * Validates a record when inline editing
@@ -604,43 +579,39 @@ export const editRecordValidateField = (recId, fieldDef, fieldLabel, value, chec
 };
 
 /**
- * delete records in bulk
+ * Delete a list of records from a table
+ *
+ * @param appId
+ * @param tblId
+ * @param recIds
+ * @param nameForRecords
+ * @returns {Function}
  */
 export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
     return (dispatch) => {
-        // we're returning a promise to the caller (not a Redux action) since this is an async action
-        // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
         return new Promise((resolve, reject) => {
-            if (appId && tblId && recIds && recIds.length >= 1) {
-                //this.dispatch(actions.DELETE_RECORD_BULK, {appId, tblId, recIds});
+            if (appId && tblId && (Array.isArray(recIds) && recIds.length > 0)) {
                 dispatch(event(recIds[0], types.DELETE_RECORDS, {appId, tblId, recIds}));
 
                 let recordService = new RecordService();
-
-                //delete the records
-                //recordService.deleteRecordBulk(appId, tblId, recIds).then(
                 recordService.deleteRecords(appId, tblId, recIds).then(
                     response => {
                         logger.debug('RecordService deleteRecordBulk success');
-                        //this.dispatch(actions.DELETE_RECORD_BULK_SUCCESS, recIds);
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
 
                         //  send out notification message on the client
-                        let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
+                        let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`;
                         NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            //this.dispatch(actions.AFTER_RECORD_EDIT);
                             dispatch(event(recIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds}));
                             resolve();
                         });
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.deleteRecords:');
-                        //this.dispatch(actions.DELETE_RECORDS_ERROR, {appId, tblId, recIds, error: error});
 
-                        //  TODO:  the error object should map to specific records
                         let errors = [];
                         if (_.has(error, 'data.response.errors')) {
                             errors = error.data.response.errors || [];
@@ -648,23 +619,19 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                         dispatch(event(recIds[0], types.DELETE_RECORDS_ERROR, {appId, tblId, recIds, errors}));
 
                         //  send out notification message
-                        let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
+                        let message = `${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`;
                         NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
 
                         // the delay allows for saving modal to trap inputs otherwise clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
-                            //this.dispatch(actions.AFTER_RECORD_EDIT);
                             dispatch(event(recIds[0], types.DELETE_RECORDS_COMPLETE, {appId, tblId, recIds}));
                             reject();
                         });
                     }
                 );
             } else {
-                logger.error(`Missing one or more required input parameters to recordActions.deleteRecords. AppId:${appId}; TblId:/${tblId}; RecId${recIds}`);
-                dispatch(event(recIds[0], types.DELETE_RECORDS_ERROR, {appId, tblId, recIds}));
-
-                //  send out notification message
-                let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
+                logger.error(`Missing one or more required input parameters to recordActions.deleteRecords. AppId:${appId}; TblId:${tblId}; RecId${recIds}`);
+                let message = `0 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`;
                 NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
                 reject();
             }
@@ -880,7 +847,7 @@ export const createRecord = (appId, tblId, params = {}) => {
             }
         });
     };
-}
+};
 
 /**
  * Save changes to an existing record.
