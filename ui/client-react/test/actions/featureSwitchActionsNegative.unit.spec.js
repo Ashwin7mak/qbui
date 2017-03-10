@@ -197,25 +197,25 @@ describe('Feature switch actions error cases', () => {
                 done();
             });
     });
-    //it('deletes feature switch overrides', (done) => {
-    //    class mockFeatureSwitchServiceNeg {
-    //        constructor() {
-    //        }
-    //        deleteOverride() {
-    //            return mockPromiseError();
-    //        }
-    //    }
-    //    FeatureSwitchActionsRewireAPI.__Rewire__('FeatureSwitchService', mockFeatureSwitchServiceNeg);
-    //    const store = mockStore({});
-    //
-    //    return store.dispatch(actions.deleteOverrides('switchId', [1, 2, 3])).then(
-    //        () => {
-    //            expect(false).toBe(true);
-    //            done();
-    //        },
-    //        () => {
-    //            expect(store.getActions()).toEqual(expectedErrorActions);
-    //            done();
-    //        });
-    //});
+    it('loads feature states', (done) => {
+        class mockFeatureSwitchServiceNeg {
+            constructor() {
+            }
+            getFeatureSwitchStates() {
+                return mockPromiseError();
+            }
+        }
+        FeatureSwitchActionsRewireAPI.__Rewire__('FeatureSwitchService', mockFeatureSwitchServiceNeg);
+        const store = mockStore({});
+
+        return store.dispatch(actions.getStates('appId')).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(store.getActions()).toEqual(expectedErrorActions);
+                done();
+            });
+    });
 });
