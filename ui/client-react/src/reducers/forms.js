@@ -170,7 +170,7 @@ const forms = (
         }
 
         let {location} = action.content;
-        let updatedForm = _.cloneDeep(currentForm);
+        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.removeField(
             updatedForm.formData.formMeta,

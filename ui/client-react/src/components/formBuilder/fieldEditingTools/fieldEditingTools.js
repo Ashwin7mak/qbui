@@ -157,7 +157,7 @@ const mapStateToProps = (state, ownProps) => {
     let selectedFields = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
     return {
         selectedFields
-    }
+    };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -165,10 +165,10 @@ const mapDispatchToProps = dispatch => {
         selectField(formId, location) {
             return dispatch(selectFieldOnForm(formId, location));
         }
-    }
+    };
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FieldEditingTools)
+)(FieldEditingTools);
