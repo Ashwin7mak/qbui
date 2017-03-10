@@ -8,10 +8,10 @@ describe('FeatureCheck', () => {
         jasmineEnzyme();
     });
 
-    const featureStates = {
-        'Feature A': true,
-        'Feature B': false
-    };
+    const featureStates = [
+        {name: 'Feature A', status: true},
+        {name: 'Feature B', status: false}
+    ];
 
     it('renders a component when feature is on', () => {
         const wrapper = shallow(

@@ -252,7 +252,7 @@ export const createOverride = (switchId) => {
             const override = {};
             // set override default values
             override[FeatureSwitchConsts.OVERRIDE_TYPE_KEY] = "REALM";
-            override[FeatureSwitchConsts.OVERRIDE_VALUE_KEY] = "realmId";
+            override[FeatureSwitchConsts.OVERRIDE_VALUE_KEY] = "id";
             override[FeatureSwitchConsts.OVERRIDE_ON_KEY] = false;
 
             const promise = featureSwitchService.createOverride(switchId, override);

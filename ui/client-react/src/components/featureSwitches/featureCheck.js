@@ -1,33 +1,49 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 
 export const FeatureCheck = React.createClass({
 
     propTypes: {
         /**
-         * The name of the feature */
-        featureName: React.PropTypes.string.isRequired,
+         * The name of the feature
+         */
+        featureName: PropTypes.string.isRequired,
         /**
          * show the wrapped children if the feature state is on (set false to hide) */
-        show: React.PropTypes.bool
+        show: PropTypes.bool,
+        /**
+         * class name to add to wrapper element
+         */
+        className: PropTypes.string,
+        /**
+         * component (defaults to a DIV)
+         */
+        component: PropTypes.any
     },
 
     getDefaultProps() {
         return {
-            show: true
+            show: true,
+            component: 'div',
+            className: ''
         };
     },
 
     getFeatureState(name) {
-        return this.props.states[name];
+        const lowercaseName = name.toLowerCase();
+
+        const found = _.find(this.props.states, (feature) => feature.name.toLowerCase() === lowercaseName);
+        return found && found.status;
     },
 
     render() {
 
         const featureState = this.getFeatureState(this.props.featureName);
 
-        if (typeof featureState === "boolean" && this.props.show) {
-            return featureState ? this.props.children : null;
+        if (featureState && this.props.show) {
+
+            return React.createElement(this.props.component, {className: this.props.className}, this.props.children);
         }
 
         return null; // feature not found or show=false

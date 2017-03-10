@@ -742,7 +742,7 @@
             route += '?realmId=' + realmId;
 
             if (appId) {
-                route += '&app=' + appId;
+                route += '&appId=' + appId;
             }
 
             return route;
