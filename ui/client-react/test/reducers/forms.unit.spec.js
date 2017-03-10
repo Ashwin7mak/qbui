@@ -242,4 +242,29 @@ describe('Forms reducer functions', () => {
             expect(mockMoveFieldHelper.removeField).not.toHaveBeenCalled();
         });
     });
+
+    describe('select a field', () => {
+        const someFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.SELECT_FIELD,
+            content: {
+                location: 1,
+            }
+        };
+
+        it('returns a new state with a field selected', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
+                ...stateWithViewForm[0],
+                formData: {formMeta: someFormMeta},
+                selectedFields: [1]
+            }]);
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
+    });
 });
