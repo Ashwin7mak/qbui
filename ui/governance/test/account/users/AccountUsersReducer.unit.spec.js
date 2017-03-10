@@ -62,6 +62,10 @@ describe('Account Users Reducers Tests', () => {
         it('returns new set of users on SET_USERS', () => {
             // change the state when the SET action type is sent
             const state = reducer(initialState, {type: types.SET_USERS, ACCOUNT_USERS_DATA});
+
+            console.log(ACCOUNT_USERS_DATA);
+
+            console.log(state.users);
             expect(state.users).toEqual(ACCOUNT_USERS_DATA);
         });
     });
