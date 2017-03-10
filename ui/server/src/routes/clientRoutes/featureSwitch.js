@@ -6,7 +6,7 @@ const routes = [
 ];
 
 module.exports = {
-    addRoutes(app, appConfig, BASE_PROPS) {
+    addRoutes(app, BASE_PROPS, appConfig) {
         BaseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, routes);
     }
 };

@@ -1,5 +1,6 @@
 const reactViews = require('express-react-views');
 const log = require('../logger').getLogger();
+const path = require('path');
 let baseRoute = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 const engineOptions = {
@@ -25,7 +26,7 @@ function renderJsx(req, res, filename, opts) {
  * Use options to pass in parameters based on the route
  */
 function renderIndex(req, res, options) {
-    renderJsx(req, res, '../viewComponents/index.jsx', options);
+    renderJsx(req, res, path.join(__dirname, '/viewComponents/index.jsx'), options);
 }
 
 class BaseClientRoute {

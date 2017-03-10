@@ -19,7 +19,7 @@ const routes = [
 ];
 
 module.exports = {
-    addRoutes(app, appConfig, BASE_PROPS) {
+    addRoutes(app, BASE_PROPS, appConfig) {
         /**
          * Possible option keys are:
          * - title - Sets the page title
