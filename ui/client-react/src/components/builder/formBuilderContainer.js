@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -39,6 +39,10 @@ const mapDispatchToProps = dispatch => {
 
         updateForm(appId, tblId, formType, form) {
             return dispatch(updateForm(appId, tblId, formType, form));
+        },
+
+        removeField(formId, location) {
+            return dispatch(removeFieldFromForm(formId, location));
         },
 
         updateAnimationState(isAnimating) {
@@ -135,6 +139,7 @@ export const FormBuilderContainer = React.createClass({
                                     formId={formId}
                                     formData={formData}
                                     moveFieldOnForm={this.props.moveField}
+                                    removeField={this.props.removeField}
                                     updateAnimationState={this.props.updateAnimationState}
                                 />
                             </Loader>

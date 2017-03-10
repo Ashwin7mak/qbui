@@ -31,13 +31,6 @@
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
-
-        &:active {
-            .formElement.fieldLabel {
-                //need to add a zindex of 1 to show the field label during an active state
-                z-index: 3;
-            }
-        }
     }
 
     .draggableField, .droppableField {

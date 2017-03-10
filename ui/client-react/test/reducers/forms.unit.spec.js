@@ -191,7 +191,6 @@ describe('Forms reducer functions', () => {
                 ...stateWithViewForm[0],
                 formData: {formMeta: updatedFormMeta}
             }]);
-
             expect(mockMoveFieldHelper.moveField).toHaveBeenCalledWith(
                 stateWithViewForm[0].formData.formMeta, 1, 2
             );
@@ -201,6 +200,46 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
 
             expect(mockMoveFieldHelper.moveField).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('removing a field', () => {
+        const updatedFormMeta = 'updated form meta';
+        const mockMoveFieldHelper = {
+            removeField(_formMeta, location) {return updatedFormMeta;}
+        };
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.REMOVE_FIELD,
+            content: {
+                location: 1,
+            }
+        };
+
+        beforeEach(() => {
+            spyOn(mockMoveFieldHelper, 'removeField').and.callThrough();
+            ReducerRewireAPI.__Rewire__('MoveFieldHelper', mockMoveFieldHelper);
+        });
+
+        afterEach(() => {
+            ReducerRewireAPI.__ResetDependency__('MoveFieldHelper');
+        });
+
+        it('returns a new state with a single field removed', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
+                ...stateWithViewForm[0],
+                formData: {formMeta: updatedFormMeta}
+            }]);
+            expect(mockMoveFieldHelper.removeField).toHaveBeenCalledWith(
+                stateWithViewForm[0].formData.formMeta, 1
+            );
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+
+            expect(mockMoveFieldHelper.removeField).not.toHaveBeenCalled();
         });
     });
 });

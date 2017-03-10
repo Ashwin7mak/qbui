@@ -308,6 +308,7 @@ let QBForm = React.createClass({
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
+                  removeField={this.props.removeField}
                   cacheDragElement={this.props.cacheDragElement}
                   clearDragElementCache={this.props.clearDragElementCache}
                   containingElement={containingElement}

@@ -251,6 +251,17 @@ export const selectFieldOnForm = (formId, location) => {
 };
 
 /**
+ * Removes a field from the form
+ * @param formId
+ * @param location
+ */
+export const removeFieldFromForm = (formId, location) => {
+    return event(formId, types.REMOVE_FIELD, {
+        location
+    });
+};
+
+/**
  * Create a new form
  *
  * @param appId
