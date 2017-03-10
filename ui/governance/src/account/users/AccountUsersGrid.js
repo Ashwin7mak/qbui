@@ -286,12 +286,12 @@ export class AccountUsersGrid extends Component {
 // Provide type checking
 AccountUsersGrid.propTypes = {
     usersProps: React.PropTypes.array
-}
+};
 
 // Provide default val
 AccountUsersGrid.defaultProps = {
     usersProps: []
-}
+};
 
 
 const mapStateToProps = (state) => {
