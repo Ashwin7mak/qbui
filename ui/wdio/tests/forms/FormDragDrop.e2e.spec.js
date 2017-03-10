@@ -11,10 +11,10 @@
     let testApp;
 
     describe('Form Builder Tests:', function() {
-        /**
-         * Setup method. Creates test app then authenticates into the new stack
-         */
         beforeAll(function() {
+            /**
+             * Setup method. Creates test app then authenticates into the new stack
+             */
             browser.logger.info('beforeAll spec function - Generating test data and logging in');
             // Need to return here. beforeAll is completely async, need to return the Promise chain in any before or after functions!
             // No need to call done() anymore
@@ -33,7 +33,7 @@
             });
         });
 
-        beforeEach(function() { // why is beforeEach purple here whereas beforeAll is not purple above?
+        beforeEach(function() {
             // open first table
             e2ePageBase.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             // edit first record
@@ -48,7 +48,8 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            browser.dragAndDrop(source, target);
+            // browser.dragAndDrop(source, target);
+            formBuilderPO.dragonDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -66,7 +67,7 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            browser.dragAndDrop(source, target);
+            formBuilderPO.dragonDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
             expect(movedFields[0]).toBe(origFields[1]);
@@ -98,9 +99,10 @@
             expect(formBuilderPO.getFieldLabels()).toEqual(origFields);
         });
 
-        // this isn't a real test, but the technique will come in handy later
-        // when we start creating fields on the fly, renaming fields, etc.
         it('drag/drop a field to another by name & verify move', function() {
+            // this isn't a real test, but the technique will come in handy later
+            // when we start creating fields on the fly, renaming fields, etc.
+
             // store the list of fields before moving
             let origFields = formBuilderPO.getFieldLabels();
             // drag the 1st field below the 2nd one
@@ -110,5 +112,6 @@
             expect(movedFields[0]).toBe(origFields[1]);
             expect(movedFields[1]).toBe(origFields[0]);
         });
+
     });
 }());

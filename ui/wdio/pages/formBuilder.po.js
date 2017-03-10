@@ -15,6 +15,21 @@
                 return browser.element('.deleteFieldIcon');
             }
         },
+        dragonDrop: {
+            // drags vert then horz to induce the preview
+            // because dragAndDrop doesn't do the trick
+            value: function(source, target) {
+                let sourceText = browser.element(source).getText();
+                browser.moveToObject(source);
+                browser.buttonDown();
+                browser.moveToObject(target);
+                browser.moveToObject(target, 0, 0); // this updates the preview
+                browser.buttonUp();
+                browser.waitUntil(function() {
+                    return sourceText === browser.element(target).getText();
+                }, 5000, 'expected text to be different after 5s');
+            }
+        },
         fieldLabels: {
             get: function() {
                 return browser.elements('.fieldLabel');
@@ -35,9 +50,9 @@
                 return browser.element('.fieldTokenTitle');
             }
         },
-        findFieldByIndex: {
+        findFieldByIndex: { // doesn't actually FIND anything...
             value: function(index) {
-                return '.sectionRow:nth-child(' + index + ')';
+                return '.formElementContainer:nth-child(' + index + ')';
             }
         },
         formContainer: {
@@ -45,19 +60,12 @@
                 return browser.element('.formContainer');
             }
         },
-        open: {
-            value: function() {
-                topNavPO.formBuilderBtn.waitForVisible(); // prevent 'element not clickable'
-                topNavPO.formBuilderBtn.click();
-                topNavPO.modifyThisForm.click();
-                return this.formContainer.waitForVisible();
-            }
-        },
         getFieldLabels: {
             value: function() {
                 let labels = [];
-                for (let i = 0; i < this.fieldLabels.value.length; i++) {
-                    labels.push(this.fieldLabels.value[i].getText());
+                let fieldLabels = this.fieldLabels;
+                for (let i = 0; i < fieldLabels.value.length; i++) {
+                    labels.push(fieldLabels.value[i].getText());
                 }
                 return labels;
             }
@@ -67,7 +75,16 @@
                 let labels = this.getFieldLabels();
                 source = this.findFieldByIndex(labels.indexOf(source));
                 target = this.findFieldByIndex(labels.indexOf(target));
-                browser.dragAndDrop(source, target);
+                this.dragonDrop(source, target);
+            }
+        },
+        open: {
+            value: function() {
+                // wait to prevent 'element not clickable'
+                topNavPO.formBuilderBtn.waitForVisible();
+                topNavPO.formBuilderBtn.click();
+                topNavPO.modifyThisForm.click();
+                return this.formContainer.waitForVisible();
             }
         },
         previewContainer: {
