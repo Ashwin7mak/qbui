@@ -6,7 +6,6 @@ import TouchBackend from 'react-dnd-touch-backend';
 import {findFormElementKey} from '../../utils/formUtils';
 import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
-import Device from '../../utils/device';
 
 import './formBuilder.scss';
 
@@ -28,6 +27,7 @@ export class FormBuilder extends Component {
         this.reorderTimeout = null;
 
         this.handleFormReorder = this.handleFormReorder.bind(this);
+        this.removeField = this.removeField.bind(this);
         this.cancelFormReorder = this.cancelFormReorder.bind(this);
         this.cacheDragElement = this.cacheDragElement.bind(this);
         this.clearDragElementCache = this.clearDragElementCache.bind(this);
@@ -58,6 +58,11 @@ export class FormBuilder extends Component {
         }
     }
 
+    removeField(location) {
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.formId, location);
+        }
+    }
     /**
      * Cancels the timeout for a reorder
      */
@@ -105,6 +110,7 @@ export class FormBuilder extends Component {
                     editingForm={true}
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
+                    removeField={this.removeField}
                     cacheDragElement={this.cacheDragElement}
                     clearDragElementCache={this.clearDragElementCache}
                     cancelFormReorder={this.cancelFormReorder}
