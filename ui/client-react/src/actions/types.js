@@ -28,6 +28,7 @@ export const MOVE_FIELD = 'MOVE_FIELD';
 export const SYNC_FORM = 'SYNC_FORM';
 
 export const SELECT_FIELD = 'SELECT_FIELD';
+export const UPDATE_FORM_ANIMATION_STATE = 'UPDATE_FORM_ANIMATION_STATE';
 
 //  ****  Nav shell actions ****
 export const HIDE_TROWSER = 'HIDE_TROWSER';

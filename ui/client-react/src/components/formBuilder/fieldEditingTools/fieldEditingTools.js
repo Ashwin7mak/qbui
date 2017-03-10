@@ -36,6 +36,7 @@ export class FieldEditingTools extends Component {
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
         this.onClickField = this.onClickField.bind(this);
         this.isFieldSelected = this.isFieldSelected.bind(this);
+        this.renderActionIcons = this.renderActionIcons.bind(this);
     }
 
     /**
@@ -52,7 +53,7 @@ export class FieldEditingTools extends Component {
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
                 left: `${fieldDomElement.offsetLeft - left}px`,
-                height: `${fieldDomElement.offsetHeight + 26}px`,
+                height: `${fieldDomElement.offsetHeight + (isSmall ? 11 : 26)}px`,
                 width: `${fieldDomElement.offsetWidth + width}px`
             };
 
@@ -80,15 +81,41 @@ export class FieldEditingTools extends Component {
         return this.props.selectedFields.find(selectedField => _.isEqual(selectedField, this.props.location));
     }
 
+    renderActionIcons() {
+        if (this.props.isDragging) {
+            return null;
+        }
+
+        return (
+            <div className="actionIcons">
+                <div className="deleteFieldIcon" onClick={this.onClickDelete}>
+                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                        <QbIcon icon="delete" />
+                    </QbToolTip>
+                </div>
+
+                <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
+                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                        <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
+                    </QbToolTip>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let isTouch = device.isTouch();
-        let classNames = ["fieldEditingTools"];
+        let classNames = ['fieldEditingTools'];
 
         if (isTouch && !isSmall) {
-            classNames.push("isTablet");
+            classNames.push('isTablet');
         } else if (!isTouch) {
-            classNames.push("notTouchDevice");
+            classNames.push('notTouchDevice');
+        }
+
+        if (this.props.isDragging) {
+            classNames.push('active');
         }
 
         if (this.isFieldSelected()) {
@@ -106,17 +133,7 @@ export class FieldEditingTools extends Component {
 
                 <DragHandle />
 
-                <div className="deleteFieldIcon" onClick={this.onClickDelete}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                        <QbIcon icon="delete" />
-                    </QbToolTip>
-                </div>
-
-                <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                        <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
-                    </QbToolTip>
-                </div>
+                {this.renderActionIcons()}
             </div>
         );
     }
@@ -126,7 +143,8 @@ FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
     onClickFieldPreferences: PropTypes.func,
-    formId: PropTypes.string,
+    isDragging: PropTypes.bool,
+    formId: PropTypes.string
 };
 
 FieldEditingTools.defaultProps = {
