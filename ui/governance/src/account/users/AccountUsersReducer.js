@@ -1,6 +1,6 @@
 import * as types from '../../app/types';
 
-const AccountUsers = (
+const reducer = (
     state = {
         // default states
 
@@ -25,4 +25,4 @@ const AccountUsers = (
     }
 };
 
-export default AccountUsers;
+export default reducer;

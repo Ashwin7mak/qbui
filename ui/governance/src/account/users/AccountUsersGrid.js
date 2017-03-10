@@ -1,8 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import moment from 'moment';
 
-import data from './AccountUserGridTempData';
-
 import * as Table from 'reactabular-table';
 import QbHeaderCell from '../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell';
 import QbRow from '../../../../client-react/src/components/dataTable/qbGrid/qbRow';
