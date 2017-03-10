@@ -10,6 +10,8 @@ describe('Validate Cookie Utility Functions', function() {
 
     describe('verify each section is returned from a ticket', function() {
         var testCases = [
+            {name: 'null ticket)', ticket: null,
+                section:'0', expectation: null},
             {name: 'return section 0 (current ticket version)', ticket: '8_bky5c33ch_j2s_rfwbk_a_p8uvqkh8pgr4dxfawibbir7p79csc7c6yc4mpy8pdqrdrgsqarg7c',
                 section:'0', expectation: '8'},
             {name: 'return section 1 (ob32 encoded time)', ticket: '8_bky5c33ch_j2s_rfwbk_a_p8uvqkh8pgr4dxfawibbir7p79csc7c6yc4mpy8pdqrdrgsqarg7c',
@@ -19,6 +21,8 @@ describe('Validate Cookie Utility Functions', function() {
             {name: 'return section 2 (non encoded user id)', ticket: '8_bky5c33ch_RCT8WEN_UF_rfwbk_a_p8uvqkh8pgr4dxfawibbir7p79csc7c6yc4mpy8pdqrdrgsqarg7c',
                 section:'2', expectation: 'RCT8WEN_UF'},
             {name: 'return section 3 (ob32 encoded realm id)', ticket: '8_bky5c33ch_j2s_rfwbk_a_p8uvqkh8pgr4dxfawibbir7p79csc7c6yc4mpy8pdqrdrgsqarg7c',
+                section:'3', expectation: 'rfwbk'},
+            {name: 'return section 3 (non encoded user id)', ticket: '8_bky5c33ch_RCT8WEN_UF_rfwbk_a_p8uvqkh8pgr4dxfawibbir7p79csc7c6yc4mpy8pdqrdrgsqarg7c',
                 section:'3', expectation: 'rfwbk'},
             {name: 'return section 4 (ob32 encoded user ticket version)', ticket: '8_bky5c33ch_j2s_rfwbk_a_p8uvqkh8pgr4dxfawibbir7p79csc7c6yc4mpy8pdqrdrgsqarg7c',
                 section:'4', expectation: 'a'},
