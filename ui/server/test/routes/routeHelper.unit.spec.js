@@ -484,7 +484,7 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test null url', url: null, expectation: null},
             {name: 'test with invalid url', url: '/url/prefix/', expectation: '/url/prefix/'},
             {name: 'test with valid url with ticket', url: '/url/prefix/ticket', expectation: '/url/prefix/ticket'},
-            {name: 'test with valid url with ticket in path', url: '/url/prefix/ticket/abc', expectation: '/url/prefix/ticket'}
+            {name: 'test with valid url with ticket in path', url: '/url/prefix/ticket/abc', expectation: '/url/prefix/ticket/abc'}
         ];
 
         testCases.forEach(function(testCase) {
