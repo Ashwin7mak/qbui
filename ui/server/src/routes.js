@@ -87,13 +87,18 @@
         });
 
         app.all(routeConstants.ADMIN + '/*', function(req, res, next) {
-            usersApi.getReqUser(req).then(function(response) {
-                if (response.administrator) {
-                    return next();
-                } else {
-                    res.status(httpStatusCodes.FORBIDDEN).send('User does not have permissions to access this content');
+            usersApi.getReqUser(req).then(
+                function(response) {
+                    if (response.administrator) {
+                        return next();
+                    } else {
+                        res.status(httpStatusCodes.FORBIDDEN).send('User does not have permissions to access this content');
+                    }
+                },
+                function(error) {
+                    res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send(JSON.stringify(error));
                 }
-            });
+            );
         });
 
         //  For all requests:

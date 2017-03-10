@@ -69,7 +69,7 @@
              */
             getUserById: function(req, userId) {
                 return new Promise((resolve, reject) => {
-                    let opts = requestHelper.setOptions(req);
+                    let opts = requestHelper.setOptions(req, true);
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     if (routeHelper.isAdminRoute(req.url)) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getUsersRouteForAdmin(req.url, userId);
