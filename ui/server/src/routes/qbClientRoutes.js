@@ -38,7 +38,8 @@ var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE
             }
         });
 
-        //  Default application dashboard
+        // Default application dashboard
+        // Currently redirects to the main apps page
         app.route(`${basePath}/`).get(function(req, res) {
             res.redirect(`${basePath}/apps`);
         });
