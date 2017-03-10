@@ -31,8 +31,8 @@ function renderIndex(req, res, options) {
 
 class BaseClientRoute {
     static addRoutesFromArrayOfPaths(app, baseProps, paths = [], options) {
-        paths.forEach(path => {
-            new BaseClientRoute(app, baseProps, path, options);
+        paths.forEach(currentPath => {
+            BaseClientRoute.addRoute(app, baseProps, currentPath, options);
         });
     }
 
@@ -46,8 +46,8 @@ class BaseClientRoute {
         return (appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
     }
 
-    constructor(app, baseProps, path, options = {}) {
-        app.route(`${baseRoute}${path.length === 0 || path.charAt(0) == '/' ? path : `/${path}`}`).get((req, res) => {
+    static addRoute(app, baseProps, currentPath, options = {}) {
+        app.route(`${baseRoute}${currentPath.length === 0 || currentPath.charAt(0) === '/' ? currentPath : `/${currentPath}`}`).get((req, res) => {
             renderIndex(req, res, Object.assign({}, baseProps, {title: 'QuickBase', req: req}, options));
         });
     }

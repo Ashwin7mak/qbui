@@ -3,7 +3,7 @@ const baseClientPath = require('../../../common/src/constants').ROUTES.BASE_CLIE
 const sinon = require('sinon');
 const assert = require('assert');
 
-const mockExpressApp = {route(_path) { return {get(_callback) {}}}};
+const mockExpressApp = {route(_path) {return {get(_callback) {}};}};
 
 describe('BaseClientRoute', () => {
     beforeEach(() => {
@@ -14,31 +14,31 @@ describe('BaseClientRoute', () => {
         mockExpressApp.route.restore();
     });
 
-    describe('new', () => {
+    describe('addRoute', () => {
         it('attaches a new route to the app', () => {
             const testPath = '/testpath';
-            new BaseClientRoute(mockExpressApp, {}, testPath);
+            BaseClientRoute.addRoute(mockExpressApp, {}, testPath);
 
             assert(mockExpressApp.route.calledOnce);
         });
 
         it('adds the base client route to all paths', () => {
             const testPath = '/testpath';
-            new BaseClientRoute(mockExpressApp, {}, testPath);
+            BaseClientRoute.addRoute(mockExpressApp, {}, testPath);
 
             assert(mockExpressApp.route.calledWith(`${baseClientPath}${testPath}`));
         });
 
         it('adds the required backslash(/) if one is not provided as part of the path', () => {
             const testPath = 'testpath';
-            new BaseClientRoute(mockExpressApp, {}, testPath);
+            BaseClientRoute.addRoute(mockExpressApp, {}, testPath);
 
             assert(mockExpressApp.route.calledWith(`${baseClientPath}/${testPath}`));
         });
 
         it('does not add a backslash to a blank route (allows route /qbase to be set)', () => {
             const testPath = '';
-            new BaseClientRoute(mockExpressApp, {}, testPath);
+            BaseClientRoute.addRoute(mockExpressApp, {}, testPath);
 
             assert(mockExpressApp.route.calledWith(baseClientPath));
         });
