@@ -1,4 +1,4 @@
-import * as types from '../../app/types';
+import * as types from '../../app/actionTypes';
 
 const AccountUsers = (
     state = {

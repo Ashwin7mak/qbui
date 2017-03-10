@@ -9,7 +9,7 @@ class AccountUsersService extends BaseService {
         };
     }
 
-    getUsers() {
+    getAccountUsers() {
         const params = {};
         const url = super.constructUrl(this.API.GET_USERS, []);
 

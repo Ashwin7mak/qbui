@@ -1,5 +1,5 @@
 import AccountUsersReducer from '../../../src/account/users/AccountUsersReducer';
-import * as types from '../../../src/app/types';
+import * as types from '../../../src/app/actionTypes';
 
 let initialState = {};
 

@@ -1,8 +1,7 @@
-import AccountUsersService from './AccountUsersService';
-import Promise from 'bluebird';
-import * as types from '../../app/types';
-import Logger from '../../../../client-react/src/utils/logger';
-import LogLevel from '../../../../client-react/src/utils/logLevels';
+import AccountUsersService from "./AccountUsersService";
+import * as types from "../../app/actionTypes";
+import Logger from "../../../../client-react/src/utils/logger";
+import LogLevel from "../../../../client-react/src/utils/logLevels";
 
 const logger = new Logger();
 
@@ -10,7 +9,7 @@ const logger = new Logger();
  * Action when there is successful user from the backend
  * @param users
  */
-export const getAccountUsersSuccess = (users) => ({
+export const receiveAccountUsers = (users) => ({
     type: types.SET_USERS,
     users
 });
@@ -20,36 +19,29 @@ export const getAccountUsersSuccess = (users) => ({
  *
  * @returns {function(*=)}
  */
-export const getUsers = () => {
+export const fetchAccountUsers = () => {
     return (dispatch) => {
+        // get all the users from the account service
+        const accountUsersService = new AccountUsersService();
 
-        return new Promise((resolve, reject) => {
+        const promise = accountUsersService.getAccountUsers();
 
-            // get all the users from the account service
-            const accountUsersService = new AccountUsersService();
+        promise.then(response => {
 
-            const promise = accountUsersService.getUsers();
+            // we have the users, update the redux store
+            dispatch(receiveAccountUsers(response.data));
 
-            promise.then(response => {
+            // otherwise we have an error
+        }).catch(error => {
 
-                // we have the users, update the redux store
-                dispatch(getAccountUsersSuccess(response.data));
-
-                // pass the data through the resolve if we need to chain these actions in the future.
-                resolve(response.data);
-
-                // otherwise we have an error
-            }).catch(error => {
-
-                if (error.response) {
-                    if (error.response.status === 403) {
-                        logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUsersService.getUsers:');
-                    } else {
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUsersService.getUsers:');
-                    }
+            if (error.response) {
+                if (error.response.status === 403) {
+                    logger.parseAndLogError(LogLevel.WARN, error.response, 'accountUsersService.getAccountUsers:');
+                } else {
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'accountUsersService.getAccountUsers:');
                 }
-                reject(error);
-            });
+            }
         });
+        return promise;
     };
 };

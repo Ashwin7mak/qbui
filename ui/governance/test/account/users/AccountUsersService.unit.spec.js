@@ -17,10 +17,10 @@ describe('Account Users Service Tests', () => {
         accountUsersService = new AccountUsersService();
     });
 
-    it('test getUsers function', () => {
+    it('test getAccountUsers function', () => {
 
         const url = accountUsersService.constructUrl(accountUsersService.API.GET_USERS);
-        accountUsersService.getUsers();
+        accountUsersService.getAccountUsers();
 
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
     });

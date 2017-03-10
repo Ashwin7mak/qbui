@@ -1,5 +1,5 @@
 import * as actions from '../../../src/account/users/AccountUsersActions';
-import * as types from '../../../src/app/types';
+import * as types from '../../../src/app/actionTypes';
 import {__RewireAPI__ as AccountUsersActionsRewireAPI} from '../../../src/account/users/AccountUsersActions';
 
 import configureMockStore from 'redux-mock-store';
@@ -51,7 +51,7 @@ describe('Account Users Actions Tests', () => {
         constructor() { }
 
         // resolve the promise with responseData
-        getUsers() {
+        getAccountUsers() {
             return Promise.resolve({data: ACCOUNT_USERS_DATA});
         }
     }
@@ -72,8 +72,8 @@ describe('Account Users Actions Tests', () => {
 
         const store = mockStore({});
 
-        // expect the dummy data when the getUsers is called
-        return store.dispatch(actions.getUsers()).then(
+        // expect the dummy data when the fetchAccountUsers is called
+        return store.dispatch(actions.fetchAccountUsers()).then(
 
             () => {
                 expect(store.getActions()).toEqual(expectedActions);

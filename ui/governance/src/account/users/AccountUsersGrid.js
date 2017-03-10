@@ -235,7 +235,7 @@ const columns = [
 ];
 
 
-export class AccountUsersGrid extends Component {
+class AccountUsersGrid extends Component {
 
     constructor(props) {
         super(props);
@@ -245,7 +245,7 @@ export class AccountUsersGrid extends Component {
      * get users whenever the component mounts
      */
     componentDidMount() {
-        this.props.getUsers();
+        this.props.fetchAccountUsers();
     }
 
     render() {
@@ -267,7 +267,7 @@ export class AccountUsersGrid extends Component {
                 <Table.Header className="qbHeader" />
 
                 <Table.Body className="qbTbody"
-                            rows={this.props.usersProps}
+                            rows={this.props.users}
                             rowKey="uid"
                             onRow={(row) => {
                                 return {
@@ -283,19 +283,19 @@ export class AccountUsersGrid extends Component {
 
 // Provide type checking
 AccountUsersGrid.propTypes = {
-    usersProps: React.PropTypes.array
+    users: React.PropTypes.array
 };
 
 // Provide default val
 AccountUsersGrid.defaultProps = {
-    usersProps: []
+    users: []
 };
 
 
 const mapStateToProps = (state) => {
 
     return {
-        usersProps: state.AccountUsers.users
+        users: state.AccountUsers.users
     };
 };
 
