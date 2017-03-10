@@ -22,7 +22,7 @@ const IsDenied = cellData => HasFlag(cellData.realmDirectoryFlags, DeniedFlag);
 const CanCreateApps = cellData => HasFlag(cellData.accountTrusteeFlags, CanCreateAppFlag);
 const IsApprovedInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RealmApprovedFlag);
 const IsRegisteredInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RegisteredFlag);
-const IsTimeNull = timeStr => timeStr === '0001-01-01T00:00:00Z';
+const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
 
 const columns = [
     {
@@ -283,7 +283,8 @@ class AccountUsersGrid extends Component {
 
 // Provide type checking
 AccountUsersGrid.propTypes = {
-    users: React.PropTypes.array
+    users: React.PropTypes.array,
+    fetchAccountUsers: React.PropTypes.func.isRequired
 };
 
 // Provide default val
@@ -291,9 +292,9 @@ AccountUsersGrid.defaultProps = {
     users: []
 };
 
+export {AccountUsersGrid};
 
 const mapStateToProps = (state) => {
-
     return {
         users: state.AccountUsers.users
     };
