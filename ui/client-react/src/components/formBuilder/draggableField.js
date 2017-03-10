@@ -12,7 +12,8 @@ import Device from '../../utils/device';
  * @type {{beginDrag: ((props)), endDrag: ((props, monitor))}}
  */
 const fieldDragSource = {
-    beginDrag(props) {
+    beginDrag(props, monitor, component) {
+        props.cacheDragElement(component);
         return {
             containingElement: props.containingElement,
             location: props.location,
@@ -38,10 +39,7 @@ const fieldDragSource = {
      * @param monitor
      */
     endDrag(props, monitor) {
-        if (monitor.didDrop() && Device.isTouch()) {
-            let {location} = monitor.getDropResult();
-            props.handleFormReorder(location, props);
-        }
+        props.clearDragElementCache();
     }
 };
 
@@ -83,7 +81,7 @@ const DraggableFieldHoc = FieldComponent => {
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>
-                    <FieldEditingTools location={location} />
+                    <FieldEditingTools location={location} isDragging={isDragging} />
                     <FieldComponent {...this.props} />
                 </div>
             );
