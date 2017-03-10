@@ -236,6 +236,7 @@ const columns = [
     },
 ];
 
+
 export class AccountUsersGrid extends Component {
 
     constructor(props) {
@@ -279,6 +280,17 @@ export class AccountUsersGrid extends Component {
             </Table.Provider>
         );
     }
+}
+
+
+// Provide type checking
+AccountUsersGrid.propTypes = {
+    usersProps: React.PropTypes.array
+}
+
+// Provide default val
+AccountUsersGrid.defaultProps = {
+    usersProps: []
 }
 
 
