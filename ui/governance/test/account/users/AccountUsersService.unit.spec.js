@@ -1,15 +1,27 @@
-import React from 'react';
-import {shallow} from 'enzyme';
-import jasmineEnzyme from 'jasmine-enzyme';
+import BaseService from '../../../../client-react/src/services/baseService';
+import AccountUsersService from '../../../src/account/users/AccountUsersService';
 
-let component;
 
-describe('example jasmine/enzyme setup', () => {
+describe('Account Users Service Tests', () => {
+
+    var accountUsersService;
+
     beforeEach(() => {
-        jasmineEnzyme();
+        spyOn(BaseService.prototype, 'setRequestInterceptor');
+        spyOn(BaseService.prototype, 'setResponseInterceptor');
+        spyOn(BaseService.prototype, 'get');
+        spyOn(BaseService.prototype, 'post');
+        spyOn(BaseService.prototype, 'put');
+        spyOn(BaseService.prototype, 'delete');
+
+        accountUsersService = new AccountUsersService();
     });
 
-    it('does something', () => {
-        expect(true).toEqual(true);
+    it('test getUsers function', () => {
+
+        const url = accountUsersService.constructUrl(accountUsersService.API.GET_USERS);
+        accountUsersService.getUsers();
+
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
     });
 });

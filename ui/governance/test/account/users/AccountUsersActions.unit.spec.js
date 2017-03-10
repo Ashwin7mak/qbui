@@ -1,15 +1,88 @@
-import React from 'react';
-import {shallow} from 'enzyme';
-import jasmineEnzyme from 'jasmine-enzyme';
+import * as actions from '../../../src/account/users/AccountUsersActions';
+import * as types from '../../../src/app/types';
+import {__RewireAPI__ as AccountUsersActionsRewireAPI} from '../../../src/account/users/AccountUsersActions';
 
-let component;
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import Promise from 'bluebird';
 
-describe('example jasmine/enzyme setup', () => {
+describe('Account Users Actions Tests', () => {
+
+    const ACCOUNT_USERS_DATA = [
+        {
+            "uid": 10000,
+            "firstName": "Administrator",
+            "lastName": "User for default SQL Installation",
+            "email": "koala_bumbles@quickbase.com",
+            "userName": "administrator",
+            "lastAccess": "2017-02-28T19:32:04.223Z",
+            "numGroupsMember": 0,
+            "numGroupsManaged": 0,
+            "hasAppAccess": true,
+            "numAppsManaged": 2,
+            "userBasicFlags": 24576,
+            "accountTrusteeFlags": 0,
+            "realmDirectoryFlags": 0,
+            "systemRights": -1
+        },
+        {
+            "uid": 56760756,
+            "firstName": "Koala",
+            "lastName": "Bumbles",
+            "email": "koala.bumbles.jr@g88.net",
+            "userName": "koala.bumbles.jr@g88.net",
+            "lastAccess": "2017-02-22T23:29:02.56Z",
+            "numGroupsMember": 0,
+            "numGroupsManaged": 1,
+            "hasAppAccess": true,
+            "numAppsManaged": 0,
+            "userBasicFlags": 8192,
+            "accountTrusteeFlags": 0,
+            "realmDirectoryFlags": 13362,
+            "systemRights": 0
+        }];
+
+    const mockStore = configureMockStore([thunk]);
+
+    // Mock the service
+    class mockAccountUsersService {
+
+        constructor() { }
+
+        // resolve the promise with responseData
+        getUsers() {
+            return Promise.resolve({data: responseData});
+        }
+    }
+
     beforeEach(() => {
-        jasmineEnzyme();
+        AccountUsersActionsRewireAPI.__Rewire__('AccountUsersService', mockAccountUsersService);
     });
 
-    it('does something', () => {
-        expect(true).toEqual(true);
+    afterEach(() => {
+        AccountUsersActionsRewireAPI.__ResetDependency__('AccountUsersService');
     });
+
+    it('gets users', (done) => {
+
+        const expectedActions = [
+            {type: types.SET_USERS, users: ACCOUNT_USERS_DATA}
+        ];
+
+        const store = mockStore({});
+
+        // expect the dummy data when the getUsers is called
+        return store.dispatch(actions.getUsers()).then(
+
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
+
 });
