@@ -1,4 +1,4 @@
-const BaseClientRoute = require('../../src/routes/clientRoutes/baseClientRoute');
+const BaseClientRoute = require('../../src/routes/baseClientRoute');
 const baseClientPath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 const sinon = require('sinon');
 const assert = require('assert');
@@ -57,6 +57,22 @@ describe('BaseClientRoute', () => {
             testPaths.forEach((path, index) => {
                 assert.equal(mockExpressApp.route.getCall(index).args[0], `${baseClientPath}${path}`);
             });
+        });
+    });
+
+    describe('generateBundleFilePath', () => {
+        const testBundleName = 'bundle';
+
+        it('returns the correct name for non-production environments', () => {
+            const mockAppConfig = {isProduction: false};
+
+            assert.equal(BaseClientRoute.generateBundleFilePath(testBundleName, mockAppConfig), `${testBundleName}.js`);
+        });
+
+        it('returns the correct name for the production environment', () => {
+            const mockAppConfig = {isProduction: true};
+
+            assert.equal(BaseClientRoute.generateBundleFilePath(testBundleName, mockAppConfig), `${testBundleName}.min.js`);
         });
     });
 });

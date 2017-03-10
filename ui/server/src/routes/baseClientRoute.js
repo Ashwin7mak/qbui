@@ -1,6 +1,6 @@
 const reactViews = require('express-react-views');
-const log = require('../../logger').getLogger();
-let baseRoute = require('../../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
+const log = require('../logger').getLogger();
+let baseRoute = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 const engineOptions = {
     beautify: true,
@@ -33,6 +33,16 @@ class BaseClientRoute {
         paths.forEach(path => {
             new BaseClientRoute(app, baseProps, path, options);
         });
+    }
+
+    /**
+     * Generates the correct bundle file path based on the current environment
+     * @param bundleFileName - bundleFileName without the extension
+     * @param appConfig
+     * @returns {string}
+     */
+    static generateBundleFilePath(bundleFileName, appConfig) {
+        return (appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
     }
 
     constructor(app, baseProps, path, options = {}) {

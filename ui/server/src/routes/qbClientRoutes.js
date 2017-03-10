@@ -1,6 +1,6 @@
 var lodash = require('lodash');
 var path = require('path');
-var baseClientRoute = require('./clientRoutes/baseClientRoute');
+var baseClientRoute = require('./baseClientRoute');
 var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 (function() {
@@ -29,54 +29,16 @@ var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE
 
     module.exports = function(app, config) {
         getBaseOpts(config);
-        const governanceBundleFileName = config.isProduction ? 'governance.min.js' : 'governance.js';
 
-        const clientReactPaths = [
-            '/app/:appId/table/:tblId/report/:rptId',
-            '/app/:appId/table/:tblId/report/:rptId/record/:recordId',
-            '/app/:appId/table/:tblId/record/:recordId',
-            '/app/:appId/table/:tblId/reports',
-            '/app/:appId/table/:tblId',
-            '/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId',
-            '/app/:appId/settings',
-            '/app/:appId/users',
-            '/app/:appId/properties',
-            '/app/:appId',
-            '/apps',
-        ];
+        // Requires all paths set inside the 'clientRoutes' folder. See aClientRoutes.sample.js for more information.
+        const normalizedPath = path.join(__dirname, 'clientRoutes');
+        require("fs").readdirSync(normalizedPath).forEach(function(file) {
+            if (file.indexOf('.sample') < 0) {
+                require("./clientRoutes/" + file).addRoutes(app, BASE_PROPS, config);
+            }
+        });
 
-        baseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, clientReactPaths);
-
-        const featureSwitchRoutes = [
-            '/admin/featureSwitches',
-            '/admin/featureSwitch/:id'
-        ];
-
-        baseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, featureSwitchRoutes);
-
-        const compBundleFileName = config.isProduction ? 'componentLibrary.min.js' : 'componentLibrary.js';
-
-        const componentLibraryRoutes = [
-            '/components',
-            '/components/:componentName'
-        ];
-
-        baseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, componentLibraryRoutes, {title: 'QuickBase Component Library', bundleFileName: compBundleFileName});
-
-        const builderRoutes = [
-            '/builder/app/:appId/table/:tblId/form',
-            '/builder/app/:appId/table/:tblId/form/:formId',
-        ];
-
-        baseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, builderRoutes);
-
-        const governanceRoutes = [
-            '/governance/:accountId/users'
-        ];
-
-        baseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, governanceRoutes, {title: 'QuickBase Governance', bundleFileName: governanceBundleFileName});
-
-        //  default application dashboard
+        //  Default application dashboard
         app.route(`${basePath}/`).get(function(req, res) {
             res.redirect(`${basePath}/apps`);
         });
