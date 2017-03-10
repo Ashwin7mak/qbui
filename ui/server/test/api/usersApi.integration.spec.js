@@ -31,7 +31,7 @@
                     apiBase.createUserAuthentication(userId).then(function() {
                         var getReqUserEndpoint = apiBase.resolveGetReqUserEndpoint();
                         apiBase.executeRequest(getReqUserEndpoint, consts.GET).then(function(result) {
-                            assert.equal(result.body, user);
+                            assert.equal(JSON.parse(result.body).id, user.id);
                             done();
                         });
                     });
@@ -42,7 +42,7 @@
             apiBase.createUserAuthentication(ADMIN_USER_ID).then(function(response) {
                 var getReqUserEndpoint = apiBase.resolveGetReqUserEndpoint();
                 apiBase.executeRequest(getReqUserEndpoint, consts.GET).then(function(result) {
-                    assert.equal(result.body.id, ADMIN_USER_ID);
+                    assert.equal(JSON.parse(result.body).id, ADMIN_USER_ID);
                     done();
                 });
             });
