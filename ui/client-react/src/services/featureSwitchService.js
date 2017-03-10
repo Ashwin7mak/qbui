@@ -66,7 +66,7 @@ class FeatureSwitchService extends BaseService {
     updateOverride(featureSwitchId, id, override) {
 
         const url = super.constructUrl(this.API.PUT_OVERRIDE,  [featureSwitchId, id]);
-        return super.put(url, override);
+        return super.put(url, _.omit(override, ['id']));
     }
 
     deleteOverrides(id, ids) {
