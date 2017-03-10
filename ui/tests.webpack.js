@@ -13,5 +13,5 @@ clientReactModules.keys().forEach(clientReactModules);
 var compLibraryModules = require.context('./componentLibrary/test', true, /.unit.spec.js$/);
 compLibraryModules.keys().forEach(compLibraryModules);
 
-var governanceModules = require.context('./governance/test', true, /.*/)(/.unit.spec.js$/);
+var governanceModules = require.context('./governance/test', true, /.unit.spec.js$/);
 governanceModules.keys().forEach(governanceModules);

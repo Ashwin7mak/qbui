@@ -1,4 +1,4 @@
-import reducer from '../../../src/reducers/featureSwitches';
+import reducer from '../../../src/account/users/AccountUsersReducer';
 import * as types from '../../../src/app/types';
 
 let initialState = {};
