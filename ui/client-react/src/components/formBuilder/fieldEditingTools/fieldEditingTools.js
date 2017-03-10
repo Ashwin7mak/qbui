@@ -78,7 +78,9 @@ export class FieldEditingTools extends Component {
     }
 
     isFieldSelected() {
-        return this.props.selectedFields.find(selectedField => _.isEqual(selectedField, this.props.location));
+        if (this.props.selectedFields) {
+            return this.props.selectedFields.find(selectedField => _.isEqual(selectedField, this.props.location));
+        }
     }
 
     renderActionIcons() {
