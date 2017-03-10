@@ -15,7 +15,7 @@ describe('Table Actions functions', () => {
     let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
 
     let responseData = {
-        reportMetaData: {data: {id: null}},
+        metaData: {data: {id: null}},
         reportData: {data:{filteredCount: 1}}
     };
 
@@ -49,16 +49,16 @@ describe('Table Actions functions', () => {
         it(test.name, function(done) {
             flux.actions.loadTableHomePage(test.appId, test.tblId, test.offset, test.numRows).then(
                 () => {
-                    done();
-                    let model = reportModel.set(responseData.reportMetaData, responseData.reportData);
+                    let model = reportModel.set(responseData.metaData, responseData);
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId:null, offset:test.offset, numRows:test.numRows}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
                     expect(model.rptId, Constants.SYNTHETIC_TABLE_REPORT.id);
+                    done();
                 },
                 () => {
-                    done();
                     expect(false).toBe(true);
+                    done();
                 }
             );
         });
