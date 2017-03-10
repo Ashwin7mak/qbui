@@ -73,8 +73,16 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    onClickField() {
-        this.props.selectField(this.props.formId, this.props.location);
+    componentDidMount() {
+        document.getElementsByClassName(`fieldEditingTools ${this.props.location.elementIndex}`)[0].addEventListener('keydown', this.onClickField);
+    }
+
+    onClickField(e) {
+        console.log('this.props.location: ', this.props.location.elementIndex);
+        e.preventDefault();
+        if (e.keyCode === 13) {
+            this.props.selectField(this.props.formId, this.props.location);
+        }
     }
 
     isFieldSelected() {
@@ -106,7 +114,7 @@ export class FieldEditingTools extends Component {
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let isTouch = device.isTouch();
-        let classNames = ['fieldEditingTools'];
+        let classNames = [`fieldEditingTools ${this.props.location.elementIndex}`];
 
         if (isTouch && !isSmall) {
             classNames.push('isTablet');

@@ -4,6 +4,29 @@
     transition: opacity 0.4s;
     border-radius: $radius-base;
 
+    &.selectedFormElement {
+        &:active {
+            //This opacity is needed to work for 'tabbing'
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
+
+            .deleteFieldIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-red-700;
+                }
+            }
+
+            .fieldPreferencesIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-cyan-700;
+                }
+            }
+        }
+    }
+
     .deleteFieldIcon {
         font-size: $size-iconfont-small;
         position: absolute;
