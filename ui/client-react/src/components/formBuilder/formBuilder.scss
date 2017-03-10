@@ -51,7 +51,6 @@
     }
 
     .selectedFormElement {
-        //This opacity is needed to work for 'tabbing'
         opacity: 1;
         outline: none;
         border: $stroke-width-thin solid $border-focused-color;
