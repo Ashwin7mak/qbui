@@ -2,6 +2,7 @@
  * Created by rbeyer on 3/6/17.
  */
 import React, {PropTypes} from 'react';
+import './appSettingsStage.scss';
 
 class AppSettingsStage extends React.Component {
 
@@ -11,14 +12,21 @@ class AppSettingsStage extends React.Component {
     }
 
     getRoleTotals() {
-        let usersInRolesCount = ``;
+        let usersRoleCount = [];
         let appUsers = this.props.appUsers;
         this.props.appRoles.forEach(function(role) {
             if (appUsers[role.id]) {
-                usersInRolesCount = usersInRolesCount + `${appUsers[role.id].length} ${role.name} `;
+                usersRoleCount.push(
+                    <div className="appRolesPod">
+                        <div className="appRolesDivider">
+                            <div className="appRolesPodCount">{`${appUsers[role.id].length}`}</div>
+                            <div className="appRolesPodName">{role.name}</div>
+                        </div>
+                    </div>
+                );
             }
         });
-        return usersInRolesCount;
+        return usersRoleCount;
     }
 
     render() {
@@ -26,7 +34,11 @@ class AppSettingsStage extends React.Component {
             <div className="report-content">
                 <div className="left">
                     <div className="content">
-                        <div className="stage-showHide-content">{this.getRoleTotals()}</div>
+                        <div className="stage-showHide-content">
+                            <div className="appRolesContent">
+                                {this.getRoleTotals()}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
