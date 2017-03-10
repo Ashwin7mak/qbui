@@ -136,9 +136,12 @@ export class FeatureSwitchesRoute extends React.Component {
      */
     createFeatureSwitch() {
 
-        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then(() => {
+        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then((feature) => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'),
                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
+            const columnToEdit = _.findIndex(this.state.columns, ['property', FeatureSwitchConsts.FEATURE_NAME_KEY]);
+            this.props.editFeatureSwitch(feature.id, columnToEdit);
         });
     }
 
@@ -386,11 +389,25 @@ export class FeatureSwitchesRoute extends React.Component {
     }
 }
 
+const switchComparator = (a, b) => {
+
+    let nameA = a[FeatureSwitchConsts.FEATURE_NAME_KEY].toUpperCase();
+    let nameB = b[FeatureSwitchConsts.FEATURE_NAME_KEY].toUpperCase();
+
+    if (nameA < nameB) {
+        return -1;
+    } else if (nameA > nameB) {
+        return 1;
+    } else {
+        return 0;
+    }
+};
 
 const mapStateToProps = (state) => {
 
+    let sortedSwitches = state.featureSwitches.switches.sort(switchComparator);
     return {
-        switches: state.featureSwitches.switches
+        switches: sortedSwitches
     };
 };
 

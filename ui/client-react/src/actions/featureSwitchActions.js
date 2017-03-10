@@ -112,7 +112,7 @@ export const createFeatureSwitch = (name) => {
                 feature.id = response.data.id;
                 feature.overrides = [];
                 dispatch(createdFeatureSwitch(feature));
-                resolve();
+                resolve(feature);
             }).catch(error => {
 
                 if (error.response) {
