@@ -91,7 +91,7 @@
                 if (response.administrator) {
                     return next();
                 } else {
-                    res.status(httpStatusCodes.FORBIDDEN).send('User doesnt have permissions to access this content');
+                    res.status(httpStatusCodes.FORBIDDEN).send('User does not have permissions to access this content');
                 }
             });
         });

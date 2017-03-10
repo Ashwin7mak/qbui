@@ -61,4 +61,4 @@ export const OVERRIDES_DELETED = 'OVERRIDES_DELETED';
 
 export const REQ_USER = 'REQ_USER';
 
-export const FORBIDDEN = 'FORBIDDEN';
+export const ERROR = 'ERROR';

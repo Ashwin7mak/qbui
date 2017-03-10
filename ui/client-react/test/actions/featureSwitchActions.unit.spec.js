@@ -320,7 +320,7 @@ describe('Feature switch actions', () => {
         FeatureSwitchActionsRewireAPI.__Rewire__('FeatureSwitchService', mockFeatureSwitchNegService);
 
         const expectedActions = [
-            {type: types.FORBIDDEN, error: {response: {status: 403}}}
+            {type: types.ERROR, error: {response: {status: 403}}}
         ];
         const store = mockStore({});
 

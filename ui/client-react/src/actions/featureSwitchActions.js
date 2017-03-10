@@ -47,7 +47,7 @@ export const loadSwitchesSuccess = (switches) => ({
 });
 
 export const errorResponse = (error) => ({
-    type: types.FORBIDDEN,
+    type: types.ERROR,
     error
 });
 

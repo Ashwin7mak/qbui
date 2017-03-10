@@ -146,7 +146,7 @@ const featureSwitches = (
             errorResponse: null
         };
 
-    case types.FORBIDDEN:
+    case types.ERROR:
         return {
             ...state,
             errorResponse: action.error.response
