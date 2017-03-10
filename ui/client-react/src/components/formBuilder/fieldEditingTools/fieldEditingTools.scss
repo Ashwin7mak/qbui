@@ -125,9 +125,13 @@
         }
     }
 
+    &.active {
+        opacity: 1;
+        @include dragpreview-active-gradient;
+    }
+
     &:active {
-        border: $stroke-width-thin solid $color-black-400;
-        background: linear-gradient(rgba($color-black-400, 0.2), rgba($color-black-400, 0.2));
+        @include dragpreview-active-gradient;
         //Need to remove the z index temporarily to only show the field and the field label for active
         z-index: 0 !important;
 

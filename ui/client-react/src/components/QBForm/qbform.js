@@ -9,8 +9,6 @@ import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 import DragAndDropField from '../formBuilder/dragAndDropField';
 import RelatedChildReport from './relatedChildReport';
 import FlipMove from 'react-flip-move';
-import Device from '../../utils/device';
-import MobileDropTarget from '../formBuilder/mobileDropTarget';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -220,17 +218,24 @@ let QBForm = React.createClass({
         }
 
         let arrangedElements = elements;
-        if (this.props.hasAnimation && this.props.editingForm && !Device.isTouch()) {
+        if (this.props.hasAnimation && this.props.editingForm) {
             // Adds animation when field elements are moved during form editing.
+            // The animation also callbacks to update the animating state to make sure drop events are not called
+            // when elements are passing each other during animation.
             arrangedElements = (
-                <FlipMove duration="200" easing="ease-out" appearAnimation="accordionVertical">
+                <FlipMove
+                    duration={200}
+                    easing="ease"
+                    appearAnimation="accordionVertical"
+                    staggerDelayBy={0}
+                    staggerDurationBy={0}
+                    delay={0}
+                    onStartAll={() => this.props.updateAnimationState(true)}
+                    onFinishAll={() => this.props.updateAnimationState(false)}
+                >
                     {elements}
                 </FlipMove>
             );
-        }
-
-        if (Device.isTouch() && this.props.editingForm && Array.isArray(elements)) {
-            arrangedElements = this.addTouchDropTargets(elements, newLocation);
         }
 
         return (
@@ -240,31 +245,10 @@ let QBForm = React.createClass({
         );
     },
 
-    addTouchDropTargets(elements, location) {
-        let elementsLength = elements.length;
-        let mobileDropTargets = [];
-        for (let i = 0; i < elementsLength; i++) {
-            let id = _.uniqueId('mobile-drop');
-            mobileDropTargets.push(<MobileDropTarget key={id} containingElement={{id}} location={this.findLocationOfElement(elements[i], location)} handleFormReorder={this.props.handleFormReorder} />);
-        }
-
-        let arrangedElements = [];
-        // Adds a drop target between each element in the column
-        elements.forEach((element, index) => {
-            arrangedElements.push(mobileDropTargets[index]);
-            arrangedElements.push(element);
-        });
-
-        // We need to add one more at the bottom so the user can add a field at the bottom of the list
-        let id = _.uniqueId('mobile-drop');
-        arrangedElements.push(<MobileDropTarget key={id} containingElement={{id}} location={Object.assign({}, location, {elementIndex: elementsLength})} handleFormReorder={this.props.handleFormReorder} />);
-
-        return arrangedElements;
-    },
-
     /**
      * Finds the location for the passed in element
      * @param element
+     * @param location
      */
     findLocationOfElement(element, location) {
         if (!element) {return {};}
@@ -324,6 +308,8 @@ let QBForm = React.createClass({
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
                   handleFormReorder={this.props.handleFormReorder}
+                  cacheDragElement={this.props.cacheDragElement}
+                  clearDragElementCache={this.props.clearDragElementCache}
                   containingElement={containingElement}
                   element={FormFieldElement}
                   key={`fieldElement-${containingElement.id}`}
