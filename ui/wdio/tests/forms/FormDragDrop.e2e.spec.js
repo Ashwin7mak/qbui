@@ -48,7 +48,6 @@
             // drag the 1st field below the 2nd one
             let source = formBuilderPO.findFieldByIndex(1);
             let target = formBuilderPO.findFieldByIndex(2);
-            // browser.dragAndDrop(source, target);
             formBuilderPO.dragonDrop(source, target);
             // verify that the first 2 items have changed position
             let movedFields = formBuilderPO.getFieldLabels();
