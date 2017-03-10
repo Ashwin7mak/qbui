@@ -23,6 +23,7 @@
     let appsApi;
     let rolesApi;
     let routeGroup;
+    let usersApi;
     let featureSwitchesApi;
 
     module.exports = function(config) {
@@ -38,6 +39,7 @@
         // (unit tests can override this through the 2nd parameter)
         featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
         rolesApi = require('../api/quickbase/rolesApi')(config);
+        usersApi = require('../api/quickbase/usersApi')(config);
 
         /* internal data */
         /*
@@ -83,6 +85,9 @@
         routeToGetFunction[routeConsts.APP_ROLES] = getAppRoles;
 
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
+
+        //  users endpoints
+        routeToGetFunction[routeConsts.REQ_USER] = getReqUser;
 
         /*
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
@@ -948,6 +953,30 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Get App Roles');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function getReqUser(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get User by id', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            usersApi.getReqUser(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'getReqUser');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'getReqUser');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
