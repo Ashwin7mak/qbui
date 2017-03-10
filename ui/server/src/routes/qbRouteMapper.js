@@ -33,6 +33,9 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
+
+        // initialize the feature switches API, use mock API if config.featureSwitchesMockData is defined
+        // (unit tests can override this through the 2nd parameter)
         featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
         rolesApi = require('../api/quickbase/rolesApi')(config);
 

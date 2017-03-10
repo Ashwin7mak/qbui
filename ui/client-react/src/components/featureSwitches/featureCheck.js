@@ -17,7 +17,7 @@ export const FeatureCheck = React.createClass({
          */
         className: PropTypes.string,
         /**
-         * component (defaults to a DIV)
+         * component to wrap children around (defaults to a DIV)
          */
         component: PropTypes.any
     },
@@ -43,6 +43,7 @@ export const FeatureCheck = React.createClass({
 
         if (featureState && this.props.show) {
 
+            // wrap the children around a div with optional class name
             return React.createElement(this.props.component, {className: this.props.className}, this.props.children);
         }
 

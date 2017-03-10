@@ -39,15 +39,24 @@
                 requestHelper = requestHelperOverride;
             },
 
+            /**
+             * get the request options (URL etc) for calling AWS feature switch APIs
+             * @param req incoming request
+             * @param isOverrides append /featureSwitchOverrides
+             * @param switchId feature switch ID
+             * @param overrideId feature switch override ID
+             * @param bulkIds append /bulk
+             * @returns {{method: (string|string), body: string, headers: {}}}
+             */
             getFeatureSwitchesRequestOpts(req, isOverrides, switchId, overrideId, bulkIds) {
 
                 const opts = {
-                    method: req.method,
-                    body: req.rawBody,
-                    headers: {}
+                    method: req.method, // copy method from incoming request
+                    body: req.rawBody,  // copy the body
+                    headers: {}         // incoming headers are incompatible with AWS
                 };
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.cookies = req.cookies;
+                opts.cookies = req.cookies; // forward the cookies
 
                 let featureSwitchesUrl;
 
@@ -62,6 +71,13 @@
                 return opts;
             },
 
+            /**
+             * get the request options for getting the feature switch states
+             * @param req
+             * @param realmId
+             * @param appId
+             * @returns {{method: (string|string), body: string, headers: {}}}
+             */
             getFeatureSwitchStatesRequestOpts(req, realmId, appId) {
 
                 const opts = {
@@ -72,13 +88,18 @@
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.cookies = req.cookies;
 
-                const featureStatesUrl = routeHelper.getFeatureSwitchStatesRoute(req.url, appId, realmId);
+                const featureStatesUrl = routeHelper.getFeatureSwitchStatesRoute(req.url, realmId, appId);
 
                 opts.url = requestHelper.getRequestAWSHost() + featureStatesUrl;
 
                 return opts;
             },
 
+            /**
+             * get feature switches and overrides for admins
+             * @param req
+             * @returns {Promise}
+             */
             getFeatureSwitches: function(req) {
                 return new Promise((resolve, reject) => {
                     if (useMockStore) {
@@ -104,6 +125,11 @@
                 });
             },
 
+            /**
+             * create a new feature switch
+             * @param req
+             * @returns {Promise}
+             */
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
                     if (useMockStore) {
@@ -130,6 +156,12 @@
                 });
             },
 
+            /**
+             * update a feature switch
+             * @param req
+             * @param featureSwitchId
+             * @returns {Promise}
+             */
             updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
@@ -155,6 +187,12 @@
                 });
             },
 
+            /**
+             * delete a set of feature switches
+             * @param req
+             * @param ids array of feature switch IDs
+             * @returns {Promise}
+             */
             deleteFeatureSwitches: function(req, ids) {
 
                 return new Promise((resolve, reject) => {
@@ -181,6 +219,12 @@
                 });
             },
 
+            /**
+             * create a new feature switch override
+             * @param req
+             * @param featureSwitchId ID of feature switch to create override for
+             * @returns {Promise}
+             */
             createFeatureSwitchOverride: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
@@ -208,6 +252,13 @@
                 });
             },
 
+            /**
+             * update existing feature switch override
+             * @param req
+             * @param featureSwitchId feature switch ID that owns the override
+             * @param overrideId
+             * @returns {Promise}
+             */
             updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
@@ -236,6 +287,13 @@
                 });
             },
 
+            /**
+             * delete a set of feature switch overrides
+             * @param req
+             * @param featureSwitchId
+             * @param ids array of feature switch overrides to delete
+             * @returns {Promise}
+             */
             deleteFeatureSwitchOverrides: function(req, featureSwitchId, ids) {
 
                 return new Promise((resolve, reject) => {
@@ -262,6 +320,12 @@
                 });
             },
 
+            /**
+             * get feature switch states for realm (and app)
+             * @param req
+             * @param appId get states based on the app (optional)
+             * @returns {Promise}
+             */
             getFeatureSwitchStates: function(req, appId = null) {
                 return new Promise((resolve, reject) => {
                     let realmId = null;
