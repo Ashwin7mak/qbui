@@ -86,7 +86,7 @@
                     let formJSON = generatedForms[i];
                     const formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
 
-                    recordBase.apiBase.executeEERequest(formsEndpoint, 'POST', formJSON).then(function(result) {
+                    recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON, null, null, true).then(function(result) {
                         var id = JSON.parse(result.body);
                         createdFormIds.push(id);
                     });

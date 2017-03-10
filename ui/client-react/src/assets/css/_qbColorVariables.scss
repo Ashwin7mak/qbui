@@ -470,10 +470,11 @@ $tabs-disabled-color:               $badcolor5-color18; // not in XD spreadsheet
 $tabs-active-color:                 $color-black-600;   // not in XD spreadsheet
 
 // FormBuilder - Drag & Drop
-$dragtoken-background-color1: $color-blue-700;
-$dragtoken-background-color2: rgba($color-blue-700, 0.8);
+$dragtoken-background-color1: $color-pink-800;
+$dragtoken-background-color2: rgba($color-pink-700, 0.9);
 $dragtoken-text-color: $color-black-100;
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
+// dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width
 
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES

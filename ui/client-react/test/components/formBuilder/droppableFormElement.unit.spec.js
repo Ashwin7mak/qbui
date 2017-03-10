@@ -17,7 +17,7 @@ describe('DroppableFormElement', () => {
 
         DroppableElementRewireAPI.__Rewire__('DropTarget', mockDropTarget);
 
-        DroppableComponent = DroppableElement(MockFieldComponent);
+        DroppableComponent = DroppableElement(MockFieldComponent, false);
     });
 
     afterEach(() => {
