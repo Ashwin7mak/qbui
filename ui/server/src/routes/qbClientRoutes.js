@@ -1,16 +1,13 @@
-var log = require('../logger').getLogger();
-var reactViews = require('express-react-views');
 var lodash = require('lodash');
 var path = require('path');
+var baseClientRoute = require('./baseClientRoute');
+var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 (function() {
     'use strict';
 
     var viewPath = path.join(__dirname, '/viewComponents');
-    var engineOptions = {
-        beautify: true,
-    };
-    var jsxEngine = reactViews.createEngine(engineOptions);
+
     var HOT_BASE;
     var BASE_PROPS;
 
@@ -30,109 +27,20 @@ var path = require('path');
         };
     }
 
-    function renderJsx(req, res, filename, opts) {
-        var templatePath = require.resolve(filename);
-        jsxEngine(templatePath, opts, function transformedJsxCallback(err, str) {
-            if (!err) {
-                res.write(str);
-                //log.debug('rendering jsx file:' + filename + '; MESSAGE: ' + str);
-                res.end();
-            } else {
-                log.error({req:req}, 'ERROR rendering jsx file:' + filename + '; MESSAGE: ' + err.message);
-                res.write('Error rendering page');
-                res.end();
-            }
-        });
-    }
-
-    /**
-     * Use options to pass in parameters based on the route
-     */
-    function renderIndex(req, res, options) {
-        var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase', req: req}, options);
-        renderJsx(req, res, './viewComponents/index.jsx', opts);
-    }
-
     module.exports = function(app, config) {
         getBaseOpts(config);
-        var baseRoute = '/qbase';
-        var compBundleFileName = config.isProduction ? 'componentLibrary.min.js' : 'componentLibrary.js';
-        var governanceBundleFileName = config.isProduction ? 'governance.min.js' : 'governance.js';
 
-        app.route(`${baseRoute}/app/:appId/table/:tblId/report/:rptId`).get(function(req, res) {
-            renderIndex(req, res);
+        // Requires all paths set inside the 'clientRoutes' folder. See aClientRoutes.sample.js for more information.
+        const normalizedPath = path.join(__dirname, 'clientRoutes');
+        require("fs").readdirSync(normalizedPath).forEach(function(file) {
+            if (file.indexOf('.sample') < 0) {
+                require("./clientRoutes/" + file).addRoutes(app, BASE_PROPS, config);
+            }
         });
 
-        app.route(`${baseRoute}/app/:appId/table/:tblId/report/:rptId/record/:recordId`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/table/:tblId/record/:recordId`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/table/:tblId/reports`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/table/:tblId`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/table/:tblId/report/:rptId/fieldWithParentId/:fieldWithParentId/masterRecordId/:masterRecordId`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/settings`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/users`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId/properties`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/app/:appId`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/apps`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route('/qbase/admin/featureSwitches').get(function(req, res) {
-            renderIndex(req, res);
-        });
-        app.route('/qbase/admin/featureSwitch/:id').get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route('/qbase/components').get(function(req, res) {
-            renderIndex(req, res, {bundleFileName: compBundleFileName});
-        });
-
-        app.route(`${baseRoute}/components/:componentName`).get(function(req, res) {
-            renderIndex(req, res, {title: 'QuickBase Component Library', bundleFileName: compBundleFileName});
-        });
-
-        app.route(`${baseRoute}/builder/app/:appId/table/:tblId/form`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/builder/app/:appId/table/:tblId/form/:formId`).get(function(req, res) {
-            renderIndex(req, res);
-        });
-
-        app.route(`${baseRoute}/governance/:accountId/users`).get(function(req, res) {
-            renderIndex(req, res, {title: 'QuickBase Governance', bundleFileName: governanceBundleFileName});
-        });
-
-        //  default application dashboard
-        app.route(`${baseRoute}/`).get(function(req, res) {
-            renderIndex(req, res);
+        //  Default application dashboard
+        app.route(`${basePath}/`).get(function(req, res) {
+            res.redirect(`${basePath}/apps`);
         });
     };
 }());
