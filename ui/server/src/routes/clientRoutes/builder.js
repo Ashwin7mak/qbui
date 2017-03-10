@@ -5,10 +5,14 @@ const routes = [
     '/builder/app/:appId/table/:tblId/form/:formId',
 ];
 
-module.exports = {
-    addRoutes(app, BASE_PROPS, appConfig) {
-        const options = {};
+module.exports = (app, appConfig, baseProps) => {
+    const baseClientRoute = new BaseClientRoute(app, appConfig, baseProps);
 
-        BaseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, routes, options);
-    }
+    return {
+        addRoutes() {
+            const options = {};
+
+            baseClientRoute.addRoutesFromArrayOfPaths(routes, options);
+        }
+    };
 };

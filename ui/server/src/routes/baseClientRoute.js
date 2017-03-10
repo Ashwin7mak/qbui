@@ -30,26 +30,31 @@ function renderIndex(req, res, options) {
 }
 
 class BaseClientRoute {
-    static addRoutesFromArrayOfPaths(app, baseProps, paths = [], options) {
+    constructor(app, appConfig, baseProps) {
+        this.app = app;
+        this.appConfig = appConfig;
+        this.baseProps = baseProps;
+    }
+
+    addRoutesFromArrayOfPaths(paths = [], options) {
         paths.forEach(currentPath => {
-            BaseClientRoute.addRoute(app, baseProps, currentPath, options);
+            this.addRoute(currentPath, options);
+        });
+    }
+
+    addRoute(currentPath, options = {}) {
+        this.app.route(`${baseRoute}${currentPath.length === 0 || currentPath.charAt(0) === '/' ? currentPath : `/${currentPath}`}`).get((req, res) => {
+            renderIndex(req, res, Object.assign({}, this.baseProps, {title: 'QuickBase', req: req}, options));
         });
     }
 
     /**
      * Generates the correct bundle file path based on the current environment
      * @param bundleFileName - bundleFileName without the extension
-     * @param appConfig
      * @returns {string}
      */
-    static generateBundleFilePath(bundleFileName, appConfig) {
-        return (appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
-    }
-
-    static addRoute(app, baseProps, currentPath, options = {}) {
-        app.route(`${baseRoute}${currentPath.length === 0 || currentPath.charAt(0) === '/' ? currentPath : `/${currentPath}`}`).get((req, res) => {
-            renderIndex(req, res, Object.assign({}, baseProps, {title: 'QuickBase', req: req}, options));
-        });
+    generateBundleFilePath(bundleFileName) {
+        return (this.appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
     }
 }
 
