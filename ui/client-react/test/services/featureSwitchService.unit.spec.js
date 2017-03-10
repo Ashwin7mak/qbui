@@ -60,7 +60,7 @@ describe('FeatureService functions', () => {
     });
 
     it('test updateOverride function', () => {
-        const override = {id: 'id', entityType: 'realm', entityValue: '2', on: false};
+        const override = {entityType: 'realm', entityValue: '2', on: false};
         const url = featureSwitchService.constructUrl(featureSwitchService.API.PUT_OVERRIDE, ['featureId', 'id']);
         featureSwitchService.updateOverride('featureId', 'id', override);
 
