@@ -473,7 +473,8 @@ export default {
         missingWalkMe: "Tutorial ist nicht verfügbar",
         builder: {
             formBuilder: {
-                unimplemented: "Feature ist momentan nicht verfügbar"
+                unimplemented: "Feature ist momentan nicht verfügbar",
+                removeField: "Feld aus Form entfernen"
             },
             fields: {
                 // Keys are equal to server constants for field types to make it easier to get these keys
