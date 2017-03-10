@@ -352,7 +352,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Delete feature switches', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.deleteFeatureSwitches(req, req.query.ids.split(',')).then(
+        let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
+        featureSwitchesApi.deleteFeatureSwitches(req, ids).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Delete feature switches');
@@ -436,7 +437,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Delete feature switch overrides', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.deleteFeatureSwitchOverrides(req, req.params.featureSwitchId, req.query.ids.split(',')).then(
+        let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
+        featureSwitchesApi.deleteFeatureSwitchOverrides(req, req.params.featureSwitchId, ids).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Delete feature switch overrides');
@@ -463,7 +465,9 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get feature states', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.getFeatureSwitchStates(req, req.query.appId).then(
+        let appId = req.query && req.query.appId;
+
+        featureSwitchesApi.getFeatureSwitchStates(req, appId ? appId : null).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Get feature states');

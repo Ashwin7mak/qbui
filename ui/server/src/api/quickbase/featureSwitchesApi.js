@@ -62,7 +62,7 @@
                 return opts;
             },
 
-            getFeatureSwitchStatesRequestOpts(req, appId, realmId) {
+            getFeatureSwitchStatesRequestOpts(req, realmId, appId) {
 
                 const opts = {
                     method: req.method,
@@ -262,7 +262,7 @@
                 });
             },
 
-            getFeatureSwitchStates: function(req, appId) {
+            getFeatureSwitchStates: function(req, appId = null) {
                 return new Promise((resolve, reject) => {
                     let realmId = null;
                     let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
@@ -270,9 +270,9 @@
                         realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
                     }
                     if (useMockStore) {
-                        resolve(mockApi.getFeatureSwitchStates(req, appId, realmId));
+                        resolve(mockApi.getFeatureSwitchStates(req, realmId, appId));
                     } else {
-                        let opts = this.getFeatureSwitchStatesRequestOpts(req, appId, realmId);
+                        let opts = this.getFeatureSwitchStatesRequestOpts(req, realmId, appId);
 
                         //  make the api request to get the app rights
                         requestHelper.executeRequest({}, opts).then(

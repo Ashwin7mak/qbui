@@ -142,7 +142,7 @@
                 });
             },
 
-            getFeatureSwitchStates: function(req, appId, realmId) {
+            getFeatureSwitchStates: function(req, realmId, appId = null) {
                 return new Promise((resolve, reject) => {
                     let states = {};
 
@@ -160,12 +160,14 @@
                                 }
                             });
 
-                            // app overrides take precedence over default and realm
-                            featureSwitch.overrides.forEach(function(override) {
-                                if (override.entityType === "app" && override.entityValue === appId) {
-                                    states[featureSwitch.name] = override.on;
-                                }
-                            });
+                            if (appId) {
+                                // app overrides take precedence over default and realm
+                                featureSwitch.overrides.forEach(function(override) {
+                                    if (override.entityType === "app" && override.entityValue === appId) {
+                                        states[featureSwitch.name] = override.on;
+                                    }
+                                });
+                            }
                         }
                     });
 
