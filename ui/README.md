@@ -490,8 +490,17 @@ To run the watcher, in a different terminal:
 
     npm run watch
 
+In order for a device or laptop to connect to your dev environment, they
+must both be on the same local network. Both can be connected to the office
+network or your home network. If both are not on the same local network,
+you can use the VPN to connect through the office network. You can connect from
+any laptop or device at the office to your dev environment running at home when
+your laptop at home has the VPN running. If two developers are at home, they
+can both run the VPN and connect from a laptop at one home to a dev
+environment at another home through the office network.
+
 Be aware that enabling other devices to access your dev environment enables *all* devices
-on the network. This is not as big of an issue when at the office or your home.
+on the local network. This is not as big of an issue when at the office or your home.
 However, when using public networks (like at Starbucks), if that network does not block
 peer-to-peer connections, this will enable the people sitting at the table next
 to you, or the black hat network sniffer dude in a car in the parking lot,

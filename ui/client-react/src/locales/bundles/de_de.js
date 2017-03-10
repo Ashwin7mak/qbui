@@ -465,7 +465,8 @@ export default {
         pageTitles: {
             pageTitleSeparator: " - ",
             editingRecord: "Datensatz #{recordId} bearbeiten",
-            newRecord: "Datensatz hinzufügen"
+            newRecord: "Datensatz hinzufügen",
+            editForm: "Formular bearbeiten",
         },
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
