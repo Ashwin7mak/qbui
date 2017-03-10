@@ -32,13 +32,14 @@ var basePath = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE
 
         // Requires all paths set inside the 'clientRoutes' folder. See aClientRoutes.sample.js for more information.
         const normalizedPath = path.join(__dirname, 'clientRoutes');
-        require("fs").readdirSync(normalizedPath).forEach(function(file) {
+        require('fs').readdirSync(normalizedPath).forEach(function(file) {
             if (file.indexOf('.sample') < 0) {
-                require("./clientRoutes/" + file).addRoutes(app, BASE_PROPS, config);
+                require("./clientRoutes/" + file)(app, config, BASE_PROPS).addRoutes();
             }
         });
 
-        //  Default application dashboard
+        // Default application dashboard
+        // Currently redirects to the main apps page
         app.route(`${basePath}/`).get(function(req, res) {
             res.redirect(`${basePath}/apps`);
         });

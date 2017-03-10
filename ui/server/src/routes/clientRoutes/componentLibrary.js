@@ -5,11 +5,16 @@ const routes = [
     '/components/:componentName'
 ];
 
-module.exports = {
-    addRoutes(app, BASE_PROPS, appConfig) {
-        const compBundleFileName = BaseClientRoute.generateBundleFilePath('componentLibrary', appConfig);
-        const options = {title: 'QuickBase Component Library', bundleFileName: compBundleFileName};
+// Routes that load the component library
+module.exports = (app, appConfig, baseProps) => {
+    const baseClientRoute = new BaseClientRoute(app, appConfig, baseProps);
 
-        BaseClientRoute.addRoutesFromArrayOfPaths(app, BASE_PROPS, routes, options);
-    }
+    return {
+        addRoutes() {
+            const compBundleFileName = baseClientRoute.generateBundleFilePath('componentLibrary');
+            const options = {title: 'QuickBase Component Library', bundleFileName: compBundleFileName};
+
+            baseClientRoute.addRoutesFromArrayOfPaths(routes, options);
+        }
+    };
 };

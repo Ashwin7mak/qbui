@@ -464,7 +464,8 @@ export default {
             pageTitleSeparator: " - ",
             editingRecord: "Modifier l'enregistrement n ° {recordId}",
             newRecord: "Ajouter un enregistrement",
-            viewRecord: "Afficher le document n ° {recordId}"
+            viewRecord: "Afficher le document n ° {recordId}",
+            editForm: "Modifier le formulaire",
         },
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",
