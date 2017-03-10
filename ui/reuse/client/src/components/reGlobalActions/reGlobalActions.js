@@ -1,20 +1,17 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
-import QBicon from '../qbIcon/qbIcon';
+import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Locale from '../../locales/locales';
-import UrlUtils from '../../utils/urlUtils';
-import cookie from 'react-cookie';
-import CookieConstants from '../../../../common/src/constants';
-import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
-import * as CompConsts from '../../constants/componentConstants';
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import Locale from '../../../../../client-react/src/locales/locales';
+import * as CompConsts from '../../../../../client-react/src/constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
-import "./globalActions.scss";
+import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
 let FluxMixin = Fluxxor.FluxMixin(React);
+
+import "./reGlobalActions.scss";
 
 const actionPropType = React.PropTypes.shape({
     icon: React.PropTypes.string.isRequired,
@@ -38,7 +35,8 @@ let GlobalAction = React.createClass({
                     <QBicon icon={this.props.action.icon}/>
                     <span className={"navLabel"}><I18nMessage message={this.props.action.msg}/></span>
                 </Link>
-            </li>);
+            </li>
+        );
     }
 });
 
@@ -145,13 +143,15 @@ let GlobalActions = React.createClass({
                     <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
                     <li className={"link globalAction"}>{this.getHelpLink()}</li>
 
-                    {this.props.actions && this.props.actions.map((action, index) => {
-                        return <GlobalAction tabIndex={this.props.startTabIndex + index}
-                                             key={action.msg}
-                                             linkClass={this.props.linkClass}
-                                             onSelect={this.props.onSelect}
-                                             action={action}/>;
-                    })}
+                    {this.props.actions && this.props.actions.map((action, index) => (
+                        <GlobalAction
+                            tabIndex={this.props.startTabIndex + index}
+                            key={action.msg}
+                            linkClass={this.props.linkClass}
+                            onSelect={this.props.onSelect}
+                            action={action}
+                        />
+                    ))}
                 </ul>
             </div>);
     }
