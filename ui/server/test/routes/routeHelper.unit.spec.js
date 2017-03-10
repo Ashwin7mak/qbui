@@ -489,7 +489,7 @@ describe('Validate RouteHelper unit tests', function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getTicketRoute(testCase.url, testCase.appId), testCase.expectation);
+                assert.equal(routeHelper.getTicketRoute(testCase.url), testCase.expectation);
                 done();
             });
         });
@@ -504,10 +504,40 @@ describe('Validate RouteHelper unit tests', function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getWhoAmIRoute(testCase.url, testCase.appId), testCase.expectation);
+                assert.equal(routeHelper.getWhoAmIRoute(testCase.url), testCase.expectation);
                 done();
             });
         });
     });
+    describe('validate getUsersRouteForAdmin method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', userId: null, expectation: ''},
+            {name: 'test null url', url: null, userId: null, expectation: null},
+            {name: 'test with invalid url with admin', url: '/admin/prefix', userId: null, expectation: '/users'},
+            {name: 'test with valid url w/o admin', url: '/url/prefix/ticket', userId: null, expectation: '/url/prefix/ticket'},
+            {name: 'test with valid url with userid', url: '/admin/prefix', userId: 1000, expectation: '/users/1000'}
+        ];
 
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getUsersRouteForAdmin(testCase.url, testCase.userId), testCase.expectation);
+                done();
+            });
+        });
+    });
+    describe('validate isAdminRoute method', function() {
+        var testCases = [
+            {name: 'test empty input', url: '', expectation: false},
+            {name: 'test null url', url: null, expectation: false},
+            {name: 'test with valid input 1', url: '/admin', expectation: true},
+            {name: 'test with valid input 2', url: '/admin/prefix', expectation: true},
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.isAdminRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
 });
