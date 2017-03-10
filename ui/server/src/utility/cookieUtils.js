@@ -22,8 +22,11 @@
          * @returns {*}
          */
         breakTicketDown: function(ticket, section) {
-            if (!ticket || !section) {
+            if (!ticket) {
                 return null;
+            }
+            if (typeof section === 'string') {
+                section = parseInt(section);
             }
             var ticketSections = ticket.split("_");
             if (ticketSections.length > 6) {
