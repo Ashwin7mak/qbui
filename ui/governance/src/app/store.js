@@ -1,7 +1,7 @@
 import thunk from 'redux-thunk';
 
 import {createStore, applyMiddleware, compose} from 'redux';
-import rootReducer from '../reducers/root';
+import rootReducer from './reducers';
 import Configuration from '../../../client-react/src/config/app.config';
 
 // create app store

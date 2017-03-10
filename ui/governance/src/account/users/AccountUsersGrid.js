@@ -10,7 +10,7 @@ import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbC
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
 
 import {connect} from 'react-redux';
-import * as AccountUsersActions from '../../actions/AccountUsersActions';
+import * as AccountUsersActions from './AccountUsersActions';
 
 const DeactivatedFlag = 0x00000040;
 const DeniedFlag = 0x0008;
@@ -268,7 +268,7 @@ export class AccountUsersGrid extends Component {
                 <Table.Header className="qbHeader" />
 
                 <Table.Body className="qbTbody"
-                            rows={this.props.users}
+                            rows={this.props.usersProps}
                             rowKey="uid"
                             onRow={(row) => {
                                 return {
@@ -285,7 +285,7 @@ export class AccountUsersGrid extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        users: state.AccountUsers.users
+        usersProps: state.AccountUsers.users
     };
 };
 

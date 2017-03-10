@@ -1,4 +1,4 @@
-import BaseService from '../../../client-react/src/services/baseService';
+import BaseService from '../../../../client-react/src/services/baseService';
 
 class AccountUsersService extends BaseService {
 

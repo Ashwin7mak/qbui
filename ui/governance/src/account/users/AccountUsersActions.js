@@ -1,8 +1,8 @@
-import AccountUsersService from '../services/AccountUsersService';
+import AccountUsersService from './AccountUsersService';
 import Promise from 'bluebird';
-import * as types from '../actions/types';
-import Logger from '../../../client-react/src/utils/logger';
-import LogLevel from '../../../client-react/src/utils/logLevels';
+import * as types from '../../app/types';
+import Logger from '../../../../client-react/src/utils/logger';
+import LogLevel from '../../../../client-react/src/utils/logLevels';
 
 const logger = new Logger();
 
