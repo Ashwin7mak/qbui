@@ -4,6 +4,7 @@ const routes = [
     '/governance/:accountId/users'
 ];
 
+// Routes related to user governance
 module.exports = (app, appConfig, baseProps) => {
     const baseClientRoute = new BaseClientRoute(app, appConfig, baseProps);
 

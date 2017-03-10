@@ -5,6 +5,7 @@ const routes = [
     '/components/:componentName'
 ];
 
+// Routes that load the component library
 module.exports = (app, appConfig, baseProps) => {
     const baseClientRoute = new BaseClientRoute(app, appConfig, baseProps);
 

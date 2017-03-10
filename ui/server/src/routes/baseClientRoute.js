@@ -4,30 +4,9 @@ const path = require('path');
 let baseRoute = require('../../../common/src/constants').ROUTES.BASE_CLIENT_ROUTE;
 
 const engineOptions = {
-    beautify: true,
+    beautify: true
 };
 const jsxEngine = reactViews.createEngine(engineOptions);
-
-function renderJsx(req, res, filename, opts) {
-    const templatePath = require.resolve(filename);
-    jsxEngine(templatePath, opts, (err, str) => {
-        if (!err) {
-            res.write(str);
-            res.end();
-        } else {
-            log.error({req:req}, 'ERROR rendering jsx file:' + filename + '; MESSAGE: ' + err.message);
-            res.write('Error rendering page');
-            res.end();
-        }
-    });
-}
-
-/**
- * Use options to pass in parameters based on the route
- */
-function renderIndex(req, res, options) {
-    renderJsx(req, res, path.join(__dirname, '/viewComponents/index.jsx'), options);
-}
 
 class BaseClientRoute {
     constructor(app, appConfig, baseProps) {
@@ -36,15 +15,25 @@ class BaseClientRoute {
         this.baseProps = baseProps;
     }
 
+    /**
+     * A helper method to add an array of paths with similar options.
+     * @param paths - an array of paths (that do not include the base route applied to all paths)
+     * @param options - optional. Override the title or bundle file for all paths in the array.
+     */
     addRoutesFromArrayOfPaths(paths = [], options) {
         paths.forEach(currentPath => {
             this.addRoute(currentPath, options);
         });
     }
 
+    /**
+     * Adds a route to the express app
+     * @param currentPath - the path for the new route. It should not include the base route that is part of all routes.
+     * @param options - optional. Override the title or bundle file for a route.
+     */
     addRoute(currentPath, options = {}) {
         this.app.route(`${baseRoute}${currentPath.length === 0 || currentPath.charAt(0) === '/' ? currentPath : `/${currentPath}`}`).get((req, res) => {
-            renderIndex(req, res, Object.assign({}, this.baseProps, {title: 'QuickBase', req: req}, options));
+            this.renderJsx(req, res, path.join(__dirname, '/viewComponents/index.jsx'), options);
         });
     }
 
@@ -55,6 +44,27 @@ class BaseClientRoute {
      */
     generateBundleFilePath(bundleFileName) {
         return (this.appConfig.isProduction ? `${bundleFileName}.min.js` : `${bundleFileName}.js`);
+    }
+
+    /**
+     * Render a jsx file with the passed in options
+     * @param req
+     * @param res
+     * @param filename
+     * @param options
+     */
+    renderJsx(req, res, filename, options) {
+        const templatePath = require.resolve(filename);
+        jsxEngine(templatePath, Object.assign({}, this.baseProps, {title: 'QuickBase', req: req}, options), (err, str) => {
+            if (!err) {
+                res.write(str);
+                res.end();
+            } else {
+                log.error({req: req}, 'ERROR rendering jsx file:' + filename + '; MESSAGE: ' + err.message);
+                res.write('Error rendering page');
+                res.end();
+            }
+        });
     }
 }
 

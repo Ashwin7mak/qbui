@@ -14,6 +14,7 @@ const routes = [
     '/apps',
 ];
 
+// Routes related to base app functionality (viewing data, modifying records, etc.)
 module.exports = (app, appConfig, baseProps) => {
     const baseClientRoute = new BaseClientRoute(app, appConfig, baseProps);
 

@@ -5,6 +5,7 @@ const routes = [
     '/admin/featureSwitch/:id'
 ];
 
+// Routes related to feature switches
 module.exports = (app, appConfig, baseProps) => {
     const baseClientRoute = new BaseClientRoute(app, appConfig, baseProps);
 
