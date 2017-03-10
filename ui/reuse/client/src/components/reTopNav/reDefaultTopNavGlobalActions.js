@@ -8,13 +8,19 @@ import Locale from '../../../../../client-react/src/locales/locales';
 import * as CompConsts from '../../../../../client-react/src/constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+import GlobalAction from '../reGlobalActions/reGlobalActions';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-import "./reGlobalActions.scss";
+import "./reDefaultTopNavGlobalActions.scss";
 
-/*
- * a list of global actions (user, alerts, help, logout etc.)
- */
+const actionPropType = React.PropTypes.shape({
+    icon: React.PropTypes.string.isRequired,
+    msg: React.PropTypes.string.isRequired,
+    link: React.PropTypes.string
+});
+
+/**
+ * The default TopNav global actions that are consistent across functional areas of the qbase app */
 let GlobalActions = React.createClass({
     mixins: [FluxMixin],
 
@@ -43,8 +49,7 @@ let GlobalActions = React.createClass({
 
     /**
      * sign out user using explicit nav
-     * (MenuItem href is currently incompatible with react-fastclick)
-     */
+     * (MenuItem href is currently incompatible with react-fastclick) */
     signOutUser() {
         WindowLocationUtils.update("/qbase/signout");
     },
@@ -104,6 +109,7 @@ let GlobalActions = React.createClass({
                 <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
             </a>);
     },
+
     render() {
         /**
          * This removes the hover shadow when the form builder button is disabled
@@ -125,6 +131,9 @@ let GlobalActions = React.createClass({
                         />
                     ))}
                 </ul>
-            </div>);
+            </div>
+        );
     }
 });
+
+export default GlobalActions;
