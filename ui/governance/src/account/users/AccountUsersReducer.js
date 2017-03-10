@@ -2,7 +2,9 @@ import * as types from '../../app/types';
 
 const AccountUsers = (
     state = {
-        //  default states
+        // default states
+
+        // empty user list initially
         users: []
     },
     action) => {
@@ -11,7 +13,7 @@ const AccountUsers = (
     switch (action.type) {
     case types.SET_USERS:
 
-        // update the state with the new users
+        // update the state with the new users sent through action
 
         return {
             ...state,

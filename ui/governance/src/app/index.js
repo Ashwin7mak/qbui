@@ -5,7 +5,7 @@ import 'react-fastclick';
 import {GOVERNANCE_USERS_ROUTE} from './routes';
 import AccountUsers from '../account/users/AccountUsers';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import createGovernanceStore from './store';
 
 const store = createGovernanceStore();

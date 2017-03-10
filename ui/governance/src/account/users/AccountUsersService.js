@@ -5,13 +5,13 @@ class AccountUsersService extends BaseService {
     constructor() {
         super();
         this.API = {
-            GET_Users               : "https://jsonplaceholder.typicode.com/users"
+            GET_USERS               : "https://jsonplaceholder.typicode.com/users"
         };
     }
 
     getUsers() {
         const params = {};
-        const url = super.constructUrl(this.API.GET_Users, []);
+        const url = super.constructUrl(this.API.GET_USERS, []);
 
         return super.get(url, {params});
     }

@@ -1,3 +1,6 @@
+/*
+Dummy data for now to return to the client
+ */
 const data = [
     {
         "uid": 10000,

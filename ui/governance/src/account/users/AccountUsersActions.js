@@ -6,6 +6,10 @@ import LogLevel from '../../../../client-react/src/utils/logLevels';
 
 const logger = new Logger();
 
+/**
+ * Action when there is successful user from the backend
+ * @param users
+ */
 export const getAccountUsersSuccess = (users) => ({
     type: types.SET_USERS,
     users
@@ -30,7 +34,9 @@ export const getUsers = () => {
 
                 // we have the users, update the redux store
                 dispatch(getAccountUsersSuccess(response.data));
-                resolve();
+
+                // pass the data through the resolve if we need to chain these actions in the future.
+                resolve(response.data);
 
                 // otherwise we have an error
             }).catch(error => {
