@@ -195,7 +195,7 @@ const forms = (
             updatedForm.selectedFields = [];
         }
 
-        updatedForm.selectedFields.push(action.content.location);
+        updatedForm.selectedFields[0] = action.content.location;
 
         return [
             ...newState,

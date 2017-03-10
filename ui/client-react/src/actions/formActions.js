@@ -246,7 +246,6 @@ export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
  * @returns {{id, type, content}|*}
  */
 export const selectFieldOnForm = (formId, location) => {
-    console.log('selectField on formsActions!');
     return event(formId, types.SELECT_FIELD, {location});
 };
 
