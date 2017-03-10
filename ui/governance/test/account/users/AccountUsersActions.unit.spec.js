@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 
 describe('Account Users Actions Tests', () => {
 
-    const ACCOUNT_USERS_DATA = [
+    let ACCOUNT_USERS_DATA = [
         {
             "uid": 10000,
             "firstName": "Administrator",
@@ -42,7 +42,8 @@ describe('Account Users Actions Tests', () => {
             "systemRights": 0
         }];
 
-    const mockStore = configureMockStore([thunk]);
+    var middleware =  [thunk];
+    const mockStore = configureMockStore(middleware);
 
     // Mock the service
     class mockAccountUsersService {
@@ -51,7 +52,7 @@ describe('Account Users Actions Tests', () => {
 
         // resolve the promise with responseData
         getUsers() {
-            return Promise.resolve({data: responseData});
+            return Promise.resolve({data: ACCOUNT_USERS_DATA});
         }
     }
 
@@ -79,7 +80,7 @@ describe('Account Users Actions Tests', () => {
                 done();
             },
 
-            () => {
+            (e) => {
                 expect(false).toBe(true);
                 done();
             });
