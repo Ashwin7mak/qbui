@@ -140,11 +140,7 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
                         dispatch(event(context, types.LOAD_REPORT_FAILED, reportResponseError));
                         reject();
                     }
-                );//.catch(ex => {
-                //    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                //    logger.logException(ex);
-                //    reject();
-                //});
+                );
             } else {
                 logger.error(`ReportAction.loadReport: Missing one or more required input parameters.  Context:${context}, AppId:${appId}, tableId:${tblId}, rptId:${rptId}`);
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));
@@ -244,7 +240,6 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                                 reject();
                             }
                         ).catch((ex) => {
-                            // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                             logger.logException(ex);
                             reject();
                         });
@@ -256,7 +251,6 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
                         reject();
                     }
                 ).catch((ex) => {
-                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                     logger.logException(ex);
                     reject();
                 });
