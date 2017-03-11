@@ -2,6 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {AccountUsersGrid} from '../../../src/account/users/AccountUsersGrid';
+import QBicon from '../../../../client-react/src/components/qbIcon/qbIcon';
 import moment from 'moment';
 
 describe('AccountUsersGrid', () => {
@@ -133,7 +134,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find("tbody tr td").at(5);
-                expect(cell.text()).toEqual("Check");
+                expect(cell.find(QBicon).exists()).toEqual(true);
             });
 
             it("should render app access and but denied correctly", () => {

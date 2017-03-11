@@ -6,6 +6,7 @@ import QbHeaderCell from '../../../../client-react/src/components/dataTable/qbGr
 import QbRow from '../../../../client-react/src/components/dataTable/qbGrid/qbRow';
 import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
+import QBicon from '../../../../client-react/src/components/qbIcon/qbIcon';
 
 import {connect} from 'react-redux';
 import * as AccountUsersActions from './AccountUsersActions';
@@ -86,12 +87,13 @@ const columns = [
         cell: {
             formatters: [
                 (hasAppAccess, cellInfo) => {
-                    const isPaidSet = hasAppAccess && !(IsDeactivated(cellInfo.rowData) || IsDenied(cellInfo.rowData));
-                    return isPaidSet ? 'Check' : '';
+                    const isPaidSeat = hasAppAccess && !(IsDeactivated(cellInfo.rowData) || IsDenied(cellInfo.rowData));
+                    return isPaidSeat ? (<QBicon icon="check" />) : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -116,11 +118,12 @@ const columns = [
         cell: {
             formatters: [
                 (numGroupsManaged, cellInfo) => {
-                    return numGroupsManaged > 0 ? 'Check' : '';
+                    return numGroupsManaged > 0 || true ? (<QBicon icon="check" />) : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -134,11 +137,12 @@ const columns = [
         cell: {
             formatters: [
                 (accountTrusteeFlags, cellInfo) => {
-                    return CanCreateApps(cellInfo.rowData) ? 'Check' : '';
+                    return CanCreateApps(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -163,11 +167,12 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsApprovedInRealm(cellInfo.rowData) ? 'Check' : '';
+                    return IsApprovedInRealm(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -181,11 +186,12 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsDenied(cellInfo.rowData) ? 'Check' : '';
+                    return IsDenied(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -199,11 +205,12 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsDeactivated(cellInfo.rowData) ? 'Check' : '';
+                    return IsDeactivated(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -222,11 +229,12 @@ const columns = [
                     }
                     const isRegistered = IsRegisteredInRealm(cellInfo.rowData);
                     const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-                    return isRegistered && daysSinceLastAccess >= 90 ? 'Check' : '';
+                    return isRegistered && daysSinceLastAccess >= 90 ? (<QBicon icon="check" />)  : '';
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
