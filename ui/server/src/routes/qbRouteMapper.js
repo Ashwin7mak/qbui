@@ -98,6 +98,8 @@
 
         routeToPostFunction[routeConsts.FEATURE_SWITCHES] = createFeatureSwitch;
         routeToPostFunction[routeConsts.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+        routeToPostFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+        routeToPostFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -118,8 +120,7 @@
         var routeToDeleteFunction = {};
         routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
         routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
-        routeToDeleteFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-        routeToDeleteFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests

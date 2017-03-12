@@ -49,12 +49,12 @@ class FeatureSwitchService extends BaseService {
     }
 
     deleteFeatureSwitches(ids) {
-        const params = {};
-        params[query.IDS] = ids.join();
+
+        const features = ids.map((id) => {return {id};});
 
         const url = super.constructUrl(this.API.DELETE_FEATURE_SWITCHES);
 
-        return super.delete(url, {params:params});
+        return super.post(url, {features});
     }
 
     createOverride(id, override) {
@@ -69,13 +69,12 @@ class FeatureSwitchService extends BaseService {
         return super.put(url, _.omit(override, ['id']));
     }
 
-    deleteOverrides(id, ids) {
-        const params = {};
-        params[query.IDS] = ids.join();
+    deleteOverrides(switchId, ids) {
+        const overrides = ids.map((id) => {return {id};});
 
-        let url = super.constructUrl(this.API.DELETE_OVERRIDES, [id]);
+        let url = super.constructUrl(this.API.DELETE_OVERRIDES, [switchId]);
 
-        return super.delete(url, {params:params});
+        return super.post(url, {overrides});
     }
 
     getFeatureSwitchStates(appId) {

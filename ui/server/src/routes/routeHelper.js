@@ -815,7 +815,7 @@
          * @param ids
          * @returns {string}
          */
-        getFeatureSwitchesBulkRoute: function(url, isOverrides, switchId, overrideId, ids) {
+        getFeatureSwitchesBulkRoute: function(url, isOverrides, switchId) {
 
             let route = getAWSFeatureSwitchesRoute(url);
 
@@ -825,7 +825,7 @@
             if (isOverrides) {
                 route += '/featureSwitchOverrides';
             }
-            route += '/bulk?ids=' + ids.join();
+            route += '/bulk';
 
             return route;
         },

@@ -73,14 +73,19 @@
                 });
             },
 
-            deleteFeatureSwitches: function(req, ids) {
+            deleteFeatureSwitches: function(req) {
 
                 return new Promise((resolve, reject) => {
-                    _.remove(featureSwitchesMockData, function(sw) {return ids.indexOf(sw.id) !== -1;});
+                    let bodyJSON = JSON.parse(req.rawBody);
+                    let features = bodyJSON.features;
+
+                    _.each(features, function(feature) {
+                        _.remove(featureSwitchesMockData, function(sw) {return sw.id === feature.id;});
+                    });
 
                     saveSwitchesMockData();
 
-                    resolve(ids);
+                    resolve(features);
                 });
             },
 
@@ -134,15 +139,20 @@
 
                     let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
-                    _.remove(featureSwitch.overrides, function(override) {return ids.indexOf(override.id) !== -1;});
+                    let bodyJSON = JSON.parse(req.rawBody);
+                    let overrides = bodyJSON.overrides;
+
+                    _.each(overrides, function(ov) {
+                        _.remove(featureSwitch.overrides, function(sw) {return sw.id === ov.id;});
+                    });
 
                     saveSwitchesMockData();
 
-                    resolve(ids);
+                    resolve();
                 });
             },
 
-            getFeatureSwitchStates: function(req, realmId, appId = null) {
+            getFeatureSwitchStates: function(req, realmId, appId) {
                 return new Promise((resolve, reject) => {
                     let states = {};
 

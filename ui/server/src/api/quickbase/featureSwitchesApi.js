@@ -48,7 +48,7 @@
              * @param bulkIds append /bulk
              * @returns {{method: (string|string), body: string, headers: {}}}
              */
-            getFeatureSwitchesRequestOpts(req, isOverrides, switchId, overrideId, bulkIds) {
+            getFeatureSwitchesRequestOpts(req, isOverrides, switchId, overrideId, isBulk) {
 
                 const opts = {
                     method: req.method, // copy method from incoming request
@@ -60,8 +60,8 @@
 
                 let featureSwitchesUrl;
 
-                if (bulkIds) {
-                    featureSwitchesUrl = routeHelper.getFeatureSwitchesBulkRoute(req.url, isOverrides, switchId, overrideId, bulkIds);
+                if (isBulk) {
+                    featureSwitchesUrl = routeHelper.getFeatureSwitchesBulkRoute(req.url, isOverrides, switchId);
                 } else {
                     featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url, isOverrides, switchId, overrideId);
                 }
@@ -197,10 +197,10 @@
 
                 return new Promise((resolve, reject) => {
                     if (useMockStore) {
-                        resolve(mockApi.deleteFeatureSwitches(req, ids));
+                        resolve(mockApi.deleteFeatureSwitches(req));
                     } else {
 
-                        let opts = this.getFeatureSwitchesRequestOpts(req, false, null, null, ids);
+                        let opts = this.getFeatureSwitchesRequestOpts(req, false, null, null, true);
 
                         //  make the api request to get the app rights
                         requestHelper.executeRequest({}, opts).then(
@@ -294,14 +294,14 @@
              * @param ids array of feature switch overrides to delete
              * @returns {Promise}
              */
-            deleteFeatureSwitchOverrides: function(req, featureSwitchId, ids) {
+            deleteFeatureSwitchOverrides: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
                     if (useMockStore) {
-                        resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId, ids));
+                        resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId));
 
                     } else {
-                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, null, ids);
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, null, true);
 
                         //  make the api request to get the app rights
                         requestHelper.executeRequest({}, opts).then(
@@ -326,7 +326,7 @@
              * @param appId get states based on the app (optional)
              * @returns {Promise}
              */
-            getFeatureSwitchStates: function(req, appId = null) {
+            getFeatureSwitchStates: function(req, appId) {
                 return new Promise((resolve, reject) => {
                     let realmId = null;
                     let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];

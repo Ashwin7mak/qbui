@@ -317,7 +317,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
             const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedOverrides")}`;
             const loaded = this.props.error === null;
             return (
-                <Loader loaded={loaded}>
+                <Loader loaded={loaded} loadedClassName="featureSwitchesLoader">
                     <div className="featureSwitches">
                         <div className="top">
                         <div><strong><I18nMessage message="featureSwitchAdmin.switchName"/>:</strong> {featureSwitch[FeatureSwitchConsts.FEATURE_NAME_KEY]}</div>

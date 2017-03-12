@@ -358,7 +358,7 @@ export class FeatureSwitchesRoute extends React.Component {
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
         const loaded = this.props.error === null;
         return (
-            <Loader loaded={loaded}>
+            <Loader loaded={loaded} loadedClassName="featureSwitchesLoader">
                 <div className="featureSwitches">
                     <div className="top">
 

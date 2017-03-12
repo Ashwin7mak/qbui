@@ -1,5 +1,9 @@
 @import '../../../src/assets/css/qbVariables';
 
+.featureSwitchesLoader {
+    display: flex;
+}
+
 .featureSwitches {
     margin: 20px;
     flex: 1 1 auto;
