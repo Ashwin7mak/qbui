@@ -43,11 +43,13 @@ describe('FeatureService functions', () => {
     });
 
     it('test deleteFeatureSwitches function', () => {
-        const ids = ['id1', 'id2'];
+        const features = {
+            features: [{id:'id1'}, {id:'id2'}]
+        };
         const url = featureSwitchService.constructUrl(featureSwitchService.API.DELETE_FEATURE_SWITCHES);
-        featureSwitchService.deleteFeatureSwitches(ids);
+        featureSwitchService.deleteFeatureSwitches(['id1', 'id2']);
 
-        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, {params: {ids: ids.join()}});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, features);
     });
 
     it('test createOverride function', () => {
@@ -68,11 +70,13 @@ describe('FeatureService functions', () => {
     });
 
     it('test deleteOverrides function', () => {
-        const ids = ['id1', 'id2'];
+        const overrides = {
+            overrides: [{id:'id1'}, {id:'id2'}]
+        };
         const url = featureSwitchService.constructUrl(featureSwitchService.API.DELETE_OVERRIDES, ['featureId']);
-        featureSwitchService.deleteOverrides('featureId', ids);
+        featureSwitchService.deleteOverrides('featureId', ['id1', 'id2']);
 
-        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, {params: {ids: ids.join()}});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, overrides);
     });
 
     it('test getFeatureSwitchStates function', () => {

@@ -140,11 +140,11 @@ describe("Validate featureSwitchesApi", function() {
 
     describe("when deleteFeatureSwitches is called", function() {
         it('success return results ', function(done) {
-            req.url = '/featureSwitches';
-            req.body = {};
+            req.url = '/featureSwitches/bulk';
+            req.body = {features: [{id:'id1'}, {id: 'id2'}]};
             let targetObject = null;
             executeReqStub.returns(Promise.resolve(targetObject));
-            let promise = featureSwitchesApi.deleteFeatureSwitches(req, ["a", "b", "c"]);
+            let promise = featureSwitchesApi.deleteFeatureSwitches(req);
 
             promise.then(
                 function(response) {
@@ -197,8 +197,8 @@ describe("Validate featureSwitchesApi", function() {
 
     describe("when deleteFeatureSwitchOverrides is called", function() {
         it('success return results ', function(done) {
-            req.url = '/featureSwitches/id';
-            req.body = {};
+            req.url = '/featureSwitches/id/bulk';
+            req.body = {overrides: [{id:'id1'}, {id: 'id2'}]};
             let targetObject = null;
             executeReqStub.returns(Promise.resolve(targetObject));
             let promise = featureSwitchesApi.deleteFeatureSwitchOverrides(req, ["a", "b", "c"]);
