@@ -17,7 +17,7 @@ const mockReactDom = {
 };
 
 const mockParentProps = {
-    deleteField(_location) {},
+    removeField(_location) {},
     openFieldPreferences(_location) {}
 };
 
@@ -43,11 +43,11 @@ describe('FieldEditingTools', () => {
     });
 
     it('has a delete button', () => {
-        spyOn(mockParentProps, 'deleteField');
+        spyOn(mockParentProps, 'removeField');
 
         component = shallow(<FieldEditingTools
             location={location}
-            onClickDelete={mockParentProps.deleteField}
+            removeField={mockParentProps.removeField}
         />);
 
         let deleteButton = component.find('.deleteFieldIcon');
@@ -55,7 +55,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.deleteField).toHaveBeenCalledWith(location);
+        expect(mockParentProps.removeField).toHaveBeenCalledWith(location);
     });
 
     it('has a field preferences button', () => {
