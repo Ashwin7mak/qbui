@@ -74,7 +74,9 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField() {
-        this.props.selectField(this.props.formId, this.props.location);
+        if (this.props.selectField) {
+            this.props.selectField(this.props.formId, this.props.location);
+        }
     }
 
     isFieldSelected() {
