@@ -1,8 +1,8 @@
 const basicIcon = (
     <div>
-        <QBicon icon="hamburger" />
-        <QBicon icon="fries" />
-        <QBicon icon="pickles" />
+        <ReIcon icon="hamburger" />
+        <ReIcon icon="fries" />
+        <ReIcon icon="pickles" />
     </div>
 );
 
