@@ -48,7 +48,7 @@ class FieldEditingTools extends Component {
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
                 left: `${fieldDomElement.offsetLeft - left}px`,
-                height: `${fieldDomElement.offsetHeight + (isSmall ? 11 : 26)}px`,
+                height: `${fieldDomElement.offsetHeight + (isSmall ? 11 : 6)}px`,
                 width: `${fieldDomElement.offsetWidth + width}px`
             };
 
