@@ -28,7 +28,8 @@ class mockReportModel {
 describe('Table Actions success workflow functions', () => {
 
     let responseData = {
-        data: null
+        metaData: {data: {id: null}},
+        reportData: {data:{filteredCount: 1}}
     };
     class mockTableService {
         constructor() { }
@@ -132,3 +133,4 @@ describe('Table Actions functions', () => {
     });
 
 });
+

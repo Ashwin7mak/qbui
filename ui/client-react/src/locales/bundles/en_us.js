@@ -471,14 +471,16 @@ export default {
             pageTitleSeparator: " - ",
             editingRecord: "Edit Record #{recordId}",
             newRecord: "Add Record",
-            viewRecord: "View Record #{recordId}"
+            viewRecord: "View Record #{recordId}",
+            editForm: "Edit Form",
         },
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
         builder: {
             formBuilder: {
-                unimplemented: "Feature is not available right now"
+                unimplemented: "Feature is not available right now",
+                removeField: "Remove field from form"
             },
             fields: {
                 // Keys are equal to server constants for field types to make it easier to get these keys
