@@ -157,7 +157,7 @@ const record = (state = [], action) => {
             };
             model = new RecordModel(action.content.appId, action.content.tblId);
             model.setRecordChanges(action.content.appId, action.content.tblId, action.content.recId, action.content.changes);
-        currentRecd.pendEdits = model.get();
+            currentRecd.pendEdits = model.get();
         }
         return newState(currentRecd);
     }
@@ -169,9 +169,9 @@ const record = (state = [], action) => {
             model.setRecordSaveSuccess(action.content.appId, action.content.tblId, action.content.recId);
             model.setSaving(false);
             return newState(currentRecd);
-                }
+        }
         return state;
-                }
+    }
     case types.SAVE_RECORD_ERROR: {
         let currentRecd = getRecordFromState(action.id);
         if (_.has(currentRecd, 'pendEdits')) {
@@ -180,8 +180,8 @@ const record = (state = [], action) => {
                 let model = new RecordModel();
                 model.set(currentRecd.pendEdits);
                 model.setRecordSaveError(action.content.appId, action.content.tblId, action.content.recId, errors);
-            return newState(currentRecd);
-        }
+                return newState(currentRecd);
+            }
         }
         return state;
     }

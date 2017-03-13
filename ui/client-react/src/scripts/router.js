@@ -41,7 +41,7 @@ let storeFunc = {
     editRecordCancel: editRecordCancel,
     createRecord: createRecord,
     updateRecord: updateRecord
-}
+};
 let history = AppHistory.setup(store, storeFunc).history;
 
 const mapStateToProps = (state) => {

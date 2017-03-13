@@ -164,7 +164,7 @@ class RecordModel {
         // only set if a new record; updating when inline editing seems to trigger a hide of the
         // the inline editing row , which displays the old record values for a short period of time.
         //if (recId === UNSAVED_RECORD_ID || recId === NEW_RECORD_VALUE) {
-        if (recId === UNSAVED_RECORD_ID ) {
+        if (recId === UNSAVED_RECORD_ID) {
             this.model.recordChanges = changes;
         }
 
