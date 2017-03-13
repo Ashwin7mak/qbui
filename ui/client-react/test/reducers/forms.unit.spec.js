@@ -244,7 +244,7 @@ describe('Forms reducer functions', () => {
     });
 
     describe('select a field', () => {
-        const testFormMeta = 'test meta data';
+        const testFormMeta = 'some meta data';
 
         const actionPayload = {
             id: VIEW,
