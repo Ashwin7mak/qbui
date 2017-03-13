@@ -109,7 +109,7 @@ describe('FieldEditingTools', () => {
         expect(mockParentProps.selectField).toHaveBeenCalledWith(formId, location);
     });
 
-    it('adds a selectedFormElement class to the filed that is selected', () => {
+    it('adds a selectedFormElement class to the field that is selected', () => {
         component = shallow(<FieldEditingTools
             location={location}
             selectedFields={[location]}
