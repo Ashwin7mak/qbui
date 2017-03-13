@@ -18,8 +18,15 @@ const MoveFieldHelper = {
 
         let formMetaCopy = _.cloneDeep(formMeta);
 
-        removeElementFromCurrentLocation(formMetaCopy, draggedItemProps);
+        removeElementFromCurrentLocationById(formMetaCopy, draggedItemProps);
         addElementToNewLocation(formMetaCopy, newLocation, draggedItemProps);
+
+        return formMetaCopy;
+    },
+
+    removeField(formMeta, location) {
+        let formMetaCopy = _.cloneDeep(formMeta);
+        removeElementFromCurrentLocation(formMetaCopy, location);
 
         return formMetaCopy;
     }
@@ -67,6 +74,16 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
     return (errors.length === 0);
 }
 
+function removeElementFromCurrentLocationById(formMetaData, draggedItemProps) {
+    let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
+
+    if (!updatedElementLocation) {
+        // Element doesn't yet appear on the form so we can safely return the existing formMetaData without removing anything
+        return formMetaData;
+    }
+    removeElementFromCurrentLocation(formMetaData, updatedElementLocation);
+}
+
 /**
  * Removes the element from where it currently exists in preparation for the move
  * WARNING: This function has side effects on the formMetaData passed in.
@@ -74,15 +91,8 @@ function hasRequiredArguments(formMeta, newLocation, draggedItemProps) {
  * @param draggedItemProps
  * @returns {*}
  */
-function removeElementFromCurrentLocation(formMetaData, draggedItemProps) {
-    let updatedElementLocation = findCurrentElementLocation(formMetaData, draggedItemProps.containingElement);
-
-    if (!updatedElementLocation) {
-        // Element doesn't yet appear on the form so we can safely return the existing formMetaData without removing anything
-        return formMetaData;
-    }
-
-    let {tabIndex, sectionIndex, columnIndex, elementIndex} = updatedElementLocation;
+function removeElementFromCurrentLocation(formMetaData, location) {
+    let {tabIndex, sectionIndex, columnIndex, elementIndex} = location;
 
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
 

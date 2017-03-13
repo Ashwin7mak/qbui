@@ -4,6 +4,7 @@
     let constants = require('../../../common/src/constants');
 
     let ACCESS_RIGHTS = 'accessRights';
+    let ADMIN = 'admin';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -11,6 +12,7 @@
     let FORMS = 'forms';
     let FORM_TYPE = 'formType';
     let TABLES = 'tables';
+    let TICKET = 'ticket';
     let RECORDS = 'records';
     let COUNT_QUERY = 'countQuery';
     let REPORTS = 'reports';
@@ -20,6 +22,7 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
+    let WHOAMI = 'whoami';
     let FEATURE_SWITCHES = 'featureSwitch';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
@@ -33,6 +36,7 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+    let REGEX_ADMIN_ROUTE = /admin(.*)?$/i;
 
     /**
      *
@@ -630,6 +634,86 @@
                 return root + '/' + REPORTS + '/' + REPORT_INVOKE;
             }
             return url;
+        },
+        /**
+         * Return the ticket route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getTicketRoute: function(url) {
+            //if (typeof url === 'string') {
+            //    let offset = url.toLowerCase().indexOf(TICKET);
+            //    if (offset !== -1) {
+            //        let root = url.substring(0, offset) + TICKET;
+            //        return root;
+            //    }
+            //}
+            let root = getUrlRoot(url, TICKET);
+            if (root) {
+                return root;
+            }
+            return url;
+        },
+
+        /**
+         * Return the ticket/whoAmI route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getWhoAmIRoute: function(url) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(TICKET);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + TICKET + '/' + WHOAMI;
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRoute: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(USERS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRouteForAdmin: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(ADMIN);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        isAdminRoute(url) {
+            if (typeof url === 'string') {
+                return REGEX_ADMIN_ROUTE.test(url);
+            }
+            return false;
         },
 
         /**

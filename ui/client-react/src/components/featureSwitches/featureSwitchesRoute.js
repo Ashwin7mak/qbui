@@ -3,11 +3,14 @@ import React from 'react';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {NotificationManager} from 'react-notifications';
+import Loader from 'react-loader';
 import {Link} from 'react-router';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import QBModal from '../qbModal/qbModal';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import _ from 'lodash';
 
 import * as Table from 'reactabular-table';
@@ -16,6 +19,7 @@ import * as UrlConsts from "../../constants/urlConstants";
 import * as CompConsts from '../../constants/componentConstants';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
+import * as constants from '../../../../common/src/constants';
 
 import './featureSwitches.scss';
 
@@ -307,10 +311,19 @@ export class FeatureSwitchesRoute extends React.Component {
         ];
     }
 
+    checkAccess(props) {
+        if (props.error && props.error.status === constants.HttpStatusCode.FORBIDDEN) {
+            WindowLocationUtils.update(UrlConsts.FORBIDDEN);
+        }
+    }
+    componentWillReceiveProps(props) {
+        this.checkAccess(props);
+    }
     /**
      * get switches whenever the component mounts
      */
     componentDidMount() {
+        this.checkAccess(this.props);
         this.props.getSwitches();
     }
 
@@ -318,43 +331,45 @@ export class FeatureSwitchesRoute extends React.Component {
 
         const selectedSize = this.state.selectedIDs.length;
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
-
+        const loaded = this.props.error === null;
         return (
-            <div className="featureSwitches">
-                <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
+            <Loader loaded={loaded}>
+                <div className="featureSwitches">
+                    <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
 
-                <div className="globalButtons">
-                    <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                    <div className="globalButtons">
+                        <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                    </div>
+
+                    <Table.Provider className="featureSwitchTable switches"
+                                    columns={this.state.columns}
+                                    components={{
+                                        body: {
+                                            wrapper: BodyWrapper,
+                                            row: RowWrapper
+                                        }
+                                    }}>
+
+                        <Table.Header />
+
+                        <Table.Body rows={this.props.switches} rowKey="id" />
+                    </Table.Provider>
+
+                    <p/>
+
+                    <div className="selectionButtons">
+
+                        <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                        <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                        <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                        <span>{selectedSizeLabel}</span>
+                    </div>
+
+                    {this.getConfirmDialog()}
+
+                    <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
                 </div>
-
-                <Table.Provider className="featureSwitchTable switches"
-                                columns={this.state.columns}
-                                components={{
-                                    body: {
-                                        wrapper: BodyWrapper,
-                                        row: RowWrapper
-                                    }
-                                }}>
-
-                    <Table.Header />
-
-                    <Table.Body rows={this.props.switches} rowKey="id" />
-                </Table.Provider>
-
-                <p/>
-
-                <div className="selectionButtons">
-
-                    <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                    <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                    <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
-                    <span>{selectedSizeLabel}</span>
-                </div>
-
-                {this.getConfirmDialog()}
-
-                <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
-            </div>
+            </Loader>
         );
     }
 }
@@ -363,7 +378,8 @@ export class FeatureSwitchesRoute extends React.Component {
 const mapStateToProps = (state) => {
 
     return {
-        switches: state.featureSwitches.switches
+        switches: state.featureSwitches.switches,
+        error: state.featureSwitches.errorResponse
     };
 };
 
