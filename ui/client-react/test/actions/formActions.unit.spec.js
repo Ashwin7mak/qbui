@@ -393,7 +393,7 @@ describe('Form Actions', () => {
 
     describe('selectFieldOnForm', () => {
         it('creates an action that will select a field', () => {
-            expect(formActions.selectFieldOnForm('view',1)).toEqual({
+            expect(formActions.selectFieldOnForm('view', 1)).toEqual({
                 id: 'view',
                 type: types.SELECT_FIELD,
                 content: {
@@ -404,7 +404,7 @@ describe('Form Actions', () => {
 
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
-            expect(formActions.removeFieldFromForm('view',1)).toEqual({
+            expect(formActions.removeFieldFromForm('view', 1)).toEqual({
                 id: 'view',
                 type: types.REMOVE_FIELD,
                 content: {
