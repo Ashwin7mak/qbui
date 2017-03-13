@@ -36,9 +36,10 @@ const AppUsersRoute = React.createClass({
         const actions = [
             {msg: 'app.users.addUser', icon:'add', className:'addRecord', disabled: true},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
+            {msg: 'unimplemented.email', icon:'mail', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true}
         ];
-        return (<IconActions className="pageActions" actions={actions}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={4}/>);
     },
 
 
