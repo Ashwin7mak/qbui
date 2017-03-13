@@ -61,7 +61,7 @@
                     var tableId = app.tables[i].id;
                     var formJSON = generatedForms[i];
                     var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(appId, tableId);
-                    createdFormPromises.push(recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON));
+                    createdFormPromises.push(recordBase.apiBase.executeRequest(formsEndpoint, 'POST', formJSON, null, null, true));
                 }
 
                 return Promise.all(createdFormPromises).then(results => {
