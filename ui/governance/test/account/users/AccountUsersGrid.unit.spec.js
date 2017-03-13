@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {AccountUsersGrid} from '../../../src/account/users/AccountUsersGrid';
-import QBicon from '../../../../client-react/src/components/qbIcon/qbIcon';
+import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import moment from 'moment';
 
 describe('AccountUsersGrid', () => {
@@ -15,7 +15,7 @@ describe('AccountUsersGrid', () => {
         it("should show the correct set of headers", ()=> {
             let component = mount(<AccountUsersGrid fetchAccountUsers={() => false} />);
             let headers = component.find("th").map(node => node.text());
-            expect(headers).toEqual(["First Name" , "Last Name", "Email", "User Name", "Last Access", "Paid Seat?", "# Groups", "Group Manager?", "Can create apps?", "# App Managed", "Realm Approved?", "Denied?", "Deactivated?", "Inactive?"]);
+            expect(headers).toEqual(["First Name" , "Last Name", "Email", "User Name", "Last Access", "Paid Seat?", "In Any Group?", "Group Manager?", "Can create apps?", "# App Managed", "Realm Approved?", "Denied?", "Deactivated?", "Inactive?"]);
         });
 
         it("should should call fetch on mount", ()=> {
@@ -36,7 +36,7 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(0);
+                let cell = component.find(QbCell).at(0);
                 expect(cell.text()).toEqual(props.users[0].firstName);
             });
         });
@@ -49,7 +49,7 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(1);
+                let cell = component.find(QbCell).at(1);
                 expect(cell.text()).toEqual(props.users[0].lastName);
             });
         });
@@ -62,7 +62,7 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(2);
+                let cell = component.find(QbCell).at(2);
                 expect(cell.text()).toEqual(props.users[0].email);
             });
         });
@@ -75,7 +75,7 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(3);
+                let cell = component.find(QbCell).at(3);
                 expect(cell.text()).toEqual(props.users[0].userName);
             });
         });
@@ -88,7 +88,7 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(4);
+                let cell = component.find(QbCell).at(4);
                 expect(cell.text()).toEqual("never");
             });
 
@@ -99,7 +99,7 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(4);
+                let cell = component.find(QbCell).at(4);
                 expect(cell.text()).toEqual("an hour ago");
             });
         });
@@ -117,8 +117,8 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(5);
-                expect(cell.text()).toEqual("");
+                let cell = component.find(QbCell).at(5);
+                expect(cell.text()).toEqual("--");
             });
 
             it("should render app access and not denied/deactivated correctly", () => {
@@ -133,8 +133,8 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(5);
-                expect(cell.find(QBicon).exists()).toEqual(true);
+                let cell = component.find(QbCell).at(5);
+                expect(cell.text()).toEqual("Y");
             });
 
             it("should render app access and but denied correctly", () => {
@@ -149,8 +149,8 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(5);
-                expect(cell.text()).toEqual("");
+                let cell = component.find(QbCell).at(5);
+                expect(cell.text()).toEqual("--");
             });
 
             it("should render app access and but deactivated correctly", () => {
@@ -165,8 +165,8 @@ describe('AccountUsersGrid', () => {
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
-                let cell = component.find("tbody tr td").at(5);
-                expect(cell.text()).toEqual("");
+                let cell = component.find(QbCell).at(5);
+                expect(cell.text()).toEqual("--");
             });
         });
     });

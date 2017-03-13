@@ -6,7 +6,6 @@ import QbHeaderCell from '../../../../client-react/src/components/dataTable/qbGr
 import QbRow from '../../../../client-react/src/components/dataTable/qbGrid/qbRow';
 import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
-import QBicon from '../../../../client-react/src/components/qbIcon/qbIcon';
 
 import {connect} from 'react-redux';
 import * as AccountUsersActions from './AccountUsersActions';
@@ -24,6 +23,7 @@ const CanCreateApps = cellData => HasFlag(cellData.accountTrusteeFlags, CanCreat
 const IsApprovedInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RealmApprovedFlag);
 const IsRegisteredInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RegisteredFlag);
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
+const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
 const columns = [
     {
@@ -88,7 +88,7 @@ const columns = [
             formatters: [
                 (hasAppAccess, cellInfo) => {
                     const isPaidSeat = hasAppAccess && !(IsDeactivated(cellInfo.rowData) || IsDenied(cellInfo.rowData));
-                    return isPaidSeat ? (<QBicon icon="check" />) : '';
+                    return RenderBoolColumn(isPaidSeat);
                 }
             ]
         },
@@ -102,9 +102,17 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: '# Groups',
+            label: 'In Any Group?',
+        },
+        cell: {
+            formatters: [
+                (numGroupsMember, cellInfo) => {
+                    return RenderBoolColumn(numGroupsMember > 0);
+                }
+            ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -118,7 +126,7 @@ const columns = [
         cell: {
             formatters: [
                 (numGroupsManaged, cellInfo) => {
-                    return numGroupsManaged > 0 || true ? (<QBicon icon="check" />) : '';
+                    return RenderBoolColumn(numGroupsManaged > 0);
                 }
             ]
         },
@@ -137,7 +145,7 @@ const columns = [
         cell: {
             formatters: [
                 (accountTrusteeFlags, cellInfo) => {
-                    return CanCreateApps(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
+                    return RenderBoolColumn(CanCreateApps(cellInfo.rowData));
                 }
             ]
         },
@@ -167,7 +175,7 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsApprovedInRealm(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
+                    return RenderBoolColumn(IsApprovedInRealm(cellInfo.rowData));
                 }
             ]
         },
@@ -186,7 +194,7 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsDenied(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
+                    return RenderBoolColumn(IsDenied(cellInfo.rowData));
                 }
             ]
         },
@@ -205,7 +213,7 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsDeactivated(cellInfo.rowData) ? (<QBicon icon="check" />)  : '';
+                    return RenderBoolColumn(IsDeactivated(cellInfo.rowData));
                 }
             ]
         },
@@ -229,7 +237,7 @@ const columns = [
                     }
                     const isRegistered = IsRegisteredInRealm(cellInfo.rowData);
                     const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-                    return isRegistered && daysSinceLastAccess >= 90 ? (<QBicon icon="check" />)  : '';
+                    return RenderBoolColumn(isRegistered && daysSinceLastAccess >= 90);
                 }
             ]
         },
