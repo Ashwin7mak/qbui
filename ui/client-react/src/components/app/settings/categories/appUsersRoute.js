@@ -3,14 +3,12 @@
  */
 import React from 'react';
 import Logger from '../../../../utils/logger';
-import {Link} from 'react-router';
-import {APP_ROUTE} from '../../../../constants/urlConstants';
 import UserManagement from './userManagement';
 import Stage from '../../../stage/stage';
 import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../qbIcon/qbIcon';
 import AppSettingsStage from '../appSettingsStage';
-
+import './appUsersRoute.scss';
 
 let logger = new Logger();
 
@@ -45,20 +43,14 @@ const AppUsersRoute = React.createClass({
 
 
     getStageHeadline() {
-        const settingsName = `${this.props.selectedApp.name}: Users`;
-        const settingsLinkText = `${this.props.selectedApp.name} Settings`;
-        const appId = this.props.params.appId;
-        const settingsLink = `${APP_ROUTE}/${appId}/settings`;
+        const userHeadLine = `${this.props.selectedApp.name} : Users`;
         return (
-            <div className="reportStageHeadline">
-
+            <div className="duder">
                 <div className="navLinks">
-                    <Link className="tableHomepageIconLink" to={settingsLink}><QBIcon icon="settings"/></Link>
-                    {<Link className="tableHomepageLink" to={settingsLink}>{settingsLinkText}</Link>}
+                    <QBIcon icon="users"/>
                 </div>
-
-                <div className="stageHeadline">
-                    <h3 className="reportName">{settingsName}</h3>
+                <div className="userStageHeadline">
+                    <h3 className="userHeadLine">{userHeadLine}</h3>
                 </div>
             </div>);
     },

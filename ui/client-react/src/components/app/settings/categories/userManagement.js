@@ -78,6 +78,7 @@ class UserManagement extends React.Component {
             if (appUsers[role.id]) {
                 appUsers[role.id].forEach(function(user) {
                     user.roleName = role.name;
+                    user.name = `${user.firstName} ${user.lastName}`;
                     appUsersFiltered.push(user);
                 });
             }
