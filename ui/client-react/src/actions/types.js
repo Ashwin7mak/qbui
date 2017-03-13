@@ -62,3 +62,7 @@ export const CREATED_OVERRIDE = 'CREATED_OVERRIDE';
 export const EDIT_OVERRIDE = 'EDIT_OVERRIDE';
 export const OVERRIDE_UPDATED = 'OVERRIDE_UPDATED';
 export const OVERRIDES_DELETED = 'OVERRIDES_DELETED';
+
+export const REQ_USER = 'REQ_USER';
+
+export const ERROR = 'ERROR';
