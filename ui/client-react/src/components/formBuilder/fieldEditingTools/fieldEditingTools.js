@@ -4,7 +4,7 @@ import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
 import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
-import device from '../../../utils/device';
+import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 
 import './fieldEditingTools.scss';
@@ -57,8 +57,8 @@ class FieldEditingTools extends Component {
     }
 
     onClickDelete() {
-        if (this.props.onClickDelete) {
-            return this.props.onClickDelete(this.props.location);
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.location);
         }
     }
 
@@ -76,7 +76,7 @@ class FieldEditingTools extends Component {
         return (
             <div className="actionIcons">
                 <div className="deleteFieldIcon" onClick={this.onClickDelete}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                    <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                         <QbIcon icon="delete" />
                     </QbToolTip>
                 </div>
@@ -92,7 +92,7 @@ class FieldEditingTools extends Component {
 
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        let isTouch = device.isTouch();
+        let isTouch = Device.isTouch();
         let classNames = ['fieldEditingTools'];
 
         if (isTouch && !isSmall) {

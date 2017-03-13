@@ -19,7 +19,7 @@
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
         var routeMapper = require('./routes/qbRouteMapper')(config);
-
+        var usersApi = require('./api/quickbase/usersApi')(config);
         /*
          *  Route to log a message. Only a post request is supported.
          *  This needs to be the first route defined.
@@ -86,6 +86,20 @@
             }
         });
 
+        app.all(routeConstants.ADMIN + '/*', function(req, res, next) {
+            usersApi.getReqUser(req).then(
+                function(response) {
+                    if (response.administrator) {
+                        return next();
+                    } else {
+                        res.status(httpStatusCodes.FORBIDDEN).send('User does not have permissions to access this content');
+                    }
+                },
+                function(error) {
+                    res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send(JSON.stringify(error));
+                }
+            );
+        });
 
         //  For all requests:
         //     -- log the request route.

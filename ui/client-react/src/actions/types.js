@@ -24,6 +24,7 @@ export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
 export const SAVING_FORM_ERROR = 'SAVING_FORM_ERROR';
 
 export const MOVE_FIELD = 'MOVE_FIELD';
+export const REMOVE_FIELD = 'REMOVE_FIELD';
 
 export const SYNC_FORM = 'SYNC_FORM';
 
@@ -60,3 +61,7 @@ export const CREATED_OVERRIDE = 'CREATED_OVERRIDE';
 export const EDIT_OVERRIDE = 'EDIT_OVERRIDE';
 export const OVERRIDE_UPDATED = 'OVERRIDE_UPDATED';
 export const OVERRIDES_DELETED = 'OVERRIDES_DELETED';
+
+export const REQ_USER = 'REQ_USER';
+
+export const ERROR = 'ERROR';

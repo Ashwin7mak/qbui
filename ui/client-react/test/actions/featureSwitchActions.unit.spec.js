@@ -307,4 +307,31 @@ describe('Feature switch actions', () => {
         const states = [{'Feature 1': true}, {'Feature 2': false}];
         expect(actions.loadStatesSuccess(states)).toEqual({type: types.SET_FEATURE_SWITCH_STATES, states});
     });
+
+    it('Test error state', (done) => {
+
+        class mockFeatureSwitchNegService {
+            constructor() {}
+
+            getFeatureSwitches() {
+                return Promise.reject({response: {status: 403}});
+            }
+        }
+        FeatureSwitchActionsRewireAPI.__Rewire__('FeatureSwitchService', mockFeatureSwitchNegService);
+
+        const expectedActions = [
+            {type: types.ERROR, error: {response: {status: 403}}}
+        ];
+        const store = mockStore({});
+
+        return store.dispatch(actions.getSwitches()).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
 });

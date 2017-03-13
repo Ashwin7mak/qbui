@@ -143,7 +143,7 @@ const forms = (
         return newState;
     }
 
-    case types.MOVE_FIELD :
+    case types.MOVE_FIELD : {
         if (!currentForm) {
             return state;
         }
@@ -161,6 +161,26 @@ const forms = (
             ...newState,
             updatedForm
         ];
+    }
+
+    case types.REMOVE_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {location} = action.content;
+        let updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
+            updatedForm.formData.formMeta,
+            location
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
 
     default:
         // return existing state by default in redux

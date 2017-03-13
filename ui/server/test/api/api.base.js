@@ -62,6 +62,7 @@
         var ERROR_HPE_INVALID_CONSTANT = 'HPE_INVALID_CONSTANT';
         var ERROR_ENOTFOUND = 'ENOTFOUND';
         var TABLES_PROPERTIES = '/tableproperties/';
+        var REQ_USER = 'reqUser';
         //add comment about this usage
         baseUrl = config === undefined ? '' : config.DOMAIN;
 
@@ -284,6 +285,9 @@
             resolveTablePropertiesEndpoint      : function(appId, tableId) {
                 var endpoint = EE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + TABLES_PROPERTIES;
                 return endpoint;
+            },
+            resolveGetReqUserEndpoint       : function() {
+                return NODE_BASE_ENDPOINT + USERS_ENDPOINT + REQ_USER;
             },
             defaultHeaders              : DEFAULT_HEADERS,
 
