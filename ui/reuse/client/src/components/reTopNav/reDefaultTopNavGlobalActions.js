@@ -1,5 +1,4 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Dropdown from 'react-bootstrap/lib/Dropdown';
@@ -9,7 +8,7 @@ import * as CompConsts from '../../../../../client-react/src/constants/component
 import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
 import GlobalAction from '../reGlobalActions/reGlobalActions';
-let FluxMixin = Fluxxor.FluxMixin(React);
+
 
 import "./reDefaultTopNavGlobalActions.scss";
 
@@ -22,8 +21,6 @@ const actionPropType = React.PropTypes.shape({
 /**
  * The default TopNav global actions that are consistent across functional areas of the qbase app */
 let GlobalActions = React.createClass({
-    mixins: [FluxMixin],
-
     propTypes: {
         linkClass: React.PropTypes.string,
         onSelect: React.PropTypes.func,
@@ -32,7 +29,9 @@ let GlobalActions = React.createClass({
         dropdownIcon: React.PropTypes.string,
         dropdownMsg: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired,
-        app: React.PropTypes.object
+        app: React.PropTypes.object,
+
+        changeLocale: React.PropTypes.func,
     },
 
     getDefaultProps() {
@@ -43,8 +42,9 @@ let GlobalActions = React.createClass({
     },
 
     changeLocale: function(locale) {
-        let flux = this.getFlux();
-        flux.actions.changeLocale(locale);
+        if (this.props.changeLocale) {
+            this.props.changeLocale(locale);
+        }
     },
 
     /**
@@ -69,9 +69,10 @@ let GlobalActions = React.createClass({
 
                 <Dropdown.Menu>
 
-                    <MenuItem eventKey={eventKeyIdx++} disabled><I18nMessage
+                    <MenuItem eventKey={eventKeyIdx++} disabled>
+                        <I18nMessage message={'header.menu.preferences'}/>
+                    </MenuItem>
 
-                        message={'header.menu.preferences'}/></MenuItem>
                     <MenuItem divider/>
 
                     {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
