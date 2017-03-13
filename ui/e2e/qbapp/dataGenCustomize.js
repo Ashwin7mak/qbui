@@ -415,10 +415,13 @@ consts = require('../../common/src/constants.js');
     }
 
     function generateNewData(_createdRecs) {
-        e2eBase.tablesSetUp(makeAppMap()).then(function(createdApp) {
-            // Set your global objects to use in the test functions
-            app = createdApp;
-
+        e2eBase.tablesSetUp(makeAppMap()).then(function(appResponse) {
+            app = appResponse;
+            // Initialize table properties for generated tables
+            app.tables.forEach(function(table, index) {
+                return e2eBase.tableServiceWdio.initTableProperties(app.id, table.id, table.name);
+            });
+        }).then(function() {
             var recordsConfig = {numRecordsToCreate: e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE, tablesConfig: {}};
             // change # of records for some of the tables
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE3].name] = {};
