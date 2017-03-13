@@ -1,7 +1,6 @@
-// action creators
-//import * as actions from '../constants/actions';
-import TableService from '../services/tableService';
+
 import Promise from 'bluebird';
+import TableService from '../services/tableService';
 import ReportModel from '../models/reportModel';
 
 import Logger from '../utils/logger';
@@ -13,9 +12,9 @@ import * as query from '../constants/query';
 let logger = new Logger();
 
 /**
- * Construct reports store payload
+ * Construct reports store redux store payload
  *
- * @param context - context
+ * @param context - report context id (nav, embedded report, etc)
  * @param type - event type
  * @param content - optional content related to event type
  * @returns {{id: *, type: *, content: *}}
@@ -29,6 +28,16 @@ function event(context, type, content) {
     };
 }
 
+/**
+ * Load the table home page for the given app and table.
+ *
+ * @param context - the context which the report will be loaded
+ * @param appId
+ * @param tblId
+ * @param offset
+ * @param rows
+ * @returns {Function}
+ */
 export const loadTableHomePage = (context, appId, tblId, offset, rows) => {
     // we're returning a promise to the caller (not a Redux action) since this is an async action
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
@@ -64,11 +73,6 @@ export const loadTableHomePage = (context, appId, tblId, offset, rows) => {
                         reject();
                     }
                 );
-                //).catch(ex => {
-                //    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
-                //    logger.logException(ex);
-                //    reject();
-                //});
             } else {
                 logger.error(`TableAction.loadTableHomePage: Missing one or more required input parameters.  Context:${context}, AppId:${appId}, tableId:${tblId}`);
                 dispatch(event(context, types.LOAD_REPORT_FAILED, 500));

@@ -9,20 +9,18 @@
 export const LOADING_FORM = 'LOADING_FORM';
 export const LOAD_FORM_ERROR = 'LOAD_FORM_ERROR';
 export const LOAD_FORM_SUCCESS = 'LOAD_FORM_SUCCESS';
-
 //  Used when saving a form or a record to show/hide the spinner
 export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_COMPLETE = 'SAVE_FORM_COMPLETE';
-
 export const SAVING_FORM = 'SAVING_FORM';
 export const SAVING_FORM_SUCCESS = 'SAVING_FORM_SUCCESS';
 export const SAVING_FORM_ERROR = 'SAVING_FORM_ERROR';
-
 export const MOVE_FIELD = 'MOVE_FIELD';
-
 export const SYNC_FORM = 'SYNC_FORM';
 
 //  ********  Nav shell actions ********
+export const REMOVE_FIELD = 'REMOVE_FIELD';
+export const UPDATE_FORM_ANIMATION_STATE = 'UPDATE_FORM_ANIMATION_STATE';
 export const HIDE_TROWSER = 'HIDE_TROWSER';
 export const SHOW_TROWSER = 'SHOW_TROWSER';
 export const TOGGLE_LEFT_NAV_VISIBLE = 'TOGGLE_LEFT_NAV_VISIBLE';
@@ -35,7 +33,6 @@ export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 
 //  ******** Record actions ********
 export const OPEN_RECORD = 'OPEN_RECORD';
-export const EDIT_RECORD = 'EDIT_RECORD';
 export const SAVE_RECORD = 'SAVE_RECORD';
 export const SAVE_RECORD_SUCCESS = 'SAVE_RECORD_SUCCESS';
 export const SAVE_RECORD_ERROR = 'SAVE_RECORD_ERROR';
@@ -45,7 +42,6 @@ export const SAVE_RECORD_COMPLETE = 'SAVE_RECORD_COMPLETE';
 export const EDIT_RECORD_START = 'EDIT_RECORD_START';
 export const EDIT_RECORD_CHANGE = 'EDIT_RECORD_CHANGE';
 export const EDIT_RECORD_CANCEL = 'EDIT_RECORD_CANCEL';
-export const EDIT_RECORD_COMMIT = 'EDIT_RECORD_COMMIT';
 export const EDIT_RECORD_VALIDATE_FIELD = 'EDIT_RECORD_VALIDATE_FIELD';
 
 //  Record actions for delete
@@ -83,3 +79,7 @@ export const CREATED_OVERRIDE = 'CREATED_OVERRIDE';
 export const EDIT_OVERRIDE = 'EDIT_OVERRIDE';
 export const OVERRIDE_UPDATED = 'OVERRIDE_UPDATED';
 export const OVERRIDES_DELETED = 'OVERRIDES_DELETED';
+
+export const REQ_USER = 'REQ_USER';
+
+export const ERROR = 'ERROR';

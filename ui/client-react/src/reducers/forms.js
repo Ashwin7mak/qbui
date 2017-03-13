@@ -48,44 +48,6 @@ const forms = (
         return newState;
     }
 
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    //case types.SAVE_FORM: {
-    //
-    //    newState.push({
-    //        ...currentForm,
-    //        id,
-    //        saving: true,
-    //        errorStatus: null
-    //    });
-    //
-    //    return newState;
-    //}
-
-    //TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    //case types.SAVE_FORM_SUCCESS: {
-    //
-    //    newState.push({
-    //        ...currentForm,
-    //        id,
-    //        saving: false,
-    //        errorStatus: null
-    //    });
-    //
-    //    return newState;
-    //}
-    //
-    ////TODO: MOVE/RENAME TO RECORDS STORE..THIS IS FIRED WHEN SAVING A RECORD
-    //case types.SAVE_FORM_FAILED: {
-    //
-    //    newState.push({
-    //        ...currentForm,
-    //        id,
-    //        saving: false,
-    //        errorStatus: action.error
-    //    });
-    //    return newState;
-    //}
-
     case types.SYNC_FORM: {
         newState.push({
             ...currentForm,
@@ -99,7 +61,8 @@ const forms = (
         newState.push({
             ...currentForm,
             id,
-            saving: true
+            saving: true,
+            errorStatus: null
         });
         return newState;
     }
@@ -109,47 +72,13 @@ const forms = (
         newState.push({
             ...currentForm,
             id,
-            saving: false
+            saving: false,
+            errorStatus: null
         });
         return newState;
     }
 
-    //case types.SAVING_FORM_ERROR: {
-    //    //  TODO:
-    //    //  because the state object holds both form and record data, make sure the
-    //    //  currentForm object is passed along for the ride.  This will get cleaned
-    //    //  up once form and record data is separated.
-    //    newState.push({
-    //        ...currentForm,
-    //        id,
-    //        saving: false,
-    //        errorStatus: action.content
-    //    });
-    //    return newState;
-    //}
-    //
-    //case types.SAVING_FORM_SUCCESS: {
-    //    //  TODO:
-    //    //  because the state object holds both form and record data, make sure the
-    //    //  currentForm object is passed along for the ride.  This will get cleaned
-    //    //  up once form and record data is separated.
-    //    //
-    //    //no changes to state..
-    //    let updatedForm = _.cloneDeep(currentForm);
-    //    //  ..for now until the store is refactored..
-    //    if (!updatedForm.formData) {
-    //        updatedForm.formData = {};
-    //    }
-    //    updatedForm.formData.formMeta = action.content;
-    //    newState.push({
-    //        ...updatedForm,
-    //        id,
-    //        saving: false
-    //    });
-    //    return newState;
-    //}
-
-    case types.MOVE_FIELD :
+    case types.MOVE_FIELD : {
         if (!currentForm) {
             return state;
         }
@@ -167,6 +96,26 @@ const forms = (
             ...newState,
             updatedForm
         ];
+    }
+
+    case types.REMOVE_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {location} = action.content;
+        let updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
+            updatedForm.formData.formMeta,
+            location
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
 
     default:
         // return existing state by default in redux

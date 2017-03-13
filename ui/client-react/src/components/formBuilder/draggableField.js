@@ -3,7 +3,6 @@ import {DragSource} from 'react-dnd';
 import DraggableItemTypes from './draggableItemTypes';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import FieldEditingTools from './fieldEditingTools/fieldEditingTools';
-import Device from '../../utils/device';
 
 /**
  * Specifies event handlers and props that are available during dragging events
@@ -12,7 +11,8 @@ import Device from '../../utils/device';
  * @type {{beginDrag: ((props)), endDrag: ((props, monitor))}}
  */
 const fieldDragSource = {
-    beginDrag(props) {
+    beginDrag(props, monitor, component) {
+        props.cacheDragElement(component);
         return {
             containingElement: props.containingElement,
             location: props.location,
@@ -38,10 +38,7 @@ const fieldDragSource = {
      * @param monitor
      */
     endDrag(props, monitor) {
-        if (monitor.didDrop() && Device.isTouch()) {
-            let {location} = monitor.getDropResult();
-            props.handleFormReorder(location, props);
-        }
+        props.clearDragElementCache();
     }
 };
 
@@ -76,14 +73,14 @@ const DraggableFieldHoc = FieldComponent => {
         }
 
         render() {
-            const {connectDragSource, isDragging, location} = this.props;
+            const {connectDragSource, isDragging, location, removeField} = this.props;
 
             let classNames = ['draggableField'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
 
             return connectDragSource(
                 <div className={classNames.join(' ')}>
-                    <FieldEditingTools location={location} />
+                    <FieldEditingTools location={location} isDragging={isDragging} removeField={removeField}/>
                     <FieldComponent {...this.props} />
                 </div>
             );

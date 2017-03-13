@@ -42,9 +42,9 @@ function getFieldsAndTheirIndex(formMeta, tabIndex, sectionIndex, columnIndex) {
 }
 
 describe('MoveFieldHelper', () => {
-    describe('moveField', () => {
+    describe('methods', () => {
 
-        let testCases = [
+        let moveFieldTestCases = [
             {
                 description: 'moves a field down within the same section/column',
                 originalTab: 0,
@@ -54,12 +54,14 @@ describe('MoveFieldHelper', () => {
                 newTab: 0,
                 newSection: 0,
                 newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 3,
                 newElementIndex: 1,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 7},
                     {orderIndex: 1, fieldId: 6},
                     {orderIndex: 2, fieldId: 8},
-                    {orderIndex: 3, fieldId: 9}
+                    {orderIndex: 3, fieldId: 9},
                 ],
                 expectFieldToBeRemoved: false
             },
@@ -73,6 +75,8 @@ describe('MoveFieldHelper', () => {
                 newTab: 0,
                 newSection: 0,
                 newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 3,
                 newElementIndex: 1,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 6},
@@ -92,6 +96,8 @@ describe('MoveFieldHelper', () => {
                 newTab: 0,
                 newSection: 0,
                 newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 4,
                 newElementIndex: 1,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 6},
@@ -115,6 +121,8 @@ describe('MoveFieldHelper', () => {
                 newTab: 0,
                 newSection: 0,
                 newColumn: 0,
+                newRow: 1,
+                expectedRemoveFieldResult: 4,
                 newElementIndex: 1,
                 expectedResult: [
                     {orderIndex: 0, fieldId: 6},
@@ -129,8 +137,47 @@ describe('MoveFieldHelper', () => {
             }
         ];
 
-        testCases.forEach(testCase => {
-            it(testCase.description, () => {
+        let removeFieldTestCases = [
+            {
+                originalTab: 0,
+                originalSection: 0,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                formMetaData: testFormData.formMeta.tabs[0].sections[0].columns[0].elements.length,
+                expectedRemoveFieldResult: 3
+            },
+            {
+                originalTab: 0,
+                originalSection: 1,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                formMetaData: testFormData.formMeta.tabs[0].sections[1].columns[0].elements.length,
+                expectedRemoveFieldResult: 2
+            },
+            {
+                originalTab: 1,
+                originalSection: 2,
+                originalColumn: 0,
+                originalElementIndex: 0,
+                formMetaData: testFormData.formMeta.tabs[1].sections[2].columns[0].elements.length,
+                expectedRemoveFieldResult: 1
+            }
+        ];
+
+        removeFieldTestCases.forEach(testCase => {
+            it(`removeField: The form has ${testCase.formMetaData} fields, one is removed, and only ${testCase.expectedRemoveFieldResult} remains`, () => {
+                let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
+                let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
+
+                let result = MoveFieldHelper.removeField(testFormData.formMeta, elementProps.location);
+                let simplifiedResult = getFieldsAndTheirIndex(result, testCase.originalTab, testCase.originalSection, testCase.originalColumn);
+
+                expect(simplifiedResult.length).toEqual(testCase.expectedRemoveFieldResult);
+            });
+        });
+
+        moveFieldTestCases.forEach(testCase => {
+            it(`moveField: ${testCase.description}`, () => {
                 let originalElement = testFormData.formMeta.tabs[testCase.originalTab].sections[testCase.originalSection].columns[testCase.originalColumn].elements[testCase.originalElementIndex];
                 let elementProps = buildDraggedItemProps(testCase.originalTab, testCase.originalSection, testCase.originalColumn, testCase.originalElementIndex, originalElement, originalElement.FormFieldElement);
                 let newLocation = buildNewLocation(testCase.newTab, testCase.newSection, testCase.newColumn, testCase.newElementIndex);

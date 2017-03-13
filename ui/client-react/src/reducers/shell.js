@@ -71,6 +71,7 @@ const shell = (
             errorPopupHidden: true
         };
     case types.CHANGE_LOCALE:
+        Locale.changeLocale(action.locale);
         return {
             ...state,
             locale: Locale.getLocale(),
