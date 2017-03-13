@@ -1,13 +1,14 @@
 import React, {PropTypes, Component} from 'react';
 import moment from 'moment';
 
-import data from './AccountUserGridTempData';
-
 import * as Table from 'reactabular-table';
 import QbHeaderCell from '../../../../client-react/src/components/dataTable/qbGrid/qbHeaderCell';
 import QbRow from '../../../../client-react/src/components/dataTable/qbGrid/qbRow';
 import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
+
+import {connect} from 'react-redux';
+import * as AccountUsersActions from './AccountUsersActions';
 
 const DeactivatedFlag = 0x00000040;
 const DeniedFlag = 0x0008;
@@ -21,7 +22,8 @@ const IsDenied = cellData => HasFlag(cellData.realmDirectoryFlags, DeniedFlag);
 const CanCreateApps = cellData => HasFlag(cellData.accountTrusteeFlags, CanCreateAppFlag);
 const IsApprovedInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RealmApprovedFlag);
 const IsRegisteredInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RegisteredFlag);
-const IsTimeNull = timeStr => timeStr === '0001-01-01T00:00:00Z';
+const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
+const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
 const columns = [
     {
@@ -85,12 +87,13 @@ const columns = [
         cell: {
             formatters: [
                 (hasAppAccess, cellInfo) => {
-                    const isPaidSet = hasAppAccess && !(IsDeactivated(cellInfo.rowData) || IsDenied(cellInfo.rowData));
-                    return isPaidSet ? 'Check' : '';
+                    const isPaidSeat = hasAppAccess && !(IsDeactivated(cellInfo.rowData) || IsDenied(cellInfo.rowData));
+                    return RenderBoolColumn(isPaidSeat);
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -99,9 +102,17 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: '# Groups',
+            label: 'In Any Group?',
+        },
+        cell: {
+            formatters: [
+                (numGroupsMember, cellInfo) => {
+                    return RenderBoolColumn(numGroupsMember > 0);
+                }
+            ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -115,11 +126,12 @@ const columns = [
         cell: {
             formatters: [
                 (numGroupsManaged, cellInfo) => {
-                    return numGroupsManaged > 0 ? 'Check' : '';
+                    return RenderBoolColumn(numGroupsManaged > 0);
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -133,11 +145,12 @@ const columns = [
         cell: {
             formatters: [
                 (accountTrusteeFlags, cellInfo) => {
-                    return CanCreateApps(cellInfo.rowData) ? 'Check' : '';
+                    return RenderBoolColumn(CanCreateApps(cellInfo.rowData));
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -162,11 +175,12 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsApprovedInRealm(cellInfo.rowData) ? 'Check' : '';
+                    return RenderBoolColumn(IsApprovedInRealm(cellInfo.rowData));
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -180,11 +194,12 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsDenied(cellInfo.rowData) ? 'Check' : '';
+                    return RenderBoolColumn(IsDenied(cellInfo.rowData));
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -198,11 +213,12 @@ const columns = [
         cell: {
             formatters: [
                 (flags, cellInfo) => {
-                    return IsDeactivated(cellInfo.rowData) ? 'Check' : '';
+                    return RenderBoolColumn(IsDeactivated(cellInfo.rowData));
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -221,11 +237,12 @@ const columns = [
                     }
                     const isRegistered = IsRegisteredInRealm(cellInfo.rowData);
                     const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-                    return isRegistered && daysSinceLastAccess >= 90 ? 'Check' : '';
+                    return RenderBoolColumn(isRegistered && daysSinceLastAccess >= 90);
                 }
             ]
         },
         props: {
+            classes: ['qbIconOnlyCell'],
             style: {
                 maxWidth: 100
             }
@@ -233,7 +250,20 @@ const columns = [
     },
 ];
 
+
 class AccountUsersGrid extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    /**
+     * get users whenever the component mounts
+     */
+    componentDidMount() {
+        this.props.fetchAccountUsers();
+    }
+
     render() {
         return (
             <Table.Provider
@@ -253,7 +283,7 @@ class AccountUsersGrid extends Component {
                 <Table.Header className="qbHeader" />
 
                 <Table.Body className="qbTbody"
-                            rows={data}
+                            rows={this.props.users}
                             rowKey="uid"
                             onRow={(row) => {
                                 return {
@@ -266,4 +296,29 @@ class AccountUsersGrid extends Component {
     }
 }
 
-export default AccountUsersGrid;
+
+// Provide type checking
+AccountUsersGrid.propTypes = {
+    users: React.PropTypes.array,
+    fetchAccountUsers: React.PropTypes.func.isRequired
+};
+
+// Provide default val
+AccountUsersGrid.defaultProps = {
+    users: []
+};
+
+export {AccountUsersGrid};
+
+const mapStateToProps = (state) => {
+    return {
+        users: state.AccountUsers.users
+    };
+};
+
+
+export default connect(
+    mapStateToProps,
+    AccountUsersActions
+)(AccountUsersGrid);
+

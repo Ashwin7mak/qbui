@@ -5,8 +5,16 @@ import 'react-fastclick';
 import {GOVERNANCE_USERS_ROUTE} from './routes';
 import AccountUsers from '../account/users/AccountUsers';
 
+import {Provider} from 'react-redux';
+import createGovernanceStore from './store';
+
+const store = createGovernanceStore();
+
+
 render((
-    <Router history={browserHistory}>
-        <Route path={GOVERNANCE_USERS_ROUTE} component={AccountUsers} />
-    </Router>
+    <Provider store={store}>
+        <Router history={browserHistory}>
+            <Route path={GOVERNANCE_USERS_ROUTE} component={AccountUsers} />
+        </Router>
+    </Provider>
 ), document.getElementById('content'));
