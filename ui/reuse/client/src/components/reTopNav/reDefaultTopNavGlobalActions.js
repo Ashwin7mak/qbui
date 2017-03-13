@@ -24,11 +24,11 @@ let GlobalActions = React.createClass({
     propTypes: {
         linkClass: React.PropTypes.string,
         onSelect: React.PropTypes.func,
-        position: React.PropTypes.string.isRequired,
+        position: React.PropTypes.string,
         actions: React.PropTypes.arrayOf(actionPropType),
         dropdownIcon: React.PropTypes.string,
         dropdownMsg: React.PropTypes.string,
-        startTabIndex: React.PropTypes.number.isRequired,
+        startTabIndex: React.PropTypes.number,
         app: React.PropTypes.object,
 
         changeLocale: React.PropTypes.func,
@@ -36,8 +36,11 @@ let GlobalActions = React.createClass({
 
     getDefaultProps() {
         return {
-            dropdownIcon: 'fries',
-            dropdownMsg: ''
+            dropdownMsg: 'globalActions.user',
+            dropdownIcon: 'user',
+            position: 'bottom',
+            startTabIndex: 0,
+            actions: [],
         };
     },
 
@@ -73,9 +76,9 @@ let GlobalActions = React.createClass({
                         <I18nMessage message={'header.menu.preferences'}/>
                     </MenuItem>
 
-                    <MenuItem divider/>
+                    {this.props.changeLocale && supportedLocales.length > 1 && <MenuItem divider/>}
 
-                    {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
+                    {this.props.changeLocale && supportedLocales.length > 1 ? supportedLocales.map((locale) => {
                             return <MenuItem href="#" className="localeLink" onSelect={() => this.changeLocale(locale)} title={locale}
                                              key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage
                                 message={'header.menu.locale.' + locale}/></MenuItem>;
