@@ -15,7 +15,7 @@ describe('AccountUsersGrid', () => {
         it("should show the correct set of headers", ()=> {
             let component = mount(<AccountUsersGrid fetchAccountUsers={() => false} />);
             let headers = component.find("th").map(node => node.text());
-            expect(headers).toEqual(["First Name" , "Last Name", "Email", "User Name", "Last Access", "Paid Seat?", "In Any Group?", "Group Manager?", "Can create apps?", "# App Managed", "Realm Approved?", "Denied?", "Deactivated?", "Inactive?"]);
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "Paid Seat?", "In Any Group?", "Group Manager?", "Can create apps?", "# App Managed", "Realm Approved?", "Denied?", "Deactivated?", "Inactive?"]);
         });
 
         it("should should call fetch on mount", ()=> {
