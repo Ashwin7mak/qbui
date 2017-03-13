@@ -43,6 +43,8 @@ export default {
     FEATURE_STATES      : 'featureStates',
 
     ROLES               : 'roles',
+    TICKET              : 'ticket',
+    ADMIN               : 'admin',
 
     // Node Entity actions
     FORMCOMPONENTS      : 'formComponents',
@@ -52,7 +54,7 @@ export default {
     INVOKE              : 'invoke',
     PARSE               : 'parse',
     BULK                : 'bulk',
-
+    REQUSER             : 'reqUser',
     // Legacy actions
     STACK               : 'stack'
 };

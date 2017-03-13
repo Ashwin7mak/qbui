@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
+import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm} from '../../actions/formActions';
+import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
 import {NEW_FORM_RECORD_ID} from '../../constants/schema';
@@ -12,8 +14,10 @@ import FormBuilder from '../formBuilder/formBuilder';
 import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
-import './formBuilderContainer.scss';
 import AutoScroll from '../autoScroll/autoScroll';
+import PageTitle from '../pageTitle/pageTitle';
+
+import './formBuilderContainer.scss';
 
 let logger = new Logger();
 
@@ -35,6 +39,14 @@ const mapDispatchToProps = dispatch => {
 
         updateForm(appId, tblId, formType, form) {
             return dispatch(updateForm(appId, tblId, formType, form));
+        },
+
+        removeField(formId, location) {
+            return dispatch(removeFieldFromForm(formId, location));
+        },
+
+        updateAnimationState(isAnimating) {
+            return dispatch(updateFormAnimationState(isAnimating));
         }
     };
 };
@@ -113,6 +125,8 @@ export const FormBuilderContainer = React.createClass({
         }
         return (
             <div className="formBuilderContainer">
+                <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
+
                 <div className="toolsAndForm">
                     <ToolPalette />
 
@@ -121,7 +135,13 @@ export const FormBuilderContainer = React.createClass({
                         pixelsFromBottomForMobile={50}>
                         <div className="formBuilderContent">
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
-                                <FormBuilder formId={formId} formData={formData} moveFieldOnForm={this.props.moveField} />
+                                <FormBuilder
+                                    formId={formId}
+                                    formData={formData}
+                                    moveFieldOnForm={this.props.moveField}
+                                    removeField={this.props.removeField}
+                                    updateAnimationState={this.props.updateAnimationState}
+                                />
                             </Loader>
                         </div>
                     </AutoScroll>
