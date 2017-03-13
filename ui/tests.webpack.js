@@ -6,7 +6,7 @@
  * See webpack docs for how it works
  * https://webpack.github.io/docs/context.html
  */
-var clientReactModules = require.context('./client-react/test/actions', true, /.unit.spec.js$/);
+var clientReactModules = require.context('./client-react/test', true, /.unit.spec.js$/);
 clientReactModules.keys().forEach(clientReactModules);
 
 //var compLibraryModules = require.context('./componentLibrary/test', true, /.unit.spec.js$/);
