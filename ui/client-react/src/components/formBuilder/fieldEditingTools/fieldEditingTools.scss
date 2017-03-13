@@ -127,6 +127,10 @@
         }
     }
 
+    &:focus {
+        outline: none;
+    }
+
     &.active {
         opacity: 1;
         @include dragpreview-active-gradient;
