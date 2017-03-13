@@ -41,6 +41,10 @@ $grid-font-size: $font-size-p;
         &:last-of-type {
             border-right: 1px solid $grid-column-header-border-color;
         }
+
+        &:first-of-type {
+            border-left: 1px solid $grid-column-header-border-color;
+        }
     }
 
     td {

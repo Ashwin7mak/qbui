@@ -33,23 +33,16 @@ class UserManagement extends React.Component {
     createUserColumns(cellFormatter) {
         let columns = [
             {
-                property: 'firstName',
+                property: 'name',
                 header: {
-                    label: 'First Name'
+                    label: 'Name'
                 },
                 cell: {formatters: [cellFormatter]}
             },
             {
-                property: 'lastName',
+                property: 'roleName',
                 header: {
-                    label: 'Last Name'
-                },
-                cell: {formatters: [cellFormatter]}
-            },
-            {
-                property: 'screenName',
-                header: {
-                    label: 'User Name'
+                    label: 'Role'
                 },
                 cell: {formatters: [cellFormatter]}
             },
@@ -61,9 +54,9 @@ class UserManagement extends React.Component {
                 cell: {formatters: [cellFormatter]}
             },
             {
-                property: 'roleName',
+                property: 'screenName',
                 header: {
-                    label: 'Role'
+                    label: 'User Name'
                 },
                 cell: {formatters: [cellFormatter]}
             }
