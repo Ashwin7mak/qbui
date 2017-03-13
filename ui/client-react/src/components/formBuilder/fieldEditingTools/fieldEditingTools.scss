@@ -126,28 +126,7 @@
             }
         }
     }
-
-    &:focus {
-        //This focus is needed for 'tabbing'
-        opacity: 1;
-        outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-red-700;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-cyan-700;
-            }
-        }
-    }
-
+    
     &.active {
         opacity: 1;
         @include dragpreview-active-gradient;
