@@ -1,9 +1,9 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import AVAILABLE_ICON_FONTS from '../src/components/reIcon/iconConstants';
+import AVAILABLE_ICON_FONTS from '../../src/components/reIcon/iconConstants';
 
-import ReIcon from '../src/components/reIcon/reIcon';
+import ReIcon from '../../src/components/reIcon/reIcon';
 
 let component;
 
