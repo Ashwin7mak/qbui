@@ -254,5 +254,147 @@ describe('Record reducer save record events', () => {
     });
 });
 
+describe('Record reducer edit record events', () => {
+    let changes = {};
+    let recId = 3;
+    let mockModel = {id:recId, pendEdits:{}};
+
+    class mockRecordModel {
+        constructor() { }
+        setEditRecordStart(a) { }
+        setEditRecordChange(a) { }
+        setEditRecordValidate(a) { }
+        get() {
+            return mockModel;
+        }
+        set(a) { }
+    }
+
+    beforeEach(() => {
+        spyOn(mockRecordModel.prototype, 'get').and.callThrough();
+        spyOn(mockRecordModel.prototype, 'set').and.callThrough();
+        spyOn(mockRecordModel.prototype, 'setEditRecordStart').and.callThrough();
+        spyOn(mockRecordModel.prototype, 'setEditRecordChange').and.callThrough();
+        spyOn(mockRecordModel.prototype, 'setEditRecordValidate').and.callThrough();
+        RecordReducerRewireAPI.__Rewire__('RecordModel', mockRecordModel);
+    });
+
+    afterEach(() => {
+        mockRecordModel.prototype.get.calls.reset();
+        mockRecordModel.prototype.set.calls.reset();
+        mockRecordModel.prototype.setEditRecordStart.calls.reset();
+        mockRecordModel.prototype.setEditRecordChange.calls.reset();
+        mockRecordModel.prototype.setEditRecordValidate.calls.reset();
+        RecordReducerRewireAPI.__ResetDependency__('RecordModel');
+    });
+
+    let recordState = [mockModel];
+    let testCases = [
+        {name: 'start edit record..not in store', recId:recId, recordInStore: false},
+        {name: 'start edit record..in store', recId: recId, changes: changes, recordInStore: true}
+    ];
+    testCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            const obj = {
+                appId:appId,
+                tblId:tblId,
+                recId:testCase.recId,
+                origRec: {},
+                changes: {},
+                isInlineEdit: true,
+                fieldToStartEditing: null
+            };
+
+            recordState = reducer(testCase.recordInStore ? recordState : [], event(testCase.recId, types.EDIT_RECORD_START, obj));
+            const record = recordState[0];
+
+            expect(mockRecordModel.prototype.setEditRecordStart).toHaveBeenCalled();
+            expect(record.id).toEqual(testCase.recId);
+            done();
+        });
+    });
+
+    testCases = [
+        {name: 'change edit record..not in store', recId:recId, recordInStore: false},
+        {name: 'change edit record..in store', recId: recId, changes: changes, recordInStore: true}
+    ];
+    testCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            const obj = {
+                appId:appId,
+                tblId:tblId,
+                recId:testCase.recId,
+                origRec: {},
+                changes: {},
+                isInlineEdit: true,
+                fieldToStartEditing: null
+            };
+
+            recordState = reducer(testCase.recordInStore ? recordState : [], event(testCase.recId, types.EDIT_RECORD_CHANGE, obj));
+            const record = recordState[0];
+
+            if (testCase.recordInStore) {
+                expect(mockRecordModel.prototype.set).toHaveBeenCalled();
+            } else {
+                expect(mockRecordModel.prototype.setEditRecordStart).toHaveBeenCalled();
+            }
+
+            expect(mockRecordModel.prototype.setEditRecordChange).toHaveBeenCalled();
+            expect(record.id).toEqual(testCase.recId);
+            done();
+        });
+    });
+
+    testCases = [
+        {name: 'validate edit record..not in store', recId:recId, recordInStore: false},
+        {name: 'validate edit record..in store', recId: recId, changes: changes, recordInStore: true}
+    ];
+    testCases.forEach(testCase => {
+        it(testCase.name, (done) => {
+            const obj = {
+                recId:testCase.recId,
+                fieldDef: {},
+                fieldLabel: {},
+                value: {},
+                checkRequired: null
+            };
+            mockRecordModel.prototype.set.calls.reset();
+            mockRecordModel.prototype.setEditRecordValidate.calls.reset();
+
+            recordState = reducer(testCase.recordInStore ? recordState : [], event(testCase.recId, types.EDIT_RECORD_VALIDATE_FIELD, obj));
+
+            if (testCase.recordInStore) {
+                expect(mockRecordModel.prototype.set).toHaveBeenCalled();
+                expect(mockRecordModel.prototype.setEditRecordValidate).toHaveBeenCalled();
+            } else {
+                expect(mockRecordModel.prototype.set).not.toHaveBeenCalled();
+                expect(mockRecordModel.prototype.setEditRecordValidate).not.toHaveBeenCalled();
+            }
+            done();
+        });
+    });
+
+    //
+    //let completeTestCases = [
+    //    {'name': 'save record complete - record not in store', appId:appId, tblId:tblId, recId:99, recordInStore:false},
+    //    {'name': 'save record complete - record in store', appId:appId, tblId:tblId, recId:recId,  recordInStore:true}
+    //];
+    //completeTestCases.forEach(testCase => {
+    //    it(testCase.name, (done) => {
+    //        const obj = {
+    //            appId: testCase.appId,
+    //            tblId: testCase.tblId,
+    //            recId: testCase.recId
+    //        };
+    //        saveState = reducer(saveState, event(testCase.recId, types.SAVE_RECORD_COMPLETE, obj));
+    //        if (testCase.recordInStore) {
+    //            expect(mockRecordModel.prototype.setSaving).toHaveBeenCalledWith(false, true);
+    //        } else {
+    //            expect(mockRecordModel.prototype.setSaving).not.toHaveBeenCalled();
+    //        }
+    //        done();
+    //    });
+    //});
+});
 
 
