@@ -244,7 +244,7 @@ describe('Forms reducer functions', () => {
     });
 
     describe('select a field', () => {
-        const someFormMeta = 'some meta data';
+        const testFormMeta = 'test meta data';
 
         const actionPayload = {
             id: VIEW,
@@ -257,7 +257,7 @@ describe('Forms reducer functions', () => {
         it('returns a new state with a field selected', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
                 ...stateWithViewForm[0],
-                formData: {formMeta: someFormMeta},
+                formData: {formMeta: testFormMeta},
                 selectedFields: [1]
             }]);
         });
