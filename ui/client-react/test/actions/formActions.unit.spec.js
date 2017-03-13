@@ -1,5 +1,5 @@
 import * as formActions from '../../src/actions/formActions';
-import {editNewRecord, openRecordForEdit, loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
+import {loadForm, createForm, updateForm, __RewireAPI__ as FormActionsRewireAPI} from '../../src/actions/formActions';
 import * as UrlConsts from "../../src/constants/urlConstants";
 import * as types from '../../src/actions/types';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
@@ -62,57 +62,8 @@ describe('Form Actions', () => {
     });
 
     describe('saving actions', () => {
-
         it('creates an action to indicate saving a form', () => {
-
-            expect(formActions.savingForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
-        });
-
-        it('creates an action to indicate save form error', () => {
-
-            expect(formActions.saveFormError("edit", "oops")).toEqual({
-                type: types.SAVE_FORM_FAILED,
-                id: "edit",
-                error: "oops"
-            });
-        });
-
-        it('creates an action to indicate form saved', () => {
-
-            expect(formActions.saveFormSuccess("edit", "someData")).toEqual({
-                type: types.SAVE_FORM_SUCCESS,
-                id: "edit"
-            });
-        });
-    });
-
-
-    describe('edit record actions', () => {
-
-        it('creates an action to open record for edit', () => {
-
-            expect(openRecordForEdit(123)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: 123,
-            });
-        });
-
-        it('creates an action to edit new record, no nav after save', () => {
-
-            expect(editNewRecord(false)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: UrlConsts.NEW_RECORD_VALUE,
-                navigateAfterSave: false
-            });
-        });
-
-        it('creates an action to edit new record, nav after save', () => {
-
-            expect(editNewRecord(true)).toEqual({
-                type: types.EDIT_REPORT_RECORD,
-                recId: UrlConsts.NEW_RECORD_VALUE,
-                navigateAfterSave: true
-            });
+            expect(formActions.saveForm("edit")).toEqual({type: types.SAVE_FORM, id: "edit"});
         });
     });
 

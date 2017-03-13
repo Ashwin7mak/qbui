@@ -56,7 +56,7 @@ const record = (state = [], action) => {
     }
 
     /**
-     * Retrieve the record from the state and return a cloned
+     * Retrieve the record from the state and return a clone
      * object
      *
      * @param id
@@ -96,7 +96,7 @@ const record = (state = [], action) => {
     }
     case types.DELETE_RECORDS_COMPLETE: {
         const ids = action.content.recIds;
-        let states = null;
+        let states = [];
         ids.forEach((recId) => {
             let currentRecd = getRecordFromState(recId);
             if (_.has(currentRecd, 'pendEdits')) {
@@ -105,16 +105,15 @@ const record = (state = [], action) => {
                 model.setSaving(false);
 
                 currentRecd.pendEdits = model.get();
-                states = newState(currentRecd);
+                states.push(currentRecd);
             }
         });
-        return states || state;
+        return states.length > 0 ? states : state;
     }
     case types.DELETE_RECORDS_ERROR: {
-        //  update errors..if any
-        let states = null;
+        let states = [];
         let errors = action.content.errors;
-        if (errors) {
+        if (Array.isArray(errors) && errors.length > 0) {
             const ids = action.content.recIds;
             ids.forEach((recId) => {
                 let currentRecd = getRecordFromState(recId);
@@ -124,11 +123,11 @@ const record = (state = [], action) => {
                     model.setErrors(errors);
 
                     currentRecd.pendEdits = model.get();
-                    states = newState(currentRecd);
+                    states.push(currentRecd);
                 }
             });
         }
-        return states || state;
+        return states.length > 0 ? states : state;
     }
     case types.OPEN_RECORD: {
         const obj = {
@@ -136,8 +135,8 @@ const record = (state = [], action) => {
             recId: action.content.recId,
             nextRecordId: action.content.nextRecordId,
             previousRecordId: action.content.previousRecordId,
-            navigateAfterSave: action.navigateAfterSave || false,
-            nextOrPreviousEdit: action.nextOrPreviousEdit || ''
+            navigateAfterSave: action.content.navigateAfterSave || false,
+            nextOrPreviousEdit: action.content.nextOrPreviousEdit || ''
         };
         return newState(obj);
     }

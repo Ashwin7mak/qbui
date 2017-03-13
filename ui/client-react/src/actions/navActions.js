@@ -10,13 +10,6 @@ let navActions = {
     onToggleRowPopUpMenu(isOpen) {
         this.dispatch(actions.TOGGLE_ROW_POP_UP_MENU, isOpen);
     },
-    /**
-     * Resets onToggleRowPopUpMenu count to 0
-     * */
-    //  NO ONE IS LISTENING TO THIS EVENT
-    //resetRowMenu() {
-    //    this.dispatch(actions.RESET_ROW_MENU);
-    //},
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },

@@ -1,6 +1,5 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
-import Locale from '../locales/locales';
 
 // Shell action creators (the Fluxxor navActions.js should be migrated over)
 
@@ -94,8 +93,8 @@ export const hideErrorMsgDialog = () => {
  * @returns {{type, locale: *}}
  */
 export const changeLocale = (locale) => {
-    Locale.changeLocale(locale);
     return {
-        type: types.CHANGE_LOCALE
+        type: types.CHANGE_LOCALE,
+        locale
     };
 };
