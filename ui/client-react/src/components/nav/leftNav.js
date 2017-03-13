@@ -8,7 +8,7 @@ import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
 import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
-import LogoImg from './QB-logo.svg';
+import LogoImg from '../../../../reuse/client/src/assets/images/QB-logo.svg';
 
 let LeftNav = React.createClass({
 
