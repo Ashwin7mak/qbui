@@ -18,7 +18,13 @@
 // =============================================================================
 // Font Face
 // =============================================================================
-
+//
+// keeping this mixin here temporarily. We cannot use it with the current webpack configuration
+// and source maps turned on. The fonts won't load because webpack loads them with blob:// URLs
+// and then the relative paths are broken. font-face styles must be separated out into their
+// own CSS files and loaded with the CSS loader not the SCSS loader and the CSS must be
+// excluded from source maps. See webpack.config.js for more info.
+/*
 @mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
     $src: null;
     $extmods: (eot: "?", svg: "#" + str-replace($name, " ", "_"));
@@ -37,6 +43,7 @@
         src: $src;
     }
 }
+*/
 
 // =============================================================================
 // placeholder

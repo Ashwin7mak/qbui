@@ -1,8 +1,16 @@
 import React from 'react';
-import AVAILABLE_ICON_FONTS from './iconConstants.js';
 import './reIcon.scss';
 import './style.css';
 import './tableIcons.css';
+
+/**
+ * Constants for accessing different icon fonts
+ */
+export const RE_AVAILABLE_ICON_FONTS = {
+    DEFAULT: 'iconTableUISturdy',
+    UI_STURDY: 'iconTableUISturdy',
+    TABLE_STURDY: 'iconTableSturdy'
+};
 
 /**
  * # QuickBase Icon Font
@@ -25,21 +33,21 @@ const ReIcon = React.createClass({
          * Optionally set the font set to use for this icon
          * Import the iconConstants.AVAILABLE_ICON_FONTS constant for easy access to available fonts
          */
-        iconFont: React.PropTypes.oneOf(Object.keys(AVAILABLE_ICON_FONTS).map(key => AVAILABLE_ICON_FONTS[key])),
+        iconFont: React.PropTypes.oneOf(Object.keys(RE_AVAILABLE_ICON_FONTS).map(key => RE_AVAILABLE_ICON_FONTS[key])),
     },
     getDefaultProps() {
         return {
             className: '',
             isTableIcon: false,
-            iconFont: AVAILABLE_ICON_FONTS.DEFAULT
+            iconFont: RE_AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
     render: function() {
         let {className, iconFont, icon} = this.props;
-        let qbIconClassName = `${className} qbIcon ${iconFont}-${icon}`;
+        let iconClassName = `${className} qbIcon ${iconFont}-${icon}`;
 
         return (
-            <span className={qbIconClassName} onClick={this.props.onClick}>
+            <span className={iconClassName} onClick={this.props.onClick}>
                 {this.props.children}
             </span>
         );

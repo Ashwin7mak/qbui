@@ -6,7 +6,7 @@ class AccountUsers extends Component {
     render() {
         return (
             <div className="governanceMain">
-                <h1>Welcome to governance! <ReIcon icon='speechbubble-outline'/></h1>
+                <h1>Welcome to governance! <ReIcon icon="speechbubble-outline"/></h1>
                 <AccountUsersGrid />
             </div>
         );
