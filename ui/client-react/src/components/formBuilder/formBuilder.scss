@@ -25,6 +25,8 @@
 
     .droppableField {
         @include small-breakpoint {
+            //This is set for mobile, this way the select box and bottom border
+            //will stretch across the whole screen
             margin-right: -13px;
             margin-left: -25px;
         }
@@ -34,39 +36,36 @@
         opacity: 1;
         z-index: 1;
         transition: opacity 0.5s;
-        height: 100px;
 
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
 
-        &:hover {
-            background: $color-black-250;
+        .draggableFieldWrapper {
             width: 310px;
+            height: 100px;
+
             @include small-breakpoint {
                 width: 100%;
-                background: 100%;
-                //margin-left: -18px;
-                padding: 0;
-                margin-right: 0;
+            }
+
+            &:hover {
+                background: $color-black-250;
+
+                .fieldEditingTools {
+                    opacity: 1;
+                }
+            }
+
+            .formElement .fieldLabel {
+                padding-top: 12px;
+                padding-left: 15px;
+            }
+
+            .cellWrapper {
+                padding-left: 15px;
             }
         }
-        @include small-breakpoint {
-            width: 100%;
-            //background: 100%;
-            //margin-left: -18px;
-        }
-        .formElement .fieldLabel {
-            padding-top: 12px;
-            padding-left: 15px;
-        }
-
-        .cellWrapper {
-            padding-left: 15px;
-        }
-
-
-
     }
 
     .draggableField, .droppableField {
