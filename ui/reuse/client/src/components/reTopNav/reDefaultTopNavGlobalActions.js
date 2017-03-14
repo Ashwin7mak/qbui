@@ -13,11 +13,12 @@ const signOutHref = '/qbase/signout';
 
 /**
  * The default global actions that are consistent across functional areas of the qbase app ecosystem.
- * This only includes the actions and is not the full TopNav bar. See ReDefaultTopNav for the whole TopNav bar with default actions.
- * You can pass in additional actions by passing in an array of GlobalAction components with the `actions` props. Check out the
- * props for other values you can change if you need.
- * If these default actions don't suit your needs, try creating a custom top nav by using the TopNav and GlobalAction components */
-class ReDefaultTopNav extends Component {
+ * This only includes the actions and is not the full top nav bar. Use ReTopNav bar with this component passed in as the GlobalActions.
+ * You can pass in additional actions by passing in an array of action objects to the `actions` prop.
+ * Alternatively, pass in additional top bar elements by wrapping them with this component as children: <ReDefaultTopNavGlobalActions> <div>CustomMenuItem</div> </ReDefaultTopNavGlobalActions>
+ * Check out the propTypes for other values you can change if you need.
+ * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
+class ReDefaultTopNavGlobalActions extends Component {
     constructor(props) {
         super(props);
 
@@ -25,7 +26,7 @@ class ReDefaultTopNav extends Component {
     }
 
     /**
-     * A callback that will fire when the user selects a language from the User dropdown
+     * Fires the changeLocale callback when the user selects a language from the User dropdown
      * @param locale
      */
     changeLocale(locale) {
@@ -77,7 +78,7 @@ const actionPropType = React.PropTypes.shape({
     link: React.PropTypes.string
 });
 
-ReDefaultTopNav.propTypes = {
+ReDefaultTopNavGlobalActions.propTypes = {
     linkClass: PropTypes.string,
     onSelect: PropTypes.func,
     position: PropTypes.string,
@@ -88,10 +89,10 @@ ReDefaultTopNav.propTypes = {
     changeLocale: React.PropTypes.func,
 };
 
-ReDefaultTopNav.defaultProps = {
+ReDefaultTopNavGlobalActions.defaultProps = {
     position: 'bottom',
     startTabIndex: 0,
     actions: [],
 };
 
-export default ReDefaultTopNav;
+export default ReDefaultTopNavGlobalActions;

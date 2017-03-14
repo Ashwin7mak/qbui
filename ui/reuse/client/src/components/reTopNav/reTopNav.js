@@ -1,8 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
+
+
+// IMPORTED FROM CLIENT REACT
+import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 import QbTooltip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
+// IMPORTED FROM CLIENT REACT
 
 import './reTopNav.scss';
 
@@ -47,9 +51,7 @@ class ReTopNav extends Component {
                     </div>
 
                     <div className="navGroup center">
-
                         <ButtonGroup className="navItem">
-
                             <QbTooltip i18nMessageKey="unimplemented.search" location="bottom">
                                 <Button tabIndex="2" className="disabled">
                                     <QBicon icon="search" />
@@ -73,8 +75,21 @@ class ReTopNav extends Component {
 
 ReTopNav.propTypes = {
     showOnSmall: PropTypes.bool,
+
+    /**
+     * A title that only appears when the navbar is shown on a small screen */
     title: PropTypes.node,
+
+    /**
+     * Callback that is fired when the hamburger menu on the left of the navbar is clicked */
     onNavClick: PropTypes.func,
+
+    /**
+     * Actions that appear at the center of the nav bar */
+    centerGlobalActions: PropTypes.element,
+
+    /**
+     * Actions that appear on the right side of the nav bar */
     globalActions: PropTypes.element
 };
 

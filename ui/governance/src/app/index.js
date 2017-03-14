@@ -1,8 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import {Router, Route, browserHistory} from 'react-router';
 import 'react-fastclick';
-import {GOVERNANCE_BASE_ROUTE, GOVERNANCE_USERS_ROUTE} from './routes';
+import {GOVERNANCE_USERS_ROUTE} from './routes';
 import AppShell from './appShell';
 import AccountUsers from '../account/users/AccountUsers';
 

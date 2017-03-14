@@ -6,7 +6,7 @@ import {NotificationContainer} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 
 /**
- * Builds a very basic App shell that includes an general setup required for common packages to work (i.e., notifications)
+ * Builds a very basic App shell that includes an general setup required for common packages to work (e.g., notifications)
  * @param functionalAreaName
  * @param children
  * @constructor

@@ -3,6 +3,7 @@ import ReNotificationManager from '../../scripts/reNotificationManager';
 
 // IMPORTS FROM CLIENT REACT
 import QbIcon from '../../../../../client-react/src/components/qbIcon/qbIcon';
+import Device from '../../../../../client-react/src/utils/device';
 import Locale from '../../../../../client-react/src/locales/locales';
 import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 // IMPORTS FROM CLIENT REACT
@@ -13,8 +14,7 @@ import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
  * in the environment configuration
  */
 function getHelpWalkme() {
-    let touch = "ontouchstart" in window;
-    if (touch) {
+    if (Device.isTouch()) {
         return;
     }
     try {
