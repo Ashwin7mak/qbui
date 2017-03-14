@@ -22,7 +22,7 @@ import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendere
 import DurationFieldValueRendererExample from 'raw!../examples/DurationFieldValueRendererExample.js';
 
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
-import QBIconExample from 'raw!../examples/QBIconExample.js';
+import ReIconExample from 'raw!../examples/ReIconExample.js';
 
 import TrowserExample from 'raw!../examples/TrowserExample.js';
 import QBModalExample from 'raw!../examples/QBModalExample.js';
@@ -60,7 +60,7 @@ export default {
     UserFieldValueEditor: UserFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
     QBPanel: QBPanelExample,
-    QBIcon: QBIconExample,
+    ReIcon: ReIconExample,
     QBModal: QBModalExample,
     AlertBanner: AlertBannerExample,
     PageTitle: PageTitleExample,

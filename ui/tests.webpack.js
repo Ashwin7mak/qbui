@@ -10,6 +10,9 @@
 var clientReactModules = require.context('./client-react/test', true, /.unit.spec.js$/);
 clientReactModules.keys().forEach(clientReactModules);
 
+var reuseLibraryModules = require.context('./reuse/client/test', true, /.unit.spec.js$/);
+reuseLibraryModules.keys().forEach(reuseLibraryModules);
+
 var compLibraryModules = require.context('./componentLibrary/test', true, /.unit.spec.js$/);
 compLibraryModules.keys().forEach(compLibraryModules);
 
