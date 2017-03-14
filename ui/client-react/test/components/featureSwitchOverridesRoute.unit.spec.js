@@ -34,7 +34,7 @@ describe('FeatureSwitchOverridesRoute', () => {
     const props = {
         params: {id: 'fs-1'},
         switches: sampleSwitches,
-        errorStatus: 200,
+        error: null,
         overrides: sampleSwitches[0].overrides,
         getSwitches: () => {},
         setFeatureSwitchOverrides: () => {},

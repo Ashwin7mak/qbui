@@ -26,7 +26,9 @@ module.exports = function(config) {
         // code coverage against all client react code EXCEPT node modules that we have privately forked
         preprocessors: {
             "tests.webpack.js": ["webpack", "sourcemap"],
-            "client-react/src/!(components/node)/**/*.js" : ["coverage"]
+            "client-react/src/!(components/node)/**/*.js" : ["coverage"],
+            "reuse/client/src/**/*.js" : ["coverage"],
+            "governance/src/**/*.js" : ["coverage"]
         },
 
         webpack: {
@@ -39,8 +41,12 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "client-react/test"),
+                            path.resolve(__dirname, "reuse/client/src"),
+                            path.resolve(__dirname, "reuse/client/test"),
                             path.resolve(__dirname, "componentLibrary/src"),
-                            path.resolve(__dirname, "componentLibrary/test")
+                            path.resolve(__dirname, "componentLibrary/test"),
+                            path.resolve(__dirname, "governance/src"),
+                            path.resolve(__dirname, "governance/test")
                         ],
                         exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
@@ -53,6 +59,7 @@ module.exports = function(config) {
                         test: /\.css?$/,
                         include: [
                             path.resolve(__dirname, "client-react/src"),
+                            path.resolve(__dirname, "reuse/client/src"),
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "node_modules/ag-grid"),
                             path.resolve(__dirname, "node_modules/react-notifications"),
@@ -66,7 +73,9 @@ module.exports = function(config) {
                         // but can return a Data Url if the file is smaller than a limit.
                         test: /\.(png|gif)?$/,
                         include: [
-                            path.resolve(__dirname, "client-react/src")
+                            path.resolve(__dirname, "client-react/src"),
+                            path.resolve(__dirname, "reuse/client/src"),
+                            path.resolve(__dirname, "governance/src")
                         ],
                         loader: "url-loader"
                     },
@@ -76,6 +85,8 @@ module.exports = function(config) {
                         loader: "style!css!sass",
                         include: [
                             path.resolve(__dirname, "client-react/src"),
+                            path.resolve(__dirname, "reuse/client/src"),
+                            path.resolve(__dirname, "governance/src"),
                             path.resolve(__dirname, "componentLibrary/src")
                         ]
                     },
@@ -93,13 +104,17 @@ module.exports = function(config) {
                         test: /\.js$/,
                         include: [
                             path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "componentLibrary/src")
+                            path.resolve(__dirname, "reuse/client/src"),
+                            path.resolve(__dirname, "componentLibrary/src"),
+                            path.resolve(__dirname, "governance/src")
                         ],
                         exclude: [
                             nodeModulesPath,
                             nodeComponentsPath,
                             path.resolve(__dirname, "client-react/test"),
-                            path.resolve(__dirname, "componentLibrary/test")
+                            path.resolve(__dirname, "reuse/client/test"),
+                            path.resolve(__dirname, "componentLibrary/test"),
+                            path.resolve(__dirname, "governance/test")
                         ],
                         loader: "istanbul-instrumenter"
                     }
