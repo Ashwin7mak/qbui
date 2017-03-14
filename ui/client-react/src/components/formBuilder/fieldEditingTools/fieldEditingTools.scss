@@ -3,6 +3,15 @@
 .fieldEditingTools {
     transition: opacity 0.4s;
     border-radius: $radius-base;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 310px;
+    // Z-index is set above the field so that delete and preference icons can be selected
+    // TODO:: Modify z-index below (to 0) the field when the field is selected so that the
+    // field itself can be clicked.
+    zIndex: 2;
 
     &.selectedFormElement {
         &:active {
@@ -27,14 +36,17 @@
         }
     }
 
+    .actionIcons {
+        float: right;
+    }
     .deleteFieldIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 5px;
-        right: 35px;
+        top: 14px;
+        right: 40px;
 
         .qbIcon {
-            opacity: 0;
+            opacity: 1;
             transition: color 0.4s;
         }
     }
@@ -42,11 +54,11 @@
     .fieldPreferencesIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 5px;
-        right: 18px;
+        top: 14px;
+        right: 16px;
 
         .qbIcon {
-            opacity: 0;
+            opacity: 1;
             transition: color 0.4s;
         }
     }
@@ -54,7 +66,6 @@
     &.notTouchDevice {
         //No borders, icon, or drag handles are displayed when it is not a touch device
         //Everything shows up on hover
-        border: $stroke-width-thin solid $color-black-400;
         opacity: 0;
 
         .deleteFieldIcon .qbIcon {
@@ -74,7 +85,8 @@
 
     &:hover {
         opacity: 1;
-
+        //background: $color-black-500;
+        //z-index: -1 !important;
         .deleteFieldIcon {
             .qbIcon {
                 opacity: 1;
@@ -102,14 +114,13 @@
     @include small-breakpoint {
         //Drag handles and borders always display during small breakpoints
         //Icons only show up when it is focused
+        width: 100%;
         border-bottom: $stroke-width-thin solid $color-black-400;
 
         .deleteFieldIcon .qbIcon {
             margin-right: $spacing-medium1;
         }
-        .fieldPreferencesIcon .qbIcon {
-            margin-right: 10px;
-        }
+
         //Scrolling activates the hover state and shows the icons
         //I am having the icons opacity set to 0 so it does not show while scrolling
         &:hover {
@@ -161,4 +172,5 @@
     .tipChildWrapper {
         cursor: pointer;
     }
+
 }

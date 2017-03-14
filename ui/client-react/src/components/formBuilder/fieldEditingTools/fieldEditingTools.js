@@ -24,7 +24,7 @@ export class FieldEditingTools extends Component {
             top: 0,
             left: 0,
             height: '250px',
-            width: '250px',
+            width: '100%',
             // Z-index is set above the field so that delete and preference icons can be selected
             // TODO:: Modify z-index below (to 0) the field when the field is selected so that the
             // field itself can be clicked.
@@ -130,7 +130,6 @@ export class FieldEditingTools extends Component {
                 className={classNames.join(' ')}
                 tabIndex="0"
                 ref={this.setPositionOfFieldEditingTools}
-                style={this.state}
                 onClick={this.onClickField}
             >
 

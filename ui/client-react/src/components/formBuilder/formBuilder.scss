@@ -23,14 +23,50 @@
         }
     }
 
+    .droppableField {
+        @include small-breakpoint {
+            margin-right: -13px;
+            margin-left: -25px;
+        }
+    }
+
     .draggableField {
         opacity: 1;
         z-index: 1;
         transition: opacity 0.5s;
+        height: 100px;
 
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
+
+        &:hover {
+            background: $color-black-250;
+            width: 310px;
+            @include small-breakpoint {
+                width: 100%;
+                background: 100%;
+                //margin-left: -18px;
+                padding: 0;
+                margin-right: 0;
+            }
+        }
+        @include small-breakpoint {
+            width: 100%;
+            //background: 100%;
+            //margin-left: -18px;
+        }
+        .formElement .fieldLabel {
+            padding-top: 12px;
+            padding-left: 15px;
+        }
+
+        .cellWrapper {
+            padding-left: 15px;
+        }
+
+
+
     }
 
     .draggableField, .droppableField {
