@@ -8,7 +8,7 @@ import {editRecordStart, editRecordChange} from '../../actions/recordActions';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
 
 //let FluxMixin = Fluxxor.FluxMixin(React);
-let Record = React.createClass({
+export const Record = React.createClass({
     //mixins: [FluxMixin],
     displayName: 'Record',
 

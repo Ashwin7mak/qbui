@@ -7,7 +7,7 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
-import Record from './../record/record';
+import {Record} from './../record/record';
 import {Link} from 'react-router';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';

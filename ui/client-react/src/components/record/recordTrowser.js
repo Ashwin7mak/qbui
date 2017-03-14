@@ -1,7 +1,6 @@
 import React from 'react';
-import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
-import Record from "./record";
+import {Record} from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
@@ -19,7 +18,6 @@ import {HideAppModal} from '../qbModal/appQbModalFunctions';
 import {connect} from 'react-redux';
 import {saveForm, saveFormComplete, syncForm} from '../../actions/formActions';
 import {showErrorMsgDialog, hideErrorMsgDialog} from '../../actions/shellActions';
-//import {updateReportRecord} from '../../actions/reportActions';
 import {editRecordCancel, openRecord, createRecord, updateRecord} from '../../actions/recordActions';
 import {APP_ROUTE, EDIT_RECORD_KEY} from '../../constants/urlConstants';
 import {CONTEXT} from '../../actions/context';
@@ -27,7 +25,6 @@ import SaveOrCancelFooter from '../saveOrCancelFooter/saveOrCancelFooter';
 
 import './recordTrowser.scss';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * trowser containing a record component
@@ -35,7 +32,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * Note: this component has been partially migrated to Redux
  */
 export const RecordTrowser = React.createClass({
-    mixins: [FluxMixin],
 
     propTypes: {
         appId: React.PropTypes.string,
@@ -44,7 +40,6 @@ export const RecordTrowser = React.createClass({
         viewingRecordId: React.PropTypes.string,
         visible: React.PropTypes.bool,
         editForm: React.PropTypes.object,
-        //pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
         errorPopupHidden: React.PropTypes.bool,
         onHideTrowser: React.PropTypes.func.isRequired
@@ -103,7 +98,6 @@ export const RecordTrowser = React.createClass({
 
         const record = this.getRecordFromProps(this.props);
         if (record.navigateAfterSave === true) {
-            // TODO: get from store
             let {appId, tblId} = this.props;
             this.props.router.push(`${APP_ROUTE}/${appId}/table/${tblId}/record/${recId}`);
         }
@@ -234,7 +228,7 @@ export const RecordTrowser = React.createClass({
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
@@ -245,7 +239,7 @@ export const RecordTrowser = React.createClass({
         let params = {
             context: CONTEXT.REPORT.NAV,
             pendEdits: pendEdits,
-            fields: this.props.editForm.formData.fields,
+            fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
             showNotificationOnSuccess: true
         };
@@ -287,11 +281,11 @@ export const RecordTrowser = React.createClass({
      * @returns {Array} of field values for the new record
      */
     handleRecordAdd(recordChanges, formType, next = false, openNewRecord = false) {
-        const flux = this.getFlux();
+        //const flux = this.getFlux();
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
-        if (_.has(this.props, 'reportData.data.fields') && Array.isArray(this.props.reportData.data.fields)) {
+        if (_.has(this.props.reportData, 'data.fields') && Array.isArray(this.props.reportData.data.fields)) {
             this.props.reportData.data.fields.forEach((field) => {
                 colList.push(field.id);
             });
@@ -300,7 +294,7 @@ export const RecordTrowser = React.createClass({
         let params = {
             context: CONTEXT.REPORT.NAV,
             recordChanges: recordChanges,
-            fields: this.props.editForm.formData.fields,
+            fields: _.has(this.props.editForm, 'formData.fields') ? this.props.editForm.formData.fields : {},
             colList: colList,
             showNotificationOnSuccess: true
         };
@@ -472,7 +466,7 @@ export const RecordTrowser = React.createClass({
     },
 
     clearEditsAndClose() {
-        const flux = this.getFlux();
+        //const flux = this.getFlux();
 
         HideAppModal();
         //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
@@ -544,10 +538,8 @@ export const RecordTrowser = React.createClass({
 
 const mapStateToProps = (state) => {
     return {
-        forms: state.forms,
         shell: state.shell,
-        record: state.record,
-        report: state.report
+        record: state.record
     };
 };
 
