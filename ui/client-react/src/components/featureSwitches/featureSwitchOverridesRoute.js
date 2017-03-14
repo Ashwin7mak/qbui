@@ -7,6 +7,8 @@ import PageTitle from '../pageTitle/pageTitle';
 import QBModal from '../qbModal/qbModal';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
+import * as UrlConsts from "../../constants/urlConstants";
 import _ from 'lodash';
 
 import * as Table from 'reactabular-table';
@@ -269,8 +271,8 @@ export class FeatureSwitchOverridesRoute extends React.Component {
         }
     }
     checkAccess(props) {
-        if (props.errorStatus === constants.HttpStatusCode.FORBIDDEN) {
-            WindowLocationUtils.update("/qbase/forbidden");
+        if (props.error && props.error.status === constants.HttpStatusCode.FORBIDDEN) {
+            WindowLocationUtils.update(UrlConsts.FORBIDDEN);
         }
     }
     componentWillReceiveProps(props) {
@@ -292,7 +294,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
             const selectedSize = this.state.selectedIDs.length;
             const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedOverrides")}`;
-            const loaded = this.props.errorStatus === constants.HttpStatusCode.OK;
+            const loaded = this.props.error === null;
             return (
                 <Loader loaded={loaded}>
                     <div className="featureSwitches">
@@ -353,7 +355,7 @@ const mapStateToProps = (state) => {
     return {
         switches: state.featureSwitches.switches,
         overrides: state.featureSwitches.overrides,
-        errorStatus: state.featureSwitches.errorStatus
+        error: state.featureSwitches.errorResponse
     };
 };
 

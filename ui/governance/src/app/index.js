@@ -6,10 +6,18 @@ import {GOVERNANCE_BASE_ROUTE, GOVERNANCE_USERS_ROUTE} from './routes';
 import NavShell from '../navShell/navShell';
 import AccountUsers from '../account/users/AccountUsers';
 
+import {Provider} from 'react-redux';
+import createGovernanceStore from './store';
+
+const store = createGovernanceStore();
+
+
 render((
-    <Router history={browserHistory}>
-        <Route component={NavShell}>
-            <Route path={GOVERNANCE_USERS_ROUTE} component={AccountUsers} />
-        </Route>
-    </Router>
+    <Provider store={store}>
+        <Router history={browserHistory}>
+            <Route component={NavShell}>
+                <Route path={GOVERNANCE_USERS_ROUTE} component={AccountUsers} />
+            </Route>
+        </Router>
+    </Provider>
 ), document.getElementById('content'));
