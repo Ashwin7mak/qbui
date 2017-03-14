@@ -19,4 +19,4 @@ export default {
     error(message, title, callback, priority) {
         NotificationManager.error(message, title, NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME, callback, priority);
     }
-}
+};

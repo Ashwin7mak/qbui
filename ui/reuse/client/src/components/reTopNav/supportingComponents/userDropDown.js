@@ -25,7 +25,7 @@ class UserDropDown extends Component {
         this.renderLocalesList = this.renderLocalesList.bind(this);
     }
 
-    renderLocalesList () {
+    renderLocalesList() {
         const {supportedLocales, changeLocale} = this.props;
 
         if (!changeLocale || !supportedLocales || supportedLocales.length === 0) {
