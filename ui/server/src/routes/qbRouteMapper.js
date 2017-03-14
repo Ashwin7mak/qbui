@@ -306,7 +306,7 @@
         perfLog.init('Get account users', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            accountUsersApi.getAccountUsers(req, req.params.accountID).then(
+            accountUsersApi.getAccountUsers(req, req.params.accountId).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get account Users');

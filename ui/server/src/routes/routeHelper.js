@@ -792,8 +792,8 @@
          * Call .NET handler to return the Current Stack Account Users information
          * @returns {string}
          */
-        getAccountUsersCurrentStack: function(accountID) {
-            return `${getCurrentStackRoot(true)}/governance/{accountID}/users`;
+        getAccountUsersCurrentStack: function(accountId) {
+            return `${getCurrentStackRoot(true)}/governance/{accountId}/users`;
         }
     };
 

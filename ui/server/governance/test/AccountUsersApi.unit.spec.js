@@ -7,7 +7,7 @@ let routeHelper = require('../../../src/routes/routeHelper');
 let accountUsersApi = require('../src/account/users/AccountUsersApi')(config);
 
 /**
- * Unit tests for feature switches apis
+ * Unit tests for Governance Account Users API
  */
 describe("AccountUsers API", function() {
 
@@ -43,9 +43,9 @@ describe("AccountUsers API", function() {
         executeReqStub.restore();
     });
 
-    describe("validate getAccountUsers function", function() {
+    describe("getAccountUsers", ()  => {
 
-        it('success return results', function(done) {
+        it('gets a list of users for the specified account', (done)  => {
 
             executeReqStub.returns(Promise.resolve({'body': '[]'}));
 

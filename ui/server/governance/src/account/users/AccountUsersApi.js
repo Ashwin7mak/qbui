@@ -477,7 +477,7 @@
              * @param useSSL
              * @returns {Promise}
              */
-            getAccountUsers: function(req, accountID) {
+            getAccountUsers: function(req, accountId) {
 
                 return new Promise((resolve, reject) => {
 
@@ -490,7 +490,7 @@
                         // make a request to the current stack to get the results
                         let opts = requestHelper.setOptions(req, false, true);
                         opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                        opts.url = routeHelper.getAccountUsersCurrentStack(accountID);
+                        opts.url = routeHelper.getAccountUsersCurrentStack(accountId);
 
                         requestHelper.executeRequest(req, opts).then(
                             (response) => {
