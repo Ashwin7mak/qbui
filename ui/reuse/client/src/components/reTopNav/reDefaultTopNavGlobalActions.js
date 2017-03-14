@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import ReGlobalAction from '../reGlobalActions/reGlobalActions';
+import ReGlobalAction from '../reGlobalAction/reGlobalAction';
 import UserDropDown from './supportingComponents/userDropDown';
 import ReHelpButton from '../reHelpButton/reHelpButton';
 
@@ -8,8 +8,6 @@ import ReHelpButton from '../reHelpButton/reHelpButton';
 import Locale from '../../../../../client-react/src/locales/locales';
 import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
 // IMPORTING FROM CLIENT REACT
-
-import "./reDefaultTopNavGlobalActions.scss";
 
 const signOutHref = '/qbase/signout';
 
@@ -60,8 +58,10 @@ class ReDefaultTopNav extends Component {
                     <li className={"link globalAction withDropdown"}>
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
+                            changeLocale={this.changeLocale}
                             startTabIndex={this.props.startTabIndex + this.props.actions.length}
                             signOutUser={this.signOutUser}
+                            app={this.props.app}
                         />
                     </li>
                     <li className={"link globalAction"}><ReHelpButton/></li>
@@ -82,8 +82,6 @@ ReDefaultTopNav.propTypes = {
     onSelect: PropTypes.func,
     position: PropTypes.string,
     actions: PropTypes.arrayOf(actionPropType),
-    dropdownIcon: PropTypes.string,
-    dropdownMsg: PropTypes.string,
     startTabIndex: PropTypes.number,
     app: PropTypes.object,
 
@@ -91,8 +89,6 @@ ReDefaultTopNav.propTypes = {
 };
 
 ReDefaultTopNav.defaultProps = {
-    dropdownMsg: 'globalActions.user',
-    dropdownIcon: 'user',
     position: 'bottom',
     startTabIndex: 0,
     actions: [],

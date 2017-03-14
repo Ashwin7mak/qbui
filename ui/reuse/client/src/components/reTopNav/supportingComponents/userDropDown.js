@@ -5,6 +5,8 @@ import DropDown from 'react-bootstrap/lib/Dropdown';
 import QbIcon from '../../../../../../client-react/src/components/qbIcon/qbIcon';
 import {I18nMessage} from '../../../../../../client-react/src/utils/i18nMessage';
 
+import './userDropDown.scss';
+
 // Uses defaults messages an icons specific to a user dropdown in the DefaultTopNav
 const dropDownMessage = 'globalActions.user';
 const dropDownIcon = 'user';
@@ -54,7 +56,7 @@ class UserDropDown extends Component {
         const {startTabIndex, app, signOutUser} = this.props;
 
         return (
-            <DropDown id="nav-right-dropdown">
+            <DropDown id="nav-right-dropdown" className="userDropDown">
                 <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
                     <QbIcon icon={dropDownIcon}/>
                     <span className={"navLabel"}><I18nMessage message={dropDownMessage}/></span>
