@@ -16,7 +16,7 @@ const QbCell = React.createClass({
     },
 
     render() {
-        let classes = ['qbCell'];
+        let classes = [...this.props.classes, 'qbCell'];
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
         }
@@ -24,5 +24,15 @@ const QbCell = React.createClass({
         return <td className={classes.join(' ')} {...this.props} />;
     }
 });
+
+QbCell.propTypes = {
+    classes: React.PropTypes.array,
+    isStickyCell: React.PropTypes.bool
+};
+
+// Provide default val
+QbCell.defaultProps = {
+    classes: []
+};
 
 export default QbCell;
