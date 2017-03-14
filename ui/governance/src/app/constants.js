@@ -1,5 +1,3 @@
-import Configuration from '../config/app.config';
-
 export default {
 
     // REQUEST HEADERS
@@ -9,15 +7,7 @@ export default {
         TICKET          : 'ticket'
     },
 
-    DEFAULT_CONFIG: {
-        apiVersion: 'v1',
-        locale: {
-            supported: ['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us'
-        },
-    },
-
-    BASE_GOVERNANCE_URL: `'/api/governance/${DEFAULT_CONFIG.apiVersion}`,
+    BASE_GOVERNANCE_URL: `/api/governance/v1`,
 
     USERS               : 'users',
 };
