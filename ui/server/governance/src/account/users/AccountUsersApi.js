@@ -481,9 +481,8 @@
 
                 return new Promise((resolve, reject) => {
 
-                    // for now always forcing to use the dummy data until we have the endpoint
-                    config.governanceMock = true;
-                    if (config && !config.governanceMock) {
+                    // if using a config property to point to a mock
+                    if (config && config.useGovernanceMockData) {
                         resolve(dummyData);
 
                     } else {
