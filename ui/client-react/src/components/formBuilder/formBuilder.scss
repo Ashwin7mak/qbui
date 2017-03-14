@@ -54,6 +54,9 @@
 
                 .fieldEditingTools {
                     opacity: 1;
+                    .qbIcon {
+                        opacity: 1;
+                    }
                 }
 
                 @include small-breakpoint {
