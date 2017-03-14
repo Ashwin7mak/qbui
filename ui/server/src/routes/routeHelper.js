@@ -793,8 +793,7 @@
          * @returns {string}
          */
         getAccountUsersCurrentStack: function(accountID) {
-            // TODO:
-            return `${getCurrentStackRoot(true)}/governance/users`;
+            return `${getCurrentStackRoot(true)}/governance/{accountID}/users`;
         }
     };
 
