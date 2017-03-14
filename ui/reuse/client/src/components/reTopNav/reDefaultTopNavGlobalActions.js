@@ -1,132 +1,55 @@
-import React from 'react';
-import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import Dropdown from 'react-bootstrap/lib/Dropdown';
-import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
-import Locale from '../../../../../client-react/src/locales/locales';
-import * as CompConsts from '../../../../../client-react/src/constants/componentConstants';
-import {NotificationManager} from 'react-notifications';
-import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
-import GlobalAction from '../reGlobalActions/reGlobalActions';
+import React, {PropTypes, Component} from 'react';
+import ReGlobalAction from '../reGlobalActions/reGlobalActions';
+import UserDropDown from './supportingComponents/userDropDown';
+import ReHelpButton from '../reHelpButton/reHelpButton';
 
+// IMPORTING FROM CLIENT REACT
+// Needs to be refactored once these components are added to the reuse library
+import Locale from '../../../../../client-react/src/locales/locales';
+import WindowLocationUtils from '../../../../../client-react/src/utils/windowLocationUtils';
+// IMPORTING FROM CLIENT REACT
 
 import "./reDefaultTopNavGlobalActions.scss";
 
-const actionPropType = React.PropTypes.shape({
-    icon: React.PropTypes.string.isRequired,
-    msg: React.PropTypes.string.isRequired,
-    link: React.PropTypes.string
-});
+const signOutHref = '/qbase/signout';
 
 /**
- * The default TopNav global actions that are consistent across functional areas of the qbase app */
-let GlobalActions = React.createClass({
-    propTypes: {
-        linkClass: React.PropTypes.string,
-        onSelect: React.PropTypes.func,
-        position: React.PropTypes.string,
-        actions: React.PropTypes.arrayOf(actionPropType),
-        dropdownIcon: React.PropTypes.string,
-        dropdownMsg: React.PropTypes.string,
-        startTabIndex: React.PropTypes.number,
-        app: React.PropTypes.object,
+ * The default global actions that are consistent across functional areas of the qbase app ecosystem.
+ * This only includes the actions and is not the full TopNav bar. See ReDefaultTopNav for the whole TopNav bar with default actions.
+ * You can pass in additional actions by passing in an array of GlobalAction components with the `actions` props. Check out the
+ * props for other values you can change if you need.
+ * If these default actions don't suit your needs, try creating a custom top nav by using the TopNav and GlobalAction components */
+class ReDefaultTopNav extends Component {
+    constructor(props) {
+        super(props);
 
-        changeLocale: React.PropTypes.func,
-    },
+        this.changeLocale = this.changeLocale.bind(this);
+    }
 
-    getDefaultProps() {
-        return {
-            dropdownMsg: 'globalActions.user',
-            dropdownIcon: 'user',
-            position: 'bottom',
-            startTabIndex: 0,
-            actions: [],
-        };
-    },
-
-    changeLocale: function(locale) {
+    /**
+     * A callback that will fire when the user selects a language from the User dropdown
+     * @param locale
+     */
+    changeLocale(locale) {
         if (this.props.changeLocale) {
             this.props.changeLocale(locale);
         }
-    },
+    }
 
     /**
-     * sign out user using explicit nav
+     * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
     signOutUser() {
-        WindowLocationUtils.update("/qbase/signout");
-    },
-
-    getUserDropdown() {
-        let supportedLocales = Locale.getSupportedLocales();
-        let eventKeyIdx = 20;
-        return (
-            <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"}>
-
-                <a bsRole="toggle"
-                   className={"dropdownToggle globalActionLink"}
-                   tabIndex={this.props.startTabIndex + this.props.actions.length}>
-                    <QBicon icon={this.props.dropdownIcon}/>
-                    <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/> : ''}</span>
-                </a>
-
-                <Dropdown.Menu>
-
-                    <MenuItem eventKey={eventKeyIdx++} disabled>
-                        <I18nMessage message={'header.menu.preferences'}/>
-                    </MenuItem>
-
-                    {this.props.changeLocale && supportedLocales.length > 1 && <MenuItem divider/>}
-
-                    {this.props.changeLocale && supportedLocales.length > 1 ? supportedLocales.map((locale) => {
-                            return <MenuItem href="#" className="localeLink" onSelect={() => this.changeLocale(locale)} title={locale}
-                                             key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage
-                                message={'header.menu.locale.' + locale}/></MenuItem>;
-                        }) : null}
-                    {supportedLocales.length > 1 ? <MenuItem divider/> : null}
-
-                    {this.props.app && <MenuItem disabled><span className="appMenuHeader">{this.props.app.name}</span></MenuItem>}
-                    {this.props.app && <MenuItem divider/>}
-
-                    <MenuItem onClick={this.signOutUser} eventKey={eventKeyIdx++}><I18nMessage
-                        message={'header.menu.sign_out'}/></MenuItem>
-                </Dropdown.Menu>
-            </Dropdown>);
-    },
-
-    getHelpWalkme() {
-        let touch = "ontouchstart" in window;
-        if (touch) {
-            return;
-        }
-        try {
-            WalkMePlayerAPI.toggleMenu();
-        } catch (err) {
-            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
-        }
-    },
-
-    getHelpLink() {
-        return (
-            <a className="dropdownToggle globalActionLink" onClick={this.getHelpWalkme}>
-                <QBicon icon={'help'}/>
-                <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
-            </a>);
-    },
+        WindowLocationUtils.update(signOutHref);
+    }
 
     render() {
-        /**
-         * This removes the hover shadow when the form builder button is disabled
-         * */
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
                     {this.props.children}
-                    <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
-                    <li className={"link globalAction"}>{this.getHelpLink()}</li>
-
                     {this.props.actions && this.props.actions.map((action, index) => (
-                        <GlobalAction
+                        <ReGlobalAction
                             tabIndex={this.props.startTabIndex + index}
                             key={action.msg}
                             linkClass={this.props.linkClass}
@@ -134,10 +57,45 @@ let GlobalActions = React.createClass({
                             action={action}
                         />
                     ))}
+                    <li className={"link globalAction withDropdown"}>
+                        <UserDropDown
+                            supportedLocales={Locale.getSupportedLocales()}
+                            startTabIndex={this.props.startTabIndex + this.props.actions.length}
+                            signOutUser={this.signOutUser}
+                        />
+                    </li>
+                    <li className={"link globalAction"}><ReHelpButton/></li>
                 </ul>
             </div>
         );
     }
+}
+
+const actionPropType = React.PropTypes.shape({
+    icon: React.PropTypes.string.isRequired,
+    msg: React.PropTypes.string.isRequired,
+    link: React.PropTypes.string
 });
 
-export default GlobalActions;
+ReDefaultTopNav.propTypes = {
+    linkClass: PropTypes.string,
+    onSelect: PropTypes.func,
+    position: PropTypes.string,
+    actions: PropTypes.arrayOf(actionPropType),
+    dropdownIcon: PropTypes.string,
+    dropdownMsg: PropTypes.string,
+    startTabIndex: PropTypes.number,
+    app: PropTypes.object,
+
+    changeLocale: React.PropTypes.func,
+};
+
+ReDefaultTopNav.defaultProps = {
+    dropdownMsg: 'globalActions.user',
+    dropdownIcon: 'user',
+    position: 'bottom',
+    startTabIndex: 0,
+    actions: [],
+};
+
+export default ReDefaultTopNav;
