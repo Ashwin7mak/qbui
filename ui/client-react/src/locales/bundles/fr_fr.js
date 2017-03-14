@@ -529,6 +529,7 @@ export default {
             overridesYes: "Oui",
             overridesNo: "Non",
             overrideCreated: "Création d'une substitution",
+            overridesUpdated: "{num} Remplacements modifié",
             overrideUpdated: "Remplacement modifié",
             overridesDeleted: "Annulation supprimée",
             selectedOverrides: "Remplacements sélectionnés",
@@ -536,6 +537,5 @@ export default {
             featureNameExists: "Les noms des entités doivent être uniques",
             featureNameEmpty: "Les noms des entités doivent être blanc"
         }
-
     }
 };

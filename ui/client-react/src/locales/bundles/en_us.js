@@ -536,6 +536,7 @@ export default {
             overridesYes: "Yes",
             overridesNo: "No",
             overrideCreated: "Override created",
+            overridesUpdated: "{num} override(s) updated",
             overrideUpdated: "Override updated",
             overridesDeleted: "Override(s) deleted",
             selectedOverrides: "Selected overrides(s)",
