@@ -51,7 +51,7 @@ describe('Account Users Actions Tests', () => {
         constructor() { }
 
         // resolve the promise with responseData
-        getAccountUsers() {
+        getAccountUsers(id) {
             return Promise.resolve({data: ACCOUNT_USERS_DATA});
         }
     }
@@ -73,10 +73,10 @@ describe('Account Users Actions Tests', () => {
         const store = mockStore({});
 
         // expect the dummy data when the fetchAccountUsers is called
-        return store.dispatch(actions.fetchAccountUsers()).then(
+        return store.dispatch(actions.fetchAccountUsers(1)).then(
 
             () => {
-                expect(store.getActions()).toEqual(expectedActions);
+                expect(store.getActions(1)).toEqual(expectedActions);
                 done();
             },
 
