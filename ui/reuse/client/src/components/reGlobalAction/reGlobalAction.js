@@ -1,14 +1,17 @@
 import React, {PropTypes} from 'react';
 import {Link} from 'react-router';
-import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
+import ReIcon from '../reIcon/reIcon';
+
+// IMPORTED FROM CLIENT REACT
 import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+// IMPORTED FROM CLIENT REACT
 
 /**
  * A global action (ex. 'Help' with an icon and an associated link) */
 const GlobalAction = props => (
     <li className={"link globalAction"}>
         <Link className={"globalActionLink"} tabIndex={props.tabIndex} to={props.action.link} onClick={props.onSelect}>
-            <QBicon icon={props.action.icon}/>
+            <ReIcon icon={props.action.icon}/>
             <span className={"navLabel"}><I18nMessage message={props.action.msg}/></span>
         </Link>
     </li>

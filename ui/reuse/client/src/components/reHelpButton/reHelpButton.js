@@ -1,8 +1,8 @@
 import React, {PropTypes, Component} from 'react';
 import ReNotificationManager from '../../scripts/reNotificationManager';
+import ReIcon from '../reIcon/reIcon';
 
 // IMPORTS FROM CLIENT REACT
-import QbIcon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 import Device from '../../../../../client-react/src/utils/device';
 import Locale from '../../../../../client-react/src/locales/locales';
 import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
@@ -30,7 +30,7 @@ function getHelpWalkme() {
  */
 const ReHelpButton = () => (
     <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
-        <QbIcon icon={'help'}/>
+        <ReIcon icon={'help'}/>
         <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
     </a>
 );

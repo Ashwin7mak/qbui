@@ -1,10 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
-
+import ReIcon from '../reIcon/reIcon';
 
 // IMPORTED FROM CLIENT REACT
-import QBicon from '../../../../../client-react/src/components/qbIcon/qbIcon';
 import QbTooltip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
 // IMPORTED FROM CLIENT REACT
 
@@ -43,7 +42,7 @@ class ReTopNav extends Component {
                     <div className="navGroup left">
                         <ButtonGroup className="navItem">
                             <Button tabIndex="1"  className="iconLink toggleNavButton" onClick={onNavClick}>
-                                <QBicon icon="hamburger" />
+                                <ReIcon icon="hamburger" />
                             </Button>
 
                             {this.getTopTitle()}
@@ -54,12 +53,12 @@ class ReTopNav extends Component {
                         <ButtonGroup className="navItem">
                             <QbTooltip i18nMessageKey="unimplemented.search" location="bottom">
                                 <Button tabIndex="2" className="disabled">
-                                    <QBicon icon="search" />
+                                    <ReIcon icon="search" />
                                 </Button>
                             </QbTooltip>
 
                             <QbTooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                                <Button tabIndex="3" className="disabled"><QBicon icon="star-full" /></Button>
+                                <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
                             </QbTooltip>
                         </ButtonGroup>
                     </div>

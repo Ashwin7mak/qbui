@@ -1,9 +1,11 @@
 import React, {PropTypes, Component} from 'react';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropDown from 'react-bootstrap/lib/Dropdown';
+import ReIcon from '../../reIcon/reIcon';
 
-import QbIcon from '../../../../../../client-react/src/components/qbIcon/qbIcon';
+// IMPORTED FROM CLIENT REACT
 import {I18nMessage} from '../../../../../../client-react/src/utils/i18nMessage';
+// IMPORTED FROM CLIENT REACT
 
 import './userDropDown.scss';
 
@@ -58,7 +60,7 @@ class UserDropDown extends Component {
         return (
             <DropDown id="nav-right-dropdown" className="userDropDown">
                 <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
-                    <QbIcon icon={dropDownIcon}/>
+                    <ReIcon icon={dropDownIcon}/>
                     <span className={"navLabel"}><I18nMessage message={dropDownMessage}/></span>
                 </a>
 
