@@ -38,12 +38,12 @@
     .deleteFieldIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 14px;
+        top: 10px;
         right: 40px;
 
         .qbIcon {
             color: $color-black-600;
-            opacity: 1;
+            opacity: 0;
             transition: color 0.4s;
         }
     }
@@ -51,12 +51,12 @@
     .fieldPreferencesIcon {
         font-size: $size-iconfont-small;
         position: absolute;
-        top: 14px;
+        top: 10px;
         right: 16px;
 
         .qbIcon {
             color: $color-black-600;
-            opacity: 1;
+            opacity: 0;
             transition: color 0.4s;
         }
     }
@@ -85,6 +85,9 @@
         //Icons and borders only display during focus
         //Drag handle always show
         border: none;
+        //.dragHandle {
+        //    opacity: 1;
+        //}
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-medium1;
         }
@@ -100,52 +103,16 @@
             margin-right: $spacing-medium1;
         }
 
-        //Scrolling activates the hover state and shows the icons
-        //I am having the icons opacity set to 0 so it does not show while scrolling
-        &:hover {
-            .deleteFieldIcon {
-                .qbIcon {
-                    opacity: 0;
-                }
-            }
-
-            .fieldPreferencesIcon {
-                .qbIcon {
-                    opacity: 0;
-                }
+        //Scrolling triggers hover on touch, this hides the icon during scroll
+        &:hover{
+            .qbIcon {
+                opacity: 0;
             }
         }
     }
 
     &:focus {
         outline: none;
-    }
-
-    &.active {
-        opacity: 1;
-        @include dragpreview-active-gradient;
-    }
-
-    &:active {
-        @include dragpreview-active-gradient;
-        //Need to remove the z index temporarily to only show the field and the field label for active
-        //z-index: 0 !important;
-
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 0;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 0;
-            }
-        }
-
-        .dragHandle {
-            opacity: 0;
-        }
     }
 
     .tipChildWrapper {

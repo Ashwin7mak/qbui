@@ -27,7 +27,7 @@
         @include small-breakpoint {
             //This is set for mobile, this way the select box and bottom border
             //will stretch across the whole screen
-            margin-right: -13px;
+            margin-right: -15px;
             margin-left: -25px;
         }
     }
@@ -54,6 +54,22 @@
 
                 .fieldEditingTools {
                     opacity: 1;
+                }
+
+                @include small-breakpoint {
+                    background: none;
+                }
+            }
+
+            &.active {
+                opacity: 1;
+                @include dragpreview-active-gradient;
+            }
+
+            &:active {
+                @include dragpreview-active-gradient;
+                .fieldEditingTools {
+                    opacity: 0;
                 }
             }
 
