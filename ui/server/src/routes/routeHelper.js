@@ -792,7 +792,8 @@
          * Call .NET handler to return the Current Stack Account Users information
          * @returns {string}
          */
-        getLegacyGovernanceEndpoint: function() {
+        getAccountUsersCurrentStack: function(accountID) {
+            // TODO:
             return `${getCurrentStackRoot(true)}/governance/users`;
         }
     };

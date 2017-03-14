@@ -6,7 +6,7 @@ class AccountUsers extends Component {
         return (
             <div className="governanceMain">
                 <h1>Welcome to governance!</h1>
-                <AccountUsersGrid />
+                <AccountUsersGrid accountID={this.props.params.accountID}/>
             </div>
         );
     }

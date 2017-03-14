@@ -477,7 +477,7 @@
              * @param useSSL
              * @returns {Promise}
              */
-            getAccountUsers: function(req, useSSL) {
+            getAccountUsers: function(req, accountID) {
 
                 return new Promise((resolve, reject) => {
 
@@ -488,9 +488,9 @@
                     } else {
 
                         // make a request to the current stack to get the results
-                        let opts = requestHelper.setOptions(req, false, useSSL);
+                        let opts = requestHelper.setOptions(req, false, true);
                         opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                        opts.url = routeHelper.getLegacyGovernanceEndpoint();
+                        opts.url = routeHelper.getAccountUsersCurrentStack(accountID);
 
                         requestHelper.executeRequest(req, opts).then(
                             (response) => {
