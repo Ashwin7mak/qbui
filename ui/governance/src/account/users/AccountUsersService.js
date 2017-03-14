@@ -1,11 +1,12 @@
 import BaseService from '../../../../client-react/src/services/baseService';
+import constants from '../../app/constants';
 
 class AccountUsersService extends BaseService {
 
     constructor() {
         super();
         this.API = {
-            GET_USERS               : "https://jsonplaceholder.typicode.com/users"
+            GET_USERS               : `${constants.BASE_GOVERNANCE_URL}/${constants.USERS}`
         };
     }
 
@@ -18,3 +19,4 @@ class AccountUsersService extends BaseService {
 }
 
 export default AccountUsersService;
+

@@ -38,11 +38,14 @@
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
     let REGEX_ADMIN_ROUTE = /admin(.*)?$/i;
 
+
     /**
-     *
+     * Root endpoint of current stack
+     * .NET handlers are /qb/
+     * C++/SBServer handlers are /db/
      */
-    function getLegacyRoot() {
-        return '/db';
+    function getCurrentStackRoot(isDotNet = true) {
+        return isDotNet ? '/qb' : '/db';
     }
 
     /**
@@ -784,6 +787,14 @@
         getFeatureSwitchesRoute: function(url) {
             return getAWSFeatureSwitchesRoute(url);
         },
+
+        /**
+         * Call .NET handler to return the Current Stack Account Users information
+         * @returns {string}
+         */
+        getLegacyGovernanceEndpoint: function() {
+            return `${getCurrentStackRoot(true)}/governance/users`;
+        }
     };
 
 }());
