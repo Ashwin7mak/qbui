@@ -1,10 +1,9 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../reuse/client/src/scripts/reNotificationManager';
 import UrlUtils from '../../utils/urlUtils';
 import {WALKME_ID_FOR_LARGE} from '../../constants/urlConstants';
-import * as CompConsts from '../../constants/componentConstants';
 
 import LaunchTourImg from './Launch-tour.png';
 import GuideMeImg from './Guide-me.png';
@@ -35,7 +34,7 @@ const AppHomePage = React.createClass({
         try {
             WalkMeAPI.startWalkthruById(WALKME_ID_FOR_LARGE);
         } catch (err) {
-            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.info(Locale.getMessage('missingWalkMe'), '');
         }
     },
 
