@@ -14,6 +14,7 @@ class ReTopNav extends Component {
         super(props);
 
         this.getTopTitle = this.getTopTitle.bind(this);
+        this.renderCenterGlobalActions = this.renderCenterGlobalActions.bind(this);
     }
 
     getTopTitle() {
@@ -30,6 +31,25 @@ class ReTopNav extends Component {
         return null;
     }
 
+    renderCenterGlobalActions() {
+        if (this.props.centerGlobalActions) {
+            return this.props.centerGlobalActions;
+        }
+
+        return (
+            <ButtonGroup className="navItem">
+                <QbTooltip i18nMessageKey="unimplemented.search" location="bottom">
+                    <Button tabIndex="2" className="disabled">
+                        <ReIcon icon="search" />
+                    </Button>
+                </QbTooltip>
+
+                <QbTooltip i18nMessageKey="unimplemented.favorites" location="bottom">
+                    <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
+                </QbTooltip>
+            </ButtonGroup>
+        );
+    }
 
     render() {
         let {showOnSmall, onNavClick, globalActions} = this.props;
@@ -50,17 +70,7 @@ class ReTopNav extends Component {
                     </div>
 
                     <div className="navGroup center">
-                        <ButtonGroup className="navItem">
-                            <QbTooltip i18nMessageKey="unimplemented.search" location="bottom">
-                                <Button tabIndex="2" className="disabled">
-                                    <ReIcon icon="search" />
-                                </Button>
-                            </QbTooltip>
-
-                            <QbTooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                                <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
-                            </QbTooltip>
-                        </ButtonGroup>
+                        {this.renderCenterGlobalActions()}
                     </div>
 
                     <div className="navGroup right">
