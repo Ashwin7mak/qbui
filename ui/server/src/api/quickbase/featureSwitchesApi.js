@@ -9,7 +9,7 @@
     let log = require('../../logger').getLogger();
     let _ = require('lodash');
 
-    module.exports = function(config) {
+    module.exports = function(config, useMockStore) {
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
 
@@ -39,20 +39,76 @@
                 requestHelper = requestHelperOverride;
             },
 
-            getFeatureSwitches: function(req, useSSL) {
+            /**
+             * get the request options (URL etc) for calling AWS feature switch APIs
+             * @param req incoming request
+             * @param isOverrides append /featureSwitchOverrides
+             * @param switchId feature switch ID
+             * @param overrideId feature switch override ID
+             * @param bulkIds append /bulk
+             * @returns {{method: (string|string), body: string, headers: {}}}
+             */
+            getFeatureSwitchesRequestOpts(req, isOverrides, switchId, overrideId, isBulk) {
+
+                const opts = {
+                    method: req.method, // copy method from incoming request
+                    body: req.rawBody,  // copy the body
+                    headers: {}         // incoming headers are incompatible with AWS
+                };
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.cookies = req.cookies; // forward the cookies
+
+                let featureSwitchesUrl;
+
+                if (isBulk) {
+                    featureSwitchesUrl = routeHelper.getFeatureSwitchesBulkRoute(req.url, isOverrides, switchId);
+                } else {
+                    featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url, isOverrides, switchId, overrideId);
+                }
+
+                opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
+
+                return opts;
+            },
+
+            /**
+             * get the request options for getting the feature switch states
+             * @param req
+             * @param realmId
+             * @param appId
+             * @returns {{method: (string|string), body: string, headers: {}}}
+             */
+            getFeatureSwitchStatesRequestOpts(req, realmId, appId) {
+
+                const opts = {
+                    method: req.method,
+                    body: req.rawBody,
+                    headers: {}
+                };
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.cookies = req.cookies;
+
+                const featureStatesUrl = routeHelper.getFeatureSwitchStatesRoute(req.url, realmId, appId);
+
+                opts.url = requestHelper.getRequestAWSHost() + featureStatesUrl;
+
+                return opts;
+            },
+
+            /**
+             * get feature switches and overrides for admins
+             * @param req
+             * @returns {Promise}
+             */
+            getFeatureSwitches: function(req) {
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.getFeatureSwitches(req));
                     } else {
-                        let opts = requestHelper.setOptions(req, false, useSSL);
-                        opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                        const featureSwitchesUrl = routeHelper.getFeatureSwitchesRoute(req.url);
-
-                        opts.url = requestHelper.getRequestAWSHost() + featureSwitchesUrl;
+                        let opts = this.getFeatureSwitchesRequestOpts(req);
 
                         //  make the api request to get the app rights
-                        requestHelper.executeRequest(req, opts).then(
+                        requestHelper.executeRequest({}, opts).then(
                             (response) => {
                                 let featureSwitches = JSON.parse(response.body);
                                 resolve(featureSwitches);
@@ -69,87 +125,234 @@
                 });
             },
 
+            /**
+             * create a new feature switch
+             * @param req
+             * @returns {Promise}
+             */
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.createFeatureSwitch(req));
 
                     } else {
-                        resolve(''); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let feature = JSON.parse(response.body);
+                                resolve(feature);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.createFeatureSwitch(): Error creating feature switch.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.createFeatureSwitch(): unexpected error creating feature switch.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
 
+            /**
+             * update a feature switch
+             * @param req
+             * @param featureSwitchId
+             * @returns {Promise}
+             */
             updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.updateFeatureSwitch(req, featureSwitchId));
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, false, featureSwitchId);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.updateFeatureSwitch(): Error updating feature switch.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.updateFeatureSwitch(): unexpected error updating feature switch.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
 
+            /**
+             * delete a set of feature switches
+             * @param req
+             * @param ids array of feature switch IDs
+             * @returns {Promise}
+             */
             deleteFeatureSwitches: function(req, ids) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
-                        resolve(mockApi.deleteFeatureSwitches(req, ids));
+                    if (useMockStore) {
+                        resolve(mockApi.deleteFeatureSwitches(req));
                     } else {
-                        resolve(); // todo: call lambda
+
+                        let opts = this.getFeatureSwitchesRequestOpts(req, false, null, null, true);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.deleteFeatureSwitches(): Error deleting feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.deleteFeatureSwitches(): unexpected error deleting feature switches.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
 
+            /**
+             * create a new feature switch override
+             * @param req
+             * @param featureSwitchId ID of feature switch to create override for
+             * @returns {Promise}
+             */
             createFeatureSwitchOverride: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
                         resolve(mockApi.createFeatureSwitchOverride(req, featureSwitchId));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let override = JSON.parse(response.body);
+                                resolve(override);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.createFeatureSwitchOverride(): Error creating feature override.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.createFeatureSwitchOverride(): unexpected error creating feature override.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
 
+            /**
+             * update existing feature switch override
+             * @param req
+             * @param featureSwitchId feature switch ID that owns the override
+             * @param overrideId
+             * @returns {Promise}
+             */
             updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
+                    if (useMockStore) {
 
                         resolve(mockApi.updateFeatureSwitchOverride(req, featureSwitchId, overrideId));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, overrideId);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.updateFeatureSwitchOverride(): Error updating feature override.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.updateFeatureSwitchOverride(): unexpected error updating feature override.', ex, true);
+                            reject(ex);
+                        });
+
                     }
                 });
             },
 
-            deleteFeatureSwitchOverrides: function(req, featureSwitchId, ids) {
+            /**
+             * delete a set of feature switch overrides
+             * @param req
+             * @param featureSwitchId
+             * @param ids array of feature switch overrides to delete
+             * @returns {Promise}
+             */
+            deleteFeatureSwitchOverrides: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    if (config && config.featureSwitchesMockData) {
-                        resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId, ids));
+                    if (useMockStore) {
+                        resolve(mockApi.deleteFeatureSwitchOverrides(req, featureSwitchId));
 
                     } else {
-                        resolve(); // todo: call lambda
+                        let opts = this.getFeatureSwitchesRequestOpts(req, true, featureSwitchId, null, true);
+
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                resolve();
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.deleteFeatureSwitchOverrides(): Error deleting feature overrides.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.deleteFeatureSwitchOverrides(): unexpected error deleting feature overrides.', ex, true);
+                            reject(ex);
+                        });
                     }
                 });
             },
 
+            /**
+             * get feature switch states for realm (and app)
+             * @param req
+             * @param appId get states based on the app (optional)
+             * @returns {Promise}
+             */
             getFeatureSwitchStates: function(req, appId) {
                 return new Promise((resolve, reject) => {
-                    let states = {};
-
-                    if (config && config.featureSwitchesMockData) {
-                        resolve(mockApi.getFeatureSwitchStates(req, appId));
-                    } else {
-                        // todo: call lambda
+                    let realmId = null;
+                    let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
+                    if (ticketCookie) {
+                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
                     }
+                    if (useMockStore) {
+                        resolve(mockApi.getFeatureSwitchStates(req, realmId, appId));
+                    } else {
+                        let opts = this.getFeatureSwitchStatesRequestOpts(req, realmId, appId);
 
-                    resolve(states);
+                        //  make the api request to get the app rights
+                        requestHelper.executeRequest({}, opts).then(
+                            (response) => {
+                                let featureStates = JSON.parse(response.body);
+                                resolve(featureStates);
+                            },
+                            (error) => {
+                                log.error({req: req}, "getFeatureSwitches.getFeatureSwitchStates(): Error retrieving feature switches.");
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('getFeatureSwitches.getFeatureSwitchStates(): unexpected error retrieving feature switches.', ex, true);
+                            reject(ex);
+                        });
+                    }
                 });
             }
         };

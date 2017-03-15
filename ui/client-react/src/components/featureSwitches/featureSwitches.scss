@@ -1,7 +1,25 @@
 @import '../../../src/assets/css/qbVariables';
 
+.featureSwitchesLoader {
+    display: flex;
+}
+
 .featureSwitches {
     margin: 20px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+
+    .top, .bottom {
+        flex: 0 0 auto;
+    }
+    .bottom {
+        margin: 20px 0;
+    }
+    .main {
+        flex: 1 1 auto;
+        overflow-y: auto;
+    }
 
     button {
         margin-right: 10px;
@@ -15,12 +33,12 @@
     }
 
     .globalButtons {
-        margin-top: 30px;
+        padding: 20px 0;
     }
 }
 
 .featureSwitchTable {
-    margin-top: 20px;
+
     width: 100%;
     table-layout: fixed;
     tbody tr:hover, tr:nth-child(odd):hover {
@@ -37,6 +55,9 @@
     tbody td {
         border-top: 1px solid $grid-line-color;
 
+    }
+    tbody tr:last-child td {
+        border-bottom: 1px solid $grid-line-color;
     }
 
     th:first-child,
