@@ -3,8 +3,6 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
-//import Fluxxor from 'fluxxor';
-//let FluxMixin = Fluxxor.FluxMixin(React);
 
 import './qbErrorMessage.scss';
 
@@ -14,8 +12,6 @@ let logger = new Logger();
  * QBErrorMessage displays a list of passed-in errors
  */
 let QBErrorMessage = React.createClass({
-    //mixins: [FluxMixin],
-
     propTypes: {
         // Required, control this property to show or hidden error message popup.
         hidden: React.PropTypes.bool.isRequired,
