@@ -1,4 +1,4 @@
-// import QbIcon from '../../../client-react/src/components/qbIcon/qbIcon';
+// import ReIcon from '../../../reuse/client/src/components/reIcon/reIcon';
 // This is a basic example for the React playground
 // Please update to include other properties or states for your component
 
@@ -11,7 +11,7 @@ var BasicQBModalExample = React.createClass({
             criticalAlertWithLongTextOpen: false,
             successQBModalOpen: false,
             singleButtonQBModal: false,
-            qbIconTitleBodyMessage: false,
+            reIconTitleBodyMessage: false,
             titleBodyMessageTwoButtons: false
         };
     },
@@ -36,8 +36,8 @@ var BasicQBModalExample = React.createClass({
         this.setState({singleButtonQBModal: !this.state.singleButtonQBModal});
     },
 
-    qbIconTitleBodyMessage() {
-        this.setState({qbIconTitleBodyMessage: !this.state.qbIconTitleBodyMessage});
+    reIconTitleBodyMessage() {
+        this.setState({reIconTitleBodyMessage: !this.state.reIconTitleBodyMessage});
     },
 
     titleBodyMessageTwoButtons() {
@@ -51,7 +51,7 @@ var BasicQBModalExample = React.createClass({
             criticalAlertWithLongTextOpen: false,
             successQBModalOpen: false,
             singleButtonQBModal: false,
-            qbIconTitleBodyMessage: false,
+            reIconTitleBodyMessage: false,
             titleBodyMessageTwoButtons: false});
     },
 
@@ -80,9 +80,9 @@ var BasicQBModalExample = React.createClass({
                 <div style={{paddingTop:"12px"}}>
                     <button onClick={this.singleButtonQBModal}>Show Single Button Modal</button>
                 </div>
-                {/*Show qbIcon Title bodyMessage*/}
+                {/*Show reIcon Title bodyMessage*/}
                 <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.qbIconTitleBodyMessage}>Show qbIcon Title bodyMessage Modal</button>
+                    <button onClick={this.reIconTitleBodyMessage}>Show reIcon Title bodyMessage Modal</button>
                 </div>
                 {/*Show Title bodyMessage Two Buttons*/}
                 <div style={{paddingTop:"12px"}}>
@@ -149,10 +149,10 @@ var BasicQBModalExample = React.createClass({
                         bodyMessage="Body Message"
                         title="Title"/>
                 </div>
-                {/*qbIcon Title bodyMessage*/}
+                {/*reIcon Title bodyMessage*/}
                 <div>
                     <QBModal
-                        show={this.state.qbIconTitleBodyMessage}
+                        show={this.state.reIconTitleBodyMessage}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
                         leftButtonName="Left Button"

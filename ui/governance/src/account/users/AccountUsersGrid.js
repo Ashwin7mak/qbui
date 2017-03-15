@@ -10,41 +10,44 @@ import '../../../../client-react/src/components/dataTable/qbGrid/qbGrid.scss';
 import {connect} from 'react-redux';
 import * as AccountUsersActions from './AccountUsersActions';
 
+// Realm/User/Account Flag constants
 const DeactivatedFlag = 0x00000040;
 const DeniedFlag = 0x0008;
 const CanCreateAppFlag = 0x0004;
 const RealmApprovedFlag = 0x0004;
 const RegisteredFlag = 0x0010;
 
+// Helper Flag Functions
 const HasFlag = (bits, flag) => (bits & flag) !== 0;
 const IsDeactivated = cellData => HasFlag(cellData.userBasicFlags, DeactivatedFlag);
 const IsDenied = cellData => HasFlag(cellData.realmDirectoryFlags, DeniedFlag);
 const CanCreateApps = cellData => HasFlag(cellData.accountTrusteeFlags, CanCreateAppFlag);
 const IsApprovedInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RealmApprovedFlag);
-const IsRegisteredInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, RegisteredFlag);
+const HasAnyRealmPermissions = cellData => cellData.realmDirectoryFlags !== 0;
+const HasAnySystemPermissions = cellData => cellData.systemRights !== 0;
+
+// Render Helpers
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
-/**
- * Columns for the grid
- */
+// Column Definitions
 const columns = [
     {
         property: 'firstName',
         header: {
-            label: 'First Name',
+            label: 'First Name'
         }
     },
     {
         property: 'lastName',
         header: {
-            label: 'Last Name',
+            label: 'Last Name'
         },
     },
     {
         property: 'email',
         header: {
-            label: 'Email',
+            label: 'Email'
         },
         props: {
             style: {
@@ -56,7 +59,7 @@ const columns = [
     {
         property: 'userName',
         header: {
-            label: 'User Name',
+            label: 'User Name'
         },
         props: {
             style: {
@@ -68,7 +71,7 @@ const columns = [
     {
         property: 'lastAccess',
         header: {
-            label: 'Last Access',
+            label: 'Last Access'
         },
         cell: {
             formatters: [
@@ -76,7 +79,7 @@ const columns = [
                     if (IsTimeNull(lastAccessString)) {
                         return 'never';
                     } else {
-                        return moment(lastAccessString).fromNow();
+                        return moment(lastAccessString).format("MMMM D YYYY");
                     }
                 }
             ]
@@ -85,13 +88,41 @@ const columns = [
     {
         property: 'hasAppAccess',
         header: {
-            label: 'Paid Seat?',
+            label: 'QuickBase Access Status'
         },
         cell: {
             formatters: [
                 (hasAppAccess, cellInfo) => {
-                    const isPaidSeat = hasAppAccess && !(IsDeactivated(cellInfo.rowData) || IsDenied(cellInfo.rowData));
-                    return RenderBoolColumn(isPaidSeat);
+                    if (IsDeactivated(cellInfo.rowData)) {
+                        return "Deactivated";
+                    } else if (IsDenied(cellInfo.rowData)) {
+                        return "Denied";
+                    } else if (HasAnySystemPermissions(cellInfo.rowData)) {
+                        return "QuickBase Staff";
+                    } else if (hasAppAccess) {
+                        return "Paid Seat";
+                    } else {
+                        return "";
+                    }
+                }
+            ]
+        }
+    },
+    {
+        property: 'lastAccess',
+        header: {
+            label: 'Inactive?'
+        },
+        cell: {
+            formatters: [
+                (lastAccessString, cellInfo) => {
+                    if (IsTimeNull(lastAccessString)) {
+                        return RenderBoolColumn(false);
+                    } else {
+                        const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
+                        return RenderBoolColumn(daysSinceLastAccess >= 180);
+                    }
+
                 }
             ]
         },
@@ -105,7 +136,7 @@ const columns = [
     {
         property: 'numGroupsMember',
         header: {
-            label: 'In Any Group?',
+            label: 'In Any Group?'
         },
         cell: {
             formatters: [
@@ -124,7 +155,7 @@ const columns = [
     {
         property: 'numGroupsManaged',
         header: {
-            label: 'Group Manager?',
+            label: 'Group Manager?'
         },
         cell: {
             formatters: [
@@ -143,7 +174,7 @@ const columns = [
     {
         property: 'accountTrusteeFlags',
         header: {
-            label: 'Can create apps?',
+            label: 'Can create apps?'
         },
         cell: {
             formatters: [
@@ -162,7 +193,7 @@ const columns = [
     {
         property: 'numAppsManaged',
         header: {
-            label: '# App Managed',
+            label: '# Apps Managed'
         },
         props: {
             style: {
@@ -173,7 +204,26 @@ const columns = [
     {
         property: 'realmDirectoryFlags',
         header: {
-            label: 'Realm Approved?',
+            label: 'In Realm Directory?'
+        },
+        cell: {
+            formatters: [
+                (flags, cellInfo) => {
+                    return RenderBoolColumn(HasAnyRealmPermissions(cellInfo.rowData));
+                }
+            ]
+        },
+        props: {
+            classes: ['qbIconOnlyCell'],
+            style: {
+                maxWidth: 100
+            }
+        }
+    },
+    {
+        property: 'realmDirectoryFlags',
+        header: {
+            label: 'Realm Approved?'
         },
         cell: {
             formatters: [
@@ -188,73 +238,29 @@ const columns = [
                 maxWidth: 100
             }
         }
-    },
-    {
-        property: 'realmDirectoryFlags',
-        header: {
-            label: 'Denied?',
-        },
-        cell: {
-            formatters: [
-                (flags, cellInfo) => {
-                    return RenderBoolColumn(IsDenied(cellInfo.rowData));
-                }
-            ]
-        },
-        props: {
-            classes: ['qbIconOnlyCell'],
-            style: {
-                maxWidth: 100
-            }
-        }
-    },
-    {
-        property: 'userBasicFlags',
-        header: {
-            label: 'Deactivated?',
-        },
-        cell: {
-            formatters: [
-                (flags, cellInfo) => {
-                    return RenderBoolColumn(IsDeactivated(cellInfo.rowData));
-                }
-            ]
-        },
-        props: {
-            classes: ['qbIconOnlyCell'],
-            style: {
-                maxWidth: 100
-            }
-        }
-    },
-    {
-        property: 'lastAccess',
-        header: {
-            label: 'Inactive?',
-        },
-        cell: {
-            formatters: [
-                (lastAccessString, cellInfo) => {
-                    if (IsTimeNull(lastAccessString)) {
-                        return '';
-                    }
-                    const isRegistered = IsRegisteredInRealm(cellInfo.rowData);
-                    const daysSinceLastAccess = moment().diff(lastAccessString, 'days');
-                    return RenderBoolColumn(isRegistered && daysSinceLastAccess >= 90);
-                }
-            ]
-        },
-        props: {
-            classes: ['qbIconOnlyCell'],
-            style: {
-                maxWidth: 100
-            }
-        }
-    },
+    }
 ];
 
+// Sub-component pieces we will be using to override React Tabular's default components
+const tableSubComponents = {
+    header: {
+        cell: QbHeaderCell
+    },
+    body: {
+        row: QbRow,
+        cell: QbCell
+    }
+};
+
+// Helper function to return additional props to add to a row element
+const onRowFn = (row) => {
+    return {
+        className: 'qbRow'
+    };
+};
+
 /**
- * Represents the Grid Component
+ * Renders the grid portion of the AccountUsers view
  */
 class AccountUsersGrid extends Component {
 
@@ -263,10 +269,10 @@ class AccountUsersGrid extends Component {
     }
 
     /**
-     * After the component mounts, retrieve the users for the account
+     * get users whenever the component mounts
      */
     componentDidMount() {
-        this.props.fetchAccountUsers(this.props.accountId);
+        this.props.fetchAccountUsers();
     }
 
     render() {
@@ -275,26 +281,14 @@ class AccountUsersGrid extends Component {
                 ref="qbGridTable"
                 className="qbGrid"
                 columns={columns}
-                components={{
-                    header: {
-                        cell: QbHeaderCell
-                    },
-                    body: {
-                        row: QbRow,
-                        cell: QbCell
-                    }
-                }}
+                components={tableSubComponents}
             >
                 <Table.Header className="qbHeader" />
 
                 <Table.Body className="qbTbody"
                             rows={this.props.users}
                             rowKey="uid"
-                            onRow={(row) => {
-                                return {
-                                    className: 'qbRow'
-                                };
-                            }}
+                            onRow={onRowFn}
                 />
             </Table.Provider>
         );

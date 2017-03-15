@@ -9,4 +9,4 @@ export const FEATURE_DESCRIPTION_KEY = 'description';
 export const OVERRIDE_ID_KEY = 'id';
 export const OVERRIDE_TYPE_KEY = 'entityType';
 export const OVERRIDE_VALUE_KEY = 'entityValue';
-export const OVERRIDE_ON_KEY = 'on';
+export const OVERRIDE_ON_KEY = 'overrideStateOn';

@@ -22,8 +22,10 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
+
+    let FEATURE_SWITCHES = 'featureSwitches';
+    let FEATURE_SWITCH_STATES = FEATURE_SWITCHES + '/status';
     let WHOAMI = 'whoami';
-    let FEATURE_SWITCHES = 'featureSwitch';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -160,24 +162,6 @@
     }
 
     /**
-     *
-     * @param url
-     * @returns {*}
-     */
-    function getAWSReqURL(url) {
-        if (url) {
-            if (url.search('/api/api') !== -1) {
-                url = url.replace('/api/api', getAWSRoot());
-            }
-
-            if (url.search('/api') !== -1) {
-                url = url.replace('/api', getAWSRoot());
-            }
-        }
-        return url;
-    }
-
-    /**
      * For the given req.url, extract the APPS and TABLES identifiers/ids and
      * append the FORMS identifier and optional formId.
      *
@@ -241,9 +225,24 @@
         }
     }
 
+    /**
+     * get feature switches route on AWS
+     * @param url
+     * @returns {string}
+     */
     function getAWSFeatureSwitchesRoute(url) {
 
         return getAWSRoot() + '/' + FEATURE_SWITCHES;
+    }
+
+    /**
+     * get feature switch states route on AWS
+     * @param url
+     * @returns {string}
+     */
+    function getAWSFeatureSwitchStatesRoute(url) {
+
+        return getAWSRoot() + '/' + FEATURE_SWITCH_STATES;
     }
 
     module.exports  = {
@@ -783,8 +782,74 @@
             return false;
         },
 
-        getFeatureSwitchesRoute: function(url) {
-            return getAWSFeatureSwitchesRoute(url);
+        /**
+         * get AWS route for feature switches
+         * @param url
+         * @param isOverrides
+         * @param switchId
+         * @param overrideId
+         * @returns {string}
+         */
+        getFeatureSwitchesRoute: function(url, isOverrides, switchId, overrideId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+
+            if (overrideId) {
+                route += '/' + overrideId;
+            }
+            return route;
+        },
+
+        /**
+         * get AWS route for feature switches bulk operations
+         * @param url
+         * @param isOverrides
+         * @param switchId
+         * @param overrideId
+         * @param ids
+         * @returns {string}
+         */
+        getFeatureSwitchesBulkRoute: function(url, isOverrides, switchId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+            route += '/bulk';
+
+            return route;
+        },
+
+        /**
+         * get AWS route for feature switch states
+         * @param url
+         * @param appId
+         * @param realmId
+         * @returns {string}
+         */
+        getFeatureSwitchStatesRoute: function(url, realmId, appId) {
+
+            let route = getAWSFeatureSwitchStatesRoute(url);
+
+            route += '?realmId=' + realmId;
+
+            if (appId) {
+                route += '&appId=' + appId;
+            }
+
+            return route;
         },
 
         /**

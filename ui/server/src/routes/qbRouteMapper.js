@@ -35,7 +35,10 @@
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
         appsApi = require('../api/quickbase/appsApi')(config);
-        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config);
+
+        // initialize the feature switches API, use mock API if config.featureSwitchesMockData is defined
+        // (unit tests can override this through the 2nd parameter)
+        featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
         rolesApi = require('../api/quickbase/rolesApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../../governance/src/account/users/AccountUsersApi')(config);
@@ -100,6 +103,8 @@
 
         routeToPostFunction[routeConsts.FEATURE_SWITCHES] = createFeatureSwitch;
         routeToPostFunction[routeConsts.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
+        routeToPostFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
+        routeToPostFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -120,8 +125,7 @@
         var routeToDeleteFunction = {};
         routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
         routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
-        routeToDeleteFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
-        routeToDeleteFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
@@ -277,7 +281,7 @@
         perfLog.init('Get feature switches', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            featureSwitchesApi.getFeatureSwitches(req, true).then(
+            featureSwitchesApi.getFeatureSwitches(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get feature switches');
@@ -392,7 +396,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Delete feature switches', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.deleteFeatureSwitches(req, req.query.ids.split(',')).then(
+        let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
+        featureSwitchesApi.deleteFeatureSwitches(req, ids).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Delete feature switches');
@@ -476,7 +481,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Delete feature switch overrides', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.deleteFeatureSwitchOverrides(req, req.params.featureSwitchId, req.query.ids.split(',')).then(
+        let ids = req.query && req.query.ids ? req.query.ids.split(',') : [];
+        featureSwitchesApi.deleteFeatureSwitchOverrides(req, req.params.featureSwitchId, ids).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Delete feature switch overrides');
@@ -503,7 +509,9 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get feature states', {req:filterNodeReq(req)});
 
-        featureSwitchesApi.getFeatureSwitchStates(req, req.query.appId).then(
+        let appId = req.query && req.query.appId;
+
+        featureSwitchesApi.getFeatureSwitchStates(req, appId ? appId : null).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, 'Get feature states');

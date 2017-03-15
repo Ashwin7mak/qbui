@@ -5,7 +5,7 @@ let sinon = require('sinon');
 let assert = require('assert');
 let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
 let routeHelper = require('../../../src/routes/routeHelper');
-let featureSwitchesApi = require('../../../src/api/quickbase/featureSwitchesApi')(config);
+let featureSwitchesApi = require('../../../src/api/quickbase/featureSwitchesApi')(config, false);
 let constants = require('../../../../common/src/constants');
 
 /**
@@ -104,14 +104,14 @@ describe("Validate featureSwitchesApi", function() {
     describe("when createFeatureSwitch is called", function() {
         it('success return results ', function(done) {
             req.url = '/featureSwitches';
-            req.body = {};
-            let targetObject = '';
+            req.body = {name: 'feature'};
+            let targetObject = {'body': '{"id":1,"name":"feature"}'};
             executeReqStub.returns(Promise.resolve(targetObject));
             let promise = featureSwitchesApi.createFeatureSwitch(req);
 
             promise.then(
-                function(response) {
-                    assert.deepEqual(response, targetObject);
+                function(feature) {
+                    assert.deepEqual(feature.name, req.body.name);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -140,11 +140,11 @@ describe("Validate featureSwitchesApi", function() {
 
     describe("when deleteFeatureSwitches is called", function() {
         it('success return results ', function(done) {
-            req.url = '/featureSwitches';
-            req.body = {};
+            req.url = '/featureSwitches/bulk';
+            req.body = {features: [{id:'id1'}, {id: 'id2'}]};
             let targetObject = null;
             executeReqStub.returns(Promise.resolve(targetObject));
-            let promise = featureSwitchesApi.deleteFeatureSwitches(req, ["a", "b", "c"]);
+            let promise = featureSwitchesApi.deleteFeatureSwitches(req);
 
             promise.then(
                 function(response) {
@@ -160,14 +160,14 @@ describe("Validate featureSwitchesApi", function() {
     describe("when createFeatureSwitchOverride is called", function() {
         it('success return results ', function(done) {
             req.url = '/featureSwitches/id';
-            req.body = {};
-            let targetObject = null;
+            req.body = {name:'testFeature'};
+            let targetObject = {'body': '{"id":"id"}'};
             executeReqStub.returns(Promise.resolve(targetObject));
-            let promise = featureSwitchesApi.createFeatureSwitchOverride(req);
+            let promise = featureSwitchesApi.createFeatureSwitchOverride(req, 'id');
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, targetObject);
+                    assert.deepEqual(response, {id:'id'});
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -197,8 +197,8 @@ describe("Validate featureSwitchesApi", function() {
 
     describe("when deleteFeatureSwitchOverrides is called", function() {
         it('success return results ', function(done) {
-            req.url = '/featureSwitches/id';
-            req.body = {};
+            req.url = '/featureSwitches/id/bulk';
+            req.body = {overrides: [{id:'id1'}, {id: 'id2'}]};
             let targetObject = null;
             executeReqStub.returns(Promise.resolve(targetObject));
             let promise = featureSwitchesApi.deleteFeatureSwitchOverrides(req, ["a", "b", "c"]);
