@@ -34,7 +34,7 @@ describe("Validate rolesApi", function() {
         }
     };
 
-    describe("validate getAppRoles function", function() {
+    describe("getAppRoles function", function() {
         let executeReqStub = null;
 
         beforeEach(function() {
@@ -102,6 +102,114 @@ describe("Validate rolesApi", function() {
                 }
             ).catch(function(errorMsg) {
                 done(new Error('getAppRoles: exception processing exception test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("removeUsersFromRole function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            rolesApi.setRequestHelperObject(requestHelper);
+            req.url = '/app/123/roles/10';
+            req.method = 'delete';
+        });
+
+        afterEach(function() {
+            req.method = 'delete';
+            req.url = '';
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            let targetObject = '{}';
+            executeReqStub.returns(Promise.resolve({targetObject}));
+            let promise = rolesApi.removeUsersFromRole(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {"targetObject": targetObject});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing removeUsersFromRole success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('removeUsersFromRole: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = rolesApi.removeUsersFromRole(req);
+
+            promise.then(
+                function(error) {
+                    done(new Error("Unexpected success promise return when testing removeUsersFromRole failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('removeUsersFromRole: exception processing fail test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("assignUsersToRole function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            rolesApi.setRequestHelperObject(requestHelper);
+            req.url = '/app/123/roles/10';
+            req.method = 'post';
+        });
+
+        afterEach(function() {
+            req.method = 'post';
+            req.url = '';
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            let targetObject = '{}';
+            executeReqStub.returns(Promise.resolve({targetObject}));
+            let promise = rolesApi.assignUsersToRole(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {"targetObject": targetObject});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing assignUsersToRole success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('assignUsersToRole: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = rolesApi.assignUsersToRole(req);
+
+            promise.then(
+                function(error) {
+                    done(new Error("Unexpected success promise return when testing assignUsersToRole failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('assignUsersToRole: exception processing fail test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
