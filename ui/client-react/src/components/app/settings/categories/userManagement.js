@@ -2,9 +2,11 @@
  * Created by rbeyer on 2/16/17.
  */
 import React, {PropTypes} from 'react';
-import * as search from 'searchtabular';
 import * as Table from 'reactabular-table';
-import {compose} from 'redux';
+import QbHeaderCell from '../../../dataTable/qbGrid/qbHeaderCell';
+import QbRow from '../../../dataTable/qbGrid/qbRow';
+import QbCell from '../../../dataTable/qbGrid/qbCell';
+import '../../../dataTable/qbGrid/qbGrid.scss';
 import './userManagement.scss';
 
 
@@ -81,9 +83,26 @@ class UserManagement extends React.Component {
         const columns = this.createUserColumns(cellFormatter);
         return (
             <div className="userManagementReport">
-                <Table.Provider columns={columns} className="userGrid">
-                    <Table.Header headerRows={[columns]} />
-                    <Table.Body rows={resolvedRows} rowKey="userId" className="userTBody"/>
+                <Table.Provider columns={columns} className="qbGrid"
+                    components={{
+                        header: {
+                            cell: QbHeaderCell
+                        },
+                        body: {
+                            row: QbRow,
+                            cell: QbCell
+                        }
+                    }}
+                >
+                    <Table.Header headerRows={[columns]} className="qbHeader"/>
+                    <Table.Body rows={resolvedRows} rowKey="userId"
+                                className="qbTbody"
+                                onRow={(row) => {
+                                    return {
+                                        className: 'qbRow'
+                                    };
+                                }}
+                    />
                 </Table.Provider>
             </div>
         );
