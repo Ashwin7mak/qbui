@@ -1,6 +1,6 @@
 import React from 'react';
 import Trowser from "../trowser/trowser";
-import {Record} from "./record";
+import Record from "./record";
 import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
