@@ -4,6 +4,7 @@ import forms from './forms';
 import reports from './reports';
 import featureSwitches from './featureSwitches';
 import animation from './animation';
+import keyboard from '../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardReducer';
 
 // combine individual reducers into a single root reducer (qbui)
 
@@ -13,6 +14,7 @@ export default combineReducers({
     featureSwitches,
     shell,
     forms,
-    reports
+    reports,
+    keyboard,
 });
 

@@ -6,6 +6,7 @@ import TouchBackend from 'react-dnd-touch-backend';
 import {findFormElementKey} from '../../utils/formUtils';
 import _ from 'lodash';
 import {findDOMNode} from 'react-dom';
+import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
 
 import './formBuilder.scss';
 
@@ -100,6 +101,7 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
+                <ReKeyboardShortcuts id="formBuilder" shortcutBindings={[{key: 's', callback: (content) => alert(`You pressed s! Extra info: ${content}`), content: 'Some extra information'}]}/>
                 <label style={{display: 'none'}} id="reactabularToggle">
                     <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
                     Has drag animation
