@@ -16,6 +16,8 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
+import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+
 
 import './formBuilderContainer.scss';
 
@@ -125,6 +127,12 @@ export const FormBuilderContainer = React.createClass({
         }
         return (
             <div className="formBuilderContainer">
+
+                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
+                    {key: 'esc', callback: () => {this.onCancel(); return false}},
+                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
+                ]}/>
+
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
                 <div className="toolsAndForm">

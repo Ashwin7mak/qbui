@@ -101,7 +101,11 @@ export class FormBuilder extends Component {
     render() {
         return (
             <div className="formBuilderContainer">
-                <ReKeyboardShortcuts id="formBuilder" shortcutBindings={[{key: 's', callback: (content) => alert(`You pressed s! Extra info: ${content}`), content: 'Some extra information'}]}/>
+
+                <ReKeyboardShortcuts id="formBuilder" shortcutBindings={[
+                    {key: 's', callback: (content) => alert(`You pressed s! Extra info: ${content}`), content: 'Some extra information'}
+                ]}/>
+
                 <label style={{display: 'none'}} id="reactabularToggle">
                     <input type="checkbox" checked={this.state.hasAnimation} onChange={evt => this.setState({hasAnimation: !this.state.hasAnimation})} />
                     Has drag animation

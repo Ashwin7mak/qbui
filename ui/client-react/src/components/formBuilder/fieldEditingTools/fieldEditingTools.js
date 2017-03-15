@@ -9,6 +9,8 @@ import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {selectFieldOnForm} from '../../../actions/formActions';
+import ReKeyboardShortcuts from '../../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+
 
 import './fieldEditingTools.scss';
 
