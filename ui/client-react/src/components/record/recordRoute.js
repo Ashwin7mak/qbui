@@ -154,7 +154,7 @@ export const RecordRoute = React.createClass({
             const {data} = this.props.reportData;
             const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
             if (key) {
-                let recordsArray = this.getRecordsArray();
+                let recordsArray = this.getRecordsArray() || [];
 
                 //  fetch the index of the row in the recordsArray that is being opened
                 const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
