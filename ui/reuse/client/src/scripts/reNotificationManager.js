@@ -4,7 +4,7 @@ export const NOTIFICATION_MESSAGE_DISMISS_TIME = 2000;
 export const NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME = 2500;
 
 /**
- * A wrapper for a third-party notification library that includes the defaults used across the qbase app ecosystem
+ * A wrapper for a third-party notification library that includes the defaults used across the qbase ecosystem
  */
 export default {
     /**

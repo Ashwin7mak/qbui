@@ -19,22 +19,6 @@ const signOutHref = '/qbase/signout';
  * Check out the propTypes for other values you can change if you need.
  * If these default actions don't suit your needs, try creating a custom top nav by using the ReTopNav with an array of GlobalAction components */
 class ReDefaultTopNavGlobalActions extends Component {
-    constructor(props) {
-        super(props);
-
-        this.changeLocale = this.changeLocale.bind(this);
-    }
-
-    /**
-     * Fires the changeLocale callback when the user selects a language from the User dropdown
-     * @param locale
-     */
-    changeLocale(locale) {
-        if (this.props.changeLocale) {
-            this.props.changeLocale(locale);
-        }
-    }
-
     /**
      * A link to sign the user out
      * (MenuItem href is currently incompatible with react-fastclick) */
@@ -59,7 +43,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                     <li className={"link globalAction withDropdown"}>
                         <UserDropDown
                             supportedLocales={Locale.getSupportedLocales()}
-                            changeLocale={this.changeLocale}
+                            changeLocale={this.props.changeLocale}
                             startTabIndex={this.props.startTabIndex + this.props.actions.length}
                             signOutUser={this.signOutUser}
                             app={this.props.app}
