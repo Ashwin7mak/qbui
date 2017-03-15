@@ -118,16 +118,6 @@ export const Record = React.createClass({
         this.props.editRecordChange(this.props.appId, this.props.tblId, change.recId, origRec, change);
     },
 
-    getPendEdits() {
-        let pendEdits = {};
-        if (Array.isArray(state.record) && state.record.length > 0) {
-            if (_.isEmpty(state.record[0]) === false) {
-                pendEdits = state.record[0].pendEdits || {};
-            }
-        }
-        return {};
-    },
-
     render() {
 
         return <QBForm {...this.props}
@@ -141,11 +131,11 @@ export const Record = React.createClass({
 // instead of relying on our parent route component to pass our props down,
 // the react-redux container will generate the required props for this route
 // from the Redux state (the presentational component has no code dependency on Redux!)
-const mapStateToProps = (state) => {
-    return {
-        record: state.record
-    };
-};
+//const mapStateToProps = (state) => {
+//    return {
+//        record: state.record
+//    };
+//};
 
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
@@ -161,6 +151,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
-    mapStateToProps,
+    //mapStateToProps,
     mapDispatchToProps
 )(Record);
