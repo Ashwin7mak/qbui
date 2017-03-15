@@ -33,7 +33,7 @@ describe('Validate RouteHelper unit tests', function() {
         accountIds.forEach(function(accountId) {
             it('Testing account: ' + accountId, function(done) {
                 assert.equal(routeHelper.getAccountUsersCurrentStack(accountId),
-                    `qb/governance/{accountId}/users`);
+                    `qb/governance/${accountId}/users`);
                 done();
             });
         });

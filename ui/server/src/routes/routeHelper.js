@@ -792,7 +792,7 @@
          * @returns {string}
          */
         getAccountUsersCurrentStack: function(accountId) {
-            return `${getLegacyStackDotNetRoot()}/governance/{accountId}/users`;
+            return `${getLegacyStackDotNetRoot()}/governance/${accountId}/users`;
         }
     };
 
