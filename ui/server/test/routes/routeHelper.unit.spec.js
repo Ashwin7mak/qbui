@@ -20,6 +20,25 @@ describe('Validate RouteHelper unit tests', function() {
         stubLog.restore();
     });
 
+    describe('current stack route helpers', function() {
+
+        it('Tests current stack .net handler', function(done) {
+            assert.equal(routeHelper.getAccountUsersCurrentStack(1),
+                "qb/governance/1/users");
+            done();
+        });
+
+        var accountIds = [1, 100, 200];
+
+        accountIds.forEach(function(accountId) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getAccountUsersCurrentStack(accountId),
+                    `qb/governance/{accountId}/users`);
+                done();
+            });
+        });
+    });
+
     describe('validate transformUrlRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', curRoute:'abc', newRoute:'def', expectation: ''},

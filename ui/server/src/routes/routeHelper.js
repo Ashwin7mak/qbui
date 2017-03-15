@@ -42,10 +42,9 @@
     /**
      * Root endpoint of current stack
      * .NET handlers are /qb/
-     * C++/SBServer handlers are /db/
      */
-    function getCurrentStackRoot(isDotNet = true) {
-        return isDotNet ? '/qb' : '/db';
+    function getLegacyStackDotNetRoot() {
+        return '/qb';
     }
 
     /**
@@ -793,7 +792,7 @@
          * @returns {string}
          */
         getAccountUsersCurrentStack: function(accountId) {
-            return `${getCurrentStackRoot(true)}/governance/{accountId}/users`;
+            return `${getLegacyStackDotNetRoot()}/governance/{accountId}/users`;
         }
     };
 

@@ -107,6 +107,9 @@
         /**
          * AWS api gateway to lambda functions for feature switches
          */
-        //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
+        //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com,
+
+
+        useGovernanceMockData: false
     };
 }());
