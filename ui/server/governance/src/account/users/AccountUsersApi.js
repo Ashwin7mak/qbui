@@ -1,5 +1,5 @@
 /*
- The purpose of this module is to process /apps/<id>/ api requests.
+ The purpose of this module is to process governance api requests for users in an account.
  */
 (function() {
     'use strict';
@@ -483,28 +483,26 @@
 
                     // if using a config property to point to a mock
                     if (config && config.useGovernanceMockData) {
-                        resolve(dummyData);
-
-                    } else {
-
-                        // make a request to the current stack to get the results
-                        let opts = requestHelper.setOptions(req, false, true);
-                        opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                        opts.url = routeHelper.getAccountUsersCurrentStack(accountId);
-
-                        requestHelper.executeRequest(req, opts).then(
-                            (response) => {
-                                resolve(JSON.parse(response.body));
-                            },
-                            (error) => {
-                                log.error({req: req}, "getAccountUsers.getAccountUsers(): Error retrieving account users.");
-                                reject(error);
-                            }
-                        ).catch((ex) => {
-                            requestHelper.logUnexpectedError('getAccountUsers.getAccountUsers(): unexpected error retrieving account users.', ex, true);
-                            reject(ex);
-                        });
+                        return resolve(dummyData);
                     }
+
+                    // make a request to the current stack to get the results
+                    let opts = requestHelper.setOptions(req, false, true);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.url = routeHelper.getAccountUsersCurrentStack(accountId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(JSON.parse(response.body));
+                        },
+                        (error) => {
+                            log.error({req: req}, "getAccountUsers.getAccountUsers(): Error retrieving account users.");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('getAccountUsers.getAccountUsers(): unexpected error retrieving account users.', ex, true);
+                        reject(ex);
+                    });
                 });
 
             }

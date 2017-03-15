@@ -83,7 +83,7 @@
 
         ADMIN                       : baseUrl.QUICKBASE + '/admin',
 
-        GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountID/users',
+        GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
     };
 
     /*
