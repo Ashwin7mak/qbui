@@ -21,8 +21,8 @@ describe('Feature switch actions', () => {
         getFeatureSwitches() {
             return Promise.resolve({data: switchesResponseData});
         }
-        createFeatureSwitch() {
-            return Promise.resolve({data: "newSwitchId"});
+        createFeatureSwitch(feature) {
+            return Promise.resolve({data: {id: "newSwitchId"}});
         }
         updateFeatureSwitch() {
             return Promise.resolve();
@@ -31,7 +31,7 @@ describe('Feature switch actions', () => {
             return Promise.resolve();
         }
         createOverride() {
-            return Promise.resolve({data: "newOverrideId"});
+            return Promise.resolve({data: {id: "newOverrideId"}});
         }
         updateOverride() {
             return Promise.resolve();
@@ -193,10 +193,7 @@ describe('Feature switch actions', () => {
             {
                 type: types.CREATED_OVERRIDE,
                 override: {
-                    id:'newOverrideId',
-                    entityType:'realm',
-                    entityValue: '',
-                    on:false
+                    id:'newOverrideId'
                 }
             }
         ];

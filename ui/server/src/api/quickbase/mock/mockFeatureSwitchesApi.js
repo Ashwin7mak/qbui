@@ -1,5 +1,5 @@
 /*
- The purpose of this module is to process /apps/<id>/ api requests.
+ This module implements the feature switches API using a local JSON file store instead of AWS.
  */
 (function() {
     'use strict';
@@ -14,8 +14,6 @@
         let constants = require('../../../../../common/src/constants');
 
         let cookieUtils = require('../../../utility/cookieUtils');
-        let ob32Utils = require('../../../utility/ob32Utils');
-        let CookieConsts = require('../../../../../common/src/constants');
         let featureSwitchesMockData;
 
         /**
@@ -48,8 +46,7 @@
 
             createFeatureSwitch: function(req) {
                 return new Promise((resolve, reject) => {
-                    let bodyJSON = JSON.parse(req.rawBody);
-                    let feature = bodyJSON.feature;
+                    let feature = JSON.parse(req.rawBody);
                     feature.id = uuid.v4();
                     feature.overrides = [];
 
@@ -57,15 +54,14 @@
 
                     saveSwitchesMockData();
 
-                    resolve(feature.id);
+                    resolve(feature);
                 });
             },
 
             updateFeatureSwitch: function(req, featureSwitchId) {
 
                 return new Promise((resolve, reject) => {
-                    let bodyJSON = JSON.parse(req.rawBody);
-                    let feature = bodyJSON.feature;
+                    let feature = JSON.parse(req.rawBody);
 
                     let index = _.findIndex(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
@@ -77,14 +73,19 @@
                 });
             },
 
-            deleteFeatureSwitches: function(req, ids) {
+            deleteFeatureSwitches: function(req) {
 
                 return new Promise((resolve, reject) => {
-                    _.remove(featureSwitchesMockData, function(sw) {return ids.indexOf(sw.id) !== -1;});
+                    let bodyJSON = JSON.parse(req.rawBody);
+                    let features = bodyJSON.features;
+
+                    _.each(features, function(feature) {
+                        _.remove(featureSwitchesMockData, function(sw) {return sw.id === feature.id;});
+                    });
 
                     saveSwitchesMockData();
 
-                    resolve(ids);
+                    resolve(features);
                 });
             },
 
@@ -92,7 +93,7 @@
 
                 return new Promise((resolve, reject) => {
                     let bodyJSON = JSON.parse(req.rawBody);
-                    let override = bodyJSON.override;
+                    let override = bodyJSON;
 
                     let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
@@ -107,15 +108,14 @@
 
                         saveSwitchesMockData();
                     }
-                    resolve(override.id);
+                    resolve(override);
                 });
             },
 
             updateFeatureSwitchOverride: function(req, featureSwitchId, overrideId) {
 
                 return new Promise((resolve, reject) => {
-                    let bodyJSON = JSON.parse(req.rawBody);
-                    let overrideData = bodyJSON.override;
+                    let overrideData = JSON.parse(req.rawBody);
 
                     let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
@@ -139,22 +139,22 @@
 
                     let featureSwitch = _.find(featureSwitchesMockData, function(sw) {return sw.id === featureSwitchId;});
 
-                    _.remove(featureSwitch.overrides, function(override) {return ids.indexOf(override.id) !== -1;});
+                    let bodyJSON = JSON.parse(req.rawBody);
+                    let overrides = bodyJSON.overrides;
+
+                    _.each(overrides, function(ov) {
+                        _.remove(featureSwitch.overrides, function(sw) {return sw.id === ov.id;});
+                    });
 
                     saveSwitchesMockData();
 
-                    resolve(ids);
+                    resolve();
                 });
             },
 
-            getFeatureSwitchStates: function(req, appId) {
+            getFeatureSwitchStates: function(req, realmId, appId) {
                 return new Promise((resolve, reject) => {
                     let states = {};
-                    let realmId = null;
-                    let ticketCookie = req.cookies && req.cookies[CookieConsts.COOKIES.TICKET];
-                    if (ticketCookie) {
-                        realmId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 3));
-                    }
 
                     if (!featureSwitchesMockData) {
                         featureSwitchesMockData = loadSwitchesMockData();
@@ -170,15 +170,22 @@
                                 }
                             });
 
-                            // app overrides take precedence over default and realm
-                            featureSwitch.overrides.forEach(function(override) {
-                                if (override.entityType === "app" && override.entityValue === appId) {
-                                    states[featureSwitch.name] = override.on;
-                                }
-                            });
+                            if (appId) {
+                                // app overrides take precedence over default and realm
+                                featureSwitch.overrides.forEach(function(override) {
+                                    if (override.entityType === "app" && override.entityValue === appId) {
+                                        states[featureSwitch.name] = override.on;
+                                    }
+                                });
+                            }
                         }
                     });
-                    resolve(states);
+
+                    let switchStates = [];
+                    Object.keys(states).forEach(function(key) {
+                        switchStates.push({name:key, status: states[key]});
+                    });
+                    resolve(switchStates);
                 });
             }
         };
