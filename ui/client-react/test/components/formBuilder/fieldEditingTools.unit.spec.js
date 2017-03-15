@@ -76,23 +76,7 @@ describe('FieldEditingTools', () => {
 
         expect(mockParentProps.openFieldPreferences).toHaveBeenCalledWith(location);
     });
-
-    it('positions the editing tools over the next sibling element', () => {
-        component = shallow(<FieldEditingTools selectedFields={[]}/>);
-        let instance = component.instance();
-
-        instance.setPositionOfFieldEditingTools(component.find('.fieldEditingTools'));
-
-        expect(instance.state).toEqual({
-            position: 'absolute',
-            zIndex: 2,
-            top: '-5px',
-            left: '-10px',
-            height: '76px',
-            width: '130px'
-        });
-    });
-
+    
     it('selects a field when an element is clicked', () => {
         spyOn(mockParentProps, 'selectField');
 
