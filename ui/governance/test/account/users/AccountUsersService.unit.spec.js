@@ -20,7 +20,7 @@ describe('Account Users Service Tests', () => {
     it('test getAccountUsers function', () => {
 
         let accountId = 1;
-        const url = accountUsersService.constructUrl(accountUsersService.API.GET_USERS,[accountId]);
+        const url = accountUsersService.constructUrl(accountUsersService.API.GET_USERS, [accountId]);
         accountUsersService.getAccountUsers(accountId);
 
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
