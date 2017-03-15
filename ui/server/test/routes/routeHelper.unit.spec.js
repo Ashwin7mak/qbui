@@ -21,13 +21,6 @@ describe('Validate RouteHelper unit tests', function() {
     });
 
     describe('current stack route helpers', function() {
-
-        it('Tests current stack .net handler', function(done) {
-            assert.equal(routeHelper.getAccountUsersCurrentStack(1),
-                "qb/governance/1/users");
-            done();
-        });
-
         var accountIds = [1, 100, 200];
 
         accountIds.forEach(function(accountId) {
