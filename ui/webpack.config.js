@@ -131,8 +131,8 @@ var config = {
                 ],
                 exclude: [
                     // Exclude fonts because webpack sourceMaps mess up the urls for font-face
-                    path.resolve(__dirname, 'client-react/src/components/qbIcon/'),
-                    path.resolve(__dirname, 'reuse/client/src/assets/fonts/')
+                    path.resolve(__dirname, 'reuse/client/src/assets/fonts'),
+                    path.resolve(__dirname, 'reuse/client/src/components/reIcon')
                 ],
                 loader: LOCAL ? 'style?sourceMap!css?sourceMap' : 'style!css'
             },
@@ -142,8 +142,8 @@ var config = {
                 // It turns off source maps for .css files known to have font-face in them.
                 test: /\.css?$/,
                 include: [
-                    path.resolve(__dirname, 'client-react/src/components/qbIcon/'),
-                    path.resolve(__dirname, 'reuse/client/src/assets/fonts/')
+                    path.resolve(__dirname, 'reuse/client/src/assets/fonts'),
+                    path.resolve(__dirname, 'reuse/client/src/components/reIcon')
                 ],
                 loader: 'style!css' // never use source maps on these files
             },
