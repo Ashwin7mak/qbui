@@ -82,10 +82,18 @@ ReDefaultTopNavGlobalActions.propTypes = {
     linkClass: PropTypes.string,
     onSelect: PropTypes.func,
     position: PropTypes.string,
-    actions: PropTypes.arrayOf(actionPropType),
     startTabIndex: PropTypes.number,
+
+    /**
+     * Optionally pass in additional actions */
+    actions: PropTypes.arrayOf(actionPropType),
+
+    /**
+     * The currently selected app */
     app: PropTypes.object,
 
+    /**
+     * A callback that will be fired when the user selects a new locale from the user dropdown */
     changeLocale: React.PropTypes.func,
 };
 

@@ -8,11 +8,11 @@ import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 
 /**
  * A global action (ex. 'Help' with an icon and an associated link) */
-const GlobalAction = props => (
-    <li className={"link globalAction"}>
-        <Link className={"globalActionLink"} tabIndex={props.tabIndex} to={props.action.link} onClick={props.onSelect}>
+const ReGlobalAction = props => (
+    <li className="link globalAction">
+        <Link className="globalActionLink" tabIndex={props.tabIndex} to={props.action.link}>
             <ReIcon icon={props.action.icon}/>
-            <span className={"navLabel"}><I18nMessage message={props.action.msg}/></span>
+            <span className="navLabel"><I18nMessage message={props.action.msg}/></span>
         </Link>
     </li>
 );
@@ -23,7 +23,7 @@ const actionPropType = PropTypes.shape({
     link: PropTypes.string
 });
 
-GlobalAction.propTypes = {
+ReGlobalAction.propTypes = {
     /**
      * An object that describes the action ({icon, msg, link}) */
     action: actionPropType.isRequired,
@@ -31,4 +31,4 @@ GlobalAction.propTypes = {
     tabIndex: PropTypes.number.isRequired
 };
 
-export default GlobalAction;
+export default ReGlobalAction;

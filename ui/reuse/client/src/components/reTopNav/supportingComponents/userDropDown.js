@@ -17,6 +17,7 @@ const signOutMessage = 'header.menu.sign_out';
 /**
  * A default user drop down component for the DefaultTopNav. Includes a User button with a dropdown menu that
  * has the available locales, the app name if available, and a signout button
+ * This component was not designed to be reused outside of the ReDefaultTopNavGlobalActions component.
  * @param props
  * @constructor
  */
