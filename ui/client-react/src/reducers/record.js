@@ -240,7 +240,7 @@ const record = (state = [], action) => {
     }
     case types.EDIT_RECORD_VALIDATE_FIELD: {
         const currentRecd = getRecordFromState(action.id);
-        if (currentRecd && _.has(currentRecd, 'pendEdits')) {
+        if (_.has(currentRecd, 'pendEdits')) {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setEditRecordValidate(action.content);
