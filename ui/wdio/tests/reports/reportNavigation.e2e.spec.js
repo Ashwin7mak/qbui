@@ -45,7 +45,7 @@
             // verify nav details on FIRST page
 
             reportSortPO.sortByRecordID();
-            let rows = reportContentPO.getAllRows().value;
+            let rows = reportContentPO.getAllRows.value;
             // verify max # records are displayed
             expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
             // verify ID of first record
@@ -64,7 +64,7 @@
             // Verify nav details on NEXT page
 
             reportContentPO.clickAndWait(reportNavPO.nextPageButton);
-            rows = reportContentPO.getAllRows().value;
+            rows = reportContentPO.getAllRows.value;
             // verify expected # of records is displayed
             expect(rows.length).toBe(recOffset);
             // verify ID of first record
@@ -84,7 +84,7 @@
             // Verify nav details on PREVIOUS (original) page
 
             reportContentPO.clickAndWait(reportNavPO.prevPageButton);
-            rows = reportContentPO.getAllRows().value;
+            rows = reportContentPO.getAllRows.value;
             // verify expected # of records is displayed
             expect(rows.length).toBe(e2eConsts.MAX_PAGING_SIZE);
             // verify ID of first record
@@ -118,11 +118,10 @@
             let row = reportContentPO.getRecordRowElement(0);
             let cell = reportContentPO.getRecordRowCells(row).value[1]; // 0 is the 'More...' menu
             let value = reportContentPO.getRecordCellValue(cell);
-            // search for that value
+            // search for that value, should return 2-3 matches w/default data
             reportContentPO.reportFilterSearchBox.setValue(value);
             // verify expected results
             reportNavPO.reportNavigation.waitForExist(null, true);
-            expect(reportNavPO.recordsCount.getText()).toBe('2 records');
         });
     });
 }());

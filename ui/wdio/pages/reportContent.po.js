@@ -12,9 +12,8 @@
     var ReportContentPage = Object.create(e2ePageBase, {
 
         tableBody: {get: function() {return browser.element('.qbTbody');}},
-        loader : {get: function() {return browser.element('.loader');}},
-        loadedContent : {get: function() {return browser.element('.loadedContent .loadedContent');}},
         reportsToolBar : {get: function() {return browser.element('.reportToolbar');}},
+
         reportFilterSearchBox : {get: function() {
             return this.reportsToolBar.element('.searchInput');
         }},
@@ -117,13 +116,13 @@
          * @param recordIndex
          * @returns Resolved record row element at specified index
          */
-        getAllRows: {value: function() {
+        getAllRows: {get: function() {
             this.qbGridBodyEl.element('.qbRow').waitForVisible();
             return this.qbGridContainer.elements('.qbRow');
         }},
 
         getRecordRowElement: {value: function(recordIndex) {
-            return this.getAllRows().value[recordIndex];
+            return this.getAllRows.value[recordIndex];
         }},
 
         /**
