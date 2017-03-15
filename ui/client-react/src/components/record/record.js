@@ -8,6 +8,7 @@ import {editRecordStart, editRecordChange} from '../../actions/recordActions';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
 
 export const Record = React.createClass({
+
     displayName: 'Record',
 
     componentWillReceiveProps(nextProps) {
@@ -122,6 +123,11 @@ export const Record = React.createClass({
 
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapStateToProps = (state) => {
+    return {
+        record: state.record
+    };
+};
 const mapDispatchToProps = (dispatch) => {
     return {
         editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit = false, fieldToStartEditing = null) => {
@@ -134,5 +140,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
+    mapStateToProps,
     mapDispatchToProps
 )(Record);

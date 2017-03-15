@@ -1,6 +1,5 @@
 import React from 'react';
 
-//import Fluxxor from 'fluxxor';
 import FieldLabelElement from './fieldLabelElement';
 import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
@@ -11,17 +10,12 @@ import _ from 'lodash';
 import {editRecordValidateField} from '../../actions/recordActions';
 import {connect} from 'react-redux';
 
-//import getFlux from '../../scripts/fluxxor';
-//let fluxxor = getFlux();
-
-//let FluxMixin = Fluxxor.FluxMixin(React);
 //TODO currently all fields have a default width of 50 defined by core. This needs to be fixed -- specific field types should have specific defaults
 const DEFAULT_FIELD_WIDTH = 50;
 /**s
  * render a form field value, optionally with its label
  */
 export const FieldElement = React.createClass({
-    //mixins: [FluxMixin],
     displayName: 'FieldElement',
     propTypes: {
         element: React.PropTypes.object, // FormFieldElement from form API
@@ -60,18 +54,14 @@ export const FieldElement = React.createClass({
     },
 
     onBlur(theVals) {
-        //const flux = this.getFlux();
         let fieldLabel = '';
         if (this.props.element.useAlternateLabel) {
             fieldLabel = this.props.element.displayText;
         } else {
             fieldLabel = this.props.relatedField ? this.props.relatedField.name : "";
         }
-        //flux.actions.recordPendingValidateField(this.props.relatedField, fieldLabel, theVals.value);
 
-        //  TODO: support multiple records in store..
-        const record = _.nth(this.props.record, 0) || {};
-        this.props.editRecordValidateField(record.id, this.props.relatedField, fieldLabel, theVals.value);
+        this.props.editRecordValidateField(this.props.recId, this.props.relatedField, fieldLabel, theVals.value);
         let change = this.getChanges(theVals);
         if (this.props.onBlur) {
             this.props.onBlur(change);
@@ -156,21 +146,6 @@ export const FieldElement = React.createClass({
             </div>);
     }
 });
-
-/**
- * We need to create an HOC with flux, because upper level components are now connected to redux
- * and no longer pass down flux. Can be removed once pending edits store is in Redux
- * https://quickbase.atlassian.net/browse/MB-2183
- * @param FieldElementComponent
- * @returns {function(*): XML}
- * @constructor
- */
-//const FieldElementWithFlux = FieldElementComponent => {
-//    return (props) => <FieldElementComponent flux={fluxxor} {...props}/>;
-//};
-//
-//export default FieldElementWithFlux(FieldElement);
-
 
 const mapStateToProps = (state) => {
     return {
