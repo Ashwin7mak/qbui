@@ -4,6 +4,7 @@
     let constants = require('../../../common/src/constants');
 
     let ACCESS_RIGHTS = 'accessRights';
+    let ADMIN = 'admin';
     let APPS = 'apps';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
@@ -11,6 +12,7 @@
     let FORMS = 'forms';
     let FORM_TYPE = 'formType';
     let TABLES = 'tables';
+    let TICKET = 'ticket';
     let RECORDS = 'records';
     let COUNT_QUERY = 'countQuery';
     let REPORTS = 'reports';
@@ -20,7 +22,10 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
-    let FEATURE_SWITCHES = 'featureSwitch';
+
+    let FEATURE_SWITCHES = 'featureSwitches';
+    let FEATURE_SWITCH_STATES = FEATURE_SWITCHES + '/status';
+    let WHOAMI = 'whoami';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -33,6 +38,7 @@
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
+    let REGEX_ADMIN_ROUTE = /admin(.*)?$/i;
 
     /**
      *
@@ -154,24 +160,6 @@
     }
 
     /**
-     *
-     * @param url
-     * @returns {*}
-     */
-    function getAWSReqURL(url) {
-        if (url) {
-            if (url.search('/api/api') !== -1) {
-                url = url.replace('/api/api', getAWSRoot());
-            }
-
-            if (url.search('/api') !== -1) {
-                url = url.replace('/api', getAWSRoot());
-            }
-        }
-        return url;
-    }
-
-    /**
      * For the given req.url, extract the APPS and TABLES identifiers/ids and
      * append the FORMS identifier and optional formId.
      *
@@ -235,9 +223,24 @@
         }
     }
 
+    /**
+     * get feature switches route on AWS
+     * @param url
+     * @returns {string}
+     */
     function getAWSFeatureSwitchesRoute(url) {
 
         return getAWSRoot() + '/' + FEATURE_SWITCHES;
+    }
+
+    /**
+     * get feature switch states route on AWS
+     * @param url
+     * @returns {string}
+     */
+    function getAWSFeatureSwitchStatesRoute(url) {
+
+        return getAWSRoot() + '/' + FEATURE_SWITCH_STATES;
     }
 
     module.exports  = {
@@ -631,6 +634,86 @@
             }
             return url;
         },
+        /**
+         * Return the ticket route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getTicketRoute: function(url) {
+            //if (typeof url === 'string') {
+            //    let offset = url.toLowerCase().indexOf(TICKET);
+            //    if (offset !== -1) {
+            //        let root = url.substring(0, offset) + TICKET;
+            //        return root;
+            //    }
+            //}
+            let root = getUrlRoot(url, TICKET);
+            if (root) {
+                return root;
+            }
+            return url;
+        },
+
+        /**
+         * Return the ticket/whoAmI route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getWhoAmIRoute: function(url) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(TICKET);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + TICKET + '/' + WHOAMI;
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRoute: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(USERS);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        /**
+         * Return the users/{userId} route from the req.url.
+         * @param url
+         * @returns {*}
+         */
+        getUsersRouteForAdmin: function(url, userId) {
+            if (typeof url === 'string') {
+                let offset = url.toLowerCase().indexOf(ADMIN);
+                if (offset !== -1) {
+                    let root = url.substring(0, offset) + USERS;
+                    if (userId) {
+                        root += '/' + userId;
+                    }
+                    return root;
+                }
+            }
+            return url;
+        },
+
+        isAdminRoute(url) {
+            if (typeof url === 'string') {
+                return REGEX_ADMIN_ROUTE.test(url);
+            }
+            return false;
+        },
 
         /**
          * Is the route a request for report results
@@ -697,8 +780,74 @@
             return false;
         },
 
-        getFeatureSwitchesRoute: function(url) {
-            return getAWSFeatureSwitchesRoute(url);
+        /**
+         * get AWS route for feature switches
+         * @param url
+         * @param isOverrides
+         * @param switchId
+         * @param overrideId
+         * @returns {string}
+         */
+        getFeatureSwitchesRoute: function(url, isOverrides, switchId, overrideId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+
+            if (overrideId) {
+                route += '/' + overrideId;
+            }
+            return route;
+        },
+
+        /**
+         * get AWS route for feature switches bulk operations
+         * @param url
+         * @param isOverrides
+         * @param switchId
+         * @param overrideId
+         * @param ids
+         * @returns {string}
+         */
+        getFeatureSwitchesBulkRoute: function(url, isOverrides, switchId) {
+
+            let route = getAWSFeatureSwitchesRoute(url);
+
+            if (switchId) {
+                route += '/' + switchId;
+            }
+            if (isOverrides) {
+                route += '/featureSwitchOverrides';
+            }
+            route += '/bulk';
+
+            return route;
+        },
+
+        /**
+         * get AWS route for feature switch states
+         * @param url
+         * @param appId
+         * @param realmId
+         * @returns {string}
+         */
+        getFeatureSwitchStatesRoute: function(url, realmId, appId) {
+
+            let route = getAWSFeatureSwitchStatesRoute(url);
+
+            route += '?realmId=' + realmId;
+
+            if (appId) {
+                route += '&appId=' + appId;
+            }
+
+            return route;
         },
     };
 

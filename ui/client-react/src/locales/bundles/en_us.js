@@ -474,14 +474,16 @@ export default {
             pageTitleSeparator: " - ",
             editingRecord: "Edit Record #{recordId}",
             newRecord: "Add Record",
-            viewRecord: "View Record #{recordId}"
+            viewRecord: "View Record #{recordId}",
+            editForm: "Edit Form",
         },
         quickBaseClassic: "QuickBase Classic",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial is not available",
         builder: {
             formBuilder: {
-                unimplemented: "Feature is not available right now"
+                unimplemented: "Feature is not available right now",
+                removeField: "Remove field from form"
             },
             fields: {
                 // Keys are equal to server constants for field types to make it easier to get these keys
@@ -537,11 +539,13 @@ export default {
             overridesYes: "Yes",
             overridesNo: "No",
             overrideCreated: "Override created",
+            overridesUpdated: "{num} override(s) updated",
             overrideUpdated: "Override updated",
             overridesDeleted: "Override(s) deleted",
             selectedOverrides: "Selected overrides(s)",
             noOverrides: "No overrides have been set, click 'Add New' to add one.",
-            featureNameExists: "Feature names must be unique"
+            featureNameExists: "Feature names must be unique",
+            featureNameEmpty: "Feature names must not be blank"
         }
     }
 };

@@ -464,14 +464,16 @@ export default {
             pageTitleSeparator: " - ",
             editingRecord: "Modifier l'enregistrement n ° {recordId}",
             newRecord: "Ajouter un enregistrement",
-            viewRecord: "Afficher le document n ° {recordId}"
+            viewRecord: "Afficher le document n ° {recordId}",
+            editForm: "Modifier le formulaire",
         },
         quickBaseClassic: "QuickBase Classique",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Le didacticiel n'est pas disponible",
         builder: {
             formBuilder: {
-                unimplemented: "La fonctionnalité n'est pas disponible en ce moment"
+                unimplemented: "La fonctionnalité n'est pas disponible en ce moment",
+                removeField: "Supprimer le champ du formulaire"
             },
             fields: {
                 // Keys are equal to server constants for field types to make it easier to get these keys
@@ -527,12 +529,13 @@ export default {
             overridesYes: "Oui",
             overridesNo: "Non",
             overrideCreated: "Création d'une substitution",
+            overridesUpdated: "{num} Remplacements modifié",
             overrideUpdated: "Remplacement modifié",
             overridesDeleted: "Annulation supprimée",
             selectedOverrides: "Remplacements sélectionnés",
             noOverrides: "Aucune substitution n'a été définie",
-            featureNameExists: "Les noms des entités doivent être uniques"
+            featureNameExists: "Les noms des entités doivent être uniques",
+            featureNameEmpty: "Les noms des entités doivent être blanc"
         }
-
     }
 };

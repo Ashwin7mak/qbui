@@ -4,15 +4,18 @@ import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
 import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
-import device from '../../../utils/device';
+import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
+import {connect} from 'react-redux';
+import _ from 'lodash';
+import {selectFieldOnForm} from '../../../actions/formActions';
 
 import './fieldEditingTools.scss';
 
 /**
  * Adds chrome around a field so that the field can be moved and edited.
  */
-class FieldEditingTools extends Component {
+export class FieldEditingTools extends Component {
     constructor(props) {
         super(props);
 
@@ -31,6 +34,9 @@ class FieldEditingTools extends Component {
         this.setPositionOfFieldEditingTools = this.setPositionOfFieldEditingTools.bind(this);
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
+        this.onClickField = this.onClickField.bind(this);
+        this.isFieldSelected = this.isFieldSelected.bind(this);
+        this.renderActionIcons = this.renderActionIcons.bind(this);
     }
 
     /**
@@ -41,12 +47,13 @@ class FieldEditingTools extends Component {
         if (editingTools) {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
             let isSmall = Breakpoints.isSmallBreakpoint();
-            let width = isSmall ? 26 : 30;
+            let width = isSmall ? 40 : 30;
+            let left = isSmall ? 25 : 15;
 
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
-                left: `${fieldDomElement.offsetLeft - 15}px`,
-                height: `${fieldDomElement.offsetHeight + 26}px`,
+                left: `${fieldDomElement.offsetLeft - left}px`,
+                height: `${fieldDomElement.offsetHeight + (isSmall ? 11 : 26)}px`,
                 width: `${fieldDomElement.offsetWidth + width}px`
             };
 
@@ -55,8 +62,8 @@ class FieldEditingTools extends Component {
     }
 
     onClickDelete() {
-        if (this.props.onClickDelete) {
-            return this.props.onClickDelete(this.props.location);
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.location);
         }
     }
 
@@ -66,29 +73,27 @@ class FieldEditingTools extends Component {
         }
     }
 
-    render() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
-        let isTouch = device.isTouch();
-        let classNames = ["fieldEditingTools"];
+    onClickField() {
+        if (this.props.selectField) {
+            this.props.selectField(this.props.formId, this.props.location);
+        }
+    }
 
-        if (isTouch && !isSmall) {
-            classNames.push("isTablet");
-        } else if (!isTouch) {
-            classNames.push("notTouchDevice");
+    isFieldSelected() {
+        if (this.props.selectedFields) {
+            return this.props.selectedFields.find(selectedField => _.isEqual(selectedField, this.props.location));
+        }
+    }
+
+    renderActionIcons() {
+        if (this.props.isDragging) {
+            return null;
         }
 
         return (
-            <div
-                className={classNames.join(' ')}
-                tabIndex="0"
-                ref={this.setPositionOfFieldEditingTools}
-                style={this.state}
-            >
-
-                <DragHandle />
-
+            <div className="actionIcons">
                 <div className="deleteFieldIcon" onClick={this.onClickDelete}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                    <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                         <QbIcon icon="delete" />
                     </QbToolTip>
                 </div>
@@ -101,12 +106,73 @@ class FieldEditingTools extends Component {
             </div>
         );
     }
+
+    render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        let classNames = ['fieldEditingTools'];
+        let isTouch = Device.isTouch();
+
+        if (isTouch && !isSmall) {
+            classNames.push('isTablet');
+        } else if (!isTouch) {
+            classNames.push('notTouchDevice');
+        }
+
+        if (this.props.isDragging) {
+            classNames.push('active');
+        }
+
+        if (this.isFieldSelected()) {
+            classNames.push('selectedFormElement');
+        }
+        return (
+            <div
+                className={classNames.join(' ')}
+                tabIndex="0"
+                ref={this.setPositionOfFieldEditingTools}
+                style={this.state}
+                onClick={this.onClickField}
+            >
+
+                <DragHandle />
+
+                {this.renderActionIcons()}
+            </div>
+        );
+    }
 }
 
 FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
-    onClickFieldPreferences: PropTypes.func
+    onClickFieldPreferences: PropTypes.func,
+    isDragging: PropTypes.bool,
+    formId: PropTypes.string
 };
 
-export default FieldEditingTools;
+FieldEditingTools.defaultProps = {
+    formId: 'view',
+};
+
+
+const mapStateToProps = (state, ownProps) => {
+    let formId = (ownProps.formId || 'view');
+    let currentForm = state.forms.find(form => form.id === formId);
+    let selectedFields = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
+    return {
+        selectedFields
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        selectField(formId, location) {
+            return dispatch(selectFieldOnForm(formId, location));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FieldEditingTools);

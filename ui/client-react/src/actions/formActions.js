@@ -240,6 +240,27 @@ export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
 };
 
 /**
+ * Selects a field on a form
+ * @param formId
+ * @param location
+ * @returns {{id, type, content}|*}
+ */
+export const selectFieldOnForm = (formId, location) => {
+    return event(formId, types.SELECT_FIELD, {location});
+};
+
+/**
+ * Removes a field from the form
+ * @param formId
+ * @param location
+ */
+export const removeFieldFromForm = (formId, location) => {
+    return event(formId, types.REMOVE_FIELD, {
+        location
+    });
+};
+
+/**
  * Create a new form
  *
  * @param appId

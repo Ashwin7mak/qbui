@@ -1,39 +1,4 @@
 @import '../../assets/css/qbVariables';
-@import "../../assets/css/main.scss";
-
-html, body {
-    margin: 0;
-    height: 100%;
-    min-height: 100%;
-    overflow: hidden;
-}
-
-html body {
-    font-family: Lato, "Open Sans", Arial, Sans-Serif;
-    font-size: $font-size-p;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 400;
-    line-height: 1.3em;
-
-    h1 {
-        font-family: Lato, "Open Sans", Arial, Sans-Serif;
-        font-size: $font-size-h1;
-        font-style: normal;
-        font-variant: normal;
-        font-weight: 500;
-        line-height: 24px;
-    }
-
-    h3 {
-        font-family: Lato, "Open Sans", Arial, Sans-Serif;
-        font-size: $font-size-h3;
-        font-style: normal;
-        font-variant: normal;
-        font-weight: 500;
-        line-height: 24px;
-    }
-}
 
 #content {
     height: 100%;

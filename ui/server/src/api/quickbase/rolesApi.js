@@ -62,6 +62,60 @@
                         reject(ex);
                     });
                 });
+            },
+
+            /**
+             * Remove a list of usersIds from an App Role
+             *
+             * @param req
+             * @returns Promise
+             */
+            removeUsersFromRole: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+
+                    //  make the api request to remove the users from the app role
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(response);
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error removing Users from Role");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('rolesAPI..unexpected error removing Users from role in removeUsersFromRole method', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
+             * Assign a list of usersIds to an App Role
+             *
+             * @param req
+             * @returns Promise
+             */
+            assignUsersToRole: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+
+                    //  make the api request to remove the users from the app role
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(response);
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error Assigning Users to Role");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('rolesAPI..unexpected error assigning Users to role in assignUsersToRole method', ex, true);
+                        reject(ex);
+                    });
+                });
             }
 
         };

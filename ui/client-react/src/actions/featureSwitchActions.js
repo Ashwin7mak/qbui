@@ -7,9 +7,11 @@ import * as FeatureSwitchConsts from '../constants/featureSwitchConstants';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import Locale from '../locales/locales';
+import constants from '../../../common/src/constants';
 import _ from 'lodash';
 
 const logger = new Logger();
+
 
 /**
  * get feature switch to send to server (omit props like 'editing')
@@ -44,6 +46,11 @@ export const loadSwitchesSuccess = (switches) => ({
     switches
 });
 
+export const errorResponse = (error) => ({
+    type: types.ERROR,
+    error
+});
+
 /**
  * get all feature switches and overrides for admin UI
  *
@@ -65,9 +72,9 @@ export const getSwitches = () => {
 
                 resolve();
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.getFeatureSwitches:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.getFeatureSwitches:');
@@ -109,14 +116,14 @@ export const createFeatureSwitch = (name) => {
 
             promise.then(response => {
                 // save the generated ID and set an empty override list
-                feature.id = response.data;
+                feature.id = response.data.id;
                 feature.overrides = [];
                 dispatch(createdFeatureSwitch(feature));
-                resolve();
+                resolve(feature);
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.createFeatureSwitch:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.createFeatureSwitch:');
@@ -153,9 +160,9 @@ export const deleteFeatureSwitches = ids => {
 
                 resolve();
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.deleteFeatureSwitches:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.deleteFeatureSwitches:');
@@ -210,9 +217,9 @@ export const updateFeatureSwitch = (id, featureSwitch, property, value) => {
 
                 resolve();
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.editFeatureSwitch:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.editFeatureSwitch:');
@@ -249,28 +256,24 @@ export const createOverride = (switchId) => {
 
             const featureSwitchService = new FeatureSwitchService();
 
-            const override = {
-                entityType: 'realm',
-                entityValue: '',
-                on: false
-            };
             // set override default values
-            override[FeatureSwitchConsts.OVERRIDE_TYPE_KEY] = "realm";
-            override[FeatureSwitchConsts.OVERRIDE_VALUE_KEY] = "";
-            override[FeatureSwitchConsts.OVERRIDE_ON_KEY] = false;
+            const override = {
+                [FeatureSwitchConsts.OVERRIDE_TYPE_KEY]: "REALM",
+                [FeatureSwitchConsts.OVERRIDE_VALUE_KEY]: "id",
+                [FeatureSwitchConsts.OVERRIDE_ON_KEY]: false
+            };
 
             const promise = featureSwitchService.createOverride(switchId, override);
 
             promise.then(response => {
-                override.id = response.data; // save the generated ID
 
-                dispatch(createdOverride(override));
+                dispatch(createdOverride(response.data));
 
-                resolve();
+                resolve(response.data);
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.createdOverride:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.createdOverride:');
@@ -325,9 +328,9 @@ export const updateOverride = (featureSwitchId, id, override, property, value) =
 
                 resolve();
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.updateOverride:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.updateOverride:');
@@ -365,9 +368,9 @@ export const deleteOverrides = (switchId, ids) => {
 
                 resolve();
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.deleteOverrides:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.deleteOverrides:');
@@ -403,9 +406,9 @@ export const getStates = (appId = null) => {
 
                 resolve();
             }).catch(error => {
-
+                dispatch(errorResponse(error));
                 if (error.response) {
-                    if (error.response.status === 403) {
+                    if (error.response.status === constants.HttpStatusCode.FORBIDDEN) {
                         logger.parseAndLogError(LogLevel.WARN, error.response, 'featureSwitchService.getFeatureSwitchStates:');
                     } else {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'featureSwitchService.getFeatureSwitchStates:');

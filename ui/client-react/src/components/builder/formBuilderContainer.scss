@@ -8,24 +8,33 @@
         flex-direction: row;
         height: 100%;
         min-width: 100%;
-        overflow: auto;
+        overflow-y: scroll; /* has to be scroll, not auto */
+        -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
     }
 
     .formBuilderContent {
         flex: 1 auto;
         max-height: 100%;
-        overflow: auto;
+        overflow-y: scroll; /* has to be scroll, not auto */
+        -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
     }
 
     .formContainer {
         padding-bottom: 90px;
     }
 
+    .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {
+        //Set's a width to keep long form titles from breaking the div
+        max-width: 500px;
+    }
+
     @include small-breakpoint {
         display: flex;
         flex-direction: column;
         opacity: 1;
+        .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {
+            //Set's a width to keep long form titles from breaking the div
+            max-width: 250px;
+        }
     }
-
-
 }

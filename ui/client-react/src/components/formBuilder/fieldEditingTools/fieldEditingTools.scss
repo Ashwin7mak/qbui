@@ -4,11 +4,34 @@
     transition: opacity 0.4s;
     border-radius: $radius-base;
 
+    &.selectedFormElement {
+        &:active {
+            //This opacity is needed to work for 'tabbing'
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
+
+            .deleteFieldIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-red-700;
+                }
+            }
+
+            .fieldPreferencesIcon {
+                .qbIcon {
+                    opacity: 1;
+                    color: $color-cyan-700;
+                }
+            }
+        }
+    }
+
     .deleteFieldIcon {
         font-size: $size-iconfont-small;
         position: absolute;
         top: 5px;
-        right: 25px;
+        right: 35px;
 
         .qbIcon {
             opacity: 0;
@@ -20,7 +43,7 @@
         font-size: $size-iconfont-small;
         position: absolute;
         top: 5px;
-        right: 5px;
+        right: 18px;
 
         .qbIcon {
             opacity: 0;
@@ -82,7 +105,10 @@
         border-bottom: $stroke-width-thin solid $color-black-400;
 
         .deleteFieldIcon .qbIcon {
-            padding-right: $spacing-medium1;
+            margin-right: $spacing-medium1;
+        }
+        .fieldPreferencesIcon .qbIcon {
+            margin-right: 10px;
         }
         //Scrolling activates the hover state and shows the icons
         //I am having the icons opacity set to 0 so it does not show while scrolling
@@ -102,23 +128,33 @@
     }
 
     &:focus {
-        //This opacity is needed to work for 'tabbing'
-        opacity: 1;
         outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
+    }
+
+    &.active {
+        opacity: 1;
+        @include dragpreview-active-gradient;
+    }
+
+    &:active {
+        @include dragpreview-active-gradient;
+        //Need to remove the z index temporarily to only show the field and the field label for active
+        z-index: 0 !important;
 
         .deleteFieldIcon {
             .qbIcon {
-                opacity: 1;
-                color: $color-red-700;
+                opacity: 0;
             }
         }
 
         .fieldPreferencesIcon {
             .qbIcon {
-                opacity: 1;
-                color: $color-cyan-700;
+                opacity: 0;
             }
+        }
+
+        .dragHandle {
+            opacity: 0;
         }
     }
 

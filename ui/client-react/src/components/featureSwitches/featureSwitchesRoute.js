@@ -3,11 +3,14 @@ import React from 'react';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {NotificationManager} from 'react-notifications';
+import Loader from 'react-loader';
 import {Link} from 'react-router';
 import ToggleButton from 'react-toggle-button';
 import PageTitle from '../pageTitle/pageTitle';
 import QBModal from '../qbModal/qbModal';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import _ from 'lodash';
 
 import * as Table from 'reactabular-table';
@@ -16,6 +19,7 @@ import * as UrlConsts from "../../constants/urlConstants";
 import * as CompConsts from '../../constants/componentConstants';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
+import * as constants from '../../../../common/src/constants';
 
 import './featureSwitches.scss';
 
@@ -82,9 +86,24 @@ export class FeatureSwitchesRoute extends React.Component {
      * @param isOn
      */
     setSelectedSwitchStates(isOn) {
+
+        const updatePromises = [];
         this.state.selectedIDs.forEach((id) => {
-            this.updateFeatureSwitch(id, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, isOn);
+            const featureSwitch = this.props.switches.find(sw => sw.id === id);
+
+            // only update feature switches who's state needs change
+            if (featureSwitch[FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY] !== isOn) {
+                updatePromises.push(this.props.updateFeatureSwitch(id, featureSwitch, FeatureSwitchConsts.FEATURE_DEFAULT_ON_KEY, isOn));
+            }
         });
+
+        // notify of updates if there were any
+        if (updatePromises.length > 0) {
+            Promise.all(updatePromises).then(() => {
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
+                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            });
+        }
     }
 
     /**
@@ -121,9 +140,12 @@ export class FeatureSwitchesRoute extends React.Component {
      */
     createFeatureSwitch() {
 
-        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then(() => {
+        this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then((feature) => {
             NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'),
                 CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+
+            const columnToEdit = _.findIndex(this.state.columns, ['property', FeatureSwitchConsts.FEATURE_NAME_KEY]);
+            this.props.editFeatureSwitch(feature.id, columnToEdit);
         });
     }
 
@@ -189,6 +211,13 @@ export class FeatureSwitchesRoute extends React.Component {
         const featureSwitch = this.props.switches.find(sw => sw.id === id);
 
         if (property === FeatureSwitchConsts.FEATURE_NAME_KEY) {
+
+            if (value.trim() === '') {
+                NotificationManager.error(Locale.getMessage('featureSwitchAdmin.featureNameEmpty'), Locale.getMessage('failed'),
+                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                return;
+            }
+
             const featureByName = this.getFeatureByName(value);
 
             // prevent renaming feature to an existing name (unless it's the currently edited feature)
@@ -307,10 +336,19 @@ export class FeatureSwitchesRoute extends React.Component {
         ];
     }
 
+    checkAccess(props) {
+        if (props.error && props.error.status === constants.HttpStatusCode.FORBIDDEN) {
+            WindowLocationUtils.update(UrlConsts.FORBIDDEN);
+        }
+    }
+    componentWillReceiveProps(props) {
+        this.checkAccess(props);
+    }
     /**
      * get switches whenever the component mounts
      */
     componentDidMount() {
+        this.checkAccess(this.props);
         this.props.getSwitches();
     }
 
@@ -318,52 +356,79 @@ export class FeatureSwitchesRoute extends React.Component {
 
         const selectedSize = this.state.selectedIDs.length;
         const selectedSizeLabel = selectedSize > 0 && `${selectedSize} ${Locale.getMessage("featureSwitchAdmin.selectedFeatures")}`;
-
+        const loaded = this.props.error === null;
         return (
-            <div className="featureSwitches">
-                <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
+            <Loader loaded={loaded} loadedClassName="featureSwitchesLoader">
+                <div className="featureSwitches">
+                    <div className="top">
 
-                <div className="globalButtons">
-                    <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                        <h1><I18nMessage message="featureSwitchAdmin.featureSwitchesTitle"/></h1>
+
+                        <div className="globalButtons">
+                            <button className="addButton" onClick={this.createFeatureSwitch}><I18nMessage message="featureSwitchAdmin.addNew"/></button>
+                        </div>
+
+                    </div>
+
+                    <div className="main">
+                        <Table.Provider className="featureSwitchTable switches"
+                                        columns={this.state.columns}
+                                        components={{
+                                            body: {
+                                                wrapper: BodyWrapper,
+                                                row: RowWrapper
+                                            }
+                                        }}>
+
+                            <Table.Header />
+
+                            <Table.Body rows={this.props.switches} rowKey="id" />
+                        </Table.Provider>
+                    </div>
+
+                    <div className="bottom">
+
+                        <div className="selectionButtons">
+
+                            <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
+                            <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
+                            <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
+                            <span>{selectedSizeLabel}</span>
+                        </div>
+
+                        {this.getConfirmDialog()}
+
+                        <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
+                    </div>
                 </div>
+            </Loader>
 
-                <Table.Provider className="featureSwitchTable switches"
-                                columns={this.state.columns}
-                                components={{
-                                    body: {
-                                        wrapper: BodyWrapper,
-                                        row: RowWrapper
-                                    }
-                                }}>
-
-                    <Table.Header />
-
-                    <Table.Body rows={this.props.switches} rowKey="id" />
-                </Table.Provider>
-
-                <p/>
-
-                <div className="selectionButtons">
-
-                    <button className="deleteButton" disabled={!selectedSize} onClick={this.confirmDelete}><I18nMessage message="featureSwitchAdmin.delete"/></button>
-                    <button className="turnOnButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(true)}><I18nMessage message="featureSwitchAdmin.turnOn"/></button>
-                    <button className="turnOffButton" disabled={!selectedSize} onClick={() => this.setSelectedSwitchStates(false)}><I18nMessage message="featureSwitchAdmin.turnOff"/></button>
-                    <span>{selectedSizeLabel}</span>
-                </div>
-
-                {this.getConfirmDialog()}
-
-                <PageTitle title={Locale.getMessage("featureSwitchAdmin.featureSwitchesTitle")} />
-            </div>
         );
     }
 }
 
+const switchComparator = (a, b) => {
+
+    let nameA = a[FeatureSwitchConsts.FEATURE_NAME_KEY].toUpperCase();
+    let nameB = b[FeatureSwitchConsts.FEATURE_NAME_KEY].toUpperCase();
+
+    if (nameA < nameB) {
+        return -1;
+    } else if (nameA > nameB) {
+        return 1;
+    } else {
+        return 0;
+    }
+};
 
 const mapStateToProps = (state) => {
 
+    let sortedSwitches = state.featureSwitches.switches.sort(switchComparator);
     return {
-        switches: state.featureSwitches.switches
+
+        switches: sortedSwitches,
+        error: state.featureSwitches.errorResponse
+
     };
 };
 

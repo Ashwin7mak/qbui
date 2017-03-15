@@ -465,14 +465,16 @@ export default {
         pageTitles: {
             pageTitleSeparator: " - ",
             editingRecord: "Datensatz #{recordId} bearbeiten",
-            newRecord: "Datensatz hinzufügen"
+            newRecord: "Datensatz hinzufügen",
+            editForm: "Formular bearbeiten",
         },
         quickBaseClassic: "QuickBase Klassik",
         quickBaseMercury: "QuickBase Mercury",
         missingWalkMe: "Tutorial ist nicht verfügbar",
         builder: {
             formBuilder: {
-                unimplemented: "Feature ist momentan nicht verfügbar"
+                unimplemented: "Feature ist momentan nicht verfügbar",
+                removeField: "Feld aus Form entfernen"
             },
             fields: {
                 // Keys are equal to server constants for field types to make it easier to get these keys
@@ -527,12 +529,14 @@ export default {
             overrideChangesDefault: "Überschreibt standardmäßig?",
             overridesYes: "Ja",
             overridesNo: "Nein",
-            overrideCreated: "Override erstellt",
+            overrideCreated: "Überschreiben erstellt",
+            overridesUpdated: "{num} Überschreiben erstellt",
             overrideUpdated: "Überschreiben geändert",
             overridesDeleted: "Überschreibt gelöscht",
             selectedOverrides: "Ausgewählte Überschreibungen",
             noOverrides: "Es wurden keine Overrides gesetzt",
-            featureNameExists: "Feature-Namen müssen eindeutig sein"
+            featureNameExists: "Feature-Namen müssen eindeutig sein",
+            featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         }
     }
 };

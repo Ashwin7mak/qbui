@@ -21,8 +21,8 @@ describe('Feature switch actions', () => {
         getFeatureSwitches() {
             return Promise.resolve({data: switchesResponseData});
         }
-        createFeatureSwitch() {
-            return Promise.resolve({data: "newSwitchId"});
+        createFeatureSwitch(feature) {
+            return Promise.resolve({data: {id: "newSwitchId"}});
         }
         updateFeatureSwitch() {
             return Promise.resolve();
@@ -31,7 +31,7 @@ describe('Feature switch actions', () => {
             return Promise.resolve();
         }
         createOverride() {
-            return Promise.resolve({data: "newOverrideId"});
+            return Promise.resolve({data: {id: "newOverrideId"}});
         }
         updateOverride() {
             return Promise.resolve();
@@ -193,10 +193,7 @@ describe('Feature switch actions', () => {
             {
                 type: types.CREATED_OVERRIDE,
                 override: {
-                    id:'newOverrideId',
-                    entityType:'realm',
-                    entityValue: '',
-                    on:false
+                    id:'newOverrideId'
                 }
             }
         ];
@@ -306,5 +303,32 @@ describe('Feature switch actions', () => {
     it('should create an action for loaded feature states', () => {
         const states = [{'Feature 1': true}, {'Feature 2': false}];
         expect(actions.loadStatesSuccess(states)).toEqual({type: types.SET_FEATURE_SWITCH_STATES, states});
+    });
+
+    it('Test error state', (done) => {
+
+        class mockFeatureSwitchNegService {
+            constructor() {}
+
+            getFeatureSwitches() {
+                return Promise.reject({response: {status: 403}});
+            }
+        }
+        FeatureSwitchActionsRewireAPI.__Rewire__('FeatureSwitchService', mockFeatureSwitchNegService);
+
+        const expectedActions = [
+            {type: types.ERROR, error: {response: {status: 403}}}
+        ];
+        const store = mockStore({});
+
+        return store.dispatch(actions.getSwitches()).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
     });
 });
