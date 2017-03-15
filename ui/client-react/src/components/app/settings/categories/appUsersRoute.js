@@ -58,16 +58,18 @@ const AppUsersRoute = React.createClass({
 
     render() {
         return (
-            <div className="userManagementContainer">
+            <div>
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
                     <AppSettingsStage appUsers={this.props.appUsersUnfiltered} appRoles={this.props.appRoles}/>
                 </Stage>
-                <UserManagement appId={this.props.params.appId}
-                                appUsers={this.props.appUsersUnfiltered}
-                                appRoles={this.props.appRoles}
-                />
+                <div className="userManagementContainer">
+                    <UserManagement appId={this.props.params.appId}
+                                    appUsers={this.props.appUsersUnfiltered}
+                                    appRoles={this.props.appRoles}
+                    />
+                </div>
             </div>
         );
     }

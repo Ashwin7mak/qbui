@@ -22,10 +22,6 @@ class UserManagement extends React.Component {
 
     constructor(...args) {
         super(...args);
-        this.state = {
-            searchColumn: 'all',
-            query: {}
-        };
         this.createUserColumns = this.createUserColumns.bind(this);
         this.createUserRows = this.createUserRows.bind(this);
     }
@@ -83,34 +79,11 @@ class UserManagement extends React.Component {
         const resolvedRows = this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
-        const query = this.state.query;
-        const searchedRows = compose(
-            search.highlighter({
-                columns: columns,
-                matches: search.matches,
-                query
-            }),
-            search.multipleColumns({
-                columns: columns,
-                query
-            }),
-        )(resolvedRows);
         return (
             <div className="userManagementReport">
-                <div className="search-container">
-                    <span>Search</span>
-                    <search.Field
-                        column={this.state.searchColumn}
-                        query={query}
-                        columns={columns}
-                        rows={resolvedRows}
-                        onColumnChange={searchColumn => this.setState({searchColumn})}
-                        onChange={newQuery => this.setState({query: newQuery})}
-                    />
-                </div>
                 <Table.Provider columns={columns} className="userGrid">
                     <Table.Header headerRows={[columns]} />
-                    <Table.Body rows={searchedRows} rowKey="userId" className="userTBody"/>
+                    <Table.Body rows={resolvedRows} rowKey="userId" className="userTBody"/>
                 </Table.Provider>
             </div>
         );
