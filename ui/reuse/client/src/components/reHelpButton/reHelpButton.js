@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React from 'react';
 import ReNotificationManager from '../../scripts/reNotificationManager';
 import ReIcon from '../reIcon/reIcon';
 
@@ -30,7 +30,7 @@ function getHelpWalkme() {
  */
 const ReHelpButton = () => (
     <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
-        <ReIcon icon={'help'}/>
+        <ReIcon icon="help" />
         <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
     </a>
 );
