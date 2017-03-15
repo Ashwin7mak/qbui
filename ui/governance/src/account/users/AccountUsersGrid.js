@@ -298,6 +298,7 @@ class AccountUsersGrid extends Component {
 
 // Provide type checking
 AccountUsersGrid.propTypes = {
+    accountId: React.PropTypes.string.isRequired,
     users: React.PropTypes.array,
     fetchAccountUsers: React.PropTypes.func.isRequired
 };
