@@ -92,13 +92,13 @@ export class FieldEditingTools extends Component {
 
         return (
             <div className="actionIcons">
-                <div className="deleteFieldIcon" onClick={this.onClickDelete}>
+                <div tabIndex="0" className="deleteFieldIcon" onClick={this.onClickDelete}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                         <QbIcon icon="delete" />
                     </QbToolTip>
                 </div>
 
-                <div className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
+                <div tabIndex="0" className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
                     <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
                         <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
                     </QbToolTip>
@@ -128,7 +128,6 @@ export class FieldEditingTools extends Component {
         return (
             <div
                 className={classNames.join(' ')}
-                tabIndex="0"
                 ref={this.setPositionOfFieldEditingTools}
                 style={this.state}
                 onClick={this.onClickField}

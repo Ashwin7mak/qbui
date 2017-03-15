@@ -31,6 +31,12 @@
         /* When in builder mode we need to push out the
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
+        &:focus {
+            width: 295px;
+            .qbIcon {
+                opacity: 1;
+            }
+        }
     }
 
     .draggableField, .droppableField {
