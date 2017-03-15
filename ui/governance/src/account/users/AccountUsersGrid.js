@@ -25,6 +25,9 @@ const IsRegisteredInRealm = cellData => HasFlag(cellData.realmDirectoryFlags, Re
 const IsTimeNull = timeStr => timeStr === '1900-01-01T00:00:00Z';
 const RenderBoolColumn = bool => bool ? 'Y' : '--';
 
+/**
+ * Columns for the grid
+ */
 const columns = [
     {
         property: 'firstName',
@@ -250,7 +253,9 @@ const columns = [
     },
 ];
 
-
+/**
+ * Represents the Grid Component
+ */
 class AccountUsersGrid extends Component {
 
     constructor(props) {
@@ -258,7 +263,7 @@ class AccountUsersGrid extends Component {
     }
 
     /**
-     * get users whenever the component mounts
+     * After the component mounts, retrieve the users for the account
      */
     componentDidMount() {
         this.props.fetchAccountUsers(this.props.accountId);

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import AccountUsersGrid from './AccountUsersGrid';
 
+/**
+ * Represents the top level page that contains the grid for account users
+ */
 class AccountUsers extends Component {
     render() {
         return (

@@ -11,7 +11,7 @@
     let fs = require('fs');
 
 
-
+    // Since we don't want to always connect to the external services, we may want to stub out dummy data
     const dummyData = [
         {
             "uid": 10000,
@@ -472,7 +472,7 @@
             },
 
             /**
-             * Get all the users in the account
+             * Get all the users in the account. Resolve either the dummy data or the actual one
              * @param req
              * @param useSSL
              * @returns {Promise}
@@ -481,7 +481,7 @@
 
                 return new Promise((resolve, reject) => {
 
-                    // if using a config property to point to a mock
+                    // if using a config property to point to a mock then return the dummyData
                     if (config && config.useGovernanceMockData) {
                         return resolve(dummyData);
                     }

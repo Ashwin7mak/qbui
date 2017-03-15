@@ -10,6 +10,9 @@ class AccountUsersService extends BaseService {
         };
     }
 
+    /**
+     * Get the Account Users through the Node API for the given accountID
+     */
     getAccountUsers(accountId) {
         const params = {};
         const url = super.constructUrl(this.API.GET_USERS, [accountId]);

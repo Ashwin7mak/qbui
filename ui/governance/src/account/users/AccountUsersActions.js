@@ -23,7 +23,6 @@ export const fetchAccountUsers = (accountId) => {
     return (dispatch) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
-
         const promise = accountUsersService.getAccountUsers(accountId);
 
         promise.then(response => {
