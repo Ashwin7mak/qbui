@@ -1,5 +1,4 @@
 import React, {PropTypes, Component} from 'react';
-import ReactDom from 'react-dom';
 import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
 import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
@@ -34,6 +33,12 @@ export class FieldEditingTools extends Component {
         }
     }
 
+    onKeyboardDelete(location) {
+        if (this.props.removeField) {
+            return this.props.removeField(location);
+        }
+    }
+
     onClickFieldPreferences() {
         if (this.props.onClickFieldPreferences) {
             return this.props.onClickFieldPreferences(this.props.location);
@@ -59,17 +64,18 @@ export class FieldEditingTools extends Component {
 
         return (
             <div className="actionIcons">
-                <div tabIndex="0" className="deleteFieldIcon" onClick={this.onClickDelete}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                        <QbIcon icon="delete" />
-                    </QbToolTip>
-                </div>
 
-                <div tabIndex="0" className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                        <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
-                    </QbToolTip>
-                </div>
+                    <div tabIndex="0" className="deleteFieldIcon" onClick={this.onClickDelete}>
+                        <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
+                            <QbIcon icon="delete" />
+                        </QbToolTip>
+                    </div>
+
+                    <div tabIndex="0" className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
+                        <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                            <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
+                        </QbToolTip>
+                    </div>
             </div>
         );
     }
@@ -92,11 +98,15 @@ export class FieldEditingTools extends Component {
         if (this.isFieldSelected()) {
             classNames.push('selectedFormElement');
         }
+
         return (
             <div
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
             >
+                <ReKeyboardShortcuts id={'formBuilderContainer'} shortcutBindings={[
+                    {key: 'd', callback: () => this.onKeyboardDelete(this.props.selectedFields[0])},
+                ]}/>
 
                 <DragHandle />
 
