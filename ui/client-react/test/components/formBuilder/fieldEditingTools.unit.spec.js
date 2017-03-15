@@ -76,7 +76,7 @@ describe('FieldEditingTools', () => {
 
         expect(mockParentProps.openFieldPreferences).toHaveBeenCalledWith(location);
     });
-    
+
     it('selects a field when an element is clicked', () => {
         spyOn(mockParentProps, 'selectField');
 

@@ -64,11 +64,6 @@
                 }
             }
 
-            &.active {
-                opacity: 1;
-                @include dragpreview-active-gradient;
-            }
-
             &:active {
                 @include dragpreview-active-gradient;
                 .fieldEditingTools {

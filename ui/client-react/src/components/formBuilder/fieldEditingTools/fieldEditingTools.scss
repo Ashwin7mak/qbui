@@ -114,4 +114,9 @@
     .tipChildWrapper {
         cursor: pointer;
     }
+
+    &.active {
+        opacity: 1;
+        @include dragpreview-active-gradient;
+    }
 }
