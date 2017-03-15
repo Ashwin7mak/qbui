@@ -31,7 +31,7 @@ describe('Validate RouteHelper unit tests', function() {
         var accountIds = [1, 100, 200];
 
         accountIds.forEach(function(accountId) {
-            it('Test case: ' + testCase.name, function(done) {
+            it('Testing account: ' + accountId, function(done) {
                 assert.equal(routeHelper.getAccountUsersCurrentStack(accountId),
                     `qb/governance/{accountId}/users`);
                 done();
