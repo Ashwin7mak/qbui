@@ -62,12 +62,12 @@ class UserDropDown extends Component {
             <DropDown id="nav-right-dropdown" className="userDropDown">
                 <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
                     <ReIcon icon={dropDownIcon}/>
-                    <span className={"navLabel"}><I18nMessage message={dropDownMessage}/></span>
+                    <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
                 </a>
 
                 <DropDown.Menu>
-                    <MenuItem disabled>
-                        <I18nMessage message={'header.menu.preferences'}/>
+                    <MenuItem className="preferencesButton" disabled>
+                        <I18nMessage message="header.menu.preferences"/>
                     </MenuItem>
 
                     {this.renderLocalesList()}
@@ -75,7 +75,7 @@ class UserDropDown extends Component {
                     {app && <MenuItem disabled><span className="appMenuHeader">{app.name}</span></MenuItem>}
                     {app && <MenuItem divider/>}
 
-                    <MenuItem onClick={signOutUser}><I18nMessage message={signOutMessage}/></MenuItem>
+                    <MenuItem className="signOutButton" onClick={() => signOutUser()}><I18nMessage message={signOutMessage}/></MenuItem>
                 </DropDown.Menu>
             </DropDown>
         );
