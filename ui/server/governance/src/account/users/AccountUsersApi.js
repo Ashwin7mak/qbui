@@ -450,6 +450,7 @@
     module.exports = function(config) {
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
+        var TICKET = 'TICKET';
 
         let requestHelper = require('../../../../src/api/quickbase/requestHelper')(config);
         let routeHelper = require('../../../../src/routes/routeHelper');
@@ -489,7 +490,9 @@
                     // make a request to the current stack to get the results
                     let opts = requestHelper.setOptions(req, false, true);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                    opts.url = routeHelper.getAccountUsersCurrentStack(accountId);
+                    opts.headers[TICKET] = req.cookies[TICKET];
+
+                    opts.url = requestHelper.getLegacyRealmBase(req) + routeHelper.getAccountUsersLegacyStackRoute(accountId);
 
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {

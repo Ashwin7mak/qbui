@@ -69,7 +69,7 @@
         DOMAIN: 'http://localhost:9000',
 
         //  legacy quickbase host
-        legacyHost: 'https://legacy.quickbase.com:443',
+        legacyBase: '.quickbase-dev.com',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,

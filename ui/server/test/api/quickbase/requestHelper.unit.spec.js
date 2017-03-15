@@ -1,7 +1,7 @@
 'use strict';
 
 let config = {
-    legacyHost: 'http://legacyHost',
+    legacyBase: '.quickbase-dev.com',
     javaHost: 'http://javaHost',
     eeHost: 'http://eeHost',
     SSL_KEY : {
@@ -90,7 +90,7 @@ describe('Validate RequestHelper unit tests', function() {
     describe('validate the legacy host', function() {
         it('Test request url method', function(done) {
             let host = requestHelper.getLegacyHost();
-            should(host).be.exactly(config.legacyHost);
+            should(host).be.exactly(config.legacyBase);
             done();
         });
     });
@@ -547,6 +547,15 @@ describe('Validate RequestHelper unit tests', function() {
                 assert.equal(requestHelper.isDisplayFormat(req), testCase.expectation);
                 done();
             });
+        });
+    });
+
+    describe('validate getLegacyRealmBase function', function() {
+        it('Test case realm host is formatted', function(done) {
+            let req = {url: 'https://wmt.ns.quickbase-dev.com/governance', params: {}};
+            assert.equal(requestHelper.getLegacyRealmBase(req),
+                'https://wmt.' + config.legacyBase);
+            done();
         });
     });
 });

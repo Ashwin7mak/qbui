@@ -856,7 +856,7 @@
          * Call .NET handler to return the Current Stack Account Users information
          * @returns {string}
          */
-        getAccountUsersCurrentStack: function(accountId) {
+        getAccountUsersLegacyStackRoute: function(accountId) {
             return `${getLegacyStackDotNetRoot()}/governance/${accountId}/users`;
         }
     };
