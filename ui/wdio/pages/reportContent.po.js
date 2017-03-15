@@ -111,16 +111,16 @@
             return colHeaders;
         }},
 
-        /**
-         * Returns a recordRowElement from the table based on the supplied index
-         * @param recordIndex
-         * @returns Resolved record row element at specified index
-         */
         getAllRows: {get: function() {
             this.qbGridBodyEl.element('.qbRow').waitForVisible();
             return this.qbGridContainer.elements('.qbRow');
         }},
 
+        /**
+         * Returns a recordRowElement from the table based on the supplied index
+         * @param recordIndex
+         * @returns Resolved record row element at specified index
+         */
         getRecordRowElement: {value: function(recordIndex) {
             return this.getAllRows.value[recordIndex];
         }},
