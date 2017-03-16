@@ -1,79 +1,97 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import Record, {__RewireAPI__ as RecordRewireAPI} from '../../src/components/record/record';
+import {mount, shallow} from 'enzyme';
+import _ from 'lodash';
+import {Record, __RewireAPI__ as RecordRewireAPI} from '../../src/components/record/record';
 
+const renderText = 'Mock QBForm';
 var QBFormMock = React.createClass({
     render: function() {
         return (
-            <div>form</div>
+            <div onclick={this.handleFieldChange}>{renderText}</div>
         );
     }
 });
 
-let flux = {
-    actions: {
-        recordPendingEditsCommit: {},
-        recordPendingEditsChangeField: {},
-        recordPendingEditsCancel: {},
-        recordPendingEditsStart: {},
-        saveRecord: {}
-    }
-};
-
 describe('Record functions', () => {
     'use strict';
 
-    let component;
+    let appId = '1';
+    let tblId = '2';
+    let recId = '6';
+    let props = {
+        appId: appId,
+        tblId: tblId,
+        recId: recId,
+        pendEdits: {
+            recordEditOpen: false,
+            recordChanges: {}
+        },
+        formData: {
+            record: [
+                {display:'2', id:3, value:2},
+                {display:'blah', id:6, value:'blah'}
+            ],
+            fields: [
+                {id:3, builtIn:true, name:'Record ID#', required:true, tableId:'2', type:'SCALAR', datatypeAttributes:{type:'NUMERIC'}},
+                {id:6, builtIn:false, name:'City', required:true, tableId:'2', type:'SCALAR', datatypeAttributes:{type:'TEXT'}}
+            ]
+        },
+        editRecordStart: () => {},
+        editRecordChange: () => {}
+    };
 
     beforeEach(() => {
         RecordRewireAPI.__Rewire__('QBForm', QBFormMock);
-        spyOn(flux.actions, 'recordPendingEditsCommit');
-        spyOn(flux.actions, 'recordPendingEditsChangeField');
-        spyOn(flux.actions, 'recordPendingEditsCancel');
-        spyOn(flux.actions, 'recordPendingEditsStart');
-        spyOn(flux.actions, 'saveRecord');
+        spyOn(props, 'editRecordStart').and.callThrough();
+        spyOn(props, 'editRecordChange').and.callThrough();
     });
 
     afterEach(() => {
         RecordRewireAPI.__ResetDependency__('QBForm');
-        flux.actions.recordPendingEditsCommit.calls.reset();
-        flux.actions.recordPendingEditsChangeField.calls.reset();
-        flux.actions.recordPendingEditsCancel.calls.reset();
-        flux.actions.recordPendingEditsStart.calls.reset();
-        flux.actions.saveRecord.calls.reset();
+        props.editRecordStart.calls.reset();
+        props.editRecordChange.calls.reset();
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<Record flux={flux}></Record>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        const record = ReactDOM.findDOMNode(component);
-        expect(record).toBeDefined();
+        let component = mount(<Record {...props}/>);
+        const div = component.find('div');
+        expect(div.text()).toBe(renderText);
     });
-    it('test field change callback', () => {
-        component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux} pendEdits={{recordChanges: {}, recordEditOpen: false}} formData={{}}></Record>);
-        component.handleFieldChange({});
-        expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
-    });
-    it('test pendingEditStart is called on edit open', () => {
-        var TestParent = React.createFactory(React.createClass({
-            getInitialState() {
-                return {recordEditOpen: false};
-            },
-            setRecordEdit() {
-                this.setState({recordEditOpen: true});
-            },
-            render() {
-                return <div>
-                    <Record ref="record" recId={1} flux={flux} pendEdits={{recordChanges: {}, recordEditOpen: this.state.recordEditOpen}} formData={{}}></Record>
-                    <button onClick={this.setRecordEdit} />
-                </div>;
+
+    var editRecordStartTests = [
+        {name: 'test editRecord Start is not called on component mount', recId:recId, recordChanges:{'change':'someChange'}, recordEditOpen:false, expectation:false},
+        {name: 'test editRecord Start is not called on component mount with edit open', recId:recId, recordChanges:{'change':'someChange'}, recordEditOpen:true, expectation:false},
+        {name: 'test editRecord Start is called on component mount', recordChanges:{}, recId:recId, recordEditOpen:true, expectation:true},
+        {name: 'test editRecord Start is called on component mount with no recId', recId:null, recordChanges:{}, recordEditOpen:true, expectation:true}
+    ];
+    editRecordStartTests.forEach(testCase => {
+        it(testCase.name, () => {
+            let testProps = _.clone(props);
+            testProps.recId = testCase.recId;
+            testProps.pendEdits.recordEditOpen = testCase.recordEditOpen;
+            testProps.pendEdits.recordChanges = testCase.recordChanges;
+
+            mount(<Record {...testProps}  />);
+            if (testCase.expectation) {
+                expect(props.editRecordStart).toHaveBeenCalled();
+            } else {
+                expect(props.editRecordStart).not.toHaveBeenCalled();
             }
-        }));
-        var parent = TestUtils.renderIntoDocument(TestParent());
-        component = TestUtils.scryRenderedComponentsWithType(parent.refs.record, Record);
-        let button = TestUtils.scryRenderedDOMComponentsWithTag(parent, 'button');
-        TestUtils.Simulate.click(button[0]);
-        expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
+        });
     });
+
+    it('test field change callback', () => {
+        let component = TestUtils.renderIntoDocument(<Record {...props}></Record>);
+        component.handleFieldChange({});
+        expect(props.editRecordChange).toHaveBeenCalled();
+    });
+
+    it('test field change callback - take 2', () => {
+        let component = TestUtils.renderIntoDocument(<Record {...props}></Record>);
+        component.handleFieldChange({});
+        expect(props.editRecordChange).toHaveBeenCalled();
+    });
+
 });

@@ -1,7 +1,6 @@
 import React from 'react';
 import Locale from '../../locales/locales';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-//import Fluxxor from "fluxxor";
 import ActionIcon from './actionIcon';
 import QBModal from '../qbModal/qbModal';
 import {connect} from 'react-redux';
@@ -13,17 +12,12 @@ import './reportActions.scss';
 
 import {EDIT_RECORD_KEY} from '../../constants/urlConstants';
 
-
-//let FluxMixin = Fluxxor.FluxMixin(React);
-
 /**
  * report-level actions
  *
  * Note: this component has been partially migrated to Redux
  */
-export let ReportActions = React.createClass({
-    //mixins: [FluxMixin],
-
+export const ReportActions = React.createClass({
     propTypes: {
         selection: React.PropTypes.array,
         rptId: React.PropTypes.string,
@@ -50,7 +44,6 @@ export let ReportActions = React.createClass({
         const action = Locale.getMessage(actionMsg);
         const record = Locale.getMessage('records.singular');
         const records = Locale.getMessage('records.plural');
-
         const suffix = this.props.selection.length === 1 ? record : records;
 
         return action + " " + this.props.selection.length + " " + suffix;
@@ -73,8 +66,6 @@ export let ReportActions = React.createClass({
      * this.props.selection has the current selected rows with the unique identifier as the value in the array
      */
     handleBulkDelete() {
-        //const flux = this.getFlux();
-        //flux.actions.deleteRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
         this.props.deleteRecords(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
@@ -136,7 +127,6 @@ export let ReportActions = React.createClass({
      * edit icon was clicked
      */
     onEditClicked() {
-
         if (this.props.selection && this.props.selection.length === 1) {
             const recordId = this.getRecordIdFromReport(this.props);
             this.navigateToRecord(recordId);
