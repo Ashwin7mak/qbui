@@ -132,7 +132,10 @@ ReSideMenuBase.propTypes = {
 
     /**
      * Determines whether the side menu will dock (stay open) at the medium or large breakpoints.
-     * If false, visible behavior is only determined by isOpen. Careful with this one as it breaks the XD pattern for left navs. */
+     * If false, visible behavior is only determined by isOpen.
+     * Two warnings about this prop:
+     *   1. Careful with this one as it breaks the XD pattern for left navs.
+     *   2. If a new prop is passed at runtime, it won't visibly update until the next page resize */
     willDock: PropTypes.bool
 
 };
