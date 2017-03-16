@@ -17,7 +17,6 @@ let logger = new Logger();
 
 /*
  Redux event for saving a form
- TODO: refactor once record events moved
  */
 function event(id, type, content) {
     return {
@@ -260,6 +259,17 @@ export const moveFieldOnForm = (formId, newLocation, draggedItemProps) => {
     return event(formId, types.MOVE_FIELD, {
         newLocation,
         draggedItemProps
+    });
+};
+
+/**
+ * Removes a field from the form
+ * @param formId
+ * @param location
+ */
+export const removeFieldFromForm = (formId, location) => {
+    return event(formId, types.REMOVE_FIELD, {
+        location
     });
 };
 

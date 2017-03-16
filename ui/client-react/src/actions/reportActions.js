@@ -41,6 +41,15 @@ export const selectReportRecords = (context, selections) => {
     return event(context, types.SELECT_REPORT_RECORDS, {selections});
 };
 
+export const addBlankRecordToReport = (context, afterRecId) => {
+    return (dispatch) => {
+        return new Promise((resolve) => {
+            dispatch(event(context, types.ADD_BLANK_REPORT_RECORD, {context, afterRecId}));
+            resolve();
+        });
+    };
+};
+
 /**
  * Retrieve a list of reports for the given app/table.  This function is called primarily when
  * populating the left hand navigation window with the list of reports and when displaying a

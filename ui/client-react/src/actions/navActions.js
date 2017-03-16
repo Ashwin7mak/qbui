@@ -1,6 +1,5 @@
 // action creators
 import * as actions from '../constants/actions';
-import Locale from '../locales/locales';
 import Breakpoints from '../utils/breakpoints';
 
 let navActions = {
@@ -11,13 +10,6 @@ let navActions = {
     onToggleRowPopUpMenu(isOpen) {
         this.dispatch(actions.TOGGLE_ROW_POP_UP_MENU, isOpen);
     },
-    /**
-     * Resets onToggleRowPopUpMenu count to 0
-     * */
-    //  NO ONE IS LISTENING TO THIS EVENT
-    //resetRowMenu() {
-    //    this.dispatch(actions.RESET_ROW_MENU);
-    //},
     toggleSearch() {
         this.dispatch(actions.TOGGLE_SEARCH);
     },
@@ -42,10 +34,6 @@ let navActions = {
     },
     hideTopNav() {
         this.dispatch(actions.HIDE_TOP_NAV);
-    },
-    changeLocale(locale) {
-        Locale.changeLocale(locale);
-        this.dispatch(actions.CHANGE_LOCALE);
     },
     scrollingReport(isScrolling = true) {
         this.dispatch(actions.SCROLLING_REPORT, isScrolling);

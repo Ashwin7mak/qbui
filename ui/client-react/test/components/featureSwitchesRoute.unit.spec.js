@@ -26,6 +26,7 @@ describe('FeatureSwitchesRoute', () => {
 
     const props = {
         switches: sampleSwitches,
+        error: null,
         getSwitches: () => {},
         createFeatureSwitch: (name) => Promise.resolve('newId'),
         updateFeatureSwitch: () => Promise.resolve(),

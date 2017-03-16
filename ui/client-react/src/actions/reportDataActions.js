@@ -36,12 +36,12 @@ let reportDataActions = {
     /**
      * setup a a new record not yet saved to the database
      */
-    newBlankReportRecord(appId, tblId, afterRecId) {
-        return new Promise((resolve, reject) => {
-            this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
-            resolve();
-        });
-    },
+    //newBlankReportRecord(appId, tblId, afterRecId) {
+    //    return new Promise((resolve, reject) => {
+    //        this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
+    //        resolve();
+    //    });
+    //},
 
     /**
      * Load a report based on it's meta data definition.

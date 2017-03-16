@@ -1,4 +1,5 @@
 import * as types from '../actions/types';
+import Locale from '../locales/locales';
 
 const shell = (
     state = {
@@ -10,7 +11,9 @@ const shell = (
         leftNavVisible: false,
         trowserOpen: false,
         trowserContent: null,
-        openCount: 0
+        openCount: 0,
+        locale: Locale.getLocale(),
+        i18n: Locale.getI18nBundle()
     },
     action) => {
 
@@ -66,6 +69,13 @@ const shell = (
         return {
             ...state,
             errorPopupHidden: true
+        };
+    case types.CHANGE_LOCALE:
+        Locale.changeLocale(action.locale);
+        return {
+            ...state,
+            locale: Locale.getLocale(),
+            i18n: Locale.getI18nBundle()
         };
     default:
         // return existing state by default in redux

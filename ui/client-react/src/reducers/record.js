@@ -2,6 +2,7 @@ import * as types from '../actions/types';
 import RecordModel from '../models/recordModel';
 import ValidationMessage from '../utils/validationMessage';
 import {NEW_RECORD_VALUE} from "../constants/urlConstants";
+import {UNSAVED_RECORD_ID} from "../constants/schema";
 import _ from 'lodash';
 
 /**
@@ -33,9 +34,8 @@ const record = (state = [], action) => {
         //  if obj is undefined/null, there's nothing to do..
         if (obj) {
             //  ensure obj id is stored as a numeric..unless it's a new record
-            if (obj.id !== NEW_RECORD_VALUE) {
-                obj.id = +obj.id;
-            }
+            obj.id = (obj.id === NEW_RECORD_VALUE || obj.id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +obj.id);
+
             if (singleRecordStore === true) {
                 if (stateList.length === 0) {
                     stateList.push(obj);
@@ -56,14 +56,15 @@ const record = (state = [], action) => {
     }
 
     /**
-     * Retrieve the record from the state and return a cloned
+     * Retrieve the record from the state and return a clone
      * object
      *
      * @param id
      * @returns {*}
      */
     function getRecordFromState(id) {
-        const recId = (id === NEW_RECORD_VALUE ? id : +id);  // ensure always looking up id as a numeric..unless it's a new record
+        // ensure always looking up id as a numeric..unless it's a new record
+        const recId = (id === NEW_RECORD_VALUE || id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +id);
         const index = _.findIndex(state, rec => rec.id === recId);
         if (index !== -1) {
             return _.cloneDeep(state[index]);
@@ -95,7 +96,7 @@ const record = (state = [], action) => {
     }
     case types.DELETE_RECORDS_COMPLETE: {
         const ids = action.content.recIds;
-        let states = null;
+        let states = [];
         ids.forEach((recId) => {
             let currentRecd = getRecordFromState(recId);
             if (_.has(currentRecd, 'pendEdits')) {
@@ -104,16 +105,15 @@ const record = (state = [], action) => {
                 model.setSaving(false);
 
                 currentRecd.pendEdits = model.get();
-                states = newState(currentRecd);
+                states.push(currentRecd);
             }
         });
-        return states || state;
+        return states.length > 0 ? states : state;
     }
     case types.DELETE_RECORDS_ERROR: {
-        //  update errors..if any
-        let states = null;
+        let states = [];
         let errors = action.content.errors;
-        if (errors) {
+        if (Array.isArray(errors) && errors.length > 0) {
             const ids = action.content.recIds;
             ids.forEach((recId) => {
                 let currentRecd = getRecordFromState(recId);
@@ -123,11 +123,11 @@ const record = (state = [], action) => {
                     model.setErrors(errors);
 
                     currentRecd.pendEdits = model.get();
-                    states = newState(currentRecd);
+                    states.push(currentRecd);
                 }
             });
         }
-        return states || state;
+        return states.length > 0 ? states : state;
     }
     case types.OPEN_RECORD: {
         const obj = {
@@ -135,8 +135,8 @@ const record = (state = [], action) => {
             recId: action.content.recId,
             nextRecordId: action.content.nextRecordId,
             previousRecordId: action.content.previousRecordId,
-            navigateAfterSave: action.navigateAfterSave || false,
-            nextOrPreviousEdit: action.nextOrPreviousEdit || ''
+            navigateAfterSave: action.content.navigateAfterSave || false,
+            nextOrPreviousEdit: action.content.nextOrPreviousEdit || ''
         };
         return newState(obj);
     }
@@ -239,7 +239,7 @@ const record = (state = [], action) => {
     }
     case types.EDIT_RECORD_VALIDATE_FIELD: {
         const currentRecd = getRecordFromState(action.id);
-        if (currentRecd && _.has(currentRecd, 'pendEdits')) {
+        if (_.has(currentRecd, 'pendEdits')) {
             let model = new RecordModel();
             model.set(currentRecd.pendEdits);
             model.setEditRecordValidate(action.content);

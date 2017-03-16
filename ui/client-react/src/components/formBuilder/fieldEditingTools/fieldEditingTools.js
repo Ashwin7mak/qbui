@@ -4,7 +4,7 @@ import AVAILABLE_ICON_FONTS from '../../../constants/iconConstants';
 import QbIcon from '../../qbIcon/qbIcon';
 import QbToolTip from '../../qbToolTip/qbToolTip';
 import DragHandle from '../dragHandle/dragHandle';
-import device from '../../../utils/device';
+import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 
 import './fieldEditingTools.scss';
@@ -31,6 +31,7 @@ class FieldEditingTools extends Component {
         this.setPositionOfFieldEditingTools = this.setPositionOfFieldEditingTools.bind(this);
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
+        this.renderActionIcons = this.renderActionIcons.bind(this);
     }
 
     /**
@@ -41,12 +42,13 @@ class FieldEditingTools extends Component {
         if (editingTools) {
             let fieldDomElement = ReactDom.findDOMNode(editingTools).nextElementSibling;
             let isSmall = Breakpoints.isSmallBreakpoint();
-            let width = isSmall ? 26 : 30;
+            let width = isSmall ? 40 : 30;
+            let left = isSmall ? 25 : 15;
 
             let styles = {
                 top: `${fieldDomElement.offsetTop - 10}px`,
-                left: `${fieldDomElement.offsetLeft - 15}px`,
-                height: `${fieldDomElement.offsetHeight + 26}px`,
+                left: `${fieldDomElement.offsetLeft - left}px`,
+                height: `${fieldDomElement.offsetHeight + (isSmall ? 11 : 26)}px`,
                 width: `${fieldDomElement.offsetWidth + width}px`
             };
 
@@ -55,8 +57,8 @@ class FieldEditingTools extends Component {
     }
 
     onClickDelete() {
-        if (this.props.onClickDelete) {
-            return this.props.onClickDelete(this.props.location);
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.location);
         }
     }
 
@@ -66,29 +68,15 @@ class FieldEditingTools extends Component {
         }
     }
 
-    render() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
-        let isTouch = device.isTouch();
-        let classNames = ["fieldEditingTools"];
-
-        if (isTouch && !isSmall) {
-            classNames.push("isTablet");
-        } else if (!isTouch) {
-            classNames.push("notTouchDevice");
+    renderActionIcons() {
+        if (this.props.isDragging) {
+            return null;
         }
 
         return (
-            <div
-                className={classNames.join(' ')}
-                tabIndex="0"
-                ref={this.setPositionOfFieldEditingTools}
-                style={this.state}
-            >
-
-                <DragHandle />
-
+            <div className="actionIcons">
                 <div className="deleteFieldIcon" onClick={this.onClickDelete}>
-                    <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
+                    <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
                         <QbIcon icon="delete" />
                     </QbToolTip>
                 </div>
@@ -101,12 +89,43 @@ class FieldEditingTools extends Component {
             </div>
         );
     }
+
+    render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        let isTouch = Device.isTouch();
+        let classNames = ['fieldEditingTools'];
+
+        if (isTouch && !isSmall) {
+            classNames.push('isTablet');
+        } else if (!isTouch) {
+            classNames.push('notTouchDevice');
+        }
+
+        if (this.props.isDragging) {
+            classNames.push('active');
+        }
+
+        return (
+            <div
+                className={classNames.join(' ')}
+                tabIndex="0"
+                ref={this.setPositionOfFieldEditingTools}
+                style={this.state}
+            >
+
+                <DragHandle />
+
+                {this.renderActionIcons()}
+            </div>
+        );
+    }
 }
 
 FieldEditingTools.propTypes = {
     location: PropTypes.object,
     onClickDelete: PropTypes.func,
-    onClickFieldPreferences: PropTypes.func
+    onClickFieldPreferences: PropTypes.func,
+    isDragging: PropTypes.bool
 };
 
 export default FieldEditingTools;

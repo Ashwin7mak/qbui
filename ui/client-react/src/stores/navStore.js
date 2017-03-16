@@ -2,7 +2,6 @@ import * as actions from '../constants/actions';
 import * as TrowserConsts from "../constants/trowserConstants";
 
 import Fluxxor from 'fluxxor';
-import Locale from '../locales/locales';
 import Logger from '../utils/logger';
 
 let logger = new Logger();
@@ -23,13 +22,12 @@ let NavStore = Fluxxor.createStore({
             openCount: 0
         };
 
-        this.setLocaleBundle();
+        //this.setLocaleBundle();
 
         this.bindActions(
             actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
             actions.TOGGLE_SEARCH, this.onToggleSearch,
             actions.SEARCHING, this.onSearching,
-            actions.CHANGE_LOCALE, this.onChangeLocale,
             actions.SHOW_TOP_NAV, this.onShowTopNav,
             actions.HIDE_TOP_NAV, this.onHideTopNav,
             actions.SET_TOP_TITLE, this.onSetTopTitle,
@@ -38,11 +36,6 @@ let NavStore = Fluxxor.createStore({
         );
     },
 
-    onChangeLocale() {
-        logger.debug('changing locale: ' + Locale.getLocale());
-        this.setLocaleBundle();
-        this.emit('change');
-    },
     onToggleRowPopUpMenu(isOpen) {
         //Originally if a user opens up one menu then opened up a second menu, the padding would be removed from the page, and the row menu pop up would be clipped
             //by keeping track of the count, makes sure padding remains at the bottom of the page, even if a user clicks on one menu and then clicks on a separate menu
@@ -88,11 +81,6 @@ let NavStore = Fluxxor.createStore({
 
     getState() {
         return this.state;
-    },
-
-    setLocaleBundle() {
-        this.state.locale = Locale.getLocale();
-        this.state.i18n = Locale.getI18nBundle();
     }
 });
 

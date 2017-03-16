@@ -9,11 +9,15 @@ import {TabPane} from 'rc-tabs';
 import RelatedChildReport from '../../src/components/QBForm/relatedChildReport';
 
 import {
-    testArrayBasedFormData as fakeQbFormData,
+    buildTestArrayBasedFormData,
     textElementText,
-    testFormDataArrayWithTwoColumns,
-    testFormDataWithRelationship
+    buildTestFormDataArrayWithTwoColumns,
+    buildTestFormDataWithRelationship
 } from '../testHelpers/testFormData';
+
+const fakeQbFormData = buildTestArrayBasedFormData();
+const testFormDataArrayWithTwoColumns = buildTestFormDataArrayWithTwoColumns();
+const testFormDataWithRelationship = buildTestFormDataWithRelationship();
 
 const emptyQBFormData = {
     formMeta: {
@@ -133,13 +137,6 @@ describe('QBForm', () => {
         });
     });
 
-    it('renders elements into rows', () => {
-        component = mount(<QBForm activeTab="1" formData={fakeQbFormData}/>);
-        let rows = component.find('.sectionRow');
-
-        expect(rows.length).toEqual(7);
-    });
-
     it('does not render relationship element if no relationships exist', () => {
         component = mount(<QBForm activeTab="0" formData={fakeQbFormData} />);
         let childReport = component.find('.referenceElement');
@@ -183,7 +180,6 @@ describe('QBForm', () => {
             tabIndex: 0,
             sectionIndex: 0,
             columnIndex: 0,
-            rowIndex: 0,
             elementIndex: 0
         });
     });

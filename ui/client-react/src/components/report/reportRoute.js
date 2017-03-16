@@ -96,8 +96,7 @@ const ReportRoute = React.createClass({
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
-        // No one is listening
-        //flux.actions.resetRowMenu();
+
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }

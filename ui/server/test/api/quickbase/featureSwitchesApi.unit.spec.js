@@ -12,6 +12,7 @@ let constants = require('../../../../common/src/constants');
  * Unit tests for feature switches apis
  */
 describe("Validate featureSwitchesApi", function() {
+    let error_message = "fail unit test case execution";
     let req = {
         headers: {
             'Content-Type': 'content-type',
@@ -64,7 +65,6 @@ describe("Validate featureSwitchesApi", function() {
         });
     });
 
-
     describe("validate getFeatureSwitches function", function() {
 
         it('success return results ', function(done) {
@@ -78,6 +78,22 @@ describe("Validate featureSwitchesApi", function() {
                 },
                 function(error) {
                     done(new Error("Unexpected failure promise return when testing getFeatureSwitches success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('getFeatureSwitches: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fail return results ', function(done) {
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = featureSwitchesApi.getFeatureSwitches(req, false);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return when testing getFeatureSwitches success"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
                 }
             ).catch(function(errorMsg) {
                 done(new Error('getFeatureSwitches: exception processing success test: ' + JSON.stringify(errorMsg)));
@@ -102,9 +118,7 @@ describe("Validate featureSwitchesApi", function() {
                 done(new Error('getFeatureSwitches: exception processing create test: ' + JSON.stringify(errorMsg)));
             });
         });
-
     });
-
     describe("when updateFeatureSwitch is called", function() {
         it('success return results ', function(done) {
             req.url = '/featureSwitches';
@@ -119,7 +133,7 @@ describe("Validate featureSwitchesApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('getFeatureSwitches: exception processing update test: ' + JSON.stringify(errorMsg)));
+                done(new Error('updateFeatureSwitch: exception processing update test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
@@ -160,7 +174,6 @@ describe("Validate featureSwitchesApi", function() {
                 done(new Error('getFeatureSwitches: exception processing create override test: ' + JSON.stringify(errorMsg)));
             });
         });
-
     });
 
     describe("when updateFeatureSwitchOverride is called", function() {
@@ -196,7 +209,7 @@ describe("Validate featureSwitchesApi", function() {
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('getFeatureSwitches: exception processing delete overrides test: ' + JSON.stringify(errorMsg)));
+                done(new Error('deleteFeatureSwitchOverrides: exception processing delete overrides test: ' + JSON.stringify(errorMsg)));
             });
         });
     });
