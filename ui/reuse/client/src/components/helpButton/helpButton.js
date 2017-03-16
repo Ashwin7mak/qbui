@@ -1,5 +1,5 @@
 import React from 'react';
-import ReNotificationManager from '../../scripts/reNotificationManager';
+import NotificationManager from '../../scripts/notificationManager';
 import ReIcon from '../reIcon/reIcon';
 
 // IMPORTS FROM CLIENT REACT
@@ -20,7 +20,7 @@ function getHelpWalkme() {
     try {
         WalkMePlayerAPI.toggleMenu();
     } catch (err) {
-        ReNotificationManager.info(Locale.getMessage('missingWalkMe'), '');
+        NotificationManager.info(Locale.getMessage('missingWalkMe'), '');
     }
 }
 

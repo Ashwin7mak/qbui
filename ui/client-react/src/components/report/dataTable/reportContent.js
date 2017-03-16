@@ -1,6 +1,6 @@
 import React from "react";
 import ReactIntl from "react-intl";
-import NotificationManager from '../../../../../reuse/client/src/scripts/reNotificationManager';
+import NotificationManager from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";

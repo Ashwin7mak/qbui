@@ -1,7 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import NotificationManager from '../../../../reuse/client/src/scripts/reNotificationManager';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import UrlUtils from '../../utils/urlUtils';
 import {WALKME_ID_FOR_LARGE} from '../../constants/urlConstants';
 

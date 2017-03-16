@@ -8,7 +8,7 @@ import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import Locale from '../locales/locales';
 import _ from 'lodash';
-import NotificationManager from '../../../reuse/client/src/scripts/reNotificationManager';
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
 

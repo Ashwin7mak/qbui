@@ -1,8 +1,8 @@
 import BaseService from '../../src/services/baseService';
 import FeatureSwitchService from '../../src/services/featureSwitchService';
-import * as query from '../../src/constants/query';
+import _ from 'lodash';
 
-describe('RecordService functions', () => {
+describe('FeatureService functions', () => {
     'use strict';
     var featureSwitchService;
 
@@ -31,23 +31,25 @@ describe('RecordService functions', () => {
         const url = featureSwitchService.constructUrl(featureSwitchService.API.POST_FEATURE_SWITCH);
         featureSwitchService.createFeatureSwitch(feature);
 
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, {feature});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, feature);
     });
 
     it('test updateFeatureSwitch function', () => {
-        const feature = {id: 'id', name: 'fsName', defaultOn: true};
+        const feature = {id: 'id', name: 'fsName', description: 'desc', teamName: 'team', defaultOn: true};
         const url = featureSwitchService.constructUrl(featureSwitchService.API.PUT_FEATURE_SWITCH, ['id']);
         featureSwitchService.updateFeatureSwitch(feature);
 
-        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, {feature});
+        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, _.omit(feature, 'id'));
     });
 
     it('test deleteFeatureSwitches function', () => {
-        const ids = ['id1', 'id2'];
+        const features = {
+            features: [{id:'id1'}, {id:'id2'}]
+        };
         const url = featureSwitchService.constructUrl(featureSwitchService.API.DELETE_FEATURE_SWITCHES);
-        featureSwitchService.deleteFeatureSwitches(ids);
+        featureSwitchService.deleteFeatureSwitches(['id1', 'id2']);
 
-        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, {params: {ids: ids.join()}});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, features);
     });
 
     it('test createOverride function', () => {
@@ -56,23 +58,25 @@ describe('RecordService functions', () => {
         const url = featureSwitchService.constructUrl(featureSwitchService.API.POST_OVERRIDE, ['featureId']);
         featureSwitchService.createOverride('featureId', override);
 
-        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, {override});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, override);
     });
 
     it('test updateOverride function', () => {
-        const override = {id: 'id', entityType: 'realm', entityValue: '2', on: false};
+        const override = {entityType: 'realm', entityValue: '2', on: false};
         const url = featureSwitchService.constructUrl(featureSwitchService.API.PUT_OVERRIDE, ['featureId', 'id']);
         featureSwitchService.updateOverride('featureId', 'id', override);
 
-        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, {override});
+        expect(BaseService.prototype.put).toHaveBeenCalledWith(url, override);
     });
 
     it('test deleteOverrides function', () => {
-        const ids = ['id1', 'id2'];
+        const overrides = {
+            overrides: [{id:'id1'}, {id:'id2'}]
+        };
         const url = featureSwitchService.constructUrl(featureSwitchService.API.DELETE_OVERRIDES, ['featureId']);
-        featureSwitchService.deleteOverrides('featureId', ids);
+        featureSwitchService.deleteOverrides('featureId', ['id1', 'id2']);
 
-        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, {params: {ids: ids.join()}});
+        expect(BaseService.prototype.post).toHaveBeenCalledWith(url, overrides);
     });
 
     it('test getFeatureSwitchStates function', () => {

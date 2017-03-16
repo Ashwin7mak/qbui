@@ -88,7 +88,7 @@ describe('FieldEditingTools', () => {
             zIndex: 2,
             top: '-5px',
             left: '-10px',
-            height: '76px',
+            height: '56px',
             width: '130px'
         });
     });
