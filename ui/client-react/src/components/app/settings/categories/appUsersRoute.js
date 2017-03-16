@@ -8,7 +8,6 @@ import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../qbIcon/qbIcon';
 import AppSettingsStage from '../appSettingsStage';
 import Locale from '../../../../locales/locales';
-import {I18nMessage} from '../../../../utils/i18nMessage';
 import './appUsersRoute.scss';
 
 const AppUsersRoute = React.createClass({
