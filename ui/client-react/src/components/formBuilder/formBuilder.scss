@@ -49,4 +49,24 @@
     .elementCache {
         display: none;
     }
+
+    .selectedFormElement {
+        opacity: 1;
+        outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
+
+        .deleteFieldIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-red-700;
+            }
+        }
+
+        .fieldPreferencesIcon {
+            .qbIcon {
+                opacity: 1;
+                color: $color-cyan-700;
+            }
+        }
+    }
 }

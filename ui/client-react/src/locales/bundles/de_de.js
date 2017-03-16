@@ -529,12 +529,14 @@ export default {
             overrideChangesDefault: "Überschreibt standardmäßig?",
             overridesYes: "Ja",
             overridesNo: "Nein",
-            overrideCreated: "Override erstellt",
+            overrideCreated: "Überschreiben erstellt",
+            overridesUpdated: "{num} Überschreiben erstellt",
             overrideUpdated: "Überschreiben geändert",
             overridesDeleted: "Überschreibt gelöscht",
             selectedOverrides: "Ausgewählte Überschreibungen",
             noOverrides: "Es wurden keine Overrides gesetzt",
-            featureNameExists: "Feature-Namen müssen eindeutig sein"
+            featureNameExists: "Feature-Namen müssen eindeutig sein",
+            featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         }
     }
 };

@@ -116,10 +116,10 @@ export const createFeatureSwitch = (name) => {
 
             promise.then(response => {
                 // save the generated ID and set an empty override list
-                feature.id = response.data;
+                feature.id = response.data.id;
                 feature.overrides = [];
                 dispatch(createdFeatureSwitch(feature));
-                resolve();
+                resolve(feature);
             }).catch(error => {
                 dispatch(errorResponse(error));
                 if (error.response) {
@@ -256,24 +256,20 @@ export const createOverride = (switchId) => {
 
             const featureSwitchService = new FeatureSwitchService();
 
-            const override = {
-                entityType: 'realm',
-                entityValue: '',
-                on: false
-            };
             // set override default values
-            override[FeatureSwitchConsts.OVERRIDE_TYPE_KEY] = "realm";
-            override[FeatureSwitchConsts.OVERRIDE_VALUE_KEY] = "";
-            override[FeatureSwitchConsts.OVERRIDE_ON_KEY] = false;
+            const override = {
+                [FeatureSwitchConsts.OVERRIDE_TYPE_KEY]: "REALM",
+                [FeatureSwitchConsts.OVERRIDE_VALUE_KEY]: "id",
+                [FeatureSwitchConsts.OVERRIDE_ON_KEY]: false
+            };
 
             const promise = featureSwitchService.createOverride(switchId, override);
 
             promise.then(response => {
-                override.id = response.data; // save the generated ID
 
-                dispatch(createdOverride(override));
+                dispatch(createdOverride(response.data));
 
-                resolve();
+                resolve(response.data);
             }).catch(error => {
                 dispatch(errorResponse(error));
                 if (error.response) {

@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import AccountUsersGrid from './AccountUserGrid';
+import React, {Component} from 'react';
+import AccountUsersGrid from './AccountUsersGrid';
 
 class AccountUsers extends Component {
     render() {

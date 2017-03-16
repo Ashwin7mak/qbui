@@ -10,6 +10,7 @@ const forms = (
 
     const newState = _.reject(state, form => form.id === id);
     const currentForm = _.find(state, form => form.id === id);
+    let updatedForm;
 
     // reducer - no mutations!
     switch (action.type) {
@@ -78,13 +79,28 @@ const forms = (
         return newState;
     }
 
+    case types.SAVING_FORM_SUCCESS: {
+        //no changes to state..
+        updatedForm = _.cloneDeep(currentForm);
+        if (!updatedForm.formData) {
+            updatedForm.formData = {};
+        }
+        updatedForm.formData.formMeta = action.content;
+        newState.push({
+            ...updatedForm,
+            id,
+            saving: false
+        });
+        return newState;
+    }
+
     case types.MOVE_FIELD : {
         if (!currentForm) {
             return state;
         }
 
         let {newLocation, draggedItemProps} = action.content;
-        let updatedForm = _.cloneDeep(currentForm);
+        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
@@ -104,7 +120,7 @@ const forms = (
         }
 
         let {location} = action.content;
-        let updatedForm = _.cloneDeep(currentForm);
+        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.removeField(
             updatedForm.formData.formMeta,
@@ -116,6 +132,25 @@ const forms = (
             updatedForm
         ];
     }
+
+    case types.SELECT_FIELD :
+
+        if (!currentForm || !_.has(action, 'content.location')) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
+
+        updatedForm.selectedFields[0] = action.content.location;
+
+        return [
+            ...newState,
+            updatedForm
+        ];
 
     default:
         // return existing state by default in redux
