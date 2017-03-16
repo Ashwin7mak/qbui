@@ -963,6 +963,9 @@ export const ReportContent = React.createClass({
         let showDTSErrorModal = pendEdits.showDTSErrorModal || false;
         const editErrors = pendEdits.editErrors || null;
 
+        // onCellClick handler: do nothing for embedded reports phase1.
+        let openRowToView = !this.props.phase1 && this.openRowToView;
+
         let reportContent;
 
         if (this.props.reportData.error) {
@@ -984,7 +987,7 @@ export const ReportContent = React.createClass({
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
                                 onEditRecordStart={this.handleEditRecordStart}
-                                onCellClick={this.openRowToView}
+                                onCellClick={openRowToView}
                                 //pendEdits={pendEdits}
                                 selectedRows={this.props.selectedRows}
                                 onRecordDelete={this.handleRecordDelete}
