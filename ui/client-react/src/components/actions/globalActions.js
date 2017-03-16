@@ -1,6 +1,6 @@
 import React from 'react';
 import Fluxxor from "fluxxor";
-import ReDefaultTopNavGlobalActions from '../../../../reuse/client/src/components/reTopNav/reDefaultTopNavGlobalActions';
+import DefaultTopNavGlobalActions from '../../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -13,7 +13,7 @@ const GlobalActions = React.createClass({
     },
 
     render() {
-        return <ReDefaultTopNavGlobalActions changeLocale={this.changeLocale} {...this.props} />;
+        return <DefaultTopNavGlobalActions changeLocale={this.changeLocale} {...this.props} />;
     }
 });
 

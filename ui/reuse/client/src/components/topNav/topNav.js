@@ -7,7 +7,7 @@ import ReIcon from '../reIcon/reIcon';
 import QbTooltip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
 // IMPORTED FROM CLIENT REACT
 
-import './reTopNav.scss';
+import './topNav.scss';
 
 class ReTopNav extends Component {
     constructor(props) {

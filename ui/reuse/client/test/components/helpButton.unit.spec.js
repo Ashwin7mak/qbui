@@ -2,18 +2,18 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ReHelpButton from '../../src/components/reHelpButton/reHelpButton';
+import HelpButton from '../../src/components/helpButton/helpButton';
 import ReIcon from '../../src/components/reIcon/reIcon';
 
 let component;
 
-describe('ReHelpButton', () => {
+describe('HelpButton', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
 
     it('displays a help button', () => {
-        component = shallow(<ReHelpButton />);
+        component = shallow(<HelpButton />);
 
         expect(component.find(ReIcon)).toHaveProp('icon', 'help');
     });

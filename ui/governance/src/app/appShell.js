@@ -1,12 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-import ReAppShell from '../../../reuse/client/src/components/reAppShell/reAppShell';
-import ReDefaultTopNavGlobalActions from '../../../reuse/client/src/components/reTopNav/reDefaultTopNavGlobalActions';
-import ReTopNav from '../../../reuse/client/src/components/reTopNav/reTopNav';
+import AppShell from '../../../reuse/client/src/components/appShell/appShell';
+import DefaultTopNavGlobalActions from '../../../reuse/client/src/components/topNav/defaultTopNavGlobalActions';
+import TopNav from '../../../reuse/client/src/components/topNav/topNav';
 
-const AppShell = ({children}) => (
-    <ReAppShell functionalAreaName="governance">
-        <ReTopNav title="Governance" globalActions={
-            <ReDefaultTopNavGlobalActions
+const GovernanceAppShell = ({children}) => (
+    <AppShell functionalAreaName="governance">
+        <TopNav title="Governance" globalActions={
+            <DefaultTopNavGlobalActions
                 position="top"
                 startTabIndex={4}
                 dropdownIcon="user"
@@ -14,7 +14,7 @@ const AppShell = ({children}) => (
             />
         }/>
         {children}
-    </ReAppShell>
+    </AppShell>
 );
 
-export default AppShell;
+export default GovernanceAppShell;

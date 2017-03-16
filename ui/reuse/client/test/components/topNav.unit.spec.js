@@ -2,12 +2,12 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ReTopNav from '../../src/components/reTopNav/reTopNav';
+import TopNav from '../../src/components/topNav/topNav';
 import ReIcon from '../../src/components/reIcon/reIcon';
 
 let component;
 
-describe('ReTopNav', () => {
+describe('TopNav', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
@@ -16,7 +16,7 @@ describe('ReTopNav', () => {
         const mockNavParent = {onNavClick() {}};
         spyOn(mockNavParent, 'onNavClick');
 
-        component = shallow(<ReTopNav onNavClick={mockNavParent.onNavClick} />);
+        component = shallow(<TopNav onNavClick={mockNavParent.onNavClick} />);
 
         let menuIcon = component.find('.toggleNavButton');
         expect(menuIcon).toBePresent();
@@ -28,14 +28,14 @@ describe('ReTopNav', () => {
 
     it('displays a title on small devices (title is hidden through css)', () => {
         const testTitle = 'test title';
-        component = shallow(<ReTopNav title={testTitle} />);
+        component = shallow(<TopNav title={testTitle} />);
 
         expect(component.find('.topTitle')).toHaveText(testTitle);
     });
 
     it('has default actions (favorite and search, disabled) in the center of the nav bar if none are provided', () => {
         // Using mount as the icons are nested inside of other components
-        component = mount(<ReTopNav/>);
+        component = mount(<TopNav/>);
 
         let centerIcons = component.find('.center').find(ReIcon);
         expect(centerIcons.at(0)).toHaveProp('icon', 'search');
@@ -45,7 +45,7 @@ describe('ReTopNav', () => {
     it('can optionally display different elements in the center of the nav bar', () => {
         const testCenterElement = <div className="centerComponent">My center component</div>;
         // Using mount as the icons are nested inside of other components
-        component = mount(<ReTopNav centerGlobalActions={testCenterElement}/>);
+        component = mount(<TopNav centerGlobalActions={testCenterElement}/>);
 
         expect(component.find('.center').find('.centerComponent')).toBePresent();
         expect(component.find('.center').find(ReIcon)).not.toBePresent();
@@ -53,7 +53,7 @@ describe('ReTopNav', () => {
 
     it('displays actions passed in on the right side of the nav bar', () => {
         const testRightElement = <div className="rightComponent">My right component</div>;
-        component = shallow(<ReTopNav globalActions={testRightElement} />);
+        component = shallow(<TopNav globalActions={testRightElement} />);
 
         expect(component.find('.right').find('.rightComponent')).toBePresent();
     });

@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import UserDropDown, {__RewireAPI__ as UserDropDownRewireAPI} from '../../src/components/reTopNav/supportingComponents/userDropDown';
+import UserDropDown, {__RewireAPI__ as UserDropDownRewireAPI} from '../../src/components/topNav/supportingComponents/userDropDown';
 
 const mockI18nMessage = ({message}) => <div className="i18nMessage">{message}</div>;
 

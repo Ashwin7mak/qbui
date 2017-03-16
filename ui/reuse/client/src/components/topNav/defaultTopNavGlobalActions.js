@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
-import ReGlobalAction from '../reGlobalAction/reGlobalAction';
+import GlobalAction from '../globalAction/globalAction';
 import UserDropDown from './supportingComponents/userDropDown';
-import ReHelpButton from '../reHelpButton/reHelpButton';
+import HelpButton from '../helpButton/helpButton';
 
 // IMPORTING FROM CLIENT REACT
 // Needs to be refactored once these components are added to the reuse library
@@ -32,7 +32,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                 <ul className={"globalActionsList"}>
                     {this.props.children}
                     {this.props.actions && this.props.actions.map((action, index) => (
-                        <ReGlobalAction
+                        <GlobalAction
                             tabIndex={this.props.startTabIndex + index}
                             key={action.msg}
                             linkClass={this.props.linkClass}
@@ -49,7 +49,7 @@ class ReDefaultTopNavGlobalActions extends Component {
                             app={this.props.app}
                         />
                     </li>
-                    <li className={"link globalAction"}><ReHelpButton/></li>
+                    <li className={"link globalAction"}><HelpButton/></li>
                 </ul>
             </div>
         );
