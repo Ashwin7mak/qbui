@@ -18,8 +18,9 @@ class ReSideMenuBase extends Component {
         this.getMainBodyClasses = this.getMainBodyClasses.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         window.addEventListener('resize', this.screenSizeChanged, false);
+        this.screenSizeChanged(); // Call the function once to initialize
     }
 
     componentWillUnmount() {
