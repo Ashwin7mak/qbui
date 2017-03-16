@@ -378,7 +378,8 @@ const QbGrid = React.createClass({
             <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT}>
                 <Table.Provider
                     ref="qbGridTable"
-                    className="qbGrid"
+                    // Turn off hover effects when in inline editing mode
+                    className={`qbGrid${this.props.isInlineEditOpen ? ' inlineEditing' : ''}`}
                     columns={columns}
                     onScroll={this.handleScroll}
                     components={{

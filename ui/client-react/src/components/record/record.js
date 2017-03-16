@@ -1,5 +1,5 @@
 import React from 'react';
-//import Fluxxor from "fluxxor";
+
 import QBForm from '../QBForm/qbform';
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
@@ -7,9 +7,8 @@ import {connect} from 'react-redux';
 import {editRecordStart, editRecordChange} from '../../actions/recordActions';
 import {UNSAVED_RECORD_ID} from "../../constants/schema";
 
-//let FluxMixin = Fluxxor.FluxMixin(React);
-let Record = React.createClass({
-    //mixins: [FluxMixin],
+export const Record = React.createClass({
+
     displayName: 'Record',
 
     componentWillReceiveProps(nextProps) {
@@ -30,6 +29,7 @@ let Record = React.createClass({
      * Get the record as {fids, names}
      * fids is a fid lookup hash looks like {6: {id:6, value: <val>, display: <display>}}
      * names is not populated. Its here to keep in sync with the data structure used by grid for similar calls.
+     *
      * @returns {*}
      */
     getOrigRec() {
@@ -42,16 +42,14 @@ let Record = React.createClass({
         return _.cloneDeep(orig);
     },
     /**
-     * When user starts editing a record (this is marked by first field change), if it's an existing (already stored) record keep note
-     * its originalRecord values (for later undo/audit?)
-     * if it's a new (unsaved) record note all it's non null values as changes to the new record
-     * to be saved.
-     * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
-     * was one or changes if it's a new record
+     * When user starts editing a record (this is marked by first field change), if it's an existing (already stored)
+     * record keep note its originalRecord values (for later undo/audit?).  If it's a new(unsaved) record, note all
+     * it's non null values as changes to the new record to be saved.  Then initiate the edit record start action with
+     * the app/table/recId and originalRec if there was one or changes if it's a new record.
+     *
      * @param recId
      */
     handleEditRecordStart() {
-        //const flux = this.getFlux();
         let origRec = null;
         let changes = {};
         if (this.props.recId) {
@@ -100,36 +98,21 @@ let Record = React.createClass({
             }
 
         }
-        //flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
         this.props.editRecordStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
     },
 
 
     /**
-     * Initiate recordPendingEditsChangeField action to hold the unsaved field value change
+     * Initiate edit record change action to hold the unsaved field value change
      * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
      */
     handleFieldChange(change) {
         change.recId = this.props.recId || UNSAVED_RECORD_ID;
-        // call action to hold the field value change
-        //const flux = this.getFlux();
-        //flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
         let origRec = change.recId ? this.getOrigRec() : null;
         this.props.editRecordChange(this.props.appId, this.props.tblId, change.recId, origRec, change);
     },
 
-    getPendEdits() {
-        let pendEdits = {};
-        if (Array.isArray(state.record) && state.record.length > 0) {
-            if (_.isEmpty(state.record[0]) === false) {
-                pendEdits = state.record[0].pendEdits || {};
-            }
-        }
-        return {};
-    },
-
     render() {
-
         return <QBForm {...this.props}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
@@ -138,17 +121,13 @@ let Record = React.createClass({
     }
 });
 
-// instead of relying on our parent route component to pass our props down,
-// the react-redux container will generate the required props for this route
-// from the Redux state (the presentational component has no code dependency on Redux!)
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapStateToProps = (state) => {
     return {
         record: state.record
     };
 };
-
-// similarly, abstract out the Redux dispatcher from the presentational component
-// (another bit of boilerplate to keep the component free of Redux dependencies)
 const mapDispatchToProps = (dispatch) => {
     return {
         editRecordStart: (appId, tblId, recId, origRec, changes, isInlineEdit = false, fieldToStartEditing = null) => {

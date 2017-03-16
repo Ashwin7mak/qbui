@@ -107,11 +107,8 @@ export const RecordRoute = React.createClass({
      * return to the report we navigated from
      */
     returnToReport() {
-
         // use the route parameters to build the URI
-
         const {appId, tblId, rptId} = this.props.params;
-
         const link = `${APP_ROUTE}/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
@@ -154,7 +151,7 @@ export const RecordRoute = React.createClass({
             const {data} = this.props.reportData;
             const key = _.has(data, 'keyField.name') ? data.keyField.name : '';
             if (key) {
-                let recordsArray = this.getRecordsArray();
+                let recordsArray = this.getRecordsArray() || [];
 
                 //  fetch the index of the row in the recordsArray that is being opened
                 const index = _.findIndex(recordsArray, rec => rec[key] && rec[key].value === recId);
@@ -260,17 +257,10 @@ export const RecordRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
-        // need to dispatch to Fluxxor since report store handles this too...
-        //const flux = this.getFlux();
-        //flux.actions.editNewRecord();
-        //
-        //this.props.editNewRecord();
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     getPageActions() {
-
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},

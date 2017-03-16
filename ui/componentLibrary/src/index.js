@@ -42,7 +42,7 @@ import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import QBPanelDoc from './docs/qbpanel';
-import QBIconDoc from './docs/qbicon';
+import ReIconDoc from './docs/reIcon';
 import QBModalDoc from './docs/qbModal.js';
 
 import InvisibleBackdropDoc from './docs/invisibleBackdrop.js';
@@ -84,7 +84,7 @@ render((
             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
-            <Route path="qbicon" component={QBIconDoc} />
+            <Route path="reIcon" component={ReIconDoc} />
             <Route path="qBModal" component={QBModalDoc} />
             <Route path="alertBanner" component={AlertBannerDoc} />
             <Route path="pageTitle" component={PageTitleDoc} />

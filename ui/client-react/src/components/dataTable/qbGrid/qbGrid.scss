@@ -219,6 +219,11 @@ $edit-icon-font-size: 18px;
         }
     }
 
+    // sometimes we just want to show an icon in a cell. for those cases we want to make sure the icon is centered
+    .qbIconOnlyCell {
+        text-align: center;
+    }
+
     // cells get the pointer cursor when not in edit mode and it's editable (not view only mode)
     // tooltips get the pointer cursor too
     .qbRow:not(.editing) .qbCell:not(.phase1),
@@ -475,7 +480,7 @@ $edit-icon-font-size: 18px;
     }
 
     // row hover highlighting - only done while not inline editing
-    .reportContent:not(.inlineEditing) & {
+    &:not(.inlineEditing) {
 
         // highlight the row when mouse is over the row
         .qbRow:hover .qbCell {
