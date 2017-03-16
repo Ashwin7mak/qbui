@@ -2,7 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
-import ReAppShell from '../../src/components/reAppShell/reAppShell';
+import ReAppShell from '../../src/components/appShell/reAppShell';
 import {NotificationContainer} from 'react-notifications';
 
 let component;
