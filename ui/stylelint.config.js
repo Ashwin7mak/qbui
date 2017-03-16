@@ -152,7 +152,7 @@ module.exports = {
         "string-quotes": ["double", {"severity": "warning"}],
         "unit-case": "lower",
         "unit-no-unknown": true,
-        "unit-whitelist": [["px", "%", "deg", "s", "ms"], {"severity": "warning"}],
+        "unit-whitelist": [["px", "%", "deg", "s", "ms", "vh"], {"severity": "warning"}],
         "value-keyword-case": [
             "lower",
             {
