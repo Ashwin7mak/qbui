@@ -14,7 +14,7 @@ let IntlMixin = ReactIntl.IntlMixin;
 /**
  * a set of record-level action icons
  */
-let RecordActions = React.createClass({
+export const RecordActions = React.createClass({
     mixins: [IntlMixin],
     nameForRecords: "Records",
 
@@ -58,8 +58,6 @@ let RecordActions = React.createClass({
 
 
     handleRecordDelete() {
-        //const flux = this.getFlux();
-        //flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.nameForRecords);
         this.props.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
