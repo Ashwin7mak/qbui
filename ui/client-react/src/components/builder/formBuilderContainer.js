@@ -17,7 +17,7 @@ import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
 import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
-
+import {selectFieldOnForm} from '../../actions/formActions';
 
 import './formBuilderContainer.scss';
 
@@ -150,6 +150,7 @@ export const FormBuilderContainer = React.createClass({
                                     removeField={this.props.removeField}
                                     updateAnimationState={this.props.updateAnimationState}
                                 />
+
                             </Loader>
                         </div>
                     </AutoScroll>

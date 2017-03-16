@@ -20,6 +20,7 @@ export class FieldEditingTools extends Component {
     constructor(props) {
         super(props);
 
+        this.tabIndex = "-1";
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
         this.onClickField = this.onClickField.bind(this);
@@ -27,10 +28,11 @@ export class FieldEditingTools extends Component {
         this.renderActionIcons = this.renderActionIcons.bind(this);
     }
 
-    onClickDelete() {
+    onClickDelete(e) {
         if (this.props.removeField) {
             return this.props.removeField(this.props.location);
         }
+        e.preventDefault();
     }
 
     onKeyboardDelete(location) {
@@ -45,10 +47,12 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    onClickField() {
+    onClickField(e) {
+        console.log('hello!');
         if (this.props.selectField) {
             this.props.selectField(this.props.formId, this.props.location);
         }
+        e.preventDefault();
     }
 
     isFieldSelected() {
@@ -62,18 +66,24 @@ export class FieldEditingTools extends Component {
             return null;
         }
 
+        if (this.isFieldSelected()) {
+this.tabIndex = "0";
+        } else {
+            this.tabIndex = "-1";
+        }
+
         return (
             <div className="actionIcons">
 
-                    <div tabIndex="0" className="deleteFieldIcon" onClick={this.onClickDelete}>
+                    <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                            <QbIcon icon="delete" />
+                           <button tabIndex={this.tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
                         </QbToolTip>
                     </div>
 
-                    <div tabIndex="0" className="fieldPreferencesIcon" onClick={this.onClickFieldPreferences}>
+                    <div  className="fieldPreferencesIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/>
+                            <button tabIndex={this.tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -100,7 +110,8 @@ export class FieldEditingTools extends Component {
         }
 
         return (
-            <div
+            <button
+                tabIndex="0"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
             >
@@ -111,7 +122,7 @@ export class FieldEditingTools extends Component {
                 <DragHandle />
 
                 {this.renderActionIcons()}
-            </div>
+            </button>
         );
     }
 }
