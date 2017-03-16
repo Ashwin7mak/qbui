@@ -272,7 +272,7 @@ class AccountUsersGrid extends Component {
      * get users whenever the component mounts
      */
     componentDidMount() {
-        this.props.fetchAccountUsers();
+        this.props.fetchAccountUsers(this.props.accountId);
     }
 
     render() {

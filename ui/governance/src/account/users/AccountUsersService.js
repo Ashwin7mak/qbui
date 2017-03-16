@@ -11,7 +11,7 @@ class AccountUsersService extends BaseService {
     }
 
     /**
-     * Get the Account Users through the Node API for the given accountID
+     * Get the Account Users through the Node API for the given accountId
      */
     getAccountUsers(accountId) {
         const params = {};
