@@ -10,6 +10,7 @@ const forms = (
 
     const newState = _.reject(state, form => form.id === id);
     const currentForm = _.find(state, form => form.id === id);
+    let updatedForm;
 
     // reducer - no mutations!
     switch (action.type) {
@@ -129,7 +130,7 @@ const forms = (
         //  up once form and record data is separated.
         //
         //no changes to state..
-        let updatedForm = _.cloneDeep(currentForm);
+        updatedForm = _.cloneDeep(currentForm);
         //  ..for now until the store is refactored..
         if (!updatedForm.formData) {
             updatedForm.formData = {};
@@ -143,19 +144,58 @@ const forms = (
         return newState;
     }
 
-    case types.MOVE_FIELD :
+    case types.MOVE_FIELD : {
         if (!currentForm) {
             return state;
         }
 
         let {newLocation, draggedItemProps} = action.content;
-        let updatedForm = _.cloneDeep(currentForm);
+        updatedForm = _.cloneDeep(currentForm);
 
         updatedForm.formData.formMeta = MoveFieldHelper.moveField(
             updatedForm.formData.formMeta,
             newLocation,
             draggedItemProps
         );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
+    case types.REMOVE_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {location} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.removeField(
+            updatedForm.formData.formMeta,
+            location
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
+    case types.SELECT_FIELD :
+
+        if (!currentForm || !_.has(action, 'content.location')) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
+
+        updatedForm.selectedFields[0] = action.content.location;
 
         return [
             ...newState,

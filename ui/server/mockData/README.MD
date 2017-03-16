@@ -47,7 +47,7 @@ JSON schema for feature switches:
             "entityValue": {
               "type": "string"
             },
-            "on": {
+            "overrideStateOn": {
               "type": "boolean"
             }
           },

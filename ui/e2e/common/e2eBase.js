@@ -20,6 +20,7 @@
         var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
         var relationshipService = require('./services/relationshipService.js');
+        var tableServiceWdio = require('../../wdio/common/services/tableService');
 
         var e2eBase = {
             // Instantiate recordBase module to use for your tests
@@ -50,6 +51,7 @@
             userService: userService(recordBase),
             roleService: roleService(recordBase),
             relationshipService: relationshipService(recordBase),
+            tableServiceWdio: tableServiceWdio(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
