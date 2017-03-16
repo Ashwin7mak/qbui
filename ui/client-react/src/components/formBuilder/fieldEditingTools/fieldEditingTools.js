@@ -88,7 +88,7 @@ export class FieldEditingTools extends Component {
          * */
         if (this.isFieldSelected()) {
             let dragHandleButtonIndex = this.props.selectedFields[0].elementIndex;
-            document.querySelectorAll('button.tempTest')[dragHandleButtonIndex].focus();
+            document.querySelectorAll('button.dragButton')[dragHandleButtonIndex].focus();
         }
     }
 
@@ -117,7 +117,7 @@ export class FieldEditingTools extends Component {
                 onClick={this.onClickField}
             >
 
-                <button className="tempTest" onClick={this.onClickField}>
+                <button className="dragButton" onClick={this.onClickField}>
                     <DragHandle />
                 </button>
 

@@ -17,7 +17,6 @@ import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
 import ReKeyboardShortcuts from '../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
-import {selectFieldOnForm} from '../../actions/formActions';
 
 import './formBuilderContainer.scss';
 
@@ -25,7 +24,7 @@ let logger = new Logger();
 
 const mapStateToProps = state => {
     return {
-        forms: state.forms
+        forms: state.forms,
     };
 };
 
@@ -116,7 +115,33 @@ export const FormBuilderContainer = React.createClass({
         />;
     },
 
+    getNewLocationForKeyBoardUp (selectedField) {
+        let newLocation = {};
+
+        newLocation.elementIndex = selectedField.tabIndex;
+        newLocation.columnIndex = selectedField.sectionIndex;
+        newLocation.tabIndex = selectedField.columnIndex;
+        newLocation.sectionIndex = selectedField.elementIndex + 1;
+
+        return newLocation;
+    },
+
+    getNewLocationForKeyBoardUpDown (selectedField) {
+        let newLocation = {};
+
+        newLocation.elementIndex = selectedField.tabIndex;
+        newLocation.columnIndex = selectedField.sectionIndex;
+        newLocation.tabIndex = selectedField.columnIndex;
+        newLocation.sectionIndex = selectedField.elementIndex - 1;
+
+        return newLocation;
+    },
+
     render() {
+        let keyBoardBindings = [
+            {key: 'esc', callback: () => {this.onCancel(); return false}},
+            {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
+        ];
 
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
@@ -124,14 +149,16 @@ export const FormBuilderContainer = React.createClass({
         if (loaded) {
             formId = this.props.forms[0].id;
             formData = this.props.forms[0].formData;
+
+            if (this.props.forms[0].selectedFields) {
+                console.log(this.getNewLocationForKeyBoardUp(this.props.forms[0].selectedFields[0]));
+                console.log(this.getNewLocationForKeyBoardUpDown(this.props.forms[0].selectedFields[0]));
+            }
         }
         return (
             <div className="formBuilderContainer">
 
-                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.onCancel(); return false}},
-                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
-                ]}/>
+                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={keyBoardBindings}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 

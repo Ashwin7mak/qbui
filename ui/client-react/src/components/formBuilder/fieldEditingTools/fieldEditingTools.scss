@@ -62,7 +62,7 @@
     &.notTouchDevice {
         //No borders, icon, or drag handles are displayed when it is not a touch device
         //Everything shows up on hover
-        opacity: 0;
+        opacity: 1;
 
         .deleteFieldIcon .qbIcon {
             padding-right: $spacing-xxx-small;
@@ -128,16 +128,17 @@
         @include dragpreview-active-gradient;
     }
 
-
-
     button {
         background: transparent;
         border: none;
         outline-color: hotpink;
-        &:focus {
-            opacity: 1;
-            outline-color: hotpink;
-        };
+    }
+
+    button.dragButton {
+        background: transparent;
+        border: none;
+        outline-color: hotpink;
+        margin-top: 14px;
     }
 
 }
