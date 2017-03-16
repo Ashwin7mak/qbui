@@ -1,12 +1,10 @@
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
 import _ from 'lodash';
 
 import EmbeddedReportToolsAndContent from '../report/ebmedded/embeddedReportToolsAndContent';
+import EmbeddedReportLink from '../report/ebmedded/embeddedReportLink';
 
-import UrlUtils from '../../utils/urlUtils';
 import Breakpoints from '../../utils/breakpoints';
-import {I18nMessage} from '../../utils/i18nMessage';
 
 /**
  * This component renders child records as an embedded report. In small-breakpoint, we render a link
@@ -23,19 +21,8 @@ class ChildReport extends React.Component {
         if (!validProps) {
             return null;
         } else if (Breakpoints.isSmallBreakpoint() || this.props.type === 'REPORTLINK') {
-            // render report link for small-breakpoint or if the element type is defined as a
-            // reportLink
-            const link = UrlUtils.getRelatedChildReportLink(appId, childTableId, childReportId, detailKeyFid, detailKeyValue);
-            let reportLink;
-            if (this.props.childTableName) {
-                reportLink = <span>{this.props.childTableName}</span>;
-            } else {
-                reportLink = <I18nMessage message="relationship.childTable" />;
-            }
             return (
-                <Link to={link} className="relatedChildReport childReportLink">
-                    {reportLink}
-                </Link>
+                <EmbeddedReportLink {...this.props}/>
             );
         } else if (this.props.type === 'EMBEDREPORT') {
             return (

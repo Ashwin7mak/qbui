@@ -141,7 +141,7 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
  * Construct a query parameters for the dynamic report using supplied facet expression, filter, and
  * existing queryParams.
  */
-const constructQueryParams = (facetResponse, filter = {}, queryParams = {}) => {
+const constructQueryParams = (facetResponse = {}, filter = {}, queryParams = {}) => {
     const filterQueries = [];
 
     //  add the facet expression
@@ -295,3 +295,36 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
  */
 export const unloadEmbeddedReport = (context) =>
     event(context, types.UNLOAD_EMBEDDED_REPORT);
+
+/* Find the records count for a report. Allows customized report that optionally allows for query
+ * parameters. The overrides are expected to be defined in the queryParams parameter.
+ *
+ * When the results are returned from the node layer a LOAD_REPORT_SUCCESS event is fired and the
+ * result will be passed to the report store.
+ * @param context
+ * @param appId
+ * @param tblId
+ * @param rptId
+ * @param queryParams: {offset, numrows, cList, sList, query}
+ */
+export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams) => {
+    // we're returning a promise to the caller (not a Redux action) since this is an async action
+    // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
+    return (dispatch) => {
+        if (appId && tblId && rptId) {
+            logger.debug(`Loading records count for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+
+            const reportService = new ReportService();
+            return reportService.getReportRecordsCount(appId, tblId, rptId, queryParams).then((response) => {
+                dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_SUCCESS, Number(response.data.body)));
+                return; //resolve promise with undefined
+            }).catch(
+                parseAndLogError(context, dispatch)(types.LOAD_REPORT_RECORDS_COUNT_FAILED, `reportActions.loadReportRecordsCount, context: ${context}`)
+            );
+        } else {
+            logger.error(`reportActions.loadReportRecordsCount: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
+            dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_FAILED, 500));
+            return new Promise().reject();
+        }
+    };
+};

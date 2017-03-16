@@ -69,6 +69,25 @@ const embeddedReport = (state = {}, action) => {
         delete stateList[action.id];
         return stateList;
     }
+    case types.LOAD_REPORT_RECORDS_COUNT_SUCCESS: {
+        const obj = {
+            id: action.id,
+            recordsCount: action.content
+        };
+        const stateList = _.cloneDeep(state);
+        stateList[action.id] = obj;
+        return stateList;
+    }
+    case types.LOAD_REPORT_RECORDS_COUNT_FAILED: {
+        const obj = {
+            id: action.id,
+            error: true,
+            errorDetails: action.content
+        };
+        const stateList = _.cloneDeep(state);
+        stateList[action.id] = obj;
+        return stateList;
+    }
     default:
         // by default, return existing state
         return state;
