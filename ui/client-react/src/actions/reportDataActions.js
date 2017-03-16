@@ -12,7 +12,6 @@ import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
-import {NotificationManager} from 'react-notifications';
 import reportModel from '../models/reportModel';
 
 let reportDataActions = {
