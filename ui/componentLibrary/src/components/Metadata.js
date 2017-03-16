@@ -38,42 +38,65 @@ import QbGridMetadata from 'component-metadata!../../../client-react/src/compone
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
-var Metadata = _.merge(
-    CheckBoxFieldValueEditorMetadata,
-    CheckBoxFieldValueRendererMetadata,
-    DateFieldValueEditorMetadata,
-    DateTimeFieldValueEditorMetadata,
-    DateTimeFieldValueRendererMetadata,
-    EmailFieldValueEditorMetadata,
-    EmailFieldValueRendererMetadata,
-    FieldValueEditorMetadata,
-    FieldValueRendererMetadata,
-    MultiChoiceFieldValueEditorMetadata,
-    MultiLineTextFieldValueEditorMetadata,
-    NumericFieldValueEditorMetadata,
-    NumericFieldValueRendererMetadata,
-    TextFieldValueEditorMetadata,
-    TextFieldValueRendererMetadata,
-    TimeFieldValueEditorMetadata,
-    TimeFieldValueRendererMetadata,
-    TrowserMetadata,
-    UrlFieldValueEditorMetadata,
-    UrlFieldValueRendererMetadata,
-    UserFieldValueEditorMetadata,
-    UserFieldValueRendererMetadata,
-    ReIconMetadata,
-    QBPanelMetadata,
-    QBModalMetadata,
-    AlertBannerMetadata,
-    PageTitleMetadata,
-    InvisibleBackdropMetadata,
-    PhoneFieldValueEditorMetadata,
-    PhoneFieldValueRendererMetadata,
-    DurationFieldValueRendererMetadata,
-    DurationFieldValueEditorMetadata,
-    QbGridMetadata
-    // END OF METADATA MERGE
-    // above comment used for grunt task, please do not delete
-);
+var Metadata = () => {
+    let metaDataObject = {
+        CheckBoxFieldValueEditorMetadata,
+        CheckBoxFieldValueRendererMetadata,
+        DateFieldValueEditorMetadata,
+        DateTimeFieldValueEditorMetadata,
+        DateTimeFieldValueRendererMetadata,
+        EmailFieldValueEditorMetadata,
+        EmailFieldValueRendererMetadata,
+        FieldValueEditorMetadata,
+        FieldValueRendererMetadata,
+        MultiChoiceFieldValueEditorMetadata,
+        MultiLineTextFieldValueEditorMetadata,
+        NumericFieldValueEditorMetadata,
+        NumericFieldValueRendererMetadata,
+        TextFieldValueEditorMetadata,
+        TextFieldValueRendererMetadata,
+        TimeFieldValueEditorMetadata,
+        TimeFieldValueRendererMetadata,
+        TrowserMetadata,
+        UrlFieldValueEditorMetadata,
+        UrlFieldValueRendererMetadata,
+        UserFieldValueEditorMetadata,
+        UserFieldValueRendererMetadata,
+        ReIconMetadata,
+        QBPanelMetadata,
+        QBModalMetadata,
+        AlertBannerMetadata,
+        PageTitleMetadata,
+        InvisibleBackdropMetadata,
+        PhoneFieldValueEditorMetadata,
+        PhoneFieldValueRendererMetadata,
+        DurationFieldValueRendererMetadata,
+        DurationFieldValueEditorMetadata,
+        QbGridMetadata,
+        ReSideMenuBaseMetadata,
+        // END OF METADATA MERGE
+        // above comment used for grunt task, please do not delete
+    };
 
-export default Metadata;
+    /**
+     * Transforms the metadata for each import into one that can be interpreted by the renderer.
+     * If the transformation fails during import, then a standard message is displayed.
+     */
+    Object.keys(metaDataObject).forEach(originalKeyName => {
+        let newKeyName = meta.replace('Metadata', '');
+        metaDataObject[newKeyName] = _.cloneDeep(metaDataObject[originalKeyName]);
+        delete metaDataObject[meta];
+
+        if (Object.keys(metaDataObject[newKeyName]).length === 0) {
+            let message = 'This component was created using the new class or function syntax. Props cannot be displayed. Check the source code.'
+            metaDataObject[newKeyName] = {
+                descHtml: `<h3>${message}</h3>`,
+                props: false
+            };
+        }
+    });
+
+    return metaDataObject;
+};
+
+export default Metadata();
