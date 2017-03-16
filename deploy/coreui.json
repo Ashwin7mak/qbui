@@ -374,7 +374,7 @@
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1"
                     }
@@ -404,7 +404,7 @@
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1"
                     }
@@ -434,7 +434,7 @@
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host_enable": true,
                       "legacy_endpoint": "",
                       "route_group": "LH_V1"
                     }
@@ -464,7 +464,7 @@
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1"
                     }
@@ -495,7 +495,7 @@
                       "node_internal_env": "PRODUCTION",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
                       "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://login.quickbase.com",
                       "route_group": "LH_V1"
                     }
