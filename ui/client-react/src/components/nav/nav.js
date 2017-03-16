@@ -248,7 +248,7 @@ export let Nav = React.createClass({
      *  Fetch the report data content.
      */
     getReportsData() {
-        let report = _.find(this.props.qbui.report, function (rpt) {
+        let report = _.find(this.props.qbui.report, function(rpt) {
             return rpt.id === CONTEXT.REPORT.NAV;
         });
         return report || {};

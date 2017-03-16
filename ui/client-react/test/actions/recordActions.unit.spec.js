@@ -652,7 +652,7 @@ describe('update Record Actions -- error workflow', () => {
                 errors: ['someError']
             }
         }
-    }
+    };
     class mockRecordService {
         constructor() { }
         saveRecord(a, t, r) {
@@ -796,7 +796,7 @@ describe('update Record Actions -- getRecord error workflow', () => {
                 errors: ['someError']
             }
         }
-    }
+    };
     let responseData = {appId, tblId, data: 'success'};
     class mockRecordService {
         constructor() { }
