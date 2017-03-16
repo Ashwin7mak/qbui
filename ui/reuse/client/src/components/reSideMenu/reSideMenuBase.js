@@ -16,6 +16,7 @@ class ReSideMenuBase extends Component {
         this.screenSizeChanged = this.screenSizeChanged.bind(this);
         this.getSideMenuClasses = this.getSideMenuClasses.bind(this);
         this.getMainBodyClasses = this.getMainBodyClasses.bind(this);
+        this.closeOnSwipeLeft = this.closeOnSwipeLeft.bind(this);
     }
 
     componentDidMount() {
@@ -42,6 +43,10 @@ class ReSideMenuBase extends Component {
             classes.push('reSideMenuDocked');
         }
 
+        if (this.props.pullRight) {
+            classes.push('reSideMenuPullRight');
+        }
+
         if (this.props.isCollapsed) {
             classes.push('reSideMenuCollapsed');
         }
@@ -53,7 +58,7 @@ class ReSideMenuBase extends Component {
         let classes = ['reSideMenuContent'];
 
         if (this.props.pullRight) {
-            classes.push('sideMenuPullRight');
+            classes.push('reSideMenuPullRight');
         }
 
         if (this.props.isCollapsed) {
@@ -71,7 +76,7 @@ class ReSideMenuBase extends Component {
         }
 
         if (this.props.pullRight) {
-            classes.push('sideMenuPullRight');
+            classes.push('reSideMenuPullRight');
         }
 
         if (this.props.isCollapsed) {
@@ -81,11 +86,17 @@ class ReSideMenuBase extends Component {
         return classes.join(' ');
     }
 
+    closeOnSwipeLeft() {
+        if (this.props.onUpdateOpenState) {
+            this.props.onUpdateOpenState(false)
+        }
+    }
+
     render() {
         return (
             <div className={this.getBaseClasses()}>
                 <div className={this.getSideMenuClasses()}>
-                    <Swipeable onswipedLeft={() => this.props.onUpdateOpenState(false)}>
+                    <Swipeable onswipedLeft={this.closeOnSwipeLeft}>
                         {this.props.sideMenuContent}
                     </Swipeable>
                 </div>
@@ -113,7 +124,7 @@ ReSideMenuBase.propTypes = {
     /**
      * Sometimes, the side menu needs to open or close itself (e.g., on some touch events, when the screen size changes).
      * This callback will fire when the component needs to open or close itself. The response should be to update the state that is controlling isOpen. */
-    onUpdateOpenState: PropTypes.func.isRequired,
+    onUpdateOpenState: PropTypes.func,
 
     /**
      * Sets the location of the side menu to the right side of the screen if true */
