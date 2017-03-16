@@ -82,21 +82,21 @@ var Metadata = () => {
      * Transforms the metadata for each import into one that can be interpreted by the renderer.
      * If the transformation fails during import, then a standard message is displayed.
      */
-    Object.keys(metaDataObject).forEach(originalKeyName => {
+    return Object.keys(metaDataObject).reduce((newMetaObject, originalKeyName) => {
         let newKeyName = meta.replace('Metadata', '');
-        metaDataObject[newKeyName] = _.cloneDeep(metaDataObject[originalKeyName]);
-        delete metaDataObject[meta];
 
-        if (Object.keys(metaDataObject[newKeyName]).length === 0) {
+        newMetaObject[newKeyName] = metaDataObject[originalKeyName];
+
+        if (Object.keys(newMetaObject[newKeyName]).length === 0) {
             let message = 'This component was created using the new class or function syntax. Props cannot be displayed. Check the source code.'
-            metaDataObject[newKeyName] = {
+            newMetaObject[newKeyName] = {
                 descHtml: `<h3>${message}</h3>`,
                 props: false
             };
         }
-    });
 
-    return metaDataObject;
+        return newMetaObject;
+    }, {});
 };
 
 export default Metadata();
