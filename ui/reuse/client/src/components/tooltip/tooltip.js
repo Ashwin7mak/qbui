@@ -1,11 +1,11 @@
 import React from 'react';
-import {I18nMessage} from '../../utils/i18nMessage';
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
+import BsToolTip from 'react-bootstrap/lib/Tooltip';
 import _ from 'lodash';
-import './qbToolTip.scss';
+import './tooltip.scss';
 
-const QBToolTip = React.createClass({
+const Tooltip = React.createClass({
     propTypes: {
         // optional name to use in classname
         tipId:  React.PropTypes.string,
@@ -26,7 +26,7 @@ const QBToolTip = React.createClass({
         }
         let tipClassName = tooltipId ? "qbtooltip " + tooltipId : " qbtooltip";
         return (
-            <Tooltip className={tipClassName} id={_.uniqueId("qbtooltip_")} >{label}</Tooltip>
+            <BsToolTip className={tipClassName} id={_.uniqueId("qbtooltip_")} >{label}</BsToolTip>
         );
     },
 
@@ -43,5 +43,5 @@ const QBToolTip = React.createClass({
     }
 });
 
-export default QBToolTip;
+export default Tooltip;
 
