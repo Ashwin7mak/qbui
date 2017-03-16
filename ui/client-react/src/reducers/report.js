@@ -46,7 +46,7 @@ const report = (state = [], action) => {
      * @returns {*}
      */
     function getReportFromState(id) {
-        //  retreive a copy of the report for the given context/id
+        //  retrieve a copy of the report for the given context/id
         const index = _.findIndex(state, rpt => rpt.id === id);
         if (index !== -1) {
             return _.cloneDeep(state[index]);
@@ -133,7 +133,7 @@ const report = (state = [], action) => {
             currentReports.error = false;
             return newState(currentReports);
         }
-        return newState(obj);
+        return state;
     }
     case types.SELECT_REPORT_RECORDS: {
         //  1..n records in a report have been selected by the user...update

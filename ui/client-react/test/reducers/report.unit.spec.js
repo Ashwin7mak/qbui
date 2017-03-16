@@ -1,10 +1,7 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/report';
 import * as types from '../../src/actions/types';
 import _ from 'lodash';
-import Logger from '../../src/utils/logger';
 
-let logger = new Logger();
-logger.logToConsole = true;
 /**
  * Unit tests for report reducer
  *
@@ -153,8 +150,8 @@ describe('Report reducer functions', () => {
     describe('Report reducer report loading', () => {
         it('test correct state when loading a report', () => {
             actionObj.type = types.LOAD_REPORTS;
+            actionObj.content = reportActionContent;
             state = reducer(state, actionObj);
-            logger.log("state=" + JSON.stringify(state));
             expect(Array.isArray(state)).toEqual(true);
             expect(state.length).toEqual(1);
             expect(state[0].loading).toEqual(true);
@@ -164,8 +161,8 @@ describe('Report reducer functions', () => {
     describe('Report reducer multiple entries', () => {
         it('test state entry', () => {
             actionObj.type = types.LOAD_REPORTS;
+            actionObj.content = reportActionContent;
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
 
             expect(state.length).toEqual(1);
 
@@ -174,7 +171,6 @@ describe('Report reducer functions', () => {
             actionObj.type = types.LOAD_REPORTS;
 
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
 
             expect(state.length).toEqual(2);
             expect(state[0].id).toEqual(1);
@@ -188,7 +184,6 @@ describe('Report reducer functions', () => {
             actionObj.type = types.LOAD_REPORTS_FAILED;
 
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
 
             expect(state.length).toEqual(2);
             expect(state[0].id).toEqual(1);
@@ -203,29 +198,64 @@ describe('Report reducer functions', () => {
         it('test correct state when loading a report fails', () => {
             actionObj.type = types.LOAD_REPORTS_FAILED;
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
-
             expect(Array.isArray(state)).toEqual(true);
-            expect(state.length).toEqual(1);
-            expect(state[0].loading).toEqual(false);
-            expect(state[0].error).toEqual(true);
+            expect(state.length).toEqual(0);
         });
     });
 
     describe('Report reducer success report loading', () => {
-        it('test correct state when loading a report succeeds', () => {
-            actionObj.type = types.LOAD_REPORTS_SUCCESS;
-            actionObj.content = {appId: '1', tblId:'2', reportsList: []};
+        it('test correct state when loading reports succeeds', () => {
+            // start with a report in loading state
+            let targetContext = "LIST_CONTEXT";
+            let listOfReports = [1,2,43];
+            actionObj.type = types.LOAD_REPORTS;
+            actionObj.id = targetContext;
+            actionObj.content = {appId: 1, tblId: 2};
             state = reducer(state, actionObj);
-            logger.info("state=" + JSON.stringify(state));
+            console.log("State upon load = " + JSON.stringify(state));
 
+            // load is successful action
+            actionObj.type = types.LOAD_REPORTS_SUCCESS;
+            actionObj.id = targetContext;
+            actionObj.content = {appId: 1, tblId: 2, reportsList:listOfReports};
+            state = reducer(state, actionObj);
+            console.log("State upon success = " + JSON.stringify(state));
+
+            //success on a loading reports actions expectations
             expect(Array.isArray(state)).toEqual(true);
             expect(state.length).toEqual(1);
             expect(state[0].loading).toEqual(false);
             expect(state[0].error).toEqual(false);
             expect(state[0].appId).toEqual(actionObj.content.appId);
-            expect(state[0].tableId).toEqual(actionObj.content.tblId);
-            expect(state[0].list).toEqual(actionObj.content.reportsList);
+            expect(state[0].tblId).toEqual(actionObj.content.tblId);
+            expect(state[0].list).toEqual(listOfReports);
         });
+        it('test correct state when loading report succeeds', () => {
+            // start with a report in loading state
+            let targetContext = "NAVREPORT";
+            let targetRpt = 55;
+            actionObj.type = types.LOAD_REPORT;
+            actionObj.id = targetContext;
+            actionObj.content = {appId: 1, tblId: 2, rptId:targetRpt};
+            state = reducer(state, actionObj);
+
+            // load is successful action
+            actionObj.type = types.LOAD_REPORTS_SUCCESS;
+            actionObj.id = targetContext;
+            actionObj.data = "heres the report";
+            actionObj.content = {appId: 1, tblId: 2, pageOffset:0, numRows:10, searchStringForFiltering:"hello", selectedRows:[1]};
+            state = reducer(state, actionObj);
+
+            //success on a loading report actions expectations
+            expect(Array.isArray(state)).toEqual(true);
+            expect(state.length).toEqual(1);
+            expect(state[0].loading).toEqual(false);
+            expect(state[0].error).toEqual(false);
+            expect(state[0].appId).toEqual(actionObj.content.appId);
+            expect(state[0].tblId).toEqual(actionObj.content.tblId);
+            expect(state[0].rptId).toEqual(targetRpt);
+            //TODO add testCase test data provider for all action content param cases
+        });
+
     });
 });
