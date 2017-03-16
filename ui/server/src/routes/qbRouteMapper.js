@@ -309,7 +309,9 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Get account users', {req:filterNodeReq(req)});
 
-        processRequest(req, res, function(req, res) {
+        if (!isRouteEnabled(req)) {
+            routeTo404(req, res);
+        } else {
             accountUsersApi.getAccountUsers(req, req.params.accountId).then(
                 function(response) {
                     res.send(response);
@@ -326,7 +328,7 @@
                     }
                 }
             );
-        });
+        }
     }
 
 
