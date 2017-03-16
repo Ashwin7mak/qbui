@@ -2,15 +2,14 @@
  * Created by rbeyer on 2/4/17.
  */
 import React from 'react';
-import Logger from '../../../../utils/logger';
 import UserManagement from './userManagement';
 import Stage from '../../../stage/stage';
 import IconActions from '../../../actions/iconActions';
 import QBIcon from '../../../qbIcon/qbIcon';
 import AppSettingsStage from '../appSettingsStage';
+import Locale from '../../../../locales/locales';
+import {I18nMessage} from '../../../../utils/i18nMessage';
 import './appUsersRoute.scss';
-
-let logger = new Logger();
 
 const AppUsersRoute = React.createClass({
 
@@ -44,7 +43,7 @@ const AppUsersRoute = React.createClass({
 
 
     getStageHeadline() {
-        const userHeadLine = `${this.props.selectedApp.name} : Users`;
+        const userHeadLine = `${this.props.selectedApp.name} : ${Locale.getMessage('app.users.users')}`;
         return (
             <div className="duder">
                 <div className="navLinks">

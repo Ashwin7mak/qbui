@@ -32,7 +32,8 @@ export default {
             },
             settings: "Settings",
             users: {
-                addUser: "Add user to app"
+                addUser: "Add user to app",
+                users: "Users"
             }
         },
         appMenu: {
