@@ -21,8 +21,8 @@ export class FormBuilder extends Component {
         super(props);
 
         this.state = {
-            hasAnimation: false
-        };
+            hasAnimation: false,
+    };
 
         this.elementCache = null;
         this.reorderTimeout = null;
@@ -41,6 +41,9 @@ export class FormBuilder extends Component {
      * @param moveImmediately - Helps with testing. Change to true to ignore the timeout that helps with fast dragging.
      */
     handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
+        console.log('newLocation: ', newLocation);
+        console.log('draggedItemProps: ', draggedItemProps);
+
         if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
             let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
 
@@ -103,7 +106,8 @@ export class FormBuilder extends Component {
             <div className="formBuilderContainer">
 
                 <ReKeyboardShortcuts id="formBuilder" shortcutBindings={[
-                    {key: 's', callback: (content) => alert(`You pressed s! Extra info: ${content}`), content: 'Some extra information'}
+                    {key: 'up', callback: (content) => {alert(`You pressed up! Extra info: ${content}`);return false;}, content: 'Some extra information'},
+                    {key: 'down', callback: (content) => {alert(`You pressed down! Extra info: ${content}`); return false;}, content: 'Some extra information'}
                 ]}/>
 
                 <label style={{display: 'none'}} id="reactabularToggle">

@@ -8,7 +8,6 @@ import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {selectFieldOnForm} from '../../../actions/formActions';
-import ReKeyboardShortcuts from '../../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
 
 
 import './fieldEditingTools.scss';
@@ -35,12 +34,6 @@ export class FieldEditingTools extends Component {
         e.preventDefault();
     }
 
-    onKeyboardDelete(location) {
-        if (this.props.removeField) {
-            return this.props.removeField(location);
-        }
-    }
-
     onClickFieldPreferences() {
         if (this.props.onClickFieldPreferences) {
             return this.props.onClickFieldPreferences(this.props.location);
@@ -48,7 +41,6 @@ export class FieldEditingTools extends Component {
     }
 
     onClickField(e) {
-        console.log('hello!');
         if (this.props.selectField) {
             this.props.selectField(this.props.formId, this.props.location);
         }
@@ -67,7 +59,7 @@ export class FieldEditingTools extends Component {
         }
 
         if (this.isFieldSelected()) {
-this.tabIndex = "0";
+            this.tabIndex = "0";
         } else {
             this.tabIndex = "-1";
         }
@@ -90,6 +82,16 @@ this.tabIndex = "0";
         );
     }
 
+    componentDidMount() {
+        /**
+         * For keyboard, we need to reset the focus, to maintain proper tabbing order;
+         * */
+        if (this.isFieldSelected()) {
+            let dragHandleButtonIndex = this.props.selectedFields[0].elementIndex;
+            document.querySelectorAll('button.tempTest')[dragHandleButtonIndex].focus();
+        }
+    }
+
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
@@ -110,19 +112,17 @@ this.tabIndex = "0";
         }
 
         return (
-            <button
-                tabIndex="0"
+            <div
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
             >
-                <ReKeyboardShortcuts id={'formBuilderContainer'} shortcutBindings={[
-                    {key: 'd', callback: () => this.onKeyboardDelete(this.props.selectedFields[0])},
-                ]}/>
 
-                <DragHandle />
+                <button className="tempTest" onClick={this.onClickField}>
+                    <DragHandle />
+                </button>
 
                 {this.renderActionIcons()}
-            </button>
+            </div>
         );
     }
 }

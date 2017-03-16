@@ -46,14 +46,14 @@ export class ReKeyboardShortcuts extends Component {
         bindings.forEach(binding => {
             MouseTrap.bind(binding.key, () => binding.callback(binding.content));
         });
-        // this.props.addAllKeyBindings(this.props.id, bindings);
+        this.props.addAllKeyBindings(this.props.id, bindings);
     }
 
     removeAllKeyBindings() {
         this.props.shortcutBindings.forEach(binding => {
             MouseTrap.unbind(binding.key);
         });
-        // this.props.removeAllKeyBindings(this.props.id);
+        this.props.removeAllKeyBindings(this.props.id);
     }
 
     render() {

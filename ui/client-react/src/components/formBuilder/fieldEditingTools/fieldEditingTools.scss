@@ -119,10 +119,6 @@
         }
     }
 
-    &:focus {
-        outline: none;
-    }
-
     .tipChildWrapper {
         cursor: pointer;
     }
@@ -132,22 +128,16 @@
         @include dragpreview-active-gradient;
     }
 
+
+
     button {
         background: transparent;
         border: none;
         outline-color: hotpink;
+        &:focus {
+            opacity: 1;
+            outline-color: hotpink;
+        };
     }
 
-    &:focus {
-        /*Focus is for keyboard nav*/
-        width: 295px;
-        outline-color: hotpink;
-        .fieldEditingTools {
-            opacity: 1;
-            .qbIcon {
-                outline-color: blueviolet;
-                opacity: 1;
-            }
-        }
-    }
 }
