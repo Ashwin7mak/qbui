@@ -6,10 +6,7 @@ import Dropdown from 'react-bootstrap/lib/Dropdown';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import UrlUtils from '../../utils/urlUtils';
-import cookie from 'react-cookie';
-import CookieConstants from '../../../../common/src/constants';
-import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
-import * as CompConsts from '../../constants/componentConstants';
+import {NOTIFICATION_MESSAGE_DISMISS_TIME} from '../../constants/componentConstants';
 import {NotificationManager} from 'react-notifications';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as ShellActions from '../../actions/shellActions';
@@ -121,7 +118,7 @@ let GlobalActions = React.createClass({
         try {
             WalkMePlayerAPI.toggleMenu();
         } catch (err) {
-            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.info(Locale.getMessage('missingWalkMe'), '', NOTIFICATION_MESSAGE_DISMISS_TIME);
         }
     },
 
