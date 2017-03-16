@@ -552,9 +552,9 @@ describe('Validate RequestHelper unit tests', function() {
 
     describe('validate getLegacyRealmBase function', function() {
         it('Test case realm host is formatted', function(done) {
-            let req = {url: 'https://wmt.ns.quickbase-dev.com/governance', params: {}};
+            let req = {headers: {host: 'https://wmt.ns.quickbase-dev.com/governance'}, params: {}};
             assert.equal(requestHelper.getLegacyRealmBase(req),
-                'https://wmt.' + config.legacyBase);
+                'https://wmt' + config.legacyBase);
             done();
         });
     });
