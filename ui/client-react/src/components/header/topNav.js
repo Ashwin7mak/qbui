@@ -1,10 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-
-//import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
-//let FluxMixin = Fluxxor.FluxMixin(React);
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
@@ -13,7 +10,6 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import './topNav.scss';
 
 var TopNav = React.createClass({
-    //mixins: [FluxMixin],
 
     propTypes: {
         showOnSmall: React.PropTypes.bool,
@@ -21,20 +17,18 @@ var TopNav = React.createClass({
         onNavClick: React.PropTypes.func,
         globalActions: React.PropTypes.element
     },
+
     getInitialState() {
         return {
             searchText:""
         };
     },
-
     searchChanged: function(ev) {
         const text = ev.target.value;
-        this.setState({searchText: text});
-        //let flux = this.getFlux();
-        //flux.actions.searchFor(text);
+        // call a redux action
     },
     searchCleared: function() {
-        this.setState({searchText: ""});
+        // call a redux action
     },
 
     getTopTitle() {
