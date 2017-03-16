@@ -89,7 +89,7 @@ describe('Record reducer delete functions', () => {
 
 describe('Record reducer open record', () => {
 
-    let initialState = [];
+    initialState = [];
     let testCases = [
         {testCase:'open record with navigateAfterSave false', recId:1, nextRecordId:10, previousRecordId:20, navigateAfterSave:false, nextOrPreviousEdit:'11'},
         {testCase:'open record with navigateAfterSave true ', recId:1, nextRecordId:10, previousRecordId:20, navigateAfterSave:true, nextOrPreviousEdit:'11'},
@@ -412,7 +412,7 @@ describe('Record reducer edit record events', () => {
                 expect(recordState[0].pendEdits).not.toBeDefined();
             } else {
                 let recordState = reducer(initialState, event(testCase.recId, types.EDIT_RECORD_CANCEL, obj));
-                expect(recordState).toEqual(initialState)
+                expect(recordState).toEqual(initialState);
             }
 
             done();
