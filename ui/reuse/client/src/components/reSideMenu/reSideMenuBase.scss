@@ -1,0 +1,95 @@
+@import "../../assets/css/_qbVariables";
+
+.reSideMenuBase {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    .reSideMenuMain {
+        overflow: auto;
+        padding-left: $spacing-small;
+        padding-right: $spacing-small;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 1;
+
+        box-shadow: -5px 0 10px -5px rgba($color-black-800, 0.3);
+
+        background-color: $page-background-color;
+
+        transform: translateX(0);
+
+        &.reSideMenuOpen:not(.reSideMenuDocked) {
+            transform: translateX($leftNav-width-large-breakpoint);
+
+            @include large-breakpoint {
+                transform: translateX($leftNav-width-large-breakpoint);
+            }
+
+            @include medium-breakpoint {
+                transform: translateX($leftNav-width-medium-breakpoint);
+            }
+
+            @include small-breakpoint {
+                // Currently small and medium have the same width
+                transform: translateX($leftNav-width-medium-breakpoint);
+            }
+        }
+
+        &.reSideMenuOpen.reSideMenuCollapsed:not(.reSideMenuDocked) {
+            transform: translateX($leftNav-width-collapsed);
+        }
+
+        transition: transform 0.5s;
+    }
+
+    .reSideMenuContent {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        padding: $spacing-small;
+        overflow: auto;
+        background-color: $color-black-300;
+        z-index: 0;
+        height: 100vh;
+
+        min-width: $leftNav-width-large-breakpoint;
+
+        @include large-breakpoint {
+            min-width: $leftNav-width-large-breakpoint;
+        }
+
+        @include medium-breakpoint {
+            min-width: $leftNav-width-medium-breakpoint;
+        }
+
+        @include small-breakpoint {
+            // Currently small and medium have the same width
+            min-width: $leftNav-width-medium-breakpoint;
+        }
+
+        &.reSideMenuCollapsed {
+            min-width: $leftNav-width-collapsed;
+        }
+
+        transition: min-width 0.5s;
+    }
+
+    &.reSideMenuDocked {
+        display: flex;
+
+        .reSideMenuMain {
+            position: relative;
+            flex: 1 auto;
+        }
+
+        .reSideMenuContent {
+            position: relative;
+            flex: 0;
+        }
+    }
+}
