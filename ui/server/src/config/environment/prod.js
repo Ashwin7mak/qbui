@@ -83,8 +83,5 @@
          */
         wistiaScriptPart1: 'https://fast.wistia.com/embed/medias/zl4za7cf5e.jsonp',
         wistiaScriptPart2: 'https://fast.wistia.com/assets/external/E-v1.js',
-
-
-        useGovernanceMockData: false
     };
 }());
