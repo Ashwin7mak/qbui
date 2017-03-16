@@ -82,14 +82,13 @@ var Metadata = () => {
      * If the transformation fails during import, then a standard message is displayed.
      */
     return Object.keys(metaDataObject).reduce((newMetaObject, originalKeyName) => {
-        let newKeyName = meta.replace('Metadata', '');
+        let newKeyName = originalKeyName.replace('Metadata', '');
 
         newMetaObject[newKeyName] = metaDataObject[originalKeyName];
 
         if (Object.keys(newMetaObject[newKeyName]).length === 0) {
-            let message = 'This component was created using the new class or function syntax. Props cannot be displayed. Check the source code.'
             newMetaObject[newKeyName] = {
-                descHtml: `<h3>${message}</h3>`,
+                descHtml: `<h3>This component was created using the new class or function syntax. Props cannot be displayed. Check the source code.</h3>`,
                 props: false
             };
         }

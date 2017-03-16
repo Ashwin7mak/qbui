@@ -41,7 +41,7 @@ const PropTable = React.createClass({
     render() {
         let propsData = this.propsData;
 
-        if(propsData === false) {
+        if (propsData === false) {
             return <div className="text-muted"><em>This component was built with class or function syntax. Props are not available. Check the source code.</em></div>;
         }
 
