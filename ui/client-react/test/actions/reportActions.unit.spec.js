@@ -143,7 +143,7 @@ describe('Test ReportsActions function success workflow', () => {
         // so we don't need to spy on the dispatcher etc.
         const filter = {
             search: 'filter'
-        }
+        };
         const expectedActions = [
             event(context, types.LOAD_REPORT, {appId, tblId, rptId}),
             event(context, types.LOAD_REPORT_SUCCESS, jasmine.any(Object))

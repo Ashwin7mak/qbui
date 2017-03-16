@@ -412,7 +412,7 @@ describe('Record reducer edit record events', () => {
                 expect(recordState[0].pendEdits).not.toBeDefined();
             } else {
                 let recordState = reducer(initialState, event(testCase.recId, types.EDIT_RECORD_CANCEL, obj));
-                expect(recordState).toEqual(initialState)
+                expect(recordState).toEqual(initialState);
             }
 
             done();

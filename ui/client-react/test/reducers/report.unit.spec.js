@@ -207,7 +207,7 @@ describe('Report reducer functions', () => {
         it('test correct state when loading reports succeeds', () => {
             // start with a report in loading state
             let targetContext = "LIST_CONTEXT";
-            let listOfReports = [1,2,43];
+            let listOfReports = [1, 2, 43];
             actionObj.type = types.LOAD_REPORTS;
             actionObj.id = targetContext;
             actionObj.content = {appId: 1, tblId: 2};
