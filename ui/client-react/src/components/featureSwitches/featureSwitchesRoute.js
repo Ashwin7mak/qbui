@@ -4,7 +4,7 @@ import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import Loader from 'react-loader';
 import {Link} from 'react-router';
 import ToggleButton from 'react-toggle-button';
@@ -16,7 +16,6 @@ import _ from 'lodash';
 import * as Table from 'reactabular-table';
 import * as edit from 'react-edit';
 import * as UrlConsts from "../../constants/urlConstants";
-import * as CompConsts from '../../constants/componentConstants';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
 import * as constants from '../../../../common/src/constants';
@@ -141,8 +140,7 @@ export class FeatureSwitchesRoute extends React.Component {
     createFeatureSwitch() {
 
         this.props.createFeatureSwitch(this.getDefaultFeatureSwitchName()).then((feature) => {
-            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchCreated"), Locale.getMessage('success'));
 
             const columnToEdit = _.findIndex(this.state.columns, ['property', FeatureSwitchConsts.FEATURE_NAME_KEY]);
             this.props.editFeatureSwitch(feature.id, columnToEdit);
@@ -158,8 +156,7 @@ export class FeatureSwitchesRoute extends React.Component {
 
         this.props.deleteFeatureSwitches(this.state.selectedIDs).then(
             () => {
-                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchesDeleted"), Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchesDeleted"), Locale.getMessage('success'));
                 this.setState({selectedIDs: [], allSelected: false});
             }
         );
@@ -223,16 +220,14 @@ export class FeatureSwitchesRoute extends React.Component {
             // prevent renaming feature to an existing name (unless it's the currently edited feature)
 
             if (featureByName && featureByName.id !== id) {
-                NotificationManager.error(Locale.getMessage('featureSwitchAdmin.featureNameExists'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                NotificationManager.error(Locale.getMessage('featureSwitchAdmin.featureNameExists'), Locale.getMessage('failed'));
                 return;
             }
         }
 
         if (featureSwitch[property] !== value) {
             this.props.updateFeatureSwitch(id, featureSwitch, property, value).then(() => {
-                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.featureSwitchUpdated"), Locale.getMessage('success'));
             });
         } else {
             this.props.featureSwitchUpdated(id, property, value); // don't save, just get out of edit mode
