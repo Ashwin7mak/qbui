@@ -16,19 +16,19 @@ describe('TableIcon', () => {
         jasmineEnzyme();
     });
 
-    it('renders an icon from the table font set', () => {
-        let iconName = AVAILABLE_ICON_FONTS.TABLE_STURDY + "-dots";
-        component = mount(<TableIcon icon={iconName} />);
-        expect(component.find(`.${iconName}`)).toBePresent();
+    it('renders an icon using a CSS class', () => {
+        let cssClassName = AVAILABLE_ICON_FONTS.TABLE_STURDY + "-dots";
+        component = mount(<TableIcon icon={cssClassName} />);
+        expect(component.find(`.${cssClassName}`)).toBePresent();
     });
 
-    // This test is to see what happens when invalid data is passed in.
-    // With the old TableIcon component, passing in "invalidData" would result
-    // in class="qbIcon invalidData" being written into the DOM. With this new component
-    // using the Icon component under the covers, passing in "invalidData" results
-    // in class="qbIcon iconTableUISturdy-invalidData".
-    it('renders an invalid icon', () => {
-        let iconName = "invalidDataGoesHere";
+    // As a bonus, by using an embedded Icon component, previously invalid input could render
+    // an icon that didn't before. The Icon component supports a default font.
+    // If you pass in a CSS class name to the TableIcon component that happens to match
+    // the name of an icon in the UI font, it will display. We don't encourage
+    // use of this new function.
+    it('renders invalid input that happens to match the name of an icon in the UI font', () => {
+        let iconName = "hamburger";
         let className = AVAILABLE_ICON_FONTS.UI_STURDY + "-" + iconName;
         component = mount(<TableIcon icon={iconName} />);
         expect(component.find(`.${className}`)).toBePresent();
