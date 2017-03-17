@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../reuse/client/src/scripts/notificationManager';
 import ToggleButton from 'react-toggle-button';
 import Loader from 'react-loader';
 import PageTitle from '../pageTitle/pageTitle';
@@ -14,7 +14,6 @@ import _ from 'lodash';
 import * as Table from 'reactabular-table';
 import * as FeatureSwitchActions from '../../actions/featureSwitchActions';
 import * as FeatureSwitchConsts from '../../constants/featureSwitchConstants';
-import * as CompConsts from '../../constants/componentConstants';
 import * as constants from '../../../../common/src/constants';
 import * as edit from 'react-edit';
 
@@ -94,8 +93,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
         // notify of updates if there were any
         if (updatePromises.length > 0) {
             Promise.all(updatePromises).then(() => {
-                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesUpdated", {num: updatePromises.length}), Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesUpdated", {num: updatePromises.length}), Locale.getMessage('success'));
             });
         }
     }
@@ -108,8 +106,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
         this.props.deleteOverrides(this.props.params.id, this.state.selectedIDs).then(() => {
 
-            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesDeleted"), Locale.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overridesDeleted"), Locale.getMessage('success'));
 
             this.setState({selectedIDs: []});
         });
@@ -161,10 +158,8 @@ export class FeatureSwitchOverridesRoute extends React.Component {
      * create new override
      */
     createOverride() {
-
         this.props.createOverride(this.props.params.id).then((override) => {
-            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideCreated"), Locale.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideCreated"), Locale.getMessage('success'));
 
             const columnToEdit = _.findIndex(this.state.columns, ['property', FeatureSwitchConsts.OVERRIDE_VALUE_KEY]);
             this.props.editOverride(override.id, columnToEdit);
@@ -183,8 +178,7 @@ export class FeatureSwitchOverridesRoute extends React.Component {
 
         if (overrideToUpdate[property] !== value) {
             this.props.updateOverride(this.props.params.id, id, overrideToUpdate, property, value).then(() => {
-                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                NotificationManager.success(Locale.getMessage("featureSwitchAdmin.overrideUpdated"), Locale.getMessage('success'));
             });
         } else {
             this.props.overrideUpdated(id, property, value); // don't save, just get out of edit mode

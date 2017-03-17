@@ -1,6 +1,6 @@
 import React from "react";
 import ReactIntl from "react-intl";
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
@@ -21,6 +21,7 @@ import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
+
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
 import {addBlankRecordToReport, selectReportRecords} from '../../../actions/reportActions';

@@ -272,7 +272,7 @@ class AccountUsersGrid extends Component {
      * get users whenever the component mounts
      */
     componentDidMount() {
-        this.props.fetchAccountUsers();
+        this.props.fetchAccountUsers(this.props.accountId);
     }
 
     render() {
@@ -298,6 +298,7 @@ class AccountUsersGrid extends Component {
 
 // Provide type checking
 AccountUsersGrid.propTypes = {
+    accountId: React.PropTypes.string.isRequired,
     users: React.PropTypes.array,
     fetchAccountUsers: React.PropTypes.func.isRequired
 };
