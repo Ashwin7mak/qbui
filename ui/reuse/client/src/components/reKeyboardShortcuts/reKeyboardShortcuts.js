@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => {
     return {
         addAllKeyBindings: (id, bindings) => dispatch(addAllKeyBindings(id, bindings)),
         removeAllKeyBindings: id => dispatch(removeAllKeyBindings(id)),
-    }
+    };
 };
 
 

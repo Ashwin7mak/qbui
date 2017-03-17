@@ -119,10 +119,10 @@ export class FieldEditingTools extends Component {
         currentField = this.getCurrentField();
 
         newKeyboardUpLocation = this.getNewLocationForKeyboardUp(currentLocation);
-        newKeyboardDownLocation= this.getNewLocationForKeyboardDown(currentLocation);
+        newKeyboardDownLocation = this.getNewLocationForKeyboardDown(currentLocation);
 
-        up = {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false}};
-        down = {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false}};
+        up = {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false;}};
+        down = {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false;}};
 
         this.keyboardBindings[0] = up;
         this.keyboardBindings[1] = down;
@@ -134,7 +134,7 @@ export class FieldEditingTools extends Component {
             columnIndex: selectedField.columnIndex,
             tabIndex: selectedField.tabIndex,
             sectionIndex: selectedField.sectionIndex
-        }
+        };
     }
 
     getNewLocationForKeyboardDown(selectedField) {
@@ -143,7 +143,7 @@ export class FieldEditingTools extends Component {
             columnIndex: selectedField.columnIndex,
             tabIndex: selectedField.tabIndex,
             sectionIndex: selectedField.sectionIndex
-        }
+        };
     }
 
     getCurrentField() {
@@ -152,7 +152,7 @@ export class FieldEditingTools extends Component {
             element: this.props.containingElement.FormFieldElement,
             location: this.props.location,
             relatedField: this.props.relatedField
-        }
+        };
     }
 
     updateSelectedFieldLocation(newLocation) {

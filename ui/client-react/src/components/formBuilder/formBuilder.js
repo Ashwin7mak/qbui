@@ -21,7 +21,7 @@ export class FormBuilder extends Component {
 
         this.state = {
             hasAnimation: false,
-    };
+        };
 
         this.elementCache = null;
         this.reorderTimeout = null;

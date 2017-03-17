@@ -128,7 +128,7 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
 
                 <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.onCancel(); return false}},
+                    {key: 'esc', callback: () => {this.onCancel(); return false;}},
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
                 ]}/>
 
