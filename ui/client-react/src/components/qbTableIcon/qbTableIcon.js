@@ -15,23 +15,23 @@ const TableIcon = ({classes, icon}) => {
     // Map the parameters to the format expected by the embedded tag.
     // The icon passed in is the full class name including font.
     // So separate them into two parameters.
-    let realIcon = `${icon}`;
+    let iconName = `${icon}`;
     let iconFont = undefined;
 
     // iterate through the available fonts to see which one is specified on this icon
     Object.keys(AVAILABLE_ICON_FONTS).map(function (key) {
-        if (realIcon.indexOf(AVAILABLE_ICON_FONTS[key]) === 0) {
+        if (iconName.indexOf(AVAILABLE_ICON_FONTS[key]) === 0) {
             iconFont = AVAILABLE_ICON_FONTS[key];
         }
     });
 
     // strip the icon font off the front of the icon name because the Icon component expects them passed in separately
     if (iconFont) {
-        realIcon = realIcon.replace(iconFont + '-', '');
+        iconName = iconName.replace(iconFont + '-', '');
     }
 
     return (
-        <Icon className={`${classes}`} icon={realIcon} iconFont={iconFont} />
+        <Icon className={`${classes}`} icon={iconName} iconFont={iconFont} />
     );
 };
 
