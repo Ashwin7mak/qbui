@@ -33,16 +33,7 @@ describe('TopNav', () => {
         expect(component.find('.topTitle')).toHaveText(testTitle);
     });
 
-    it('has default actions (favorite and search, disabled) in the center of the nav bar if none are provided', () => {
-        // Using mount as the icons are nested inside of other components
-        component = mount(<TopNav/>);
-
-        let centerIcons = component.find('.center').find(ReIcon);
-        expect(centerIcons.at(0)).toHaveProp('icon', 'search');
-        expect(centerIcons.at(1)).toHaveProp('icon', 'star-full');
-    });
-
-    it('can optionally display different elements in the center of the nav bar', () => {
+    it('can optionally display elements in the center of the nav bar', () => {
         const testCenterElement = <div className="centerComponent">My center component</div>;
         // Using mount as the icons are nested inside of other components
         component = mount(<TopNav centerGlobalActions={testCenterElement}/>);
