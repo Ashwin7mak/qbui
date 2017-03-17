@@ -11,7 +11,7 @@ import TableIcon  from '../../src/components/qbTableIcon/qbTableIcon';
 
 let component;
 
-fdescribe('TableIcon', () => {
+describe('TableIcon', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
