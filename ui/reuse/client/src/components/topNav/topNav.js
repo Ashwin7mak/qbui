@@ -2,10 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import ReIcon from '../reIcon/reIcon';
-
-// IMPORTED FROM CLIENT REACT
-import QbTooltip from '../../../../../client-react/src/components/qbToolTip/qbToolTip';
-// IMPORTED FROM CLIENT REACT
+import Tooltip from '../tooltip/tooltip';
 
 import './topNav.scss';
 
@@ -38,15 +35,15 @@ class ReTopNav extends Component {
 
         return (
             <ButtonGroup className="navItem">
-                <QbTooltip i18nMessageKey="unimplemented.search" location="bottom">
+                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
                     <Button tabIndex="2" className="disabled">
                         <ReIcon icon="search" />
                     </Button>
-                </QbTooltip>
+                </Tooltip>
 
-                <QbTooltip i18nMessageKey="unimplemented.favorites" location="bottom">
+                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
                     <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
-                </QbTooltip>
+                </Tooltip>
             </ButtonGroup>
         );
     }
