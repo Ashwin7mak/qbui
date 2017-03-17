@@ -30,6 +30,10 @@ import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
+import Button from 'react-bootstrap/lib/Button';
+import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
+import ReIcon from '../../../../reuse/client/src/components/reIcon/reIcon';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -244,6 +248,22 @@ export let Nav = React.createClass({
         return <InvisibleBackdrop show={showIt}/>;
     },
 
+    getCenterGlobalActions() {
+        return (
+            <ButtonGroup className="navItem">
+                <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
+                    <Button tabIndex="2" className="disabled">
+                        <ReIcon icon="search" />
+                    </Button>
+                </Tooltip>
+
+                <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
+                    <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
+                </Tooltip>
+            </ButtonGroup>
+        );
+    },
+
     render() {
         if (!this.state.apps || this.state.apps.apps === null) {
             // don't render anything until we've made this first api call without being redirected to V2
@@ -330,10 +350,12 @@ export let Nav = React.createClass({
 
             <div className="main" >
                 <TopNav title={this.state.nav.topTitle}
+                        centerGlobalActions={this.getCenterGlobalActions()}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
                         flux={flux}
-                        showOnSmall = {this.state.nav.showTopNav}/>
+                        showOnSmall = {this.state.nav.showTopNav}
+                />
                 {this.props.children &&
                     <div className="mainContent" >
                         <TempMainErrorMessages apps={this.state.apps.apps} appsLoading={this.state.apps.loading} selectedAppId={this.state.apps.selectedAppId} />
