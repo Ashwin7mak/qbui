@@ -31,12 +31,12 @@ export class FieldEditingTools extends Component {
         this.renderActionIcons = this.renderActionIcons.bind(this);
 
         this.getCurrentField = this.getCurrentField.bind(this);
-        this.getNewLocationForKeyBoardUp = this.getNewLocationForKeyBoardUp.bind(this);
-        this.getNewLocationForKeyBoardDown = this.getNewLocationForKeyBoardDown.bind(this);
+        this.getNewLocationForKeyboardUp = this.getNewLocationForKeyboardUp.bind(this);
+        this.getNewLocationForKeyboardDown = this.getNewLocationForKeyboardDown.bind(this);
 
         this.activateKeyboardMovingField = this.activateKeyboardMovingField.bind(this);
-        this.keyBoardMoveFieldUp = this.keyBoardMoveFieldUp.bind(this);
-        this.keyBoardMoveFieldDown = this.keyBoardMoveFieldDown.bind(this);
+        this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
+        this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
 
         this.updateSelectedFieldLocation = this.updateSelectedFieldLocation.bind(this);
     }
@@ -48,10 +48,11 @@ export class FieldEditingTools extends Component {
         e.preventDefault();
     }
 
-    onClickFieldPreferences() {
+    onClickFieldPreferences(e) {
         if (this.props.onClickFieldPreferences) {
             return this.props.onClickFieldPreferences(this.props.location);
         }
+        e.preventDefault();
     }
 
     onClickField(e) {
@@ -117,16 +118,16 @@ export class FieldEditingTools extends Component {
         currentLocation = this.props.selectedFields[0];
         currentField = this.getCurrentField();
 
-        newKeyboardUpLocation = this.getNewLocationForKeyBoardUp(currentLocation);
-        newKeyboardDownLocation= this.getNewLocationForKeyBoardDown(currentLocation);
+        newKeyboardUpLocation = this.getNewLocationForKeyboardUp(currentLocation);
+        newKeyboardDownLocation= this.getNewLocationForKeyboardDown(currentLocation);
 
-        up = {key: 'up', callback: () => {this.keyBoardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false}};
-        down = {key: 'down', callback: () => {this.keyBoardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false}};
+        up = {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false}};
+        down = {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false}};
 
         this.keyboardBindings.push(up, down);
     }
 
-    getNewLocationForKeyBoardUp(selectedField) {
+    getNewLocationForKeyboardUp(selectedField) {
         return {
             elementIndex: selectedField.elementIndex - 1,
             columnIndex: selectedField.columnIndex,
@@ -135,7 +136,7 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    getNewLocationForKeyBoardDown(selectedField) {
+    getNewLocationForKeyboardDown(selectedField) {
         return {
             elementIndex: selectedField.elementIndex + 1,
             columnIndex: selectedField.columnIndex,
@@ -167,7 +168,7 @@ export class FieldEditingTools extends Component {
 
     }
 
-    keyBoardMoveFieldUp(formId, newLocation, currentLocation) {
+    keyboardMoveFieldUp(formId, newLocation, currentLocation) {
         console.log('newLocation: ', newLocation);
         if (newLocation.elementIndex !== -1) {
             this.props.moveField(formId, newLocation, currentLocation);
@@ -175,7 +176,7 @@ export class FieldEditingTools extends Component {
         this.updateSelectedFieldLocation('up');
     }
 
-    keyBoardMoveFieldDown(formId, newLocation, currentLocation) {
+    keyboardMoveFieldDown(formId, newLocation, currentLocation) {
         if (currentLocation.location.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
             this.props.moveField(formId, newLocation, currentLocation);
         }
@@ -184,7 +185,6 @@ export class FieldEditingTools extends Component {
 
     render() {
         this.keyboardBindings = [];
-
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
         let isTouch = Device.isTouch();
