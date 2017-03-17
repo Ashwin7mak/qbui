@@ -58,7 +58,7 @@
         }
     };
     module.exports  = {
-        getCannedFields: function(){
+        getCannedFields: function() {
             return [cannedTextField, cannedDateField];
         },
 

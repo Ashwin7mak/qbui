@@ -336,14 +336,13 @@
             /**
              *
              */
-            createForm: function(req, form) {
+            createForm: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestEeHost() + routeHelper.getFormsRoute(req.url, true);
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            let formId = JSON.parse(response.body).id;
-                            resolve(formId);
+                            resolve(response);
                         },
                         (error) => {
                             log.error({req: req}, "formsApi.createForm(): Error creating form on EE");

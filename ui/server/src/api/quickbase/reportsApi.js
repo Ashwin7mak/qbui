@@ -663,13 +663,16 @@
             /**
              *
              */
-            createReport: function(req, report) {
+            createReport: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            let reportId = JSON.parse(response.body).id;
+                            let reportId = null;
+                            if (response.body) {
+                                reportId = JSON.parse(response.body).id;
+                            }
                             resolve(reportId);
                         },
                         (error) => {

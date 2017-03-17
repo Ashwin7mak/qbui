@@ -999,7 +999,7 @@
         perfLog.init('Get User by id', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            tablesApi.createTableComponents(req, payload).then(
+            tablesApi.createTableComponents(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'getReqUser');

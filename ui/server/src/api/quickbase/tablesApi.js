@@ -38,22 +38,24 @@
             setRequestHelperObject: function(requestHelperOverride) {
                 requestHelper = requestHelperOverride;
             },
+            setFieldsApi: function(override) {
+                fieldsApi = override;
+            },
+            setFormsApi: function(override) {
+                formsApi = override;
+            },
+            setReportsApi: function(override) {
+                reportsApi = override;
+            },
 
             createTableProperties: function(req, tableId) {
                 return new Promise((resolve, reject) =>{
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
 
-                    let payload = {};
-                    if (req.body.tableNoun) {
-                        payload = _.pick(req.body, ['tableNoun', 'description', 'tableIcon']);
-                    } else {
-                        reject("Record name is required");
-                    }
-                    opts.body = JSON.stringify(payload);
                     requestHelper.executeRequest(req, opts).then(
                         (eeResponse) =>{
-                            resolve(eeResponse);
+                            resolve(JSON.parse(eeResponse.body));
                         },
                         (error) =>{
                             //in case of error/exception while setting table properties on EE clean out the table created on core because there is no queue right now.
@@ -70,13 +72,6 @@
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url);
 
-                    let payload = {};
-                    if (req.body.name) {
-                        payload = _.pick(req.body, ['name']);
-                    } else {
-                        reject("Table name is required");
-                    }
-                    opts.body = JSON.stringify(payload);
                     //  make the api request to get the user object
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
@@ -125,9 +120,20 @@
              */
             createTableComponents: function(req) {
                 return new Promise((resolve, reject) => {
-                    this.createTable(req).then(
+                    // this has input for both creating table and props
+                    // core fails if its passed in props that are not recognized for some reason
+                    // so we need to parse this here and send only what's recognized.
+                    let reqPayload = req.body;
+                    if (!reqPayload.name || !reqPayload.tableNoun) {
+                        reject("Required parameters missing");
+                    }
+                    let tableReq = _.clone(req);
+                    tableReq.rawBody = JSON.stringify({name: reqPayload.name});
+                    let tableProperReq = _.clone(req);
+                    tableProperReq.rawBody = JSON.stringify(_.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']));
+                    this.createTable(tableReq).then(
                         (tableId) => {
-                            this.createTableProperties(req, tableId).then(
+                            this.createTableProperties(tableProperReq, tableId).then(
                                 () => {
                                     //create the components
                                     let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
@@ -137,7 +143,7 @@
                                     fieldsToCreate.forEach((field) => {
                                         let fieldReq = _.clone(req);
                                         fieldReq.url = tablesRootUrl;
-                                        fieldReq.rawBody = field;
+                                        fieldReq.rawBody = JSON.stringify(field);
                                         promises.push(fieldsApi.createField(fieldReq));
                                     });
                                     Promise.all(promises).then(
@@ -149,19 +155,16 @@
                                             reportsToCreate.forEach((report) => {
                                                 let reportReq = _.clone(req);
                                                 reportReq.url = tablesRootUrl;
-                                                reportReq.rawBody = report;
-                                                promises.push(reportsApi.createReport(reportReq, report));
+                                                reportReq.rawBody = JSON.stringify(report);
+                                                promises.push(reportsApi.createReport(reportReq));
                                             });
                                             let formsToCreate = cannedNewTableElements.getCannedForms("name", fieldIds);
                                             formsToCreate.forEach((form) => {
                                                 let formReq = _.clone(req);
                                                 formReq.url = tablesRootUrl;
-                                                formReq.rawBody = form;
-                                                promises.push(formsApi.createForm(formReq, form));
+                                                formReq.rawBody = JSON.stringify(form);
+                                                promises.push(formsApi.createForm(formReq));
                                             });
-                                            //promises.push(reportsApi.createReport(fieldReq, cannedListChangesReport));
-                                            //promises.push(reportsApi.createReport(fieldReq, cannedListAllReport));
-                                            //promises.push(formsApi.createForm(fieldReq, cannedForm));
                                             Promise.all(promises).then(
                                                 (response) => {
                                                     let reportIds = [];

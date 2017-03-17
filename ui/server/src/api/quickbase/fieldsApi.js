@@ -5,6 +5,8 @@
     'use strict';
 
     let defaultRequest = require('request');
+    let Promise = require('bluebird');
+    let log = require('../../logger').getLogger();
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -108,13 +110,16 @@
             /**
              *
              */
-            createField: function(req, field) {
+            createField: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            let fieldId = JSON.parse(response.body).id;
+                            let fieldId = null;
+                            if (response.body) {
+                                fieldId = JSON.parse(response.body).id;
+                            }
                             resolve(fieldId);
                         },
                         (error) => {

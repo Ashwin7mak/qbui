@@ -193,22 +193,22 @@
      * @returns {*}
      */
     function getEEFormsRoute(url, formId) {
-        //if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) &&
-        //    !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
-        //    return getEEReqURL(url);
-        //} else {
-            let root = getUrlRoot(url, TABLES);
+        let root = getUrlRoot(url, TABLES);
+        if (!root) {
+            return url;
+        }
 
-            let eeUrl = getEEReqURL(root);
+        let eeUrl = getEEReqURL(root);
 
-            if (!eeUrl) {
-                //  no url root for TABLES found; return original url unchanged
-                return eeUrl;
-            }
-            eeUrl = eeUrl + '/' + FORMS;
-
+        if (!eeUrl) {
+            //  no url root for TABLES found; return original url unchanged
+            return eeUrl;
+        }
+        eeUrl = eeUrl + '/' + FORMS;
+        if (REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) ||
+            REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
             if (formId) {
-                return eeUrl + '/' + FORMS + (formId ? '/' + formId : '');
+                return eeUrl + (formId ? '/' + formId : '');
             }
 
             if (url.search('formType') !== -1) {
@@ -222,11 +222,10 @@
                     }
                 });
 
-                return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
+                return eeUrl + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
             }
-
-            return eeUrl;
-        //}
+        }
+        return eeUrl;
     }
 
     /**

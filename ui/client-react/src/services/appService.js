@@ -33,10 +33,10 @@ class AppService extends BaseService {
      * @param appId
      */
     getAppUsers(appId) {
-        //let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
-        //return super.get(url);
-        let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
-        return super.post(url, {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"});
+        let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
+        return super.get(url);
+        //let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
+        //return super.post(url, {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"});
     }
 
     /**
