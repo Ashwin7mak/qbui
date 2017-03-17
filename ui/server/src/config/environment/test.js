@@ -77,7 +77,7 @@
         DOMAIN: nodeHost,
 
         //  legacy quickbase host
-        legacyHost: '',
+        legacyBase: '',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
