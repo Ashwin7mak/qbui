@@ -133,7 +133,7 @@ describe('ReportRoute functions', () => {
             expect(loadReport).not.toHaveBeenCalled();
         });
 
-        it('loadReport is not called when rptId', () => {
+        it('loadReport is not called when rptId is missing', () => {
             const missingRouteParams = Object.assign({}, routeParams, {rptId: null});
             component = TestUtils.renderIntoDocument(
                 <Provider store={store}>
