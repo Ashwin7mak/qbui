@@ -45,7 +45,6 @@ export const loadFields = (appId, tblId) => {
                         let error = errorResponse.response;
                         logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.getFields:');
                         dispatch(event(appId, tblId, types.LOAD_FIELDS_ERROR, {error:error}));
-                        //this.dispatch(actions.LOAD_FIELDS_FAILED, error.response.status);
                         reject();
                     }
                 );

@@ -46,19 +46,16 @@ describe('TableHomePageRoute functions', () => {
     flux.actions = {
         selectTableId() {return;},
         loadTableHomePage() {return;},
-        loadFields() {return;},
         hideTopNav() {return;}
     };
 
     beforeEach(() => {
         spyOn(flux.actions, 'loadTableHomePage');
-        spyOn(flux.actions, 'loadFields');
         spyOn(flux.actions, 'selectTableId');
     });
 
     afterEach(() => {
         flux.actions.loadTableHomePage.calls.reset();
-        flux.actions.loadFields.calls.reset();
         flux.actions.selectTableId.calls.reset();
     });
 
