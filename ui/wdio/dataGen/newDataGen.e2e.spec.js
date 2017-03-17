@@ -12,13 +12,13 @@
          */
         beforeAll(function() {
             browser.logger.info('beforeAll spec function - Generating test data via API');
-            return e2eBase.fullReportsSetup().then(function(responses) {
+            return e2eBase.basicAppSetup().then(function(responses) {
                 // Set your global app to use in the test functions
-                testApp = responses[0];
+                testApp = responses;
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                Promise.reject(new Error('Error during test setup beforeAll: ' + error.message));
+                return Promise.reject(new Error('Error in beforeAll: ' + error.message));
             });
         });
 

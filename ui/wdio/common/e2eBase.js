@@ -110,9 +110,22 @@
                     // Set the global app object for use below
                     createdApp = appResponse;
                 }).then(function() {
-                    // Initialize table properties for generated tables
+                    // Initialize table properties for generated tables (via Experience Engine)
+                    let initTablePropsPromises = [];
+
+                    // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
+                    // otherwise errors can be swallowed!
                     createdApp.tables.forEach(function(table, index) {
-                        return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
+                        // Load an array with the promise functions you want to execute
+                        initTablePropsPromises.push(function() {
+                            return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
+                        });
+                    });
+
+                    // Bluebird's promise.each function (executes each promise synchronously)
+                    return Promise.each(initTablePropsPromises, function(queue_item) {
+                        // This is an iterator that executes each Promise function in the array here
+                        return queue_item();
                     });
                 }).then(function() {
                     // Generate and add the default set of Users to the app
@@ -151,7 +164,7 @@
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error during defaultAppSetup: ' + e.message));
+                    return Promise.reject(new Error('Error in defaultAppSetup: ' + e.message));
                 });
             },
 
