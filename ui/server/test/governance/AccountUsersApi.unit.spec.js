@@ -2,14 +2,15 @@
 
 let sinon = require('sinon');
 let assert = require('assert');
-let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-let routeHelper = require('../../../src/routes/routeHelper');
-let accountUsersApi = require('../src/account/users/AccountUsersApi')(config);
+let config = {legacyBase: '.legacyBase', javaHost: 'http://javaHost', SSL_KEY: {private: 'privateKey', cert: 'cert', requireCert: true}};
+let requestHelper = require('../../src/api/quickbase/requestHelper')(config);
+let routeHelper = require('../../src/routes/routeHelper');
+let accountUsersApi = require('../../src/governance/account/users/AccountUsersApi')(config);
 
 /**
  * Unit tests for Governance Account Users API
  */
-describe("AccountUsers API", function() {
+describe('AccountUsers API', function() {
 
     let req = {
         headers: {

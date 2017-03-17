@@ -381,7 +381,7 @@
             getLegacyRealmBase: function(req, isSecure = true) {
 
                 let requestHost = this.getRequestHost(req, true, false);
-                let realmHost = requestHost.substr(0, requestHost.indexOf("."));
+                let realmHost = requestHost ? requestHost.substr(0, requestHost.indexOf(".")) : '';
                 let realmURL = realmHost + config.legacyBase;
 
                 if (isSecure) {

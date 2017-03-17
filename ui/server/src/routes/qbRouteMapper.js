@@ -41,7 +41,7 @@
         featureSwitchesApi = require('../api/quickbase/featureSwitchesApi')(config, config.featureSwitchesMockData);
         rolesApi = require('../api/quickbase/rolesApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
-        accountUsersApi = require('../../governance/src/account/users/AccountUsersApi')(config);
+        accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
 
         /* internal data */
         /*
