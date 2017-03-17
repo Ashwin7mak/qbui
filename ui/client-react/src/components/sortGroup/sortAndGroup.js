@@ -14,14 +14,10 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import constants from '../../../../common/src/constants';
 import {GROUP_TYPE} from '../../../../common/src/groupTypes';
 import _ from 'lodash';
-import Fluxxor from 'fluxxor';
 
 import {connect} from 'react-redux';
 import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 /**
  *  SortAndGroup container component manages the state and presents the components that are :
@@ -36,9 +32,6 @@ let KIND = {
 };
 
 const SortAndGroup = React.createClass({
-    mixins: [FluxMixin],
-    //mixins: [FluxMixin, StoreWatchMixin('SortAndGroupStore')],
-
     displayName: 'SortAndGroup',
     contextTypes: {
         touch: React.PropTypes.bool
@@ -110,9 +103,6 @@ const SortAndGroup = React.createClass({
     },
 
     toggleShow() {
-        //TODO:move state to flux action & store
-        //let flux = this.getFlux();
-        //flux.actions.showSortAndGroup({show:!this.state.show});
         return this.state.show ? this.hide() : this.show();
     },
 
@@ -144,14 +134,12 @@ const SortAndGroup = React.createClass({
     },
 
     updateRecords(sortGroupString) {
-        let flux = this.getFlux();
         let queryParams = {};
-
         queryParams[query.SORT_LIST_PARAM] = sortGroupString;
         queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
         queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
-        //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        //  right now, the component is used only within the context of a report served up by the nav window
         this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
     },
 
@@ -308,13 +296,6 @@ const SortAndGroup = React.createClass({
         }
         return answer;
     },
-
-    getStateFromFlux() {
-        //let flux = this.getFlux();
-        //return flux.store('SortAndGroupStore').getState();
-        return {show: false};
-    },
-
 
     getField(fid, fields) {
         return _.find(fields, field => (field.id === fid));
