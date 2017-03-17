@@ -12,7 +12,7 @@ import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/component
  */
 const TableIcon = ({classes, icon}) => {
 
-    // Map the parameters to the format expected by the embedded tag.
+    // Map the parameters to the format expected by the embedded component.
     // The icon passed in is the full class name including font.
     // So separate them into two parameters.
     let iconName = `${icon}`;
