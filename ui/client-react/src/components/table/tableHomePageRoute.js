@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
-import * as FieldsActions from '../../actions/FieldsActions';
+import * as FieldsActions from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -102,8 +102,12 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
 
-        let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
-        let fields = fieldsContainer ? fieldsContainer.fields : [];
+        let fields = [];
+        if (_.has(this.props, 'params')) {
+            //  get fields from redux store
+            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
+            fields = fieldsContainer ? fieldsContainer.fields : [];
+        }
 
         return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>

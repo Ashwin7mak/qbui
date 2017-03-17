@@ -65,7 +65,7 @@ const SortAndGroup = React.createClass({
         filter: React.PropTypes.object,
 
         // the fields in the table
-        fields:  React.PropTypes.object.isRequired,
+        fields:  React.PropTypes.array.isRequired,
 
         // the callback to call when the sort group dialog in shown
         onMenuEnter : React.PropTypes.func,
@@ -196,12 +196,14 @@ const SortAndGroup = React.createClass({
     },
 
     getSortState() {
-        let answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(this.props.fields.fields.data);
+        let fields = this.getFieldsFromProps();
+        let answer = this.state.dirty ? this.state.newSelectionsSort : this.getSortFields(fields);
         return answer;
     },
 
     getGroupState() {
-        let answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(this.props.fields.fields.data);
+        let fields = this.getFieldsFromProps();
+        let answer = this.state.dirty ? this.state.newSelectionsGroup : this.getGroupFields(fields);
         return answer;
     },
 
@@ -483,16 +485,22 @@ const SortAndGroup = React.createClass({
         return answer;
     },
 
+    getFieldsFromProps() {
+        let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.appId && field.tblId === this.props.tblId);
+        let fields = _.has(fieldsContainer, 'fields.fields.data') ? fieldsContainer.fields.fields.data : [];
+        return fields;
+    },
+
     /**
      * Prepares the menu button used to show/hide the dialog of sort and group options when clicked
      *
      **/
     render() {
 
-        let fields = this.state.show &&  _.has(this.props, 'fields.fields.data') ?
-                                this.props.fields.fields.data : [];
+        let fields = this.state.show ? this.getFieldsFromProps() : [];
         let sortByFields = this.state.show ? this.getSortFields(fields) : [];
         let groupByFields = this.state.show ? this.getGroupFields(fields) : [];
+
         let fieldChoiceList = this.getFieldsNotYetUsed(fields, groupByFields, sortByFields);
         let visGroupEls = _.has(this.props, 'reportData.data.groupEls') ?
                             this.getVisGroupEls(this.props.reportData.data.groupEls, fields) :  [];

@@ -18,6 +18,16 @@ const fields = (state = [], action) => {
         return keyField;
     }
 
+    //  Return fields in an object structure that matches the
+    //  fields object that is returned within a report object.
+    function getFields() {
+        return {
+            fields: {
+                data: action.content.fields
+            }
+        };
+    }
+
     switch (action.type) {
     case types.LOAD_FIELDS: {
         newState.push({
@@ -35,7 +45,7 @@ const fields = (state = [], action) => {
             appId: action.appId,
             tblId: action.tblId,
             keyField: getKeyField(),
-            fields: action.content.fields,
+            fields: getFields(),
             fieldsLoading: false,
             error: false
         });

@@ -297,8 +297,12 @@ export let Nav = React.createClass({
         }
 
         let viewingRecordId = null;
+        let fields = [];
         if (this.props.params) {
             viewingRecordId = this.props.params.recordId;
+            //   get the fields from the redux store
+            let fieldsContainer = _.find(this.props.qbui.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
+            fields = fieldsContainer ? fieldsContainer.fields : [];
         }
 
         let reportsData = this.getReportsData();
@@ -378,7 +382,7 @@ export let Nav = React.createClass({
                             locale: this.state.nav.locale,
                             //pendEdits:pendEdits,
                             isRowPopUpMenuOpen: this.props.qbui.shell.isRowPopUpMenuOpen,
-                            fields: this.props.qbui.fields,
+                            fields: fields,
                             //reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(reportsData.tblId),
