@@ -25,6 +25,7 @@ javaHost:'http://localhost:3030',
 
 * To use as your legacy mock server, then edit your local.json config file to set the appropriate env
 ```
+isMockServer : true,
 legacyBase:'.ns.quickbase-dev.com:3030',
 ```
 
