@@ -32,6 +32,11 @@ export const SHOW_ERROR_MSG_DIALOG = 'SHOW_ERROR_MSG_DIALOG';
 export const HIDE_ERROR_MSG_DIALOG = 'HIDE_ERROR_MSG_DIALOG';
 export const CHANGE_LOCALE = 'CHANGE_LOCALE';
 
+//  ******** Field actions *********
+export const LOAD_FIELDS = 'LOAD_FIELDS';
+export const LOAD_FIELDS_SUCCESS = 'LOAD_FIELDS_SUCCESS';
+export const LOAD_FIELDS_ERROR = 'LOAD_FIELDS_ERROR';
+
 //  ******** Record actions ********
 export const OPEN_RECORD = 'OPEN_RECORD';
 export const SAVE_RECORD = 'SAVE_RECORD';

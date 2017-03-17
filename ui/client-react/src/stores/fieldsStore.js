@@ -19,30 +19,30 @@ let FieldsStore = Fluxxor.createStore({
         this.error = false;
 
         this.bindActions(
-            actions.LOAD_FIELDS, this.onLoadFields,
-            actions.LOAD_FIELDS_SUCCESS, this.onLoadFieldsSuccess,
-            actions.LOAD_FIELDS_FAILED, this.onLoadFieldsFailed,
+            //actions.LOAD_FIELDS, this.onLoadFields,
+            //actions.LOAD_FIELDS_SUCCESS, this.onLoadFieldsSuccess,
+            //actions.LOAD_FIELDS_FAILED, this.onLoadFieldsFailed,
             actions.SELECT_TABLE, this.onSelectTable
         );
 
         this.logger = new Logger();
     },
-    onLoadFields() {
-        this.fieldsLoading = true;
-        this.emit("change");
-    },
-    onLoadFieldsFailed() {
-        this.fieldsLoading = false;
-        this.fields = [];
-        this.error = true;
-        this.emit("change");
-    },
-    onLoadFieldsSuccess(fields) {
-        this.fieldsLoading = false;
-        this.fields = fields;
-        this.error = false;
-        this.emit('change');
-    },
+    //onLoadFields() {
+    //    this.fieldsLoading = true;
+    //    this.emit("change");
+    //},
+    //onLoadFieldsFailed() {
+    //    this.fieldsLoading = false;
+    //    this.fields = [];
+    //    this.error = true;
+    //    this.emit("change");
+    //},
+    //onLoadFieldsSuccess(fields) {
+    //    this.fieldsLoading = false;
+    //    this.fields = fields;
+    //    this.error = false;
+    //    this.emit('change');
+    //},
     onSelectTable(tblId) {
         this.currentTable = tblId;
         this.fields = [];
