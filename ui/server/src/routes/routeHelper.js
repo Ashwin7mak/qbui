@@ -22,6 +22,7 @@
     let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
     let RELATIONSHIPS = 'relationships';
+    let TABLEPROPERTIES = 'tableproperties';
 
     let FEATURE_SWITCHES = 'featureSwitches';
     let FEATURE_SWITCH_STATES = FEATURE_SWITCHES + '/status';
@@ -192,13 +193,19 @@
      * @returns {*}
      */
     function getEEFormsRoute(url, formId) {
-        if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) &&
-            !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
-            return getEEReqURL(url);
-        } else {
+        //if (!REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url) &&
+        //    !REGEX_FORMS_COMPONENT_ROUTE.test(url)) {
+        //    return getEEReqURL(url);
+        //} else {
             let root = getUrlRoot(url, TABLES);
 
             let eeUrl = getEEReqURL(root);
+
+            if (!eeUrl) {
+                //  no url root for TABLES found; return original url unchanged
+                return eeUrl;
+            }
+            eeUrl = eeUrl + '/' + FORMS;
 
             if (formId) {
                 return eeUrl + '/' + FORMS + (formId ? '/' + formId : '');
@@ -218,9 +225,8 @@
                 return eeUrl + '/' + FORMS + (formType ? '/' + FORM_TYPE + '/' + formType.toUpperCase() : '');
             }
 
-            //  no url root for TABLES found; return original url unchanged
             return eeUrl;
-        }
+        //}
     }
 
     /**
@@ -379,6 +385,20 @@
             let root = getUrlRoot(url, APPS);
             if (root) {
                 return root + '/' + TABLES + (tableId ? '/' + tableId : '');
+            }
+
+            //  no url root for APPS found; return original url unchanged
+            return url;
+        },
+
+        getTablePropertiesRoute: function(url, tableId) {
+            //if (!tableId) {
+            //    return url;
+            //}
+            let root = getUrlRoot(url, APPS);
+            let eeUrl = getEEReqURL(root);
+            if (eeUrl) {
+                return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '') + '/' + TABLEPROPERTIES;
             }
 
             //  no url root for APPS found; return original url unchanged

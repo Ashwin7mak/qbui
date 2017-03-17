@@ -10,7 +10,7 @@
     let collectionUtils = require('../../utility/collectionUtils');
     var url = require('url');
     var lodash = require('lodash');
-
+    let jsonBigNum = require('json-bignum');
     module.exports = function(config) {
 
         //Module constants:
@@ -331,6 +331,29 @@
                         reject(ex);
                     });
                 }.bind(this));
+            },
+
+            /**
+             *
+             */
+            createForm: function(req, form) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getFormsRoute(req.url, true);
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let formId = JSON.parse(response.body).id;
+                            resolve(formId);
+                        },
+                        (error) => {
+                            log.error({req: req}, "formsApi.createForm(): Error creating form on EE");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('formsApi.createForm(): unexpected error creating form on EE', ex, true);
+                        reject(ex);
+                    });
+                });
             }
         };
 

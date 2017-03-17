@@ -126,6 +126,7 @@
                 //  body header option valid for all verbs EXCEPT 'get'.
                 if (!this.isGet(req) && !this.isGet(opts)) {
                     opts.body = req.rawBody;
+                    opts.body = JSON.stringify(opts.body);
                 }
                 return opts;
             },

@@ -57,6 +57,8 @@
         REPORT_INVOKE_RESULTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
+        TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
+        TABLE_COMPONENTS            : baseUrl.QUICKBASE + '/apps/:appId/tables/tableComponents',
 
         //  APP ENDPOINTS
         APPS                        : baseUrl.QUICKBASE + '/apps',

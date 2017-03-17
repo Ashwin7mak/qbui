@@ -103,8 +103,30 @@
                 }
 
                 return requestHelper.executeRequest(req, opts);
-            }
+            },
 
+            /**
+             *
+             */
+            createField: function(req, field) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let fieldId = JSON.parse(response.body).id;
+                            resolve(fieldId);
+                        },
+                        (error) => {
+                            log.error({req: req}, "fieldsApi.createField(): Error creating field on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('fieldsApi.createField(): unexpected error creating field on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            }
         };
 
         return fieldsApi;

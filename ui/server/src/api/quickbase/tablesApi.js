@@ -1,150 +1,200 @@
-///*
-// The purpose of this module is to process /ticket api requests.
-// */
-//(function() {
-//    'use strict';
-//
-//    let defaultRequest = require('request');
-//    let perfLogger = require('../../perfLogger');
-//    let httpStatusCodes = require('../../constants/httpStatusCodes');
-//    let log = require('../../logger').getLogger();
-//    let _ = require('lodash');
-//
-//    module.exports = function(config) {
-//        let requestHelper = require('./requestHelper')(config);
-//        let routeHelper = require('../../routes/routeHelper');
-//        let constants = require('../../../../common/src/constants');
-//        let cookieUtils = require('../../utility/cookieUtils');
-//        let ob32Utils = require('../../utility/ob32Utils');
-//        let request = defaultRequest;
-//
-//        let tablesApi = {
-//
-//            /**
-//             * Allows you to override the request object
-//             * @param requestOverride
-//             */
-//            setRequestObject: function(requestOverride) {
-//                request = requestOverride;
-//            },
-//            /**
-//             * Allows you to override the requestHelper object
-//             * @param requestRequestOverride
-//             */
-//            setRequestHelperObject: function(requestHelperOverride) {
-//                requestHelper = requestHelperOverride;
-//            },
-//
-//            createTableProperties: function(req, payload) {
-//                let table = JSON.parse(response.body);
-//                opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url);
-//                //opts.body = JSON.stringify({tableNoun: payload.tableName, description: payload.description, icon: payload.icon});
-//                requestHelper.executeRequest(req, opts).then(
-//                    (eeResponse) =>{
-//                        resolve(table);
-//                    },
-//                    (error) => {
-//                        //in case of error/exception while setting table properties on EE clean out the table created on core because there is no queue right now.
-//                        log.error({req: req}, "tablesApi.createTableProperties(): Error setting table properties");
-//                        reject(error);
-//                    }).catch((ex) => {
-//                        requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error setting table properties', ex, true);
-//                        reject(ex);
-//                    });
-//            },
-//            createTable: function(req, payload) {
-//                return new Promise((resolve, reject) => {
-//                    let opts = requestHelper.setOptions(req, true);
-//                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-//                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url);
-//
-//                    //opts.body = JSON.stringify({name: payload.tableName});
-//                    //  make the api request to get the user object
-//                    requestHelper.executeRequest(req, opts).then(
-//                        (response) => {
-//                            let table = JSON.parse(response.body);
-//                            //opts.body = JSON.stringify({tableNoun: payload.tableName, description: payload.description, icon: payload.icon});
-//                            this.createTableProperties(req, payload).then(
-//                                (eeResponse) =>{
-//                                    resolve(table);
-//                                },
-//                                (error) => {
-//                                    //in case of error/exception while setting table properties on EE clean out the table created on core because there is no queue right now.
-//                                    this.deleteTable(req, payload);
-//                                    reject(error);
-//                                }).catch((ex) => {
-//                                    this.deleteTable(req, payload);
-//                                    reject(ex);
-//                                });
-//                        },
-//                        (error) => {
-//                            log.error({req: req}, "tablesApi.createTable(): Error creating table on core");
-//                            reject(error);
-//                        }
-//                    ).catch((ex) => {
-//                        requestHelper.logUnexpectedError('tablesApi.createTable(): unexpected error creating table on core', ex, true);
-//                        reject(ex);
-//                    });
-//                });
-//            },
-//            /**
-//             * Get requesting user's meta data.
-//             * @param req
-//             * @returns {Promise}
-//             */
-//            getReqUser: function(req) {
-//                return new Promise((resolve, reject) => {
-//                    let ticket = req.cookies[constants.COOKIES.TICKET];
-//                    if (!ticket) {
-//                        ticket = req.headers.ticket;
-//                    }
-//                    if (ticket) {
-//                        let userId = cookieUtils.getUserId(ticket);
-//                        this.getUserById(req, userId).then(function(response) {
-//                            resolve(response);
-//                        },
-//                        function(error) {
-//                            log.error({req: req}, "usersApi.getReqUser(): Error retrieving user.");
-//                            reject(error);
-//                        }).catch(function(error) {
-//                            requestHelper.logUnexpectedError('usersApi..getReqUser', error, true);
-//                            reject(error);
-//                        });
-//                    }
-//                });
-//            },
-//            /**
-//             * Given a userId get that user's meta data.
-//             * @param req
-//             * @param userId
-//             * @returns {Promise}
-//             */
-//            getUserById: function(req, userId) {
-//                return new Promise((resolve, reject) => {
-//                    let opts = requestHelper.setOptions(req, true);
-//                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-//                    if (routeHelper.isAdminRoute(req.url)) {
-//                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getUsersRouteForAdmin(req.url, userId);
-//                    } else {
-//                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getUsersRoute(req.url, userId);
-//                    }
-//                    //  make the api request to get the user object
-//                    requestHelper.executeRequest(req, opts).then(
-//                        (response) => {
-//                            let user = JSON.parse(response.body);
-//                            resolve(user);
-//                        },
-//                        (error) => {
-//                            log.error({req: req}, "usersApi.getUserById(): Error retrieving user for userId:" + userId);
-//                            reject(error);
-//                        }
-//                    ).catch((ex) => {
-//                        requestHelper.logUnexpectedError('usersApi.getUserById(): unexpected error fetching user', ex, true);
-//                        reject(ex);
-//                    });
-//                });
-//            }
-//        };
-//        return usersApi;
-//    };
-//}());
+/*
+ The purpose of this module is to process /ticket api requests.
+ */
+(function() {
+    'use strict';
+
+    let defaultRequest = require('request');
+    let perfLogger = require('../../perfLogger');
+    let httpStatusCodes = require('../../constants/httpStatusCodes');
+    let log = require('../../logger').getLogger();
+    let _ = require('lodash');
+
+    module.exports = function(config) {
+        let requestHelper = require('./requestHelper')(config);
+        let routeHelper = require('../../routes/routeHelper');
+        let constants = require('../../../../common/src/constants');
+        let cookieUtils = require('../../utility/cookieUtils');
+        let ob32Utils = require('../../utility/ob32Utils');
+        let fieldsApi = require('./fieldsApi')(config);
+        let reportsApi = require('./reportsApi')(config);
+        let formsApi = require('./formsApi')(config);
+        let cannedNewTableElements = require('./cannedNewTableElements');
+        let request = defaultRequest;
+
+        let tablesApi = {
+
+            /**
+             * Allows you to override the request object
+             * @param requestOverride
+             */
+            setRequestObject: function(requestOverride) {
+                request = requestOverride;
+            },
+            /**
+             * Allows you to override the requestHelper object
+             * @param requestRequestOverride
+             */
+            setRequestHelperObject: function(requestHelperOverride) {
+                requestHelper = requestHelperOverride;
+            },
+
+            createTableProperties: function(req, tableId) {
+                return new Promise((resolve, reject) =>{
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+
+                    let payload = {};
+                    if (req.body.tableNoun) {
+                        payload = _.pick(req.body, ['tableNoun', 'description', 'tableIcon']);
+                    } else {
+                        reject("Record name is required");
+                    }
+                    opts.body = JSON.stringify(payload);
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) =>{
+                            resolve(eeResponse);
+                        },
+                        (error) =>{
+                            //in case of error/exception while setting table properties on EE clean out the table created on core because there is no queue right now.
+                            log.error({req: req}, "tablesApi.createTableProperties(): Error setting table properties");
+                            reject(error);
+                        }).catch((ex) =>{
+                            requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error setting table properties', ex, true);
+                            reject(ex);
+                        });
+                });
+            },
+            createTable: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url);
+
+                    let payload = {};
+                    if (req.body.name) {
+                        payload = _.pick(req.body, ['name']);
+                    } else {
+                        reject("Table name is required");
+                    }
+                    opts.body = JSON.stringify(payload);
+                    //  make the api request to get the user object
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let tableId = JSON.parse(response.body);
+                            resolve(tableId);
+                        },
+                        (error) => {
+                            log.error({req: req}, "tablesApi.createTable(): Error creating table on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('tablesApi.createTable(): unexpected error creating table on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+            deleteTable: function(req, tableId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.method = 'delete';
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url, tableId);
+
+                    //  make the api request to get the user object
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(response);
+                        },
+                        (error) => {
+                            log.error({req: req}, "tablesApi.deleteTable(): Error deleting table on core:" + tableId);
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('tablesApi.deleteTable(): unexpected error deleting table on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
+             * This api creates a table in core, initializes a tableproperties object in EE.
+             * Adds 2 fields to the table - one Text and one Date.
+             * Then creates 2 reports a List All and List Changes report
+             * And a form with the previously created fields.
+             * @param req
+             * @returns {Promise}
+             */
+            createTableComponents: function(req) {
+                return new Promise((resolve, reject) => {
+                    this.createTable(req).then(
+                        (tableId) => {
+                            this.createTableProperties(req, tableId).then(
+                                () => {
+                                    //create the components
+                                    let tablesRootUrl = routeHelper.getTablesRoute(req.url, tableId);
+                                    let fieldsToCreate = cannedNewTableElements.getCannedFields();
+
+                                    let promises = [];
+                                    fieldsToCreate.forEach((field) => {
+                                        let fieldReq = _.clone(req);
+                                        fieldReq.url = tablesRootUrl;
+                                        fieldReq.rawBody = field;
+                                        promises.push(fieldsApi.createField(fieldReq));
+                                    });
+                                    Promise.all(promises).then(
+                                        (fieldsResponse) => {
+                                            let fieldIds = [];
+                                            fieldIds.push(fieldsResponse[0], fieldsResponse[1]);
+                                            promises = [];
+                                            let reportsToCreate = cannedNewTableElements.getCannedReports();
+                                            reportsToCreate.forEach((report) => {
+                                                let reportReq = _.clone(req);
+                                                reportReq.url = tablesRootUrl;
+                                                reportReq.rawBody = report;
+                                                promises.push(reportsApi.createReport(reportReq, report));
+                                            });
+                                            let formsToCreate = cannedNewTableElements.getCannedForms("name", fieldIds);
+                                            formsToCreate.forEach((form) => {
+                                                let formReq = _.clone(req);
+                                                formReq.url = tablesRootUrl;
+                                                formReq.rawBody = form;
+                                                promises.push(formsApi.createForm(formReq, form));
+                                            });
+                                            //promises.push(reportsApi.createReport(fieldReq, cannedListChangesReport));
+                                            //promises.push(reportsApi.createReport(fieldReq, cannedListAllReport));
+                                            //promises.push(formsApi.createForm(fieldReq, cannedForm));
+                                            Promise.all(promises).then(
+                                                (response) => {
+                                                    let reportIds = [];
+                                                    reportIds.push(response[0], response[1]);
+                                                    resolve(tableId);
+                                                },
+                                                (error) => {
+                                                    resolve(tableId);
+                                                    console.log(error);
+                                                }
+                                            );
+                                        },
+                                        (error) => {
+                                            // dont go forward with creation of report/form?
+                                            console.log(error);
+                                        }
+                                    );
+                                },
+                                (error) => {
+                                    //delete the table if table props creation failed to clean up core.
+                                    // Dont wait for response because what can you really do if it fails?
+                                    this.deleteTable(req, tableId);
+                                    reject(error);
+                                }
+                            );
+                        },
+                        (error) => {
+                            reject(error);
+                        }
+                    );
+                });
+            },
+        };
+        return tablesApi;
+    };
+}());
