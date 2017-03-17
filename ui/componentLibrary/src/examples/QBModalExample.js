@@ -1,4 +1,4 @@
-// import ReIcon from '../../../reuse/client/src/components/reIcon/reIcon';
+// import Icon from '../../../reuse/client/src/components/icon/icon';
 // This is a basic example for the React playground
 // Please update to include other properties or states for your component
 

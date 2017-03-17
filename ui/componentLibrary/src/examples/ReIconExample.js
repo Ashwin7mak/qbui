@@ -1,8 +1,8 @@
 const basicIcon = (
     <div>
-        <ReIcon icon="hamburger" />
-        <ReIcon icon="fries" />
-        <ReIcon icon="pickles" />
+        <Icon icon="hamburger" />
+        <Icon icon="fries" />
+        <Icon icon="pickles" />
     </div>
 );
 
