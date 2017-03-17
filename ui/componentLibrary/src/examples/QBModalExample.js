@@ -11,7 +11,7 @@ var BasicQBModalExample = React.createClass({
             criticalAlertWithLongTextOpen: false,
             successQBModalOpen: false,
             singleButtonQBModal: false,
-            reIconTitleBodyMessage: false,
+            iconTitleBodyMessage: false,
             titleBodyMessageTwoButtons: false
         };
     },
@@ -36,8 +36,8 @@ var BasicQBModalExample = React.createClass({
         this.setState({singleButtonQBModal: !this.state.singleButtonQBModal});
     },
 
-    reIconTitleBodyMessage() {
-        this.setState({reIconTitleBodyMessage: !this.state.reIconTitleBodyMessage});
+    iconTitleBodyMessage() {
+        this.setState({iconTitleBodyMessage: !this.state.iconTitleBodyMessage});
     },
 
     titleBodyMessageTwoButtons() {
@@ -51,7 +51,7 @@ var BasicQBModalExample = React.createClass({
             criticalAlertWithLongTextOpen: false,
             successQBModalOpen: false,
             singleButtonQBModal: false,
-            reIconTitleBodyMessage: false,
+            iconTitleBodyMessage: false,
             titleBodyMessageTwoButtons: false});
     },
 
@@ -80,9 +80,9 @@ var BasicQBModalExample = React.createClass({
                 <div style={{paddingTop:"12px"}}>
                     <button onClick={this.singleButtonQBModal}>Show Single Button Modal</button>
                 </div>
-                {/*Show reIcon Title bodyMessage*/}
+                {/*Show Icon Title bodyMessage*/}
                 <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.reIconTitleBodyMessage}>Show reIcon Title bodyMessage Modal</button>
+                    <button onClick={this.iconTitleBodyMessage}>Show Icon Title bodyMessage Modal</button>
                 </div>
                 {/*Show Title bodyMessage Two Buttons*/}
                 <div style={{paddingTop:"12px"}}>
@@ -149,10 +149,10 @@ var BasicQBModalExample = React.createClass({
                         bodyMessage="Body Message"
                         title="Title"/>
                 </div>
-                {/*reIcon Title bodyMessage*/}
+                {/*Icon Title bodyMessage*/}
                 <div>
                     <QBModal
-                        show={this.state.reIconTitleBodyMessage}
+                        show={this.state.iconTitleBodyMessage}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
                         leftButtonName="Left Button"
