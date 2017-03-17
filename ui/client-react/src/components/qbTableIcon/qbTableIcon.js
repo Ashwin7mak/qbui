@@ -19,7 +19,7 @@ const TableIcon = ({classes, icon}) => {
     let iconFont = undefined;
 
     // iterate through the available fonts to see which one is specified on this icon
-    Object.keys(AVAILABLE_ICON_FONTS).map(function (key) {
+    Object.keys(AVAILABLE_ICON_FONTS).map(function(key) {
         if (iconName.indexOf(AVAILABLE_ICON_FONTS[key]) === 0) {
             iconFont = AVAILABLE_ICON_FONTS[key];
         }
