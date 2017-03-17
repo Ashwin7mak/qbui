@@ -8,7 +8,9 @@ import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {selectFieldOnForm} from '../../../actions/formActions';
+import {moveFieldOnForm} from '../../../actions/formActions';
 
+import ReKeyboardShortcuts from '../../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
 
 import './fieldEditingTools.scss';
 
@@ -25,6 +27,11 @@ export class FieldEditingTools extends Component {
         this.onClickField = this.onClickField.bind(this);
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
+        this.getNewLocationForKeyBoardUp = this.getNewLocationForKeyBoardUp.bind(this);
+        this.getNewLocationForKeyBoardDown = this.getNewLocationForKeyBoardDown.bind(this);
+        this.getCurrentField = this.getCurrentField.bind(this);
+        this.keyBoardMoveFieldUp = this.keyBoardMoveFieldUp.bind(this);
+        this.keyBoardMoveFieldDown = this.keyBoardMoveFieldDown.bind(this);
     }
 
     onClickDelete(e) {
@@ -92,7 +99,58 @@ export class FieldEditingTools extends Component {
         }
     }
 
+    getNewLocationForKeyBoardUp(selectedField) {
+        return {
+            elementIndex: selectedField.elementIndex - 1,
+            columnIndex: selectedField.columnIndex,
+            tabIndex: selectedField.tabIndex,
+            sectionIndex: selectedField.sectionIndex
+        }
+    }
+
+    getNewLocationForKeyBoardDown(selectedField) {
+        return {
+            elementIndex: selectedField.elementIndex + 1,
+            columnIndex: selectedField.columnIndex,
+            tabIndex: selectedField.tabIndex,
+            sectionIndex: selectedField.sectionIndex
+        }
+    }
+
+    getCurrentField() {
+        return {
+            containingElement: this.props.containingElement,
+            element: this.props.containingElement.FormFieldElement,
+            location: this.props.location,
+            relatedField: this.props.relatedField
+        }
+    }
+
+    keyBoardMoveFieldUp(formId, newLocation, currentLocation) {
+        if (newLocation.elementIndex !== 1) {
+            this.props.moveField(formId, newLocation, currentLocation);
+        }
+        this.onClickField(e);
+    }
+
+
+    keyBoardMoveFieldDown(formId, newLocation, currentLocation) {
+        console.log(this.props.currentForm.formData.formMeta.fields.length);
+        if (currentLocation.location.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
+            this.props.moveField(formId, newLocation, currentLocation);
+        }
+        this.onClickField(e);
+    }
+
     render() {
+        let keyBoardBindings = [];
+        let newKeyboardUpLocation = null;
+        let newKeyboardDownLocation = null;
+        let currentLocation = null;
+        let currentField = null;
+        let up = null;
+        let down = null;
+
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
         let isTouch = Device.isTouch();
@@ -109,6 +167,18 @@ export class FieldEditingTools extends Component {
 
         if (this.isFieldSelected()) {
             classNames.push('selectedFormElement');
+
+            currentLocation = this.props.selectedFields[0];
+            currentField = this.getCurrentField();
+            newKeyboardUpLocation = this.getNewLocationForKeyBoardUp(currentLocation);
+            newKeyboardDownLocation= this.getNewLocationForKeyBoardDown(currentLocation);
+
+            // console.log('currentField: ', currentField);
+
+            up = {key: 'up', callback: () => {this.keyBoardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false}};
+            down = {key: 'down', callback: () => {this.keyBoardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false}};
+
+            keyBoardBindings.push(up, down);
         }
 
         return (
@@ -116,6 +186,7 @@ export class FieldEditingTools extends Component {
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
             >
+                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={keyBoardBindings}/>
 
                 <button className="dragButton" onClick={this.onClickField}>
                     <DragHandle />
@@ -145,6 +216,7 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = state.forms.find(form => form.id === formId);
     let selectedFields = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
     return {
+        currentForm,
         selectedFields
     };
 };
@@ -153,7 +225,11 @@ const mapDispatchToProps = dispatch => {
     return {
         selectField(formId, location) {
             return dispatch(selectFieldOnForm(formId, location));
-        }
+        },
+
+        moveField(formId, newLocation, draggedItemProps) {
+            return dispatch(moveFieldOnForm(formId, newLocation, draggedItemProps));
+        },
     };
 };
 
