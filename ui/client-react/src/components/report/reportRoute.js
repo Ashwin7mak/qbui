@@ -41,9 +41,10 @@ const ReportRoute = React.createClass({
         // ensure the search box is cleared for the new report
         this.props.dispatch(clearSearchInput());
 
-        //flux.actions.loadFields(appId, tblId)
+        //  get the fields for this app/tbl
         this.props.dispatch(loadFields(appId, tblId));
-        //flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
+
+        //  load the report
         this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
     },
     /**
@@ -56,12 +57,11 @@ const ReportRoute = React.createClass({
         // ensure the search box is cleared for the new report
         this.props.dispatch(clearSearchInput());
 
-        //flux.actions.loadFields(appId, tblId);
+        //  get the fields for this app/tbl
         this.props.dispatch(loadFields(appId, tblId));
 
         // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
         // TODO: tables with relationships
-        //flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
         this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, /*filter*/{}, queryParams));
     },
     loadReportFromParams(params) {
@@ -108,12 +108,6 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
-        // need to dispatch to Fluxxor since report store handles this too...
-        //const flux = this.getFlux();
-        //flux.actions.editNewRecord();
-        //
-        //this.props.dispatch(editNewRecord());
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 

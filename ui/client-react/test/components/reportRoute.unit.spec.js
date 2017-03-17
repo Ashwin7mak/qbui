@@ -15,15 +15,11 @@ describe('ReportRoute functions', () => {
     'use strict';
     const pendEdits = {showDTSErrorModal: false};
     let component;
-    let reportDataSearchStore = Fluxxor.createStore({
+    let mockNavStore = Fluxxor.createStore({
         getState() {
-            return {searchStringInput :''};
+            return {};
         }
     });
-
-    let stores = {
-        ReportDataSearchStore: new reportDataSearchStore()
-    };
 
     let appId = 1;
     let tblId = 2;
@@ -33,14 +29,15 @@ describe('ReportRoute functions', () => {
 
     let routeParams = {appId, tblId, rptId, format: true};
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, pageOffset: offset, numRows: numRows}};
+
+    let stores = {
+        NavStore: new mockNavStore()
+    };
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
         selectTableId() {return;},
-        loadReport() {return;},
-        loadFields() {return;},
-        hideTopNav() {return;},
-        resetRowMenu() {return;}
+        hideTopNav() {return;}
     };
 
     const StageMock = React.createClass({
@@ -56,16 +53,12 @@ describe('ReportRoute functions', () => {
     });
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadReport');
-        spyOn(flux.actions, 'loadFields');
         spyOn(flux.actions, 'selectTableId');
         ReportRouteRewireAPI.__Rewire__('Stage', StageMock);
         ReportRouteRewireAPI.__Rewire__('ReportToolsAndContent', ReportToolsAndContentMock);
     });
 
     afterEach(() => {
-        flux.actions.loadReport.calls.reset();
-        flux.actions.loadFields.calls.reset();
         flux.actions.selectTableId.calls.reset();
         ReportRouteRewireAPI.__ResetDependency__('Stage');
         ReportRouteRewireAPI.__ResetDependency__('ReportToolsAndContent');
