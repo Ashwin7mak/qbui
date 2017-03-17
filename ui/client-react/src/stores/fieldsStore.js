@@ -22,7 +22,7 @@ let FieldsStore = Fluxxor.createStore({
             //actions.LOAD_FIELDS, this.onLoadFields,
             //actions.LOAD_FIELDS_SUCCESS, this.onLoadFieldsSuccess,
             //actions.LOAD_FIELDS_FAILED, this.onLoadFieldsFailed,
-            actions.SELECT_TABLE, this.onSelectTable
+            //actions.SELECT_TABLE, this.onSelectTable
         );
 
         this.logger = new Logger();
@@ -43,27 +43,27 @@ let FieldsStore = Fluxxor.createStore({
     //    this.error = false;
     //    this.emit('change');
     //},
-    onSelectTable(tblId) {
-        this.currentTable = tblId;
-        this.fields = [];
-        this.emit('change');
-    },
-    getKeyField() {
-        let answer;
-        if (typeof this.fields.data !== 'undefined') {
-            answer = _.find(this.fields.data, field => field.keyField && field.keyField === true);
-        }
-        return answer;
-    },
-    getState() {
-        return {
-            fields: this.fields,
-            keyField: this.getKeyField(),
-            currentTable: this.currentTable,
-            fieldsLoading: this.fieldsLoading,
-            error: this.error
-        };
-    }
+    //onSelectTable(tblId) {
+    //    this.currentTable = tblId;
+    //    this.fields = [];
+    //    this.emit('change');
+    //},
+    //getKeyField() {
+    //    let answer;
+    //    if (typeof this.fields.data !== 'undefined') {
+    //        answer = _.find(this.fields.data, field => field.keyField && field.keyField === true);
+    //    }
+    //    return answer;
+    //},
+    //getState() {
+    //    return {
+    //        fields: this.fields,
+    //        keyField: this.getKeyField(),
+    //        currentTable: this.currentTable,
+    //        fieldsLoading: this.fieldsLoading,
+    //        error: this.error
+    //    };
+    //}
 });
 
 export default FieldsStore;
