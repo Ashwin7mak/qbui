@@ -59,8 +59,8 @@ class UserDropDown extends Component {
         const {startTabIndex, app, signOutUser} = this.props;
 
         return (
-            <DropDown id="nav-right-dropdown" className="userDropDown">
-                <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
+            <DropDown id="nav-right-dropdown" className="userDropDown globalActionLink">
+                <a bsRole="toggle" className="dropdownToggle" tabIndex={startTabIndex}>
                     <ReIcon icon={dropDownIcon}/>
                     <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
                 </a>
