@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import HelpButton from '../../src/components/helpButton/helpButton';
-import ReIcon from '../../src/components/reIcon/reIcon';
+import Icon from '../../src/components/icon/icon';
 
 let component;
 
@@ -15,6 +15,6 @@ describe('HelpButton', () => {
     it('displays a help button', () => {
         component = shallow(<HelpButton />);
 
-        expect(component.find(ReIcon)).toHaveProp('icon', 'help');
+        expect(component.find(Icon)).toHaveProp('icon', 'help');
     });
 });

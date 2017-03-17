@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropDown from 'react-bootstrap/lib/Dropdown';
-import ReIcon from '../../reIcon/reIcon';
+import Icon from '../../icon/icon';
 
 // IMPORTED FROM CLIENT REACT
 import {I18nMessage} from '../../../../../../client-react/src/utils/i18nMessage';
@@ -61,7 +61,7 @@ class UserDropDown extends Component {
         return (
             <DropDown id="nav-right-dropdown" className="userDropDown">
                 <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
-                    <ReIcon icon={dropDownIcon}/>
+                    <Icon icon={dropDownIcon}/>
                     <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
                 </a>
 

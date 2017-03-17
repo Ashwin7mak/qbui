@@ -5,15 +5,15 @@ import ReactPlayground from '../components/ReactPlayground';
 import Examples from '../components/Examples';
 import PropTable from '../components/PropTable';
 
-export default function ReIconDoc() {
+export default function IconDoc() {
     return (
         <div>
-            <div dangerouslySetInnerHTML={{__html: Metadata.ReIcon.descHtml}} />
+            <div dangerouslySetInnerHTML={{__html: Metadata.Icon.descHtml}} />
 
-            <ReactPlayground codeText={Examples.ReIcon} />
+            <ReactPlayground codeText={Examples.Icon} />
 
             <h2>Props</h2>
-            <PropTable component="ReIcon" metadata={Metadata} />
+            <PropTable component="Icon" metadata={Metadata} />
         </div>
     );
 }
