@@ -16,12 +16,19 @@ const TableIcon = ({classes, icon}) => {
     // The icon passed in is the full class name including font.
     // So separate them into two parameters.
     let realIcon = `${icon}`;
-    let iconFont = AVAILABLE_ICON_FONTS.TABLE_STURDY;
+    let iconFont = undefined;
 
-    if (realIcon.indexOf(AVAILABLE_ICON_FONTS.UI_STURDY) === 0) {
-        iconFont = AVAILABLE_ICON_FONTS.UI_STURDY;
+    // iterate through the available fonts to see which one is specified on this icon
+    Object.keys(AVAILABLE_ICON_FONTS).map(function (key) {
+        if (realIcon.indexOf(AVAILABLE_ICON_FONTS[key]) === 0) {
+            iconFont = AVAILABLE_ICON_FONTS[key];
+        }
+    });
+
+    // strip the icon font off the front of the icon name because the Icon component expects them passed in separately
+    if (iconFont) {
+        realIcon = realIcon.replace(iconFont + '-', '');
     }
-    realIcon = realIcon.replace(iconFont + '-', '');
 
     return (
         <Icon className={`${classes}`} icon={realIcon} iconFont={iconFont} />
