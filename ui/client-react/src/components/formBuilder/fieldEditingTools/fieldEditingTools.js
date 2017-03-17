@@ -124,7 +124,8 @@ export class FieldEditingTools extends Component {
         up = {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false}};
         down = {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false}};
 
-        this.keyboardBindings.push(up, down);
+        this.keyboardBindings[0] = up;
+        this.keyboardBindings[1] = down;
     }
 
     getNewLocationForKeyboardUp(selectedField) {
@@ -169,8 +170,7 @@ export class FieldEditingTools extends Component {
     }
 
     keyboardMoveFieldUp(formId, newLocation, currentLocation) {
-        console.log('newLocation: ', newLocation);
-        if (newLocation.elementIndex !== -1) {
+        if (currentLocation.location.elementIndex !== 0) {
             this.props.moveField(formId, newLocation, currentLocation);
         }
         this.updateSelectedFieldLocation('up');
@@ -184,7 +184,6 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        this.keyboardBindings = [];
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
         let isTouch = Device.isTouch();
@@ -209,7 +208,7 @@ export class FieldEditingTools extends Component {
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
             >
-                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={this.keyboardBindings}/>
+                <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={this.keyboardBindings}/>
 
                 <button className="dragButton" onClick={this.onClickField}>
                     <DragHandle />
