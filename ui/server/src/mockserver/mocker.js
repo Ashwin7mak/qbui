@@ -24,7 +24,7 @@
             },
             file: {
                 alias: 'f',
-                description: 'Set db file',
+                description: 'Set db file (must be within mockserver directory)',
                 default: 'db.json'
             },
         })
@@ -35,18 +35,16 @@
     let infile = argv.file;
     // use the db.json file copy from sample if it doesn't exist
     let dbfile;
+    if (infile) {
+        infile = path.join(__dirname, infile);
+    }
     if (infile && fs.existsSync(infile)) {
         dbfile = infile;
     } else {
         dbfile = path.join(__dirname, 'db.json');
     }
-    let dbSamplefile = path.join(__dirname, 'db.json.sample');
-    if (!fs.existsSync(dbfile) && fs.existsSync(dbSamplefile)) {
-        //copy sample file
-        console.log("Copying db.json.sample to db.json...");
-        let contents = fs.readFileSync(dbSamplefile, 'utf8');
-        fs.writeFileSync(dbfile, contents);
-    }
+
+    let routes = require(dbfile);
 
     // Returns an Express server
     let server = jsonServer.create();
@@ -56,9 +54,6 @@
         delete req.query.format;
         next();
     });
-
-    // Set default middlewares (logger, static, cors and no-cache)
-    server.use(jsonServer.defaults());
 
     // Custom routes
     server.get('/api/api/v1/ticket', (req, res) => {
@@ -70,11 +65,21 @@
     });
     //Add any additional custom or generated route responses here
 
+    let genericRouter = function(req, res) {
+        var contents = routes[req.path];
+        if (!contents) {
+            contents = routes[req.path.substr(1)];
+        }
+
+        if (contents) {
+            res.json(contents);
+        } else {
+            res.status(404).send('Not found');
+        }
+    };
+
+    server.get('/*', genericRouter);
     // Returns an Express router
-    let router = jsonServer.router(dbfile);
-
-    server.use(router);
-
     server.listen(port, argv.host);
     console.log("Mock backend listening on port " + port + " - http://" + argv.host + ":" + port + "  \ndbfile : " + dbfile);
 

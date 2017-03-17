@@ -11,7 +11,7 @@ node server/mockserver/mocker.js
 
 * add `-h<nameofhost>` to specify a host name other than localhost
 
-* add `-f<filename>` to specify a file name of mock data other than db.json
+* add `-f<filename>` to specify a file name of mock data other than db.json. The file must be in the same directory as mocker.js
 
 * To run serve with reload of server on changes to db file or mocker.js use
 `npm run mockServer 
@@ -21,6 +21,11 @@ node server/mockserver/mocker.js
 
 ```
 javaHost:'http://localhost:3030',
+```
+
+* To use as your legacy mock server, then edit your local.json config file to set the appropriate env
+```
+legacyBase:'.ns.quickbase-dev.com:3030',
 ```
 
 * Then run the node layer as usual via `grunt serve` or `NODE_ENV=local npm start`
