@@ -1,7 +1,7 @@
 import React from 'react';
 import UrlUtils, {__RewireAPI__ as UrlUtilsRewireAPI} from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
-import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK} from '../../src/constants/urlConstants';
+import {SUPPORT_LINK_PATH, REPORT_LINK, CHILD_REPORT_LINK, USERS_ROUTE} from '../../src/constants/urlConstants';
 import StringUtils from '../../src/utils/stringUtils';
 
 describe('UrlUtils', () => {
@@ -139,6 +139,15 @@ describe('UrlUtils', () => {
             let url = StringUtils.format(CHILD_REPORT_LINK, [appId, tblId, rptId, detailKeyFid, detailKeyValue]);
 
             expect(UrlUtils.getRelatedChildReportLink(appId, tblId, rptId, detailKeyFid, detailKeyValue)).toEqual(url);
+        });
+    });
+
+    describe('getAppUsersLink', () => {
+        it('returns a link to the app users management page', () => {
+            let appId = '1';
+            let url = StringUtils.format(USERS_ROUTE, [appId]);
+
+            expect(UrlUtils.getAppUsersLink(appId)).toEqual(url);
         });
     });
 });
