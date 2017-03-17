@@ -54,7 +54,7 @@
                 return config ? config.eeHost + req.url : '';
             },
             getLegacyHost : function() {
-                return config ? config.legacyHost : '';
+                return config ? config.legacyBase : '';
             },
             getAgentOptions: function(req) {
                 let agentOptions = {
@@ -369,7 +369,27 @@
 
             isRawFormat: function(req) {
                 return this.getQueryParameterValue(req, consts.REQUEST_PARAMETER.FORMAT) === consts.FORMAT.RAW;
-            }
+            },
+
+
+            /**
+             * Gets the path to the current stack for the realm
+             * we take the root realm and append the hostname
+             * @param req
+             * @returns {*}
+             */
+            getLegacyRealmBase: function(req, isSecure = true) {
+
+                let requestHost = this.getRequestHost(req, true, false);
+                let realmHost = requestHost.substr(0, requestHost.indexOf("."));
+                let realmURL = realmHost + config.legacyBase;
+
+                if (isSecure) {
+                    realmURL = consts.PROTOCOL.HTTPS + realmURL;
+                }
+
+                return realmURL;
+            },
         };
 
         return helper;

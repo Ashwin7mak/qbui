@@ -2,13 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import QBToolTip, {__RewireAPI__ as QBToolTipRewireAPI}  from '../../src/components/qbToolTip/qbToolTip';
 
-var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>test</div>
-        );
-    }
-});
+const I18nMessageMock = () => <div>test</div>;
 
 describe('QBToolTip functions', () => {
     'use strict';
@@ -22,37 +16,9 @@ describe('QBToolTip functions', () => {
     });
 
 
-    it('test render of component empty', () => {
-        let component = TestUtils.renderIntoDocument(<QBToolTip/>);
-        expect(component).toBeTruthy();// "expect component was wrapped");
-    });
-
-    it('test render of component several children', () => {
-        let component = TestUtils.renderIntoDocument(<QBToolTip><span>test</span><div>xyz</div></QBToolTip>);
-        expect(component).toBeTruthy();// "expect component was wrapped");
-    });
-
+    // Keep this test to ensure the stub is still working until the stub is removed
     it('test render of component default', () => {
         let component = TestUtils.renderIntoDocument(<QBToolTip><span>something here</span></QBToolTip>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
-
-    it('test render of component with plain string', () => {
-        let component = TestUtils.renderIntoDocument(<QBToolTip plainMessage="hello"><span>something here</span></QBToolTip>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
-    it('test render of component with i18nMessageKey', () => {
-        let component = TestUtils.renderIntoDocument(<QBToolTip i18nMessageKey="test"><span>something here</span></QBToolTip>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
-
-    it('test render of component with delay', () => {
-        let component = TestUtils.renderIntoDocument(<QBToolTip delayStart={0} i18nMessageKey="test">
-            <span>something here</span></QBToolTip>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
-
 });
