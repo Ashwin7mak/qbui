@@ -6,7 +6,6 @@
 
 import React, {PropTypes} from 'react';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon.js';
-import './style.css';
 
 /**
  * an icon using a new qb icon font (from Lisa)
@@ -22,7 +21,7 @@ const TableIcon = ({classes, icon}) => {
     if (realIcon.indexOf(AVAILABLE_ICON_FONTS.UI_STURDY) === 0) {
         iconFont = AVAILABLE_ICON_FONTS.UI_STURDY;
     }
-    realIcon = realIcon.replace(iconFont+'-', '');
+    realIcon = realIcon.replace(iconFont + '-', '');
 
     return (
         <Icon className={`${classes}`} icon={realIcon} iconFont={iconFont} />

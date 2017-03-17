@@ -1,15 +1,26 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import {mount} from 'enzyme';
+import jasmineEnzyme from 'jasmine-enzyme';
+import AVAILABLE_ICON_FONTS from '../../src/constants/iconConstants';
 import TableIcon  from '../../src/components/qbTableIcon/qbTableIcon';
 
-describe('TableIcon functions', () => {
-    'use strict';
+/**
+ * This component is replaced by the component "Icon" in the reuse library.
+ * This test is only to verify that this stub class is working.
+ */
 
-    let component;
+let component;
 
+fdescribe('TableIcon', () => {
+    beforeEach(() => {
+        jasmineEnzyme();
+    });
 
-    it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<TableIcon icon="dots" />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    it('renders an icon from the table font set', () => {
+        let iconName = AVAILABLE_ICON_FONTS.TABLE_STURDY + "-dots";
+
+        component = mount(<TableIcon icon={iconName} />);
+
+        expect(component.find(`.${iconName}`)).toBePresent();
     });
 });
