@@ -40,9 +40,6 @@ export class FormBuilder extends Component {
      * @param moveImmediately - Helps with testing. Change to true to ignore the timeout that helps with fast dragging.
      */
     handleFormReorder(newLocation, draggedItemProps, moveImmediately = false) {
-        console.log('newLocation: ', newLocation);
-        console.log('draggedItemProps: ', draggedItemProps);
-
         if (this.props.moveFieldOnForm && _.has(draggedItemProps, 'containingElement')) {
             let element = draggedItemProps.containingElement[findFormElementKey(draggedItemProps.containingElement)];
 
