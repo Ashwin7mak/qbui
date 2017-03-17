@@ -61,7 +61,7 @@ class UserDropDown extends Component {
         return (
             <DropDown id="nav-right-dropdown" className="userDropDown">
                 <a bsRole="toggle" className="dropdownToggle globalActionLink" tabIndex={startTabIndex}>
-                    <icon icon={dropDownIcon}/>
+                    <Icon icon={dropDownIcon}/>
                     <span className="navLabel"><I18nMessage message={dropDownMessage}/></span>
                 </a>
 
