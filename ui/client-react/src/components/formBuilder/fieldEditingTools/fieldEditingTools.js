@@ -22,16 +22,19 @@ export class FieldEditingTools extends Component {
         super(props);
 
         this.tabIndex = "-1";
+
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
         this.onClickField = this.onClickField.bind(this);
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
+
+        this.getCurrentField = this.getCurrentField.bind(this);
         this.getNewLocationForKeyBoardUp = this.getNewLocationForKeyBoardUp.bind(this);
         this.getNewLocationForKeyBoardDown = this.getNewLocationForKeyBoardDown.bind(this);
-        this.getCurrentField = this.getCurrentField.bind(this);
         this.keyBoardMoveFieldUp = this.keyBoardMoveFieldUp.bind(this);
         this.keyBoardMoveFieldDown = this.keyBoardMoveFieldDown.bind(this);
+        this.updateSelectedFieldLocation = this.updateSelectedFieldLocation.bind(this);
     }
 
     onClickDelete(e) {
@@ -126,20 +129,34 @@ export class FieldEditingTools extends Component {
         }
     }
 
+    updateSelectedFieldLocation(newLocation) {
+        if (this.props.selectField) {
+            let currentLocation = this.props.location;
+
+            if (newLocation === 'up') {
+                currentLocation.elementIndex = currentLocation.elementIndex - 1;
+            } else if (newLocation === 'down') {
+                currentLocation.elementIndex = currentLocation.elementIndex + 1;
+            }
+            console.log('newLocation: ', newLocation);
+            console.log('location: ', this.props.location);
+            this.props.selectField(this.props.formId, currentLocation);
+        }
+
+    }
+
     keyBoardMoveFieldUp(formId, newLocation, currentLocation) {
         if (newLocation.elementIndex !== 1) {
             this.props.moveField(formId, newLocation, currentLocation);
         }
-        this.onClickField(e);
+        this.updateSelectedFieldLocation('up');
     }
 
-
     keyBoardMoveFieldDown(formId, newLocation, currentLocation) {
-        console.log(this.props.currentForm.formData.formMeta.fields.length);
         if (currentLocation.location.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
             this.props.moveField(formId, newLocation, currentLocation);
         }
-        this.onClickField(e);
+        this.updateSelectedFieldLocation('down');
     }
 
     render() {
@@ -172,8 +189,6 @@ export class FieldEditingTools extends Component {
             currentField = this.getCurrentField();
             newKeyboardUpLocation = this.getNewLocationForKeyBoardUp(currentLocation);
             newKeyboardDownLocation= this.getNewLocationForKeyBoardDown(currentLocation);
-
-            // console.log('currentField: ', currentField);
 
             up = {key: 'up', callback: () => {this.keyBoardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false}};
             down = {key: 'down', callback: () => {this.keyBoardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false}};

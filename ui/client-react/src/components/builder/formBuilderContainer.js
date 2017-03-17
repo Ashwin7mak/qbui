@@ -115,50 +115,22 @@ export const FormBuilderContainer = React.createClass({
         />;
     },
 
-    getNewLocationForKeyBoardUp (selectedField) {
-        let newLocation = {};
-
-        newLocation.elementIndex = selectedField.tabIndex;
-        newLocation.columnIndex = selectedField.sectionIndex;
-        newLocation.tabIndex = selectedField.columnIndex;
-        newLocation.sectionIndex = selectedField.elementIndex + 1;
-
-        return newLocation;
-    },
-
-    getNewLocationForKeyBoardUpDown (selectedField) {
-        let newLocation = {};
-
-        newLocation.elementIndex = selectedField.tabIndex;
-        newLocation.columnIndex = selectedField.sectionIndex;
-        newLocation.tabIndex = selectedField.columnIndex;
-        newLocation.sectionIndex = selectedField.elementIndex - 1;
-
-        return newLocation;
-    },
-
     render() {
-        let keyBoardBindings = [
-            {key: 'esc', callback: () => {this.onCancel(); return false}},
-            {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
-        ];
-
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
         let formId = null;
+
         if (loaded) {
             formId = this.props.forms[0].id;
             formData = this.props.forms[0].formData;
-
-            if (this.props.forms[0].selectedFields) {
-                console.log(this.getNewLocationForKeyBoardUp(this.props.forms[0].selectedFields[0]));
-                console.log(this.getNewLocationForKeyBoardUpDown(this.props.forms[0].selectedFields[0]));
-            }
         }
         return (
             <div className="formBuilderContainer">
 
-                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={keyBoardBindings}/>
+                <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
+                    {key: 'esc', callback: () => {this.onCancel(); return false}},
+                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
+                ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
