@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 
+import fields from './fields';
 import forms from './forms';
 import record from './record';
 import report from './report';
@@ -14,6 +15,7 @@ import animation from './animation';
 export default combineReducers({
     animation,
     featureSwitches,
+    fields,
     forms,
     record,
     report,

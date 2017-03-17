@@ -338,33 +338,6 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     render() {
-        let classes = ['reportToolsAndContentContainer'];
-        // TODO get from reports store
-        if (this.props.selectedRows) {
-            if (this.props.selectedRows.length > 0) {
-                classes.push('activeSelection');
-            }
-            if (this.props.selectedRows.length === 1) {
-                classes.push('singleSelection');
-            }
-        }
-
-        if (this.props.reportData && this.props.reportData.isRecordDeleted) {
-            this.getPageUsingOffsetMultiplicant(0);
-        }
-
-        let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
-
-        // Define the page start. Page offset is zero indexed. For display purposes, add one.
-        this.pageStart = this.props.reportData.pageOffset + 1;
-        // Define page end. This is page offset added to page size or number of rows.
-        this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
-
-        this.recordsCount = this.getReportRecordsCount(this.props.reportData);
-        this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
-
-
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.reportData.appId) ||
             _.isUndefined(this.props.reportData.tblId) ||
@@ -373,6 +346,37 @@ export const ReportToolsAndContent = React.createClass({
             logger.info("the necessary params were not specified to reportToolsAndContent render params=" + simpleStringify(this.props.params));
             return <ReportContentError errorDetails={this.props.reportData.errorDetails}/>;
         } else {
+            let classes = ['reportToolsAndContentContainer'];
+            // TODO get from reports store
+            if (this.props.selectedRows) {
+                if (this.props.selectedRows.length > 0) {
+                    classes.push('activeSelection');
+                }
+                if (this.props.selectedRows.length === 1) {
+                    classes.push('singleSelection');
+                }
+            }
+
+            if (this.props.reportData && this.props.reportData.isRecordDeleted) {
+                this.getPageUsingOffsetMultiplicant(0);
+            }
+
+            let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+
+            //  get the fields from redux store
+            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.reportData.appId && field.tblId === this.props.reportData.tblId);
+            let fields = fieldsContainer ? fieldsContainer.fields : [];
+
+            let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(fields);
+
+            // Define the page start. Page offset is zero indexed. For display purposes, add one.
+            this.pageStart = this.props.reportData.pageOffset + 1;
+            // Define page end. This is page offset added to page size or number of rows.
+            this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
+
+            this.recordsCount = this.getReportRecordsCount(this.props.reportData);
+            this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
+
             let toolbar = <ReportToolbar appId={this.props.reportData.appId}
                                          tblId={this.props.reportData.tblId}
                                          rptId={typeof this.props.reportData.rptId !== "undefined" ? this.props.reportData.rptId : this.props.params.rptId}
@@ -381,7 +385,7 @@ export const ReportToolsAndContent = React.createClass({
                                          searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                                          pageActions={this.getPageActions(0)}
                                          nameForRecords={this.nameForRecords}
-                                         fields={this.props.fields}
+                                         fields={fields}
                                          searchTheString={this.searchTheString}
                                          filterOnSelections={this.filterOnSelections}
                                          clearSearchString={this.clearSearchString}
@@ -431,9 +435,9 @@ export const ReportToolsAndContent = React.createClass({
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
-
                                    onGridReady={this.onGridSizeSet}
-                                   {...this.props} />
+                                   {...this.props}
+                                   fields={fields}/>
 
                     {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
                 </div>
@@ -445,7 +449,8 @@ export const ReportToolsAndContent = React.createClass({
 const mapStateToProps = (state) => {
     return {
         report: state.report,
-        search: state.search
+        search: state.search,
+        fields: state.fields
     };
 };
 

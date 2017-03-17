@@ -44,7 +44,7 @@ const CLOSE_NAV = false;
 const OPEN_APPSLIST = true;
 
 export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', /*'ReportDataStore', 'RecordPendingEditsStore',*/ 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore' /*'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore'*/)],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -54,10 +54,10 @@ export let Nav = React.createClass({
         let flux = this.getFlux();
         return {
             nav: flux.store('NavStore').getState(),
-            apps: flux.store('AppsStore').getState(),
+            apps: flux.store('AppsStore').getState()
             //pendEdits: flux.store('RecordPendingEditsStore').getState(),
             //reportData: flux.store('ReportDataStore').getState(),
-            fields: flux.store('FieldsStore').getState()
+            //fields: flux.store('FieldsStore').getState()
             //reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
@@ -297,8 +297,12 @@ export let Nav = React.createClass({
         }
 
         let viewingRecordId = null;
+        let fields = [];
         if (this.props.params) {
             viewingRecordId = this.props.params.recordId;
+            //   get the fields from the redux store
+            let fieldsContainer = _.find(this.props.qbui.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
+            fields = fieldsContainer ? fieldsContainer.fields : [];
         }
 
         let reportsData = this.getReportsData();
@@ -378,7 +382,7 @@ export let Nav = React.createClass({
                             locale: this.state.nav.locale,
                             //pendEdits:pendEdits,
                             isRowPopUpMenuOpen: this.props.qbui.shell.isRowPopUpMenuOpen,
-                            fields: this.state.fields,
+                            fields: fields,
                             //reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(reportsData.tblId),

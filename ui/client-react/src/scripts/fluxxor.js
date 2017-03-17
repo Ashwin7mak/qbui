@@ -1,8 +1,8 @@
 import ReactDOM from "react-dom";
 
 import Fluxxor from "fluxxor";
-import FieldsStore from "../stores/fieldsStore";
-import fieldsActions from "../actions/fieldsActions";
+//import FieldsStore from "../stores/fieldsStore";
+//import fieldsActions from "../actions/fieldsActions";
 import AppsStore from "../stores/appsStore";
 import appsActions from "../actions/appsActions";
 import NavStore from "../stores/navStore";
@@ -17,14 +17,14 @@ export default function getFlux() {
         AppsStore: new AppsStore(),
         NavStore: new NavStore(),
         FacetMenuStore: new FacetMenuStore(),
-        FieldsStore: new FieldsStore(),
+        //FieldsStore: new FieldsStore(),
         PerfStore: new PerfStore()
     };
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(appsActions);
     flux.addActions(navActions);
     flux.addActions(facetMenuActions);
-    flux.addActions(fieldsActions);
+    //flux.addActions(fieldsActions);
     flux.addActions(perfActions);
 
     //to ensure you don't get cascading dispatch errors with Fluxxor
