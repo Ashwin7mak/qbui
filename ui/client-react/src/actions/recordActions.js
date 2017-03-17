@@ -596,7 +596,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                 let recordService = new RecordService();
                 recordService.deleteRecords(appId, tblId, recIds).then(
                     response => {
-                        logger.debug('RecordService deleteRecordBulk success');
+                        logger.debug('RecordService deleteRecords success');
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
 
                         //  send out notification message on the client

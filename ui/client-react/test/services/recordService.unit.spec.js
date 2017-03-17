@@ -4,7 +4,7 @@ import * as query from '../../src/constants/query';
 
 describe('RecordService functions', () => {
     'use strict';
-    var recordService;
+    var recordService = new RecordService();
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
@@ -13,9 +13,14 @@ describe('RecordService functions', () => {
         spyOn(BaseService.prototype, 'post');
         spyOn(BaseService.prototype, 'patch');
         spyOn(BaseService.prototype, 'delete');
-        spyOn(BaseService.prototype, 'deleteBulk');
-
-        recordService = new RecordService();
+    });
+    afterEach(() => {
+        BaseService.prototype.setRequestInterceptor.calls.reset();
+        BaseService.prototype.setResponseInterceptor.calls.reset();
+        BaseService.prototype.get.calls.reset();
+        BaseService.prototype.post.calls.reset();
+        BaseService.prototype.patch.calls.reset();
+        BaseService.prototype.delete.calls.reset();
     });
 
     it('test getRecords function with reqd parameters', () => {
@@ -208,8 +213,8 @@ describe('RecordService functions', () => {
         var tblId = 2;
         var recIds = [1, 2, 3];
         var url = recordService.constructUrl(recordService.API.DELETE_RECORD_BULK, [appId, tblId]);
-        recordService.deleteRecordBulk(appId, tblId, recIds);
+        recordService.deleteRecords(appId, tblId, recIds);
 
-        expect(BaseService.prototype.deleteBulk).toHaveBeenCalledWith(url, {data: recIds});
+        expect(BaseService.prototype.delete).toHaveBeenCalledWith(url, {data: recIds});
     });
 });
