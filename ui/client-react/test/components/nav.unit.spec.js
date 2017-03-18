@@ -36,7 +36,7 @@ class WindowLocationUtilsMock {
 }
 
 
-describe('Nav', () => {
+describe('Nav Unit tests', () => {
     'use strict';
 
     let navStore = Fluxxor.createStore({
@@ -213,27 +213,26 @@ describe('Nav', () => {
         });
     });
 
-    describe('navigateToBuilder function', () => {
-        it('renders a component without form type or form id', () => {
-            let expectedRouter = ['/qbase/builder/app/1/table/2/form'];
-            props.forms = [];
-            props.router = [];
+    it('renders form builder component without form type or form id', () => {
+        let expectedRouter = ['/qbase/builder/app/1/table/2/form'];
+        props.forms = [];
+        props.router = [];
 
-            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
-            component.navigateToBuilder();
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        component.navigateToBuilder();
 
-            expect(props.router).toEqual(expectedRouter);
-        });
-
-        it('renders a component with a form type', () => {
-            let expectedRouter = ['/qbase/builder/app/1/table/2/form?formType=view'];
-            props.forms = [{id: 'view'}];
-            props.router = [];
-
-            let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
-            component.navigateToBuilder();
-
-            expect(props.router).toEqual(expectedRouter);
-        });
+        expect(props.router).toEqual(expectedRouter);
     });
+
+    it('renders form builder component with a form type', () => {
+        let expectedRouter = ['/qbase/builder/app/1/table/2/form?formType=view'];
+        props.forms = [{id: 'view'}];
+        props.router = [];
+
+        let component = TestUtils.renderIntoDocument(<Nav {...props} flux={flux}></Nav>);
+        component.navigateToBuilder();
+
+        expect(props.router).toEqual(expectedRouter);
+    });
+
 });
