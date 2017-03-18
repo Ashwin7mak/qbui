@@ -41,11 +41,11 @@ export const TableHomePageRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
 
+        //  redux actions..
         this.props.clearSearchInput();
-
-        //flux.actions.loadFields(appId, tblId);
         this.props.loadFields(appId, tblId);
 
+        //  loads from the report Nav context
         this.props.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows);
     },
     loadHomePageForParams(params) {
@@ -102,9 +102,9 @@ export const TableHomePageRoute = React.createClass({
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
         let homePageParams = _.assign(this.props.params, {rptId: null});
 
+        //  get fields from redux store
         let fields = [];
         if (_.has(this.props, 'params')) {
-            //  get fields from redux store
             let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
             fields = fieldsContainer ? fieldsContainer.fields : [];
         }
