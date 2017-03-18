@@ -34,7 +34,7 @@ describe('Test fields reducer', () => {
 
         expect(currentField.appId).toEqual(appId);
         expect(currentField.tblId).toEqual(tblId);
-        expect(currentField.fields).toEqual(fields);
+        expect(currentField.fields).toEqual({fields:{data:fields}});
         expect(currentField.keyField).toEqual(keyField);
         expect(currentField.fieldsLoading).toEqual(false);
         expect(currentField.error).toEqual(false);
