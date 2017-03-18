@@ -14,7 +14,9 @@ describe('AccountUsersGrid', () => {
 
         const baseProps = {
             fetchAccountUsers: () => false,
-            accountId: "0"
+            fetchRequestContextIfNeeded: () => false,
+            accountId: "0",
+            loading: false
         };
 
         it("should show the correct set of headers", ()=> {
