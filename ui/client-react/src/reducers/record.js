@@ -14,8 +14,7 @@ import _ from 'lodash';
  */
 const record = (state = [], action) => {
 
-    //  Store can be configured to hold just one record
-    //  or array of records.
+    //  Store can be configured to hold just one record or array of records.
     //  NOTE: until a need to do so, only 1 record in the store
     const singleRecordStore = true;
 
@@ -36,6 +35,10 @@ const record = (state = [], action) => {
             //  ensure obj id is stored as a numeric..unless it's a new record
             obj.id = (obj.id === NEW_RECORD_VALUE || obj.id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +obj.id);
 
+            //  TODO: the id is currently the record id, which is fine when only holding 1 record
+            //  TODO: or working on the same table, but this will need to be refactored and set to
+            //  TODO: the appId/tblId/recId composite to ensure no collision when working on records
+            //  TODO: with the same recId but from different tables.
             if (singleRecordStore === true) {
                 if (stateList.length === 0) {
                     stateList.push(obj);
@@ -56,13 +59,17 @@ const record = (state = [], action) => {
     }
 
     /**
-     * Retrieve the record from the state and return a clone
-     * object
+     * Retrieve the record from the state and return a clone object
      *
      * @param id
      * @returns {*}
      */
     function getRecordFromState(id) {
+        //  TODO: the id is currently the record id, which is fine when only holding 1 record
+        //  TODO: or working on the same table, but this will need to be refactored and set to
+        //  TODO: the appId/tblId/recId composite to ensure no collision when working on records
+        //  TODO: with the same recId but from different tables.
+        //
         // ensure always looking up id as a numeric..unless it's a new record
         const recId = (id === NEW_RECORD_VALUE || id === UNSAVED_RECORD_ID ? NEW_RECORD_VALUE : +id);
         const index = _.findIndex(state, rec => rec.id === recId);
