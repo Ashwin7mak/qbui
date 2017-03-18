@@ -22,7 +22,7 @@ import UrlFieldValueRendererMetadata from 'component-metadata!../../../client-re
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 
-import ReIconMetadata from 'component-metadata!../../../reuse/client/src/components/reIcon/reIcon.js';
+import IconMetadata from 'component-metadata!../../../reuse/client/src/components/icon/icon.js';
 import QBPanelMetadata from 'component-metadata!../../../client-react/src/components/QBPanel/qbpanel.js';
 
 import TrowserMetadata from 'component-metadata!../../../client-react/src/components/trowser/trowser.js';
@@ -61,7 +61,7 @@ var Metadata = _.merge(
     UrlFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
-    ReIconMetadata,
+    IconMetadata,
     QBPanelMetadata,
     QBModalMetadata,
     AlertBannerMetadata,

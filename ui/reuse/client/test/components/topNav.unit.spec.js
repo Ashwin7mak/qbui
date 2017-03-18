@@ -3,7 +3,7 @@ import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import TopNav from '../../src/components/topNav/topNav';
-import ReIcon from '../../src/components/reIcon/reIcon';
+import Icon from '../../src/components/icon/icon';
 
 let component;
 
@@ -39,7 +39,7 @@ describe('TopNav', () => {
         component = mount(<TopNav centerGlobalActions={testCenterElement}/>);
 
         expect(component.find('.center').find('.centerComponent')).toBePresent();
-        expect(component.find('.center').find(ReIcon)).not.toBePresent();
+        expect(component.find('.center').find(Icon)).not.toBePresent();
     });
 
     it('displays actions passed in on the right side of the nav bar', () => {

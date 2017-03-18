@@ -33,7 +33,7 @@ import {CONTEXT} from '../../actions/context';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
 import Tooltip from '../../../../reuse/client/src/components/tooltip/tooltip';
-import ReIcon from '../../../../reuse/client/src/components/reIcon/reIcon';
+import Icon from '../../../../reuse/client/src/components/icon/icon';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -253,12 +253,12 @@ export let Nav = React.createClass({
             <ButtonGroup className="navItem">
                 <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
                     <Button tabIndex="2" className="disabled">
-                        <ReIcon icon="search" />
+                        <Icon icon="search" />
                     </Button>
                 </Tooltip>
 
                 <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                    <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
+                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
                 </Tooltip>
             </ButtonGroup>
         );

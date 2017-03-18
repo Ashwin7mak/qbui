@@ -1,8 +1,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {AccountUsersGrid} from '../../../src/account/users/AccountUsersGrid';
-import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
+import {AccountUsersGrid} from '../../../../src/account/users/grid/AccountUsersGrid';
+import QbCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import moment from 'moment';
 
 describe('AccountUsersGrid', () => {
@@ -20,7 +20,7 @@ describe('AccountUsersGrid', () => {
         it("should show the correct set of headers", ()=> {
             let component = mount(<AccountUsersGrid {...baseProps} />);
             let headers = component.find("th").map(node => node.text());
-            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "# Apps Managed", "In Realm Directory?", "Realm Approved?"]);
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?", "In Realm Directory?", "Realm Approved?"]);
         });
 
         it("should should call fetch on mount", ()=> {
@@ -124,7 +124,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("");
+                expect(cell.text()).toEqual("No App Access");
             });
 
             it("should show deactivated above all else", () => {
@@ -306,9 +306,9 @@ describe('AccountUsersGrid', () => {
             });
         });
 
-        describe("# apps managed?", () => {
+        describe("App Manager?", () => {
 
-            it("should render num apps managed as 0", () => {
+            it("should render no apps correctly", () => {
                 let props = {
                     users: [{numAppsManaged: 0, uid:0}],
                     ...baseProps
@@ -316,10 +316,10 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(10);
-                expect(cell.text()).toEqual("0");
+                expect(cell.text()).toEqual("--");
             });
 
-            it("should render num apps managed as positive number", () => {
+            it("should render some apps correctly", () => {
                 let props = {
                     users: [{numAppsManaged: 1, uid:0}],
                     ...baseProps
@@ -327,7 +327,7 @@ describe('AccountUsersGrid', () => {
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(10);
-                expect(cell.text()).toEqual("1");
+                expect(cell.text()).toEqual("Y");
             });
         });
 
