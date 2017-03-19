@@ -24,11 +24,11 @@
         transform: translateX(0);
 
         &.reSideMenuOpen:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
-            @include translateMenuOnLeft;
+            @include moveMenuToLeft;
         }
 
         &.reSideMenuOpen.reSideMenuPullRight:not(.reSideMenuDocked) {
-            @include translateMenuOnRight;
+            @include moveMenuToRight;
         }
 
         &.reSideMenuOpen.reSideMenuCollapsed:not(.reSideMenuPullRight):not(.reSideMenuDocked) {

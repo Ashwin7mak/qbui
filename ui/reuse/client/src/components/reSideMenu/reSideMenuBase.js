@@ -65,7 +65,7 @@ class ReSideMenuBase extends Component {
     }
 
     getSideMenuClasses() {
-        const {baseClass, pullRight, isCollapsed} = this.props;
+        const {baseClass, pullRight, isCollapsed, isOpen} = this.props;
 
         let classes = [`${baseClass}Content`];
 
@@ -73,8 +73,16 @@ class ReSideMenuBase extends Component {
             classes.push(`${baseClass}PullRight`);
         }
 
-        if (this.props.isCollapsed) {
+        if (isOpen && !this.state.isDocked) {
+            classes.push(`${baseClass}Open`)
+        }
+
+        if (isCollapsed) {
             classes.push(`${baseClass}Collapsed`);
+        }
+
+        if (this.state.isDocked) {
+            classes.push(`${baseClass}Docked`);
         }
 
         return classes.join(' ');

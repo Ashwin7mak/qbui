@@ -5,23 +5,28 @@
 }
 
 @mixin baseMenuWidths {
+    // The min and max width are set here to help with animating collapsed state
     min-width: $leftNav-width-xLarge-breakpoint;
+    max-width: $leftNav-width-xLarge-breakpoint;
 
     @include large-breakpoint {
         min-width: $leftNav-width-large-breakpoint;
+        max-width: $leftNav-width-large-breakpoint;
     }
 
     @include medium-breakpoint {
         min-width: $leftNav-width-medium-breakpoint;
+        max-width: $leftNav-width-medium-breakpoint;
     }
 
     @include small-breakpoint {
         // Currently small and medium have the same width
         min-width: $leftNav-width-medium-breakpoint;
+        max-width: $leftNav-width-medium-breakpoint;
     }
 }
 
-@mixin translateMenuOnLeft {
+@mixin moveMenuToLeft {
     transform: translateX($leftNav-width-xLarge-breakpoint);
 
     @include large-breakpoint {
@@ -39,7 +44,7 @@
 }
 
 // When docked on the right, we need to translate in the opposite direction
-@mixin translateMenuOnRight {
+@mixin moveMenuToRight {
     transform: translateX(-$leftNav-width-xLarge-breakpoint);
 
     @include large-breakpoint {
