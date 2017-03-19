@@ -1,0 +1,57 @@
+@import "../../assets/css/_qbVariables";
+
+@mixin menuShadow {
+    box-shadow: -5px 0 10px -5px rgba($color-black-800, 0.3), 5px 0 10px -5px rgba($color-black-800, 0.3);
+}
+
+@mixin baseMenuWidths {
+    min-width: $leftNav-width-xLarge-breakpoint;
+
+    @include large-breakpoint {
+        min-width: $leftNav-width-large-breakpoint;
+    }
+
+    @include medium-breakpoint {
+        min-width: $leftNav-width-medium-breakpoint;
+    }
+
+    @include small-breakpoint {
+        // Currently small and medium have the same width
+        min-width: $leftNav-width-medium-breakpoint;
+    }
+}
+
+@mixin translateMenuOnLeft {
+    transform: translateX($leftNav-width-xLarge-breakpoint);
+
+    @include large-breakpoint {
+        transform: translateX($leftNav-width-large-breakpoint);
+    }
+
+    @include medium-breakpoint {
+        transform: translateX($leftNav-width-medium-breakpoint);
+    }
+
+    @include small-breakpoint {
+        // Currently small and medium have the same width
+        transform: translateX($leftNav-width-medium-breakpoint);
+    }
+}
+
+// When docked on the right, we need to translate in the opposite direction
+@mixin translateMenuOnRight {
+    transform: translateX(-$leftNav-width-xLarge-breakpoint);
+
+    @include large-breakpoint {
+        transform: translateX(-$leftNav-width-large-breakpoint);
+    }
+
+    @include medium-breakpoint {
+        transform: translateX(-$leftNav-width-medium-breakpoint);
+    }
+
+    @include small-breakpoint {
+        // Currently small and medium have the same width
+        transform: translateX(-$leftNav-width-medium-breakpoint);
+    }
+}

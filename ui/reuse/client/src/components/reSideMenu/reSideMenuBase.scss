@@ -1,4 +1,5 @@
 @import "../../assets/css/_qbVariables";
+@import "./sideMenuMixins";
 
 .reSideMenuBase {
     position: relative;
@@ -6,7 +7,7 @@
     width: 100%;
 
     &:not(.reSideMenuDocked) .reSideMenuMain {
-        box-shadow: -5px 0 10px -5px rgba($color-black-800, 0.3), 5px 0 10px -5px rgba($color-black-800, 0.3);
+        @include menuShadow;
     }
 
     .reSideMenuMain {
@@ -23,38 +24,11 @@
         transform: translateX(0);
 
         &.reSideMenuOpen:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
-            transform: translateX($leftNav-width-xLarge-breakpoint);
-
-            @include large-breakpoint {
-                transform: translateX($leftNav-width-large-breakpoint);
-            }
-
-            @include medium-breakpoint {
-                transform: translateX($leftNav-width-medium-breakpoint);
-            }
-
-            @include small-breakpoint {
-                // Currently small and medium have the same width
-                transform: translateX($leftNav-width-medium-breakpoint);
-            }
+            @include translateMenuOnLeft;
         }
 
-        // When docked on the right, we need to translate the main content in the opposite direction
         &.reSideMenuOpen.reSideMenuPullRight:not(.reSideMenuDocked) {
-            transform: translateX(-$leftNav-width-xLarge-breakpoint);
-
-            @include large-breakpoint {
-                transform: translateX(-$leftNav-width-large-breakpoint);
-            }
-
-            @include medium-breakpoint {
-                transform: translateX(-$leftNav-width-medium-breakpoint);
-            }
-
-            @include small-breakpoint {
-                // Currently small and medium have the same width
-                transform: translateX(-$leftNav-width-medium-breakpoint);
-            }
+            @include translateMenuOnRight;
         }
 
         &.reSideMenuOpen.reSideMenuCollapsed:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
@@ -84,20 +58,7 @@
         z-index: 0;
         height: 100vh; // Ensures that long content can be scrolled on all browsers
 
-        min-width: $leftNav-width-xLarge-breakpoint;
-
-        @include large-breakpoint {
-            min-width: $leftNav-width-large-breakpoint;
-        }
-
-        @include medium-breakpoint {
-            min-width: $leftNav-width-medium-breakpoint;
-        }
-
-        @include small-breakpoint {
-            // Currently small and medium have the same width
-            min-width: $leftNav-width-medium-breakpoint;
-        }
+        @include baseMenuWidths;
 
         &.reSideMenuCollapsed {
             min-width: $leftNav-width-collapsed;
