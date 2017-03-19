@@ -1,16 +1,42 @@
 @import "../../assets/css/_qbVariables";
 @import "../reSideMenu/sideMenuMixins";
 
+/*
+    A note on all the first-child selectors (">"):
+    The frequent first-child selectors are required here to successfully handle
+    multiple side navs on the page (e.g., a left side trowser and a right trowser).
+    We only want to select the first child so styles for the current instance do not affect
+    other navs that may be on the page as these components get nested.
+ */
+
 .sideTrowserBase {
     position: relative;
     height: 100%;
     width: 100%;
 
-    &:not(.sideTrowserDocked) .sideTrowserContent {
-        box-shadow: -5px 0 10px -5px rgba($color-black-800, 0.3), 5px 0 10px -5px rgba($color-black-800, 0.3);
+    &:not(.sideTrowserDocked) > .sideTrowserContent {
+        @include menuShadow;
     }
 
-    .sideTrowserContent {
+    &.sideTrowserDocked {
+        display: flex;
+
+        &.sideTrowserPullRight {
+            flex-direction: row-reverse;
+        }
+
+        > .sideTrowserMain {
+            position: relative;
+            flex: 1 auto;
+        }
+
+        > .sideTrowserContent {
+            position: relative;
+            flex: 0;
+        }
+    }
+
+    > .sideTrowserContent {
         position: absolute;
         top: 0;
 
@@ -54,23 +80,5 @@
         }
 
         transition: transform 0.5s, min-width 0.5s, max-width 0.5s;
-    }
-
-    &.sideTrowserDocked {
-        display: flex;
-
-        &.sideTrowserPullRight {
-            flex-direction: row-reverse;
-        }
-
-        .sideTrowserMain {
-            position: relative;
-            flex: 1 auto;
-        }
-
-        .sideTrowserContent {
-            position: relative;
-            flex: 0;
-        }
     }
 }
