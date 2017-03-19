@@ -86,7 +86,7 @@ class AppHistory {
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
         self.cancelListenBeforeUnload = self.history.listenBeforeUnload(event => {
-            if (self.getIsPendingEdit()) {
+            if (self && self.getIsPendingEdit()) {
                 // No need to internationalize as it will not appear in the modal on evergreen browsers.
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';

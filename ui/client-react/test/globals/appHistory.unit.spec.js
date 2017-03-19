@@ -65,11 +65,30 @@ describe('AppHistory', () => {
             }
         }]
     };
+
     let mockStore = {
         getState: () => {
             return store;
         },
-        dispatch: (func) => {}
+        dispatch: (func) => {
+            return {
+                then(callbackSuccess, callbackFail) {
+                    callbackSuccess();
+                }
+            };
+        }
+    };
+    let mockStoreReject = {
+        getState: () => {
+            return store;
+        },
+        dispatch: (func) => {
+            return {
+                then(callbackSuccess, callbackFail) {
+                    callbackFail();
+                }
+            };
+        }
     };
     let mockStoreFunc = {
         editRecordCancel: () => {},
@@ -118,6 +137,35 @@ describe('AppHistory', () => {
         });
     });
 
+    describe('Test getFields function', () => {
+        beforeEach(() => {
+            spyOn(AppHistory, 'getFieldsFromReportStore');
+            spyOn(AppHistory, 'getFieldsFromFormStore');
+        });
+        afterEach(() => {
+            AppHistory.getFieldsFromReportStore.calls.reset();
+            AppHistory.getFieldsFromFormStore.calls.reset();
+        });
+        let testCases = [
+            {name:'verify get fields from report store', isInlineEditOpen: true},
+            {name:'verify get fields from forms store', isInlineEditOpen: false}
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.name, () => {
+                store.record[0].pendEdits.isInlineEditOpen = testCase.isInlineEditOpen;
+                AppHistory.setup(mockStore, mockStoreFunc);
+                AppHistory.getFields();
+                if (testCase.isInlineEditOpen) {
+                    expect(AppHistory.getFieldsFromReportStore).toHaveBeenCalled();
+                    expect(AppHistory.getFieldsFromFormStore).not.toHaveBeenCalled();
+                } else {
+                    expect(AppHistory.getFieldsFromReportStore).not.toHaveBeenCalled();
+                    expect(AppHistory.getFieldsFromFormStore).toHaveBeenCalled();
+                }
+            });
+        });
+    });
+
     describe('showPendingEditsConfirmationModal', () => {
         it('shows a default confirmation modal for allowing the user to decide what to do if they have unsaved changed', () => {
             let mockShowAppModal = jasmine.createSpy('ShowAppModal');
@@ -150,16 +198,21 @@ describe('AppHistory', () => {
         });
     });
 
-    describe('user selects an action when leaving a dirty form', () => {
+    describe('verify record save functions', () => {
         beforeEach(() => {
             spyOn(AppHistory, '_continueToDestination');
+            spyOn(AppHistory, '_haltRouteChange');
             spyOn(AppHistory, 'showPendingEditsConfirmationModal');
             spyOn(mockStore, 'dispatch').and.callThrough();
+            spyOn(mockStoreReject, 'dispatch').and.callThrough();
         });
         afterEach(() => {
             AppHistory._continueToDestination.calls.reset();
+            AppHistory._haltRouteChange.calls.reset();
             AppHistory.showPendingEditsConfirmationModal.calls.reset();
             mockStore.dispatch.calls.reset();
+            mockStoreReject.dispatch.calls.reset();
+            currentModalDetails = null;
         });
 
         it('routes the user to their specified destination if there are no pending edits', () => {
@@ -178,73 +231,42 @@ describe('AppHistory', () => {
             expect(AppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
 
-        //it('saves any pending edits before navigating away (edit from form)', () => {
-        //    store.record[0].pendEdits.isPendingEdit = true;
-        //    store.record[0].pendEdits.currentEditingRecordId = 1;
-        //    AppHistory.setup(mockStore, mockStoreFunc);
-        //
-        //    goToNewPage();
-        //    mockActions.clickSaveButton();
-        //
-        //    expect(AppHistory._continueToDestination).toHaveBeenCalled();
-        //    expect(mockStore.dispatch).toHaveBeenCalled();
-        //});
-        //
-        //it('saves any pending edits before navigating away (existing record)', () => {
-        //    let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: true});
-        //    AppHistory.setup(mockFluxWithPendingEdit);
-        //
-        //    spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
-        //    spyOn(AppHistory, '_continueToDestination').and.callThrough();
-        //
-        //    goToNewPage();
-        //    mockActions.clickSaveButton();
-        //    expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: true}, "reportFields");
-        //    expect(AppHistory._continueToDestination).toHaveBeenCalled();
-        //});
-        //
-        //it('halts a route change if there was a problem saving the changes', () => {
-        //    let mockWithError = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, hasErrorOnSave: true});
-        //
-        //    AppHistory.setup(mockWithError);
-        //
-        //    spyOn(AppHistory, '_onRecordSavedError').and.callThrough();
-        //    spyOn(AppHistory, '_haltRouteChange').and.callThrough();
-        //
-        //    goToNewPage();
-        //    mockActions.clickSaveButton();
-        //
-        //    expect(AppHistory._onRecordSavedError).toHaveBeenCalled();
-        //    expect(AppHistory._haltRouteChange).toHaveBeenCalled();
-        //});
-        //
-        //it('cancels changes an continues to destination if user chooses to discard changes', () => {
-        //    let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
-        //    AppHistory.setup(mockFluxWithPendingEdit);
-        //
-        //    spyOn(mockFluxWithPendingEdit.actions, 'recordPendingEditsCancel').and.callThrough();
-        //    spyOn(AppHistory, '_discardChanges').and.callThrough();
-        //    spyOn(AppHistory, '_continueToDestination').and.callThrough();
-        //
-        //    goToNewPage();
-        //    mockActions.clickDiscardChanges();
-        //
-        //    expect(mockFluxWithPendingEdit.actions.recordPendingEditsCancel).toHaveBeenCalled();
-        //    expect(AppHistory._discardChanges).toHaveBeenCalled();
-        //    expect(AppHistory._continueToDestination).toHaveBeenCalled();
-        //});
-        //
-        //it('halts route change if uses chooses to stay on the page', () => {
-        //    let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
-        //    AppHistory.setup(mockFluxWithPendingEdit);
-        //
-        //    spyOn(AppHistory, '_haltRouteChange').and.callThrough();
-        //
-        //    goToNewPage();
-        //    mockActions.clickStayButton();
-        //
-        //    expect(AppHistory._haltRouteChange).toHaveBeenCalled();
-        //});
+        let callBackTestCases = [
+            {name:'no save option if redux store is not initialized', store:null, createRecordFunc: null, updateRecordFunc: null},
+            {name:'no save option if redux createRecord function is not initialized', store:mockStore, createRecordFunc: mockStoreFunc.createRecord, updateRecordFunc: null},
+            {name:'no save option if redux updateRecord function is not initialized', store:mockStore, createRecordFunc: null, updateRecordFunc: mockStoreFunc.updateRecord}
+        ];
+        callBackTestCases.forEach(testCase => {
+            it(testCase.name, () => {
+                expect(mockStore.dispatch).not.toHaveBeenCalled();
+            });
+        });
+
+        let testCases = [
+            {'name':'save new record pending edits before navigating', successFlow: true, recId: UNSAVED_RECORD_ID},
+            {'name':'save existing record pending edits before navigating', successFlow: true, recId: 1},
+            {'name':'halt route change when save new record pending edits error', successFlow: false, recId: UNSAVED_RECORD_ID},
+            {'name':'halt route change when existing record pending edits error', successFlow: false, recId: 1}
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.name, (done) => {
+                store.record[0].pendEdits.isPendingEdit = true;
+                store.record[0].pendEdits.currentEditingRecordId = testCase.recId;
+                AppHistory.setup(testCase.successFlow ? mockStore : mockStoreReject, mockStoreFunc);
+
+                goToNewPage();
+                AppHistory._saveChanges();
+
+                if (testCase.successFlow) {
+                    expect(mockStore.dispatch).toHaveBeenCalled();
+                    expect(AppHistory._continueToDestination).toHaveBeenCalled();
+                } else {
+                    expect(mockStoreReject.dispatch).toHaveBeenCalled();
+                    expect(AppHistory._haltRouteChange).toHaveBeenCalled();
+                }
+                done();
+            });
+        });
     });
 });
 
