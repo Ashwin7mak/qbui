@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, {Component} from 'react';
 import ReSideMenuBase, {SideMenuBaseProps} from '../reSideMenu/reSideMenuBase';
 
 import './sideTrowserBase.scss';
