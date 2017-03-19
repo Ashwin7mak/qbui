@@ -7,6 +7,14 @@ import './reSideMenuBase.scss';
 import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
+/**
+ * ReSideMenuBase creates a panel that appears below the main content.
+ * The main content will slide out of the way to reveal the side panel.
+ * Heads up: Only use one ReSideMenuBase component per page for two reasons:
+ *   1) More than one breaks the XD pattern for this type of component
+ *   2) You may get odd visual effects on some browsers
+ * If you need more than one, use a SideTrowser component instead for one or both of your panels.
+ */
 class ReSideMenuBase extends Component {
     constructor(props) {
         super(props);

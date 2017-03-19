@@ -5,24 +5,24 @@
     height: 100%;
     width: 100%;
 
+    &:not(.reSideMenuDocked) .reSideMenuMain {
+        box-shadow: -5px 0 10px -5px rgba($color-black-800, 0.3), 5px 0 10px -5px rgba($color-black-800, 0.3);
+    }
+
     .reSideMenuMain {
         overflow: auto;
-        padding-left: $spacing-small;
-        padding-right: $spacing-small;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100vh;
+        height: 100vh; // Ensures that long content can be scrolled on all browsers
         z-index: 1;
-
-        box-shadow: -5px 0 10px -5px rgba($color-black-800, 0.3), 5px 0 10px -5px rgba($color-black-800, 0.3);
 
         background-color: $page-background-color;
 
         transform: translateX(0);
 
-        &.reSideMenuOpen:not(.reSideMenuDocked):not(.reSideMenuPullRight) {
+        &.reSideMenuOpen:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
             transform: translateX($leftNav-width-xLarge-breakpoint);
 
             @include large-breakpoint {
@@ -39,6 +39,7 @@
             }
         }
 
+        // When docked on the right, we need to translate the main content in the opposite direction
         &.reSideMenuOpen.reSideMenuPullRight:not(.reSideMenuDocked) {
             transform: translateX(-$leftNav-width-xLarge-breakpoint);
 
@@ -56,7 +57,7 @@
             }
         }
 
-        &.reSideMenuOpen.reSideMenuCollapsed:not(.reSideMenuDocked):not(.reSideMenuPullRight) {
+        &.reSideMenuOpen.reSideMenuCollapsed:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
             transform: translateX($leftNav-width-collapsed);
         }
 
@@ -81,7 +82,7 @@
         overflow: auto;
         background-color: $color-black-300;
         z-index: 0;
-        height: 100vh;
+        height: 100vh; // Ensures that long content can be scrolled on all browsers
 
         min-width: $leftNav-width-xLarge-breakpoint;
 
