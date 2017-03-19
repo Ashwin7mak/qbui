@@ -24,12 +24,27 @@ describe('Report reducer initialize', () => {
 });
 
 describe('Report reducer report loading', () => {
-    it('test correct state when loading a report', () => {
+    it('test correct state when loading a report with no content', () => {
         actionObj.type = types.LOAD_REPORTS;
         state = reducer(state, actionObj);
         expect(Array.isArray(state)).toEqual(true);
         expect(state.length).toEqual(1);
         expect(state[0].loading).toEqual(true);
+        expect(state[0].appId).toEqual('');
+        expect(state[0].tblId).toEqual('');
+    });
+    it('test correct state when loading a report', () => {
+        actionObj.type = types.LOAD_REPORTS;
+        actionObj.content = {
+            appId: '1',
+            tblId: '2'
+        };
+        state = reducer(state, actionObj);
+        expect(Array.isArray(state)).toEqual(true);
+        expect(state.length).toEqual(1);
+        expect(state[0].loading).toEqual(true);
+        expect(state[0].appId).toEqual(actionObj.content.appId);
+        expect(state[0].tblId).toEqual(actionObj.content.tblId);
     });
 });
 
@@ -64,7 +79,21 @@ describe('Report reducer multiple entries', () => {
 });
 
 describe('Report reducer error report loading', () => {
-    it('test correct state when loading a report fails', () => {
+    it('test correct state when loading a report fails and report not in store', () => {
+        actionObj.type = types.LOAD_REPORTS_FAILED;
+        state = reducer(state, actionObj);
+        expect(Array.isArray(state)).toEqual(true);
+        expect(state.length).toEqual(0);
+    });
+    it('test correct state when loading a report fails and report in store', () => {
+        actionObj.type = types.LOAD_REPORTS;
+        actionObj.content = {
+            appId: '1',
+            tblId: '2'
+        };
+        state = reducer(state, actionObj);
+        expect(state.length).toEqual(1);
+
         actionObj.type = types.LOAD_REPORTS_FAILED;
         state = reducer(state, actionObj);
         expect(Array.isArray(state)).toEqual(true);
@@ -75,16 +104,30 @@ describe('Report reducer error report loading', () => {
 });
 
 describe('Report reducer success report loading', () => {
-    it('test correct state when loading a report succeeds', () => {
+    it('test correct state when loading a report succeeds and report not in store', () => {
         actionObj.type = types.LOAD_REPORTS_SUCCESS;
-        actionObj.content = {appId: '1', tblId:'2', reportsList: []};
+        state = reducer(state, actionObj);
+        expect(Array.isArray(state)).toEqual(true);
+        expect(state.length).toEqual(0);
+    });
+    it('test correct state when loading a report succeeds', () => {
+        actionObj.type = types.LOAD_REPORTS;
+        actionObj.content = {
+            appId: '1',
+            tblId: '2'
+        };
+        state = reducer(state, actionObj);
+        expect(state.length).toEqual(1);
+
+        actionObj.type = types.LOAD_REPORTS_SUCCESS;
+        actionObj.content = {appId: '1', tblId:'2', reportsList: ['list of reports']};
         state = reducer(state, actionObj);
         expect(Array.isArray(state)).toEqual(true);
         expect(state.length).toEqual(1);
         expect(state[0].loading).toEqual(false);
         expect(state[0].error).toEqual(false);
         expect(state[0].appId).toEqual(actionObj.content.appId);
-        expect(state[0].tableId).toEqual(actionObj.content.tblId);
+        expect(state[0].tblId).toEqual(actionObj.content.tblId);
         expect(state[0].list).toEqual(actionObj.content.reportsList);
     });
 });
