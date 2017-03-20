@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SideMenuBase, {SideMenuBaseProps} from '../sideMenu/sideMenuBase';
+import SideMenuBase, {SideMenuBaseProps} from '../sideMenuBase/sideMenuBase';
 
 import './sideTrowserBase.scss';
 
