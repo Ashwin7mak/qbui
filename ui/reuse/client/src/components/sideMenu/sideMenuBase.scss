@@ -1,16 +1,16 @@
 @import "../../assets/css/_qbVariables";
 @import "./sideMenuMixins";
 
-.reSideMenuBase {
+.sideMenuBase {
     position: relative;
     height: 100%;
     width: 100%;
 
-    &:not(.reSideMenuDocked) .reSideMenuMain {
+    &:not(.sideMenuDocked) .sideMenuMain {
         @include menuShadow;
     }
 
-    .reSideMenuMain {
+    .sideMenuMain {
         overflow: auto;
         position: absolute;
         top: 0;
@@ -23,31 +23,31 @@
 
         transform: translateX(0);
 
-        &.reSideMenuOpen:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
+        &.sideMenuOpen:not(.sideMenuPullRight):not(.sideMenuDocked) {
             @include moveMenuToLeft;
         }
 
-        &.reSideMenuOpen.reSideMenuPullRight:not(.reSideMenuDocked) {
+        &.sideMenuOpen.sideMenuPullRight:not(.sideMenuDocked) {
             @include moveMenuToRight;
         }
 
-        &.reSideMenuOpen.reSideMenuCollapsed:not(.reSideMenuPullRight):not(.reSideMenuDocked) {
+        &.sideMenuOpen.sideMenuCollapsed:not(.sideMenuPullRight):not(.sideMenuDocked) {
             transform: translateX($leftNav-width-collapsed);
         }
 
-        &.reSideMenuOpen.reSideMenuCollapsed.reSideMenuPullRight:not(.reSideMenuDocked) {
+        &.sideMenuOpen.sideMenuCollapsed.sideMenuPullRight:not(.sideMenuDocked) {
             transform: translateX(-$leftNav-width-collapsed);
         }
 
         transition: transform 0.5s;
     }
 
-    .reSideMenuContent {
+    .sideMenuContent {
         position: absolute;
         top: 0;
         left: 0;
 
-        &.reSideMenuPullRight {
+        &.sideMenuPullRight {
             left: auto;
             right: 0;
         }
@@ -60,26 +60,26 @@
 
         @include baseMenuWidths;
 
-        &.reSideMenuCollapsed {
+        &.sideMenuCollapsed {
             min-width: $leftNav-width-collapsed;
         }
 
         transition: min-width 0.5s;
     }
 
-    &.reSideMenuDocked {
+    &.sideMenuDocked {
         display: flex;
 
-        &.reSideMenuPullRight {
+        &.sideMenuPullRight {
             flex-direction: row-reverse;
         }
 
-        .reSideMenuMain {
+        .sideMenuMain {
             position: relative;
             flex: 1 auto;
         }
 
-        .reSideMenuContent {
+        .sideMenuContent {
             position: relative;
             flex: 0;
         }

@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import SideTrowserBase from '../../src/components/sideTrowser/sideTrowserBase';
-import SideMenuBase from '../../src/components/reSideMenu/reSideMenuBase';
+import SideMenuBase from '../../src/components/sideMenu/sideMenuBase';
 
 let component;
 

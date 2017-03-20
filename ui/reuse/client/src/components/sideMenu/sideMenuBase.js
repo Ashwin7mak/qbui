@@ -1,21 +1,21 @@
 import React, {PropTypes, Component} from 'react';
 import Swipeable from 'react-swipeable';
 
-import './reSideMenuBase.scss';
+import './sideMenuBase.scss';
 
 // CLIENT REACT IMPORTS
 import Breakpoints from '../../../../../client-react/src/utils/breakpoints';
 // CLIENT REACT IMPORTS
 
 /**
- * ReSideMenuBase creates a panel that appears below the main content.
+ * SideMenuBase creates a panel that appears below the main content.
  * The main content will slide out of the way to reveal the side panel.
- * Heads up: Only use one ReSideMenuBase component per page for two reasons:
+ * Heads up: Only use one SideMenuBase component per page for two reasons:
  *   1) More than one breaks the XD pattern for this type of component
  *   2) You may get odd visual effects on some browsers
  * If you need more than one, use a SideTrowser component instead for one or both of your panels.
  */
-class ReSideMenuBase extends Component {
+class SideMenuBase extends Component {
     constructor(props) {
         super(props);
 
@@ -130,7 +130,7 @@ class ReSideMenuBase extends Component {
     }
 }
 
-// Reusable props for components that are built on ReSideMenuBase
+// Reusable props for components that are built on SideMenuBase
 export const SideMenuBaseProps = {
     /**
      * The content of the side menu. Can be any valid react element. */
@@ -162,7 +162,7 @@ export const SideMenuBaseProps = {
     willDock: PropTypes.bool,
 };
 
-ReSideMenuBase.propTypes = {
+SideMenuBase.propTypes = {
     ...SideMenuBaseProps,
 
     /**
@@ -170,12 +170,12 @@ ReSideMenuBase.propTypes = {
     baseClass: PropTypes.string
 };
 
-ReSideMenuBase.defaultProps = {
+SideMenuBase.defaultProps = {
     isOpen: false,
     isCollapsed: false,
     pullRight: false,
     willDock: true,
-    baseClass: 'reSideMenu'
+    baseClass: 'sideMenu'
 };
 
-export default ReSideMenuBase;
+export default SideMenuBase;

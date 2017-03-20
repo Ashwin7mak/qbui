@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import ReSideMenuBase, {SideMenuBaseProps} from '../reSideMenu/reSideMenuBase';
+import SideMenuBase, {SideMenuBaseProps} from '../sideMenu/sideMenuBase';
 
 import './sideTrowserBase.scss';
 
 class SideTrowserBase extends Component {
     render() {
         return (
-            <ReSideMenuBase {...this.props} baseClass="sideTrowser" />
+            <SideMenuBase {...this.props} baseClass="sideTrowser" />
         );
     }
 }
 
-ReSideMenuBase.propTypes = {
+SideTrowserBase.propTypes = {
     ...SideMenuBaseProps
 };
 
