@@ -58,11 +58,29 @@
                             resolve(JSON.parse(eeResponse.body));
                         },
                         (error) =>{
-                            //in case of error/exception while setting table properties on EE clean out the table created on core because there is no queue right now.
                             log.error({req: req}, "tablesApi.createTableProperties(): Error setting table properties");
                             reject(error);
                         }).catch((ex) =>{
                             requestHelper.logUnexpectedError('tablesApi.createTableProperties(): unexpected error setting table properties', ex, true);
+                            reject(ex);
+                        });
+                });
+            },
+            deleteTableProperties: function(req, tableId) {
+                return new Promise((resolve, reject) =>{
+                    let opts = requestHelper.setOptions(req);
+                    opts.method = 'delete';
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (eeResponse) =>{
+                            resolve(response);
+                        },
+                        (error) =>{
+                            log.error({req: req}, "tablesApi.deleteTableProperties(): Error deleting table properties");
+                            reject(error);
+                        }).catch((ex) =>{
+                            requestHelper.logUnexpectedError('tablesApi.deleteTableProperties(): unexpected error deleting table properties', ex, true);
                             reject(ex);
                         });
                 });
@@ -158,7 +176,7 @@
                                                 reportReq.rawBody = JSON.stringify(report);
                                                 promises.push(reportsApi.createReport(reportReq));
                                             });
-                                            let formsToCreate = cannedNewTableElements.getCannedForms("name", fieldIds);
+                                            let formsToCreate = cannedNewTableElements.getCannedForms(reqPayload.tableNoun, fieldIds);
                                             formsToCreate.forEach((form) => {
                                                 let formReq = _.clone(req);
                                                 formReq.url = tablesRootUrl;
@@ -172,14 +190,17 @@
                                                     resolve(tableId);
                                                 },
                                                 (error) => {
-                                                    resolve(tableId);
-                                                    console.log(error);
+                                                    this.deleteTable(req, tableId);
+                                                    this.deleteTableProperties(req, tableId);
+                                                    reject(error);
                                                 }
                                             );
                                         },
                                         (error) => {
-                                            // dont go forward with creation of report/form?
-                                            console.log(error);
+                                            // dont go forward with creation of report/form
+                                            this.deleteTable(req, tableId);
+                                            this.deleteTableProperties(req, tableId);
+                                            reject(error);
                                         }
                                     );
                                 },

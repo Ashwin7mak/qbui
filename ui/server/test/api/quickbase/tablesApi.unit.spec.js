@@ -189,6 +189,58 @@ describe("Validate tablesApi", function() {
         });
     });
 
+    describe("validate deleteTableProperties function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            tablesApi.setRequestHelperObject(requestHelper);
+            req.url = 'apps/123/tableproperties/456';
+            req.method = 'delete';
+        });
+
+        afterEach(function() {
+            req.url = '';
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({statusCode:"200"}));
+            let promise = tablesApi.deleteTableProperties(req, "456");
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {statusCode: 200});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing deleteTableProperties success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableProperties: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = tablesApi.deleteTableProperties(req, "456");
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing deleteTableProperties failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('deleteTableProperties: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
     describe("validate createTableComponents function", function() {
         let createTableStub = null;
         let createTablePropsStub = null;
