@@ -92,6 +92,7 @@ const report = (state = [], action) => {
     case types.LOAD_REPORT_SUCCESS: {
         //  load a report is successful..update the store with the report info
         let currentReport = getReportFromState(action.id);
+
         if (currentReport) {
             // set the report data from action.content.
             // action.content maps to reportModel.getModel()
@@ -116,8 +117,10 @@ const report = (state = [], action) => {
             // set loading state
             currentReport.loading = false;
             currentReport.error = false;
+
             return newState(currentReport);
         }
+
         return state;
     }
     case types.LOAD_REPORTS_SUCCESS: {

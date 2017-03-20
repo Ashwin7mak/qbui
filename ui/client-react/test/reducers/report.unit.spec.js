@@ -1,6 +1,9 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/report';
 import * as types from '../../src/actions/types';
+import FacetSelections from '../../src/components/facet/facetSelections'
 import _ from 'lodash';
+import Diff from 'deep-diff';
+
 
 /**
  * Unit tests for report reducer
@@ -40,7 +43,12 @@ describe('Report reducer functions', () => {
             toDeepEqual: () => {
                 return {
                     compare: (actual, expected) => {
-                        return {pass: _.isEqual(actual, expected)};
+                        return {
+                            pass: _.isEqual(actual, expected),
+                            message : `Expected actual: ${JSON.stringify(actual)} to equal ${JSON.stringify(expected)} 
+                            but difference is :
+                            ${JSON.stringify(Diff.diff(actual, expected))}`
+                        };
                     }
                 };
             }
@@ -203,7 +211,7 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Report reducer success report loading', () => {
+    describe('Report reducer success reports loading', () => {
         it('test correct state when loading reports succeeds', () => {
             // start with a report in loading state
             let targetContext = "LIST_CONTEXT";
@@ -212,14 +220,12 @@ describe('Report reducer functions', () => {
             actionObj.id = targetContext;
             actionObj.content = {appId: 1, tblId: 2};
             state = reducer(state, actionObj);
-            console.log("State upon load = " + JSON.stringify(state));
 
             // load is successful action
             actionObj.type = types.LOAD_REPORTS_SUCCESS;
             actionObj.id = targetContext;
-            actionObj.content = {appId: 1, tblId: 2, reportsList:listOfReports};
+            actionObj.content = {appId: 1, tblId: 2, reportsList: listOfReports};
             state = reducer(state, actionObj);
-            console.log("State upon success = " + JSON.stringify(state));
 
             //success on a loading reports actions expectations
             expect(Array.isArray(state)).toEqual(true);
@@ -230,31 +236,78 @@ describe('Report reducer functions', () => {
             expect(state[0].tblId).toEqual(actionObj.content.tblId);
             expect(state[0].list).toEqual(listOfReports);
         });
-        it('test correct state when loading report succeeds', () => {
+    });
+
+    describe('Report reducer success report loading test correct state ', () => {
+        let allHaveThisForContent = {appId: 1, tblId: 2}
+        let targetContext = "NAVREPORT";
+        let targetRpt = 55;
+        let data = {rptId: targetRpt, info: "heres the report"};
+        let initDefaultLoad = {appId: 1, tblId: 2, rptId: targetRpt};
+        let initNoRptLoad = {appId: 1, tblId: 2};
+
+        let loadReport = (content) => {
             // start with a report in loading state
-            let targetContext = "NAVREPORT";
-            let targetRpt = 55;
             actionObj.type = types.LOAD_REPORT;
             actionObj.id = targetContext;
-            actionObj.content = {appId: 1, tblId: 2, rptId:targetRpt};
+            actionObj.content = content;
             state = reducer(state, actionObj);
+        };
 
-            // load is successful action
-            actionObj.type = types.LOAD_REPORTS_SUCCESS;
-            actionObj.id = targetContext;
-            actionObj.data = "heres the report";
-            actionObj.content = {appId: 1, tblId: 2, pageOffset:0, numRows:10, searchStringForFiltering:"hello", selectedRows:[1]};
-            state = reducer(state, actionObj);
+        let testCases = [{
+                description: 'all Params',
+                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"hello", selectedRows:[1], data},
+                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+            }, {
+                description: 'page params',
+                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:10, numRows:99, searchStringForFiltering:"hello", selectedRows:[1], data},
+                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+            }, {
+                description: 'no search param',
+                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"", selectedRows:[1], data},
+                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+            }, {
+                description: 'no selected rows param',
+                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
+                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+            }, {
+                description: 'no rptId in state',
+                initStateContent : initNoRptLoad,
+                contentIn : {...allHaveThisForContent, rptId:undefined, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
+                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+            },
 
-            //success on a loading report actions expectations
-            expect(Array.isArray(state)).toEqual(true);
-            expect(state.length).toEqual(1);
-            expect(state[0].loading).toEqual(false);
-            expect(state[0].error).toEqual(false);
-            expect(state[0].appId).toEqual(actionObj.content.appId);
-            expect(state[0].tblId).toEqual(actionObj.content.tblId);
-            expect(state[0].rptId).toEqual(targetRpt);
-            //TODO add testCase test data provider for all action content param cases
+        ];
+
+
+        testCases.forEach(testCase => {
+            it('when loading report with ' + testCase.description  + ' succeeds', () => {
+                // use testcase init state if supplied
+                if (testCase.initStateContent) {
+                    loadReport(testCase.initStateContent);
+                } else  {
+                    loadReport(initDefaultLoad)
+                }
+                console.log("before case state = " + JSON.stringify(state));
+
+                // load is successful action
+                actionObj.type = types.LOAD_REPORT_SUCCESS;
+                actionObj.content = testCase.contentIn;
+                console.log("before case actionObj = " + JSON.stringify(actionObj));
+                state = reducer(state, actionObj);
+                console.log("after case for " + testCase.description + " state = " + JSON.stringify(state));
+
+                //success on a loading report actions expectations
+                expect(Array.isArray(state)).toEqual(true);
+                expect(state.length).toEqual(1);
+                expect(state[0].loading).toEqual(false);
+                expect(state[0].error).toEqual(false);
+                expect(state[0].appId).toEqual(actionObj.content.appId);
+                expect(state[0].tblId).toEqual(actionObj.content.tblId);
+                expect(state[0].rptId).toEqual(targetRpt);
+                let expectation  = Object.assign({}, testCase.contentIn, testCase.expectedState);
+                expect(state[0]).toDeepEqual(expectation);
+            });
         });
 
     });
