@@ -27,7 +27,7 @@ const UrlFieldValueRenderer = require('../../../client-react/src/components/fiel
 const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor').default;
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer').default;
 
-const ReIcon = require('../../../reuse/client/src/components/reIcon/reIcon').default;
+const Icon = require('../../../reuse/client/src/components/icon/icon').default;
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel').default;
 
 const Trowser = require('../../../client-react/src/components/trowser/trowser.js').default;

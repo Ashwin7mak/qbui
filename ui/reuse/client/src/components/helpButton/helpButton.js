@@ -1,6 +1,6 @@
 import React from 'react';
 import NotificationManager from '../../scripts/notificationManager';
-import ReIcon from '../reIcon/reIcon';
+import Icon from '../icon/icon';
 
 // IMPORTS FROM CLIENT REACT
 import Device from '../../../../../client-react/src/utils/device';
@@ -30,7 +30,7 @@ function getHelpWalkme() {
  */
 const ReHelpButton = () => (
     <a className="dropdownToggle globalActionLink" onClick={getHelpWalkme}>
-        <ReIcon icon="help" />
+        <Icon icon="help" />
         <span className={"navLabel"}><I18nMessage message={'globalActions.help'}/></span>
     </a>
 );

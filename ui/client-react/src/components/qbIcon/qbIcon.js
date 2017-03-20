@@ -4,6 +4,6 @@
  **/
 
 // import the default renaming it to what we want to export
-import QBicon from '../../../../reuse/client/src/components/reIcon/reIcon.js';
+import Icon from '../../../../reuse/client/src/components/icon/icon.js';
 
-export default QBicon;
+export default Icon;

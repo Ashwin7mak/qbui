@@ -4,17 +4,17 @@
 (function() {
     'use strict';
 
-    let perfLogger = require('../../../../src/perfLogger');
-    let httpStatusCodes = require('../../../../src/constants/httpStatusCodes');
-    let log = require('../../../../src/logger').getLogger();
+    let perfLogger = require('../../../perfLogger');
+    let httpStatusCodes = require('../../../constants/httpStatusCodes');
+    let log = require('../../../logger').getLogger();
     let _ = require('lodash');
     let fs = require('fs');
     let consts = require('../../../../../common/src/constants');
 
     module.exports = function(config) {
 
-        let requestHelper = require('../../../../src/api/quickbase/requestHelper')(config);
-        let routeHelper = require('../../../../src/routes/routeHelper');
+        let requestHelper = require('../../../api/quickbase/requestHelper')(config);
+        let routeHelper = require('../../../routes/routeHelper');
 
         let accountUsersAPI = {
 
@@ -27,7 +27,7 @@
             },
             /**
              * Allows you to override the requestHelper object
-             * @param requestRequestOverride
+             * @param requestHelperOverride
              */
             setRequestHelperObject: function(requestHelperOverride) {
                 requestHelper = requestHelperOverride;
@@ -36,7 +36,7 @@
             /**
              * Get all the users in the account. Resolve either the dummy data or the actual one
              * @param req
-             * @param useSSL
+             * @param accountId
              * @returns {Promise}
              */
             getAccountUsers: function(req, accountId) {
