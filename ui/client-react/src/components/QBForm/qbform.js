@@ -394,7 +394,7 @@ let QBForm = React.createClass({
                 let display = field.screenName + ". ";
 
                 return (
-                    <div className="userInFooter">
+                    <div className="userInFooter" key={index}>
                         <span key={index} className="fieldNormalText">{field.name}</span>
                         <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>
                     </div>
