@@ -49,11 +49,11 @@ export class FieldEditingTools extends Component {
         e.preventDefault();
     }
 
-    onClickField(e) {
+    onClickField() {
         if (this.props.selectField) {
             this.props.selectField(this.props.formId, this.props.location);
         }
-        e.preventDefault();
+        // e.preventDefault();
     }
 
     isFieldSelected() {

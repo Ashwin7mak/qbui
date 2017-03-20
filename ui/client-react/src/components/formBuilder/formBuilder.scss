@@ -64,6 +64,10 @@
                 }
             }
 
+            .formElement .fieldLabel {
+                z-index: 1;
+            }
+
             &:active {
                 @include dragpreview-active-gradient;
                 .fieldEditingTools {

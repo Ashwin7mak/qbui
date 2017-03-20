@@ -52,7 +52,8 @@ describe('FieldEditingTools', () => {
             removeField={mockParentProps.removeField}
         />);
 
-        let deleteButton = component.find('.deleteFieldIcon');
+        let deleteButton = component.find('.deleteFieldIcon button');
+
         expect(deleteButton).toBePresent();
 
         deleteButton.simulate('click');
@@ -69,7 +70,8 @@ describe('FieldEditingTools', () => {
             onClickFieldPreferences={mockParentProps.openFieldPreferences}
         />);
 
-        let preferencesIcon = component.find('.fieldPreferencesIcon');
+        let preferencesIcon = component.find('.fieldPreferencesIcon button');
+
         expect(preferencesIcon).toBePresent();
 
         preferencesIcon.simulate('click');

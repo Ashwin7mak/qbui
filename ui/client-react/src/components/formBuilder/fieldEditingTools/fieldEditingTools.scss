@@ -7,6 +7,12 @@
     height: 100%;
     width: 310px;
 
+    &:focus {
+        //For keyboard nav
+        background: $color-cyan-300;
+        outline: none;
+    }
+
     &.selectedFormElement {
         &:active {
             //This opacity is needed to work for 'tabbing'
@@ -76,12 +82,6 @@
                 opacity: 1;
                 color: $color-cyan-700;
             }
-        }
-        &:focus {
-            //For keyboard nav
-            background: $color-cyan-300;
-            z-index: -1 !important;
-            outline: none;
         }
     }
 
