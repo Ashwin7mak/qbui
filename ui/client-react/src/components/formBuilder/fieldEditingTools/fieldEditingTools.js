@@ -30,9 +30,11 @@ export class FieldEditingTools extends Component {
         this.renderActionIcons = this.renderActionIcons.bind(this);
 
         this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.getSelectedFormElementContainer = this.getSelectedFormElementContainer.bind(this);
         this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
         this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
         this.scrollElementIntoView = this.scrollElementIntoView.bind(this);
+        this.updateScrollLocation = this.updateScrollLocation.bind(this);
     }
 
     onClickDelete(e) {
@@ -97,8 +99,10 @@ export class FieldEditingTools extends Component {
          * */
         if (this.props.selectedFields[0]) {
             let selectedFormElement = document.querySelector('.selectedFormElement');
-            selectedFormElement.focus();
-            this.scrollElementIntoView();
+            if (selectedFormElement) {
+                selectedFormElement.focus();
+            }
+            this.updateScrollLocation();
         }
     }
 
@@ -114,16 +118,28 @@ export class FieldEditingTools extends Component {
         }
     }
 
+    getSelectedFormElementContainer() {
+        let selectedFormElement = document.querySelector('.selectedFormElement');
+        if (selectedFormElement) {
+            return selectedFormElement.getBoundingClientRect();
+        }
+    }
+
     scrollElementIntoView() {
+        let selectedFormElement = document.querySelector('.selectedFormElement');
+        if (selectedFormElement) {
+            document.querySelector('.selectedFormElement').scrollIntoView(true);
+        }
+    }
+
+    updateScrollLocation() {
         if (this.props.selectedFields[0]) {
-            let selectedFormElement = document.querySelector('.selectedFormElement').getBoundingClientRect();
+            let selectedFormElement = this.getSelectedFormElementContainer();
             let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
             let bottom = absoluteElementTop + selectedFormElement.height;
 
-            if (bottom > window.innerHeight - 40) {
-                document.querySelector('.selectedFormElement').scrollIntoView(true);
-            } else if (absoluteElementTop < 50) {
-                document.querySelector('.selectedFormElement').scrollIntoView(true);
+            if (bottom > window.innerHeight - 40 || absoluteElementTop < 50) {
+                this.scrollElementIntoView();
             }
         }
     }

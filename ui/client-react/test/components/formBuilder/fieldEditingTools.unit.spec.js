@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 
 import {FieldEditingTools, __RewireAPI__ as FieldEditingToolsRewireAPI} from '../../../src/components/formBuilder/fieldEditingTools/fieldEditingTools';
@@ -12,6 +12,12 @@ const mockReactDom = {
             offsetLeft: 5,
             offsetHeight: 50,
             offsetWidth: 100
+        },
+        selectedForm: {
+            offsetTop: 5,
+            offsetLeft: 5,
+            offsetHeight: 50,
+            offsetWidth: 100
         }};
     }
 };
@@ -20,6 +26,8 @@ const mockParentProps = {
     removeField(_location) {},
     openFieldPreferences(_location) {},
     selectField(_formId, _location) {},
+    keyBoardMoveFieldUp (_formId, _location) {},
+    keyBoardMoveFieldDown (_formId, _location) {}
 };
 
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
@@ -116,6 +124,47 @@ describe('FieldEditingTools', () => {
 
         expect(selectedFormElement).not.toBePresent();
     });
+
+    it('scrolls into view when the selectedFormElement is at the bottom of the page of the page', () => {
+        let container = {
+            height: 150,
+            top: 100
+        };
+
+        component = shallow(<FieldEditingTools
+            location={location}
+            selectedFields={[location]}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
+        spyOn(instance, 'scrollElementIntoView');
+
+        instance.updateScrollLocation();
+
+        expect(instance.scrollElementIntoView).toHaveBeenCalled();
+    });
+
+    it('scrolls into view when the selectedFormElement is at the top of the page', () => {
+        let container = {
+            height: 50,
+            top: 10
+        };
+
+        component = shallow(<FieldEditingTools
+            location={location}
+            selectedFields={[location]}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
+        spyOn(instance, 'scrollElementIntoView');
+
+        instance.updateScrollLocation();
+
+        expect(instance.scrollElementIntoView).toHaveBeenCalled();
+    });
+
 });
 
 
