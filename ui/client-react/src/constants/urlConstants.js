@@ -13,6 +13,7 @@ export const APPS_ROUTE = `${BASE_CLIENT_ROUTE}/apps`;
 export const APP_ROUTE = `${BASE_CLIENT_ROUTE}/app`;
 export const BUILDER_ROUTE = `${BASE_CLIENT_ROUTE}/builder`;
 export const ADMIN_ROUTE = `${BASE_CLIENT_ROUTE}/admin`;
+export const USERS_ROUTE = `${APP_ROUTE}/{0}/users`;
 export const REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}`;
 export const CHILD_REPORT_LINK = `${APP_ROUTE}/{0}/table/{1}/report/{2}?detailKeyFid={3}&detailKeyValue={4}`;
 
