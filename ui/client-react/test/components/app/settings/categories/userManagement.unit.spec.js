@@ -68,7 +68,8 @@ describe('UserManagement functions', () => {
             "screenName": "Cap",
             "email": "imissthe40s@shield.com",
             "userId": "RDUII_UB",
-            "roleName": "Viewer"
+            "roleName": "Viewer",
+            "name": "Steve Rogers"
         },
         {
             "firstName": "Tony",
@@ -76,7 +77,8 @@ describe('UserManagement functions', () => {
             "screenName": "ironman",
             "email": "arcreactor@stark.com",
             "userId": "RDUII_UC",
-            "roleName": "Participant"
+            "roleName": "Participant",
+            "name": "Tony Stark"
         },
         {
             "firstName": "administrator",
@@ -84,12 +86,13 @@ describe('UserManagement functions', () => {
             "screenName": "administrator",
             "email": "administrator@quickbase.com",
             "userId": "10000",
-            "roleName": "Administrator"
+            "roleName": "Administrator",
+            "name": "administrator none"
         }
     ];
     const appUsersEmpty = [];
     const appId = 1;
-    const userColumns = ['firstName', 'lastName', 'screenName', 'email', 'roleName'];
+    const userColumns = ['name', 'roleName', 'email', 'screenName'];
 
     it('test render of component', () => {
         let component = TestUtils.renderIntoDocument(<UserManagement appUsers={appUsers}

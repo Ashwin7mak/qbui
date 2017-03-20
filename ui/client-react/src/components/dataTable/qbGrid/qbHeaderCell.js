@@ -16,7 +16,7 @@ const QbHeaderCell = React.createClass({
     },
 
     render() {
-        let classes = ['qbHeaderCell'];
+        let classes = [...this.props.classes, 'qbHeaderCell'];
         if (this.props.isStickyCell) {
             classes.push(['stickyCell']);
         }
@@ -24,5 +24,15 @@ const QbHeaderCell = React.createClass({
         return <th className={classes.join(' ')} {...this.props} />;
     }
 });
+
+QbHeaderCell.propTypes = {
+    classes: React.PropTypes.array,
+    isStickyCell: React.PropTypes.bool
+};
+
+// Provide default val
+QbHeaderCell.defaultProps = {
+    classes: []
+};
 
 export default QbHeaderCell;

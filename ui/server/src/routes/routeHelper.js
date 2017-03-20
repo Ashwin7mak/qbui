@@ -40,11 +40,13 @@
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
     let REGEX_ADMIN_ROUTE = /admin(.*)?$/i;
 
+
     /**
-     *
+     * Root endpoint of current stack
+     * .NET handlers are /qb/
      */
-    function getLegacyRoot() {
-        return '/db';
+    function getLegacyStackDotNetRoot() {
+        return '/qb';
     }
 
     /**
@@ -849,6 +851,14 @@
 
             return route;
         },
+
+        /**
+         * Call .NET handler to return the Current Stack Account Users information
+         * @returns {string}
+         */
+        getAccountUsersLegacyStackRoute: function(accountId) {
+            return `${getLegacyStackDotNetRoot()}/governance/${accountId}/users`;
+        }
     };
 
 }());

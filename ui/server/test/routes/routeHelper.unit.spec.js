@@ -20,6 +20,18 @@ describe('Validate RouteHelper unit tests', function() {
         stubLog.restore();
     });
 
+    describe('current stack route helpers', function() {
+        var accountIds = [1, 100, 200];
+
+        accountIds.forEach(function(accountId) {
+            it('Testing account: ' + accountId, function(done) {
+                assert.equal(routeHelper.getAccountUsersLegacyStackRoute(accountId),
+                    `/qb/governance/${accountId}/users`);
+                done();
+            });
+        });
+    });
+
     describe('validate transformUrlRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', curRoute:'abc', newRoute:'def', expectation: ''},

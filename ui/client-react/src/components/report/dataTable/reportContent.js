@@ -1,6 +1,6 @@
 import React from "react";
 import ReactIntl from "react-intl";
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
@@ -19,7 +19,6 @@ import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
-import * as CompConsts from '../../../constants/componentConstants';
 import {openRecordForEdit} from '../../../actions/formActions';
 import {connect} from 'react-redux';
 import {APP_ROUTE} from '../../../constants/urlConstants';
@@ -274,8 +273,7 @@ export const ReportContent = React.createClass({
         newBlankReportPromise.then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
             // due to the speed of re-rendering
-            NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'),
-                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+            NotificationManager.success(Locales.getMessage('recordNotifications.recordAdded'), Locales.getMessage('success'));
         });
     },
 

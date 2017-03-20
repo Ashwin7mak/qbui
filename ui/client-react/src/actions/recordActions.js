@@ -8,8 +8,7 @@ import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import Locale from '../locales/locales';
 import _ from 'lodash';
-import {NotificationManager} from 'react-notifications';
-import * as CompConsts from '../constants/componentConstants';
+import NotificationManager from '../../../reuse/client/src/scripts/notificationManager';
 import * as query from '../constants/query';
 import * as UrlConsts from "../constants/urlConstants";
 
@@ -118,8 +117,7 @@ let recordActions = {
                                         this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
 
                                         if (!showNotificationOnSuccess) {
-                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'),
-                                                CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'));
                                         }
                                         // this tiny delay allows for saving modal to trap inputs otherwise
                                         // clicks get queued till after creating
@@ -163,15 +161,13 @@ let recordActions = {
 
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
                         if (error.response.status === 403) {
-                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'),
-                                CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'));
                         }
                         if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
                             const {status} = error.response.data.response;
                             if (status !== 422) {
                                 // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
-                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'),
-                                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'));
                             }
                         }
                         // this delay allows for saving modal to trap inputs otherwise
@@ -208,8 +204,7 @@ let recordActions = {
                     response => {
                         logger.debug('RecordService deleteRecord success');
                         this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
-                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'),
-                            CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'));
                         // this delay allows for saving modal to trap inputs otherwise
                         // clicks get invoked after deleting
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -220,8 +215,7 @@ let recordActions = {
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
-                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'));
                         // this delay allows for saving modal to trap inputs otherwise
                         // clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -267,7 +261,7 @@ let recordActions = {
                         logger.debug('RecordService deleteRecordBulk success');
                         this.dispatch(actions.DELETE_RECORD_BULK_SUCCESS, recIds);
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
-                        NotificationManager.success(message, Locale.getMessage('success'), CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                        NotificationManager.success(message, Locale.getMessage('success'));
                         // this delay allows for saving modal to trap inputs otherwise
                         // clicks get invoked after deleting
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -279,7 +273,7 @@ let recordActions = {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
                         this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
-                        NotificationManager.error(message, Locale.getMessage('failed'), CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        NotificationManager.error(message, Locale.getMessage('failed'));
                         // this delay allows for saving modal to trap inputs otherwise
                         // clicks get invoked after delete
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {
@@ -410,8 +404,7 @@ let recordActions = {
                                 logger.debug('RecordService getRecord success');
                                 this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
                                 if (!showNotificationOnSuccess) {
-                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'),
-                                        CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
+                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'));
                                 }
                                 // this delay allows for saving modal to trap inputs otherwise
                                 // clicks get invoked after saving
@@ -443,8 +436,7 @@ let recordActions = {
                         }
 
                         this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
-                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'),
-                            CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'));
                             // this delay allows for saving modal to trap inputs otherwise
                             // clicks get invoked after saving
                         Promise.delay(PRE_REQ_DELAY_MS).then(() => {

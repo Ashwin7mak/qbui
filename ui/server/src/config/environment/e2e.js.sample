@@ -69,7 +69,7 @@
         DOMAIN: 'http://localhost:9001',
 
         //  legacy quickbase host
-        legacyHost: 'https://legacy.quickbase.com:443',
+        legacyBase: '',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
@@ -107,6 +107,9 @@
         /**
          * AWS api gateway to lambda functions for feature switches
          */
-        //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com
+        //awsHost: "https://lwbv23m3xk.execute-api.us-west-2.amazonaws.com,
+
+
+        useGovernanceMockData: false
     };
 }());
