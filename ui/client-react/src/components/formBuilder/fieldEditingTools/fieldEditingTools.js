@@ -167,9 +167,9 @@ export class FieldEditingTools extends Component {
             let bottom = absoluteElementTop + selectedFormElement.height;
 
             if (bottom > window.innerHeight - 30) {
-                document.querySelector('.selectedFormElement').scrollIntoView({block: "end", behavior: "smooth"});
+                document.querySelector('.selectedFormElement').scrollIntoView();
             } else if (absoluteElementTop < 30) {
-                document.querySelector('.selectedFormElement').scrollIntoView({block: "end", behavior: "smooth"});
+                document.querySelector('.selectedFormElement').scrollIntoView(false);
             }
         }
     }
