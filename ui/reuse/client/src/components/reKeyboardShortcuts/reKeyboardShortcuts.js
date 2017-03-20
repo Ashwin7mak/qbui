@@ -1,24 +1,7 @@
 import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
 import MouseTrap from 'mousetrap';
-import {addAllKeyBindings, removeAllKeyBindings} from './reKeyboardActions';
 
-
-const mapStateToProps = state => {
-    return {
-        keyboard: state.keyboard,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addAllKeyBindings: (id, bindings) => dispatch(addAllKeyBindings(id, bindings)),
-        removeAllKeyBindings: id => dispatch(removeAllKeyBindings(id)),
-    };
-};
-
-
-export class ReKeyboardShortcuts extends Component {
+class ReKeyboardShortcuts extends Component {
     constructor(props) {
         super(props);
 
@@ -46,14 +29,12 @@ export class ReKeyboardShortcuts extends Component {
         bindings.forEach(binding => {
             MouseTrap.bind(binding.key, () => binding.callback(binding.content));
         });
-        // this.props.addAllKeyBindings(this.props.id, bindings);
     }
 
     removeAllKeyBindings() {
         this.props.shortcutBindings.forEach(binding => {
             MouseTrap.unbind(binding.key);
         });
-        // this.props.removeAllKeyBindings(this.props.id);
     }
 
     render() {
@@ -82,7 +63,5 @@ ReKeyboardShortcuts.propTypes = {
     }))
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ReKeyboardShortcuts);
+export default ReKeyboardShortcuts;
+

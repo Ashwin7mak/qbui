@@ -15,6 +15,5 @@ export default combineReducers({
     shell,
     forms,
     reports,
-    keyboard,
 });
 

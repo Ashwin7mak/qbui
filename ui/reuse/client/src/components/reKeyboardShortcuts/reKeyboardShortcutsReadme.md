@@ -4,35 +4,15 @@
 
 The ReKeyboardShortcuts component allows you to quickly add keyboard shortcuts to your app. 
 
-The motivating behind setting up keyboard shortcuts was twofold:
+The motivation behind setting up keyboard shortcuts was twofold:
 
 1) To create a similar infrastructure for keyboard shortcuts across the qbase ecosystem
 2) To make it easy to add keyboard shortcuts
-3) To easily debug conflicting keyboard shortcuts
 
 Goals 1 and 2 are met by adding this component within the reuse library and making it easy
 for any functional area to use it.
 
-Goal 3 is met by publishing all the currently active keybindings in a Redux store.
-Developers can use the "Redux" devtools to quickly see which bindings are listening to each 
-key and quickly debug any conflicting keybindings. In addition, components will automatically clean
-up their own bindings when they are unmounted.
-
 ### Setup
-
-To use this component within a functional area you must include the the `reKeyboardReducer` as  `keyboard` within your Redux store setup.
-
-E.g.,
-``` javascript
-import keyboard from '../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardReducer';
-
-export default combineReducers({
-   someOtherStore,
-   store3,
-   keyboard // <- This one must be present for ReKeyboardShortcuts to work
-});
-```
-
 ### Setting Keyboard Shortcuts
 
 Using `ReKeyboardShortcuts` is as easy as importing the component and
