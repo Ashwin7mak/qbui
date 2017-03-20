@@ -12,13 +12,13 @@ describe('GlobalAction', () => {
 
         // Creating mock elements here so that the Router and internationalization do not need to be loaded for this test
         GlobalActionRewireAPI.__Rewire__('Link', ({to, className, children}) => <div><div className={className}>{to}</div>{children}</div>);
-        GlobalActionRewireAPI.__Rewire__('ReIcon', ({icon}) => <div className="mockIcon">{icon}</div>);
+        GlobalActionRewireAPI.__Rewire__('Icon', ({icon}) => <div className="mockIcon">{icon}</div>);
         GlobalActionRewireAPI.__Rewire__('I18nMessage', ({message}) => <div className="mockMessage">{message}</div>);
     });
 
     afterEach(() => {
         GlobalActionRewireAPI.__ResetDependency__('Link');
-        GlobalActionRewireAPI.__ResetDependency__('ReIcon');
+        GlobalActionRewireAPI.__ResetDependency__('Icon');
         GlobalActionRewireAPI.__ResetDependency__('I18nMessage');
     });
 
