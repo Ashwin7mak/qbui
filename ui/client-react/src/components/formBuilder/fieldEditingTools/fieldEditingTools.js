@@ -21,6 +21,7 @@ export class FieldEditingTools extends Component {
         super(props);
 
         this.tabIndex = "-1";
+        this.fieldEditingTools = null;
 
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
@@ -33,6 +34,7 @@ export class FieldEditingTools extends Component {
         this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
         this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
         this.updateSelectedFieldLocation = this.updateSelectedFieldLocation.bind(this);
+        this.scrollElementIntoView = this.scrollElementIntoView.bind(this);
     }
 
     onClickDelete(e) {
@@ -95,9 +97,10 @@ export class FieldEditingTools extends Component {
         /**
          * For keyboard, we need to reset the focus, to maintain proper tabbing order;
          * */
-        if (this.isFieldSelected()) {
+        if (this.props.selectedFields[0]) {
             let dragHandleButtonIndex = this.props.selectedFields[0].elementIndex;
-            document.querySelectorAll('button.dragButton')[dragHandleButtonIndex].focus();
+            let dragButton = document.querySelectorAll('button.dragButton')[dragHandleButtonIndex];
+            dragButton.focus();
         }
     }
 
@@ -142,6 +145,7 @@ export class FieldEditingTools extends Component {
             if (currentLocation.elementIndex !== 0) {
                 this.props.keyBoardMoveField(formId, newLocation, currentLocation);
             }
+            this.scrollElementIntoView();
             this.updateSelectedFieldLocation('up');
         }
     }
@@ -151,7 +155,22 @@ export class FieldEditingTools extends Component {
             if (currentLocation.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
                 this.props.keyBoardMoveField(formId, newLocation, currentLocation);
             }
+            this.scrollElementIntoView();
             this.updateSelectedFieldLocation('down');
+        }
+    }
+
+    scrollElementIntoView() {
+        if (this.props.selectedFields[0]) {
+            let selectedFormElement = document.querySelector('.selectedFormElement').getBoundingClientRect();;
+            let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
+            let bottom = absoluteElementTop + selectedFormElement.height;
+
+            if (bottom > window.innerHeight - 30) {
+                document.querySelector('.selectedFormElement').scrollIntoView({block: "end", behavior: "smooth"});
+            } else if (absoluteElementTop < 30) {
+                document.querySelector('.selectedFormElement').scrollIntoView({block: "end", behavior: "smooth"});
+            }
         }
     }
 
@@ -175,14 +194,16 @@ export class FieldEditingTools extends Component {
             classNames.push('selectedFormElement');
         }
 
+
         return (
             <div
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
+                ref={fieldEditingTools => this.fieldEditingTools = fieldEditingTools}
             >
                 <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={[
-                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, this.getNewLocationForKeyboardUp(this.props.selectedFields[0]), this.props.selectedFields[0])}},
-                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, this.getNewLocationForKeyboardDown(this.props.selectedFields[0]), this.props.selectedFields[0])}}
+                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, this.getNewLocationForKeyboardUp(this.props.selectedFields[0]), this.props.selectedFields[0]); return false;}},
+                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, this.getNewLocationForKeyboardDown(this.props.selectedFields[0]), this.props.selectedFields[0]); return false;}}
                 ]}/>
 
                 <button className="dragButton" onClick={this.onClickField}>
