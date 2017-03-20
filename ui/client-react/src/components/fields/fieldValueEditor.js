@@ -292,7 +292,6 @@ const FieldValueEditor = React.createClass({
 
 
     render() {
-        console.log('tabIndex: ', this.props.tabIndex);
         // the css classes
         let classes = 'fieldValueEditor';
         /**
