@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import CheckBoxFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/checkBoxFieldValueEditor.js';
 import CheckBoxFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/checkBoxFieldValueRenderer.js';
 import DateFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateFieldValueEditor.js';
@@ -38,42 +36,63 @@ import QbGridMetadata from 'component-metadata!../../../client-react/src/compone
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
-var Metadata = _.merge(
-    CheckBoxFieldValueEditorMetadata,
-    CheckBoxFieldValueRendererMetadata,
-    DateFieldValueEditorMetadata,
-    DateTimeFieldValueEditorMetadata,
-    DateTimeFieldValueRendererMetadata,
-    EmailFieldValueEditorMetadata,
-    EmailFieldValueRendererMetadata,
-    FieldValueEditorMetadata,
-    FieldValueRendererMetadata,
-    MultiChoiceFieldValueEditorMetadata,
-    MultiLineTextFieldValueEditorMetadata,
-    NumericFieldValueEditorMetadata,
-    NumericFieldValueRendererMetadata,
-    TextFieldValueEditorMetadata,
-    TextFieldValueRendererMetadata,
-    TimeFieldValueEditorMetadata,
-    TimeFieldValueRendererMetadata,
-    TrowserMetadata,
-    UrlFieldValueEditorMetadata,
-    UrlFieldValueRendererMetadata,
-    UserFieldValueEditorMetadata,
-    UserFieldValueRendererMetadata,
-    IconMetadata,
-    QBPanelMetadata,
-    QBModalMetadata,
-    AlertBannerMetadata,
-    PageTitleMetadata,
-    InvisibleBackdropMetadata,
-    PhoneFieldValueEditorMetadata,
-    PhoneFieldValueRendererMetadata,
-    DurationFieldValueRendererMetadata,
-    DurationFieldValueEditorMetadata,
-    QbGridMetadata
-    // END OF METADATA MERGE
-    // above comment used for grunt task, please do not delete
-);
+var Metadata = () => {
+    let metaDataObject = {
+        CheckBoxFieldValueEditorMetadata,
+        CheckBoxFieldValueRendererMetadata,
+        DateFieldValueEditorMetadata,
+        DateTimeFieldValueEditorMetadata,
+        DateTimeFieldValueRendererMetadata,
+        EmailFieldValueEditorMetadata,
+        EmailFieldValueRendererMetadata,
+        FieldValueEditorMetadata,
+        FieldValueRendererMetadata,
+        MultiChoiceFieldValueEditorMetadata,
+        MultiLineTextFieldValueEditorMetadata,
+        NumericFieldValueEditorMetadata,
+        NumericFieldValueRendererMetadata,
+        TextFieldValueEditorMetadata,
+        TextFieldValueRendererMetadata,
+        TimeFieldValueEditorMetadata,
+        TimeFieldValueRendererMetadata,
+        TrowserMetadata,
+        UrlFieldValueEditorMetadata,
+        UrlFieldValueRendererMetadata,
+        UserFieldValueEditorMetadata,
+        UserFieldValueRendererMetadata,
+        IconMetadata,
+        QBPanelMetadata,
+        QBModalMetadata,
+        AlertBannerMetadata,
+        PageTitleMetadata,
+        InvisibleBackdropMetadata,
+        PhoneFieldValueEditorMetadata,
+        PhoneFieldValueRendererMetadata,
+        DurationFieldValueRendererMetadata,
+        DurationFieldValueEditorMetadata,
+        QbGridMetadata,
+        // END OF METADATA MERGE
+        // above comment used for grunt task, please do not delete
+    };
 
-export default Metadata;
+    /**
+     * Transforms the metadata for each import into one that can be interpreted by the renderer.
+     * If the transformation fails during import, then a standard message is displayed.
+     */
+    return Object.keys(metaDataObject).reduce((newMetaObject, originalKeyName) => {
+        let newKeyName = originalKeyName.replace('Metadata', '');
+
+        newMetaObject[newKeyName] = metaDataObject[originalKeyName][newKeyName];
+
+        if (Object.keys(newMetaObject[newKeyName]).length === 0) {
+            newMetaObject[newKeyName] = {
+                descHtml: `<h3>This component was created using the new class or function syntax. Props cannot be displayed. Check the source code.</h3>`,
+                props: false
+            };
+        }
+
+        return newMetaObject;
+    }, {});
+};
+
+export default Metadata();
