@@ -116,9 +116,9 @@ let TablesList = React.createClass({
     },
     getTopLinksItem() {
         const appHomePageSelected = !this.props.selectedTableId &&
-            (WindowLocationUtils.getPathname() !== UrlUtils.getAppUsersLink(this.props.selectedAppId));
+            (WindowLocationUtils.getPathname() === `${APP_ROUTE}/${this.props.selectedAppId}`);
         const appUsersPageSelected = !this.props.selectedTableId &&
-            (WindowLocationUtils.getPathname() !== `${APP_ROUTE}/${this.props.selectedAppId}`);
+            (WindowLocationUtils.getPathname() === UrlUtils.getAppUsersLink(this.props.selectedAppId));
 
         return (
         <li className="horizontal">
