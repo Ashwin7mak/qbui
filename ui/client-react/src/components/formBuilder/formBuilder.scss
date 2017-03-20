@@ -56,7 +56,7 @@
 
         .draggableFieldWrapper {
             width: 310px;
-            height: 100px;
+            height: 100%;
 
             @include small-breakpoint {
                 width: 100%;
