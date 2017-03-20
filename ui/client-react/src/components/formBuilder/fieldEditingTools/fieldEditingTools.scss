@@ -77,12 +77,12 @@
                 color: $color-cyan-700;
             }
         }
-      &:focus {
-        //For keyboard nav
-        background: $color-cyan-300;
-        z-index: -1 !important;
-        outline: none;
-      }
+        &:focus {
+            //For keyboard nav
+            background: $color-cyan-300;
+            z-index: -1 !important;
+            outline: none;
+        }
     }
 
     &.isTablet {
@@ -124,15 +124,10 @@
 
     button {
         background: transparent;
+        outline: none;
         border: none;
-        outline-color: hotpink;
+        &:focus {
+            background: $color-cyan-300;
+        }
     }
-
-    button.dragButton {
-        background: transparent;
-        border: none;
-        outline-color: hotpink;
-        margin-top: 14px;
-    }
-
 }

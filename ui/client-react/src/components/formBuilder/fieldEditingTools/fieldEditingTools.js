@@ -130,7 +130,7 @@ export class FieldEditingTools extends Component {
 
     handleKeyDown(e) {
         if (e.which === 32) {
-            this.onClickField(e)
+            this.onClickField(e);
             e.preventDefault();
         }
     }
@@ -207,12 +207,12 @@ const mapDispatchToProps = dispatch => {
             return dispatch(selectFieldOnForm(formId, location));
         },
 
-        keyBoardMoveFieldUp (formId, location) {
-           return dispatch(keyBoardMoveFieldUp(formId, location));
+        keyBoardMoveFieldUp(formId, location) {
+            return dispatch(keyBoardMoveFieldUp(formId, location));
         },
 
-        keyboardMoveFieldDown (formId, location) {
-           return dispatch(keyboardMoveFieldDown(formId, location));
+        keyboardMoveFieldDown(formId, location) {
+            return dispatch(keyboardMoveFieldDown(formId, location));
         }
     };
 };

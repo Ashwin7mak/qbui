@@ -261,14 +261,12 @@ export const removeFieldFromForm = (formId, location) => {
 };
 
 export const keyBoardMoveFieldUp = (formId, location) => {
-    console.log('formsActions: ', location)
     return event(formId, types.KEYBOARD_MOVE_FIELD_UP, {
         location
     });
 };
 
 export const keyboardMoveFieldDown = (formId, location) => {
-    console.log('formsActions: ', location)
     return event(formId, types.KEYBOARD_MOVE_FIELD_DOWN, {
         location
     });
