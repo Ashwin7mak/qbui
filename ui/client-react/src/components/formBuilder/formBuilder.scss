@@ -41,19 +41,6 @@
         left padding to make room for the editing tools */
         margin-left: $spacing-tiny;
 
-        &:focus {
-            /*Focus is for keyboard nav*/
-            width: 295px;
-            outline-color: hotpink;
-            .fieldEditingTools {
-                opacity: 1;
-                .qbIcon {
-                    outline-color: blueviolet;
-                    opacity: 1;
-                }
-            }
-        }
-
         .draggableFieldWrapper {
             width: 310px;
             height: 100%;

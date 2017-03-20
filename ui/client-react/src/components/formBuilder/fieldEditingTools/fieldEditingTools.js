@@ -29,6 +29,7 @@ export class FieldEditingTools extends Component {
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
 
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.getNewLocationForKeyboardUp = this.getNewLocationForKeyboardUp.bind(this);
         this.getNewLocationForKeyboardDown = this.getNewLocationForKeyboardDown.bind(this);
         this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
@@ -98,9 +99,8 @@ export class FieldEditingTools extends Component {
          * For keyboard, we need to reset the focus, to maintain proper tabbing order;
          * */
         if (this.props.selectedFields[0]) {
-            let dragHandleButtonIndex = this.props.selectedFields[0].elementIndex;
-            let dragButton = document.querySelectorAll('button.dragButton')[dragHandleButtonIndex];
-            dragButton.focus();
+            let selectedFormElement = document.querySelector('.selectedFormElement');
+            selectedFormElement.focus();
         }
     }
 
@@ -174,10 +174,18 @@ export class FieldEditingTools extends Component {
         }
     }
 
+    handleKeyDown(e) {
+        console.log('keycode: ', e.which)
+        if (e.which === 32) {
+            this.onClickField(e)
+            e.preventDefault();
+        }
+    }
+
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
-        let isTouch = Device.isTouch();
+        let isTouch = Device.isTouch();     
 
 
         if (isTouch && !isSmall) {
@@ -197,8 +205,11 @@ export class FieldEditingTools extends Component {
 
         return (
             <div
+                tabIndex="0"
+                role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
+                onKeyDown={this.handleKeyDown}
                 ref={fieldEditingTools => this.fieldEditingTools = fieldEditingTools}
             >
                 <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={[
@@ -206,9 +217,7 @@ export class FieldEditingTools extends Component {
                     {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, this.getNewLocationForKeyboardDown(this.props.selectedFields[0]), this.props.selectedFields[0]); return false;}}
                 ]}/>
 
-                <button className="dragButton" onClick={this.onClickField}>
-                    <DragHandle />
-                </button>
+                <DragHandle />
 
                 {this.renderActionIcons()}
             </div>

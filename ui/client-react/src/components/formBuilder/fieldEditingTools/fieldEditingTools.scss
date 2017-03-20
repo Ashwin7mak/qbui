@@ -70,25 +70,19 @@
                 opacity: 1;
                 color: $color-red-700;
             }
-            /*Focus is for keyboard nav*/
-            &:focus {
-                outline-color: blueviolet;
-                opacity: 1;
-                color: $color-red-700;
-            }
         }
         .fieldPreferencesIcon .qbIcon {
             &:hover {
                 opacity: 1;
                 color: $color-cyan-700;
             }
-            /*Focus is for keyboard nav*/
-            &:focus {
-                outline-color: blueviolet;
-                opacity: 1;
-                color: $color-cyan-700;
-            }
         }
+      &:focus {
+        //For keyboard nav
+        background: $color-cyan-300;
+        z-index: -1 !important;
+        outline: none;
+      }
     }
 
     &.isTablet {
