@@ -1,9 +1,12 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {AccountUsersGrid} from '../../../../src/account/users/grid/AccountUsersGrid';
+import ConnectedAccountUsersGrid, {AccountUsersGrid} from '../../../../src/account/users/grid/AccountUsersGrid';
 import QbCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import moment from 'moment';
+import configureMockStore from 'redux-mock-store';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
 
 describe('AccountUsersGrid', () => {
     beforeEach(() => {
@@ -33,6 +36,17 @@ describe('AccountUsersGrid', () => {
             spyOn(props, 'fetchAccountUsers');
             mount(<AccountUsersGrid {...props} />);
             expect(props.fetchAccountUsers.calls.any()).toEqual(true);
+        });
+
+        it("should should render an error state", ()=> {
+            let props = {
+                ...baseProps,
+                error: "Error"
+            };
+
+            let component = mount(<AccountUsersGrid {...props} />);
+            let errorSection = component.find("h1");
+            expect(errorSection.length).toEqual(1);
         });
 
         describe("firstName", () => {
