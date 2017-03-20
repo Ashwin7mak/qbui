@@ -136,14 +136,14 @@ const CheckBoxFieldValueEditor = React.createClass({
         }
 
         return (
-            <div className={this.setGeneralClasses()} tabIndex="0" onKeyDown={this.onKeyDown} onClick={this.onChange} onBlur={this.onBlur}>
+            <div className={this.setGeneralClasses()} tabIndex={this.props.tabIndex} onKeyDown={this.onKeyDown} onClick={this.onChange} onBlur={this.onBlur}>
                 <input className={this.setCheckBoxClasses()}
                        checked={this.props.value}
                        ref="fieldInput"
                        type="checkbox"
                        onChange={this.onChange}
                        disabled={this.props.disabled}
-                       tabIndex={this.props.tabIndex} />
+                       tabIndex="-1" />
                 {this.renderLabel()}
                 {this.renderRequiredSymbol()}
             </div>
