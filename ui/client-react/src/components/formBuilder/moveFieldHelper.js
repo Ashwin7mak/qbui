@@ -31,9 +31,16 @@ const MoveFieldHelper = {
         return formMetaCopy;
     },
 
-    keyBoardMoveFieldUpOrDown(formMeta, newLocation, currentLocation) {
+    keyBoardMoveFieldUp(formMeta, currentLocation) {
         let formMetaCopy = _.cloneDeep(formMeta);
-        swapFieldLocation(formMetaCopy, newLocation, currentLocation);
+        swapFieldLocation(formMetaCopy, currentLocation, -1);
+
+        return formMetaCopy;
+    },
+
+    keyBoardMoveFieldDown(formMeta, currentLocation) {
+        let formMetaCopy = _.cloneDeep(formMeta);
+        swapFieldLocation(formMetaCopy, currentLocation, 1);
 
         return formMetaCopy;
     }
@@ -113,13 +120,15 @@ function removeElementFromCurrentLocation(formMetaData, location) {
     return formMetaData;
 }
 
-function swapFieldLocation(formMetaData, newLocation, currentLocation) {
+function swapFieldLocation(formMetaData, currentLocation, newLocation) {
     let {tabIndex, sectionIndex, columnIndex, elementIndex} = currentLocation;
+
+    let newElementIndex = elementIndex + newLocation;
 
     let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
 
-    let swappedElement = column.elements[newLocation.elementIndex];
-    column.elements[newLocation.elementIndex] = column.elements[elementIndex];
+    let swappedElement = column.elements[newElementIndex];
+    column.elements[newElementIndex] = column.elements[elementIndex];
     column.elements[elementIndex] = swappedElement;
 
     updateOrderIndices(column, 'elements');

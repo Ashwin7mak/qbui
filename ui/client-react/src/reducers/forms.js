@@ -183,18 +183,36 @@ const forms = (
         ];
     }
 
-    case types.KEYBOARD_MOVE_FIELD : {
+    case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;
         }
 
-        let {newLocation, currentLocation} = action.content;
+        let {location} = action.content;
         updatedForm = _.cloneDeep(currentForm);
 
-        updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldUpOrDown(
+        updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldUp(
             updatedForm.formData.formMeta,
-            newLocation,
-            currentLocation
+            location
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
+    case types.KEYBOARD_MOVE_FIELD_DOWN : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {location} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldDown(
+            updatedForm.formData.formMeta,
+            location
         );
 
         return [
