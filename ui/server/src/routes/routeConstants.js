@@ -16,7 +16,8 @@
         EXPERIENCE_ENGINE   : '/ee/:version',
         QUICKBASE_HEALTH    : '/api/:version',
         NODE                : '/api/n/:version',
-        QUICKBASE_LEGACY    : '/api/l/:version'
+        QUICKBASE_LEGACY    : '/api/l/:version',
+        GOVERNANCE          : '/api/governance/:version'
     };
 
     /*
@@ -82,7 +83,9 @@
         // is configured to act as proxy and pass the request directly to the server side resource.
         TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*',
 
-        ADMIN                       : baseUrl.QUICKBASE + '/admin'
+        ADMIN                       : baseUrl.QUICKBASE + '/admin',
+
+        GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
     };
 
     /*

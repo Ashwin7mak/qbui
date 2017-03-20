@@ -1,8 +1,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {AccountUsersGrid} from '../../../src/account/users/AccountUsersGrid';
-import QbCell from '../../../../client-react/src/components/dataTable/qbGrid/qbCell';
+import {AccountUsersGrid} from '../../../../src/account/users/grid/AccountUsersGrid';
+import QbCell from '../../../../../client-react/src/components/dataTable/qbGrid/qbCell';
 import moment from 'moment';
 
 describe('AccountUsersGrid', () => {
@@ -12,15 +12,20 @@ describe('AccountUsersGrid', () => {
 
     describe("Component", () => {
 
+        const baseProps = {
+            fetchAccountUsers: () => false,
+            accountId: "0"
+        };
+
         it("should show the correct set of headers", ()=> {
-            let component = mount(<AccountUsersGrid fetchAccountUsers={() => false} />);
+            let component = mount(<AccountUsersGrid {...baseProps} />);
             let headers = component.find("th").map(node => node.text());
-            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "# Apps Managed", "In Realm Directory?", "Realm Approved?"]);
+            expect(headers).toEqual(["First Name", "Last Name", "Email", "User Name", "Last Access", "QuickBase Access Status", "Inactive?", "In Any Group?", "Group Manager?", "Can create apps?", "App Manager?", "In Realm Directory?", "Realm Approved?"]);
         });
 
         it("should should call fetch on mount", ()=> {
             let props = {
-                fetchAccountUsers: () => false
+                ...baseProps
             };
 
             spyOn(props, 'fetchAccountUsers');
@@ -32,7 +37,7 @@ describe('AccountUsersGrid', () => {
             it("should render properly", () => {
                 let props = {
                     users: [{firstName: "Test", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -45,7 +50,7 @@ describe('AccountUsersGrid', () => {
             it("should render properly", () => {
                 let props = {
                     users: [{lastName: "Test", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -58,7 +63,7 @@ describe('AccountUsersGrid', () => {
             it("should render properly", () => {
                 let props = {
                     users: [{email: "Test", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -71,7 +76,7 @@ describe('AccountUsersGrid', () => {
             it("should render properly", () => {
                 let props = {
                     users: [{userName: "Test", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -84,7 +89,7 @@ describe('AccountUsersGrid', () => {
             it("should render null properly", () => {
                 let props = {
                     users: [{lastAccess: "1900-01-01T00:00:00Z", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -95,7 +100,7 @@ describe('AccountUsersGrid', () => {
             it("should render properly", () => {
                 let props = {
                     users: [{lastAccess: "2017-03-01T16:00:00Z", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -114,12 +119,12 @@ describe('AccountUsersGrid', () => {
                         systemRights: 0,
                         uid:0
                     }],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(5);
-                expect(cell.text()).toEqual("");
+                expect(cell.text()).toEqual("No App Access");
             });
 
             it("should show deactivated above all else", () => {
@@ -131,7 +136,7 @@ describe('AccountUsersGrid', () => {
                         systemRights: 2,
                         uid:0
                     }],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -148,7 +153,7 @@ describe('AccountUsersGrid', () => {
                         systemRights: 2,
                         uid:0
                     }],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -165,7 +170,7 @@ describe('AccountUsersGrid', () => {
                         systemRights: 6,
                         uid:0
                     }],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -182,7 +187,7 @@ describe('AccountUsersGrid', () => {
                         systemRights: 0,
                         uid:0
                     }],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -195,7 +200,7 @@ describe('AccountUsersGrid', () => {
             it("should render null properly", () => {
                 let props = {
                     users: [{lastAccess: "1900-01-01T00:00:00Z", uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -206,7 +211,7 @@ describe('AccountUsersGrid', () => {
             it("should render inactive properly", () => {
                 let props = {
                     users: [{lastAccess: moment().subtract(181, 'days').toISOString(), uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -217,7 +222,7 @@ describe('AccountUsersGrid', () => {
             it("should render NOT inactive properly", () => {
                 let props = {
                     users: [{lastAccess: moment().subtract(179, 'days').toISOString(), uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -231,7 +236,7 @@ describe('AccountUsersGrid', () => {
             it("should render numGroupsMember correctly when a number", () => {
                 let props = {
                     users: [{numGroupsMember: 1, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -242,7 +247,7 @@ describe('AccountUsersGrid', () => {
             it("should render numGroupsMember correctly when 0", () => {
                 let props = {
                     users: [{numGroupsMember: 0, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -256,7 +261,7 @@ describe('AccountUsersGrid', () => {
             it("should render numGroupsManaged correctly when a number", () => {
                 let props = {
                     users: [{numGroupsManaged: 1, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -267,7 +272,7 @@ describe('AccountUsersGrid', () => {
             it("should render numGroupsManaged correctly when 0", () => {
                 let props = {
                     users: [{numGroupsManaged: 0, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -281,7 +286,7 @@ describe('AccountUsersGrid', () => {
             it("should render can create apps correctly when user has flag", () => {
                 let props = {
                     users: [{accountTrusteeFlags: 5, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -292,7 +297,7 @@ describe('AccountUsersGrid', () => {
             it("should render can create apps correctly when user does NOT have flag", () => {
                 let props = {
                     users: [{accountTrusteeFlags: 1, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -301,28 +306,28 @@ describe('AccountUsersGrid', () => {
             });
         });
 
-        describe("# apps managed?", () => {
+        describe("App Manager?", () => {
 
-            it("should render num apps managed as 0", () => {
+            it("should render no apps correctly", () => {
                 let props = {
                     users: [{numAppsManaged: 0, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(10);
-                expect(cell.text()).toEqual("0");
+                expect(cell.text()).toEqual("--");
             });
 
-            it("should render num apps managed as positive number", () => {
+            it("should render some apps correctly", () => {
                 let props = {
                     users: [{numAppsManaged: 1, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
                 let cell = component.find(QbCell).at(10);
-                expect(cell.text()).toEqual("1");
+                expect(cell.text()).toEqual("Y");
             });
         });
 
@@ -331,7 +336,7 @@ describe('AccountUsersGrid', () => {
             it("should render in realm directory correctly when 0", () => {
                 let props = {
                     users: [{realmDirectoryFlags: 0, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -342,7 +347,7 @@ describe('AccountUsersGrid', () => {
             it("should render in realm directory correctly when has some flags", () => {
                 let props = {
                     users: [{realmDirectoryFlags: 1, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -356,7 +361,7 @@ describe('AccountUsersGrid', () => {
             it("should render realm approved correctly when flag is set", () => {
                 let props = {
                     users: [{realmDirectoryFlags: 5, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);
@@ -367,7 +372,7 @@ describe('AccountUsersGrid', () => {
             it("should render realm approved correctly when flag is not set", () => {
                 let props = {
                     users: [{realmDirectoryFlags: 1, uid:0}],
-                    fetchAccountUsers: () => false
+                    ...baseProps
                 };
 
                 let component = mount(<AccountUsersGrid {...props} />);

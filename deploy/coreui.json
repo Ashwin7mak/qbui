@@ -55,7 +55,7 @@
     },
     "paramELBSubnets": {
       "Type": "CommaDelimitedList",
-      "Default": "subnet-992e90ee, subnet-932af7ca",
+      "Default": "subnet-972af7ce, subnet-872e90f0",
       "Description": "Subnets for the ELB"
     },
     "paramInstanceSubnets": {
@@ -131,8 +131,8 @@
         "GroupDescription": "Enable HTTP access to ELB",
         "VpcId": {"Ref": "paramVPC"},
         "SecurityGroupIngress": [
-          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBSSLPort"}, "ToPort": {"Ref": "paramELBSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}},
-          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBNonSSLPort"}, "ToPort": {"Ref": "paramELBNonSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}}
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBSSLPort"}, "ToPort": {"Ref": "paramELBSSLPort"}, "CidrIp": "0.0.0.0/0"},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBNonSSLPort"}, "ToPort": {"Ref": "paramELBNonSSLPort"}, "CidrIp": "0.0.0.0/0"}
         ]
       }
     },
@@ -146,7 +146,7 @@
         },
         "LoadBalancerName": {"Ref": "AWS::StackName"},
         "CrossZone": "true",
-        "Scheme": "internal",
+        "Scheme": "internet-facing",
         "ConnectionDrainingPolicy": {
           "Enabled": "true",
           "Timeout": {"Ref": "paramConnectionDrainingTimeout"}
@@ -373,8 +373,8 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
-                      "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1"
                     }
@@ -403,8 +403,8 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
-                      "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1"
                     }
@@ -433,8 +433,8 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
-                      "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
+                      "ee_host_enable": true,
                       "legacy_endpoint": "",
                       "route_group": "LH_V1"
                     }
@@ -463,8 +463,8 @@
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
-                      "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://internal.jenkinscs1.quickbaserocks.com",
                       "route_group": "LH_V1"
                     }
@@ -494,8 +494,8 @@
                       "secrets_s3_bucket": {"Fn::Join": ["", ["iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]},
                       "node_internal_env": "PRODUCTION",
                       "rest_endpoint": {"Fn::Join": ["", ["https://t.tomcat.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":8443"]]},
-                      "ee_host": {"Fn::Join": ["", ["https://experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
-                      "ee_host_enable": false,
+                      "ee_host": {"Fn::Join": ["", ["https://t.experienceengine.", {"Ref": "paramSwimlane"}, ".", {"Ref": "paramDomainName"}, ":443"]]},
+                      "ee_host_enable": true,
                       "legacy_endpoint": "https://login.quickbase.com",
                       "route_group": "LH_V1"
                     }
@@ -585,7 +585,7 @@
           "DNSName": { "Fn::GetAtt": ["ElasticLoadBalancer", "DNSName"] }
         },
         "HostedZoneName": { "Fn::Join": ["", [{ "Ref": "paramDomainName" }, "."]] },
-        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "paramSwimlane" }, ".", { "Ref": "paramDomainName" }, "."]] },
+        "Name": { "Fn::Join": ["", ["*.", { "Ref": "paramSwimlane" }, ".", { "Ref": "paramDomainName" }, "."]] },
         "Type": "A"
       }
     }
