@@ -7,8 +7,7 @@ import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import {selectFieldOnForm} from '../../../actions/formActions';
-import {moveFieldOnForm} from '../../../actions/formActions';
+import {selectFieldOnForm, keyBoardMoveField} from '../../../actions/formActions';
 
 import ReKeyboardShortcuts from '../../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
 
@@ -22,7 +21,6 @@ export class FieldEditingTools extends Component {
         super(props);
 
         this.tabIndex = "-1";
-        this.keyboardBindings = [];
 
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
@@ -30,14 +28,10 @@ export class FieldEditingTools extends Component {
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
 
-        this.getCurrentField = this.getCurrentField.bind(this);
         this.getNewLocationForKeyboardUp = this.getNewLocationForKeyboardUp.bind(this);
         this.getNewLocationForKeyboardDown = this.getNewLocationForKeyboardDown.bind(this);
-
-        this.activateKeyboardMovingField = this.activateKeyboardMovingField.bind(this);
         this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
         this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
-
         this.updateSelectedFieldLocation = this.updateSelectedFieldLocation.bind(this);
     }
 
@@ -107,57 +101,31 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    activateKeyboardMovingField() {
-        let newKeyboardUpLocation = null;
-        let newKeyboardDownLocation = null;
-        let currentLocation = null;
-        let currentField = null;
-        let up = null;
-        let down = null;
-
-        currentLocation = this.props.selectedFields[0];
-        currentField = this.getCurrentField();
-
-        newKeyboardUpLocation = this.getNewLocationForKeyboardUp(currentLocation);
-        newKeyboardDownLocation = this.getNewLocationForKeyboardDown(currentLocation);
-
-        up = {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, newKeyboardUpLocation, currentField); return false;}};
-        down = {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, newKeyboardDownLocation, currentField); return false;}};
-
-        this.keyboardBindings[0] = up;
-        this.keyboardBindings[1] = down;
-    }
-
     getNewLocationForKeyboardUp(selectedField) {
-        return {
-            elementIndex: selectedField.elementIndex - 1,
-            columnIndex: selectedField.columnIndex,
-            tabIndex: selectedField.tabIndex,
-            sectionIndex: selectedField.sectionIndex
-        };
+        if (selectedField) {
+            return {
+                elementIndex: selectedField.elementIndex - 1,
+                columnIndex: selectedField.columnIndex,
+                tabIndex: selectedField.tabIndex,
+                sectionIndex: selectedField.sectionIndex
+            };
+        }
     }
 
     getNewLocationForKeyboardDown(selectedField) {
-        return {
-            elementIndex: selectedField.elementIndex + 1,
-            columnIndex: selectedField.columnIndex,
-            tabIndex: selectedField.tabIndex,
-            sectionIndex: selectedField.sectionIndex
-        };
-    }
-
-    getCurrentField() {
-        return {
-            containingElement: this.props.containingElement,
-            element: this.props.containingElement.FormFieldElement,
-            location: this.props.location,
-            relatedField: this.props.relatedField
-        };
+        if (selectedField) {
+            return {
+                elementIndex: selectedField.elementIndex + 1,
+                columnIndex: selectedField.columnIndex,
+                tabIndex: selectedField.tabIndex,
+                sectionIndex: selectedField.sectionIndex
+            };
+        }
     }
 
     updateSelectedFieldLocation(newLocation) {
         if (this.props.selectField) {
-            let currentLocation = this.props.location;
+            let currentLocation = Object.assign({}, this.props.selectedFields[0]);
 
             if (newLocation === 'up') {
                 currentLocation.elementIndex = currentLocation.elementIndex - 1;
@@ -170,23 +138,28 @@ export class FieldEditingTools extends Component {
     }
 
     keyboardMoveFieldUp(formId, newLocation, currentLocation) {
-        if (currentLocation.location.elementIndex !== 0) {
-            this.props.moveField(formId, newLocation, currentLocation);
+        if (currentLocation) {
+            if (currentLocation.elementIndex !== 0) {
+                this.props.keyBoardMoveField(formId, newLocation, currentLocation);
+            }
+            this.updateSelectedFieldLocation('up');
         }
-        this.updateSelectedFieldLocation('up');
     }
 
     keyboardMoveFieldDown(formId, newLocation, currentLocation) {
-        if (currentLocation.location.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
-            this.props.moveField(formId, newLocation, currentLocation);
+        if (currentLocation) {
+            if (currentLocation.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
+                this.props.keyBoardMoveField(formId, newLocation, currentLocation);
+            }
+            this.updateSelectedFieldLocation('down');
         }
-        this.updateSelectedFieldLocation('down');
     }
 
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
         let isTouch = Device.isTouch();
+
 
         if (isTouch && !isSmall) {
             classNames.push('isTablet');
@@ -200,7 +173,6 @@ export class FieldEditingTools extends Component {
 
         if (this.isFieldSelected()) {
             classNames.push('selectedFormElement');
-            this.activateKeyboardMovingField();
         }
 
         return (
@@ -208,7 +180,10 @@ export class FieldEditingTools extends Component {
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
             >
-                <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={this.keyboardBindings}/>
+                <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={[
+                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, this.getNewLocationForKeyboardUp(this.props.selectedFields[0]), this.props.selectedFields[0])}},
+                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, this.getNewLocationForKeyboardDown(this.props.selectedFields[0]), this.props.selectedFields[0])}}
+                ]}/>
 
                 <button className="dragButton" onClick={this.onClickField}>
                     <DragHandle />
@@ -249,9 +224,9 @@ const mapDispatchToProps = dispatch => {
             return dispatch(selectFieldOnForm(formId, location));
         },
 
-        moveField(formId, newLocation, draggedItemProps) {
-            return dispatch(moveFieldOnForm(formId, newLocation, draggedItemProps));
-        },
+        keyBoardMoveField (formId, newLocation, currentLocation) {
+           return dispatch(keyBoardMoveField(formId, newLocation, currentLocation));
+        }
     };
 };
 

@@ -260,6 +260,13 @@ export const removeFieldFromForm = (formId, location) => {
     });
 };
 
+export const keyBoardMoveField = (formId, newLocation, currentLocation) => {
+    return event(formId, types.KEYBOARD_MOVE_FIELD, {
+        newLocation,
+        currentLocation
+    });
+};
+
 /**
  * Create a new form
  *

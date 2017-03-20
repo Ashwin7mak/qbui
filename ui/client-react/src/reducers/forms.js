@@ -183,6 +183,26 @@ const forms = (
         ];
     }
 
+    case types.KEYBOARD_MOVE_FIELD : {
+        if (!currentForm) {
+            return state;
+        }
+
+        let {newLocation, currentLocation} = action.content;
+        updatedForm = _.cloneDeep(currentForm);
+
+        updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldUpOrDown(
+            updatedForm.formData.formMeta,
+            newLocation,
+            currentLocation
+        );
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
     case types.SELECT_FIELD :
 
         if (!currentForm || !_.has(action, 'content.location')) {

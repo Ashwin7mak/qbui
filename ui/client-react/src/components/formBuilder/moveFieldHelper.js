@@ -29,6 +29,13 @@ const MoveFieldHelper = {
         removeElementFromCurrentLocation(formMetaCopy, location);
 
         return formMetaCopy;
+    },
+
+    keyBoardMoveFieldUpOrDown(formMeta, newLocation, currentLocation) {
+        let formMetaCopy = _.cloneDeep(formMeta);
+        swapFieldLocation(formMetaCopy, newLocation, currentLocation);
+
+        return formMetaCopy;
     }
 };
 
@@ -102,6 +109,20 @@ function removeElementFromCurrentLocation(formMetaData, location) {
 
     updateOrderIndices(column, 'elements');
     clearEmptyElementsFromSection(formMetaData, tabIndex, sectionIndex, columnIndex);
+
+    return formMetaData;
+}
+
+function swapFieldLocation(formMetaData, newLocation, currentLocation) {
+    let {tabIndex, sectionIndex, columnIndex, elementIndex} = currentLocation;
+
+    let column = formMetaData.tabs[tabIndex].sections[sectionIndex].columns[columnIndex];
+
+    let swappedElement = column.elements[newLocation.elementIndex];
+    column.elements[newLocation.elementIndex] = column.elements[elementIndex];
+    column.elements[elementIndex] = swappedElement;
+
+    updateOrderIndices(column, 'elements');
 
     return formMetaData;
 }
