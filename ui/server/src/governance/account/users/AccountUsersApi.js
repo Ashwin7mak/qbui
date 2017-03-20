@@ -46,7 +46,7 @@
                     let host = requestHelper.getLegacyRealmBase(req, false);
 
                     opts.headers.host = host;
-                    opts.url =  consts.PROTOCOL.HTTPS + host + routeHelper.getAccountUsersLegacyStackRoute(accountId);
+                    opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getAccountUsersLegacyStackRoute(accountId);
 
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
