@@ -176,7 +176,7 @@
                                                 reportReq.rawBody = JSON.stringify(report);
                                                 promises.push(reportsApi.createReport(reportReq));
                                             });
-                                            let formsToCreate = cannedNewTableElements.getCannedForms(reqPayload.tableNoun, fieldIds);
+                                            let formsToCreate = cannedNewTableElements.getCannedForms(reqPayload.tableNoun + " form", fieldIds);
                                             formsToCreate.forEach((form) => {
                                                 let formReq = _.clone(req);
                                                 formReq.url = tablesRootUrl;
