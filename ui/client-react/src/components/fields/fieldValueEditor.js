@@ -164,7 +164,8 @@ const FieldValueEditor = React.createClass({
             fieldDef: this.props.fieldDef,
             fieldName: this.props.fieldName,
             // add the .cellEdit css class if working inside an agGrid
-            classes: (this.props.classes && this.props.classes.includes('cellEditWrapper') ? 'cellEdit' : '')
+            classes: (this.props.classes && this.props.classes.includes('cellEditWrapper') ? 'cellEdit' : ''),
+            tabIndex: this.props.tabIndex
         };
 
         // Only allow the Record ID field to be a renderer, not an editor
@@ -291,6 +292,7 @@ const FieldValueEditor = React.createClass({
 
 
     render() {
+        console.log('tabIndex: ', this.props.tabIndex);
         // the css classes
         let classes = 'fieldValueEditor';
         /**

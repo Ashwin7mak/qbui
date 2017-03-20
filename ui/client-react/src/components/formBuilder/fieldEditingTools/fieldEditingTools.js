@@ -162,7 +162,7 @@ export class FieldEditingTools extends Component {
 
     scrollElementIntoView() {
         if (this.props.selectedFields[0]) {
-            let selectedFormElement = document.querySelector('.selectedFormElement').getBoundingClientRect();;
+            let selectedFormElement = document.querySelector('.selectedFormElement').getBoundingClientRect();
             let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
             let bottom = absoluteElementTop + selectedFormElement.height;
 

@@ -26,7 +26,6 @@ const TextArea = React.createClass({
                     style={this.props.style}
                     onChange={this.props.onChange}
                     onBlur={this.props.onBlur}
-                    tabIndex="0"
                     maxLength={maxLength}
                     onKeyUp={this.props.onKeyUp}
                     placeholder={this.props.placeholder}
@@ -35,6 +34,7 @@ const TextArea = React.createClass({
                     cols={cols}
                     value={this.props.value || ''}
                     type="text"
+                    tabIndex={this.props.tabIndex}
                 />);
     }
 });

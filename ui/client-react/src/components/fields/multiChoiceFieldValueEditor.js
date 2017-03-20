@@ -165,7 +165,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
             }) : [];
 
         return <Select
-            tabIndex="0"
             value={selectedValue && {label: selectedValue}}
             optionRenderer={this.renderOption}
             options={choices}
@@ -174,7 +173,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
             noResultsText={notFoundMessage}
             autosize={false}
             clearable={false}
-            onBlur={this.onBlur} />;
+            onBlur={this.onBlur}
+            tabIndex={this.props.tabIndex}
+        />;
     },
 
     getFieldElement() {
