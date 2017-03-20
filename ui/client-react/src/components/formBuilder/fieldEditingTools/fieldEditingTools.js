@@ -32,7 +32,6 @@ export class FieldEditingTools extends Component {
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
         this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
-        this.updateSelectedFieldLocation = this.updateSelectedFieldLocation.bind(this);
         this.scrollElementIntoView = this.scrollElementIntoView.bind(this);
     }
 
@@ -99,40 +98,19 @@ export class FieldEditingTools extends Component {
         if (this.props.selectedFields[0]) {
             let selectedFormElement = document.querySelector('.selectedFormElement');
             selectedFormElement.focus();
+            this.scrollElementIntoView();
         }
-    }
-
-    updateSelectedFieldLocation(newLocation) {
-        if (this.props.selectField) {
-            let currentLocation = Object.assign({}, this.props.selectedFields[0]);
-
-            if (newLocation === 'up') {
-                currentLocation.elementIndex = currentLocation.elementIndex - 1;
-            } else if (newLocation === 'down') {
-                currentLocation.elementIndex = currentLocation.elementIndex + 1;
-            }
-            this.props.selectField(this.props.formId, currentLocation);
-        }
-
     }
 
     keyboardMoveFieldUp(formId, currentLocation) {
-        if (currentLocation) {
-            if (currentLocation.elementIndex !== 0) {
-                this.props.keyBoardMoveFieldUp(formId, currentLocation);
-            }
-            this.scrollElementIntoView();
-            this.updateSelectedFieldLocation('up');
+        if (currentLocation && currentLocation.elementIndex !== 0) {
+            this.props.keyBoardMoveFieldUp(formId, currentLocation);
         }
     }
 
     keyboardMoveFieldDown(formId, currentLocation) {
-        if (currentLocation) {
-            if (currentLocation.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
-                this.props.keyboardMoveFieldDown(formId, currentLocation);
-            }
-            this.scrollElementIntoView();
-            this.updateSelectedFieldLocation('down');
+        if (currentLocation && currentLocation.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
+            this.props.keyboardMoveFieldDown(formId, currentLocation);
         }
     }
 
@@ -142,16 +120,15 @@ export class FieldEditingTools extends Component {
             let absoluteElementTop = selectedFormElement.top + window.pageYOffset;
             let bottom = absoluteElementTop + selectedFormElement.height;
 
-            if (bottom > window.innerHeight - 30) {
-                document.querySelector('.selectedFormElement').scrollIntoView();
-            } else if (absoluteElementTop < 30) {
-                document.querySelector('.selectedFormElement').scrollIntoView(false);
+            if (bottom > window.innerHeight - 40) {
+                document.querySelector('.selectedFormElement').scrollIntoView(true);
+            } else if (absoluteElementTop < 50) {
+                document.querySelector('.selectedFormElement').scrollIntoView(true);
             }
         }
     }
 
     handleKeyDown(e) {
-        console.log('keycode: ', e.which)
         if (e.which === 32) {
             this.onClickField(e)
             e.preventDefault();

@@ -43,6 +43,12 @@ const MoveFieldHelper = {
         swapFieldLocation(formMetaCopy, currentLocation, 1);
 
         return formMetaCopy;
+    },
+
+    updateSelectedFieldLocation(location, updatedLocation) {
+        let locationCopy = Object.assign({}, location);
+        locationCopy.elementIndex = locationCopy.elementIndex + updatedLocation;
+        return locationCopy;
     }
 };
 

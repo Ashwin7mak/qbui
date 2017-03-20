@@ -196,6 +196,11 @@ const forms = (
             location
         );
 
+        updatedForm.selectedFields[0] = MoveFieldHelper.updateSelectedFieldLocation(
+            location,
+            -1
+        );
+
         return [
             ...newState,
             updatedForm
@@ -213,6 +218,11 @@ const forms = (
         updatedForm.formData.formMeta = MoveFieldHelper.keyBoardMoveFieldDown(
             updatedForm.formData.formMeta,
             location
+        );
+
+        updatedForm.selectedFields[0] = MoveFieldHelper.updateSelectedFieldLocation(
+            location,
+            1
         );
 
         return [
