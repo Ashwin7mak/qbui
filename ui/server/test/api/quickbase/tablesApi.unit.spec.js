@@ -247,13 +247,14 @@ describe("Validate tablesApi", function() {
         let createFieldStub = null;
         let createReportStub = null;
         let createFormStub = null;
-        let deleteTableStub = null;
+        let deleteTableSpy = null;
+        let deleteTablePropsSpy = null;
         let createTableResp = {'body':"123"};
         let createTablePropsResp = {body: '{"tableNoun": "test"}'};
-        let deleteTableResp = {statusCode:"200"};
         let createFieldResp = {'body': '{"id": "6"}'};
         let createReportResp = {'body':'{"id":"1"}'};
         let createFormResp = {'body':'{"formId":"1"}'};
+        let errorPromise = Promise.reject({error: "some error"});
 
         beforeEach(function() {
             createTableStub = sinon.stub(tablesApi, "createTable");
@@ -261,14 +262,19 @@ describe("Validate tablesApi", function() {
             createFieldStub = sinon.stub(fieldsApi, "createField");
             createReportStub = sinon.stub(reportsApi, "createReport");
             createFormStub = sinon.stub(formsApi, "createForm");
-            deleteTableStub = sinon.stub(tablesApi, "deleteTable");
             tablesApi.setFieldsApi(fieldsApi);
             tablesApi.setFormsApi(formsApi);
             tablesApi.setReportsApi(reportsApi);
             req.body = {name: "name", tableNoun: "noun", description: "desc", tableIcon: "icon"};
             req.url = 'apps/123/tables/tableComponents';
             req.method = 'post';
-
+            createTableStub.returns(Promise.resolve(createTableResp));
+            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
+            createFieldStub.returns(Promise.resolve(createFieldResp));
+            createReportStub.returns(Promise.resolve(createReportResp));
+            createFormStub.returns(Promise.resolve(createFormResp));
+            deleteTableSpy = sinon.spy(tablesApi, "deleteTable");
+            deleteTablePropsSpy = sinon.spy(tablesApi, "deleteTableProperties");
         });
 
         afterEach(function() {
@@ -279,16 +285,11 @@ describe("Validate tablesApi", function() {
             createFieldStub.restore();
             createReportStub.restore();
             createFormStub.restore();
-            deleteTableStub.restore();
+            deleteTableSpy.restore();
+            deleteTablePropsSpy.restore();
         });
 
         it('success return results ', function(done) {
-            createTableStub.returns(Promise.resolve(createTableResp));
-            createTablePropsStub.returns(Promise.resolve(createTablePropsResp));
-            createFieldStub.returns(Promise.resolve(createFieldResp));
-            createReportStub.returns(Promise.resolve(createReportResp));
-            createFormStub.returns(Promise.resolve(createFormResp));
-            deleteTableStub.returns(Promise.resolve(deleteTableResp));
             let promise = tablesApi.createTableComponents(req);
 
             promise.then(
@@ -298,6 +299,175 @@ describe("Validate tablesApi", function() {
                 },
                 function(error) {
                     done(new Error("Unexpected failure promise return when testing createTableComponents success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails table name isnt passed in ', function(done) {
+            req.body = {tableNoun: "noun", description: "desc", tableIcon: "icon"};
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success when missing required fields"));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('fails table noun isnt passed in ', function(done) {
+            req.body = {name: "name", description: "desc", tableIcon: "icon"};
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success when missing required fields"));
+                },
+                function(error) {
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('deletes table if table props creation fails', function(done) {
+            createTablePropsStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success when table props creation failed"));
+                },
+                function(error) {
+                    assert(deleteTableSpy.called);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('deletes table & props if field creation fails', function(done) {
+            createFieldStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if field creation failed"));
+                },
+                function(error) {
+                    assert(deleteTableSpy.called);
+                    assert(deleteTablePropsSpy.called);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('deletes table & props if report creation fails', function(done) {
+            createReportStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if report creation failed"));
+                },
+                function(error) {
+                    assert(deleteTableSpy.called);
+                    assert(deleteTablePropsSpy.called);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('deletes table & props if form creation fails', function(done) {
+            createFormStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if form creation failed"));
+                },
+                function(error) {
+                    assert(deleteTableSpy.called);
+                    assert(deleteTablePropsSpy.called);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('create field is not called if table creation fails', function(done) {
+            createFieldStub.restore();
+            createFieldStub = sinon.spy(fieldsApi, "createField");
+            createTableStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if table creation failed"));
+                },
+                function(error) {
+                    assert.equal(createFieldStub.callCount, 0);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('create table props is not called if table creation fails', function(done) {
+            createTablePropsStub.restore();
+            createTablePropsStub = sinon.spy(tablesApi, "createTableProperties");
+            createTableStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if table creation failed"));
+                },
+                function(error) {
+                    assert.equal(createTablePropsStub.callCount, 0);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('create report is not called if field creation fails', function(done) {
+            createReportStub.restore();
+            createReportStub = sinon.spy(reportsApi, "createReport");
+            createFieldStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if field creation failed"));
+                },
+                function(error) {
+                    assert.equal(createReportStub.callCount, 0);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('create form is not called if field creation fails', function(done) {
+            createFormStub.restore();
+            createFormStub = sinon.spy(formsApi, "createForm");
+            createFieldStub.returns(errorPromise);
+            let promise = tablesApi.createTableComponents(req);
+
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success if field creation failed"));
+                },
+                function(error) {
+                    assert.equal(createFormStub.callCount, 0);
+                    done();
                 }
             ).catch(function(errorMsg) {
                 done(new Error('createTableComponents: exception processing success test: ' + JSON.stringify(errorMsg)));

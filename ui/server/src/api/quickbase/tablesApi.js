@@ -74,7 +74,7 @@
 
                     requestHelper.executeRequest(req, opts).then(
                         (eeResponse) =>{
-                            resolve(response);
+                            resolve(eeResponse);
                         },
                         (error) =>{
                             log.error({req: req}, "tablesApi.deleteTableProperties(): Error deleting table properties");
