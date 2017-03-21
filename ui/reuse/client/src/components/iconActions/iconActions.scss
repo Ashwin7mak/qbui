@@ -11,6 +11,11 @@
             display: inline-block;
         }
 
+        // Turn off the disabled cursor on a tooltip wrapped button if it is not disabled
+        .iconActionButton:not(.disabled) .tipChildWrapper {
+            cursor: pointer;
+        }
+
         .iconActionButton {
             border: 0;
             margin-right: 2px;
