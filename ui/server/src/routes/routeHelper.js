@@ -876,7 +876,17 @@
          */
         getAccountUsersLegacyStackRoute: function(accountId) {
             return `${getLegacyStackDotNetRoot()}/governance/${accountId}/users`;
+        },
+
+        /**
+         * Call .NET handler to return the context of the account and user
+         * @returns {string}
+         */
+        getGovernanceContextLegacyStackRoute: function(accountId) {
+                return `${getLegacyStackDotNetRoot()}/governance/context/${accountId? accountId: ''}`;
         }
+
+
     };
 
 }());

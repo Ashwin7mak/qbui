@@ -86,6 +86,9 @@
         ADMIN                       : baseUrl.QUICKBASE + '/admin',
 
         GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
+
+        // the account id is an optional parameter
+        GOVERNANCE_CONTEXT           : baseUrl.GOVERNANCE + '/:accountId?/context',
     };
 
     /*
