@@ -20,16 +20,6 @@ class AccountUsersService extends BaseService {
 
         return super.get(url, {params});
     }
-
-    /**
-     * Get the account, realm, user context
-     */
-    getContext(accountId) {
-        const params = {};
-        const url = super.constructUrl(this.API.GET_CONTEXT, [accountId]);
-
-        return super.get(url, {params});
-    }
 }
 
 export default AccountUsersService;

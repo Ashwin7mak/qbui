@@ -1,22 +1,20 @@
 /*
- The purpose of this module is to process governance api requests for users in an account.
+ The purpose of this module is to expose common apis used for governance.
  */
 (function() {
     'use strict';
 
-    let perfLogger = require('../perfLogger');
-    let httpStatusCodes = require('../constants/httpStatusCodes');
-    let log = require('../logger').getLogger();
-    let _ = require('lodash');
-    let fs = require('fs');
-    let consts = require('../../../common/src/constants');
+    let perfLogger = require('../../perfLogger');
+    let httpStatusCodes = require('../../constants/httpStatusCodes');
+    let log = require('../../logger').getLogger();
+    let consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
 
-        let requestHelper = require('../api/quickbase/requestHelper')(config);
-        let routeHelper = require('../routes/routeHelper');
+        let requestHelper = require('../../api/quickbase/requestHelper')(config);
+        let routeHelper = require('../../routes/routeHelper');
 
-        let accountUsersAPI = {
+        let governanceAPI = {
 
             /**
              * Allows you to override the request object
@@ -34,12 +32,12 @@
             },
 
             /**
-             * Get the context of the governance
+             * Get the context of the governance. Returns the Realm, Account, User Information
              * @param req
              * @param accountId
              * @returns {Promise}
              */
-            getGovernanceContext: function(req, accountId) {
+            getContext: function(req, accountId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req, false, true);
                     let host = requestHelper.getLegacyRealmBase(req, false);
@@ -51,18 +49,18 @@
                              resolve(JSON.parse(response.body));
                          },
                          (error) => {
-                             log.error({req: req}, "getGovernanceContext.getGovernanceContext(): Error retrieving account users.");
+                             log.error({req: req}, "getContext.getContext(): Error retrieving account users.");
                              reject(error);
                          }
                      ).catch((ex) => {
-                         requestHelper.logUnexpectedError('getGovernanceContext.getGovernanceContext(): unexpected error retrieving account users.', ex, true);
+                         requestHelper.logUnexpectedError('getContext.getContext(): unexpected error retrieving account users.', ex, true);
                          reject(ex);
                      });
                 });
             }
         };
 
-        return accountUsersAPI;
+        return governanceAPI;
     };
 
 }());

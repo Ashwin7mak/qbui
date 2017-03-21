@@ -1,13 +1,13 @@
 {
   "qb/governance/context" : {
     "realm": {
-      "name": "kunjanenterprise",
+      "name": "mock_realm",
       "id": 678,
       "isAccountURL": false
     },
     "account": {
-      "name": "kunjan_enterprise_account",
-      "id": 214450,
+      "name": "mock_account",
+      "id": 212950,
       "allowsUserAdmins": false
     },
     "user": {
@@ -18,15 +18,15 @@
     }
   },
 
-  "qb/governance/context/212950" : {
+  "qb/governance/context?accountID=212950" : {
     "realm": {
-      "name": "kunjanenterprise",
+      "name": "mock_realm",
       "id": 678,
       "isAccountURL": false
     },
     "account": {
-      "name": "kunjan_enterprise_account",
-      "id": 214450,
+      "name": "mock_account",
+      "id": 212950,
       "allowsUserAdmins": false
     },
     "user": {

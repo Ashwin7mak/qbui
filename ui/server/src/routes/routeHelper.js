@@ -883,7 +883,7 @@
          * @returns {string}
          */
         getGovernanceContextLegacyStackRoute: function(accountId) {
-                return `${getLegacyStackDotNetRoot()}/governance/context/${accountId? accountId: ''}`;
+            return `${getLegacyStackDotNetRoot()}/governance/context/${accountId ? accountId : ''}`;
         }
 
 

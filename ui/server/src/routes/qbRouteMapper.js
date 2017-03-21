@@ -45,7 +45,7 @@
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
         tablesApi = require('../api/quickbase/tablesApi')(config);
-        governanceApi = require('../governance/GovernanceApi')(config);
+        governanceApi = require('../governance/common/GovernanceCommonApi')(config);
 
         /* internal data */
         /*
@@ -352,7 +352,7 @@
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
         } else {
-            governanceApi.getGovernanceContext(req, req.params.accountId).then(
+            governanceApi.getContext(req, req.query.accountID).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get governance context');
