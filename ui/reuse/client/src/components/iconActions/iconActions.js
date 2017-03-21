@@ -178,28 +178,28 @@ IconActions.propTypes = {
 
     /**
      * The number of actions to show before the rest are displayed in a dropdown menu. Set to 0 to display all actions in a dropdown menu. */
-    maxButtonsBeforeMenu: React.PropTypes.number,
+    maxButtonsBeforeMenu: PropTypes.number,
 
     /**
      * An optional class to add to the main component */
-    className: React.PropTypes.string,
+    className: PropTypes.string,
 
     /**
      * Set to true if the iconActions are positioned on the right side of the UI.
      * Aligns the menu with the right side of the dropdown menu. I.e, pushes the menu to the left so it doesn't appear off-screen for menus on the right edge of the screen. */
-    pullRight: React.PropTypes.bool,
+    pullRight: PropTypes.bool,
 
     /**
      * An optional tooltip to display when hovering over the menu dropdown button */
-    dropdownTooltip: React.PropTypes.bool,
+    dropdownTooltip: PropTypes.bool,
 
     /**
      * Indicate whether the menu items should have icons */
-    menuIcons: React.PropTypes.bool,
+    menuIcons: PropTypes.bool,
 
     /**
      * A callback that is fired when the dropdown menu is clicked. It is passed one argument that is a boolean indicating whether the menu is open */
-    onDropdownToggle: React.PropTypes.func
+    onDropdownToggle: PropTypes.func
 };
 
 IconActions.defaultProps = {
