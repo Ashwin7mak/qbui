@@ -55,46 +55,18 @@ class Locale {
      * supported locales defined in the run-time configuration object or no change is made.
      *
      * @param newLocale
-     * @param newAppBundle
+     * @param newBundle
      */
-    static changeLocale(newLocale, newAppBundle) {
-        if (!newAppBundle) {
-            throw new Error('API signature changed. An application bundle is required. Call your application bundle loader changeLocale() function instead.');
+    static changeLocale(newLocale, newBundle) {
+        if (!newBundle) {
+            throw new Error('A bundle is required. Call your application bundle loader changeLocale() function instead.');
         }
 
         if (!Locale.isSupported(newLocale)) {
             logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
         } else {
-
-            let newReuseBundle = "";
-
-            try {
-                // this is where all supported locales are defined
-                switch (locale.toLowerCase()) {
-                    case 'en-us':
-                        newReuseBundle = require('./bundles/reuse-en_us');
-                        break;
-                    case 'fr-fr':
-                        newReuseBundle = require('./bundles/reuse-fr_fr');
-                        break;
-                    case 'de-de':
-                        newReuseBundle = require('./bundles/reuse-de_de');
-                        break;
-                }
-            } catch (e) {
-                logger.error('Error fetching shared bundle for locale:', e);
-            }
-
-            if (!newReuseBundle) {
-                logger.warn('Locale (' + locale + ') is invalid or not supported for shared bundle.  Using default: en-us');
-                newReuseBundle = require('./bundles/reuse-en_us');
-            }
-
-            // merge reuse bundle with app bundle
-            // newReuseBundle.default;
-
-            bundle = newAppBundle;
             locale = newLocale;
+            bundle = newBundle;
         }
 
     }

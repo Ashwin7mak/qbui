@@ -1,5 +1,6 @@
 import Logger from '../utils/logger';
-import Locale from '../../../reuse/client/src/locales/locales';
+import Locale from '../../../reuse/client/src/locales/locale';
+import _ from 'lodash';
 
 let logger = new Logger();
 
@@ -19,32 +20,44 @@ class AppsBundleLoader {
                 logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
             } else {
 
-                // Now load the app bundle
-                let newAppBundle = "";
+                // Now load the bundles
+                let newBundle = "";
 
                 try {
                     // this is where all supported locales are defined
                     switch (newLocale.toLowerCase()) {
                         case 'en-us':
-                            newAppBundle = require('./bundles/apps-en_us');
+                            newBundle = _.merge(
+                                require('./bundles/apps-en_us'),
+                                require('../../../reuse/client/src/locales/bundles/reuse-en_us')
+                            );
                             break;
                         case 'fr-fr':
-                            newAppBundle = require('./bundles/apps-fr_fr');
+                            newBundle = _.merge(
+                                require('./bundles/apps-fr_fr'),
+                                require('../../../reuse/client/src/locales/bundles/reuse-fr_fr')
+                            );
                             break;
                         case 'de-de':
-                            newAppBundle = require('./bundles/apps-de_de');
+                            newBundle = _.merge(
+                                require('./bundles/apps-de_de'),
+                                require('../../../reuse/client/src/locales/bundles/reuse-de_de')
+                            );
                             break;
                     }
                 } catch (e) {
                     logger.error('Error fetching app locale bundle:', e);
                 }
 
-                if (!newAppBundle) {
+                if (!newBundle) {
                     logger.warn('Locale (' + newLocale + ') is invalid or not supported.  Using default: en-us');
-                    newAppBundle = require('./bundles/apps-en_us');
+                    newBundle = _.merge(
+                        require('./bundles/apps-en_us'),
+                        require('../../../reuse/client/src/locales/bundles/reuse-en_us')
+                    );
                 }
 
-                Locale.changeLocale(newLocale, newAppBundle.default);
+                Locale.changeLocale(newLocale, newBundle.default);
             }
         } catch (e) {
             logger.error('Error changing locale..Locale not changed --> ', e);
