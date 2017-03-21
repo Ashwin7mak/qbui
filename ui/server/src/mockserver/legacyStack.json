@@ -1,4 +1,41 @@
 {
+  "qb/governance/context" : {
+    "realm": {
+      "name": "kunjanenterprise",
+      "id": 678,
+      "isAccountURL": false
+    },
+    "account": {
+      "name": "kunjan_enterprise_account",
+      "id": 214450,
+      "allowsUserAdmins": false
+    },
+    "user": {
+    "isAccountAdmin": true,
+    "isRealmAdmin": true,
+    "isCSR": false,
+    "isOnDenyList": false
+    }
+  },
+
+  "qb/governance/context/212950" : {
+    "realm": {
+      "name": "kunjanenterprise",
+      "id": 678,
+      "isAccountURL": false
+    },
+    "account": {
+      "name": "kunjan_enterprise_account",
+      "id": 214450,
+      "allowsUserAdmins": false
+    },
+    "user": {
+      "isAccountAdmin": true,
+      "isRealmAdmin": true,
+      "isCSR": false,
+      "isOnDenyList": false
+    }
+  },
   "/qb/governance/212950/users": [
     {
       "uid": 10000,
