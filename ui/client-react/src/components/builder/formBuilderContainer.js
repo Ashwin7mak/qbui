@@ -120,7 +120,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     updateChildrenTabIndex(e) {
-        let childrenTabIndex = this.props.forms[0].formBuilderChildrenTabIndex ? this.props.forms[0].formBuilderChildrenTabIndex[0].tabIndex : undefined;
+        let childrenTabIndex = this.props.forms[0].formBuilderChildrenTabIndex ? this.props.forms[0].formBuilderChildrenTabIndex[0] : undefined;
 
         if ((e.which === 13 || e.which === 32) && childrenTabIndex !== "0") {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);

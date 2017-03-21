@@ -357,8 +357,33 @@ describe('Forms reducer functions', () => {
         it('returns existing state if there is no current form', () => {
             expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
 
-            expect(mockMoveFieldHelper.keyBoardMoveFieldDown).not.toHaveBeenCalled(``);
+            expect(mockMoveFieldHelper.keyBoardMoveFieldDown).not.toHaveBeenCalled();
             expect(mockMoveFieldHelper.updateSelectedFieldLocation).not.toHaveBeenCalled();
         });
+    });
+
+    describe('toggle tab index', () => {
+        const testFormMeta = 'some meta data';
+
+        const actionPayload = {
+            id: VIEW,
+            type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+            content: {
+                currentTabIndex: '-1',
+            }
+        };
+
+        it('returns a new state with a tabindex toggled', () => {
+            expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
+                ...stateWithViewForm[0],
+                formData: {formMeta: testFormMeta},
+                formBuilderChildrenTabIndex: ['0']
+            }]);
+        });
+
+        it('returns existing state if there is no current form', () => {
+            expect(reducer(stateWithEditForm, actionPayload)).toEqual(stateWithEditForm);
+        });
+
     });
 });

@@ -263,6 +263,7 @@ const forms = (
         if (!currentForm) {
             return state;
         }
+
         let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
         updatedForm = _.cloneDeep(currentForm);
 
@@ -270,7 +271,7 @@ const forms = (
             updatedForm.formBuilderChildrenTabIndex = [];
         }
 
-        updatedForm.formBuilderChildrenTabIndex[0] = {tabIndex: tabIndex};
+        updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
 
         return [
             ...newState,
