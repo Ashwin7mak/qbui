@@ -36,9 +36,9 @@ class IconActions extends Component {
 
         this.state = {dropdownOpen: false};
 
-        this.getActionButton = this.getActionButton.bind(this);
+        this.renderActionButton = this.renderActionButton.bind(this);
         this.renderDropDownTrigger = this.renderDropDownTrigger.bind(this);
-        this.getActionsMenu = this.getActionsMenu.bind(this);
+        this.renderActionsMenu = this.renderActionsMenu.bind(this);
         this.onDropdownToggle = this.onDropdownToggle.bind(this);
     }
 
@@ -50,7 +50,7 @@ class IconActions extends Component {
      * Render an action button
      * @param action
      */
-    getActionButton(action) {
+    renderActionButton(action) {
         let classNames = ['iconActionButton'];
         if (action.disabled) {
             classNames.push('disabled');
@@ -103,7 +103,7 @@ class IconActions extends Component {
     /**
      * Render dropdown containing remaining actions (after maxButtonsBeforeMenu index)
      */
-    getActionsMenu() {
+    renderActionsMenu() {
         const {actions, pullRight, maxButtonsBeforeMenu} = this.props;
         const classes = this.props.menuIcons ? 'menuIcons' : '';
 
@@ -136,8 +136,8 @@ class IconActions extends Component {
         const {actions, maxButtonsBeforeMenu, className} = this.props;
         return (
             <div className={'iconActions ' + className}>
-                {actions.map((action, index) => (index < maxButtonsBeforeMenu ? this.getActionButton(action) : null))}
-                {(actions.length > maxButtonsBeforeMenu) && this.getActionsMenu()}
+                {actions.map((action, index) => (index < maxButtonsBeforeMenu ? this.renderActionButton(action) : null))}
+                {(actions.length > maxButtonsBeforeMenu) && this.renderActionsMenu()}
             </div>
         );
     }
