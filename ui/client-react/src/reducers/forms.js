@@ -183,6 +183,26 @@ const forms = (
         ];
     }
 
+    case types.SELECT_FIELD : {
+
+        if (!currentForm || !_.has(action, 'content.location')) {
+            return state;
+        }
+
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
+
+        updatedForm.selectedFields[0] = action.content.location;
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;
@@ -195,6 +215,10 @@ const forms = (
             updatedForm.formData.formMeta,
             location
         );
+
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
 
         updatedForm.selectedFields[0] = MoveFieldHelper.updateSelectedFieldLocation(
             location,
@@ -220,6 +244,10 @@ const forms = (
             location
         );
 
+        if (!updatedForm.selectedFields) {
+            updatedForm.selectedFields = [];
+        }
+
         updatedForm.selectedFields[0] = MoveFieldHelper.updateSelectedFieldLocation(
             location,
             1
@@ -230,25 +258,6 @@ const forms = (
             updatedForm
         ];
     }
-
-    case types.SELECT_FIELD :
-
-        if (!currentForm || !_.has(action, 'content.location')) {
-            return state;
-        }
-
-        updatedForm = _.cloneDeep(currentForm);
-
-        if (!updatedForm.selectedFields) {
-            updatedForm.selectedFields = [];
-        }
-
-        updatedForm.selectedFields[0] = action.content.location;
-
-        return [
-            ...newState,
-            updatedForm
-        ];
 
     default:
         // return existing state by default in redux
