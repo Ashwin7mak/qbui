@@ -10,7 +10,7 @@
     var errorCodes = require('../../src/api/errorCodes');
     var testUtils = require('./api.test.Utils');
 
-    describe('API - Validate report execution', function() {
+    describe('API - Validate table creation api', function() {
         var app;
 
         // App variable with different data fields

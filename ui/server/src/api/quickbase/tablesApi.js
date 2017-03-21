@@ -207,7 +207,7 @@
                                             let fieldIds = [];
                                             fieldIds.push(fieldsResponse[0], fieldsResponse[1]);
                                             promises = [];
-                                            let reportsToCreate = cannedNewTableElements.getCannedReports();
+                                            let reportsToCreate = cannedNewTableElements.getCannedReports(reqPayload.name);
                                             reportsToCreate.forEach((report) => {
                                                 let reportReq = _.clone(req);
                                                 reportReq.url = tablesRootUrl;
