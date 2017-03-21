@@ -54,6 +54,7 @@ import DurationFieldValueRendererDoc from './docs/durationFieldValueRenderer.js'
 import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
 import QbGridDoc from './docs/qbGrid.js';
 import SideMenuBaseDoc from './docs/sideMenuBase.js';
+import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -95,6 +96,7 @@ render((
             <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
             <Route path="qbGrid" component={QbGridDoc} />
             <Route path="sideMenuBase" component={SideMenuBaseDoc} />
+            <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
