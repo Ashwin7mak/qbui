@@ -115,7 +115,7 @@ describe('FormBuilderContainer', () => {
             let e = {
                 which: 13,
                 preventDefault() {return;}
-            }
+            };
 
             component = mount(<FormBuilderContainer appId={appId}
                                                     forms={forms}
@@ -136,7 +136,7 @@ describe('FormBuilderContainer', () => {
             let e = {
                 which: 32,
                 preventDefault() {return;}
-            }
+            };
 
             component = mount(<FormBuilderContainer appId={appId}
                                                     forms={forms}
@@ -157,7 +157,7 @@ describe('FormBuilderContainer', () => {
             let e = {
                 which: 19,
                 preventDefault() {return;}
-            }
+            };
 
             component = mount(<FormBuilderContainer appId={appId}
                                                     forms={forms}
@@ -174,7 +174,7 @@ describe('FormBuilderContainer', () => {
         });
 
         it('enter and space will not toggle the children tab indexes if the tabIndex is currently 0', () => {
-            let forms = [{formBuilderChildrenTabIndex: [ {tabIndex: "0"} ],formData:{loading: false, formType: {}, formMeta: {}}}];
+            let forms = [{formBuilderChildrenTabIndex: [{tabIndex: "0"}], formData:{loading: false, formType: {}, formMeta: {}}}];
             let e = {
                 which: 32,
                 preventDefault() {return;}

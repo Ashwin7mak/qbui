@@ -147,7 +147,7 @@ export class FieldEditingTools extends Component {
         let isCurrentlySelectedField = true;
 
         if (this.props.selectedFields[0]) {
-            isCurrentlySelectedField = this.props.location.elementIndex !== this.props.selectedFields[0].elementIndex
+            isCurrentlySelectedField = this.props.location.elementIndex !== this.props.selectedFields[0].elementIndex;
         }
 
         if ((e.which === 13 || e.which === 32) && isCurrentlySelectedField) {
