@@ -50,7 +50,9 @@ export class FieldEditingTools extends Component {
     onClickField(e) {
         if (this.props.selectField) {
             this.props.selectField(this.props.formId, this.props.location);
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
         }
     }
 
