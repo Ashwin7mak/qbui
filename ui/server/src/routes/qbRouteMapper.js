@@ -60,7 +60,6 @@
         routeToGetFunction[routeConsts.GOVERNANCE_ACCOUNT_USERS] = getAccountUsers;
         routeToGetFunction[routeConsts.GOVERNANCE_CONTEXT] = getGovernanceContext;
 
-
         //  app endpoints
         routeToGetFunction[routeConsts.APPS] = getApps;
         routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
