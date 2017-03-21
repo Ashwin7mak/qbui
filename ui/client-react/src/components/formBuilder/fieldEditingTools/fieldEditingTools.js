@@ -37,14 +37,13 @@ export class FieldEditingTools extends Component {
     onClickDelete(e) {
         if (this.props.removeField) {
             return this.props.removeField(this.props.location);
-            e.preventDefault();
         }
+        e.preventDefault();
     }
 
-    onClickFieldPreferences(e) {
+    onClickFieldPreferences() {
         if (this.props.onClickFieldPreferences) {
             return this.props.onClickFieldPreferences(this.props.location);
-            e.preventDefault();
         }
     }
 
