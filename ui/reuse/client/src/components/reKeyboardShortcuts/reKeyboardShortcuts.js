@@ -13,14 +13,6 @@ class ReKeyboardShortcuts extends Component {
         this.addAllKeyBindings(this.props.shortcutBindings);
     }
 
-    // TODO:: Don't unbind everything when new props are passed in
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.shortcutBindings !== this.props.shortcutBindings) {
-            this.removeAllKeyBindings();
-            this.addAllKeyBindings(nextProps.shortcutBindings);
-        }
-    }
-
     componentWillUnmount() {
         this.removeAllKeyBindings();
     }
@@ -38,7 +30,9 @@ class ReKeyboardShortcuts extends Component {
     }
 
     render() {
-        return <div className={`keyBindingsActiveFor${this.props.id}`}/>;
+        return <div className={`keyBindingsActiveFor${this.props.id}`}>
+            {this.props.children}
+            </div>;
     }
 }
 
