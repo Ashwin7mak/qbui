@@ -393,13 +393,12 @@
         },
 
         getTablePropertiesRoute: function(url, tableId) {
-            //if (!tableId) {
-            //    return url;
-            //}
             let root = getUrlRoot(url, APPS);
-            let eeUrl = getEEReqURL(root);
-            if (eeUrl) {
-                return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '') + '/' + TABLEPROPERTIES;
+            if (root) {
+                let eeUrl = getEEReqURL(root);
+                if (eeUrl) {
+                    return eeUrl + '/' + TABLES + (tableId ? '/' + tableId : '') + '/' + TABLEPROPERTIES;
+                }
             }
 
             //  no url root for APPS found; return original url unchanged

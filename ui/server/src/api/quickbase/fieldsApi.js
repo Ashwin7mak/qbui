@@ -107,9 +107,6 @@
                 return requestHelper.executeRequest(req, opts);
             },
 
-            /**
-             *
-             */
             createField: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);

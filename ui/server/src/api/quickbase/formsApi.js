@@ -10,7 +10,7 @@
     let collectionUtils = require('../../utility/collectionUtils');
     var url = require('url');
     var lodash = require('lodash');
-    let jsonBigNum = require('json-bignum');
+
     module.exports = function(config) {
 
         //Module constants:

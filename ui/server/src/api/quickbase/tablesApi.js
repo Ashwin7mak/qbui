@@ -38,16 +38,37 @@
             setRequestHelperObject: function(requestHelperOverride) {
                 requestHelper = requestHelperOverride;
             },
+            /**
+             * Allows overriding the fieldApi object.
+             * This is only here for the purpose of testing.
+             * @param override
+             */
             setFieldsApi: function(override) {
                 fieldsApi = override;
             },
+            /**
+             * Allows overriding the formsApi object.
+             * This is only here for the purpose of testing.
+             * @param override
+             */
             setFormsApi: function(override) {
                 formsApi = override;
             },
+            /**
+             * Allows overriding the reportsApi object.
+             * This is only here for the purpose of testing.
+             * @param override
+             */
             setReportsApi: function(override) {
                 reportsApi = override;
             },
 
+            /**
+             * Create endpoint on the tableProperties object.
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
             createTableProperties: function(req, tableId) {
                 return new Promise((resolve, reject) =>{
                     let opts = requestHelper.setOptions(req);
@@ -66,6 +87,12 @@
                         });
                 });
             },
+            /**
+             * Delete endpoint on the tableProperties object
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
             deleteTableProperties: function(req, tableId) {
                 return new Promise((resolve, reject) =>{
                     let opts = requestHelper.setOptions(req);
@@ -85,6 +112,11 @@
                         });
                 });
             },
+            /**
+             * Create endpoint for the table object
+             * @param req
+             * @returns {Promise}
+             */
             createTable: function(req) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);
@@ -106,6 +138,12 @@
                     });
                 });
             },
+            /**
+             * Delete endpoint for the table object
+             * @param req
+             * @param tableId
+             * @returns {Promise}
+             */
             deleteTable: function(req, tableId) {
                 return new Promise((resolve, reject) => {
                     let opts = requestHelper.setOptions(req);

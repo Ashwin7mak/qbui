@@ -1,3 +1,6 @@
+/**
+ * Contains the canned components that are created with a new table.
+ */
 (function() {
     var _ = require('lodash');
     let constants = require('../../../../common/src/constants');
