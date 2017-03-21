@@ -135,10 +135,7 @@ class RecordModel {
     }
 
     setEditRecordCancel(appId, tblId, recId) {
-        this.init();
-        this.model.appId = appId;
-        this.model.tblId = tblId;
-        this.model.recId = recId;
+        this.init(appId, tblId, recId);
     }
 
     setRecordChanges(appId, tblId, recId, changes) {
