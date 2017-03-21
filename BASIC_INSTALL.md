@@ -1,11 +1,3 @@
-To clone this repo use:
-
-* `git clone -b master ssh://git@github.com/quickbase/qbui.git`
-
-or
-
-* `git clone -b master https://github.com/QuickBase/qbui.git`
-
 The following provides instructions for installing only the QBUI project locally for development, pointing to the integration environment for Core and Experience Engine.
 For full instructions to setup and run, including various options see <https://github.com/QuickBase/qbui/blob/master/ui/README.md#instructions-to-run-for-development> for details
 
@@ -19,9 +11,10 @@ For running locally make sure you copy
 
 ##Pre-installation
 
-FIRST - Do all the Quickbase java backend development [setup instructions](https://github.com/QuickBase/QuickBase/blob/master/README.md) so that you have installed
+FIRST - Make sure you have the following installed 
+(Further instructions in the Core repo [setup instructions](https://github.com/QuickBase/QuickBase/blob/master/README.md))
 
-* Git & SourceTree Source code control
+* Git & SourceTree Source code control (or GitHub Desktop)
 * Intellij IDE
   * Install some IntelliJ plugins if you don't have these already
     * React-templates
@@ -32,15 +25,16 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
-##Installing
-
-To avoid permission issues caused by installing npm modules globally, you can either 1) [install NVM](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-via-nvm) (on Mac) OR 2) [install node and configure](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-and-configure-global-node-modules) where node installs global npm modules.
-
+###Installing
 #### Install Node via NVM
 
 NVM only works with Mac but is the easier and cleaner option.
-
-Follow the steps in this[nvm installation docs](https://github.com/creationix/nvm#installation)
+Install NVM from a terminal window:
+```
+touch ~/.bash_profile
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
+```
+For further info or if you run into issues, check here for the latest instructions: [nvm installation docs](https://github.com/creationix/nvm#installation)
 
 Next, install Node.js v6.9.5 and set v6.9.5 as your default version of node 
 
@@ -52,45 +46,9 @@ To verify installation enter `nvm list default` which should print:
 ```bash
     ->         v6.9.5
 ```
-If nvm and node were successfully installed, skip the next section about installing Node.js and global node configuration.
+(For instructions for using Zsh instead of bash or installing and configuring without NVM, see the full installation guide: https://github.com/QuickBase/qbui/blob/master/ui/README.md#tip-for-nvm-and-zsh
 
-##### Tip for NVM and Zsh
-
-You can add the following script to your `~/.zshconfig` file to automatically switch to the correct node version for the qbui project
-when you `cd` into the `qbui/ui` folder if you used NVM (see above) and also use [OhMyZsh](https://github.com/robbyrussell/oh-my-zsh).
-
-``` bash
-# place this after nvm initialization!
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local node_version="$(nvm version)"
-  local nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-      nvm use
-    fi
-  elif [ "$node_version" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
-```
-See more about this at https://github.com/creationix/nvm
-
-*Note:* Don't have Zsh? That's ok. You can use the command `nvm use` when you are in the `qbui/ui` directly 
-to automatically switch to the correct version of Node.
-
-#### Install Node and configure global node modules
-
-* Install node.js (v6.9.5, as of 3/1/2016) via nvm 
-
+#### Install homebrew and grunt
 
 * Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
 
@@ -111,17 +69,16 @@ to automatically switch to the correct version of Node.
 
     Grunt tasks are defined in the Gruntfile.js
 
+### Clone the repo
+To clone this repo use:
 
-* Then get the qbui project repo
+* `git clone -b master ssh://git@github.com/quickbase/qbui.git`
 
-    ```
-    git clone -b master ssh://git@github.com/quickbase/qbui.git
-    ```
-    or
+or
 
-    ```
-    git clone -b master https://github.com/QuickBase/qbui.git
-    ```
+* `git clone -b master https://github.com/QuickBase/qbui.git`
+
+or through the GitHub desktop tool
 
     *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
