@@ -434,4 +434,15 @@ describe('Form Actions', () => {
                 }});
         });
     });
+
+    describe('toggleFormBuilderChildrenTabIndex', () => {
+        it('creates an action that update formBuilder children tabindex', () => {
+            expect(formActions.toggleFormBuilderChildrenTabIndex('view', 1)).toEqual({
+                id: 'view',
+                type: types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX,
+                content: {
+                    currentTabIndex: 1
+                }});
+        });
+    });
 });
