@@ -117,6 +117,17 @@
                     SORT_ORDER: 'sortOrder',
                     GROUP_TYPE: 'groupType'
                 }
+            },
+            FORM: {
+                NAME: 'name',
+                TABS: 'tabs',
+                ORDER_IDX: 'orderIndex',
+                SECTIONS: 'sections',
+                PSEUDO: 'pseudo',
+                ELEMENTS: 'elements',
+                FORM_FIELD_EL: 'FormFieldElement',
+                TYPE: 'type',
+                SHOW_AS_RADIO: 'showAsRadio'
             }
         },
         FORMAT : {
