@@ -7,7 +7,6 @@
     let perfLogger = require('../../../perfLogger');
     let httpStatusCodes = require('../../../constants/httpStatusCodes');
     let log = require('../../../logger').getLogger();
-    let _ = require('lodash');
     let fs = require('fs');
     let consts = require('../../../../../common/src/constants');
 
@@ -40,27 +39,21 @@
              * @returns {Promise}
              */
             getAccountUsers: function(req, accountId) {
-                return new Promise((resolve, reject) => {
-                    // make a request to the current stack to get the results
-                    let opts = requestHelper.setOptions(req, false, true);
-                    let host = requestHelper.getLegacyRealmBase(req, false);
+                let opts = requestHelper.setOptions(req, false, true);
+                let host = requestHelper.getLegacyRealmBase(req, false);
 
                     opts.headers.host = host;
                     opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getAccountUsersLegacyStackRoute(accountId);
 
-                    requestHelper.executeRequest(req, opts).then(
-                        (response) => {
-                            resolve(JSON.parse(response.body));
-                        },
-                        (error) => {
-                            log.error({req: req}, "getAccountUsers.getAccountUsers(): Error retrieving account users.");
-                            reject(error);
-                        }
-                    ).catch((ex) => {
+                requestHelper
+                    .executeRequest(req, opts)
+                    .then((response) => {
+                        resolve(JSON.parse(response.body));
+                    })
+                    .catch((ex) => {
                         requestHelper.logUnexpectedError('getAccountUsers.getAccountUsers(): unexpected error retrieving account users.', ex, true);
                         reject(ex);
                     });
-                });
             }
         };
 

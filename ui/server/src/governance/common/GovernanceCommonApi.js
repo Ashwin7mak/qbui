@@ -38,25 +38,21 @@
              * @returns {Promise}
              */
             getContext: function(req, accountId) {
-                return new Promise((resolve, reject) => {
-                    let opts = requestHelper.setOptions(req, false, true);
-                    let host = requestHelper.getLegacyRealmBase(req, false);
 
-                    opts.headers.host = host;
-                    opts.url =  consts.PROTOCOL.HTTPS + host + routeHelper.getGovernanceContextLegacyStackRoute(accountId);
-                    requestHelper.executeRequest(req, opts).then(
-                         (response) => {
-                             resolve(JSON.parse(response.body));
-                         },
-                         (error) => {
-                             log.error({req: req}, "getContext.getContext(): Error retrieving account users.");
-                             reject(error);
-                         }
-                     ).catch((ex) => {
-                         requestHelper.logUnexpectedError('getContext.getContext(): unexpected error retrieving account users.', ex, true);
-                         reject(ex);
-                     });
-                });
+                let opts = requestHelper.setOptions(req, false, true);
+                let host = requestHelper.getLegacyRealmBase(req, false);
+                opts.headers.host = host;
+                opts.url =  consts.PROTOCOL.HTTPS + host + routeHelper.getGovernanceContextLegacyStackRoute(accountId);
+
+                return requestHelper
+                    .executeRequest(req, opts)
+                    .then((response) => {
+                        resolve(JSON.parse(response.body));
+                    })
+                    .catch((ex) => {
+                        requestHelper.logUnexpectedError("getContext.getContext(): Error retrieving account users.", ex, true);
+                        reject(ex);
+                    });
             }
         };
 
