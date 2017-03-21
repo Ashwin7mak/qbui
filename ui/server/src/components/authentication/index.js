@@ -4,6 +4,7 @@
 (function() {
     'use strict';
     var consts = require('../../../../common/src/constants');
+    var favicons = require('../../constants/favicons');
     var CommonUrlUtils = require('../../../../common/src/commonUrlUtils');
     var log = require('../../logger').getLogger();
 
@@ -41,11 +42,11 @@
         if (req.headers.accept === consts.APPLICATION_JSON) {
             res.json(result, result.status);
         } else {
-            res.render(viewFilePath, function(err) {
+            res.render(viewFilePath, {favicons: favicons}, function(err) {
                 if (err) {
                     return res.json(result, result.status);
                 }
-                res.render(viewFilePath);
+                res.render(viewFilePath, {favicons: favicons});
             });
         }
         log.info({req: req, res:res}, message);
