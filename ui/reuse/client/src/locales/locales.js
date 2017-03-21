@@ -1,7 +1,8 @@
-
-import Logger from '../utils/logger';
-import config from '../config/app.config';
-import StringUtils from '../utils/stringUtils';
+// IMPORTS FROM CLIENT REACT
+import Logger from '../../../../client-react/src/utils/logger';
+import config from '../../../../client-react/src/config/app.config';
+import StringUtils from '../../../../client-react/src/utils/stringUtils';
+// IMPORTS FROM CLIENT REACT
 
 let logger = new Logger();
 
@@ -9,8 +10,18 @@ let logger = new Logger();
 //  todo: then affect how this object is implemented)...we do not want to use the browser as the source of
 //  todo: truth as the supported QuickBase languages will be a subset of the languages offered in the browser.
 let locale = config.locale.default;
+let bundle = undefined; // changeLocale() must be called to initialize this variable before getMessage() is ever called.
 
 class Locale {
+
+    /**
+     * Verify the locale is supported
+     *
+     * @param locale
+     */
+    static isSupported(locale) {
+        return (config.locale.supported.indexOf(locale.toLowerCase()) >= 0) ;
+    }
 
     /**
      * Return the current locale
@@ -36,31 +47,7 @@ class Locale {
      * @returns {string}
      */
     static getI18nBundle() {
-        let bundle = "";
-
-        try {
-            // this is where all supported locales are defined
-            switch (locale.toLowerCase()) {
-            case 'en-us':
-                bundle = require('./bundles/apps-en_us');
-                break;
-            case 'fr-fr':
-                bundle = require('./bundles/apps-fr_fr');
-                break;
-            case 'de-de':
-                bundle = require('./bundles/apps-de_de');
-                break;
-            }
-        } catch (e) {
-            logger.error('Error fetching locale:', e);
-        }
-
-        if (!bundle) {
-            logger.warn('Locale (' + locale + ') is invalid or not supported.  Using default: en-us');
-            bundle = require('./bundles/apps-en_us');
-        }
-
-        return bundle.default;
+        return bundle;
     }
 
     /**
@@ -68,17 +55,48 @@ class Locale {
      * supported locales defined in the run-time configuration object or no change is made.
      *
      * @param newLocale
+     * @param newAppBundle
      */
-    static changeLocale(newLocale) {
-        try {
-            if (config.locale.supported.indexOf(newLocale.toLowerCase()) === -1) {
-                logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
-            } else {
-                locale = newLocale;
-            }
-        } catch (e) {
-            logger.error('Error changing locale..Locale not changed --> ', e);
+    static changeLocale(newLocale, newAppBundle) {
+        if (!newAppBundle) {
+            throw new Error('API signature changed. An application bundle is required. Call your application bundle loader changeLocale() function instead.');
         }
+
+        if (!Locale.isSupported(newLocale)) {
+            logger.warn('Invalid/unsupported change locale: ' + newLocale + '.  Locale not changed.');
+        } else {
+
+            let newReuseBundle = "";
+
+            try {
+                // this is where all supported locales are defined
+                switch (locale.toLowerCase()) {
+                    case 'en-us':
+                        newReuseBundle = require('./bundles/reuse-en_us');
+                        break;
+                    case 'fr-fr':
+                        newReuseBundle = require('./bundles/reuse-fr_fr');
+                        break;
+                    case 'de-de':
+                        newReuseBundle = require('./bundles/reuse-de_de');
+                        break;
+                }
+            } catch (e) {
+                logger.error('Error fetching shared bundle for locale:', e);
+            }
+
+            if (!newReuseBundle) {
+                logger.warn('Locale (' + locale + ') is invalid or not supported for shared bundle.  Using default: en-us');
+                newReuseBundle = require('./bundles/reuse-en_us');
+            }
+
+            // merge reuse bundle with app bundle
+            // newReuseBundle.default;
+
+            bundle = newAppBundle;
+            locale = newLocale;
+        }
+
     }
 
     /**
