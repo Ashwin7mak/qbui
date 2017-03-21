@@ -75,7 +75,7 @@
 
         getCannedForms: function(formName, fieldIds) {
             let form = _.clone(cannedForm);
-            form.name = formName;
+            form.name = formName + " form";
             if (fieldIds.length === 2) {
                 form.tabs[0].sections[0].elements[0].FormFieldElement.fieldId = fieldIds[0];
                 form.tabs[0].sections[0].elements[1].FormFieldElement.fieldId = fieldIds[1];
