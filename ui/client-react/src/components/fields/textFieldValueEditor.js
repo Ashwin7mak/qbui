@@ -132,11 +132,6 @@ const TextFieldValueEditor = React.createClass({
         }
         classNames.push(this.props.classes || '');
 
-        // react throws warning about rendering Input component with null input
-        if (this.props.value === null || this.props.value === undefined) {
-            this.props.value = '';
-        }
-
         let Input = this.props.showClearButton ? ClearableTextInput : TextInput;
 
         // use the raw value as the input value, not the formatted display value that may include escaped content

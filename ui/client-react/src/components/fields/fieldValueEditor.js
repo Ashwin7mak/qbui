@@ -259,6 +259,11 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.TEXT_FORMAT:
         default: {
+            // react throws warning about rendering Input component with null input
+            if (commonProps.value === null || commonProps.value === undefined) {
+                commonProps.value = '';
+            }
+
             if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
                 return (
                         <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
