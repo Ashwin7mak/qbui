@@ -125,7 +125,7 @@ describe('FormBuilderContainer', () => {
                                                     updateForm={mockActions.updateForm} />);
 
 
-            let instance = component.instance();
+            instance = component.instance();
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalled();
@@ -146,7 +146,7 @@ describe('FormBuilderContainer', () => {
                                                     updateForm={mockActions.updateForm} />);
 
 
-            let instance = component.instance();
+            instance = component.instance();
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalled();
@@ -167,7 +167,7 @@ describe('FormBuilderContainer', () => {
                                                     updateForm={mockActions.updateForm} />);
 
 
-            let instance = component.instance();
+            instance = component.instance();
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
@@ -188,7 +188,7 @@ describe('FormBuilderContainer', () => {
                                                     updateForm={mockActions.updateForm} />);
 
 
-            let instance = component.instance();
+            instance = component.instance();
             instance.updateChildrenTabIndex(e);
 
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
