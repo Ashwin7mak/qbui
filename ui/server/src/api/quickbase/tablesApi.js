@@ -185,8 +185,10 @@
                     }
                     let tableReq = _.clone(req);
                     tableReq.rawBody = JSON.stringify({name: reqPayload.name});
+                    tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
                     let tableProperReq = _.clone(req);
                     tableProperReq.rawBody = JSON.stringify(_.pick(reqPayload, ['tableNoun', 'description', 'tableIcon']));
+                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
                     this.createTable(tableReq).then(
                         (tableId) => {
                             this.createTableProperties(tableProperReq, tableId).then(
@@ -200,6 +202,7 @@
                                         let fieldReq = _.clone(req);
                                         fieldReq.url = tablesRootUrl;
                                         fieldReq.rawBody = JSON.stringify(field);
+                                        fieldReq.headers[constants.CONTENT_LENGTH] = fieldReq.rawBody.length;
                                         promises.push(fieldsApi.createField(fieldReq));
                                     });
                                     Promise.all(promises).then(
@@ -212,6 +215,7 @@
                                                 let reportReq = _.clone(req);
                                                 reportReq.url = tablesRootUrl;
                                                 reportReq.rawBody = JSON.stringify(report);
+                                                reportReq.headers[constants.CONTENT_LENGTH] = reportReq.rawBody.length;
                                                 promises.push(reportsApi.createReport(reportReq));
                                             });
                                             let formsToCreate = cannedNewTableElements.getCannedForms(reqPayload.tableNoun, fieldIds);
@@ -219,6 +223,7 @@
                                                 let formReq = _.clone(req);
                                                 formReq.url = tablesRootUrl;
                                                 formReq.rawBody = JSON.stringify(form);
+                                                formReq.headers[constants.CONTENT_LENGTH] = formReq.rawBody.length;
                                                 promises.push(formsApi.createForm(formReq));
                                             });
                                             Promise.all(promises).then(

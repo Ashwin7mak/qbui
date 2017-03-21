@@ -126,9 +126,6 @@
                 //  body header option valid for all verbs EXCEPT 'get'.
                 if (!this.isGet(req) && !this.isGet(opts)) {
                     opts.body = req.rawBody;
-                    if (opts.body) {
-                        opts.headers[consts.CONTENT_LENGTH] = opts.body.length;
-                    }
                 }
                 return opts;
             },
