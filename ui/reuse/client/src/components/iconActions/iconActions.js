@@ -60,26 +60,25 @@ class IconActions extends Component {
         }
 
         return (
-            <Tooltip key={this.getActionKey(action)} i18nMessageKey={action.i18nMessageKey} plainMessage={action.plainMessage} placement="bottom" >
-                <Button
-                    key={action.i18nMessageKey}
-                    tabIndex="0"
-                    className={classNames.join(' ')}
-                    onClick={action.onClick}
-                >
+            <Button
+                key={action.i18nMessageKey}
+                tabIndex="0"
+                className={classNames.join(' ')}
+                onClick={action.onClick}
+            >
+                <Tooltip key={this.getActionKey(action)} i18nMessageKey={action.i18nMessageKey} plainMessage={action.plainMessage} placement="bottom" >
                     <Icon icon={action.icon}/>
-                </Button>
-            </Tooltip>
+                </Tooltip>
+            </Button>
         );
     }
 
     renderDropDownTrigger() {
         const dropdownTrigger = <button bsRole="toggle" tabIndex="0"  className="btn dropdownToggle iconActionButton"><Icon icon="fries"/> </button>;
 
-        if (this.props.dropdownBsToolTip && !this.state.dropdownOpen) {
-            // TODO: Might need to add bsRole=toggle
+        if (this.props.dropdownTooltip && !this.state.dropdownOpen) {
             return (
-                <Tooltip tipId="more" i18nMessageKey="selection.more" key="more" location="bottom">
+                <Tooltip bsRole="toggle" tipId="more" i18nMessageKey="selection.more" key="more" location="bottom">
                     {dropdownTrigger}
                 </Tooltip>
             );
@@ -91,10 +90,12 @@ class IconActions extends Component {
     renderActionInMenu(action) {
         return (
             <MenuItem key={this.getActionKey(action)} href="#" onSelect={action.onClick} disabled={action.disabled} >
-                {this.props.menuIcons &&
-                <Icon className={action.disabled ? "disabled " + action.className : action.className}
-                        icon={action.icon}/>}
-                {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
+                {
+                    this.props.menuIcons &&
+                    <Icon className={action.disabled ? "disabled " + action.className : action.className} icon={action.icon}/>
+                }
+
+                {action.i18nMessageKey ? <I18nMessage message={action.i18nMessageKey}  />: action.plainMessage}
             </MenuItem>
         );
     }
@@ -161,7 +162,7 @@ IconActions.propTypes = {
 
         /**
          * A non-localized string to use. Will be overwritten by i18nMessagekey if that prop is also passed in. Only use this prop if the string has already been localized. */
-        plainMessage: PropTypes.bool,
+        plainMessage: PropTypes.string,
 
         /**
          * A callback that occurs when this action is clicked */
@@ -194,7 +195,7 @@ IconActions.propTypes = {
     dropdownTooltip: React.PropTypes.bool,
 
     /**
-     * Indicate whether the menu items have icons so we can add some spacing to account for the icons */
+     * Indicate whether the menu items should have icons */
     menuIcons: React.PropTypes.bool,
 
     /**

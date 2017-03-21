@@ -1,9 +1,16 @@
 import React from 'react';
 import Fluxxor from 'fluxxor';
-import ReIconActions from '../../../../reuse/client/src/components/iconActions/iconActions';
+import IconActions from '../../../../reuse/client/src/components/iconActions/iconActions';
 const FluxMixin = Fluxxor.FluxMixin(React);
 
-let IconActions = React.createClass({
+/**
+ * The original file in this location has moved to the reuse library.
+ * What remains here is a stub so existing code does not have to change yet.
+ *
+ * The remaining code here is for backwards compatability until Fluxxor is completely removed.
+ * If you are building a new IconActions set, please use IconActions from the reuse library.
+ **/
+const QbIconActions = React.createClass({
     mixins: [FluxMixin],
 
     onDropdownToggle(open) {
@@ -14,8 +21,20 @@ let IconActions = React.createClass({
     },
 
     render() {
-        return <ReIconActions {...this.props} onDropdownToggle={this.onDropdownToggle} />;
+        // Some of the props have been made more descriptive and to bring it in line with other components (e.g., Tooltip).
+        // This function maps to the new property names for each action.
+        let actions = this.props.actions.map(action => {
+            if (action.rawMsg) {
+                action.plainMessage = action.msg;
+            } else {
+                action.i18nMessageKey = action.msg;
+            }
+
+            return action;
+        });
+
+        return <IconActions {...this.props} actions={actions} onDropdownToggle={this.onDropdownToggle} />;
     }
 });
 
-export default IconActions;
+export default QbIconActions;
