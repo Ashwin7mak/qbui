@@ -50,61 +50,65 @@
 
             var tableComponentsEndpoint = recordBase.apiBase.resolveTableComponentsEndpoint(app.id);
             const payload = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
-            recordBase.apiBase.executeRequest(tableComponentsEndpoint, consts.POST, payload).then(function(response) {
-                var tableId = response.body;
-                //get table, tableprops, fields, report and form
-                var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
-                recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
-                    (tableResponse) => {
-                        var table = JSON.parse(tableResponse.body);
-                        assert.equal(table.name, payload.name, "Unexpected table name returned");
+            recordBase.apiBase.executeRequest(tableComponentsEndpoint, consts.POST, payload).then(
+                (response) => {
+                    var tableId = response.body;
+                    //get table, tableprops, fields, report and form
+                    var tableEndpoint = recordBase.apiBase.resolveTablesEndpoint(app.id, tableId);
+                    recordBase.apiBase.executeRequest(tableEndpoint, consts.GET).then(
+                        (tableResponse) => {
+                            var table = JSON.parse(tableResponse.body);
+                            assert.equal(table.name, payload.name, "Unexpected table name returned");
 
-                        var promises = [];
-                        var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
-                        promises.push(recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET));
-                        var fieldsEndpoint = recordBase.apiBase.resolveFieldsEndpoint(app.id, tableId);
-                        promises.push(recordBase.apiBase.executeRequest(fieldsEndpoint, consts.GET));
-                        var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, tableId);
-                        promises.push(recordBase.apiBase.executeRequest(reportsEndpoint, consts.GET));
-                        var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(app.id, tableId, 1);
-                        promises.push(recordBase.apiBase.executeRequest(formsEndpoint, consts.GET));
+                            var promises = [];
+                            var tablePropsEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(app.id, tableId);
+                            promises.push(recordBase.apiBase.executeRequest(tablePropsEndpoint, consts.GET));
+                            var fieldsEndpoint = recordBase.apiBase.resolveFieldsEndpoint(app.id, tableId);
+                            promises.push(recordBase.apiBase.executeRequest(fieldsEndpoint, consts.GET));
+                            var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, tableId);
+                            promises.push(recordBase.apiBase.executeRequest(reportsEndpoint, consts.GET));
+                            var formsEndpoint = recordBase.apiBase.resolveFormsEndpoint(app.id, tableId, 1);
+                            promises.push(recordBase.apiBase.executeRequest(formsEndpoint, consts.GET));
 
-                        Promise.all(promises).then(
-                            (responses) => {
-                                let tableProps = JSON.parse(responses[0].body);
-                                assert.equal(tableProps.tableNoun, payload.tableNoun, "Unexpected table noun returned");
-                                assert.equal(tableProps.tableIcon, payload.tableIcon, "Unexpected table icon returned");
-                                assert.equal(tableProps.description, payload.description, "Unexpected description returned");
+                            Promise.all(promises).then(
+                                (responses) => {
+                                    let tableProps = JSON.parse(responses[0].body);
+                                    assert.equal(tableProps.tableNoun, payload.tableNoun, "Unexpected table noun returned");
+                                    assert.equal(tableProps.tableIcon, payload.tableIcon, "Unexpected table icon returned");
+                                    assert.equal(tableProps.description, payload.description, "Unexpected description returned");
 
-                                let fieldResp = JSON.parse(responses[1].body);
-                                assert.ok(Array.isArray(fieldResp));
-                                assert.equal(fieldResp.length, Object.keys(consts.BUILTIN_FIELD_ID).length + 2, "Unexpected number of fields returned");
+                                    let fieldResp = JSON.parse(responses[1].body);
+                                    assert.ok(Array.isArray(fieldResp));
+                                    assert.equal(fieldResp.length, Object.keys(consts.BUILTIN_FIELD_ID).length + 2, "Unexpected number of fields returned");
 
-                                let reportResp = JSON.parse(responses[2].body);
-                                assert.ok(Array.isArray(reportResp));
-                                assert.equal(reportResp.length, 2, "Unexpected number of reports returned");
+                                    let reportResp = JSON.parse(responses[2].body);
+                                    assert.ok(Array.isArray(reportResp));
+                                    assert.equal(reportResp.length, 2, "Unexpected number of reports returned");
 
-                                let formResp = JSON.parse(responses[3].body);
-                                assert(formResp.name, payload.tableNoun + " form", "Unexpected form returned");
-                                done();
-                            },
-                            (error) => {
-                                done(new Error("Error retrieving table components: " + JSON.stringify(error)));
-                            }
-                        ).catch((error) => {
-                            done(new Error("Assertion failure: " + JSON.stringify(error)));
-                        });
-                    },
-                    (error) => {
-                        done(new Error("Expected table not found"));
-                    }
-                ).catch((error) => {
-                    done(new Error("Assertion failure: " + JSON.stringify(error)));
+                                    let formResp = JSON.parse(responses[3].body);
+                                    assert(formResp.name, payload.tableNoun + " form", "Unexpected form returned");
+                                    done();
+                                },
+                                (error) => {
+                                    done(new Error("Error retrieving table components: " + JSON.stringify(error)));
+                                }
+                            ).catch((error) => {
+                                done(new Error("Assertion failure: " + JSON.stringify(error)));
+                            });
+                        },
+                        (error) => {
+                            done(new Error("Expected table not found"));
+                        }
+                    ).catch((error) => {
+                        done(new Error("Assertion failure: " + JSON.stringify(error)));
+                    });
+                },
+                (error) => {
+                    done(new Error("Failure creating table components: " + JSON.stringify(error)));
+                }).catch(function(error) {
+                    log.error(JSON.stringify(error));
+                    done();
                 });
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
-                done();
-            });
         });
 
         after(function(done) {
