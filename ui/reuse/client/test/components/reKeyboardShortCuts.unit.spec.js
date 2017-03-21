@@ -8,7 +8,7 @@ const testId = "testId";
 
 let component;
 
-fdescribe('ReKeyboardShortCuts', () => {
+describe('ReKeyboardShortCuts', () => {
     beforeEach(() => {
         jasmineEnzyme();
     });
