@@ -4,6 +4,6 @@
  **/
 
 // import the default renaming it to what we want to export
-import Locale from '../../../reuse/client/src/locales/locales';
+import Locale from '../../../reuse/client/src/locales/locale';
 
 export default Locale;
