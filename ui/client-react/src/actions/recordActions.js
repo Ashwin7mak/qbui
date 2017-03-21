@@ -41,7 +41,8 @@ function _logValidationErrors(errors, msgPrefix) {
             // information in the fieldDef array.
             let errorObj = _.clone(err);
             delete errorObj.def;
-            logger.parseAndLogError(LogLevel.ERROR, {data:errorObj}, msgPrefix);
+            // log validation errors at info level
+            logger.parseAndLogError(LogLevel.INFO, {data:errorObj}, msgPrefix);
         });
     }
 }
@@ -202,7 +203,7 @@ let recordActions = {
      * delete a record
      */
 
-        //  TODO:  MONDAY  migrate deleteRECORD to use redux..
+    //  TODO:  MONDAY  migrate deleteRECORD to use redux..
     //deleteRecord(appId, tblId, recId, nameForRecords) {
     //    // promise is returned in support of unit testing only
     //    return new Promise((resolve, reject) => {
@@ -596,7 +597,7 @@ export const deleteRecords = (appId, tblId, recIds, nameForRecords) => {
                 let recordService = new RecordService();
                 recordService.deleteRecords(appId, tblId, recIds).then(
                     response => {
-                        logger.debug('RecordService deleteRecordBulk success');
+                        logger.debug('RecordService deleteRecords success');
                         dispatch(event(recIds[0], types.REMOVE_REPORT_RECORDS, {appId, tblId, recIds}));
 
                         //  send out notification message on the client
@@ -999,4 +1000,3 @@ export const updateRecord = (appId, tblId, recId, params = {}) => {
 };
 
 export default recordActions;
-

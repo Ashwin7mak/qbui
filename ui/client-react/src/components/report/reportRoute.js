@@ -18,6 +18,7 @@ import ReportToolsAndContent from '../report/reportToolsAndContent';
 import {connect} from 'react-redux';
 import {clearSearchInput} from '../../actions/searchActions';
 import {loadReport, loadDynamicReport} from '../../actions/reportActions';
+import {loadFields} from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import {APP_ROUTE, EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
@@ -40,8 +41,10 @@ const ReportRoute = React.createClass({
         // ensure the search box is cleared for the new report
         this.props.dispatch(clearSearchInput());
 
-        flux.actions.loadFields(appId, tblId);
-        //flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
+        //  get the fields for this app/tbl
+        this.props.dispatch(loadFields(appId, tblId));
+
+        //  load the report
         this.props.dispatch(loadReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, offset, numRows));
     },
 
@@ -62,11 +65,11 @@ const ReportRoute = React.createClass({
         // ensure the search box is cleared for the new report
         this.props.dispatch(clearSearchInput());
 
-        flux.actions.loadFields(appId, tblId);
+        //  get the fields for this app/tbl
+        this.props.dispatch(loadFields(appId, tblId));
 
         // TODO: instead of using 0 for the rptID, the node layer should send data when apps have
         // TODO: tables with relationships
-        //flux.actions.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
         this.loadDynamicReport(appId, tblId, rptId, true, /*filter*/{}, queryParams);
     },
     loadReportFromParams(params) {
@@ -113,12 +116,6 @@ const ReportRoute = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
-        // need to dispatch to Fluxxor since report store handles this too...
-        //const flux = this.getFlux();
-        //flux.actions.editNewRecord();
-        //
-        //this.props.dispatch(editNewRecord());
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
@@ -159,6 +156,14 @@ const ReportRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
+            let fields = [];
+            if (_.has(this.props, 'qbui.fields')) {
+                let fieldsContainer = _.find(this.props.qbui.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
+                if (fieldsContainer) {
+                    fields = fieldsContainer.fields;
+                }
+            }
+
             return (<div className="reportContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions(5)}>

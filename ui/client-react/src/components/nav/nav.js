@@ -1,63 +1,65 @@
 import React from "react";
-import cookie from 'react-cookie';
+
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
 import TempMainErrorMessages from './tempMainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
-import * as SchemaConsts from "../../constants/schema";
+
 import GlobalActions from "../actions/globalActions";
 import BuilderDropDownAction from '../actions/builderDropDownAction';
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter} from 'react-router';
 import _ from 'lodash';
-import "./nav.scss";
-import "react-notifications/lib/notifications.css";
-import AppUtils from '../../utils/appUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
-import "../../assets/css/animate.min.css";
+
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
+import * as SchemaConsts from "../../constants/schema";
+
 import NavPageTitle from '../pageTitle/navPageTitle';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
-import UrlUtils from '../../utils/urlUtils';
-import CookieConstants from '../../../../common/src/constants';
-import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
+
+import {CONTEXT} from '../../actions/context';
+
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
-import {CONTEXT} from '../../actions/context';
+import {connect} from 'react-redux';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
 // as a raw string and we tell react to interpret it as HTML. See more in common/src/views/Readme.md
 import LoadingScreen from 'raw!../../../../common/src/views/loadingScreen.html';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+//  import styles
+import "./nav.scss";
+import "react-notifications/lib/notifications.css";
+import "../../assets/css/animate.min.css";
 
 const OPEN_NAV = true;
 const CLOSE_NAV = false;
-const OPEN_APPSLIST = true;
+const OPEN_APPS_LIST = true;
 
-export let Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', /*'ReportDataStore', 'RecordPendingEditsStore',*/ 'FieldsStore')],
+let FluxMixin = Fluxxor.FluxMixin(React);
+let StoreWatchMixin = Fluxxor.StoreWatchMixin;
+export const Nav = React.createClass({
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore' /*'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore'*/)],
 
     contextTypes: {
         touch: React.PropTypes.bool
     },
-    // todo: maybe we should move this up another level into the router...
+
     getStateFromFlux() {
         let flux = this.getFlux();
         return {
             nav: flux.store('NavStore').getState(),
-            apps: flux.store('AppsStore').getState(),
+            apps: flux.store('AppsStore').getState()
             //pendEdits: flux.store('RecordPendingEditsStore').getState(),
             //reportData: flux.store('ReportDataStore').getState(),
-            fields: flux.store('FieldsStore').getState()
+            //fields: flux.store('FieldsStore').getState()
             //reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
@@ -71,8 +73,8 @@ export let Nav = React.createClass({
         const {appId, tblId} = this.props.params;
         let formType;
 
-        if (this.props.qbui && this.props.qbui.forms && this.props.qbui.forms[0]) {
-            formType = this.props.qbui.forms[0].id;
+        if (_.has(this.props, 'forms') && this.props.forms.length > 0) {
+            formType = this.props.forms[0].id;
         }
 
         let link = `${UrlConsts.BUILDER_ROUTE}/app/${appId}/table/${tblId}/form`;
@@ -134,19 +136,19 @@ export let Nav = React.createClass({
         if (Breakpoints.isSmallBreakpoint()) {
             setTimeout(() => {
                 // left nav css transition seems to interfere with event handling without this
-                this.props.dispatch(ShellActions.toggleLeftNav(CLOSE_NAV));
+                this.props.toggleLeftNav(CLOSE_NAV);
             }, 0);
         }
 
-        this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_REPORTS));
-        this.props.dispatch(ReportActions.loadReports(CONTEXT.REPORT.NAV_LIST, this.state.apps.selectedAppId, tableId));
+        this.props.showTrowser(TrowserConsts.TROWSER_REPORTS);
+        this.props.loadReports(CONTEXT.REPORT.NAV_LIST, this.state.apps.selectedAppId, tableId);
     },
 
     /**
      * hide the trowser
      */
     hideTrowser() {
-        this.props.dispatch(ShellActions.hideTrowser());
+        this.props.hideTrowser();
     },
 
     getSelectedApp() {
@@ -193,16 +195,16 @@ export let Nav = React.createClass({
      *  if left nav is collapsed, open the apps list and dispatch event to open nav
      */
     toggleAppsList(open) {
-        if (this.props.qbui.shell.leftNavExpanded) {
-            this.props.dispatch(ShellActions.toggleAppsList(open));
+        if (this.props.shell.leftNavExpanded) {
+            this.props.toggleAppsList(open);
         } else {
-            this.props.dispatch(ShellActions.toggleAppsList(OPEN_APPSLIST));
-            this.props.dispatch(ShellActions.toggleLeftNav(OPEN_NAV));
+            this.props.toggleAppsList(OPEN_APPS_LIST);
+            this.props.toggleLeftNav(OPEN_NAV);
         }
     },
 
     getEditFormFromProps() {
-        return _.has(this.props, "qbui.forms") && _.find(this.props.qbui.forms, form => form.id === "edit");
+        return _.has(this.props, "forms") && _.find(this.props.forms, form => form.id === "edit");
     },
 
     /**
@@ -219,12 +221,11 @@ export let Nav = React.createClass({
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] &&
             (!editData || !editData.loading) &&
-            (!this.props.qbui.shell.trowserOpen || oldRecId !== editRec)) {
-
-            this.props.dispatch(FormActions.loadForm(appId, tblId, rptId, "edit", editRec)).then(() => {
-                this.props.dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
-            });
-
+            (!this.props.shell.trowserOpen || oldRecId !== editRec)) {
+            // load the edit form and in a trowser
+            const showTrowser = true;
+            const formType = "edit";
+            this.props.loadForm(appId, tblId, rptId, formType, editRec, showTrowser);
         }
     },
 
@@ -248,7 +249,7 @@ export let Nav = React.createClass({
      *  Fetch the report data content.
      */
     getReportsData() {
-        let report = _.find(this.props.qbui.report, function (rpt) {
+        let report = _.find(this.props.report, function(rpt) {
             return rpt.id === CONTEXT.REPORT.NAV;
         });
         return report || {};
@@ -257,7 +258,7 @@ export let Nav = React.createClass({
      *  Fetch the report list content.
      */
     getReportsList() {
-        let reportList = _.find(this.props.qbui.report, function(rpt) {
+        let reportList = _.find(this.props.report, function(rpt) {
             return rpt.id === CONTEXT.REPORT.NAV_LIST;
         });
         return reportList || {};
@@ -266,9 +267,9 @@ export let Nav = React.createClass({
     getPendEdits() {
         let pendEdits = {};
         //  TODO: just getting to work....improve this to support multi records...
-        if (Array.isArray(this.props.qbui.record) && this.props.qbui.record.length > 0) {
-            if (_.isEmpty(this.props.qbui.record[0]) === false) {
-                pendEdits = this.props.qbui.record[0].pendEdits || {};
+        if (Array.isArray(this.props.record) && this.props.record.length > 0) {
+            if (_.isEmpty(this.props.record[0]) === false) {
+                pendEdits = this.props.record[0].pendEdits || {};
             }
         }
         return pendEdits;
@@ -286,7 +287,7 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         let classes = "navShell";
-        if (this.props.qbui.shell.leftNavVisible) {
+        if (this.props.shell.leftNavVisible) {
             classes += " leftNavOpen";
         }
         let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
@@ -297,8 +298,12 @@ export let Nav = React.createClass({
         }
 
         let viewingRecordId = null;
+        let fields = [];
         if (this.props.params) {
             viewingRecordId = this.props.params.recordId;
+            //   get the fields from the redux store
+            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
+            fields = fieldsContainer ? fieldsContainer.fields : [];
         }
 
         let reportsData = this.getReportsData();
@@ -318,7 +323,7 @@ export let Nav = React.createClass({
             <AppQbModal/>
 
             {this.props.params && this.props.params.appId &&
-                <RecordTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                <RecordTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
                                editForm={this.getEditFormFromProps()}
                                appId={this.props.params.appId}
@@ -330,11 +335,11 @@ export let Nav = React.createClass({
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable(reportsData.tblId)}
                                reportData={reportsData}
-                               errorPopupHidden={this.props.qbui.shell.errorPopupHidden}
+                               errorPopupHidden={this.props.shell.errorPopupHidden}
                                onHideTrowser={this.hideTrowser}/>
             }
             {this.props.params && this.props.params.appId &&
-                <ReportManagerTrowser visible={this.props.qbui.shell.trowserOpen && this.props.qbui.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                <ReportManagerTrowser visible={this.props.shell.trowserOpen && this.props.shell.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable(reportsList.tblId)}
                                       filterReportsName={this.state.nav.filterReportsName}
@@ -343,9 +348,9 @@ export let Nav = React.createClass({
             }
 
             <LeftNav
-                visible={this.props.qbui.shell.leftNavVisible}
-                expanded={this.props.qbui.shell.leftNavExpanded}
-                appsListOpen={this.props.qbui.shell.appsListOpen}
+                visible={this.props.shell.leftNavVisible}
+                expanded={this.props.shell.leftNavExpanded}
+                appsListOpen={this.props.shell.appsListOpen}
                 apps={this.state.apps.apps}
                 appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
@@ -360,7 +365,6 @@ export let Nav = React.createClass({
                 <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
-                        //flux={flux}
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
@@ -376,10 +380,8 @@ export let Nav = React.createClass({
                             appUsersUnfiltered: this.state.apps.appUsersUnfiltered,
                             appRoles: this.state.apps.appRoles,
                             locale: this.state.nav.locale,
-                            //pendEdits:pendEdits,
-                            isRowPopUpMenuOpen: this.props.qbui.shell.isRowPopUpMenuOpen,
-                            fields: this.state.fields,
-                            //reportSearchData: this.state.reportSearchData,
+                            isRowPopUpMenuOpen: this.props.shell.isRowPopUpMenuOpen,
+                            fields: fields,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(reportsData.tblId),
                             scrollingReport: this.state.nav.scrollingReport,
@@ -397,7 +399,7 @@ export let Nav = React.createClass({
     onSelectItem() {
         // hide left nav after selecting items on small breakpoint
         if (Breakpoints.isSmallBreakpoint()) {
-            this.props.dispatch(ShellActions.toggleLeftNav(CLOSE_NAV));
+            this.props.toggleLeftNav(CLOSE_NAV);
         }
     },
 
@@ -405,10 +407,54 @@ export let Nav = React.createClass({
      * Toggle open/closed the left nav based on its current state
      */
     toggleNav() {
-        this.props.dispatch(ShellActions.toggleLeftNav());
+        this.props.toggleLeftNav();
     }
 });
 
+const mapStateToProps = (state) => {
+    return {
+        fields: state.fields,
+        forms: state.forms,
+        shell: state.shell,
+        record: state.record,
+        report: state.report
+    };
+};
 
-export let NavWithRouter = withRouter(Nav);
-export default NavWithRouter;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        toggleAppsList: (toggleState) => {
+            dispatch(ShellActions.toggleAppsList(toggleState));
+        },
+        toggleLeftNav: (navState) => {
+            dispatch(ShellActions.toggleLeftNav(navState));
+        },
+        hideTrowser: () => {
+            dispatch(ShellActions.hideTrowser());
+        },
+        showTrowser: (content) => {
+            dispatch(ShellActions.showTrowser(content));
+        },
+        loadForm: (appId, tblId, rptId, formType, editRec, showTrowser) => {
+            dispatch(FormActions.loadForm(appId, tblId, rptId, formType, editRec)).then(() => {
+                if (showTrowser) {
+                    dispatch(ShellActions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD));
+                }
+            });
+        },
+        loadReports: (context, appId, tblId) => {
+            dispatch(ReportActions.loadReports(context, appId, tblId));
+        }
+    };
+};
+
+export const NavWithRouter = withRouter(Nav);
+export const ConnectedNavRoute = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Nav);
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(NavWithRouter);

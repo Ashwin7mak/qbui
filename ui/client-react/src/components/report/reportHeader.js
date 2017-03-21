@@ -21,7 +21,7 @@ import './reportHeader.scss';
  * A header that takes the place of the top nav when viewing a report
  * (visible on small breakpoint currently)
  */
-var ReportHeader = React.createClass({
+export const ReportHeader = React.createClass({
     facetFields : {},
     // a key send delay (keep it very small otherwise noticable lag on keypress entry)
     debounceInputMillis: 100,
@@ -42,12 +42,6 @@ var ReportHeader = React.createClass({
     },
     componentWillReceiveProps() {
         this.mapFacetFields();
-    },
-
-
-    // no top nav present so the hamburger exists here
-    onNavClick() {
-        this.props.toggleLeftNav();
     },
 
     searchTheString(searchTxt) {
@@ -82,18 +76,20 @@ var ReportHeader = React.createClass({
         queryParams[query.OFFSET_PARAM] = PAGE.DEFAULT_OFFSET;
         queryParams[query.NUMROWS_PARAM] = PAGE.DEFAULT_NUM_ROWS;
 
-        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
-            this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            true, filter, queryParams);
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV,
+            this.props.appId,
+            this.props.tblId,
+            this.props.rptId,
+            true,
+            filter,
+            queryParams
+        );
 
     },
 
     handleSearchChange(e) {
-        if (this.searchTheString) {
-            var searchTxt = e.target.value;
-            this.searchTheString(searchTxt);
-        }
+        var searchTxt = e.target.value;
+        this.searchTheString(searchTxt);
     },
 
     getReportData() {
@@ -117,7 +113,7 @@ var ReportHeader = React.createClass({
             onSearchChange={this.handleSearchChange}
             onClearSearch={this.clearSearchString}
             searchPlaceHolder={placeMsg}
-            searchValue={this.props.search.searchInput || ""}
+            searchValue={_.get(this, 'props.search.searchInput') || ""}
         />;
     }
 });

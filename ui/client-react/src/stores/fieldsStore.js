@@ -19,51 +19,51 @@ let FieldsStore = Fluxxor.createStore({
         this.error = false;
 
         this.bindActions(
-            actions.LOAD_FIELDS, this.onLoadFields,
-            actions.LOAD_FIELDS_SUCCESS, this.onLoadFieldsSuccess,
-            actions.LOAD_FIELDS_FAILED, this.onLoadFieldsFailed,
-            actions.SELECT_TABLE, this.onSelectTable
+            //actions.LOAD_FIELDS, this.onLoadFields,
+            //actions.LOAD_FIELDS_SUCCESS, this.onLoadFieldsSuccess,
+            //actions.LOAD_FIELDS_FAILED, this.onLoadFieldsFailed,
+            //actions.SELECT_TABLE, this.onSelectTable
         );
 
         this.logger = new Logger();
     },
-    onLoadFields() {
-        this.fieldsLoading = true;
-        this.emit("change");
-    },
-    onLoadFieldsFailed() {
-        this.fieldsLoading = false;
-        this.fields = [];
-        this.error = true;
-        this.emit("change");
-    },
-    onLoadFieldsSuccess(fields) {
-        this.fieldsLoading = false;
-        this.fields = fields;
-        this.error = false;
-        this.emit('change');
-    },
-    onSelectTable(tblId) {
-        this.currentTable = tblId;
-        this.fields = [];
-        this.emit('change');
-    },
-    getKeyField() {
-        let answer;
-        if (typeof this.fields.data !== 'undefined') {
-            answer = _.find(this.fields.data, field => field.keyField && field.keyField === true);
-        }
-        return answer;
-    },
-    getState() {
-        return {
-            fields: this.fields,
-            keyField: this.getKeyField(),
-            currentTable: this.currentTable,
-            fieldsLoading: this.fieldsLoading,
-            error: this.error
-        };
-    }
+    //onLoadFields() {
+    //    this.fieldsLoading = true;
+    //    this.emit("change");
+    //},
+    //onLoadFieldsFailed() {
+    //    this.fieldsLoading = false;
+    //    this.fields = [];
+    //    this.error = true;
+    //    this.emit("change");
+    //},
+    //onLoadFieldsSuccess(fields) {
+    //    this.fieldsLoading = false;
+    //    this.fields = fields;
+    //    this.error = false;
+    //    this.emit('change');
+    //},
+    //onSelectTable(tblId) {
+    //    this.currentTable = tblId;
+    //    this.fields = [];
+    //    this.emit('change');
+    //},
+    //getKeyField() {
+    //    let answer;
+    //    if (typeof this.fields.data !== 'undefined') {
+    //        answer = _.find(this.fields.data, field => field.keyField && field.keyField === true);
+    //    }
+    //    return answer;
+    //},
+    //getState() {
+    //    return {
+    //        fields: this.fields,
+    //        keyField: this.getKeyField(),
+    //        currentTable: this.currentTable,
+    //        fieldsLoading: this.fieldsLoading,
+    //        error: this.error
+    //    };
+    //}
 });
 
 export default FieldsStore;

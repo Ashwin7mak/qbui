@@ -1,8 +1,8 @@
 import React from "react";
 import ReactIntl from "react-intl";
-import {NotificationManager} from 'react-notifications';
+import NotificationManager from '../../../../../reuse/client/src/scripts/notificationManager';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
-import AGGrid from "../../../components/dataTable/agGrid/agGrid";
+//import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import ReportGrid from "../../../components/dataTable/reportGrid/reportGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
@@ -21,6 +21,7 @@ import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
 import QBModal from '../../qbModal/qbModal';
 import * as CompConsts from '../../../constants/componentConstants';
+
 import {connect} from 'react-redux';
 import {createRecord, deleteRecord, editRecordStart, editRecordCancel, editRecordChange, editRecordValidateField, openRecord, updateRecord} from '../../../actions/recordActions';
 import {addBlankRecordToReport, selectReportRecords} from '../../../actions/reportActions';
@@ -82,9 +83,9 @@ export const ReportContent = React.createClass({
         //  data is the row object...get the record id
         //let recId = data[key].value;
 
-        //  TODO: improve the retrieve of a report
-        //const {filteredRecords, hasGrouping} = this.props.reportData.data;
-        const {filteredRecords, hasGrouping} = this.props.report[0].data;
+        //  TODO: improve the retrieve of a report from redux store
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+        //const {filteredRecords, hasGrouping} = this.props.report[0].data;
 
         let recordsArray = [];
         if (hasGrouping) {
@@ -120,8 +121,10 @@ export const ReportContent = React.createClass({
      * @returns {*}
      */
     getOrigRec(recId) {
-        //let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+        //  TODO: improve the retrieve of a report from redux store
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        //let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+
         let primaryKeyName = this.props.primaryKeyName;
 
         let fids = {};
@@ -147,10 +150,14 @@ export const ReportContent = React.createClass({
      */
     getOrigGroupedRec(recId) {
         let orig = {names:{}, fids:{}};
-        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
-        //// this.props.report[0].data
 
-        let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.primaryKeyName);
+        //  TODO: improve the retrieve of a report from redux store
+        let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+        //let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
+
+        let primaryKeyName = this.props.primaryKeyName;
+
+        let rec = ReportUtils.findGroupedRecord(recs, recId, primaryKeyName);
 
         orig.names = rec || {};
         let fids = {};
@@ -222,6 +229,7 @@ export const ReportContent = React.createClass({
             let changes = {};
 
             if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+                //  TODO: improve the retrieve of a report from redux store
                 origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
                 //// this.props.report[0].data
             } else {
@@ -315,6 +323,7 @@ export const ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (pendEdits.isPendingEdit || recordId === SchemaConsts.UNSAVED_RECORD_ID) {
+            // TODO: add code in dispatcher to add blank record after successful record update
             let saveRecordPromise = this.handleRecordSaveClicked(recordId, true, true);
 
             // After saving the record successfully, then add the new row
@@ -329,14 +338,14 @@ export const ReportContent = React.createClass({
         //return Promise.resolve(null);
     },
 
-    addNewRowAfterRecordSaveSuccess(afterRecId) {
-        const flux = this.getFlux();
-        //let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
-
-        // The promise is saved to a variable and called separately for testing purposes
-        // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
-        this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, afterRecId, true);
-    },
+    //addNewRowAfterRecordSaveSuccess(afterRecId) {
+    //    //const flux = this.getFlux();
+    //    //let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+    //
+    //    // The promise is saved to a variable and called separately for testing purposes
+    //    // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
+    //    this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, afterRecId, true);
+    //},
 
     /**
      * User wants to save changes to a record.
@@ -440,13 +449,7 @@ export const ReportContent = React.createClass({
             colList: colList,
             showNotificationOnSuccess: showNotificationOnSuccess
         };
-        this.props.dispatch(createRecord(this.props.appId, this.props.tblId, params)).then(
-            (obj) => {
-                if (addNewRow) {
-                    this.addNewRowAfterRecordSaveSuccess();
-                }
-            }
-        );
+        this.props.createRecord(this.props.appId, this.props.tblId, params, addNewRow);
 
         ///return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
@@ -507,7 +510,7 @@ export const ReportContent = React.createClass({
             if (pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
                 recId = pendEdits.currentEditingRecordId;
             }
-            if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== reId) {
+            if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== recId) {
                 recId = this.props.editingId;
             }
             if (recId) {
@@ -1154,9 +1157,17 @@ const mapDispatchToProps = (dispatch) => {
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
             dispatch(deleteRecord(appId, tblId, recId, nameForRecords));
         },
-        dispatch: dispatch,
         updateRecord:(appId, tblId, recId, params) => {
             dispatch(updateRecord(appId, tblId, recId, params));
+        },
+        createRecord: (appid, tblId, params, addNewRow) => {
+            dispatch(createRecord(appId, tblId, params)).then(
+                () => {
+                    if (addNewRow) {
+                        dispatch(addBlankRecordToReport(CONTEXT.REPORT.NAV, appId, tblId, null, true));
+                    }
+                }
+            );
         }
     };
 };

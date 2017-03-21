@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
 import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
+import * as FieldsActions from '../../actions/fieldsActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -47,12 +48,12 @@ export const TableHomePageRoute = React.createClass({
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
 
-        // ensure the search input is empty
-        this.props.dispatch(SearchActions.clearSearchInput());
+        //  redux actions..
+        this.props.clearSearchInput();
+        this.props.loadFields(appId, tblId);
 
-        flux.actions.loadFields(appId, tblId);
-        //flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
-        this.props.dispatch(TableActions.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows));
+        //  loads from the report Nav context
+        this.props.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows);
     },
     loadHomePageForParams(params) {
         let appId = params.appId;
@@ -80,12 +81,6 @@ export const TableHomePageRoute = React.createClass({
      * Add a new record in trowser
      */
     editNewRecord() {
-        // need to dispatch to Fluxxor since report store handles this too...
-        //const flux = this.getFlux();
-        //flux.actions.editNewRecord();
-        //
-        //this.props.dispatch(editNewRecord());
-
         WindowLocationUtils.pushWithQuery(EDIT_RECORD_KEY, NEW_RECORD_VALUE);
     },
 
@@ -93,7 +88,7 @@ export const TableHomePageRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
-            {msg: 'unimplemented.print', icon:'print', disabled: true},
+            {msg: 'unimplemented.print', icon:'print', disabled: true}
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -103,7 +98,6 @@ export const TableHomePageRoute = React.createClass({
 
         return (
             <div className="tableHomepageStageHeadline">
-
                 <div className="navLinks">
                     {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
                     <span>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></span>
@@ -113,8 +107,15 @@ export const TableHomePageRoute = React.createClass({
 
     render() {
         //  ensure there is a rptId property otherwise the report not found page is rendered in ReportToolsAndContent
-        //  TODO: this should become unnecessary once flux store is replaced..
         let homePageParams = _.assign(this.props.params, {rptId: null});
+
+        //  get fields from redux store
+        let fields = [];
+        if (_.has(this.props, 'params')) {
+            let fieldsContainer = _.find(this.props.fields, field => field.appId === this.props.params.appId && field.tblId === this.props.params.tblId);
+            fields = fieldsContainer ? fieldsContainer.fields : [];
+        }
+
         return (<div className="reportContainer">
             <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
                 <ReportStage reportData={this.props.reportData} />
@@ -128,7 +129,7 @@ export const TableHomePageRoute = React.createClass({
                 appUsers={this.props.appUsers}
                 routeParams={this.props.routeParams}
                 selectedAppId={this.props.selectedAppId}
-                fields={this.props.fields}
+                fields={fields}
                 searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                 selectedRows={this.props.reportData.selectedRows}
                 scrollingReport={this.props.scrollingReport}
@@ -139,5 +140,30 @@ export const TableHomePageRoute = React.createClass({
     }
 });
 
-// injects dispatch()
-export default connect()(TableHomePageRoute);
+// similarly, abstract out the Redux dispatcher from the presentational component
+// (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapStateToProps = (state) => {
+    return {
+        fields: state.fields,
+        report: state.report
+    };
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        clearSearchInput:  () => {
+            dispatch(SearchActions.clearSearchInput());
+        },
+        loadTableHomePage: (context, appId, tblId, offset, numRows) => {
+            dispatch(TableActions.loadTableHomePage(CONTEXT.REPORT.NAV, appId, tblId, offset, numRows));
+        },
+        loadFields: (appId, tblId) => {
+            dispatch(FieldsActions.loadFields(appId, tblId));
+        }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TableHomePageRoute);
+

@@ -41,7 +41,8 @@ let storeFunc = {
     editRecordCancel: editRecordCancel,
     createRecord: createRecord,
     updateRecord: updateRecord
-}
+};
+//  pass references to redux store and methods called within the appHistory component
 let history = AppHistory.setup(store, storeFunc).history;
 
 const mapStateToProps = (state) => {
@@ -53,7 +54,6 @@ const ConnectedNav = connect(mapStateToProps)(NavWrapper); // pass Redux state a
 const ConnectedBuilderNav = connect(mapStateToProps)(BuilderWrapper); // pass Redux state as qbui prop
 
 // init the feature switches
-
 store.dispatch(FeatureSwitchActions.getStates());
 
 const createElementWithFlux = (Component, props) => <Component {...props} flux={fluxxor} />;

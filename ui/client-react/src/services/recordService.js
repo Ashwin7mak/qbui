@@ -1,14 +1,10 @@
 import constants from './constants';
-import commonConstants from '../../../common/src/constants';
 import SaveRecordFormatter from '../../../common/src/formatter/saveRecordFormatter';
 import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
 import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import _ from 'lodash';
-
-// TODO: temporary for test...make sure to remove
-import Promise from 'bluebird';
 
 class RecordService extends BaseService {
 
@@ -105,19 +101,6 @@ class RecordService extends BaseService {
 
         let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
         return super.patch(url, fixedChanges);
-
-        // TODO: remove when in code review
-        //let error = {
-        //    data: {
-        //        response: {
-        //            errors: [
-        //                {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
-        //                {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
-        //            ]
-        //        }
-        //    }
-        //};
-        //return Promise.reject(error);
     }
 
 
@@ -134,19 +117,6 @@ class RecordService extends BaseService {
 
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
         return super.post(url, fixedRecord);
-
-        //TODO: remove..
-        //let error = {
-        //    data: {
-        //        response: {
-        //            errors: [
-        //                {id:1, def:{fieldName:'field1'}, isInvalid:true, txt:'error message 1'},
-        //                {id:2, def:{fieldName:'field2'}, isInvalid:true, txt:'error message 2'}
-        //            ]
-        //        }
-        //    }
-        //};
-        //return Promise.reject(error);
     }
 
     /**
@@ -162,24 +132,17 @@ class RecordService extends BaseService {
         return super.delete(url);
     }
 
-    deleteRecordBulk(appId, tableId, recordIds) {
-        // TODO: remove...
-        return this.deleteRecords(appid, tableId, recordIds);
-    }
-
+    /**
+     * Delete a list of records
+     *
+     * @param appId
+     * @param tableId
+     * @param recordIds
+     * @returns {*}
+     */
     deleteRecords(appId, tableId, recordIds) {
         let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
         return super.delete(url, {data: recordIds});
-
-        // TODO: remove when in code review
-        //let error = {
-        //    data: {
-        //        response: {
-        //            errors: [{isInvalid:true, txt:'error message 1'}, {isInvalid:true, txt:'error message 2'}]
-        //        }
-        //    }
-        //};
-        //return Promise.resolve();
     }
 
 }
