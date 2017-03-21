@@ -128,7 +128,7 @@ class IconActions extends Component {
         this.setState({dropdownOpen: open});
 
         if (this.props.onDropdownToggle) {
-            this.props.onDropdownToggle(open)
+            this.props.onDropdownToggle(open);
         }
     }
 

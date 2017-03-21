@@ -32,7 +32,7 @@ describe('IconActions', () => {
         IconActionsRewireAPI.__ResetDependency__('Icon');
         IconActionsRewireAPI.__ResetDependency__('lodash');
     });
-    
+
     it('renders when no actions are passed in', () => {
         component = shallow(<IconActions actions={[]}/>);
 

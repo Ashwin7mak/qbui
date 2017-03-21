@@ -38,7 +38,7 @@ class Stage extends Component {
                 </div>
 
                 <Collapse in={this.state.open}>
-                    <Well>{this.props.children}</Well>
+                    <Well className="collapsedContent">{this.props.children}</Well>
                 </Collapse>
 
                 <button className="toggleStage" onClick={this.toggleStage}><Icon icon={this.state.open ? 'caret-up' : 'caret-down'} /></button>
