@@ -28,20 +28,20 @@ class AppsBundleLoader {
                     switch (newLocale.toLowerCase()) {
                     case 'en-us':
                         newBundle = _.merge(
-                            require('./bundles/apps-en_us'),
-                            require('../../../reuse/client/src/locales/bundles/reuse-en_us')
+                            require('../../../reuse/client/src/locales/bundles/reuse-en_us'),
+                            require('./bundles/apps-en_us')
                         );
                         break;
                     case 'fr-fr':
                         newBundle = _.merge(
-                            require('./bundles/apps-fr_fr'),
-                            require('../../../reuse/client/src/locales/bundles/reuse-fr_fr')
+                            require('../../../reuse/client/src/locales/bundles/reuse-fr_fr'),
+                            require('./bundles/apps-fr_fr')
                         );
                         break;
                     case 'de-de':
                         newBundle = _.merge(
-                            require('./bundles/apps-de_de'),
-                            require('../../../reuse/client/src/locales/bundles/reuse-de_de')
+                            require('../../../reuse/client/src/locales/bundles/reuse-de_de'),
+                            require('./bundles/apps-de_de')
                         );
                         break;
                     }
@@ -52,8 +52,8 @@ class AppsBundleLoader {
                 if (!newBundle) {
                     logger.warn('Locale (' + newLocale + ') is invalid or not supported.  Using default: en-us');
                     newBundle = _.merge(
-                        require('./bundles/apps-en_us'),
-                        require('../../../reuse/client/src/locales/bundles/reuse-en_us')
+                        require('../../../reuse/client/src/locales/bundles/reuse-en_us'),
+                        require('./bundles/apps-en_us')
                     );
                 }
 

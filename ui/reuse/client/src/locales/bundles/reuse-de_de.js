@@ -4,7 +4,7 @@ export default {
 
     messages: {
         test: {
-            testMsg: "Test message for reuse library - de-de"
+            testMsg2: "Test message for reuse library - de-de"
         }
     }
 };
