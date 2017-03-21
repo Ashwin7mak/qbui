@@ -29,36 +29,36 @@ class GovernanceBundleLoader {
                 try {
                     // this is where all supported locales are defined
                     switch (newLocale.toLowerCase()) {
-                        case 'en-us':
-                            // BAD BAD BAD - we should not be importing the client-react strings!
-                            // However, governance imports client-react code for the grid that needs these strings.
-                            // They have to stay here until that code is removed.
-                            newAppBundle = _.merge(
-                                require('../../../client-react/src/locales/bundles/apps-en_us'),    // NAUGHTY! EVIL! NO!
-                                require('../../../reuse/client/src/locales/bundles/reuse-en_us'),
-                                require('./bundles/governance-en_us')
-                            );
-                            break;
-                        case 'fr-fr':
-                            // BAD BAD BAD - we should not be importing the client-react strings!
-                            // However, governance imports client-react code for the grid that needs these strings.
-                            // They have to stay here until that code is removed.
-                            newAppBundle = _.merge(
-                                require('../../../client-react/src/locales/bundles/apps-fr_fr'),    // NAUGHTY! EVIL! NO!
-                                require('../../../reuse/client/src/locales/bundles/reuse-fr_fr'),
-                                require('./bundles/governance-fr_fr')
-                            );
-                            break;
-                        case 'de-de':
-                            // BAD BAD BAD - we should not be importing the client-react strings!
-                            // However, governance imports client-react code for the grid that needs these strings.
-                            // They have to stay here until that code is removed.
-                            newAppBundle = _.merge(
-                                require('../../../client-react/src/locales/bundles/apps-de_de'),    // NAUGHTY! EVIL! NO!
-                                require('../../../reuse/client/src/locales/bundles/reuse-de_de'),
-                                require('./bundles/governance-de_de')
-                            );
-                            break;
+                    case 'en-us':
+                        // BAD BAD BAD - we should not be importing the client-react strings!
+                        // However, governance imports client-react code for the grid that needs these strings.
+                        // They have to stay here until that code is removed.
+                        newAppBundle = _.merge(
+                            require('../../../client-react/src/locales/bundles/apps-en_us'),    // NAUGHTY! EVIL! NO!
+                            require('../../../reuse/client/src/locales/bundles/reuse-en_us'),
+                            require('./bundles/governance-en_us')
+                        );
+                        break;
+                    case 'fr-fr':
+                        // BAD BAD BAD - we should not be importing the client-react strings!
+                        // However, governance imports client-react code for the grid that needs these strings.
+                        // They have to stay here until that code is removed.
+                        newAppBundle = _.merge(
+                            require('../../../client-react/src/locales/bundles/apps-fr_fr'),    // NAUGHTY! EVIL! NO!
+                            require('../../../reuse/client/src/locales/bundles/reuse-fr_fr'),
+                            require('./bundles/governance-fr_fr')
+                        );
+                        break;
+                    case 'de-de':
+                        // BAD BAD BAD - we should not be importing the client-react strings!
+                        // However, governance imports client-react code for the grid that needs these strings.
+                        // They have to stay here until that code is removed.
+                        newAppBundle = _.merge(
+                            require('../../../client-react/src/locales/bundles/apps-de_de'),    // NAUGHTY! EVIL! NO!
+                            require('../../../reuse/client/src/locales/bundles/reuse-de_de'),
+                            require('./bundles/governance-de_de')
+                        );
+                        break;
                     }
                 } catch (e) {
                     logger.error('Error fetching app locale bundle:', e);

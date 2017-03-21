@@ -26,24 +26,24 @@ class AppsBundleLoader {
                 try {
                     // this is where all supported locales are defined
                     switch (newLocale.toLowerCase()) {
-                        case 'en-us':
-                            newBundle = _.merge(
-                                require('./bundles/apps-en_us'),
-                                require('../../../reuse/client/src/locales/bundles/reuse-en_us')
-                            );
-                            break;
-                        case 'fr-fr':
-                            newBundle = _.merge(
-                                require('./bundles/apps-fr_fr'),
-                                require('../../../reuse/client/src/locales/bundles/reuse-fr_fr')
-                            );
-                            break;
-                        case 'de-de':
-                            newBundle = _.merge(
-                                require('./bundles/apps-de_de'),
-                                require('../../../reuse/client/src/locales/bundles/reuse-de_de')
-                            );
-                            break;
+                    case 'en-us':
+                        newBundle = _.merge(
+                            require('./bundles/apps-en_us'),
+                            require('../../../reuse/client/src/locales/bundles/reuse-en_us')
+                        );
+                        break;
+                    case 'fr-fr':
+                        newBundle = _.merge(
+                            require('./bundles/apps-fr_fr'),
+                            require('../../../reuse/client/src/locales/bundles/reuse-fr_fr')
+                        );
+                        break;
+                    case 'de-de':
+                        newBundle = _.merge(
+                            require('./bundles/apps-de_de'),
+                            require('../../../reuse/client/src/locales/bundles/reuse-de_de')
+                        );
+                        break;
                     }
                 } catch (e) {
                     logger.error('Error fetching app locale bundle:', e);

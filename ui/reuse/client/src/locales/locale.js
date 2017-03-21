@@ -19,8 +19,8 @@ class Locale {
      *
      * @param locale
      */
-    static isSupported(locale) {
-        return (config.locale.supported.indexOf(locale.toLowerCase()) >= 0) ;
+    static isSupported(aLocale) {
+        return (config.locale.supported.indexOf(aLocale.toLowerCase()) >= 0) ;
     }
 
     /**
