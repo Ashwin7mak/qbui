@@ -6,6 +6,11 @@
     }
 
     .iconActions {
+        // Tooltips normally display as block elements. To keep actions in a horizontal line, we need to override tooltips default display.
+        .tipChildWrapper {
+            display: inline-block;
+        }
+
         .iconActionButton {
             border: 0;
             margin-right: 2px;
@@ -40,7 +45,6 @@
 
             .addRecord {
                 border-radius: 20px;
-                -webkit-border-radius: 20px;
                 background-color: $color-green-600;
                 color: $color-black-100;
                 margin-right: 30px;
