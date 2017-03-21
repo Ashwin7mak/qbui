@@ -178,7 +178,7 @@ describe('FormBuilderContainer', () => {
             let e = {
                 which: 32,
                 preventDefault() {return;}
-            }
+            };
 
             component = mount(<FormBuilderContainer appId={appId}
                                                     forms={forms}
