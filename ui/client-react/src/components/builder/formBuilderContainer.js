@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm, toggleFormBuilderChildrenTabIndex} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -48,6 +48,10 @@ const mapDispatchToProps = dispatch => {
 
         updateAnimationState(isAnimating) {
             return dispatch(updateFormAnimationState(isAnimating));
+        },
+
+        toggleFormBuilderChildrenTabIndex(formId, currentTabIndex) {
+            return dispatch(toggleFormBuilderChildrenTabIndex(formId, currentTabIndex));
         }
     };
 };
@@ -115,6 +119,15 @@ export const FormBuilderContainer = React.createClass({
         />;
     },
 
+    updateChildrenTabIndex(e) {
+        let childrenTabIndex = this.props.forms[0].formBuilderChildrenTabIndex ? this.props.forms[0].formBuilderChildrenTabIndex[0].tabIndex : undefined;
+
+        if ((e.which === 13 || e.which === 32) && childrenTabIndex !== "0") {
+            this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);
+            e.preventDefault();
+        }
+    },
+
     render() {
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
@@ -129,8 +142,8 @@ export const FormBuilderContainer = React.createClass({
 
                 <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
                     {key: 'esc', callback: () => {this.onCancel(); return false;}},
-                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}}
-                ]}/>
+                    {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
+            ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 
@@ -140,7 +153,7 @@ export const FormBuilderContainer = React.createClass({
                     <AutoScroll
                         pixelsFromBottomForLargeDevices={80}
                         pixelsFromBottomForMobile={50}>
-                        <div className="formBuilderContent">
+                        <div className="formBuilderContent" tabIndex="0" role="button" onKeyDown={this.updateChildrenTabIndex}>
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                 <FormBuilder
                                     formId={formId}

@@ -253,6 +253,8 @@ export const selectFieldOnForm = (formId, location) => {
  * Removes a field from the form
  * @param formId
  * @param location
+ * @returns {{id, type, content}|*}
+
  */
 export const removeFieldFromForm = (formId, location) => {
     return event(formId, types.REMOVE_FIELD, {
@@ -260,15 +262,38 @@ export const removeFieldFromForm = (formId, location) => {
     });
 };
 
+/**
+ * Move a field up one position on a form
+ * @param formId
+ * location
+ * @returns {{id, type, content}|*}
+ */
 export const keyBoardMoveFieldUp = (formId, location) => {
     return event(formId, types.KEYBOARD_MOVE_FIELD_UP, {
         location
     });
 };
 
+/**
+ * Move a field down one position on a form
+ * @param formId
+ * location
+ * @returns {{id, type, content}|*}
+ */
 export const keyboardMoveFieldDown = (formId, location) => {
     return event(formId, types.KEYBOARD_MOVE_FIELD_DOWN, {
         location
+    });
+};
+
+/**
+ * Toggles children tabIndex for formBuilder
+ * @param formId
+ * @returns {{id, type, content}|*}
+ */
+export const toggleFormBuilderChildrenTabIndex = (formId, currentTabIndex) => {
+    return event(formId, types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX, {
+        currentTabIndex
     });
 };
 

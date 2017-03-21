@@ -7,7 +7,7 @@ let ToolPalette = React.createClass({
 
     render() {
         return (
-            <div className="toolPaletteContainer">
+            <div className="toolPaletteContainer" tabIndex="0">
 
             </div>
         );

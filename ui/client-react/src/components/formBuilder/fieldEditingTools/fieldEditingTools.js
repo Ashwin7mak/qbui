@@ -20,16 +20,13 @@ export class FieldEditingTools extends Component {
     constructor(props) {
         super(props);
 
-        this.tabIndex = "-1";
-        this.fieldEditingTools = null;
-
         this.onClickDelete = this.onClickDelete.bind(this);
         this.onClickFieldPreferences = this.onClickFieldPreferences.bind(this);
         this.onClickField = this.onClickField.bind(this);
         this.isFieldSelected = this.isFieldSelected.bind(this);
         this.renderActionIcons = this.renderActionIcons.bind(this);
 
-        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.selectedCurrentField = this.selectedCurrentField.bind(this);
         this.getSelectedFormElementContainer = this.getSelectedFormElementContainer.bind(this);
         this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
         this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
@@ -40,22 +37,22 @@ export class FieldEditingTools extends Component {
     onClickDelete(e) {
         if (this.props.removeField) {
             return this.props.removeField(this.props.location);
+            e.preventDefault();
         }
-        e.preventDefault();
     }
 
     onClickFieldPreferences(e) {
         if (this.props.onClickFieldPreferences) {
             return this.props.onClickFieldPreferences(this.props.location);
+            e.preventDefault();
         }
-        e.preventDefault();
     }
 
     onClickField(e) {
         if (this.props.selectField) {
             this.props.selectField(this.props.formId, this.props.location);
+            e.preventDefault();
         }
-        e.preventDefault();
     }
 
     isFieldSelected() {
@@ -65,28 +62,29 @@ export class FieldEditingTools extends Component {
     }
 
     renderActionIcons() {
+        let tabIndex = "-1";
+
         if (this.props.isDragging) {
             return null;
         }
 
         if (this.isFieldSelected()) {
-            this.tabIndex = "0";
+            tabIndex = "0";
         } else {
-            this.tabIndex = "-1";
+            tabIndex = "-1";
         }
 
         return (
             <div className="actionIcons">
-
                     <div className="deleteFieldIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.removeField">
-                           <button tabIndex={this.tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
+                           <button tabIndex={tabIndex} onClick={this.onClickDelete}> <QbIcon icon="delete" /> </button>
                         </QbToolTip>
                     </div>
 
                     <div  className="fieldPreferencesIcon">
                         <QbToolTip i18nMessageKey="builder.formBuilder.unimplemented">
-                            <button tabIndex={this.tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
+                            <button tabIndex={tabIndex} onClick={this.onClickFieldPreferences}> <QbIcon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon="Dimensions"/> </button>
                         </QbToolTip>
                     </div>
             </div>
@@ -95,7 +93,8 @@ export class FieldEditingTools extends Component {
 
     componentDidMount() {
         /**
-         * For keyboard, we need to reset the focus, to maintain proper tabbing order;
+         * For keyboard, we need to reset the focus, to maintain proper tabbing order
+         * and wee need to keep the current form element in view, by scrolling it into view
          * */
         if (this.props.selectedFields[0]) {
             let selectedFormElement = document.querySelector('.selectedFormElement');
@@ -144,14 +143,21 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    handleKeyDown(e) {
-        if (e.which === 32) {
+    selectedCurrentField(e) {
+        let isCurrentlySelectedField = true;
+
+        if (this.props.selectedFields[0]) {
+            isCurrentlySelectedField = this.props.location.elementIndex !== this.props.selectedFields[0].elementIndex
+        }
+
+        if ((e.which === 13 || e.which === 32) && isCurrentlySelectedField) {
             this.onClickField(e);
-            e.preventDefault();
         }
     }
 
     render() {
+        let tabIndex = this.props.currentForm.formBuilderChildrenTabIndex ? this.props.currentForm.formBuilderChildrenTabIndex[0].tabIndex : "-1";
+
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
         let isTouch = Device.isTouch();
@@ -171,19 +177,17 @@ export class FieldEditingTools extends Component {
             classNames.push('selectedFormElement');
         }
 
-
         return (
             <div
-                tabIndex="0"
+                tabIndex={tabIndex}
                 role="button"
                 className={classNames.join(' ')}
                 onClick={this.onClickField}
-                onKeyDown={this.handleKeyDown}
-                ref={fieldEditingTools => this.fieldEditingTools = fieldEditingTools}
+                onKeyDown={this.selectedCurrentField}
             >
                 <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={[
                     {key: 'up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
-                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}}
+                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
                 ]}/>
 
                 <DragHandle />

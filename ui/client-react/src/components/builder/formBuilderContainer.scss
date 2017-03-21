@@ -17,6 +17,10 @@
         max-height: 100%;
         overflow-y: scroll; /* has to be scroll, not auto */
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
+        &:focus {
+            outline-color: $color-cyan-300;
+            outline-width: 10px;
+        }
     }
 
     .formContainer {

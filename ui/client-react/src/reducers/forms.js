@@ -259,6 +259,25 @@ const forms = (
         ];
     }
 
+    case types.TOGGLE_FORM_BUILDER_CHILDREN_TABINDEX : {
+        if (!currentForm) {
+            return state;
+        }
+        let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        updatedForm = _.cloneDeep(currentForm);
+
+        if (!updatedForm.formBuilderChildrenTabIndex) {
+            updatedForm.formBuilderChildrenTabIndex = [];
+        }
+
+        updatedForm.formBuilderChildrenTabIndex[0] = {tabIndex: tabIndex};
+
+        return [
+            ...newState,
+            updatedForm
+        ];
+    }
+
     default:
         // return existing state by default in redux
         return state;
