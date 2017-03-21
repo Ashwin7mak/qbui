@@ -25,7 +25,7 @@ class UserManagement extends React.Component {
     constructor(...args) {
         super(...args);
         this.createUserColumns = this.createUserColumns.bind(this);
-        this.createUserRows = this.createUserRows.bind(this);
+        this.createUserRows = this.createUserRows.bind(this); 
     }
 
     createUserColumns(cellFormatter) {
@@ -54,7 +54,7 @@ class UserManagement extends React.Component {
             {
                 property: 'screenName',
                 header: {
-                    label: 'User Name'
+                    label: 'User name'
                 },
                 cell: {formatters: [cellFormatter]}
             }

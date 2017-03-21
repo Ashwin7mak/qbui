@@ -22,7 +22,7 @@
 
     .stageLeft {
         flex: 1 1 auto;
-        padding: 20px 10px 20px 15px;
+        padding: 20px 10px 10px 15px;
         white-space: nowrap;
         overflow: hidden;
         color: $stage-headline-icon-color;
@@ -103,7 +103,7 @@
         border-top: 0;
         border-radius: 0 0 2px 2px;
         background-color: $color-black-100;
-        color: $iconfont-on-light-normal-color;
+        color: $iconfont-on-light-alternate-color;
     }
 
     .well {
