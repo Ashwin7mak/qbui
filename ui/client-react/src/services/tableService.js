@@ -12,7 +12,8 @@ class TableService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_HOMEPAGE  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.HOMEPAGE}`
+            GET_HOMEPAGE            : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.HOMEPAGE}`,
+            CREATE_TABLE_COMPONENTS : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/${constants.TABLECOMPONENTS}`
         };
     }
 
@@ -40,6 +41,17 @@ class TableService extends BaseService {
         }
 
         return super.get(url, {params:params});
+    }
+    /**
+     * create a table and related components
+     * @param appId
+     * @param table object of structure {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"}
+     */
+    createTableComponents(appId, table) {
+        let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
+        //mock data
+        table = {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"};
+        return super.post(url, table);
     }
 }
 

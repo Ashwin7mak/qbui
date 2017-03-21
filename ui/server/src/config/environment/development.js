@@ -43,7 +43,7 @@
         eeHost: '',
         eeHostEnable: false,
 
-        legacyHost: '',
+        legacyBase: '',
 
         //DEV Express Server
         DOMAIN: '',
