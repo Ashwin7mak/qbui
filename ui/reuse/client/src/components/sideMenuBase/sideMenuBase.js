@@ -74,7 +74,7 @@ class SideMenuBase extends Component {
         }
 
         if (isOpen && !this.state.isDocked) {
-            classes.push(`${baseClass}Open`)
+            classes.push(`${baseClass}Open`);
         }
 
         if (isCollapsed) {
@@ -94,7 +94,7 @@ class SideMenuBase extends Component {
         let classes = [`${baseClass}Main`];
 
         if (isOpen && !this.state.isDocked) {
-            classes.push(`${baseClass}Open`)
+            classes.push(`${baseClass}Open`);
         }
 
         if (pullRight) {
@@ -110,7 +110,7 @@ class SideMenuBase extends Component {
 
     closeOnSwipeLeft() {
         if (this.props.onUpdateOpenState) {
-            this.props.onUpdateOpenState(false)
+            this.props.onUpdateOpenState(false);
         }
     }
 

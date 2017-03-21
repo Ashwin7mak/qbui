@@ -4,7 +4,7 @@ import jasmineEnzyme from 'jasmine-enzyme';
 
 import SideMenuBase, {__RewireAPI__ as SideMenuBaseRewireAPI} from '../../src/components/sideMenuBase/sideMenuBase';
 
-const mockStoreActions = {onUpdateOpenState(isOpen) {return isOpen}};
+const mockStoreActions = {onUpdateOpenState(isOpen) {return isOpen;}};
 const testSideMenuContent = <div className="testSideMenuContent">Test SideMenu Content</div>;
 const testMainContent = <div className="testMainContent">Test Main Content</div>;
 const requiredProps = {sideMenuContent: testSideMenuContent, onUpdateOpenState: mockStoreActions.onUpdateOpenState};

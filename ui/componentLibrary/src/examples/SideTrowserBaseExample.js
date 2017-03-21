@@ -17,16 +17,16 @@ const ExampleParentComponent = React.createClass({
             isCollapsed: false,
             willDock: true,
             pullRight: false,
-        }
+        };
     },
 
-    toggleIsOpen() {this.setState({isOpen: !this.state.isOpen})},
+    toggleIsOpen() {this.setState({isOpen: !this.state.isOpen});},
 
-    toggleIsCollapsed() {this.setState({isCollapsed: !this.state.isCollapsed})},
+    toggleIsCollapsed() {this.setState({isCollapsed: !this.state.isCollapsed});},
 
-    toggleWillDock() {this.setState({willDock: !this.state.willDock})},
+    toggleWillDock() {this.setState({willDock: !this.state.willDock});},
 
-    togglePullRight() {this.setState({pullRight: !this.state.pullRight})},
+    togglePullRight() {this.setState({pullRight: !this.state.pullRight});},
 
     render() {
         return (

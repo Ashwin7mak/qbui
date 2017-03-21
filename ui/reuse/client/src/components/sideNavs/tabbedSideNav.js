@@ -15,7 +15,7 @@ import './tabbedSideNav.scss';
 class TabbedSideNav extends Component {
     constructor(props) {
         super(props);
-        
+
         this.getDefaultTab = this.getDefaultTab.bind(this);
         this.onTabChanged = this.onTabChanged.bind(this);
         this.onTabClicked = this.onTabClicked.bind(this);
@@ -32,17 +32,17 @@ class TabbedSideNav extends Component {
             this.props.onTabClicked(tabKey);
         }
     }
-    
+
     getDefaultTab() {
         if (this.props.defaultTab) {
             return this.props.defaultTab;
         }
-        
+
         if (this.tabs && this.tabs.length > 0) {
             return this.tabs[0].key;
         }
     }
-    
+
     render() {
         return (
             <div className="tabbedSideNav">
