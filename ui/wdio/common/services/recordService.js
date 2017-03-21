@@ -85,7 +85,7 @@
                 genRecords.forEach(function(currentRecord) {
                     fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
                 });
-                promise.all(fetchRecordPromises)
+                promise.each(fetchRecordPromises)
                     .then(function(results) {
                         deferred.resolve(results);
                     }).catch(function(error) {

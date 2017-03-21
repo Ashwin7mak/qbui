@@ -377,9 +377,18 @@
                                 var errorMsg = error ? error : '';
                                 var responseMsg = response ? 'Response statusCode: ' + response.statusCode + ', body: ' + response.body : '';
 
+                                // Nice logging for Node output
                                 log.error('Network request failed, no retries left or an unsupported error for retry found');
                                 log.error(`Unknown failure mode. ${errorMsg} ${responseMsg}`);
-                                return reject(new Error(`Error in executeRequestRetryable: ${errorMsg} ${responseMsg}`));
+
+                                // Return whatever kind of object we get back for the test frameworks to do validation with
+                                if (error) {
+                                    return reject(error);
+                                } else {
+                                    return reject(response);
+                                }
+
+
                             }
                         } else {
                             resolve(response);
