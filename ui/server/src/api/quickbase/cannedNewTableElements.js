@@ -67,12 +67,12 @@
     };
     module.exports  = {
         getCannedFields: function() {
-            return [cannedTextField, cannedDateField];
+            return [cannedDateField, cannedTextField];
         },
 
         getCannedReports: function(tableName) {
             cannedListAllReport[constants.REQUEST_PARAMETER.REPORT.NAME] = 'All ' + tableName;
-            return [cannedListAllReport, cannedListChangesReport];
+            return [cannedListChangesReport, cannedListAllReport];
         },
 
         getCannedForms: function(formName, fieldIds) {
