@@ -101,7 +101,7 @@ module.exports = function(grunt) {
         if (endOfImport < 0) {
             grunt.log.error(IMPORT_COMMENT + ' comment missing from ReactPlayground.js. Import may be misplaced.');
         }
-        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "');");
+        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "').default;");
         grunt.file.write(componentData.playgroundFile, playgroundFileArray.join("\n"));
     }
 
