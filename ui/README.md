@@ -125,7 +125,7 @@ to automatically switch to the correct version of Node.
 
     *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
-##Configuring
+## Configuring
 Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
 
 For developing set this environment variable in your bash profile

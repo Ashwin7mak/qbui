@@ -1,15 +1,7 @@
 The following provides instructions for installing only the QBUI project locally for development, pointing to the integration environment for Core and Experience Engine.
 For full instructions to setup and run, including various options see <https://github.com/QuickBase/qbui/blob/master/ui/README.md#instructions-to-run-for-development> for details
 
-For running locally make sure you copy
-
- `qbui/ui/server/src/config/environment/local.js.sample`
-
- to
-
- `qbui/ui/server/src/config/environment/local.js`
-
-##Pre-installation
+### Pre-installation
 
 FIRST - Make sure you have the following installed 
 (Further instructions in the Core repo [setup instructions](https://github.com/QuickBase/QuickBase/blob/master/README.md))
@@ -25,7 +17,7 @@ FIRST - Make sure you have the following installed
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
-###Installing
+### Installing
 #### Install Node via NVM
 
 NVM only works with Mac but is the easier and cleaner option.
@@ -82,7 +74,7 @@ or through the GitHub desktop tool
 
     *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
-##Configuring
+## Configuring
 Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
 
 For developing set this environment variable in your bash profile
@@ -90,34 +82,15 @@ For developing set this environment variable in your bash profile
 
 By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- copy \<project root\>qbui/ui/server/src/config/environment/local.js.sample into the local.js
+- copy \<project root\>qbui/ui/server/src/config/environment/local.js.sample into local.js
+- copy \<project root\>qbui/ui/server/src/config/environment/e2e.js.sample into e2e.js
 
-Notes about the above configuration:
+Edit both files and switch to the commented out values for javaHost, eeHost and eeHostPort so you point to the trunk integration environment
 
-* SSL support is commented out.  See the section at the bottom of this README for setup instruction.
-
-* Environment variable 'javaHost' points to a local core instance rest endpoint.  Change to point to another server instance if not running Quickbase java core backend locally.
-
-* Environment variable 'eeHost' points to a local experience engine instance rest endpoint.  Change to point to another server instance if not running Quickbase java EE backend locally.
-
-* Environment variable 'eeHostEnable' indicates if the experience engine instance is used by the node layer or not.  Set this flag to true to enable the experience engine support.
-
-* Hotloading is enabled. If you need to connect to your server from inside a VM (such as when testing with IE or Edge) or from any device other than your laptop, you will need to disable hotloading with our current configuration or Node will refuse the connection since it didn't originate from 127.0.0.1/localhost. (Hotloading a.k.a. Hot Module Replacement / HMR is a feature of webpack that watches for changes on your disk and updates the code in the browser without you needing to refresh the page.)
-
-RUN-TIME configuration.
-
-The following run-time environment variable is supported:
-
-        NODE_ENV: <name of config file>
-
-        For example:
-
-        NODE_ENV=test
-
-        will load the test.js file for configuration, default is local.js
+See [notes about the above configuration](https://github.com/QuickBase/qbui/blob/master/ui/README.md#configuring)
 
 
-##Instructions to run server and watch for changes
+## Instructions to run server and watch for changes
 
 * `cd` to the \<project root\>qbui/ui directory.
 
@@ -130,159 +103,14 @@ The following run-time environment variable is supported:
 * Current urls supported
     * http://localhost:9000/
 
-###Note :
+### Note :
  The Node Server only listen via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
 
 ## Testing
-cd to <project root>/qbui/ui directory
-###Lint and Code Style tests
-Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
+See [testing instructions](https://github.com/QuickBase/qbui/blob/master/ui/README.md#testing)
 
-* Linting check [ESLint](http://eslint.org/docs/rules/) -
-    Look at the .eslintrc files for the lint rules and coding standards
-    and set the following settings for coding style errors to appear in the IDE inspection. (This step is manual due to difference user code paths)
-
-    *  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings
-
-    *  ESLint dialog
-        * ![eslintDialogScreenShot.png](eslintDialogScreenShot.png)
-    * Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` to override with comment statements.
-    * The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffectkr/popularconvention#javascript
-
-    * The ESLint setup in the above dialog will now run eslint with the Intellij `Analyze\Inspect Code...` feature and while you edit it will show errors in the left margin in red.
-
-    * ESLint is part of the build and build will fail if there are errors.
-
-    * The script to run eslint from the command line is `NODE_ENV=local npm run lint` or to fix the stylistic [fixable errors][http://eslint.org/docs/rules/) run `NODE_ENV=local npm run lintFix` our build does lintFix. The lint npm script runs ` node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .`
-
-    * Also to run the eslint on the source from Intellij *custom tool* with clickable links to error location, do the following
-        1. Create a external tool (`IntelliJ\Preferences...\Tools\Exterenal Tools`) to run eslint using this
-           - program: `npm`
-           - parameters: `run lintFix`
-           - working directory: `$ProjectFileDir$/ui`
-
-        2. Use an output filter like:
-
-           ```bash
-             $FILE_PATH$.*:$LINE$.*:$COLUMN$
-
-           ```
-           * For Example ![eslintExternalTool](eslintExternalTool.png)
-
-        3. When launching the tool now any eslint errors listed which have file location will be also clickable. Clicking will take you to the error location in the Intellij editor:
-           ![](eslintErrorExample.png)
-
-
-
-
-
-###Unit tests
-Running `grunt test` will run the client and server unit tests with karma and mocha as well as the codeStandards.
-
-Use `grunt test:server` to only run server tests.
-
-Use `grunt test:client` to only run client tests.
-
-Note: If you see a `Cannot find module './build/Release/DTraceProviderBindings'] code: 'MODULE_NOT_FOUND'` in the log from unit test run ` npm install bunyan ` to fix
-
-
-###Mocha Integration tests
-
-In order to run the integration tests you will need to have your Node.js express server and your Java API service running
-
-Make sure you have configured your local.js file properly (as described above):
-
-        //REST endpoint (protocol,server,port)
-        javaHost: 'http://localhost:8080'
-        //Express Server
-        DOMAIN: 'http://localhost:9000'
-
-
-
-Because the integration tests create a realm and the Mac OS by default does not handle loopback calls to localhost, we need to setup / configure
-a local DNS server (Dnsmasq):
-
-
-        # Update your homebrew installation
-        brew up
-        # Install Dnsmasq
-        brew install dnsmasq
-
-        # Copy the default configuration file:
-        mkdir -p /usr/local/etc && cp $(brew list dnsmasq | grep /dnsmasq.conf.example$) /usr/local/etc/dnsmasq.conf
-
-        # Copy the daemon configuration file into place:
-        sudo cp $(brew list dnsmasq | grep /homebrew.mxcl.dnsmasq.plist$) /Library/LaunchDaemons/
-
-        # Start Dnsmasq automatically when the OS starts:
-        sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-
-        #if you ever need to unload it use
-        sudo launchctl remove homebrew.mxcl.dnsmasq
-        sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-
-
-Configure Dnsmasq: The configuration file lives at `/usr/local/etc/dnsmasq.conf` by default, so open this file in your favourite editor. Add or uncomment this line in config file:
-
-        address=/localhost/127.0.0.1
-
-        # Restart Dnsmasq:
-        sudo launchctl stop homebrew.mxcl.dnsmasq
-        sudo launchctl start homebrew.mxcl.dnsmasq
-
-At this point Dnsmasq is being used for all DNS requests. We want to configure the Mac OS to just use Dnsmasq for localhost callbacks:
-
-        sudo mkdir -p /etc/resolver
-        sudo tee /etc/resolver/localhost >/dev/null <<EOF
-        nameserver 127.0.0.1
-        EOF
-
-For more documentation on Dnsmasq see: `http://passingcuriosity.com/2013/dnsmasq-dev-osx/`
-
-To make sure it's working properly run java backend and in your web browser hit:
-`http://blah.localhost:8080/api/`
-If swagger comes up then Dnsmasq is configured properly.
-
-Now try to hit an external website like `http://www.google.com` to make sure the OS is handling non localhost calls.
-
-Now you should be able to run your Mocha integration tests!
-With the Java API service running, from the qbui/ui directory run:
-
-        export NODE_ENV=local
-        grunt mochaTest:integration
-
-Note that this command will launch your Node express server if it's not running.
-
-###WebdriverIO E2E tests
-
-To setup WebdriverIO for browser end to end tests, follow the **README.md** setup guide in the `qbui/ui/wdio` directory. Make sure to check out the **NEWBIEGUIDE.md** as well!
-
-Create your own copy of the **e2e.js** Node config file by copying and renaming **e2e.js.sample** located in `qbui/ui/server/src/config/environment`. The e2e tests have their own config file as they will launch their own node instance when running.
-
-Now run `npm run update-webdriver` in terminal from the `qbui/ui` directory
-
-Once everything is configured you can run `grunt test:e2eLocalDataGen` as a smoke test to check that everything is working properly. This script will generate you a test realm and app which you can view in the UI.
-
-See [Debugging UI](./DEBUGGING.md) for more info on debugging tests.
-
-To run your local e2e tests out on Sauce Labs against your local dev machine you can run
-
-`grunt test:e2eLocalSauce --baseUrl=<the url you want to hit> --sauceKey=<the credentials for our sauceLabs account>`
-
-The credentials for the Sauce Labs account can be found in the Jenkins job **try-ui-webdriverIO**
-
-For more information on Sauce Labs visit: [https://docs.saucelabs.com/](https://docs.saucelabs.com/)
-
-To configure WebdriverIO to use different browsers, modify or add a file to the wdio configuration under `qbui/ui/wdio/config`.
-
-For all of the browser capabilities check out:
-
-[http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config](http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config)
-and
-[https://www.browserstack.com/automate/capabilities](https://www.browserstack.com/automate/capabilities)
-
-##Using Gradle to build distribution node server
+## Using Gradle to build distribution node server
 Gradle is used to build a production version of the node server and client application.
 
 Output from the Gradle Build and Test task is saved under the /build folder.
