@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
 //import Fluxxor from 'fluxxor';
 import ReportUtils from '../../../utils/reportUtils';
 import serverTypeConsts from '../../../../../common/src/constants';
 import * as query from '../../../constants/query';
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
-import * as ReportActions from '../../../actions/reportActions';
+import {loadDynamicReport} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
 
 //const FluxMixin = Fluxxor.FluxMixin(React);
@@ -64,7 +65,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             queryParams[query.SORT_LIST_PARAM] = sortListParam;
 
             //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-            this.props.dispatch(ReportActions.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
+            this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
         },
 
         /**
@@ -92,7 +93,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
             //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-            this.props.dispatch(ReportActions.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
+            this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
         },
 
         render() {
