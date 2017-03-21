@@ -217,7 +217,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will move a field down if the selected form element is not located at the last index', () => {
-        let currentForm = { formData: { formMeta: {fields: [1,2,3,4, 5, 6] } } };
+        let currentForm = {formData: {formMeta: {fields:[1,2,3,4, 5, 6]}}};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -237,7 +237,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will not move a field down if the selected form element is greater than the last index', () => {
-        let currentForm = { formData: { formMeta: {fields: [1,2,3,4] } } };
+        let currentForm = {formData: {formMeta: {fields: [1,2,3,4]}}};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -257,7 +257,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will select a field when enter is pressed', () => {
-        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+        let currentForm = {formBuilderChildrenTabIndex: ["0"]};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -281,7 +281,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will select a field when space is pressed', () => {
-        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+        let currentForm = {formBuilderChildrenTabIndex: ["0"]};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -305,7 +305,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will not select a field when a user presses a key that is not enter or space', () => {
-        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+        let currentForm = {formBuilderChildrenTabIndex: ["0"]};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -313,7 +313,7 @@ describe('FieldEditingTools', () => {
             which: 29
         };
         component = shallow(<FieldEditingTools
-            currentForm = {currentForm}
+            currentForm={currentForm}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
@@ -329,7 +329,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will not select a field when the field is already selected', () => {
-        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+        let currentForm = {formBuilderChildrenTabIndex: ["0"]};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -337,7 +337,7 @@ describe('FieldEditingTools', () => {
             which: 13
         };
         component = shallow(<FieldEditingTools
-            currentForm = {currentForm}
+            currentForm={currentForm}
             location={location}
             selectedFields={[location]}
             formId={formId}
