@@ -12,12 +12,6 @@ const mockReactDom = {
             offsetLeft: 5,
             offsetHeight: 50,
             offsetWidth: 100
-        },
-        selectedForm: {
-            offsetTop: 5,
-            offsetLeft: 5,
-            offsetHeight: 50,
-            offsetWidth: 100
         }};
     }
 };
@@ -26,8 +20,8 @@ const mockParentProps = {
     removeField(_location) {},
     openFieldPreferences(_location) {},
     selectField(_formId, _location) {},
-    keyBoardMoveFieldUp (_formId, _location) {},
-    keyBoardMoveFieldDown (_formId, _location) {}
+    keyBoardMoveFieldUp(_formId, _location) {},
+    keyboardMoveFieldDown(_formId, _location) {}
 };
 
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
@@ -165,6 +159,101 @@ describe('FieldEditingTools', () => {
         expect(instance.scrollElementIntoView).toHaveBeenCalled();
     });
 
+    it('will not scroll into view when the selectedFormElement is at the top of the page', () => {
+        let container = {
+            height: 50,
+            top: 50
+        };
+
+        component = shallow(<FieldEditingTools
+            location={location}
+            selectedFields={[location]}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'getSelectedFormElementContainer').and.returnValue(container);
+        spyOn(instance, 'scrollElementIntoView');
+
+        instance.updateScrollLocation();
+
+        expect(instance.scrollElementIntoView).not.toHaveBeenCalled();
+    });
+
+    it('will move a field up if the selected form element is not at index 0', () => {
+        spyOn(mockParentProps, 'keyBoardMoveFieldUp');
+
+        component = shallow(<FieldEditingTools
+            location={location}
+            selectedFields={[location]}
+            formId={formId}
+            keyBoardMoveFieldUp={mockParentProps.keyBoardMoveFieldUp}
+        />);
+
+        let instance = component.instance();
+
+        instance.keyboardMoveFieldUp();
+
+        expect(mockParentProps.keyBoardMoveFieldUp).toHaveBeenCalledWith(formId, location);
+    });
+
+    it('will not move a field up if the selected form element is at index 0', () => {
+        const locationAtIndexZero = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 0};
+
+        spyOn(mockParentProps, 'keyBoardMoveFieldUp');
+
+        component = shallow(<FieldEditingTools
+            location={locationAtIndexZero}
+            selectedFields={[locationAtIndexZero]}
+            formId={formId}
+            keyBoardMoveFieldUp={mockParentProps.keyBoardMoveFieldUp}
+        />);
+
+        let instance = component.instance();
+
+        instance.keyboardMoveFieldUp();
+
+        expect(mockParentProps.keyBoardMoveFieldUp).not.toHaveBeenCalled();
+    });
+
+    it('will move a field down if the selected form element is not located at the last index', () => {
+        let currentForm = { formData: { formMeta: {fields: [1,2,3,4, 5, 6] } } };
+
+        spyOn(mockParentProps, 'keyboardMoveFieldDown');
+
+        component = shallow(<FieldEditingTools
+            currentForm = {currentForm}
+            location={location}
+            selectedFields={[location]}
+            formId={formId}
+            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
+        />);
+
+        let instance = component.instance();
+
+        instance.keyboardMoveFieldDown();
+
+        expect(mockParentProps.keyboardMoveFieldDown).toHaveBeenCalledWith(formId, location);
+    });
+
+    it('will not move a field down if the selected form element is greater than the last index', () => {
+        let currentForm = { formData: { formMeta: {fields: [1,2,3,4] } } };
+
+        spyOn(mockParentProps, 'keyboardMoveFieldDown');
+
+        component = shallow(<FieldEditingTools
+            currentForm = {currentForm}
+            location={location}
+            selectedFields={[location]}
+            formId={formId}
+            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
+        />);
+
+        let instance = component.instance();
+
+        instance.keyboardMoveFieldDown();
+
+        expect(mockParentProps.keyboardMoveFieldDown).not.toHaveBeenCalled();
+    });
 });
 
 

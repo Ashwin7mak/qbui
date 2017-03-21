@@ -106,15 +106,15 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    keyboardMoveFieldUp(formId, currentLocation) {
-        if (currentLocation && currentLocation.elementIndex !== 0) {
-            this.props.keyBoardMoveFieldUp(formId, currentLocation);
+    keyboardMoveFieldUp() {
+        if (this.props.formId && this.props.selectedFields[0].elementIndex !== 0) {
+            this.props.keyBoardMoveFieldUp(this.props.formId, this.props.selectedFields[0]);
         }
     }
 
-    keyboardMoveFieldDown(formId, currentLocation) {
-        if (currentLocation && currentLocation.elementIndex !== this.props.currentForm.formData.formMeta.fields.length - 1) {
-            this.props.keyboardMoveFieldDown(formId, currentLocation);
+    keyboardMoveFieldDown() {
+        if (this.props.selectedFields && this.props.selectedFields[0].elementIndex < this.props.currentForm.formData.formMeta.fields.length - 1) {
+            this.props.keyboardMoveFieldDown(this.props.formId, this.props.selectedFields[0]);
         }
     }
 
@@ -182,8 +182,8 @@ export class FieldEditingTools extends Component {
                 ref={fieldEditingTools => this.fieldEditingTools = fieldEditingTools}
             >
                 <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={[
-                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(this.props.formId, this.props.selectedFields[0]); return false;}},
-                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(this.props.formId, this.props.selectedFields[0]); return false;}}
+                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}}
                 ]}/>
 
                 <DragHandle />
