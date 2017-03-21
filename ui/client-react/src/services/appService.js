@@ -12,8 +12,7 @@ class AppService extends BaseService {
         this.API = {
             GET_APP           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
             GET_APP_USERS     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.USERS}`,
-            GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`,
-            CREATE_TABLE_COMPONENTS      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/${constants.TABLECOMPONENTS}`
+            GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`
         };
     }
 
@@ -35,8 +34,6 @@ class AppService extends BaseService {
     getAppUsers(appId) {
         let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
         return super.get(url);
-        //let url = super.constructUrl(this.API.CREATE_TABLE_COMPONENTS, [appId]);
-        //return super.post(url, {name: "name", description: "desc", tableIcon: "icon", tableNoun: "noun"});
     }
 
     /**
