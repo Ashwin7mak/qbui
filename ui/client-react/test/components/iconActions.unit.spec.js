@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import QbIconActions  from '../../src/components/actions/iconActions';
+import QbIconActions from '../../src/components/actions/iconActions';
 import {__RewireAPI__ as IconActionsRewireAPI} from '../../../reuse/client/src/components/iconActions/iconActions';
 
 const I18nMessageMock = React.createClass({

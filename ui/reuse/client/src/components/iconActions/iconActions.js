@@ -61,12 +61,12 @@ class IconActions extends Component {
 
         return (
             <Button
-                key={action.i18nMessageKey}
+                key={this.getActionKey(action)}
                 tabIndex="0"
                 className={classNames.join(' ')}
                 onClick={action.onClick}
             >
-                <Tooltip key={this.getActionKey(action)} i18nMessageKey={action.i18nMessageKey} plainMessage={action.plainMessage} placement="bottom" >
+                <Tooltip i18nMessageKey={action.i18nMessageKey} plainMessage={action.plainMessage} placement="bottom">
                     <Icon icon={action.icon}/>
                 </Tooltip>
             </Button>
@@ -89,13 +89,13 @@ class IconActions extends Component {
 
     renderActionInMenu(action) {
         return (
-            <MenuItem key={this.getActionKey(action)} href="#" onSelect={action.onClick} disabled={action.disabled} >
+            <MenuItem className="menuActionButton" key={this.getActionKey(action)} href="#" onSelect={action.onClick} disabled={action.disabled}>
                 {
                     this.props.menuIcons &&
                     <Icon className={action.disabled ? "disabled " + action.className : action.className} icon={action.icon}/>
                 }
 
-                {action.i18nMessageKey ? <I18nMessage message={action.i18nMessageKey}  />: action.plainMessage}
+                {action.i18nMessageKey ? <I18nMessage message={action.i18nMessageKey}  /> : action.plainMessage}
             </MenuItem>
         );
     }
@@ -107,9 +107,8 @@ class IconActions extends Component {
         const {actions, pullRight, maxButtonsBeforeMenu} = this.props;
         const classes = this.props.menuIcons ? 'menuIcons' : '';
 
-
         return (
-            <Dropdown className={classes} id="nav-right-dropdown" pullRight={pullRight} onToggle={this.onDropdownToggle} rootClose>
+            <Dropdown className={`iconActionsDropDownMenu ${classes}`} id="nav-right-dropdown" pullRight={pullRight} onToggle={this.onDropdownToggle} rootClose>
                 {this.renderDropDownTrigger()}
 
                 <Dropdown.Menu >
@@ -149,7 +148,7 @@ IconActions.propTypes = {
      * An array of actions to display */
     actions: PropTypes.arrayOf(React.PropTypes.shape({
         /**
-         * The key to use to identify the action in the array of components. */
+         * The key to use to identify the action in the array of components and specify the action in the callback */
         key: PropTypes.string,
 
         /**
@@ -165,7 +164,7 @@ IconActions.propTypes = {
         plainMessage: PropTypes.string,
 
         /**
-         * A callback that occurs when this action is clicked */
+         * A callback that occurs when this action is clicked. It receives an onClick or onSelect event as an argument. */
         onClick: PropTypes.func,
 
         /**
