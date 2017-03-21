@@ -143,7 +143,7 @@ export const FormBuilderContainer = React.createClass({
                 <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
                     {key: 'esc', callback: () => {this.onCancel(); return false;}},
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-            ]}/>
+                ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
 

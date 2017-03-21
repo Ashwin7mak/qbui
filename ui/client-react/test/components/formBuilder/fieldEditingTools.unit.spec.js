@@ -217,7 +217,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will move a field down if the selected form element is not located at the last index', () => {
-        let currentForm = {formData: {formMeta: {fields:[1,2,3,4, 5, 6]}}};
+        let currentForm = {formData: {formMeta: {fields:[1, 2, 3, 4, 5, 6]}}};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 
@@ -237,7 +237,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('will not move a field down if the selected form element is greater than the last index', () => {
-        let currentForm = {formData: {formMeta: {fields: [1,2,3,4]}}};
+        let currentForm = {formData: {formMeta: {fields: [1, 2, 3, 4]}}};
 
         spyOn(mockParentProps, 'keyboardMoveFieldDown');
 

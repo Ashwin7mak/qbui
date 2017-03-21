@@ -297,7 +297,7 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
                 ...stateWithViewForm[0],
                 formData: {formMeta: updatedFormMeta},
-                selectedFields: [ updatedFormMeta ]
+                selectedFields: [updatedFormMeta]
             }]);
             expect(mockMoveFieldHelper.keyBoardMoveFieldUp).toHaveBeenCalledWith(
                 stateWithViewForm[0].formData.formMeta, 1
@@ -344,7 +344,7 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
                 ...stateWithViewForm[0],
                 formData: {formMeta: updatedFormMeta},
-                selectedFields: [ updatedFormMeta ]
+                selectedFields: [updatedFormMeta]
             }]);
             expect(mockMoveFieldHelper.keyBoardMoveFieldDown).toHaveBeenCalledWith(
                 stateWithViewForm[0].formData.formMeta, 1

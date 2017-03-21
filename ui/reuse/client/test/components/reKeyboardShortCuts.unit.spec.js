@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import ReKeyboardShortCuts from '../../src/components/reKeyboardShortcuts/reKeyboardShortcuts'
+import ReKeyboardShortCuts from '../../src/components/reKeyboardShortcuts/reKeyboardShortcuts';
 
 const keyBindings = [{key: 'esc', callback: () => {}}, {key: 'mod+s', callback: () => {}}];
 const testId = "testId";
