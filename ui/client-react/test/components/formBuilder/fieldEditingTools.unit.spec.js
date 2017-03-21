@@ -25,6 +25,7 @@ const mockParentProps = {
 };
 
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
+const diffSelectedLocation = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
 const formId = 'view';
 let component;
 
@@ -253,6 +254,102 @@ describe('FieldEditingTools', () => {
         instance.keyboardMoveFieldDown();
 
         expect(mockParentProps.keyboardMoveFieldDown).not.toHaveBeenCalled();
+    });
+
+    it('will select a field when enter is pressed', () => {
+        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+
+        spyOn(mockParentProps, 'keyboardMoveFieldDown');
+
+        let e = {
+            which: 13
+        };
+        component = shallow(<FieldEditingTools
+            currentForm = {currentForm}
+            location={location}
+            selectedFields={[diffSelectedLocation]}
+            formId={formId}
+            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'onClickField');
+
+        instance.selectedCurrentField(e);
+
+        expect(instance.onClickField).toHaveBeenCalledWith(e);
+    });
+
+    it('will select a field when space is pressed', () => {
+        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+
+        spyOn(mockParentProps, 'keyboardMoveFieldDown');
+
+        let e = {
+            which: 32
+        };
+        component = shallow(<FieldEditingTools
+            currentForm = {currentForm}
+            location={location}
+            selectedFields={[diffSelectedLocation]}
+            formId={formId}
+            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'onClickField');
+
+        instance.selectedCurrentField(e);
+
+        expect(instance.onClickField).toHaveBeenCalledWith(e);
+    });
+
+    it('will not select a field when a user presses a key that is not enter or space', () => {
+        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+
+        spyOn(mockParentProps, 'keyboardMoveFieldDown');
+
+        let e = {
+            which: 29
+        };
+        component = shallow(<FieldEditingTools
+            currentForm = {currentForm}
+            location={location}
+            selectedFields={[diffSelectedLocation]}
+            formId={formId}
+            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'onClickField');
+
+        instance.selectedCurrentField(e);
+
+        expect(instance.onClickField).not.toHaveBeenCalled();
+    });
+
+    it('will not select a field when the field is already selected', () => {
+        let currentForm = { formBuilderChildrenTabIndex: [ {tabIndex: "0"} ]};
+
+        spyOn(mockParentProps, 'keyboardMoveFieldDown');
+
+        let e = {
+            which: 13
+        };
+        component = shallow(<FieldEditingTools
+            currentForm = {currentForm}
+            location={location}
+            selectedFields={[location]}
+            formId={formId}
+            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
+        />);
+
+        let instance = component.instance();
+        spyOn(instance, 'onClickField');
+
+        instance.selectedCurrentField(e);
+
+        expect(instance.onClickField).not.toHaveBeenCalled();
     });
 });
 
