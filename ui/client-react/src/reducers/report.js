@@ -174,17 +174,31 @@ const report = (state = [], action) => {
         return state;
     }
     case types.REMOVE_REPORT_RECORDS: {
-        // remove record from all report stores
-        const ids = action.content.recIds;
-        const reports = _.cloneDeep(state);
-        reports.forEach((rpt) => {
-            ids.forEach((recId) => {
-                //  remove the record from the report
-                ReportModelHelper.deleteRecordFromReport(rpt.data, recId);
-                rpt.selectedRows = _.without(rpt.selectedRows, recId);
+        // search all reports in the store and remove the deleted record
+        // from any loaded report.
+        const appId = action.content ? action.content.appId : null;
+        const tblId = action.content ? action.content.tblId : null;
+        const ids = action.content ? action.content.recIds : [];
+
+        if (appId && tblId && Array.isArray(ids)) {
+            const reports = _.cloneDeep(state);
+            reports.forEach((rpt) => {
+                //  table reports have a data model object
+                if (_.has(rpt, 'data')) {
+                    //  search each report entry and remove the record
+                    //  from any report for the appId/tblId/recId combination
+                    if (rpt.appId === appId && rpt.tblId === tblId) {
+                        ids.forEach((recId) => {
+                            //  remove the record from the report
+                            ReportModelHelper.deleteRecordFromReport(rpt.data, recId);
+                            rpt.selectedRows = _.without(rpt.selectedRows, recId);
+                        });
+                    }
+                }
             });
-        });
-        return reports;
+            return reports;
+        }
+        return state;
     }
     case types.ADD_BLANK_REPORT_RECORD: {
         let currentReport = getReportFromState(action.id);
@@ -212,10 +226,11 @@ const report = (state = [], action) => {
         return state;
     }
     case types.CHANGE_LOCALE: {
-        // listen for change locale event and update report columns to new locale for all reports
+        // listen for change locale event and update all reports to the new locale
         const reports = _.cloneDeep(state);
         reports.forEach((rpt) => {
             if (rpt && !rpt.loading) {
+                //  table reports have a data model object
                 if (_.has(rpt, 'data')) {
                     let groupEls = rpt.data.groupEls;
                     let fids = rpt.data.fids;
