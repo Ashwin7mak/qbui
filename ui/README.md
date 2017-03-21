@@ -510,7 +510,7 @@ hotloader only opens up node on port 9000 to other devices. Other services
 (such as core on port 8080 or Experience Engine on port 8081) are always open to
 all devices on the network and aren't affected by the hotloader settings.
 
-##Troubleshooting
+## Troubleshooting
 POSSIBLE ISSUES -- and how to resolve
 
 1. First, since the ui has dependencies on the java backend make sure:
@@ -541,7 +541,7 @@ POSSIBLE ISSUES -- and how to resolve
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
 
-##Other Resources
+## Other Resources
 
 * Links for learning Node, react, etc - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
 
