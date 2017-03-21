@@ -83,9 +83,9 @@ export const ReportContent = React.createClass({
         //  data is the row object...get the record id
         //let recId = data[key].value;
 
-        //  TODO: improve the retrieve of a report
-        //const {filteredRecords, hasGrouping} = this.props.reportData.data;
-        const {filteredRecords, hasGrouping} = this.props.report[0].data;
+        //  TODO: improve the retrieve of a report from redux store
+        const {filteredRecords, hasGrouping} = this.props.reportData.data;
+        //const {filteredRecords, hasGrouping} = this.props.report[0].data;
 
         let recordsArray = [];
         if (hasGrouping) {
@@ -121,8 +121,10 @@ export const ReportContent = React.createClass({
      * @returns {*}
      */
     getOrigRec(recId) {
-        //let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+        //  TODO: improve the retrieve of a report from redux store
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        //let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+
         let primaryKeyName = this.props.primaryKeyName;
 
         let fids = {};
@@ -148,10 +150,12 @@ export const ReportContent = React.createClass({
      */
     getOrigGroupedRec(recId) {
         let orig = {names:{}, fids:{}};
+
+        //  TODO: improve the retrieve of a report from redux store
         let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
-        let primaryKeyName = this.props.primaryKeyName;
         //let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
-        //// this.props.report[0].data
+
+        let primaryKeyName = this.props.primaryKeyName;
 
         let rec = ReportUtils.findGroupedRecord(recs, recId, primaryKeyName);
 
@@ -225,6 +229,7 @@ export const ReportContent = React.createClass({
             let changes = {};
 
             if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+                //  TODO: improve the retrieve of a report from redux store
                 origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
                 //// this.props.report[0].data
             } else {
@@ -505,7 +510,7 @@ export const ReportContent = React.createClass({
             if (pendEdits.isInlineEditOpen && pendEdits.currentEditingRecordId) {
                 recId = pendEdits.currentEditingRecordId;
             }
-            if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== reId) {
+            if (Number.isInteger(this.props.editingIndex) && this.props.editingId !== recId) {
                 recId = this.props.editingId;
             }
             if (recId) {

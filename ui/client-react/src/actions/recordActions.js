@@ -41,7 +41,8 @@ function _logValidationErrors(errors, msgPrefix) {
             // information in the fieldDef array.
             let errorObj = _.clone(err);
             delete errorObj.def;
-            logger.parseAndLogError(LogLevel.ERROR, {data:errorObj}, msgPrefix);
+            // log validation errors at info level
+            logger.parseAndLogError(LogLevel.INFO, {data:errorObj}, msgPrefix);
         });
     }
 }
