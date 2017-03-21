@@ -20,7 +20,7 @@
         }
     };
 
-    const cannedListAllReport = {/*'name': 'List All',*/
+    const cannedListAllReport = {/*'name': 'All <tableName>',*/
         [constants.REQUEST_PARAMETER.REPORT.TYPE]: 'TABLE'};
 
     const cannedListChangesReport = {[constants.REQUEST_PARAMETER.REPORT.NAME]: 'Latest Changes',
@@ -34,7 +34,7 @@
         ]};
 
     const cannedForm = {
-        //name: 'AXRBrcL1DR',
+        //name: <tableNoun> form,
         [constants.REQUEST_PARAMETER.FORM.TABS]: {
             0: {
                 [constants.REQUEST_PARAMETER.FORM.ORDER_IDX]: 0,
