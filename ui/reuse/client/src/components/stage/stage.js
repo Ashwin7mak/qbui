@@ -36,7 +36,7 @@ class Stage extends Component {
                         {this.props.pageActions}
                     </div>
                 </div>
-                
+
                 <Collapse in={this.state.open}>
                     <Well>{this.props.children}</Well>
                 </Collapse>
