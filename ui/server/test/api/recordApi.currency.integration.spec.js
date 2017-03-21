@@ -91,7 +91,7 @@
                             separator_pattern: 'THREE_THEN_TWO',
                             decimal_mark: ',',
                             position: 'LEFT',
-                            symbol: '\u20BD'
+                            //symbol: '\u20BD'
                         }
                     }
                 }
