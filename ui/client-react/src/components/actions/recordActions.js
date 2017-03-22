@@ -114,6 +114,11 @@ export const RecordActions = React.createClass({
 
 // similarly, abstract out the Redux dispatcher from the presentational component
 // (another bit of boilerplate to keep the component free of Redux dependencies)
+const mapStateToProps = (state) => {
+    return {
+        record: state.record
+    };
+};
 const mapDispatchToProps = (dispatch) => {
     return {
         deleteRecord:  (appId, tblId, recId, nameForRecords) => {
@@ -123,5 +128,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
+    mapStateToProps,
     mapDispatchToProps
 )(RecordActions);

@@ -1,16 +1,19 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
-import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
+
 import _ from 'lodash';
 import Locales from '../../src/locales/locales';
 import * as SchemaConsts from '../../src/constants/schema';
 import * as GroupTypes from '../../../common/src/groupTypes';
 import Promise from 'bluebird';
 import {APP_ROUTE} from '../../src/constants/urlConstants';
+import {CONTEXT} from '../../src/actions/context';
 
+Promise.onPossiblyUnhandledRejection(function(err) {
+    return err;
+});
 
-//TODO Code hygiene: Clean up names with underscores, replace with camelcase. Tracked at https://quickbase.atlassian.net/browse/MB-501
 var LocalesMock = {
     getLocale: function() {
         return 'en-us';
@@ -23,16 +26,20 @@ var LocalesMock = {
     }
 };
 
-var AGGridMock = React.createClass({
+class WindowLocationUtilsMock {
+    static pushWithQuery(key, recId) { }
+}
+
+var ReportGridMock = React.createClass({
     render: function() {
-        return <div>mock aggrid</div>;
+        return <div>mock reportgrid</div>;
     }
 });
 
 
-const header_empty = <div>nothing</div>;
+const headerEmpty = <div>nothing</div>;
 
-const fakeReportData_empty = {
+const fakeReportDataEmpty = {
     loading: false,
     data: {
         name: "",
@@ -41,11 +48,16 @@ const fakeReportData_empty = {
         recordsCount: 0
     }
 };
-const fakeReportData_emptyData = {
+const fakeReportDataEmptyData = {
     loading: true
 };
 
-const fakeReportData_simple = {
+const fakeReportDataSelectedRowsData = {
+    loading: true,
+    selectedRows: [1, 5]
+};
+
+const fakeReportDataSimple = {
     appId: "1",
     tblId: "2",
     rptId: "3",
@@ -89,7 +101,7 @@ const fakeReportData_simple = {
     }
 };
 
-const fakeReportDataFields_simple = {
+const fakeReportDataFieldsSimple = {
     fields: {
         data: [
             {
@@ -150,7 +162,7 @@ const fakeReportDataFields_simple = {
     }
 };
 
-const fakeReportData_pagedData  = {
+const fakeReportDataPagedData  = {
     loading: false,
     countingTotalRecords: false,
     numRows:5,
@@ -225,7 +237,7 @@ const fakeReportData_pagedData  = {
 };
 
 
-const fakeReportDataFields_unsaved = {
+const fakeReportDataFieldsUnsaved = {
     fields: {
         data: [
             {
@@ -250,7 +262,7 @@ const fakeReportDataFields_unsaved = {
     }
 };
 
-const fakeReportData_unsaved = {
+const fakeReportDataUnsaved = {
     loading: false,
     countingTotalRecords: false,
     recordsCount:1,
@@ -270,12 +282,12 @@ const fakeReportData_unsaved = {
 
 
 let map = new Map();
-fakeReportDataFields_unsaved.fields.data.forEach((field) => {
+fakeReportDataFieldsUnsaved.fields.data.forEach((field) => {
     map.set(field.id, field);
 });
-fakeReportData_unsaved.data.fieldsMap = map;
+fakeReportDataUnsaved.data.fieldsMap = map;
 
-const cols_with_numeric_field = [
+const colsWithNumericField = [
     {
         "field": "col_num",
         "datatypeAttributes": {
@@ -290,7 +302,7 @@ const cols_with_numeric_field = [
     }
 ];
 
-const cols_with_date_field = [
+const colsWithDateField = [
     {
         "field": "col_num"
     },
@@ -305,7 +317,7 @@ const cols_with_date_field = [
     }
 ];
 
-const cols_with_bold_attrs = [
+const colsWithBoldAttrs = [
     {
         "field": "col_num",
         "datatypeAttributes": {
@@ -319,7 +331,7 @@ const cols_with_bold_attrs = [
         "field": "col_date"
     }
 ];
-const cols_with_nowrap_attrs = [
+const colsWithNoWrapAttrs = [
     {
         "columnName": "col_num",
         "datatypeAttributes": {
@@ -334,7 +346,7 @@ const cols_with_nowrap_attrs = [
     }
 ];
 
-const fakeReportData_attributes = {
+const fakeReportDataAttributes = {
     loading: false,
     data: {
         name: "test",
@@ -373,42 +385,34 @@ const flux = {
         },
         measure: ()=> {
         },
-        recordPendingEditsCancel: ()=> {
-        },
-        recordPendingEditsStart: ()=> {
-        },
-        recordPendingEditsChangeField: ()=> {
-        },
-        recordPendingEditsCommit: ()=> {
-        },
-        recordPendingValidateField: ()=> {
-        },
-        newBlankReportRecord: ()=> {
-            return {
-                then: function(callback) {return callback(101);}
-            };
-        },
-        saveRecord: ()=> {
-            return {
-                then: function(callback) {return callback(101);}
-            };
-        },
-        saveNewRecord: ()=> {
-        },
-        selectedRows: ()=> {
-        },
-        editingReportRow: ()=> {
-        },
         logMeasurements : ()=> {
-        },
-        deleteRecord: ()=> {
-        },
-        openingReportRow: ()=> {
         }
     }
 };
 
-const fakeReportGroupData_template = {
+//  redux dispatch methods
+const props = {
+    appId: '1',
+    tblId: '2',
+    reactabular: true,
+    flux: flux,
+    record: [
+        {pendEdits: {}}
+    ],
+    report: [],
+    selectReportRecords: () => {},
+    openRecord: () => {},
+    editRecordStart: () => {},
+    editRecordCancel: () => {},
+    editRecordChange: () => {},
+    editRecordValidateField: () => {},
+    addBlankRecordToReport: () => {},
+    deleteRecord: () => {},
+    updateRecord: () => {},
+    createRecord: () => {}
+};
+
+const fakeReportGroupDataTemplate = {
     loading: false,
     data: {
         name: "test",
@@ -431,7 +435,7 @@ const fakeReportGroupData_template = {
     }
 };
 
-const fakeReportGroupData_recursiveTemplate = {
+const fakeReportGroupDataRecursiveTemplate = {
     loading: false,
     data: {
         name: "test",
@@ -466,7 +470,7 @@ describe('ReportContent grouping functions', () => {
     let localeGetMessageSpy;
 
     beforeEach(() => {
-        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('ReportGrid', ReportGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype, 'formatNumber').and.callFake(function(val) {
             return val;
@@ -478,11 +482,17 @@ describe('ReportContent grouping functions', () => {
     });
 
     afterEach(() => {
-        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('ReportGrid');
         ReportContentRewireAPI.__ResetDependency__('Locales');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();
+
+        //  initialize redux stores
+        props.reports = [];
+        props.record = [
+            {pendEdits: {}}
+        ];
     });
 
     var groupByNumberCases = [
@@ -514,17 +524,18 @@ describe('ReportContent grouping functions', () => {
 
     groupByNumberCases.forEach(function(test) {
         it('Test case: ' + test.name, function() {
-            let reportData = _.cloneDeep(fakeReportGroupData_template);
+            let reportData = _.cloneDeep(fakeReportGroupDataTemplate);
 
             reportData.data.groupFields[0].field.datatypeAttributes.type = test.dataType;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
 
-            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+            props.report[0] = reportData;
+            component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                     pendEdits={{}}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}
+                                                                    reportHeader={headerEmpty}
                                                                     reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header
@@ -555,17 +566,17 @@ describe('ReportContent grouping functions', () => {
 
     groupByTimeOfDayCases.forEach(function(test) {
         it('Test case: ' + test.name, function() {
-            let reportData = _.cloneDeep(fakeReportGroupData_template);
+            let reportData = _.cloneDeep(fakeReportGroupDataTemplate);
 
             reportData.data.groupFields[0].field.datatypeAttributes.type = SchemaConsts.TIME_OF_DAY;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
 
-            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                    pendEdits={{}}
+            props.report[0] = reportData;
+            component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}
+                                                                    reportHeader={headerEmpty}
                                                                     reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header
@@ -588,17 +599,17 @@ describe('ReportContent grouping functions', () => {
 
     groupByTextCases.forEach(function(test) {
         it('Test case: ' + test.name, function() {
-            let reportData = _.cloneDeep(fakeReportGroupData_template);
+            let reportData = _.cloneDeep(fakeReportGroupDataTemplate);
 
             reportData.data.groupFields[0].field.datatypeAttributes.type = SchemaConsts.TEXT;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
 
-            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                    pendEdits={{}}
+            props.report[0] = reportData;
+            component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}
+                                                                    reportHeader={headerEmpty}
                                                                     reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header
@@ -640,17 +651,17 @@ describe('ReportContent grouping functions', () => {
 
     groupByDateCases.forEach(function(test) {
         it('Test case: ' + test.name, function() {
-            let reportData = _.cloneDeep(fakeReportGroupData_template);
+            let reportData = _.cloneDeep(fakeReportGroupDataTemplate);
 
             reportData.data.groupFields[0].field.datatypeAttributes.type = test.dataType;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
 
-            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                    pendEdits={{}}
+            props.report[0] = reportData;
+            component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}
+                                                                    reportHeader={headerEmpty}
                                                                     reportFooter={fakeReportFooter}/>);
 
 
@@ -689,17 +700,17 @@ describe('ReportContent grouping functions', () => {
 
     groupByDurationCases.forEach(function(test) {
         it('Test case: ' + test.name, function() {
-            let reportData = _.cloneDeep(fakeReportGroupData_template);
+            let reportData = _.cloneDeep(fakeReportGroupDataTemplate);
 
             reportData.data.groupFields[0].field.datatypeAttributes.type = SchemaConsts.DURATION;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
 
-            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                    pendEdits={{}}
+            props.report[0] = reportData;
+            component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}
+                                                                    reportHeader={headerEmpty}
                                                                     reportFooter={fakeReportFooter}/>);
 
 
@@ -717,12 +728,12 @@ describe('ReportContent grouping functions', () => {
 
     it('Test case: Recursive test', function() {
         let localizeGroupingSpy = spyOn(ReportContent.prototype, 'localizeGroupingHeaders').and.callThrough();
-        let reportData = fakeReportGroupData_recursiveTemplate;
+        let reportData = fakeReportGroupDataRecursiveTemplate;
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
+        props.report[0] = reportData;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={reportData}
-                                                                reportHeader={header_empty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
 
         expect(localizeGroupingSpy.calls.count()).toEqual(0);
@@ -737,7 +748,7 @@ describe('ReportContent grouping functions exception handling', () => {
     let localeGetMessageSpy;
 
     beforeEach(() => {
-        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('ReportGrid', ReportGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype, 'formatNumber').and.throwError();
         localizeDateSpy = spyOn(ReportContent.prototype, 'formatDate').and.throwError();
@@ -745,11 +756,17 @@ describe('ReportContent grouping functions exception handling', () => {
     });
 
     afterEach(() => {
-        ReportContentRewireAPI.__ResetDependency__('AGGrid');
         ReportContentRewireAPI.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('ReportGridMock');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();
+
+        //  initialize redux stores
+        props.reports = [];
+        props.record = [
+            {pendEdits: {}}
+        ];
     });
 
     var groupTestExceptionCases = [
@@ -759,17 +776,17 @@ describe('ReportContent grouping functions exception handling', () => {
 
     groupTestExceptionCases.forEach(function(test) {
         it('Test case: ' + test.name, function() {
-            let reportData = _.cloneDeep(fakeReportGroupData_template);
+            let reportData = _.cloneDeep(fakeReportGroupDataTemplate);
 
             reportData.data.groupFields[0].field.datatypeAttributes.type = test.dataType;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
 
-            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                    pendEdits={{}}
+            props.report[0] = reportData;
+            component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}
+                                                                    reportHeader={headerEmpty}
                                                                     reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header matches the input
@@ -788,98 +805,104 @@ describe('ReportContent functions', () => {
     var component;
 
     beforeEach(() => {
-        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('ReportGrid', ReportGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('WindowLocationUtils', WindowLocationUtilsMock);
+
+        spyOn(WindowLocationUtilsMock, 'pushWithQuery').and.callThrough();
+        //   spy on redux methods
+        spyOn(props, 'selectReportRecords').and.callThrough();
+        spyOn(props, 'openRecord').and.callThrough();
+        spyOn(props, 'editRecordStart').and.callThrough();
+        spyOn(props, 'editRecordCancel').and.callThrough();
+        spyOn(props, 'editRecordChange').and.callThrough();
+        spyOn(props, 'editRecordValidateField').and.callThrough();
+        spyOn(props, 'addBlankRecordToReport').and.callThrough();
+        spyOn(props, 'deleteRecord').and.callThrough();
+        spyOn(props, 'updateRecord').and.callThrough();
+        spyOn(props, 'createRecord').and.callThrough();
     });
 
     afterEach(() => {
-        ReportContentRewireAPI.__ResetDependency__('AGGrid');
         ReportContentRewireAPI.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('ReportGrid');
+        ReportContentRewireAPI.__ResetDependency__('WindowLocationUtils');
+
+        WindowLocationUtilsMock.pushWithQuery.calls.reset();
+        props.selectReportRecords.calls.reset();
+        props.openRecord.calls.reset();
+        props.editRecordStart.calls.reset();
+        props.editRecordCancel.calls.reset();
+        props.editRecordChange.calls.reset();
+        props.editRecordValidateField.calls.reset();
+        props.addBlankRecordToReport.calls.reset();
+        props.deleteRecord.calls.reset();
+        props.updateRecord.calls.reset();
+        props.createRecord.calls.reset();
+
+        //  initialize redux stores
+        props.reports = [];
+        props.record = [
+            {pendEdits: {}}
+        ];
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of empty component', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
     });
-
-    it('test render of dtsErrorModal component', () => {
-        var mockPendEdits = {showDTSErrorModal: true};
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}
-                                                                pendEdits={mockPendEdits}/>);
-        var dtsErrorModal = document.querySelector(dtsErrorModalClass);
-        expect(dtsErrorModal).not.toBeNull();
-        if (dtsErrorModal) {
-            dtsErrorModal.parentNode.removeChild(dtsErrorModal);
-        }
-    });
-
-    it('test hide of dtsErrorModal component', () => {
-        var mockPendEdits = {showDTSErrorModal: false};
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}
-                                                                pendEdits={mockPendEdits}/>);
-        var dtsErrorModal = document.querySelector(dtsErrorModalClass);
-        expect(dtsErrorModal).toBeNull();
-    });
-
 
     it('test hide of footer on row selection', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_emptyData}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmptyData}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 selectedRows={selectedRowIds}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         var reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
         expect(reportNavigation.length).toEqual(0);
     });
 
     it('test render of empty data', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_emptyData}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmptyData}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
     });
 
     it('test render with keyField', () => {
-
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_emptyData}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmptyData}
                                                                 fields={{keyField : {name: 'testId'}}}
-                                                                reportHeader={header_empty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
     });
 
 
     it('test getOrigRec', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        let origRec = Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]);
         let modifiedRec = _.merge({}, origRec, {col_num: {value:44}});
         let origRecExpect = {
-            names: Object.assign({}, fakeReportData_simple.data.filteredRecords[0]),
+            names: Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]),
             fids: {
                 4: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 4);})],
                 5: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 5);})],
@@ -889,23 +912,23 @@ describe('ReportContent functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         let result = component.getOrigRec(modifiedRec[keyField].value);
         expect(result).toEqual(origRecExpect);
     });
 
     it('test getOrigGroupedRec with reportData', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        let origRec = Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]);
         let modifiedRec = _.merge({}, origRec, {col_num: {value:44}});
         let origGroupRecExpect = {
-            names: Object.assign({}, fakeReportData_simple.data.filteredRecords[0]),
+            names: Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]),
             fids: {
                 4: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 4);})],
                 5: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 5);})],
@@ -915,40 +938,40 @@ describe('ReportContent functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         let result = component.getOrigGroupedRec(modifiedRec[keyField].value);
         expect(result).toEqual(origGroupRecExpect);
     });
 
     it('test getOrigGroupedRec with no reportData', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        let origRec = Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]);
         let modifiedRec = _.merge({}, origRec, {col_num: {value:44}});
         let origGroupRecNullExpect = {names: {}, fids: {}};
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
+        props.report[0] = {};
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
                                                                 reportData={{}}
-                                                                reportHeader={header_empty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         let result = component.getOrigGroupedRec(modifiedRec[keyField].value);
         expect(result).toEqual(origGroupRecNullExpect);
     });
 
     it('test validateRecord', () => {
         let validatedRecord = {ok: true, errors: []};
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.validateRecord(null);
@@ -957,10 +980,10 @@ describe('ReportContent functions', () => {
 
     it('test cancelRecordDelete', () => {
         let confirmDeletesDialogOpen = false;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.cancelRecordDelete();
@@ -969,88 +992,107 @@ describe('ReportContent functions', () => {
     });
 
     it('test handleValidateFieldValue with fieldDef', () => {
-        spyOn(flux.actions, 'recordPendingValidateField');
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        props.record[0].pendEdits = {
+            isInlineEditOpen: true,
+            currentEditingRecordId: 3
+        };
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.handleValidateFieldValue("fieldDef", "fieldName", "value", false);
-        expect(flux.actions.recordPendingValidateField).toHaveBeenCalled();
+        expect(props.editRecordValidateField).toHaveBeenCalled();
+    });
+    it('test handleValidateFieldValue with fieldDef but no recId', () => {
+        props.report[0] = fakeReportDataEmpty;
+        props.record[0].pendEdits = {
+            isInlineEditOpen: true
+        };
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+            reportData={fakeReportDataEmpty}
+            reportHeader={headerEmpty}
+            reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component.handleValidateFieldValue("fieldDef", "fieldName", "value", false);
+        expect(props.editRecordValidateField).not.toHaveBeenCalled();
     });
 
     it('test handleValidateFieldValue null fieldDef', () => {
         let error = 'Field Def not provided for field validation in reportContent';
         let handleValidateFieldValue = Promise.reject(error);
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+
+        props.report[0] = fakeReportDataEmpty;
+        props.record[0].pendEdits = {
+            isInlineEditOpen: true,
+            currentEditingRecordId: 3
+        };
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.handleValidateFieldValue(null, "fieldName", "value", false);
         expect(result).toEqual(handleValidateFieldValue);
+        expect(props.editRecordValidateField).not.toHaveBeenCalled();
     });
 
     it('test selectRows', () => {
-        spyOn(flux.actions, 'selectedRows');
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.selectRows();
-        expect(flux.actions.selectedRows).toHaveBeenCalled();
+        expect(props.selectReportRecords).toHaveBeenCalled();
     });
 
-    it('test toggleSelectedRow with valid id', () => {
-        spyOn(flux.actions, 'selectedRows');
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+    it('test toggleSelectedRow with id not in list', () => {
+        fakeReportDataEmptyData.selectedRows = [];
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 selectedRows={selectedRowIds}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.toggleSelectedRow(1);
-        expect(flux.actions.selectedRows).toHaveBeenCalled();
+        expect(props.selectReportRecords).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, [1]);
     });
-
-    it('test toggleSelectedRow with invalid id', () => {
-        spyOn(flux.actions, 'selectedRows');
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
-                                                                selectedRows={selectedRowIds}
-                                                                reportFooter={fakeReportFooter}/>);
+    it('test toggleSelectedRow with id in list', () => {
+        props.report[0] = fakeReportDataSelectedRowsData;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+            reportData={fakeReportDataSelectedRowsData}
+            reportHeader={headerEmpty}
+            selectedRows={selectedRowIds}
+            reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        component.toggleSelectedRow(3);
-        expect(flux.actions.selectedRows).toHaveBeenCalled();
+        component.toggleSelectedRow(1);
+        expect(props.selectReportRecords).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, [5]);
+
+        // cleanup
+        fakeReportDataEmptyData.selectedRows = [];
     });
 
     it('test openRecordForEdit', () => {
-        spyOn(flux.actions, 'editingReportRow');
-        let dispatchMethod = () => { };
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
-                                                                dispatch={dispatchMethod}
+        props.report[0] = fakeReportDataEmpty;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        component.openRecordForEdit(1);
-        expect(flux.actions.editingReportRow).toHaveBeenCalled();
+        component.openRecordForEditInTrowser(1);
+        expect(props.openRecord).toHaveBeenCalled();
+        expect(WindowLocationUtilsMock.pushWithQuery).toHaveBeenCalled();
     });
 
     it('test onScrollRecords', () => {
         spyOn(flux.actions, 'scrollingReport');
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         component.onScrollRecords();
@@ -1059,10 +1101,9 @@ describe('ReportContent functions', () => {
 
     it('test isNumericDataType returns true', () => {
         let isNumericValue = true;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.isNumericDataType(SchemaConsts.NUMERIC);
@@ -1077,10 +1118,9 @@ describe('ReportContent functions', () => {
 
     it('test isDateDataType returns true', () => {
         let isDateValue = true;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.isDateDataType(SchemaConsts.DATE);
@@ -1091,10 +1131,9 @@ describe('ReportContent functions', () => {
 
     it('test isNumericDataType returns false', () => {
         let isNumericValue = false;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.isNumericDataType(SchemaConsts.DATE);
@@ -1103,10 +1142,9 @@ describe('ReportContent functions', () => {
 
     it('test isDateDataType returns false', () => {
         let isDateValue = false;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.isDateDataType(SchemaConsts.NUMERIC);
@@ -1114,10 +1152,9 @@ describe('ReportContent functions', () => {
     });
 
     it('test parseTimeOfDay with valid data returns parsedDate', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         //test with only hh:mm
@@ -1134,10 +1171,9 @@ describe('ReportContent functions', () => {
 
     it('test parseTimeOfDay with non-string value returns null', () => {
         let timeOfDay = 13.37;
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.parseTimeOfDay(timeOfDay);
@@ -1146,10 +1182,9 @@ describe('ReportContent functions', () => {
 
     it('test parseTimeOfDay with incorrect format value returns null', () => {
         let timeOfDay = "13:37:00:00";
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataEmpty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let result = component.parseTimeOfDay(timeOfDay);
@@ -1158,62 +1193,50 @@ describe('ReportContent functions', () => {
 
     it('test handleEditRecordStart existing record', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
-        spyOn(flux.actions, 'recordPendingEditsStart');
+        let origRec = Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]);
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-        component.handleEditRecordStart(origRec[keyField].value);
-        expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
-    });
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
 
+        component.handleEditRecordStart(origRec[keyField].value);
+        expect(props.editRecordStart).toHaveBeenCalled();
+    });
 
     it('test handleEditRecordStart unsaved record', () => {
         let keyField = 'id';
-        let appId = '123';
-        let tblId = '456';
-        let origRec = Object.assign({}, fakeReportData_unsaved.data.filteredRecords[0]);
-        spyOn(flux.actions, 'recordPendingEditsStart');
+        let appId = '1';
+        let tblId = '2';
+        let origRec = Object.assign({}, fakeReportDataUnsaved.data.filteredRecords[0]);
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                appId={appId}
-                                                                tblId={tblId}
-                                                                reportData={fakeReportData_unsaved}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataUnsaved;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataUnsaved}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
-        expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
-            appId, tblId, null, null, {5: {oldVal: {value: undefined, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text', fieldDef: fakeReportDataFields_unsaved.fields.data[0]}}, true, null
-        );
+        expect(props.editRecordStart).toHaveBeenCalled();
     });
-
 
     it('test handleEditRecordCancel', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
-        spyOn(flux.actions, 'recordPendingEditsCancel');
+        let origRec = Object.assign({}, fakeReportDataSimple.data.filteredRecords[0]);
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleEditRecordCancel(origRec[keyField].value);
-        expect(flux.actions.recordPendingEditsCancel).toHaveBeenCalled();
+        expect(props.editRecordCancel).toHaveBeenCalled();
     });
 
     it('test handleFieldChange', () => {
@@ -1221,8 +1244,8 @@ describe('ReportContent functions', () => {
         let edits = {recordChanges:{
             4:{
                 fieldName : 'col_num',
-                newVal: {value:"hi", display:"there"},
-            },
+                newVal: {value:"hi", display:"there"}
+            }
         },
             originalRecord: {fids:{
                 4: {value: 'older'}
@@ -1230,38 +1253,32 @@ describe('ReportContent functions', () => {
             }
         };
 
-        spyOn(flux.actions, 'recordPendingEditsChangeField');
-
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                pendEdits={edits}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
-        expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
+        expect(props.editRecordChange).toHaveBeenCalled();
     });
 
     it('test handleRecordDelete', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.records[0]);
-        spyOn(flux.actions, 'deleteRecord');
+        let origRec = Object.assign({}, fakeReportDataSimple.data.records[0]);
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                reportData={fakeReportData_simple}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
                                                                 primaryKeyName="col_text"
-                                                                reportHeader={header_empty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
         component.deleteRecord();
-        expect(flux.actions.deleteRecord).toHaveBeenCalled();
+        expect(props.deleteRecord).toHaveBeenCalled();
     });
 
     it('test handleRecordSaveClicked', () => {
@@ -1269,8 +1286,8 @@ describe('ReportContent functions', () => {
         let edits = {recordChanges:{
             4:{
                 fieldName : 'col_num',
-                newVal: {value:"hi", display:"there"},
-            },
+                newVal: {value:"hi", display:"there"}
+            }
         },
             originalRecord: {fids:{
                 4: {value: 'older'}}
@@ -1286,27 +1303,23 @@ describe('ReportContent functions', () => {
                     {
                         id: 5,
                         builtIn: true
-                    },
+                    }
                 ]
             }
         };
 
-        spyOn(flux.actions, 'saveNewRecord');
-
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                pendEdits={edits}
-                                                                reportData={fakeReportData_simple}
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
                                                                 fields={fieldsData}
-                                                                reportHeader={header_empty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
-        expect(flux.actions.saveNewRecord).toHaveBeenCalled();
+        expect(props.createRecord).toHaveBeenCalled();
     });
-
 
     it('test handleFieldChange undefined fid', () => {
         let keyField = "id";
@@ -1318,19 +1331,16 @@ describe('ReportContent functions', () => {
             }
         };
 
-        spyOn(flux.actions, 'recordPendingEditsChangeField');
-
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                pendEdits={edits}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
-        expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
+        expect(props.editRecordChange).toHaveBeenCalled();
     });
 
     it('test handleRecordNewBlank on clean', () => {
@@ -1344,27 +1354,23 @@ describe('ReportContent functions', () => {
             }
         };
 
-        spyOn(flux.actions, 'newBlankReportRecord');
-
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                pendEdits={edits}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
 
         component.handleRecordNewBlank(101);
-        expect(flux.actions.newBlankReportRecord).toHaveBeenCalled();
+        expect(props.addBlankRecordToReport).toHaveBeenCalled();
     });
 
     it('test handleRecordNewBlank on dirty', () => {
         let appId = '123';
         let tbleId = '456';
         let recordId = 101;
-
         let keyField = "id";
         let edits = {
             isPendingEdit: true,
@@ -1375,25 +1381,20 @@ describe('ReportContent functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId={appId}
-                                                                tblId={tbleId}
-                                                                pendEdits={edits}
-                                                                reportData={fakeReportData_simple}
-                                                                fields={fakeReportDataFields_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                fields={fakeReportDataFieldsSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-
-        spyOn(component, 'getFlux').and.returnValue(flux);
-        spyOn(flux.actions, 'saveRecord').and.callThrough();
-        spyOn(flux.actions, 'newBlankReportRecord').and.callThrough();
-
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleRecordNewBlank({value: recordId});
 
-        expect(flux.actions.saveRecord.calls.mostRecent().args.pop()).toEqual(true);
-        expect(flux.actions.newBlankReportRecord).toHaveBeenCalledWith(appId, tbleId, recordId);
+        expect(props.updateRecord).toHaveBeenCalled();
+        // add back once new blank report record code is turned on..
+        //expect(props.newBlankReportRecord).toHaveBeenCalledWith(CONTEXT.REPORT.NAV, appId, tbleId, recordId, false);
     });
 
     it('test handleRecordAdd', () => {
@@ -1412,7 +1413,7 @@ describe('ReportContent functions', () => {
                         id: 5,
                         name :  'col_builtin',
                         builtIn: true
-                    },
+                    }
                 ]
             }
         };
@@ -1421,13 +1422,13 @@ describe('ReportContent functions', () => {
                 4:{
                     fieldName : 'col_num',
                     fieldDef : fieldsData.fields.data[0],
-                    newVal: {value:"hi", display:"there"},
+                    newVal: {value:"hi", display:"there"}
                 },
                 5:{
                     fieldName : 'col_builtin',
                     fieldDef : fieldsData.fields.data[1],
-                    newVal: {value:"5", display:"no edit"},
-                },
+                    newVal: {value:"5", display:"no edit"}
+                }
             }
         };
 
@@ -1437,29 +1438,25 @@ describe('ReportContent functions', () => {
             id: 4,
             value: "hi",
             display: "there",
-            fieldDef: fieldsData.fields.data[0],
+            fieldDef: fieldsData.fields.data[0]
         }
         ];
-        spyOn(flux.actions, 'saveNewRecord');
 
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                pendEdits={edits}
-                                                                reportData={fakeReportData_simple}
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
                                                                 fields={fieldsData}
-                                                                reportHeader={header_empty}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}
                                                                 primaryKeyName={keyField}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
-        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data, [4, 5], false);
+        expect(props.createRecord).toHaveBeenCalled();
     });
 
     it('test handleRecordChange', () => {
         let keyField = "id";
-        spyOn(flux.actions, 'recordPendingEditsCommit');
-        spyOn(flux.actions, 'saveRecord');
         let edits = {recordChanges:{
             4:{
                 fieldName : 'col_num',
@@ -1467,8 +1464,8 @@ describe('ReportContent functions', () => {
                     name: 'col_num',
                     id: 4
                 },
-                newVal: {value:"hi", display:"there"},
-            },
+                newVal: {value:"hi", display:"there"}
+            }
         },
             originalRecord: {fids:{
                 4: {value: 'older'},
@@ -1476,46 +1473,51 @@ describe('ReportContent functions', () => {
             }
             }
         };
+
+        props.report[0] = fakeReportDataSimple;
+        props.record[0].pendEdits = edits;
         component = TestUtils.renderIntoDocument(
-            <ReportContent flux={flux}
-                           appId="123"
-                           tblId="456"
-                           reportData={fakeReportData_simple}
-                           fields={fakeReportDataFields_simple}
-                           pendEdits={edits}
-                           reportHeader={header_empty}
+            <ReportContent {...props}
+                           reportData={fakeReportDataSimple}
+                           fields={fakeReportDataFieldsSimple}
+                           reportHeader={headerEmpty}
                            reportFooter={fakeReportFooter}
                            primaryKeyName={keyField} />);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
-        expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
+
         let colList = [];
-        fakeReportDataFields_simple.fields.data.forEach((field) => {
+        fakeReportDataFieldsSimple.fields.data.forEach((field) => {
             colList.push(field.id);
         });
-        expect(flux.actions.saveRecord).toHaveBeenCalledWith("123", "456", 100, edits, fakeReportDataFields_simple.fields.data, colList, false);
+        let params = {
+            context: CONTEXT.REPORT.NAV,
+            pendEdits: edits,
+            fields: fakeReportDataFieldsSimple.fields.data,
+            colList: colList,
+            showNotificationOnSuccess: true
+        };
+        expect(props.updateRecord).toHaveBeenCalledWith(props.appId, props.tblId, 100, params);
     });
 
-
-
     it('test render of data without attributes', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
-        var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
-        expect(agGrid.length).toEqual(1);
-        agGrid = agGrid[0];
-        expect(agGrid.props.records.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
-        expect(_.intersection(agGrid.props.columns, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
+        var grid = TestUtils.scryRenderedComponentsWithType(component, ReportGridMock);
+        expect(grid.length).toEqual(1);
+        grid = grid[0];
+        expect(grid.props.records.length).toEqual(fakeReportDataSimple.data.filteredRecords.length);
+        expect(_.intersection(grid.props.columns, fakeReportDataSimple.data.columns).length).toEqual(fakeReportDataSimple.data.columns.length);
     });
 
     it('test startPerfTiming', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         spyOn(flux.actions, 'mark');
         component.startPerfTiming({reportData: {
@@ -1525,10 +1527,10 @@ describe('ReportContent functions', () => {
     });
 
     it('test capturePerfTiming', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}
+        props.report[0] = fakeReportDataSimple;
+        component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                reportData={fakeReportDataSimple}
+                                                                reportHeader={headerEmpty}
                                                                 reportFooter={fakeReportFooter}/>);
         spyOn(flux.actions, 'measure');
         spyOn(flux.actions, 'logMeasurements');
@@ -1538,25 +1540,9 @@ describe('ReportContent functions', () => {
         expect(flux.actions.measure).toHaveBeenCalled();
         expect(flux.actions.logMeasurements).toHaveBeenCalled();
     });
-    it('test openRow callback to push state to router', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                pendEdits={{}}
-                                                                appId="123"
-                                                                tblId="456"
-                                                                rptId="2"
-                                                                reportData={fakeReportData_simple}
-                                                                primaryKeyName="RecId"
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}
-                                                                router={[]}
-                                                                recordsCount={100}/>);
-        component.openRow({RecId: {value: 2}});
-        expect(component.props.router).toContain(`${APP_ROUTE}/123/table/456/report/2/record/2`);
-    });
 
     describe('handleRecordDelete', () => {
         let recordId = 4;
-
         let mockRecord = {
             'Another Field': {
                 value: 900
@@ -1579,17 +1565,16 @@ describe('ReportContent functions', () => {
                 let mockRecordForCurrentTest = Object.assign({}, mockRecord);
                 mockRecordForCurrentTest[testCase.primaryKeyFieldName] = {value: recordId};
 
-                component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                        pendEdits={{}}
-                                                                        reportData={fakeReportData_simple}
-                                                                        reportHeader={header_empty}
+                props.report[0] = fakeReportDataSimple;
+                component = TestUtils.renderIntoDocument(<ReportContent {...props}
+                                                                        reportData={fakeReportDataSimple}
+                                                                        reportHeader={headerEmpty}
                                                                         primaryKeyName={testCase.primaryKeyFieldName} />);
-
                 spyOn(component, 'setState');
-
                 component.handleRecordDelete(mockRecordForCurrentTest);
 
                 expect(component.setState).toHaveBeenCalledWith({selectedRecordId: recordId});
+                expect(component.setState).toHaveBeenCalledWith({confirmDeletesDialogOpen: true});
             });
         });
     });

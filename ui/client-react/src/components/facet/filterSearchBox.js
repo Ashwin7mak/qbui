@@ -3,32 +3,22 @@ import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import './facet.scss';
-//import Fluxxor from 'fluxxor';
 import SearchBox from '../search/searchBox';
 import {connect} from 'react-redux';
 
 let logger = new Logger();
 
-//let FluxMixin = Fluxxor.FluxMixin(React);
-//let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
 /*
  FilterSearchBox component takes user input for filtering a report.
  Takes the function to call on changes to search string, what he list is known as default is Records
  */
-const FilterSearchBox = React.createClass({
-    //mixins: [FluxMixin, StoreWatchMixin('ReportDataSearchStore')],
+export const FilterSearchBox = React.createClass({
 
     displayName: 'FilterSearchBox',
     propTypes: {
         onChange : React.PropTypes.func,
         clearSearchString : React.PropTypes.func
     },
-
-    //getStateFromFlux() {
-    //    let flux = this.getFlux();
-    //    return flux.store('ReportDataSearchStore').getState();
-    //},
 
     render() {
 

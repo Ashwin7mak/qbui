@@ -61,9 +61,9 @@ const report = (state = [], action) => {
         //  ie: NAV, Embedded report, etc.
         const loadRptObj = {
             id: action.id,
-            appId: action.content.appId,
-            tblId: action.content.tblId,
-            rptId: action.content.rptId,
+            appId: action.content ? action.content.appId : '',
+            tblId: action.content ? action.content.tblId : '',
+            rptId: action.content ? action.content.rptId : '',
             loading: true
         };
         return newState(loadRptObj);
@@ -71,8 +71,8 @@ const report = (state = [], action) => {
         //  load a list of reports.  Id is the 'LIST' context
         const loadReportsObj = {
             id: action.id,
-            appId: action.content.appId,
-            tblId: action.content.tblId,
+            appId: action.content ? action.content.appId : '',
+            tblId: action.content ? action.content.tblId : '',
             loading: true
         };
         return newState(loadReportsObj);

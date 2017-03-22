@@ -1,6 +1,6 @@
 import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/report';
 import * as types from '../../src/actions/types';
-import FacetSelections from '../../src/components/facet/facetSelections'
+import FacetSelections from '../../src/components/facet/facetSelections';
 import _ from 'lodash';
 import Diff from 'deep-diff';
 
@@ -9,6 +9,7 @@ import Diff from 'deep-diff';
  * Unit tests for report reducer
  *
  */
+/* eslint no-console:0 */
 
 describe('Report reducer functions', () => {
 
@@ -239,10 +240,10 @@ describe('Report reducer functions', () => {
     });
 
     describe('Report reducer success report loading test correct state ', () => {
-        let allHaveThisForContent = {appId: 1, tblId: 2}
+        let allHaveThisForContent = {appId: 1, tblId: 2};
         let targetContext = "NAVREPORT";
         let targetRpt = 55;
-        let data = {rptId: targetRpt, info: "heres the report"};
+        let data = {rptId: targetRpt, info: "here's the report"};
         let initDefaultLoad = {appId: 1, tblId: 2, rptId: targetRpt};
         let initNoRptLoad = {appId: 1, tblId: 2};
 
@@ -255,27 +256,27 @@ describe('Report reducer functions', () => {
         };
 
         let testCases = [{
-                description: 'all Params',
-                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"hello", selectedRows:[1], data},
-                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
-            }, {
-                description: 'page params',
-                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:10, numRows:99, searchStringForFiltering:"hello", selectedRows:[1], data},
-                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
-            }, {
-                description: 'no search param',
-                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"", selectedRows:[1], data},
-                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
-            }, {
-                description: 'no selected rows param',
-                contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
-                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
-            }, {
-                description: 'no rptId in state',
-                initStateContent : initNoRptLoad,
-                contentIn : {...allHaveThisForContent, rptId:undefined, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
-                expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
-            },
+            description: 'all Params',
+            contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"hello", selectedRows:[1], data},
+            expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+        }, {
+            description: 'page params',
+            contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:10, numRows:99, searchStringForFiltering:"hello", selectedRows:[1], data},
+            expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+        }, {
+            description: 'no search param',
+            contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"", selectedRows:[1], data},
+            expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+        }, {
+            description: 'no selected rows param',
+            contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
+            expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+        }, {
+            description: 'no rptId in state',
+            initStateContent : initNoRptLoad,
+            contentIn : {...allHaveThisForContent, rptId:undefined, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
+            expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
+        },
 
         ];
 
@@ -286,7 +287,7 @@ describe('Report reducer functions', () => {
                 if (testCase.initStateContent) {
                     loadReport(testCase.initStateContent);
                 } else  {
-                    loadReport(initDefaultLoad)
+                    loadReport(initDefaultLoad);
                 }
                 console.log("before case state = " + JSON.stringify(state));
 

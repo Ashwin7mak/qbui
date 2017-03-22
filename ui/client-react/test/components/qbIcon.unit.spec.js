@@ -6,7 +6,7 @@ import AVAILABLE_ICON_FONTS from '../../src/constants/iconConstants';
 import QbIcon from '../../src/components/qbIcon/qbIcon';
 
 /**
- * This component is relocated to the reuse library and renamed "ReIcon".
+ * This component is relocated to the reuse library and renamed "Icon".
  * This test is only to verify that this stub class is working.
  * Unit test for the actual code is in the reuse library.
  */

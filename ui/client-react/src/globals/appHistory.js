@@ -26,14 +26,6 @@ class AppHistory {
             this.editRecordCancel = null;
             this.createRecord = null;
             this.updateRecord = null;
-            //this.flux = null;
-
-            // Properties needed to save records with pending edits
-            //this.appId = null;
-            //this.tableId = null;
-            //this.recordId = null;
-            //this.pendEdits = {};
-            //this.fields = null;
 
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
@@ -50,9 +42,6 @@ class AppHistory {
      * @param redux store
      */
     setup(store, storeFunc) {
-        //  TODO remove once all stores are migrated
-        //self.flux = flux;
-
         //  redux store
         self.store = store;
         if (storeFunc) {
@@ -97,7 +86,7 @@ class AppHistory {
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
         self.cancelListenBeforeUnload = self.history.listenBeforeUnload(event => {
-            if (self.getIsPendingEdit()) {
+            if (self && self.getIsPendingEdit()) {
                 // No need to internationalize as it will not appear in the modal on evergreen browsers.
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';
@@ -116,10 +105,12 @@ class AppHistory {
         let pendEdits = {};
         if (self.store) {
             const state = self.store.getState();
-            //  TODO: just getting to work....improve this to support multi records...
+            //  fetch the 1st record in the store
+            //  TODO: revisit to ensure appropriate support for store with multiple records
             if (Array.isArray(state.record) && state.record.length > 0) {
-                if (_.isEmpty(state.record[0]) === false) {
-                    pendEdits = state.record[0].pendEdits || {};
+                const recordStore = state.record[0];
+                if (_.isEmpty(recordStore) === false) {
+                    pendEdits = recordStore.pendEdits || {};
                 }
             }
         }
@@ -130,11 +121,13 @@ class AppHistory {
         let fields = [];
         if (self.store) {
             const state = self.store.getState();
-            if (array.isArray(state.forms) && state.forms.length > 0) {
+            if (Array.isArray(state.forms) && state.forms.length > 0) {
+                //  fetch the 1st form in the store
+                //  TODO: revisit to ensure appropriate support for store with multiple forms
                 if (_.isEmpty(state.forms[0]) === false) {
                     const formsStore = state.forms[0];
                     if (_.has(formsStore, 'formData.fields')) {
-                        fields = state.forms[0].formData.fields;
+                        fields = formsStore.formData.fields;
                     }
                 }
             }
@@ -146,11 +139,13 @@ class AppHistory {
         let fields = [];
         if (self.store) {
             const state = self.store.getState();
-            if (array.isArray(state.forms) && state.forms.length > 0) {
+            if (Array.isArray(state.report) && state.report.length > 0) {
+                //  fetch the 1st report in the store
+                //  TODO: revisit to ensure appropriate support for store with multiple reports
                 if (_.isEmpty(state.report[0]) === false) {
                     const reportStore = state.report[0];
                     if (_.has(reportStore, 'data.fields')) {
-                        fields = state.reportStore[0].data.fields;
+                        fields = reportStore.data.fields;
                     }
                 }
             }
@@ -190,18 +185,9 @@ class AppHistory {
         let fields = null;
         const pendEdits = self.getPendingEditsFromStore();
         if (pendEdits.isInlineEditOpen) {
-            //TODO: get from fields store?
-            fields = getFieldsFromReportStore();
-            //let fieldsStore = self.flux.store('FieldsStore').getState();
-            //if (_.has(fieldsStore, 'fields.data')) {
-            //    fields = fieldsStore.fields.data;
-            //}
+            fields = self.getFieldsFromReportStore();
         } else {
-            fields = getFieldsFromFormStore();
-            //let formsStore = self.flux.store('FormStore').getState();
-            //if (_.has(formsStore, 'editFormData.fields')) {
-            //    fields = formsStore.editFormData.fields;
-            //}
+            fields = self.getFieldsFromFormStore();
         }
         return fields;
     }
@@ -213,7 +199,7 @@ class AppHistory {
     _saveChanges() {
         self._hideModal();
 
-        if (self.store && _.isFunction(self.createRecord) && _.isFunction(selft.updateRecord)) {
+        if (self.store && _.isFunction(self.createRecord) && _.isFunction(self.updateRecord)) {
             const pendEdits = self.getPendingEditsFromStore();
             const appId = pendEdits.currentEditingAppId;
             const tableId = pendEdits.currentEditingTableId;
@@ -222,10 +208,6 @@ class AppHistory {
             let fields = self.getFields();
 
             if (pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
-                // handle record add
-                //self.flux.actions.saveNewRecord(appId, tableId, pendEdits.recordChanges, fields)
-                //    .then(self._onRecordSaved, self._onRecordSavedError);
-                //self._handleRecordAdd();
                 let params = {
                     context: null,
                     recordChanges: pendEdits.recordChanges,
@@ -242,11 +224,6 @@ class AppHistory {
                     }
                 );
             } else {
-                //self.store.dispatch(appId, tableId, recordId);
-                //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
-                //self.flux.actions.saveRecord(appId, tableId, recordId, pendEdits, fields, null, false)
-                //    .then(self._onRecordSaved, self._onRecordSavedError);
-                //self._handleRecordChange();
                 let params = {
                     context: null,              // no report context to worry about...
                     pendEdits: pendEdits,
@@ -266,26 +243,6 @@ class AppHistory {
         }
     }
 
-    //_handleRecordAdd() {
-    //    self.flux.actions.saveNewRecord(self.appId, self.tableId, self.pendEdits.recordChanges, self.fields)
-    //        .then(self._onRecordSaved, self._onRecordSavedError);
-    //}
-
-    //_handleRecordChange() {
-    //    self.store.dispatch(editRecordCommit(self.appId, self.tableId, self.recordId));
-    //    //self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
-    //    self.flux.actions.saveRecord(self.appId, self.tableId, self.recordId, self.pendEdits, self.fields)
-    //        .then(self._onRecordSaved, self._onRecordSavedError);
-    //}
-
-    //_onRecordSaved() {
-    //    self._continueToDestination();
-    //}
-    //
-    //_onRecordSavedError() {
-    //    self._haltRouteChange();
-    //}
-
     _discardChanges(hideModal = true) {
 
         if (hideModal) {
@@ -299,8 +256,6 @@ class AppHistory {
                 self.store.dispatch(self.editRecordCancel(pendEdits.currentEditingAppId, pendEdits.currentEditingTableId, pendEdits.currentEditingRecordId));
             }
         }
-
-        //self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
         self._continueToDestination();
     }
 
