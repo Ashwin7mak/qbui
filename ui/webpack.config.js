@@ -127,7 +127,8 @@ var config = {
                     componentLibraryPath,
                     path.resolve(__dirname, 'node_modules/ag-grid'),
                     path.resolve(__dirname, 'node_modules/react-notifications'),
-                    path.resolve(__dirname, 'node_modules/react-select')
+                    path.resolve(__dirname, 'node_modules/react-select'),
+                    path.resolve(__dirname, 'node_modules/rc-tabs')
                 ],
                 exclude: [
                     // Exclude fonts because webpack sourceMaps mess up the urls for font-face
