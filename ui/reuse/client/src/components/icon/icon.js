@@ -1,6 +1,6 @@
 import React from 'react';
 import './icon.scss';
-import './style.css';
+import './uiIcons.css';
 import './tableIcons.css';
 
 /**
