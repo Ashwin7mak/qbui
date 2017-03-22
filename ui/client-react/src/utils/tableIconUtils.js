@@ -4,7 +4,7 @@
 
 import _ from 'lodash';
 
-const DEFAULT_TABLE_ICON = "iconTableUISturdy-report-table";
+const DEFAULT_TABLE_ICON = "iconUISturdy-report-table";
 
 const ICON_PREFIX = "icon-TableIcons_sturdy_";
 
