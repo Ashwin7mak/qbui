@@ -476,6 +476,9 @@ $dragtoken-text-color: $color-black-100;
 $dragtoken-shadow-color: rgba($color-black-800, 0.5);
 // dragtoken-active-gradient is defined in qbVariables because of a circular dependency on stroke-width
 
+// app users
+$add-user-button: $color-orange-500;
+$app-role-divider: $color-orange-500;
 //-------------------------------------------------------------------
 // END NEW SEMANTIC NAMES
 //-------------------------------------------------------------------
