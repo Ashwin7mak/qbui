@@ -44,7 +44,7 @@ export class TableCreationDialog extends React.Component {
             tableNoun: this.props.tableCreation.tableInfo.tableNoun
         };
 
-        this.props.createTable(this.props.appId , tableInfo).then(
+        this.props.createTable(this.props.appId, tableInfo).then(
             (response) => {
                 this.props.hideTableCreationDialog();
 
@@ -75,7 +75,7 @@ export class TableCreationDialog extends React.Component {
     }
 
     getTableIcon(name) {
-        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>
+        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
     }
 
     getIcons() {
@@ -94,7 +94,7 @@ export class TableCreationDialog extends React.Component {
 
     selectIcon(icon) {
 
-        this.updateTableProperty('tableIcon', icon)
+        this.updateTableProperty('tableIcon', icon);
     }
 
     getIconDropdown() {
@@ -173,27 +173,9 @@ export class TableCreationDialog extends React.Component {
                                       value={this.props.tableCreation.tableInfo.description}/>
                         </div>
                     </div>
-
                 </div>
             </div>);
     }
-
-    /**
-    chooseFieldsMethodPage() {
-
-        return (
-            <div className="tableInfo">
-                <div className="description">Each bit of information you want to collect is a field.</div>
-                <div className="title">Choose how to add fields to your table</div>
-
-                <div className="addFieldsMethods">
-                    <div className="addFieldsMethod">Drag fields onto a form</div>
-                    <div className="addFieldsMethod">Drag column into a report</div>
-                    <div className="addFieldsMethod">Create a list of fields</div>
-                </div>
-
-            </div>);
-    }*/
 
     isValid() {
         if (this.props.tableCreation.tableInfo.name.trim() === '') {

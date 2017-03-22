@@ -21,7 +21,7 @@
         .tableField {
             min-width: 50%;
 
-            padding-right:20px;
+            padding-right: 20px;
             margin-bottom: 30px;
             .tableFieldTitle {
                 margin-bottom: 4px;
@@ -29,10 +29,10 @@
             }
 
             input, textarea {
-                padding:5px;
+                padding: 5px;
                 resize: none;
                 width: 100%;
-                border:1px solid $input-text-normal-border-color;
+                border: 1px solid $input-text-normal-border-color;
             }
 
             input {
@@ -62,7 +62,7 @@
                 button {
                     width: 32px;
                     height: 32px;
-                    vertical-align:middle;
+                    vertical-align: middle;
                     border: 0;
                     background-color: inherit;
                     font-size: 16px;
@@ -78,27 +78,15 @@
         }
 
     }
-    .addFieldsMethods {
-        display: flex;
-        flex-direction: row;
-        margin-left: -5px;
-        margin-right: 5px;
-
-        .addFieldsMethod {
-            flex: 1 1 0;
-            border: 1px dotted grey;
-            padding: 8px;
-            margin: 5px;
-            height: 200px;
-
-            &:hover {
-                cursor: pointer;
-                background-color: #eee;
-            }
-        }
-    }
 }
 
+.multiStepModal.tableMenuOpen .modal-dialog {
+
+    .modal-body > *:first-child {
+        overflow: visible;
+    }
+
+}
 
 @include not-small-breakpoint {
 
@@ -109,12 +97,16 @@
         }
         width: 840px;
     }
+}
 
-    .multiStepModal.tableMenuOpen .modal-dialog {
+/* some initial small styles in case we support small */
+@include small-breakpoint {
+
+    .multiStepModal .modal-dialog {
 
         .modal-body > *:first-child {
-            overflow: visible;
+            height: 550px;
         }
-
+        width: 420px;
     }
 }
