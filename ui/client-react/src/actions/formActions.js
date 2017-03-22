@@ -274,7 +274,7 @@ export const removeFieldFromForm = (formId, location) => {
  * location
  * @returns {{id, type, content}|*}
  */
-export const keyBoardMoveFieldUp = (formId, location) => {
+export const keyboardMoveFieldUp = (formId, location) => {
     return event(formId, types.KEYBOARD_MOVE_FIELD_UP, {
         location
     });

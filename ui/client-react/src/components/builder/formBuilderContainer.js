@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyBoardMoveFieldUp, keyboardMoveFieldDown, deselectField} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -60,8 +60,8 @@ const mapDispatchToProps = dispatch => {
             return dispatch(toggleFormBuilderChildrenTabIndex(formId, currentTabIndex));
         },
 
-        keyBoardMoveFieldUp(formId, location) {
-            return dispatch(keyBoardMoveFieldUp(formId, location));
+        keyboardMoveFieldUp(formId, location) {
+            return dispatch(keyboardMoveFieldUp(formId, location));
         },
 
         keyboardMoveFieldDown(formId, location) {
@@ -144,7 +144,7 @@ export const FormBuilderContainer = React.createClass({
 
     keyboardMoveFieldUp() {
         if (this.props.selectedField.elementIndex !== 0) {
-            this.props.keyBoardMoveFieldUp(this.props.forms[0].id, this.props.selectedField);
+            this.props.keyboardMoveFieldUp(this.props.forms[0].id, this.props.selectedField);
         }
     },
 
