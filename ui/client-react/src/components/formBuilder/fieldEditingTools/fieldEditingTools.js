@@ -98,11 +98,12 @@ export class FieldEditingTools extends Component {
          * and wee need to keep the current form element in view, by scrolling it into view
          * */
         if (this.props.selectedFields[0]) {
-            let selectedFormElement = document.querySelector('.selectedFormElement');
-            if (selectedFormElement) {
-                selectedFormElement.focus();
-            }
+            let deleteFieldIcon = document.querySelectorAll('.deleteFieldIcon button');
+            deleteFieldIcon[this.props.selectedFields[0].elementIndex].focus();
             this.updateScrollLocation();
+        } else if (!this.props.selectedFields[0] && this.props.tabIndex === "0") {
+            let firstFieldElement = document.querySelectorAll('.fieldEditingTools');
+                firstFieldElement[0].focus();
         }
     }
 
