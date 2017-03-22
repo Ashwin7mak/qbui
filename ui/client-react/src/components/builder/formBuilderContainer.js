@@ -23,8 +23,10 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
+    let tabIndex = state.forms[0].formBuilderChildrenTabIndex ? state.forms[0].formBuilderChildrenTabIndex[0] : undefined;
     return {
         forms: state.forms,
+        tabIndex
     };
 };
 
@@ -120,7 +122,7 @@ export const FormBuilderContainer = React.createClass({
     },
 
     updateChildrenTabIndex(e) {
-        let childrenTabIndex = this.props.forms[0].formBuilderChildrenTabIndex ? this.props.forms[0].formBuilderChildrenTabIndex[0] : undefined;
+        let childrenTabIndex = this.props.tabIndex;
 
         if ((e.which === 13 || e.which === 32) && childrenTabIndex !== "0") {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);
