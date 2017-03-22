@@ -351,7 +351,7 @@
         if (!isRouteEnabled(req)) {
             routeTo404(req, res);
         } else {
-            governanceApi.getContext(req, req.query.accountID).then(
+            governanceApi.getContext(req, req.query.accountId).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Get governance context');
