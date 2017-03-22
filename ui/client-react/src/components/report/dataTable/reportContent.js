@@ -152,8 +152,8 @@ export const ReportContent = React.createClass({
         let orig = {names:{}, fids:{}};
 
         //  TODO: improve the retrieve of a report from redux store
-        let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
-        //let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
+        //let recs = this.props.report[0].data ? this.props.report[0].data.filteredRecords : [];
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [{}];
 
         let primaryKeyName = this.props.primaryKeyName;
 
