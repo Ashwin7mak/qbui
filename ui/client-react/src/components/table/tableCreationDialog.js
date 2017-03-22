@@ -78,11 +78,6 @@ export class TableCreationDialog extends React.Component {
         return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
     }
 
-    getIcons() {
-
-        return this.getIconNames().map((name) => this.getTableIcon(name));
-    }
-
     onToggleDropdown(isOpen) {
 
         if (isOpen) {
@@ -102,22 +97,20 @@ export class TableCreationDialog extends React.Component {
         const dropdownTitle = this.getTableIcon(this.props.tableCreation.tableInfo.tableIcon);
 
         const iconNames = this.getIconNames();
-        const icons = this.getIcons();
 
         return (
             <DropdownButton title={dropdownTitle}
                             id="createTableIconDropdown"
                             onToggle={this.onToggleDropdown}>
-                {iconNames.map((iconName, i) => (<MenuItem key={i} onSelect={() => this.selectIcon(iconName)}>{icons[i]}</MenuItem>))}
+                {iconNames.map((iconName, i) => (<MenuItem key={i} onSelect={() => this.selectIcon(iconName)}>{this.getTableIcon(iconName)}</MenuItem>))}
             </DropdownButton>);
     }
 
     getSuggestedIcons() {
-
-        const icons = this.getIcons();
+        const iconNames = this.getIconNames();
         return (
             <div className="iconList">
-                {icons.map((icon, i) => <button key={i}>{icon}</button>)}
+                {iconNames.map((iconName, i) => <button key={i} onClick={() => this.selectIcon(iconName)}>{this.getTableIcon(iconName)}</button>)}
             </div>);
 
     }
