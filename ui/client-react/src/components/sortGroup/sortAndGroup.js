@@ -31,7 +31,7 @@ let KIND = {
     SORT :'sort'
 };
 
-const SortAndGroup = React.createClass({
+export const SortAndGroup = React.createClass({
     displayName: 'SortAndGroup',
     contextTypes: {
         touch: React.PropTypes.bool
@@ -140,7 +140,7 @@ const SortAndGroup = React.createClass({
         queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
         //  right now, the component is used only within the context of a report served up by the nav window
-        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
+        this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
 
     applyChanges() {
@@ -529,5 +529,16 @@ const SortAndGroup = React.createClass({
         );
     }
 });
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loadDynamicReport:  (context, appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
+        }
+    };
+};
 
-export default connect()(SortAndGroup);
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(SortAndGroup);

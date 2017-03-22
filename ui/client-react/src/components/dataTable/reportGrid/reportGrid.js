@@ -11,7 +11,7 @@ import _ from 'lodash';
 
 import ReportCell from './reportCell';
 
-const ReportGrid = React.createClass({
+export const ReportGrid = React.createClass({
     propTypes: {
         appId: PropTypes.string,
         tblId: PropTypes.string,

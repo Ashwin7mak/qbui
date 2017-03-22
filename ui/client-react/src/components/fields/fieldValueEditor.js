@@ -175,6 +175,17 @@ const FieldValueEditor = React.createClass({
         }
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
+            if (typeof commonProps.value === 'string') {
+                if (commonProps.value.toLowerCase() === 'true') {
+                    commonProps.value = true;
+                } else {
+                    /*eslint no-lonely-if:0*/
+                    if (commonProps.value.toLowerCase() === 'false') {
+                        commonProps.value = false;
+                    }
+                }
+            }
+            commonProps.value = _.isBoolean(commonProps.value) ? commonProps.value : false;
             return <CheckBoxFieldValueEditor {...commonProps} label={this.props.label} />;
         }
 
@@ -217,6 +228,9 @@ const FieldValueEditor = React.createClass({
                         {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
                 );
             } else {
+                if (commonProps.value !== null && commonProps.value !== undefined) {
+                    commonProps.value = commonProps.value + '';
+                }
                 return <NumericFieldValueEditor {...commonProps}
                     key={'nfve-' + this.props.idKey}
                     onChange={this.props.onChange ? this.props.onChange : ()=>{}}
@@ -245,6 +259,10 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.TEXT_FORMAT:
         default: {
+            // react throws warning about rendering Input component with null input
+            if (commonProps.value === null || commonProps.value === undefined) {
+                commonProps.value = '';
+            }
 
             if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
                 return (

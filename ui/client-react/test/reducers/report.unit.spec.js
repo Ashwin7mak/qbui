@@ -503,26 +503,19 @@ describe('Report reducer functions', () => {
         let contextId = "REMOVE_REPORT_RECORDS";
         let anotherContextId = "OTHER_REMOVE_REPORT_RECORDS";
         let initialState = [
-            {id:contextId, data:{}, selectedRows:[1, 3, 4]},
-            {id:anotherContextId}
+            {id:contextId, data:{}, appId: 1, tblId: 2, selectedRows:[1, 3, 4]},
+            {id:anotherContextId, data:{}, appId: 1}
         ];
         let reportContentDelete = {
+            appId : 1,
+            tblId : 2,
             recIds: [1, 2, 3]
         };
 
         let testCases = [
             {
-                description: 'when no state',
-                initialState: [],
-                content: reportContentDelete,
-                expects: (state) => {
-                    expect(Array.isArray(state)).toEqual(true);
-                    expect(state.length).toEqual(0);
-                }
-            },
-            {
                 initialState,
-                description: 'when report matches delete record',
+                description: 'when report has delete record',
                 content : reportContentDelete,
                 expects : (state) => {
                     expect(Array.isArray(state)).toEqual(true);
@@ -537,6 +530,47 @@ describe('Report reducer functions', () => {
                 expects: (state) => {
                     expect(Array.isArray(state)).toEqual(true);
                     expect(state.length).toEqual(0);
+                    expect(state).toEqual([]);
+                }
+            },
+            {
+                description: 'when no appId',
+                initialState: [],
+                content: _.pick(reportContentDelete, ['tblId', 'recIds']),
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                    expect(state).toEqual([]);
+                }
+            },
+            {
+                description: 'when no tblId',
+                initialState: [],
+                content: _.pick(reportContentDelete, ['appId', 'recIds']),
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                    expect(state).toEqual([]);
+                }
+            },
+            {
+                description: 'when not array rptIds',
+                initialState: initialState,
+                content: Object.assign({}, _.pick(reportContentDelete, ['appId','tblId']), {recIds: 'not array'}),
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(2);
+                    expect(state).toEqual(initialState);
+                }
+            },
+            {
+                description: 'when no state',
+                initialState: [],
+                content: reportContentDelete,
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                    expect(state).toEqual([]);
                 }
             }
         ];
@@ -547,8 +581,11 @@ describe('Report reducer functions', () => {
                 if (testCase.content) {
                     actionObj.content = testCase.content;
                 }
+                console.log('state before =' + JSON.stringify(state));
+                console.log('action before =' + JSON.stringify(actionObj));
 
                 state = reducer(state, actionObj);
+                console.log('state after =' + JSON.stringify(state));
 
                 testCase.expects(state);
             });
@@ -720,10 +757,7 @@ describe('Report reducer functions', () => {
                 if (testCase.content) {
                     actionObj.content = testCase.content;
                 }
-                console.log('state before =' + JSON.stringify(state));
-                console.log('action before =' + JSON.stringify(actionObj));
                 state = reducer(state, actionObj);
-                console.log('state after =' + JSON.stringify(state));
 
                 testCase.expects(state);
             });
