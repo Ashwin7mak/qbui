@@ -11,139 +11,10 @@ import * as SpinnerConfigurations from "../../../../../client-react/src/constant
 
 import * as AccountUsersActions from '../AccountUsersActions';
 import * as RequestContextActions from '../../../common/requestContext/RequestContextActions';
-import * as Formatters from './AccountUsersGridFormatters';
 
-// Column Definitions
-const breakWordColumnProps = {
-    style: {
-        maxWidth: 275,
-        wordWrap: 'break-word'
-    }
-};
+import {GetAccountUsersGridColumns} from './AccountUsersGridColumns';
 
-const boolColumnProps = {
-    classes: ['AlignCenter'],
-    style: {
-        maxWidth: 80
-    }
-};
 
-const columns = [
-    {
-        property: 'firstName',
-        header: {
-            label: 'First Name'
-        }
-    },
-    {
-        property: 'lastName',
-        header: {
-            label: 'Last Name'
-        },
-    },
-    {
-        property: 'email',
-        header: {
-            label: 'Email'
-        },
-        props: breakWordColumnProps
-    },
-    {
-        property: 'userName',
-        header: {
-            label: 'User Name'
-        },
-        props: breakWordColumnProps
-    },
-    {
-        property: 'lastAccess',
-        header: {
-            label: 'Last Access'
-        },
-        cell: {
-            formatters: [Formatters.FormatLastAccessString]
-        }
-    },
-    {
-        property: 'hasAppAccess',
-        header: {
-            label: 'QuickBase Access Status'
-        },
-        cell: {
-            formatters: [Formatters.FormatUserStatusText]
-        }
-    },
-    {
-        property: 'lastAccess',
-        header: {
-            label: 'Inactive?'
-        },
-        cell: {
-            formatters: [Formatters.FormatIsInactive]
-        },
-        props: boolColumnProps
-    },
-    {
-        property: 'numGroupsMember',
-        header: {
-            label: 'In Any Group?'
-        },
-        cell: {
-            formatters: [Formatters.FormatIsGroupMember]
-        },
-        props: boolColumnProps
-    },
-    {
-        property: 'numGroupsManaged',
-        header: {
-            label: 'Group Manager?'
-        },
-        cell: {
-            formatters: [Formatters.FormatIsGroupManager]
-        },
-        props: boolColumnProps
-    },
-    {
-        property: 'accountTrusteeFlags',
-        header: {
-            label: 'Can create apps?'
-        },
-        cell: {
-            formatters: [Formatters.FormatCanCreateApps]
-        },
-        props: boolColumnProps
-    },
-    {
-        property: 'numAppsManaged',
-        header: {
-            label: 'App Manager?'
-        },
-        cell: {
-            formatters: [Formatters.FormatIsAppManager]
-        },
-        props: boolColumnProps
-    },
-    {
-        property: 'realmDirectoryFlags',
-        header: {
-            label: 'In Realm Directory?'
-        },
-        cell: {
-            formatters: [Formatters.FormatIsInRealmDirectory]
-        },
-        props: boolColumnProps
-    },
-    {
-        property: 'realmDirectoryFlags',
-        header: {
-            label: 'Realm Approved?'
-        },
-        cell: {
-            formatters: [Formatters.FormatIsRealmApproved]
-        },
-        props: boolColumnProps
-    }
-];
 
 // Sub-component pieces we will be using to override React Tabular's default components
 const tableSubComponents = {
@@ -181,7 +52,7 @@ class AccountUsersGrid extends Component {
     }
 
     render() {
-        if (this.props.error) {
+        if (this.props.dataFetchingError) {
             return (
                 <h1>Error</h1>
             );
@@ -191,7 +62,7 @@ class AccountUsersGrid extends Component {
                     <Table.Provider
                         ref="qbGridTable"
                         className="qbGrid"
-                        columns={columns}
+                        columns={GetAccountUsersGridColumns(this.props.showAccountColumns, this.props.showRealmColumns)}
                         components={tableSubComponents}
                     >
                         <Table.Header className="qbHeader" />
@@ -213,25 +84,30 @@ class AccountUsersGrid extends Component {
 AccountUsersGrid.propTypes = {
     accountId: React.PropTypes.string.isRequired,
     users: React.PropTypes.array,
-    currentUser: React.PropTypes.object,
+    showAccountColumns: React.PropTypes.bool,
+    showRealmColumns: React.PropTypes.bool,
+    dataFetchingError: React.PropTypes.any,
     fetchAccountUsers: React.PropTypes.func.isRequired,
     fetchRequestContextIfNeeded: React.PropTypes.func.isRequired
 };
 
 // Provide default val
 AccountUsersGrid.defaultProps = {
-    users: [],
-    loading: true
+    users: []
 };
 
 export {AccountUsersGrid};
 
 const mapStateToProps = (state) => {
+    let user = state.RequestContext.currentUser;
+    let realm = state.RequestContext.realm;
+
     return {
         users: state.AccountUsers.users,
-        currentUser: state.RequestContext.currentUser,
-        loading: state.RequestContext.status.isFetching,
-        error: state.RequestContext.status.error
+        loading: state.RequestContext.status.isFetching || !user.id,
+        dataFetchingError: state.RequestContext.status.error,
+        showAccountColumns: user.isAccountAdmin || user.isCSR,
+        showRealmColumns: !realm.isAccountURL && (user.isRealmAdmin || user.isCSR),
     };
 };
 
