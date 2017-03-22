@@ -17,7 +17,7 @@ describe('AccountUsersStage', () => {
     });
 
     it('can be hidden during development', () => {
-        component = mount(<AccountUsersStage isHidden={false} />);
+        component = mount(<AccountUsersStage isHidden={true} />);
 
         expect(component.find('.stageHeader')).not.toBePresent();
     });
