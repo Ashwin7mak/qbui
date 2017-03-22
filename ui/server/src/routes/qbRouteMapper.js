@@ -24,6 +24,7 @@
     let rolesApi;
     let routeGroup;
     let usersApi;
+    let tablesApi;
     let featureSwitchesApi;
     let accountUsersApi;
 
@@ -42,6 +43,7 @@
         rolesApi = require('../api/quickbase/rolesApi')(config);
         usersApi = require('../api/quickbase/usersApi')(config);
         accountUsersApi = require('../governance/account/users/AccountUsersApi')(config);
+        tablesApi = require('../api/quickbase/tablesApi')(config);
 
         /* internal data */
         /*
@@ -105,6 +107,8 @@
         routeToPostFunction[routeConsts.FEATURE_OVERRIDES] = createFeatureSwitchOverride;
         routeToPostFunction[routeConsts.FEATURE_SWITCHES_BULK] = deleteFeatureSwitchesBulk;
         routeToPostFunction[routeConsts.FEATURE_OVERRIDES_BULK] = deleteFeatureSwitchOverridesBulk;
+
+        routeToPostFunction[routeConsts.TABLE_COMPONENTS] = createTableComponents;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -1026,6 +1030,31 @@
             );
         });
     }
+
+    function createTableComponents(req, res, payload) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get User by id', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            tablesApi.createTableComponents(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'getReqUser');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'getReqUser');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
 
     /**
      * This is the function for proxying to a swagger endpoint on

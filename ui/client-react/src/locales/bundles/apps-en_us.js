@@ -32,7 +32,7 @@ export default {
             },
             settings: "Settings",
             users: {
-                addUser: "Add user to app",
+                addUser: "Adding a new user is not available yet",
                 users: "Users"
             }
         },
