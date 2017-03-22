@@ -7,9 +7,7 @@ import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import {selectFieldOnForm, keyBoardMoveFieldUp, keyboardMoveFieldDown} from '../../../actions/formActions';
-
-import ReKeyboardShortcuts from '../../../../../reuse/client/src/components/reKeyboardShortcuts/reKeyboardShortcuts';
+import {selectFieldOnForm} from '../../../actions/formActions';
 
 import './fieldEditingTools.scss';
 
@@ -28,8 +26,6 @@ export class FieldEditingTools extends Component {
 
         this.selectedCurrentField = this.selectedCurrentField.bind(this);
         this.getSelectedFormElementContainer = this.getSelectedFormElementContainer.bind(this);
-        this.keyboardMoveFieldUp = this.keyboardMoveFieldUp.bind(this);
-        this.keyboardMoveFieldDown = this.keyboardMoveFieldDown.bind(this);
         this.scrollElementIntoView = this.scrollElementIntoView.bind(this);
         this.updateScrollLocation = this.updateScrollLocation.bind(this);
     }
@@ -107,18 +103,6 @@ export class FieldEditingTools extends Component {
         }
     }
 
-    keyboardMoveFieldUp() {
-        if (this.props.formId && this.props.selectedFields[0].elementIndex !== 0) {
-            this.props.keyBoardMoveFieldUp(this.props.formId, this.props.selectedFields[0]);
-        }
-    }
-
-    keyboardMoveFieldDown() {
-        if (this.props.selectedFields && this.props.selectedFields[0].elementIndex < this.props.currentForm.formData.formMeta.fields.length - 1) {
-            this.props.keyboardMoveFieldDown(this.props.formId, this.props.selectedFields[0]);
-        }
-    }
-
     getSelectedFormElementContainer() {
         let selectedFormElement = document.querySelector('.selectedFormElement');
         if (selectedFormElement) {
@@ -187,10 +171,6 @@ export class FieldEditingTools extends Component {
                 onClick={this.onClickField}
                 onKeyDown={this.selectedCurrentField}
             >
-                <ReKeyboardShortcuts id="fieldEditingTools" shortcutBindings={[
-                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
-                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
-                ]}/>
 
                 <DragHandle />
 
@@ -230,14 +210,6 @@ const mapDispatchToProps = dispatch => {
         selectField(formId, location) {
             return dispatch(selectFieldOnForm(formId, location));
         },
-
-        keyBoardMoveFieldUp(formId, location) {
-            return dispatch(keyBoardMoveFieldUp(formId, location));
-        },
-
-        keyboardMoveFieldDown(formId, location) {
-            return dispatch(keyboardMoveFieldDown(formId, location));
-        }
     };
 };
 

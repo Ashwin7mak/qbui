@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm, toggleFormBuilderChildrenTabIndex} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm, toggleFormBuilderChildrenTabIndex, keyBoardMoveFieldUp, keyboardMoveFieldDown} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -24,12 +24,18 @@ let logger = new Logger();
 
 const mapStateToProps = state => {
     let tabIndex = undefined;
+    let selectedField = undefined;
     if (state.forms.length > 0 && state.forms[0].formBuilderChildrenTabIndex) {
         tabIndex = state.forms[0].formBuilderChildrenTabIndex[0];
     }
+    if (state.forms.length > 0 && state.forms[0].selectedFields) {
+        console.log(state.forms);
+        selectedField = state.forms[0].selectedFields[0];
+    }
     return {
         forms: state.forms,
-        tabIndex
+        tabIndex,
+        selectedField
     };
 };
 
@@ -57,6 +63,14 @@ const mapDispatchToProps = dispatch => {
 
         toggleFormBuilderChildrenTabIndex(formId, currentTabIndex) {
             return dispatch(toggleFormBuilderChildrenTabIndex(formId, currentTabIndex));
+        },
+
+        keyBoardMoveFieldUp(formId, location) {
+            return dispatch(keyBoardMoveFieldUp(formId, location));
+        },
+
+        keyboardMoveFieldDown(formId, location) {
+            return dispatch(keyboardMoveFieldDown(formId, location));
         }
     };
 };
@@ -133,6 +147,18 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    keyboardMoveFieldUp() {
+        if (this.props.selectedField.elementIndex !== 0) {
+            this.props.keyBoardMoveFieldUp(this.props.forms[0].id, this.props.selectedField);
+        }
+    },
+
+    keyboardMoveFieldDown() {
+        if (this.props.selectedField && this.props.selectedField.elementIndex < this.props.forms[0].formData.formMeta.fields.length - 1) {
+            this.props.keyboardMoveFieldDown(this.props.forms[0].id, this.props.selectedField);
+        }
+    },
+
     render() {
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
@@ -148,6 +174,8 @@ export const FormBuilderContainer = React.createClass({
                 <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
                     {key: 'esc', callback: () => {this.onCancel(); return false;}},
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
+                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}}
                 ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
