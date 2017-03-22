@@ -9,8 +9,9 @@
 
     &:focus {
         //For keyboard nav
-        background: $color-cyan-300;
+        opacity: 1;
         outline: none;
+        border: $stroke-width-thin solid $border-focused-color;
     }
 
     &.selectedFormElement {
@@ -127,7 +128,9 @@
         outline: none;
         border: none;
         &:focus {
-            background: $color-cyan-300;
+            opacity: 1;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
         }
     }
 }

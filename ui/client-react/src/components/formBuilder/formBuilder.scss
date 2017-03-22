@@ -75,7 +75,6 @@
                 padding-top: 12px;
                 padding-left: 15px;
                 width: 80%;
-                z-index: 1;
             }
 
             .cellWrapper {
@@ -102,10 +101,8 @@
     }
 
     .selectedFormElement {
-        opacity: 1;
-        outline: none;
-        border: $stroke-width-thin solid $border-focused-color;
-
+        background: $color-cyan-300;
+        z-index: -1 !important;
         .deleteFieldIcon {
             .qbIcon {
                 opacity: 1;
