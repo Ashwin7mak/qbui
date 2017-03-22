@@ -42,7 +42,7 @@ To verify installation enter `nvm list default` which should print:
 
 #### Install homebrew and grunt
 
-* Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
+* Install homebrew if it's not already installed. Test if it's installed by running `brew --version`. If it says not found, install homebrew with:
 
     ```
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -57,7 +57,7 @@ To verify installation enter `nvm list default` which should print:
 
     The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
-     Node modules are managed by package.json.
+    Node modules are managed by package.json.
 
     Grunt tasks are defined in the Gruntfile.js
 
@@ -72,7 +72,7 @@ or
 
 or through the GitHub desktop tool
 
-    *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
+Note: If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
 ## Configuring
 Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
@@ -94,7 +94,11 @@ See [notes about the above configuration](ui/README.md#configuring)
 
 * `cd` to the \<project root\>qbui/ui directory.
 
+* Open .npmrc and comment out the line in it so we bypass the cache and go straight to the public registry
+
 * run 'npm install' to install node modules
+
+* Revert your .npmrc file so you don't accidentally check it in (since we need to use the cache in CI)
 
 * To launch the node web server (express) and it will update server as you make edits run
 
@@ -105,8 +109,8 @@ See [notes about the above configuration](ui/README.md#configuring)
 Note that this is pointing to the integration testing environment.  Apps here may be changed or torn down at any time.
 
 ### Note :
- The Node Server only listen via a specific ip/hostname when running with dev hotloader,
- as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
+ The Node Server only listens via a specific ip/hostname when running with dev hotloader,
+ as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node 
 
 ## Testing
 See [testing instructions](ui/README.md#testing)
