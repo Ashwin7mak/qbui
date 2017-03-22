@@ -45,18 +45,19 @@
 
         &.pageActions {
             .iconActionButton {
-                width: 40px;
-                height: 40px;
+                width: 30px;
+                height: 30px;
             }
 
             .addRecord {
                 border-radius: 20px;
-                background-color: $color-green-600;
+                background-color: $add-user-button;
                 color: $color-black-100;
-                margin-right: 30px;
+                margin-right: 24px;
 
                 .qbIcon {
                     color: $color-black-100;
+                    font-size: 16px;
                 }
             }
         }

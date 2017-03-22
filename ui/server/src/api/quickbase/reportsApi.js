@@ -658,6 +658,29 @@
                         reject(ex);
                     });
                 });
+            },
+
+            createReport: function(req) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            let reportId = null;
+                            if (response.body) {
+                                reportId = JSON.parse(response.body).id;
+                            }
+                            resolve(reportId);
+                        },
+                        (error) => {
+                            log.error({req: req}, "reportsApi.createReport(): Error creating report on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsApi.createReport(): unexpected error creating report on core', ex, true);
+                        reject(ex);
+                    });
+                });
             }
         };
 
