@@ -23,7 +23,10 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
-    let tabIndex = state.forms[0].formBuilderChildrenTabIndex ? state.forms[0].formBuilderChildrenTabIndex[0] : undefined;
+    let tabIndex = undefined;
+    if (state.forms.length > 0 && state.forms[0].formBuilderChildrenTabIndex) {
+        tabIndex = state.forms[0].formBuilderChildrenTabIndex[0];
+    }
     return {
         forms: state.forms,
         tabIndex
