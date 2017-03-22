@@ -246,6 +246,16 @@ export const selectFieldOnForm = (formId, location) => {
 };
 
 /**
+ * Deselects a field on a form
+ * @param formId
+ * @param location
+ * @returns {{id, type, content}|*}
+ */
+export const deselectField = (formId, location) => {
+    return event(formId, types.DESELECT_FIELD, {location});
+};
+
+/**
  * Removes a field from the form
  * @param formId
  * @param location

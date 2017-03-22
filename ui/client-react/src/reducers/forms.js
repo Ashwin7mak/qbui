@@ -203,6 +203,26 @@ const forms = (
         ];
     }
 
+        case types.DESELECT_FIELD : {
+
+            if (!currentForm || !_.has(action, 'content.location')) {
+                return state;
+            }
+
+            updatedForm = _.cloneDeep(currentForm);
+
+            if (!updatedForm.selectedFields) {
+                updatedForm.selectedFields = [];
+            }
+
+            updatedForm.selectedFields[0] = undefined;
+
+            return [
+                ...newState,
+                updatedForm
+            ];
+        }
+
     case types.KEYBOARD_MOVE_FIELD_UP : {
         if (!currentForm) {
             return state;

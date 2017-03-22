@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyBoardMoveFieldUp, keyboardMoveFieldDown} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyBoardMoveFieldUp, keyboardMoveFieldDown, deselectField} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -66,6 +66,10 @@ const mapDispatchToProps = dispatch => {
 
         keyboardMoveFieldDown(formId, location) {
             return dispatch(keyboardMoveFieldDown(formId, location));
+        },
+
+        deselectField(formId, location) {
+            return dispatch(deselectField(formId, location));
         }
     };
 };
@@ -93,10 +97,6 @@ export const FormBuilderContainer = React.createClass({
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
-    },
-
-    onCancel() {
-        AppHistory.history.goBack();
     },
 
     saveClicked() {
@@ -154,6 +154,23 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    onCancel() {
+        AppHistory.history.goBack();
+    },
+
+    escapeCurrentContext() {
+        let childrenTabIndex = this.props.tabIndex;
+        let selectedField = this.props.selectedField;
+        if (selectedField) {
+            console.log('selectedField');
+            this.props.deselectField(this.props.forms[0].id, selectedField);
+        } else if(this.props.tabIndex === "0") {
+            this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);
+        } else {
+            this.onCancel();
+        }
+    },
+
     render() {
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
@@ -167,7 +184,7 @@ export const FormBuilderContainer = React.createClass({
             <div className="formBuilderContainer">
 
                 <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
-                    {key: 'esc', callback: () => {this.onCancel(); return false;}},
+                    {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
                     {key: 'up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
                     {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}}
