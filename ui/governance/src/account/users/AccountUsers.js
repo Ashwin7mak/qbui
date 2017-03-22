@@ -9,7 +9,7 @@ class AccountUsers extends Component {
     render() {
         return (
             <div className="governanceMain">
-                <AccountUsersStage isHidden={false} />
+                <AccountUsersStage isHidden={true} />
                 <AccountUsersGrid accountId={this.props.params.accountId}/>
             </div>
         );
