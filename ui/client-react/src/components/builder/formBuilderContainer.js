@@ -29,7 +29,6 @@ const mapStateToProps = state => {
         tabIndex = state.forms[0].formBuilderChildrenTabIndex[0];
     }
     if (state.forms.length > 0 && state.forms[0].selectedFields) {
-        console.log(state.forms);
         selectedField = state.forms[0].selectedFields[0];
     }
     return {
