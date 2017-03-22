@@ -45,14 +45,14 @@
                     opts.headers.host = host;
                     opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getAccountUsersLegacyStackRoute(accountId);
 
-                requestHelper
+                return requestHelper
                     .executeRequest(req, opts)
                     .then((response) => {
-                        resolve(JSON.parse(response.body));
+                        return JSON.parse(response.body);
                     })
                     .catch((ex) => {
                         requestHelper.logUnexpectedError('getAccountUsers.getAccountUsers(): unexpected error retrieving account users.', ex, true);
-                        reject(ex);
+                        throw ex;
                     });
             }
         };

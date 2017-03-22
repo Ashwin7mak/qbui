@@ -47,11 +47,11 @@
                 return requestHelper
                     .executeRequest(req, opts)
                     .then((response) => {
-                        resolve(JSON.parse(response.body));
+                        return JSON.parse(response.body);
                     })
                     .catch((ex) => {
                         requestHelper.logUnexpectedError("getContext.getContext(): Error retrieving account users.", ex, true);
-                        reject(ex);
+                        throw ex;
                     });
             }
         };
