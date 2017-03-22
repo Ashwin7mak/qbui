@@ -100,8 +100,9 @@ See [notes about the above configuration](ui/README.md#configuring)
 
     * `grunt serve`
 
-* Current urls supported
-    * http://localhost:9000/
+* Navigate to http://localhost.localhost:9000/api/api/v1/ticket?uid=10000&realmId=117000 This logs you in as the administrator user.
+* Navigate to http://localhost.localhost:9000/qbase/apps/ to see the apps available to the administrator user.
+Note that this is pointing to the integration testing environment.  Apps here may be changed or torn down at any time.
 
 ### Note :
  The Node Server only listen via a specific ip/hostname when running with dev hotloader,
