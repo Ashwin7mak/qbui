@@ -41,7 +41,10 @@ class Stage extends Component {
                     <Well className="collapsedContent">{this.props.children}</Well>
                 </Collapse>
 
-                <button className="toggleStage" onClick={this.toggleStage}><Icon icon={this.state.open ? 'caret-up' : 'caret-down'} /></button>
+                {
+                    this.props.children &&
+                    <button className="toggleStage" onClick={this.toggleStage}><Icon icon={this.state.open ? 'caret-up' : 'caret-down'} /></button>
+                }
             </div>
         );
     }
@@ -53,7 +56,7 @@ Stage.propTypes = {
     pageActions: PropTypes.element,
 
     /**
-     * The title/headline of the stage. It appears toward the upper-left of the stage. */
+     * The title/headline of the stage. It appears toward the upper-left of the stage. It's easiest to use the StageHeaderComponent, but not required. */
     stageHeadline: PropTypes.node
 };
 
