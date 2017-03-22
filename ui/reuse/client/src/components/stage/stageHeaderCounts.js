@@ -2,6 +2,17 @@ import React, {PropTypes, Component} from 'react';
 
 import './stageHeaderCounts.scss';
 
+/**
+ * A few pages need to display large counts of items in the Stage. This component can be used to display that information.
+ * Use this component as the content of a Stage.
+ * <Stage>
+ *     <StageHeaderCounts items={items} />
+ * </Stage>
+ * @param items
+ * @param className
+ * @param stageHeaderHasIcon
+ * @constructor
+ */
 const StageHeaderCounts = ({items, className, stageHeaderHasIcon}) => (
     <div className={`stageHeaderCounts ${className || ''} ${stageHeaderHasIcon ? 'stageHeaderCountsWithIcon' : ''}`}>
         {
@@ -40,8 +51,7 @@ StageHeaderCounts.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Set to true if the parent stage element has an icon.
-     */
+     * Set to true if the parent stage element has an icon. */
     stageHeaderHasIcon: PropTypes.bool
 };
 

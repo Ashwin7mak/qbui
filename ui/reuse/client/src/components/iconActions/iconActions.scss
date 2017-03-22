@@ -36,7 +36,7 @@
                 background-color: transparent;
             }
 
-            .iconActionButton:not([disabled]):hover {
+            .iconActionButton:not(.disabled):hover {
                 background: $topnav-hover-background-color;
                 color: $topnav-hover-color;
                 cursor: pointer;

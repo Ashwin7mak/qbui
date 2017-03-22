@@ -3,6 +3,14 @@ import Icon from '../icon/icon';
 
 import './stageHeader.scss';
 
+/**
+ * A reusable header for use with the Stage component.
+ * @param title
+ * @param icon
+ * @param iconClassName
+ * @param description
+ * @constructor
+ */
 const StageHeader = ({title, icon, iconClassName, description}) => (
     <div className="stageHeaderComponent">
         {
@@ -30,7 +38,7 @@ const StageHeader = ({title, icon, iconClassName, description}) => (
 StageHeader.propTypes = {
     /**
      * The main title that will appear in the header */
-    // TODO:: Convert to i18nMessageKey
+    // TODO:: Convert to i18nMessageKey when localization is completed. https://quickbase.atlassian.net/browse/MC-1002
     title: PropTypes.string.isRequired,
 
     /**

@@ -14,9 +14,9 @@ const QbIconActions = React.createClass({
     mixins: [FluxMixin],
 
     onDropDownToggle(open) {
-        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
-        //It will remove the white space if the menu is close. The class is added in reportContent.js
-        //TODO: Convert to ShellAction (toggleRowActionsMenu) when reactabular work is done. It breaks with ag-grid.
+        // This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
+        // It will remove the white space if the menu is closed. The class is added in reportContent.js
+        // TODO: Convert to ShellAction (toggleRowActionsMenu) when reactabular work is done. It breaks with ag-grid.
         this.getFlux().actions.onToggleRowPopUpMenu(open);
     },
 
