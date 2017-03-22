@@ -1,5 +1,5 @@
-import Locale, {__RewireAPI__ as LocaleRewireAPI} from '../../src/locales/locales';
-import AppsBundleLoader from '../../src/locales/appsBundleLoader';
+import Locale, {__RewireAPI__ as LocaleRewireAPI} from '../../src/locales/locale';
+import ReuseBundleLoader from '../../src/locales/reuseBundleLoader';
 
 describe('Locales', () => {
     'use strict';
@@ -45,19 +45,19 @@ describe('Locales', () => {
     });
 
     it('test valid change locale', () => {
-        AppsBundleLoader.changeLocale('fr-fr');
+        ReuseBundleLoader.changeLocale('fr-fr');
         let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
         expect(Locale.getLocale()).toBe('fr-fr');
 
-        AppsBundleLoader.changeLocale('de-de');
+        ReuseBundleLoader.changeLocale('de-de');
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('de-de');
         expect(Locale.getLocale()).toBe('de-de');
     });
 
     it('test getMessage', () => {
-        AppsBundleLoader.changeLocale('en-us');
+        ReuseBundleLoader.changeLocale('en-us');
         Locale.getI18nBundle();
         const testMsg = Locale.getMessage("test.testMsg");
         expect(testMsg).toBe('test');
@@ -73,23 +73,23 @@ describe('Locales', () => {
         LocaleRewireAPI.__Rewire__('config', mockConfig);
 
         //  set to a valid locale..
-        AppsBundleLoader.changeLocale('fr-fr');
+        ReuseBundleLoader.changeLocale('fr-fr');
         let i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
 
         //  .. now set to an invalid locale..locale should not change
-        AppsBundleLoader.changeLocale('de-de');
+        ReuseBundleLoader.changeLocale('de-de');
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
         expect(Locale.getLocale()).toBe('fr-fr');
 
-        AppsBundleLoader.changeLocale({'throws exception':2});
+        ReuseBundleLoader.changeLocale({'throws exception':2});
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('fr-fr');
         expect(Locale.getLocale()).toBe('fr-fr');
 
         //  set to a valid locale..
-        AppsBundleLoader.changeLocale('en-us');
+        ReuseBundleLoader.changeLocale('en-us');
         i18n = Locale.getI18nBundle();
         expect(i18n.locales).toBe('en-us');
 
