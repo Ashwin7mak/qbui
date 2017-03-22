@@ -7,8 +7,9 @@
     background-color: $color-black-250;
 
     &:focus {
-        outline-color: $color-cyan-300;
-        outline-width: 10px;
+        outline: none;
+        opacity: .5;
+        background: $color-cyan-300;
     }
 
     @include small-breakpoint {
