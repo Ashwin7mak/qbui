@@ -1,0 +1,233 @@
+@import "../../assets/css/qbVariables";
+
+.topNav {
+    min-width: 200px;
+    flex: 0 0 auto;
+    flex-basis: $top-nav-height;
+    display: flex;
+    order: 1;
+    flex-direction: column;
+    background-color: $topnav-header-background-color;
+
+    .top {
+        display: flex;
+        flex-basis: $top-nav-height;
+        font-size: 14px;
+        min-width: 300px;
+    }
+
+    .navGroup.left, .navGroup.right {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+
+    @include small-breakpoint {
+        .navGroup.left {
+            flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .navGroup.center {
+        flex: 1 0 auto;
+
+        .navItem {
+            display: flex;
+            justify-content: center;
+        }
+
+        @include small-breakpoint {
+            flex: 0 0 auto;
+
+            .navItem {
+                justify-content: flex-end;
+            }
+        }
+    }
+
+    .btn-group {
+        height: 40px;
+
+        button {
+            width: 40px;
+            color: $topnav-icon-color;
+            border-radius: 0;
+            padding: 0;
+            height: $top-nav-height;
+            text-align: center;
+        }
+
+        button:not(.disabled):hover .hi {
+            color: $color-black-100;
+        }
+
+        button.disabled {
+            opacity: 0.65;
+        }
+    }
+
+    .btn {
+        background: $topnav-header-background-color;
+        border: 0;
+    }
+
+    .btn.disabled {
+        background: $topnav-header-background-color;
+    }
+
+    .navGroup .btn-group .btn:not(.disabled):hover {
+        background: $topnav-hover-background-color;
+
+        span {
+            color: $topnav-hover-color;
+        }
+    }
+
+    .iconLink {
+        color: $topnav-icon-color;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .qbIcon {
+        font-size: 22px;
+    }
+
+
+    .dropdown-menu {
+        right: 0;
+        left: auto;
+    }
+
+    .topNav .dropdown {
+        a.dropdownToggle {
+            display: inline-block;
+            cursor: pointer;
+            color: $topnav-icon-color;
+            padding: 0 8px;
+        }
+
+        a.dropdownToggle:hover {
+            background-color: $topnav-hover-background-color;
+
+            span {
+                color: $topnav-hover-color;
+            }
+        }
+    }
+
+    .globalActions {
+        display: inline-block;
+
+        .builder {
+            padding-right: 10px;
+        }
+
+
+        .link {
+            cursor: pointer;
+
+            > a, > div > a {
+                display: inline-block;
+                color: $topnav-icon-color;
+                padding: 0 8px;
+
+                .qbIcon {
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        .globalActionsList {
+            margin: 0;
+            padding: 0;
+            vertical-align: middle;
+            line-height: 40px;
+        }
+
+        .globalAction {
+            border: 0;
+
+            .qbIcon + span {
+                margin-left: 6px;
+            }
+        }
+
+        .globalAction.disabled {
+            vertical-align: middle;
+            margin-right: -12px;
+            padding-top: 3px;
+            height: 40px;
+        }
+        .globalAction.disabled:hover {
+            background: $topnav-header-background-color;
+
+            > a {
+                color: $topnav-header-background-color;
+            }
+        }
+        .globalAction:hover {
+            background: $topnav-hover-background-color;
+
+            > a {
+                color: $topnav-hover-color;
+            }
+        }
+
+        li.globalAction {
+            display: inline-block;
+        }
+    }
+
+    .navItem {
+        &.topTitle {
+            display: none;
+        }
+    }
+
+    .topTitle {
+        display: none;
+    }
+
+    @include small-breakpoint {
+        &.hideSmall {
+            display: none;
+        }
+
+        .globalActions {
+            display: none; /* shown on left nav */
+        }
+
+        .topTitle {
+            display: inline-block;
+
+            .qbIcon {
+                vertical-align: middle;
+                color: $topnav-title-icon-color;
+            }
+
+            .qbIcon + span {
+                margin-left: 5px;
+            }
+        }
+
+        .top .navGroup.left {
+            display: flex;
+            flex-direction: row;
+
+            .navItem {
+                flex: 0 0 auto;
+            }
+
+            .topTitle {
+                display: flex;
+                flex: 1 1 auto;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}

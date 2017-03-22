@@ -27,7 +27,11 @@ export default {
                 helpLinkPreText: "Veuillez ",
                 helpLinkText: "contacter notre équipe de soins"
             },
-            settings: "Paramètres"
+            settings: "Paramètres",
+            users: {
+                addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
+                users: "Utilisateurs"
+            }
         },
         appMenu: {
             qbClassicLink: "Basculer vers QuickBase Classic"

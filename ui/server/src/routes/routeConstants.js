@@ -16,7 +16,8 @@
         EXPERIENCE_ENGINE   : '/ee/:version',
         QUICKBASE_HEALTH    : '/api/:version',
         NODE                : '/api/n/:version',
-        QUICKBASE_LEGACY    : '/api/l/:version'
+        QUICKBASE_LEGACY    : '/api/l/:version',
+        GOVERNANCE          : '/api/governance/:version'
     };
 
     /*
@@ -57,6 +58,8 @@
         REPORT_INVOKE_RESULTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/invoke',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
+        TABLES                      : baseUrl.QUICKBASE + '/apps/:appId/tables',
+        TABLE_COMPONENTS            : baseUrl.QUICKBASE + '/apps/:appId/tables/tableComponents',
 
         //  APP ENDPOINTS
         APPS                        : baseUrl.QUICKBASE + '/apps',
@@ -80,7 +83,9 @@
         // is configured to act as proxy and pass the request directly to the server side resource.
         TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*',
 
-        ADMIN                       : baseUrl.QUICKBASE + '/admin'
+        ADMIN                       : baseUrl.QUICKBASE + '/admin',
+
+        GOVERNANCE_ACCOUNT_USERS     : baseUrl.GOVERNANCE + '/:accountId/users',
     };
 
     /*

@@ -30,7 +30,11 @@ export default {
                 helpLinkPreText: "Please ",
                 helpLinkText: "contact our Care team"
             },
-            settings: "Settings"
+            settings: "Settings",
+            users: {
+                addUser: "Adding a new user is not available yet",
+                users: "Users"
+            }
         },
         appMenu: {
             qbClassicLink: "Switch to QuickBase Classic"

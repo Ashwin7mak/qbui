@@ -19,12 +19,11 @@ export const receiveAccountUsers = (users) => ({
  *
  * @returns {function(*=)}
  */
-export const fetchAccountUsers = () => {
+export const fetchAccountUsers = (accountId) => {
     return (dispatch) => {
         // get all the users from the account service
         const accountUsersService = new AccountUsersService();
-
-        const promise = accountUsersService.getAccountUsers();
+        const promise = accountUsersService.getAccountUsers(accountId);
 
         promise.then(response => {
 

@@ -8,6 +8,7 @@ import Promise from 'bluebird';
 
 describe('Account Users Actions Tests', () => {
 
+    // Dummy Data
     let ACCOUNT_USERS_DATA = [
         {
             "uid": 10000,
@@ -50,8 +51,8 @@ describe('Account Users Actions Tests', () => {
 
         constructor() { }
 
-        // resolve the promise with responseData
-        getAccountUsers() {
+        // resolve the promise with dummy responseData
+        getAccountUsers(accountId) {
             return Promise.resolve({data: ACCOUNT_USERS_DATA});
         }
     }
@@ -64,19 +65,20 @@ describe('Account Users Actions Tests', () => {
         AccountUsersActionsRewireAPI.__ResetDependency__('AccountUsersService');
     });
 
-    it('gets users', (done) => {
+    it('gets dummy users', (done) => {
 
         const expectedActions = [
             {type: types.SET_USERS, users: ACCOUNT_USERS_DATA}
         ];
 
         const store = mockStore({});
+        const accountId = 1;
 
         // expect the dummy data when the fetchAccountUsers is called
-        return store.dispatch(actions.fetchAccountUsers()).then(
+        return store.dispatch(actions.fetchAccountUsers(accountId)).then(
 
             () => {
-                expect(store.getActions()).toEqual(expectedActions);
+                expect(store.getActions(accountId)).toEqual(expectedActions);
                 done();
             },
 

@@ -2,9 +2,12 @@
  * Created by rbeyer on 2/16/17.
  */
 import React, {PropTypes} from 'react';
-import * as search from 'searchtabular';
 import * as Table from 'reactabular-table';
-import {compose} from 'redux';
+import QbHeaderCell from '../../../dataTable/qbGrid/qbHeaderCell';
+import QbRow from '../../../dataTable/qbGrid/qbRow';
+import QbCell from '../../../dataTable/qbGrid/qbCell';
+import EmailFieldValueRenderer from '../../../fields/emailFieldValueRenderer';
+import '../../../dataTable/qbGrid/qbGrid.scss';
 import './userManagement.scss';
 
 
@@ -22,34 +25,24 @@ class UserManagement extends React.Component {
 
     constructor(...args) {
         super(...args);
-        this.state = {
-            searchColumn: 'all',
-            query: {}
-        };
         this.createUserColumns = this.createUserColumns.bind(this);
         this.createUserRows = this.createUserRows.bind(this);
     }
 
     createUserColumns(cellFormatter) {
+        const cellFormatterEmail = (cellData) => {return <EmailFieldValueRenderer value={cellData} display={cellData}/>;};
         let columns = [
             {
-                property: 'firstName',
+                property: 'name',
                 header: {
-                    label: 'First Name'
+                    label: 'Name'
                 },
                 cell: {formatters: [cellFormatter]}
             },
             {
-                property: 'lastName',
+                property: 'roleName',
                 header: {
-                    label: 'Last Name'
-                },
-                cell: {formatters: [cellFormatter]}
-            },
-            {
-                property: 'screenName',
-                header: {
-                    label: 'User Name'
+                    label: 'Role'
                 },
                 cell: {formatters: [cellFormatter]}
             },
@@ -58,12 +51,12 @@ class UserManagement extends React.Component {
                 header: {
                     label: 'Email'
                 },
-                cell: {formatters: [cellFormatter]}
+                cell: {formatters: [cellFormatterEmail]}
             },
             {
-                property: 'roleName',
+                property: 'screenName',
                 header: {
-                    label: 'Role'
+                    label: 'User name'
                 },
                 cell: {formatters: [cellFormatter]}
             }
@@ -78,6 +71,7 @@ class UserManagement extends React.Component {
             if (appUsers[role.id]) {
                 appUsers[role.id].forEach(function(user) {
                     user.roleName = role.name;
+                    user.name = `${user.firstName} ${user.lastName}`;
                     appUsersFiltered.push(user);
                 });
             }
@@ -89,34 +83,28 @@ class UserManagement extends React.Component {
         const resolvedRows = this.createUserRows();
         const cellFormatter = (cellData) => {return <span>{cellData}</span>;};
         const columns = this.createUserColumns(cellFormatter);
-        const query = this.state.query;
-        const searchedRows = compose(
-            search.highlighter({
-                columns: columns,
-                matches: search.matches,
-                query
-            }),
-            search.multipleColumns({
-                columns: columns,
-                query
-            }),
-        )(resolvedRows);
         return (
-            <div className="userManagementContainer">
-                <div className="search-container">
-                    <span>Search</span>
-                    <search.Field
-                        column={this.state.searchColumn}
-                        query={query}
-                        columns={columns}
-                        rows={resolvedRows}
-                        onColumnChange={searchColumn => this.setState({searchColumn})}
-                        onChange={newQuery => this.setState({query: newQuery})}
+            <div className="userManagementReport">
+                <Table.Provider columns={columns} className="qbGrid"
+                    components={{
+                        header: {
+                            cell: QbHeaderCell
+                        },
+                        body: {
+                            row: QbRow,
+                            cell: QbCell
+                        }
+                    }}
+                >
+                    <Table.Header headerRows={[columns]} className="qbHeader"/>
+                    <Table.Body rows={resolvedRows} rowKey="userId"
+                                className="qbTbody"
+                                onRow={(row) => {
+                                    return {
+                                        className: 'qbRow'
+                                    };
+                                }}
                     />
-                </div>
-                <Table.Provider columns={columns} className="userGrid">
-                    <Table.Header headerRows={[columns]} />
-                    <Table.Body rows={searchedRows} rowKey="userId" className="userTBody"/>
                 </Table.Provider>
             </div>
         );
