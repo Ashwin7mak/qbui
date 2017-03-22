@@ -150,7 +150,6 @@
                     opts.method = 'delete';
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url, tableId);
 
-                    //  make the api request to get the user object
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             resolve(response);
@@ -161,6 +160,53 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('tablesApi.deleteTable(): unexpected error deleting table on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+
+            /**
+             * Create endpoint for the table object
+             * @param req
+             * @returns {Promise}
+             */
+            patchTable: function(req, tableId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(response.body);
+                        },
+                        (error) => {
+                            log.error({req: req}, "tablesApi.patchTable(): Error patching table on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('tablesApi.patchTable(): unexpected error patching table on core', ex, true);
+                        reject(ex);
+                    });
+                });
+            },
+            /**
+             * replaceTableProperties
+             */
+            replaceTableProperties: function(req, tableId) {
+                return new Promise((resolve, reject) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.url = requestHelper.getRequestEeHost() + routeHelper.getTablePropertiesRoute(req.url, tableId);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve(JSON.parse(response.body));
+                        },
+                        (error) => {
+                            log.error({req: req}, "tablesApi.replaceTableProperties(): Error replacing table on core");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('tablesApi.replaceTableProperties(): unexpected error replacing table on core', ex, true);
                         reject(ex);
                     });
                 });
@@ -241,8 +287,8 @@
                                         },
                                         (error) => {
                                             // dont go forward with creation of report/form
-                                            this.deleteTable(req, tableId);
                                             this.deleteTableProperties(req, tableId);
+                                            this.deleteTable(req, tableId);
                                             reject(error);
                                         }
                                     );
@@ -261,6 +307,39 @@
                     );
                 });
             },
+
+            /**
+             * The update Table call will send the whole object for TableProperties + name of the table if it has been updated.
+             * This api is responsible for making 2 calls -
+             *  1. to Core to update table name (if its on the payload)
+             *  2. to EE to call PUT on the tableproperties object
+             *  NOTE: The patch for tableproperties is not usable so use PUT instead.
+             * @param req
+             * @returns {Promise}
+             */
+            updateTable: function(req) {
+                return new Promise((resolve, reject) =>{
+                    // this has input for both creating table and props
+                    // core fails if its passed in props that are not recognized for some reason
+                    // so we need to parse this here and send only what's recognized.
+                    let reqPayload = req.body;
+
+                    let promises = [];
+                    if (reqPayload.name) {
+                        let tableReq = _.clone(req);
+                        tableReq.rawBody = JSON.stringify({name: reqPayload.name});
+                        tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
+                        tableReq.method = 'patch';
+                        promises.push(this.patchTable(tableReq, req.params.tableId));
+                    }
+
+                    let tableProperReq = _.clone(req);
+                    tableProperReq.rawBody = JSON.stringify(_.omit(reqPayload, ['name']));
+                    tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
+                    tableProperReq.method = 'put';
+                    promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
+                });
+            }
         };
         return tablesApi;
     };
