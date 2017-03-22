@@ -6,8 +6,10 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import {NotificationManager} from 'react-notifications';
 import * as TableCreationActions from '../../actions/tableCreationActions';
-import * as CompConsts from '../../constants/componentConstants';
 import Locale from '../../locales/locales';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
+import UrlUtils from '../../utils/urlUtils';
+
 import './tableCreationDialog.scss';
 
 export class TableCreationDialog extends React.Component {
@@ -44,13 +46,17 @@ export class TableCreationDialog extends React.Component {
 
         this.props.createTable(this.props.appId , tableInfo).then(
             (response) => {
-                NotificationManager.success(Locale.getMessage("tableCreation.tableCreated"), Locale.getMessage('success'),
-                    CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
                 this.props.hideTableCreationDialog();
+
+                NotificationManager.success(Locale.getMessage("tableCreation.tableCreated"), Locale.getMessage('success'));
+
+                setTimeout(() => {
+                    const tblId = response.data;
+                    WindowLocationUtils.update(UrlUtils.getAfterTableCreatedLink(this.props.appId, tblId));
+                }, 2000);
             },
             (error) => {
-                NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'),
-                    CompConsts.NOTIFICATION_MESSAGE_FAIL_DISMISS_TIME);
+                NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
             });
     }
 

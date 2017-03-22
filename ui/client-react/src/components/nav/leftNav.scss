@@ -611,6 +611,13 @@ div.leftNavTooltip {
         transform: translate3d(300px, 0, 0);
         -webkit-transform: translate3d(300px, 0, 0);
     }
+
+    /* hide tables footer (add new table) for small */
+
+    .tablesFooter {
+        display: none;
+    }
+
 }
 
 /** REACTCSSTRANSITION BASE CLASSES **/
@@ -670,3 +677,5 @@ $travel-distance: 15;
         left: auto !important;
     }
 }
+
+
