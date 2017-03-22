@@ -11,7 +11,7 @@ const mockConnectDragSource = component => component;
 let DraggableComponent;
 let component;
 
-fdescribe('DraggableField', () => {
+describe('DraggableField', () => {
     beforeEach(() => {
         jasmineEnzyme();
 
