@@ -5,13 +5,7 @@
     border-top: none;
     width: 220px;
     background-color: $color-black-250;
-
-    &:focus {
-        outline: none;
-        opacity: .5;
-        background: $color-cyan-300;
-    }
-
+    
     @include small-breakpoint {
         display: none;
     }
