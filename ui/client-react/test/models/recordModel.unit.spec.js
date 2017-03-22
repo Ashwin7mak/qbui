@@ -143,7 +143,7 @@ describe('Record Model', () => {
 
         expect(model.editErrors.ok).toBeFalsy();
         expect(mockValidationMessage.getMessage).toHaveBeenCalled();
-        expect(model.editErrors.errors.length).toEqual(1);;
+        expect(model.editErrors.errors.length).toEqual(1);
     });
 
     it('verify setEditRecordChange method with original record and changes', () => {
