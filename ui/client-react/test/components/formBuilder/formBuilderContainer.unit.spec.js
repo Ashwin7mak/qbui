@@ -212,7 +212,7 @@ describe('FormBuilderContainer', () => {
                 keyBoardMoveFieldUp={mockActions.keyBoardMoveFieldUp}
             />);
 
-            let instance = component.instance();
+            instance = component.instance();
 
             instance.keyboardMoveFieldUp();
 
@@ -231,7 +231,7 @@ describe('FormBuilderContainer', () => {
                 keyBoardMoveFieldUp={mockActions.keyBoardMoveFieldUp}
             />);
 
-            let instance = component.instance();
+            instance = component.instance();
 
             instance.keyboardMoveFieldUp();
 
@@ -251,7 +251,7 @@ describe('FormBuilderContainer', () => {
                 keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
             />);
 
-            let instance = component.instance();
+            instance = component.instance();
 
             instance.keyboardMoveFieldDown();
 
@@ -271,7 +271,7 @@ describe('FormBuilderContainer', () => {
                 keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
             />);
 
-            let instance = component.instance();
+            instance = component.instance();
 
             instance.keyboardMoveFieldDown();
 

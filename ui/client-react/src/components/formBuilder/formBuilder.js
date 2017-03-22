@@ -111,7 +111,6 @@ export class FormBuilder extends Component {
                     editingForm={true}
                     formData={this.props.formData}
                     handleFormReorder={this.handleFormReorder}
-                    removeField={this.removeField}
                     cacheDragElement={this.cacheDragElement}
                     clearDragElementCache={this.clearDragElementCache}
                     cancelFormReorder={this.cancelFormReorder}

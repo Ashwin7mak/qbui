@@ -7,7 +7,7 @@ import Device from '../../../utils/device';
 import Breakpoints from '../../../utils/breakpoints';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import {selectFieldOnForm} from '../../../actions/formActions';
+import {selectFieldOnForm, removeFieldFromForm} from '../../../actions/formActions';
 
 import './fieldEditingTools.scss';
 
@@ -32,7 +32,7 @@ export class FieldEditingTools extends Component {
 
     onClickDelete(e) {
         if (this.props.removeField) {
-            return this.props.removeField(this.props.location);
+            return this.props.removeField(this.props.formId, this.props.location);
         }
         e.preventDefault();
     }
@@ -99,7 +99,7 @@ export class FieldEditingTools extends Component {
             this.updateScrollLocation();
         } else if (!this.props.selectedFields[0] && this.props.tabIndex === "0") {
             let firstFieldElement = document.querySelectorAll('.fieldEditingTools');
-                firstFieldElement[0].focus();
+            firstFieldElement[0].focus();
         }
     }
 
@@ -209,6 +209,9 @@ const mapDispatchToProps = dispatch => {
     return {
         selectField(formId, location) {
             return dispatch(selectFieldOnForm(formId, location));
+        },
+        removeField(formId, location) {
+            return dispatch(removeFieldFromForm(formId, location));
         },
     };
 };
