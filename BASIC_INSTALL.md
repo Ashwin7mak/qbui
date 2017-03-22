@@ -91,24 +91,23 @@ See [notes about the above configuration](ui/README.md#configuring)
 
 
 ## Instructions to run server and watch for changes
+### Install node modules
 
 * `cd` to the \<project root\>qbui/ui directory.
-
 * Open .npmrc and comment out the line in it so we bypass the cache and go straight to the public registry
-
 * run 'npm install' to install node modules
-
 * Revert your .npmrc file so you don't accidentally check it in (since we need to use the cache in CI)
 
-* To launch the node web server (express) and it will update server as you make edits run
+### Run the app
+* Launch the node web server (express) and it will update server as you make edits run
 
-    * `grunt serve`
+   `grunt serve`
 
 * Navigate to http://localhost.localhost:9000/api/api/v1/ticket?uid=10000&realmId=117000 This logs you in as the administrator user.
 * Navigate to http://localhost.localhost:9000/qbase/apps/ to see the apps available to the administrator user.
 Note that this is pointing to the integration testing environment.  Apps here may be changed or torn down at any time.
 
-### Note :
+#### Note :
  The Node Server only listens via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node 
 
