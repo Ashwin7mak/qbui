@@ -26,7 +26,7 @@ class UserManagement extends React.Component {
     constructor(...args) {
         super(...args);
         this.createUserColumns = this.createUserColumns.bind(this);
-        this.createUserRows = this.createUserRows.bind(this); 
+        this.createUserRows = this.createUserRows.bind(this);
     }
 
     createUserColumns(cellFormatter) {
