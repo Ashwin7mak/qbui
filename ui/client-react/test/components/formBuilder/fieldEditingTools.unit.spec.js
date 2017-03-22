@@ -19,15 +19,13 @@ const mockReactDom = {
 const mockParentProps = {
     removeField(_location) {},
     openFieldPreferences(_location) {},
-    selectField(_formId, _location) {},
-    keyBoardMoveFieldUp(_formId, _location) {},
-    keyboardMoveFieldDown(_formId, _location) {}
+    selectField(_formId, _location) {}
 };
 
+const currentForm = {formBuilderChildrenTabIndex: ["0"]};
+const formId = 'view';
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
 const diffSelectedLocation = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
-let currentForm = {formBuilderChildrenTabIndex: ["0"]};
-const formId = 'view';
 let component;
 
 describe('FieldEditingTools', () => {
@@ -189,96 +187,16 @@ describe('FieldEditingTools', () => {
         expect(instance.scrollElementIntoView).not.toHaveBeenCalled();
     });
 
-    it('will move a field up if the selected form element is not at index 0', () => {
-        spyOn(mockParentProps, 'keyBoardMoveFieldUp');
-
-        component = shallow(<FieldEditingTools
-            currentForm={currentForm}
-            location={location}
-            selectedFields={[location]}
-            formId={formId}
-            keyBoardMoveFieldUp={mockParentProps.keyBoardMoveFieldUp}
-        />);
-
-        let instance = component.instance();
-
-        instance.keyboardMoveFieldUp();
-
-        expect(mockParentProps.keyBoardMoveFieldUp).toHaveBeenCalledWith(formId, location);
-    });
-
-    it('will not move a field up if the selected form element is at index 0', () => {
-        const locationAtIndexZero = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 0};
-
-        spyOn(mockParentProps, 'keyBoardMoveFieldUp');
-
-        component = shallow(<FieldEditingTools
-            currentForm={currentForm}
-            location={locationAtIndexZero}
-            selectedFields={[locationAtIndexZero]}
-            formId={formId}
-            keyBoardMoveFieldUp={mockParentProps.keyBoardMoveFieldUp}
-        />);
-
-        let instance = component.instance();
-
-        instance.keyboardMoveFieldUp();
-
-        expect(mockParentProps.keyBoardMoveFieldUp).not.toHaveBeenCalled();
-    });
-
-    it('will move a field down if the selected form element is not located at the last index', () => {
-        let currentFormData = {formData: {formMeta: {fields:[1, 2, 3, 4, 5, 6]}}};
-
-        spyOn(mockParentProps, 'keyboardMoveFieldDown');
-
-        component = shallow(<FieldEditingTools
-            currentForm={currentFormData}
-            location={location}
-            selectedFields={[location]}
-            formId={formId}
-            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
-        />);
-
-        let instance = component.instance();
-
-        instance.keyboardMoveFieldDown();
-
-        expect(mockParentProps.keyboardMoveFieldDown).toHaveBeenCalledWith(formId, location);
-    });
-
-    it('will not move a field down if the selected form element is greater than the last index', () => {
-        let currentFormData = {formData: {formMeta: {fields: [1, 2, 3, 4]}}};
-
-        spyOn(mockParentProps, 'keyboardMoveFieldDown');
-
-        component = shallow(<FieldEditingTools
-            currentForm={currentFormData}
-            location={location}
-            selectedFields={[location]}
-            formId={formId}
-            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
-        />);
-
-        let instance = component.instance();
-
-        instance.keyboardMoveFieldDown();
-
-        expect(mockParentProps.keyboardMoveFieldDown).not.toHaveBeenCalled();
-    });
-
     it('will select a field when enter is pressed', () => {
-        spyOn(mockParentProps, 'keyboardMoveFieldDown');
-
         let e = {
             which: 13
         };
+
         component = shallow(<FieldEditingTools
             currentForm={currentForm}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
-            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
         />);
 
         let instance = component.instance();
@@ -290,17 +208,15 @@ describe('FieldEditingTools', () => {
     });
 
     it('will select a field when space is pressed', () => {
-        spyOn(mockParentProps, 'keyboardMoveFieldDown');
-
         let e = {
             which: 32
         };
+
         component = shallow(<FieldEditingTools
             currentForm={currentForm}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
-            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
         />);
 
         let instance = component.instance();
@@ -312,17 +228,15 @@ describe('FieldEditingTools', () => {
     });
 
     it('will not select a field when a user presses a key that is not enter or space', () => {
-        spyOn(mockParentProps, 'keyboardMoveFieldDown');
-
         let e = {
             which: 29
         };
+
         component = shallow(<FieldEditingTools
             currentForm={currentForm}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
-            keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
         />);
 
         let instance = component.instance();
@@ -334,16 +248,14 @@ describe('FieldEditingTools', () => {
     });
 
     it('will not select a field when the field is already selected', () => {
-        spyOn(mockParentProps, 'keyboardMoveFieldDown');
-
         let e = {
             which: 13
         };
+
         component = shallow(<FieldEditingTools
             currentForm={currentForm}
             location={location}
             selectedFields={[location]}
-            formId={formId}
             keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
         />);
 
