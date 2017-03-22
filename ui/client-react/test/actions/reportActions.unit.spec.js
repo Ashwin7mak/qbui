@@ -288,7 +288,7 @@ describe('Test ReportsActions function failure workflow', () => {
         // so we don't need to spy on the dispatcher etc.
         const expectedActions = [
             event(context, types.LOAD_REPORT, {appId, tblId, rptId}),
-            event(context, types.LOAD_REPORT_FAILED, mockErrorResponse)
+            event(context, types.LOAD_REPORT_FAILED, 'error')
         ];
         const store = mockReportsStore({});
         return store.dispatch(reportActions.loadDynamicReport(context, appId, tblId, rptId, true, null, null)).then(

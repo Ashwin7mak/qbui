@@ -150,12 +150,12 @@ export const loadReport = (context, appId, tblId, rptId, format, offset, rows) =
  * Construct a query parameters for the dynamic report using supplied facet expression, filter, and
  * existing queryParams.
  */
-const constructQueryParams = (facetResponse = {}, filter = {}, queryParams = {}) => {
+const constructQueryParams = (facetResponse = {}, filter = {}, queryParams) => {
     const filterQueries = [];
 
     //  add the facet expression
     if (facetResponse.data) {
-        filterQueries.push(facets.data);
+        filterQueries.push(facetResponse.data);
     }
     //  any search filters
     if (filter && filter.search) {
@@ -163,6 +163,7 @@ const constructQueryParams = (facetResponse = {}, filter = {}, queryParams = {})
     }
     //  override the report query expressions
     if (filterQueries.length > 0) {
+        queryParams = queryParams || {};
         queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
     }
 
@@ -233,6 +234,7 @@ const parseAndLogError = (context, dispatch) =>
             error = error.response || error;
             logger.parseAndLogError(LogLevel.ERROR, error, errorString);
             dispatch(event(context, action, error));
+            return Promise.reject();
         };
 
 /* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
@@ -279,7 +281,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
             return reportService.parseFacetExpression(filter ? filter.facet : '').then(
                 (facetResponse) => constructQueryParams(facetResponse, filter, queryParams)
             ).then((newQueryParams) => {
-                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams, format}, filter).then((report) => {
+                return getDynamicReportResults(context, {appId, tblId, rptId, queryParams: newQueryParams, format}, filter).then((report) => {
                     dispatch(event(context, actions.LOAD_REPORT_SUCCESS, report));
                     return; //resolve promise with undefined
                 }).catch(
@@ -291,7 +293,7 @@ export const loadDynamicReport = (context, appId, tblId, rptId, format, filter, 
         } else {
             logger.error(`reportActions.loadDynamicReport: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
             dispatch(event(context, actions.LOAD_REPORT_FAILED, 500));
-            return new Promise().reject();
+            return new Promise.reject();
         }
     };
 };
@@ -333,7 +335,7 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
         } else {
             logger.error(`reportActions.loadReportRecordsCount: Missing one or more required input parameters.  AppId:${appId}; TblId:${tblId}; RptId:${rptId}`);
             dispatch(event(context, types.LOAD_REPORT_RECORDS_COUNT_FAILED, 500));
-            return new Promise().reject();
+            return new Promise.reject();
         }
     };
 };
