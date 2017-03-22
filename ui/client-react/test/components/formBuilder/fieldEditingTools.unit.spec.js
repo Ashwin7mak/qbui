@@ -128,7 +128,7 @@ describe('FieldEditingTools', () => {
 
     it('scrolls into view when the selectedFormElement is at the bottom of the page of the page', () => {
         let container = {
-            height: 150,
+            height: 1500,
             top: 100
         };
 
