@@ -21,9 +21,7 @@ import * as Constants from "../../../../common/src/constants";
 import ReportContentError from './dataTable/reportContentError';
 import {connect} from 'react-redux';
 import {editNewRecord} from '../../actions/formActions';
-import {loadDynamicReport} from '../../actions/reportActions';
 import {searchInput, clearSearchInput} from '../../actions/searchActions';
-import {CONTEXT} from '../../actions/context';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
 
 let logger = new Logger();
@@ -60,6 +58,7 @@ export const ReportToolsAndContent = React.createClass({
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
+        loadDynamicReport: React.PropTypes.func,
 
         // used for relationships phase-1
         phase1: React.PropTypes.bool
@@ -173,7 +172,8 @@ export const ReportToolsAndContent = React.createClass({
             //    this.props.routeParams.tblId,
             //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
             //    true, filter, queryParams);
-            this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
+            this.props.loadDynamicReport(
+                this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
                 true, filter, queryParams);
@@ -245,6 +245,9 @@ export const ReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
                               width={this.state.gridWidth}
+
+                              // used for relationships phase-1
+                              phase1={this.props.phase1}
                />;
     },
     getSelectionActions() {
@@ -438,16 +441,13 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         searchInput: (input) => {
             dispatch(searchInput(input));
         },
         clearSearchInput: () => {
             dispatch(clearSearchInput());
-        },
-        loadDynamicReport: (context, appId, tblId, rptId, format, filter, queryParams) => {
-            dispatch(loadDynamicReport(context, appId, tblId, rptId, format, filter, queryParams));
         }
     };
 };

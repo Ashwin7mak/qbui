@@ -13,6 +13,7 @@ import {editNewRecord} from '../../actions/formActions';
 import * as SearchActions from '../../actions/searchActions';
 import * as TableActions from '../../actions/tableActions';
 import * as FieldsActions from '../../actions/fieldsActions';
+import {loadDynamicReport} from '../../actions/reportActions';
 import {CONTEXT} from '../../actions/context';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import {EDIT_RECORD_KEY, NEW_RECORD_VALUE} from '../../constants/urlConstants';
@@ -41,7 +42,7 @@ export const TableHomePageRoute = React.createClass({
      * Load a report with query parameters.
      */
     loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
-        this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
+        this.props.loadDynamicReport(appId, tblId, rptId, format, filter, queryParams);
     },
 
     loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
@@ -135,7 +136,8 @@ export const TableHomePageRoute = React.createClass({
                 scrollingReport={this.props.scrollingReport}
                 rptId={this.props.reportData ? this.props.reportData.rptId : null}
                 nameForRecords={this.nameForRecords}
-                pendEdits={this.props.pendEdits} />
+                pendEdits={this.props.pendEdits}
+                loadDynamicReport={this.loadDynamicReport}/>
         </div>);
     }
 });
@@ -158,6 +160,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         loadFields: (appId, tblId) => {
             dispatch(FieldsActions.loadFields(appId, tblId));
+        },
+        loadDynamicReport: (appId, tblId, rptId, format, filter, queryParams) => {
+            dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, format, filter, queryParams));
         }
     };
 };
@@ -166,4 +171,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(TableHomePageRoute);
-
