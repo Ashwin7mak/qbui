@@ -8,11 +8,11 @@
     .navLinks {
         display: flex;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: $spacing-xxx-small;
 
         .qbIcon {
             font-size: 28px;
-            margin-right: 10px;
+            margin-right: $spacing-xxx-small;
         }
 
         * {
@@ -22,7 +22,7 @@
 
     .stageLeft {
         flex: 1 1 auto;
-        padding: 20px 10px 20px 15px;
+        padding: $spacing-x-small $spacing-xxx-small $spacing-x-small $spacing-xx-small;
         white-space: nowrap;
         overflow: hidden;
         color: $stage-headline-icon-color;
@@ -38,6 +38,7 @@
                 font-size: 20px;
             }
 
+            // Need to leave this styling because not all stages are using the StageHeader component
             h3 {
                 height: 26px;
                 margin: 0;
@@ -47,13 +48,13 @@
         }
 
         .breadCrumbs {
-            line-height: 40px;
+            line-height: $spacing-medium2;
             display: flex;
             align-items: center;
             overflow: hidden;
 
             > .qbIcon {
-                margin-right: 6px;
+                margin-right: $spacing-tiny;
             }
 
             > * {
@@ -73,11 +74,11 @@
     }
 
     .stageRight {
-        padding-top: 20px;
+        padding-top: $spacing-x-small;
         flex: 0 0 auto;
 
         .iconActionButton {
-            font-size: 18px;
+            font-size: $font-size-h4;
             color: $page-actions-icon-color;
         }
 
@@ -90,7 +91,7 @@
 .layout-stage {
     border-bottom: 1px solid $topnav-header-background-color;
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: $spacing-medium1;
     background-color: $color-black-100;
 
     .toggleStage {
@@ -101,7 +102,7 @@
         height: 24px;
         border: 1px solid $topnav-header-background-color;
         border-top: 0;
-        border-radius: 0 0 2px 2px;
+        border-radius: 0 0 $spacing-x-tiny $spacing-x-tiny;
         background-color: $color-black-100;
         color: $iconfont-on-light-normal-color;
     }
@@ -110,7 +111,7 @@
         background-color: $color-black-100;
         border: 0 none transparent;
         margin: 0;
-        padding: 0 0 10px;
+        padding: 0 0 $spacing-xxx-small;
         box-shadow: none;
     }
 }

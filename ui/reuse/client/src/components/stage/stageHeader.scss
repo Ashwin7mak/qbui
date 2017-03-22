@@ -27,12 +27,12 @@
     .stageHeaderTitleContainer {
         flex: 1 auto;
         align-items: center;
-        font-size: 12px;
+        font-size: $font-size-small;
         color: $stage-headline-color;
-        margin-bottom: 10px;
+        margin-bottom: $spacing-xxx-small;
 
         .stageHeaderTitle {
-            height: 26px;
+            height: $font-size-h3 + 2; // Adds extra height so descenders don't get cut off by overflow: hidden
             margin: 0;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -42,7 +42,7 @@
     .stageHeaderDescriptionContainer {
         text-align: left;
         color: $stage-headline-color;
-        max-width: 50%;
+        max-width: 60%;
         white-space: normal;
 
         @include medium-breakpoint {
