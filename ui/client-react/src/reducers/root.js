@@ -3,6 +3,7 @@ import shell from './shell';
 import forms from './forms';
 import reports from './reports';
 import featureSwitches from './featureSwitches';
+import tableCreation from './tableCreation';
 import animation from './animation';
 
 // combine individual reducers into a single root reducer (qbui)
@@ -13,6 +14,7 @@ export default combineReducers({
     featureSwitches,
     shell,
     forms,
-    reports
+    reports,
+    tableCreation
 });
 

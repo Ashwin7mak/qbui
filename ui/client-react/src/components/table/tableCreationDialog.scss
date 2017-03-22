@@ -1,0 +1,120 @@
+@import '../../assets/css/_qbVariables';
+
+.tableCreationDialog .tableInfo {
+
+    .title {
+        color: $color-black-700;
+        font-size: $font-size-large;
+        padding-top: $spacing-x-small;
+        padding-bottom: $spacing-x-small;
+    }
+    .description {
+        color: $color-black-500;
+        font-size: $font-size-small;
+    }
+    .sections {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-left: 2px;
+
+        .tableField {
+            min-width: 50%;
+
+            padding-right:20px;
+            margin-bottom: 30px;
+            .tableFieldTitle {
+                margin-bottom: 4px;
+                color: $field-label-normal-color;
+            }
+
+            input, textarea {
+                padding:5px;
+                resize: none;
+                width: 100%;
+                border:1px solid $input-text-normal-border-color;
+            }
+
+            input {
+                height: 34px;
+            }
+        }
+
+        .iconSelection {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+        .iconChooser {
+            flex-grow: 0;
+            margin-right: 20px;
+            .dropdown-toggle {
+                border-radius: 0;
+            }
+            .dropdown-menu {
+                min-width: inherit;
+            }
+        }
+        .suggestedIcons {
+            flex-grow: 1;
+            .iconList {
+                height: 32px;
+                button {
+                    width: 32px;
+                    height: 32px;
+                    vertical-align:middle;
+                    border: 0;
+                    background-color: inherit;
+                    font-size: 16px;
+                    transition: font-size 100ms ease-out;
+                }
+                button:hover {
+                    font-size: 24px;
+                    transition: font-size 100ms ease-in;
+                }
+
+            }
+
+        }
+
+    }
+    .addFieldsMethods {
+        display: flex;
+        flex-direction: row;
+        margin-left: -5px;
+        margin-right: 5px;
+
+        .addFieldsMethod {
+            flex: 1 1 0;
+            border: 1px dotted grey;
+            padding: 8px;
+            margin: 5px;
+            height: 200px;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #eee;
+            }
+        }
+    }
+}
+
+
+@include not-small-breakpoint {
+
+    .multiStepModal .modal-dialog {
+
+        .modal-body > *:first-child {
+            height: 350px;
+        }
+        width: 840px;
+    }
+
+    .multiStepModal.tableMenuOpen .modal-dialog {
+
+        .modal-body > *:first-child {
+            overflow: visible;
+        }
+
+    }
+}

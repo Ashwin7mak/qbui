@@ -1,5 +1,4 @@
 import React from "react";
-import cookie from 'react-cookie';
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
@@ -15,21 +14,18 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
-import AppUtils from '../../utils/appUtils';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 import NavPageTitle from '../pageTitle/navPageTitle';
 import InvisibleBackdrop from '../qbModal/invisibleBackdrop';
 import AppQbModal from '../qbModal/appQbModal';
-import UrlUtils from '../../utils/urlUtils';
-import CookieConstants from '../../../../common/src/constants';
-import CommonCookieUtils from '../../../../common/src/commonCookieUtils';
 import * as ShellActions from '../../actions/shellActions';
 import * as FormActions from '../../actions/formActions';
 import * as ReportActions from '../../actions/reportActions';
+import * as TableCreationActions from '../../actions/tableCreationActions';
 import {CONTEXT} from '../../actions/context';
+import TableCreationDialog from '../table/tableCreationDialog';
 
 // This shared view with the server layer must be loaded as raw HTML because
 // the current backend setup cannot handle a react component in a common directory. It is loaded
@@ -326,6 +322,7 @@ export let Nav = React.createClass({
                 onToggleAppsList={this.toggleAppsList}
                 globalActions={this.getLeftGlobalActions()}
                 onSelect={this.onSelectItem}
+                onCreateNewTable={this.createNewTable}
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
@@ -363,6 +360,8 @@ export let Nav = React.createClass({
             {this.state.pendEdits &&
                 this.renderSavingModal(this.state.pendEdits.saving)
             }
+
+            {this.state.apps.selectedAppId && <TableCreationDialog/>}
         </div>);
     },
 
@@ -378,6 +377,10 @@ export let Nav = React.createClass({
      */
     toggleNav() {
         this.props.dispatch(ShellActions.toggleLeftNav());
+    },
+
+    createNewTable() {
+        this.props.dispatch(TableCreationActions.showTableCreationDialog());
     }
 });
 

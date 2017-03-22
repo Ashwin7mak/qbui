@@ -15,7 +15,8 @@ let TablesList = React.createClass({
         selectedAppId: React.PropTypes.string.isRequired,
         onSelect: React.PropTypes.func,
         showReports: React.PropTypes.func.isRequired,
-        expanded: React.PropTypes.bool
+        expanded: React.PropTypes.bool,
+        onCreateNewTable: React.PropTypes.func
     },
     getDefaultProps() {
         return {
@@ -123,6 +124,15 @@ let TablesList = React.createClass({
         </li>);
     },
 
+    getBottomLinksItem() {
+
+        return (
+            <li className="newTableItem link">
+                <div className="newTable" onClick={this.props.onCreateNewTable}>
+                    <QBicon icon="add-mini"/> New Table
+                </div>
+            </li>);
+    },
     render() {
         return (
             <div className="tablesHeadingAndList">
@@ -142,6 +152,10 @@ let TablesList = React.createClass({
 
                 <ul className="tablesList">
                     {this.tablesList()}
+                </ul>
+
+                <ul className="tablesFooter">
+                    {this.getBottomLinksItem()}
                 </ul>
             </div>
         );

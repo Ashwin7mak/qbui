@@ -543,6 +543,10 @@ export default {
             noOverrides: "No overrides have been set, click 'Add New' to add one.",
             featureNameExists: "Feature names must be unique",
             featureNameEmpty: "Feature names must not be blank"
+        },
+        tableCreation: {
+            tableCreated: "Table created",
+            tableCreationFailed: "Unable to create table"
         }
     }
 };

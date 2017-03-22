@@ -536,6 +536,10 @@ export default {
             noOverrides: "Aucune substitution n'a été définie",
             featureNameExists: "Les noms des entités doivent être uniques",
             featureNameEmpty: "Les noms des entités doivent être blanc"
+        },
+        tableCreation: {
+            tableCreated: "Table created",
+            tableCreationFailed: "Unable to create table"
         }
     }
 };

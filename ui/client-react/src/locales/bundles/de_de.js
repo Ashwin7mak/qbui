@@ -537,6 +537,10 @@ export default {
             noOverrides: "Es wurden keine Overrides gesetzt",
             featureNameExists: "Feature-Namen müssen eindeutig sein",
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
+        },
+        tableCreation: {
+            tableCreated: "Table created",
+            tableCreationFailed: "Unable to create table"
         }
     }
 };

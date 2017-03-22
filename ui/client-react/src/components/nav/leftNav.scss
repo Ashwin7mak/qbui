@@ -373,6 +373,26 @@ div.leftNavTooltip {
                 width: 100%;
                 overflow: auto;
             }
+
+            .tablesFooter {
+                line-height: 40px;
+                .newTable {
+                    cursor: pointer;
+                    padding-left: 10px;
+                    &:hover {
+                        color: $left-nav-link-hover-color;
+                        background-color: $leftnav-table-selected-color;
+                    }
+                    .qbIcon {
+                        vertical-align: middle;
+                        width: 24px;
+                    }
+                }
+
+                padding: 0;
+                margin: 0;
+                border-top: 1px solid $leftnav-background-stroke-color;
+            }
         }
     }
     /* This is so when you hover over the item, the entire contents shows like a tooltip... but we then cannot scroll when collapsed. Temporary fix */
