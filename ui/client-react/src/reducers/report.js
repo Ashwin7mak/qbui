@@ -151,7 +151,7 @@ const report = (state = [], action) => {
     case types.SAVE_RECORD_SUCCESS: {
         //  listen to record save event.  If there is a report context
         //  defined, then the report is updated with the new/updated record.
-        let rpt = action.content.report;
+        let rpt = _.get(action, 'content.report');
         if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);
             if (currentReport) {
@@ -178,13 +178,15 @@ const report = (state = [], action) => {
     }
     case types.REMOVE_REPORT_RECORDS: {
         // remove record from all report stores
-        const ids = action.content.recIds;
+        const ids = _.get(action, 'content.recIds');
         const reports = _.cloneDeep(state);
         reports.forEach((rpt) => {
             ids.forEach((recId) => {
                 //  remove the record from the report
                 ReportModelHelper.deleteRecordFromReport(rpt.data, recId);
-                rpt.selectedRows = _.without(rpt.selectedRows, recId);
+                if (rpt.selectedRows) {
+                    rpt.selectedRows = _.without(rpt.selectedRows, recId);
+                }
             });
         });
         return reports;
@@ -198,7 +200,7 @@ const report = (state = [], action) => {
             };
 
             //  gotta have an id to know where to insert the new record
-            if (content.afterRecId) {
+            if (content.afterRecId !== undefined) {
                 // remove record from report if its new and unsaved
                 if (currentReport.editingIndex !== undefined || currentReport.editingId !== undefined) {
                     if (content.afterRecId === UNSAVED_RECORD_ID || content.afterRecId === NEW_RECORD_VALUE) {

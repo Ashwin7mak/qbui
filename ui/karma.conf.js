@@ -6,12 +6,15 @@ let nodeModulesPath = path.resolve(__dirname, "node_modules");
 let nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
 let testsFile = "tests.webpack.js";
 let testWithCoverage = true;
-let profilePath = path.resolve(__dirname, 'chromePath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
+let profilePath = path.resolve(__dirname, 'chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
 
 if (process.env.KARMA_USE_CUSTOM) {
     testsFile = "tests.custom.webpack.js";
+}
+if (process.env.KARMA_WITHOUT_COVERAGE) {
     testWithCoverage = false;
 }
+
 module.exports = function(config) {
     "use strict";
 
@@ -188,7 +191,7 @@ module.exports = function(config) {
 
     };
 
-    newConf.preprocessors[""+testsFile] = ["webpack", "sourcemap"];
+    newConf.preprocessors["" + testsFile] = ["webpack", "sourcemap"];
 
     if (testWithCoverage) {
         newConf.preprocessors = Object.assign({}, newConf.preprocessors, {
@@ -196,7 +199,7 @@ module.exports = function(config) {
             "reuse/client/src/**/*.js" : ["coverage"],
             "governance/src/**/*.js" : ["coverage"]
         });
-        newConf.postLoaders = [
+        newConf.webpack.module.postLoaders = [
             { //delays coverage til after tests are run, fixing transpiled source coverage error
                 test: /\.js$/,
                 include: [
@@ -236,7 +239,9 @@ module.exports = function(config) {
 
         newConf.reporters.push("coverage");
     }
-    //console.log("newConf =  " + JSON.stringify(newConf));
+    // console.log("testsFile = " + testsFile);
+    // console.log("testWithCoverage = " + testWithCoverage);
+    // console.log("newConf =  \n" + JSON.stringify(newConf));
     config.set(newConf);
 
 };

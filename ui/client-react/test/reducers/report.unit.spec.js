@@ -2,6 +2,8 @@ import reducer, {__RewireAPI__ as ReducerRewireAPI} from '../../src/reducers/rep
 import * as types from '../../src/actions/types';
 import FacetSelections from '../../src/components/facet/facetSelections';
 import _ from 'lodash';
+import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
+import {NEW_RECORD_VALUE} from '../../src/constants/urlConstants';
 import Diff from 'deep-diff';
 
 
@@ -9,8 +11,6 @@ import Diff from 'deep-diff';
  * Unit tests for report reducer
  *
  */
-/* eslint no-console:0 */
-
 describe('Report reducer functions', () => {
 
     let state = undefined;
@@ -34,6 +34,13 @@ describe('Report reducer functions', () => {
             loading: false
         }
     ];
+    let mockReportModelHelper = {
+        addReportRecord: () => {},
+        updateReportRecord: () => {},
+        deleteRecordFromReport: () => {},
+        getReportColumns: () => {},
+    };
+
 
     beforeEach(() => {
         state = undefined;
@@ -54,8 +61,22 @@ describe('Report reducer functions', () => {
                 };
             }
         });
+        spyOn(mockReportModelHelper, 'addReportRecord');
+        spyOn(mockReportModelHelper, 'updateReportRecord');
+        spyOn(mockReportModelHelper, 'deleteRecordFromReport');
+        spyOn(mockReportModelHelper, 'getReportColumns');
+        ReducerRewireAPI.__Rewire__('ReportModelHelper', mockReportModelHelper);
+
 
     });
+    afterEach(() => {
+        ReducerRewireAPI.__ResetDependency__('ReportModelHelper');
+        mockReportModelHelper.addReportRecord.calls.reset();
+        mockReportModelHelper.updateReportRecord.calls.reset();
+        mockReportModelHelper.deleteRecordFromReport.calls.reset();
+        mockReportModelHelper.getReportColumns.calls.reset();
+    });
+
 
     describe('Report reducer initialize', () => {
 
@@ -73,7 +94,7 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Report reducer load', () => {
+    describe('Report reducer LOAD_REPORT', () => {
         let expectedStateSingle = _.cloneDeep(reportListState);
         let actionContentSingle = {
             appId: 1, tblId: 2, rptId:3
@@ -99,7 +120,7 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Reports reducer load', () => {
+    describe('Reports reducer LOAD_REPORTS', () => {
 
         let expectedStateList = _.cloneDeep(reportListState);
         let actionContentList = {
@@ -126,7 +147,28 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Report reducer load failed', () => {
+    describe('Reports reducer LOAD_REPORTS load reports app/table not specified', () => {
+
+        let reportLoadActionList = {
+            type: types.LOAD_REPORTS,
+            id: 11,
+        };
+        let expectedStateList = [{id:11,appId:"",tblId:"",loading:true}];
+
+        let testCase = {
+            reportLoadAction: reportLoadActionList,
+            actionType: types.LOAD_REPORTS,
+            message: 'LOAD_REPORTS',
+            expectedState: expectedStateList
+        };
+        it('returns correct state on ' + testCase.message, () => {
+
+            let newState = reducer(reportListState, testCase.reportLoadAction);
+            expect(newState).toDeepEqual(testCase.expectedState);
+        });
+    });
+
+    describe('Report reducer LOAD_REPORT_FAILED load failed', () => {
         let expectedState = _.cloneDeep(reportListState);
 
         let testCases = [
@@ -156,7 +198,7 @@ describe('Report reducer functions', () => {
 
     });
 
-    describe('Report reducer report loading', () => {
+    describe('Report reducer LOAD_REPORTS report loading', () => {
         it('test correct state when loading a report', () => {
             actionObj.type = types.LOAD_REPORTS;
             actionObj.content = reportActionContent;
@@ -203,7 +245,7 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Report reducer error report loading', () => {
+    describe('Report reducer LOAD_REPORTS_FAILED error report loading', () => {
         it('test correct state when loading a report fails', () => {
             actionObj.type = types.LOAD_REPORTS_FAILED;
             state = reducer(state, actionObj);
@@ -212,7 +254,7 @@ describe('Report reducer functions', () => {
         });
     });
 
-    describe('Report reducer success reports loading', () => {
+    describe('Report reducer success LOAD_REPORTS reports loading', () => {
         it('test correct state when loading reports succeeds', () => {
             // start with a report in loading state
             let targetContext = "LIST_CONTEXT";
@@ -237,9 +279,35 @@ describe('Report reducer functions', () => {
             expect(state[0].tblId).toEqual(actionObj.content.tblId);
             expect(state[0].list).toEqual(listOfReports);
         });
+        it('test correct state when LOAD_REPORTS loading reports succeeds with no matching id', () => {
+            // start with a report in loading state
+            let targetContext = "LIST_CONTEXT";
+            let listOfReports = [1, 2, 43];
+            actionObj.type = types.LOAD_REPORTS;
+            actionObj.id = targetContext;
+            actionObj.content = {appId: 1, tblId: 2};
+            state = reducer(state, actionObj);
+            let unalteredState = _.clone(state);
+
+            // load is successful action
+            actionObj.type = types.LOAD_REPORTS_SUCCESS;
+            actionObj.id = targetContext + "NO_A_MATCH";
+            actionObj.content = {appId: 1, tblId: 2, reportsList: listOfReports};
+            state = reducer(state, actionObj);
+
+            //success on a loading reports actions expectations
+            expect(Array.isArray(state)).toEqual(true);
+            expect(state.length).toEqual(1);
+            expect(state[0].loading).toEqual(true);
+            expect(state[0].id).toEqual(targetContext);
+            expect(state[0].error).toBeUndefined();
+            expect(state[0].appId).toEqual(actionObj.content.appId);
+            expect(state[0].tblId).toEqual(actionObj.content.tblId);
+            expect(state[0].list).toBeUndefined();
+        });
     });
 
-    describe('Report reducer success report loading test correct state ', () => {
+    describe('Report reducer success LOAD_REPORT report loading test correct state ', () => {
         let allHaveThisForContent = {appId: 1, tblId: 2};
         let targetContext = "NAVREPORT";
         let targetRpt = 55;
@@ -248,11 +316,13 @@ describe('Report reducer functions', () => {
         let initNoRptLoad = {appId: 1, tblId: 2};
 
         let loadReport = (content) => {
-            // start with a report in loading state
-            actionObj.type = types.LOAD_REPORT;
-            actionObj.id = targetContext;
-            actionObj.content = content;
-            state = reducer(state, actionObj);
+            if (content !== null) {
+                // start with a report in loading state
+                actionObj.type = types.LOAD_REPORT;
+                actionObj.id = targetContext;
+                actionObj.content = content;
+                state = reducer(state, actionObj);
+            }
         };
 
         let testCases = [{
@@ -272,44 +342,405 @@ describe('Report reducer functions', () => {
             contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
             expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
         }, {
+            description: 'no matching id',
+            initStateContent : null,
+            contentIn : {...allHaveThisForContent, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
+            expectedState: undefined
+        }, {
             description: 'no rptId in state',
             initStateContent : initNoRptLoad,
             contentIn : {...allHaveThisForContent, rptId:undefined, id: targetContext, pageOffset:0, numRows:10, searchStringForFiltering:"test", selectedRows:[], data},
             expectedState: {error:false, loading:false, rptId: targetRpt, data, selections: new FacetSelections(), facetExpression: {}}
         },
-
         ];
-
 
         testCases.forEach(testCase => {
             it('when loading report with ' + testCase.description  + ' succeeds', () => {
                 // use testcase init state if supplied
-                if (testCase.initStateContent) {
+                if (_.has(testCase, 'initStateContent')) {
                     loadReport(testCase.initStateContent);
                 } else  {
                     loadReport(initDefaultLoad);
                 }
-                console.log("before case state = " + JSON.stringify(state));
 
                 // load is successful action
                 actionObj.type = types.LOAD_REPORT_SUCCESS;
                 actionObj.content = testCase.contentIn;
-                console.log("before case actionObj = " + JSON.stringify(actionObj));
                 state = reducer(state, actionObj);
-                console.log("after case for " + testCase.description + " state = " + JSON.stringify(state));
 
                 //success on a loading report actions expectations
                 expect(Array.isArray(state)).toEqual(true);
-                expect(state.length).toEqual(1);
-                expect(state[0].loading).toEqual(false);
-                expect(state[0].error).toEqual(false);
-                expect(state[0].appId).toEqual(actionObj.content.appId);
-                expect(state[0].tblId).toEqual(actionObj.content.tblId);
-                expect(state[0].rptId).toEqual(targetRpt);
-                let expectation  = Object.assign({}, testCase.contentIn, testCase.expectedState);
-                expect(state[0]).toDeepEqual(expectation);
+                if (testCase.expectedState) {
+                    expect(state.length).toEqual(1);
+                    expect(state[0].loading).toEqual(false);
+                    expect(state[0].error).toEqual(false);
+                    expect(state[0].appId).toEqual(actionObj.content.appId);
+                    expect(state[0].tblId).toEqual(actionObj.content.tblId);
+                    expect(state[0].rptId).toEqual(targetRpt);
+                    let expectation = Object.assign({}, testCase.contentIn, testCase.expectedState);
+                    expect(state[0]).toDeepEqual(expectation);
+                }
+            });
+        });
+    });
+
+    describe('Report reducer SELECT_REPORT_RECORDS test correct state', () => {
+        let contextId = "TEST_SELECT";
+        it('when no matches', () => {
+            let state = [];
+            actionObj.type = types.SELECT_REPORT_RECORDS;
+            actionObj.id = contextId;
+            state = reducer(state, actionObj);
+            expect(Array.isArray(state)).toEqual(true);
+            expect(state.length).toEqual(0);
+        });
+        it('when report matches', () => {
+            let state = [{id:contextId}];
+            actionObj.type = types.SELECT_REPORT_RECORDS;
+            actionObj.id = contextId;
+            actionObj.content = {selections : [1, 2, 3]};
+            state = reducer(state, actionObj);
+            expect(Array.isArray(state)).toEqual(true);
+            expect(state.length).toEqual(1);
+        });
+
+    });
+
+    describe('Report reducer SAVE_RECORD_SUCCESS test correct state', () => {
+        let contextId = "SAVE_RECORD_SUCCESS";
+        let reportContentAdd = {report : {
+            context: contextId,
+                recId: 2,
+                record: [4, 5, 6],
+                newRecId :55,
+                afterRecId: 6,
+                info: 'report stuff'
+        }};
+        let reportContent = {report : {
+            context: contextId,
+                recId: 2,
+                record: [4, 5, 6],
+                afterRecId: 6,
+                info: 'report stuff'
+        }};
+        let testCases = [
+            {
+                initialState:  [{id:contextId}],
+                description: 'when report matches add record',
+                content : reportContentAdd,
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(state[0].loading).toEqual(false);
+                    expect(state[0].error).toEqual(false);
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches update record',
+                initialState: [{id:contextId }],
+                content : reportContent,
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(state[0].loading).toEqual(false);
+                    expect(state[0].error).toEqual(false);
+                    expect(mockReportModelHelper.updateReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches but no record',
+                initialState: [{id:contextId }],
+                content : {report : {
+                    context: contextId,
+                    recId: 2,
+                    afterRecId: 6,
+                    info: 'report stuff'
+                }},
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(state[0].loading).toEqual(false);
+                    expect(state[0].error).toEqual(false);
+                    expect(mockReportModelHelper.updateReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when no matches in current state',
+                initialState: [],
+                content:  {report:{context:{}}},
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            },
+            {
+                description: 'when no content',
+                initialState: [],
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let state = testCase.initialState;
+                actionObj.type = types.SAVE_RECORD_SUCCESS;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                state = reducer(state, actionObj);
+
+                testCase.expects(state);
             });
         });
 
     });
+
+    describe('Report reducer REMOVE_REPORT_RECORDS test correct state', () => {
+        let contextId = "REMOVE_REPORT_RECORDS";
+        let anotherContextId = "OTHER_REMOVE_REPORT_RECORDS";
+        let initialState = [
+            {id:contextId, data:{}, selectedRows:[1, 3, 4]},
+            {id:anotherContextId}
+        ];
+        let reportContentDelete = {
+            recIds: [1, 2, 3]
+        };
+
+        let testCases = [
+            {
+                description: 'when no state',
+                initialState: [],
+                content: reportContentDelete,
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            },
+            {
+                initialState,
+                description: 'when report matches delete record',
+                content : reportContentDelete,
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(2);
+                    expect(mockReportModelHelper.deleteRecordFromReport).toHaveBeenCalled();
+                    expect(state[0].selectedRows).toEqual([4]);
+                }
+            },
+            {
+                description: 'when no content',
+                initialState: [],
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let state = testCase.initialState;
+                actionObj.type = types.REMOVE_REPORT_RECORDS;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+
+                state = reducer(state, actionObj);
+
+                testCase.expects(state);
+            });
+        });
+
+    });
+
+    describe('Report reducer ADD_BLANK_REPORT_RECORD test correct state', () => {
+        let contextId = "ADD_BLANK_REPORT_RECORD";
+        let reportContentAddBlank = {
+            afterRecId: 6
+        };
+        let testCases = [
+            {
+                description: 'when report matches add record with editingIndex',
+                initialState: [{id:contextId, editingIndex:44}],
+                content : reportContentAddBlank,
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(state[0].editingIndex).toBeUndefined();
+                    expect(state[0].editingId).toBeUndefined();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches add record with editingId',
+                initialState: [{id:contextId, editingId:44}],
+                content : reportContentAddBlank,
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(state[0].editingIndex).toBeUndefined();
+                    expect(state[0].editingId).toBeUndefined();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches add record with after as UNSAVED_RECORD_ID',
+                initialState: [{id:contextId, editingId:44}],
+                content : { afterRecId: UNSAVED_RECORD_ID },
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(mockReportModelHelper.deleteRecordFromReport).toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches add record with after as NEW_RECORD_VALUE',
+                initialState: [{id:contextId, editingId:44}],
+                content : { afterRecId: NEW_RECORD_VALUE },
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(mockReportModelHelper.deleteRecordFromReport).toHaveBeenCalled();
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches update record',
+                initialState: [{id:contextId, editingId:44}],
+
+                content : reportContentAddBlank,
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(mockReportModelHelper.addReportRecord).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report matches add record no editIndex',
+                initialState: [{id:contextId}],
+                content:  {},
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(1);
+                    expect(state).toEqual([{id:contextId}]);
+                }
+            },
+            {
+                description: 'when no matches in current state',
+                initialState: [],
+                content:  {report:{context:{}}},
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            },
+            {
+                description: 'when no content',
+                initialState: [],
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            }
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let state = testCase.initialState;
+                actionObj.type = types.ADD_BLANK_REPORT_RECORD;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                state = reducer(state, actionObj);
+
+                testCase.expects(state);
+            });
+        });
+
+    });
+
+    describe('Report reducer CHANGE_LOCALE test correct state', () => {
+        let contextId = "CHANGE_LOCALE";
+        let anotherContextId = "ANOTHER_CHANGE_LOCALE";
+        let testCases = [
+            {
+                description: 'when report has no data',
+                initialState: [{id:contextId, loading:false}, {id:anotherContextId} ],
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(2);
+                    expect(mockReportModelHelper.getReportColumns).not.toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report is loading',
+                initialState: [{id:contextId, loading:true, data: {groupEls : {}, fids: {}, }}, {id:anotherContextId} ],
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(2);
+                    expect(mockReportModelHelper.getReportColumns).not.toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report not loading update columns locale',
+                initialState: [{id:contextId, loading:false, data: { fids: {}, }}, {id:anotherContextId} ],
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(2);
+                    expect(mockReportModelHelper.getReportColumns).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when report not loading update fields grp',
+                initialState: [{id:contextId, loading:false, data: {groupEls : {}, fids: {}, hasGrouping: true}}, {id:anotherContextId}, {} ],
+                expects : (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(3);
+                    expect(mockReportModelHelper.getReportColumns).toHaveBeenCalled();
+                }
+            },
+            {
+                description: 'when no current state',
+                initialState: [],
+                expects: (state) => {
+                    expect(Array.isArray(state)).toEqual(true);
+                    expect(state.length).toEqual(0);
+                }
+            },
+        ];
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                let state = testCase.initialState;
+                actionObj.type = types.CHANGE_LOCALE;
+                actionObj.id = contextId;
+                if (testCase.content) {
+                    actionObj.content = testCase.content;
+                }
+                console.log('state before =' + JSON.stringify(state));
+                console.log('action before =' + JSON.stringify(actionObj));
+                state = reducer(state, actionObj);
+                console.log('state after =' + JSON.stringify(state));
+
+                testCase.expects(state);
+            });
+        });
+
+    });
+
+    describe('Report reducer INVALID_ACTION test correct state', () => {
+        it('handled non matching action', () => {
+            let state = [123, 456, 789];
+            let expectedState = _.clone(state);
+            state = reducer(state, {type: "This is not a valid action type"});
+            expect(state.length).toEqual(expectedState.length);
+            expect(state).toEqual(expectedState);
+
+        })
+    });
+
+
 });
