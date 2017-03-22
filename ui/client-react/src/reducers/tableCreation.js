@@ -10,7 +10,7 @@ const tableCreation = (
         tableInfo: {
             name: "",
             description: "",
-            tableIcon: "projects",
+            tableIcon: "estimates",
             tableNoun: ""
         }
     },

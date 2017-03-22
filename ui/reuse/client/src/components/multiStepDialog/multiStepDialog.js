@@ -3,7 +3,7 @@ import {PropTypes} from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import ReIcon from '../reIcon/reIcon';
+import Icon from '../icon/icon';
 import Loader from 'react-loader';
 
 import './multiStepDialog.scss';
@@ -34,8 +34,8 @@ class MultiStepDialog extends React.Component {
     renderIcons() {
         return (
             <div className={"rightIcons"}>
-                <button><ReIcon icon={"help"}/></button>
-                <button onClick={this.cancelClicked}><ReIcon icon={"close"}/></button>
+                <button><Icon icon={"help"}/></button>
+                <button onClick={this.cancelClicked}><Icon icon={"close"}/></button>
             </div>);
     }
 

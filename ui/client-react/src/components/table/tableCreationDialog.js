@@ -3,7 +3,7 @@ import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDi
 import {connect} from 'react-redux';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
-import QbTableIcon from '../qbTableIcon/qbTableIcon';
+import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 import {NotificationManager} from 'react-notifications';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import * as CompConsts from '../../constants/componentConstants';
@@ -21,6 +21,7 @@ export class TableCreationDialog extends React.Component {
         this.onCancel = this.onCancel.bind(this);
         this.onToggleDropdown = this.onToggleDropdown.bind(this);
         this.updateTableProperty = this.updateTableProperty.bind(this);
+        this.selectIcon = this.selectIcon.bind(this);
     }
 
     onCancel() {
@@ -41,7 +42,7 @@ export class TableCreationDialog extends React.Component {
             tableNoun: this.props.tableCreation.tableInfo.tableNoun
         };
 
-        this.props.createTable('appid', tableInfo).then(
+        this.props.createTable(this.props.appId , tableInfo).then(
             (response) => {
                 NotificationManager.success(Locale.getMessage("tableCreation.tableCreated"), Locale.getMessage('success'),
                     CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -53,8 +54,8 @@ export class TableCreationDialog extends React.Component {
             });
     }
 
-    getIcons() {
-        const iconSuffixes = [
+    getIconNames()  {
+        return [
             "estimates",
             "projects",
             "customers",
@@ -64,9 +65,16 @@ export class TableCreationDialog extends React.Component {
             "projects",
             "reports",
             "schedule"
-            ];
+        ];
+    }
 
-        return iconSuffixes.map((suffix) => (<QbTableIcon icon={"icon-TableIcons_sturdy_" + suffix} />));
+    getTableIcon(name) {
+        return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>
+    }
+
+    getIcons() {
+
+        return this.getIconNames().map((name) => this.getTableIcon(name));
     }
 
     onToggleDropdown(isOpen) {
@@ -78,12 +86,23 @@ export class TableCreationDialog extends React.Component {
         }
     }
 
+    selectIcon(icon) {
+
+        this.updateTableProperty('tableIcon', icon)
+    }
+
     getIconDropdown() {
 
+        const dropdownTitle = this.getTableIcon(this.props.tableCreation.tableInfo.tableIcon);
+
+        const iconNames = this.getIconNames();
         const icons = this.getIcons();
+
         return (
-            <DropdownButton title={icons[0]} id="createTableIconDropdown" onToggle={this.onToggleDropdown}>
-                {icons.map((icon, i) => (<MenuItem key={i}>{icon}</MenuItem>))}
+            <DropdownButton title={dropdownTitle}
+                            id="createTableIconDropdown"
+                            onToggle={this.onToggleDropdown}>
+                {iconNames.map((iconName, i) => (<MenuItem key={i} onSelect={() => this.selectIcon(iconName)}>{icons[i]}</MenuItem>))}
             </DropdownButton>);
     }
 
@@ -174,7 +193,7 @@ export class TableCreationDialog extends React.Component {
         if (this.props.tableCreation.tableInfo.name.trim() === '') {
             return false;
         }
-        if (this.props.tableCreation.tableInfo.name.trim() === '') {
+        if (this.props.tableCreation.tableInfo.tableNoun.trim() === '') {
             return false;
         }
 
