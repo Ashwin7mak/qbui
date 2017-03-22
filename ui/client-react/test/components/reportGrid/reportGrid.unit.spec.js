@@ -338,7 +338,7 @@ describe('ReportGrid', () => {
 
         it('passes the correct props to QbGrid and commonCellProps for relationships phase1', () => {
             phase1 = true;
-            component = shallow(<ReportGrid
+            component = shallow(<UnconnectedReportGrid
                 {...requiredProps}
                 {...actions}
                 columns={testColumns}

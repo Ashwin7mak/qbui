@@ -35,33 +35,19 @@ const MockChildReport = (props) => {
     return <RelatedChildReport {...props} />;
 };
 
-// wraps the MockChildReport in a function, to be used by the MockRouter below
-const MockChildReportWrapper = (props) => () => MockChildReport(props);
-
-// This is needed for testing the Link component rendered in RelatedChildReport
-// The Route's component property expects a function to be passed
-const MockRouter = (props = {}) => (
-    <Router history={createMemoryHistory("/")}>
-        <Route path="/" component={MockChildReportWrapper(props)} />
-    </Router>
-);
-
-const EmbeddedReportToolsAndContentMock = React.createClass({
-    render: () => {
-        return (
-            <div className="embeddedReportContainer"></div>
-        );
-    }
-});
+const EmbeddedReportToolsAndContentMock = (props) => <div className="embeddedReportContainer"></div>;
+const EmbeddedReportLinkMock = (props) => <div className="embeddedReportLink"></div>;
 
 describe('RelatedChildReport', () => {
     beforeAll(() => {
         jasmineEnzyme();
         RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportToolsAndContent', EmbeddedReportToolsAndContentMock);
+        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportLink', EmbeddedReportLinkMock);
     });
 
     afterAll(() => {
         RelatedChildReportRewireAPI.__ResetDependency__('EmbeddedReportToolsAndContent');
+        RelatedChildReportRewireAPI.__Rewire__('EmbeddedReportLink');
     });
 
     let component, domComponent;
@@ -87,7 +73,7 @@ describe('RelatedChildReport', () => {
     });
 
     describe('in Large/Medium breakpoint', () => {
-        it('displays an embedded report', () => {
+        it('renders EmbeddedReportToolsAndContent', () => {
             component = shallow(MockChildReport());
             const embeddedReportContainer = component.find(EmbeddedReportToolsAndContentMock);
             expect(embeddedReportContainer.length).toEqual(1);
@@ -122,18 +108,10 @@ describe('RelatedChildReport', () => {
             RelatedChildReportRewireAPI.__ResetDependency__('Breakpoints');
         });
 
-        it('displays a clickable link', () => {
-            component = TestUtils.renderIntoDocument(MockChildReport());
-            domComponent = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
-
-            expect(domComponent).toBeTruthy();
-        });
-
-        it('displays a clickable link to a child table', () => {
-            component = TestUtils.renderIntoDocument(MockRouter());
-            domComponent = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
-
-            expect(domComponent.getAttribute('href')).toEqual(relatedChildReportUrl);
+        it('renders EmbeddedReportLink', () => {
+            component = shallow(MockChildReport());
+            const embeddedReportLink = component.find(EmbeddedReportLinkMock);
+            expect(embeddedReportLink.length).toEqual(1);
         });
     });
 });
