@@ -40,7 +40,7 @@ class ReuseBundleLoader {
                         break;
                     }
                 } catch (e) {
-                    logger.error('Error fetching app locale bundle:', e);
+                    logger.error('Error fetching reuse locale bundle:', e);
                 }
 
                 if (!newBundle) {

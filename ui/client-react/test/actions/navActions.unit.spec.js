@@ -41,7 +41,7 @@ describe('Nav Actions functions', () => {
         expect(mockAppsBundleLoader.changeLocale).toHaveBeenCalledWith('en-us');
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.CHANGE_LOCALE);
 
-        navActionsRewireAPI.__ResetDependency__('Locale');
+        navActionsRewireAPI.__ResetDependency__('AppsBundleLoader');
     });
 
 
