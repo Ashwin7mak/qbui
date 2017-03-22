@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import CheckBoxFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/checkBoxFieldValueEditor.js';
 import CheckBoxFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/checkBoxFieldValueRenderer.js';
 import DateFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateFieldValueEditor.js';
@@ -33,6 +35,8 @@ import PhoneFieldValueRendererMetadata from 'component-metadata!../../../client-
 import DurationFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueRenderer.js';
 import DurationFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/durationFieldValueEditor.js';
 import QbGridMetadata from 'component-metadata!../../../client-react/src/components/dataTable/qbGrid/qbGrid.js';
+import SideMenuBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideMenuBase/sideMenuBase.js';
+import SideTrowserBaseMetadata from 'component-metadata!../../../reuse/client/src/components/sideTrowserBase/sideTrowserBase.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -71,6 +75,8 @@ var Metadata = () => {
         DurationFieldValueRendererMetadata,
         DurationFieldValueEditorMetadata,
         QbGridMetadata,
+        SideMenuBaseMetadata,
+        SideTrowserBaseMetadata
         // END OF METADATA MERGE
         // above comment used for grunt task, please do not delete
     };
@@ -82,7 +88,11 @@ var Metadata = () => {
     return Object.keys(metaDataObject).reduce((newMetaObject, originalKeyName) => {
         let newKeyName = originalKeyName.replace('Metadata', '');
 
-        newMetaObject[newKeyName] = metaDataObject[originalKeyName][newKeyName];
+        if (_.has(metaDataObject, `${originalKeyName}.${newKeyName}`)) {
+            newMetaObject[newKeyName] = metaDataObject[originalKeyName][newKeyName];
+        } else {
+            newMetaObject[newKeyName] = metaDataObject[originalKeyName];
+        }
 
         if (Object.keys(newMetaObject[newKeyName]).length === 0) {
             newMetaObject[newKeyName] = {
