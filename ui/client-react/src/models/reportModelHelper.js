@@ -253,10 +253,11 @@ function addRecordToReport(currentReport, content) {
         let afterRecId = content.afterRecId;
         let newRecId = content.newRecId;
 
+        let newRecord;
+        let afterRecIndex = -1;
         if (reportData.filteredRecords.length > 0) {
             //  Unless there is a specified afterRecId, will add the new record to the top of the list.  Currently, only
             //  adding a new record from the grid will include the afterRecId.
-            let afterRecIndex = -1;
             if (afterRecId) {
                 // The afterRecId is an object if coming from the grid
                 if (_.has(afterRecId, 'value')) {
@@ -266,7 +267,7 @@ function addRecordToReport(currentReport, content) {
             }
 
             // use 1st record to create newRecord
-            const newRecord = _.mapValues(reportData.filteredRecords[0], (obj) => {
+            newRecord = _.mapValues(reportData.filteredRecords[0], (obj) => {
                 //get the default value for the fid if any
                 let valueAnswer = null;
                 let theCorrespondingField = _.find(reportData.fields, (item) => item.id === obj.id);
@@ -285,59 +286,62 @@ function addRecordToReport(currentReport, content) {
 
             // format the values in the new record
             formatRecordValues(newRecord);
-
             // set id to unsaved
             newRecord[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
-
-            //make a copy
-            const newFilteredRecords = reportData.filteredRecords.slice(0);
-
-            //insert after the index
-            currentReport.editingIndex = undefined;
-            currentReport.editingId = undefined;
-
-            // add to filtered records
-            let filteredIndex;
-            if (afterRecIndex !== -1) {
-                newFilteredRecords.splice(afterRecIndex + 1, 0, newRecord);
-                filteredIndex = afterRecIndex + 1;
-            } else {
-                // add to the top of the array
-                newFilteredRecords.unshift(newRecord);
-                filteredIndex = 0;
-            }
-
-            reportData.filteredRecords = newFilteredRecords;
-            reportData.filteredRecordsCount++;
-
-            // add to records
-            const newRecords = reportData.records.slice(0);
-            let newRecordsIndex;
-            if (afterRecIndex !== -1) {
-                //  set the editing index and id for new blank rows
-                if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-                    currentReport.editingIndex = afterRecIndex;
-                    currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-                }
-                newRecordsIndex = afterRecIndex + 1;
-                newRecords.splice(newRecordsIndex, 0, newRecord);
-            } else {
-                //  set the editing index for new blank rows
-                if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
-                    currentReport.editingIndex = newRecords.length;
-                    currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-                }
-                // add to the top of the array
-                newRecords.unshift(newRecord);
-                newRecordsIndex = 0;
-            }
-
-            reportData.records = newRecords;
-            currentReport.recordsCount++;
-
-            record = newRecords[newRecordsIndex];
-            filtRecord = newFilteredRecords[filteredIndex];
+        } else {
+            //  there are no records in the grid to use as a template..so just convert the
+            //  new record into the 'newRecord' format
+            newRecord = formatRecord(content.record, reportData.fields);
         }
+
+        //make a copy
+        const newFilteredRecords = reportData.filteredRecords.slice(0);
+
+        //insert after the index
+        currentReport.editingIndex = undefined;
+        currentReport.editingId = undefined;
+
+        // add to filtered records
+        let filteredIndex;
+        if (afterRecIndex !== -1) {
+            newFilteredRecords.splice(afterRecIndex + 1, 0, newRecord);
+            filteredIndex = afterRecIndex + 1;
+        } else {
+            // add to the top of the array
+            newFilteredRecords.unshift(newRecord);
+            filteredIndex = 0;
+        }
+
+        reportData.filteredRecords = newFilteredRecords;
+        reportData.filteredRecordsCount++;
+
+        // add to records
+        const newRecords = reportData.records.slice(0);
+        let newRecordsIndex;
+        if (afterRecIndex !== -1) {
+            //  set the editing index and id for new blank rows
+            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
+                currentReport.editingIndex = afterRecIndex;
+                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+            }
+            newRecordsIndex = afterRecIndex + 1;
+            newRecords.splice(newRecordsIndex, 0, newRecord);
+        } else {
+            //  set the editing index for new blank rows
+            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
+                currentReport.editingIndex = newRecords.length;
+                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+            }
+            // add to the top of the array
+            newRecords.unshift(newRecord);
+            newRecordsIndex = 0;
+        }
+
+        reportData.records = newRecords;
+        currentReport.recordsCount++;
+
+        record = newRecords[newRecordsIndex];
+        filtRecord = newFilteredRecords[filteredIndex];
 
         if (newRecId) {
             if (record) {
