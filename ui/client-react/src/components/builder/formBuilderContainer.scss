@@ -18,9 +18,8 @@
         overflow-y: scroll; /* has to be scroll, not auto */
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
         &:focus {
-            outline: none;
-            opacity: .5;
-            background: $color-cyan-300;
+            outline-color: $border-focused-color;
+            outline-width: 8px;
         }
     }
 
