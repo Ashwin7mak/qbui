@@ -50,7 +50,7 @@ export const createdTable = () => ({
 });
 
 
-export const createTable = (appId, tableProps) => {
+export const createTable = (appId, tableInfo) => {
 
     return (dispatch) => {
 
@@ -60,7 +60,7 @@ export const createTable = (appId, tableProps) => {
 
             const tableService = new TableService();
 
-            const promise = tableService.createTable(appId, tableProps);
+            const promise = tableService.createTableComponents(appId, tableInfo);
 
             promise.then(response => {
                 dispatch(createdTable());

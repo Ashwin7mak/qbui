@@ -34,7 +34,14 @@ export class TableCreationDialog extends React.Component {
     }
     onFinished() {
 
-        this.props.createTable('appid', {}).then(
+        const tableInfo = {
+            name: this.props.tableCreation.tableInfo.name,
+            description: this.props.tableCreation.tableInfo.description,
+            tableIcon: this.props.tableCreation.tableInfo.tableIcon,
+            tableNoun: this.props.tableCreation.tableInfo.tableNoun
+        };
+
+        this.props.createTable('appid', tableInfo).then(
             (response) => {
                 NotificationManager.success(Locale.getMessage("tableCreation.tableCreated"), Locale.getMessage('success'),
                     CompConsts.NOTIFICATION_MESSAGE_DISMISS_TIME);
@@ -105,12 +112,20 @@ export class TableCreationDialog extends React.Component {
                 <div className="sections">
                     <div className="tableField">
                         <div className="tableFieldTitle">* Table Name</div>
-                        <div className="tableFieldInput"><input type="text" onChange={(e) => this.updateTableProperty('name', e.target.value)} value={this.props.tableCreation.tableInfo.name}/></div>
+                        <div className="tableFieldInput">
+                            <input type="text"
+                                   onChange={(e) => this.updateTableProperty('name', e.target.value)}
+                                   value={this.props.tableCreation.tableInfo.name}/>
+                        </div>
                     </div>
 
                     <div className="tableField">
                         <div className="tableFieldTitle">* A record in the table is called a</div>
-                        <div className="tableFieldInput"><input type="text" /></div>
+                        <div className="tableFieldInput">
+                            <input type="text"
+                                   onChange={(e) => this.updateTableProperty('tableNoun', e.target.value)}
+                                   value={this.props.tableCreation.tableInfo.tableNoun}/>
+                        </div>
                     </div>
 
                     <div className="tableField iconSelection">
@@ -126,13 +141,19 @@ export class TableCreationDialog extends React.Component {
 
                     <div className="tableField">
                         <div className="tableFieldTitle">Description</div>
-                        <div className="tableFieldInput"><textarea type="text" rows="6"/></div>
+                        <div className="tableFieldInput">
+                            <textarea type="text"
+                                      rows="6"
+                                      onChange={(e) => this.updateTableProperty('description', e.target.value)}
+                                      value={this.props.tableCreation.tableInfo.description}/>
+                        </div>
                     </div>
 
                 </div>
             </div>);
     }
 
+    /**
     chooseFieldsMethodPage() {
 
         return (
@@ -147,13 +168,15 @@ export class TableCreationDialog extends React.Component {
                 </div>
 
             </div>);
-    }
+    }*/
 
     isValid() {
         if (this.props.tableCreation.tableInfo.name.trim() === '') {
             return false;
         }
-
+        if (this.props.tableCreation.tableInfo.name.trim() === '') {
+            return false;
+        }
 
         return true;
 

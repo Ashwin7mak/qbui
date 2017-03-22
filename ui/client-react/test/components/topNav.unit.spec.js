@@ -6,23 +6,11 @@ import TopNav, {__RewireAPI__ as TopNavRewireAPI} from '../../src/components/hea
 import GlobalActions from '../../src/components/actions/globalActions';
 import Locale from '../../src/locales/locales';
 
-var CurrentDateMock = React.createClass({
-    render: function() {
-        return (
-            <div>date</div>
-        );
-    }
-});
-
+/**
+ * Tests for the client-react implementation of the TopNav including the actions that appear in the navbar
+ */
 describe('TopNav functions', () => {
     'use strict';
-
-    let globalActionsData = [
-        {msg: 'globalActions.user', link: '/user', icon: 'user'},
-        {msg: 'globalActions.help', link: '/help', icon: 'help'}
-    ];
-    let globalActions = (<GlobalActions actions={globalActionsData} startTabIndex={0}
-                           position={"top"}/>);
     let component;
 
     let navStore = Fluxxor.createStore({
@@ -44,8 +32,15 @@ describe('TopNav functions', () => {
         },
     });
 
+    let globalActionsData = [
+        {msg: 'globalActions.user', link: '/user', icon: 'user'},
+        {msg: 'globalActions.help', link: '/help', icon: 'help'}
+    ];
+    let globalActions = (<GlobalActions flux={flux} actions={globalActionsData} startTabIndex={0}
+                                        position={"top"}/>);
+
     beforeEach(() => {
-        component = TestUtils.renderIntoDocument(<TopNav flux={flux} globalActions={globalActions}/>);
+        component = TestUtils.renderIntoDocument(<TopNav globalActions={globalActions}/>);
         spyOn(flux.actions, 'searchFor');
         spyOn(flux.actions, 'changeLocale');
     });

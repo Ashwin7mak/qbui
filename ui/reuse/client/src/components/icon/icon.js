@@ -1,12 +1,12 @@
 import React from 'react';
-import './reIcon.scss';
+import './icon.scss';
 import './style.css';
 import './tableIcons.css';
 
 /**
  * Constants for accessing different icon fonts
  */
-export const RE_AVAILABLE_ICON_FONTS = {
+export const AVAILABLE_ICON_FONTS = {
     DEFAULT: 'iconTableUISturdy',
     UI_STURDY: 'iconTableUISturdy',
     TABLE_STURDY: 'iconTableSturdy'
@@ -17,10 +17,10 @@ export const RE_AVAILABLE_ICON_FONTS = {
  * An icon using a new qb icon font (from Lisa)
  * ## Usage
  * ```
- *   <ReIcon icon="accessibility" />
+ *   <Icon icon="accessibility" />
  * ```
  */
-const ReIcon = React.createClass({
+const Icon = React.createClass({
     propTypes: {
         /**
          * See QuickBase.design for full list of icons.
@@ -33,13 +33,13 @@ const ReIcon = React.createClass({
          * Optionally set the font set to use for this icon
          * Import the iconConstants.AVAILABLE_ICON_FONTS constant for easy access to available fonts
          */
-        iconFont: React.PropTypes.oneOf(Object.keys(RE_AVAILABLE_ICON_FONTS).map(key => RE_AVAILABLE_ICON_FONTS[key])),
+        iconFont: React.PropTypes.oneOf(Object.keys(AVAILABLE_ICON_FONTS).map(key => AVAILABLE_ICON_FONTS[key])),
     },
     getDefaultProps() {
         return {
             className: '',
             isTableIcon: false,
-            iconFont: RE_AVAILABLE_ICON_FONTS.DEFAULT
+            iconFont: AVAILABLE_ICON_FONTS.DEFAULT
         };
     },
     render: function() {
@@ -54,4 +54,4 @@ const ReIcon = React.createClass({
     }
 });
 
-export default ReIcon;
+export default Icon;

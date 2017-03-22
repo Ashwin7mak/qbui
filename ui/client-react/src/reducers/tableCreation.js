@@ -10,8 +10,8 @@ const tableCreation = (
         tableInfo: {
             name: "",
             description: "",
-            singleNoun: "",
-            icon: "projects"
+            tableIcon: "projects",
+            tableNoun: ""
         }
     },
     action) => {

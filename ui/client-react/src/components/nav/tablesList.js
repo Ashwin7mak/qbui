@@ -7,6 +7,8 @@ import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import SearchBox from '../search/searchBox';
 import {APP_ROUTE} from '../../constants/urlConstants';
+import WindowLocationUtils from '../../utils/windowLocationUtils';
+import UrlUtils from '../../utils/urlUtils';
 
 
 let TablesList = React.createClass({
@@ -114,12 +116,16 @@ let TablesList = React.createClass({
 
     },
     getTopLinksItem() {
-        const appHomePageSelected = !this.props.selectedTableId;
+        const appHomePageSelected = !this.props.selectedTableId &&
+            (WindowLocationUtils.getPathname() === `${APP_ROUTE}/${this.props.selectedAppId}`);
+        const appUsersPageSelected = !this.props.selectedTableId &&
+            (WindowLocationUtils.getPathname() === UrlUtils.getAppUsersLink(this.props.selectedAppId));
 
         return (
         <li className="horizontal">
             <ul className="topLinks">
                 {this.getNavItem('nav.home', `${APP_ROUTE}/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
+                {this.getNavItem('app.users.users', UrlUtils.getAppUsersLink(this.props.selectedAppId), 'users', appUsersPageSelected)}
             </ul>
         </li>);
     },
