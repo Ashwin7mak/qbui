@@ -49,20 +49,20 @@
                 width: 100%;
             }
 
-            &:hover {
-                background: $color-black-250;
+           &:hover {
+               background: $color-black-250;
 
-                .fieldEditingTools {
-                    opacity: 1;
-                    .qbIcon {
-                        opacity: 1;
-                    }
-                }
+               .fieldEditingTools {
+                   opacity: 1;
+                   .qbIcon {
+                       opacity: 1;
+                   }
+               }
 
-                @include small-breakpoint {
-                    background: none;
-                }
-            }
+               @include small-breakpoint {
+                   background: none;
+               }
+           }
 
             &:active {
                 @include dragpreview-active-gradient;
@@ -78,6 +78,27 @@
 
             .cellWrapper {
                 padding-left: 15px;
+            }
+
+            &.selectedFormElement {
+                &:hover {
+                    background: $color-cyan-300;
+                }
+                background: $color-cyan-300;
+                z-index: -1 !important;
+                .deleteFieldIcon {
+                    .qbIcon {
+                        opacity: 1;
+                        color: $color-red-700;
+                    }
+                }
+
+                .fieldPreferencesIcon {
+                    .qbIcon {
+                        opacity: 1;
+                        color: $color-cyan-700;
+                    }
+                }
             }
         }
     }
@@ -97,23 +118,5 @@
      */
     .elementCache {
         display: none;
-    }
-
-    .selectedFormElement {
-        background: $color-cyan-300;
-        z-index: -1 !important;
-        .deleteFieldIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-red-700;
-            }
-        }
-
-        .fieldPreferencesIcon {
-            .qbIcon {
-                opacity: 1;
-                color: $color-cyan-700;
-            }
-        }
     }
 }

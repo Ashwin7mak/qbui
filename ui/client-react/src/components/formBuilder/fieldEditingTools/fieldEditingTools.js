@@ -146,6 +146,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
+        console.log('this.props.selectedFields[0]: ', this.props.selectedFields[0]);
         let tabIndex = this.props.tabIndex;
 
         let isSmall = Breakpoints.isSmallBreakpoint();

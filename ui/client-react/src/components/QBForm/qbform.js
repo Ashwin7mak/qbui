@@ -307,6 +307,7 @@ let QBForm = React.createClass({
         return (
             <div key={containingElement.id} className="formElementContainer">
               <CurrentFieldElement
+                  isFormElementSelected={this.props.isFormElementSelected}
                   tabIndex={tabIndex}
                   location={location}
                   orderIndex={FormFieldElement.orderIndex}
