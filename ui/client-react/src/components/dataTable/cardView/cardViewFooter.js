@@ -21,7 +21,7 @@ var CardViewFooter = React.createClass({
             <div className="cardViewFooterContainer">
                 <div className="cardViewFooter">
                     <button className="fetchNextButton" onClick={this.props.getNextReportPage}>
-                        <QBicon className="fetchNextArrow" icon="iconUiSturdy_descending" />
+                        <QBicon className="fetchNextArrow" icon="descending" />
                         <I18nMessage message="report.nextPage"/>
                     </button>
                 </div>
