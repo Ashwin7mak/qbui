@@ -7,6 +7,15 @@ import _ from 'lodash';
 
 let logger = new Logger();
 
+/**
+ * The bundle loader class that is specific to the Governance Functional Area.
+ * Each functional area has its own localized string bundles. These need to be loaded
+ * by a bundle loader class specific to the functional area. Each bundle loader class
+ * must be initialized in the application startup as soon as possible because calls
+ * made to Locale.getMessage() will fail until the bundle loader has loaded the proper
+ * strings. Initialize the bundle loader for each application by calling the changeLocale()
+ * function.
+ */
 class GovernanceBundleLoader {
 
     /**
@@ -28,13 +37,18 @@ class GovernanceBundleLoader {
 
                 try {
                     // this is where all supported locales are defined
+                    // We merge multiple bundles together as needed so a single bundle can be accessed for all text.
+                    // In the case of name collisions, the last bundle loaded wins. This is on purpose
+                    // right now so we don't have to change all the code to use different keys.
+                    // Different functional areas should have a different top level key in the file
+                    // such that over time the possibility of name collisions will be reduced.
                     switch (newLocale.toLowerCase()) {
                     case 'en-us':
                         // BAD BAD BAD - we should not be importing the client-react strings!
                         // However, governance imports client-react code for the grid that needs these strings.
                         // They have to stay here until that code is removed.
                         newAppBundle = _.merge(
-                            require('../../../client-react/src/locales/bundles/apps-en_us'),    // NAUGHTY! EVIL! NO!
+                            require('../../../client-react/src/locales/bundles/apps-en_us'),    // todo: NAUGHTY! EVIL! NO! remove this dependency
                             require('../../../reuse/client/src/locales/bundles/reuse-en_us'),
                             require('./bundles/governance-en_us')
                         );
@@ -44,7 +58,7 @@ class GovernanceBundleLoader {
                         // However, governance imports client-react code for the grid that needs these strings.
                         // They have to stay here until that code is removed.
                         newAppBundle = _.merge(
-                            require('../../../client-react/src/locales/bundles/apps-fr_fr'),    // NAUGHTY! EVIL! NO!
+                            require('../../../client-react/src/locales/bundles/apps-fr_fr'),    // todo: NAUGHTY! EVIL! NO! remove this dependency
                             require('../../../reuse/client/src/locales/bundles/reuse-fr_fr'),
                             require('./bundles/governance-fr_fr')
                         );
@@ -54,7 +68,7 @@ class GovernanceBundleLoader {
                         // However, governance imports client-react code for the grid that needs these strings.
                         // They have to stay here until that code is removed.
                         newAppBundle = _.merge(
-                            require('../../../client-react/src/locales/bundles/apps-de_de'),    // NAUGHTY! EVIL! NO!
+                            require('../../../client-react/src/locales/bundles/apps-de_de'),    // todo: NAUGHTY! EVIL! NO! remove this dependency
                             require('../../../reuse/client/src/locales/bundles/reuse-de_de'),
                             require('./bundles/governance-de_de')
                         );

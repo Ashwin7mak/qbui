@@ -12,7 +12,7 @@ import createGovernanceStore from './store';
 import GovernanceBundleLoader from '../locales/governanceBundleLoader';
 
 // init the localization services
-GovernanceBundleLoader.changeLocale('en-us'); // need to figure out how to get to: config.locale.default
+GovernanceBundleLoader.changeLocale('en-us'); // todo: LocaleHack - need to figure out how to get to: config.locale.default
 
 const store = createGovernanceStore();
 

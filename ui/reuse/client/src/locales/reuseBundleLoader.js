@@ -7,6 +7,15 @@ import _ from 'lodash';
 
 let logger = new Logger();
 
+/**
+ * The bundle loader class that is specific to the reuse library Functional Area.
+ * Each functional area has its own localized string bundles. These need to be loaded
+ * by a bundle loader class specific to the functional area. Each bundle loader class
+ * must be initialized in the application startup as soon as possible because calls
+ * made to Locale.getMessage() will fail until the bundle loader has loaded the proper
+ * strings. Initialize the bundle loader for each application by calling the changeLocale()
+ * function.
+ */
 class ReuseBundleLoader {
 
     /**
