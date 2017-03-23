@@ -32,8 +32,8 @@ const forms = (
          * The data is being modified directly because this a direct response from the sever
          * This is a fix for a bug in EE that does not return either a tableId or an appId
          * */
-        action.formData.formMeta.appId = action.formData.formMeta.appId ? action.formData.formMeta.appId : action.appId;
-        action.formData.formMeta.tableId = action.formData.formMeta.tableId ? action.formData.formMeta.tableId : action.tblId;
+        action.formData.formMeta.appId = action.formData.formMeta.appId || action.appId;
+        action.formData.formMeta.tableId = action.formData.formMeta.tableId || action.tblId;
 
         newState.push({
             id,
