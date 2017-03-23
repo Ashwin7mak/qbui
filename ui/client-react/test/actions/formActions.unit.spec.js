@@ -426,7 +426,7 @@ describe('Form Actions', () => {
 
     describe('keyBoardMoveFieldUp', () => {
         it('creates an action that will move a field up', () => {
-            expect(formActions.keyBoardMoveFieldUp('view', 1)).toEqual({
+            expect(formActions.keyboardMoveFieldUp('view', 1)).toEqual({
                 id: 'view',
                 type: types.KEYBOARD_MOVE_FIELD_UP,
                 content: {
