@@ -1,4 +1,4 @@
-import React;
+import React, {PropTypes, Component} from 'react';
 import {Link} from 'react-router';
 import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
@@ -8,32 +8,33 @@ import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
 import A11Utils from '../../../../../client-react/src/utils/a11yUtils';
 // IMPORTED FROM CLIENT REACT
 
+// TODO:: This component still needs to be refactored!
 const NavItem = React.createClass({
 
     propTypes: {
-        item: React.PropTypes.shape({
-            id: React.PropTypes.any,
-            msg: React.PropTypes.string,
-            name: React.PropTypes.string,
-            icon: React.PropTypes.string,
+        item: PropTypes.shape({
+            id: PropTypes.any,
+            msg: PropTypes.string,
+            name: PropTypes.string,
+            icon: PropTypes.string,
 
             /**
              * The icon font to use for this nav item. See Icon for available icon font constants. */
-            iconFont: React.PropTypes.string,
-            link: React.PropTypes.string
+            iconFont: PropTypes.string,
+            link: PropTypes.string
         }),
-        onSelect: React.PropTypes.func,
-        isHeading: React.PropTypes.bool,
-        showSecondary: React.PropTypes.bool,
-        secondaryIcon: React.PropTypes.string,
-        secondaryOnSelect: React.PropTypes.func,
-        hoverComponent: React.PropTypes.element,
-        showToolTip: React.PropTypes.bool,
-        selected: React.PropTypes.bool,
+        onSelect: PropTypes.func,
+        isHeading: PropTypes.bool,
+        showSecondary: PropTypes.bool,
+        secondaryIcon: PropTypes.string,
+        secondaryOnSelect: PropTypes.func,
+        hoverComponent: PropTypes.element,
+        showToolTip: PropTypes.bool,
+        selected: PropTypes.bool,
 
         /**
          * A boolean that will cause the default font to be the Table icon font. The iconFont on the individual nav item will always take precedence. */
-        tableIcon: React.PropTypes.bool,
+        tableIcon: PropTypes.bool,
     },
 
     getDefaultProps() {
