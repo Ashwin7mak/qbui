@@ -197,9 +197,10 @@ export const FormBuilderContainer = React.createClass({
                     <AutoScroll
                         pixelsFromBottomForLargeDevices={80}
                         pixelsFromBottomForMobile={50}>
-                        <div className="formBuilderContent" tabIndex="0" role="button" onKeyDown={this.updateChildrenTabIndex}>
+                        <div className="formBuilderContent">
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                 <FormBuilder
+                                    formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                     formId={formId}
                                     formData={formData}
                                     moveFieldOnForm={this.props.moveField}

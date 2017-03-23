@@ -17,14 +17,16 @@
         max-height: 100%;
         overflow-y: scroll; /* has to be scroll, not auto */
         -webkit-overflow-scrolling: touch; /* This allows for momentum scrolling on touch devices */
-        &:focus {
-            outline-color: $border-focused-color;
-            outline-width: 8px;
-        }
     }
 
     .formContainer {
         padding-bottom: 90px;
+        .editing{
+        &:focus {
+            outline-color: $border-focused-color;
+            outline-width: 5px;
+        }
+        }
     }
 
     .qbPanel .qbPanelHeader .qbPanelHeaderTitle .qbPanelHeaderTitleText {

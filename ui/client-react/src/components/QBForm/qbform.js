@@ -461,6 +461,22 @@ let QBForm = React.createClass({
         });
     },
 
+    isEditingForm(formContent) {
+        if (this.props.editingForm) {
+            return (
+                <form className={this.props.edit ? 'editForm' : 'viewForm'} tabIndex="0" role="buton" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                    {formContent}
+                </form>
+            );
+        } else {
+            return (
+                <form className='viewForm'>
+                    {formContent}
+                </form>
+            );
+        }
+    },
+
     /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
@@ -490,9 +506,7 @@ let QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                <form className={this.props.edit ? 'editForm' : 'viewForm'}>
-                    {formContent}
-                </form>
+                {this.isEditingForm(formContent)}
                 <div>{formFooter}</div>
             </div>
         );
