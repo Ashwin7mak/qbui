@@ -107,7 +107,7 @@ export class FormBuilder extends Component {
                 </label>
                 {this.props.showCustomDragLayer && <FormBuilderCustomDragLayer />}
                 <QbForm
-                    isFormElementSelected={this.props.isFormElementSelected}
+                    selectedField={this.props.selectedField}
                     formBuilderUpdateChildrenTabIndex={this.props.formBuilderUpdateChildrenTabIndex}
                     edit={true}
                     editingForm={true}

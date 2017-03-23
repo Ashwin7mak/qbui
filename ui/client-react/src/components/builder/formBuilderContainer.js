@@ -200,7 +200,7 @@ export const FormBuilderContainer = React.createClass({
                         <div className="formBuilderContent">
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                 <FormBuilder
-                                    isFormElementSelected={this.props.selectedField}
+                                    selectedField={this.props.selectedField}
                                     formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                     formId={formId}
                                     formData={formData}
