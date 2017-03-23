@@ -9,7 +9,7 @@ The motivation behind setting up keyboard shortcuts was twofold:
 1) To create a similar infrastructure for keyboard shortcuts across the qbase ecosystem
 2) To make it easy to add keyboard shortcuts
 
-Goals 1 and 2 are met by adding this component within the reuse library and making it easy
+These goals are met by adding this component within the reuse library and making it easy
 for any functional area to use it.
 
 ### Setup
