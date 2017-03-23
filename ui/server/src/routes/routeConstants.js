@@ -92,9 +92,12 @@
      *  List of Experience engine public API endpoints
      */
     var experienceEngineApiEndpoints = {
-        // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
-        // is configured to act as proxy and pass the request directly to the server side resource.
-        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*'
+        // Currently, all wildcard routes are disabled for put, patch, post, and delete requests in prod. All get requests are allowed.
+        // You only need to define put, patch, post, and delete requests that are allowed in prod below.
+        // Heads Up: Order matters. Define all specific routes BEFORE the generic EXPERIENCE_ENGINE_ALL route.
+        // Second Heads up: You also need to define the routes in qbRouteMapper.
+        EE_FORMS                    : baseUrl.EXPERIENCE_ENGINE + '/apps/:app/tables/:table/forms*',
+        EXPERIENCE_ENGINE_ALL       : baseUrl.EXPERIENCE_ENGINE + '/*',
     };
 
     /**
