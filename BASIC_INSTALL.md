@@ -104,8 +104,9 @@ See [notes about the above configuration](ui/README.md#configuring)
    `grunt serve`
 
 * Navigate to http://localhost.localhost:9000/api/api/v1/ticket?uid=10000&realmId=117000 This logs you in as the administrator user.
-* Navigate to http://localhost.localhost:9000/qbase/apps/ to see the apps available to the administrator user.
+* Navigate to http://localhost.localhost:9000/qbase/apps/ to see the apps available to the administrator user. 
 Note that this is pointing to the integration testing environment.  Apps here may be changed or torn down at any time.
+* Navigate to http://localhost:9000/qbase/components/qbpanel to see the component library and play with different React components we can reuse
 
 #### Note :
  The Node Server only listens via a specific ip/hostname when running with dev hotloader,
