@@ -5,7 +5,7 @@ import FlipMove from 'react-flip-move';
 import SideMenuBase from '../sideMenuBase/sideMenuBase';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
-import NavItem from '../navItem/navItem';
+import NavItem from '../simpleNavItem/simpleNavItem';
 
 // CLIENT REACT IMPORTS
 import {LEFT_NAV_BAR} from '../../../../../client-react/src/constants/spinnerConfigurations';
