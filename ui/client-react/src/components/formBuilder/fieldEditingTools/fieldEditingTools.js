@@ -93,7 +93,11 @@ export class FieldEditingTools extends Component {
          * For keyboard, we need to reset the focus, to maintain proper tabbing order
          * and wee need to keep the current form element in view, by scrolling it into view
          * */
-        if (this.props.selectedFields[0]) {
+
+        if (this.props.previouslySelectedField && this.props.previouslySelectedField[0] && this.props.tabIndex !== "-1") {
+            let previouslySelectedField = document.querySelectorAll('.fieldEditingTools');
+            previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
+        } else if (this.props.selectedFields[0]) {
             let deleteFieldIcon = document.querySelectorAll('.deleteFieldIcon button');
             deleteFieldIcon[this.props.selectedFields[0].elementIndex].focus();
             this.updateScrollLocation();
@@ -198,9 +202,12 @@ const mapStateToProps = (state, ownProps) => {
     let currentForm = state.forms.find(form => form.id === formId);
     let tabIndex = currentForm.formBuilderChildrenTabIndex ? currentForm.formBuilderChildrenTabIndex[0] : "-1";
     let selectedFields = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields : []);
+    let previouslySelectedField = (_.has(currentForm, 'previouslySelectedField') ? currentForm.previouslySelectedField : []);
+
     return {
         currentForm,
         selectedFields,
+        previouslySelectedField,
         tabIndex
     };
 };

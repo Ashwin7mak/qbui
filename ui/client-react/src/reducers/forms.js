@@ -211,10 +211,12 @@ const forms = (
 
             updatedForm = _.cloneDeep(currentForm);
 
-            if (!updatedForm.selectedFields) {
+            if (!updatedForm.selectedFields || !updatedForm.previouslySelectedField) {
                 updatedForm.selectedFields = [];
+                updatedForm.previouslySelectedField = [];
             }
 
+            updatedForm.previouslySelectedField[0] = action.content.location;
             updatedForm.selectedFields[0] = undefined;
 
             return [
