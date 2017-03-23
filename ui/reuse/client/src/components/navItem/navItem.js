@@ -1,13 +1,14 @@
-import React from 'react';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import React;
 import {Link} from 'react-router';
-import {I18nMessage} from '../../utils/i18nMessage';
-import QBicon from '../qbIcon/qbIcon';
-import TableIcon from '../qbTableIcon/qbTableIcon';
-import A11Utils from '../../utils/a11yUtils';
+import Icon, {AVAILABLE_ICON_FONTS} from '../icon/icon';
+import Tooltip from '../tooltip/tooltip';
 
-let NavItem = React.createClass({
+// IMPORTED FROM CLIENT REACT
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+import A11Utils from '../../../../../client-react/src/utils/a11yUtils';
+// IMPORTED FROM CLIENT REACT
+
+const NavItem = React.createClass({
 
     propTypes: {
         item: React.PropTypes.shape({
@@ -15,6 +16,10 @@ let NavItem = React.createClass({
             msg: React.PropTypes.string,
             name: React.PropTypes.string,
             icon: React.PropTypes.string,
+
+            /**
+             * The icon font to use for this nav item. See Icon for available icon font constants. */
+            iconFont: React.PropTypes.string,
             link: React.PropTypes.string
         }),
         onSelect: React.PropTypes.func,
@@ -24,7 +29,11 @@ let NavItem = React.createClass({
         secondaryOnSelect: React.PropTypes.func,
         hoverComponent: React.PropTypes.element,
         showToolTip: React.PropTypes.bool,
-        selected: React.PropTypes.bool
+        selected: React.PropTypes.bool,
+
+        /**
+         * A boolean that will cause the default font to be the Table icon font. The iconFont on the individual nav item will always take precedence. */
+        tableIcon: React.PropTypes.bool,
     },
 
     getDefaultProps() {
@@ -51,6 +60,18 @@ let NavItem = React.createClass({
         }
     },
 
+    getIconFont(item) {
+        if (item.iconFont) {
+            return item.iconFont;
+        }
+
+        if (this.props.tableIcon) {
+            return AVAILABLE_ICON_FONTS.TABLE_STURDY;
+        }
+
+        return AVAILABLE_ICON_FONTS.DEFAULT;
+    },
+
     getLinkItem(item, label) {
         let classes = "link";
         if (this.props.secondaryIcon) {
@@ -61,17 +82,14 @@ let NavItem = React.createClass({
         }
         return (<li className={classes}>
             <Link className="leftNavLink" to={item.link} onClick={this.onClick} onKeyDown={this.onClick}>
-                {this.props.tableIcon ?
-                    <TableIcon icon={item.icon}/> :
-                    <QBicon icon={item.icon}/>
-                    }
+                <Icon iconFont={item.iconFont || AVAILABLE_ICON_FONTS.DEFAULT} icon={item.icon} />
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&
             <a onClick={(event)=> this.onSecondaryClick(event, item.id)}
                onKeyDown={(event)=> this.onSecondaryClick(event, item.id)}
                className="right">
-                <QBicon icon={this.props.secondaryIcon}/>
+                <Icon icon={this.props.secondaryIcon}/>
             </a> }
             {this.props.hoverComponent}
         </li>);
@@ -86,7 +104,7 @@ let NavItem = React.createClass({
                     onClick={this.onHeadingClick} onKeyDown={this.onHeadingClick}
                     className={ this.props.secondaryIcon ? "heading withSecondary" : "heading"}>
                     <I18nMessage message={item.msg}/>
-                    {this.props.secondaryIcon && <QBicon icon={this.props.secondaryIcon} />}
+                    {this.props.secondaryIcon && <Icon icon={this.props.secondaryIcon} />}
                 </li>);
         } else {
             let label = item.name;
@@ -94,11 +112,12 @@ let NavItem = React.createClass({
             if (item.msg) {
                 label = (<I18nMessage message={item.msg}/>);
             }
-            const tooltip = (<Tooltip className={ this.props.showTooltip ? 'leftNavTooltip show' : 'leftNavTooltip' }
-                                      id={tooltipID}>{label}</Tooltip>);
 
+            // TODO:: I don't think className on tooltip is doing anything. May need a refactor. It was part of the original code here.
             return this.props.showToolTip ?
-                <OverlayTrigger key={item.id} placement="right" overlay={tooltip}>{this.getLinkItem(item, label)}</OverlayTrigger> : this.getLinkItem(item, label);
+                <Tooltip key={item.id} placement="right" tipId={tooltipID} className={this.props.showToolTip ? 'leftNavTooltip show' : 'leftNavTooltip'}>
+                    {this.getLinkItem(item, label)}
+                </Tooltip> : this.getLinkItem(item, label);
         }
     }
 });
