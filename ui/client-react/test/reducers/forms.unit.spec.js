@@ -75,7 +75,7 @@ describe('Forms reducer functions', () => {
             }]);
         });
 
-        it('returns correct state when load succeeds', () => {
+        fit('returns correct state when load succeeds', () => {
             let currentAppId = 'appId';
             let currentblId = 'tblId';
             let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
@@ -91,7 +91,7 @@ describe('Forms reducer functions', () => {
                 errorStatus: null
             }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, backUpAppId, backUpTblId})).toDeepEqual([{
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual([{
                 id: 'view',
                 loading: false,
                 formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
@@ -99,20 +99,20 @@ describe('Forms reducer functions', () => {
             }]);
         });
 
-        it('returns correct appId and tableId if they are missing', () => {
+        fit('returns correct appId and tableId if they are missing', () => {
             let formData = {formMeta: {appId: null, tableId: null}};
             let backUpAppId = 'banana';
-            let backuUpTblId = 'apple';
+            let backUpTblId = 'apple';
             let loadingFormState = [{
                 id: 'view',
                 loading: true,
                 errorStatus: null
             }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, backUpAppId, backuUpTblId})).toDeepEqual([{
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId: backUpAppId, tblId: backUpTblId})).toDeepEqual([{
                 id: 'view',
                 loading: false,
-                formData: {formMeta: {appId: backUpAppId, tableId: backuUpTblId}},
+                formData: {formMeta: {appId: backUpAppId, tableId: backUpTblId}},
                 errorStatus: null
             }]);
         });
