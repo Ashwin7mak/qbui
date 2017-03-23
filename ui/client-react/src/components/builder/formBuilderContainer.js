@@ -174,7 +174,6 @@ export const FormBuilderContainer = React.createClass({
         let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
         let formData = null;
         let formId = null;
-
         if (loaded) {
             formId = this.props.forms[0].id;
             formData = this.props.forms[0].formData;
@@ -207,7 +206,6 @@ export const FormBuilderContainer = React.createClass({
                                     moveFieldOnForm={this.props.moveField}
                                     updateAnimationState={this.props.updateAnimationState}
                                 />
-
                             </Loader>
                         </div>
                     </AutoScroll>

@@ -26,6 +26,7 @@ const TextArea = React.createClass({
                     style={this.props.style}
                     onChange={this.props.onChange}
                     onBlur={this.props.onBlur}
+                    tabIndex={this.props.tabIndex}
                     maxLength={maxLength}
                     onKeyUp={this.props.onKeyUp}
                     placeholder={this.props.placeholder}
@@ -33,9 +34,7 @@ const TextArea = React.createClass({
                     rows={rows}
                     cols={cols}
                     value={this.props.value || ''}
-                    type="text"
-                    tabIndex={this.props.tabIndex}
-                />);
+                    type="text" />);
     }
 });
 const ClearableTextArea = clearableInput(TextArea);
