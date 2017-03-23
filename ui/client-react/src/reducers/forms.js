@@ -193,9 +193,11 @@ const forms = (
 
         if (!updatedForm.selectedFields) {
             updatedForm.selectedFields = [];
+            updatedForm.previouslySelectedField = [];
         }
 
         updatedForm.selectedFields[0] = action.content.location;
+        updatedForm.previouslySelectedField = undefined;
 
         return [
             ...newState,
