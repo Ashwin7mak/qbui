@@ -98,13 +98,10 @@ export class FieldEditingTools extends Component {
             let previouslySelectedField = document.querySelectorAll('.fieldEditingTools');
             previouslySelectedField[this.props.previouslySelectedField[0].elementIndex].focus();
         } else if (this.props.selectedFields[0]) {
-            let deleteFieldIcon = document.querySelectorAll('.deleteFieldIcon button');
-            deleteFieldIcon[this.props.selectedFields[0].elementIndex].focus();
-            this.updateScrollLocation();
-        } else if (!this.props.selectedFields[0] && this.props.tabIndex === "0") {
             let firstFieldElement = document.querySelectorAll('.fieldEditingTools');
-            firstFieldElement[0].focus();
+            firstFieldElement[this.props.selectedFields[0].elementIndex].focus();
         }
+        this.updateScrollLocation();
     }
 
     getSelectedFormElementContainer() {
@@ -146,8 +143,7 @@ export class FieldEditingTools extends Component {
     }
 
     render() {
-        console.log('this.props.selectedFields[0]: ', this.props.selectedFields[0]);
-        let tabIndex = this.props.tabIndex;
+        let tabIndex = this.props.selectedFields[0] ? "0" : this.props.tabIndex;
 
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
