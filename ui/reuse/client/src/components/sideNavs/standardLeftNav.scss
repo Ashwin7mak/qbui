@@ -76,6 +76,11 @@
                 transform: rotate(-180deg);
             }
         }
+
+        // Override the not allowed icon on tooltips
+        .tipChildWrapper {
+            cursor: pointer;
+        }
     }
 
     .standardLeftNavItems {

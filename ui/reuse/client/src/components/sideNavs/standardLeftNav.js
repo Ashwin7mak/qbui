@@ -40,6 +40,7 @@ class StandardLeftNav extends Component {
         }
     }
 
+    // TODO:: Re-render on page resize so that the presence/absence of tooltip updates when the window changes size
     renderContextHeaderTitle() {
         const {contextHeaderTitle} = this.props;
 
