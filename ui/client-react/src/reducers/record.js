@@ -5,6 +5,7 @@ import {NEW_RECORD_VALUE} from "../constants/urlConstants";
 import {UNSAVED_RECORD_ID} from "../constants/schema";
 import _ from 'lodash';
 
+
 /**
  * Manage array of record states
  *

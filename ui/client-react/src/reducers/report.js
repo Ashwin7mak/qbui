@@ -46,7 +46,7 @@ const report = (state = [], action) => {
      * @returns {*}
      */
     function getReportFromState(id) {
-        //  retreive a copy of the report for the given context/id
+        //  retrieve a copy of the report for the given context/id
         const index = _.findIndex(state, rpt => rpt.id === id);
         if (index !== -1) {
             return _.cloneDeep(state[index]);
@@ -92,6 +92,7 @@ const report = (state = [], action) => {
     case types.LOAD_REPORT_SUCCESS: {
         //  load a report is successful..update the store with the report info
         let currentReport = getReportFromState(action.id);
+
         if (currentReport) {
             // set the report data from action.content.
             // action.content maps to reportModel.getModel()
@@ -116,8 +117,10 @@ const report = (state = [], action) => {
             // set loading state
             currentReport.loading = false;
             currentReport.error = false;
+
             return newState(currentReport);
         }
+
         return state;
     }
     case types.LOAD_REPORTS_SUCCESS: {
@@ -148,7 +151,7 @@ const report = (state = [], action) => {
     case types.SAVE_RECORD_SUCCESS: {
         //  listen to record save event.  If there is a report context
         //  defined, then the report is updated with the new/updated record.
-        let rpt = action.content.report;
+        let rpt = _.get(action, 'content.report');
         if (rpt && rpt.context) {
             let currentReport = getReportFromState(rpt.context);
             if (currentReport) {
@@ -209,7 +212,7 @@ const report = (state = [], action) => {
             };
 
             //  gotta have an id to know where to insert the new record
-            if (content.afterRecId) {
+            if (content.afterRecId !== undefined) {
                 // remove record from report if its new and unsaved
                 if (currentReport.editingIndex !== undefined || currentReport.editingId !== undefined) {
                     if (content.afterRecId === UNSAVED_RECORD_ID || content.afterRecId === NEW_RECORD_VALUE) {

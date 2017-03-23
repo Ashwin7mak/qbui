@@ -152,26 +152,26 @@ class ReportModelHelper {
      * @param content
      */
     static updateReportRecord(currentReport, content) {
-        let record = null;
-        let filtRecord = null;
-        let reportData = currentReport.data;
+        //  nothing to do if no record content to update
+        if (content.record) {
+            let record = null;
+            let filteredRecord = null;
+            let reportData = currentReport.data;
 
-        if (reportData.hasGrouping) {
-            record = ReportUtils.findGroupedRecord(reportData.records, content.recId, reportData.keyField.name);
-            filtRecord = ReportUtils.findGroupedRecord(reportData.filteredRecords, content.recId, reportData.keyField.name);
-        } else {
-            record = findRecordById(reportData.records, content.recId, reportData.hasGrouping, reportData.keyField);
-            filtRecord = findRecordById(reportData.filteredRecords, content.recId, reportData.hasGrouping, reportData.keyField);
+            if (reportData.hasGrouping) {
+                record = ReportUtils.findGroupedRecord(reportData.records, content.recId, reportData.keyField.name);
+                filteredRecord = ReportUtils.findGroupedRecord(reportData.filteredRecords, content.recId, reportData.keyField.name);
+            } else {
+                record = findRecordById(reportData.records, content.recId, reportData.hasGrouping, reportData.keyField);
+                filteredRecord = findRecordById(reportData.filteredRecords, content.recId, reportData.hasGrouping, reportData.keyField);
+            }
+
+            // transform record from format [{id, value}] to [fieldName: {id, value}]
+            let formattedRec = formatRecord(content.record, reportData.fields);
+
+            //  update the report with the new content
+            updateReportRecordData(record, filteredRecord, formattedRec);
         }
-
-        // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
-        let formattedRec = formatRecord(content.record, reportData.fields);
-
-        // Add all display values and patch the previously created skeleton of record with the newRecord values
-        formatRecordValues(formattedRec);
-
-        //  update the report with the new record data
-        updateReportRecordData(record, filtRecord, formattedRec);
     }
 
     /**
@@ -253,10 +253,11 @@ function addRecordToReport(currentReport, content) {
         let afterRecId = content.afterRecId;
         let newRecId = content.newRecId;
 
+        let newRecord;
+        let afterRecIndex = -1;
         if (reportData.filteredRecords.length > 0) {
             //  Unless there is a specified afterRecId, will add the new record to the top of the list.  Currently, only
             //  adding a new record from the grid will include the afterRecId.
-            let afterRecIndex = -1;
             if (afterRecId) {
                 // The afterRecId is an object if coming from the grid
                 if (_.has(afterRecId, 'value')) {
@@ -266,7 +267,7 @@ function addRecordToReport(currentReport, content) {
             }
 
             // use 1st record to create newRecord
-            const newRecord = _.mapValues(reportData.filteredRecords[0], (obj) => {
+            newRecord = _.mapValues(reportData.filteredRecords[0], (obj) => {
                 //get the default value for the fid if any
                 let valueAnswer = null;
                 let theCorrespondingField = _.find(reportData.fields, (item) => item.id === obj.id);
@@ -283,62 +284,64 @@ function addRecordToReport(currentReport, content) {
                 return valueAnswer;
             });
 
-            // format the values in the new reacord
+            // format the values in the new record
             formatRecordValues(newRecord);
-
             // set id to unsaved
             newRecord[reportData.keyField.name].value = SchemaConstants.UNSAVED_RECORD_ID;
+        } else {
+            //  there are no records in the grid to use as a template..so just convert the
+            //  new record into the 'newRecord' format
+            newRecord = formatRecord(content.record, reportData.fields);
+        }
 
-            //make a copy
-            const newFilteredRecords = reportData.filteredRecords.slice(0);
+        //make a copy
+        const newFilteredRecords = reportData.filteredRecords.slice(0);
 
-            //insert after the index
-            currentReport.editingIndex = undefined;
-            currentReport.editingId = undefined;
+        //insert after the index
+        currentReport.editingIndex = undefined;
+        currentReport.editingId = undefined;
 
-            // add to filtered records
-            let filteredIndex;
-            if (afterRecIndex !== -1) {
-                newFilteredRecords.splice(afterRecIndex + 1, 0, newRecord);
+        // add to filtered records
+        let filteredIndex;
+        if (afterRecIndex !== -1) {
+            newFilteredRecords.splice(afterRecIndex + 1, 0, newRecord);
+            filteredIndex = afterRecIndex + 1;
+        } else {
+            // add to the top of the array
+            newFilteredRecords.unshift(newRecord);
+            filteredIndex = 0;
+        }
+
+        reportData.filteredRecords = newFilteredRecords;
+        reportData.filteredRecordsCount++;
+
+        // add to records
+        const newRecords = reportData.records.slice(0);
+        let newRecordsIndex;
+        if (afterRecIndex !== -1) {
+            //  set the editing index and id for new blank rows
+            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
                 currentReport.editingIndex = afterRecIndex;
                 currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-                filteredIndex = afterRecIndex + 1;
-            } else {
-                // add to the top of the array
-                currentReport.editingIndex = newFilteredRecords.length;
-                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-                newFilteredRecords.unshift(newRecord);
-                filteredIndex = 0;
             }
-
-            reportData.filteredRecords = newFilteredRecords;
-            reportData.filteredRecordsCount++;
-
-            // add to records
-            const newRecords = reportData.records.slice(0);
-            let newRecordsIndex;
-            if (afterRecIndex !== -1) {
-                newRecords.splice(afterRecIndex + 1, 0, newRecord);
-                currentReport.editingIndex = afterRecIndex;
-                currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-                newRecordsIndex = afterRecIndex + 1;
-            } else {
-                // add to the top of the array
+            newRecordsIndex = afterRecIndex + 1;
+            newRecords.splice(newRecordsIndex, 0, newRecord);
+        } else {
+            //  set the editing index for new blank rows
+            if (newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
                 currentReport.editingIndex = newRecords.length;
                 currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
-                newRecords.unshift(newRecord);
-                newRecordsIndex = 0;
             }
-
-            // Always make sure to return an editing index so grid can detect the new row
-            currentReport.editingIndex = (currentReport.editingIndex === undefined ? -1 : currentReport.editingIndex);
-
-            reportData.records = newRecords;
-            currentReport.recordsCount++;
-
-            record = newRecords[newRecordsIndex];
-            filtRecord = newFilteredRecords[filteredIndex];
+            // add to the top of the array
+            newRecords.unshift(newRecord);
+            newRecordsIndex = 0;
         }
+
+        reportData.records = newRecords;
+        currentReport.recordsCount++;
+
+        record = newRecords[newRecordsIndex];
+        filtRecord = newFilteredRecords[filteredIndex];
 
         if (newRecId) {
             if (record) {
@@ -451,9 +454,11 @@ function addRecordToGroupedReport(currentReport, content) {
             afterRecIndex = ReportUtils.findRecordIndex(reportData.filteredRecords, content.afterRecId, reportData.keyField.name);
         }
 
-        //editing index for aggrid to open inline edit
-        currentReport.editingIndex = afterRecIndex;
-        currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+        //editing index for new blank rows
+        if (content.newRecId === SchemaConstants.UNSAVED_RECORD_ID) {
+            currentReport.editingIndex = afterRecIndex;
+            currentReport.editingId = SchemaConstants.UNSAVED_RECORD_ID;
+        }
     }
 
     // set the record id

@@ -1,22 +1,32 @@
 // Karma configuration
 //
-var path = require("path");
-var webpack = require('webpack');
-var nodeModulesPath = path.resolve(__dirname, "node_modules");
-var nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
+let path = require("path");
+let webpack = require('webpack');
+let nodeModulesPath = path.resolve(__dirname, "node_modules");
+let nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
+let testsFile = "tests.webpack.js";
+let testWithCoverage = true;
+let profilePath = path.resolve(__dirname, 'build/chromeDebugPath'); //use to keep debug settings between sessions applied in customLaunchers ChromeWithCustomConfig
+
+if (process.env.KARMA_USE_CUSTOM) {
+    testsFile = "tests.custom.webpack.js";
+}
+if (process.env.KARMA_WITHOUT_COVERAGE) {
+    testWithCoverage = false;
+}
 
 module.exports = function(config) {
     "use strict";
 
-    config.set({
-        //  base path that is used to resolve files, excludes, etc.
+    let newConf = {
+        // base path that is used to resolve files, excludes, etc.
         basePath: "",
 
         frameworks: ["phantomjs-shim", "intl-shim", "es6-shim", "jasmine"],
 
         // list of files/patterns to load and test
         files: [
-            {pattern: "tests.webpack.js"}
+            {pattern:testsFile}
         ],
 
         // list of files to exclude
@@ -24,12 +34,7 @@ module.exports = function(config) {
 
         // add webpack as the preprocessor
         // code coverage against all client react code EXCEPT node modules that we have privately forked
-        preprocessors: {
-            "tests.webpack.js": ["webpack", "sourcemap"],
-            "client-react/src/!(components/node)/**/*.js" : ["coverage"],
-            "reuse/client/src/**/*.js" : ["coverage"],
-            "governance/src/**/*.js" : ["coverage"]
-        },
+        preprocessors: {},
 
         webpack: {
             devtool: "eval",
@@ -99,26 +104,7 @@ module.exports = function(config) {
                         loaders: ["json-loader"]
                     }
                 ],
-                postLoaders: [
-                    { //delays coverage til after tests are run, fixing transpiled source coverage error
-                        test: /\.js$/,
-                        include: [
-                            path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "reuse/client/src"),
-                            path.resolve(__dirname, "componentLibrary/src"),
-                            path.resolve(__dirname, "governance/src")
-                        ],
-                        exclude: [
-                            nodeModulesPath,
-                            nodeComponentsPath,
-                            path.resolve(__dirname, "client-react/test"),
-                            path.resolve(__dirname, "reuse/client/test"),
-                            path.resolve(__dirname, "componentLibrary/test"),
-                            path.resolve(__dirname, "governance/test")
-                        ],
-                        loader: "istanbul-instrumenter"
-                    }
-                ]
+                postLoaders: [],
             },
             plugins: [
                 // Define the build run-time environment.  Configure to run as a PROD build.
@@ -160,27 +146,17 @@ module.exports = function(config) {
                         height: 900
                     }
                 }
+            },
+            'ChromeWithCustomConfig': {
+                base: 'ChromeCanary',
+                options : {
+                },
+                flags: ['--user-data-dir=' + profilePath],
+                displayName: 'Custom Debugging',
             }
         },
-        reporters: ["progress", "mocha", "coverage", "junit"],
+        reporters: ["progress", "mocha", "junit"],
 
-        //  define where the coverage reports live for the client code
-        coverageReporter: {
-            // specify a common output directory
-            dir: "build/reports/client/",
-            reporters: [
-                {type: "lcov", subdir: "coverage"},
-                {type: "text-summary"}    // outputs to the console by default
-            ],
-            check : {
-                global: {
-                    statements: 90,
-                    branches: 60,
-                    functions: 90,
-                    lines: 90
-                }
-            }
-        },
 
         // will be resolved to basePath (in the same way as files/exclude patterns)
         junitReporter : {
@@ -213,5 +189,59 @@ module.exports = function(config) {
             captureConsole: true
         }
 
-    });
+    };
+
+    newConf.preprocessors["" + testsFile] = ["webpack", "sourcemap"];
+
+    if (testWithCoverage) {
+        newConf.preprocessors = Object.assign({}, newConf.preprocessors, {
+            "client-react/src/!(components/node)/**/*.js" : ["coverage"],
+            "reuse/client/src/**/*.js" : ["coverage"],
+            "governance/src/**/*.js" : ["coverage"]
+        });
+        newConf.webpack.module.postLoaders = [
+            { //delays coverage til after tests are run, fixing transpiled source coverage error
+                test: /\.js$/,
+                include: [
+                    path.resolve(__dirname, "client-react/src"),
+                    path.resolve(__dirname, "reuse/client/src"),
+                    path.resolve(__dirname, "componentLibrary/src"),
+                    path.resolve(__dirname, "governance/src")
+                ],
+                exclude: [
+                    nodeModulesPath,
+                    nodeComponentsPath,
+                    path.resolve(__dirname, "client-react/test"),
+                    path.resolve(__dirname, "reuse/client/test"),
+                    path.resolve(__dirname, "componentLibrary/test"),
+                    path.resolve(__dirname, "governance/test")
+                ],
+                loader: "istanbul-instrumenter"
+            }
+        ];
+        //  define where the coverage reports live for the client code
+        newConf.coverageReporter = {
+            // specify a common output directory
+            dir: "build/reports/client/",
+            reporters: [
+                {type: "lcov", subdir: "coverage"},
+                {type: "text-summary"}    // outputs to the console by default
+            ],
+            check : {
+                global: {
+                    statements: 90,
+                    branches: 60,
+                    functions: 90,
+                    lines: 90
+                }
+            }
+        };
+
+        newConf.reporters.push("coverage");
+    }
+    // console.log("testsFile = " + testsFile);
+    // console.log("testWithCoverage = " + testWithCoverage);
+    // console.log("newConf =  \n" + JSON.stringify(newConf));
+    config.set(newConf);
+
 };

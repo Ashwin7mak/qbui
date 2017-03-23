@@ -352,10 +352,10 @@
                 //Make request and return promise
                 var deferred = promise.pending();
                 apiBase.executeRequestRetryable(opts, 3).then(function(resp) {
-                    log.debug('Response for reqInfo ' + reqInfo + ' got success response' + resp);
+                    log.debug('Response for reqInfo ' + reqInfo + ' got success response' + JSON.stringify(resp));
                     deferred.resolve(resp);
                 }).catch(function(error) {
-                    log.debug('Response ERROR! for reqInfo ' + reqInfo + ' got error response' + error);
+                    log.debug('Response ERROR! for reqInfo ' + reqInfo + ' got error response error:' + JSON.stringify(error));
                     deferred.reject(error);
                 });
                 return deferred.promise;
@@ -378,7 +378,8 @@
                             });
                         } else {
                             log.error('Network request failed, no retries left or an unsupported error for retry found');
-                            log.info('Unknown failure mode. Error: ' + JSON.stringify(error) + ' response: ' + JSON.stringify(response));
+                            log.info('Unknown failure mode. Error: ' + JSON.stringify(error) +
+                                    ' opts: ' + JSON.stringify(opts) + ' response: ' + JSON.stringify(response));
                             deferred.reject({error: error, response: transformResponseBodyToJsonObject(response)});
                         }
                     } else {

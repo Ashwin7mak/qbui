@@ -344,7 +344,7 @@ export const ReportToolsAndContent = React.createClass({
     },
 
     render() {
-        if (_.isUndefined(this.props.params) ||
+        if (_.isUndefined(this.props.reportData) ||
             _.isUndefined(this.props.reportData.appId) ||
             _.isUndefined(this.props.reportData.tblId) ||
             (_.isUndefined(this.props.reportData.rptId))
