@@ -6,6 +6,10 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import Icon from '../icon/icon';
 import Loader from 'react-loader';
 
+// IMPORTS FROM CLIENT REACT
+import {I18nMessage} from '../../../../../client-react/src/utils/i18nMessage';
+// IMPORTS FROM CLIENT REACT
+
 import './multiStepDialog.scss';
 
 
@@ -25,9 +29,9 @@ class MultiStepDialog extends React.Component {
 
     renderTitle() {
 
-        return this.props.titles && (
+        return this.props.titleMessages && (
             <Modal.Title>
-                {this.props.titles[this.props.pageIndex]}
+                <I18nMessage message={this.props.titleMessages[this.props.pageIndex]} />
             </Modal.Title>);
     }
 
@@ -65,14 +69,14 @@ class MultiStepDialog extends React.Component {
             <Modal.Footer>
                 <div className="buttons">
                     <span className="spacer"/>
-                    <Button className="cancelButton" onClick={this.cancelClicked}>Cancel</Button>
+                    <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>
 
                     {showPrevious &&
-                        <Button onClick={this.previousClicked}>Previous</Button>}
+                        <Button onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
                     {showNext &&
-                        <Button bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}>Next</Button>}
+                        <Button bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
                     {showFinished &&
-                        <Button bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}>Finished</Button>}
+                        <Button bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}><I18nMessage message="nav.finished"/></Button>}
                 </div>
             </Modal.Footer>
         );

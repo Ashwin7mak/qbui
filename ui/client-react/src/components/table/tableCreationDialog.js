@@ -45,12 +45,8 @@ export class TableCreationDialog extends React.Component {
             (response) => {
                 this.props.hideTableCreationDialog();
 
-                NotificationManager.success(Locale.getMessage("tableCreation.tableCreated"), Locale.getMessage('success'));
-
-                setTimeout(() => {
-                    const tblId = response.data;
-                    WindowLocationUtils.update(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
-                }, 2000);
+                const tblId = response.data;
+                WindowLocationUtils.update(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
                 NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));
@@ -59,7 +55,7 @@ export class TableCreationDialog extends React.Component {
 
     isValid() {
 
-        return /*this.props.tableCreation.edited && */!_.findKey(this.props.tableCreation.tableInfo, (field) => field.validationError);
+        return !_.findKey(this.props.tableCreation.tableInfo, (field) => field.validationError);
     }
 
     getExistingTableNames() {
@@ -76,14 +72,13 @@ export class TableCreationDialog extends React.Component {
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
                                  loading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
-                                 title="New Table"
                                  pageIndex={this.props.tableCreation.dialogPage}
                                  onCancel={this.onCancel}
                                  onPrevious={this.onPrevious}
                                  onNext={this.onNext}
                                  onFinished={this.onFinished}
                                  canProceed={this.isValid()}
-                                 titles={['New Table', 'Get ready to add fields to your table']}>
+                                 titleMessages={["tableCreation.newTablePageTitle", "tableCreation.addFieldsTitle"]}>
 
                 <TableCreationPanel tableInfo={this.props.tableCreation.tableInfo}
                                     tableMenuOpened={this.props.tableMenuOpened}

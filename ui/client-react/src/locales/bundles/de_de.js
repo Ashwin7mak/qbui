@@ -94,6 +94,9 @@ export default {
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
             cancel: "Stornieren",
+            next: "Nächster",
+            previous: "Bisherige",
+            finished: "Fertig",
             new: "Neu"
         },
         field: {
@@ -543,8 +546,25 @@ export default {
             featureNameEmpty: "Feature-Namen dürfen nicht leer sein"
         },
         tableCreation: {
-            tableCreated: "Table created",
-            tableCreationFailed: "Unable to create table"
+            newTablePageTitle: "Neue Tabelle",
+            newTableDescription: "Erstellen Sie eine neue Tabelle, wenn Sie eine neue Art von Informationen sammeln möchten.",
+            newTableTitle: "Nennen Sie Ihren Tisch",
+
+            summaryDescription: "Jedes Bit von Informationen, die Sie sammeln möchten, ist ein Feld.",
+            summaryTitle: "Drag & Drop Felder, die Sie hinzufügen möchten, um Ihre Tabelle auf das Formular. Sie können die Felder in der Reihenfolge anordnen, in der die Leute sie benutzen möchten.",
+
+            addFieldsTitle: "Machen Sie sich bereit, Felder zu Ihrem Tisch hinzuzufügen",
+            tableNameHeading: "Tabellenname",
+            recordNameHeading: "Ein Rekord in der Tabelle heißt a",
+            descriptionHeading: "Beschreibung",
+            iconHeading: "Symbol",
+            suggestedIconsHeading: "Vorgeschlagene Ikonen",
+
+            tableCreated: "Tabelle erstellt",
+            tableCreationFailed: "Unable to create table",
+            validateTableNameEmpty: "Kann keine Tabelle erstellen",
+            validateTableNameExists: "Der Tabellenname muss für diese App eindeutig sein",
+            validateRecordNameEmpty: "Tabellenname darf nicht leer sein",
         }
     }
 };

@@ -2,7 +2,8 @@ import React from 'react';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import TableFieldInput from './tableFieldInput';
-
+import {I18nMessage} from "../../utils/i18nMessage";
+import Locale from '../../locales/locales';
 import Icon, {AVAILABLE_ICON_FONTS} from '../../../../reuse/client/src/components/icon/icon';
 
 import './tableCreationPanel.scss';
@@ -61,7 +62,11 @@ class TableCreationPanel extends React.Component {
             <DropdownButton title={dropdownTitle}
                             id="createTableIconDropdown"
                             onToggle={this.onToggleDropdown}>
-                {iconNames.map((iconName, i) => (<MenuItem key={i} onSelect={() => this.selectIcon(iconName)}>{this.getTableIcon(iconName)}</MenuItem>))}
+                {iconNames.map((iconName, i) => (
+                    <MenuItem key={i}
+                              onSelect={() => this.selectIcon(iconName)}>
+                                    {this.getTableIcon(iconName)}
+                    </MenuItem>))}
             </DropdownButton>);
     }
 
@@ -69,7 +74,10 @@ class TableCreationPanel extends React.Component {
         const iconNames = this.getIconNames();
         return (
             <div className="iconList">
-                {iconNames.map((iconName, i) => <button key={i} onClick={() => this.selectIcon(iconName)}>{this.getTableIcon(iconName)}</button>)}
+                {iconNames.map((iconName, i) => (
+                    <button key={i} onClick={() => this.selectIcon(iconName)}>
+                        {this.getTableIcon(iconName)}
+                    </button>))}
             </div>);
 
     }
@@ -88,16 +96,16 @@ class TableCreationPanel extends React.Component {
         switch (property) {
         case 'name': {
             if (trimmed === '') {
-                validationError = 'Table name must not be empty';
+                validationError = Locale.getMessage('tableCreation.validateTableNameEmpty');
             } else if (this.tableNameExists(trimmed)) {
-                validationError = 'Table name must be unique for this app';
+                validationError = Locale.getMessage('tableCreation.validateTableNameExists');
             }
 
             break;
         }
         case 'tableNoun': {
             if (trimmed === '') {
-                validationError = 'Record name must not be empty';
+                validationError = Locale.getMessage('tableCreation.validateRecordNameEmpty');
             }
             break;
         }
@@ -109,11 +117,11 @@ class TableCreationPanel extends React.Component {
 
         return (<div className="tableField iconSelection">
             <div className="iconChooser">
-                <div className="tableFieldTitle">Icon</div>
+                <div className="tableFieldTitle"><I18nMessage message="tableCreation.iconHeading"/></div>
                 {this.getIconDropdown()}
             </div>
             <div className="suggestedIcons">
-                <div className="tableFieldTitle">Suggested Icons</div>
+                <div className="tableFieldTitle"><I18nMessage message="tableCreation.suggestedIconsHeading"/></div>
                 {this.getSuggestedIcons()}
             </div>
         </div>);
@@ -126,7 +134,6 @@ class TableCreationPanel extends React.Component {
 
     onFocusInput(name) {
         this.props.setEditingProperty(name);
-
     }
 
     onBlurInput() {
@@ -137,11 +144,11 @@ class TableCreationPanel extends React.Component {
         return (
             <div className="tableInfo">
 
-                <div className="description">Create a new table when you want to collect a new type of information.</div>
-                <div className="title">Name your table</div>
+                <div className="description"><I18nMessage message="tableCreation.newTableDescription"/></div>
+                <div className="title"><I18nMessage message="tableCreation.newTableTitle"/></div>
 
                 <div className="sections">
-                    <TableFieldInput title="Table Name"
+                    <TableFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
                                      name="name"
                                      value={this.props.tableInfo.name.value}
                                      onChange={this.updateTableProperty}
@@ -152,7 +159,7 @@ class TableCreationPanel extends React.Component {
                                      hasFocus={this.props.focusOn === "name"}
                                      validationError={this.props.validate ? this.props.tableInfo.name.validationError : null}/>
 
-                    <TableFieldInput title="A record in the table is called a"
+                    <TableFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}
                                      name="tableNoun"
                                      value={this.props.tableInfo.tableNoun.value}
                                      onChange={this.updateTableProperty}
@@ -164,7 +171,7 @@ class TableCreationPanel extends React.Component {
 
                     {this.renderIconSection()}
 
-                    <TableFieldInput title="Description"
+                    <TableFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}
                                      name="description"
                                      value={this.props.tableInfo.description.value}
                                      onChange={this.updateTableProperty}
