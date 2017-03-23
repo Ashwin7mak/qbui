@@ -15,9 +15,10 @@ var mockRes = {
     json: function(result, status) {},
     render: function(path, callback) {},
     clearCookie: function(name, options) {},
-    cookie: function(name, value, options) {}
+    cookie: function(name, value, options) {},
+    redirect : function(path) {}
 };
-var stubLog, stubMockJson, spyRender, spyCookie, spyClearCookie;
+var stubLog, stubMockJson, spyRender, spyCookie, spyClearCookie, spyRedirect;
 
 describe('Validate https response authentication functions', function() {
 
@@ -27,6 +28,7 @@ describe('Validate https response authentication functions', function() {
         spyRender = sinon.spy(mockRes, 'render');
         spyCookie = sinon.spy(mockRes, 'cookie');
         spyClearCookie = sinon.spy(mockRes, 'clearCookie');
+        spyRedirect = sinon.spy(mockRes, 'redirect');
     });
     afterEach(function() {
         stubLog.restore();
@@ -34,6 +36,7 @@ describe('Validate https response authentication functions', function() {
         spyRender.restore();
         spyCookie.restore();
         spyClearCookie.restore();
+        spyRedirect.restore();
     });
 
     it('validate http response 200 json request for signout', function() {
@@ -102,4 +105,40 @@ describe('Validate https response authentication functions', function() {
         assert(spyRender.calledOnce);
     });
 
+    it('validate http response 302 redirect when federating the ticket', function() {
+        var mockFederationReq = {
+            query: {
+                "url" : "team.ns.quickbase.com/qbase/governance/12/users"
+            },
+            headers : {
+                host: "team.quickbase.com"
+            },
+            cookies : {
+                "team_TICKET": "someticketvalue"
+            }
+        };
+
+        authentication.federation(mockFederationReq, mockRes);
+        assert(spyRedirect.calledOnce);
+        assert(spyRedirect.calledWith(mockFederationReq.query.url));
+    });
+
+    it('validate http response 401 when realm ticket is null', function() {
+        var mockFederationReq = {
+            query: {
+                "url" : "team.ns.quickbase.com/qbase/governance/12/users"
+            },
+            headers : {
+                host: "team.quickbase.com"
+            },
+            cookies : {
+                "team_TICKET": null
+            }
+        };
+
+        authentication.federation(mockFederationReq, mockRes);
+        assert.equal(mockRes.httpStatus, 401);
+        assert(spyRedirect.callCount === 0);
+        assert(spyRender.calledOnce);
+    });
 });

@@ -12,7 +12,7 @@
         var viewFilePath = 'signout.html';
         var statusCode = 200;
         var message = "User is signing out";
-        var hostname = (req.headers.host.match(/:/g)) ? req.headers.host.slice(0, req.headers.host.indexOf(":")) : req.headers.host;
+        var hostname = extractHostname(req.headers.host);
         var nsTicketDomain = "." + CommonUrlUtils.getDomain(hostname);
         res.cookie(consts.COOKIES.TICKET, "", {domain: hostname, expires: new Date(0)});
         res.cookie(consts.COOKIES.V2TOV3, "", {domain: hostname, expires: new Date(0)});
@@ -31,6 +31,56 @@
         //res.cookie(cookies.TICKET,  {path: '/'});
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
+
+    /**
+     * Take the TICKET from the <REALMHOST>_TICKET cookies on the <HOSTNAME>.com domain (e.g., quickbase.com)
+     * generated from Legacy Stack NSLoginRedirect endpoint and put it into the TICKET cookie on the
+     * <REALMHOST>.v3.<HOSTNAME>.com domain (e.g., team.v3.quickbase.com)
+     * @param req
+     * @param res
+     */
+    module.exports.federation = function ticketFederation(req, res) {
+        var hostname = extractHostname(req.headers.host)
+        var realmHost  = CommonUrlUtils.getSubdomain(hostname);
+        var legacyTicketCookieName = `${realmHost}_${consts.COOKIES.TICKET}`;
+
+        // Get the Ticket from the realm-specific cookie
+        var ticket = req.cookies[legacyTicketCookieName];
+
+        // Throw a 401 error if we are missing the ticket
+        if (ticket === undefined || ticket === null) {
+            var statusCode = 401;
+            return processAuthentication(req, res, "401.html", statusCode, "Missing Ticket");
+        }
+
+        // Expire the realm-specific cookie
+        res.cookie(legacyTicketCookieName, "",
+            {
+                domain: CommonUrlUtils.getDomain(hostname),
+                expires: new Date(0),
+                httpOnly: true,
+                secure: true
+            });
+
+        // Copy and set the new stack cookie
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        res.cookie(consts.COOKIES.TICKET, ticket,
+            {
+                domain: hostname,
+                expires: tomorrow,
+                httpOnly: true,
+                secure: true
+            });
+
+        var redirectUrl = req.query.url;
+        res.redirect(redirectUrl);
+        log.info({req: req, res:res});
+    };
+
+    function extractHostname(hostname) {
+        return (hostname.match(/:/g)) ? hostname.slice(0, hostname.indexOf(":")) : hostname;
+    }
 
     function processAuthentication(req, res, viewFilePath, statusCode, message) {
         var result = {
