@@ -258,7 +258,8 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
                 ...stateWithViewForm[0],
                 formData: {formMeta: testFormMeta},
-                selectedFields: [1]
+                selectedFields: [1],
+                previouslySelectedField: undefined
             }]);
         });
 

@@ -61,7 +61,7 @@ describe('FieldEditingTools', () => {
 
         deleteButton.simulate('click');
 
-        expect(mockParentProps.removeField).toHaveBeenCalledWith(location);
+        expect(mockParentProps.removeField).toHaveBeenCalledWith(formId, location);
     });
 
     it('has a field preferences button', () => {

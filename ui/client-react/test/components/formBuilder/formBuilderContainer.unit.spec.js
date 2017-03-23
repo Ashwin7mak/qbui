@@ -136,7 +136,7 @@ describe('FormBuilderContainer', () => {
         });
     });
 
-    describe('move field using a keyboard', () => {
+    describe('keyboard navigation for formBuilder', () => {
         it('will toggle the children tab indexes if space is pressed and the tab indexes are not already 0', () => {
             let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}];
             let e = {
@@ -147,6 +147,7 @@ describe('FormBuilderContainer', () => {
             component = mount(<FormBuilderContainer appId={appId}
                                                     forms={forms}
                                                     tblId={tblId}
+                                                    selectedField={selectedField}
                                                     loadForm={mockActions.loadForm}
                                                     toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
                                                     updateForm={mockActions.updateForm} />);
