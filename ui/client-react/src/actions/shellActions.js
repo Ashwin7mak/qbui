@@ -1,8 +1,6 @@
 import * as types from '../actions/types';
 import Breakpoints from '../utils/breakpoints';
 
-// Shell action creators (the Fluxxor navActions.js should be migrated over)
-
 /**
  * Show the trowser
  *

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-//import Fluxxor from 'fluxxor';
+
 import ReportUtils from '../../../utils/reportUtils';
 import serverTypeConsts from '../../../../../common/src/constants';
 import * as query from '../../../constants/query';
@@ -8,8 +8,6 @@ import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
 import {loadDynamicReport} from '../../../actions/reportActions';
 import {CONTEXT} from '../../../actions/context';
-
-//const FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
  * A wrapper for ReportColumnMenuContainer that has a link to the flux stores. Separates presentational from business
@@ -20,7 +18,6 @@ import {CONTEXT} from '../../../actions/context';
  */
 const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
     return React.createClass({
-        //mixins: [FluxMixin],
 
         propTypes: {
             appId: PropTypes.string,
@@ -47,8 +44,6 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
         groupReport(column, asc) {
             if (!this.hasRequiredIds()) {return;}
 
-            //let flux = this.getFlux();
-
             //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
             let sortFid = column.id.toString();
             let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
@@ -64,7 +59,6 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             queryParams[query.NUMROWS_PARAM] = numRows;
             queryParams[query.SORT_LIST_PARAM] = sortListParam;
 
-            //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
             this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
         },
 
@@ -80,8 +74,6 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
                 return;
             }
 
-            //let flux = this.getFlux();
-
             let queryParams = {};
             // for on-the-fly sort selection, this selection will result in removal of old sort order
             // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
@@ -92,7 +84,6 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
             queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-            //flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
             this.props.dispatch(loadDynamicReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams));
         },
 

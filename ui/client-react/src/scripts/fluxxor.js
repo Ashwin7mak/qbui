@@ -24,7 +24,6 @@ export default function getFlux() {
     flux.addActions(appsActions);
     flux.addActions(navActions);
     flux.addActions(facetMenuActions);
-    //flux.addActions(fieldsActions);
     flux.addActions(perfActions);
 
     //to ensure you don't get cascading dispatch errors with Fluxxor
