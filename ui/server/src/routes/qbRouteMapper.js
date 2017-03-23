@@ -1035,7 +1035,7 @@
 
     function createTableComponents(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Create tale components', {req:filterNodeReq(req)});
+        perfLog.init('Create table components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             tablesApi.createTableComponents(req).then(

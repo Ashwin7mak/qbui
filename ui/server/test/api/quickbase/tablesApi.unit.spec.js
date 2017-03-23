@@ -661,7 +661,7 @@ describe("Validate tablesApi", function() {
 
             promise.then(
                 function(response) {
-                    done(new Error("Unexpected success promise return when patchTable failed"));
+                    done(new Error("Unexpected success promise return when replaceTableProperties failed"));
                 },
                 function(error) {
                     done();
