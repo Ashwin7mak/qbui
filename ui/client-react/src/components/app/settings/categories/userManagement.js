@@ -6,6 +6,7 @@ import * as Table from 'reactabular-table';
 import QbHeaderCell from '../../../dataTable/qbGrid/qbHeaderCell';
 import QbRow from '../../../dataTable/qbGrid/qbRow';
 import QbCell from '../../../dataTable/qbGrid/qbCell';
+import EmailFieldValueRenderer from '../../../fields/emailFieldValueRenderer';
 import '../../../dataTable/qbGrid/qbGrid.scss';
 import './userManagement.scss';
 
@@ -29,6 +30,7 @@ class UserManagement extends React.Component {
     }
 
     createUserColumns(cellFormatter) {
+        const cellFormatterEmail = (cellData) => {return <EmailFieldValueRenderer value={cellData} display={cellData}/>;};
         let columns = [
             {
                 property: 'name',
@@ -49,12 +51,12 @@ class UserManagement extends React.Component {
                 header: {
                     label: 'Email'
                 },
-                cell: {formatters: [cellFormatter]}
+                cell: {formatters: [cellFormatterEmail]}
             },
             {
                 property: 'screenName',
                 header: {
-                    label: 'User Name'
+                    label: 'User name'
                 },
                 cell: {formatters: [cellFormatter]}
             }

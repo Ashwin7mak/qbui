@@ -1,0 +1,87 @@
+@import "../../assets/css/_qbVariables";
+@import "./sideMenuMixins";
+
+.sideMenuBase {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    &:not(.sideMenuDocked) .sideMenuMain {
+        @include menuShadow;
+    }
+
+    .sideMenuMain {
+        overflow: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh; // Ensures that long content can be scrolled on all browsers
+        z-index: 1;
+
+        background-color: $page-background-color;
+
+        transform: translateX(0);
+
+        &.sideMenuOpen:not(.sideMenuPullRight):not(.sideMenuDocked) {
+            @include moveMenuToLeft;
+        }
+
+        &.sideMenuOpen.sideMenuPullRight:not(.sideMenuDocked) {
+            @include moveMenuToRight;
+        }
+
+        &.sideMenuOpen.sideMenuCollapsed:not(.sideMenuPullRight):not(.sideMenuDocked) {
+            transform: translateX($leftNav-width-collapsed);
+        }
+
+        &.sideMenuOpen.sideMenuCollapsed.sideMenuPullRight:not(.sideMenuDocked) {
+            transform: translateX(-$leftNav-width-collapsed);
+        }
+
+        transition: transform 0.5s;
+    }
+
+    .sideMenuContent {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        &.sideMenuPullRight {
+            left: auto;
+            right: 0;
+        }
+
+        padding: $spacing-small;
+        overflow: auto;
+        background-color: $color-black-300;
+        z-index: 0;
+        height: 100vh; // Ensures that long content can be scrolled on all browsers
+
+        @include baseMenuWidths;
+
+        &.sideMenuCollapsed {
+            min-width: $leftNav-width-collapsed;
+        }
+
+        transition: min-width 0.5s;
+    }
+
+    &.sideMenuDocked {
+        display: flex;
+
+        &.sideMenuPullRight {
+            flex-direction: row-reverse;
+        }
+
+        .sideMenuMain {
+            position: relative;
+            flex: 1 auto;
+        }
+
+        .sideMenuContent {
+            position: relative;
+            flex: 0;
+        }
+    }
+}

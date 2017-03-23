@@ -29,7 +29,7 @@ export default {
             },
             settings: "Paramètres",
             users: {
-                addUser: "Ajouter un utilisateur à l'application",
+                addUser: "L'ajout d'un nouvel utilisateur n'est pas encore disponible",
                 users: "Utilisateurs"
             }
         },

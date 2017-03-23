@@ -29,7 +29,7 @@ export default {
             },
             settings: "Einstellungen",
             users: {
-                addUser: "Benutzer zur App hinzufügen",
+                addUser: "Das Hinzufügen eines neuen Benutzers ist noch nicht verfügbar",
                 users: "Benutzer"
             }
         },

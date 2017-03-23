@@ -22,6 +22,11 @@
     ];
 
     //  mercury v1
+    /**
+     * These routes are disabled in the prod environment. If you are getting an unexpected 404 error in prod you can:
+     * A) Enable that HTTP verb for all routes to that endpoint by modifying the wildcard routes (e.g., TOMCAT_ALL, EXPERIENCE_ENGINE_ALL)
+     * B) Enabled a specific subset of routes by defining the specific route in both routeConstants and qbRouteMapper.
+     */
     routeGroupDisabled[routeGroups.LH_V1] = [
         {route: routeConsts.FEATURE_STATES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.FEATURE_SWITCHES, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
