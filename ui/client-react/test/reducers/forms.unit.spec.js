@@ -76,37 +76,43 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns correct state when load succeeds', () => {
-            let formData = {formMeta: {appId: 'appId', tableId: 'tblId'}};
-            let appId = 'banana';
-            let tblId = 'apple';
+            let currentAppId = 'appId';
+            let currentblId = 'tblId';
+            let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
+            /**
+             * This test checks to be sure the actual appId and tblId from the response are
+             * the ones being used. So here I made the backup id's different for testing purposes.
+             * */
+            let backUpAppId = 'banana';
+            let backUpTblId = 'apple';
             let loadingFormState = [{
                 id: 'view',
                 loading: true,
                 errorStatus: null
             }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId, tblId})).toDeepEqual([{
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, backUpAppId, backUpTblId})).toDeepEqual([{
                 id: 'view',
                 loading: false,
-                formData: {formMeta: {appId: appId, tableId: tblId}},
+                formData: {formMeta: {appId: currentAppId, tableId: currentblId}},
                 errorStatus: null
             }]);
         });
 
         it('returns correct appId and tableId if they are missing', () => {
             let formData = {formMeta: {appId: null, tableId: null}};
-            let appId = 'banana';
-            let tblId = 'apple';
+            let backUpAppId = 'banana';
+            let backuUpTblId = 'apple';
             let loadingFormState = [{
                 id: 'view',
                 loading: true,
                 errorStatus: null
             }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId, tblId})).toDeepEqual([{
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, backUpAppId, backuUpTblId})).toDeepEqual([{
                 id: 'view',
                 loading: false,
-                formData: {formMeta: {appId: appId, tableId: tblId}},
+                formData: {formMeta: {appId: backUpAppId, tableId: backuUpTblId}},
                 errorStatus: null
             }]);
         });
@@ -289,3 +295,6 @@ describe('Forms reducer functions', () => {
 
     });
 });
+
+// [ Object({ id: 'view', formData: Object({ formMeta: Object({ appId: 'appId', tableId: 'tblId' }) }), loading: false, errorStatus: null }) ]
+// [ Object({ id: 'view', formData: Object({ formMeta: Object({ appId: 'banana', tableId: 'apple' }) }), loading: false, errorStatus: null }) ]
