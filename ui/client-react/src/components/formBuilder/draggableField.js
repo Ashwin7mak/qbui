@@ -74,12 +74,12 @@ const DraggableFieldHoc = FieldComponent => {
         }
 
         render() {
-            const {connectDragSource, isDragging, location, isFormElementSelected} = this.props;
+            const {connectDragSource, isDragging, location, selectedField} = this.props;
 
             let classNames = ['draggableField'];
             let draggableFieldWrapper = ['draggableFieldWrapper'];
             classNames.push(isDragging ? 'dragging' : 'notDragging');
-            if (_.isEqual(location, isFormElementSelected)) {
+            if (_.isEqual(location, selectedField)) {
                 draggableFieldWrapper.push('selectedFormElement');
             }
 
