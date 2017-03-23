@@ -138,6 +138,7 @@
         var routeToAllFunction = {};
         routeToAllFunction[routeConsts.TOMCAT_ALL] = forwardApiRequest;
         routeToAllFunction[routeConsts.EXPERIENCE_ENGINE_ALL] = forwardExperienceEngineApiRequest;
+        routeToAllFunction[routeConsts.EE_FORMS] = forwardExperienceEngineApiRequest;
 
         /*** public data ****/
         return {
