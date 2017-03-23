@@ -99,6 +99,10 @@ export const FormBuilderContainer = React.createClass({
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
     },
 
+    onCancel() {
+        AppHistory.history.goBack();
+    },
+
     saveClicked() {
         // get the form meta data from the store..hard code offset for now...this is going to change..
         if (this.props.forms && this.props.forms.length > 0 && this.props.forms[0].formData) {
@@ -152,10 +156,6 @@ export const FormBuilderContainer = React.createClass({
         if (this.props.selectedField && this.props.selectedField.elementIndex < this.props.forms[0].formData.formMeta.fields.length - 1) {
             this.props.keyboardMoveFieldDown(this.props.forms[0].id, this.props.selectedField);
         }
-    },
-
-    onCancel() {
-        AppHistory.history.goBack();
     },
 
     escapeCurrentContext() {
