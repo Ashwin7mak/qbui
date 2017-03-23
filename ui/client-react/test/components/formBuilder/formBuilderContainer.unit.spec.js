@@ -210,7 +210,7 @@ describe('FormBuilderContainer', () => {
                 forms={currentForm}
                 location={location}
                 selectedFields={[location]}
-                keyBoardMoveFieldUp={mockActions.keyBoardMoveFieldUp}
+                keyBoardMoveFieldUp={mockActions.keyboardMoveFieldUp}
             />);
 
             instance = component.instance();
