@@ -1,5 +1,5 @@
 
-#QuickBase UI
+# QuickBase UI
 
 The QuickBase ui project is the ui layer of the QuickBase application. It is an Node.js pass thru API server to the java backend as well as a React frontend.
 
@@ -13,11 +13,11 @@ see also:
 [QBUI project File structure](FILESSTRUCTURE.md)
 
 
-##Knowledge Prerequisites
+## Knowledge Prerequisites
 Writing Javascript, Node.js, React
 
 
-##Pre-installation
+## Pre-installation
 
 FIRST - Do all the Quickbase java backend development [setup instructions](https://github.com/QuickBase/QuickBase/blob/master/README.md) so that you have installed
 
@@ -32,7 +32,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
   * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
 * Java and Tomcat to run the backend
 
-##Installing
+## Installing
 
 To avoid permission issues caused by installing npm modules globally, you can either 1) [install NVM](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-via-nvm) (on Mac) OR 2) [install node and configure](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-and-configure-global-node-modules) where node installs global npm modules.
 
@@ -89,21 +89,21 @@ to automatically switch to the correct version of Node.
 
 #### Install Node and configure global node modules
 
-* Install node.js (v6.9.5, as of 3/1/2016) via nvm 
+1. Install node.js (v6.9.5, as of 3/1/2016) via nvm 
 
 
-* Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
+2. Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
 
     ```
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     ```
-* Install grunt with npm
+3. Install grunt with npm
     ``` bash
     npm install -g grunt
     npm install -g grunt-cli
     ```
 
-* **qbui** project uses npm as its *package managers* and Grunt as its *task runner*.
+4. **qbui** project uses npm as its *package managers* and Grunt as its *task runner*.
 
     The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
@@ -112,7 +112,7 @@ to automatically switch to the correct version of Node.
     Grunt tasks are defined in the Gruntfile.js
 
 
-* Then get the qbui project repo
+5. Then get the qbui project repo
 
     ```
     git clone -b master ssh://git@github.com/quickbase/qbui.git
@@ -125,7 +125,21 @@ to automatically switch to the correct version of Node.
 
     *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
-##Configuring
+6. Last step is to install all the npm modules.
+
+First, you'll most likely need to amend the `.npmrc` file located in the `/<project root>/qbui/ui` folder.
+
+Comment out the following line:
+```
+;registry = https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/npmjs/
+```
+
+Now `cd` into the `/<project root>/qbui/ui` directory and run
+```
+npm install
+```
+
+## Configuring
 Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
 
 For developing set this environment variable in your bash profile
@@ -160,11 +174,7 @@ The following run-time environment variable is supported:
         will load the test.js file for configuration, default is local.js
 
 
-##Instructions to run server and watch for changes
-
-* `cd` to the \<project root\>qbui/ui directory.
-
-* run 'npm install' to install node modules
+## Instructions to run server and watch for changes
 
 * To launch the node web server (express) and it will update server as you make edits run
 
@@ -173,13 +183,13 @@ The following run-time environment variable is supported:
 * Current urls supported
     * http://localhost:9000/
 
-###Note :
+### Note :
  The Node Server only listen via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
 
 ## Testing
 cd to <project root>/qbui/ui directory
-###Lint and Code Style tests
+### Lint and Code Style tests
 Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
 * Linting check [ESLint](http://eslint.org/docs/rules/) -
@@ -220,7 +230,7 @@ Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. 
 
 
 
-###Unit tests
+### Unit tests
 Running `grunt test` will run the client and server unit tests with karma and mocha as well as the codeStandards.
 
 Use `grunt test:server` to only run server tests.
@@ -230,7 +240,7 @@ Use `grunt test:client` to only run client tests.
 Note: If you see a `Cannot find module './build/Release/DTraceProviderBindings'] code: 'MODULE_NOT_FOUND'` in the log from unit test run ` npm install bunyan ` to fix
 
 
-###Mocha Integration tests
+### Mocha Integration tests
 
 In order to run the integration tests you will need to have your Node.js express server and your Java API service running
 
@@ -297,7 +307,7 @@ With the Java API service running, from the qbui/ui directory run:
 
 Note that this command will launch your Node express server if it's not running.
 
-###WebdriverIO E2E tests
+### WebdriverIO E2E tests
 
 To setup WebdriverIO for browser end to end tests, follow the **README.md** setup guide in the `qbui/ui/wdio` directory. Make sure to check out the **NEWBIEGUIDE.md** as well!
 
@@ -325,7 +335,7 @@ For all of the browser capabilities check out:
 and
 [https://www.browserstack.com/automate/capabilities](https://www.browserstack.com/automate/capabilities)
 
-##Using Gradle to build distribution node server
+## Using Gradle to build distribution node server
 Gradle is used to build a production version of the node server and client application.
 
 Output from the Gradle Build and Test task is saved under the /build folder.
@@ -358,7 +368,7 @@ To run the production distribution node server:
         NODE_ENV=prod node server/src/app.js
         NODE_ENV=prod npm start
 
-##Running with Forever
+## Running with Forever
 To start a node server with forever which ensures that a given node script runs continuously:
 
         NODE_ENV=prod PORT=9000 node_modules/forever/bin/forever start server/src/app.js
@@ -373,7 +383,7 @@ other forever options
     -o  OUTFILE      Logs stdout from child script to OUTFILE
     -e  ERRFILE      Logs stderr from child script to ERRFILE
 
-##Running NODE UI server code with SSL
+## Running NODE UI server code with SSL
 By default, the express server will only accept http requests. To also accept https requests, the following setup is required.
 
 CREATE CERTS:
@@ -448,14 +458,14 @@ To stop or not accept SSL requests, comment out/remove the SSL_KEY object in you
 
 
 
-##Access REST endpoints over SSL
+## Access REST endpoints over SSL
 Update the javahost run-time configuration parameter to use the https protocol and appropriate port.  For example, include the following
 setting in the local.env.js file:
 
     //REST endpoint (protocol,server,port)
     javaHost: 'https://localhost.com:8443'
 
-##Accessing your development environment from another laptop or device
+## Accessing your development environment from another laptop or device
 
 To access your development environment from another laptop or device, you need to disable the
 hotloader. Edit local.js, and uncomment the line for the "noHotLoad" property.
@@ -510,7 +520,7 @@ hotloader only opens up node on port 9000 to other devices. Other services
 (such as core on port 8080 or Experience Engine on port 8081) are always open to
 all devices on the network and aren't affected by the hotloader settings.
 
-##Troubleshooting
+## Troubleshooting
 POSSIBLE ISSUES -- and how to resolve
 
 1. First, since the ui has dependencies on the java backend make sure:
@@ -541,7 +551,7 @@ POSSIBLE ISSUES -- and how to resolve
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
 
-##Other Resources
+## Other Resources
 
 * Links for learning Node, react, etc - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
 
