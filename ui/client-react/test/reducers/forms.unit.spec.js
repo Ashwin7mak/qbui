@@ -75,7 +75,7 @@ describe('Forms reducer functions', () => {
             }]);
         });
 
-        fit('returns correct state when load succeeds', () => {
+        it('returns correct state when load succeeds', () => {
             let currentAppId = 'appId';
             let currentblId = 'tblId';
             let formData = {formMeta: {appId: currentAppId, tableId: currentblId}};
@@ -99,7 +99,7 @@ describe('Forms reducer functions', () => {
             }]);
         });
 
-        fit('returns correct appId and tableId if they are missing', () => {
+        it('returns correct appId and tableId if they are missing', () => {
             let formData = {formMeta: {appId: null, tableId: null}};
             let backUpAppId = 'banana';
             let backUpTblId = 'apple';
