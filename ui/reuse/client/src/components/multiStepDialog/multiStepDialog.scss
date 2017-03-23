@@ -3,18 +3,21 @@
 .multiStepModal {
 
     .modal-content {
-        border-radius: 0;
+        border-radius: $radius-base;
 
         .rightIcons {
             font-size: 18px;
             position: absolute;
-            right: $spacing-x-small;
-            top: $spacing-x-small;
+            right: 15px;
+            top: 15px;
             color: $iconfont-on-light-alternate-color;
             button {
                 padding-left: 8px;
                 border: 0;
                 background: initial;
+                &:hover {
+                    color: $color-black-500;
+                }
             }
         }
     }
@@ -28,6 +31,7 @@
 
     .modal-body {
         padding: $spacing-x-small;
+        padding-top: 10px;
         padding-left: $spacing-medium1;
     }
 
@@ -38,6 +42,7 @@
     }
 
     .modal-footer {
+        border-top: 0;
         .buttons {
             display: flex;
 
