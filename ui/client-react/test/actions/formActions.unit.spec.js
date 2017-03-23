@@ -402,6 +402,17 @@ describe('Form Actions', () => {
         });
     });
 
+    describe('deselectField', () => {
+        it('creates an action that deselects a form element', () => {
+            expect(formActions.deselectField('view', 1)).toEqual({
+                id: 'view',
+                type: types.DESELECT_FIELD,
+                content: {
+                    location: 1
+                }});
+        });
+    });
+
     describe('removeFieldFromForm', () => {
         it('creates an action that will remove a field', () => {
             expect(formActions.removeFieldFromForm('view', 1)).toEqual({
