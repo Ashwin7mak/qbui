@@ -223,20 +223,20 @@ describe('FormBuilderContainer', () => {
         it('will not move a field up if the selected form element is at index 0', () => {
             const locationAtIndexZero = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 0};
 
-            spyOn(mockActions, 'keyBoardMoveFieldUp');
+            spyOn(mockActions, 'keyboardMoveFieldUp');
 
             component = shallow(<FormBuilderContainer
                 forms={currentForm}
                 location={locationAtIndexZero}
                 selectedField={locationAtIndexZero}
-                keyBoardMoveFieldUp={mockActions.keyBoardMoveFieldUp}
+                keyBoardMoveFieldUp={mockActions.keyboardMoveFieldUp}
             />);
 
             instance = component.instance();
 
             instance.keyboardMoveFieldUp();
 
-            expect(mockActions.keyBoardMoveFieldUp).not.toHaveBeenCalled();
+            expect(mockActions.keyboardMoveFieldUp).not.toHaveBeenCalled();
         });
 
         it('will move a field down if the selected form element is not located at the last index', () => {
