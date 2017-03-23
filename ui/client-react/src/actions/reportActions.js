@@ -234,6 +234,7 @@ const parseAndLogError = (context, dispatch) =>
             error = error.response || error;
             logger.parseAndLogError(LogLevel.ERROR, error, errorString);
             dispatch(event(context, action, error));
+            // reject the promise to prevent bluebird from swallowing the error
             return Promise.reject();
         };
 
@@ -323,7 +324,7 @@ export const loadReportRecordsCount = (context, appId, tblId, rptId, queryParams
     // (this is permitted when we're using redux-thunk middleware which invokes the store dispatch)
     return (dispatch) => {
         if (appId && tblId && rptId) {
-            logger.debug(`Loading records count for appId: ${appId}, tblId:${tblId}, rptId:${rptId}`);
+            logger.debug(`Loading records count for appId: ${appId}, tblId:${tblId}, rptId:${rptId}, queryParams:${JSON.stringify(queryParams)}`);
 
             const reportService = new ReportService();
             return reportService.getReportRecordsCount(appId, tblId, rptId, queryParams).then((response) => {

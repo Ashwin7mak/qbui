@@ -68,6 +68,11 @@ describe('Test ReportsActions function success workflow', () => {
             something: ''
         }
     };
+    let mockCountResult = {
+        data: {
+            body: 3
+        }
+    };
 
     class mockReportService {
         getReports() {
@@ -81,6 +86,9 @@ describe('Test ReportsActions function success workflow', () => {
         }
         getDynamicReportResults() {
             return Promise.resolve(mockReportResultsResponse);
+        }
+        getReportRecordsCount() {
+            return Promise.resolve(mockCountResult);
         }
     }
 
@@ -160,6 +168,25 @@ describe('Test ReportsActions function success workflow', () => {
                 done();
             });
     });
+
+    it('loadReportRecordsCount action dispatches type:LOAD_REPORT_RECORDS_COUNT_SUCCESS with number of records', (done) => {
+        // the mock store makes the actions dispatched available via getActions()
+        // so we don't need to spy on the dispatcher etc.
+        const expectedActions = [
+            event(context, types.LOAD_REPORT_RECORDS_COUNT_SUCCESS, jasmine.any(Number))
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.loadReportRecordsCount(context, appId, tblId, rptId)).then(
+            () => {
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            },
+            () => {
+                expect(false).toBe(true);
+                done();
+            });
+    });
 });
 
 describe('Test ReportsActions function failure workflow', () => {
@@ -183,6 +210,9 @@ describe('Test ReportsActions function failure workflow', () => {
             return Promise.resolve(mockFacetResult);
         }
         getDynamicReportResults() {
+            return Promise.reject(mockErrorResponse);
+        }
+        getReportRecordsCount() {
             return Promise.reject(mockErrorResponse);
         }
     }
@@ -317,6 +347,25 @@ describe('Test ReportsActions function failure workflow', () => {
             },
             () => {
                 expect(mockReportService.prototype.getDynamicReportResults.calls.count()).toEqual(0);
+                expect(store.getActions()).toEqual(expectedActions);
+                done();
+            });
+    });
+
+    it('loadReportRecordsCount action dispatches LOAD_REPORT_RECORDS_COUNT_FAILED when request fails', (done) => {
+        // the mock store makes the actions dispatched available via getActions()
+        // so we don't need to spy on the dispatcher etc.
+        const expectedActions = [
+            event(context, types.LOAD_REPORT_RECORDS_COUNT_FAILED, 'error')
+        ];
+        const store = mockReportsStore({});
+
+        return store.dispatch(reportActions.loadReportRecordsCount(context, appId, tblId, rptId)).then(
+            () => {
+                expect(false).toBe(true);
+                done();
+            },
+            () => {
                 expect(store.getActions()).toEqual(expectedActions);
                 done();
             });
