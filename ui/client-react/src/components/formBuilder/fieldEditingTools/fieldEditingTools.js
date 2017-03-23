@@ -148,7 +148,7 @@ export class FieldEditingTools extends Component {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let classNames = ['fieldEditingTools'];
         let isTouch = Device.isTouch();
-        
+
         if (isTouch && !isSmall) {
             classNames.push('isTablet');
         } else if (!isTouch) {

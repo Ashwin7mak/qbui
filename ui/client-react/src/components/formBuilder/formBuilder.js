@@ -20,7 +20,7 @@ export class FormBuilder extends Component {
         super(props);
 
         this.state = {
-            hasAnimation: false,
+            hasAnimation: false
         };
 
         this.elementCache = null;
