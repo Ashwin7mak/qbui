@@ -28,6 +28,8 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'loadForm');
         spyOn(mockActions, 'updateForm');
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
+        spyOn(mockActions, 'keyboardMoveFieldUp');
+        spyOn(mockActions, 'keyboardMoveFieldDown');
     });
 
     describe('load form data', () => {
@@ -203,8 +205,6 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will move a field up if the selected form element is not at index 0', () => {
-            spyOn(mockActions, 'keyboardMoveFieldUp');
-
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
                 forms={currentForm}
@@ -223,8 +223,6 @@ describe('FormBuilderContainer', () => {
         it('will not move a field up if the selected form element is at index 0', () => {
             const locationAtIndexZero = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 0};
 
-            spyOn(mockActions, 'keyboardMoveFieldUp');
-
             component = shallow(<FormBuilderContainer
                 forms={currentForm}
                 location={locationAtIndexZero}
@@ -241,8 +239,6 @@ describe('FormBuilderContainer', () => {
 
         it('will move a field down if the selected form element is not located at the last index', () => {
             let currentFormData = [{formData: {formMeta: {fields:[1, 2, 3, 4, 5, 6]}}, id: 'view'}];
-
-            spyOn(mockActions, 'keyboardMoveFieldDown');
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
@@ -261,8 +257,6 @@ describe('FormBuilderContainer', () => {
 
         it('will not move a field down if the selected form element is greater than the last index', () => {
             let currentFormData = [{formData: {formMeta: {fields: [1, 2, 3, 4]}}, id: 'view'}];
-
-            spyOn(mockActions, 'keyboardMoveFieldDown');
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}

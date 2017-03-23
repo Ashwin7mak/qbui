@@ -124,7 +124,7 @@ describe('FieldEditingTools', () => {
         expect(selectedFormElement).not.toBePresent();
     });
 
-    it('scrolls into view when the selectedFormElement is at the bottom of the page of the page', () => {
+    it('scrolls into view when the selectedFormElement is at the bottom of the page', () => {
         let container = {
             height: 1500,
             top: 100
@@ -166,7 +166,7 @@ describe('FieldEditingTools', () => {
         expect(instance.scrollElementIntoView).toHaveBeenCalled();
     });
 
-    it('will not scroll into view when the selectedFormElement is at the top of the page', () => {
+    it('will not scroll into view when the selectedFormElement is already in view', () => {
         let container = {
             height: 50,
             top: 50
@@ -247,6 +247,9 @@ describe('FieldEditingTools', () => {
         expect(instance.onClickField).not.toHaveBeenCalled();
     });
 
+    /**
+     * This allows enter to click on buttons inside of a field
+     * */
     it('will not select a field when the field is already selected', () => {
         let e = {
             which: 13
