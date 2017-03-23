@@ -289,7 +289,3 @@ describe('Forms reducer functions', () => {
 
     });
 });
-
-//
-// [ Object({ id: 'view', loading: false, formData: Object({ formMeta: Object({ appId: 'banana', tableId: 'apple' }) }), errorStatus: null }) ]
-// [ Object({ id: 'view', loading: false, formData: Object({ formMeta: Object({ appId: 'banana', tblId: 'apple' }) }), errorStatus: null }) ]
