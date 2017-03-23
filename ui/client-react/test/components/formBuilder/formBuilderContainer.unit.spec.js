@@ -15,7 +15,7 @@ const mockActions = {
     loadForm() {},
     updateForm() {},
     toggleFormBuilderChildrenTabIndex() {},
-    keyBoardMoveFieldUp(_formId, _location) {},
+    keyboardMoveFieldUp(_formId, _location) {},
     keyboardMoveFieldDown(_formId, _location) {}
 };
 
@@ -203,21 +203,21 @@ describe('FormBuilderContainer', () => {
         });
 
         it('will move a field up if the selected form element is not at index 0', () => {
-            spyOn(mockActions, 'keyBoardMoveFieldUp');
+            spyOn(mockActions, 'keyboardMoveFieldUp');
 
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
                 forms={currentForm}
                 location={location}
                 selectedFields={[location]}
-                keyBoardMoveFieldUp={mockActions.keyboardMoveFieldUp}
+                keyboardMoveFieldUp={mockActions.keyboardMoveFieldUp}
             />);
 
             instance = component.instance();
 
             instance.keyboardMoveFieldUp();
 
-            expect(mockActions.keyBoardMoveFieldUp).toHaveBeenCalledWith(currentForm[0].id, selectedField);
+            expect(mockActions.keyboardMoveFieldUp).toHaveBeenCalledWith(currentForm[0].id, selectedField);
         });
 
         it('will not move a field up if the selected form element is at index 0', () => {
