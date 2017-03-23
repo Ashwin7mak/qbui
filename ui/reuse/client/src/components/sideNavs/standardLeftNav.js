@@ -5,6 +5,7 @@ import FlipMove from 'react-flip-move';
 import SideMenuBase from '../sideMenuBase/sideMenuBase';
 import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
+import NavItem from '../navItem/navItem';
 
 // CLIENT REACT IMPORTS
 import {LEFT_NAV_BAR} from '../../../../../client-react/src/constants/spinnerConfigurations';
@@ -81,9 +82,9 @@ class StandardLeftNav extends Component {
                 {this.renderContextHeader()}
 
                 <Loader loadedClassName="standardLeftNavItems" loaded={!showLoadingIndicator} options={LEFT_NAV_BAR}>
-                    <FlipMove>
-                        {navItems.forEach(navItem => (
-                            <div className="standardLeftNavItem"></div>
+                    <FlipMove typeName="ul" className="standardLeftNavItemsList">
+                        {navItems.map((navItem, index) => (
+                            <NavItem key={index} item={{id: 1, msg: 'test.testMsg', name: 'testName', icon: 'users', link: 'governance'}} showSecondary={true} secondaryIcon="settings" />
                         ))}
                     </FlipMove>
                 </Loader>

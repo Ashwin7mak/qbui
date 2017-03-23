@@ -1,6 +1,9 @@
 @import "../../assets/css/qbVariables";
 
 .standardLeftNav {
+    background-color: $leftnav-background-color;
+    border-right: 1px solid $leftnav-background-stroke-color;
+    color: $color-black-700;
     display: flex;
     flex-direction: column;
 
