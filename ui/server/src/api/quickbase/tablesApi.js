@@ -202,11 +202,11 @@
                             resolve(JSON.parse(response.body));
                         },
                         (error) => {
-                            log.error({req: req}, "tablesApi.replaceTableProperties(): Error replacing table on core");
+                            log.error({req: req}, "tablesApi.replaceTableProperties(): Error replacing tableprops on EE");
                             reject(error);
                         }
                     ).catch((ex) => {
-                        requestHelper.logUnexpectedError('tablesApi.replaceTableProperties(): unexpected error replacing table on core', ex, true);
+                        requestHelper.logUnexpectedError('tablesApi.replaceTableProperties(): unexpected error replacing tableprops on EE', ex, true);
                         reject(ex);
                     });
                 });
@@ -279,8 +279,8 @@
                                                     resolve(tableId);
                                                 },
                                                 (error) => {
-                                                    this.deleteTable(req, tableId);
                                                     this.deleteTableProperties(req, tableId);
+                                                    this.deleteTable(req, tableId);
                                                     reject(error);
                                                 }
                                             );
@@ -329,7 +329,6 @@
                         let tableReq = _.clone(req);
                         tableReq.rawBody = JSON.stringify({name: reqPayload.name});
                         tableReq.headers[constants.CONTENT_LENGTH] = tableReq.rawBody.length;
-                        tableReq.method = 'patch';
                         promises.push(this.patchTable(tableReq, req.params.tableId));
                     }
 
@@ -338,6 +337,15 @@
                     tableProperReq.headers[constants.CONTENT_LENGTH] = tableProperReq.rawBody.length;
                     tableProperReq.method = 'put';
                     promises.push(this.replaceTableProperties(tableProperReq, req.params.tableId));
+
+                    Promise.all(promises).then(
+                        (response) => {
+                            resolve();
+                        },
+                        (error) => {
+                            reject(error);
+                        }
+                    );
                 });
             }
         };
