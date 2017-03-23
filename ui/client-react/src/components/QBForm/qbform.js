@@ -465,13 +465,13 @@ let QBForm = React.createClass({
     isEditingForm(formContent) {
         if (this.props.editingForm) {
             return (
-                <form className={this.props.edit ? 'editForm' : 'viewForm'} tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
+                <form className={"editForm"} tabIndex="0" role="button" onKeyDown={this.props.formBuilderUpdateChildrenTabIndex}>
                     {formContent}
                 </form>
             );
         } else {
             return (
-                <form className='viewForm'>
+                <form className="viewForm">
                     {formContent}
                 </form>
             );
