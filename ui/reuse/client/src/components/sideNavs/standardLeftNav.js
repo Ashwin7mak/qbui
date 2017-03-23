@@ -2,8 +2,9 @@ import React, {PropTypes, Component} from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Loader from 'react-loader';
 import FlipMove from 'react-flip-move';
-import Icon from '../icon/icon';
 import SideMenuBase from '../sideMenuBase/sideMenuBase';
+import Icon from '../icon/icon';
+import Tooltip from '../tooltip/tooltip';
 
 // CLIENT REACT IMPORTS
 import {LEFT_NAV_BAR} from '../../../../../client-react/src/constants/spinnerConfigurations';
@@ -17,8 +18,9 @@ class StandardLeftNav extends Component {
     constructor(props) {
         super(props);
 
-        this.renderContextHeader = this.renderContextHeader.bind(this);
         this.onClickContextHeader = this.onClickContextHeader.bind(this);
+        this.renderContextHeaderTitle = this.renderContextHeaderTitle.bind(this);
+        this.renderContextHeader = this.renderContextHeader.bind(this);
         this.renderNavContent = this.renderNavContent.bind(this);
     }
 
@@ -28,14 +30,42 @@ class StandardLeftNav extends Component {
         }
     }
 
+    getMaxLengthBeforeTooltip() {
+        if (Breakpoints.isLargeBreakpoint() || Breakpoints.isXLargeBreakpoint()) {
+            return 23;
+        } else if (Breakpoints.isMediumBreakpoint()) {
+            return 15;
+        } else {
+            return 13;
+        }
+    }
+
+    renderContextHeaderTitle() {
+        const {contextHeaderTitle} = this.props;
+
+        let contextHeaderTitleElement = <span className="contextHeaderTitle">{contextHeaderTitle}</span>;
+
+        console.log(`title legnth: ${contextHeaderTitle.length}`);
+        console.log(`max: ${this.getMaxLengthBeforeTooltip()}`);
+        if (contextHeaderTitle.length > this.getMaxLengthBeforeTooltip()) {
+            return (
+                <Tooltip plainMessage={contextHeaderTitle} location="bottom">{contextHeaderTitleElement}</Tooltip>
+            );
+        }
+
+        return contextHeaderTitleElement;
+    }
+
     renderContextHeader() {
-        const {showContextHeader, contextHeaderIcon, contextHeaderTitle, showContextHeaderToggle, isContextToggleDown} = this.props;
+        const {showContextHeader, contextHeaderIcon, showContextHeaderToggle, isContextToggleDown} = this.props;
 
         return (
             <div className={`contextHeader ${showContextHeader ? '' : 'contextHeaderCollapsed'}`}>
                 <Button className="contextHeaderButton" onClick={this.onClickContextHeader}>
                     {contextHeaderIcon && <Icon icon={contextHeaderIcon} className="contextHeaderIcon" />}
-                    <span className="contextHeaderTitle">{contextHeaderTitle}</span>
+
+                    {this.renderContextHeaderTitle()}
+
                     {showContextHeaderToggle && <Icon icon="caret-up" className={`contextHeaderToggle ${isContextToggleDown ? 'contextToggleDown' : ''}`} />}
                 </Button>
             </div>
