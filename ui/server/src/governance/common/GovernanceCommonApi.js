@@ -4,9 +4,7 @@
 (function() {
     'use strict';
 
-    let perfLogger = require('../../perfLogger');
     let httpStatusCodes = require('../../constants/httpStatusCodes');
-    let log = require('../../logger').getLogger();
     let consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
@@ -38,11 +36,11 @@
              * @returns {Promise}
              */
             getContext: function(req, accountId) {
-
                 let opts = requestHelper.setOptions(req, false, true);
                 let host = requestHelper.getLegacyRealmBase(req, false);
+
                 opts.headers.host = host;
-                opts.url =  (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getGovernanceContextLegacyStackRoute(accountId);
+                opts.url = (config.isMockServer ? consts.PROTOCOL.HTTP : consts.PROTOCOL.HTTPS) + host + routeHelper.getGovernanceContextLegacyStackRoute(accountId);
 
                 return requestHelper
                     .executeRequest(req, opts)

@@ -4,10 +4,7 @@
 (function() {
     'use strict';
 
-    let perfLogger = require('../../../perfLogger');
     let httpStatusCodes = require('../../../constants/httpStatusCodes');
-    let log = require('../../../logger').getLogger();
-    let fs = require('fs');
     let consts = require('../../../../../common/src/constants');
 
     module.exports = function(config) {
