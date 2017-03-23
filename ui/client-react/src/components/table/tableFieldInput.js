@@ -13,9 +13,9 @@ class TableFieldInput extends React.Component {
             this.input.focus();
         }
     }
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
 
-        if (this.props.validationError !== prevProps.validationError) {
+        if (this.props.hasFocus) {
             this.input.focus();
         }
     }
@@ -36,15 +36,17 @@ class TableFieldInput extends React.Component {
             type: "text",
             value: this.props.value,
             rows: this.props.rows,
-            ref: (input) => this.input = input,
-            onChange: (e) => this.props.onChange(this.props.name, e.target.value)
+            ref: (input) => {this.input = input;},
+            onChange: (e) => this.props.onChange(this.props.name, e.target.value),
+            onFocus: () => this.props.onFocus && this.props.onFocus(this.props.name),
+            onBlur: () => this.props.onBlur && this.props.onBlur(this.props.name)
         };
 
         const input = React.createElement(this.props.component, inputProps);
 
         const classes = ["tableField"];
 
-        if (this.props.validationError) {
+        if (!this.props.hasFocus && this.props.validationError) {
             classes.push("validationFailed");
         }
 
@@ -52,7 +54,7 @@ class TableFieldInput extends React.Component {
             <div className={classes.join(" ")}>
                 <div className="tableFieldTitle">{this.props.required && "*"} {this.props.title}</div>
                 <div className="tableFieldInput">
-                    {this.props.validationError ? this.renderInvalidInput(input) : input}
+                    {!this.props.hasFocus && this.props.validationError  ? this.renderInvalidInput(input) : input}
                 </div>
             </div>);
     }

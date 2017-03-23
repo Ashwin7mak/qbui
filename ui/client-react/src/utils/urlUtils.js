@@ -91,7 +91,7 @@ const UrlUtils = {
      * @param tblId
      */
     getAfterTableCreatedLink(appId, tblId) {
-        return `${BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1`;
+        return `${BUILDER_ROUTE}/app/${appId}/table/${tblId}/form/1?tc`;
     }
 };
 

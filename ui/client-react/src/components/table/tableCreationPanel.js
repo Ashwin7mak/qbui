@@ -15,6 +15,8 @@ class TableCreationPanel extends React.Component {
         this.onToggleDropdown = this.onToggleDropdown.bind(this);
         this.selectIcon = this.selectIcon.bind(this);
         this.updateTableProperty = this.updateTableProperty.bind(this);
+        this.onFocusInput = this.onFocusInput.bind(this);
+        this.onBlurInput = this.onBlurInput.bind(this);
     }
 
     getIconNames()  {
@@ -78,7 +80,7 @@ class TableCreationPanel extends React.Component {
 
     }
 
-    updateTableProperty(property, value) {
+    updateTableProperty(property, value, isUserEdit = true) {
 
         let validationError = null;
         const trimmed = value.trim();
@@ -100,7 +102,7 @@ class TableCreationPanel extends React.Component {
             break;
         }
         }
-        this.props.setTableProperty(property, value, validationError);
+        this.props.setTableProperty(property, value, validationError, isUserEdit);
     }
 
     renderIconSection() {
@@ -117,12 +119,25 @@ class TableCreationPanel extends React.Component {
         </div>);
     }
 
+    componentDidMount() {
+        this.updateTableProperty('name', this.props.tableInfo.name.value, false);
+        this.updateTableProperty('tableNoun', this.props.tableInfo.tableNoun.value, false);
+    }
+
+    onFocusInput(name) {
+        this.props.setEditingProperty(name);
+
+    }
+
+    onBlurInput() {
+        this.props.setEditingProperty(null);
+    }
+
     render() {
         return (
             <div className="tableInfo">
 
-                <div className="description">Create a new table when you want to collect a new type of information.
-                </div>
+                <div className="description">Create a new table when you want to collect a new type of information.</div>
                 <div className="title">Name your table</div>
 
                 <div className="sections">
@@ -130,15 +145,22 @@ class TableCreationPanel extends React.Component {
                                      name="name"
                                      value={this.props.tableInfo.name.value}
                                      onChange={this.updateTableProperty}
-                                     required autofocus
-                                     validationError={this.props.tableInfo.name.validationError}/>
+                                     onFocus={this.onFocusInput}
+                                     onBlur={this.onBlurInput}
+                                     required
+                                     autofocus
+                                     hasFocus={this.props.focusOn === "name"}
+                                     validationError={this.props.validate ? this.props.tableInfo.name.validationError : null}/>
 
                     <TableFieldInput title="A record in the table is called a"
                                      name="tableNoun"
                                      value={this.props.tableInfo.tableNoun.value}
                                      onChange={this.updateTableProperty}
+                                     onFocus={this.onFocusInput}
+                                     onBlur={this.onBlurInput}
                                      required
-                                     validationError={this.props.tableInfo.tableNoun.validationError}/>
+                                     hasFocus={this.props.focusOn === "tableNoun"}
+                                     validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     {this.renderIconSection()}
 

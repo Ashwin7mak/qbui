@@ -30,12 +30,17 @@ export const tableMenuClosed = () => ({
     type: types.TABLE_CREATION_MENU_CLOSED
 });
 
+export const setEditingProperty = (editing) => ({
+    type: types.SET_EDITING_PROPERTY,
+    editing
+});
 
-export const setTableProperty = (property, value, validationError) => ({
+export const setTableProperty = (property, value, validationError, isUserEdit) => ({
     type: types.SET_TABLE_CREATION_PROPERTY,
     property,
     value,
-    validationError
+    validationError,
+    isUserEdit
 });
 
 export const savingTable = () => ({

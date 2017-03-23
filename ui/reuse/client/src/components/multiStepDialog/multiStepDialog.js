@@ -25,9 +25,9 @@ class MultiStepDialog extends React.Component {
 
     renderTitle() {
 
-        return this.props.title && (
+        return this.props.titles && (
             <Modal.Title>
-                {this.props.title}
+                {this.props.titles[this.props.pageIndex]}
             </Modal.Title>);
     }
 
@@ -107,17 +107,17 @@ class MultiStepDialog extends React.Component {
                         {this.renderIcons()}
                         <div className="bodyContainer">
 
-                                {this.renderTitle()}
+                            {this.renderTitle()}
 
-                                <Modal.Body>
-                                    <Loader loaded={!this.props.loading}>
+                            <Modal.Body>
+                                <Loader loaded={!this.props.loading}>
                                     <ReactCSSTransitionGroup transitionName={this.state.transitionName}
                                                              transitionEnterTimeout={300}
                                                              transitionLeaveTimeout={300}>
                                         {panels[this.props.pageIndex]}
                                     </ReactCSSTransitionGroup>
-                                    </Loader>
-                                </Modal.Body>
+                                </Loader>
+                            </Modal.Body>
 
                         </div>
                         {this.renderButtons()}

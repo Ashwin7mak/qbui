@@ -14,7 +14,7 @@ const defaultTableInfo = {
         validationError:null
     },
     tableNoun: {
-        value: "Record",
+        value: "",
         validationError:null
     }
 };
@@ -27,7 +27,8 @@ const tableCreation = (
         menuOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
-        edited: false
+        edited: false,
+        editing: null
     },
     action) => {
 
@@ -40,7 +41,8 @@ const tableCreation = (
             menuOpen: false,
             savingTable: false,
             tableInfo: {...defaultTableInfo},
-            edited: false
+            edited: false,
+            editing: null
         };
 
     case types.HIDE_TABLE_CREATION_DIALOG: {
@@ -86,11 +88,17 @@ const tableCreation = (
 
         return {
             ...state,
-            edited: true,
+            edited: state.edited || action.isUserEdit,
             tableInfo: info
         };
     }
 
+    case types.SET_EDITING_PROPERTY: {
+        return {
+            ...state,
+            editing: action.editing
+        };
+    }
     case types.SAVING_TABLE: {
         return {
             ...state,

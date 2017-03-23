@@ -1,5 +1,6 @@
 import React from 'react';
 import TableCreationPanel from './tableCreationPanel';
+import TableCreationSummaryPanel from './tableCreationSummaryPanel';
 import MultiStepDialog from '../../../../reuse/client/src/components/multiStepDialog/multiStepDialog';
 import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
@@ -58,7 +59,7 @@ export class TableCreationDialog extends React.Component {
 
     isValid() {
 
-        return this.props.tableCreation.edited && !_.findKey(this.props.tableCreation.tableInfo, (field) => field.validationError);
+        return /*this.props.tableCreation.edited && */!_.findKey(this.props.tableCreation.tableInfo, (field) => field.validationError);
     }
 
     getExistingTableNames() {
@@ -81,13 +82,19 @@ export class TableCreationDialog extends React.Component {
                                  onPrevious={this.onPrevious}
                                  onNext={this.onNext}
                                  onFinished={this.onFinished}
-                                 canProceed={this.isValid()}>
+                                 canProceed={this.isValid()}
+                                 titles={['New Table', 'Get ready to add fields to your table']}>
 
                 <TableCreationPanel tableInfo={this.props.tableCreation.tableInfo}
                                     tableMenuOpened={this.props.tableMenuOpened}
                                     tableMenuClosed={this.props.tableMenuClosed}
                                     setTableProperty={this.props.setTableProperty}
+                                    setEditingProperty={this.props.setEditingProperty}
+                                    focusOn={this.props.tableCreation.editing}
+                                    validate={this.props.tableCreation.edited}
                                     appTables={this.getExistingTableNames()} />
+
+                <TableCreationSummaryPanel />
 
             </MultiStepDialog>);
     }
