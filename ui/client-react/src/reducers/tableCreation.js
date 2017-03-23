@@ -28,7 +28,8 @@ const tableCreation = (
         savingTable: false,
         tableInfo: defaultTableInfo,
         edited: false,
-        editing: null
+        editing: null,
+        notifyTableCreated: false
     },
     action) => {
 
@@ -115,6 +116,13 @@ const tableCreation = (
         return {
             ...state,
             savingTable: false
+        };
+    }
+
+    case types.NOTIFY_TABLE_CREATED: {
+        return {
+            ...state,
+            notifyTableCreated: action.notifyTableCreated
         };
     }
     default:

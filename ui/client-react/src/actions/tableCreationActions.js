@@ -86,3 +86,8 @@ export const createTable = (appId, tableInfo) => {
         });
     };
 };
+
+export const notifyTableCreated = (notifyTableCreated) => ({
+    type: types.NOTIFY_TABLE_CREATED,
+    notifyTableCreated
+});

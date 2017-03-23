@@ -6,9 +6,9 @@ import {connect} from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 import * as TableCreationActions from '../../actions/tableCreationActions';
 import Locale from '../../locales/locales';
-import WindowLocationUtils from '../../utils/windowLocationUtils';
 import UrlUtils from '../../utils/urlUtils';
 import _ from 'lodash';
+import AppHistory from '../../globals/appHistory';
 
 import './tableCreationDialog.scss';
 
@@ -44,9 +44,11 @@ export class TableCreationDialog extends React.Component {
         this.props.createTable(this.props.app.id, tableInfo).then(
             (response) => {
                 this.props.hideTableCreationDialog();
+                this.props.notifyTableCreated(true);
 
                 const tblId = response.data;
-                WindowLocationUtils.update(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
+
+                AppHistory.history.push(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
             },
             (error) => {
                 NotificationManager.error(Locale.getMessage('tableCreation.tableCreationFailed'), Locale.getMessage('failed'));

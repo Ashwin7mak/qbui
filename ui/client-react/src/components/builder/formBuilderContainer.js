@@ -4,6 +4,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
 import {loadForm, updateForm, moveFieldOnForm, removeFieldFromForm} from '../../actions/formActions';
+import {notifyTableCreated} from '../../actions/tableCreationActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -16,6 +17,7 @@ import AppHistory from '../../globals/appHistory';
 import Logger from '../../utils/logger';
 import AutoScroll from '../autoScroll/autoScroll';
 import PageTitle from '../pageTitle/pageTitle';
+import {NotificationManager} from 'react-notifications';
 
 import './formBuilderContainer.scss';
 
@@ -23,7 +25,8 @@ let logger = new Logger();
 
 const mapStateToProps = state => {
     return {
-        forms: state.forms
+        forms: state.forms,
+        notifyTableCreated: state.tableCreation.notifyTableCreated
     };
 };
 
@@ -47,6 +50,10 @@ const mapDispatchToProps = dispatch => {
 
         updateAnimationState(isAnimating) {
             return dispatch(updateFormAnimationState(isAnimating));
+        },
+
+        tableCreatedNotificationComplete() {
+            return dispatch(notifyTableCreated(false));
         }
     };
 };
@@ -74,6 +81,15 @@ export const FormBuilderContainer = React.createClass({
     componentDidMount() {
         // We use the NEW_FORM_RECORD_ID so that the form does not load any record data
         this.props.loadForm(this.props.appId, this.props.tblId, null, (this.props.formType || 'view'), NEW_FORM_RECORD_ID);
+
+        // if we've been sent here from the table creation flow, show a notification
+
+        if (this.props.notifyTableCreated) {
+            this.props.tableCreatedNotificationComplete();
+            setTimeout(() => {
+                NotificationManager.success(Locale.getMessage('tableCreation.tableCreated'), Locale.getMessage('success'));
+            }, 1000);
+        }
     },
 
     onCancel() {
