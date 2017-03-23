@@ -31,10 +31,11 @@ export const tableMenuClosed = () => ({
 });
 
 
-export const setTableProperty = (property, value) => ({
+export const setTableProperty = (property, value, validationError) => ({
     type: types.SET_TABLE_CREATION_PROPERTY,
     property,
-    value
+    value,
+    validationError
 });
 
 export const savingTable = () => ({
@@ -63,6 +64,7 @@ export const createTable = (appId, tableInfo) => {
             const promise = tableService.createTableComponents(appId, tableInfo);
 
             promise.then(response => {
+
                 dispatch(createdTable());
                 resolve(response);
             }).catch(error => {

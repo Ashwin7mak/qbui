@@ -361,7 +361,7 @@ export let Nav = React.createClass({
                 this.renderSavingModal(this.state.pendEdits.saving)
             }
 
-            {this.state.apps.selectedAppId && <TableCreationDialog appId={this.state.apps.selectedAppId}/>}
+            {this.state.apps.selectedAppId && <TableCreationDialog app={this.getSelectedApp()}/>}
         </div>);
     },
 

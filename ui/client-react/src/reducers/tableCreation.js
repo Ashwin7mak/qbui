@@ -1,5 +1,24 @@
 import * as types from '../actions/types';
 
+const defaultTableInfo = {
+    name: {
+        value: "",
+        validationError:null
+    },
+    description: {
+        value: "",
+        validationError:null
+    },
+    tableIcon: {
+        value: "estimates",
+        validationError:null
+    },
+    tableNoun: {
+        value: "Record",
+        validationError:null
+    }
+};
+
 const tableCreation = (
     state = {
         //  default states
@@ -7,12 +26,8 @@ const tableCreation = (
         dialogPage: 0,
         menuOpen: false,
         savingTable: false,
-        tableInfo: {
-            name: "",
-            description: "",
-            tableIcon: "estimates",
-            tableNoun: ""
-        }
+        tableInfo: defaultTableInfo,
+        edited: false
     },
     action) => {
 
@@ -21,7 +36,11 @@ const tableCreation = (
         return {
             ...state,
             dialogOpen: true,
-            dialogPage: 0
+            dialogPage: 0,
+            menuOpen: false,
+            savingTable: false,
+            tableInfo: {...defaultTableInfo},
+            edited: false
         };
 
     case types.HIDE_TABLE_CREATION_DIALOG: {
@@ -63,10 +82,11 @@ const tableCreation = (
 
         const info = {...state.tableInfo};
 
-        info[action.property] = action.value;
+        info[action.property] = {value: action.value, validationError: action.validationError};
 
         return {
             ...state,
+            edited: true,
             tableInfo: info
         };
     }
