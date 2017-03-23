@@ -15,13 +15,6 @@
         let accountUsersAPI = {
 
             /**
-             * Allows you to override the request object
-             * @param requestOverride
-             */
-            setRequestObject: function(requestOverride) {
-                request = requestOverride;
-            },
-            /**
              * Allows you to override the requestHelper object
              * @param requestHelperOverride
              */
