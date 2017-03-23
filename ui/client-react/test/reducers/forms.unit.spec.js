@@ -76,17 +76,38 @@ describe('Forms reducer functions', () => {
         });
 
         it('returns correct state when load succeeds', () => {
+            let formData = {formMeta: {appId: 'appId', tableId: 'tblId'}};
+            let appId = 'banana';
+            let tblId = 'apple';
             let loadingFormState = [{
                 id: 'view',
                 loading: true,
                 errorStatus: null
             }];
 
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: "someData"})).toDeepEqual([{
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId, tblId})).toDeepEqual([{
                 id: 'view',
                 loading: false,
-                formData: "someData",
-                errorStatus:null
+                formData: {formMeta: {appId: appId, tableId: tblId}},
+                errorStatus: null
+            }]);
+        });
+
+        it('returns correct appId and tableId if they are missing', () => {
+            let formData = {formMeta: {appId: null, tableId: null}};
+            let appId = 'banana';
+            let tblId = 'apple';
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
+
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: formData, appId, tblId})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                formData: {formMeta: {appId: appId, tableId: tblId}},
+                errorStatus: null
             }]);
         });
 
@@ -268,3 +289,7 @@ describe('Forms reducer functions', () => {
 
     });
 });
+
+//
+// [ Object({ id: 'view', loading: false, formData: Object({ formMeta: Object({ appId: 'banana', tableId: 'apple' }) }), errorStatus: null }) ]
+// [ Object({ id: 'view', loading: false, formData: Object({ formMeta: Object({ appId: 'banana', tblId: 'apple' }) }), errorStatus: null }) ]
