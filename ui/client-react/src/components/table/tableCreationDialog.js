@@ -40,7 +40,7 @@ export class TableCreationDialog extends React.Component {
             tableNoun: this.props.tableCreation.tableInfo.tableNoun.value
         };
 
-        this.props.createTable(this.props.appId, tableInfo).then(
+        this.props.createTable(this.props.app.id, tableInfo).then(
             (response) => {
                 this.props.hideTableCreationDialog();
 
