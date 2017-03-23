@@ -1,12 +1,10 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
 import {ReportToolsAndContent,
         __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import constants from '../../../common/src/constants';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
-import {CONTEXT} from '../../src/actions/context';
 
 describe('ReportToolsAndContent functions', () => {
     'use strict';
@@ -152,7 +150,6 @@ describe('ReportToolsAndContent functions', () => {
                                                        params={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).toHaveBeenCalledWith(
-                CONTEXT.REPORT.NAV,
                 reportParams.appId,
                 reportParams.tblId,
                 reportParams.rptId,
