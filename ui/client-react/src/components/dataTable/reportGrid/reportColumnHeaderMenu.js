@@ -159,6 +159,14 @@ export const ReportColumnHeaderMenu = React.createClass({
         this.groupReport(false);
     },
 
+    addColumnBefore() {
+
+    },
+
+    addColumnAfter() {
+
+    },
+
     render() {
         return (
             <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
@@ -188,7 +196,10 @@ export const ReportColumnHeaderMenu = React.createClass({
 
                     <MenuItem divider/>
 
-                    <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                    <MenuItem onSelect={this.addColumnBefore}>
+                        <I18nMessage message="report.menu.addColumnBefore"/>
+                    </MenuItem>
+
                     <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
                     <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
                 </Dropdown.Menu>
