@@ -21,11 +21,11 @@
 
     .formContainer {
         padding-bottom: 90px;
-        .editForm{
-        &:focus {
-            outline: none;
-            border: $stroke-width-thin solid $border-focused-color;
-        }
+        .editForm {
+            &:focus {
+                outline: none;
+                border: $stroke-width-thin solid $border-focused-color;
+            }
         }
     }
 

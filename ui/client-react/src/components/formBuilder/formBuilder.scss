@@ -49,20 +49,20 @@
                 width: 100%;
             }
 
-           &:hover {
-               background: $color-black-250;
+            &:hover {
+                background: $color-black-250;
 
-               .fieldEditingTools {
-                   opacity: 1;
-                   .qbIcon {
-                       opacity: 1;
-                   }
-               }
+                .fieldEditingTools {
+                    opacity: 1;
+                    .qbIcon {
+                        opacity: 1;
+                    }
+                }
 
-               @include small-breakpoint {
-                   background: none;
-               }
-           }
+                @include small-breakpoint {
+                    background: none;
+                }
+            }
 
             &:active {
                 @include dragpreview-active-gradient;
