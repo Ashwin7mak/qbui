@@ -21,10 +21,10 @@
 
     .formContainer {
         padding-bottom: 90px;
-        .editing{
+        .editForm{
         &:focus {
-            outline-color: $border-focused-color;
-            outline-width: 5px;
+            outline: none;
+            border: $stroke-width-thin solid $border-focused-color;
         }
         }
     }
