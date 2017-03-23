@@ -48,7 +48,7 @@ export class TableCreationDialog extends React.Component {
 
                 setTimeout(() => {
                     const tblId = response.data;
-                    WindowLocationUtils.update(UrlUtils.getAfterTableCreatedLink(this.props.appId, tblId));
+                    WindowLocationUtils.update(UrlUtils.getAfterTableCreatedLink(this.props.app.id, tblId));
                 }, 2000);
             },
             (error) => {
