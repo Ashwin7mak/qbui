@@ -87,7 +87,7 @@ export const createTable = (appId, tableInfo) => {
     };
 };
 
-export const notifyTableCreated = (notifyTableCreated) => ({
+export const notifyTableCreated = (notify) => ({
     type: types.NOTIFY_TABLE_CREATED,
-    notifyTableCreated
+    notifyTableCreated: notify
 });
