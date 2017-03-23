@@ -35,7 +35,6 @@
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
-        var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
         var FORMS_ENDPOINT = '/forms/';
         var FORM_TYPE_ENDPOINT = 'formType/';
