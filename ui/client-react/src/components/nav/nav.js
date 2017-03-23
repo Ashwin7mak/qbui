@@ -46,7 +46,7 @@ const OPEN_APPS_LIST = true;
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 export const Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore' /*'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore'*/)],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool
@@ -57,10 +57,6 @@ export const Nav = React.createClass({
         return {
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState()
-            //pendEdits: flux.store('RecordPendingEditsStore').getState(),
-            //reportData: flux.store('ReportDataStore').getState(),
-            //fields: flux.store('FieldsStore').getState()
-            //reportSearchData: flux.store('ReportDataSearchStore').getState()
         };
     },
 

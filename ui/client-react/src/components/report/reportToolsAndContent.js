@@ -166,10 +166,6 @@ export const ReportToolsAndContent = React.createClass({
             queryParams[query.OFFSET_PARAM] = Constants.PAGE.DEFAULT_OFFSET;
             queryParams[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
 
-            //this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
-            //    this.props.routeParams.tblId,
-            //    typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            //    true, filter, queryParams);
             this.props.loadDynamicReport(CONTEXT.REPORT.NAV, this.props.selectedAppId,
                 this.props.routeParams.tblId,
                 typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
@@ -180,17 +176,13 @@ export const ReportToolsAndContent = React.createClass({
     searchTheString(searchTxt) {
         this.props.searchInput(searchTxt);
         this.filterOnSearch(searchTxt);
-        //this.getFlux().actions.filterSearchPending(searchTxt);
     },
 
     filterOnSelections(newSelections) {
-        // obsolete??
-        //this.getFlux().actions.filterSelectionsPending(newSelections);
         this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections, true);
     },
 
     clearSearchString() {
-        //this.getFlux().actions.filterSearchPending('');
         this.props.clearSearchInput();
         // no debounce when clicking the clear button
         this.filterReport('', this.props.reportData.selections);
@@ -200,9 +192,7 @@ export const ReportToolsAndContent = React.createClass({
         // TODO clear out filter selection
         let noSelections = new FacetSelections();
         // TODO: don't think this filterSelectionsPending is necessray
-        //this.getFlux().actions.filterSelectionsPending(noSelections);
 
-        //this.getFlux().actions.filterSearchPending('');
         this.props.clearSearchInput();
         this.debouncedFilterReport('', noSelections, true);
     },
@@ -313,7 +303,6 @@ export const ReportToolsAndContent = React.createClass({
         queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
         queryParams[query.NUMROWS_PARAM] = numRows;
 
-        //this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
         this.props.loadDynamicReport(CONTEXT.REPORT.NAV, appId, tblId, rptId, true, filter, queryParams);
     },
 

@@ -109,9 +109,6 @@ export const ReportContent = React.createClass({
             previousRecordId = index > 0 ? recordsArray[index - 1][key].value : null;
         }
 
-        // let flux know we've drilled-down into a record so we can navigate back and forth
-        //let flux = this.getFlux();
-        //flux.actions.openingReportRow(recId);
         this.props.openRecord(recId, nextRecordId, previousRecordId);
     },
 
@@ -224,7 +221,6 @@ export const ReportContent = React.createClass({
      */
     handleEditRecordStart(recId, fieldToStartEditing = null) {
         if (_.has(this.props, 'reportData.data')) {
-            //const flux = this.getFlux();
             let origRec = null;
             let changes = {};
 
@@ -265,7 +261,6 @@ export const ReportContent = React.createClass({
                 }
             }
 
-            //flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
             this.props.editRecordStart(this.props.appId, this.props.tblId, recId, origRec, changes, true, fieldToStartEditing);
         }
     },
@@ -276,8 +271,6 @@ export const ReportContent = React.createClass({
      * @param recId
      */
     handleEditRecordCancel(recId) {
-        //const flux = this.getFlux();
-        //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
         this.props.editRecordCancel(this.props.appId, this.props.tblId, recId);
     },
 
@@ -289,8 +282,6 @@ export const ReportContent = React.createClass({
 
         // call action to hold the field value change
 
-        //const flux = this.getFlux();
-        //flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
         // TODO: change to get from redux store
         // this.props.report[0].data
         let origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(change.recId) : this.getOrigRec(change.recId);
@@ -332,20 +323,10 @@ export const ReportContent = React.createClass({
             //    return saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
             //}
         } else {
-            //return flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, recordId);
             this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, recordId, false);
         }
         //return Promise.resolve(null);
     },
-
-    //addNewRowAfterRecordSaveSuccess(afterRecId) {
-    //    //const flux = this.getFlux();
-    //    //let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
-    //
-    //    // The promise is saved to a variable and called separately for testing purposes
-    //    // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
-    //    this.props.addBlankRecordToReport(CONTEXT.REPORT.NAV, this.props.appId, this.props.tblId, afterRecId, true);
-    //},
 
     /**
      * User wants to save changes to a record.
@@ -395,8 +376,6 @@ export const ReportContent = React.createClass({
      * @returns {{confirmDeletesDialogOpen: boolean}}
      */
     deleteRecord() {
-        //const flux = this.getFlux();
-        //flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
         this.props.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
         this.setState({confirmDeletesDialogOpen: false});
     },
@@ -450,8 +429,6 @@ export const ReportContent = React.createClass({
             showNotificationOnSuccess: showNotificationOnSuccess
         };
         this.props.createRecord(this.props.appId, this.props.tblId, params, addNewRow);
-
-        ///return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
 
     /**
@@ -466,16 +443,13 @@ export const ReportContent = React.createClass({
             recordId = recordId.value;
         }
 
-        //const flux = this.getFlux();
         let colList = [];
         if (_.has(this.props, 'fields.fields.data') && Array.isArray(this.props.fields.fields.data)) {
             this.props.fields.fields.data.forEach((field) => {
                 colList.push(field.id);
             });
-            //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recordId);
-            //this.props.editRecordCommit(this.props.appId, this.props.tblId, recordId);
+
             let pendEdits = this.getPendEdits();
-            //let promise = flux.actions.saveRecord(this.props.appId, this.props.tblId, recordId, pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
             let params = {
                 context: CONTEXT.REPORT.NAV,
                 pendEdits: pendEdits,
@@ -495,8 +469,6 @@ export const ReportContent = React.createClass({
     handleValidateFieldValue(fieldDef, fieldName, value, checkRequired) {
         // check the value against the fieldDef
         if (fieldDef) {
-            //const flux = this.getFlux();
-            //return flux.actions.recordPendingValidateField(fieldDef, fieldName, value, checkRequired);
 
             let recId = null;
             let pendEdits = this.getPendEdits();
@@ -528,7 +500,6 @@ export const ReportContent = React.createClass({
     },
 
     selectRows(selectedRows) {
-        //this.getFlux().actions.selectedRows(selectedRowIds);
         this.props.selectReportRecords(CONTEXT.REPORT.NAV, selectedRows);
     },
 
@@ -546,8 +517,6 @@ export const ReportContent = React.createClass({
             selectedRows = _.without(selectedRows, id);
         }
 
-        //const flux = this.getFlux();
-        //flux.actions.selectedRows(selectedRows);
         this.props.selectReportRecords(CONTEXT.REPORT.NAV, selectedRows);
     },
 

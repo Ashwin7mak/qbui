@@ -221,9 +221,6 @@ export const RecordTrowser = React.createClass({
      * @returns {Array}
      */
     handleRecordChange(formType, next = false, openNewRecord = false) {
-        //const flux = this.getFlux();
-        //flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
-        //this.props.editRecordCommit(this.props.appId, this.props.tblId, this.props.recId);
 
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
@@ -234,7 +231,6 @@ export const RecordTrowser = React.createClass({
             });
         }
         const pendEdits = this.getPendEdits();
-        //return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList);
 
         let params = {
             context: CONTEXT.REPORT.NAV,
@@ -271,8 +267,6 @@ export const RecordTrowser = React.createClass({
                 this.showErrorDialog();
             }
         );
-        //this.props.updateRecord(this.props.appId, this.props.tblId, this.props.recId, pendEdits, this.props.editForm.formData.fields, colList);
-        //this.nextRecord();
     },
 
     /**
@@ -281,7 +275,6 @@ export const RecordTrowser = React.createClass({
      * @returns {Array} of field values for the new record
      */
     handleRecordAdd(recordChanges, formType, next = false, openNewRecord = false) {
-        //const flux = this.getFlux();
         let colList = [];
         // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
         // with the right column list from the server
@@ -290,7 +283,6 @@ export const RecordTrowser = React.createClass({
                 colList.push(field.id);
             });
         }
-        //return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.editForm.formData.fields, colList);
         let params = {
             context: CONTEXT.REPORT.NAV,
             recordChanges: recordChanges,
@@ -332,13 +324,6 @@ export const RecordTrowser = React.createClass({
     previousRecord() {
         const record = this.getRecordFromProps(this.props);
         this.navigateToRecord(record.previousRecordId);
-        //const {appId, tblId, rptId, previousEditRecordId} = this.props.reportData;
-        //
-        //// let flux know we're traversing records so it can pass down updated previous/next record IDs
-        //let flux = this.getFlux();
-        //flux.actions.editPreviousRecord(previousEditRecordId);
-        //
-        //this.props.openRecordForEdit(previousEditRecordId);
     },
 
     /**
@@ -466,10 +451,7 @@ export const RecordTrowser = React.createClass({
     },
 
     clearEditsAndClose() {
-        //const flux = this.getFlux();
-
         HideAppModal();
-        //flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         this.props.editRecordCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
         this.props.onHideTrowser();
@@ -599,4 +581,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(RecordTrowser);
-
