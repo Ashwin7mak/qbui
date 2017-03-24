@@ -1,3 +1,7 @@
+/**
+ * This bundle contains all the strings needed by the "Apps" functional area.
+ * This functional area is for the main app served in client-react at the /qbase/apps route.
+ */
 export default {
     locales: "en-us",
     currencyCode: "usd",
@@ -32,7 +36,7 @@ export default {
             },
             settings: "Settings",
             users: {
-                addUser: "Add user to app",
+                addUser: "Adding a new user is not available yet",
                 users: "Users"
             }
         },

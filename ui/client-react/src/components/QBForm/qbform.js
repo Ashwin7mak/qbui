@@ -2,6 +2,8 @@ import React, {PropTypes} from 'react';
 import _ from 'lodash';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
+import TabContent from 'rc-tabs/lib/TabContent';
+import ScrollableInkTabBar from 'rc-tabs/lib/ScrollableInkTabBar';
 import FieldElement from './fieldElement';
 import Locale from '../../locales/locales';
 import Constants from '../../../../common/src/constants';
@@ -394,7 +396,7 @@ let QBForm = React.createClass({
                 let display = field.screenName + ". ";
 
                 return (
-                    <div className="userInFooter">
+                    <div className="userInFooter" key={index}>
                         <span key={index} className="fieldNormalText">{field.name}</span>
                         <span key={`${index}-link`} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>
                     </div>
@@ -473,7 +475,18 @@ let QBForm = React.createClass({
             tabs = this.props.formData.formMeta.tabs.map(tab => this.createTab(tab, this.props.formData.formMeta.tabs.length));
         }
 
-        const formContent = tabs.length < 2 ? tabs : <Tabs activeKey={this.props.activeTab}>{tabs}</Tabs>;
+        let formContent;
+        if (tabs.length < 2) {
+            formContent = tabs;
+        } else {
+            formContent = (
+                <Tabs
+                    activeKey={this.props.activeTab}
+                    renderTabBar={() => <ScrollableInkTabBar />}
+                    renderTabContent={() => <TabContent />}
+                >{tabs}</Tabs>
+            );
+        }
 
         return (
             <div className="formContainer">

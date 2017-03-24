@@ -493,4 +493,58 @@ describe('Validate FormsApi unit tests', function() {
         });
 
     });
+
+    describe("validate createField function", function() {
+        let executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            formsApi.setRequestHelperObject(requestHelper);
+            req.url = 'tables/123/forms';
+            req.method = 'post';
+            req.rawBody = {name: "test"};
+        });
+
+        afterEach(function() {
+            req.url = '';
+            req.rawBody = {};
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            executeReqStub.returns(Promise.resolve({'body': '{"id": "11"}'}));
+            let promise = formsApi.createForm(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {'body': '{"id": "11"}'});
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing createForm success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createForm: exception processing success test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results ', function(done) {
+            let error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            let promise = formsApi.createForm(req);
+
+            promise.then(
+                function() {
+                    done(new Error("Unexpected success promise return when testing createForm failure"));
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('createForm: exception processing failure test: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
 });

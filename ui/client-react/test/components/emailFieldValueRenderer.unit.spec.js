@@ -5,7 +5,7 @@ import TestUtils, {Simulate} from 'react-addons-test-utils';
 import EmailFieldValueRenderer from '../../src/components/fields/emailFieldValueRenderer';
 
 let defaultProtocol = 'mailto:';
-let emailIconClass = '.iconTableUISturdy-mail';
+let emailIconClass = '.iconUISturdy-mail';
 
 let testEmail = 'mailto:test@quickbase.com';
 let testEmailWithoutProtocol = 'test@quickbase.com';
