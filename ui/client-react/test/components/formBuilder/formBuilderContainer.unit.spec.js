@@ -16,7 +16,9 @@ const mockActions = {
     updateForm() {},
     toggleFormBuilderChildrenTabIndex() {},
     keyboardMoveFieldUp(_formId, _location) {},
-    keyboardMoveFieldDown(_formId, _location) {}
+    keyboardMoveFieldDown(_formId, _location) {},
+    removeField(_formId, _location) {},
+    deselectField(_formId, _location) {}
 };
 
 let component;
@@ -30,6 +32,8 @@ describe('FormBuilderContainer', () => {
         spyOn(mockActions, 'toggleFormBuilderChildrenTabIndex');
         spyOn(mockActions, 'keyboardMoveFieldUp');
         spyOn(mockActions, 'keyboardMoveFieldDown');
+        spyOn(mockActions, 'removeField');
+        spyOn(mockActions, 'deselectField');
     });
 
     describe('load form data', () => {
@@ -204,12 +208,41 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
         });
 
+        it('will move a remove a field', () => {
+            component = shallow(<FormBuilderContainer
+                selectedField={selectedField}
+                forms={currentForm}
+                location={location}
+                removeField={mockActions.removeField}
+            />);
+
+            instance = component.instance();
+
+            instance.removeField();
+
+            expect(mockActions.removeField).toHaveBeenCalledWith(currentForm[0].id, selectedField);
+        });
+
+        it('will deselect a field', () => {
+            component = shallow(<FormBuilderContainer
+                selectedField={selectedField}
+                forms={currentForm}
+                location={location}
+                deselectField={mockActions.deselectField}
+            />);
+
+            instance = component.instance();
+
+            instance.deselectField();
+
+            expect(mockActions.deselectField).toHaveBeenCalledWith(currentForm[0].id, selectedField);
+        });
+
         it('will move a field up if the selected form element is not at index 0', () => {
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
                 forms={currentForm}
                 location={location}
-                selectedFields={[location]}
                 keyboardMoveFieldUp={mockActions.keyboardMoveFieldUp}
             />);
 
@@ -244,7 +277,6 @@ describe('FormBuilderContainer', () => {
                 selectedField={selectedField}
                 forms={currentFormData}
                 location={location}
-                selectedFields={[location]}
                 keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
             />);
 
@@ -262,7 +294,6 @@ describe('FormBuilderContainer', () => {
                 selectedField={selectedField}
                 forms={currentFormData}
                 location={location}
-                selectedFields={[location]}
                 keyboardMoveFieldDown={mockActions.keyboardMoveFieldDown}
             />);
 

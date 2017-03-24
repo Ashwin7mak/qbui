@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 import {connect} from 'react-redux';
-import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField} from '../../actions/formActions';
+import {loadForm, updateForm, moveFieldOnForm, toggleFormBuilderChildrenTabIndex, keyboardMoveFieldUp, keyboardMoveFieldDown, deselectField, removeFieldFromForm} from '../../actions/formActions';
 import {updateFormAnimationState} from '../../actions/animationActions';
 import Loader from 'react-loader';
 import {LARGE_BREAKPOINT} from "../../constants/spinnerConfigurations";
@@ -76,7 +76,10 @@ const mapDispatchToProps = dispatch => {
 
         deselectField(formId, location) {
             return dispatch(deselectField(formId, location));
-        }
+        },
+        removeField(formId, location) {
+            return dispatch(removeFieldFromForm(formId, location));
+        },
     };
 };
 
@@ -107,6 +110,12 @@ export const FormBuilderContainer = React.createClass({
 
     onCancel() {
         AppHistory.history.goBack();
+    },
+
+    removeField() {
+        if (this.props.removeField) {
+            return this.props.removeField(this.props.forms[0].id, this.props.selectedField);
+        }
     },
 
     saveClicked() {
@@ -164,11 +173,17 @@ export const FormBuilderContainer = React.createClass({
         }
     },
 
+    deselectField() {
+        if (this.props.deselectField) {
+            this.props.deselectField(this.props.forms[0].id, this.props.selectedField);
+        }
+    },
+
     escapeCurrentContext() {
         let childrenTabIndex = this.props.tabIndex;
         let selectedField = this.props.selectedField;
         if (selectedField) {
-            this.props.deselectField(this.props.forms[0].id, selectedField);
+            this.deselectField();
         } else if (this.props.tabIndex === "0") {
             this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);
         } else {
@@ -190,8 +205,9 @@ export const FormBuilderContainer = React.createClass({
                 <ReKeyboardShortcuts id="formBuilderContainer" shortcutBindings={[
                     {key: 'esc', callback: () => {this.escapeCurrentContext(); return false;}},
                     {key: 'mod+s', callback: () => {this.saveClicked(); return false;}},
-                    {key: 'up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
-                    {key: 'down', callback: () => {this.keyboardMoveFieldDown(); return false;}}
+                    {key: 'shift+up', callback: () => {this.keyboardMoveFieldUp(); return false;}},
+                    {key: 'shift+down', callback: () => {this.keyboardMoveFieldDown(); return false;}},
+                    {key: 'backspace', callback: () => {this.removeField(); return false;}}
                 ]}/>
 
                 <PageTitle title={Locale.getMessage('pageTitles.editForm')}/>
