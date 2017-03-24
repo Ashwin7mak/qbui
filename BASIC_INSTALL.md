@@ -82,8 +82,8 @@ For developing set this environment variable in your bash profile
 
 By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- copy \<project root\>qbui/ui/server/src/config/environment/local.js.sample into local.js
-- copy \<project root\>qbui/ui/server/src/config/environment/e2e.js.sample into e2e.js
+- Make a copy of \<project root\>qbui/ui/server/src/config/environment/local.js.sample called local.js
+- Make a copy \<project root\>qbui/ui/server/src/config/environment/e2e.js.sample called e2e.js
 
 Edit both files and switch to the commented out values for javaHost, eeHost and eeHostPort so you point to the trunk integration environment
 
