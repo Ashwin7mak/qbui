@@ -4,11 +4,15 @@
  */
 (function() {
     'use strict';
-    //Bluebird Promise library
+    // Bluebird Promise library
     var promise = require('bluebird');
-    //Node.js assert library
+    // Node.js assert library
     var assert = require('assert');
-    var recordGenerator = require('../../../test_generators/record.generator.js');
+    // Record Generator library
+    var recordGenerator = require('../../../test_generators/record.generator');
+    // Logging library
+    var log = require('../../../server/src/logger').getLogger();
+
     module.exports = function(recordBase) {
         var recordService = {
             /**
@@ -61,6 +65,7 @@
                     generatedRecords.push(generatedEmptyRecords[0]);
                 }
 
+                // Based on how many records we are adding either do a couple addRecord calls or one bulk add call
                 if (numRecords < MIN_RECORDSCOUNT) {
                     // Via the API create the records, a new report, then run the report.
                     return e2eBase.recordService.addRecords(createdApp, createdApp.tables[tableIndex], generatedRecords);
@@ -75,24 +80,26 @@
              * Returns a promise.
              */
             addRecords: function(app, table, genRecords) {
-                //TODO: Remove deferred pattern
-                var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 var fetchRecordPromises = [];
-                //TODO: This function does not add records in order of the genRecords due to looping over promises
-                //TODO: Investigate fix or just use bulk for add any more than 1 record
+
+                // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
+                // otherwise errors can be swallowed!
                 genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
-                });
-                promise.each(fetchRecordPromises)
-                    .then(function(results) {
-                        deferred.resolve(results);
-                    }).catch(function(error) {
-                        console.log(JSON.stringify(error));
-                        deferred.reject(error);
+                    fetchRecordPromises.push(function() {
+                        return recordBase.createRecord(recordsEndpoint, currentRecord, null);
                     });
-                return deferred.promise;
+                });
+
+                // Bluebird's promise.each function (executes each promise synchronously)
+                return promise.each(fetchRecordPromises, function(queueItem) {
+                    // This is an iterator that executes each Promise function in the array here
+                    return queueItem();
+                }).catch(function(error) {
+                    log.error('Error adding records (possible random dataGen issue): ' + JSON.stringify(error));
+                    return error;
+                });
             },
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
@@ -101,7 +108,10 @@
             addBulkRecords: function(app, table, genRecords) {
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
+                return recordBase.createBulkRecords(recordsEndpoint, genRecords, null).catch(function(error) {
+                    log.error('Error adding bulk records (possible random dataGen issue): ' + JSON.stringify(error));
+                    return error;
+                });
             },
 
             /**

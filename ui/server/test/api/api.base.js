@@ -387,8 +387,6 @@
                                 } else {
                                     return reject(response);
                                 }
-
-
                             }
                         } else {
                             resolve(response);

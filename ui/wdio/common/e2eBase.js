@@ -7,7 +7,9 @@
 (function() {
     'use strict';
     //Bluebird Promise library
-    var Promise = require('bluebird');
+    var promise = require('bluebird');
+    // Logging library
+    var log = require('../../server/src/logger').getLogger();
 
     module.exports = function(config) {
         var recordBase = require('../../server/test/api/recordApi.base.js')(config);
@@ -112,7 +114,6 @@
                 }).then(function() {
                     // Initialize table properties for generated tables (via Experience Engine)
                     let initTablePropsPromises = [];
-
                     // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
                     // otherwise errors can be swallowed!
                     createdApp.tables.forEach(function(table, index) {
@@ -121,50 +122,56 @@
                             return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
                         });
                     });
-
                     // Bluebird's promise.each function (executes each promise synchronously)
-                    return Promise.each(initTablePropsPromises, function(queue_item) {
+                    return promise.each(initTablePropsPromises, function(queueItem) {
                         // This is an iterator that executes each Promise function in the array here
-                        return queue_item();
+                        return queueItem();
                     });
                 }).then(function() {
                     // Generate and add the default set of Users to the app
                     return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
                 }).then(function() {
-                    // Generate and add records to Table 1 (include a dupe and an empty record)
-                    return e2eBase.recordService.addRecordsToTable(createdApp, 0, numberOfRecords, true, true);
-                }).then(function() {
-                    // Create a List all report for the first table
-                    return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null);
-                }).then(function() {
-                    // Create records and a List all report for table 2
-                    //TODO: Need to do this better. We had inconsistencies when creating test data with promises hence why Table 2 is hardcoded
-                    if (createdApp.tables[1]) {
-                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                        var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
-                        // Generate the record JSON objects
-                        var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
-                        // Via the API create the records, a new report, then run the report.
-                        //TODO: The looping issue is probably caused by this addRecords function. Investigate.
-                        return e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords).then(function() {
-                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null);
+                    // Generate and add records to each table (include a dupe and an empty record)
+                    let addRecordPromises = [];
+                    createdApp.tables.forEach(function(table, index) {
+                        addRecordPromises.push(function() {
+                            return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, true, true);
                         });
-                    }
+                    });
+                    return promise.each(addRecordPromises, function(queueItem) {
+                        return queueItem();
+                    });
+                }).then(function() {
+                    // Create a List all report for each table
+                    let createReportPromises = [];
+                    createdApp.tables.forEach(function(table, index) {
+                        createReportPromises.push(function() {
+                            return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
+                        });
+                    });
+                    return promise.each(createReportPromises, function(queueItem) {
+                        return queueItem();
+                    });
                 }).then(function() {
                     // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
                 }).then(function() {
-                    // Set default table homepage for Table 1
-                    return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
-                }).then(function() {
-                    // Set default table homepage for Table 2
-                    return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[1].id, 1);
+                    // Set the default table homepage for each table
+                    let setDefaultTableHomePromises = [];
+                    createdApp.tables.forEach(function(table, index) {
+                        setDefaultTableHomePromises.push(function() {
+                            return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
+                        });
+                    });
+                    return promise.each(setDefaultTableHomePromises, function(queueItem) {
+                        return queueItem();
+                    });
                 }).then(function() {
                     // Return the createdApp object
                     return createdApp;
-                }).catch(function(e) {
+                }).catch(function(error) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error in defaultAppSetup: ' + e.message));
+                    return promise.reject(error);
                 });
             },
 
@@ -202,33 +209,48 @@
                     ];
                     // Use the Text field and Checkbox field for facets
                     var facetFids = [TEXT_FID, CHECKBOX_FID];
-                    var reportIds = [];
 
-                    //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
-                    // Create report with fids
-                    return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
-                        .then(function(rid1) {
-                            reportIds.push(rid1);
-                            // Create report with sortList
-                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
-                        }).then(function(rid2) {
-                            reportIds.push(rid2);
-                            // Create report with facetFids
-                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
-                        }).then(function(rid3) {
-                            reportIds.push(rid3);
-                            // Create report with all params defined
-                            return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
-                        }).then(function(rid4) {
-                            reportIds.push(rid4);
-                            return reportIds;
+                    // Array of promise functions
+                    let createReportPromises = [];
+
+                    // Load the array with the promise functions you want to execute
+                    createReportPromises.push(function() {
+                        // Create report with fids
+                        return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null);
+                    });
+                    createReportPromises.push(function() {
+                        // Create report with sortList
+                        return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
+                    });
+                    createReportPromises.push(function() {
+                        // Create report with sortList
+                        return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
+                    });
+                    createReportPromises.push(function() {
+                        // Create report with all params defined
+                        return e2eBase.reportService.createCustomReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
+                    });
+
+                    // Create an array to collect the results of each promise call (in this case each create report call returns a reportId)
+                    let reportIds = [];
+
+                    // Bluebird's promise.each function (executes each promise synchronously)
+                    return promise.each(createReportPromises, function(queueItem) {
+                        // This is an iterator that executes each Promise function in the array here
+                        return queueItem().then(function(result) {
+                            // Collect the returned rids from each create report call
+                            reportIds.push(result);
                         });
+                    }).then(function() {
+                        // return your array of rids for use later
+                        return reportIds;
+                    });
                 }).then(function(reportIds) {
-                    // Return back the list of reportIds
+                    // Return back the created app and list of reportIds
                     return [createdApp, reportIds];
-                }).catch(function(e) {
+                }).catch(function(error) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error during fullReportsSetup: ' + e.message));
+                    return promise.reject(error);
                 });
             },
 
@@ -236,7 +258,7 @@
             tablesSetUp: function(tableToFieldToFieldTypeMap) {
                 //use map of tables passed in
                 if (!tableToFieldToFieldTypeMap) {
-                    return Promise.reject(new Error("no map of tables to build defined"));
+                    return promise.reject(new Error("no map of tables to build defined"));
                 } else {
                     // Create the app schema via the API
                     return e2eBase.appService.createAppSchema(tableToFieldToFieldTypeMap);

@@ -30,13 +30,12 @@
              * Given an appId, tableId, tableNoun initialize a table properties object in EE.
              */
             initTableProperties: function(appId, tableId, tableNoun) {
+                //TODO: Ask Aditi about this
                 let propsJson = {"tableNoun":"' + tableNoun + '"};
                 const tablePropertiesEndpoint = recordBase.apiBase.resolveTablePropertiesEndpoint(appId, tableId);
                 // Makes use of the isEE param of the executeRequest function
                 return recordBase.apiBase.executeRequest(tablePropertiesEndpoint, 'POST', propsJson, null, null, true).then(function(result) {
                     return JSON.parse(result.body);
-                }).catch(function(error) {
-                    return Promise.reject(new Error('Error in initTableProperties: ' + error.message));
                 });
             }
         };
