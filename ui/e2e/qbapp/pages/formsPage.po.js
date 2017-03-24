@@ -26,15 +26,15 @@
     var FormsPage = function() {
         this.formTrowserHeader = element.all(by.className('trowserHeader')).first();
         //form help button
-        this.formHelpBtn = this.formTrowserHeader.element(by.className('iconTableUISturdy-help'));
+        this.formHelpBtn = this.formTrowserHeader.element(by.className('iconUISturdy-help'));
         //form close button
-        this.formCloseBtn = this.formTrowserHeader.element(by.className('iconTableUISturdy-close'));
+        this.formCloseBtn = this.formTrowserHeader.element(by.className('iconUISturdy-close'));
 
         this.formTrowserFooter = element(by.className('recordTrowser')).element(by.className('trowserFooter'));
         //save button
         this.formSaveBtn = this.formTrowserFooter.element(by.className('saveButtons'));
         //alert button
-        this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('iconTableUISturdy-alert'));
+        this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('iconUISturdy-alert'));
 
         this.formBodyEl = element(by.tagName('body'));
         this.recordContainerEl = element(by.className('recordContainer')).all(by.className('loadedContent')).first();
@@ -57,8 +57,8 @@
         this.formErrorMessage = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessage'));
         this.formErrorMessageVisisble = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessageVisible'));
         this.formErrorMessageHeader = this.formErrorMessage.element(by.className('qbErrorMessageHeader'));
-        this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.className('iconTableUISturdy-x-secondary'));
-        this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconTableUISturdy-alert'));
+        this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.className('iconUISturdy-x-secondary'));
+        this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconUISturdy-alert'));
         this.formErrorMessageContent = this.formErrorMessageVisisble.element(by.className('qbErrorMessageContent'));
 
         //Save changes before leaving dialogue

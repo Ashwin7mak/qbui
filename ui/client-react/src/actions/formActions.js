@@ -46,11 +46,13 @@ export const loadFormError = (id, error) => {
  * @param formData form data returned from server
  * @returns {{type, container: *, formData: *}}
  */
-export const loadFormSuccess = (id, formData) => {
+export const loadFormSuccess = (id, formData, appId, tblId) => {
     return {
         id,
         type: types.LOAD_FORM_SUCCESS,
-        formData: convertFormToArrayForClient(formData)
+        formData: convertFormToArrayForClient(formData),
+        appId,
+        tblId
     };
 };
 
@@ -186,7 +188,7 @@ export const loadForm = (appId, tblId, rptId, formType, recordId) => {
                         response.data.recordId = recordId;
                     }
 
-                    dispatch(loadFormSuccess(formType, response.data));
+                    dispatch(loadFormSuccess(formType, response.data, appId, tblId));
                     resolve(response.data);
                 },
                 (error) => {
