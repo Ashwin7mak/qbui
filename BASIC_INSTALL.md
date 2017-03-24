@@ -108,9 +108,11 @@ See [notes about the above configuration](ui/README.md#configuring)
 Note that this is pointing to the integration testing environment.  Apps here may be changed or torn down at any time.
 * Navigate to http://localhost:9000/qbase/components/qbpanel to see the component library and play with different React components we can reuse
 
-#### Note :
- The Node Server only listens via a specific ip/hostname when running with dev hotloader,
+#### Notes :
+* The integration environments are only available from the QuickBase network, so you will need to be in the office or on VPN
+* The Node Server only listens via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node 
+ 
 
 ## Testing
 See [testing instructions](ui/README.md#testing)
