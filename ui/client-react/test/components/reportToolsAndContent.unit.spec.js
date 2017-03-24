@@ -1,10 +1,9 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
 import {ReportToolsAndContent,
         __RewireAPI__ as ReportToolsAndContentRewireAPI}  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import constants from '../../../common/src/constants';
-import {shallow, mount} from 'enzyme';
+import {shallow} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {CONTEXT} from '../../src/actions/context';
 import Promise from 'bluebird';
@@ -31,7 +30,8 @@ describe('ReportToolsAndContent functions', () => {
 
     const rptId = '3';
     let reportParams = {appId: 1, tblId: 2, rptId: rptId, format:true, offset: constants.PAGE.DEFAULT_OFFSET, numRows: constants.PAGE.DEFAULT_NUM_ROWS};
-    let reportDataParams = {reportData: {appId: 1, tblId: 2, rptId: rptId, loading: true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportDataParams = {reportData: {appId: 1, tblId: 2, rptId: rptId, loading: true, pageOffset: 20, selections: new FacetSelections(), data: {recordsCount: 5, sortList: "1", columns: [{field: "col_num", headerName: "col_num"}], facets: [{
+        id: 1, name: 'test', type: "TEXT", values: [{value: "a"}, {value: "b"}, {value: "c"}]}]}}, selectedRows: ["rowSelected"]};
 
     const primaryKeyName = 'Employee Number';
     const reportFields = [{
@@ -109,7 +109,7 @@ describe('ReportToolsAndContent functions', () => {
     });
 
     it('passes the primaryKeyName to child components', () => {
-        const result = mount(
+        const result = shallow(
                 <ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams}/>
             );
 
@@ -120,6 +120,28 @@ describe('ReportToolsAndContent functions', () => {
     });
 
 
+    it('verifies if component contains the specific classes and invokes onGridSizeSet method', () => {
+        component = shallow(
+            <ReportToolsAndContent
+                flux={flux}
+                params={reportParams}
+                {...reportDataParams}
+            />);
+
+        expect(component.find('.ag-body-container')).toBeTruthy();
+        expect(component.find('.ag-pinned-left-cols-container')).toBeTruthy();
+        component.instance().onGridSizeSet();
+    });
+
+    it('invokes editNewRecord', () => {
+        component = shallow(
+            <ReportToolsAndContent
+                flux={flux}
+                params={reportParams}
+                {...reportDataParams}
+            />);
+        component.instance().editNewRecord();
+    })
 
     describe('load dynamic report Action tests', () => {
         let loadDynamicReportSpy = null;
@@ -128,17 +150,6 @@ describe('ReportToolsAndContent functions', () => {
         });
 
         it('invoke loadDynamicReport if a record is deleted', () => {
-
-            let filter = {
-                selections: reportDataParams.reportData.selections,
-                search:undefined,
-                facet:undefined
-            };
-            const queryParams = {
-                sortList: '',
-                offset: reportParams.offset,
-                numRows: reportParams.numRows
-            };
 
             const modifiedReport = Object.assign({}, reportDataParams);
             modifiedReport.reportData.isRecordDeleted = true;
@@ -151,8 +162,8 @@ describe('ReportToolsAndContent functions', () => {
                 reportParams.tblId,
                 reportParams.rptId,
                 reportParams.format,
-                filter,
-                queryParams
+                jasmine.any(Object),
+                jasmine.any(Object)
             );
 
         });
@@ -168,7 +179,7 @@ describe('ReportToolsAndContent functions', () => {
     });
 
 
-    describe('Search Input', () => {
+    describe('Test Search Input', () => {
 
         let searchInput = null;
         let clearSearchInput = null;
@@ -229,6 +240,7 @@ describe('ReportToolsAndContent functions', () => {
                 // pass in the spy loadDynamicReport as a prop
                 component.setProps({loadDynamicReport: obj.loadDynamicReport});
                 component.instance().clearSearchString();
+                component.instance().clearAllFilters();
                 expect(clearSearchInput).toHaveBeenCalled();
                 expect(obj.loadDynamicReport).toHaveBeenCalled();
             }).then(() => {
@@ -243,6 +255,70 @@ describe('ReportToolsAndContent functions', () => {
                 );
                 done();
             });
+        });
+    });
+
+    describe('Test get report next page', () => {
+        let obj = {};
+        reportDataParams.reportData.pageOffset = constants.PAGE.DEFAULT_OFFSET;
+        reportDataParams.reportData.numRows = constants.PAGE.DEFAULT_NUM_ROWS;
+        beforeEach(() => {
+            obj = {
+                loadDynamicReport: null
+            };
+            component = shallow(
+                <ReportToolsAndContent
+                    flux={flux}
+                    params={reportParams}
+                    {...reportDataParams}
+                />);
+
+        });
+
+        it('records count less than sum of offset and number of rows, method returns false', () => {
+            const result =  component.instance().getNextReportPage();
+            expect(result).toBeFalsy();
+        });
+
+        it('records count more than sum of offset and number of rows, invokes loadDynamicReport', () => {
+            spyOn(obj, 'loadDynamicReport');
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            reportDataParams.reportData.data.recordsCount =  reportDataParams.reportData.data.recordsCount + constants.PAGE.DEFAULT_NUM_ROWS;
+            component.instance().getNextReportPage();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
+        });
+    });
+
+    describe('Test get report previous page', () => {
+        let obj = {};
+
+        beforeEach(() => {
+            obj = {
+                loadDynamicReport: null
+            };
+
+            component = shallow(
+                <ReportToolsAndContent
+                    flux={flux}
+                    params={reportParams}
+                    {...reportDataParams}
+                />);
+
+        });
+
+        it('if page offset is zero, method returns false', () => {
+            reportDataParams.reportData.pageOffset = constants.PAGE.DEFAULT_OFFSET;
+            const result =  component.instance().getPreviousReportPage();
+            expect(result).toBeFalsy();
+        });
+
+
+        it('if page offset is not zero, invokes loadDynamicReport', () => {
+            reportDataParams.reportData.pageOffset = constants.PAGE.DEFAULT_NUM_ROWS;
+            spyOn(obj, 'loadDynamicReport');
+            component.setProps({loadDynamicReport: obj.loadDynamicReport});
+            component.instance().getPreviousReportPage();
+            expect(obj.loadDynamicReport).toHaveBeenCalled();
         });
     });
 });
