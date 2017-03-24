@@ -119,31 +119,8 @@ describe('FormBuilderContainer', () => {
         });
     });
 
-    describe('toggle children tab indexes', () => {
-        it('will toggle the children tab indexes if enter is pressed and the tab indexes are not already 0', () => {
-            let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}];
-            let e = {
-                which: 13,
-                preventDefault() {return;}
-            };
-
-            component = mount(<FormBuilderContainer appId={appId}
-                                                    forms={forms}
-                                                    tblId={tblId}
-                                                    loadForm={mockActions.loadForm}
-                                                    toggleFormBuilderChildrenTabIndex={mockActions.toggleFormBuilderChildrenTabIndex}
-                                                    updateForm={mockActions.updateForm} />);
-
-
-            instance = component.instance();
-            instance.updateChildrenTabIndex(e);
-
-            expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalled();
-        });
-    });
-
     describe('keyboard navigation for formBuilder', () => {
-        it('will toggle the children tab indexes if space is pressed and the tab indexes are not already 0', () => {
+        it('will toggle the children tab indices if space is pressed and the tab indices are not already 0', () => {
             let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}];
             let e = {
                 which: 32,
@@ -165,7 +142,7 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.toggleFormBuilderChildrenTabIndex).toHaveBeenCalled();
         });
 
-        it('will not toggle the children tab indexes if space or enter are not pressed', () => {
+        it('will not toggle the children tab indices if space or enter are not pressed', () => {
             let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}];
             let e = {
                 which: 19,
@@ -186,7 +163,7 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
         });
 
-        it('enter and space will not toggle the children tab indexes if the tabIndex is currently 0', () => {
+        it('enter and space will not toggle the children tab indices if the tabIndex is currently 0', () => {
             let forms = [{formData:{loading: false, formType: {}, formMeta: {}}}];
             let e = {
                 which: 32,
@@ -208,7 +185,7 @@ describe('FormBuilderContainer', () => {
             expect(mockActions.toggleFormBuilderChildrenTabIndex).not.toHaveBeenCalled();
         });
 
-        it('will move a remove a field', () => {
+        it('will remove a field', () => {
             component = shallow(<FormBuilderContainer
                 selectedField={selectedField}
                 forms={currentForm}
