@@ -29,7 +29,7 @@ function initializeState() {
         edited: false,
         editing: null,
         notifyTableCreated: false
-    }
+    };
 }
 
 beforeEach(() => {

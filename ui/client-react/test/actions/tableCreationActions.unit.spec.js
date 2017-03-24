@@ -111,7 +111,7 @@ describe('Table Creation actions', () => {
             });
     });
 
-    it('failes to create table', (done) => {
+    it('fails to create table', (done) => {
 
         TableCreationsActionsRewireAPI.__Rewire__('TableService', mockTableFailureService);
 
@@ -130,7 +130,6 @@ describe('Table Creation actions', () => {
                 done();
             });
 
-        TableCreationsActionsRewireAPI.__ResetDependency__('mockTableService');
     });
     it('should create an action for notifying of table creation', () => {
         expect(actions.notifyTableCreated(true)).toEqual({type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
