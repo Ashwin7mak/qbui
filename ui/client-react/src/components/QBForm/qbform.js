@@ -469,10 +469,10 @@ let QBForm = React.createClass({
      * This is for keyboard navigation, it will add focus to a form only if formFocus is true
      * */
     componentDidUpdate() {
-      if (this.props.formFocus) {
+        if (this.props.formFocus) {
           document.querySelector('.formContainer .editForm').focus();
           document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
-      }
+        }
     },
 
     /**
