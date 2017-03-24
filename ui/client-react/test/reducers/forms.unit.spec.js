@@ -34,43 +34,6 @@ describe('Forms reducer functions', () => {
         expect(reducer(undefined, {})).toEqual(initialState);
     });
 
-    describe('Loading form functions', () => {
-        it('returns correct state when loading view form', () => {
-            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual([{
-                id: 'view',
-                syncLoadedForm: false,
-                loading: true,
-                errorStatus: null
-            }]);
-        });
-
-        it('returns correct state when load succeeds', () => {
-            let loadingFormState = [{
-                id: 'view',
-                loading: true,
-                errorStatus: null
-            }];
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: "someData"})).toDeepEqual([{
-                id: 'view',
-                loading: false,
-                formData: "someData",
-                errorStatus:null
-            }]);
-        });
-
-        it('returns correct state when load error occurs', () => {
-            let loadingFormState = [{
-                id: 'view',
-                loading: true,
-                errorStatus: null
-            }];
-            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual([{
-                id: 'view',
-                loading: false,
-                errorStatus: "oops"
-            }]);
-        });
-    });
 
     describe('Sync form changes functions', () => {
         let syncFormState = [{
@@ -86,6 +49,45 @@ describe('Forms reducer functions', () => {
                 formData:'someData'
             }]);
         });
+    });
+
+
+    describe('Loading form functions', () => {
+        it('returns correct state when loading view form', () => {
+            expect(reducer(initialState, {type: types.LOADING_FORM, id: 'view'})).toDeepEqual([{
+                id: 'view',
+                syncLoadedForm: false,
+                loading: true,
+                errorStatus: null
+            }]);
+        });
+
+        it('returns correct state when load error occurs', () => {
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_ERROR, id: "view", error: "oops"})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                errorStatus: "oops"
+            }]);
+        });
+        it('returns correct state when load succeeds', () => {
+            let loadingFormState = [{
+                id: 'view',
+                loading: true,
+                errorStatus: null
+            }];
+            expect(reducer(loadingFormState, {type: types.LOAD_FORM_SUCCESS, id: "view", formData: "someData"})).toDeepEqual([{
+                id: 'view',
+                loading: false,
+                formData: "someData",
+                errorStatus:null
+            }]);
+        });
+
     });
 
     let VIEW = 'view';
