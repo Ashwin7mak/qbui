@@ -5,6 +5,8 @@ import en from 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router';
+import AppsBundleLoader from '../../client-react/src/locales/appsBundleLoader';
+import config from '../../client-react/src/config/app.config';
 
 import Nav from '../../client-react/src/components/nav/nav';
 
@@ -42,7 +44,7 @@ import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import QBPanelDoc from './docs/qbpanel';
-import ReIconDoc from './docs/reIcon';
+import IconDoc from './docs/icon';
 import QBModalDoc from './docs/qbModal.js';
 
 import InvisibleBackdropDoc from './docs/invisibleBackdrop.js';
@@ -53,8 +55,13 @@ import PhoneFieldValueRendererDoc from './docs/phoneFieldValueRenderer.js';
 import DurationFieldValueRendererDoc from './docs/durationFieldValueRenderer.js';
 import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
 import QbGridDoc from './docs/qbGrid.js';
+import SideMenuBaseDoc from './docs/sideMenuBase.js';
+import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
+
+// init the localization services
+AppsBundleLoader.changeLocale(config.locale.default);
 
 render((
     <Router history={browserHistory}>
@@ -84,7 +91,7 @@ render((
             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
-            <Route path="reIcon" component={ReIconDoc} />
+            <Route path="icon" component={IconDoc} />
             <Route path="qBModal" component={QBModalDoc} />
             <Route path="alertBanner" component={AlertBannerDoc} />
             <Route path="pageTitle" component={PageTitleDoc} />
@@ -93,6 +100,8 @@ render((
             <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
             <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
             <Route path="qbGrid" component={QbGridDoc} />
+            <Route path="sideMenuBase" component={SideMenuBaseDoc} />
+            <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

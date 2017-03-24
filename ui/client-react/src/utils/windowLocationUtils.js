@@ -54,6 +54,14 @@ class WindowLocationUtils {
     }
 
     /**
+     * Function to return the current pathname
+     * this exists for testability
+     */
+    static getPathname() {
+        return window.location.pathname;
+    }
+
+    /**
      * push current url with key=value query param
      * @param key
      * @param value

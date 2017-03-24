@@ -127,12 +127,13 @@ var config = {
                     componentLibraryPath,
                     path.resolve(__dirname, 'node_modules/ag-grid'),
                     path.resolve(__dirname, 'node_modules/react-notifications'),
-                    path.resolve(__dirname, 'node_modules/react-select')
+                    path.resolve(__dirname, 'node_modules/react-select'),
+                    path.resolve(__dirname, 'node_modules/rc-tabs')
                 ],
                 exclude: [
                     // Exclude fonts because webpack sourceMaps mess up the urls for font-face
                     path.resolve(__dirname, 'reuse/client/src/assets/fonts'),
-                    path.resolve(__dirname, 'reuse/client/src/components/reIcon')
+                    path.resolve(__dirname, 'reuse/client/src/components/icon')
                 ],
                 loader: LOCAL ? 'style?sourceMap!css?sourceMap' : 'style!css'
             },
@@ -143,7 +144,7 @@ var config = {
                 test: /\.css?$/,
                 include: [
                     path.resolve(__dirname, 'reuse/client/src/assets/fonts'),
-                    path.resolve(__dirname, 'reuse/client/src/components/reIcon')
+                    path.resolve(__dirname, 'reuse/client/src/components/icon')
                 ],
                 loader: 'style!css' // never use source maps on these files
             },

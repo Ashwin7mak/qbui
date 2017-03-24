@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Button from 'react-bootstrap/lib/Button';
-import ReIcon from '../reIcon/reIcon';
+import Icon from '../icon/icon';
 import Tooltip from '../tooltip/tooltip';
 
 import './topNav.scss';
@@ -37,12 +37,12 @@ class ReTopNav extends Component {
             <ButtonGroup className="navItem">
                 <Tooltip i18nMessageKey="unimplemented.search" location="bottom">
                     <Button tabIndex="2" className="disabled">
-                        <ReIcon icon="search" />
+                        <Icon icon="search" />
                     </Button>
                 </Tooltip>
 
                 <Tooltip i18nMessageKey="unimplemented.favorites" location="bottom">
-                    <Button tabIndex="3" className="disabled"><ReIcon icon="star-full" /></Button>
+                    <Button tabIndex="3" className="disabled"><Icon icon="star-full" /></Button>
                 </Tooltip>
             </ButtonGroup>
         );
@@ -59,7 +59,7 @@ class ReTopNav extends Component {
                     <div className="navGroup left">
                         <ButtonGroup className="navItem">
                             <Button tabIndex="1"  className="iconLink toggleNavButton" onClick={onNavClick}>
-                                <ReIcon icon="hamburger" />
+                                <Icon icon="hamburger" />
                             </Button>
 
                             {this.getTopTitle()}

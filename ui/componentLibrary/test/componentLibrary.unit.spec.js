@@ -6,7 +6,7 @@ import ComponentLibraryWrapper from '../src/components/componentLibrary';
 import PropTable from '../src/components/PropTable';
 import ReactPlayground from '../src/components/ReactPlayground';
 
-import ReIconDoc from '../src/docs/reIcon';
+import IconDoc from '../src/docs/icon';
 
 const fakeMetadata = {
     "QBPanel": {
@@ -69,7 +69,7 @@ const fakeMetadata = {
         "doclets": {},
         "descHtml": "<h1 id=\"qbpanel\">QBPanel</h1>\n<p> Custom QuickBase Panel component that wraps the bootstrap component. You can pass content by wrapping it in a <code>&lt;QBPanel&gt;&lt;/QBPanel&gt;</code> tag.</p>\n"
     },
-    "ReIcon": {
+    "Icon": {
         "props": {
             "icon": {
                 "type": {
@@ -103,13 +103,13 @@ const fakeMetadata = {
         },
         "composes": [],
         "methods": {},
-        "desc": "# QuickBase Icon Font\nAn icon using a new qb icon font (from Lisa)\n## Usage\n```\n  <ReIcon icon=\"accessibility\" />\n```",
+        "desc": "# QuickBase Icon Font\nAn icon using a new qb icon font (from Lisa)\n## Usage\n```\n  <Icon icon=\"accessibility\" />\n```",
         "doclets": {},
-        "descHtml": "<h1 id=\"quickbase-icon-font\">QuickBase Icon Font</h1>\n<p>An icon using a new qb icon font (from Lisa)</p>\n<h2 id=\"usage\">Usage</h2>\n<pre><code>  &lt;ReIcon icon=&quot;accessibility&quot; /&gt;\n</code></pre>"
+        "descHtml": "<h1 id=\"quickbase-icon-font\">QuickBase Icon Font</h1>\n<p>An icon using a new qb icon font (from Lisa)</p>\n<h2 id=\"usage\">Usage</h2>\n<pre><code>  &lt;Icon icon=&quot;accessibility&quot; /&gt;\n</code></pre>"
     }
 };
 
-const exampleCodeText = "const basicIcon = (<ReIcon icon='hamburger' />);ReactDOM.render(basicIcon, mountNode);";
+const exampleCodeText = "const basicIcon = (<Icon icon='hamburger' />);ReactDOM.render(basicIcon, mountNode);";
 
 describe('Component Library functions', () => {
     'use strict';
@@ -144,13 +144,13 @@ describe('Component Library functions', () => {
 
     // PropTable
     it('test render prop table', () => {
-        let component = TestUtils.renderIntoDocument(<PropTable component="ReIcon" metadata={fakeMetadata} />);
+        let component = TestUtils.renderIntoDocument(<PropTable component="Icon" metadata={fakeMetadata} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     // Test doc files
-    // it('test render ReIcon Doc', () => {
-    //     var component = TestUtils.renderIntoDocument(<ReIconDoc />);
+    // it('test render Icon Doc', () => {
+    //     var component = TestUtils.renderIntoDocument(<IconDoc />);
     //     expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     // });
 
