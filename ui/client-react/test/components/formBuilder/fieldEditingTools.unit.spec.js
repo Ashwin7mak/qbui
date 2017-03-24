@@ -22,7 +22,7 @@ const mockParentProps = {
     selectField(_formId, _location) {}
 };
 
-const currentForm = {formBuilderChildrenTabIndex: ["0"]};
+const formBuilderChildrenTabIndex = ["0"];
 const formId = 'view';
 const location = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 4};
 const diffSelectedLocation = {tabIndex: 0, sectionIndex: 1, columnIndex: 2, rowIndex: 3, elementIndex: 3};
@@ -40,7 +40,7 @@ describe('FieldEditingTools', () => {
     });
 
     it('has a drag handle', () => {
-        component = shallow(<FieldEditingTools currentForm={currentForm} selectedFields={[]}/>);
+        component = shallow(<FieldEditingTools formBuilderChildrenTabIndex={formBuilderChildrenTabIndex} selectedFields={[]}/>);
 
         expect(component.find(DragHandle)).toBePresent();
     });
@@ -49,7 +49,7 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'removeField');
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
             removeField={mockParentProps.removeField}
@@ -68,7 +68,7 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'openFieldPreferences');
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             selectedFields={[]}
             location={location}
             onClickFieldPreferences={mockParentProps.openFieldPreferences}
@@ -87,7 +87,7 @@ describe('FieldEditingTools', () => {
         spyOn(mockParentProps, 'selectField');
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
             selectField={mockParentProps.selectField}
@@ -102,7 +102,7 @@ describe('FieldEditingTools', () => {
 
     it('adds a selectedFormElement class to the field that is selected', () => {
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
         />);
@@ -114,7 +114,7 @@ describe('FieldEditingTools', () => {
 
     it('does not add a selectedFormElement class to any fields, when no fields are selected', () => {
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[]}
         />);
@@ -131,7 +131,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
         />);
@@ -152,7 +152,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
         />);
@@ -173,7 +173,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
         />);
@@ -193,7 +193,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
@@ -213,7 +213,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
@@ -233,7 +233,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[diffSelectedLocation]}
             formId={formId}
@@ -256,7 +256,7 @@ describe('FieldEditingTools', () => {
         };
 
         component = shallow(<FieldEditingTools
-            currentForm={currentForm}
+            formBuilderChildrenTabIndex={formBuilderChildrenTabIndex}
             location={location}
             selectedFields={[location]}
             keyboardMoveFieldDown={mockParentProps.keyboardMoveFieldDown}
