@@ -29,10 +29,8 @@ class MultiStepDialog extends React.Component {
 
     renderTitle() {
 
-        return this.props.titleMessages && (
-            <Modal.Title>
-                <I18nMessage message={this.props.titleMessages[this.props.pageIndex]} />
-            </Modal.Title>);
+        return this.props.titles && (
+            <Modal.Title>{this.props.titles[this.props.pageIndex]}</Modal.Title>);
     }
 
     renderIcons() {
@@ -131,13 +129,15 @@ class MultiStepDialog extends React.Component {
 }
 
 MultiStepDialog.propTypes = {
+    titles: PropTypes.arrayOf(PropTypes.string),
     pageIndex: PropTypes.number.isRequired,
     onCancel: PropTypes.func.isRequired,
     onNext: PropTypes.func.isRequired,
     onPrevious: PropTypes.func.isRequired,
     onFinished: PropTypes.func.isRequired,
     canProceed: PropTypes.bool,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    classes: PropTypes.string
 };
 
 MultiStepDialog.defaultProps = {

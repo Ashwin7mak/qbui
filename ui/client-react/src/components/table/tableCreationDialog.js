@@ -121,7 +121,7 @@ export class TableCreationDialog extends React.Component {
                                  onNext={this.onNext}
                                  onFinished={this.onFinished}
                                  canProceed={this.isValid()}
-                                 titleMessages={["tableCreation.newTablePageTitle", "tableCreation.addFieldsTitle"]}>
+                                 titles={[Locale.getMessage("tableCreation.newTablePageTitle"), Locale.getMessage("tableCreation.addFieldsTitle")]}>
 
                 <TableCreationPanel tableInfo={this.props.tableInfo}
                                     tableMenuOpened={this.props.tableMenuOpened}
