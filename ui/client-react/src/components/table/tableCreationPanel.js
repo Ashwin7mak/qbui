@@ -152,6 +152,7 @@ class TableCreationPanel extends React.Component {
                 <div className="sections">
                     <TableFieldInput title={Locale.getMessage("tableCreation.tableNameHeading")}
                                      name="name"
+                                     placeholder={Locale.getMessage("tableCreation.tableNamePlaceholder")}
                                      value={this.props.tableInfo.name.value}
                                      onChange={this.updateTableProperty}
                                      onFocus={this.onFocusInput}
@@ -164,6 +165,7 @@ class TableCreationPanel extends React.Component {
 
                     <TableFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}
                                      name="tableNoun"
+                                     placeholder={Locale.getMessage("tableCreation.recordNamePlaceholder")}
                                      value={this.props.tableInfo.tableNoun.value}
                                      onChange={this.updateTableProperty}
                                      onFocus={this.onFocusInput}
@@ -177,6 +179,7 @@ class TableCreationPanel extends React.Component {
 
                     <TableFieldInput title={Locale.getMessage("tableCreation.descriptionHeading")}
                                      name="description"
+                                     placeholder={Locale.getMessage("tableCreation.descriptionPlaceholder")}
                                      value={this.props.tableInfo.description.value}
                                      onChange={this.updateTableProperty}
                                      component="textarea"

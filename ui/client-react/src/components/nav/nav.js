@@ -379,6 +379,9 @@ export let Nav = React.createClass({
         this.props.dispatch(ShellActions.toggleLeftNav());
     },
 
+    /**
+     * open the create table wizard
+     */
     createNewTable() {
         this.props.dispatch(TableCreationActions.showTableCreationDialog());
     }

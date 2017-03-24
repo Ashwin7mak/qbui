@@ -563,6 +563,10 @@ export default {
             iconHeading: "Icône",
             suggestedIconsHeading: "Icônes suggérées",
 
+            tableNamePlaceholder: "Par exemple, les clients",
+            recordNamePlaceholder: "Par exemple, client",
+            descriptionPlaceholder: "Texte à afficher en vol stationnaire sur le nom de la table dans la colonne de gauche",
+
             tableCreated: "Tableau créé",
             tableCreationFailed: "Impossible de créer une table",
             validateTableNameEmpty: "Le nom de la table ne doit pas être vide",

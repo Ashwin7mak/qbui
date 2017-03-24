@@ -564,6 +564,10 @@ export default {
             iconHeading: "Symbol",
             suggestedIconsHeading: "Vorgeschlagene Ikonen",
 
+            tableNamePlaceholder: "Zum Beispiel, Kunden",
+            recordNamePlaceholder: "Zum Beispiel, Kunde",
+            descriptionPlaceholder: "Text, der angezeigt wird, wenn er über den Tabellennamen in der linken Spalte schwebt",
+
             tableCreated: "Tabelle erstellt",
             tableCreationFailed: "Unable to create table",
             validateTableNameEmpty: "Kann keine Tabelle erstellen",

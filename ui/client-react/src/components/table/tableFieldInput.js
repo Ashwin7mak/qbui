@@ -39,6 +39,7 @@ class TableFieldInput extends React.Component {
             type: "text",
             value: this.props.value,
             rows: this.props.rows,
+            placeholder: this.props.placeholder,
             ref: (input) => {this.input = input;},
             onChange: (e) => this.props.onChange(this.props.name, e.target.value),
             onFocus: () => this.props.onFocus && this.props.onFocus(this.props.name),

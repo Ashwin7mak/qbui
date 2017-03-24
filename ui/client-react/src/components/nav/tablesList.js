@@ -130,6 +130,10 @@ let TablesList = React.createClass({
         </li>);
     },
 
+    /**
+     * render fixed footer (new table link)
+     * @returns {XML}
+     */
     getBottomLinksItem() {
 
         return (
@@ -139,6 +143,7 @@ let TablesList = React.createClass({
                 </div>
             </li>);
     },
+
     render() {
         return (
             <div className="tablesHeadingAndList">
