@@ -25,16 +25,22 @@ let logger = new Logger();
 const mapStateToProps = state => {
     let tabIndex = undefined;
     let selectedField = undefined;
+    let formFocus = undefined;
     if (state.forms.length > 0 && state.forms[0].formBuilderChildrenTabIndex) {
         tabIndex = state.forms[0].formBuilderChildrenTabIndex[0];
     }
     if (state.forms.length > 0 && state.forms[0].selectedFields) {
         selectedField = state.forms[0].selectedFields[0];
     }
+    if (state.forms.length > 0 && state.forms[0].formFocus) {
+        formFocus = state.forms[0].formFocus[0];
+    }
+
     return {
         forms: state.forms,
         tabIndex,
-        selectedField
+        selectedField,
+        formFocus
     };
 };
 
@@ -199,6 +205,7 @@ export const FormBuilderContainer = React.createClass({
                         <div className="formBuilderContent">
                             <Loader loaded={loaded} options={LARGE_BREAKPOINT}>
                                 <FormBuilder
+                                    formFocus={this.props.formFocus}
                                     selectedField={this.props.selectedField}
                                     formBuilderUpdateChildrenTabIndex={this.updateChildrenTabIndex}
                                     formId={formId}

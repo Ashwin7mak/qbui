@@ -289,13 +289,22 @@ const forms = (
         }
 
         let tabIndex = action.content.currentTabIndex === undefined || action.content.currentTabIndex === "-1" ? "0" : "-1";
+        let formFocus = false;
+
+        if (action.content.currentTabIndex === undefined) {
+            formFocus = false;
+        } else if (tabIndex === "-1") {
+            formFocus = true;
+        }
         updatedForm = _.cloneDeep(currentForm);
 
-        if (!updatedForm.formBuilderChildrenTabIndex) {
+        if (!updatedForm.formBuilderChildrenTabIndex && !updatedForm.formFocus) {
             updatedForm.formBuilderChildrenTabIndex = [];
+            updatedForm.formFocus = [];
         }
 
         updatedForm.formBuilderChildrenTabIndex[0] = tabIndex;
+        updatedForm.formFocus[0] = formFocus;
 
         return [
             ...newState,

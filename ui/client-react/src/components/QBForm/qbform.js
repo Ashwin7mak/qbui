@@ -466,6 +466,15 @@ let QBForm = React.createClass({
     },
 
     /**
+     * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * */
+    componentDidUpdate() {
+      if (this.props.formFocus) {
+          document.querySelector('.formContainer .editForm').focus();
+      }
+    },
+
+    /**
      * This is for keyboard navigation for form builder. If we are in form builder this will add forms to the tabbing flow.
      * */
     isEditingForm(formContent) {

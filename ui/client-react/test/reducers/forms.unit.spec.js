@@ -378,7 +378,8 @@ describe('Forms reducer functions', () => {
             expect(reducer(stateWithViewForm, actionPayload)).toEqual([{
                 ...stateWithViewForm[0],
                 formData: {formMeta: testFormMeta},
-                formBuilderChildrenTabIndex: ['0']
+                formBuilderChildrenTabIndex: ['0'],
+                formFocus: [false]
             }]);
         });
 
