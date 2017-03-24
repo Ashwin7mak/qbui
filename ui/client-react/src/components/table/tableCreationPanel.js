@@ -1,4 +1,5 @@
 import React from 'react';
+import {PropTypes} from 'react';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import TableFieldInput from './tableFieldInput';
@@ -13,6 +14,7 @@ class TableCreationPanel extends React.Component {
     constructor(props) {
         super(props);
 
+        // bind to fix context for event handlers
         this.onToggleDropdown = this.onToggleDropdown.bind(this);
         this.selectIcon = this.selectIcon.bind(this);
         this.updateTableProperty = this.updateTableProperty.bind(this);
@@ -20,6 +22,10 @@ class TableCreationPanel extends React.Component {
         this.onBlurInput = this.onBlurInput.bind(this);
     }
 
+    /**
+     * get a set of table icon names (this is temporary until the icon chooser is built)
+     * @returns
+     */
     getIconNames()  {
         return [
             "estimates",
@@ -34,26 +40,44 @@ class TableCreationPanel extends React.Component {
         ];
     }
 
+    /**
+     * get a table icon with a given name
+     * @param name
+     * @returns {XML}
+     */
     getTableIcon(name) {
         return <Icon iconFont={AVAILABLE_ICON_FONTS.TABLE_STURDY} icon={name}/>;
     }
 
+    /**
+     * track open dialogs since parent might need the info to prevent clipping etc.
+     * @param isOpen
+     */
     onToggleDropdown(isOpen) {
 
-        if (isOpen) {
+        if (isOpen && this.props.tableMenuOpened) {
             this.props.tableMenuOpened();
-        } else {
+        } else if (this.props.tableMenuOpened) {
             this.props.tableMenuClosed();
         }
     }
 
+    /**
+     * icon selected
+     * @param icon
+     */
     selectIcon(icon) {
 
         this.updateTableProperty('tableIcon', icon);
     }
 
+    /**
+     * get a dropdown containing a set of sample icons (temporary until icon chooser is built)
+     * @returns {XML}
+     */
     getIconDropdown() {
 
+        // set title to currently selected icon
         const dropdownTitle = this.getTableIcon(this.props.tableInfo.tableIcon.value);
 
         const iconNames = this.getIconNames();
@@ -70,6 +94,10 @@ class TableCreationPanel extends React.Component {
             </DropdownButton>);
     }
 
+    /**
+     * display suggested icons in a list (temporary until icon chooser is built)
+     * @returns {XML}
+     */
     getSuggestedIcons() {
         const iconNames = this.getIconNames();
         return (
@@ -82,12 +110,22 @@ class TableCreationPanel extends React.Component {
 
     }
 
+    /**
+     * check existing table names for proposed name
+     * @param name
+     * @returns {boolean}
+     */
     tableNameExists(name) {
 
         return this.props.appTables.indexOf(name) !== -1;
-
     }
 
+    /**
+     * updata a table property
+     * @param property 'name' etc
+     * @param value new value for property
+     * @param isUserEdit did user initiate the edit?
+     */
     updateTableProperty(property, value, isUserEdit = true) {
 
         let validationError = null;
@@ -100,7 +138,6 @@ class TableCreationPanel extends React.Component {
             } else if (this.tableNameExists(trimmed)) {
                 validationError = Locale.getMessage('tableCreation.validateTableNameExists');
             }
-
             break;
         }
         case 'tableNoun': {
@@ -113,6 +150,10 @@ class TableCreationPanel extends React.Component {
         this.props.setTableProperty(property, value, validationError, isUserEdit);
     }
 
+    /**
+     * render an icon selection section (temporary until icon chooser is built)
+     * @returns {XML}
+     */
     renderIconSection() {
 
         return (<div className="tableField iconSelection">
@@ -127,21 +168,37 @@ class TableCreationPanel extends React.Component {
         </div>);
     }
 
+    /**
+     * validate all tableInfo props
+     */
     componentDidMount() {
 
         _.mapKeys(this.props.tableInfo, (val, key) => {
+
+            // update prop to set the validation state, but don't mark fields as being edited
             this.updateTableProperty(key, val.value, false);
         });
     }
 
+    /**
+     * set edited property to that which has focus
+     * @param name
+     */
     onFocusInput(name) {
         this.props.setEditingProperty(name);
     }
 
+    /**
+     * unset edited property when focus is lost
+     */
     onBlurInput() {
         this.props.setEditingProperty(null);
     }
 
+    /**
+     * render the table settings UI
+     * @returns {XML}
+     */
     render() {
         return (
             <div className="tableInfo">
@@ -188,5 +245,14 @@ class TableCreationPanel extends React.Component {
             </div>);
     }
 }
+
+TableCreationPanel.propTypes = {
+    appTables: PropTypes.array.isRequired,
+    tableInfo: PropTypes.object.isRequired,
+    tableMenuOpened: PropTypes.func,
+    tableMenuClosed: PropTypes.func,
+    setEditingProperty: PropTypes.func.isRequired
+
+};
 
 export default TableCreationPanel;

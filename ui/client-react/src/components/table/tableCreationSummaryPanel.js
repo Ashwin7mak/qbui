@@ -9,6 +9,10 @@ class TableCreationSummaryPanel extends React.Component {
         super(props);
     }
 
+    /**
+     * render the table creation summary panel (2d page of the table creation wizard)
+     * @returns {XML}
+     */
     render() {
         return (
             <div className="tableCreationSummary">

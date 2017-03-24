@@ -378,14 +378,15 @@ div.leftNavTooltip {
                 line-height: 40px;
                 .newTable {
                     cursor: pointer;
-                    padding-left: 10px;
+
                     &:hover {
                         color: $left-nav-link-hover-color;
                         background-color: $leftnav-table-selected-color;
                     }
                     .qbIcon {
                         vertical-align: middle;
-                        width: 24px;
+                        width: 32px;
+                        font-size: 32px;
                     }
                 }
 
