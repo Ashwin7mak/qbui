@@ -304,7 +304,7 @@ let QBForm = React.createClass({
 
         let CurrentFieldElement = (this.props.editingForm ? DragAndDropField(FieldElement) : FieldElement);
         /**
-         * This tabIndex is for form builder keyboard navigation. It is removing all field editors from the tabbing flow.
+         * This tabIndex is for form builder keyboard navigation. It is removing all field value editors from the tabbing flow
          * */
         let tabIndex = (this.props.editingForm ? "-1" : 0);
         return (
@@ -467,6 +467,7 @@ let QBForm = React.createClass({
 
     /**
      * This is for keyboard navigation, it will add focus to a form only if formFocus is true
+     * formFocus becomes true when a user is hitting escape to remove the children elements form the tabbing flow
      * */
     componentDidUpdate() {
         if (this.props.formFocus) {
@@ -476,7 +477,7 @@ let QBForm = React.createClass({
     },
 
     /**
-     * This is for keyboard navigation for form builder. If we are in form builder this will add forms to the tabbing flow.
+     * This is for keyboard navigation for form builder. If we are in form builder this will add forms to the tabbing flow
      * */
     isEditingForm(formContent) {
         if (this.props.editingForm) {

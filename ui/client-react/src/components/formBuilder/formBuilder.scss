@@ -50,7 +50,8 @@
             }
 
             &:hover {
-                background: $color-black-250;
+                transition: background-color 0.5s ease;
+                background-color: $color-black-250;
 
                 .fieldEditingTools {
                     opacity: 1;
@@ -81,10 +82,11 @@
             }
 
             &.selectedFormElement {
+                transition: background-color 0.5s ease;
                 &:hover {
                     background: $color-cyan-300;
                 }
-                background: $color-cyan-300;
+                background-color: $color-cyan-300;
                 z-index: -1 !important;
                 .deleteFieldIcon {
                     .qbIcon {
