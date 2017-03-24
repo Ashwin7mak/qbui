@@ -1,5 +1,5 @@
 /**
- * e2e base module that initializes the domain service modules as well as the base class defined in the server layer
+ * e2e base module that initializes the domain service modules as well as the base class defined in the Node server layer
  * Currently recordApi.base.js is the server module which communicates with the Java API.
  * This module needs to be 'required' by all wdio tests (make sure to run the initialize function and set the baseUrl).
  * Created by klabak on 9/17/15.
@@ -111,19 +111,30 @@
                 return e2eBase.appService.createApp(generatedApp).then(function(appResponse) {
                     // Set the global app object for use below
                     createdApp = appResponse;
-                }).then(function() {
-                    // Initialize table properties for generated tables (via Experience Engine)
-                    let initTablePropsPromises = [];
+
+                    let tableSetupPromises = [];
                     // If using JS for loops with promise functions make sure to use Bluebird's Promise.each function
                     // otherwise errors can be swallowed!
                     createdApp.tables.forEach(function(table, index) {
                         // Load an array with the promise functions you want to execute
-                        initTablePropsPromises.push(function() {
+                        tableSetupPromises.push(function() {
+                            // Initialize table properties for generated tables (via Experience Engine)
                             return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
                         });
+                        tableSetupPromises.push(function() {
+                            // Generate and add records to each table (include a dupe and an empty record)
+                            return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, true, true);
+                        });
+                        tableSetupPromises.push(function() {
+                            // Create a List all report for each table
+                            return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
+                        });
+                        tableSetupPromises.push(function() {
+                            return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
+                        });
                     });
-                    // Bluebird's promise.each function (executes each promise synchronously)
-                    return promise.each(initTablePropsPromises, function(queueItem) {
+                    // Bluebird's promise.each function (executes each promise sequentially)
+                    return promise.each(tableSetupPromises, function(queueItem) {
                         // This is an iterator that executes each Promise function in the array here
                         return queueItem();
                     });
@@ -131,41 +142,8 @@
                     // Generate and add the default set of Users to the app
                     return e2eBase.userService.addDefaultUserListToApp(createdApp.id);
                 }).then(function() {
-                    // Generate and add records to each table (include a dupe and an empty record)
-                    let addRecordPromises = [];
-                    createdApp.tables.forEach(function(table, index) {
-                        addRecordPromises.push(function() {
-                            return e2eBase.recordService.addRecordsToTable(createdApp, index, numberOfRecords, true, true);
-                        });
-                    });
-                    return promise.each(addRecordPromises, function(queueItem) {
-                        return queueItem();
-                    });
-                }).then(function() {
-                    // Create a List all report for each table
-                    let createReportPromises = [];
-                    createdApp.tables.forEach(function(table, index) {
-                        createReportPromises.push(function() {
-                            return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
-                        });
-                    });
-                    return promise.each(createReportPromises, function(queueItem) {
-                        return queueItem();
-                    });
-                }).then(function() {
                     // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
-                }).then(function() {
-                    // Set the default table homepage for each table
-                    let setDefaultTableHomePromises = [];
-                    createdApp.tables.forEach(function(table, index) {
-                        setDefaultTableHomePromises.push(function() {
-                            return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
-                        });
-                    });
-                    return promise.each(setDefaultTableHomePromises, function(queueItem) {
-                        return queueItem();
-                    });
                 }).then(function() {
                     // Return the createdApp object
                     return createdApp;
@@ -234,7 +212,7 @@
                     // Create an array to collect the results of each promise call (in this case each create report call returns a reportId)
                     let reportIds = [];
 
-                    // Bluebird's promise.each function (executes each promise synchronously)
+                    // Bluebird's promise.each function (executes each promise sequentially)
                     return promise.each(createReportPromises, function(queueItem) {
                         // This is an iterator that executes each Promise function in the array here
                         return queueItem().then(function(result) {
