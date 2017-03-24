@@ -4,6 +4,10 @@
  */
 (function() {
     'use strict';
+    // Bluebird Promise library
+    var promise = require('bluebird');
+    // Logging library
+    var log = require('../../../server/src/logger').getLogger();
     // Field generator module
     var fieldGenerator = require('../../../test_generators/field.generator.js');
     module.exports = function(recordBase) {
@@ -24,7 +28,10 @@
                 return fieldGenerator.generateChoices(type, numChoices, options);
             },
             setDefaultTableHomePage : function(appId, tableId, reportId) {
-                return recordBase.apiBase.setDefaultTableHomePage(appId, tableId, reportId);
+                return recordBase.apiBase.setDefaultTableHomePage(appId, tableId, reportId).catch(function(error) {
+                    log.error('Error setting default table homepage');
+                    return promise.reject(error);
+                });
             },
             /**
              * Given an appId, tableId, tableNoun initialize a table properties object in EE.
@@ -36,6 +43,9 @@
                 // Makes use of the isEE param of the executeRequest function
                 return recordBase.apiBase.executeRequest(tablePropertiesEndpoint, 'POST', propsJson, null, null, true).then(function(result) {
                     return JSON.parse(result.body);
+                }).catch(function(error) {
+                    log.error('Error initializing table properties');
+                    return promise.reject(error);
                 });
             }
         };

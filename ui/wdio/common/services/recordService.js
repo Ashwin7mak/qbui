@@ -8,10 +8,10 @@
     var promise = require('bluebird');
     // Node.js assert library
     var assert = require('assert');
-    // Record Generator library
-    var recordGenerator = require('../../../test_generators/record.generator');
     // Logging library
     var log = require('../../../server/src/logger').getLogger();
+    // Record Generator library
+    var recordGenerator = require('../../../test_generators/record.generator');
 
     module.exports = function(recordBase) {
         var recordService = {
@@ -97,8 +97,8 @@
                     // This is an iterator that executes each Promise function in the array here
                     return queueItem();
                 }).catch(function(error) {
-                    log.error('Error adding records (possible random dataGen issue): ' + JSON.stringify(error));
-                    return error;
+                    log.error('Error adding records (possible random dataGen issue)');
+                    return promise.reject(error);
                 });
             },
             /**
@@ -109,8 +109,8 @@
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 return recordBase.createBulkRecords(recordsEndpoint, genRecords, null).catch(function(error) {
-                    log.error('Error adding bulk records (possible random dataGen issue): ' + JSON.stringify(error));
-                    return error;
+                    log.error('Error adding bulk records (possible random dataGen issue)');
+                    return promise.reject(error);
                 });
             },
 

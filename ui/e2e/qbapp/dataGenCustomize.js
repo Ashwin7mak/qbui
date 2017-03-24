@@ -447,8 +447,8 @@ consts = require('../../common/src/constants.js');
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
-                console.log('Error during createRecords  ' + error.message);
-                console.log('stacktrace:' + error.stack);
+                console.log('Error during createRecords ' + JSON.stringify(error));
+                return Promise.reject(error);
             });
         }).then(function() {
             // Generate 1 empty record

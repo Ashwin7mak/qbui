@@ -65,7 +65,10 @@
                 //    }
                 //});
                 //Cleanup the realm and app
-                return e2eBase.recordBase.apiBase.cleanup();
+                return e2eBase.recordBase.apiBase.cleanup().catch(function(error) {
+                    log.error('Error during cleanup: ' + JSON.stringify(error));
+                    return promise.reject(error);
+                });
             },
             // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
             getRequestAppsPageEndpoint: function(realmName) {
@@ -88,9 +91,11 @@
                 return sessionTicketRequestEndPoint;
             },
 
-            /*
-             * Setup method that generates an application, table, report and a specified number of records
-             * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
+            /**
+             * Setup method that generates an app, table, list all report, forms, default table homepage, a set of users and a specified number of records
+             * @param tableToFieldToFieldTypeMap - Map containing the structure of the app, tables and fields
+             * @param numberOfRecords - Number of records to create per table in the app
+             * @returns A promise function returning the created JSON app object from the createApp API call
              */
             basicAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
@@ -118,7 +123,7 @@
                     createdApp.tables.forEach(function(table, index) {
                         // Load an array with the promise functions you want to execute
                         tableSetupPromises.push(function() {
-                            // Initialize table properties for generated tables (via Experience Engine)
+                            // Initialize table properties (via Experience Engine)
                             return e2eBase.tableService.initTableProperties(createdApp.id, table.id, table.name);
                         });
                         tableSetupPromises.push(function() {
@@ -130,6 +135,7 @@
                             return e2eBase.reportService.createCustomReport(createdApp.id, table.id, 'List All Report', null, null, null, null);
                         });
                         tableSetupPromises.push(function() {
+                            // Set the default table homepage for each
                             return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
                         });
                     });
@@ -149,13 +155,15 @@
                     return createdApp;
                 }).catch(function(error) {
                     // Catch any errors and reject the promise with it
+                    log.error('Error during basicAppSetup');
                     return promise.reject(error);
                 });
             },
 
-            /*
-             * Setup function that will create you all currently supported report types. Calls the default setup functions as well.
-             * @param numRecords is how many records will be generated per table
+            /**
+             * Setup function that will create you all currently supported report types. Calls the basicAppSetup function as well.
+             * @param numRecords - How many records will be generated per table
+             * @returns A promise function that resolves to an array containing the createApp JSON object and an array of created reportIds
              */
             fullReportsSetup: function(numRecords) {
                 var createdApp;
@@ -216,11 +224,11 @@
                     return promise.each(createReportPromises, function(queueItem) {
                         // This is an iterator that executes each Promise function in the array here
                         return queueItem().then(function(result) {
-                            // Collect the returned rids from each create report call
+                            // Collect the returned ids from each create report API call
                             reportIds.push(result);
                         });
                     }).then(function() {
-                        // return your array of rids for use later
+                        // Return your array for use later
                         return reportIds;
                     });
                 }).then(function(reportIds) {
@@ -228,6 +236,7 @@
                     return [createdApp, reportIds];
                 }).catch(function(error) {
                     // Catch any errors and reject the promise with it
+                    log.error('Error during fullReportsSetup');
                     return promise.reject(error);
                 });
             },
