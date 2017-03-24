@@ -35,7 +35,7 @@ describe('Table Creation actions', () => {
     });
 
     afterEach(() => {
-        TableCreationsActionsRewireAPI.__ResetDependency__('mockTableCService');
+        TableCreationsActionsRewireAPI.__ResetDependency__('mockTableService');
     });
 
 
@@ -130,7 +130,7 @@ describe('Table Creation actions', () => {
                 done();
             });
 
-        TableCreationsActionsRewireAPI.__ResetDependency__('mockTableCService');
+        TableCreationsActionsRewireAPI.__ResetDependency__('mockTableService');
     });
     it('should create an action for notifying of table creation', () => {
         expect(actions.notifyTableCreated(true)).toEqual({type: types.NOTIFY_TABLE_CREATED, notifyTableCreated: true});
