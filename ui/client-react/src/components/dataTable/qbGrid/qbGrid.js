@@ -9,6 +9,7 @@ import {UNSAVED_RECORD_ID} from '../../../constants/schema';
 import RowActions, {SELECT_ROW_CHECKBOX} from './rowActions';
 import QbIcon from '../../qbIcon/qbIcon';
 import CollapsedGroupsHelper from './collapsedGroupHelper';
+import ColumnTransformer from './columnTransformer';
 
 import Logger from '../../../utils/logger';
 const logger = new Logger();
@@ -52,6 +53,10 @@ const QbGrid = React.createClass({
         /**
          * Indicates if all the rows currently displayed in the grid are selected */
         areAllRowsSelected: PropTypes.bool,
+
+        /**
+         * The action that will add a column */
+        onColumnAdd: PropTypes.func,
 
         /**
          * The action that occurs when a row is selected (e.g., by clicking the checkboxes in the first column) */
@@ -215,6 +220,18 @@ const QbGrid = React.createClass({
                 return column;
             }
         });
+    },
+
+    /**
+     * Add a column to the grid.
+     * @param index the index position this column should appear in the grid
+     * @param id
+     */
+    addColumn(index, id) {
+        console.log("adding column");
+        if (this.props.onColumnAdd) {
+            this.props.onColumnAdd(index, id);
+        }
     },
 
     /**

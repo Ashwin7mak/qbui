@@ -23,7 +23,8 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             tblId: PropTypes.string,
             rptId: PropTypes.string,
             fieldDef: PropTypes.object,
-            sortFids: PropTypes.array
+            sortFids: PropTypes.array,
+            onColumnAdd: PropTypes.func
         },
 
         /**
@@ -94,6 +95,7 @@ const ReportColumnHeaderMenuContainer = (ReportColumnHeaderMenu) => {
             return (<ReportColumnHeaderMenu
                 sortReport={this.sortReport}
                 groupReport={this.groupReport}
+                onColumnAdd={this.props.onColumnAdd}
                 {...this.props}
             />);
         }

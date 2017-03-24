@@ -353,6 +353,14 @@ export const ReportContent = React.createClass({
     },
 
     /**
+     * Adds a new column.
+     */
+    handleColumnAdd() {
+        const flux = this.getFlux();
+        this.props.reportData.data.columns.push();
+    },
+
+    /**
      * Save a new record
      * @param recordChanges
      * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
@@ -849,6 +857,7 @@ export const ReportContent = React.createClass({
                                 loading={this.props.reportData.loading}
                                 appUsers={this.props.appUsers}
                                 onFieldChange={this.handleFieldChange}
+                                onColumnAdd={this.handleColumnAdd}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onCellClick={this.openRow}
                                 pendEdits={this.props.pendEdits}

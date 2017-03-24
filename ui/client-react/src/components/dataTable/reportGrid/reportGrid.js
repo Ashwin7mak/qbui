@@ -5,6 +5,7 @@ import ReportRowTransformer from './reportRowTransformer';
 import FieldUtils from '../../../utils/fieldUtils';
 import ReportUtils from '../../../utils/reportUtils';
 import ReportColumnHeaderMenu from './reportColumnHeaderMenu';
+import ColumnTransformer from '../qbGrid/columnTransformer';
 
 import _ from 'lodash';
 
@@ -69,6 +70,10 @@ const ReportGrid = React.createClass({
         /**
          * Action for when a field value is changed (e.g., user types in an input box when inline editing) */
         onFieldChange: PropTypes.func.isRequired,
+
+        /**
+         * The action that will add a column */
+        onColumnAdd: PropTypes.func,
 
         /**
          * An action that is called when a field should be validated */
@@ -257,6 +262,7 @@ const ReportGrid = React.createClass({
                 tblId: this.props.tblId,
                 rptId: this.props.rptId,
                 sortFids: this.props.sortFids,
+                onColumnAdd: this.props.onColumnAdd,
             }}
         />;
     }

@@ -21,6 +21,7 @@ export const ReportColumnHeaderMenu = React.createClass({
         sortFids: PropTypes.array,
         sortReport: PropTypes.func,
         groupReport: PropTypes.func,
+        onColumnAdd : PropTypes.func,
     },
 
     /**
@@ -160,11 +161,11 @@ export const ReportColumnHeaderMenu = React.createClass({
     },
 
     addColumnBefore() {
-
+        this.props.onColumnAdd(this.props.fieldDef.id - 1, this.props.sortFids.length);
     },
 
     addColumnAfter() {
-
+        this.props.onColumnAdd(this.props.fieldDef.id + 1, this.props.sortFids.length);
     },
 
     render() {
