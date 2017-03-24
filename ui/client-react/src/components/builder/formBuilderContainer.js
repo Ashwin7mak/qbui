@@ -23,21 +23,13 @@ import './formBuilderContainer.scss';
 let logger = new Logger();
 
 const mapStateToProps = state => {
-    let tabIndex = undefined;
-    let selectedField = undefined;
-    let formFocus = undefined;
-    if (state.forms.length > 0 && state.forms[0].formBuilderChildrenTabIndex) {
-        tabIndex = state.forms[0].formBuilderChildrenTabIndex[0];
-    }
-    if (state.forms.length > 0 && state.forms[0].selectedFields) {
-        selectedField = state.forms[0].selectedFields[0];
-    }
-    if (state.forms.length > 0 && state.forms[0].formFocus) {
-        formFocus = state.forms[0].formFocus[0];
-    }
+    let currentForm = state.forms ? state.forms[0] : undefined;
+    let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []);
+    let tabIndex = (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined);
+    let formFocus = (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : []);
 
     return {
-        forms: state.forms,
+        currentForm,
         tabIndex,
         selectedField,
         formFocus
@@ -114,15 +106,15 @@ export const FormBuilderContainer = React.createClass({
 
     removeField() {
         if (this.props.removeField) {
-            return this.props.removeField(this.props.forms[0].id, this.props.selectedField);
+            return this.props.removeField(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
     saveClicked() {
         // get the form meta data from the store..hard code offset for now...this is going to change..
-        if (this.props.forms && this.props.forms.length > 0 && this.props.forms[0].formData) {
-            let formMeta = this.props.forms[0].formData.formMeta;
-            let formType = this.props.forms[0].formData.formType;
+        if (this.props.currentForm && this.props.currentForm.formData) {
+            let formMeta = this.props.currentForm.formData.formMeta;
+            let formType = this.props.currentForm.formData.formType;
             this.props.updateForm(formMeta.appId, formMeta.tableId, formType, formMeta);
         }
     },
@@ -156,26 +148,26 @@ export const FormBuilderContainer = React.createClass({
         let childrenTabIndex = this.props.tabIndex;
 
         if ((e.which === 13 || e.which === 32) && childrenTabIndex !== "0") {
-            this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);
+            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
             e.preventDefault();
         }
     },
 
     keyboardMoveFieldUp() {
         if (this.props.selectedField.elementIndex !== 0) {
-            this.props.keyboardMoveFieldUp(this.props.forms[0].id, this.props.selectedField);
+            this.props.keyboardMoveFieldUp(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
     keyboardMoveFieldDown() {
-        if (this.props.selectedField && this.props.selectedField.elementIndex < this.props.forms[0].formData.formMeta.fields.length - 1) {
-            this.props.keyboardMoveFieldDown(this.props.forms[0].id, this.props.selectedField);
+        if (this.props.selectedField && this.props.selectedField.elementIndex < this.props.currentForm.formData.formMeta.fields.length - 1) {
+            this.props.keyboardMoveFieldDown(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
     deselectField() {
         if (this.props.deselectField) {
-            this.props.deselectField(this.props.forms[0].id, this.props.selectedField);
+            this.props.deselectField(this.props.currentForm.id, this.props.selectedField);
         }
     },
 
@@ -185,19 +177,19 @@ export const FormBuilderContainer = React.createClass({
         if (selectedField) {
             this.deselectField();
         } else if (this.props.tabIndex === "0") {
-            this.props.toggleFormBuilderChildrenTabIndex(this.props.forms[0].id, childrenTabIndex);
+            this.props.toggleFormBuilderChildrenTabIndex(this.props.currentForm.id, childrenTabIndex);
         } else {
             this.onCancel();
         }
     },
 
     render() {
-        let loaded = (_.has(this.props, 'forms') && this.props.forms.length > 0 && !this.props.forms[0].loading);
+        let loaded = (_.has(this.props, 'currentForm') && this.props.currentForm !== undefined && !this.props.currentForm.loading);
         let formData = null;
         let formId = null;
         if (loaded) {
-            formId = this.props.forms[0].id;
-            formData = this.props.forms[0].formData;
+            formId = this.props.currentForm.id;
+            formData = this.props.currentForm.formData;
         }
         return (
             <div className="formBuilderContainer">
