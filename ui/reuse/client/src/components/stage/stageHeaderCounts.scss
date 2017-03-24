@@ -1,0 +1,43 @@
+@import "../../assets/css/qbVariables";
+
+$stage-header-count-item-height: 60px;
+$stage-header-count-item-border-width: 3px;
+$stage-header-count-title-font-size: 14px;
+$stage-header-count-min-width: 175px;
+
+.stageHeaderCounts {
+    display: flex;
+    flex-wrap: wrap;
+
+    &.stageHeaderCountsWithIcon {
+        margin-left: $spacing-xx-small;
+    }
+
+    .stageHeaderCountItem {
+        flex: 0 1 auto;
+        min-width: $stage-header-count-min-width;
+        padding-left: $spacing-medium2;
+        color: $default-text-onlight-color;
+
+        .stageHeaderCountDivider {
+            border-left: $stage-header-count-item-border-width solid $color-orange-500;
+            height: $stage-header-count-item-height;
+
+            .stageHeaderCount, .stageHeaderCountTitle {
+                margin-left: $spacing-xx-small;
+            }
+
+            .stageHeaderCount {
+                font-weight: bold;
+                font-size: $font-size-h3;
+                padding-top: $spacing-xxx-small;
+            }
+
+            .stageHeaderCountTitle {
+                padding-top: $spacing-tiny;
+                font-size: $stage-header-count-title-font-size;
+                white-space: nowrap;
+            }
+        }
+    }
+}
