@@ -31,6 +31,14 @@
                 return deferred.promise;
             },
             /**
+             * Wrapper function that calls the generator function in the test_generators folder
+             */
+            generateAppFromMap: function(tableToFieldToFieldTypeMap) {
+                //Generate the app JSON object
+                var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
+                return generatedApp;
+            },
+            /**
              * creates an application, table, and fields from map
              * @returns a promise the created app
              */
@@ -39,14 +47,6 @@
                 var generatedApp = this.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
                 return this.createApp(generatedApp);
-            },
-            /**
-             * Wrapper function that calls the generator function in the test_generators folder
-             */
-            generateAppFromMap: function(tableToFieldToFieldTypeMap) {
-                //Generate the app JSON object
-                var generatedApp = appGenerator.generateAppWithTablesFromMap(tableToFieldToFieldTypeMap);
-                return generatedApp;
             }
         };
         return appService;
