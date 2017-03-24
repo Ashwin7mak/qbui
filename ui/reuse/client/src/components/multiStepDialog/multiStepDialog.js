@@ -71,11 +71,11 @@ class MultiStepDialog extends React.Component {
                     <Button className="cancelButton" onClick={this.cancelClicked}><I18nMessage message="nav.cancel"/></Button>
 
                     {showPrevious &&
-                        <Button onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
+                        <Button className="previousButton" onClick={this.previousClicked}><I18nMessage message="nav.previous"/></Button>}
                     {showNext &&
-                        <Button bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
+                        <Button className="nextButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.nextClicked}><I18nMessage message="nav.next"/></Button>}
                     {showFinished &&
-                        <Button bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}><I18nMessage message="nav.finished"/></Button>}
+                        <Button className="finishedButton" bsStyle="primary" disabled={!this.props.canProceed} onClick={this.finishClicked}><I18nMessage message="nav.finished"/></Button>}
                 </div>
             </Modal.Footer>
         );
