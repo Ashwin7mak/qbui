@@ -140,7 +140,7 @@ describe('RecordTrowser functions', () => {
 
     it('test cancelling from the record trowser', () => {
         let wrapper = mount(<RecordTrowser {...props}/>);
-        const closeIcon = wrapper.find('.iconTableUISturdy-close');
+        const closeIcon = wrapper.find('.iconUISturdy-close');
         closeIcon.simulate('click');
 
         expect(props.editRecordCancel).toHaveBeenCalled();

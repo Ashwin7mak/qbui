@@ -29,20 +29,20 @@
         //form footer save buttons(there will be 2 buttons)
         editFormSaveBtns : {get: function() {return browser.elements('.saveOrCancelFooter .rightIcons .saveButtons button');}},
         //form footer alert button
-        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.saveOrCancelFooter .iconTableUISturdy-alert');}},
+        editFormFooterErrorAlertBtn : {get: function() {return browser.element('.saveOrCancelFooter .iconUISturdy-alert');}},
 
         //edit pencil in view form
-        editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconTableUISturdy-edit');}},
+        editPencilBtnOnStageInViewForm : {get: function() {return browser.element('.stageRight .pageActions .iconUISturdy-edit');}},
 
         //form close button
-        formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconTableUISturdy-close');}},
+        formCloseBtn : {get: function() {return browser.element('.trowserHeader .iconUISturdy-close');}},
 
         //form error message container
         formErrorMessageContainerEl : {get: function() {return browser.element('div.qbErrorMessage.qbErrorMessageVisible');}},
         //header on error message container
         formErrorMessageHeader : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageHeader');}},
         //close btn on error container
-        formErrorMessageContainerCloseBtn : {get: function() {return this.formErrorMessageContainerEl.element('.iconTableUISturdy-x-secondary');}},
+        formErrorMessageContainerCloseBtn : {get: function() {return this.formErrorMessageContainerEl.element('.iconUISturdy-x-secondary');}},
         formErrorMessageContent : {get: function() {return this.formErrorMessageContainerEl.element('.qbErrorMessageContent');}},
 
         //Save changes before leaving dialogue

@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import Locale from '../locales/locales';
+import AppsBundleLoader from '../locales/appsBundleLoader';
 
 const shell = (
     state = {
@@ -71,7 +72,7 @@ const shell = (
             errorPopupHidden: true
         };
     case types.CHANGE_LOCALE:
-        Locale.changeLocale(action.locale);
+        AppsBundleLoader.changeLocale(action.locale);
         return {
             ...state,
             locale: Locale.getLocale(),
