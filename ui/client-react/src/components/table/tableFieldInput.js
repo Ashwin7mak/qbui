@@ -19,9 +19,11 @@ class TableFieldInput extends React.Component {
 
     /**
      * grab focus if hasFocus=true
+     * since getting focus can result in replacing
+     * the wrapped error input with a new input we
+     * need to explicitly grab the focus again
      */
     componentDidUpdate() {
-
         if (this.props.hasFocus) {
             this.input.focus();
         }
