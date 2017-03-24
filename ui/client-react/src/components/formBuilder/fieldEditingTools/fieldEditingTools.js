@@ -201,7 +201,6 @@ const mapStateToProps = (state, ownProps) => {
     let previouslySelectedField = (_.has(currentForm, 'previouslySelectedField') ? currentForm.previouslySelectedField : []);
 
     return {
-        currentForm,
         selectedFields,
         previouslySelectedField,
         tabIndex
