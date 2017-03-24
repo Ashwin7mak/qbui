@@ -141,7 +141,7 @@ describe('ReportToolsAndContent functions', () => {
                 {...reportDataParams}
             />);
         component.instance().editNewRecord();
-    })
+    });
 
     describe('load dynamic report Action tests', () => {
         let loadDynamicReportSpy = null;
