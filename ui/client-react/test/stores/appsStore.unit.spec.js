@@ -34,7 +34,7 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).selectedTableId).toBeFalsy();
         expect(flux.store(STORE_NAME).loading).toBeTruthy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
-        //  expect 11 bindActions
+        //  expect 14 bindActions
         expect(flux.store(STORE_NAME).__actions__.LOAD_APPS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APPS_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APPS_FAILED).toBeDefined();
@@ -46,6 +46,9 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.LOAD_APP_ROLES_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.LOAD_APP_OWNER_FAILED).toBeDefined();
     });
 
     it('test load apps action', () => {
@@ -203,6 +206,46 @@ describe('Test Apps Store', () => {
         flux.dispatcher.dispatch(loadAppsAction);
 
         expect(flux.store(STORE_NAME).appRoles).toEqual(roles);
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load app owner action', () => {
+
+        let loadAppsAction = {
+            type: actions.LOAD_APP_OWNER
+        };
+
+        flux.dispatcher.dispatch(loadAppsAction);
+
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load app owner failed action', () => {
+
+        let loadAppsAction = {
+            type: actions.LOAD_APP_OWNER_FAILED
+        };
+
+        flux.dispatcher.dispatch(loadAppsAction);
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load app owner success action', () => {
+        let appOwner = {firstName: "Duder", lastName: "McDuderson", email: "duder@duder.com", screenName: "duderino"};
+        let loadAppsAction = {
+            type: actions.LOAD_APP_OWNER_SUCCESS,
+            payload: appOwner
+        };
+
+        flux.dispatcher.dispatch(loadAppsAction);
+
+        expect(flux.store(STORE_NAME).appOwner).toEqual(appOwner);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
