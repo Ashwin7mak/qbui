@@ -282,7 +282,7 @@ div.leftNavTooltip {
                 text-overflow: ellipsis;
             }
 
-            .iconTableUISturdy-caret-up {
+            .iconUISturdy-caret-up {
                 position: absolute;
                 right: 10px;
                 width: auto;
@@ -660,7 +660,7 @@ $travel-distance: 15;
     transition: all $transition-time ease-in;
 }
 
-.leftNav.appsListOpen .appsToggleArea .qbIcon.iconTableUISturdy-caret-up {
+.leftNav.appsListOpen .appsToggleArea .qbIcon.iconUISturdy-caret-up {
     transform: rotate(0deg);
 }
 
