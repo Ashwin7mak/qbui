@@ -1,154 +1,40 @@
 import React from 'react';
-import {I18nMessage} from '../../utils/i18nMessage';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import Button from 'react-bootstrap/lib/Button';
-import Dropdown from 'react-bootstrap/lib/Dropdown';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
 import Fluxxor from 'fluxxor';
-import QBicon from '../qbIcon/qbIcon';
-import './iconActions.scss';
-
+import IconActions from '../../../../reuse/client/src/components/iconActions/iconActions';
 const FluxMixin = Fluxxor.FluxMixin(React);
 
 /**
- * a set of icon actions, of which maxButtonsBeforeMenu are displayed
- * followed by a dropdown containing the remainder
+ * The original file in this location has moved to the reuse library.
+ * What remains here is a stub so existing code does not have to change yet.
  *
- * example:
- *
- * if the actions prop is passed:
- * [
- *  {msg: 'name-a', icon: 'icon-a'},
- *  {msg: 'name-b', icon: 'icon-b'},
- *  {msg: 'name-c', icon: 'icon-b'}
- * ];
- *
- * to render a dropdown containing localized name-a,name-b, and name-c we pass maxButtonsBeforeMenu={0}
- * to render 3 QBIcons without a dropdown menu we pass maxButtonsBeforeMenu={2} (or greater)
- * to render 1 icon with a dropdown containing name-b and name-c we pass maxButtonsBeforeMenu={1}
- */
-
-let IconActions = React.createClass({
+ * The remaining code here is for backwards compatability until Fluxxor is completely removed.
+ * If you are building a new IconActions set, please use IconActions from the reuse library.
+ **/
+const QbIconActions = React.createClass({
     mixins: [FluxMixin],
 
-    // actions don't have any functionality yet...
-    propTypes: {
-        actions: React.PropTypes.arrayOf(React.PropTypes.shape({
-            icon: React.PropTypes.string,
-            msg: React.PropTypes.string,
-            rawMsg: React.PropTypes.bool, // msg doesn't need to be localized
-            onClick: React.PropTypes.function,
-            className: React.PropTypes.string,
-            disabled: React.PropTypes.bool
-        })).isRequired,
-        maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
-        className: React.PropTypes.string,
-        pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
-        dropdownTooltip: React.PropTypes.bool,
-        menuIcons: React.PropTypes.bool
-    },
-    getDefaultProps() {
-        return {
-            maxButtonsBeforeMenu: Number.MAX_VALUE,
-            pullRight: true,
-            menuIcons: false,
-            dropdownTooltip: false,
-            className: ''
-        };
-    },
-    getInitialState() {
-        return {
-            dropdownOpen: false
-        };
-    },
-    /**
-     * get an action button
-     * @param action
-     */
-    getActionButton(action) {
-        let tooltip;
-        if (action.rawMsg) {
-            tooltip = (<Tooltip id={action.msg}>{action.msg}</Tooltip>);
-        } else {
-            tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
-        }
-        let className = "iconActionButton ";
-        if (action.disabled) {
-            className += "disabled ";
-        }
-        if (action.className) {
-            className += action.className;
-        }
-
-
-        return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
-                    <Button key={action.msg}
-                       tabIndex="0"
-                       className={className}
-                       onClick={action.onClick}>
-                            <QBicon icon={action.icon}/>
-                    </Button>
-                </OverlayTrigger>);
-    },
-
-    /* callback from opening pickle menu */
-    onDropdownToggle(open) {
-        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
-            //It will remove the white space if the menu is close. The class is added in reportContent.js
-        this.setState({dropdownOpen: open});
-        //TODO: Convert to ShellAction (toggleRowActionsMenu) when reactabular work is done. It breaks with ag-grid.
+    onDropDownToggle(open) {
+        // This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
+        // It will remove the white space if the menu is closed. The class is added in reportContent.js
+        // TODO: Convert to ShellAction (toggleRowActionsMenu) when reactabular work is done. It breaks with ag-grid.
         this.getFlux().actions.onToggleRowPopUpMenu(open);
     },
-    /**
-     * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
-     */
-    getActionsMenu() {
 
-        const classes = this.props.menuIcons ? "menuIcons" : "";
-        let dropdownTrigger;
-
-        if (this.props.dropdownTooltip && !this.state.dropdownOpen) {
-            const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
-
-            dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
-                <button ref="dropDownMenu" tabIndex="0"  className={"btn dropdownToggle iconActionButton"}><QBicon icon="fries"/> </button>
-            </OverlayTrigger>;
-        } else {
-            dropdownTrigger = <button bsRole="toggle" tabIndex="0"  className={"btn dropdownToggle iconActionButton"}><QBicon icon="fries"/> </button>;
-        }
-
-        return (
-            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onDropdownToggle} rootClose>
-
-                {dropdownTrigger}
-                <Dropdown.Menu >
-                    {this.props.actions.map((action, index) => {
-                        if (index >= this.props.maxButtonsBeforeMenu) {
-                            return (
-                                <MenuItem key={action.msg} href="#" onSelect={action.onClick} disabled={action.disabled} >
-                                    {this.props.menuIcons &&
-                                        <QBicon className={action.disabled ? "disabled " + action.className : action.className}
-                                                icon={action.icon}/>}
-                                        {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
-                                </MenuItem>);
-                        }
-                    })}
-                </Dropdown.Menu>
-            </Dropdown>);
-    },
     render() {
-        return (
-            <div className={'iconActions ' + this.props.className}>
-                {this.props.actions.map((action, index) => {
-                    if (index < this.props.maxButtonsBeforeMenu) {
-                        return this.getActionButton(action);
-                    }
-                })}
-                {(this.props.actions.length > this.props.maxButtonsBeforeMenu) && this.getActionsMenu()}
-            </div>
-        );
+        // Some of the props have been made more descriptive and to bring it in line with other components (e.g., Tooltip).
+        // This function maps to the new property names for each action.
+        let actions = this.props.actions.map(action => {
+            if (action.rawMsg) {
+                action.plainMessage = action.msg;
+            } else {
+                action.i18nMessageKey = action.msg;
+            }
+
+            return action;
+        });
+
+        return <IconActions {...this.props} actions={actions} onDropdownToggle={this.onDropDownToggle} />;
     }
 });
 
-export default IconActions;
+export default QbIconActions;

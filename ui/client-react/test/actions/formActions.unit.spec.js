@@ -53,10 +53,12 @@ describe('Form Actions', () => {
 
         it('creates an action to indicate form loaded', () => {
 
-            expect(formActions.loadFormSuccess("view", "someData")).toEqual({
+            expect(formActions.loadFormSuccess("view", "someData", 'appId', 'tblId')).toEqual({
                 type: types.LOAD_FORM_SUCCESS,
                 id: "view",
-                formData: "someData"
+                formData: "someData",
+                appId: 'appId',
+                tblId: 'tblId'
             });
         });
     });
@@ -174,7 +176,9 @@ describe('Form Actions', () => {
                         tableId: formAndRecordResponseData.tableId,
                         appId: formAndRecordResponseData.appId,
                         recordId: '123'
-                    }
+                    },
+                    appId: 'appId',
+                    tblId: 'tblId'
                 }
             ];
             const store = mockStore({});
@@ -202,7 +206,9 @@ describe('Form Actions', () => {
                         appId: formResponseData.appId,
                         recordId: formResponseData.recordId,
                         record: null
-                    }
+                    },
+                    appId: 'appId',
+                    tblId: 'tblId'
                 }
             ];
             const store = mockStore({});
