@@ -5,6 +5,8 @@ import en from 'intl/locale-data/jsonp/en.js';
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router';
+import AppsBundleLoader from '../../client-react/src/locales/appsBundleLoader';
+import config from '../../client-react/src/config/app.config';
 
 import Nav from '../../client-react/src/components/nav/nav';
 
@@ -53,8 +55,13 @@ import PhoneFieldValueRendererDoc from './docs/phoneFieldValueRenderer.js';
 import DurationFieldValueRendererDoc from './docs/durationFieldValueRenderer.js';
 import DurationFieldValueEditorDoc from './docs/durationFieldValueEditor.js';
 import QbGridDoc from './docs/qbGrid.js';
+import SideMenuBaseDoc from './docs/sideMenuBase.js';
+import SideTrowserBaseDoc from './docs/sideTrowserBase.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
+
+// init the localization services
+AppsBundleLoader.changeLocale(config.locale.default);
 
 render((
     <Router history={browserHistory}>
@@ -93,6 +100,8 @@ render((
             <Route path="phoneFieldValueRenderer" component={PhoneFieldValueRendererDoc} />
             <Route path="durationFieldValueEditor" component={DurationFieldValueEditorDoc} />
             <Route path="qbGrid" component={QbGridDoc} />
+            <Route path="sideMenuBase" component={SideMenuBaseDoc} />
+            <Route path="sideTrowserBase" component={SideTrowserBaseDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

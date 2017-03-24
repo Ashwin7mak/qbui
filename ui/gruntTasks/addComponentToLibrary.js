@@ -17,7 +17,7 @@ module.exports = function(grunt) {
     //   Common locator across files
     var IMPORT_COMMENT = '// END OF IMPORT STATEMENTS';
     //   Locator comments in Metadata.js (extra spaces are needed to match tab indentation)
-    var METADATA_MERGE_COMMENT = '    // END OF METADATA MERGE';
+    var METADATA_MERGE_COMMENT = '        // END OF METADATA MERGE';
     //   Locator comments in Examples.js (extra spaces are needed to match tab indentation)
     var EXAMPLES_END_EXPORT_COMMENT = '    // END OF EXPORT';
 
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
             grunt.log.error(METADATA_MERGE_COMMENT + ' comment missing from Metadata.js. Statement may be misplaced.');
         }
         metaDataFileArray[endOfMerge - 1] = metaDataFileArray[endOfMerge - 1] + ',';
-        metaDataFileArray.splice(endOfMerge, 0, '    ' + componentData.componentName + 'Metadata');
+        metaDataFileArray.splice(endOfMerge, 0, '        ' + componentData.componentName + 'Metadata');
 
         grunt.file.write(componentData.metaDataFilePath, metaDataFileArray.join("\n"));
     }
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
         if (endOfImport < 0) {
             grunt.log.error(IMPORT_COMMENT + ' comment missing from ReactPlayground.js. Import may be misplaced.');
         }
-        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "');");
+        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "').default;");
         grunt.file.write(componentData.playgroundFile, playgroundFileArray.join("\n"));
     }
 

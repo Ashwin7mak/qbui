@@ -1,0 +1,84 @@
+@import "../../assets/css/_qbVariables";
+@import "../sideMenuBase/sideMenuMixins";
+
+/*
+    A note on all the first-child selectors (">"):
+    The frequent first-child selectors are required here to successfully handle
+    multiple side navs on the page (e.g., a left side trowser and a right trowser).
+    We only want to select the first child so styles for the current instance do not affect
+    other navs that may be on the page as these components get nested.
+ */
+
+.sideTrowserBase {
+    height: 100%;
+    width: 100%;
+
+    &:not(.sideTrowserDocked) > .sideTrowserContent.sideTrowserOpen {
+        @include menuShadow;
+    }
+
+    &.sideTrowserDocked {
+        display: flex;
+
+        &.sideTrowserPullRight {
+            flex-direction: row-reverse;
+        }
+
+        > .sideTrowserMain {
+            position: relative;
+            flex: 1 auto;
+            overflow: auto;
+        }
+
+        > .sideTrowserContent {
+            position: relative;
+            flex: 0;
+        }
+    }
+
+    > .sideTrowserContent {
+        position: absolute;
+        top: 0;
+
+        padding: $spacing-small;
+        overflow: auto;
+        background-color: $color-black-300;
+        z-index: 100;
+        height: 100vh; // Ensures that long content can be scrolled on all browsers
+
+        @include baseMenuWidths;
+
+        &.sideTrowserCollapsed {
+            min-width: $leftNav-width-collapsed;
+            // Min width alone doesn't work when translating over the top of the main content. Need max-width too.
+            max-width: $leftNav-width-collapsed;
+        }
+
+        // Styling when the side trowser is on the left
+        &:not(.sideTrowserPullRight):not(.sideTrowserDocked) {
+            left: 0;
+
+            // Hide menu by default
+            @include moveMenuToRight;
+
+            &.sideTrowserOpen {
+                transform: translateX(0);
+            }
+        }
+
+        // Styling when side trowser is on the right
+        &.sideTrowserPullRight:not(.sideTrowserDocked) {
+            left: auto;
+            right: 0;
+
+            // Hide menu by default
+            @include moveMenuToLeft;
+
+            &.sideTrowserOpen {
+                transform: translateX(0);
+            }
+        }
+
+        transition: transform 0.5s, min-width 0.5s, max-width 0.5s;
+    }
+}

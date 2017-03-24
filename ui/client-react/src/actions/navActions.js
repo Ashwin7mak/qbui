@@ -1,7 +1,7 @@
 // action creators
 import * as actions from '../constants/actions';
-import Locale from '../locales/locales';
 import Breakpoints from '../utils/breakpoints';
+import AppsBundleLoader from '../locales/appsBundleLoader';
 
 let navActions = {
 
@@ -43,7 +43,7 @@ let navActions = {
         this.dispatch(actions.HIDE_TOP_NAV);
     },
     changeLocale(locale) {
-        Locale.changeLocale(locale);
+        AppsBundleLoader.changeLocale(locale);
         this.dispatch(actions.CHANGE_LOCALE);
     },
     scrollingReport(isScrolling = true) {

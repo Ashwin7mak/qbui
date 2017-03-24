@@ -15,8 +15,8 @@ describe('PhoneFieldValueRenderer functions', () => {
     const rawPhoneNumberValWithExt = "5555555555x5555";
     const phoneNumberWithExt = "(555) 555-5555 x5555";
     const phoneNumberWithoutExt = "(555) 555-5555";
-    const smsIcon = "iconTableUISturdy-speechbubble-outline";
-    const phoneIcon = "iconTableUISturdy-phone-outline";
+    const smsIcon = "iconUISturdy-speechbubble-outline";
+    const phoneIcon = "iconUISturdy-phone-outline";
     const testExtension = '5432';
     const telHref = `tel:${rawPhoneNumberVal}`;
 

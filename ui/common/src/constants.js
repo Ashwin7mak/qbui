@@ -96,6 +96,38 @@
             LEGACY_STACK: {
                 ACTION: 'a',
                 VALUE: 'value'
+            },
+            TABLE: {
+                NAME: 'name',
+                ICON: 'tableIcon',
+                RECORD_NAME: 'tableNoun',
+                DESC: 'description'
+            },
+            FIELD: {
+                NAME: 'name',
+                TYPE: 'type',
+                DATA_TYPE_ATTRS: 'datatypeAttributes'
+            },
+            REPORT: {
+                NAME: 'name',
+                TYPE: 'type',
+                SORT_LIST: 'sortList',
+                SORT: {
+                    FIELD_ID: 'fieldId',
+                    SORT_ORDER: 'sortOrder',
+                    GROUP_TYPE: 'groupType'
+                }
+            },
+            FORM: {
+                NAME: 'name',
+                TABS: 'tabs',
+                ORDER_IDX: 'orderIndex',
+                SECTIONS: 'sections',
+                PSEUDO: 'pseudo',
+                ELEMENTS: 'elements',
+                FORM_FIELD_EL: 'FormFieldElement',
+                TYPE: 'type',
+                SHOW_AS_RADIO: 'showAsRadio'
             }
         },
         FORMAT : {

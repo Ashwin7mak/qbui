@@ -8,11 +8,10 @@
     .appRolesPod {
         flex: 0 1 auto;
         min-width: 175px;
-        padding-left: 40px;
         color: $default-text-onlight-color;
 
         .appRolesDivider {
-            border-left: 3px solid $color-orange-500;
+            border-left: 3px solid $app-role-divider;
             height: 60px;
             flex: 1 1 auto;
 
