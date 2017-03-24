@@ -165,14 +165,14 @@
         .globalAction.disabled:hover {
             background: $topnav-header-background-color;
 
-            > a {
+            > a, .dropdownToggle {
                 color: $topnav-header-background-color;
             }
         }
         .globalAction:hover {
             background: $topnav-hover-background-color;
 
-            > a {
+            > a, .dropdownToggle {
                 color: $topnav-hover-color;
             }
         }

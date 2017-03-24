@@ -42,13 +42,13 @@
         //record actions container
         this.recordActionsContainer = this.recordContainerEl.element(by.className('recordActionsContainer'));
         //record form actions
-        this.recordFormActionPreviousBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className('iconTableUISturdy-caret-left'));
-        this.recordFormActionReturnToReportBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className(' qbIcon iconTableUISturdy-return'));
-        this.recordFormActionNextBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className('iconTableUISturdy-caret-right'));
+        this.recordFormActionPreviousBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className('iconUISturdy-caret-left'));
+        this.recordFormActionReturnToReportBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className(' qbIcon iconUISturdy-return'));
+        this.recordFormActionNextBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className('iconUISturdy-caret-right'));
 
         //record page actions
         //record edit button
-        this.recordEditBtn = this.recordActionsContainer.element(by.className('pageActions')).element(by.className('iconTableUISturdy-edit'));
+        this.recordEditBtn = this.recordActionsContainer.element(by.className('pageActions')).element(by.className('iconUISturdy-edit'));
 
         //card View List
         this.reportCardViewListHolder = this.reportTable.element(by.className('cardViewListHolder'));
@@ -313,7 +313,7 @@
                         expect(text.replace(/[!@#$%^&*]/g, "")).toBe(sNumeric.toString());
                     }
                     if (fieldType === 'checkbox') {
-                        expect(elm.element(by.className('iconTableUISturdy-check')).isPresent()).toBeTruthy();
+                        expect(elm.element(by.className('iconUISturdy-check')).isPresent()).toBeTruthy();
                     }
                 });
             });

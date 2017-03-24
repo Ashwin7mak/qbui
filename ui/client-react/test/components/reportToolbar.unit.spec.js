@@ -230,7 +230,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is no shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-filter-tool");
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconUISturdy-filter-tool");
         expect(filterIcon.length).toEqual(0);
 
     });
@@ -245,7 +245,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-filter-tool");
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconUISturdy-filter-tool");
         expect(filterIcon.length).toEqual(1);
 
     });
