@@ -128,8 +128,10 @@ class TableCreationPanel extends React.Component {
     }
 
     componentDidMount() {
-        this.updateTableProperty('name', this.props.tableInfo.name.value, false);
-        this.updateTableProperty('tableNoun', this.props.tableInfo.tableNoun.value, false);
+
+        _.mapKeys(this.props.tableInfo, (val, key) => {
+            this.updateTableProperty(key, val.value, false);
+        });
     }
 
     onFocusInput(name) {
@@ -157,6 +159,7 @@ class TableCreationPanel extends React.Component {
                                      required
                                      autofocus
                                      hasFocus={this.props.focusOn === "name"}
+                                     edited={this.props.tableInfo.name.edited}
                                      validationError={this.props.validate ? this.props.tableInfo.name.validationError : null}/>
 
                     <TableFieldInput title={Locale.getMessage("tableCreation.recordNameHeading")}
@@ -167,6 +170,7 @@ class TableCreationPanel extends React.Component {
                                      onBlur={this.onBlurInput}
                                      required
                                      hasFocus={this.props.focusOn === "tableNoun"}
+                                     edited={this.props.tableInfo.tableNoun.edited}
                                      validationError={this.props.validate ? this.props.tableInfo.tableNoun.validationError : null}/>
 
                     {this.renderIconSection()}

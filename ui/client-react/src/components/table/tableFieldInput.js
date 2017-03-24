@@ -30,6 +30,9 @@ class TableFieldInput extends React.Component {
             </QBToolTip>);
     }
 
+    showValidationError() {
+        return !this.props.hasFocus && this.props.validationError && this.props.edited;
+    }
     render() {
 
         const inputProps = {
@@ -46,7 +49,8 @@ class TableFieldInput extends React.Component {
 
         const classes = ["tableField"];
 
-        if (!this.props.hasFocus && this.props.validationError) {
+        const showValidationError = this.showValidationError();
+        if (showValidationError) {
             classes.push("validationFailed");
         }
 
@@ -54,7 +58,7 @@ class TableFieldInput extends React.Component {
             <div className={classes.join(" ")}>
                 <div className="tableFieldTitle">{this.props.required && "*"} {this.props.title}</div>
                 <div className="tableFieldInput">
-                    {!this.props.hasFocus && this.props.validationError  ? this.renderInvalidInput(input) : input}
+                    {showValidationError ? this.renderInvalidInput(input) : input}
                 </div>
             </div>);
     }

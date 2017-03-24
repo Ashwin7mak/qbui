@@ -3,19 +3,15 @@ import * as types from '../actions/types';
 const defaultTableInfo = {
     name: {
         value: "",
-        validationError:null
     },
     description: {
         value: "",
-        validationError:null
     },
     tableIcon: {
-        value: "estimates",
-        validationError:null
+        value: "projects",
     },
     tableNoun: {
         value: "",
-        validationError:null
     }
 };
 
@@ -83,14 +79,20 @@ const tableCreation = (
 
     case types.SET_TABLE_CREATION_PROPERTY: {
 
-        const info = {...state.tableInfo};
+        const tableInfo = {...state.tableInfo};
 
-        info[action.property] = {value: action.value, validationError: action.validationError};
+        const fieldInfo = tableInfo[action.property];
+
+        tableInfo[action.property] = {
+            value: action.value,
+            validationError: action.validationError,
+            edited: fieldInfo.edited || action.isUserEdit
+        };
 
         return {
             ...state,
             edited: state.edited || action.isUserEdit,
-            tableInfo: info
+            tableInfo: tableInfo
         };
     }
 
