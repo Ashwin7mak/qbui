@@ -7,7 +7,7 @@ import constants from '../../../common/src/constants';
 import {shallow, mount} from 'enzyme';
 import jasmineEnzyme from 'jasmine-enzyme';
 import {CONTEXT} from '../../src/actions/context';
-
+import Promise from 'bluebird';
 describe('ReportToolsAndContent functions', () => {
     'use strict';
 
@@ -125,13 +125,7 @@ describe('ReportToolsAndContent functions', () => {
         let loadDynamicReportSpy = null;
         beforeEach(() =>{
             loadDynamicReportSpy = jasmine.createSpy('loadDynamicReport');
-            ReportToolsAndContentRewireAPI.__Rewire__('loadDynamicReport', loadDynamicReportSpy);
         });
-
-        afterEach(() => {
-            ReportToolsAndContentRewireAPI.__ResetDependency__('loadDynamicReport');
-        });
-
 
         it('invoke loadDynamicReport if a record is deleted', () => {
 
@@ -170,6 +164,85 @@ describe('ReportToolsAndContent functions', () => {
             component = shallow(<ReportToolsAndContent loadDynamicReport={loadDynamicReportSpy} flux={flux} params={reportParams} {...reportDataParams} {...modifiedReport} />);
 
             expect(loadDynamicReportSpy).not.toHaveBeenCalled();
+        });
+    });
+
+
+    describe('Search Input', () => {
+
+        let searchInput = null;
+        let clearSearchInput = null;
+        let obj = {};
+        const selectedAppId = 1;
+        beforeEach(() => {
+
+            searchInput = jasmine.createSpy('searchInput');
+            clearSearchInput = jasmine.createSpy('clearSearchInput');
+            obj = {
+                loadDynamicReport: null
+            };
+            component = shallow(
+                <ReportToolsAndContent
+                    searchInput={searchInput}
+                    clearSearchInput={clearSearchInput} flux={flux}
+                    params={reportParams}
+                    selectedAppId={selectedAppId}
+                    routeParams={{appId:1, tblId:2,  rptId:'3'}}
+                    {...reportDataParams}
+                />);
+
+        });
+
+        it('loads a new report with a debounce when user runs a text search', (done) => {
+            new Promise(resolve => {
+                // loadDynamicReport is called with a debounce, resolve when it's called
+                spyOn(obj, 'loadDynamicReport').and.callFake(() => {
+                    resolve();
+                });
+                // pass in the spy loadDynamicReport as a prop
+                component.setProps({loadDynamicReport: obj.loadDynamicReport});
+                component.instance().searchTheString('Search Text!');
+                expect(searchInput).toHaveBeenCalledWith('Search Text!');
+                expect(obj.loadDynamicReport).not.toHaveBeenCalled();
+            }).then(() => {
+                expect(obj.loadDynamicReport).toHaveBeenCalledWith(
+                    CONTEXT.REPORT.NAV,
+                    reportParams.appId,
+                    reportParams.tblId,
+                    reportParams.rptId,
+                    reportParams.format,
+                    jasmine.any(Object),
+                    jasmine.any(Object)
+                );
+                done();
+            });
+        });
+
+
+
+        it('loads a new report with an empty search string when user clears search input', (done) => {
+            new Promise(resolve => {
+                // loadDynamicReport is called with a debounce, resolve when it's called
+                spyOn(obj, 'loadDynamicReport').and.callFake(() => {
+                    resolve();
+                });
+                // pass in the spy loadDynamicReport as a prop
+                component.setProps({loadDynamicReport: obj.loadDynamicReport});
+                component.instance().clearSearchString();
+                expect(clearSearchInput).toHaveBeenCalled();
+                expect(obj.loadDynamicReport).toHaveBeenCalled();
+            }).then(() => {
+                expect(obj.loadDynamicReport).toHaveBeenCalledWith(
+                    CONTEXT.REPORT.NAV,
+                    reportParams.appId,
+                    reportParams.tblId,
+                    reportParams.rptId,
+                    reportParams.format,
+                    jasmine.any(Object),
+                    jasmine.any(Object)
+                );
+                done();
+            });
         });
     });
 });
