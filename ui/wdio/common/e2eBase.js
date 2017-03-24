@@ -21,6 +21,8 @@
         var formService = require('./services/formService.js');
         var userService = require('./services/userService.js');
         var roleService = require('./services/roleService.js');
+        var relationshipService = require('./services/relationshipService.js');
+        var tableServiceWdio = require('../../wdio/common/services/tableService');
 
         var e2eBase = {
             // Instantiate recordBase module to use for your tests
@@ -50,6 +52,7 @@
             formService: formService(recordBase),
             userService: userService(recordBase),
             roleService: roleService(recordBase),
+            relationshipService: relationshipService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
@@ -150,6 +153,11 @@
                 }).then(function() {
                     // Create forms for both tables
                     return e2eBase.formService.createDefaultForms(createdApp);
+                }).then(function() {
+                    // Create a relationship between the 3rd and 4th tables
+                    if (createdApp.tables[2] && createdApp.tables[3]) {
+                        return e2eBase.relationshipService.createOneToOneRelationship(createdApp, createdApp.tables[2], createdApp.tables[3]);
+                    }
                 }).then(function() {
                     // Return the createdApp object
                     return createdApp;
