@@ -115,7 +115,7 @@ export class TableCreationDialog extends React.Component {
         return (<MultiStepDialog show={this.props.tableCreation.dialogOpen}
                                  loading={this.props.tableCreation.savingTable}
                                  classes={classes.join(' ')}
-                                 pageIndex={this.props.tableCreation.dialogPage}
+                                 pageIndex={this.props.tableCreation.pageIndex}
                                  onCancel={this.onCancel}
                                  onPrevious={this.onPrevious}
                                  onNext={this.onNext}
@@ -142,9 +142,11 @@ TableCreationDialog.propTypes = {
     app: PropTypes.object.isRequired,
     tableCreation: PropTypes.object.isRequired,
     tableInfo: PropTypes.object.isRequired,
+    setEditingProperty: PropTypes.func.isRequired,
     nextTableCreationPage: PropTypes.func.isRequired,
     previousTableCreationPage: PropTypes.func.isRequired,
     hideTableCreationDialog: PropTypes.func.isRequired,
+    createTable: PropTypes.func.isRequired,
     notifyTableCreated: PropTypes.func.isRequired
 };
 

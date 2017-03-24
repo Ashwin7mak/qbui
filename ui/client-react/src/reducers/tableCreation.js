@@ -19,7 +19,7 @@ const tableCreation = (
     state = {
         //  default states
         dialogOpen: false,
-        dialogPage: 0,
+        pageIndex: 0,
         menuOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
@@ -34,7 +34,7 @@ const tableCreation = (
         return {
             ...state,
             dialogOpen: true,
-            dialogPage: 0,
+            pageIndex: 0,
             menuOpen: false,
             savingTable: false,
             tableInfo: {...defaultTableInfo},
@@ -46,21 +46,21 @@ const tableCreation = (
         return {
             ...state,
             dialogOpen: false,
-            dialogPage: 0
+            pageIndex: 0
         };
     }
 
     case types.NEXT_TABLE_CREATION_PAGE: {
         return {
             ...state,
-            dialogPage: state.dialogPage + 1
+            pageIndex: state.pageIndex + 1
         };
     }
 
     case types.PREVIOUS_TABLE_CREATION_PAGE: {
         return {
             ...state,
-            dialogPage: state.dialogPage > 0 ? state.dialogPage - 1 : 0
+            pageIndex: state.pageIndex > 0 ? state.pageIndex - 1 : 0
         };
     }
     case types.TABLE_CREATION_MENU_OPEN: {

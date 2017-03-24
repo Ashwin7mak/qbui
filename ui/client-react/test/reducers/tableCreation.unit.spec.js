@@ -22,7 +22,7 @@ function initializeState() {
     initialState = {
         //  default states
         dialogOpen: false,
-        dialogPage: 0,
+        pageIndex: 0,
         menuOpen: false,
         savingTable: false,
         tableInfo: defaultTableInfo,
@@ -62,18 +62,18 @@ describe('Test table creation reducers', () => {
         it('return updated page state after next', () => {
 
             const state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
-            expect(state.dialogPage).toBe(1);
+            expect(state.pageIndex).toBe(1);
         });
 
 
         it('return updated page state after previous', () => {
             let state = reducer(initialState, {type: types.NEXT_TABLE_CREATION_PAGE});
             state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.dialogPage).toBe(0);
+            expect(state.pageIndex).toBe(0);
 
             // doesn't go negative
             state = reducer(state, {type: types.PREVIOUS_TABLE_CREATION_PAGE});
-            expect(state.dialogPage).toBe(0);
+            expect(state.pageIndex).toBe(0);
         });
 
         it('return updated page state table menu open', () => {
