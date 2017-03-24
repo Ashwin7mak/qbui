@@ -470,8 +470,8 @@ let QBForm = React.createClass({
      * */
     componentDidUpdate() {
         if (this.props.formFocus) {
-          document.querySelector('.formContainer .editForm').focus();
-          document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
+            document.querySelector('.formContainer .editForm').focus();
+            document.querySelector('.qbPanelHeaderTitleText').scrollIntoView(false);
         }
     },
 
