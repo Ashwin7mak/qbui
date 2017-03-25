@@ -26,7 +26,7 @@ const mapStateToProps = state => {
     let currentForm = state.forms ? state.forms[0] : undefined;
     let selectedField = (_.has(currentForm, 'selectedFields') ? currentForm.selectedFields[0] : []);
     let tabIndex = (_.has(currentForm, 'formBuilderChildrenTabIndex') ? currentForm.formBuilderChildrenTabIndex[0] : undefined);
-    let formFocus = (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : []);
+    let formFocus = (_.has(currentForm, 'formFocus') ? currentForm.formFocus[0] : undefined);
 
     return {
         currentForm,
